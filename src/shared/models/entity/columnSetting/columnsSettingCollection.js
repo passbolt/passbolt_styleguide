@@ -100,10 +100,11 @@ class ColumnsSettingCollection extends EntityCollection {
    * Merge the collection by id
    * (warning: The order must not be changed from the source)
    * @param {ColumnsSettingCollection} columnsSettingCollection The columns setting collection to merge
+   * @param {{keepUnknownValue: boolean}} [options] optional options The columns setting merge options
    *
    * @return {ColumnsSettingCollection} The new columns setting collection
    */
-  deepMerge(columnsSettingCollection) {
+  deepMerge(columnsSettingCollection, options = {keepUnknownValue: true}) {
     const columnsToMerge = columnsSettingCollection.toDto();
     // Deep merge keeping the order from the source and add at the end the new entry
     const columnSettingCollectionDto = columnsToMerge.reduce((columnsMerged, columnToMerge) => {
@@ -113,8 +114,13 @@ class ColumnsSettingCollection extends EntityCollection {
         columnsMerged[index] = Object.assign(columnsMerged[index], columnToMerge);
         return columnsMerged;
       }
-      // If we don't find anything so columnToMerge is an unique entry
-      return [...columnsMerged, columnToMerge];
+      // If we don't find anything so columnToMerge is a unique entry
+      if (options?.keepUnknownValue) {
+        // Add columnToMerge if option keepUnknownValue is true
+        return [...columnsMerged, columnToMerge];
+      }
+      // Ignore columnToMerge if option keepUnknownValue is false
+      return columnsMerged;
     }, this.toDto()); // Initial values of reduce to merge
     return new this.constructor(columnSettingCollectionDto);
   }
@@ -201,12 +207,12 @@ class ColumnsSettingCollection extends EntityCollection {
    * Merge the collection by id from the default
    * If the collection is null return the default
    * @param {ColumnsSettingCollection | null} columnsSettingCollection The columns setting collection to merge with the default
-   *
+   * @param {{keepUnknownValue: boolean}} [options] optional options The columns setting merge options
    * @return {ColumnsSettingCollection} The new columns setting collection
    */
-  static createFromDefault(columnsSettingCollection = null) {
+  static createFromDefault(columnsSettingCollection = null, options = {keepUnknownValue: true}) {
     if (columnsSettingCollection !== null) {
-      return this.DEFAULT.deepMerge(columnsSettingCollection);
+      return this.DEFAULT.deepMerge(columnsSettingCollection, options);
     }
     return this.DEFAULT;
   }

@@ -59,7 +59,7 @@ class CellFavorite extends Component {
   render() {
     const isFavorite = this.value.favorite !== null && this.value.favorite !== undefined;
     return (
-      <button type="button" className={`link no-border no-text ${isFavorite ? "fav" : "unfav"}`} onClick={this.handleClick}>
+      <button type="button" className={`no-border no-text ${isFavorite ? "fav" : "unfav"}`} onClick={this.handleClick}>
         <FavoriteSVG/>
       </button>
     );

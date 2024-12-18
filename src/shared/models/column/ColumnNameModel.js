@@ -30,6 +30,7 @@ class ColumnNameModel extends ColumnModel {
     columnDto.resizable = true;
     columnDto.draggable = true;
     columnDto.sortable = true;
+    columnDto.getValue = value => value;
     super(columnDto);
   }
 }

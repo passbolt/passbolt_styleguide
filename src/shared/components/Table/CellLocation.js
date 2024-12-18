@@ -73,7 +73,7 @@ class CellLocation extends Component {
     if (this.value.length === 0) {
       return (
         <TooltipPortal message={<span>{this.props.t("My workspace")}</span>} direction="auto">
-          <button className="link no-border" type="button" onClick={event => this.handleClick(event, null)}>
+          <button className="no-border" type="button" onClick={event => this.handleClick(event, null)}>
             <FolderSVG/>
             <span>{this.props.t("My workspace")}</span>
           </button>
@@ -82,7 +82,7 @@ class CellLocation extends Component {
     }
     return (
       <TooltipPortal message={this.tooltipHierarchyFolder} direction="auto">
-        <button className="link no-border" type="button" onClick={event => this.handleClick(event, this.lastFolder.id)}>
+        <button className="no-border" type="button" onClick={event => this.handleClick(event, this.lastFolder.id)}>
           {!this.lastFolder.personal &&
             <ShareFolderSVG/>
           }

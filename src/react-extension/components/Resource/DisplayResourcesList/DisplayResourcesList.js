@@ -28,7 +28,6 @@ import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import GridTable from "../../../../shared/components/Table/GridTable";
 import CellFavorite from "../../../../shared/components/Table/CellFavorite";
-import CellHeaderIcon from "../../../../shared/components/Table/CellHeaderIcon";
 import CellLink from "../../../../shared/components/Table/CellLink";
 import CellPassword from "../../../../shared/components/Table/CellPassword";
 import CellButton from "../../../../shared/components/Table/CellButton";
@@ -46,8 +45,6 @@ import {withProgress} from "../../../contexts/ProgressContext";
 import CellTotp from "../../../../shared/components/Table/CellTotp";
 import ColumnTotpModel from "../../../../shared/models/column/ColumnTotpModel";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
-import ColumnAttentionRequiredModel from "../../../../shared/models/column/ColumnAttentionRequiredModel";
-import CellAttentionRequired from "../../../../shared/components/Table/CellAttentionRequired";
 import ColumnExpiredModel from "../../../../shared/models/column/ColumnExpiredModel";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import CellDate from "../../../../shared/components/Table/CellDate";
@@ -60,6 +57,7 @@ import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import FavoriteSVG from "../../../../img/svg/favorite.svg";
+import CellName from "../../../../shared/components/Table/CellName";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -129,11 +127,7 @@ class DisplayResourcesList extends React.Component {
   initColumns() {
     this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}));
     this.defaultColumns.push(new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: FavoriteSVG}}));
-    if (this.hasAttentionRequiredFeature) {
-      this.defaultColumns.push(new ColumnAttentionRequiredModel({cellRenderer: {component: CellAttentionRequired}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "exclamation"}}}));
-    }
-
-    this.defaultColumns.push(new ColumnNameModel({headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
+    this.defaultColumns.push(new ColumnNameModel({cellRenderer: {component: CellName, props: {hasAttentionRequiredFeature: this.hasAttentionRequiredFeature}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
     if (this.props.passwordExpiryContext.isFeatureEnabled()) {
       this.defaultColumns.push(new ColumnExpiredModel({cellRenderer: {component: CellExpiryDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Expiry")}}}));
     }

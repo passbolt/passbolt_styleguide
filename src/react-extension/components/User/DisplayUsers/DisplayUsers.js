@@ -322,12 +322,12 @@ class DisplayUsers extends React.Component {
         }
         <td className="cell-name l-cell">
           <div title={`${user.profile.first_name} ${user.profile.last_name}`}>
-            {`${user.profile.first_name} ${user.profile.last_name}`}
+            <span>{`${user.profile.first_name} ${user.profile.last_name}`}</span>
           </div>
         </td>
         <td className="cell-username l-cell username">
           <div title={user.username}>
-            {user.username}
+            <span>{user.username}</span>
           </div>
         </td>
         <td className="cell-role m-cell role">
@@ -338,35 +338,37 @@ class DisplayUsers extends React.Component {
         {this.hasSuspendedColumn() &&
           <td className="cell-role m-cell suspended">
             <div>
-              {isSuspended ? this.translate("Yes") : this.translate("No")}
+              <span>{isSuspended ? this.translate("Yes") : this.translate("No")}</span>
             </div>
           </td>
         }
         <td className="cell-modified m-cell">
           <div title={user.modified}>
-            {modifiedFormatted}
+            <span>{modifiedFormatted}</span>
           </div>
         </td>
         <td className="cell-last_logged_in m-cell">
           <div title={user.last_logged_in}>
-            {lastLoggedInFormatted}
+            <span>{lastLoggedInFormatted}</span>
           </div>
         </td>
         {this.hasMfaColumn() &&
           <td className="cell-is_mfa_enabled m-cell">
             <div>
-              {mfa}
+              <span>{mfa}</span>
             </div>
           </td>
         }
         {this.hasAccountRecoveryColumn() &&
           <td className="cell-is_account_recovery_enabled m-cell">
             <div>
-              {{
-                "approved": <Trans>Approved</Trans>,
-                "rejected": <Trans>Rejected</Trans>,
-                [undefined]: <Trans>Pending</Trans>,
-              }[user?.account_recovery_user_setting?.status]}
+              <span>
+                {{
+                  "approved": <Trans>Approved</Trans>,
+                  "rejected": <Trans>Rejected</Trans>,
+                  [undefined]: <Trans>Pending</Trans>,
+                }[user?.account_recovery_user_setting?.status]}
+              </span>
             </div>
           </td>
         }
@@ -391,226 +393,223 @@ class DisplayUsers extends React.Component {
     const filterType = this.props.userWorkspaceContext.filter.type;
 
     return (
-      <div className={`tableview ready ${isEmpty ? "empty" : ""}`}>
-        <div className="tableview-wrapper">
-          {!isReady &&
-            <div className="empty-content">
-            </div>
-          }
-          {isReady &&
-            <React.Fragment>
-              {isEmpty &&
-                filterType === UserWorkspaceFilterTypes.TEXT &&
-                <div className="empty-content">
-                  <h2><Trans>None of the users matched this search.</Trans></h2>
-                  <p className="try-another-search"><Trans>Try another search or use the left panel to navigate into
-                    your organization.</Trans></p>
-                </div>
-              }
-              {!isEmpty &&
-                <React.Fragment>
-                  <div className="tableview-header">
-                    <table>
-                      <thead>
-                        <tr>
-                          <th className="cell-checkbox selections s-cell">
-                            <div className="input checkbox">
-                              <input type="checkbox" name="select all" checked={false} readOnly={true}/>
-                              <span className="visually-hidden"><Trans>Select all</Trans></span>
+      <div className={`tableview users ${isEmpty ? "empty" : ""}`}>
+        {!isReady &&
+          <div className="empty-content">
+          </div>
+        }
+        {isReady &&
+          <React.Fragment>
+            {isEmpty &&
+              filterType === UserWorkspaceFilterTypes.TEXT &&
+              <div className="empty-content">
+                <h2><Trans>None of the users matched this search.</Trans></h2>
+                <p className="try-another-search"><Trans>Try another search or use the left panel to navigate into
+                  your organization.</Trans></p>
+              </div>
+            }
+            {!isEmpty &&
+              <React.Fragment>
+                <div className="tableview-header">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th className="cell-checkbox selections s-cell">
+                          <div className="input checkbox">
+                            <input type="checkbox" name="select all" checked={false} readOnly={true}/>
+                            <span className="visually-hidden"><Trans>Select all</Trans></span>
+                          </div>
+                        </th>
+                        {this.hasAttentionRequiredColumn() &&
+                        <th className="s-cell attention-required">
+                          <button className="link no-border" type="button"
+                            onClick={ev => this.handleSortByColumnClick(ev, "attentionRequired")}>
+                            <div className="cell-header">
+                              <span className="cell-header-text">
+                                <Icon name="exclamation" baseline={true}/>
+                              </span>
+                              <span className="cell-header-icon-sort">
+                                {this.isSortedColumn("attentionRequired") && this.isSortedAsc() &&
+                            <Icon name="ascending"/>
+                                }
+                                {this.isSortedColumn("attentionRequired") && !this.isSortedAsc() &&
+                                  <Icon name="descending"/>
+                                }
+                              </span>
                             </div>
-                          </th>
-                          {this.hasAttentionRequiredColumn() &&
-                          <th className="s-cell attention-required">
-                            <button className="link no-border" type="button"
-                              onClick={ev => this.handleSortByColumnClick(ev, "attentionRequired")}>
-                              <div className="cell-header">
-                                <span className="cell-header-text">
-                                  <Icon name="exclamation" baseline={true}/>
-                                </span>
-                                <span className="cell-header-icon-sort">
-                                  {this.isSortedColumn("attentionRequired") && this.isSortedAsc() &&
+                          </button>
+                        </th>
+                        }
+                        <th className="cell-name l-cell sortable">
+                          <button className="link no-border" type="button"
+                            onClick={ev => this.handleSortByColumnClick(ev, "name")}>
+                            <div className="cell-header">
+                              <span className="cell-header-text">
+                                <Trans>Name</Trans>
+                              </span>
+                              <span className="cell-header-icon-sort">
+                                {this.isSortedColumn("name") && this.isSortedAsc() &&
+                            <Icon name="ascending"/>
+                                }
+                                {this.isSortedColumn("name") && !this.isSortedAsc() &&
+                                <Icon name="descending"/>
+                                }
+                              </span>
+                            </div>
+                          </button>
+                        </th>
+                        <th className="cell-username l-cell username sortable">
+                          <button className="link no-border" type="button"
+                            onClick={ev => this.handleSortByColumnClick(ev, "username")}>
+                            <div className="cell-header">
+                              <span className="cell-header-text">
+                                <Trans>Username</Trans>
+                              </span>
+                              <span className="cell-header-icon-sort">
+                                {this.isSortedColumn("username") && this.isSortedAsc() &&
+                            <Icon name="ascending"/>
+                                }
+                                {this.isSortedColumn("username") && !this.isSortedAsc() &&
+                                <Icon name="descending"/>
+                                }
+                              </span>
+                            </div>
+                          </button>
+                        </th>
+                        <th className="cell-role m-cell role sortable">
+                          <button className="link no-border" type="button"
+                            onClick={ev => this.handleSortByColumnClick(ev, "role.name")}>
+                            <div className="cell-header">
+                              <span className="cell-header-text">
+                                <Trans>Role</Trans>
+                              </span>
+                              <span className="cell-header-icon-sort">
+                                {this.isSortedColumn("role.name") && this.isSortedAsc() &&
+                            <Icon name="ascending"/>
+                                }
+                                {this.isSortedColumn("role.name") && !this.isSortedAsc() &&
+                                <Icon name="descending"/>
+                                }
+                              </span>
+                            </div>
+                          </button>
+                        </th>
+                        {this.hasSuspendedColumn() &&
+                        <th className="cell-role m-cell suspended">
+                          <button className="link no-border" type="button"
+                            onClick={ev => this.handleSortByColumnClick(ev, "disabled")}>
+                            <div className="cell-header">
+                              <span className="cell-header-text">
+                                <Trans>Suspended</Trans>
+                              </span>
+                              <span className="cell-header-icon-sort">
+                                {this.isSortedColumn("disabled") && this.isSortedAsc() &&
                               <Icon name="ascending"/>
-                                  }
-                                  {this.isSortedColumn("attentionRequired") && !this.isSortedAsc() &&
-                                    <Icon name="descending"/>
-                                  }
-                                </span>
-                              </div>
-                            </button>
-                          </th>
-                          }
-                          <th className="cell-name l-cell sortable">
-                            <button className="link no-border" type="button"
-                              onClick={ev => this.handleSortByColumnClick(ev, "name")}>
-                              <div className="cell-header">
-                                <span className="cell-header-text">
-                                  <Trans>Name</Trans>
-                                </span>
-                                <span className="cell-header-icon-sort">
-                                  {this.isSortedColumn("name") && this.isSortedAsc() &&
-                              <Icon name="ascending"/>
-                                  }
-                                  {this.isSortedColumn("name") && !this.isSortedAsc() &&
+                                }
+                                {this.isSortedColumn("disabled") && !this.isSortedAsc() &&
                                   <Icon name="descending"/>
-                                  }
-                                </span>
-                              </div>
-                            </button>
-                          </th>
-                          <th className="cell-username l-cell username sortable">
-                            <button className="link no-border" type="button"
-                              onClick={ev => this.handleSortByColumnClick(ev, "username")}>
-                              <div className="cell-header">
-                                <span className="cell-header-text">
-                                  <Trans>Username</Trans>
-                                </span>
-                                <span className="cell-header-icon-sort">
-                                  {this.isSortedColumn("username") && this.isSortedAsc() &&
-                              <Icon name="ascending"/>
-                                  }
-                                  {this.isSortedColumn("username") && !this.isSortedAsc() &&
-                                  <Icon name="descending"/>
-                                  }
-                                </span>
-                              </div>
-                            </button>
-                          </th>
-                          <th className="cell-role m-cell role sortable">
-                            <button className="link no-border" type="button"
-                              onClick={ev => this.handleSortByColumnClick(ev, "role.name")}>
-                              <div className="cell-header">
-                                <span className="cell-header-text">
-                                  <Trans>Role</Trans>
-                                </span>
-                                <span className="cell-header-icon-sort">
-                                  {this.isSortedColumn("role.name") && this.isSortedAsc() &&
-                              <Icon name="ascending"/>
-                                  }
-                                  {this.isSortedColumn("role.name") && !this.isSortedAsc() &&
-                                  <Icon name="descending"/>
-                                  }
-                                </span>
-                              </div>
-                            </button>
-                          </th>
-                          {this.hasSuspendedColumn() &&
-                          <th className="cell-role m-cell suspended">
-                            <button className="link no-border" type="button"
-                              onClick={ev => this.handleSortByColumnClick(ev, "disabled")}>
-                              <div className="cell-header">
-                                <span className="cell-header-text">
-                                  <Trans>Suspended</Trans>
-                                </span>
-                                <span className="cell-header-icon-sort">
-                                  {this.isSortedColumn("disabled") && this.isSortedAsc() &&
-                                <Icon name="ascending"/>
-                                  }
-                                  {this.isSortedColumn("disabled") && !this.isSortedAsc() &&
-                                    <Icon name="descending"/>
-                                  }
-                                </span>
-                              </div>
-                            </button>
-                          </th>
-                          }
-                          <th className="cell-modified m-cell sortable">
-                            <button className="link no-border" type="button"
-                              onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
-                              <div className="cell-header">
-                                <span className="cell-header-text">
-                                  <Trans>Modified</Trans>
-                                </span>
-                                <span className="cell-header-icon-sort">
-                                  {this.isSortedColumn("modified") && this.isSortedAsc() &&
-                              <Icon name="ascending"/>
-                                  }
-                                  {this.isSortedColumn("modified") && !this.isSortedAsc() &&
-                                  <Icon name="descending"/>
-                                  }
-                                </span>
-                              </div>
-                            </button>
-                          </th>
-                          <th className="cell-last_logged_in m-cell sortable">
-                            <button className="link no-border" type="button"
-                              onClick={ev => this.handleSortByColumnClick(ev, "last_logged_in")}>
-                              <div className="cell-header">
-                                <span className="cell-header-text">
-                                  <Trans>Last logged in</Trans>
-                                </span>
-                                <span className="cell-header-icon-sort">
-                                  {this.isSortedColumn("last_logged_in") && this.isSortedAsc() &&
-                              <Icon name="ascending"/>
-                                  }
-                                  {this.isSortedColumn("last_logged_in") && !this.isSortedAsc() &&
-                                  <Icon name="descending"/>
-                                  }
-                                </span>
-                              </div>
-                            </button>
+                                }
+                              </span>
+                            </div>
+                          </button>
+                        </th>
+                        }
+                        <th className="cell-modified m-cell sortable">
+                          <button className="link no-border" type="button"
+                            onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
+                            <div className="cell-header">
+                              <span className="cell-header-text">
+                                <Trans>Modified</Trans>
+                              </span>
+                              <span className="cell-header-icon-sort">
+                                {this.isSortedColumn("modified") && this.isSortedAsc() &&
+                            <Icon name="ascending"/>
+                                }
+                                {this.isSortedColumn("modified") && !this.isSortedAsc() &&
+                                <Icon name="descending"/>
+                                }
+                              </span>
+                            </div>
+                          </button>
+                        </th>
+                        <th className="cell-last_logged_in m-cell sortable">
+                          <button className="link no-border" type="button"
+                            onClick={ev => this.handleSortByColumnClick(ev, "last_logged_in")}>
+                            <div className="cell-header">
+                              <span className="cell-header-text">
+                                <Trans>Last logged in</Trans>
+                              </span>
+                              <span className="cell-header-icon-sort">
+                                {this.isSortedColumn("last_logged_in") && this.isSortedAsc() &&
+                            <Icon name="ascending"/>
+                                }
+                                {this.isSortedColumn("last_logged_in") && !this.isSortedAsc() &&
+                                <Icon name="descending"/>
+                                }
+                              </span>
+                            </div>
+                          </button>
 
-                          </th>
-                          {this.hasMfaColumn() &&
-                          <th className="cell-is_mfa_enabled m-cell sortable">
-                            <button className="link no-border" type="button"
-                              onClick={ev => this.handleSortByColumnClick(ev, "is_mfa_enabled")}>
-                              <div className="cell-header">
-                                <span className="cell-header-text">
-                                  <Trans>MFA</Trans>
-                                </span>
-                                <span className="cell-header-icon-sort">
-                                  {this.isSortedColumn("is_mfa_enabled") && this.isSortedAsc() &&
-                                <Icon name="ascending"/>
-                                  }
-                                  {this.isSortedColumn("is_mfa_enabled") && !this.isSortedAsc() &&
-                                    <Icon name="descending"/>
-                                  }
-                                </span>
-                              </div>
-                            </button>
-                          </th>
-                          }
-                          {this.hasAccountRecoveryColumn() &&
-                          <th className="cell-account_recovery_user_setting_status m-cell sortable">
-                            <button className="link no-border" type="button"
-                              onClick={ev => this.handleSortByColumnClick(ev, "account_recovery_user_setting.status")}>
-                              <div className="cell-header">
-                                <span className="cell-header-text">
-                                  <Trans>Account recovery</Trans>
-                                </span>
-                                <span className="cell-header-icon-sort">
-                                  {this.isSortedColumn("account_recovery_user_setting.status") && this.isSortedAsc() &&
+                        </th>
+                        {this.hasMfaColumn() &&
+                        <th className="cell-is_mfa_enabled m-cell sortable">
+                          <button className="link no-border" type="button"
+                            onClick={ev => this.handleSortByColumnClick(ev, "is_mfa_enabled")}>
+                            <div className="cell-header">
+                              <span className="cell-header-text">
+                                <Trans>MFA</Trans>
+                              </span>
+                              <span className="cell-header-icon-sort">
+                                {this.isSortedColumn("is_mfa_enabled") && this.isSortedAsc() &&
                               <Icon name="ascending"/>
-                                  }
-                                  {this.isSortedColumn("account_recovery_user_setting.status") && !this.isSortedAsc() &&
-                                    <Icon name="descending"/>
-                                  }
-                                </span>
-                              </div>
-                            </button>
-                          </th>
-                          }
-                        </tr>
-                      </thead>
-                    </table>
-                  </div>
-                  <div className="tableview-content scroll">
-                    <ReactList
-                      itemRenderer={(index, key) => this.renderItem(index, key)}
-                      itemsRenderer={(items, ref) => this.renderTable(items, ref)}
-                      length={this.users.length}
-                      pageSize={20}
-                      minSize={20}
-                      type="uniform"
-                      ref={this.listRef}>
-                    </ReactList>
-                  </div>
-                </React.Fragment>
-              }
-            </React.Fragment>
-          }
-        </div>
-
+                                }
+                                {this.isSortedColumn("is_mfa_enabled") && !this.isSortedAsc() &&
+                                  <Icon name="descending"/>
+                                }
+                              </span>
+                            </div>
+                          </button>
+                        </th>
+                        }
+                        {this.hasAccountRecoveryColumn() &&
+                        <th className="cell-account_recovery_user_setting_status m-cell sortable">
+                          <button className="link no-border" type="button"
+                            onClick={ev => this.handleSortByColumnClick(ev, "account_recovery_user_setting.status")}>
+                            <div className="cell-header">
+                              <span className="cell-header-text">
+                                <Trans>Account recovery</Trans>
+                              </span>
+                              <span className="cell-header-icon-sort">
+                                {this.isSortedColumn("account_recovery_user_setting.status") && this.isSortedAsc() &&
+                            <Icon name="ascending"/>
+                                }
+                                {this.isSortedColumn("account_recovery_user_setting.status") && !this.isSortedAsc() &&
+                                  <Icon name="descending"/>
+                                }
+                              </span>
+                            </div>
+                          </button>
+                        </th>
+                        }
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+                <div className="tableview-content">
+                  <ReactList
+                    itemRenderer={(index, key) => this.renderItem(index, key)}
+                    itemsRenderer={(items, ref) => this.renderTable(items, ref)}
+                    length={this.users.length}
+                    pageSize={20}
+                    minSize={20}
+                    type="uniform"
+                    ref={this.listRef}>
+                  </ReactList>
+                </div>
+              </React.Fragment>
+            }
+          </React.Fragment>
+        }
       </div>
     );
   }
