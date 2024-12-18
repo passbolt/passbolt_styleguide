@@ -8,11 +8,19 @@
         flex-direction: column;
         align-items: flex-start;
         align-self: stretch;
+
+        .row {
+            padding-left: 2.4rem;
+        }
     }
 
     ul {
       list-style: none;
       padding: 0;
+
+      &.folders-tree {
+        padding-left: 1.5rem
+      }
     }
 
     li {
@@ -26,7 +34,7 @@
         display: flex;
         align-items: center;
         box-sizing: border-box;
-        padding: .8rem 1.6rem .8rem 2.4rem;
+        padding: .8rem 0 .8rem 1rem;
         border-radius: var(--Button-border-radius);
 
         &.no-hover:hover {
@@ -34,14 +42,13 @@
         }
 
         // Selected
-        &:hover, &.highlight, &.selected {
+        &:hover, &:focus-visible, &:focus, &.highlight, &.selected {
             background: var(--Sections-Filter-selected);
             .main-cell button {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 font-style: normal;
                 font-weight: 700;
-                line-height: normal;
             }
 
             .right-cell button {
@@ -50,17 +57,11 @@
         }
 
         // Focus
-        &:focus {
-            background: @workspace-left-menu-focus-background;
-            box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @workspace-left-menu-focus-border;
-            .main-cell button {
-                color: @workspace-left-menu-focus-text-color;
-                .svg-icon {
-                    &.caret-right,&.caret-down {
-                        --icon-color: @icon-primary-background-color;
-                    }
-                }
-            }
+        &:focus, &:focus-visible {
+            background: var(--Sections-Filter-selected);
+            box-shadow:
+                0 0 .4rem var(--States-Focus),
+                inset 0 0 0 .1rem var(--States-Focus);
         }
 
         /*
@@ -112,12 +113,18 @@
                 display: flex;
                 align-items: center;
                 width: 100%;
+                line-height: normal;
 
                 .svg-icon.exclamation {
                   margin-left: 0.8rem;
                   svg {
                     --icon-exclamation-background-color: @icon-exclamation-required-color;
                   }
+                }
+
+                svg {
+                    width: 1.8rem;
+                    height: 1.8rem;
                 }
             }
         }
@@ -127,7 +134,6 @@
         */
         .right-cell {
             float: right;
-            margin-right: .5rem;
 
             button {
                 display: none;

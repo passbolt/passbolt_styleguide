@@ -504,7 +504,8 @@ class FilterResourcesByFoldersItem extends React.Component {
           onDragOver={this.handleDragOverEvent}
           onDragEnd={this.handleDragEndEvent}
           onDragLeave={this.handleDragLeaveEvent}
-          onDragStart={this.handleDragStartEvent}>
+          onDragStart={this.handleDragStartEvent}
+          tabIndex={2}>
           <div className="main-cell-wrapper">
             <div className="main-cell"
               onClick={this.handleSelectEvent}

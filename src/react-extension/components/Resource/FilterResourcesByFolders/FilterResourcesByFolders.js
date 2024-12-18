@@ -26,6 +26,7 @@ import {withDrag} from "../../../contexts/DragContext";
 import CarretDownSVG from "../../../../img/svg/caret_down.svg";
 import CarretRightSVG from "../../../../img/svg/caret_right.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
+import CabinetSVG from "../../../../img/svg/cabinet.svg";
 
 // Root virtual folder identifier.
 const ROOT = null;
@@ -338,14 +339,15 @@ class FilterResourcesByFolders extends React.Component {
                         onClick={this.handleClickOnTitle}
                         onContextMenu={this.handleTitleContextualMenuEvent}>
                         {!isLoading &&
-                          <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()}>
+                          <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()} tabIndex={1}>
                             {isOpen
                               ? <CarretDownSVG />
                               : <CarretRightSVG />
                             }
                           </div>
                         }
-                        <Trans>Folders</Trans>
+                        <CabinetSVG />
+                        <Trans>My workspace</Trans>
                       </button>
                     </span>
                   </h3>
