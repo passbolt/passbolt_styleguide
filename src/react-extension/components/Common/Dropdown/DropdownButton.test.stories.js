@@ -63,7 +63,7 @@ export const DropdownCreate = {
         <Trans>Create</Trans>
         <CaretDownSVG/>
       </DropdownButton>
-      <DropdownMenu>
+      <DropdownMenu className="menu-create-primary">
         <DropdownMenuItem>
           <button type="button" className="no-border">
             <KeySVG/>
@@ -180,10 +180,10 @@ export const DropdownAddSecret = {
 export const DropdownMore = {
   render: () =>
     <Dropdown>
-      <DropdownButton direction="right" className="button-action-contextual button-action-icon">
+      <DropdownButton className="button-action-contextual button-action-icon">
         <MoreHorizontalSVG/>
       </DropdownButton>
-      <DropdownMenu>
+      <DropdownMenu className="menu-action-contextual">
         <DropdownMenuItem separator={true}>
           <button type="button" className="no-border">
             <DownloadFileSVG/>
@@ -354,12 +354,12 @@ export const DropdownFilter = {
 export const DropdownCopy = {
   render: () =>
     <Dropdown>
-      <DropdownButton direction="right" className="button-action-contextual">
+      <DropdownButton className="button-action-contextual">
         <CopySVG/>
         <Trans>Copy</Trans>
         <CaretDownSVG/>
       </DropdownButton>
-      <DropdownMenu>
+      <DropdownMenu className="menu-action-contextual">
         <DropdownMenuItem>
           <button type="button" className="no-border">
             <OwnedByMeSVG/>

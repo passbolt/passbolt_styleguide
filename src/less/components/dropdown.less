@@ -6,7 +6,7 @@
     button, .button {
         &.open {
             z-index: 4;
-            background: var(--Primary-button-Primary-button-menu-background);
+            background: var(--Action-button-Action-button-background);
             border-radius: var(--Button-border-radius) var(--Button-border-radius) 0 0;
             box-shadow: inset .1rem 0 0 0 var(--Action-button-Action-button-border), inset -.1rem 0 0 0 var(--Action-button-Action-button-border), inset 0 .1rem 0 0 var(--Action-button-Action-button-border);
             color: var(--Text-and-icons-Main-text);
@@ -14,6 +14,14 @@
             svg {
                 --icon-color: var(--Text-and-icons-Icons);
                 --icon-background-color: var(--Workspace-Workspace-background);
+            }
+
+            &.button-action-contextual {
+              box-shadow: inset .1rem 0 0 0 var(--Context-buttons-Context-button-border), inset -.1rem 0 0 0 var(--Context-buttons-Context-button-border), inset 0 .1rem 0 0 var(--Context-buttons-Context-button-border);
+            }
+
+            &.create.primary {
+              background: var(--Primary-button-Primary-button-menu-background);
             }
         }
     }
@@ -27,7 +35,7 @@
         display: none;
         border: 1px solid var(--Action-button-Action-button-border);
         box-sizing: border-box;
-        background: var(--Primary-button-Primary-button-menu-background);
+        background: var(--Action-button-Action-button-background);
         padding: .8rem 0 .8rem 0;
         box-shadow: var(--Menu-drop-shadow-Menu-drop-shadow-X) var(--Menu-drop-shadow-Menu-drop-shadow-Y) var(--Menu-drop-shadow-Menu-drop-shadow-blur) 0 var(--Menu-drop-shadow-Menu-drop-shadow, rgba(0, 0, 0, 0.10));
         border-radius: var(--Menu-radius);
@@ -35,6 +43,14 @@
         line-height: 2rem;
         width: max-content;
         min-width: calc(100% + 3.2rem);
+
+        &.menu-action-contextual {
+          border: 1px solid var(--Context-buttons-Context-button-border);
+        }
+
+        &.menu-create-primary {
+          background: var(--Primary-button-Primary-button-menu-background);
+        }
 
         &.visible {
             display: block;

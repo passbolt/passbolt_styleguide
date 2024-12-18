@@ -218,7 +218,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
           <Trans>Create</Trans>
           <CaretDownSVG/>
         </DropdownButton>
-        <DropdownMenu>
+        <DropdownMenu className="menu-create-primary">
           {!this.hasMetadataTypesSettings() &&
             <>
               <DropdownItem separator={!canUseTotp}>

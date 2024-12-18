@@ -453,7 +453,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                     <Trans>Copy</Trans>
                     <CaretDownSVG/>
                   </DropdownButton>
-                  <DropdownMenu>
+                  <DropdownMenu className="menu-action-contextual">
                     {this.hasResourceUsername &&
                       <DropdownMenuItem>
                         <button id="username_action" type="button" className="no-border"
@@ -522,7 +522,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                   <DropdownButton className="more button-action-contextual button-action-icon">
                     <MoreHorizontalSVG/>
                   </DropdownButton>
-                  <DropdownMenu>
+                  <DropdownMenu className="menu-action-contextual">
                     {this.canExport() &&
                       <DropdownMenuItem>
                         <button id="export_action" type="button" className="no-border"
