@@ -60,6 +60,7 @@ import mockRequestAccountRecoveryGetAccount from "./request/mockRequestAccountRe
 import mockRequestHasUserEnabledAccountRecovery from "./request/mockRequestHasUserEnabledAccountRecovery";
 import mockRequestRbacsFindMe from "./request/mockRequestRbacsFindMe";
 import mockRequestAccountGet from "./request/mockRequestAccountGet";
+import mockRequestFindMyGropus from "./request/mockRequestGroups";
 
 export default storage => {
   const mockPort = new MockPort(storage);
@@ -93,15 +94,16 @@ export default storage => {
   mockPort.addRequestListener("passbolt.resources.delete-all", mockRequestResourcesDelete);
   mockPort.addRequestListener("passbolt.actionlogs.find-all-for", mockRequestFindActivities);
   mockPort.addRequestListener("passbolt.addon.get-version", mockRequestGetVersion);
-  mockPort.addRequestListener("passbolt.groups.update-local-storage", mockRequestGroupsUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.keyring.get-public-key-info-by-user", mockRequestGpgKeysFindByUserId);
   mockPort.addRequestListener("passbolt.keyring.get-private-key", mockRequestPrivateKeys);
   mockPort.addRequestListener("passbolt.users.delete-dry-run", mockRequestUserDeleteDryRun);
   mockPort.addRequestListener("passbolt.import-passwords.import-file", mockRequestImportFile);
   mockPort.addRequestListener("passbolt.users.disable-mfa", mockRequestDisableMFA);
+  mockPort.addRequestListener("passbolt.groups.update-local-storage", mockRequestGroupsUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.groups.delete-dry-run", mockRequestGroupDeleteDryRun);
   mockPort.addRequestListener("passbolt.groups.create", mockRequestGroupsCreate);
   mockPort.addRequestListener("passbolt.groups.update", mockRequestGroupsUpdate);
+  mockPort.addRequestListener("passbolt.groups.find-my-groups", mockRequestFindMyGropus);
   mockPort.addRequestListener("passbolt.themes.find-all", mockRequestFindAllThemes);
   mockPort.addRequestListener("passbolt.locale.get", mockRequestGetLocale);
   mockPort.addRequestListener("passbolt.password-policies.get", mockRequestPasswordPolicies);

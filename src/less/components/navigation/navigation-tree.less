@@ -50,8 +50,7 @@
                 }
 
                 button {
-                    width: calc(100% - 3.2rem);
-                    gap: .6rem;
+                    gap: .8rem;
 
                     .toggle-folder svg {
                         width: .8rem;
@@ -68,15 +67,13 @@
                         margin-left: 1rem;
                     }
 
-                    svg {
-                        width: 1.8rem;
-                        height: 1.8rem;
-                        min-width: 1.8rem;
-                    }
-
                     .toggle-folder svg {
                         width: .8rem;
                         height: .8rem;
+                    }
+
+                    span {
+                        width: 100%;
                     }
                 }
             }
@@ -95,6 +92,10 @@
                             cursor: pointer;
                             padding: 0;
                         }
+                    }
+
+                    &.section-title button {
+                        font-weight: 700;
                     }
                 }
             }
@@ -128,6 +129,23 @@
 
             &.is-dragged {
                 pointer-events: auto;
+            }
+        }
+    }
+
+    &.navigation-folders {
+        .row {
+            padding: .8rem 0 .8rem 1rem;
+
+            .main-cell-wrapper .main-cell {
+                button {
+                    gap: .6rem;
+                    width: calc(100% - 3.2rem);
+
+                    & > svg {
+                        margin-right: .2rem;
+                    }
+                }
             }
         }
     }
