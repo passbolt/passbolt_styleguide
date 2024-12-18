@@ -63,15 +63,6 @@
                         height: 1.8rem;
                     }
 
-                    .tag-name {
-                        margin-left: 1rem;
-                    }
-
-                    .toggle-folder svg {
-                        width: .8rem;
-                        height: .8rem;
-                    }
-
                     span {
                         width: 100%;
                     }
@@ -148,6 +139,29 @@
                 }
             }
         }
+    }
+
+    &.navigation-tags {
+        .root:not(.tag-item) {
+            position: relative;
+
+            .more-ctrl {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 3.2rem; // 4rem for the desired position in the design - .8rem for the current margin-right
+                z-index: 10;
+            }
+        }
+
+        .tag-item {
+            .more-ctrl {
+                button {
+                    margin-right: 0;
+                }
+            }
+        }
+
     }
 
     /*All other levels*/

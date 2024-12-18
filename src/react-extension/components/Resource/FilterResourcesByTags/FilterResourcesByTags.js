@@ -23,6 +23,7 @@ import {withTranslation} from "react-i18next";
 import CarretDownSVG from "../../../../img/svg/caret_down.svg";
 import CarretRightSVG from "../../../../img/svg/caret_right.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
+import TagV2SVG from "../../../../img/svg/tag_v2.svg";
 
 /**
  * This component display the tag to filter the resources
@@ -199,21 +200,24 @@ class FilterResourcesByTags extends React.Component {
             <div className="row title">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <h3>
+                  <h3 className="section-title">
                     <span className="folders-label" onClick={this.handleTitleClickEvent} onContextMenu={this.handleTitleContextualMenuEvent}>
                       <button type="button" className="link no-border">
-                        {this.state.open
-                          ? <CarretDownSVG />
-                          : <CarretRightSVG />
-                        }
-                        {this.state.title}
+                        <TagV2SVG />
+                        <span>{this.state.title}</span>
+                        <div className="toggle-folder">
+                          {this.state.open
+                            ? <CarretDownSVG />
+                            : <CarretRightSVG />
+                          }
+                        </div>
                       </button>
                     </span>
                   </h3>
                 </div>
               </div>
               <div className="dropdown right-cell more-ctrl">
-                <button type="button" className={`${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}>
+                <button type="button" className={`button-transparent inline-menu-horizontal ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}>
                   <MoreHorizontalSVG />
                 </button>
               </div>
