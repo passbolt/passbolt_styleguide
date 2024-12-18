@@ -115,24 +115,31 @@ class DisplayResourceWorkspacePageObject {
   }
 
   /**
+   * Returns the filter button of password workspace
+   */
+  get filterButton() {
+    return Boolean(this._container.querySelector('.actions-filter'));
+  }
+
+  /**
    * Returns the info button of password workspace
    */
   get infoButton() {
-    return this._container.querySelector('.actions.secondary li:last-child button');
+    return this._container.querySelector('.actions-secondary button.info');
   }
 
   /**
    * Returns the column view button menu elements of password workspace menu
    */
   get menuColumnView() {
-    return this._container.querySelector('.actions.secondary .dropdown button');
+    return this._container.querySelector('.actions-secondary .dropdown button');
   }
 
   /**
    * Returns the column view item checkbox elements of password workspace menu
    */
   menuColumnViewItem(index) {
-    return this._container.querySelectorAll('.actions.secondary .dropdown-content li')[index - 1].querySelector('input[type=\"checkbox\"]');
+    return this._container.querySelectorAll('.actions-secondary .dropdown-content li')[index - 1].querySelector('input[type=\"checkbox\"]');
   }
 
   /**

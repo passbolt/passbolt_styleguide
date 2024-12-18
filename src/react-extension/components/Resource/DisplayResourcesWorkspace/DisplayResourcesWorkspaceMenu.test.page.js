@@ -194,7 +194,7 @@ class DisplayMenuPageObject {
    * @returns {HTMLElement}
    */
   get clearSelectionButton() {
-    return this._container.querySelector('.actions > button.button-transparent.inline');
+    return this._container.querySelector('.actions .actions-wrapper > button.button-transparent.inline');
   }
 
   /**

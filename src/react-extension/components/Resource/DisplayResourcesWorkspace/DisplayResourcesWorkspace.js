@@ -40,6 +40,7 @@ import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import InfoSVG from "../../../../img/svg/info.svg";
 import WorkspaceSwitcher from "../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
+import DisplayResourcesWorkspaceFilters from "./DisplayResourcesWorkspaceFilters";
 
 class Workspace extends Component {
   /**
@@ -154,41 +155,33 @@ class Workspace extends Component {
               <div className="top-bar">
                 <FilterResourcesByBreadcrumb/>
                 <div className="action-bar">
-                  <div className="col2_3 actions-wrapper">
-                    {this.props.resourceWorkspaceContext.selectedResources?.length > 0
-                      ? <DisplayResourcesWorkspaceMenu/>
-                      : /* todo: create a dedicated component for displaying filters when no resources is selected */ <></>
-                    }
-                    <div className="actions secondary">
-                      <ul>
-                        <li>
-                          <Dropdown>
-                            <DropdownButton>
-                              <ColumnsSVG/>
-                              <Trans>Columns</Trans>
-                              <CaretDownSVG/>
-                            </DropdownButton>
-                            <DropdownMenu direction="left">
-                              {this.columnsResourceSetting?.map(column =>
-                                <DropdownMenuItem keepOpenOnClick={true} key={column.id} separator={column.id === 'uri'}>
-                                  <div className="input checkbox">
-                                    <input type="checkbox" checked={column.show} id={column.id} name={column.id} onChange={this.handleOnChangeColumnView}/>
-                                    <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
-                                  </div>
-                                </DropdownMenuItem>
-                              )}
-                            </DropdownMenu>
-                          </Dropdown>
-                        </li>
-                        <li>
-                          <button type="button" className={`button-toggle button-action button-action-icon info ${this.hasLockDetail() ? "active" : ""}`}
-                            onClick={this.handleViewDetailClickEvent}>
-                            <InfoSVG />
-                            <span className="visuallyhidden"><Trans>View detail</Trans></span>
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
+                  {this.props.resourceWorkspaceContext.selectedResources?.length > 0
+                    ? <DisplayResourcesWorkspaceMenu/>
+                    : <DisplayResourcesWorkspaceFilters/>
+                  }
+                  <div className="actions-secondary">
+                    <Dropdown>
+                      <DropdownButton>
+                        <ColumnsSVG/>
+                        <Trans>Columns</Trans>
+                        <CaretDownSVG/>
+                      </DropdownButton>
+                      <DropdownMenu direction="left">
+                        {this.columnsResourceSetting?.map(column =>
+                          <DropdownMenuItem keepOpenOnClick={true} key={column.id} separator={column.id === 'uri'}>
+                            <div className="input checkbox">
+                              <input type="checkbox" checked={column.show} id={column.id} name={column.id} onChange={this.handleOnChangeColumnView}/>
+                              <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
+                            </div>
+                          </DropdownMenuItem>
+                        )}
+                      </DropdownMenu>
+                    </Dropdown>
+                    <button type="button" className={`button-toggle button-action button-action-icon info ${this.hasLockDetail() ? "active" : ""}`}
+                      onClick={this.handleViewDetailClickEvent}>
+                      <InfoSVG />
+                      <span className="visuallyhidden"><Trans>View detail</Trans></span>
+                    </button>
                   </div>
                 </div>
               </div>
