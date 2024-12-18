@@ -35,7 +35,7 @@ class DropdownMenu extends React.Component {
   render() {
     return (
       this.dropdownMenuMustShow &&
-          <ul className={`dropdown-content menu visible ${this.props.direction}`}>
+          <ul className={`dropdown-content menu visible ${this.props.className} ${this.props.direction}`}>
             {this.props.children}
           </ul>
     );
@@ -48,6 +48,7 @@ DropdownMenu.defaultProps = {
 
 DropdownMenu.propTypes = {
   direction: PropTypes.string, // The direction property
+  className: PropTypes.string, // The className property
   dropdownContext: PropTypes.any, // The dropdown context
   children: PropTypes.any // The children property
 };

@@ -348,7 +348,7 @@ class DisplayUserWorkspaceActions extends React.Component {
                 <DropdownButton className="more button-action-contextual button-action-icon" disabled={!this.hasMoreActionAllowed}>
                   <MoreHorizontalSVG/>
                 </DropdownButton>
-                <DropdownMenu>
+                <DropdownMenu className="menu-action-contextual">
                   <DropdownMenuItem separator={true}>
                     <button id="copy-user-permalink" type="button" className="no-border" disabled={!this.canCopyPermalink} onClick={this.handleCopyPermalinkEvent}>
                       <LinkSVG/>

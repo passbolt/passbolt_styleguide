@@ -107,7 +107,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
             <Trans>Create</Trans>
             <CaretDownSVG/>
           </DropdownButton>
-          <DropdownMenu>
+          <DropdownMenu className="menu-create-primary">
             <DropdownMenuItem>
               <button id="user_action" type="button" className="no-border" onClick={this.handleCreateMenuUserClickEvent}>
                 <UserAddSVG/>
