@@ -115,6 +115,13 @@ class DisplayResourceWorkspacePageObject {
   }
 
   /**
+   * Returns the footer elements of password workspace
+   */
+  get footer() {
+    return Boolean(this._container.querySelector('.footer'));
+  }
+
+  /**
    * Returns the filter button of password workspace
    */
   get filterButton() {

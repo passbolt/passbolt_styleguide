@@ -50,7 +50,7 @@ const Template = ({...args}) =>
                 <ManageContextualMenu/>
                 <ManageAnnouncements/>
                 <div id="container" className="page user">
-                  <div id="app" className="app ready" tabIndex="1000">
+                  <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
                     <DisplayUserWorkspace/>
                   </div>
                 </div>

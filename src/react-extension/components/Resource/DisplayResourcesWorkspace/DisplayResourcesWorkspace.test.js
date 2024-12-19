@@ -40,6 +40,7 @@ jest.mock("./DisplayResourcesWorkspaceMainMenu", () => () => <></>);
 jest.mock("../../Common/Navigation/Header/Logo");
 jest.mock("../../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu", () => () => <></>);
 jest.mock("./DisplayResourcesWorkspaceFilters", () => () => <span className="actions-filter"></span>);
+jest.mock("../../Common/Footer/Footer", () => () => <span className="footer"></span>);
 
 beforeEach(() => {
   jest.resetModules();
@@ -103,6 +104,7 @@ describe("DisplayResourcesWorkspace", () => {
       expect(page.displayResourceWorkspacePageObject.sidebarFolder).toBeTruthy();
       expect(page.displayResourceWorkspacePageObject.folderTree).toBeTruthy();
       expect(page.displayResourceWorkspacePageObject.tag).toBeTruthy();
+      expect(page.displayResourceWorkspacePageObject.footer).toBeTruthy();
     });
 
     it('As LU I cannot see the resource sidebar via the workspace if I deactivate the details', () => {
@@ -111,6 +113,7 @@ describe("DisplayResourcesWorkspace", () => {
       expect(page.displayResourceWorkspacePageObject.exists()).toBeTruthy();
       expect(page.displayResourceWorkspacePageObject.sidebarResource).toBeFalsy();
       expect(page.displayResourceWorkspacePageObject.sidebarFolder).toBeFalsy();
+      expect(page.displayResourceWorkspacePageObject.footer).toBeFalsy();
     });
 
     it('As LU I cannot see the resource sidebar via the workspace if I have no resource selected', () => {
@@ -119,6 +122,7 @@ describe("DisplayResourcesWorkspace", () => {
       expect(page.displayResourceWorkspacePageObject.exists()).toBeTruthy();
       expect(page.displayResourceWorkspacePageObject.sidebarResource).toBeFalsy();
       expect(page.displayResourceWorkspacePageObject.sidebarFolder).toBeFalsy();
+      expect(page.displayResourceWorkspacePageObject.footer).toBeFalsy();
     });
   });
 

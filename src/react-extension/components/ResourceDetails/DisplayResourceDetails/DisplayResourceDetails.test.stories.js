@@ -31,7 +31,19 @@ export default {
     (Story, {args}) => (
       <Router>
         <ResourceWorkspaceContext.Provider value={args.resourceWorkspaceContext}>
-          <Story {...args} />
+          <div className="page">
+            <div className="app" style={{margin: "-1rem"}}>
+              <div className="panel main">
+                <div className="panel middle">
+                  <div className="middle-right" style={{display: "flex", justifyContent: "flex-end"}}>
+                    <div className="panel aside">
+                      <Story {...args} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </ResourceWorkspaceContext.Provider>
       </Router>
     )

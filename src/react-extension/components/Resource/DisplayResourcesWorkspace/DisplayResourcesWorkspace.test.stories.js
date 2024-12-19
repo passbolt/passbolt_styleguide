@@ -58,7 +58,7 @@ const ExtApp = ({...args}) =>
                         <ManageWorkflows/>
                         <DragContextProvider>
                           <div id="container" className="page password">
-                            <div id="app" className="app ready" tabIndex="1000">
+                            <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
                               <DisplayResourcesWorkspace {...args}/>
                             </div>
                           </div>

@@ -77,35 +77,33 @@ class DisplayResourceFolderDetails extends React.Component {
     const canUseAuditLog = this.props.context.siteSettings.canIUse("auditLog");
 
     return (
-      <div className="panel aside ready">
-        <div className="sidebar resource">
-          <div className="sidebar-header">
-            <div className="teaser-image">
-              <Icon name="folder"/>
-            </div>
-            <h3>
-              <div className="title-wrapper">
-                <span className="name">{this.props.resourceWorkspaceContext.details.folder.name}</span>
-                <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this folder")} onClick={this.handlePermalinkClick}>
-                  <Icon name="link"/>
-                  <span className="visuallyhidden"><Trans>Copy the link to this folder</Trans></span>
-                </button>
-              </div>
-              <span className="subtitle"><Trans>folder</Trans></span>
-            </h3>
-            <button type="button" className="link no-border dialog-close" onClick={this.handleCloseClick}>
-              <Icon name="close"/>
-              <span className="visuallyhidden"><Trans>Close</Trans></span>
-            </button>
+      <div className="sidebar resource">
+        <div className="sidebar-header">
+          <div className="teaser-image">
+            <Icon name="folder"/>
           </div>
-          <DisplayResourceFolderDetailsInformation/>
-          {canViewShare &&
-            <DisplayResourceFolderDetailsPermissions/>
-          }
-          {canUseAuditLog &&
-            <DisplayResourceFolderDetailsActivity/>
-          }
+          <h3>
+            <div className="title-wrapper">
+              <span className="name">{this.props.resourceWorkspaceContext.details.folder.name}</span>
+              <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this folder")} onClick={this.handlePermalinkClick}>
+                <Icon name="link"/>
+                <span className="visuallyhidden"><Trans>Copy the link to this folder</Trans></span>
+              </button>
+            </div>
+            <span className="subtitle"><Trans>folder</Trans></span>
+          </h3>
+          <button type="button" className="link no-border dialog-close" onClick={this.handleCloseClick}>
+            <Icon name="close"/>
+            <span className="visuallyhidden"><Trans>Close</Trans></span>
+          </button>
         </div>
+        <DisplayResourceFolderDetailsInformation/>
+        {canViewShare &&
+          <DisplayResourceFolderDetailsPermissions/>
+        }
+        {canUseAuditLog &&
+          <DisplayResourceFolderDetailsActivity/>
+        }
       </div>
     );
   }
