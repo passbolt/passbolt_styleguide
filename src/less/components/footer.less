@@ -45,6 +45,18 @@
           height: 1.6rem;
         }
       }
+
+      // Fix the height to not have scrolling with tooltip
+      .tooltip {
+        .tooltip-text {
+          display: none;
+        }
+        &:hover {
+          .tooltip-text {
+            display: flex;
+          }
+        }
+      }
     }
   }
 }
