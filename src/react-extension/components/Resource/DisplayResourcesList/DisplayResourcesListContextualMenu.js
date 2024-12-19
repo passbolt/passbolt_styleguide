@@ -319,7 +319,6 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * @return {boolean}
    */
   get isPasswordResources() {
-    console.log(this.props.resourceTypes?.getFirstById(this.resource.resource_type_id));
     return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasPassword();
   }
 

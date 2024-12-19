@@ -61,6 +61,7 @@ import mockRequestHasUserEnabledAccountRecovery from "./request/mockRequestHasUs
 import mockRequestRbacsFindMe from "./request/mockRequestRbacsFindMe";
 import mockRequestAccountGet from "./request/mockRequestAccountGet";
 import mockRequestFindMyGropus from "./request/mockRequestGroups";
+import mockRequestResourcesFindDetails from "./request/mockRequestResourcesFindDetails";
 
 export default storage => {
   const mockPort = new MockPort(storage);
@@ -78,6 +79,7 @@ export default storage => {
   mockPort.addRequestListener("passbolt.users.find-logged-in-user", mockRequestUsersFindLoggedInUser);
   mockPort.addRequestListener("passbolt.resources.create", mockRequestResourcesCreate);
   mockPort.addRequestListener("passbolt.resources.update", mockRequestResourcesUpdate);
+  mockPort.addRequestListener("passbolt.resources.find-details", mockRequestResourcesFindDetails);
   mockPort.addRequestListener("passbolt.share.find-resources-for-share", mockRequestShareGetResources);
   mockPort.addRequestListener("passbolt.share.search-aros", mockRequestShareSearchAros);
   mockPort.addRequestListener("passbolt.secret.find-by-resource-id", mockRequestSecretDecrypt);

@@ -11,16 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
+import {v4 as uuidv4} from "uuid";
 
 const createFolder = (index, data = {}) => ({
-  id: index,
+  id: uuidv4(),
   name: `Folder-${index}`,
   created: "2020-02-01T00:00:00+00:00",
   modified: "2020-02-01T00:00:00+00:00",
   created_by: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
   modified_by: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
   permission: {
-    id: "6aada140-fe8b-5e69-a90f-ae0cec6d3dcf",
+    id: uuidv4(),
     aco: "Folder",
     aco_foreign_key: "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
     aro: "User",

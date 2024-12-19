@@ -42,6 +42,7 @@ import WorkspaceSwitcher from "../../Common/Navigation/WorkspaceSwitcher/Workspa
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 import DisplayResourcesWorkspaceFilters from "./DisplayResourcesWorkspaceFilters";
 import Footer from "../../Common/Footer/Footer";
+import DisplayEmptyDetails from "../../ResourceFolderDetails/DisplayResourceFolderDetails/DisplayEmptyDetails";
 
 class Workspace extends Component {
   /**
@@ -108,6 +109,15 @@ class Workspace extends Component {
    */
   get isUserWorkspaceVisible() {
     return this.props.rbacContext.canIUseUiAction(uiActions.USERS_VIEW_WORKSPACE);
+  }
+
+  /**
+   * Returns true if there is currently if nothing is selected in the workspace.
+   * @returns {boolean}
+   */
+  get shouldDisplayEmptyDetails() {
+    return !this.props.resourceWorkspaceContext.details.folder
+      && !this.props.resourceWorkspaceContext.details.resource;
   }
 
   /**
@@ -188,15 +198,17 @@ class Workspace extends Component {
               </div>
               <DisplayResourcesList/>
             </div>
-            {this.props.resourceWorkspaceContext.details.folder && this.hasLockDetail() &&
+            {this.hasLockDetail() &&
               <div className="panel aside">
-                <DisplayResourceFolderDetails/>
-                <Footer/>
-              </div>
-            }
-            {this.props.resourceWorkspaceContext.details.resource && this.hasLockDetail() &&
-              <div className="panel aside">
-                <DisplayResourceDetails/>
+                {this.shouldDisplayEmptyDetails &&
+                  <DisplayEmptyDetails />
+                }
+                {this.props.resourceWorkspaceContext.details.folder &&
+                  <DisplayResourceFolderDetails/>
+                }
+                {this.props.resourceWorkspaceContext.details.resource &&
+                  <DisplayResourceDetails/>
+                }
                 <Footer/>
               </div>
             }
