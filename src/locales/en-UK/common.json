@@ -723,7 +723,7 @@
   "Password is no longer marked as expired whenever the password is updated.": "Password is no longer marked as expired whenever the password is updated.",
   "Password must be a valid string": "Password must be a valid string",
   "Password Policy": "Password Policy",
-  "Password, Encrypted description and TOTP": "",
+  "Password, Encrypted description and TOTP": "Password, Encrypted description and TOTP",
   "passwords": "passwords",
   "Passwords": "Passwords",
   "Passwords settings": "Passwords settings",
