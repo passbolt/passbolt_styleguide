@@ -240,7 +240,6 @@ class ExtApp extends Component {
                                       </NavigationContextProvider>
                                     </Router>
                                     <ManageLoading/>
-                                    {/* TODO To be moved into information panel <Footer/> */}
                                   </ProgressContextProvider>
                                 </LoadingContextProvider>
                               </ContextualMenuContextProvider>

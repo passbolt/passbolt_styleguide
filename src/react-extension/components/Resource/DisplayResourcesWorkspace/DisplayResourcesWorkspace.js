@@ -41,6 +41,7 @@ import InfoSVG from "../../../../img/svg/info.svg";
 import WorkspaceSwitcher from "../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 import DisplayResourcesWorkspaceFilters from "./DisplayResourcesWorkspaceFilters";
+import Footer from "../../Common/Footer/Footer";
 
 class Workspace extends Component {
   /**
@@ -188,10 +189,16 @@ class Workspace extends Component {
               <DisplayResourcesList/>
             </div>
             {this.props.resourceWorkspaceContext.details.folder && this.hasLockDetail() &&
-              <DisplayResourceFolderDetails/>
+              <div className="panel aside">
+                <DisplayResourceFolderDetails/>
+                <Footer/>
+              </div>
             }
             {this.props.resourceWorkspaceContext.details.resource && this.hasLockDetail() &&
-              <DisplayResourceDetails/>
+              <div className="panel aside">
+                <DisplayResourceDetails/>
+                <Footer/>
+              </div>
             }
           </div>
         </div>

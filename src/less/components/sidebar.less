@@ -1,47 +1,35 @@
 /**
  * Sidebar
  */
-.panel.aside {
-  z-index: 2;
-  display: flex;
-  width: 35rem;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.6rem;
+.sidebar {
+  flex: 1 0 0;
   align-self: stretch;
-  border-radius: var(--Section-border-radius) var(--Section-border-radius) 0 0;
-  background: var(--Workspace-Panels-background);
+  display: flex;
+  flex-direction: column;
 
-  .sidebar{
-    align-self: stretch;
-  /* Controls */
   .sidebar-header {
     padding: 1.6rem;
     display: flex;
     align-items: center;
     align-self: stretch;
-    .clearfix();
 
     .title-area {
       display: flex;
       align-items: flex-start;
-      flex: 1 0 0;
+      min-width: 0;
 
       h3 {
         display: flex;
         padding: 0 .8rem 0 1.6rem;
         flex-direction: column;
         align-items: flex-start;
-        flex: 1 0 0;
         margin: 0;
         border-bottom: none;
-        display: flex;
+        min-width: 0;
 
         .title-wrapper {
           width: 100%;
-          display: flex;
           align-self: stretch;
-
           line-height: normal;
           font-weight: 600;
           font-size: 2rem;
@@ -59,26 +47,8 @@
           color: var(--Text-and-icons-Main-text);
           opacity: 0.5;
           font-weight: 400;
-          display: flex;
-          align-self: stretch;
+          width: 100%;
           .ellipsis();
-        }
-      }
-
-      .title-link {
-        display: flex;
-        padding: .2rem;
-        justify-content: center;
-        align-items: center;
-        gap: 1.6rem;
-
-        .svg-icon svg {
-          width: 1.6rem;
-          height: 1.6rem;
-        }
-
-        &:hover {
-          --icon-color: var(--Palette-Contrast-1);
         }
       }
     }
@@ -95,9 +65,6 @@
       height: 5.6rem;
 
       .svg-icon {
-        --icon-color: @info-panel-header-icon-color;
-        padding: 1.44rem 1.32rem 1.45rem 1.44rem;
-
         &.exclamation {
           svg {
             height: 1.2rem;
@@ -117,15 +84,7 @@
       }
     }
 
-    .dialog-close {
-      position: absolute;
-      right: 1.6rem;
-      top: 1.6rem;
-      padding: 0;
-    }
-
     &.suspended {
-
       .teaser-image,
       .title-wrapper .name,
       .subtitle {
@@ -155,7 +114,7 @@
       .accordion-header {
         display: flex;
         height: 2.2rem;
-        padding: 1.2rem 0;
+        padding: 1.2rem 1.6rem;
         align-items: center;
         gap: 1.6rem;
         align-self: stretch;
@@ -164,15 +123,17 @@
           width: 100%;
           margin-block-start: 0;
           margin-block-end: 0;
+
           button {
             width: 100%;
             display: flex;
+
             .accordion-title {
-                display: flex;
-                flex: 1 0 0;
-                font-size: 1.5rem;
-                font-weight: 700;
-                line-height: normal;
+              display: flex;
+              flex: 1 0 0;
+              font-size: 1.5rem;
+              font-weight: 700;
+              line-height: normal;
             }
 
             .svg-icon {
@@ -182,7 +143,7 @@
               flex-direction: column;
               justify-content: center;
               align-items: center;
-            } 
+            }
           }
         }
       }
@@ -191,7 +152,7 @@
       .accordion-content {
         padding: 1.6rem;
         gap: 1.6rem;
-        width: 100%;
+        align-self: stretch;
 
         // button displayed next to caret that open/close
         .section-action {
@@ -222,9 +183,9 @@
     }
 
     /** SECTIONS **/
+
     .detailed-information {
       li {
-        .clearfix();
         font-size: 1.4rem;
         line-height: 1.9rem;
         margin-bottom: .8rem;
@@ -350,8 +311,6 @@
       }
 
       li {
-        .clearfix();
-
         span {
           .ellipsis();
         }
@@ -383,9 +342,8 @@
     }
 
     /** Sidebar forms **/
-    .form-content {
-      .clearfix();
 
+    .form-content {
       label {
         display: none;
       }
@@ -399,6 +357,7 @@
       }
 
       /* submit / cancel */
+
       .actions {
         display: flex;
         align-items: center;
@@ -424,5 +383,4 @@
       }
     }
   }
-}
 }
