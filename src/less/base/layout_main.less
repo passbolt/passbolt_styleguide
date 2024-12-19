@@ -33,22 +33,25 @@
 
           .sidebar-content {
             display: flex;
-            padding: 0 1.6rem;
             flex-direction: column;
             align-items: flex-start;
             gap: 1.6rem;
             flex: 1 0 0;
             align-self: stretch;
+            min-height: 0;
 
             .top-bar-left {
               display: flex;
-              height: 4.3rem; // 7.2rem - 2.9rem (2.1rem + .8rem)
-              padding: 2.1rem 0 .8rem 1.6rem;
+              padding: 2.95rem 1.6rem 1.65rem 3.2rem;  // 2.95rem (top) + 1.65rem (bottom) + 2.6rem (logo height) = 7.2rem
               flex-direction: column;
               justify-content: center;
               align-items: flex-start;
               gap: 2rem;
               align-self: stretch;
+            }
+
+            .main-action-wrapper {
+              padding: 0 1.6rem;
             }
 
             .sidebar-content-left {
@@ -57,6 +60,8 @@
               align-items: flex-start;
               gap: .8rem;
               align-self: stretch;
+              padding: 0 1.6rem;
+              overflow-y: auto;
             }
           }
         }
