@@ -272,7 +272,9 @@ class DisplayResourceDetailsDescription extends React.Component {
         <div className="accordion-header">
           <h4>
             <button type="button" onClick={this.handleTitleClickEvent} className="link no-border section-opener">
-              <Trans>Description</Trans>
+              <span className="accordion-title">
+                <Trans>Description</Trans>
+              </span>
               {this.state.open &&
               <Icon name="caret-down"/>
               }

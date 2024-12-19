@@ -86,7 +86,9 @@ class DisplayResourceDetailsTag extends React.Component {
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
-              <Trans>Tags</Trans>
+              <span className="accordion-title">
+                <Trans>Tags</Trans>
+              </span>
               {this.state.open &&
               <Icon name="caret-down"/>
               }

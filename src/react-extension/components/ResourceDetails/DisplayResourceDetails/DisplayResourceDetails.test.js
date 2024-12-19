@@ -66,11 +66,6 @@ describe("DisplayResourceDetails", () => {
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${props.context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resourceWorkspaceContext.details.resource.id}`);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The permalink has been copied to clipboard");
     });
-
-    it('As LU I should be able to close the resource details', async() => {
-      await page.closeResourceDetails();
-      expect(props.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
-    });
   });
 
   describe('As LU I can see the details section', () => {

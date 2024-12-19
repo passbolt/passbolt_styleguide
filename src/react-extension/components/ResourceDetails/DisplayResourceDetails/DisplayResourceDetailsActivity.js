@@ -468,7 +468,9 @@ class DisplayResourceDetailsActivity extends React.Component {
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
-              <Trans>Activity</Trans>
+              <span className="accordion-title">
+                <Trans>Activity</Trans>
+              </span>
               {this.state.open &&
               <Icon name="caret-down"/>
               }

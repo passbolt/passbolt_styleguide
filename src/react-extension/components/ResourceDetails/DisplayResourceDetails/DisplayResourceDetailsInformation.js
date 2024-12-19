@@ -550,7 +550,7 @@ class DisplayResourceDetailsInformation extends React.Component {
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
-              <span>
+              <span className="accordion-title">
                 <Trans>Information</Trans>
                 {canUsePasswordExpiry && this.isAttentionRequired && <Icon name="exclamation" baseline={true}/>}
               </span>
