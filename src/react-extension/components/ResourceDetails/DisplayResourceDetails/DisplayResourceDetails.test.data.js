@@ -18,15 +18,19 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * Default props
  * @returns {{resource: {id: string, name: string}}}
  */
 export function defaultProps() {
+  const resourceWorkspaceContext = resourceWorkspaceContextWithSelectedResourceIOwn();
   return {
     context: defaultUserAppContext(),
-    resourceWorkspaceContext: resourceWorkspaceContextWithSelectedResourceIOwn(),
+    resourceWorkspaceContext: resourceWorkspaceContext,
+    rbacContext: defaultAdministratorRbacContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    initialEntries: `/app/passwords/view/${resourceWorkspaceContext.details.resource.id}`,
   };
 }

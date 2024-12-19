@@ -205,7 +205,9 @@ class DisplayResourceDetailsPermission extends React.Component {
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
-              <Trans>Shared with</Trans>
+              <span className="accordion-title">
+                <Trans>Shared with</Trans>
+              </span>
               {this.state.open &&
               <Icon name="caret-down"/>
               }

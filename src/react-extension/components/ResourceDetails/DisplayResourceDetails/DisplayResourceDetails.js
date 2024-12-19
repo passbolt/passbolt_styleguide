@@ -121,45 +121,46 @@ class DisplayResourceDetails extends React.Component {
       && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_ACTIVITIES);
     const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
     const canSeeComments = this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_COMMENTS);
-
     return (
       <div className="panel aside ready">
         <div className="sidebar resource">
           <div className="sidebar-header">
             <div className="teaser-image">
-              <Icon name="key"/>
+              <Icon name="key" />
             </div>
-            <h3>
-              <div className="title-wrapper">
-                <span className="name">{this.props.resourceWorkspaceContext.details.resource.metadata.name}</span>
-                <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this password")} onClick={this.handlePermalinkClick}>
-                  <Icon name="link"/>
-                  <span className="visuallyhidden"><Trans>Copy the link to this password</Trans></span>
-                </button>
-              </div>
-              <span className="subtitle">{this.subtitle}</span>
-            </h3>
-            <button type="button" className="dialog-close button-transparent" onClick={this.handleCloseClick}>
-              <Icon name="close"/>
-              <span className="visuallyhidden"><Trans>Close</Trans></span>
-            </button>
+            <div className="title-area">
+
+              <h3>
+                <div className="title-wrapper">
+                  <span className="name">{this.props.resourceWorkspaceContext.details.resource.metadata.name}</span>
+                </div>
+                <span className="subtitle">{this.subtitle}</span>
+              </h3>
+              <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this password")} onClick={this.handlePermalinkClick}>
+                <Icon name="link" />
+                <span className="visuallyhidden"><Trans>Copy the link to this password</Trans></span>
+              </button>
+            </div>
           </div>
-          <DisplayResourceDetailsInformation/>
-          {!this.isStandaloneTotpResource &&
-            <DisplayResourceDetailsDescription/>
-          }
-          {canViewShare &&
-            <DisplayResourceDetailsPermission/>
-          }
-          {canUseTags &&
-          <DisplayResourceDetailsTag/>
-          }
-          {canSeeComments &&
-          <DisplayResourceDetailsComment/>
-          }
-          {canUseAuditLog &&
-          <DisplayResourceDetailsActivity/>
-          }
+
+          <div className="sidebar-content">
+            <DisplayResourceDetailsInformation />
+            {!this.isStandaloneTotpResource &&
+              <DisplayResourceDetailsDescription />
+            }
+            {canViewShare &&
+              <DisplayResourceDetailsPermission />
+            }
+            {canUseTags &&
+              <DisplayResourceDetailsTag />
+            }
+            {canSeeComments &&
+              <DisplayResourceDetailsComment />
+            }
+            {canUseAuditLog &&
+              <DisplayResourceDetailsActivity />
+            }
+          </div>
         </div>
       </div>
     );

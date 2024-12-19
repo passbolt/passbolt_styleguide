@@ -139,7 +139,9 @@ class DisplayResourceDetailsComment extends React.Component {
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClickedEvent}>
-              <Trans>Comments</Trans>
+              <span className="accordion-title">
+                <Trans>Comments</Trans>
+              </span>
               {this.state.open &&
               <Icon name="caret-down"/>
               }
