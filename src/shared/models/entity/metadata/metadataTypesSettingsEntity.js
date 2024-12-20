@@ -12,6 +12,7 @@
  * @since         4.10.0
  */
 import EntityV2 from "../abstract/entityV2";
+import EntityValidationError from "../abstract/entityValidationError";
 
 export const RESOURCE_TYPE_VERSION_4 = "v4";
 export const RESOURCE_TYPE_VERSION_5 = "v5";
@@ -37,6 +38,7 @@ class MetadataTypesSettingsEntity extends EntityV2 {
         "allow_creation_of_v4_folders",
         "allow_creation_of_v4_tags",
         "allow_creation_of_v4_comments",
+        "allow_v5_v4_downgrade",
       ],
       "properties": {
         "default_resource_types": {
@@ -91,6 +93,9 @@ class MetadataTypesSettingsEntity extends EntityV2 {
         "allow_creation_of_v4_comments": {
           "type": "boolean"
         },
+        "allow_v5_v4_downgrade": {
+          "type": "boolean"
+        },
       }
     };
   }
@@ -101,10 +106,10 @@ class MetadataTypesSettingsEntity extends EntityV2 {
    */
   static createFromV4Default() {
     const defaultData = {
-      default_resource_types: "v4",
-      default_folder_type: "v4",
-      default_tag_type: "v4",
-      default_comment_type: "v4",
+      default_resource_types: RESOURCE_TYPE_VERSION_4,
+      default_folder_type: RESOURCE_TYPE_VERSION_4,
+      default_tag_type: RESOURCE_TYPE_VERSION_4,
+      default_comment_type: RESOURCE_TYPE_VERSION_4,
       allow_creation_of_v5_resources: false,
       allow_creation_of_v5_folders: false,
       allow_creation_of_v5_tags: false,
@@ -113,6 +118,7 @@ class MetadataTypesSettingsEntity extends EntityV2 {
       allow_creation_of_v4_folders: true,
       allow_creation_of_v4_tags: true,
       allow_creation_of_v4_comments: true,
+      allow_v5_v4_downgrade: false,
     };
 
     return new MetadataTypesSettingsEntity(defaultData);
@@ -126,10 +132,10 @@ class MetadataTypesSettingsEntity extends EntityV2 {
    */
   static createFromDefault(data = {}) {
     const defaultData = {
-      default_resource_types: "v4",
-      default_folder_type: "v4",
-      default_tag_type: "v4",
-      default_comment_type: "v4",
+      default_resource_types: RESOURCE_TYPE_VERSION_4,
+      default_folder_type: RESOURCE_TYPE_VERSION_4,
+      default_tag_type: RESOURCE_TYPE_VERSION_4,
+      default_comment_type: RESOURCE_TYPE_VERSION_4,
       allow_creation_of_v5_resources: false,
       allow_creation_of_v5_folders: false,
       allow_creation_of_v5_tags: false,
@@ -138,9 +144,32 @@ class MetadataTypesSettingsEntity extends EntityV2 {
       allow_creation_of_v4_folders: true,
       allow_creation_of_v4_tags: true,
       allow_creation_of_v4_comments: true,
+      allow_v5_v4_downgrade: false,
     };
 
     return new MetadataTypesSettingsEntity({...defaultData, ...data});
+  }
+
+  /**
+   * @inheritDoc
+   * @throws {EntityValidationError} If the default resource creation is not allowed.
+   */
+  validateBuildRules() {
+    let error;
+
+    if (this.isDefaultResourceTypeV4 && !this.allowCreationOfV4Resources) {
+      error = error || new EntityValidationError();
+      const message = "Allow creation of v4 resources should be true when default resources is v4";
+      error.addError("allow_creation_of_v4_resources", "is_default", message);
+    } else if (this.isDefaultResourceTypeV5 && !this.allowCreationOfV5Resources) {
+      error = error || new EntityValidationError();
+      const message = "Allow creation of v5 resources should be true when default resources is v5";
+      error.addError("allow_creation_of_v5_resources", "is_default", message);
+    }
+
+    if (error) {
+      throw error;
+    }
   }
 
   /*

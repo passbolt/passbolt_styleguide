@@ -20,13 +20,20 @@ import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import {
   defaultMetadataTypesSettingsV4Dto,
-  defaultMetadataTypesSettingsV50FreshDto, defaultMetadataTypesSettingsV50OMigratedFromV4WithSupportV4Dto,
+  defaultMetadataTypesSettingsV50FreshDto,
+  defaultMetadataTypesSettingsV50OMigratedFromV4WithSupportV4Dto,
   defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto,
   defaultMetadataTypesSettingsV6Dto
 } from "./metadataTypesSettingsEntity.test.data";
 
 describe("MetadataTypesSettings", () => {
   describe("::getSchema", () => {
+    it("schema must validate", () => {
+      EntitySchema.validateSchema(MetadataTypesSettingsEntity.name, MetadataTypesSettingsEntity.getSchema());
+    });
+  });
+
+  describe("::validateSchema", () => {
     it("schema must validate", () => {
       EntitySchema.validateSchema(MetadataTypesSettingsEntity.name, MetadataTypesSettingsEntity.getSchema());
     });
@@ -93,6 +100,25 @@ describe("MetadataTypesSettings", () => {
     it("validates allow_creation_of_v4_comments property", () => {
       assertEntityProperty.boolean(MetadataTypesSettingsEntity, "allow_creation_of_v4_comments");
       assertEntityProperty.required(MetadataTypesSettingsEntity, "allow_creation_of_v4_comments");
+    });
+
+    it("validates allow_v5_v4_downgrade property", () => {
+      assertEntityProperty.boolean(MetadataTypesSettingsEntity, "allow_v5_v4_downgrade");
+      assertEntityProperty.required(MetadataTypesSettingsEntity, "allow_v5_v4_downgrade");
+    });
+  });
+
+  describe("::validateBuildRules", () => {
+    it("validates default_resource_types cannot be v4 if allow_creation_of_v4_resources is false", () => {
+      const dto = defaultMetadataTypesSettingsV4Dto();
+      dto.allow_creation_of_v4_resources = false;
+      expect(() => new MetadataTypesSettingsEntity(dto)).toThrowEntityValidationError("allow_creation_of_v4_resources", "is_default");
+    });
+
+    it("validates default_resource_types cannot be v4 if allow_creation_of_v4_resources is false", () => {
+      const dto = defaultMetadataTypesSettingsV50FreshDto();
+      dto.allow_creation_of_v5_resources = false;
+      expect(() => new MetadataTypesSettingsEntity(dto)).toThrowEntityValidationError("allow_creation_of_v5_resources", "is_default");
     });
   });
 
