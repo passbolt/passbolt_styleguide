@@ -4,7 +4,11 @@
             display:block;
         }
         a:hover, button:hover {
-            color:@text-focus-color;
+            color: var(--Palette-Contrast-1);
+
+            &:disabled, &.disabled {
+              color: var(--Text-and-icons-Main-text);
+            }
         }
     }
 
@@ -19,6 +23,13 @@
     }
 
     .accordion-content {
+        a:hover, button:hover {
+          color: var(--Palette-Contrast-1);
+
+          &:disabled, &.disabled {
+            color: var(--Text-and-icons-Main-text);
+          }
+        }
         .processing-wrapper {
             display: flex;
             align-items: center;

@@ -31,6 +31,7 @@ import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import DisplayResourceDetailsPassword from "./DisplayResourceDetailsPassword";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -102,6 +103,14 @@ class DisplayResourceDetails extends React.Component {
   }
 
   /**
+   * Is password resource
+   * @return {boolean}
+   */
+  get isPasswordResources() {
+    return this.props.resourceTypes?.getFirstById(this.props.resourceWorkspaceContext.details.resource.resource_type_id)?.hasPassword();
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -145,6 +154,9 @@ class DisplayResourceDetails extends React.Component {
 
         <div className="sidebar-content">
           <DisplayResourceDetailsInformation />
+          {this.isPasswordResources &&
+            <DisplayResourceDetailsPassword/>
+          }
           {!this.isStandaloneTotpResource &&
             <DisplayResourceDetailsDescription />
           }

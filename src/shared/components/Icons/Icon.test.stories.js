@@ -18,8 +18,8 @@ import CalendarClockSVG from "../../../img/svg/calendar_clock.svg";
 import CalendarCogSVG from "../../../img/svg/calendar_cog.svg";
 import CameraSVG from "../../../img/svg/camera.svg";
 import CardSVG from "../../../img/svg/card.svg";
-import CarretDownSVG from "../../../img/svg/caret_down.svg";
-import CarretRightSVG from "../../../img/svg/caret_right.svg";
+import CaretDownSVG from "../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../img/svg/caret_right.svg";
 import CastleSVG from "../../../img/svg/castle.svg";
 import ChevronLeftSVG from "../../../img/svg/chevron_left.svg";
 import ChevronRightSVG from "../../../img/svg/chevron_right.svg";
@@ -193,8 +193,8 @@ const iconsSVGs = [
   CalendarCogSVG,
   CameraSVG,
   CardSVG,
-  CarretDownSVG,
-  CarretRightSVG,
+  CaretDownSVG,
+  CaretRightSVG,
   CastleSVG,
   ChevronLeftSVG,
   ChevronRightSVG,

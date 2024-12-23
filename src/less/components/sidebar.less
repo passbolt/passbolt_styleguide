@@ -159,27 +159,61 @@
 
 
       .accordion-content {
+        display: flex;
         padding: 1.6rem;
         gap: 1.6rem;
         align-self: stretch;
 
-        // button displayed next to caret that open/close
-        .section-action {
+        .information-label, .information-value {
           display: flex;
-          justify-content: center;
-          font-size: 1.4rem;
-          position: absolute;
-          margin-top: -5.1rem;
-          right: 4.2rem;
-          border: 0;
-          padding: 0;
-          width: 2.2rem;
-          height: 2rem;
-          font-style: normal;
+          flex-direction: column;
+          gap: .4rem;
+          max-width: 50%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
 
-          .svg-icon.plus-circle svg {
-            width: 1.6rem;
-            height: 1.6rem;
+          .label {
+            color: var(--Text-and-icons-Secondary-text)
+          }
+
+          .label, .value {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            button {
+              display: block;
+              width: 100%;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              text-align: left;
+            }
+          }
+
+          .password-value {
+            display: flex;
+            gap: .4rem;
+
+            .secret {
+              &-with-preview {
+                max-width: calc(100% - 2.4rem);
+              }
+
+              &-copy {
+                button {
+                  line-height: 1.9rem; // set height for obfuscated characters
+                }
+              }
+
+              button {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 100%;
+              }
+            }
           }
         }
 
