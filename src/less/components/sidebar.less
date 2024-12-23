@@ -103,7 +103,6 @@
 
   .sidebar-content {
     display: flex;
-    padding-top: .8rem;
     flex-direction: column;
     align-items: flex-start;
     gap: .8rem;
@@ -439,6 +438,50 @@
 
       .error-message {
         margin-bottom: 0;
+      }
+    }
+
+    .tabs-nav--bordered {
+      display: flex;
+      justify-content: space-around;
+      margin: 0;
+      padding: 0 1.6rem;
+      border-color: var(--Workspace-Dividers);
+
+      li {
+        border: 0;
+        margin: 0;
+        background: transparent;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+
+        button {
+          padding: .8rem 1.6rem;
+          border-radius: var(--Button-border-radius) var(--Button-border-radius) 0 0;
+
+          &:hover, &:focus-visible {
+            background: var(--Grid-Grid-hover-row);
+            border-bottom: 1px solid var(--Palette-Contrast-1);
+            margin-bottom: -.1rem;
+            box-shadow: none;
+            font-weight: 700;
+          }
+        }
+
+        &.active {
+          button {
+            border-bottom: 1px solid var(--Palette-Contrast-1);
+            margin-bottom: -.1rem;
+            box-shadow: none;
+            font-weight: 700;
+          }
+        }
+
+
+        &:hover, &:focus-visible {
+          box-shadow: none;
+        }
       }
     }
   }

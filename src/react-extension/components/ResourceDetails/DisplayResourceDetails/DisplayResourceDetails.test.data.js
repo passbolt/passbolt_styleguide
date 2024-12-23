@@ -24,15 +24,15 @@ import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/R
  * Default props
  * @returns {*}
  */
-export function defaultProps(props = {}) {
-  const resourceWorkspaceContext = props.resourceWorkspaceContext || resourceWorkspaceContextWithSelectedResourceIOwn();
-  delete props.resourceWorkspaceContext;
+export function defaultProps(data = {}) {
+  const resourceWorkspaceContext = data.resourceWorkspaceContext || resourceWorkspaceContextWithSelectedResourceIOwn();
+  delete data.resourceWorkspaceContext;
   return {
-    context: defaultUserAppContext(),
+    ...data,
+    context: defaultUserAppContext(data.context),
+    rbacContext: defaultAdministratorRbacContext(data.rbacContext),
     resourceWorkspaceContext: resourceWorkspaceContext,
-    rbacContext: defaultAdministratorRbacContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     initialEntries: `/app/passwords/view/${resourceWorkspaceContext.details.resource.id}`,
-    ...props
   };
 }

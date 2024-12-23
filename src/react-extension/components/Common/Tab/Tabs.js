@@ -52,7 +52,7 @@ class Tabs extends React.Component {
    * @param tabItem The item which represents the tab
    */
   handleTabClick(tabItem) {
-    this.setState({activeTabName: tabItem.name});
+    this.setState({activeTabName: tabItem.type});
     if (typeof tabItem.onClick == 'function') {
       tabItem.onClick();
     }
@@ -68,12 +68,12 @@ class Tabs extends React.Component {
                 key={key}
                 name={props.name}
                 onClick={ () => this.handleTabClick(props)}
-                isActive={props.name === this.state.activeTabName}
+                isActive={props.type === this.state.activeTabName}
               />)
           }
         </ul>
         <div className="tabs-active-content">
-          {this.props.children.find(tab => tab.props.name === this.state.activeTabName).props.children}
+          {this.props.children.find(tab => tab.props.type === this.state.activeTabName).props.children}
         </div>
       </div>
     );
