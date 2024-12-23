@@ -25,6 +25,7 @@ import {
 } from "./DisplayResourcesWorkspace.test.data";
 import DisplayResourceWorkspacePage from "./DisplayResourcesWorkspace.test.page";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultResourceWorkspaceContext} from '../../../contexts/ResourceWorkspaceContext.test.data';
 
 jest.mock("../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetails", () => () => <span className="sidebar resource"></span>);
 jest.mock("../../ResourceFolderDetails/DisplayResourceFolderDetails/DisplayResourceFolderDetails", () => () => <span className="sidebar folder"></span>);
@@ -100,8 +101,8 @@ describe("DisplayResourcesWorkspace", () => {
       const props = defaultPropsWithFolderAndResource(); // The resourceWorkspaceContext to pass
       page = new DisplayResourceWorkspacePage(props);
       expect(page.displayResourceWorkspacePageObject.exists()).toBeTruthy();
-      expect(page.displayResourceWorkspacePageObject.sidebarResource).toBeTruthy();
-      expect(page.displayResourceWorkspacePageObject.sidebarFolder).toBeTruthy();
+      expect(page.displayResourceWorkspacePageObject.hasSidebarResource).toBeTruthy();
+      expect(page.displayResourceWorkspacePageObject.hasSidebarFolder).toBeTruthy();
       expect(page.displayResourceWorkspacePageObject.folderTree).toBeTruthy();
       expect(page.displayResourceWorkspacePageObject.tag).toBeTruthy();
       expect(page.displayResourceWorkspacePageObject.footer).toBeTruthy();
@@ -111,8 +112,8 @@ describe("DisplayResourcesWorkspace", () => {
       const props = defaultPropsFolderAndResourceLocked(); // The resourceWorkspaceContext to pass
       page = new DisplayResourceWorkspacePage(props);
       expect(page.displayResourceWorkspacePageObject.exists()).toBeTruthy();
-      expect(page.displayResourceWorkspacePageObject.sidebarResource).toBeFalsy();
-      expect(page.displayResourceWorkspacePageObject.sidebarFolder).toBeFalsy();
+      expect(page.displayResourceWorkspacePageObject.hasSidebarResource).toBeFalsy();
+      expect(page.displayResourceWorkspacePageObject.hasSidebarFolder).toBeFalsy();
       expect(page.displayResourceWorkspacePageObject.footer).toBeFalsy();
     });
 
@@ -120,8 +121,8 @@ describe("DisplayResourcesWorkspace", () => {
       const props = defaultProps(); // The resourceWorkspaceContext to pass
       page = new DisplayResourceWorkspacePage(props);
       expect(page.displayResourceWorkspacePageObject.exists()).toBeTruthy();
-      expect(page.displayResourceWorkspacePageObject.sidebarResource).toBeFalsy();
-      expect(page.displayResourceWorkspacePageObject.sidebarFolder).toBeFalsy();
+      expect(page.displayResourceWorkspacePageObject.hasSidebarResource).toBeFalsy();
+      expect(page.displayResourceWorkspacePageObject.hasSidebarFolder).toBeFalsy();
       expect(page.displayResourceWorkspacePageObject.footer).toBeFalsy();
     });
   });
@@ -152,6 +153,25 @@ describe("DisplayResourcesWorkspace", () => {
       expect(props.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('name', false);
       await page.displayResourceWorkspacePageObject.clickOn(page.displayResourceWorkspacePageObject.menuColumnViewItem(6));
       expect(props.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('password', false);
+    });
+  });
+
+  describe("As LU I can see the empty sidebar", () => {
+    it('As LU I can toggle the resource sidebar', async() => {
+      expect.assertions(3);
+
+      const props = defaultProps({
+        resourceWorkspaceContext: defaultResourceWorkspaceContext({
+          lockDisplayDetail: true,
+        })
+      });
+      page = new DisplayResourceWorkspacePage(props);
+
+      expect(page.displayResourceWorkspacePageObject.infoButton).not.toBeNull();
+      expect(page.displayResourceWorkspacePageObject.hasSidebarEmpty).toStrictEqual(true);
+
+      await page.displayResourceWorkspacePageObject.clickOn(page.displayResourceWorkspacePageObject.infoButton);
+      expect(props.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
     });
   });
 });
