@@ -10,6 +10,8 @@
 
     .content-wrapper {
         overflow: hidden;
+        width: 100%;
+
         .content {
             .name {
                 .ellipsis();
@@ -22,8 +24,11 @@
 
             .subinfo {
                 .ellipsis();
-                font-size: 1.1rem; /* 11px */
                 opacity: .5;
+
+                color: var(--Text-and-icons-Secondary-text);
+                font-size: 1.2rem;
+                padding-top: .8rem;
 
                 .dateTimeAgo {
                     color: @default-text-color;
@@ -32,7 +37,7 @@
                 .chips-group {
                     float: right;
                     .chips {
-                        font-size: 1.4rem;
+                        font-size: 1.2rem;
                         color: @chips-user-status-text-color;
                         padding-top: 0.1rem;
                         padding-bottom: 0.1rem;
@@ -85,10 +90,18 @@
     }
 
     ul.permissions-list {
-        margin-top: 1em;
-        font-size: 0.8em;
+        display: flex;
+        flex-direction: column;
+        gap: .8rem;
+        padding-top: .8rem;
+        font-size: 1.4rem;
 
         li {
+            display: flex;
+            gap: .4rem;
+            width: 100%;
+            align-items: center;
+
             .avatar {
                 margin-left: 0;
                 float: left;
@@ -107,9 +120,7 @@
                 }
             }
             .name {
-                display: inline-block;
-                padding-left:7%;
-                line-height: (@avatar-size / 2);
+                width: 100%;
                 &.crossed {
                     text-decoration: line-through;
                 }
@@ -117,25 +128,20 @@
                     font-weight: bold;
                 }
             }
-            .type{
-                float: right;
-                text-align: right;
-                line-height: (@avatar-size / 2);
-                color: @text-info-color;
+            .type {
                 span {
-                    background-color: white;
-                    font-size: 0.8em;
-                    color: white;
-                    padding: 0.1em 0.5em;
-                    border-radius: 0.5em;
+                    font-size: 1.2rem;
+                    color: var(--Text-and-icons-Main-text-reversed);;
+                    padding: 0 .8rem .2rem;
+                    border-radius: var(--Button-border-radius);
                     &.created {
-                        background-color: @usercard-created-background;
+                        background: var(--Palette-Contrast-4);
                     }
                     &.updated {
-                        background-color: @usercard-updated-background;
+                        background: var(--Palette-Contrast-1);
                     }
                     &.removed {
-                        background-color: @usercard-removed-background;
+                        background: var(--Palette-Contrast-3);
                     }
                 }
             }
@@ -149,11 +155,17 @@
     }
 }
 
+
 .usercard-col-2 {
     .usercard-col-2(34px);
 }
 
 .usercard-detailed-col-2 {
+    display: flex;
+    gap: 1.6rem;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+
     .usercard-col-2(42px);
 
     // Animation used to show that an activity is new.
