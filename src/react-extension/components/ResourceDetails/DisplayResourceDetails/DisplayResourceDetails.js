@@ -32,6 +32,7 @@ import {
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import DisplayResourceDetailsPassword from "./DisplayResourceDetailsPassword";
+import DisplayResourceDetailsTotp from "./DisplayResourceDetailsTotp";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -111,6 +112,14 @@ class DisplayResourceDetails extends React.Component {
   }
 
   /**
+   * Is totp resource
+   * @return {boolean}
+   */
+  get isTotpResources() {
+    return this.props.resourceTypes?.getFirstById(this.props.resourceWorkspaceContext.details.resource.resource_type_id)?.hasTotp();
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -156,6 +165,9 @@ class DisplayResourceDetails extends React.Component {
           <DisplayResourceDetailsInformation />
           {this.isPasswordResources &&
             <DisplayResourceDetailsPassword/>
+          }
+          {this.isTotpResources &&
+            <DisplayResourceDetailsTotp isStandaloneTotp={this.isStandaloneTotpResource}/>
           }
           {!this.isStandaloneTotpResource &&
             <DisplayResourceDetailsDescription />
