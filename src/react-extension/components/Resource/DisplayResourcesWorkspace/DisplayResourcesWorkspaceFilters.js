@@ -78,7 +78,7 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
     switch (this.props.resourceWorkspaceContext.filter.type) {
       case ResourceWorkspaceFilterTypes.FAVORITE:
         return <>
-          <FavoriteSVG/>
+          <FavoriteSVG className="star"/>
           <span><Trans>Starred</Trans></span>
         </>;
       case ResourceWorkspaceFilterTypes.SHARED_WITH_ME:
@@ -159,7 +159,7 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
             <DropdownMenu>
               <DropdownMenuItem>
                 <button type="button" className="no-border" onClick={this.handleFavoriteClick}>
-                  <FavoriteSVG/>
+                  <FavoriteSVG className="star"/>
                   <span><Trans>Starred</Trans></span>
                 </button>
               </DropdownMenuItem>

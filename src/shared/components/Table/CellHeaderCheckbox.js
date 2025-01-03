@@ -27,6 +27,7 @@ class CellHeaderCheckbox extends Component {
       <div className="input checkbox">
         <input
           type="checkbox"
+          className="for-grid"
           name="select all"
           checked={this.props.checked}
           onChange={this.props.onChange}/>
