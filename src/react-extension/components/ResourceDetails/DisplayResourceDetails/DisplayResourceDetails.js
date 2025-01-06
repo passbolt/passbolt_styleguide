@@ -120,6 +120,14 @@ class DisplayResourceDetails extends React.Component {
   }
 
   /**
+   * Has description
+   * @return {boolean}
+   */
+  get hasDescription() {
+    return this.props.resourceTypes?.getFirstById(this.props.resourceWorkspaceContext.details.resource.resource_type_id)?.hasMetadataDescription();
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -169,7 +177,7 @@ class DisplayResourceDetails extends React.Component {
           {this.isTotpResources &&
             <DisplayResourceDetailsTotp isStandaloneTotp={this.isStandaloneTotpResource}/>
           }
-          {!this.isStandaloneTotpResource &&
+          {this.hasDescription &&
             <DisplayResourceDetailsDescription />
           }
           {canViewShare &&

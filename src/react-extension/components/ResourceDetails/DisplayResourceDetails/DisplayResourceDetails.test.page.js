@@ -64,6 +64,27 @@ export default class DisplayResourceDetailsPage {
   }
 
   /**
+   * Returns the password
+   */
+  get password() {
+    return this._page.container.querySelector('.password');
+  }
+
+  /**
+   * Returns the totp
+   */
+  get totp() {
+    return this._page.container.querySelector('.totp');
+  }
+
+  /**
+   * Returns the description
+   */
+  get description() {
+    return this._page.container.querySelector('.description');
+  }
+
+  /**
    * Returns the close button
    */
   get closeButton() {
