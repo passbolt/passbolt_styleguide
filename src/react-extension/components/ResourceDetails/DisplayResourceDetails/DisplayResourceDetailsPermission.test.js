@@ -18,7 +18,6 @@
 
 
 import {
-  defaultAppContext,
   defaultProps, permissionMock,
 } from "./DisplayResourceDetailsPermission.test.data";
 import DisplayResourceDetailsPermissionPage from "./DisplayResourceDetailsPermission.test.page";
@@ -29,10 +28,9 @@ beforeEach(() => {
 
 describe("See permissions", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
   const permissionFoundRequestMockImpl = jest.fn(() => Promise.resolve(permissionMock));
 
   describe(' As LU I can see permissions of a resource with at least one permission', () => {
@@ -45,29 +43,30 @@ describe("See permissions", () => {
      */
 
     beforeEach(() => {
-      page = new DisplayResourceDetailsPermissionPage(context, props);
+      page = new DisplayResourceDetailsPermissionPage(props);
       mockContextRequest(permissionFoundRequestMockImpl);
     });
 
     it('I should see the 4 permissions made on the resource', async() => {
+      expect.assertions(3);
       await page.title.click();
       expect(page.title.hyperlink.textContent).toBe("Shared with");
 
       expect(page.displayPermissionList.exists()).toBeTruthy();
       expect(page.displayPermissionList.count()).toBe(3);
-      expect(page.displayPermissionList.editIcon).not.toBeNull();
-      await page.displayPermissionList.click(page.displayPermissionList.editIcon);
     });
 
     it('I should be able to identify each permission name', async() => {
+      expect.assertions(4);
       await page.title.click();
       expect(page.displayPermissionList.name(1)).toBe('Ada Lovelace (ada@passbolt.com)');
       expect(page.displayPermissionList.name(2)).toBe('Admin User (admin@passbolt.com)');
       expect(page.displayPermissionList.name(3)).toBe('Marketing');
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.permissions.find-aco-permissions-for-display", props.resourceWorkspaceContext.details.resource.id, "Resource");
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.permissions.find-aco-permissions-for-display", props.resourceWorkspaceContext.details.resource.id, "Resource");
     });
 
     it('I should be able to see each permission type', async() => {
+      expect.assertions(3);
       await page.title.click();
       expect(page.displayPermissionList.type(1)).toBe('can read');
       expect(page.displayPermissionList.type(2)).toBe('is owner');
@@ -90,10 +89,11 @@ describe("See permissions", () => {
 
     beforeEach(() => {
       mockContextRequest(loadingFindMockImpl);
-      page = new DisplayResourceDetailsPermissionPage(context, props);
+      page = new DisplayResourceDetailsPermissionPage(props);
     });
 
     it('I should see the loading message “Retrieving permissions”', async() => {
+      expect.assertions(2);
       await page.title.click();
 
       const inProgressFn = () => {

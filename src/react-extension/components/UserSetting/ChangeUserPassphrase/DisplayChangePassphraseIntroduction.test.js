@@ -18,7 +18,7 @@
 import DisplayChangePassphraseIntroductionPage from "./DisplayChangePassphraseIntroduction.test.page";
 import {defaultProps} from "./DisplayChangePassphraseIntroduction.test.data";
 import {waitFor} from "@testing-library/react";
-import {defaultAppContext} from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetailsPermission.test.data";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -26,7 +26,7 @@ beforeEach(() => {
 
 describe("As LU I should see the user introduction passphrase page", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
+  const context = defaultUserAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
   describe('As LU I can start to update the passphrase', () => {
