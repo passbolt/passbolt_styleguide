@@ -36,6 +36,7 @@ import KeySVG from "../../../../img/svg/key.svg";
 import LinkSVG from "../../../../img/svg/link.svg";
 import Tabs from "../../Common/Tab/Tabs";
 import Tab from "../../Common/Tab/Tab";
+import DisplayResourceDetailsNote from "./DisplayResourceDetailsNote";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -130,6 +131,14 @@ class DisplayResourceDetails extends React.Component {
     return this.props.resourceTypes?.getFirstById(this.props.resourceWorkspaceContext.details.resource.resource_type_id)?.hasMetadataDescription();
   }
 
+  /*
+   * Is resource with secure note
+   * @return {boolean}
+   */
+  get hasSecureNote() {
+    return this.props.resourceTypes?.getFirstById(this.props.resourceWorkspaceContext.details.resource.resource_type_id)?.hasSecretDescription();
+  }
+
   /**
    * Get the translate function
    * @returns {function(...[*]=)}
@@ -159,6 +168,9 @@ class DisplayResourceDetails extends React.Component {
         }
         {this.hasDescription &&
           <DisplayResourceDetailsDescription />
+        }
+        {this.hasSecureNote &&
+          <DisplayResourceDetailsNote />
         }
         {canViewShare &&
           <DisplayResourceDetailsPermission />

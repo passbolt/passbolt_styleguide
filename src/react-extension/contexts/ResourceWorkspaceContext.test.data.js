@@ -110,6 +110,7 @@ export function defaultResourceWorkspaceContext(data = {}) {
     onChangeColumnView:  jest.fn(),
     onChangeColumnsSettings:  jest.fn(),
     getHierarchyFolderCache: jest.fn(() => []),
+    onResourceDescriptionDecrypted: jest.fn(),
     ...data
   };
 }
