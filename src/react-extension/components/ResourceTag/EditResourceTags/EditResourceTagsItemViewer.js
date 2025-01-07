@@ -65,7 +65,7 @@ class EditResourceTagsItemViewer extends React.Component {
   render() {
     const isLoading = this.isLoading();
     return (
-      <div>
+      <div className="tags-list">
         {isLoading &&
         <div className="processing-wrapper">
           <SpinnerSVG/>
@@ -73,21 +73,17 @@ class EditResourceTagsItemViewer extends React.Component {
         </div>
         }
         {!isLoading && this.props.tags.length === 0 &&
-        <span className="empty-content"
-          onClick={this.props.toggleInputTagEditor}><Trans>There is no tag, click here to add one</Trans></span>
+        <span className="empty-content"><Trans>There is no tag.</Trans></span>
         }
         {!isLoading && this.props.tags.length > 0 &&
-        <ul className="tags tags-list" onClick={this.props.toggleInputTagEditor}>
-          {this.getTags().map(tag =>
-            <li key={tag.id} className="tag-list-item">
-              <a onClick={event => this.handleOnClickTag(event, tag)} className="tag ellipsis">
-                <span className="tag-content">
+          this.getTags().map(tag =>
+            <div key={tag.id} className="tag-list-item">
+              <button type="button" onClick={event => this.handleOnClickTag(event, tag)} className="tag">
+                <span className="tag-content ellipsis">
                   {tag.slug}
                 </span>
-              </a>
-            </li>)
-          }
-        </ul>
+              </button>
+            </div>)
         }
       </div>
     );
@@ -96,7 +92,6 @@ class EditResourceTagsItemViewer extends React.Component {
 
 EditResourceTagsItemViewer.propTypes = {
   tags: PropTypes.array,
-  toggleInputTagEditor: PropTypes.func,
   resourceWorkspaceContext: PropTypes.any,
   history: PropTypes.any,
 };

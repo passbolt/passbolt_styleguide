@@ -223,6 +223,10 @@
           }
         }
 
+        button.section-action {
+          color: var(--Text-and-icons-Main-text);
+        }
+
         .empty-content {
           font-size: 1.4rem;
           line-height: normal;
@@ -245,6 +249,7 @@
 
     .detailed-permission {
       padding-bottom: 0;
+
       .accordion-content {
         flex-direction: column;
         gap: 0;
@@ -254,6 +259,7 @@
 
     .detailed-comments {
       padding-bottom: 0;
+
       .accordion-content {
         flex-direction: column;
 
@@ -263,12 +269,31 @@
           align-items: center;
           flex-direction: column;
           align-self: stretch;
-
-          button.section-action {
-            color: var(--Text-and-icons-Main-text);
-          }
         }
 
+      }
+    }
+
+    .detailed-tags {
+      padding-bottom: 0;
+      .accordion-content {
+        padding: 0;
+        flex-direction: column;
+
+        .edit-tags {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          align-self: stretch;
+          padding-bottom: 1.6rem;
+        }
+
+        .form-content {
+          .actions {
+            padding: 0 1.6rem 1.6rem 1.6rem;
+          }
+        }
       }
     }
 
@@ -437,22 +462,35 @@
         justify-content: flex-end;
         margin-top: 1.6rem;
 
-        .cancel {
-          margin-left: auto;
-          margin-right: 1.6rem;
+        button {
+          color: var(--Text-and-icons-Main-text);
+
+          &.primary {
+            color: var(--Primary-button-Primary-button-text);
+          }
         }
+
+        .cancel {
+          margin-right: 1.2rem;
+        }
+
       }
 
       .message.notice {
-        padding: 1rem;
-        margin: 1.6rem -1.6rem 0 -1.6rem;
+        padding: .8rem 1.6rem;
+        justify-content: center;
+        align-items: center;
+        align-self: stretch;
         font-size: 1.2rem;
-        line-height: 1.6rem;
-        background: @info-panel-section-notice-background;
+        background: var(--Palette-Info);
 
         span:last-child {
           display: inline-block;
         }
+      }
+
+      .error-message {
+        margin-bottom: 0;
       }
     }
   }
