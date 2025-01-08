@@ -12,14 +12,17 @@
  * @since         5.0.0
  */
 
-import mockPort from "../../../../../test/mocks/mockPort";
-import mockStorage from "../../../../../test/mocks/mockStorage";
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
-import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
 import DisplayResourceDetails from "./DisplayResourceDetails";
 import {defaultProps} from "./DisplayResourceDetails.test.data";
 import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
+import {
+  resourceStandaloneTotpDto,
+  resourceWithTotpDto
+} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import {RbacContext} from "../../../../shared/context/Rbac/RbacContext";
 
 /**
  * DisplayResourceDetails stories
@@ -30,37 +33,52 @@ export default {
   decorators: [
     (Story, {args}) => (
       <Router>
-        <ResourceWorkspaceContext.Provider value={args.resourceWorkspaceContext}>
-          <div className="page">
-            <div className="app" style={{margin: "-1rem"}}>
-              <div className="panel main">
-                <div className="panel middle">
-                  <div className="middle-right" style={{display: "flex", justifyContent: "flex-end"}}>
-                    <div className="panel aside">
-                      <Story {...args} />
+        <RbacContext.Provider value={args.rbacContext}>
+          <ResourceWorkspaceContext.Provider value={args.resourceWorkspaceContext}>
+            <div className="page">
+              <div className="app" style={{margin: "-1rem"}}>
+                <div className="panel main">
+                  <div className="panel middle">
+                    <div className="middle-right" style={{display: "flex", justifyContent: "flex-end"}}>
+                      <div className="panel aside">
+                        <Story {...args} />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </ResourceWorkspaceContext.Provider>
+          </ResourceWorkspaceContext.Provider>
+        </RbacContext.Provider>
       </Router>
     )
   ]
 };
 
 
-const storage = mockStorage();
-const port = mockPort(storage);
-
-port.addRequestListener("passbolt.organization-settings.get", () => siteSettingsCe);
-
 export const Default = {
   args: {
-    storage: storage,
-    port: port,
     ...defaultProps(),
+  }
+};
+
+export const PasswordWithTotp = {
+  args: {
+    ...defaultProps({
+      resourceWorkspaceContext: defaultResourceWorkspaceContext({
+        details: {
+          resource: resourceWithTotpDto(),
+        }})}),
+  }
+};
+
+export const StandaloneTotp = {
+  args: {
+    ...defaultProps({
+      resourceWorkspaceContext: defaultResourceWorkspaceContext({
+        details: {
+          resource: resourceStandaloneTotpDto(),
+        }})}),
   }
 };
 

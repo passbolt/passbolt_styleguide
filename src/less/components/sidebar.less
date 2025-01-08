@@ -164,18 +164,24 @@
         gap: 1.6rem;
         align-self: stretch;
 
-        .information-label, .information-value {
-          display: flex;
-          flex-direction: column;
-          gap: .4rem;
-          max-width: 50%;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+        .information-label {
+          max-width: calc(50% - .8rem);
 
           .label {
             color: var(--Text-and-icons-Secondary-text)
           }
+        }
+
+        .information-value {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .information-label, .information-value {
+          display: flex;
+          flex-direction: column;
+          gap: .4rem;
 
           .label, .value {
             white-space: nowrap;
@@ -192,7 +198,7 @@
             }
           }
 
-          .password-value {
+          .password-value, .totp-value {
             display: flex;
             gap: .4rem;
 
@@ -226,6 +232,16 @@
     }
 
     /** SECTIONS **/
+
+    .detailed-totp {
+      .accordion-content {
+        gap: 3.2rem;
+
+        .information-label {
+          max-width: calc(50% - 1.6rem);
+        }
+      }
+    }
 
     .detailed-information {
       li {
