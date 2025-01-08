@@ -16,7 +16,7 @@ import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import DisplayResourceDetailsTag from "./DisplayResourceDetailsTag";
 import {defaultProps} from "./DisplayResourceDetailsTag.test.data";
-import {BrowserRouter as Router} from "react-router-dom";
+import {MemoryRouter} from "react-router-dom";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 export default {
@@ -33,9 +33,9 @@ export default {
                   <div className="sidebar resource">
                     <div className="sidebar-content">
                       <AppContext.Provider value={args.context}>
-                        <Router>
+                        <MemoryRouter initialEntries={['/']}>
                           <Story {...args} />
-                        </Router>
+                        </MemoryRouter>
                       </AppContext.Provider>
                     </div>
                   </div>
