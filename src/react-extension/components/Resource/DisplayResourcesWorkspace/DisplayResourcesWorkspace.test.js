@@ -26,6 +26,7 @@ import {
 import DisplayResourceWorkspacePage from "./DisplayResourcesWorkspace.test.page";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultResourceWorkspaceContext} from '../../../contexts/ResourceWorkspaceContext.test.data';
+import {resourceAllTypesDtosCollectionAndVariousPermission} from '../../../../shared/models/entity/resource/resourcesCollection.test.data';
 
 jest.mock("../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetails", () => () => <span className="sidebar resource"></span>);
 jest.mock("../../ResourceFolderDetails/DisplayResourceFolderDetails/DisplayResourceFolderDetails", () => () => <span className="sidebar folder"></span>);
@@ -124,6 +125,16 @@ describe("DisplayResourcesWorkspace", () => {
       expect(page.displayResourceWorkspacePageObject.hasSidebarResource).toBeFalsy();
       expect(page.displayResourceWorkspacePageObject.hasSidebarFolder).toBeFalsy();
       expect(page.displayResourceWorkspacePageObject.footer).toBeFalsy();
+    });
+
+    it('As LU I I should the multiple resources sidebar if I have multiple resources selected', () => {
+      const props = defaultProps(); // The resourceWorkspaceContext to pass
+      props.resourceWorkspaceContext.selectedResources = resourceAllTypesDtosCollectionAndVariousPermission();
+      props.resourceWorkspaceContext.lockDisplayDetail = true;
+      page = new DisplayResourceWorkspacePage(props);
+      expect(page.displayResourceWorkspacePageObject.exists()).toBeTruthy();
+      expect(page.displayResourceWorkspacePageObject.hasSidebarEmpty).toBeFalsy();
+      expect(page.displayResourceWorkspacePageObject.hasSidebarMultipleResources).toBeTruthy();
     });
   });
 

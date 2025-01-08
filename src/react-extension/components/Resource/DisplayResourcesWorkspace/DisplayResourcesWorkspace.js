@@ -43,6 +43,7 @@ import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 import DisplayResourcesWorkspaceFilters from "./DisplayResourcesWorkspaceFilters";
 import Footer from "../../Common/Footer/Footer";
 import DisplayEmptyDetails from "../../ResourceFolderDetails/DisplayResourceFolderDetails/DisplayEmptyDetails";
+import DisplayResourcesListDetails from "../../ResourceDetails/DisplayResourceDetails/DisplayResourcesListDetails";
 
 class Workspace extends Component {
   /**
@@ -117,7 +118,16 @@ class Workspace extends Component {
    */
   get shouldDisplayEmptyDetails() {
     return !this.props.resourceWorkspaceContext.details.folder
-      && !this.props.resourceWorkspaceContext.details.resource;
+      && !this.props.resourceWorkspaceContext.details.resource
+      && this.props.resourceWorkspaceContext.selectedResources.length === 0;
+  }
+
+  /**
+   * Returns true if multiple resources are currently selected.
+   * @returns {boolean}
+   */
+  get shouldDisplayListDetails() {
+    return this.props.resourceWorkspaceContext.selectedResources.length > 1;
   }
 
   /**
@@ -200,6 +210,9 @@ class Workspace extends Component {
             </div>
             {this.hasLockDetail() &&
               <div className="panel aside">
+                {this.shouldDisplayListDetails &&
+                  <DisplayResourcesListDetails />
+                }
                 {this.shouldDisplayEmptyDetails &&
                   <DisplayEmptyDetails />
                 }

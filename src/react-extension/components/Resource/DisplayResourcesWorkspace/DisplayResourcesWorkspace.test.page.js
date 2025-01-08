@@ -99,6 +99,14 @@ class DisplayResourceWorkspacePageObject {
   }
 
   /**
+   * Returns true if the multiple resources sidebar of the password workspace is present
+   * @returns {HTMLElement}
+   */
+  get hasSidebarMultipleResources() {
+    return Boolean(this._container.querySelector('.sidebar.multiple-resources-selected'));
+  }
+
+  /**
    * Returns true if the sidebar resource of the password workspace is present
    * @returns {HTMLElement}
    */
