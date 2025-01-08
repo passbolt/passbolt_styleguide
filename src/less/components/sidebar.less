@@ -84,11 +84,23 @@
         margin-right: 0.15rem;
         margin-top: 0.15rem;
         --icon-color: var(--Resource-icon-Resource-icon-color);
+        --icon-background-color: none;
 
         &.attention-required {
           height: 1.2rem;
           margin-top: 2.6rem;
           margin-left: 3rem;
+        }
+      }
+
+      .svg-icon {
+        &.exclamation {
+          svg {
+            height: 1.2rem;
+            margin-top: 2.6rem;
+            margin-left: 3rem;
+            --icon-exclamation-background-color: var(--Palette-Contrast-3);
+          }
         }
       }
     }
