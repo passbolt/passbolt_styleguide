@@ -11,4 +11,5 @@ npm install \
     @storybook/addon-webpack5-compiler-swc@1.0.5 \
     @storybook/storybook-deployer@2.8.16 \
     @storybook/test-runner@0.19.1 \
+    @storybook/test@8.4.2 \
     --no-save

@@ -356,4 +356,34 @@ describe("As AD I can see the administration menu", () => {
       expect(page.passwordExpirySettings).toBeNull();
     });
   });
+
+  describe("As a signed-in administrator on the administration workspace, I can see the Content Type Encrypted metadata option in the left-side bar", () => {
+    it('If the feature flag is true, the menu should be visible', async() => {
+      expect.assertions(4);
+      const props = defaultProps({
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      await page.gotoContentTypesEncryptedMetadata();
+      expect(page.contentTypesEncryptedMetadata).toBeTruthy();
+      expect(page.menuSelected).toBe('Encrypted metadata');
+      expect(props.navigationContext.onGoToAdministrationContentTypesMetadataRequested).toHaveBeenCalled();
+    });
+
+    it('If the feature flag is false, the menu should not be visible', async() => {
+      expect.assertions(2);
+      const props = defaultProps({
+        context: {
+          siteSettings: {
+            canIUse: feature => feature !== "metadata"
+          }
+        },
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      expect(page.contentTypesEncryptedMetadata).toBeNull();
+    });
+  });
 });

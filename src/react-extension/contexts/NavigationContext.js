@@ -116,6 +116,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationUserPassphrasePoliciesRequested: this.onGoToAdministrationUserPassphrasePoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace user passphrase policies
       onGoToAdministrationPasswordExpirySettingsRequested: this.onGoToAdministrationPasswordExpirySettingsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password expiry settings
       onGoToAdministrationHealthcheckRequested: this.onGoToAdministrationHealthcheckRequested.bind(this),
+      onGoToAdministrationContentTypesMetadataRequested: this.onGoToAdministrationContentTypesMetadataRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types metadata.
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -307,6 +308,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationPasswordExpirySettingsRequested() {
     await this.goTo("browser-extension", "/app/administration/password-expiry");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace content types metadata.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationContentTypesMetadataRequested() {
+    await this.goTo("browser-extension", "/app/administration/content-types/metadata");
   }
 
   /**
