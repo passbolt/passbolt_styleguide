@@ -21,13 +21,17 @@ import React from 'react';
 import {defaultProps} from "./DisplayResourceDetails.test.data";
 import DisplayResourceDetailsPage from "./DisplayResourceDetails.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import {
+  resourceLegacyDto,
+  resourceStandaloneTotpDto, resourceWithTotpDto
+} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 
 jest.mock("./DisplayResourceDetailsInformation", () => () => <></>);
-jest.mock("./DisplayResourceDetailsPassword", () => () => <></>);
-jest.mock("./DisplayResourceDetailsTotp", () => () => <></>);
+jest.mock("./DisplayResourceDetailsPassword", () => () => <div className="password"></div>);
+jest.mock("./DisplayResourceDetailsTotp", () => () => <div className="totp"></div>);
 jest.mock("./DisplayResourceDetailsActivity", () => () => <></>);
 jest.mock("./DisplayResourceDetailsPermission", () => () => <></>);
-jest.mock("./DisplayResourceDetailsDescription", () => () => <></>);
+jest.mock("./DisplayResourceDetailsDescription", () => () => <div className="description"></div>);
 jest.mock("./DisplayResourceDetailsTag", () => () => <></>);
 jest.mock("./DisplayResourceDetailsComment", () => () => <></>);
 
@@ -74,8 +78,59 @@ describe("DisplayResourceDetails", () => {
     it.todo('As LU I can see the details section');
   });
 
+  describe('As LU I can see the password section', () => {
+    it('As LU I can see the password section', () => {
+      expect.assertions(1);
+      const props = defaultProps(); // The props to pass
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.password).toBeDefined();
+    });
+
+    it('As LU I cannot see the password section if resource type has no password', () => {
+      expect.assertions(1);
+      const props = defaultProps({resourceWorkspaceContext: {details: {resource: resourceStandaloneTotpDto()}}}); // The props to pass
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.password).toBeNull();
+    });
+  });
+
+  describe('As LU I can see the totp section', () => {
+    it('As LU I can see the totp section for a resource with password description and totp', () => {
+      expect.assertions(1);
+      const props = defaultProps({resourceWorkspaceContext: {details: {resource: resourceWithTotpDto()}}}); // The props to pass
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.totp).toBeDefined();
+    });
+
+    it('As LU I can see the totp section for a standalone totp', () => {
+      expect.assertions(1);
+      const props = defaultProps({resourceWorkspaceContext: {details: {resource: resourceStandaloneTotpDto()}}}); // The props to pass
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.totp).toBeDefined();
+    });
+
+    it('As LU I cannot see the totp section if resource type has no totp', () => {
+      expect.assertions(1);
+      const props = defaultProps(); // The props to pass
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.totp).toBeNull();
+    });
+  });
+
   describe('As LU I can see the description section', () => {
-    it.todo('As LU I can see the description section');
+    it('As LU I can see the description section', () => {
+      expect.assertions(1);
+      const props = defaultProps({resourceWorkspaceContext: {details: {resource: resourceLegacyDto()}}}); // The props to pass
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.description).toBeDefined();
+    });
+
+    it('As LU I cannot see the description section if resource type has no description', () => {
+      expect.assertions(1);
+      const props = defaultProps(); // The props to pass
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.description).toBeNull();
+    });
   });
 
   describe('As LU I can see the share section', () => {
