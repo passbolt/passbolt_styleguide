@@ -31,6 +31,7 @@ export const defaultMetadataTypesSettingsV4Dto = (data = {}) => {
     allow_creation_of_v4_folders: true,
     allow_creation_of_v4_tags: true,
     allow_creation_of_v4_comments: true,
+    allow_v4_v5_upgrade: false,
     allow_v5_v4_downgrade: false,
   };
   return Object.assign(defaultData, data);
@@ -56,6 +57,7 @@ export const defaultMetadataTypesSettingsV6Dto = (data = {}) => {
     allow_creation_of_v4_folders: false,
     allow_creation_of_v4_tags: false,
     allow_creation_of_v4_comments: false,
+    allow_v4_v5_upgrade: false,
     allow_v5_v4_downgrade: false,
   };
   return Object.assign(defaultData, data);
@@ -81,6 +83,7 @@ export const defaultMetadataTypesSettingsV50FreshDto = (data = {}) => {
     allow_creation_of_v4_folders: true,
     allow_creation_of_v4_tags: true,
     allow_creation_of_v4_comments: true,
+    allow_v4_v5_upgrade: false,
     allow_v5_v4_downgrade: false,
   };
   return Object.assign(defaultData, data);
@@ -106,7 +109,8 @@ export const defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto = (data = 
     allow_creation_of_v4_folders: true,
     allow_creation_of_v4_tags: true,
     allow_creation_of_v4_comments: true,
-    allow_v5_v4_downgrade: false,
+    allow_v4_v5_upgrade: true,
+    allow_v5_v4_downgrade: true,
   };
   return Object.assign(defaultData, data);
 };
@@ -132,6 +136,7 @@ export const defaultMetadataTypesSettingsV50OMigratedFromV4WithSupportV4Dto = (d
     allow_creation_of_v4_folders: true,
     allow_creation_of_v4_tags: true,
     allow_creation_of_v4_comments: true,
+    allow_v4_v5_upgrade: true,
     allow_v5_v4_downgrade: false,
   };
   return Object.assign(defaultData, data);

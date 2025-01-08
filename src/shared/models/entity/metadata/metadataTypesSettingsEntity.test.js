@@ -102,6 +102,11 @@ describe("MetadataTypesSettings", () => {
       assertEntityProperty.required(MetadataTypesSettingsEntity, "allow_creation_of_v4_comments");
     });
 
+    it("validates allow_v4_v5_upgrade property", () => {
+      assertEntityProperty.boolean(MetadataTypesSettingsEntity, "allow_v4_v5_upgrade");
+      assertEntityProperty.required(MetadataTypesSettingsEntity, "allow_v4_v5_upgrade");
+    });
+
     it("validates allow_v5_v4_downgrade property", () => {
       assertEntityProperty.boolean(MetadataTypesSettingsEntity, "allow_v5_v4_downgrade");
       assertEntityProperty.required(MetadataTypesSettingsEntity, "allow_v5_v4_downgrade");
@@ -113,18 +118,20 @@ describe("MetadataTypesSettings", () => {
       const dto = defaultMetadataTypesSettingsV4Dto();
       dto.allow_creation_of_v4_resources = false;
       expect(() => new MetadataTypesSettingsEntity(dto)).toThrowEntityValidationError("allow_creation_of_v4_resources", "is_default");
+      expect(() => new MetadataTypesSettingsEntity(dto)).toThrowEntityValidationError("default_resource_types", "allow_create_v4");
     });
 
     it("validates default_resource_types cannot be v4 if allow_creation_of_v4_resources is false", () => {
       const dto = defaultMetadataTypesSettingsV50FreshDto();
       dto.allow_creation_of_v5_resources = false;
       expect(() => new MetadataTypesSettingsEntity(dto)).toThrowEntityValidationError("allow_creation_of_v5_resources", "is_default");
+      expect(() => new MetadataTypesSettingsEntity(dto)).toThrowEntityValidationError("default_resource_types", "allow_create_v5");
     });
   });
 
   describe("::constructor", () => {
     it("constructor works if default v4 DTO is provided. Whenever the instance is still running a v4.", () => {
-      expect.assertions(12);
+      expect.assertions(14);
       const dto = defaultMetadataTypesSettingsV4Dto();
       const entity = new MetadataTypesSettingsEntity(dto);
 
@@ -140,10 +147,12 @@ describe("MetadataTypesSettings", () => {
       expect(entity._props.allow_creation_of_v4_folders).toBeTruthy();
       expect(entity._props.allow_creation_of_v4_tags).toBeTruthy();
       expect(entity._props.allow_creation_of_v4_comments).toBeTruthy();
+      expect(entity._props.allow_v4_v5_upgrade).toBeFalsy();
+      expect(entity._props.allow_v5_v4_downgrade).toBeFalsy();
     });
 
     it("constructor works if default v5 DTO is provided. Whenever the migration is completed to v5.", () => {
-      expect.assertions(12);
+      expect.assertions(14);
       const dto = defaultMetadataTypesSettingsV6Dto();
       const entity = new MetadataTypesSettingsEntity(dto);
 
@@ -159,10 +168,12 @@ describe("MetadataTypesSettings", () => {
       expect(entity._props.allow_creation_of_v4_folders).toBeFalsy();
       expect(entity._props.allow_creation_of_v4_tags).toBeFalsy();
       expect(entity._props.allow_creation_of_v4_comments).toBeFalsy();
+      expect(entity._props.allow_v4_v5_upgrade).toBeFalsy();
+      expect(entity._props.allow_v5_v4_downgrade).toBeFalsy();
     });
 
     it("constructor works if default v5 fresh instance DTO is provided. Resources should be created by default in v5, in v4 resources are not accepted.", () => {
-      expect.assertions(12);
+      expect.assertions(14);
       const dto = defaultMetadataTypesSettingsV50FreshDto();
       const entity = new MetadataTypesSettingsEntity(dto);
 
@@ -178,10 +189,12 @@ describe("MetadataTypesSettings", () => {
       expect(entity._props.allow_creation_of_v4_folders).toBeTruthy();
       expect(entity._props.allow_creation_of_v4_tags).toBeTruthy();
       expect(entity._props.allow_creation_of_v4_comments).toBeTruthy();
+      expect(entity._props.allow_v4_v5_upgrade).toBeFalsy();
+      expect(entity._props.allow_v5_v4_downgrade).toBeFalsy();
     });
 
     it("constructor works if default v5 instance on-going migration from v4 DTO is provided. Resources should be created by default in v4, in v5 resources are accepted.", () => {
-      expect.assertions(12);
+      expect.assertions(14);
       const dto = defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto();
       const entity = new MetadataTypesSettingsEntity(dto);
 
@@ -197,10 +210,12 @@ describe("MetadataTypesSettings", () => {
       expect(entity._props.allow_creation_of_v4_folders).toBeTruthy();
       expect(entity._props.allow_creation_of_v4_tags).toBeTruthy();
       expect(entity._props.allow_creation_of_v4_comments).toBeTruthy();
+      expect(entity._props.allow_v4_v5_upgrade).toBeTruthy();
+      expect(entity._props.allow_v5_v4_downgrade).toBeTruthy();
     });
 
     it("constructor works if default v5 instance migrated from v4 with support of v4 DTO is provided. Resources should be created by default in v5, and v5 resources are accepted.", () => {
-      expect.assertions(12);
+      expect.assertions(14);
       const dto = defaultMetadataTypesSettingsV50OMigratedFromV4WithSupportV4Dto();
       const entity = new MetadataTypesSettingsEntity(dto);
 
@@ -216,12 +231,14 @@ describe("MetadataTypesSettings", () => {
       expect(entity._props.allow_creation_of_v4_folders).toBeTruthy();
       expect(entity._props.allow_creation_of_v4_tags).toBeTruthy();
       expect(entity._props.allow_creation_of_v4_comments).toBeTruthy();
+      expect(entity._props.allow_v4_v5_upgrade).toBeTruthy();
+      expect(entity._props.allow_v5_v4_downgrade).toBeFalsy();
     });
   });
 
   describe("::createFromV4Default", () => {
     it("creates from default v4 metadata types settings", () => {
-      expect.assertions(12);
+      expect.assertions(14);
       const dto = MetadataTypesSettingsEntity.createFromV4Default();
       const entity = new MetadataTypesSettingsEntity(dto);
 
@@ -237,12 +254,14 @@ describe("MetadataTypesSettings", () => {
       expect(entity._props.allow_creation_of_v4_folders).toBeTruthy();
       expect(entity._props.allow_creation_of_v4_tags).toBeTruthy();
       expect(entity._props.allow_creation_of_v4_comments).toBeTruthy();
+      expect(entity._props.allow_v4_v5_upgrade).toBeFalsy();
+      expect(entity._props.allow_v5_v4_downgrade).toBeFalsy();
     });
   });
 
   describe("::createFromV5Default", () => {
     it("creates from default metadata types settings", () => {
-      expect.assertions(12);
+      expect.assertions(14);
       const dto = MetadataTypesSettingsEntity.createFromDefault();
       const entity = new MetadataTypesSettingsEntity(dto);
 
@@ -258,10 +277,12 @@ describe("MetadataTypesSettings", () => {
       expect(entity._props.allow_creation_of_v4_folders).toBeTruthy();
       expect(entity._props.allow_creation_of_v4_tags).toBeTruthy();
       expect(entity._props.allow_creation_of_v4_comments).toBeTruthy();
+      expect(entity._props.allow_v4_v5_upgrade).toBeFalsy();
+      expect(entity._props.allow_v5_v4_downgrade).toBeFalsy();
     });
 
     it("creates from default metadata types settings with alteration", () => {
-      expect.assertions(12);
+      expect.assertions(14);
       const dto = MetadataTypesSettingsEntity.createFromDefault({
         default_resource_types: RESOURCE_TYPE_VERSION_5,
         default_folder_type: RESOURCE_TYPE_VERSION_5,
@@ -275,6 +296,8 @@ describe("MetadataTypesSettings", () => {
         allow_creation_of_v4_folders: false,
         allow_creation_of_v4_tags: false,
         allow_creation_of_v4_comments: false,
+        allow_v4_v5_upgrade: true,
+        allow_v5_v4_downgrade: true,
       });
       const entity = new MetadataTypesSettingsEntity(dto);
 
@@ -290,6 +313,8 @@ describe("MetadataTypesSettings", () => {
       expect(entity._props.allow_creation_of_v4_folders).toBeFalsy();
       expect(entity._props.allow_creation_of_v4_tags).toBeFalsy();
       expect(entity._props.allow_creation_of_v4_comments).toBeFalsy();
+      expect(entity._props.allow_v4_v5_upgrade).toBeTruthy();
+      expect(entity._props.allow_v5_v4_downgrade).toBeTruthy();
     });
   });
 
@@ -347,6 +372,26 @@ describe("MetadataTypesSettings", () => {
       entity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto());
       expect(entity.isDefaultResourceTypeV5).toBeFalsy();
       expect(entity.isDefaultResourceTypeV4).toBeTruthy();
+    });
+  });
+
+  describe("::allowV5V4Downgrade", () => {
+    it("is v4 downgrade allowed", () => {
+      expect.assertions(2);
+      let entity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto());
+      expect(entity.allowV5V4Downgrade).toBeFalsy();
+      entity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto());
+      expect(entity.allowV5V4Downgrade).toBeTruthy();
+    });
+  });
+
+  describe("::allowV4V5Upgrade", () => {
+    it("is v5 upgrade allowed", () => {
+      expect.assertions(2);
+      let entity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto());
+      expect(entity.allowV4V5Upgrade).toBeFalsy();
+      entity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto());
+      expect(entity.allowV4V5Upgrade).toBeTruthy();
     });
   });
 });
