@@ -23,6 +23,7 @@ import DisplayResourceDetailsPage from "./DisplayResourceDetails.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
 jest.mock("./DisplayResourceDetailsInformation", () => () => <></>);
+jest.mock("./DisplayResourceDetailsPassword", () => () => <></>);
 jest.mock("./DisplayResourceDetailsActivity", () => () => <></>);
 jest.mock("./DisplayResourceDetailsPermission", () => () => <></>);
 jest.mock("./DisplayResourceDetailsDescription", () => () => <></>);
