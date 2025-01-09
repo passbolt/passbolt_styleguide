@@ -27,6 +27,7 @@
     "src/shared/**/*.{js,jsx}",
     "!src/**/*.test.js",
     "!src/**/*.test.stories.js",
-    "!src/**/*.test.data.js"
+    "!src/**/*.test.data.js",
+    "!src/**/*.test.page.js"
   ]
 }
