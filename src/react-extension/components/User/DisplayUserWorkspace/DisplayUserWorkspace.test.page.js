@@ -14,12 +14,12 @@
  */
 
 
-import {render} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import React from "react";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import DisplayUserWorkspace from "./DisplayUserWorkspace";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import {waitFor} from "@testing-library/dom";
 
 /**
  * The DisplayUserWorkspacePage component represented as a page
@@ -27,17 +27,14 @@ import MockTranslationProvider from "../../../test/mock/components/International
 export default class DisplayUserWorkspacePage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
-          <Router>
-            <DisplayUserWorkspace {...props}/>
-          </Router>
-        </AppContext.Provider>
+        <Router>
+          <DisplayUserWorkspace.WrappedComponent {...props}/>
+        </Router>
       </MockTranslationProvider>
     );
   }
@@ -61,6 +58,22 @@ export default class DisplayUserWorkspacePage {
    */
   get hasUserGroupDetails() {
     return Boolean(this._page.container.querySelector('.user-group-details'));
+  }
+
+  /**
+   * Returns the go back button
+   */
+  get goBackButton() {
+    return this._page.container.querySelector('button.back');
+  }
+
+  /**
+   * Click on the go back button element
+   */
+  async goBack() {
+    const leftClick = {button: 0};
+    fireEvent.click(this.goBackButton, leftClick);
+    await waitFor(() => {});
   }
 }
 

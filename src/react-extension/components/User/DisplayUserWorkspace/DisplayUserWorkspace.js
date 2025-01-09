@@ -20,7 +20,6 @@ import {Route, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import DisplayUserDetails from "../../UserDetails/DisplayUserDetails/DisplayUserDetails";
 import DisplayUserWorkspaceActions from "../DisplayUserWorkspaceActions/DisplayUserWorkspaceActions";
-import Logo from "../../Common/Navigation/Header/Logo";
 import DisplayUserBadgeMenu from "../DisplayUserBadgeMenu/DisplayUserBadgeMenu";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import DisplayGroups from "../FilterUsersByGroups/FilterUsersByGroup";
@@ -31,11 +30,30 @@ import DisplayUserWorkspaceMainActions from "../DisplayUserWorkspaceMainActions/
 import FilterUsersByBreadcrumb from "../FilterUsersByBreadcrumb/FilterUsersByBreadcrumb";
 import HandleReviewAccountRecoveryRequestRoute from "../HandleReviewAccountRecoveryRequestRoute/HandleReviewAccountRecoveryRequestRoute";
 import DisplayHttpError from '../../Common/Error/DisplayHttpError/DisplayHttpError';
+import ArrowLeftSVG from "../../../../img/svg/arrow_left.svg";
+import {Trans} from "react-i18next";
 
 /**
  * This component is a container for all the user workspace features
  */
 class DisplayUserWorkspace extends React.Component {
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
+    this.bindCallbacks();
+  }
+
+  /**
+   * Bind callbacks methods
+   * @return {void}
+   */
+  bindCallbacks() {
+    this.handleGoBack = this.handleGoBack.bind(this);
+  }
+
   /**
    * Returns true if the user details must be displayed
    * @returns {boolean}
@@ -63,6 +81,13 @@ class DisplayUserWorkspace extends React.Component {
   }
 
   /**
+   * Handle go back to resource workspace
+   */
+  handleGoBack() {
+    this.props.history.push({pathname: `/app/passwords`});
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -77,7 +102,15 @@ class DisplayUserWorkspace extends React.Component {
             <>
               <div className="panel left">
                 <div className="sidebar-content">
-                  <Logo/>
+                  <div className="top-bar-left-navigation">
+                    <div className="navigation">
+                      {/* Add onclick action */}
+                      <button type="button" className="button-transparent back" onClick={this.handleGoBack}>
+                        <ArrowLeftSVG/>
+                      </button>
+                      <span className="title"><Trans>Users & Groups</Trans></span>
+                    </div>
+                  </div>
                   <DisplayUserWorkspaceMainActions/>
                   <div className="sidebar-content-left">
                     <FilterUsersByShortcut/>
@@ -124,4 +157,4 @@ DisplayUserWorkspace.propTypes = {
   userWorkspaceContext: PropTypes.any
 };
 
-export default withAppContext(withRouter(withUserWorkspace(DisplayUserWorkspace)));
+export default withRouter(withAppContext(withUserWorkspace(DisplayUserWorkspace)));

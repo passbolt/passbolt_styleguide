@@ -15,26 +15,20 @@
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 /**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
- */
-export function defaultContext(data = {}) {
-  const defaultData = defaultAppContext();
-  return Object.assign(defaultData, data);
-}
-
-/**
  * Props with user details
  */
 export function propsWithUserDetails() {
   return {
+    context: defaultAppContext(),
     userWorkspaceContext: {
       details: {
         user: 'some user',
         locked: true
       },
       isAccessAllowed: () => true,
+    },
+    history: {
+      push: jest.fn(),
     }
   };
 }
@@ -44,6 +38,7 @@ export function propsWithUserDetails() {
  */
 export function propsWithGroupDetails() {
   return {
+    context: defaultAppContext(),
     userWorkspaceContext: {
       details: {
         group: 'some group',
@@ -60,6 +55,7 @@ export function propsWithGroupDetails() {
  */
 export function propsWithoutLock() {
   return {
+    context: defaultAppContext(),
     userWorkspaceContext: {
       details: {
         locked: false
