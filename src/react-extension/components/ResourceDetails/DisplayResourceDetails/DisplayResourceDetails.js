@@ -12,7 +12,6 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import DisplayResourceDetailsInformation from "./DisplayResourceDetailsInformation";
 import DisplayResourceDetailsTag from "./DisplayResourceDetailsTag";
@@ -33,6 +32,8 @@ import {
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import DisplayResourceDetailsPassword from "./DisplayResourceDetailsPassword";
 import DisplayResourceDetailsTotp from "./DisplayResourceDetailsTotp";
+import KeySVG from "../../../../img/svg/key.svg";
+import LinkSVG from "../../../../img/svg/link.svg";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -152,10 +153,9 @@ class DisplayResourceDetails extends React.Component {
       <div className="sidebar resource">
         <div className="sidebar-header">
           <div className="teaser-image">
-            <Icon name="key" />
+            <KeySVG/>
           </div>
           <div className="title-area">
-
             <h3>
               <div className="title-wrapper">
                 <span className="name">{this.props.resourceWorkspaceContext.details.resource.metadata.name}</span>
@@ -163,7 +163,7 @@ class DisplayResourceDetails extends React.Component {
               <span className="subtitle">{this.subtitle}</span>
             </h3>
             <button type="button" className="title-link button-transparent inline" title={this.translate("Copy the link to this password")} onClick={this.handlePermalinkClick}>
-              <Icon name="link" />
+              <LinkSVG/>
               <span className="visuallyhidden"><Trans>Copy the link to this password</Trans></span>
             </button>
           </div>

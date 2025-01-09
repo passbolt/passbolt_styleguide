@@ -44,8 +44,7 @@
           font-size: 2rem;
 
           .name {
-            max-width: 85%;
-            float: left;
+            display: block;
             .ellipsis();
           }
         }
@@ -60,35 +59,34 @@
           .ellipsis();
         }
       }
+
+      .title-link {
+        flex-shrink: 0;
+      }
     }
 
     .teaser-image {
       display: flex;
       align-items: center;
       justify-content: center;
-      float: left;
+      flex-shrink: 0;
       background: var(--Resource-icon-Resource-icons-backgound);
       text-align: center;
       border-radius: 50%;
       width: 5.6rem;
       height: 5.6rem;
 
-      .svg-icon {
-        &.exclamation {
-          svg {
-            height: 1.2rem;
-            margin-top: 2.6rem;
-            margin-left: 3rem;
-            --icon-exclamation-background-color: var(--Palette-Contrast-3);
-          }
-        }
+      svg {
+        width: 3.3rem;
+        height: 3.3rem;
+        margin-right: 0.15rem;
+        margin-top: 0.15rem;
+        --icon-color: var(--Resource-icon-Resource-icon-color);
 
-        svg {
-          width: 3.3rem;
-          height: 3.3rem;
-          margin-right: 0.15rem;
-          margin-top: 0.15rem;
-          --icon-color: var(--Resource-icon-Resource-icon-color)
+        &.attention-required {
+          height: 1.2rem;
+          margin-top: 2.6rem;
+          margin-left: 3rem;
         }
       }
     }
@@ -140,18 +138,19 @@
             .accordion-title {
               display: flex;
               flex: 1 0 0;
+              gap: .8rem;
               font-size: 1.5rem;
               font-weight: 700;
               line-height: normal;
-            }
 
-            .svg-icon {
-              display: flex;
-              width: .8rem;
-              height: .8rem;
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
+              svg.attention-required {
+                flex-shrink: 0;
+                height: 1.6rem;
+                width: 1.6rem;
+                --icon-exclamation-color: var(--Alert-Alert-icon);
+                --icon-exclamation-background-color: var(--Alert-Alert-background);
+                --icon-exclamation-border-color: var(--Alert-Alert-background);
+              }
             }
           }
         }
@@ -168,7 +167,22 @@
           max-width: calc(50% - .8rem);
 
           .label {
-            color: var(--Text-and-icons-Secondary-text)
+            color: var(--Text-and-icons-Secondary-text);
+
+            &-with-icon {
+              display: flex;
+              gap: .8rem;
+
+              svg.attention-required {
+                flex-shrink: 0;
+                height: 1.6rem;
+                width: 1.6rem;
+                --icon-exclamation-color: var(--Alert-Alert-icon);
+                --icon-exclamation-background-color: var(--Alert-Alert-background);
+                --icon-exclamation-border-color: var(--Alert-Alert-background);
+              }
+            }
+
           }
         }
 
@@ -187,6 +201,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            height: 2rem; // set height for empty value
 
             button {
               display: block;
@@ -195,6 +210,14 @@
               overflow: hidden;
               text-overflow: ellipsis;
               text-align: left;
+
+              &.folder-link {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 8px;
+                align-self: stretch;
+              }
             }
           }
 
@@ -236,7 +259,6 @@
     }
 
     /** SECTIONS **/
-
     .detailed-totp {
       .accordion-content {
         gap: 3.2rem;
@@ -292,81 +314,6 @@
         .form-content {
           .actions {
             padding: 0 1.6rem 1.6rem 1.6rem;
-          }
-        }
-      }
-    }
-
-    .detailed-information {
-      li {
-        font-size: 1.4rem;
-        line-height: 1.9rem;
-        margin-bottom: .8rem;
-
-        &:last-child {
-          margin-bottom: 0;
-        }
-
-        span {
-          .ellipsis();
-        }
-
-        .label {
-          width: 30%;
-          display: inline-block;
-          margin-right: 1.6rem;
-          color: var(--Text-and-icons-Secondary-text);
-        }
-
-        .value {
-          width: 60%;
-          display: inline-block;
-
-          button {
-            font-size: 1.4rem;
-            font-weight: 400;
-            line-height: 1.9rem;
-            max-width: 100%;
-
-            &.folder-link {
-              display: flex;
-              border: 0;
-
-              .svg-icon {
-                svg {
-                  width: 100%;
-                  height: 1.6rem;
-                }
-              }
-            }
-          }
-        }
-
-        &.password,
-        &.totp {
-          .value {
-            .secret {
-              float: left;
-              max-width: calc(100% - 3rem); // password field - password preview button
-              overflow: hidden;
-              text-overflow: ellipsis;
-            }
-          }
-
-          .password-view,
-          .totp-view {
-            display: flex;
-            align-items: center;
-            width: 2.2rem;
-            height: 2rem;
-            margin: 0 0 0 .8rem;
-            padding: 0;
-            float: left;
-
-            .svg-icon svg {
-              width: 1.4rem;
-              height: 100%;
-            }
           }
         }
       }

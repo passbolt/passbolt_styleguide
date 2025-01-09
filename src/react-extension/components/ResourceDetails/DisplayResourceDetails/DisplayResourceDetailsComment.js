@@ -18,9 +18,10 @@ import AddResourceComment from "../../ResourceComment/AddResourceComment/AddReso
 import PropTypes from "prop-types";
 import DisplayResourceCommentList from "../../ResourceComment/DisplayResourceCommentList/DisplayResourceCommentList";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import ReplySVG from "../../../../img/svg/reply.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 class DisplayResourceDetailsComment extends React.Component {
   /**
@@ -152,10 +153,10 @@ class DisplayResourceDetailsComment extends React.Component {
                 <Trans>Comments</Trans>
               </span>
               {this.state.open &&
-              <Icon name="caret-down"/>
+                <CaretDownSVG/>
               }
               {!this.state.open &&
-              <Icon name="caret-right"/>
+                <CaretRightSVG/>
               }
             </button>
           </h4>
