@@ -17,7 +17,7 @@ import DisplayResourceDetailsPermission from "./DisplayResourceDetailsPermission
 import {defaultProps, permissionMock} from "./DisplayResourceDetailsPermission.test.data";
 
 /**
- * DisplayResourceDetailsDescription stories
+ * DisplayResourceDetailsPermission stories
  */
 export default {
   title: 'Components/ResourceDetails/DisplayResourceDetailsPermission',

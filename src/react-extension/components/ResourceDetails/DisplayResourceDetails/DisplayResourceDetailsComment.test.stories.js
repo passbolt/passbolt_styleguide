@@ -12,15 +12,17 @@
  * @since         5.0.0
  */
 import React from "react";
-import DisplayResourceDetailsDescription from "./DisplayResourceDetailsDescription";
-import {defaultProps, resourceWithDescriptionMock} from "./DisplayResourceDetailsDescription.test.data";
+import {defaultProps} from "./DisplayResourceDetailsComment.test.data";
+import DisplayResourceDetailsComment from "./DisplayResourceDetailsComment";
+import {commentsMock} from "../../ResourceComment/DisplayResourceCommentList/DisplayResourceCommentList.test.data";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 
 /**
- * DisplayResourceDetailsDescription stories
+ * DisplayResourceDetailsComment stories
  */
 export default {
-  title: 'Components/ResourceDetails/DisplayResourceDetailsDescription',
-  component: DisplayResourceDetailsDescription,
+  title: 'Components/ResourceDetails/DisplayResourceDetailsComment',
+  component: DisplayResourceDetailsComment,
   decorators: [
     (Story, {args}) => (
       <div className="page">
@@ -31,7 +33,9 @@ export default {
                 <div className="panel aside">
                   <div className="sidebar resource">
                     <div className="sidebar-content">
-                      <Story {...args} />
+                      <AppContext.Provider value={args.context}>
+                        <Story {...args} />
+                      </AppContext.Provider>
                     </div>
                   </div>
                 </div>
@@ -44,6 +48,9 @@ export default {
   ]
 };
 
+const props = defaultProps();
+props.context.port.addRequestListener("passbolt.comments.find-all-by-resource", () => commentsMock);
+
 export const Default = {
-  args: defaultProps({resourceWorkspaceContext: {details: {resource: resourceWithDescriptionMock}}})
+  args: props
 };
