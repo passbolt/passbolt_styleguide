@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../../shared/components/Icons/Icon";
 
-class DisplayContentTypesMetadataAdministrationActions extends React.Component {
+class DisplayContentTypesEncryptedMetadataAdministrationActions extends React.Component {
   /**
    * Render the component
    * @returns {JSX}
@@ -40,10 +40,10 @@ class DisplayContentTypesMetadataAdministrationActions extends React.Component {
   }
 }
 
-DisplayContentTypesMetadataAdministrationActions.propTypes = {
+DisplayContentTypesEncryptedMetadataAdministrationActions.propTypes = {
   isProcessing: PropTypes.bool, // The component is processing
   onSaveRequested: PropTypes.func, // The component save settings callback
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation("common")(DisplayContentTypesMetadataAdministrationActions);
+export default withTranslation("common")(DisplayContentTypesEncryptedMetadataAdministrationActions);

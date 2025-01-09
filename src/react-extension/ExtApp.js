@@ -84,11 +84,6 @@ import MetadataTypesSettingsLocalStorageContextProvider from "../shared/context/
  * - Most of the user settings MFA screen. Because of duo constraints.
  */
 class ExtApp extends Component {
-  /*
-   * =============================================================
-   *  View
-   * =============================================================
-   */
   render() {
     const accountRecoveryUserService = new ExtAppAccountRecoveryUserService(this.props.port);
     return (
@@ -221,6 +216,7 @@ class ExtApp extends Component {
                                             "/app/administration/password-policies",
                                             "/app/administration/user-passphrase-policies",
                                             "/app/administration/password-expiry",
+                                            "/app/administration/content-types/metadata",
                                           ]}>
                                             <AdministrationWorkspaceContextProvider>
                                               <AdminAccountRecoveryContextProvider>
@@ -229,9 +225,11 @@ class ExtApp extends Component {
                                                     <AdminPasswordPoliciesContextProvider>
                                                       <AdministrationUserPassphrasePoliciesContextProvider>
                                                         <AdministrationPasswordExpiryContextProvider>
-                                                          <ManageDialogs/>
-                                                          <ManageWorkflows/>
-                                                          <AdministrationWorkspace/>
+                                                          <ResourceTypesLocalStorageContextProvider>
+                                                            <ManageDialogs/>
+                                                            <ManageWorkflows/>
+                                                            <AdministrationWorkspace/>
+                                                          </ResourceTypesLocalStorageContextProvider>
                                                         </AdministrationPasswordExpiryContextProvider>
                                                       </AdministrationUserPassphrasePoliciesContextProvider>
                                                     </AdminPasswordPoliciesContextProvider>

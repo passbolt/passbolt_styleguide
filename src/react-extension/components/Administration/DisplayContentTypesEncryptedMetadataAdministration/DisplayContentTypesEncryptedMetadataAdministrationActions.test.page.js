@@ -15,12 +15,12 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import DisplayContentTypesMetadataAdministrationActions from "./DisplayContentTypesMetadataAdministrationActions";
+import DisplayContentTypesEncryptedMetadataAdministrationActions from "./DisplayContentTypesEncryptedMetadataAdministrationActions";
 
 /**
- * The DisplayContentTypesMetadataAdministrationActions component represented as a page
+ * The DisplayContentTypesEncryptedMetadataAdministrationActions component represented as a page
  */
-export default class  DisplayContentTypesMetadataAdministrationActionsPage {
+export default class DisplayContentTypesEncryptedMetadataAdministrationActionsPage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -28,7 +28,7 @@ export default class  DisplayContentTypesMetadataAdministrationActionsPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayContentTypesMetadataAdministrationActions {...props}/>
+        <DisplayContentTypesEncryptedMetadataAdministrationActions {...props}/>
       </MockTranslationProvider>
     );
   }

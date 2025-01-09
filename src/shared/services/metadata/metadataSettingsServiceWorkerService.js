@@ -27,22 +27,26 @@ class MetadataSettingsServiceWorkerService {
 
   /**
    * Get or find the metadata types settings.
-   * @returns {Promise<object>}
+   * @returns {Promise<MetadataTypesSettingsEntity>}
    */
   async getOrFindTypesSettings() {
-    return this.port.request(METADATA_GET_OR_FIND_SETTINGS_EVENT);
+    const settingsDto = await this.port.request(METADATA_GET_OR_FIND_SETTINGS_EVENT);
+    return new MetadataTypesSettingsEntity(settingsDto);
   }
 
   /**
    * Get or find the metadata types settings.
-   * @param {MetadataTypesSettingsEntity} settings The metadata types settings to save.
-   * @return {Promise<object>}
+   * @param {MetadataTypesSettingsFormEntity} formSettings The metadata types form settings to save.
+   * @return {Promise<MetadataTypesSettingsEntity>}
+   * @throws {TypeError} If the settings property is not of type MetadataTypesSettingsEntity.
+   * @throws {EntityValidationError} If the data returned by the browser extension is not a valid MetadataTypesSettings entity.
    */
-  async saveTypesSettings(settings) {
-    if (!(settings instanceof MetadataTypesSettingsEntity)) {
+  async saveTypesSettings(formSettings) {
+    if (!(formSettings instanceof MetadataTypesSettingsEntity)) {
       throw new TypeError("The 'settings' property should be of type 'MetadataTypesSettingsEntity'.");
     }
-    return this.port.request(METADATA_SAVE_TYPES_SETTINGS_EVENT, settings.toDto());
+    const savedSettingsDto = await this.port.request(METADATA_SAVE_TYPES_SETTINGS_EVENT, formSettings.toDto());
+    return new MetadataTypesSettingsEntity(savedSettingsDto);
   }
 }
 
