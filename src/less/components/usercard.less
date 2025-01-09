@@ -1,18 +1,16 @@
 .usercard-col-2(@avatar-size) {
-    .clearfix();
-    margin: 0 0 1.2rem 0;
+    display: flex;
+    gap: 1.6rem;
+    padding: .8rem 1.6rem;
+    border-top: .1rem solid var(--Workspace-Dividers-lighter);
 
     &:last-of-type {
         margin-bottom: 0;
     }
 
     .content-wrapper {
-        float: left;
-        width: 100%;
-
+        overflow: hidden;
         .content {
-            margin: 0 0 0 calc(@avatar-size + 1.6rem);
-
             .name {
                 .ellipsis();
 
@@ -23,9 +21,9 @@
             }
 
             .subinfo {
-                color: @default-text-color;
-                font-size: 0.929em; /* 13px */
-                margin-top: 0.4rem;
+                .ellipsis();
+                font-size: 1.1rem; /* 11px */
+                opacity: .5;
 
                 .dateTimeAgo {
                     color: @default-text-color;
@@ -72,10 +70,8 @@
     }
 
     .avatar {
-        float: left;
         width: @avatar-size;
         height: @avatar-size;
-        margin-left: -100%;
 
         svg {
           width: @avatar-size;
@@ -154,7 +150,7 @@
 }
 
 .usercard-col-2 {
-    .usercard-col-2(42px);
+    .usercard-col-2(34px);
 }
 
 .usercard-detailed-col-2 {
