@@ -277,6 +277,32 @@ describe("ResourceTypesCollection", () => {
     });
   });
 
+  describe("::hasSomeOfVersion", () => {
+    it("should have some v4 resource types.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
+      expect(resourceTypes.hasSomeOfVersion(RESOURCE_TYPE_VERSION_4)).toBeTruthy();
+    });
+
+    it("should note have some v4 resource types.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesV5CollectionDto());
+      expect(resourceTypes.hasSomeOfVersion(RESOURCE_TYPE_VERSION_4)).toBeFalsy();
+    });
+
+    it("should have some v5 resource types.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesV5CollectionDto());
+      expect(resourceTypes.hasSomeOfVersion(RESOURCE_TYPE_VERSION_5)).toBeTruthy();
+    });
+
+    it("should note have some v5 resource types.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
+      expect(resourceTypes.hasSomeOfVersion(RESOURCE_TYPE_VERSION_5)).toBeFalsy();
+    });
+  });
+
   describe(":pushMany", () => {
     it("[performance] should ensure performance adding large dataset remains effective.", async() => {
       const count = 10_000;
