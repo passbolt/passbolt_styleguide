@@ -13,12 +13,12 @@
  */
 
 import React from "react";
-import {Trans, withTranslation} from "react-i18next";
+import {withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {withDialog} from "../../../contexts/DialogContext";
 import ConfirmResourceCommentDeletion from "../ConfirmResourceCommentDeletion/ConfirmResourceCommentDeletion";
+import DeleteSVG from "../../../../img/svg/delete.svg";
 
 /**
  * This component allows to delete a resource comment ( at least call-to-action )
@@ -50,11 +50,8 @@ class DeleteComment extends React.Component {
 
   render() {
     return (
-      <button type="button" className="delete-comment button-transparent" onClick={this.delete}>
-        <span className="svg-icon">
-          <Icon name="trash"/>
-        </span>
-        <span className="visuallyhidden"><Trans>Delete</Trans></span>
+      <button type="button" className="delete-comment button-transparent inline" onClick={this.delete}>
+        <DeleteSVG name="trash"/>
       </button>
     );
   }
