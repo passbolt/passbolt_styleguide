@@ -229,7 +229,8 @@ class GenerateResourcePassword extends Component {
               <Tabs activeTabName={generatorConfiguration.default_generator}>
                 <Tab
                   key={"password"}
-                  name={"password"}
+                  name={this.props.t("password")}
+                  type={"password"}
                   onClick={() => this.handleGeneratorTypeChanged("password")}>
                   {generatorConfiguration.default_generator === "password" &&
                     <ConfigurePasswordGenerator
@@ -239,7 +240,8 @@ class GenerateResourcePassword extends Component {
                 </Tab>
                 <Tab
                   key={"passphrase"}
-                  name={"passphrase"}
+                  name={this.props.t("passphrase")}
+                  type={"passphrase"}
                   onClick={() => this.handleGeneratorTypeChanged("passphrase")}>
                   {generatorConfiguration.default_generator === "passphrase" &&
                     <ConfigurePassphraseGenerator

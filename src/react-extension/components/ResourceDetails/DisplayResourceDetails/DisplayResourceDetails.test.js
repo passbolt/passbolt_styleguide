@@ -25,6 +25,7 @@ import {
   resourceLegacyDto,
   resourceStandaloneTotpDto, resourceWithTotpDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import {denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 jest.mock("./DisplayResourceDetailsInformation", () => () => <></>);
 jest.mock("./DisplayResourceDetailsPassword", () => () => <div className="password"></div>);
@@ -71,6 +72,43 @@ describe("DisplayResourceDetails", () => {
       await page.selectPermalink();
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${props.context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resourceWorkspaceContext.details.resource.id}`);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The permalink has been copied to clipboard");
+    });
+  });
+
+  describe('As LU I can use tabs in the resource sidebar', () => {
+    let props, page;
+
+    beforeEach(() => {
+      props = defaultProps(); // The props to pass
+      page = new DisplayResourceDetailsPage(props);
+    });
+
+    it('I should see tabs a in the resource sidebar', () => {
+      expect.assertions(3);
+      expect(page.tabs()).toBeTruthy();
+      expect(page.tab(0).textContent).toStrictEqual("Details");
+      expect(page.tab(1).textContent).toStrictEqual("Activity");
+    });
+
+    it('I should not see tabs a in the resource sidebar if RBAC denies it', () => {
+      expect.assertions(1);
+
+      const props = defaultProps({
+        rbacContext: denyRbacContext()
+      });
+      page = new DisplayResourceDetailsPage(props);
+
+      expect(page.tabs()).toBeFalsy();
+    });
+
+    it('I can see activity tab context', async() => {
+      expect.assertions(2);
+
+      page = new DisplayResourceDetailsPage(props);
+
+      expect(page.activeTab.textContent).toStrictEqual("Details");
+      await page.click(page.tab(1));
+      expect(page.activeTab.textContent).toStrictEqual("Activity");
     });
   });
 

@@ -94,7 +94,7 @@ class DisplayResourceDetailsDescription extends React.Component {
    */
   render() {
     return (
-      <div className="detailed-information accordion sidebar-section">
+      <div className="detailed-description accordion sidebar-section">
         <div className="accordion-header">
           <h4>
             <button type="button" onClick={this.handleTitleClickEvent} className="link no-border section-opener">

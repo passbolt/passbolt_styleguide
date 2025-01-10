@@ -34,6 +34,8 @@ import DisplayResourceDetailsPassword from "./DisplayResourceDetailsPassword";
 import DisplayResourceDetailsTotp from "./DisplayResourceDetailsTotp";
 import KeySVG from "../../../../img/svg/key.svg";
 import LinkSVG from "../../../../img/svg/link.svg";
+import Tabs from "../../Common/Tab/Tabs";
+import Tab from "../../Common/Tab/Tab";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -137,17 +139,48 @@ class DisplayResourceDetails extends React.Component {
   }
 
   /**
+   * Renders the "Details" section tab of a resource.
+   * @returns {JSX}
+   */
+  renderResourceDetail() {
+    const canUseTags = this.props.context.siteSettings.canIUse("tags")
+      && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
+    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
+    const canSeeComments = this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_COMMENTS);
+
+    return (
+      <>
+        <DisplayResourceDetailsInformation />
+        {this.isPasswordResources &&
+          <DisplayResourceDetailsPassword/>
+        }
+        {this.isTotpResources &&
+          <DisplayResourceDetailsTotp isStandaloneTotp={this.isStandaloneTotpResource}/>
+        }
+        {this.hasDescription &&
+          <DisplayResourceDetailsDescription />
+        }
+        {canViewShare &&
+          <DisplayResourceDetailsPermission />
+        }
+        {canUseTags &&
+        <DisplayResourceDetailsTag />
+        }
+        {canSeeComments &&
+          <DisplayResourceDetailsComment />
+        }
+      </>
+    );
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
-    const canUseTags = this.props.context.siteSettings.canIUse("tags")
-      && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
     const canUseAuditLog = (this.props.context.siteSettings.canIUse("auditLog")
       || this.props.context.siteSettings.canIUse("audit_log")) // @deprecated remove with v4
       && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_ACTIVITIES);
-    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
-    const canSeeComments = this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_COMMENTS);
 
     return (
       <div className="sidebar resource">
@@ -170,27 +203,16 @@ class DisplayResourceDetails extends React.Component {
         </div>
 
         <div className="sidebar-content">
-          <DisplayResourceDetailsInformation />
-          {this.isPasswordResources &&
-            <DisplayResourceDetailsPassword/>
-          }
-          {this.isTotpResources &&
-            <DisplayResourceDetailsTotp isStandaloneTotp={this.isStandaloneTotpResource}/>
-          }
-          {this.hasDescription &&
-            <DisplayResourceDetailsDescription />
-          }
-          {canViewShare &&
-            <DisplayResourceDetailsPermission />
-          }
-          {canUseTags &&
-            <DisplayResourceDetailsTag />
-          }
-          {canSeeComments &&
-            <DisplayResourceDetailsComment />
-          }
-          {canUseAuditLog &&
-            <DisplayResourceDetailsActivity />
+          {!canUseAuditLog
+            ? this.renderResourceDetail()
+            : <Tabs activeTabName='Details'>
+              <Tab key='Details' name={this.props.t('Details')} type='Details'>
+                {this.renderResourceDetail()}
+              </Tab>
+              <Tab key='Activity' name={this.props.t('Activity')} type='Activity'>
+                <DisplayResourceDetailsActivity />
+              </Tab>
+            </Tabs>
           }
         </div>
       </div>
