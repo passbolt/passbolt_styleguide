@@ -16,16 +16,19 @@
  * Unit tests on DisplayUserWorkspace in regard of specifications
  */
 import {
-  defaultAppContext,
+  propsUserRole,
   propsWithMyselfAsSelectedUser,
-  propsWithoutSelectedUser,
   propsWithSelectedActiveUser,
   propsWithSelectedMFADisabledUser,
   propsWithSelectedUser
 } from "./DisplayUserWorkspaceActions.test.data";
 import {waitFor} from "@testing-library/dom";
 import DisplayUserWorkspaceActionsPage from "./DisplayUserWorkspaceActions.test.page";
-
+import "../../../../../test/mocks/mockClipboard";
+import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import ConfirmDisableUserMFA from "../ConfirmDisableUserMFA/ConfirmDisableUserMFA";
+import HandleReviewAccountRecoveryRequestWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
 
 beforeEach(() => {
   jest.resetModules();
@@ -33,117 +36,220 @@ beforeEach(() => {
 
 describe("Display User Workspace Actions", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
-
   beforeEach(() => {
 
   });
 
   it('As AD I should edit a selected user', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithSelectedUser());
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsWithSelectedUser());
     await waitFor(() => {});
     expect(page.canEdit).toBeTruthy();
   });
 
-  it('As AD I should not edit an user if no user is selected', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithoutSelectedUser());
+  it('As LU I should not edit an user with user role', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsUserRole());
     await waitFor(() => {});
     expect(page.canEdit).toBeFalsy();
   });
 
   it('As AD I should delete a selected user', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithSelectedUser());
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsWithSelectedUser());
     await waitFor(() => {});
     expect(page.canDelete).toBeTruthy();
   });
 
-  it('As AD I should not delete an user if no user is selected', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithoutSelectedUser());
+  it('As LU I should not delete an user with user role', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsUserRole());
     await waitFor(() => {});
     expect(page.canDelete).toBeFalsy();
   });
 
   it('As AD I should not delete a selected user if this user is myself', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithMyselfAsSelectedUser());
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsWithMyselfAsSelectedUser());
     await waitFor(() => {});
     expect(page.canDelete).toBeFalsy();
   });
 
-  it('As AD I should copy an selected user permalink', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithSelectedUser());
+  it('As AD I should copy a selected user permalink', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsWithSelectedUser());
     await waitFor(() => {});
-    await page.moreActions();
+    await page.copyActions();
     expect(page.canCopyPermalink).toBeTruthy();
   });
 
-  it('As AD I should not copy an user permalink if no user is selected', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithoutSelectedUser());
+  it('As LU I can click to copy a selected user permalink', async() => {
+    expect.assertions(2);
+    const props = propsUserRole();
+    page = new DisplayUserWorkspaceActionsPage(props);
     await waitFor(() => {});
-    await page.moreActions();
-    expect(page.canCopyPermalink).toBeFalsy();
+    await page.copyActions();
+    await page.copyPermalink();
+
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${props.context.userSettings.getTrustedDomain()}/app/users/view/${props.userWorkspaceContext.selectedUsers[0].id}`);
+    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The permalink has been copied to clipboard");
+  });
+
+  it('As AD I should copy a selected user email', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsWithSelectedUser());
+    await waitFor(() => {});
+    await page.copyActions();
+    expect(page.canCopyUserEmail).toBeTruthy();
+  });
+
+  it('As LU I can click to copy a selected user email', async() => {
+    expect.assertions(2);
+    const props = propsUserRole();
+    page = new DisplayUserWorkspaceActionsPage(props);
+    await waitFor(() => {});
+    await page.copyActions();
+    await page.copyEmailAddress();
+
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.userWorkspaceContext.selectedUsers[0].username);
+    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The email address has been copied to clipboard");
+  });
+
+  it('As AD I should copy a selected user public key', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsWithSelectedActiveUser());
+    await waitFor(() => {});
+    await page.copyActions();
+    expect(page.canCopyUserPublicKey).toBeTruthy();
+  });
+
+  it('As AD I should not copy an inactive selected user public key', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsWithSelectedUser());
+    await waitFor(() => {});
+    await page.copyActions();
+    expect(page.canCopyUserPublicKey).toBeFalsy();
+  });
+
+  it('As AD I can click to copy a selected user public key', async() => {
+    expect.assertions(3);
+    const props = propsWithSelectedActiveUser();
+    const publicKey = pgpKeys.ada.public;
+    jest.spyOn(props.context.port, 'request').mockImplementation(() => ({armored_key: publicKey}));
+    page = new DisplayUserWorkspaceActionsPage(props);
+    await waitFor(() => {});
+    await page.copyActions();
+    await page.copyPublicKey();
+
+    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", props.userWorkspaceContext.selectedUsers[0].id);
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(publicKey);
+    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The public key has been copied to clipboard");
+  });
+
+  it('As LU I should copy an user information with user role', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsUserRole());
+    await waitFor(() => {});
+    expect(page.canCopy).toBeTruthy();
   });
 
   it('As AD I should resend an invite to an inactive selected user', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithSelectedUser());
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsWithSelectedUser());
     await waitFor(() => {});
-    await page.moreActions();
     expect(page.canResendInvite).toBeTruthy();
   });
 
-  it('As AD I should not resend an invite to an user if no user is selected', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithoutSelectedUser());
+  it('As LU I should not resend an invite to an user with user role', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsUserRole());
     await waitFor(() => {});
-    await page.moreActions();
     expect(page.canResendInvite).toBeFalsy();
   });
-  it('As AD I should not resend an invite to an active selected user', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithSelectedActiveUser());
+
+  it('As AD I can click to resend an invite to an inactive selected user', async() => {
+    expect.assertions(2);
+    const props = propsWithSelectedUser();
+    jest.spyOn(props.context.port, 'request').mockImplementation(() => new Promise(resolve => resolve()));
+    page = new DisplayUserWorkspaceActionsPage(props);
     await waitFor(() => {});
-    await page.moreActions();
+    await page.resendInvite();
+
+    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.users.resend-invite", props.userWorkspaceContext.selectedUsers[0].username);
+    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The invite has been resent successfully");
+  });
+
+  it('As AD I can click to resend an invite to an inactive selected user and throw an error', async() => {
+    expect.assertions(2);
+    const props = propsWithSelectedUser();
+    jest.spyOn(props.context.port, 'request').mockImplementation(() => new Promise(((resolve, reject) => reject("ERROR"))));
+    page = new DisplayUserWorkspaceActionsPage(props);
+    await waitFor(() => {});
+    await page.resendInvite();
+
+    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.users.resend-invite", props.userWorkspaceContext.selectedUsers[0].username);
+    expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: "ERROR"});
+  });
+
+  it('As AD I should not resend an invite to an active selected user', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsWithSelectedActiveUser());
+    await waitFor(() => {});
     expect(page.canResendInvite).toBeFalsy();
   });
 
   it('As AD I should disable an enabled user MFA ', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithSelectedUser());
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsWithSelectedUser());
     await waitFor(() => {});
-    await page.moreActions();
     expect(page.canDisableMFA).toBeTruthy();
   });
 
-  it('As AD I should not disable an user MFA if no user is selected', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithoutSelectedUser());
+  it('As AD I can click to disable an enabled user MFA', async() => {
+    expect.assertions(1);
+    const props = propsWithSelectedUser();
+    page = new DisplayUserWorkspaceActionsPage(props);
     await waitFor(() => {});
-    await page.moreActions();
+    await page.disableMfa();
+
+    expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmDisableUserMFA);
+  });
+
+  it('As LU I should not disable an user MFA with user role', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsUserRole());
+    await waitFor(() => {});
     expect(page.canDisableMFA).toBeFalsy();
   });
 
   it('As AD I should not disable an already disabled user MFA', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithSelectedMFADisabledUser());
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsWithSelectedMFADisabledUser());
     await waitFor(() => {});
-    await page.moreActions();
     expect(page.canDisableMFA).toBeFalsy();
   });
 
-  it('AS LU I should lock / unlock the display of the details area', async() => {
-    const props =  propsWithSelectedUser();
-    page = new DisplayUserWorkspaceActionsPage(context, props);
-    jest.spyOn(props.userWorkspaceContext, 'onDetailsLocked').mockImplementationOnce(() => {});
-    await waitFor(() => {});
-    await page.lockDetails();
-    expect(props.userWorkspaceContext.onDetailsLocked).toHaveBeenCalled();
-  });
-
   it('As AD I should not disable a review account recovery request if a user is selected', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithSelectedUser());
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsWithSelectedUser());
     await waitFor(() => {});
-    await page.moreActions();
     expect(page.canReviewAccountRecovery).toBeTruthy();
   });
 
-  it('As AD I should not disable a review account recovery request if no user is selected', async() => {
-    page = new DisplayUserWorkspaceActionsPage(context, propsWithoutSelectedUser());
+  it('As AD I can click to review account recovery request if a user is selected', async() => {
+    expect.assertions(1);
+    const props = propsWithSelectedUser();
+    page = new DisplayUserWorkspaceActionsPage(props);
     await waitFor(() => {});
-    await page.moreActions();
+    await page.reviewAccountRecovery();
+
+    expect(props.workflowContext.start).toHaveBeenCalledWith(HandleReviewAccountRecoveryRequestWorkflow, {accountRecoveryRequestId: props.userWorkspaceContext.selectedUsers[0].pending_account_recovery_request.id});
+  });
+
+  it('As LU I should not disable a review account recovery request with user role', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsUserRole());
+    await waitFor(() => {});
     expect(page.canReviewAccountRecovery).toBeFalsy();
   });
 });

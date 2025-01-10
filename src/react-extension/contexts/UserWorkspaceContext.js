@@ -55,7 +55,8 @@ export const UserWorkspaceContext = React.createContext({
   onDetailsLocked: () => {}, // Lock or unlock detail  (hide or display the group or user details)
   onSorterChanged: () => {}, // Whenever the sorter changed
   onUserSelected: {
-    single: () => {}// Whenever a single user has been selected
+    single: () => {}, // Whenever a single user has been selected
+    none: () => {} // Whenever none users have been selected
   },
   onGroupToEdit: () => {}, // Whenever a group will be edited
   shouldDisplaySuspendedUsersFilter: () => {}, // returns true if the 'Suspended user' filter should be displayed in the UI
@@ -102,7 +103,8 @@ class UserWorkspaceContextProvider extends React.Component {
       onDetailsLocked: this.handleDetailsLocked.bind(this), // Lock or unlock detail  (hide or display the group or user details)
       onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
       onUserSelected: {
-        single: this.handleUserSelected.bind(this)// Whenever a single user has been selected
+        single: this.handleUserSelected.bind(this), // Whenever a single user has been selected
+        none: this.handleNoneUsersSelected.bind(this), // Whenever none users have been selected
       },
       onGroupToEdit: this.handleGroupToEdit.bind(this), // Whenever a group will be edited
       isAttentionRequired: this.isAttentionRequired.bind(this), // Whenever a user needs attention
@@ -336,6 +338,14 @@ class UserWorkspaceContextProvider extends React.Component {
   async handleUserSelected(user) {
     await this.select(user);
     this.redirectAfterSelection();
+  }
+
+  /**
+   * Handle the single user selection
+   */
+  async handleNoneUsersSelected() {
+    await this.unselectAll();
+    await this.detailNothing();
   }
 
   /**

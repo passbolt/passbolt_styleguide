@@ -75,5 +75,15 @@ export default class DisplayUserWorkspacePage {
     fireEvent.click(this.goBackButton, leftClick);
     await waitFor(() => {});
   }
+
+  /**
+   * Toggle the lock of the display of the details
+   */
+  async lockDetails() {
+    const element = this._page.container.querySelector('.button-toggle.info');
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
+    await waitFor(() => {});
+  }
 }
 

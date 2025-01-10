@@ -16,8 +16,6 @@
 
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {BrowserRouter as Router} from "react-router-dom";
 import DisplayUserWorkspaceActions from "./DisplayUserWorkspaceActions";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -27,43 +25,62 @@ import MockTranslationProvider from "../../../test/mock/components/International
 export default class DisplayUserWorkspaceActionsPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
-          <Router>
-            <DisplayUserWorkspaceActions {...props}/>
-          </Router>
-        </AppContext.Provider>
+        <DisplayUserWorkspaceActions {...props}/>
       </MockTranslationProvider>
     );
   }
 
   /**
-   * Returns true if one can edit an user
+   * Returns true if one can copy a user
+   */
+  get canCopy() {
+    const element = this._page.container.querySelector('#copy-action');
+    return Boolean(element);
+  }
+
+  /**
+   * Returns true if one can edit a user
    */
   get canEdit() {
-    const element = this._page.container.querySelectorAll('li button')[0];
-    return Boolean(element) && !element.hasAttribute('disabled');
+    const element = this._page.container.querySelector('#edit-user');
+    return Boolean(element);
   }
 
   /**
-   * Returns true if one can delete an user
+   * Returns true if one can delete a user
    */
   get canDelete() {
-    const element = this._page.container.querySelectorAll('li button')[1];
-    return Boolean(element) && !element.hasAttribute('disabled');
+    const element = this._page.container.querySelector('#delete-user');
+    return Boolean(element);
   }
 
   /**
-   * Returns true if one can copy permalink an user
+   * Returns true if one can copy permalink of a user
    */
   get canCopyPermalink() {
     const element = this._page.container.querySelector('#copy-user-permalink');
-    return Boolean(element) && !element.hasAttribute('disabled');
+    return Boolean(element);
+  }
+
+  /**
+   * Returns true if one can copy email of a user
+   */
+  get canCopyUserEmail() {
+    const element = this._page.container.querySelector('#copy-user-email');
+    return Boolean(element);
+  }
+
+  /**
+   * Returns true if one can copy public key of a user
+   */
+  get canCopyUserPublicKey() {
+    const element = this._page.container.querySelector('#copy-user-public-key');
+    return Boolean(element);
   }
 
   /**
@@ -71,7 +88,7 @@ export default class DisplayUserWorkspaceActionsPage {
    */
   get canResendInvite() {
     const element = this._page.container.querySelector('#resend-invite-user');
-    return Boolean(element) && !element.hasAttribute('disabled');
+    return Boolean(element);
   }
 
   /**
@@ -79,7 +96,7 @@ export default class DisplayUserWorkspaceActionsPage {
    */
   get canDisableMFA() {
     const element = this._page.container.querySelector('#disable-mfa-action');
-    return Boolean(element) && !element.hasAttribute('disabled');
+    return Boolean(element);
   }
 
   /**
@@ -87,24 +104,70 @@ export default class DisplayUserWorkspaceActionsPage {
    */
   get canReviewAccountRecovery() {
     const element = this._page.container.querySelector('#review-recovery');
-    return Boolean(element) && !element.hasAttribute('disabled');
+    return Boolean(element);
   }
 
   /**
-   * Asks for more actions through the dropdown
+   * Asks for copy actions through the dropdown
    */
-  async moreActions() {
-    const element = this._page.container.querySelector('.dropdown button');
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+  async copyActions() {
+    const element = this._page.container.querySelector('#copy-action .dropdown button');
+    await this.click(element);
   }
 
   /**
-   * Toggle the lock of the display of the details
+   * Copy permalink
    */
-  async lockDetails() {
-    const element = this._page.container.querySelector('.button-toggle.info');
+  async copyPermalink() {
+    const element = this._page.container.querySelector('#copy-user-permalink');
+    await this.click(element);
+  }
+
+  /**
+   * Copy email address
+   */
+  async copyEmailAddress() {
+    const element = this._page.container.querySelector('#copy-user-email');
+    await this.click(element);
+  }
+
+  /**
+   * Copy public key
+   */
+  async copyPublicKey() {
+    const element = this._page.container.querySelector('#copy-user-public-key');
+    await this.click(element);
+  }
+
+  /**
+   * Resend invite
+   */
+  async resendInvite() {
+    const element = this._page.container.querySelector('#resend-invite-user');
+    await this.click(element);
+  }
+
+  /**
+   * disable MFA
+   */
+  async disableMfa() {
+    const element = this._page.container.querySelector('#disable-mfa-action');
+    await this.click(element);
+  }
+
+  /**
+   * Review account recovery
+   */
+  async reviewAccountRecovery() {
+    const element = this._page.container.querySelector('#review-recovery');
+    await this.click(element);
+  }
+
+  /**
+   * click on element
+   * @param element
+   */
+  async click(element) {
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
