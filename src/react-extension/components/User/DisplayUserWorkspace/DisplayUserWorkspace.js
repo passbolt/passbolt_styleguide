@@ -87,8 +87,12 @@ class DisplayUserWorkspace extends React.Component {
               </div>
               <div className="panel middle">
                 <div className="header">
-                  <FilterUsersByText/>
-                  <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+                  <div className="header-left">
+                    <FilterUsersByText/>
+                  </div>
+                  <div className="header-right">
+                    <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+                  </div>
                 </div>
                 <div className="middle-right">
                   <div className="breadcrumbs-and-grid">
