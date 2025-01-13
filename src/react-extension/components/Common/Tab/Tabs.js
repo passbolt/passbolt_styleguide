@@ -67,6 +67,7 @@ class Tabs extends React.Component {
               <Tab
                 key={key}
                 name={props.name}
+                type={props.type}
                 onClick={ () => this.handleTabClick(props)}
                 isActive={props.type === this.state.activeTabName}
               />)

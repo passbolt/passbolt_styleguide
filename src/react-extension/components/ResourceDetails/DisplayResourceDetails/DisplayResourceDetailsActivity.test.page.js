@@ -45,16 +45,7 @@ export default class PasswordSidebarActivitySectionPage {
    * Set up the objects of the page
    */
   setupPageObjects() {
-    this._titleHeader = new TitleHeaderPageObject(this._page.container);
     this._displayActivityList = new DisplayActivityPageObject(this._page.container);
-  }
-
-  /**
-   * Return the page object of the title header
-   * @returns {{select: select}}
-   */
-  get title() {
-    return this._titleHeader;
   }
 
   /**
@@ -62,33 +53,6 @@ export default class PasswordSidebarActivitySectionPage {
    */
   get displayActivityList() {
     return this._displayActivityList;
-  }
-}
-
-/**
- * Page object for the TitleHeader element
- */
-class TitleHeaderPageObject {
-  /**
-   * Default constructor
-   * @param container The container which includes the Activity Component
-   */
-  constructor(container) {
-    this._container = container;
-  }
-
-  /**
-   * Returns the clickable area of the header
-   */
-  get hyperlink() {
-    return this._container.querySelector(".accordion-header h4 button");
-  }
-
-  /** Click on the title */
-  async click()  {
-    const leftClick = {button: 0};
-    fireEvent.click(this.hyperlink, leftClick);
-    await waitFor(() => {});
   }
 }
 
