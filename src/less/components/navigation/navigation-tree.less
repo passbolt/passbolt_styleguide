@@ -107,6 +107,7 @@
             .main-cell {
 
                 span.tag-name,
+                span.group-name,
                 span.folder-name {
                     color: var(--Text-and-icons-Main-text);
                     text-shadow: none;
@@ -123,7 +124,6 @@
             }
         }
     }
-
     &.navigation-folders {
         .row {
             padding: .8rem 0 .8rem 1rem;
@@ -141,8 +141,28 @@
         }
     }
 
+    &.navigation-groups {
+        .root:not(.group-item){
+            position: relative;
+
+            .more-ctrl {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 3.2rem; // 4rem for the desired position in the design - .8rem for the current margin-right
+                z-index: 10;
+            }
+        }
+        
+        .group-item {
+            .row {
+                padding: .8rem 0 .8rem 2.6rem;
+            }
+        }
+    }
+
     &.navigation-tags {
-        .root:not(.tag-item) {
+        .root:not(.tag-item){
             position: relative;
 
             .more-ctrl {
