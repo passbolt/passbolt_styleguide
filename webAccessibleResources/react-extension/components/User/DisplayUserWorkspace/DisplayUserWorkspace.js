@@ -68,48 +68,40 @@ class DisplayUserWorkspace extends React.Component {
    */
   render() {
     return (
-      <>
+      <div>
         {this.props.context.users &&
         <Route path="/app/account-recovery/requests/review/:accountRecoveryRequestId" component={HandleReviewAccountRecoveryRequestRoute}/>
         }
+        <div className="header second">
+          <Logo/>
+          <FilterUsersByText/>
+          <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+        </div>
+        <div className="header third">
+          <DisplayUserWorkspaceMainActions/>
+          {this.isAccessAllowed &&
+          <DisplayUserWorkspaceActions/>
+          }
+        </div>
         <div className="panel main">
           {this.isAccessAllowed ? (
             <>
               <div className="panel left">
-                <div className="sidebar-content">
-                  <Logo/>
-                  <DisplayUserWorkspaceMainActions/>
-                  <div className="sidebar-content-left">
-                    <FilterUsersByShortcut/>
-                    <DisplayGroups/>
-                  </div>
-                </div>
+                <FilterUsersByShortcut/>
+                <DisplayGroups/>
               </div>
               <div className="panel middle">
-                <div className="header">
-                  <FilterUsersByText/>
-                  <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
-                </div>
-                <div className="middle-right">
-                  <div className="breadcrumbs-and-grid">
-                    <div className="top-bar">
-                      <FilterUsersByBreadcrumb/>
-                      <div className="action-bar">
-                        <DisplayUserWorkspaceActions/>
-                      </div>
-                    </div>
-                    <DisplayUsers/>
-                  </div>
-                  {this.mustDisplayUserDetails && <DisplayUserDetails/>}
-                  {this.mustDisplayGroupDetails && <DisplayUserGroupDetails/>}
-                </div>
+                <FilterUsersByBreadcrumb/>
+                <DisplayUsers/>
+                {this.mustDisplayUserDetails && <DisplayUserDetails/>}
+                {this.mustDisplayGroupDetails && <DisplayUserGroupDetails/>}
               </div>
             </>
           ) : (
             <DisplayHttpError errorCode={403}/>
           )}
         </div>
-      </>
+      </div>
     );
   }
 }

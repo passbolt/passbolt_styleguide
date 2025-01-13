@@ -21,31 +21,13 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-export const DefaultUserBadgeMenu = {
-  args: defaultProps()
-};
+export const Initial = Template.bind({});
+Initial.args = defaultProps();
 
 const propsAttentionRequired = {
   accountRecoveryContext: {
     isAccountRecoveryChoiceRequired: () => true
   }
 };
-
-export const AttentionRequired = {
-  args: defaultProps(propsAttentionRequired)
-};
-
-const propsWithUserAvatar = {
-  user: {
-    "username": "ada@passbolt.com",
-    profile: {
-      "first_name": "ada",
-      "last_name": "lovelace",
-      avatar: {url: {medium: "img/avatar/ada.png", small: "img/avatar/ada.png"}}
-    }
-  }
-};
-
-export const UserAvatarBadgeMenu = {
-  args: defaultProps(propsWithUserAvatar)
-};
+export const AttentionRequired = Template.bind({});
+AttentionRequired.args = defaultProps(propsAttentionRequired);

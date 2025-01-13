@@ -7,15 +7,39 @@
     button, .button {
         &.open {
             z-index: 4;
-            background: var(--Primary-button-Primary-button-menu-background);
-            border-radius: var(--Button-border-radius) var(--Button-border-radius) 0 0;
-            box-shadow: inset .1rem 0 0 0 var(--Action-button-Action-button-border), inset -.1rem 0 0 0 var(--Action-button-Action-button-border), inset 0 .1rem 0 0 var(--Action-button-Action-button-border);
-            color: var(--Text-and-icons-Main-text);
+            background: @dropdown-background;
+            border-radius: .4rem .4rem 0 0;
+            box-shadow: inset .1rem 0 0 0 @default-border, inset -.1rem 0 0 0 @default-border, inset 0 .1rem 0 0 @default-border;
+            color: @default-text-color;
+            padding-bottom: 1.4rem;
 
             svg {
-                --icon-color: var(--Text-and-icons-Icons);
-                --icon-background-color: var(--Workspace-Workspace-background);
+                --icon-color: @icon-color;
+                --icon-background-color: @icon-background-color;
             }
+
+            &.button-action-icon {
+              height: 4.2rem; // Add .6rem to 3.6rem due to the padding bottom (1.4rem -.8rem)
+            }
+
+            & + .dropdown-content {
+                top: calc(100% - .1rem);
+            }
+        }
+
+        &.more {
+            .svg-icon svg {
+                margin-left: 1.6rem;
+            }
+        }
+
+        &.button-action-icon {
+          width: inherit;
+        }
+
+        .svg-icon + .svg-icon {
+            margin-left: .8rem;
+            display: inline-flex;
         }
     }
 
@@ -23,19 +47,18 @@
     .dropdown-content {
         float: left;
         position: absolute;
-        top: calc(100% - .1rem);
         z-index: 3;
         display: none;
-        border: 1px solid var(--Action-button-Action-button-border);
+        border: 1px solid @default-border;
         box-sizing: border-box;
-        background: var(--Primary-button-Primary-button-menu-background);
-        padding: .8rem 0 .8rem 0;
-        box-shadow: var(--Menu-drop-shadow-Menu-drop-shadow-X) var(--Menu-drop-shadow-Menu-drop-shadow-Y) var(--Menu-drop-shadow-Menu-drop-shadow-blur) 0 var(--Menu-drop-shadow-Menu-drop-shadow, rgba(0, 0, 0, 0.10));
-        border-radius: var(--Menu-radius);
+        background: @dropdown-background;
+        padding: .4rem 0 .8rem 0;
+        filter: drop-shadow(0 1rem 1rem rgba(0, 0, 0, @shadow-opacity-dropdown));
+        border-radius: .4rem;
         font-size: 1.5rem;
         line-height: 2rem;
         width: max-content;
-        min-width: calc(100% + 3.2rem);
+        min-width: calc(100% + .8rem);
 
         &.visible {
             display: block;
@@ -43,120 +66,68 @@
 
         &.left {
             right: 0;
-            border-radius: var(--Menu-radius) 0 var(--Menu-radius) var(--Menu-radius);
+            border-radius: .4rem 0 .4rem .4rem;
         }
 
         &.right {
             left: 0;
-            border-radius: 0 var(--Menu-radius) var(--Menu-radius) var(--Menu-radius);
-        }
-
-        &.over {
-            right: -.1rem;
-            top: -.4rem;
-            z-index: 10;
-            padding: 0;
-            box-shadow: none;
-            border: none;
-
-            &:before {
-                content: "";
-                position: absolute;
-                width: 100%;
-                border-radius: var(--Workspace-selection-button-radius);
-                // 4.1rem is the height of a single dropdown item in this context
-                top: 4.1rem;
-                height: calc(100% - 4.1rem);
-                box-shadow: var(--Menu-drop-shadow-Menu-drop-shadow-X) var(--Menu-drop-shadow-Menu-drop-shadow-Y) var(--Menu-drop-shadow-Menu-drop-shadow-blur) 0 var(--Menu-drop-shadow-Menu-drop-shadow);
-            }
-
-            button.no-border {
-                display: flex;
-                justify-content: flex-end;
-                padding: 1rem var(--Workspace-selection-button-padding);
-                gap: 1.6rem;
-            }
-
-            li {
-                position: relative;
-                background: var(--Workspace-Workspace-button-background);
-                border-left: .1rem solid var(--Action-button-Action-button-border);
-                border-right: .1rem solid var(--Action-button-Action-button-border);
-
-                &:first-child {
-                    border-radius: var(--Workspace-selection-button-radius) var(--Workspace-selection-button-radius) 0 0;
-                    border-top: .1rem solid var(--Action-button-Action-button-border);
-
-                    button {
-                        border-radius: var(--Workspace-selection-button-radius) var(--Workspace-selection-button-radius) 0 0;
-                    }
-                }
-
-                &:last-child {
-                    border-radius: 0 0 var(--Workspace-selection-button-radius) var(--Workspace-selection-button-radius);
-                    border-bottom: .1rem solid var(--Action-button-Action-button-border);
-
-                    button {
-                        border-radius: 0 0 var(--Workspace-selection-button-radius) var(--Workspace-selection-button-radius);
-                    }
-                }
-            }
+            border-radius: 0 .4rem .4rem .4rem;
         }
 
 
         // Separator of contextual menu item
         .separator-after {
-            border-bottom: 1px solid var(--Workspace-Dividers);
+            border-bottom: 1px solid @default-border;
             margin-bottom: .4rem;
             button {
                 margin-bottom: .4rem;
             }
         }
 
-        // Dropdown menu item
-        button.no-border {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            align-self: stretch;
-            background: none;
-            border: none;
-            padding: .8rem 1.6rem;
-            float: inherit;
-            margin-right: inherit;
-            width: 100%;
-            border-radius: 0;
-            box-shadow: none;
+        li {
+            // Dropdown menu item
+            button.link {
+                display: flex;
+                align-items: center;
+                border: 0;
+                padding: .8rem 1.6rem;
+                float: inherit;
+                margin-right: inherit;
+                width: 100%;
+                box-shadow: none;
 
-            // Dropdown menu item hover and focus
-            &:hover, &:focus, &:focus-visible {
-                background: var(--Sections-Filter-selected);
+                // Dropdown menu item hover
+                &:hover {
+                    color: @dropdown-item-hover-text-color;
+                    background: @dropdown-item-hover-background;
+                }
+
+                // Dropdown menu item focus
+                &:focus {
+                    color: @dropdown-item-focus-text-color;
+                    background: @dropdown-item-focus-background;
+                    box-shadow: 0 0 .4rem @shadow-focus-color;
+                    outline: @outline-default-border;
+                }
+
+                // Dropdown menu item pressed
+                &:active {
+                    color: @dropdown-item-active-text-color;
+                    background: @dropdown-item-active-background;
+                    box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
+                }
             }
 
-            // Dropdown menu item pressed
-            &:active {
-              box-shadow: inset 0 -0.1rem 0 0 var(--States-Active-Highlight), inset 0 .1rem 0 0 var(--States-Active-Shadow);
+            .checkbox {
+              padding: .8rem 1.6rem;
+              margin: 0;
+
+              // Dropdown menu item hover
+              &:hover {
+                color: @dropdown-item-hover-text-color;
+                background: @dropdown-item-hover-background;
+              }
             }
-        }
-
-        .checkbox {
-          padding: .8rem 1.6rem;
-          margin: 0;
-
-          // Dropdown menu item hover
-          &:hover {
-            background: var(--Sections-Filter-selected);
-          }
-        }
-
-        .radio {
-          padding: .8rem 1.6rem;
-          margin: 0;
-
-          // Dropdown menu item hover
-          &:hover {
-            background: var(--Sections-Filter-selected);
-          }
         }
     }
 }

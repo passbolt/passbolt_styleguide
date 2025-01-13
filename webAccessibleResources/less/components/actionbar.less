@@ -1,89 +1,44 @@
 /* actions */
-.panel.left .main-action-wrapper {
-  margin: .4rem 0 0 1.6rem;
-  .dropdown {
-    margin-right: 0;
-  }
-  button {
-    margin-right: .8rem;
-  }
-}
-.panel.middle .middle-right .top-bar {
-  .action-bar {
-    display: flex;
-    padding: .8rem 1.6rem .8rem 1.2rem;
-    align-items: flex-start;
-    gap: .8rem;
-    align-self: stretch;
-
-    .actions-wrapper {
-      display: flex;
-      justify-content: space-between;
-      gap: 1.6rem;
-      width: 100%;
-
-      .actions {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: .8rem;
-        background: var(--Palette-Select);
-        border-radius: var(--Action-bar-radius);
-        padding: .4rem 1.6rem .4rem .4rem;
-
-        ul {
-          li:last-child .dropdown {
-            margin-right: 0;
-          }
-        }
-
-        &.secondary {
-          flex: 0;
-          background: transparent;
-          padding: .4rem 0;
-        }
-
-        > ul {
-          display: flex;
-        }
-
-        span.counter {
-          padding: 0 .4rem;
-          color: var(--Text-and-icons-Secondary-text);
-          font-weight: normal;
-          font-size: 1.4rem;
-          height: 3.6rem;
-          line-height: 3.6rem;
-          .ellipsis();
-        }
-
-        > button:last-child {
-          margin-right: 0;
-          margin-left: auto;
-          top: .1rem;
-        }
-      }
-
-      button {
-        margin-right: 1rem;
-      }
-
-      .dropdown {
-        margin-right: 1rem;
-
-        button {
-          margin-right: 0;
-        }
-      }
-
-      .secondary {
-        li:last-child button{
-            margin-right: 0;
-
-        }
-      }
+.header.third .main-action-wrapper {
+    margin: .4rem 0 0 1.6rem;
+    .dropdown {
+      margin-right: 0;
     }
-  }
+    button {
+        margin-right: .8rem;
+    }
+
+}
+
+.header.third .actions-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin: .4rem 1.6rem 0 0;
+    .actions {
+        flex: 1;
+        &.secondary {
+            flex: 0;
+        }
+        > ul {
+            display: flex;
+        }
+    }
+    .dropdown {
+        margin-right: 0;
+        .dropdown-content.left {
+            margin-right: 1rem;
+        }
+    }
+    button {
+        margin-right: 1rem;
+    }
+    .secondary {
+        button {
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
 }
 
 /* hide icons if there is no space */

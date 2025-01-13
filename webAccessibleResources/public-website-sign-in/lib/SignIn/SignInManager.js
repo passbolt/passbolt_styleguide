@@ -27,7 +27,7 @@ class SignInManager {
    * Initializes the in-form manager
    */
   initialize() {
-    this.addClassToDomElement();
+    this.addClassToDomElement()
     this.handlePortDestroyEvent();
     this.handlePublicWebsiteClickEvent();
   }

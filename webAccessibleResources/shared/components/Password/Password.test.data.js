@@ -25,9 +25,7 @@ export function defaultProps(props = {}) {
       backgroundColor: "#FFAA47",
       textColor: "#000000"
     },
-    disabled: false,
     onChange: jest.fn()
   };
   return Object.assign(defaultProps, props || {});
 }
-

@@ -41,7 +41,7 @@ class FilterUsersByShortcut extends React.Component {
   }
 
   /**
-   * Returns true if the Home shortcut is currently selected
+   * Returns true if the All Items shortcut is currently selected
    */
   get isAllItemsSelected() {
     return this.props.userWorkspaceContext.filter.type === UserWorkspaceFilterTypes.ALL;
@@ -62,7 +62,7 @@ class FilterUsersByShortcut extends React.Component {
   }
 
   /**
-   * Whenever the shortcut "Home" has been selected
+   * Whenever the shortcut "All items" has been selected
    */
   handleAllItemsClick() {
     const filter = {type: UserWorkspaceFilterTypes.ALL};

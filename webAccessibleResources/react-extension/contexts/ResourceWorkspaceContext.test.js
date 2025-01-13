@@ -43,7 +43,7 @@ describe("Resource Workspace Context", () => {
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.NONE);
     });
 
-    it("AS LU I should have home filter when I went to /app/passwords without filter", async() => {
+    it("AS LU I should have an ALL ITEMS filter when I went to /app/passwords without filter", async() => {
       await page.goToAllItems();
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.ALL);
     });

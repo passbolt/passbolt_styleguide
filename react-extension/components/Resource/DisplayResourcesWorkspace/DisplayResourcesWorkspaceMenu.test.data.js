@@ -17,11 +17,13 @@ import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import ColumnsResourceSettingCollection
+  from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import {
   defaultResourceDto, resourceStandaloneTotpDto,
-  resourceWithFavoriteDto, resourceWithReadPermissionDto, resourceWithTotpDto,
+  resourceWithFavoriteDto, resourceWithReadPermissionDto, resourceWithTotpDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
@@ -35,7 +37,7 @@ import {
  * @param appContext An existing app context
  * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
-export const defaultAppContext = (appContext = {}) => {
+export function defaultAppContext(appContext = {}) {
   const siteSettings = new SiteSettings(siteSettingsFixture);
   const defaultAppContext = {
     port: new MockPort(),
@@ -44,107 +46,131 @@ export const defaultAppContext = (appContext = {}) => {
     setContext: () => jest.fn()
   };
   return Object.assign(defaultAppContext, appContext);
-};
-
-/**
- * Returns the default props for the current component.
- * @param {object} [data = {}]
- * @returns {object}
- */
-const defaultProps = (data = {}) => ({
-  context: defaultAppContext(),
-  rbacContext: defaultAdministratorRbacContext(),
-  resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
-  dialogContext: defaultDialogContext(),
-  ...data,
-});
+}
 
 /**
  * Default props one selected resource owned
  * @returns {{resourceWorkspaceContext}}
  */
-export const defaultPropsOneResourceOwned = (data = {}) => defaultProps({
-  resourceWorkspaceContext: defaultResourceWorkspaceContext({
-    selectedResources: [resourcesMock[0]],
-    lockDisplayDetail: true,
-  }),
-  ...data,
-});
+export function defaultPropsOneResourceOwned() {
+  return {
+    rbacContext: defaultAdministratorRbacContext(),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [resourcesMock[0]],
+      columnsResourceSetting: new ColumnsResourceSettingCollection([
+        {id: "favorite", label: "Favorite", position: 1, show: true},
+        {id: "name", label: "Name", position: 2, show: true},
+        {id: "username", label: "Username", position: 3, show: true},
+        {id: "password", label: "Password", position: 4, show: true},
+        {id: "totp", label: "TOTP", position: 5, show: true},
+        {id: "uri", label: "URI", position: 6, show: false},
+        {id: "modified", label: "Modified", position: 7, show: true}]),
+      lockDisplayDetail: true,
+      onLockDetail: jest.fn(),
+      onResourcesToExport: () => jest.fn(),
+      onResourceCopied: () => jest.fn(),
+      onChangeColumnView:  jest.fn()
+    }),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    dialogContext: defaultDialogContext(),
+  };
+}
 
 /**
  * Default props one selected totp resource owned
  * @returns {{resourceWorkspaceContext}}
  */
-export const defaultPropsOneTotpResourceOwned = (data = {}) => defaultProps({
-  resourceWorkspaceContext: defaultResourceWorkspaceContext({
-    selectedResources: [resourcesMock[3]],
-    lockDisplayDetail: true,
-  }),
-  ...data
-});
-
-/**
- * Default props one selected totp resource owned
- * @returns {{resourceWorkspaceContext}}
- */
-export const defaultPropsOneStandaloneTotpResourceOwned = (data = {}) => defaultProps({
-  resourceWorkspaceContext: defaultResourceWorkspaceContext({
-    selectedResources: [resourcesMock[4]],
-    lockDisplayDetail: true,
-  }),
-  ...data,
-});
-
-/**
- * Default props one selected resource owned
- * @returns {{resourceWorkspaceContext}}
- */
-export const defaultPropsOneResourceNotOwned = (data = {}) => defaultProps({
-  resourceWorkspaceContext: defaultResourceWorkspaceContext({
-    selectedResources: [resourcesMock[2]],
-    lockDisplayDetail: false
-  }),
-  ...data,
-});
+export function defaultPropsOneTotpResourceOwned() {
+  return {
+    rbacContext: defaultAdministratorRbacContext(),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [resourcesMock[3]],
+      columnsResourceSetting: new ColumnsResourceSettingCollection([
+        {id: "favorite", label: "Favorite", position: 1, show: true},
+        {id: "name", label: "Name", position: 2, show: true},
+        {id: "username", label: "Username", position: 3, show: true},
+        {id: "password", label: "Password", position: 4, show: true},
+        {id: "totp", label: "TOTP", position: 5, show: true},
+        {id: "uri", label: "URI", position: 6, show: false},
+        {id: "modified", label: "Modified", position: 7, show: true}]),
+      lockDisplayDetail: true,
+      onLockDetail: jest.fn(),
+      onResourcesToExport: () => jest.fn(),
+      onResourceCopied: () => jest.fn(),
+      onChangeColumnView:  jest.fn()
+    }),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+  };
+}
 
 /**
  * Default props one selected resource owned
  * @returns {{resourceWorkspaceContext}}
  */
-export const defaultPropsNoResource = (data = {}) => defaultProps({
-  resourceWorkspaceContext: defaultResourceWorkspaceContext({
-    lockDisplayDetail: true
-  }),
-  ...data,
-});
+export function defaultPropsOneResourceNotOwned() {
+  return {
+    rbacContext: defaultAdministratorRbacContext(),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [resourcesMock[2]],
+      lockDisplayDetail: false
+    }),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+  };
+}
+
+/**
+ * Default props one selected resource owned
+ * @returns {{resourceWorkspaceContext}}
+ */
+export function defaultPropsNoResource() {
+  return {
+    rbacContext: defaultAdministratorRbacContext(),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      columnsResourceSetting: new ColumnsResourceSettingCollection([
+        {id: "favorite", label: "Favorite", position: 1, show: false},
+        {id: "name", label: "Name", position: 2, show: true},
+        {id: "username", label: "Username", position: 3, show: false},
+        {id: "password", label: "Password", position: 4, show: false},
+        {id: "uri", label: "URI", position: 5, show: false},
+        {id: "modified", label: "Modified", position: 6, show: true}]),
+      lockDisplayDetail: true
+    }),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+  };
+}
 
 /**
  * Default props multiple selected resource
  * @returns {{resourceWorkspaceContext}}
  */
-export const defaultPropsMultipleResource = (data = {}) => defaultProps({
-  resourceWorkspaceContext: defaultResourceWorkspaceContext({
-    selectedResources: resourcesMock,
-    lockDisplayDetail: true
-  }),
-  ...data,
-});
+export function defaultPropsMultipleResource() {
+  return {
+    rbacContext: defaultAdministratorRbacContext(),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: resourcesMock,
+      lockDisplayDetail: true
+    }),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+  };
+}
 
 /**
  * Default props multiple selected resource can update
  * @returns {{resourceWorkspaceContext}}
  */
-export const defaultPropsMultipleResourceUpdateRights = (data = {}) => {
+export function defaultPropsMultipleResourceUpdateRights() {
   const selectedResources = [resourcesMock[0], resourcesMock[1]];
-  return defaultProps({
+  return {
+    rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       selectedResources,
       lockDisplayDetail: true
     }),
     passwordExpiryContext: defaultPasswordExpirySettingsContext({policy_override: true}),
-    ...data
-  });
-};
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    dialogContext: defaultDialogContext(),
+  };
+}
 
 /**
  * Mocked list of resources

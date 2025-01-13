@@ -2,7 +2,6 @@
 
 .avatar {
     display: flex;
-    position: relative;
 
     &-with-name {
       display: flex;
@@ -11,7 +10,7 @@
       .details {
         display: flex;
         flex-direction: column;
-        padding: 0 .8rem 0 1.6rem;
+        margin-left: 1.6rem;
 
         .name,
         .email {
@@ -20,49 +19,47 @@
           .ellipsis();
         }
         .name {
-          font-size: 2rem;
-          font-style: normal;
-          font-weight: 600;
-          line-height: normal;
-          color: var(--Text-and-icons-Main-text);
+          font-weight: 700;
+          font-size: 1.5rem;
+          line-height: 2rem;
         }
         .email {
-          color: var(--Text-and-icons-Main-text);
-          font-size: 1.3rem;
-          font-style: normal;
           font-weight: 400;
-          opacity: 0.5;
-          line-height: normal;
+          font-size: 1.2rem;
+          line-height: 1.6rem;
         }
       }
     }
 
-    svg.attention-required {
-        position: absolute;
-        width: 2rem;
-        height: 2rem;
-        top: -0.1rem;
-        left: 3.7rem;
-        --icon-exclamation-color: var(--Alert-Alert-icon);
-        --icon-exclamation-background-color: var(--Alert-Alert-background);
-        --icon-exclamation-border-color: var(--Alert-Alert-background);
+    &.attention-required {
+      img {
+        border: 1px solid @attention-required-border;
+        box-sizing: border-box;
+      }
+      .svg-icon {
+        &.exclamation {
+          position: absolute;
+          svg {
+            width: 1.2rem;
+            height: 1.2rem;
+            margin-top: 2.6rem;
+            margin-left: 3rem;
+            --icon-exclamation-background-color: @icon-exclamation-required-color;
+          }
+        }
+      }
     }
 
     img, svg {
-      width: 5.6rem;
-      height: 5.6rem;
-      border-radius: 50%;
-    }
-
-    .default-avatar {
-      display: flex;
+      width: @avatar-size;
+      height: @avatar-size;
       border-radius: 50%;
     }
 
     &.big {
       img, svg{
-        width: 6.4rem;
-        height: 6.4rem;
+        width: @avatar-size * 2;
+        height: @avatar-size * 2;
       }
     }
 }

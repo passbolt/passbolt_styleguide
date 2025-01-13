@@ -145,7 +145,7 @@ describe("See tags", () => {
       expect(props.history.push).toHaveBeenCalled();
     });
 
-    it('Filter my resources tags by shared tags should filter my resources by Home if it was previously filtered with a personal tag', async() => {
+    it('Filter my resources tags by shared tags should filter my resources by All items if it was previously filtered with a personal tag', async() => {
       expect(page.sidebarTagFilterSection.tagSelected).not.toBeNull();
       await page.title.click(page.title.filterButton);
       await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.sharedTagMenu);
@@ -192,7 +192,7 @@ describe("See tags", () => {
       page = new FilterResourcesByTags(context, props, contextResource);
     });
 
-    it('Filter my resources tags by personal tags should filter my resources by Home if it was previously filtered with a shared tag', async() => {
+    it('Filter my resources tags by personal tags should filter my resources by All items if it was previously filtered with a shared tag', async() => {
       expect(page.sidebarTagFilterSection.tagSelected).not.toBeNull();
       await page.sidebarTagFilterSection.click(page.title.filterButton);
       await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.personalTagMenu);

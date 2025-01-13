@@ -30,19 +30,31 @@ export class TestEntityV2 extends EntityV2 {
       "required": [],
       "properties": {
         "id": {
-          "anyOf": [{
-            "type": "string",
-            "format": "uuid"
-          }, {
-            "type": "null"
-          }],
+          "type": "string",
+          "format": "uuid",
+          "nullable": true,
         },
         "name": {
-          "anyOf": [{
-            "type": "string"
-          }, {
-            "type": "null"
-          }],
+          "type": "string",
+          "nullable": true,
+        },
+        "number": {
+          "type": "number",
+          "nullable": true,
+        },
+        "integer": {
+          "type": "integer",
+          "nullable": true,
+        },
+        "boolean": {
+          "type": "boolean",
+          "nullable": true,
+        },
+        "object": {
+          "type": "object"
+        },
+        "array": {
+          "type": "array"
         },
         "associated_entity": TestAssociatedEntityV2.getSchema()
       }
@@ -111,6 +123,13 @@ export const minimalTestEntityV2Dto = data => ({
 export const defaultTestEntityV2Dto = data => ({
   id: uuid(),
   name: "test name",
+  number: Math.random(),
+  integer: Math.floor(Math.random() * 100),
+  boolean: Math.random() < 0.5,
+  object: {
+    foo: uuid()
+  },
+  array: [uuid(), uuid()],
   associated_entity: defaultAssociatedTestEntityV2Dto(),
   ...data
 });

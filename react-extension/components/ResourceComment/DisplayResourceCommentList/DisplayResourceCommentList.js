@@ -19,7 +19,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import DeleteComment from "../DeleteResourceComment/DeleteComment";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
-import SpinnerSVG from "../../../../img/svg/spinner.svg";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {isUserSuspended} from "../../../../shared/utils/userUtils";
 
@@ -177,7 +177,7 @@ class DisplayResourceCommentList extends React.Component {
         }
         {this.state.actions.loading &&
         <div className="processing-wrapper">
-          <SpinnerSVG/>
+          <Icon name="spinner"/>
           <span className="processing-text"><Trans>Retrieving comments</Trans></span>
         </div>
         }

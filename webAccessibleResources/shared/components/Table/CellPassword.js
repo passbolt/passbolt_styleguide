@@ -80,7 +80,7 @@ class CellPassword extends Component {
                onClick={this.handlePasswordClick} />
            </div>
            {this.props.canPreview &&
-             <button type="button" onClick={this.handlePreviewPasswordButtonClick} className="password-view inline button-transparent">
+             <button type="button" onClick={this.handlePreviewPasswordButtonClick} className="password-view button-transparent">
                <Icon name={previewedPassword ? 'eye-close' : 'eye-open'}/>
              </button>
            }

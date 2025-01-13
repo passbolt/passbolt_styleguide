@@ -15,6 +15,7 @@
 import React, {Component} from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import PropTypes from "prop-types";
+import DisplayMainMenu from "./components/Common/Menu/DisplayMainMenu";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import DisplayActionFeedbacks from "./components/Common/ActionFeedback/DisplayActionFeedbacks";
 import DialogContextProvider from "./contexts/DialogContext";
@@ -31,6 +32,7 @@ import HandleRouteFallback from "./components/Common/Route/HandleRouteFallback";
 import DisplayUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayUserSettingsWorkspace";
 import HandleSessionExpired from "./components/Authentication/HandleSessionExpired/HandleSessionExpired";
+import Footer from "./components/Common/Footer/Footer";
 import HandleExtAppRouteChanged from "./components/Common/Route/HandleExtAppRouteChanged";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWorkspaceContext";
@@ -82,11 +84,6 @@ import MetadataTypesSettingsLocalStorageContextProvider from "../shared/context/
  * - Most of the user settings MFA screen. Because of duo constraints.
  */
 class ExtApp extends Component {
-  /*
-   * =============================================================
-   *  View
-   * =============================================================
-   */
   render() {
     const accountRecoveryUserService = new ExtAppAccountRecoveryUserService(this.props.port);
     return (
@@ -157,9 +154,11 @@ class ExtApp extends Component {
                                                       <ManageAnnouncements/>
                                                       <DragContextProvider>
                                                         <div id="container" className="page password">
-                                                          <div id="app" className="app" tabIndex="1000">
-                                                            {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
-                                                            <DisplayResourcesWorkspace/>
+                                                          <div id="app" className="app ready" tabIndex="1000">
+                                                            <div className="header first">
+                                                              <DisplayMainMenu/>
+                                                            </div>
+                                                            <DisplayResourcesWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                                                           </div>
                                                         </div>
                                                       </DragContextProvider>
@@ -183,8 +182,10 @@ class ExtApp extends Component {
                                               <ManageContextualMenu/>
                                               <ManageAnnouncements/>
                                               <div id="container" className="page user">
-                                                <div id="app" className="app" tabIndex="1000">
-                                                  {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
+                                                <div id="app" className="app ready" tabIndex="1000">
+                                                  <div className="header first">
+                                                    <DisplayMainMenu/>
+                                                  </div>
                                                   <DisplayUserWorkspace/>
                                                 </div>
                                               </div>
@@ -197,8 +198,10 @@ class ExtApp extends Component {
                                                 <ManageDialogs/>
                                                 <ManageAnnouncements/>
                                                 <div id="container" className="page settings">
-                                                  <div id="app" className="app" tabIndex="1000">
-                                                    {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
+                                                  <div id="app" className="app ready" tabIndex="1000">
+                                                    <div className="header first">
+                                                      <DisplayMainMenu/>
+                                                    </div>
                                                     <DisplayUserSettingsWorkspace/>
                                                   </div>
                                                 </div>
@@ -213,6 +216,7 @@ class ExtApp extends Component {
                                             "/app/administration/password-policies",
                                             "/app/administration/user-passphrase-policies",
                                             "/app/administration/password-expiry",
+                                            "/app/administration/content-types/metadata",
                                           ]}>
                                             <AdministrationWorkspaceContextProvider>
                                               <AdminAccountRecoveryContextProvider>
@@ -221,9 +225,11 @@ class ExtApp extends Component {
                                                     <AdminPasswordPoliciesContextProvider>
                                                       <AdministrationUserPassphrasePoliciesContextProvider>
                                                         <AdministrationPasswordExpiryContextProvider>
-                                                          <ManageDialogs/>
-                                                          <ManageWorkflows/>
-                                                          <AdministrationWorkspace/>
+                                                          <ResourceTypesLocalStorageContextProvider>
+                                                            <ManageDialogs/>
+                                                            <ManageWorkflows/>
+                                                            <AdministrationWorkspace/>
+                                                          </ResourceTypesLocalStorageContextProvider>
                                                         </AdministrationPasswordExpiryContextProvider>
                                                       </AdministrationUserPassphrasePoliciesContextProvider>
                                                     </AdminPasswordPoliciesContextProvider>
@@ -240,7 +246,7 @@ class ExtApp extends Component {
                                       </NavigationContextProvider>
                                     </Router>
                                     <ManageLoading/>
-                                    {/* TODO To be moved into information panel <Footer/> */}
+                                    <Footer/>
                                   </ProgressContextProvider>
                                 </LoadingContextProvider>
                               </ContextualMenuContextProvider>

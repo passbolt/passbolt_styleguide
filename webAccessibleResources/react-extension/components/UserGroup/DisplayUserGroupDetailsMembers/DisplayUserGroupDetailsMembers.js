@@ -15,7 +15,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
-import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import DisplayUserGroupDetailsMembersGroupMember from "./DisplayUserGroupDetailsMembersGroupMember";
@@ -113,7 +112,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
           </button>
           {this.isLoading() &&
           <div className="processing-wrapper">
-            <SpinnerSVG/>
+            <Icon name="spinner"/>
             <span className="processing-text"><Trans>Retrieving group members</Trans></span>
           </div>
           }

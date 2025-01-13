@@ -27,6 +27,7 @@ import DialogContextProvider from "../../../contexts/DialogContext";
 import mockPort from "../../../../../test/mocks/mockPort";
 import mockStorage from "../../../../../test/mocks/mockStorage";
 import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
+import DisplayMainMenu from "../../Common/Menu/DisplayMainMenu";
 import RbacContextProvider from "../../../../shared/context/Rbac/RbacContext";
 
 /**
@@ -51,6 +52,9 @@ const Template = ({...args}) =>
                 <ManageAnnouncements/>
                 <div id="container" className="page user">
                   <div id="app" className="app ready" tabIndex="1000">
+                    <div className="header first">
+                      <DisplayMainMenu/>
+                    </div>
                     <DisplayUserWorkspace/>
                   </div>
                 </div>

@@ -18,7 +18,6 @@ import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../../../shared/components/Icons/Icon";
-import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {Trans, withTranslation} from "react-i18next";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
@@ -481,7 +480,7 @@ class DisplayResourceDetailsActivity extends React.Component {
         <div className="accordion-content">
           {this.state.loading &&
           <div className="processing-wrapper">
-            <SpinnerSVG/>
+            <Icon name="spinner"/>
             <span className="processing-text"><Trans>Retrieving activities</Trans></span>
           </div>
           }

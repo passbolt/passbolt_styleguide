@@ -24,7 +24,10 @@ import DisplayUserProfile from "../DisplayUserProfile/DisplayUserProfile";
 import DisplayUserTheme from "../DisplayUserTheme/DisplayUserTheme";
 import DisplayUserSettingsWorkspaceBreadcrumb
   from "../DisplayUserSettingsWorkspaceBreadcrumb/DisplayUserSettingsWorkspaceBreadcrumb";
+import DisplayUserSettingsWorkspaceActions
+  from "../DisplayUserSettingWorkspaceActions/DisplayUserSettingWorkspaceActions";
 import DisplayUserGpgInformation from "../DisplayUserGpgInformation/DisplayUserGpgInformation";
+import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import DisplayUserPassphrase from "../ChangeUserPassphrase/ChangeUserPassphrase";
 import DisplayUserChooseSecurityToken from "../ChangeUserSecurityToken/ChangeUserSecurityToken";
 import TransferToMobile from "../TransferToMobile/TransferToMobile";
@@ -90,48 +93,40 @@ class DisplayUserSettingsWorkspace extends React.Component {
   render() {
     const {path} = this.props.match;
     return (
-      <div className="panel main">
-        <div className="panel left">
-          <div className="sidebar-content">
-            <Logo/>
-            <div className="sidebar-content-left">
-              <NavigateIntoUserSettingsWorkspace
-                hasPendingMfaChoice={this.isMfaChoiceRequired}
-                hasPendingAccountRecoveryChoice={this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()}/>
-            </div>
-          </div>
+      <div>
+        <div className="header second">
+          <Logo/>
+          <SearchBar disabled={true}/>
+          <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
         </div>
-        <div className="panel middle">
-          <div className="header">
-            <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+        <div className="header third">
+          <DisplayUserSettingsWorkspaceActions/>
+        </div>
+        <div className="panel main">
+          <div className="panel left">
+            <NavigateIntoUserSettingsWorkspace
+              hasPendingMfaChoice={this.isMfaChoiceRequired}
+              hasPendingAccountRecoveryChoice={this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()}/>
           </div>
-          <div className="middle-right">
-            <div className="breadcrumbs-and-grid">
-              <div className="top-bar">
-                <DisplayUserSettingsWorkspaceBreadcrumb/>
-              </div>
-              <Route path={`${path}/profile`} component={DisplayUserProfile}/>
-              <Route path={`${path}/passphrase`} component={DisplayUserPassphrase}/>
-              <Route path={`${path}/security-token`} component={DisplayUserChooseSecurityToken}></Route>
-              {this.canIUseThemeCapability &&
-                <Route path={`${path}/theme`} component={DisplayUserTheme}/>
-              }
-              {this.canIUseMobileTransferCapability &&
-                <Route path={`${path}/mobile`} component={TransferToMobile}></Route>
-              }
-              {this.canIUseDesktopExportCapability &&
-                <Route path={`${path}/desktop`} component={ExportAccountToDesktop}></Route>
-              }
-              {this.canIUseAccountRecoveryCapability &&
-                <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettings}></Route>
-              }
-              <Route path={`${path}/mfa`} component={OrchestrateMfaSettings}></Route>
-              <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
-              {/* TODO will be moved directly in specific administration menu item component <DisplayUserSettingsWorkspaceActions/> */}
-            </div>
-            <div className="help-panel">
-              {/* TODO Should display according help panel information */}
-            </div>
+          <div className="panel middle">
+            <DisplayUserSettingsWorkspaceBreadcrumb/>
+            <Route path={`${path}/profile`} component={DisplayUserProfile}/>
+            <Route path={`${path}/passphrase`} component={DisplayUserPassphrase}/>
+            <Route path={`${path}/security-token`} component={DisplayUserChooseSecurityToken}></Route>
+            {this.canIUseThemeCapability &&
+            <Route path={`${path}/theme`} component={DisplayUserTheme}/>
+            }
+            {this.canIUseMobileTransferCapability &&
+            <Route path={`${path}/mobile`} component={TransferToMobile}></Route>
+            }
+            {this.canIUseDesktopExportCapability &&
+            <Route path={`${path}/desktop`} component={ExportAccountToDesktop}></Route>
+            }
+            {this.canIUseAccountRecoveryCapability &&
+            <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettings}></Route>
+            }
+            <Route path={`${path}/mfa`} component={OrchestrateMfaSettings}></Route>
+            <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
           </div>
         </div>
       </div>

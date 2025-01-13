@@ -39,7 +39,7 @@ describe("Display User Workspace Breadcrumb", () => {
     page = new FilterUsersByBreadcrumbPage(context, propsWithFilter(UserWorkspaceFilterTypes.ALL));
     await waitFor(() => {});
     expect(page.breadcrumbLabels(1)).toBe('All users');
-    expect(page.itemNumberDisplayed).toContain("3");
+    expect(page.itemNumberDisplayed).toBe("3");
   });
 
   it('As LU, I should see "Recently Modified" if the filter is set to Recently Modified', async() => {
@@ -48,7 +48,7 @@ describe("Display User Workspace Breadcrumb", () => {
     await waitFor(() => {});
     expect(page.breadcrumbLabels(1)).toBe('All users');
     expect(page.breadcrumbLabels(2)).toBe('Recently modified');
-    expect(page.itemNumberDisplayed).toContain("3");
+    expect(page.itemNumberDisplayed).toBe("3");
   });
 
   it('As LU, I should see "Suspended user" if the filter is set to Suspended user', async() => {
@@ -65,7 +65,7 @@ describe("Display User Workspace Breadcrumb", () => {
     await waitFor(() => {});
     expect(page.breadcrumbLabels(1)).toBe('All users');
     expect(page.breadcrumbLabels(2)).toBe('Search: Ada');
-    expect(page.itemNumberDisplayed).toContain("1");
+    expect(page.itemNumberDisplayed).toBe("1");
   });
 
   it('As LU, I should see All Users if the filter is set to an non-empty Text', async() => {
@@ -74,7 +74,7 @@ describe("Display User Workspace Breadcrumb", () => {
     await waitFor(() => {});
     expect(page.breadcrumbLabels(1)).toBe('All users');
     expect(page.breadcrumbLabels(2)).toBeUndefined();
-    expect(page.itemNumberDisplayed).toContain("0");
+    expect(page.itemNumberDisplayed).toBe("0");
   });
 
   it('As LU, I should see the group name if the filter is set to Group', async() => {
@@ -83,7 +83,7 @@ describe("Display User Workspace Breadcrumb", () => {
     await waitFor(() => {});
     expect(page.breadcrumbLabels(1)).toBe('All users');
     expect(page.breadcrumbLabels(2)).toBe('My super group (group)');
-    expect(page.itemNumberDisplayed).toContain("6");
+    expect(page.itemNumberDisplayed).toBe("6");
   });
 
   it('As LU, I should see the N/A if the filter is set to Group and the group name is empty', async() => {
@@ -92,7 +92,7 @@ describe("Display User Workspace Breadcrumb", () => {
     await waitFor(() => {});
     expect(page.breadcrumbLabels(1)).toBe('All users');
     expect(page.breadcrumbLabels(2)).toBe("N/A (group)");
-    expect(page.itemNumberDisplayed).toContain("0");
+    expect(page.itemNumberDisplayed).toBe("0");
   });
 });
 

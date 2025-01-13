@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
-import CloseIcon from "../../../../../img/svg/close.svg";
+import Icon from "../../../../../shared/components/Icons/Icon";
 
 class DialogCloseButton extends Component {
   /**
@@ -49,7 +49,7 @@ class DialogCloseButton extends Component {
   render() {
     return (
       <button type="button" disabled={this.props.disabled} className="dialog-close button button-transparent" onClick={this.handleCloseClick}>
-        <CloseIcon className="svg-icon close"/>
+        <Icon name='close'/>
         <span className="visually-hidden"><Trans>Close</Trans></span>
       </button>
     );

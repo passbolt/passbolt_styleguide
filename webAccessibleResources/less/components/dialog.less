@@ -15,16 +15,17 @@
   margin-top: 1%;
   /* some space for the footer / notification area in case it is really tall */
   margin-bottom: 4.8rem;
-  background: var(--Dialog-Dialog-header-and-footer);
-  border-radius: var(--Section-border-radius);
+  background: @dialog-background;
+  border: 1px solid @dialog-border;
+  border-radius: .3rem;
   box-sizing: border-box;
-  padding: 0px 16px;
+  box-shadow: 0 1rem 1rem @dialog-box-shadow-color;
 
   /* header */
   .dialog-header {
     display: flex;
     align-items: center;
-    padding: 1.2rem 0 1.2rem 1.6rem;
+    padding: 1.6rem;
 
     .dialog-title-wrapper {
       flex: 1;
@@ -33,10 +34,8 @@
       width: 90%;
       h2 {
         margin: 0;
-        font-size: 1.8rem;
-        color: var(--Text-and-icons-Main-text);
-        line-height:normal;
-        font-weight: 400;
+        font-size: 1.9rem;
+        line-height: 2.6rem;
         .ellipsis();
       }
 
@@ -44,9 +43,7 @@
         padding-top: .4rem;
         padding-left: .8rem;
         font-size: 1.4rem;
-        line-height: normal;
-        font-weight: 400;
-        color: var(--Text-and-icons-Secondary-text);
+        line-height: 2rem;
       }
 
       .tooltip {
@@ -60,25 +57,21 @@
     .dialog-variable{
       overflow-wrap: break-word;
     }
-
-    .warning.message {
-      padding: .8rem 1.6rem;
-      border-bottom-left-radius: var(--Section-border-radius);
-      border-bottom-right-radius: var(--Section-border-radius);
-    }
   }
 
   /* inputs */
   .form-content,
   .dialog-body {
+    background: @default-background;
     padding: 1.6rem;
-    align-items: flex-start;
-    align-self: stretch;
-    border-radius: var(--Section-border-radius);
-    background: var(--Dialog-Dialog-fill);
     // Remove padding
     &.no-padding {
       padding: 0;
+    }
+
+    // all direct child element
+    & > * {
+      margin-bottom: 1.6rem;
     }
   }
 
@@ -118,10 +111,9 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 1.6rem 0;
+    padding: 1.6rem;
 
     .button-left {
-      background: var(--Workspace-Workspace-button-background);
       margin-right: auto;
     }
 
@@ -141,16 +133,15 @@
 
 /* can also be used outside a dialog, like the sidebar */
 .dialog-close {
-  display: flex;
-  padding: 4px;
-  align-items: center;
+  margin-left: 1rem;
+  padding: 0;
   &, &:hover {
     display: block;
     border: none;
   }
 
-  .svg-icon svg {
-    padding: .4rem;
+  .svg-icon {
+    padding: .65rem;
     width: 2.4rem;
     height: 2.4rem;
     text-align: center;

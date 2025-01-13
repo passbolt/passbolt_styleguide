@@ -21,6 +21,7 @@ import NavigateIntoUserSettingsWorkspace from "../NavigateIntoUserSettingsWorksp
 import DisplayUserSettingsWorkspaceBreadcrumb
   from "../DisplayUserSettingsWorkspaceBreadcrumb/DisplayUserSettingsWorkspaceBreadcrumb";
 import PropTypes from "prop-types";
+import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import {withMfa} from '../../../contexts/MFAContext';
 import DisplayUserMfaProvider from '../DisplayUserMfa/DisplayUserMfaProvider';
 import DisplayUserMfa from "../DisplayUserMfa/DisplayUserMfa";
@@ -43,30 +44,22 @@ class DisplayApiUserSettingsWorkspace extends React.Component {
    */
   render() {
     return (
-      <div className="panel main">
-        <div className="panel left">
-          <div className="sidebar-content">
-            <Logo/>
-            <div className="sidebar-content-left">
-              <NavigateIntoUserSettingsWorkspace hasPendingMfaChoice={this.isMfaChoiceRequired}/>
-            </div>
-          </div>
+      <div>
+        <div className="header second">
+          <Logo/>
+          <SearchBar disabled={true}/>
+          <DisplayUserBadgeMenu baseUrl={this.props.context.trustedDomain} user={this.props.context.loggedInUser}/>
         </div>
-        <div className="panel middle">
-          <div className="header">
-            <DisplayUserBadgeMenu baseUrl={this.props.context.trustedDomain} user={this.props.context.loggedInUser}/>
+        <div className="header third">
+        </div>
+        <div className="panel main">
+          <div className="panel left">
+            <NavigateIntoUserSettingsWorkspace hasPendingMfaChoice={this.isMfaChoiceRequired}/>
           </div>
-          <div className="middle-right">
-            <div className="breadcrumbs-and-grid">
-              <div className="top-bar">
-                <DisplayUserSettingsWorkspaceBreadcrumb/>
-              </div>
-              <Route exact path="/app/settings/mfa/:provider" component={DisplayUserMfaProvider}></Route>
-              <Route exact path="/app/settings/mfa" component={DisplayUserMfa}></Route>
-            </div>
-            <div className="help-panel">
-              {/* TODO Should display according help panel information */}
-            </div>
+          <div className="panel middle">
+            <DisplayUserSettingsWorkspaceBreadcrumb/>
+            <Route exact path="/app/settings/mfa/:provider" component={DisplayUserMfaProvider}></Route>
+            <Route exact path="/app/settings/mfa" component={DisplayUserMfa}></Route>
           </div>
         </div>
       </div>

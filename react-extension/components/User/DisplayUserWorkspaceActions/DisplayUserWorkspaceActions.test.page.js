@@ -62,7 +62,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * Returns true if one can copy permalink an user
    */
   get canCopyPermalink() {
-    const element = this._page.container.querySelector('#copy-user-permalink');
+    const element = this._page.container.querySelectorAll('li button')[2];
     return Boolean(element) && !element.hasAttribute('disabled');
   }
 
@@ -70,7 +70,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * Returns true if one can resend an invite to a user
    */
   get canResendInvite() {
-    const element = this._page.container.querySelector('#resend-invite-user');
+    const element = this._page.container.querySelectorAll('li button')[3];
     return Boolean(element) && !element.hasAttribute('disabled');
   }
 
@@ -78,7 +78,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * Returns true if one can disable user MFA
    */
   get canDisableMFA() {
-    const element = this._page.container.querySelector('#disable-mfa-action');
+    const element = this._page.container.querySelectorAll('li button')[4];
     return Boolean(element) && !element.hasAttribute('disabled');
   }
 
@@ -86,7 +86,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * Returns true if one can review account recovery of a user
    */
   get canReviewAccountRecovery() {
-    const element = this._page.container.querySelector('#review-recovery');
+    const element = this._page.container.querySelectorAll('li button')[5];
     return Boolean(element) && !element.hasAttribute('disabled');
   }
 

@@ -13,7 +13,7 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -66,6 +66,20 @@ class DisplayResourceWorkspacePageObject {
   }
 
   /**
+   * Returns the header second element of password workspace
+   */
+  get headerSecond() {
+    return this._container.querySelector('.header.second');
+  }
+
+  /**
+   * Returns the header third element of password workspace
+   */
+  get headerThird() {
+    return this._container.querySelector('.header.third');
+  }
+
+  /**
    * Returns the panel main element of password workspace
    */
   get panelMain() {
@@ -115,41 +129,10 @@ class DisplayResourceWorkspacePageObject {
   }
 
   /**
-   * Returns the info button of password workspace
-   */
-  get infoButton() {
-    return this._container.querySelector('.actions.secondary li:last-child button');
-  }
-
-  /**
-   * Returns the column view button menu elements of password workspace menu
-   */
-  get menuColumnView() {
-    return this._container.querySelector('.actions.secondary .dropdown button');
-  }
-
-  /**
-   * Returns the column view item checkbox elements of password workspace menu
-   */
-  menuColumnViewItem(index) {
-    return this._container.querySelectorAll('.actions.secondary .dropdown-content li')[index - 1].querySelector('input[type=\"checkbox\"]');
-  }
-
-  /**
    * Returns true if the page object exists in the container
    */
   exists() {
-    return this.panelMain !== null
+    return this.headerSecond !== null && this.headerThird !== null && this.panelMain !== null
       && this.panelLeft !== null && this.panelMiddle !== null;
-  }
-
-  /**
-   * Simulates a click on the given element.
-   * @param {HTMLElement} element
-   */
-  async clickOn(element) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
   }
 }

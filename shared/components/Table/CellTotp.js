@@ -96,7 +96,7 @@ class CellTotp extends Component {
               }
             </div>
             {this.props.canPreview &&
-              <button type="button" onClick={this.handlePreviewTotpButtonClick} className="totp-view inline button-transparent">
+              <button type="button" onClick={this.handlePreviewTotpButtonClick} className="totp-view button-transparent">
                 <Icon name={this.previewedTotp ? 'eye-close' : 'eye-open'}/>
               </button>
             }

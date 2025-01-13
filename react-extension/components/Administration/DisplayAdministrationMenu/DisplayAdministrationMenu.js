@@ -157,6 +157,14 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Can I use the metadata plugin
+   * @returns {boolean}
+   */
+  get canIUseMetadata() {
+    return this.canIUse('metadata');
+  }
+
+  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
@@ -175,6 +183,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleUserPassphrasePoliciesClick = this.handleUserPassphrasePoliciesClick.bind(this);
     this.handlePasswordExpirySettingsClick = this.handlePasswordExpirySettingsClick.bind(this);
     this.handleHealthcheckClick = this.handleHealthcheckClick.bind(this);
+    this.handleContentTypesMetadataClick = this.handleContentTypesMetadataClick.bind(this);
   }
 
   /**
@@ -280,6 +289,13 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleHealthcheckClick() {
     this.props.navigationContext.onGoToAdministrationHealthcheckRequested();
+  }
+
+  /**
+   * Handle when the user click on the content types metadata settings menu
+   */
+  handleContentTypesMetadataClick() {
+    this.props.navigationContext.onGoToAdministrationContentTypesMetadataRequested();
   }
 
   /**
@@ -400,6 +416,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isHealthcheckSelected() {
     return AdministrationWorkspaceMenuTypes.HEALTHCHECK === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If content types metadata menu is selected
+   * @returns {boolean}
+   */
+  isContentTypesMetadataSelected() {
+    return AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -583,6 +607,19 @@ class DisplayAdministrationMenu extends React.Component {
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handleHealthcheckClick}>
                     <span><Trans>Passbolt API Status</Trans></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
+          {this.canIUseMetadata &&
+          <li id="encrypted_metadata_menu">
+            <div className={`row  ${this.isContentTypesMetadataSelected() ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button className="link no-border" type="button" onClick={this.handleContentTypesMetadataClick}>
+                    <span><Trans>Encrypted metadata</Trans></span>
                   </button>
                 </div>
               </div>

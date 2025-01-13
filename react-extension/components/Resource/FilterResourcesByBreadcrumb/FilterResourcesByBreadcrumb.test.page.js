@@ -93,7 +93,7 @@ class DisplayBreadcrumbPageObject {
    * @return {string | any}
    */
   get itemNumberDisplayed() {
-    return this._container.querySelector('.counter')?.textContent;
+    return this._container.querySelector('.chips')?.textContent;
   }
 
   /**

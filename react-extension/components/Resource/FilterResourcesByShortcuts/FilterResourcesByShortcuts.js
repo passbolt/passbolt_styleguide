@@ -50,14 +50,14 @@ class FilterResourcesByShortcuts extends React.Component {
   }
 
   /**
-   * Returns true if the Home shortcut is currently selected
+   * Returns true if the All Items shortcut is currently selected
    */
   get isAllItemsSelected() {
     return this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.ALL;
   }
 
   /**
-   * Returns true if the Home shortcut is currently selected
+   * Returns true if the All Items shortcut is currently selected
    */
   get isItemsIOwnSelected() {
     return this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.ITEMS_I_OWN;
@@ -92,7 +92,7 @@ class FilterResourcesByShortcuts extends React.Component {
   }
 
   /**
-   * Whenever the shortcut "Home" has been selected
+   * Whenever the shortcut "All items" has been selected
    */
   handleAllItemsClick() {
     const filter = {type: ResourceWorkspaceFilterTypes.ALL};
@@ -148,7 +148,7 @@ class FilterResourcesByShortcuts extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button type="button" className="link no-border">
-                    <span><Trans>Home</Trans></span>
+                    <span><Trans>All items</Trans></span>
                   </button>
                 </div>
               </div>

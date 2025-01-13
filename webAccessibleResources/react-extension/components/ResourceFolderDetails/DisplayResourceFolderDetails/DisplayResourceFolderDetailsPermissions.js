@@ -16,7 +16,6 @@ import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import Icon from "../../../../shared/components/Icons/Icon";
-import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
@@ -218,7 +217,7 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
             <ul className="shared-with ready">
               {this.isLoading() &&
               <div className="processing-wrapper">
-                <SpinnerSVG/>
+                <Icon name="spinner"/>
                 <span className="processing-text"><Trans>Retrieving permissions</Trans></span>
               </div>
               }

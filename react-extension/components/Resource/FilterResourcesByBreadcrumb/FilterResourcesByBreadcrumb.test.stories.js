@@ -17,112 +17,83 @@ const Template = args =>
 
 
 
-export const AllFilter = {
-  args: {
-    resourceWorkspaceContext: {
-      filter: {type: ResourceWorkspaceFilterTypes.ALL},
-      filteredResources: [{}, {}, {}]
-    },
+export const AllFilter = Template.bind({});
+AllFilter.args = {
+  resourceWorkspaceContext: {
+    filter: {type: ResourceWorkspaceFilterTypes.ALL},
+    filteredResources: [{}, {}, {}]
   },
-  render: Template
 };
 
-export const FolderFilter = {
-  args: {
-    resourceWorkspaceContext: {
-      filter: {type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder: {name: 'My Folder'}}},
-      filteredResources: [{}, {}]
-    },
-  },
-  render: Template
+export const FolderFilter = Template.bind({});
+FolderFilter.args = {
+  resourceWorkspaceContext: {
+    filter: {type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder: {name: 'My Folder'}}},
+    filteredResources: [{}, {}]
+  }
 };
 
-export const RootFolderFilter = {
-  args: {
-    resourceWorkspaceContext: {
-      filter: {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER},
-      filteredResources: [{}, {}, {}, {}, {}]
-    },
-  },
-  render: Template
+
+export const RootFolderFilter = Template.bind({});
+RootFolderFilter.args = {
+  resourceWorkspaceContext: {
+    filter: {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER},
+    filteredResources: [{}, {}, {}, {}, {}]
+  }
 };
 
-export const TagFilter = {
-  args: {
-    resourceWorkspaceContext: {
-      filter: {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag: {slug: '#charlie'}}},
-      filteredResources: []
-    },
-  },
-  render: Template
+export const TagFilter = Template.bind({});
+TagFilter.args = {
+  resourceWorkspaceContext: {
+    filter: {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag: {slug: '#charlie'}}},
+    filteredResources: []
+  }
 };
 
-export const GroupFilter = {
-  args: {
-    resourceWorkspaceContext: {
-      filter: {type: ResourceWorkspaceFilterTypes.GROUP, payload: {group: {name: 'My super group'}}},
-      filteredResources: [{}]
-    }
-  },
-  render: Template
+export const GroupFilter = Template.bind({});
+GroupFilter.args = {
+  resourceWorkspaceContext: {
+    filter: {type: ResourceWorkspaceFilterTypes.GROUP, payload: {group: {name: 'My super group'}}},
+    filteredResources: [{}]
+  }
 };
 
-export const ItemsIOwnFilter = {
-  args: {
-    resourceWorkspaceContext: {
-      filter: {type: ResourceWorkspaceFilterTypes.ITEMS_I_OWN},
-      filteredResources: [{}, {}, {}]
-    }
-  },
-  render: Template
+export const ItemsIOwnFilter = Template.bind({});
+ItemsIOwnFilter.args = {
+  resourceWorkspaceContext: {
+    filter: {type: ResourceWorkspaceFilterTypes.ITEMS_I_OWN},
+    filteredResources: [{}, {}, {}]
+  }
 };
 
-export const FavoriteFilter = {
-  args: {
-    resourceWorkspaceContext: {
-      filter: {type: ResourceWorkspaceFilterTypes.FAVORITE},
-      filteredResources: [{}, {}, {}, {}]
-    }
-  },
-  render: Template
+export const FavoriteFilter = Template.bind({});
+FavoriteFilter.args = {
+  resourceWorkspaceContext: {
+    filter: {type: ResourceWorkspaceFilterTypes.FAVORITE},
+    filteredResources: [{}, {}, {}, {}]
+  }
 };
 
-export const ShareWithMeFilter = {
-  args: {
-    resourceWorkspaceContext: {
-      filter: {type: ResourceWorkspaceFilterTypes.SHARED_WITH_ME},
-      filteredResources: [{}, {}, {}, {}, {}, {}]
-    }
-  },
-  render: Template
+export const ShareWithMeFilter = Template.bind({});
+ShareWithMeFilter.args = {
+  resourceWorkspaceContext: {
+    filter: {type: ResourceWorkspaceFilterTypes.SHARED_WITH_ME},
+    filteredResources: [{}, {}, {}, {}, {}, {}]
+  }
 };
 
-export const RecentlyModifiedFilter = {
-  args: {
-    resourceWorkspaceContext: {
-      filter: {type: ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED},
-      filteredResources: [{}, {}, {}]
-    }
-  },
-  render: Template
+export const RecentlyModifiedFilter = Template.bind({});
+RecentlyModifiedFilter.args = {
+  resourceWorkspaceContext: {
+    filter: {type: ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED},
+    filteredResources: [{}, {}, {}]
+  }
 };
 
-export const ExpiredFilter = {
-  args: {
-    resourceWorkspaceContext: {
-      filter: {type: ResourceWorkspaceFilterTypes.EXPIRED},
-      filteredResources: [{}, {}, {}, {}, {}, {}]
-    }
-  },
-  render: Template
-};
-
-export const FilterWithNullResources = {
-  args: {
-    resourceWorkspaceContext: {
-      filter: {type: ResourceWorkspaceFilterTypes.ALL},
-      filteredResources: null
-    },
-  },
-  render: Template
+export const ExpiredFilter = Template.bind({});
+ExpiredFilter.args = {
+  resourceWorkspaceContext: {
+    filter: {type: ResourceWorkspaceFilterTypes.EXPIRED},
+    filteredResources: [{}, {}, {}, {}, {}, {}]
+  }
 };

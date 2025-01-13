@@ -609,7 +609,7 @@ class DisplayResourceDetailsInformation extends React.Component {
                   }
                 </div>
                 {canPreviewSecret &&
-                  <button type="button" onClick={this.handlePreviewTotpButtonClick} className="totp-view inline button-transparent">
+                  <button type="button" onClick={this.handlePreviewTotpButtonClick} className="totp-view button-transparent">
                     <Icon name={isTotpPreviewed ? 'eye-close' : 'eye-open'}/>
                   </button>
                 }

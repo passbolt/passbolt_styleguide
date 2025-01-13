@@ -148,158 +148,142 @@ html {
  * Page layout
  */
 .page {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  width: 100%;
+  min-width: 32rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  overflow: auto;
+  /* main workspace panels  position depend on how many headers are there */
+  /* Grid */
+  /* if the other grid is used
+   don't center the grid inside main panel */
 }
-.page .app {
-  display: flex;
-  align-items: flex-start;
-  align-self: stretch;
-  height: 100vh;
-  width: 100vw;
-}
-.page .app .panel.main {
-  display: flex;
-  padding-right: 1.6rem;
-  align-items: flex-start;
-  flex: 1 0 0;
-  align-self: stretch;
-  background: var(--Workspace-Workspace-background);
-  min-width: 0;
-}
-.page .app .panel.main .panel.left {
-  display: flex;
-  width: 26.9rem;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.6rem;
-  align-self: stretch;
-}
-.page .app .panel.main .panel.left .sidebar-content {
-  display: flex;
-  padding: 0 1.6rem;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.6rem;
-  flex: 1 0 0;
-  align-self: stretch;
-}
-.page .app .panel.main .panel.left .sidebar-content .top-bar-left {
-  display: flex;
-  height: 4.3rem;
-  padding: 2.1rem 0 0.8rem 1.6rem;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 2rem;
-  align-self: stretch;
-}
-.page .app .panel.main .panel.left .sidebar-content .sidebar-content-left {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.8rem;
-  align-self: stretch;
-}
-.page .app .panel.main .panel.middle {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1 0 0;
-  align-self: stretch;
-  min-height: 0;
-  min-width: 0;
-}
-.page .app .panel.main .panel.middle .header {
-  display: flex;
-  padding: 2.4rem 1.6rem 2.4rem 0;
-  justify-content: flex-end;
-  align-items: center;
-  align-self: stretch;
-  min-width: 0;
-}
-.page .app .panel.main .panel.middle .header .header-left {
-  display: flex;
-  align-items: center;
-  flex: 1 0 0;
-  padding-right: 1.6rem;
-  width: calc(100% - 35rem);
-}
-.page .app .panel.main .panel.middle .header .header-right {
-  display: flex;
-  width: 33.4rem;
-  justify-content: flex-end;
-  align-items: center;
-}
-.page .app .panel.main .panel.middle .middle-right {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 1.6rem;
-  flex: 1 0 0;
-  align-self: stretch;
-  min-width: 0;
-}
-.page .app .panel.main .panel.middle .middle-right .breadcrumbs-and-grid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1 0 0;
-  align-self: stretch;
-  border-radius: var(--Section-border-radius) var(--Section-border-radius) 0 0;
-  background: var(--Grid-Grid-background);
-  min-height: 0;
-  min-width: 0;
-}
-.page .app .panel.main .panel.middle .middle-right .breadcrumbs-and-grid .top-bar {
-  display: flex;
-  padding-bottom: 0.8rem;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.8rem;
-  align-self: stretch;
-  min-width: 0;
-}
-.page .app .panel.main .panel.middle .middle-right .breadcrumbs-and-grid .grid {
-  display: flex;
-  align-items: flex-start;
-  flex: 1 0 0;
-  align-self: stretch;
-  position: relative;
-  min-width: 0;
-}
-.page .app .panel.main .panel.middle .middle-right .breadcrumbs-and-grid .grid .action-bar {
-  display: flex;
-  height: 7.3rem;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-end;
-  align-self: stretch;
-}
-.page .app .panel.main .panel.middle .middle-right .panel.aside,
-.page .app .panel.main .panel.middle .middle-right .help-panel {
-  display: flex;
-  width: 35rem;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.6rem;
-  align-self: stretch;
-  border-radius: var(--Section-border-radius) var(--Section-border-radius) 0 0;
-  background: var(--Workspace-Panels-background);
+.page .panel {
   height: 100%;
+  width: 100%;
+  position: absolute;
+  overflow: auto;
 }
-/* TODO check what should be displayed for small screen */
+.page .panel.main {
+  bottom: 3.4rem;
+  height: auto;
+  padding: 0;
+}
+.page .panel.main .panel.left {
+  background: #FAFAFA;
+}
+.page .header.second + .panel.main {
+  top: 6.875em;
+}
+.page .header.third + .panel.main {
+  top: 16.5rem;
+  border-top: 1px solid #E0E0E0;
+}
+.page .header {
+  width: 100%;
+  overflow: hidden;
+  /* headers */
+}
+.page .header.first {
+  min-height: 4.3rem;
+}
+.page .header.second {
+  height: 7rem;
+}
+.page .header.third {
+  height: 5.2rem;
+}
+.page .col1,
+.page .col2,
+.page .col3,
+.page .col2_3 {
+  position: absolute;
+}
+.page .col1,
+.page .panel.left {
+  width: 18%;
+  box-sizing: border-box;
+}
+.page .panel.middle {
+  width: 82%;
+  left: 18%;
+  overflow: hidden;
+  background: #FAFAFA;
+}
+.page .panel.middle.scroll {
+  overflow-y: scroll;
+}
+.page .col2 {
+  width: calc(82% - 35rem);
+  left: 18%;
+}
+.page .col3,
+.page .panel.right {
+  width: 24%;
+  left: 76%;
+}
+.page .col2_3 {
+  width: calc(82% - 1.6rem);
+  left: 18%;
+}
+.page .panel.main .grid-responsive-12 {
+  width: 100%;
+  height: calc(100% - 3.9rem);
+  margin-right: 1.6rem;
+  max-width: none;
+  box-sizing: border-box;
+}
+/* hide left column when there is no space */
+@media all and (max-width: 1024px) {
+  .page .panel.left {
+    display: none;
+  }
+  .page .header.second .col2 {
+    display: none;
+  }
+  .page .header.second .col2_3 {
+    display: none;
+  }
+  .page .header.third {
+    height: 5.2rem;
+  }
+  .page .header.third .col1,
+  .page .header.third .col2,
+  .page .header.third .col2_3 {
+    position: relative;
+    float: left;
+    left: auto;
+    width: auto;
+  }
+  .page .header.third .col3 {
+    display: none;
+  }
+  .page .panel.main .panel.left {
+    display: none;
+  }
+  .page .panel.main .panel.middle {
+    width: 100%;
+    left: 0;
+  }
+  .page .panel.main .panel.aside {
+    min-width: auto;
+  }
+}
 /*
  * scroll
  */
 .scroll {
   overflow-y: scroll;
 }
+.header.second .col1 {
+  min-width: 200px;
+}
 .logo-svg.no-img {
-  width: 15rem;
-  height: 2.6rem;
-  flex-shrink: 0;
+  width: 150px;
+  height: 26px;
   --icon-color: #000000;
 }
 .logo-svg h1 {
@@ -309,20 +293,23 @@ html {
   width: 200px;
   height: 45px;
 }
+.header.second .col1 {
+  min-width: 200px;
+}
 /* Small Progress bar */
 .progress-bar {
-  background: var(--Loading-bar-Loading-bar-background);
+  background: #BDBDBD;
   width: 100%;
-  height: 0.2rem;
+  height: 0.3rem;
   display: block;
-  border-radius: var(--Progress-Bar-radius);
+  border-radius: 0.2rem;
 }
 .progress-bar .progress {
-  background: var(--Loading-bar-Loading-bar-foreground);
+  background: #D40101;
   width: 0;
-  height: 0.2rem;
+  height: 0.3rem;
   display: block;
-  border-radius: var(--Progress-Bar-radius);
+  border-radius: 0.2rem;
   transition: width 500ms linear;
 }
 .progress-bar .progress.completed {
@@ -379,88 +366,69 @@ html {
   position: relative;
   left: -50%;
   float: left;
-  border-radius: var(--Button-border-radius);
-  color: var(--Text-and-icons-Main-text);
+  box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.1);
+  border-radius: 0.3rem;
+  color: #000000;
   font-size: 1.5rem;
   font-weight: 400;
   line-height: 2rem;
   width: auto;
 }
 .notification-container .notification .message.warning {
-  background: var(--Palette-Warning);
+  color: #000000;
+  background: #FFDBA6;
 }
 .notification-container .notification .message.success {
-  background: var(--Palette-Success);
+  color: #000000;
+  background: #EDF7EB;
 }
 .notification-container .notification .message.error {
-  background: var(--Palette-Error);
+  color: #000000;
+  background: #FFA6A6;
 }
 /*
  * Breadcrumbs
  */
 .breadcrumbs {
-  display: flex;
-  min-width: 0;
-  padding: 1.2rem 1.6rem 0 1.6rem;
-  align-items: flex-start;
-  align-self: stretch;
+  height: 3.9rem;
+  padding: 0;
+  margin-bottom: 0;
+  background: #FAFAFA;
 }
 .breadcrumbs ul {
-  display: flex;
-  min-width: 0;
+  padding-top: 1rem;
+  margin-left: 1rem;
 }
 .breadcrumbs ul li {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex: 0 1 auto;
-  min-width: 0;
+  margin-left: 0.5rem;
+  max-width: 25%;
+  float: left;
 }
 .breadcrumbs ul li:before {
   content: "\203A";
   /* unicode character › */
-  padding: 0rem 0.4rem;
-  font-size: 1.8rem;
-  font-weight: 400;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  color: var(--Text-and-icons-Main-text);
-  align-items: center;
-  font-style: normal;
+  margin-right: 0.5rem;
+  font-size: 1.4rem;
 }
 .breadcrumbs ul li:first-child {
   margin-left: 0;
   padding-left: 0;
 }
 .breadcrumbs ul li:first-child:before {
-  content: none;
+  content: "";
 }
 .breadcrumbs ul button {
   border: 0;
-  font-size: 1.8rem;
-  line-height: normal;
-  padding: 0rem 0.6rem;
-  border-radius: var(--Button-border-radius);
-  /* focus visible (display with keyboard navigation) */
-}
-.breadcrumbs ul button:hover {
-  background: var(--Action-button-Active-action-button-background);
-}
-.breadcrumbs ul button:focus-visible {
-  box-shadow: 0 0 0.4rem var(--States-Focus), inset 0 0 0 0.1rem var(--States-Focus);
-  text-decoration: none;
-  border: none;
-}
-.breadcrumbs span.counter {
-  padding-left: 0.8rem;
-  color: var(--Text-and-icons-Secondary-text);
-  font-weight: normal;
   font-size: 1.4rem;
-  line-height: 2.1rem;
-  align-self: flex-end;
-  flex-shrink: 0;
-  display: block;
+  line-height: 1.9rem;
+  max-width: 100%;
+}
+.breadcrumbs span.chips {
+  margin-left: 0.8rem;
+  vertical-align: 0.1rem;
+  padding: 0.1rem 0.55rem 0.2rem 0.55rem;
+  border-radius: 2rem;
 }
 .breadcrumbs div.main-cell {
   display: inline;
@@ -770,9 +738,9 @@ table.table-info.horizontal tbody tr:hover {
   max-width: 24rem;
   width: max-content;
   padding: 0.4rem 0.8rem;
-  background: var(--Tool-tip-Tool-tip-background);
-  color: var(--Tool-tip-Tool-tip-text);
-  border-radius: var(--Menu-radius);
+  background: #B3B3B3;
+  color: #000000;
+  border-radius: 0.3rem;
   font-size: 1.2rem;
   line-height: 1.6rem;
   font-weight: normal;
@@ -795,7 +763,7 @@ table.table-info.horizontal tbody tr:hover {
 .tooltip .tooltip-text.top::after {
   left: 50%;
   top: 100%;
-  border-top-color: var(--Tool-tip-Tool-tip-background);
+  border-top-color: #B3B3B3;
 }
 .tooltip .tooltip-text.right {
   bottom: 50%;
@@ -805,7 +773,7 @@ table.table-info.horizontal tbody tr:hover {
 .tooltip .tooltip-text.right::after {
   bottom: 50%;
   right: 100%;
-  border-right-color: var(--Tool-tip-Tool-tip-background);
+  border-right-color: #B3B3B3;
 }
 .tooltip .tooltip-text.bottom {
   top: 100%;
@@ -815,7 +783,7 @@ table.table-info.horizontal tbody tr:hover {
 .tooltip .tooltip-text.bottom::after {
   right: 50%;
   bottom: 100%;
-  border-bottom-color: var(--Tool-tip-Tool-tip-background);
+  border-bottom-color: #B3B3B3;
 }
 .tooltip .tooltip-text.left {
   top: 50%;
@@ -825,7 +793,7 @@ table.table-info.horizontal tbody tr:hover {
 .tooltip .tooltip-text.left::after {
   top: 50%;
   left: 100%;
-  border-left-color: var(--Tool-tip-Tool-tip-background);
+  border-left-color: #B3B3B3;
 }
 .tooltip:hover .tooltip-text,
 .tooltip:focus .tooltip-text {
@@ -878,6 +846,22 @@ article figure .legend {
   margin-top: 0.5em;
   margin-bottom: 1em;
   font-style: italic;
+}
+/* search */
+form.search {
+  margin-top: 2rem;
+  max-width: 64rem;
+}
+form.search legend,
+form.search label {
+  display: none;
+  width: 16rem;
+}
+/* rescale on small screen */
+@media all and (max-width: 480px) {
+  form.search {
+    display: none;
+  }
 }
 .social {
   text-align: center;

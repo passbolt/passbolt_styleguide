@@ -18,7 +18,7 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
 import Breadcrumb from "../../Common/Navigation/Breadcrumbs/Breadcrumb";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {Trans, withTranslation} from "react-i18next";
+import {withTranslation} from "react-i18next";
 
 /**
  * The component displays a navigation breadcrumb given the applied resources filter
@@ -55,12 +55,12 @@ class FilterResourcesByBreadcrumb extends Component {
         return [...items, this.getLastBreadcrumb(`${filteredTagName} ${this.translate("(tag)")}`)];
       }
       case ResourceWorkspaceFilterTypes.ROOT_FOLDER: {
-        return [this.getLastBreadcrumb(this.translate("My workspace"))];
+        return [...items, this.getLastBreadcrumb(this.translate("root (folder)"))];
       }
       case ResourceWorkspaceFilterTypes.FOLDER: {
         const folder = this.props.resourceWorkspaceContext.filter.payload.folder;
         const currentFolderName = (folder && folder.name) || this.translate("N/A");
-        return [this.getLastBreadcrumb(this.translate("My workspace")), this.getLastBreadcrumb(`${currentFolderName} ${this.translate("(folder)")}`)];
+        return [...items, this.getLastBreadcrumb(`${currentFolderName} ${this.translate("(folder)")}`)];
       }
       case ResourceWorkspaceFilterTypes.GROUP: {
         const group = this.props.resourceWorkspaceContext.filter.payload.group;
@@ -73,11 +73,11 @@ class FilterResourcesByBreadcrumb extends Component {
   }
 
   /**
-   * Returns the home breadcrumb items
+   * Returns the all items breadcrumb items
    * @return {JSX.Element}
    */
   get allItemsBreadcrumb() {
-    return <Breadcrumb name={this.translate("Home")} onClick={this.props.navigationContext.onGoToPasswordsRequested}/>;
+    return <Breadcrumb name={this.translate("All items")} onClick={this.props.navigationContext.onGoToPasswordsRequested}/>;
   }
 
   /**
@@ -119,11 +119,10 @@ class FilterResourcesByBreadcrumb extends Component {
    * @returns {JSX}
    */
   render() {
-    const count = this.props.resourceWorkspaceContext.filteredResources?.length;
     return (
       <Breadcrumbs items={this.items}>
         {this.isResourceNotNull &&
-          <span className="counter"><Trans count={count}>{{count}} items</Trans></span>
+          <span className="chips">{this.props.resourceWorkspaceContext.filteredResources.length}</span>
         }
       </Breadcrumbs>
     );

@@ -163,6 +163,15 @@ class ResourceTypesCollection extends EntityV2Collection {
     return this.items.some(resourceType => resourceType.hasTotp() && resourceType.version === version);
   }
 
+  /**
+   * Has some of the given version
+   * @param {string} [version] The version
+   * @returns {boolean}
+   */
+  hasSomeOfVersion(version = RESOURCE_TYPE_VERSION_4) {
+    return this.items.some(resourceType => resourceType.version === version);
+  }
+
   /*
    * ==================================================
    * Setters

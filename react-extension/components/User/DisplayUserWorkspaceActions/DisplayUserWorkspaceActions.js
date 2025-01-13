@@ -29,15 +29,6 @@ import HandleReviewAccountRecoveryRequestWorkflow
   from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
 import {withWorkflow} from "../../../contexts/WorkflowContext";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
-import Dropdown from "../../Common/Dropdown/Dropdown";
-import DropdownButton from "../../Common/Dropdown/DropdownButton";
-import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
-import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
-import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
-import LinkSVG from "../../../../img/svg/link.svg";
-import SendSVG from "../../../../img/svg/send.svg";
-import FingerprintDisabledSVG from "../../../../img/svg/fingerprint_disabled.svg";
-import BuoySVG from "../../../../img/svg/buoy.svg";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -49,20 +40,54 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.state = this.defaultState;
     this.bindCallbacks();
+    this.createRefs();
+  }
+
+  /**
+   * Returns the component default state
+   */
+  get defaultState() {
+    return {
+      moreMenuOpen: false // Display flag for the more button menu
+    };
   }
 
   /**
    * Bind callbacks methods
    */
   bindCallbacks() {
+    this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
     this.handleDetailsLockedEvent = this.handleDetailsLockedEvent.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
+    this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
     this.handleDisableMfaEvent = this.handleDisableMfaEvent.bind(this);
     this.handleCopyPermalinkEvent = this.handleCopyPermalinkEvent.bind(this);
     this.handleResendInviteClickEvent = this.handleResendInviteClickEvent.bind(this);
     this.handleReviewRecoveryRequestEvent = this.handleReviewRecoveryRequestEvent.bind(this);
+  }
+
+  /**
+   * Create DOM nodes or React elements references in order to be able to access them programmatically.
+   */
+  createRefs() {
+    this.moreMenuRef = React.createRef();
+  }
+
+  /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
+  }
+
+  /**
+   * Whenever the component will unmount
+   */
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleDocumentClickEvent, {capture: true});
   }
 
   /**
@@ -166,6 +191,13 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
+   * Handle the open or close the more menu
+   */
+  handleMoreClickEvent() {
+    this.toggleMoreMenu();
+  }
+
+  /**
    * Handle the will of disable MFA for a user
    */
   handleDisableMfaEvent() {
@@ -173,9 +205,22 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
+   * Handle click events on document. Hide the component if the click occurred outside of the component.
+   * @param {ReactEvent} event The event
+   */
+  handleDocumentClickEvent(event) {
+    // Prevent closing when the user click on an element of the menu
+    if (this.moreMenuRef.current && this.moreMenuRef.current.contains(event.target)) {
+      return;
+    }
+    this.closeMoreMenu();
+  }
+
+  /**
    * Handle review recovery request click event
    */
   handleReviewRecoveryRequestEvent() {
+    this.closeMoreMenu();
     const accountRecoveryRequestId = this.selectedUser.pending_account_recovery_request.id;
     this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {accountRecoveryRequestId});
   }
@@ -273,13 +318,31 @@ class DisplayUserWorkspaceActions extends React.Component {
    * Disable the selected user's MFA
    */
   disableMFA() {
+    this.closeMoreMenu();
     this.props.dialogContext.open(ConfirmDisableUserMFA);
+  }
+
+
+  /**
+   * Toggles the more menu
+   */
+  toggleMoreMenu() {
+    const moreMenuOpen = !this.state.moreMenuOpen;
+    this.setState({moreMenuOpen});
+  }
+
+  /**
+   * Close the more menu
+   */
+  closeMoreMenu() {
+    this.setState({moreMenuOpen: false});
   }
 
   /**
    * Copy the user permalink
    */
   async copyPermalink() {
+    this.closeMoreMenu();
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/users/view/${this.selectedUser.id}`;
     await ClipBoard.copy(permalink, this.props.context.port);
@@ -300,6 +363,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   onResendInviteSuccess() {
     this.props.actionFeedbackContext.displaySuccess(this.translate("The invite has been resent successfully"));
+    this.toggleMoreMenu();
   }
 
   /**
@@ -310,6 +374,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     const errorDialogProps = {
       error: error
     };
+    this.toggleMoreMenu();
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
 
@@ -327,7 +392,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   render() {
     return (
-      <div className="actions-wrapper">
+      <div className="col2_3 actions-wrapper">
         <div className="actions">
           {this.isLoggedInUserAdmin() &&
           <ul>
@@ -343,45 +408,78 @@ class DisplayUserWorkspaceActions extends React.Component {
                 <span><Trans>Delete</Trans></span>
               </button>
             </li>
-            <li>
-              <Dropdown>
-                <DropdownButton className="more button-action-contextual button-action-icon" disabled={!this.hasMoreActionAllowed}>
-                  <MoreHorizontalSVG/>
-                </DropdownButton>
-                <DropdownMenu>
-                  <DropdownMenuItem separator={true}>
-                    <button id="copy-user-permalink" type="button" className="no-border" disabled={!this.canCopyPermalink} onClick={this.handleCopyPermalinkEvent}>
-                      <LinkSVG/>
-                      <span><Trans>Copy permalink</Trans></span>
-                    </button>
-                  </DropdownMenuItem>
-                  {this.canIUseResend &&
-                    <DropdownMenuItem>
-                      <button id="resend-invite-user" type="button" className="no-border" disabled={!this.canResendInviteToUser} onClick={this.handleResendInviteClickEvent}>
-                        <SendSVG/>
-                        <span><Trans>Resend invite</Trans></span>
-                      </button>
-                    </DropdownMenuItem>
-                  }
-                  {this.canIUseMfa &&
-                    <DropdownMenuItem>
-                      <button id="disable-mfa-action" type="button" className="no-border" disabled={!this.canDisableMfaForUser} onClick={this.handleDisableMfaEvent}>
-                        <FingerprintDisabledSVG/>
-                        <span><Trans>Disable MFA</Trans></span>
-                      </button>
-                    </DropdownMenuItem>
-                  }
-                  {this.canIReviewAccountRecoveryRequest() &&
-                    <DropdownMenuItem>
-                      <button id="review-recovery" type="button" className="no-border" disabled={!this.hasPendingAccountRecoveryRequest()} onClick={this.handleReviewRecoveryRequestEvent}>
-                        <BuoySVG/>
-                        <span><Trans>Review recovery request</Trans></span>
-                      </button>
-                    </DropdownMenuItem>
-                  }
-                </DropdownMenu>
-              </Dropdown>
-            </li>
+            <div className="dropdown" ref={this.moreMenuRef}>
+              <button type="button"
+                className={`more ${this.state.moreMenuOpen ? "open" : ""}`}
+                disabled={!this.hasMoreActionAllowed}
+                onClick={this.handleMoreClickEvent}>
+                <span><Trans>More</Trans></span>
+                <Icon name="caret-down"/>
+              </button>
+              <ul className={`dropdown-content menu right ${this.state.moreMenuOpen ? "visible" : ""}`}>
+                <li id="copy-user-permalink" className="separator-after">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <button type="button"
+                          onClick={this.handleCopyPermalinkEvent}
+                          disabled={!this.canCopyPermalink}
+                          className="link no-border">
+                          <span><Trans>Copy permalink to clipboard</Trans></span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                {this.canIUseResend &&
+                <li id="resend-invite-user" className="separator-after">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <button type="button" onClick={this.handleResendInviteClickEvent}
+                          disabled={!this.canResendInviteToUser} className="link no-border">
+                          <span><Trans>Resend invite</Trans></span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                }
+                {this.canIUseMfa &&
+                <li id="disable-mfa-action" className="">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <button type="button"
+                          id="disable-mfa"
+                          onClick={this.handleDisableMfaEvent}
+                          disabled={!this.canDisableMfaForUser}
+                          className="link no-border">
+                          <span><Trans>Disable MFA</Trans></span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                }
+                {this.canIReviewAccountRecoveryRequest() &&
+                <li key="review-recovery-user">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <button type="button"
+                          id="review-recovery"
+                          onClick={this.handleReviewRecoveryRequestEvent}
+                          disabled={!this.hasPendingAccountRecoveryRequest()} className="link no-border">
+                          <span><Trans>Review recovery request</Trans></span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                }
+              </ul>
+            </div>
           </ul>
           }
         </div>
@@ -389,7 +487,7 @@ class DisplayUserWorkspaceActions extends React.Component {
           <ul>
             <li>
               <button type="button"
-                className={`button-toggle button-action button-action-icon info ${this.hasDetailsLocked() ? "active" : ""}`}
+                className={`button-toggle button-action-icon info ${this.hasDetailsLocked() ? "selected" : ""}`}
                 onClick={this.handleDetailsLockedEvent}>
                 <Icon name="info-circle" big={true}/>
                 <span className="visuallyhidden"><Trans>View detail</Trans></span>

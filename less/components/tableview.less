@@ -2,18 +2,16 @@
  * Main Workspace - Table View
  */
 .tableview {
-  display: flex;
   background: @tableview-background;
   position: relative;
+  margin-right: 1.6rem;
   font-size: 1.5rem; /* 15px */
-  height: 100%; // force height to use 100% for flex child
-  width: 100%; // force width to use 100% for flex child
+  height: calc(100% - 4rem); // 100% - breadcrumb height - border
   border-radius: 0.3rem 0.3rem 0 0;
   border: 1px solid @default-border;
   border-bottom: none;
   box-shadow: 0 -.1rem 0 @tableview-shadow-color;
   overflow: auto;
-  min-width: 0; // important to keep the container size for ellipsis
 
   /* header */
   .tableview-header {
@@ -49,7 +47,7 @@
     top: 3.1rem;
     bottom: 0;
     padding: 0;
-    border-top: .1rem solid @default-border;
+    border-top: 1px solid @default-border;
     position: absolute;
 
     table {
@@ -327,8 +325,16 @@
       .password-view, .totp-view {
         display: none;
         align-items: center;
+        width: 2.2rem;
+        height: 2rem;
         margin: 0 0 0 .8rem;
+        padding: 0;
         float: left;
+
+        .svg-icon svg {
+          width: 1.4rem;
+          height: 100%;
+        }
       }
       &:hover {
         .password-view, .totp-view {

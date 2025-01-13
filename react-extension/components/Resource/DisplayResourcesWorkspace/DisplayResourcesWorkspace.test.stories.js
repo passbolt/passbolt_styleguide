@@ -27,6 +27,8 @@ import DialogContextProvider from "../../../contexts/DialogContext";
 import mockPort from "../../../../../test/mocks/mockPort";
 import mockStorage from "../../../../../test/mocks/mockStorage";
 import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
+import DisplayMainMenu from "../../Common/Menu/DisplayMainMenu";
+import Footer from "../../Common/Footer/Footer";
 import RbacContextProvider from "../../../../shared/context/Rbac/RbacContext";
 import MetadataTypesSettingsLocalStorageContextProvider from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import ResourceTypesLocalStorageContextProvider from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
@@ -39,7 +41,7 @@ export default {
   component: DisplayResourcesWorkspace
 };
 
-const ExtApp = ({...args}) =>
+const Template = ({...args}) =>
   <MemoryRouter initialEntries={['/app/passwords']}>
     <ExtAppContextProvider storage={args.storage} port={args.port}>
       <RbacContextProvider>
@@ -55,8 +57,12 @@ const ExtApp = ({...args}) =>
                       <DragContextProvider>
                         <div id="container" className="page password">
                           <div id="app" className="app ready" tabIndex="1000">
+                            <div className="header first">
+                              <DisplayMainMenu/>
+                            </div>
                             <DisplayResourcesWorkspace {...args}/>
                           </div>
+                          <Footer/>
                         </div>
                       </DragContextProvider>
                     </ResourcePasswordGeneratorContextProvider>
@@ -73,21 +79,17 @@ const ExtApp = ({...args}) =>
 const storage = mockStorage();
 const port = mockPort(storage);
 
-export const proVersion = {
-  args: {
-    port: port,
-    storage: storage
-  },
-  render: ExtApp
+export const proVersion = Template.bind({});
+proVersion.args = {
+  port: port,
+  storage: storage
 };
 
 const ceStorage = mockStorage();
 const cePort = mockPort(ceStorage);
 cePort.addRequestListener("passbolt.organization-settings.get", () => siteSettingsCe);
-export const ceVersion = {
-  args: {
-    port: cePort,
-    storage: ceStorage
-  },
-  render: ExtApp
+export const ceVersion = Template.bind({});
+ceVersion.args = {
+  port: cePort,
+  storage: ceStorage
 };

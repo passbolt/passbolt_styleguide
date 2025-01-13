@@ -40,7 +40,7 @@ describe("See Resource FilterResourcesByShortcuts", () => {
   });
 
   each([
-    {filter: ResourceWorkspaceFilterTypes.ALL, itemSelected: "Home", itemIndex: 1},
+    {filter: ResourceWorkspaceFilterTypes.ALL, itemSelected: "All items", itemIndex: 1},
     {filter: ResourceWorkspaceFilterTypes.FAVORITE, itemSelected: "Favorites", itemIndex: 2},
     {filter: ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED, itemSelected: "Recently modified", itemIndex: 3},
     {filter: ResourceWorkspaceFilterTypes.SHARED_WITH_ME, itemSelected: "Shared with me", itemIndex: 4},

@@ -4,45 +4,28 @@ a {
     text-decoration: none;
     cursor: pointer;
     font-size: 1.5rem;
-    font-weight: 400;
-    text-overflow: ellipsis;
-    line-height: normal;
-    border-bottom: 1px solid var(--Palette-Gradient-7);
-    color: var(--Text-and-icons-Main-text);
-    gap: 1.6rem;
-    display: inline-flex;
-    overflow: hidden;
+    line-height: 2rem;
+    border-bottom: 1px solid @link-border;
 
     &:link, &:visited {
-        color: var(--Text-and-icons-Main-text);
+        color: @default-text-color;
     }
-    &:active, &:hover {
+    &:hover {
         text-decoration: none;
         cursor: pointer;
-        border-bottom: 1px solid var(--Palette-Contrast-1);
+        color: @text-focus-color;
+        border-bottom: 1px solid @link-hover-border;
     }
-
-    &:focus, &:focus-visible {
-        border-bottom: none;
-        display: inline;
-        position: relative;
-        &::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 0.5px;
-            background-color: var(--Palette-Contrast-1);
-            box-shadow: 0px 0px 4px 0px var(--States-Focus);
-        }
+    &:active, &:focus, &:focus-visible {
+        outline: @outline-default-border;
+        color: @text-focus-color;
+        border: none;
     }
-
-
     &.disabled {
         outline: 0;
         text-decoration: none;
         cursor: default;
+        color: @default-text-color;
         opacity: .5;
         pointer-events: none;
     }
@@ -55,7 +38,7 @@ button.link {
     cursor: pointer;
     font-size: 1.5rem;
     line-height: 2rem;
-    border-bottom: 1px solid var(--Palette-Gradient-7);
+    border-bottom: 1px solid @link-border;
     border-radius: 0;
     padding: 0;
     text-align: inherit;
@@ -65,37 +48,37 @@ button.link {
     box-shadow: none;
     min-width: inherit;
 
-    &:focus, &:focus-visible {
-        border-bottom: none;
-        display: inline;
-        position: relative;
+    &:focus {
+        border-bottom: 1px solid @link-border;
         box-shadow: none;
-        &::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 0.5px;
-            background-color: var(--Palette-Contrast-1);
-            box-shadow: 0px 0px 4px 0px var(--States-Focus);
-        }
     }
-
-    &:active, &:hover {
+    &:focus-visible {
+        box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
+        outline: @outline-default-border;
+    }
+    &:hover {
         text-decoration: none;
         cursor: pointer;
-        border-bottom: 1px solid var(--Palette-Contrast-1);
+        color: @text-focus-color;
+        border-bottom: 1px solid @link-hover-border;
         box-shadow: none;
     }
-
+    &:active {
+        background: transparent;
+        outline: @outline-default-border;
+        color: @text-focus-color;
+        border: none;
+        box-shadow: none;
+    }
     &:disabled {
         background: transparent;
         outline: 0;
         text-decoration: none;
+        color: @default-text-color;
         cursor: default;
         opacity: .5;
         pointer-events: none;
+        border-bottom: 1px solid @link-border;
         box-shadow: none;
     }
 
@@ -105,9 +88,6 @@ button.link {
 
     &.no-border {
         border: none;
-        &::after {
-            content: none;
-        }
     }
 }
 
@@ -181,10 +161,12 @@ button.link-icon {
         outline: 0;
         text-decoration: none;
         box-shadow: none;
+        color: @default-text-color;
+        --icon-color: @icon-color;
         opacity: .5;
 
         .link-label {
-            border-bottom: 1px solid var(--Palette-Gradient-7);
+            border-bottom: 1px solid @link-border;
         }
     }
 }

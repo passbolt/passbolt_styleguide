@@ -14,7 +14,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
-import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import EditResourceDescription from "../../ResourceDescription/EditResourceDescription/EditResourceDescription";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
@@ -292,7 +291,7 @@ class DisplayResourceDetailsDescription extends React.Component {
           {this.state.isSecretDecrypting &&
           <p className="description-content">
             <span className="processing-wrapper">
-              <SpinnerSVG/>
+              <Icon name="spinner"/>
               <span className="processing-text"><Trans>Decrypting</Trans></span>
             </span>
           </p>

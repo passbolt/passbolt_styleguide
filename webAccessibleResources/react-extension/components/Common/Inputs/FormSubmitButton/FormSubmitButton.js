@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import SpinnerSVG from "../../../../../img/svg/spinner.svg";
+import Icon from "../../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 
 class FormSubmitButton extends Component {
@@ -74,7 +74,7 @@ class FormSubmitButton extends Component {
         disabled={this.props.disabled}>
         {this.props.value || <Trans>Save</Trans>}
         {this.props.processing &&
-          <SpinnerSVG/>
+          <Icon name="spinner"/>
         }
       </button>
     );

@@ -11,21 +11,28 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
+import React from "react";
 import Password from "./Password";
 import {defaultProps} from "./Password.test.data";
 
 export default {
   title: 'Foundations/Password',
-  component: Password
+  component: "Password"
 };
 
 
-export const InputPassphrase =  {
-  args: defaultProps(),
-};
+const Template = args =>
+  <div style={{display: "flex", flexWrap: "wrap"}}>
+    <div style={{width: "49%", marginRight: "1%"}}>
+      <Password {...args} id="password1"/>
+    </div>
+    <div style={{width: "49%", marginRight: "1%"}}>
+      <Password {...args} id="password2" disabled={true}/>
+    </div>
+  </div>;
 
-export const InputPassword = {
-  args: defaultProps({placeholder: "Password", securityToken: null}),
-};
+export const InputPassphrase = Template.bind({});
+InputPassphrase.args = defaultProps();
 
-
+export const InputPassword = Template.bind({});
+InputPassword.args = defaultProps({placeholder: "Password", securityToken: false});

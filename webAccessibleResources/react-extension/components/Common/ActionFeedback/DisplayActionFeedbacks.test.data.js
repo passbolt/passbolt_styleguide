@@ -33,16 +33,6 @@ export const propsWithOneErrorMessage = {
 };
 
 /**
- *  Props with one warning feedback
- */
-export const propsWithOneWarningMessage = {
-  actionFeedbackContext: {
-    feedbacks: [{type: 'warning', message: "Be carreful this is a warning message"}],
-    remove: () => {}
-  }
-};
-
-/**
  * Props for checking the 5 seconds display
  */
 export const propsForDisplayTime = {

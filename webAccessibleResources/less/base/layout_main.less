@@ -2,168 +2,160 @@
  * Page layout
  */
 .page {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  width: 100%;
+  min-width: 32rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  overflow: auto;
 
-  .app {
-    display: flex;
-    align-items: flex-start;
-    align-self: stretch;
-    height: 100vh;
-    width: 100vw;
+  .panel {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    overflow: auto;
 
-    .panel {
-      &.main {
-        display: flex;
-        padding-right: 1.6rem;
-        align-items: flex-start;
-        flex: 1 0 0;
-        align-self: stretch;
-        background: var(--Workspace-Workspace-background);
-        min-width: 0; // important to keep the container size for ellipsis
+    &.main {
+      bottom: 3.4rem;
+      height: auto;
+      padding: 0;
 
-        .panel.left {
-          display: flex;
-          width: 26.9rem;
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 1.6rem;
-          align-self: stretch;
-
-          .sidebar-content {
-            display: flex;
-            padding: 0 1.6rem;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1.6rem;
-            flex: 1 0 0;
-            align-self: stretch;
-
-            .top-bar-left {
-              display: flex;
-              height: 4.3rem; // 7.2rem - 2.9rem (2.1rem + .8rem)
-              padding: 2.1rem 0 .8rem 1.6rem;
-              flex-direction: column;
-              justify-content: center;
-              align-items: flex-start;
-              gap: 2rem;
-              align-self: stretch;
-            }
-
-            .sidebar-content-left {
-              display: flex;
-              flex-direction: column;
-              align-items: flex-start;
-              gap: .8rem;
-              align-self: stretch;
-            }
-          }
-        }
-
-        .panel.middle {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          flex: 1 0 0;
-          align-self: stretch;
-          min-height: 0; // important to keep the container size for ellipsis
-          min-width: 0; // important to keep the container size for ellipsis
-
-          .header {
-            display: flex;
-            padding: 2.4rem 1.6rem 2.4rem 0;
-            justify-content: flex-end;
-            align-items: center;
-            align-self: stretch;
-            min-width: 0; // important to keep the container size for ellipsis
-
-            .header-left {
-              display: flex;
-              align-items: center;
-              flex: 1 0 0;
-              padding-right: 1.6rem;
-              width: calc(100% - 35rem);
-            }
-
-            .header-right {
-              display: flex;
-              width: 33.4rem;
-              justify-content: flex-end;
-              align-items: center;
-            }
-          }
-
-          .middle-right {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 1.6rem;
-            flex: 1 0 0;
-            align-self: stretch;
-            min-width: 0; // important to keep the container size for ellipsis
-
-            .breadcrumbs-and-grid {
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              flex: 1 0 0;
-              align-self: stretch;
-              border-radius: var(--Section-border-radius) var(--Section-border-radius) 0 0;
-              background: var(--Grid-Grid-background);
-              min-height: 0; // important to keep the container size for ellipsis
-              min-width: 0; // important to keep the container size for ellipsis
-
-              .top-bar {
-                display: flex;
-                padding-bottom: .8rem;
-                flex-direction: column;
-                align-items: center;
-                gap: .8rem;
-                align-self: stretch;
-                min-width: 0; // important to keep the container size for ellipsis
-              }
-
-              .grid {
-                display: flex;
-                align-items: flex-start;
-                flex: 1 0 0;
-                align-self: stretch;
-                position: relative;
-                min-width: 0; // important to keep the container size for ellipsis
-
-                // TODO when action button will be in the administration component item
-                .action-bar {
-                  display: flex;
-                  height: 7.3rem;
-                  flex-direction: column;
-                  justify-content: flex-end;
-                  align-items: flex-end;
-                  align-self: stretch;
-                }
-              }
-            }
-
-            .panel.aside, .help-panel {
-              display: flex;
-              width: 35rem;
-              flex-direction: column;
-              align-items: flex-start;
-              gap: 1.6rem;
-              align-self: stretch;
-              border-radius: var(--Section-border-radius) var(--Section-border-radius) 0 0;
-              background: var(--Workspace-Panels-background);
-              height: 100%;
-            }
-          }
-        }
+      .panel.left {
+        background: @workspace-left-background;
       }
     }
   }
+
+  /* main workspace panels  position depend on how many headers are there */
+  .header.second + .panel.main {
+    // with search only
+    top: 6.875em;
+  }
+
+  .header.third + .panel.main {
+    // with search and action bar
+    top: 16.5rem;
+    border-top: 1px solid @default-border;
+  }
+
+  .header {
+    width: 100%;
+    overflow: hidden;
+
+    /* headers */
+    &.first {
+      // let the height be automatically set
+      // it breaks the greedy nav on firefox otherwise
+      min-height: 4.3rem;
+    }
+
+    &.second {
+      height: 7rem;
+    }
+
+    &.third {
+      height: 5.2rem;
+    }
+  }
+
+  /* Grid */
+  .col1, .col2, .col3, .col2_3 {
+    position: absolute;
+  }
+
+  .col1,
+  .panel.left {
+    width: 18%;
+    box-sizing: border-box;
+  }
+
+  .panel.middle {
+    width: 82%;
+    left: 18%;
+    overflow: hidden;
+    background: @workspace-middle-background;
+  }
+
+  .panel.middle.scroll {
+    overflow-y: scroll;
+  }
+
+  .col2 {
+    width: calc(82% - 35rem);
+    left: 18%;
+  }
+
+  .col3,
+  .panel.right {
+    width: 24%;
+    left: 76%;
+  }
+
+  .col2_3 {
+    width: calc(82% - 1.6rem);
+    left: 18%;
+  }
+
+  /* if the other grid is used
+   don't center the grid inside main panel */
+  .panel.main .grid-responsive-12 {
+    width: 100%;
+    height: calc(100% - 3.9rem); // 100% - the height of the breadcrumb
+    margin-right: 1.6rem;
+    max-width: none;
+    box-sizing: border-box;
+  }
 }
 
-/* TODO check what should be displayed for small screen */
+/* hide left column when there is no space */
 @media all and (max-width: 1024px) {
   .page {
+    .panel.left {
+      display: none;
+    }
+
+    .header.second {
+      .col2 {
+        display: none;
+      }
+
+      .col2_3 {
+        display: none;
+      }
+    }
+
+    .header.third {
+      height: 5.2rem;
+
+      .col1,
+      .col2,
+      .col2_3 {
+        position: relative;
+        float: left;
+        left: auto;
+        width: auto;
+      }
+
+      .col3 {
+        display: none;
+      }
+    }
+
+    .panel.main {
+      .panel.left {
+        display: none;
+      }
+
+      .panel.middle {
+        width: 100%;
+        left: 0;
+      }
+
+      .panel.aside {
+        min-width: auto;
+      }
+    }
   }
 }

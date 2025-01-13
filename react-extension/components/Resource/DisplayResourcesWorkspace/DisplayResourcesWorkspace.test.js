@@ -114,33 +114,4 @@ describe("DisplayResourcesWorkspace", () => {
       expect(page.displayResourceWorkspacePageObject.sidebarFolder).toBeFalsy();
     });
   });
-
-  describe("As LU I can toggle columns of the resource workspace grid.", () => {
-    it('As LU I can toggle the resource sidebar', async() => {
-      expect.assertions(2);
-
-      const props = defaultProps(); // The resourceWorkspaceContext to pass
-      page = new DisplayResourceWorkspacePage(props);
-
-      expect(page.displayResourceWorkspacePageObject.infoButton).not.toBeNull();
-
-      await page.displayResourceWorkspacePageObject.clickOn(page.displayResourceWorkspacePageObject.infoButton);
-      expect(props.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
-    });
-
-    it('As LU I can unselect and select a column resource', async() => {
-      expect.assertions(4);
-
-      const props = defaultProps(); // The resourceWorkspaceContext to pass
-      page = new DisplayResourceWorkspacePage(props);
-
-      expect(page.displayResourceWorkspacePageObject.menuColumnView).not.toBeNull();
-      await page.displayResourceWorkspacePageObject.clickOn(page.displayResourceWorkspacePageObject.menuColumnView);
-      expect(page.displayResourceWorkspacePageObject.menuColumnViewItem(3)).not.toBeNull();
-      await page.displayResourceWorkspacePageObject.clickOn(page.displayResourceWorkspacePageObject.menuColumnViewItem(3));
-      expect(props.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('name', false);
-      await page.displayResourceWorkspacePageObject.clickOn(page.displayResourceWorkspacePageObject.menuColumnViewItem(6));
-      expect(props.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('password', false);
-    });
-  });
 });
