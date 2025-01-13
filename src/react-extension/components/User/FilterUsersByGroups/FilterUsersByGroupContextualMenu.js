@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {filterByGroupsOptions} from "./FilterUsersByGroup";
 import {Trans, withTranslation} from "react-i18next";
+import UsersSVG from "../../../../img/svg/users.svg";
 
 class FilterUsersByGroupContextualMenu extends React.Component {
   /**
@@ -69,7 +70,7 @@ class FilterUsersByGroupContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button" className="link no-border" id="all-groups" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.all)}><span><Trans>All groups</Trans></span></button>
+                <button type="button" className="link no-border" id="all-groups" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.all)}><UsersSVG/><span><Trans>All groups</Trans></span></button>
               </div>
             </div>
           </div>
@@ -78,7 +79,7 @@ class FilterUsersByGroupContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button" className="link no-border" id="groups-manage" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.manage)}><span><Trans>Groups I manage</Trans></span></button>
+                <button type="button" className="link no-border" id="groups-manage" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.manage)}><UsersSVG/><span><Trans>Groups I manage</Trans></span></button>
               </div>
             </div>
           </div>
@@ -87,7 +88,7 @@ class FilterUsersByGroupContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button" className="link no-border" id="groups-member" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.member)}><span><Trans>Groups I am member of</Trans></span></button>
+                <button type="button" className="link no-border" id="groups-member" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.member)}><UsersSVG/><span><Trans>Groups I am member of</Trans></span></button>
               </div>
             </div>
           </div>
