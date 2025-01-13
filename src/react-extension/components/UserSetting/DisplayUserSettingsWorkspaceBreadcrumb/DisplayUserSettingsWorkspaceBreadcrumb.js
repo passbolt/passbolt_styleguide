@@ -29,7 +29,7 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
    */
   get items() {
     return [
-      <Breadcrumb key="bread-1" name={this.translate("All users")} onClick={this.props.navigationContext.onGoToUsersRequested}/>,
+      <Breadcrumb key="bread-1" name={this.translate("Home")} onClick={this.props.navigationContext.onGoToUsersRequested}/>,
       <Breadcrumb key="bread-2" name={this.loggedInUserName} onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}/>,
       <Breadcrumb key="bread-3" name={this.getLastBreadcrumbItemName} onClick={this.onLastBreadcrumbClick.bind(this)}/>
     ];

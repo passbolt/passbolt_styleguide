@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
+import HomeSVG from "../../../../img/svg/home.svg";
 
 /**
  * This component allows to select shortcut filters applied on users
@@ -102,36 +103,13 @@ class FilterUsersByShortcut extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button className="link no-border" type="button" id="all-users">
-                    <span><Trans>All users</Trans></span>
+                    <HomeSVG />
+                    <span><Trans>Home</Trans></span>
                   </button>
                 </div>
               </div>
             </div>
           </li>
-          <li>
-            <div className={`row ${this.isRecentlyModifiedSelected ? "selected" : ""}`} onClick={this.handleRecentlyModifiedClick}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button className="link no-border" type="button" id="recently-modified">
-                    <span><Trans>Recently modified</Trans></span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </li>
-          {this.shouldDisplaySuspendedUsersFilter &&
-            <li>
-              <div className={`row ${this.isSuspendedUsersSelected ? "selected" : ""}`} onClick={this.handleSuspendedUsersClick}>
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button className="link no-border" type="button" id="suspended-users">
-                      <span><Trans>Suspended users</Trans></span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </li>
-          }
         </ul>
       </div>
     );
