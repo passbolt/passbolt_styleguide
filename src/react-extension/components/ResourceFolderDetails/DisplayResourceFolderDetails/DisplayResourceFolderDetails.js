@@ -12,7 +12,6 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import DisplayResourceFolderDetailsInformation from "./DisplayResourceFolderDetailsInformation";
 import DisplayResourceFolderDetailsPermissions from "./DisplayResourceFolderDetailsPermissions";
@@ -24,6 +23,8 @@ import {Trans, withTranslation} from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import FolderSVG from "../../../../img/svg/folder.svg";
+import LinkSVG from "../../../../img/svg/link.svg";
 
 class DisplayResourceFolderDetails extends React.Component {
   /**
@@ -39,15 +40,7 @@ class DisplayResourceFolderDetails extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleCloseClick = this.handleCloseClick.bind(this);
     this.handlePermalinkClick = this.handlePermalinkClick.bind(this);
-  }
-
-  /**
-   * Handle when the user closes the sidebar.
-   */
-  handleCloseClick() {
-    this.props.resourceWorkspaceContext.onLockDetail();
   }
 
   /**
@@ -80,30 +73,30 @@ class DisplayResourceFolderDetails extends React.Component {
       <div className="sidebar resource">
         <div className="sidebar-header">
           <div className="teaser-image">
-            <Icon name="folder"/>
+            <FolderSVG/>
           </div>
-          <h3>
-            <div className="title-wrapper">
-              <span className="name">{this.props.resourceWorkspaceContext.details.folder.name}</span>
-              <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this folder")} onClick={this.handlePermalinkClick}>
-                <Icon name="link"/>
-                <span className="visuallyhidden"><Trans>Copy the link to this folder</Trans></span>
-              </button>
-            </div>
-            <span className="subtitle"><Trans>folder</Trans></span>
-          </h3>
-          <button type="button" className="link no-border dialog-close" onClick={this.handleCloseClick}>
-            <Icon name="close"/>
-            <span className="visuallyhidden"><Trans>Close</Trans></span>
-          </button>
+          <div className="title-area">
+            <h3>
+              <div className="title-wrapper">
+                <span className="name">{this.props.resourceWorkspaceContext.details.folder.name}</span>
+              </div>
+              <span className="subtitle"><Trans>folder</Trans></span>
+            </h3>
+            <button type="button" className="title-link button-transparent inline" title={this.translate("Copy the link to this folder")} onClick={this.handlePermalinkClick}>
+              <LinkSVG/>
+              <span className="visuallyhidden"><Trans>Copy the link to this folder</Trans></span>
+            </button>
+          </div>
         </div>
-        <DisplayResourceFolderDetailsInformation/>
-        {canViewShare &&
-          <DisplayResourceFolderDetailsPermissions/>
-        }
-        {canUseAuditLog &&
-          <DisplayResourceFolderDetailsActivity/>
-        }
+        <div className="sidebar-content">
+          <DisplayResourceFolderDetailsInformation/>
+          {canViewShare &&
+            <DisplayResourceFolderDetailsPermissions/>
+          }
+          {canUseAuditLog &&
+            <DisplayResourceFolderDetailsActivity/>
+          }
+        </div>
       </div>
     );
   }
