@@ -55,11 +55,11 @@ class FilterUsersByBreadcrumb extends Component {
   }
 
   /**
-   * Returns the all users breadcrumb items
+   * Returns the home breadcrumb items
    * @return {JSX.Element}
    */
   get allUsersBreadcrumb() {
-    return <Breadcrumb name={this.translate("All users")} onClick={this.props.navigationContext.onGoToUsersRequested}/>;
+    return <Breadcrumb name={this.translate("Home")} onClick={this.props.navigationContext.onGoToUsersRequested}/>;
   }
 
   /**
