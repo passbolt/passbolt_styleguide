@@ -96,7 +96,7 @@
       border-radius: 50%;
       width: 5.6rem;
       height: 5.6rem;
-      
+
       svg {
         width: 3.3rem;
         height: 3.3rem;
@@ -357,6 +357,18 @@
         display: grid;
         gap: .8rem;
         flex-direction: column;
+
+        &.error-message {
+          background-color: var(--Palette-Error);
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+
+          button {
+            padding: .4rem 1.6rem;
+          }
+        }
 
         button {
           justify-self: center;

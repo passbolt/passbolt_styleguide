@@ -14,6 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
+import RevertSVG from "../../../../img/svg/revert.svg";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {Trans, withTranslation} from "react-i18next";
@@ -185,14 +186,14 @@ class DisplayResourceDetailsNote extends React.Component {
           </h4>
         </div>
         {this.state.open &&
-          <div className="accordion-content">
+          <div className={`accordion-content ${this.state.error ? "error-message" : ""}`}>
             {this.state.error &&
               <>
-                <p className="description-content error-message">
-                  <Trans>Decryption failed, click to retry</Trans>
+                <p className="description-content">
+                  <Trans><strong>Error: </strong>Decryption failed</Trans>
                 </p>
                 <button type="button" disabled={this.state.isSecretDecrypting} onClick={this.handleRetryDecryptClickEvent}>
-                  <EyeOpenSVG/><Trans>Show</Trans>{this.state.isSecretDecrypting && <SpinnerSVG/>}
+                  {this.state.isSecretDecrypting ? <SpinnerSVG/> : <RevertSVG/>}<Trans>Retry</Trans>
                 </button>
               </>
             }
