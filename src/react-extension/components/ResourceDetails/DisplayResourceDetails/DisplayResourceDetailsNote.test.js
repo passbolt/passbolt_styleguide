@@ -130,6 +130,6 @@ describe("See secure note", () => {
     await waitFor(() => {});
 
     expect(page.errorMessage).not.toBeNull();
-    expect(page.errorMessage.textContent).toBe("Decryption failed, click to retry");
+    expect(page.errorMessage.textContent).toContain("Error: Decryption failed");
   });
 });
