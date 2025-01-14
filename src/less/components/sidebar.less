@@ -16,6 +16,13 @@
     padding: 12.8rem 6.4rem 0 6.4rem;
   }
 
+  .sidebar-title {
+    padding: 1.6rem;
+    font-size: 1.8rem;
+    font-weight: 700; //should be 600 according to the design
+    box-shadow: inset 0.1rem -0.2rem 0rem -0.1rem var(--Workspace-Dividers);
+  }
+
   .sidebar-header {
     padding: 1.6rem;
     display: flex;
@@ -92,17 +99,6 @@
           margin-left: 3rem;
         }
       }
-
-      .svg-icon {
-        &.exclamation {
-          svg {
-            height: 1.2rem;
-            margin-top: 2.6rem;
-            margin-left: 3rem;
-            --icon-exclamation-background-color: var(--Palette-Contrast-3);
-          }
-        }
-      }
     }
 
     &.suspended {
@@ -114,6 +110,21 @@
     }
   }
 
+  &.multiple-resources-selected {
+    .sidebar-header {
+      box-shadow: inset 0 .1rem 0 0 var(--Workspace-Dividers-lighter);
+    }
+
+    .title-area {
+      align-items: center;
+      flex-shrink: 50;
+      width: 100%;
+
+      h3 {
+        width: 100%;
+      }
+    }
+  }
 
   .sidebar-content {
     display: flex;

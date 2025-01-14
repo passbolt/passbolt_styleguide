@@ -18,6 +18,7 @@ import {defaultUserRbacContext} from "../../shared/context/Rbac/RbacContext.test
 import {readPermissionDto, updatePermissionDto} from "../../shared/models/entity/permission/permissionEntity.test.data";
 import {defaultResourceMetadataDto} from "../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
 import {defaultTagDto} from "../../shared/models/entity/tag/tagEntity.test.data";
+import {resourceAllTypesDtosCollection, resourceAllTypesDtosCollectionAndVariousPermission} from "../../shared/models/entity/resource/resourcesCollection.test.data";
 
 export function defaultAppContext(appContext) {
   const folders = [
@@ -158,6 +159,30 @@ export function resourceWorkspaceContextWithSelectedResourceIOwn(data = {}) {
     details: {
       resource: defaultResourceDto(),
     },
+    ...data
+  });
+}
+
+/**
+ * Returns the resource workspace context data with a set of selected resources I own.
+ * @param {object} data Override the default context.
+ * @returns {object}
+ */
+export function resourceWorkspaceContextWithSelectedResourcesIOwn(data = {}) {
+  return defaultResourceWorkspaceContext({
+    selectedResources: resourceAllTypesDtosCollection(),
+    ...data
+  });
+}
+
+/**
+ * Returns the resource workspace context data with a set of selected resources I own.
+ * @param {object} data Override the default context.
+ * @returns {object}
+ */
+export function resourceWorkspaceContextWithSelectedResourcesAndVariousPermission(data = {}) {
+  return defaultResourceWorkspaceContext({
+    selectedResources: resourceAllTypesDtosCollectionAndVariousPermission(),
     ...data
   });
 }
