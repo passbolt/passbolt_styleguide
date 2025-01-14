@@ -12,7 +12,6 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {
@@ -30,6 +29,8 @@ import {formatDateTimeAgo, formatExpirationDateTimeAgo} from "../../../../shared
 import AttentionSVG from "../../../../img/svg/attention.svg";
 import ShareFolderSVG from "../../../../img/svg/share_folder.svg";
 import FolderSVG from "../../../../img/svg/folder.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 class DisplayResourceDetailsInformation extends React.Component {
   /**
@@ -272,11 +273,9 @@ class DisplayResourceDetailsInformation extends React.Component {
                 <Trans>Information</Trans>
                 {canUsePasswordExpiry && this.isAttentionRequired && <AttentionSVG className="attention-required"/>}
               </span>
-              {this.state.open &&
-              <Icon name="caret-down"/>
-              }
-              {!this.state.open &&
-              <Icon name="caret-right"/>
+              {this.state.open
+                ? <CaretDownSVG/>
+                : <CaretRightSVG/>
               }
             </button>
           </h4>
@@ -303,9 +302,9 @@ class DisplayResourceDetailsInformation extends React.Component {
               }
             </div>
             <div className="information-value">
-              <span className="created value">{createdDateTimeAgo}</span>
+              <span className="created value" title={this.resource.created}>{createdDateTimeAgo}</span>
               <span className="created-by value">{creatorUsername}</span>
-              <span className="modified value">{modifiedDateTimeAgo}</span>
+              <span className="modified value" title={this.resource.modified}>{modifiedDateTimeAgo}</span>
               <span className="modified-by value">{modifierUsername}</span>
               {canUseFolders &&
                 <span className="location value">
