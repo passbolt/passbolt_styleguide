@@ -7,6 +7,18 @@
   display: flex;
   flex-direction: column;
 
+  &.group {
+    .sidebar-header {
+      border-bottom: .1rem solid var(--Workspace-Dividers);
+      .teaser-image {
+          svg {
+            width: 5.6rem;
+            height: 5.6rem;
+        }
+      }
+    }
+  }
+
   &.empty {
     display: flex;
     flex-direction: column;
@@ -84,7 +96,7 @@
       border-radius: 50%;
       width: 5.6rem;
       height: 5.6rem;
-
+      
       svg {
         width: 3.3rem;
         height: 3.3rem;
@@ -129,7 +141,6 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: .8rem;
     flex: 1 0 0;
     align-self: stretch;
     overflow-y: scroll;
@@ -137,7 +148,6 @@
     .sidebar-section {
       border-bottom: .1rem solid var(--Workspace-Dividers);
       display: flex;
-      padding-bottom: .8rem;
       flex-direction: column;
       align-items: flex-start;
       align-self: stretch;
@@ -183,9 +193,9 @@
 
       .accordion-content {
         display: flex;
-        padding: 1.6rem;
-        gap: 1.6rem;
+        padding: 1.6rem 1.6rem 2.4rem 1.6rem;
         align-self: stretch;
+        gap: 1.6rem;
 
         .information-label {
           max-width: calc(50% - .8rem);
@@ -293,9 +303,7 @@
       }
     }
 
-    .detailed-permission {
-      padding-bottom: 0;
-
+    .detailed-permission,  .detailed-members {
       .accordion-content {
         flex-direction: column;
         gap: 0;
