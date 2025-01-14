@@ -211,7 +211,7 @@ class DisplayResourceDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> created item <span className="item">{{resourceName}}</span>
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo third-level light">{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
@@ -238,7 +238,7 @@ class DisplayResourceDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> updated item <span className="item">{{resourceName}}</span>
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo third-level light">{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
@@ -265,7 +265,7 @@ class DisplayResourceDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> accessed secret of item <span className="item">{{resourceName}}</span>
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo third-level light">{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
@@ -292,7 +292,7 @@ class DisplayResourceDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> updated secret of item <span className="item">{{resourceName}}</span>
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo third-level light">{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
@@ -352,7 +352,7 @@ class DisplayResourceDetailsActivity extends React.Component {
               {activity.data.permissions.updated.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "updated"))}
               {activity.data.permissions.removed.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "removed"))}
             </ul>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo third-level light">{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>

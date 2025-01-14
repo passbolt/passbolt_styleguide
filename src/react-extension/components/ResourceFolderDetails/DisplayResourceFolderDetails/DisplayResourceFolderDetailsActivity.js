@@ -279,7 +279,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> changed permissions of folder <span className="item">{{folderName}}</span> with
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo third-level light">{activityFormattedDate}</div>
             <ul className="permissions-list">
               {activity.data.permissions.added.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "created"))}
               {activity.data.permissions.updated.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "updated"))}

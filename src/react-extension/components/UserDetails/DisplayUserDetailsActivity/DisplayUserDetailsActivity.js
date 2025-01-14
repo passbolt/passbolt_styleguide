@@ -189,7 +189,7 @@ class DisplayUserDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> requested an account recovery
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo third-level light">{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>

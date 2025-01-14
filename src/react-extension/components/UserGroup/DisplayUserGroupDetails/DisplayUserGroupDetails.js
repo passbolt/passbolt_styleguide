@@ -92,29 +92,29 @@ class DisplayUserGroupDetails extends React.Component {
   render() {
     return (
       <div className="panel aside ready">
-        <div className="sidebar user">
+        <div className="sidebar group">
           <div className="sidebar-header">
             <div className="teaser-image">
               <GroupAvatar group={this.group}/>
             </div>
-            <h3>
-              <div className="title-wrapper">
-                <span className="name sidebar-header-title">{this.group.name}</span>
-                <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this group")} onClick={this.handlePermalinkClick}>
-                  <Icon name="link"/>
-                  <span className="visuallyhidden"><Trans>Copy the link to this group</Trans></span>
-                </button>
-              </div>
-              <span className="subtitle"><Trans>Group</Trans></span>
-            </h3>
-            <button type="button" className="dialog-close button-transparent" onClick={this.handleCloseClick}>
-              <Icon name="close"/>
-              <span className="visuallyhidden"><Trans>Close</Trans></span>
-            </button>
+            <div className="title-area">
+              <h3>
+                <div className="title-wrapper">
+                  <span className="name sidebar-header-title">{this.group.name}</span>
+                </div>
+                <span className="subtitle"><Trans>Group</Trans></span>
+              </h3>
+              <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this group")} onClick={this.handlePermalinkClick}>
+                <Icon name="link"/>
+                <span className="visuallyhidden"><Trans>Copy the link to this group</Trans></span>
+              </button>
+            </div>
+          </div>
+          <div className="sidebar-content">
+            <DisplayUserGroupDetailsInformation/>
+            <DisplayUserGroupDetailsMembers/>
           </div>
         </div>
-        <DisplayUserGroupDetailsInformation/>
-        <DisplayUserGroupDetailsMembers/>
       </div>
     );
   }
