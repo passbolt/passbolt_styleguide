@@ -17,7 +17,6 @@
  */
 import React from 'react';
 import {
-  defaultContext,
   propsWithGroupDetails,
   propsWithoutLock,
   propsWithUserDetails
@@ -42,11 +41,10 @@ beforeEach(() => {
 
 describe("Display User Workspace", () => {
   let page; // The page to test against
-  const context = defaultContext(); // The applicative context
 
   it('As LU, I should see the user details area if the area is locked and the details is on an user', async() => {
     expect.assertions(2);
-    page = new DisplayUserWorkspacePage(context, propsWithUserDetails());
+    page = new DisplayUserWorkspacePage(propsWithUserDetails());
     await waitFor(() => {});
     expect(page.isGridDisplayed).toBeTruthy();
     expect(page.hasUserDetails).toBeTruthy();
@@ -54,7 +52,7 @@ describe("Display User Workspace", () => {
 
   it('As LU, I should see the user group details area if the area is locked and the details is on an user group', async() => {
     expect.assertions(2);
-    page = new DisplayUserWorkspacePage(context, propsWithGroupDetails());
+    page = new DisplayUserWorkspacePage(propsWithGroupDetails());
     await waitFor(() => {});
     expect(page.isGridDisplayed).toBeTruthy();
     expect(page.hasUserGroupDetails).toBeTruthy();
@@ -62,7 +60,7 @@ describe("Display User Workspace", () => {
 
   it('As LU, I should not see any details area if the area is not locked', async() => {
     expect.assertions(3);
-    page = new DisplayUserWorkspacePage(context, propsWithoutLock());
+    page = new DisplayUserWorkspacePage(propsWithoutLock());
     await waitFor(() => {});
     expect(page.isGridDisplayed).toBeTruthy();
     expect(page.hasUserDetails).toBeFalsy();
@@ -73,8 +71,17 @@ describe("Display User Workspace", () => {
     expect.assertions(1);
     const props = propsWithUserDetails();
     props.userWorkspaceContext.isAccessAllowed = () => false;
-    page = new DisplayUserWorkspacePage(context, props);
+    page = new DisplayUserWorkspacePage(props);
     await waitFor(() => {});
     expect(page.isGridDisplayed).toBeFalsy();
+  });
+
+  it('As LU, I should go back on the resource workspace', async() => {
+    expect.assertions(1);
+    const props = propsWithUserDetails();
+    page = new DisplayUserWorkspacePage(props);
+    await waitFor(() => {});
+    await page.goBack();
+    expect(props.history.push).toHaveBeenCalledWith({pathname: `/app/passwords`});
   });
 });
