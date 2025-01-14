@@ -25,6 +25,8 @@ import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import FolderSVG from "../../../../img/svg/folder.svg";
 import LinkSVG from "../../../../img/svg/link.svg";
+import Tabs from "../../Common/Tab/Tabs";
+import Tab from "../../Common/Tab/Tab";
 
 class DisplayResourceFolderDetails extends React.Component {
   /**
@@ -62,12 +64,30 @@ class DisplayResourceFolderDetails extends React.Component {
   }
 
   /**
+   * Renders the "Details" section tab of a folder.
+   * @returns {JSX}
+   */
+  renderFolderDetail() {
+    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
+
+    return (
+      <>
+        <DisplayResourceFolderDetailsInformation/>
+        {canViewShare &&
+          <DisplayResourceFolderDetailsPermissions/>
+        }
+      </>
+    );
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
-    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_FOLDER);
-    const canUseAuditLog = this.props.context.siteSettings.canIUse("auditLog");
+    const canUseAuditLog = (this.props.context.siteSettings.canIUse("auditLog")
+    || this.props.context.siteSettings.canIUse("audit_log")) // @deprecated remove with v4
+    && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_ACTIVITIES);
 
     return (
       <div className="sidebar resource">
@@ -89,12 +109,16 @@ class DisplayResourceFolderDetails extends React.Component {
           </div>
         </div>
         <div className="sidebar-content">
-          <DisplayResourceFolderDetailsInformation/>
-          {canViewShare &&
-            <DisplayResourceFolderDetailsPermissions/>
-          }
-          {canUseAuditLog &&
-            <DisplayResourceFolderDetailsActivity/>
+          {!canUseAuditLog
+            ? this.renderFolderDetail()
+            : <Tabs activeTabName='Details'>
+              <Tab key='Details' name={this.props.t('Details')} type='Details'>
+                {this.renderFolderDetail()}
+              </Tab>
+              <Tab key='Activity' name={this.props.t('Activity')} type='Activity'>
+                <DisplayResourceFolderDetailsActivity />
+              </Tab>
+            </Tabs>
           }
         </div>
       </div>
