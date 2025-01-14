@@ -61,7 +61,7 @@ describe("DisplayResourceDetails", () => {
 
     it('I can copy the resource permalink', async() => {
       const mockContextRequest = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
-      const copyClipboardMockImpl = jest.fn((message, data) => data);
+      const copyClipboardMockImpl = jest.fn((_, data) => data);
       const props = defaultProps(); // The props to pass
       const page = new DisplayResourceDetailsPage(props);
 
