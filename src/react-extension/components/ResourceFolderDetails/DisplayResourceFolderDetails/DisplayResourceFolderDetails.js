@@ -91,7 +91,7 @@ class DisplayResourceFolderDetails extends React.Component {
 
     return (
       <div className="sidebar resource">
-        <div className="sidebar-header">
+        <div className={`sidebar-header ${canUseAuditLog ? "" : "with-separator"}`}>
           <div className="teaser-image">
             <FolderSVG/>
           </div>

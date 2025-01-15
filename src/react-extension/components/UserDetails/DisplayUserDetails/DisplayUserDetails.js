@@ -129,8 +129,8 @@ class DisplayUserDetails extends React.Component {
     return (
       <div className="panel aside ready">
         <div className="sidebar user">
-          <div className={`sidebar-header ${this.isUserSuspended(this.user) ? "suspended" : ""}`}>
-            <div className={`teaser-image  ${this.hasAttentionRequired ? "attention-required" : ""}`}>
+          <div className={`sidebar-header with-separator ${this.isUserSuspended(this.user) ? "suspended" : ""}`}>
+            <div className={`teaser-image ${this.hasAttentionRequired ? "attention-required" : ""}`}>
               <UserAvatar
                 user={this.user}
                 baseUrl={this.baseUrl}

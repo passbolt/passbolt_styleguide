@@ -7,15 +7,10 @@
   display: flex;
   flex-direction: column;
 
-  &.group {
-    .sidebar-header {
-      border-bottom: .1rem solid var(--Workspace-Dividers);
-      .teaser-image {
-          svg {
-            width: 5.6rem;
-            height: 5.6rem;
-        }
-      }
+  &.group .sidebar-header .teaser-image {
+      svg {
+        width: 5.6rem;
+        height: 5.6rem;
     }
   }
 
@@ -40,6 +35,10 @@
     display: flex;
     align-items: center;
     align-self: stretch;
+
+    &.with-separator {
+      border-bottom: .1rem solid var(--Workspace-Dividers);
+    }
 
     .title-area {
       display: flex;
