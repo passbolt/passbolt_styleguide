@@ -15,7 +15,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import EditUser from "../EditUser/EditUser";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -31,13 +30,19 @@ import {withWorkflow} from "../../../contexts/WorkflowContext";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
-import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
 import LinkSVG from "../../../../img/svg/link.svg";
 import SendSVG from "../../../../img/svg/send.svg";
 import FingerprintDisabledSVG from "../../../../img/svg/fingerprint_disabled.svg";
 import BuoySVG from "../../../../img/svg/buoy.svg";
+import CloseSVG from "../../../../img/svg/close.svg";
+import CopySVG from "../../../../img/svg/copy.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import EmailSVG from "../../../../img/svg/email.svg";
+import KeySVG from "../../../../img/svg/key.svg";
+import DeleteSVG from "../../../../img/svg/delete.svg";
+import EditSVG from "../../../../img/svg/edit.svg";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -56,29 +61,22 @@ class DisplayUserWorkspaceActions extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleDetailsLockedEvent = this.handleDetailsLockedEvent.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleDisableMfaEvent = this.handleDisableMfaEvent.bind(this);
     this.handleCopyPermalinkEvent = this.handleCopyPermalinkEvent.bind(this);
+    this.handleCopyEmailClickEvent = this.handleCopyEmailClickEvent.bind(this);
+    this.handleCopyPublicKeyEvent = this.handleCopyPublicKeyEvent.bind(this);
     this.handleResendInviteClickEvent = this.handleResendInviteClickEvent.bind(this);
     this.handleReviewRecoveryRequestEvent = this.handleReviewRecoveryRequestEvent.bind(this);
+    this.handleClearSelectionClick = this.handleClearSelectionClick.bind(this);
   }
 
   /**
    * Returns true if the current user can delete the current selected user
    */
   get canDelete() {
-    const isNotCurrentUser = this.selectedUser && this.props.context.loggedInUser.id !== this.selectedUser.id;
-    return !this.isButtonDisabled() && isNotCurrentUser;
-  }
-
-  /**
-   * Handle view detail click event
-   */
-  handleDetailsLockedEvent() {
-    // lock or unlock the detail resource or folder
-    this.props.userWorkspaceContext.onDetailsLocked();
+    return  this.selectedUser && this.props.context.loggedInUser.id !== this.selectedUser.id;
   }
 
   /**
@@ -89,18 +87,27 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
+   * Handle the will of copying the user email address
+   */
+  async handleCopyEmailClickEvent() {
+    await ClipBoard.copy(this.selectedUser.username, this.props.context.port);
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The email address has been copied to clipboard"));
+  }
+
+  /**
+   * Handle the will of copying the user public key
+   */
+  async handleCopyPublicKeyEvent() {
+    const gpgKeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.selectedUser.id);
+    await ClipBoard.copy(gpgKeyInfo?.armored_key, this.props.context.port);
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The public key has been copied to clipboard"));
+  }
+
+  /**
    * Handle the will of
    */
   handleResendInviteClickEvent() {
     this.resendInvite();
-  }
-
-  /**
-   * Has lock for the detail display
-   * @returns {boolean}
-   */
-  hasDetailsLocked() {
-    return this.props.userWorkspaceContext.details.locked;
   }
 
   /**
@@ -196,53 +203,35 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
-   * Returns true if the current user can copy a user permalink
-   */
-  get canCopyPermalink() {
-    return Boolean(this.selectedUser);
-  }
-
-  /**
    * Can the logged in user use the mfa capability.
    */
   get canIUseMfa() {
-    return this.props.context.siteSettings.canIUse("multiFactorAuthentication");
-  }
-
-  /**
-   * Returns true if the current user can disable the MFA of a user
-   */
-  get canDisableMfaForUser() {
-    return this.selectedUser && this.selectedUser.is_mfa_enabled;
+    return this.hasOneUserSelected()
+      && this.props.context.siteSettings.canIUse("multiFactorAuthentication")
+      && this.selectedUser.is_mfa_enabled;
   }
 
   /**
    * Returns true if the logged in user can use the resend capability.
    */
   get canIUseResend() {
-    return this.isLoggedInUserAdmin();
+    return !this.isActiveUser;
   }
 
   /**
-   * Returns true if the logged in user can resend an invite to the user
+   * Returns true if the selected user is active
    */
-  get canResendInviteToUser() {
-    return this.selectedUser && !this.selectedUser.active;
+  get isActiveUser() {
+    return this.selectedUser?.active;
   }
 
   /**
    * Check if the user can use the review recovery request capability.
    */
-  canIReviewAccountRecoveryRequest() {
-    return this.props.context.siteSettings.canIUse("accountRecovery") && this.isLoggedInUserAdmin();
-  }
-
-  /**
-   * Has a pending account recovery for the user.
-   * @returns {boolean}
-   */
-  hasPendingAccountRecoveryRequest() {
-    return this.selectedUser && Boolean(this.selectedUser.pending_account_recovery_request);
+  get canIReviewAccountRecoveryRequest() {
+    return this.hasOneUserSelected()
+      && this.props.context.siteSettings.canIUse("accountRecovery")
+      && Boolean(this.selectedUser.pending_account_recovery_request);
   }
 
   /**
@@ -251,14 +240,6 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   hasOneUserSelected() {
     return this.props.userWorkspaceContext.selectedUsers.length === 1;
-  }
-
-  /**
-   * Check if the button is disabled.
-   * @returns {boolean}
-   */
-  isButtonDisabled() {
-    return !this.hasOneUserSelected();
   }
 
   /**
@@ -314,6 +295,14 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
+   * Handle the event on the 'close' icon to clear the current selection.
+   * @returns {Promise<void>}
+   */
+  async handleClearSelectionClick() {
+    await this.props.userWorkspaceContext.onUserSelected.none();
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -326,76 +315,94 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const count = this.props.userWorkspaceContext.selectedUsers?.length;
+
     return (
-      <div className="actions-wrapper">
-        <div className="actions">
-          {this.isLoggedInUserAdmin() &&
+      <div className="actions">
+        <div className="actions-wrapper">
           <ul>
-            <li>
-              <button type="button" disabled={this.isButtonDisabled()} onClick={this.handleEditClickEvent}>
-                <Icon name="edit"/>
-                <span><Trans>Edit</Trans></span>
-              </button>
-            </li>
-            <li>
-              <button type="button" disabled={!this.canDelete} onClick={this.handleDeleteClickEvent}>
-                <Icon name="trash"/>
-                <span><Trans>Delete</Trans></span>
-              </button>
-            </li>
-            <li>
-              <Dropdown>
-                <DropdownButton className="more button-action-contextual button-action-icon" disabled={!this.hasMoreActionAllowed}>
-                  <MoreHorizontalSVG/>
-                </DropdownButton>
-                <DropdownMenu className="menu-action-contextual">
-                  <DropdownMenuItem separator={true}>
-                    <button id="copy-user-permalink" type="button" className="no-border" disabled={!this.canCopyPermalink} onClick={this.handleCopyPermalinkEvent}>
-                      <LinkSVG/>
-                      <span><Trans>Copy permalink</Trans></span>
+            {this.hasOneUserSelected() &&
+              <li id="copy-action">
+                <Dropdown>
+                  <DropdownButton className="button-action-contextual">
+                    <CopySVG/>
+                    <Trans>Copy</Trans>
+                    <CaretDownSVG/>
+                  </DropdownButton>
+                  <DropdownMenu className="menu-action-contextual">
+                    <DropdownMenuItem>
+                      <button id="copy-user-email" type="button" className="no-border" onClick={this.handleCopyEmailClickEvent}>
+                        <EmailSVG/>
+                        <span><Trans>Copy email address</Trans></span>
+                      </button>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <button id="copy-user-permalink" type="button" className="no-border" onClick={this.handleCopyPermalinkEvent}>
+                        <LinkSVG/>
+                        <span><Trans>Copy permalink</Trans></span>
+                      </button>
+                    </DropdownMenuItem>
+                    {this.isActiveUser &&
+                      <DropdownMenuItem>
+                        <button id="copy-user-public-key" type="button" className="no-border" onClick={this.handleCopyPublicKeyEvent}>
+                          <KeySVG/>
+                          <span><Trans>Copy public key</Trans></span>
+                        </button>
+                      </DropdownMenuItem>
+                    }
+                  </DropdownMenu>
+                </Dropdown>
+              </li>
+            }
+            {this.isLoggedInUserAdmin() &&
+              <>
+                {this.hasOneUserSelected() &&
+                  <li>
+                    <button id="edit-user" type="button" className="button-action-contextual" onClick={this.handleEditClickEvent}>
+                      <EditSVG/>
+                      <span><Trans>Edit</Trans></span>
                     </button>
-                  </DropdownMenuItem>
-                  {this.canIUseResend &&
-                    <DropdownMenuItem>
-                      <button id="resend-invite-user" type="button" className="no-border" disabled={!this.canResendInviteToUser} onClick={this.handleResendInviteClickEvent}>
-                        <SendSVG/>
-                        <span><Trans>Resend invite</Trans></span>
-                      </button>
-                    </DropdownMenuItem>
-                  }
-                  {this.canIUseMfa &&
-                    <DropdownMenuItem>
-                      <button id="disable-mfa-action" type="button" className="no-border" disabled={!this.canDisableMfaForUser} onClick={this.handleDisableMfaEvent}>
-                        <FingerprintDisabledSVG/>
-                        <span><Trans>Disable MFA</Trans></span>
-                      </button>
-                    </DropdownMenuItem>
-                  }
-                  {this.canIReviewAccountRecoveryRequest() &&
-                    <DropdownMenuItem>
-                      <button id="review-recovery" type="button" className="no-border" disabled={!this.hasPendingAccountRecoveryRequest()} onClick={this.handleReviewRecoveryRequestEvent}>
-                        <BuoySVG/>
-                        <span><Trans>Review recovery request</Trans></span>
-                      </button>
-                    </DropdownMenuItem>
-                  }
-                </DropdownMenu>
-              </Dropdown>
-            </li>
+                  </li>
+                }
+                {this.canDelete &&
+                  <li>
+                    <button id="delete-user" type="button" className="button-action-contextual" onClick={this.handleDeleteClickEvent}>
+                      <DeleteSVG/>
+                      <span><Trans>Delete</Trans></span>
+                    </button>
+                  </li>
+                }
+                {this.canIUseResend &&
+                  <li>
+                    <button id="resend-invite-user" className="button-action-contextual" type="button" onClick={this.handleResendInviteClickEvent}>
+                      <SendSVG/>
+                      <span><Trans>Resend invite</Trans></span>
+                    </button>
+                  </li>
+                }
+                {this.canIUseMfa &&
+                  <li>
+                    <button id="disable-mfa-action" className="button-action-contextual" type="button" onClick={this.handleDisableMfaEvent}>
+                      <FingerprintDisabledSVG/>
+                      <span><Trans>Disable MFA</Trans></span>
+                    </button>
+                  </li>
+                }
+                {this.canIReviewAccountRecoveryRequest &&
+                  <li>
+                    <button id="review-recovery" className="button-action-contextual" type="button" onClick={this.handleReviewRecoveryRequestEvent}>
+                      <BuoySVG/>
+                      <span><Trans>Review recovery request</Trans></span>
+                    </button>
+                  </li>
+                }
+              </>
+            }
           </ul>
-          }
-        </div>
-        <div className="actions secondary">
-          <ul>
-            <li>
-              <button type="button"
-                className={`button-toggle button-action button-action-icon info ${this.hasDetailsLocked() ? "active" : ""}`}
-                onClick={this.handleDetailsLockedEvent}>
-                <Icon name="info-circle" big={true}/>
-                <span className="visuallyhidden"><Trans>View detail</Trans></span>
-              </button>
-            </li>
-          </ul>
+          <span className="counter"><Trans count={count}>{{count}} selected</Trans></span>
+          <button type="button" className="button-transparent inline" onClick={this.handleClearSelectionClick}>
+            <CloseSVG/>
+          </button>
         </div>
       </div>
     );

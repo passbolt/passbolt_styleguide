@@ -13,6 +13,7 @@
  */
 
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContext.test.data";
 
 /**
  * Props with user details
@@ -20,13 +21,13 @@ import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 export function propsWithUserDetails() {
   return {
     context: defaultAppContext(),
-    userWorkspaceContext: {
+    userWorkspaceContext: defaultUserWorkspaceContext({
       details: {
         user: 'some user',
         locked: true
       },
       isAccessAllowed: () => true,
-    },
+    }),
     history: {
       push: jest.fn(),
     }

@@ -43,8 +43,10 @@ export function defaultProps(data = {}) {
  */
 export function defaultUserWorkspaceContext(data = {}) {
   const _default = {
+    onDetailsLocked: jest.fn(),
     onUserSelected: {
-      single: jest.fn()
+      single: jest.fn(),
+      none: jest.fn()
     },
     filter: UserWorkspaceFilterTypes.ALL,
     shouldDisplaySuspendedUsersFilter: () => true

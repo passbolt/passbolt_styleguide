@@ -31,6 +31,7 @@ import FilterUsersByBreadcrumb from "../FilterUsersByBreadcrumb/FilterUsersByBre
 import HandleReviewAccountRecoveryRequestRoute from "../HandleReviewAccountRecoveryRequestRoute/HandleReviewAccountRecoveryRequestRoute";
 import DisplayHttpError from '../../Common/Error/DisplayHttpError/DisplayHttpError';
 import ArrowLeftSVG from "../../../../img/svg/arrow_left.svg";
+import InfoSVG from "../../../../img/svg/info.svg";
 import {Trans} from "react-i18next";
 
 /**
@@ -52,6 +53,7 @@ class DisplayUserWorkspace extends React.Component {
    */
   bindCallbacks() {
     this.handleGoBack = this.handleGoBack.bind(this);
+    this.handleDetailsLockedEvent = this.handleDetailsLockedEvent.bind(this);
   }
 
   /**
@@ -85,6 +87,22 @@ class DisplayUserWorkspace extends React.Component {
    */
   handleGoBack() {
     this.props.history.push({pathname: `/app/passwords`});
+  }
+
+  /**
+   * Has lock for the detail display
+   * @returns {boolean}
+   */
+  hasDetailsLocked() {
+    return this.props.userWorkspaceContext.details.locked;
+  }
+
+  /**
+   * Handle view detail click event
+   */
+  handleDetailsLockedEvent() {
+    // lock or unlock the detail resource or folder
+    this.props.userWorkspaceContext.onDetailsLocked();
   }
 
   /**
@@ -132,7 +150,18 @@ class DisplayUserWorkspace extends React.Component {
                     <div className="top-bar">
                       <FilterUsersByBreadcrumb/>
                       <div className="action-bar">
-                        <DisplayUserWorkspaceActions/>
+                        {this.props.userWorkspaceContext.selectedUsers?.length > 0
+                          ? <DisplayUserWorkspaceActions/>
+                          : <div className="actions"></div>
+                        }
+                        <div className="actions-secondary">
+                          <button type="button"
+                            className={`button-toggle button-action button-action-icon info ${this.hasDetailsLocked() ? "active" : ""}`}
+                            onClick={this.handleDetailsLockedEvent}>
+                            <InfoSVG/>
+                            <span className="visuallyhidden"><Trans>View detail</Trans></span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                     <DisplayUsers/>

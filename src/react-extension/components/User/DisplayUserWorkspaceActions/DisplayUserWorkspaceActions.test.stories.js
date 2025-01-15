@@ -15,9 +15,8 @@
 import React from "react";
 import DisplayUserWorkspaceActions from "./DisplayUserWorkspaceActions";
 import {
-  defaultAppContext,
-  propsWithSelectedUser,
-  propsWithSelectedUserTemporaryHasPendingAccountRecovery
+  propsUserRole, propsWithMyselfAsSelectedUser,
+  propsWithSelectedUser
 } from "./DisplayUserWorkspaceActions.test.data";
 
 
@@ -43,22 +42,14 @@ export default {
   component: DisplayUserWorkspaceActions
 };
 
-export const AdminWithoutReviewRecovery = {
-  args:  Object.assign(propsWithSelectedUser(), {context: defaultAppContext()})
+export const Admin = {
+  args:  propsWithSelectedUser()
 };
 
-export const AdminWithReviewRecovery = {
-  args: Object.assign(propsWithSelectedUserTemporaryHasPendingAccountRecovery(), {context: defaultAppContext()})
+export const AdminSelected = {
+  args: propsWithMyselfAsSelectedUser()
 };
 
-
-const userRole = {
-  loggedInUser: {
-    role: {
-      name: 'user'
-    }
-  },
-};
 export const User = {
-  args: Object.assign(propsWithSelectedUser, {context: defaultAppContext(userRole)})
+  args: propsUserRole()
 };

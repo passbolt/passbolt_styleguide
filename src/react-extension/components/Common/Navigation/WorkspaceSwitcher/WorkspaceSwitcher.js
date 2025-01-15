@@ -53,7 +53,7 @@ class WorkspaceSwitcher extends React.PureComponent {
             </DropdownMenu>
           </Dropdown>
           :
-          <button type="button" className="no-border button-transparent">
+          <button type="button" className="button-transparent" onClick={this.props.navigationContext.onGoToUsersRequested}>
             <UsersSVG/>
           </button>
         }

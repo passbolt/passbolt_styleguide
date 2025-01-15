@@ -84,4 +84,14 @@ describe("Display User Workspace", () => {
     await page.goBack();
     expect(props.history.push).toHaveBeenCalledWith({pathname: `/app/passwords`});
   });
+
+  it('AS LU I should lock / unlock the display of the details area', async() => {
+    expect.assertions(1);
+    const props =  propsWithUserDetails();
+    page = new DisplayUserWorkspacePage(props);
+    await waitFor(() => {});
+
+    await page.lockDetails();
+    expect(props.userWorkspaceContext.onDetailsLocked).toHaveBeenCalled();
+  });
 });

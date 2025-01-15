@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {MemoryRouter} from "react-router-dom";
+import {MemoryRouter, Route} from "react-router-dom";
 import DisplayUserWorkspace from "./DisplayUserWorkspace";
 import ManageContextualMenu from "../../Common/ContextualMenu/ManageContextualMenu";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
@@ -44,17 +44,25 @@ const Template = ({...args}) =>
         <DialogContextProvider>
           <NavigationContextProvider>
             <ContextualMenuContextProvider>
-              <UserWorkspaceContextProvider>
-                <ManageDialogs/>
-                <ManageWorkflows/>
-                <ManageContextualMenu/>
-                <ManageAnnouncements/>
-                <div id="container" className="page user">
-                  <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
-                    <DisplayUserWorkspace/>
+              <Route path={[
+                "/app/account-recovery/requests/review/:accountRecoveryRequestId",
+                "/app/groups/view/:selectedGroupId",
+                "/app/groups/edit/:selectedGroupId",
+                "/app/users/view/:selectedUserId",
+                "/app/users",
+              ]}>
+                <UserWorkspaceContextProvider>
+                  <ManageDialogs/>
+                  <ManageWorkflows/>
+                  <ManageContextualMenu/>
+                  <ManageAnnouncements/>
+                  <div id="container" className="page user">
+                    <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
+                      <DisplayUserWorkspace/>
+                    </div>
                   </div>
-                </div>
-              </UserWorkspaceContextProvider>
+                </UserWorkspaceContextProvider>
+              </Route>
             </ContextualMenuContextProvider>
           </NavigationContextProvider>
         </DialogContextProvider>
