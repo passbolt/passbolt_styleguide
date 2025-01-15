@@ -391,7 +391,8 @@ class DisplayResourcesListContextualMenu extends React.Component {
       <ContextualMenuWrapper
         hide={this.props.hide}
         left={this.props.left}
-        top={this.props.top}>
+        top={this.props.top}
+        className="floating">
 
         {
           !this.isStandaloneTotpResource &&  <li key="option-username-resource" className="ready">
