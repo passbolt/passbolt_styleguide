@@ -78,6 +78,13 @@ describe("MetadataKeyEntity", () => {
       assertEntityProperty.nullable(MetadataKeyEntity, "deleted");
     });
 
+    it("validates expired property", () => {
+      assertEntityProperty.string(MetadataKeyEntity, "expired");
+      assertEntityProperty.dateTime(MetadataKeyEntity, "expired");
+      assertEntityProperty.notRequired(MetadataKeyEntity, "expired");
+      assertEntityProperty.nullable(MetadataKeyEntity, "expired");
+    });
+
     it("validates metadata_private_keys property", () => {
       const metadataKeyDto = defaultMetadataKeyDto();
       const successScenarios = [
@@ -92,7 +99,7 @@ describe("MetadataKeyEntity", () => {
 
   describe("::constructor", () => {
     it("constructor works if valid minimal DTO is provided", () => {
-      expect.assertions(9);
+      expect.assertions(10);
       const dto = minimalMetadataKeyDto();
       const entity = new MetadataKeyEntity(dto);
 
@@ -104,11 +111,12 @@ describe("MetadataKeyEntity", () => {
       expect(entity._props.modified).toBeUndefined();
       expect(entity._props.modified_by).toBeUndefined();
       expect(entity._props.deleted).toBeUndefined();
+      expect(entity._props.expired).toBeUndefined();
       expect(entity._props.metadata_private_keys).toBeUndefined();
     });
 
     it("constructor works if valid DTO is provided", () => {
-      expect.assertions(10);
+      expect.assertions(11);
       const dto = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true});
       const entity = new MetadataKeyEntity(dto);
 
@@ -120,6 +128,7 @@ describe("MetadataKeyEntity", () => {
       expect(entity._props.modified).toStrictEqual(dto.modified);
       expect(entity._props.modified_by).toStrictEqual(dto.modified_by);
       expect(entity._props.deleted).toStrictEqual(dto.deleted);
+      expect(entity._props.expired).toStrictEqual(dto.expired);
       expect(entity._props.metadata_private_keys).toBeUndefined();
       expect(entity._metadata_private_keys).toStrictEqual(new MetadataPrivateKeysCollection(dto.metadata_private_keys));
     });
@@ -172,6 +181,27 @@ describe("MetadataKeyEntity", () => {
       const entity1 = new MetadataKeyEntity(dto1);
 
       expect(entity1.armoredKey).toStrictEqual(armoredKey);
+    });
+
+    it("`fingerprint` should return the right value", () => {
+      expect.assertions(1);
+      const dto1 = minimalMetadataKeyDto();
+      const entity1 = new MetadataKeyEntity(dto1);
+
+      expect(entity1.fingerprint).toStrictEqual(dto1.fingerprint);
+    });
+
+    it("`expired` should return the right value", () => {
+      expect.assertions(3);
+      const dto1 = minimalMetadataKeyDto();
+      const entity1 = new MetadataKeyEntity(dto1);
+      expect(entity1.expired).toBeNull();
+      const dto2 = minimalMetadataKeyDto({expired: null});
+      const entity2 = new MetadataKeyEntity(dto2);
+      expect(entity2.expired).toBeNull();
+      const dto3 = minimalMetadataKeyDto({expired: "2022-10-11T08:09:00+00:00"});
+      const entity3 = new MetadataKeyEntity(dto3);
+      expect(entity3.expired).toStrictEqual(dto3.expired);
     });
   });
   describe("::dtDto", () => {

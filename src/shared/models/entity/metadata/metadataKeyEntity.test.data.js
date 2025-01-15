@@ -24,7 +24,7 @@ import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data
  */
 export const minimalMetadataKeyDto = (data = {}, options = {}) => {
   const defaultData = {
-    fingerprint: "abcd".repeat(10),
+    fingerprint: Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16).toUpperCase()).join(''),
     armored_key: defaultArmoredPublicKey(),
     ...data
   };
@@ -52,6 +52,7 @@ export const defaultMetadataKeyDto = (data = {}, options = {}) => {
     created: "2022-10-11T08:09:00+00:00",
     modified_by: uuidv4(),
     deleted: null,
+    expired: null,
     ...data,
   };
 
