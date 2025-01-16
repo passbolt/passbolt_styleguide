@@ -24,7 +24,7 @@ import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data
  */
 export const minimalMetadataKeyDto = (data = {}, options = {}) => {
   const defaultData = {
-    fingerprint: Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16).toUpperCase()).join(''),
+    fingerprint: Array.from({length: 40}, () => Math.floor(Math.random() * 16).toString(16).toUpperCase()).join(''),
     armored_key: defaultArmoredPublicKey(),
     ...data
   };

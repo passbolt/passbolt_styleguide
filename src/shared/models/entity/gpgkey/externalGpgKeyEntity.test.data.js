@@ -79,8 +79,44 @@ export const bettyExternalPublicGpgKeyEntityDto = (data = {}) => {
     "algorithm": pgpKeys.betty.algorithm?.toLowerCase(),
     "length": pgpKeys.betty.length,
     "curve": pgpKeys.betty.curve,
-    "private": true,
+    "private": false,
     "revoked": pgpKeys.betty.revoked
+  };
+
+  return Object.assign(defaultData, data);
+};
+
+export const caroleExternalPublicGpgKeyEntityDto = (data = {}) => {
+  const defaultData = {
+    armored_key: pgpKeys.carol.public,
+    key_id: pgpKeys.carol.key_id,
+    user_ids: pgpKeys.carol.user_ids,
+    fingerprint: pgpKeys.carol.fingerprint,
+    expires: 'Infinity',
+    created: pgpKeys.carol.created,
+    algorithm: pgpKeys.carol.algorithm?.toLowerCase(),
+    length: pgpKeys.carol.length,
+    curve: pgpKeys.carol.curve,
+    private: false,
+    revoked: pgpKeys.carol.revoked,
+  };
+
+  return Object.assign(defaultData, data);
+};
+
+export const ed25519ExternalPublicGpgKeyEntityDto = (data = {}) => {
+  const defaultData = {
+    armored_key: pgpKeys.eddsa_ed25519.public,
+    key_id: pgpKeys.eddsa_ed25519.key_id,
+    user_ids: pgpKeys.eddsa_ed25519.user_ids,
+    fingerprint: pgpKeys.eddsa_ed25519.fingerprint,
+    expires: 'Infinity',
+    created: pgpKeys.eddsa_ed25519.created,
+    algorithm: pgpKeys.eddsa_ed25519.algorithm?.toLowerCase(),
+    length: pgpKeys.eddsa_ed25519.length,
+    curve: pgpKeys.eddsa_ed25519.curve,
+    private: false,
+    revoked: pgpKeys.eddsa_ed25519.revoked,
   };
 
   return Object.assign(defaultData, data);

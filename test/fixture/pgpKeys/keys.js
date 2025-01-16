@@ -59,6 +59,12 @@ exports.pgpKeys = {
       email: "betty@passbolt.com",
       name: "Betty Holberton",
     }],
+    length: 4096,
+    expires: "Infinity",
+    created: "2015-08-09T14:29:12.000Z",
+    algorithm: "RSA",
+    curve: null,
+    revoked: false
   },
   carol: {
     userId: "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
@@ -72,6 +78,10 @@ exports.pgpKeys = {
       email: "carl@passbolt.com",
       name: "Carol Shaw",
     }],
+    expires: "Infinity",
+    created: "2016-09-07T13:13:42.000Z",
+    algorithm: "RSA",
+    curve: null,
   },
   account_recovery_organization: {
     fingerprint: "28FBD1034880416B2B8CA75A289BCE03F3C0893F",
