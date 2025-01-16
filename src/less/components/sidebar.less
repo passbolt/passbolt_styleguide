@@ -7,10 +7,16 @@
   display: flex;
   flex-direction: column;
 
-  &.group .sidebar-header .teaser-image {
-      svg {
-        width: 5.6rem;
-        height: 5.6rem;
+  &.group, &.user {
+    .sidebar-header {
+      border-bottom: .1rem solid var(--Workspace-Dividers);
+      .teaser-image {
+        svg:not(.attention-required) {
+          width: 5.6rem;
+          height: 5.6rem;
+          margin-top: 0;
+      }
+    }  
     }
   }
 
@@ -96,18 +102,12 @@
       width: 5.6rem;
       height: 5.6rem;
 
-      svg {
+      svg:not(.attention-required) {
         width: 3.3rem;
         height: 3.3rem;
         margin-top: 0.15rem;
         --icon-color: var(--Resource-icon-Resource-icon-color);
         --icon-background-color: none;
-
-        &.attention-required {
-          height: 1.2rem;
-          margin-top: 2.6rem;
-          margin-left: 3rem;
-        }
       }
     }
 
@@ -195,6 +195,7 @@
         padding: 1.6rem 1.6rem 2.4rem 1.6rem;
         align-self: stretch;
         gap: 1.6rem;
+        font-size: 1.4rem;
 
         .information-label {
           max-width: calc(50% - .8rem);
@@ -302,7 +303,7 @@
       }
     }
 
-    .detailed-permission,  .detailed-members {
+    .detailed-permission,  .detailed-members, .detailed-user-groups {
       .accordion-content {
         flex-direction: column;
         gap: 0;
@@ -374,18 +375,17 @@
     }
 
     .detailed-account-recovery {
-      li {
-        display: flex;
-        align-items: baseline;
-        margin-bottom: .8rem;
-
-        .label {
-          width: 45%;
-          margin-right: 5%;
+      .accordion-content {
+        flex-direction: column;
+        .account-recovery-details {
+          display: flex;
+          align-self: stretch;
+          gap: 1.6rem;
+          font-size: 1.4rem;
         }
-
-        .value {
-          width: 50%;
+        button {
+          justify-self: center;
+          align-self: center;
         }
       }
     }
@@ -407,46 +407,21 @@
     }
 
     .key-information {
-      .fingerprint .value {
-        height: 4rem;
-      }
-
-      textarea {
-        min-height: 40rem;
-        line-height: normal;
-        margin-top: 0.8rem;
-        width: 100%;
-        box-sizing: border-box;
-      }
-
-      li {
-        span {
-          .ellipsis();
-        }
-
-        .label {
-          width: 30%;
-          display: inline-block;
-          margin-right: 10%;
-          height: 1.8em;
-        }
-
-        .value {
-          width: 60%;
-          display: inline-block;
-          height: 1.8em;
-        }
-
-        &.key {
-          button.copy-public-key {
-            height: 2.5rem;
-
-            svg {
-              width: inherit;
-              height: inherit;
+      .accordion-content {
+          .information-label {
+            max-width: calc(35% - .8rem);
+            .fingerprint.label {
+              white-space: break-spaces;
             }
           }
-        }
+          .fingerprint.label, .fingerprint.value  {
+            display: block;
+            height: 3.5rem;
+          }
+          .fingerprint.value {
+            font-family: Inconsolata;
+            font-size: 16px;
+          }
       }
     }
 

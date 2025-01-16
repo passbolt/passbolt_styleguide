@@ -11,18 +11,18 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import DisplayEmptyDetailsPage from "./DisplayEmptyDetails.test.page";
+import DisplayUserWorkspaceEmptyDetailsPage from "./DisplayUserWorkspaceEmptyDetails.test.page";
 
 /**
- * Unit tests on DisplayEmptyDetails in regard of specifications
+ * Unit tests on DisplayUserWorkspaceEmptyDetails in regard of specifications
  */
-describe("DisplayEmptyDetails", () => {
+describe("DisplayUserWorkspaceEmptyDetails", () => {
   it('As LU I see the empty sidebar with its content', () => {
     expect.assertions(2);
 
-    const page = new DisplayEmptyDetailsPage();
+    const page = new DisplayUserWorkspaceEmptyDetailsPage();
 
     expect(page.exists()).toStrictEqual(true);
-    expect(page.content).toStrictEqual("Select a resource or a folder to see the details.");
+    expect(page.content).toStrictEqual("Select a user or a group to see the details.");
   });
 });

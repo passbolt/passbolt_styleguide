@@ -34,6 +34,7 @@ jest.mock("../../UserDetails/DisplayUserDetails/DisplayUserDetails", () => () =>
 jest.mock("../DisplayUserWorkspaceActions/DisplayUserWorkspaceActions", () => () => <></>);
 jest.mock("../../Common/Navigation/Header/Logo");
 jest.mock("../DisplayUserBadgeMenu/DisplayUserBadgeMenu", () => () => <></>);
+jest.mock("../../Common/Footer/Footer", () => () => <span className="footer"></span>);
 
 beforeEach(() => {
   jest.resetModules();

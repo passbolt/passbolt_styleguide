@@ -14,7 +14,6 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../shared/components/Icons/Icon";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
@@ -23,6 +22,10 @@ import HandleReviewAccountRecoveryRequestWorkflow
   from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
 import {withWorkflow} from "../../../contexts/WorkflowContext";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import TriangleAlertSVG from "../../../../img/svg/triangle_alert.svg";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 /**
  * This component displays the user details about information
@@ -183,17 +186,18 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClicked}>
-              <span>
+              <span className="accordion-title">
                 <Trans>Account recovery</Trans>
                 {this.isAccountRecoveryPending &&
-                  <Icon name="exclamation" baseline={true}/>
+                  <AttentionSVG className="attention-required"/>
                 }
               </span>
-              {this.state.open && <Icon name="caret-down"/>}
-              {!this.state.open && <Icon name="caret-right"/>}
+              {this.state.open && <CaretDownSVG/>}
+              {!this.state.open && <CaretRightSVG/>}
             </button>
           </h4>
         </div>
+        {this.state.open &&
         <div className="accordion-content">
           {this.state.loading &&
           <div className="processing-wrapper">
@@ -202,25 +206,30 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
           </div>
           }
           {!this.state.loading &&
-          <ul>
+          <>
+            <div className="account-recovery-details">
+              <div className="information-label">
+                {this.isAccountRecoveryPending &&
+                <span className="pending-request-status label"><Trans>Current status</Trans></span>
+                }
+                <span className="previous-request label"><Trans>Previous recovery</Trans></span>
+                <span className="requests-count label"><Trans>Number of recovery</Trans></span>
+              </div>
+              <div className="information-value">
+                {this.isAccountRecoveryPending &&
+              <span className="pending-request-status value"><Trans>To review</Trans></span>
+                }
+                <span className="previous-request value">{this.previousAccountRecoveryRequest ? `${this.capitalizeFirstLetter(this.previousAccountRecoveryRequest.status)} ${formatDateTimeAgo(this.previousAccountRecoveryRequest.created, this.props.t, this.props.context.locale)}` : "Never"}</span>
+                <span className="requests-count value">{this.state.userRequests.length}</span>
+              </div>
+            </div>
             {this.isAccountRecoveryPending &&
-            <li className="pending-request-status">
-              <span className="label"><Trans>Current status</Trans></span>
-              <button type="button" onClick={this.handleReviewClicked}>Review</button>
-            </li>
+              <button className="review-request" type="button" onClick={this.handleReviewClicked}><TriangleAlertSVG/><Trans>Review</Trans></button>
             }
-            <li className="previous-request">
-              <span className="label"><Trans>Previous recovery</Trans></span>
-              <span
-                className="value">{this.previousAccountRecoveryRequest ? `${this.capitalizeFirstLetter(this.previousAccountRecoveryRequest.status)} ${formatDateTimeAgo(this.previousAccountRecoveryRequest.created, this.props.t, this.props.context.locale)}` : "Never"}</span>
-            </li>
-            <li className="requests-count">
-              <span className="label"><Trans>Number of recovery</Trans></span>
-              <span className="value">{this.state.userRequests.length}</span>
-            </li>
-          </ul>
+          </>
           }
         </div>
+        }
       </div>
     );
   }
