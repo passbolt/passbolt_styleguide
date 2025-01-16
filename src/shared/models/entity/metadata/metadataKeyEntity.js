@@ -83,6 +83,11 @@ class MetadataKeyEntity extends EntityV2 {
           "format": "date-time",
           "nullable": true,
         },
+        "expired": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true,
+        },
         "metadata_private_keys": MetadataPrivateKeysCollection.getSchema(),
       }
     };
@@ -178,6 +183,22 @@ class MetadataKeyEntity extends EntityV2 {
    */
   get created() {
     return this._props.created || null;
+  }
+
+  /**
+   * Get the fingerprint.
+   * @returns {string}
+   */
+  get fingerprint() {
+    return this._props.fingerprint;
+  }
+
+  /**
+   * Get the fingerprint.
+   * @returns {string|null}
+   */
+  get expired() {
+    return this._props.expired || null;
   }
 
   /*
