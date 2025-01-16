@@ -11,9 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.11.0
  */
-import MetadataTypesSettingsEntity from "../../models/entity/metadata/metadataTypesSettingsEntity";
+import MetadataTypesSettingsEntity from "../../../models/entity/metadata/metadataTypesSettingsEntity";
+import MetadataKeysSettingsEntity from "../../../models/entity/metadata/metadataKeysSettingsEntity";
 
-export const METADATA_GET_OR_FIND_SETTINGS_EVENT = "passbolt.metadata.get-or-find-metadata-types-settings";
+export const METADATA_FIND_KEYS_SETTINGS_EVENT = "passbolt.metadata.find-metadata-keys-settings";
+export const METADATA_FIND_TYPES_SETTINGS_EVENT = "passbolt.metadata.find-metadata-types-settings";
 export const METADATA_SAVE_TYPES_SETTINGS_EVENT = "passbolt.metadata.save-metadata-types-settings";
 
 class MetadataSettingsServiceWorkerService {
@@ -26,17 +28,26 @@ class MetadataSettingsServiceWorkerService {
   }
 
   /**
-   * Get or find the metadata types settings.
+   * Find the metadata keys settings.
+   * @returns {Promise<MetadataKeysSettingsEntity>}
+   */
+  async findKeysSettings() {
+    const settingsDto = await this.port.request(METADATA_FIND_KEYS_SETTINGS_EVENT);
+    return new MetadataKeysSettingsEntity(settingsDto);
+  }
+
+  /**
+   * Find the metadata types settings.
    * @returns {Promise<MetadataTypesSettingsEntity>}
    */
-  async getOrFindTypesSettings() {
-    const settingsDto = await this.port.request(METADATA_GET_OR_FIND_SETTINGS_EVENT);
+  async findTypesSettings() {
+    const settingsDto = await this.port.request(METADATA_FIND_TYPES_SETTINGS_EVENT);
     return new MetadataTypesSettingsEntity(settingsDto);
   }
 
   /**
-   * Get or find the metadata types settings.
-   * @param {MetadataTypesSettingsFormEntity} formSettings The metadata types form settings to save.
+   * Save the metadata types settings.
+   * @param {MetadataTypesSettingsEntity} formSettings The metadata types settings to save.
    * @return {Promise<MetadataTypesSettingsEntity>}
    * @throws {TypeError} If the settings property is not of type MetadataTypesSettingsEntity.
    * @throws {EntityValidationError} If the data returned by the browser extension is not a valid MetadataTypesSettings entity.

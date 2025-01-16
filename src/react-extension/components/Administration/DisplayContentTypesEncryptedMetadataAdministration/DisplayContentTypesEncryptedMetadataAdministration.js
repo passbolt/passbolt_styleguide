@@ -20,7 +20,7 @@ import {createPortal} from "react-dom";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import MetadataTypesSettingsFormEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsFormEntity";
-import MetadataSettingsServiceWorkerService from "../../../../shared/services/metadata/metadataSettingsServiceWorkerService";
+import MetadataSettingsServiceWorkerService from "../../../../shared/services/serviceWorker/metadata/metadataSettingsServiceWorkerService";
 import DisplayContentTypesEncryptedMetadataAdministrationActions from "./DisplayContentTypesEncryptedMetadataAdministrationActions";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
