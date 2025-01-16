@@ -30,7 +30,7 @@ describe("MetadataKeysServiceWorkerService", () => {
   });
 
   describe("::findAll", () => {
-    it("requests the service worker with the expected event and return metadata keys collection.", async () => {
+    it("requests the service worker with the expected event and return metadata keys collection.", async() => {
       expect.assertions(3);
       const dto = defaultMetadataKeysDtos();
       jest.spyOn(port, "request").mockReturnValue(dto);

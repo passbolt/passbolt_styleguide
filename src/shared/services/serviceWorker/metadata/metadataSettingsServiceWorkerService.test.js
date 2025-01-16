@@ -12,15 +12,18 @@
  * @since         4.11.0
  */
 
-import MockPort from "../../../react-extension/test/mock/MockPort";
+import MockPort from "../../../../react-extension/test/mock/MockPort";
 import MetadataSettingsServiceWorkerService, {
-  METADATA_GET_OR_FIND_SETTINGS_EVENT, METADATA_SAVE_TYPES_SETTINGS_EVENT
+  METADATA_FIND_KEYS_SETTINGS_EVENT,
+  METADATA_FIND_TYPES_SETTINGS_EVENT, METADATA_SAVE_TYPES_SETTINGS_EVENT
 } from "./metadataSettingsServiceWorkerService";
-import MetadataTypesSettingsEntity from "../../models/entity/metadata/metadataTypesSettingsEntity";
+import MetadataTypesSettingsEntity from "../../../models/entity/metadata/metadataTypesSettingsEntity";
 import {
   defaultMetadataTypesSettingsV4Dto,
   defaultMetadataTypesSettingsV50FreshDto
-} from "../../models/entity/metadata/metadataTypesSettingsEntity.test.data";
+} from "../../../models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import {defaultMetadataKeysSettingsDto} from "../../../models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import MetadataKeysSettingsEntity from "../../../models/entity/metadata/metadataKeysSettingsEntity";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -34,13 +37,25 @@ describe("MetadataSettingsServiceWorkerService", () => {
     service = new MetadataSettingsServiceWorkerService(port);
   });
 
-  describe("::getOrFindTypesSettings", () => {
-    it("requests the service worker with the expected event and return metadata type settings entity.", async() => {
+  describe("::findKeysSettings", () => {
+    it("requests the service worker with the expected event and return metadata keys settings entity.", async() => {
+      expect.assertions(3);
+      const dto = defaultMetadataKeysSettingsDto();
+      jest.spyOn(port, "request").mockReturnValue(dto);
+      const settings = await service.findKeysSettings();
+      expect(port.request).toHaveBeenCalledWith(METADATA_FIND_KEYS_SETTINGS_EVENT);
+      expect(settings).toBeInstanceOf(MetadataKeysSettingsEntity);
+      expect(settings.toDto()).toEqual(dto);
+    });
+  });
+
+  describe("::findTypesSettings", () => {
+    it("requests the service worker with the expected event and return metadata types settings entity.", async() => {
       expect.assertions(3);
       const dto = defaultMetadataTypesSettingsV4Dto();
       jest.spyOn(port, "request").mockReturnValue(dto);
-      const settings = await service.getOrFindTypesSettings();
-      expect(port.request).toHaveBeenCalledWith(METADATA_GET_OR_FIND_SETTINGS_EVENT);
+      const settings = await service.findTypesSettings();
+      expect(port.request).toHaveBeenCalledWith(METADATA_FIND_TYPES_SETTINGS_EVENT);
       expect(settings).toBeInstanceOf(MetadataTypesSettingsEntity);
       expect(settings.toDto()).toEqual(dto);
     });
