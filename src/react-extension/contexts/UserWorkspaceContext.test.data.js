@@ -48,6 +48,9 @@ export function defaultUserWorkspaceContext(data = {}) {
       single: jest.fn(),
       none: jest.fn()
     },
+    scrollTo: {
+      user: null // The user to scroll to
+    },
     filter: UserWorkspaceFilterTypes.ALL,
     shouldDisplaySuspendedUsersFilter: () => true
   };

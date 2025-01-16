@@ -30,6 +30,7 @@ jest.mock("../FilterUsersByText/FilterUsersByText", () => () => <></>);
 jest.mock("../../UserGroup/DisplayUserGroupDetails/DisplayUserGroupDetails", () => () => <span className="user-group-details"></span>);
 jest.mock("../DisplayUserWorkspaceMainActions/DisplayUserWorkspaceMainActions", () => () => <></>);
 jest.mock("../FilterUsersByBreadcrumb/FilterUsersByBreadcrumb", () => () => <></>);
+jest.mock("../DisplayUsers/DisplayUsers", () => () => <span className="tableview"></span>);
 jest.mock("../../UserDetails/DisplayUserDetails/DisplayUserDetails", () => () => <span className="user-details"></span>);
 jest.mock("../DisplayUserWorkspaceActions/DisplayUserWorkspaceActions", () => () => <></>);
 jest.mock("../../Common/Navigation/Header/Logo");
