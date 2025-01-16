@@ -29,6 +29,7 @@ class CellHeaderCheckbox extends Component {
           type="checkbox"
           className="for-grid"
           name="select all"
+          disabled={this.props.disabled}
           checked={this.props.checked}
           onChange={this.props.onChange}/>
       </div>
@@ -38,7 +39,8 @@ class CellHeaderCheckbox extends Component {
 
 CellHeaderCheckbox.propTypes = {
   checked: PropTypes.bool.isRequired, // The checked value
-  onChange: PropTypes.func // The onChange function property
+  onChange: PropTypes.func, // The onChange function property
+  disabled: PropTypes.bool
 };
 
 export default CellHeaderCheckbox;

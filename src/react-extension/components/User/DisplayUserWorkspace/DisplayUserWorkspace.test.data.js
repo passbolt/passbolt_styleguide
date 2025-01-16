@@ -40,13 +40,13 @@ export function propsWithUserDetails() {
 export function propsWithGroupDetails() {
   return {
     context: defaultAppContext(),
-    userWorkspaceContext: {
+    userWorkspaceContext: defaultUserWorkspaceContext({
       details: {
         group: 'some group',
         locked: true
       },
       isAccessAllowed: () => true,
-    }
+    })
   };
 }
 
@@ -57,12 +57,12 @@ export function propsWithGroupDetails() {
 export function propsWithoutLock() {
   return {
     context: defaultAppContext(),
-    userWorkspaceContext: {
+    userWorkspaceContext: defaultUserWorkspaceContext({
       details: {
         locked: false
       },
       isAccessAllowed: () => true,
-    }
+    })
   };
 }
 

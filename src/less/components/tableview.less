@@ -11,42 +11,6 @@
   overflow: auto;
   min-width: 0; // important to keep the container size for ellipsis
 
-  &.users {
-    .tableview-header {
-      height: 3.2rem;
-      width: inherit; // important users is not customizable for now
-      min-width: inherit; // important users is not customizable for now
-      border: none;
-
-      table {
-        border-top: .1rem solid var(--Workspace-Dividers);
-        border-bottom: .1rem solid var(--Workspace-Dividers);
-        background: var(--Grid-Grid-background);
-      }
-    }
-
-    .tableview-content {
-      width: inherit; // important users is not customizable for now
-      min-width: inherit; // important users is not customizable for now
-    }
-
-    tbody tr {
-      border-bottom: .1rem solid var(--Workspace-Dividers);
-
-      &:before {
-        content: none;
-      }
-
-      &.selected {
-        background: var(--Grid-Grid-selected-row);
-      }
-
-      &:hover {
-        background: var(--Grid-Grid-hover-row);
-      }
-    }
-  }
-
   /* header */
   .tableview-header {
     height: 3rem;
@@ -242,7 +206,7 @@
         }
       }
 
-      &.suspended td {
+      &.suspended td, &.inactive td {
         opacity: 0.5;
 
         &.cell-checkbox {
@@ -255,10 +219,6 @@
           background: linear-gradient(var(--Grid-Grid-hover-row),var(--Grid-Grid-hover-row) 3.1rem, var(--Workspace-Dividers), var(--Workspace-Dividers) 3.2rem);
         }
       }
-    }
-
-    tbody tr.inactive {
-      color: @text-lighter-color;
     }
 
     /* multi select and fav fix */

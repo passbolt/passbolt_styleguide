@@ -114,11 +114,18 @@ class DisplayUserDetails extends React.Component {
 
   /**
    * Returns true if the feature flag disableUser is enabled and the given user is suspended.
-   * @param {object} user
    * @returns {boolean}
    */
-  isUserSuspended(user) {
-    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(user);
+  get isUserSuspended() {
+    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(this.user);
+  }
+
+  /**
+   * Returns true if the given user is not active.
+   * @returns {boolean}
+   */
+  get isUserInactive() {
+    return !this.user.active;
   }
 
   /**
@@ -128,7 +135,7 @@ class DisplayUserDetails extends React.Component {
   render() {
     return (
       <div className="sidebar user">
-        <div className={`sidebar-header ${this.isUserSuspended(this.user) ? "suspended" : ""}`}>
+        <div className={`sidebar-header ${this.isUserInactive ? "inactive" : ""} ${this.isUserSuspended ? "suspended" : ""}`}>
           <div className="teaser-image">
             <UserAvatar
               user={this.user}
@@ -136,7 +143,6 @@ class DisplayUserDetails extends React.Component {
               attentionRequired={this.hasAttentionRequired}/>
           </div>
           <div className="title-area">
-
             <h3>
               <div className="title-wrapper">
                 <span className="name">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}</span>
@@ -148,7 +154,6 @@ class DisplayUserDetails extends React.Component {
               <span className="visuallyhidden"><Trans>Copy the link to this user</Trans></span>
             </button>
           </div>
-
         </div>
         <div className="sidebar-content">
           <DisplayUserDetailsInformation/>
