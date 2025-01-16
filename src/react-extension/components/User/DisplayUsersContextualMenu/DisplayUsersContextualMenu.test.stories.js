@@ -25,29 +25,33 @@ import {
 
 export default {
   title: 'Components/User/DisplayUsersContextualMenu',
-  component: DisplayUsersContextualMenu
+  component: DisplayUsersContextualMenu,
+  decorators: [
+    (Story, args) =>
+      <MockTranslationProvider>
+        <MemoryRouter initialEntries={['/']}>
+          <Route component={routerProps => <Story {...args} {...routerProps}/>}></Route>
+        </MemoryRouter>
+      </MockTranslationProvider>
+  ],
 };
 
-
-const Template = args =>
-  <MockTranslationProvider>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <DisplayUsersContextualMenu {...args} {...routerProps}/>}></Route>
-    </MemoryRouter>
-  </MockTranslationProvider>;
-
-export const AdminWithoutReviewRecovery = Template.bind({});
-AdminWithoutReviewRecovery.args = Object.assign(defaultProps(), {context: defaultAppContext()});
-
-export const AdminWithReviewRecovery = Template.bind({});
-AdminWithReviewRecovery.args = Object.assign(propsWithUserTemporaryHasPendingAccountRecovery(), {context: defaultAppContext()});
-
-export const User = Template.bind({});
-const userRole = {
-  loggedInUser: {
-    role: {
-      name: 'user'
-    }
-  },
+export const AdminWithoutReviewRecovery = {
+  args: defaultProps({context: defaultAppContext()})
 };
-User.args = Object.assign(defaultProps(), {context: defaultAppContext(userRole)});
+
+export const AdminWithReviewRecovery = {
+  args: propsWithUserTemporaryHasPendingAccountRecovery({context: defaultAppContext()})
+};
+
+export const User = {
+  args: defaultProps({
+    context: defaultAppContext({
+      loggedInUser: {
+        role: {
+          name: 'user',
+        },
+      },
+    }),
+  }),
+};
