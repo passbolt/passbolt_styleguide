@@ -24,7 +24,7 @@ class DisplayEmptyDetails extends React.Component {
     return (
       <div className="sidebar empty">
         <SelectResourceSVG />
-        <p><Trans>Select a resource or a folder to see the details</Trans></p>
+        <p><Trans>Select a resource or a folder to see the details.</Trans></p>
       </div>
     );
   }

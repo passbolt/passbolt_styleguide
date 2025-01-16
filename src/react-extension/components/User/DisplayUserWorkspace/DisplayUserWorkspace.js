@@ -33,6 +33,8 @@ import DisplayHttpError from '../../Common/Error/DisplayHttpError/DisplayHttpErr
 import ArrowLeftSVG from "../../../../img/svg/arrow_left.svg";
 import InfoSVG from "../../../../img/svg/info.svg";
 import {Trans} from "react-i18next";
+import DisplayUserWorkspaceEmptyDetails from '../DisplayUserWorkspaceEmptyDetails/DisplayUserWorkspaceEmptyDetails';
+import Footer from '../../Common/Footer/Footer';
 
 /**
  * This component is a container for all the user workspace features
@@ -60,18 +62,18 @@ class DisplayUserWorkspace extends React.Component {
    * Returns true if the user details must be displayed
    * @returns {boolean}
    */
-  get mustDisplayUserDetails() {
+  get shouldDisplayUserDetails() {
     const {details} = this.props.userWorkspaceContext;
-    return details.user && details.locked;
+    return details.user;
   }
 
   /**
    * Returns true if the group details must be displayed
    * @returns {boolean}
    */
-  get mustDisplayGroupDetails() {
+  get shouldDisplayGroupDetails() {
     const {details} = this.props.userWorkspaceContext;
-    return details.group && details.locked;
+    return details.group;
   }
 
   /**
@@ -87,6 +89,15 @@ class DisplayUserWorkspace extends React.Component {
    */
   handleGoBack() {
     this.props.history.push({pathname: `/app/passwords`});
+  }
+
+  /**
+   * Returns true if there is currently if nothing is selected in the workspace.
+   * @returns {boolean}
+   */
+  get shouldDisplayEmptyDetails() {
+    const {details} = this.props.userWorkspaceContext;
+    return !details.user && !details.group;
   }
 
   /**
@@ -166,8 +177,20 @@ class DisplayUserWorkspace extends React.Component {
                     </div>
                     <DisplayUsers/>
                   </div>
-                  {this.mustDisplayUserDetails && <DisplayUserDetails/>}
-                  {this.mustDisplayGroupDetails && <DisplayUserGroupDetails/>}
+                  {this.hasDetailsLocked() &&
+                    <div className="panel aside">
+                      {this.shouldDisplayEmptyDetails &&
+                        <DisplayUserWorkspaceEmptyDetails />
+                      }
+                      {this.shouldDisplayUserDetails &&
+                        <DisplayUserDetails/>
+                      }
+                      {this.shouldDisplayGroupDetails &&
+                        <DisplayUserGroupDetails/>
+                      }
+                      <Footer/>
+                    </div>
+                  }
                 </div>
               </div>
             </>

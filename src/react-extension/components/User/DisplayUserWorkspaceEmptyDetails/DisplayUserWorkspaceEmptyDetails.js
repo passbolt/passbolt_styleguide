@@ -11,18 +11,23 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import DisplayEmptyDetailsPage from "./DisplayEmptyDetails.test.page";
+import React from "react";
+import {Trans, withTranslation} from "react-i18next";
+import SelectUserSVG from "../../../../img/svg/select_user.svg";
 
-/**
- * Unit tests on DisplayEmptyDetails in regard of specifications
- */
-describe("DisplayEmptyDetails", () => {
-  it('As LU I see the empty sidebar with its content', () => {
-    expect.assertions(2);
+class DisplayUserWorkspaceEmptyDetails extends React.Component {
+  /**
+   * Render the component
+   * @returns {JSX}
+   */
+  render() {
+    return (
+      <div className="sidebar empty">
+        <SelectUserSVG />
+        <p><Trans>Select a user or a group to see the details.</Trans></p>
+      </div>
+    );
+  }
+}
 
-    const page = new DisplayEmptyDetailsPage();
-
-    expect(page.exists()).toStrictEqual(true);
-    expect(page.content).toStrictEqual("Select a resource or a folder to see the details.");
-  });
-});
+export default withTranslation('common')(DisplayUserWorkspaceEmptyDetails);

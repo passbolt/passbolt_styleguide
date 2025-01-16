@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../../../shared/components/Icons/Icon";
+import LinkSVG from "../../../../img/svg/link.svg";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
@@ -127,30 +127,30 @@ class DisplayUserDetails extends React.Component {
    */
   render() {
     return (
-      <div className="panel aside ready">
-        <div className="sidebar user">
-          <div className={`sidebar-header with-separator ${this.isUserSuspended(this.user) ? "suspended" : ""}`}>
-            <div className={`teaser-image ${this.hasAttentionRequired ? "attention-required" : ""}`}>
-              <UserAvatar
-                user={this.user}
-                baseUrl={this.baseUrl}
-                attentionRequired={this.hasAttentionRequired}/>
-            </div>
+      <div className="sidebar user">
+        <div className={`sidebar-header ${this.isUserSuspended(this.user) ? "suspended" : ""}`}>
+          <div className="teaser-image">
+            <UserAvatar
+              user={this.user}
+              baseUrl={this.baseUrl}
+              attentionRequired={this.hasAttentionRequired}/>
+          </div>
+          <div className="title-area">
+
             <h3>
               <div className="title-wrapper">
                 <span className="name">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}</span>
-                <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this user")} onClick={this.handlePermalinkClick}>
-                  <Icon name="link"/>
-                  <span className="visuallyhidden"><Trans>Copy the link to this user</Trans></span>
-                </button>
               </div>
               <span className="subtitle">{this.user.username}</span>
             </h3>
-            <button type="button" className="dialog-close button-transparent" onClick={this.handleCloseClick}>
-              <Icon name="close"/>
-              <span className="visuallyhidden"><Trans>Close</Trans></span>
+            <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this user")} onClick={this.handlePermalinkClick}>
+              <LinkSVG/>
+              <span className="visuallyhidden"><Trans>Copy the link to this user</Trans></span>
             </button>
           </div>
+
+        </div>
+        <div className="sidebar-content">
           <DisplayUserDetailsInformation/>
           {this.user.active && <DisplayUserDetailsGroups/>}
           {this.user.active && <DisplayUserDetailsPublicKey/>}

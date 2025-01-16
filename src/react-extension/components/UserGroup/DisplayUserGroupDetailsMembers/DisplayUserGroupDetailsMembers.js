@@ -97,22 +97,23 @@ class DisplayUserGroupDetailsMembers extends React.Component {
    */
   render() {
     return (
-      <div className={`detailed-members accordion sidebar-section ${this.state.open ? "" : "closed"}`}>        <div className="accordion-header">
-        <h4>
-          <button type="button" className="link no-border section-opener" onClick={this.handleTitleClicked}>
-            <span className="accordion-title">
-              <Trans>Group members</Trans>
-            </span>
-            {this.state.open &&
+      <div className={`detailed-members accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
+        <div className="accordion-header">
+          <h4>
+            <button type="button" className="link no-border section-opener" onClick={this.handleTitleClicked}>
+              <span className="accordion-title">
+                <Trans>Group members</Trans>
+              </span>
+              {this.state.open &&
                 <CaretDownSVG/>
-            }
-            {!this.state.open &&
+              }
+              {!this.state.open &&
                 <CaretRightSVG/>
-            }
-          </button>
-        </h4>
-      </div>
-      {this.state.open &&
+              }
+            </button>
+          </h4>
+        </div>
+        {this.state.open &&
           <div className="accordion-content">
             {this.isLoading() &&
               <div className="processing-wrapper">
@@ -130,7 +131,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
             </>
             }
           </div>
-      }
+        }
       </div>
     );
   }
