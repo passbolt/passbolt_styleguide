@@ -12,12 +12,12 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import {withRouter} from "react-router-dom";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../contexts/AdministrationWorkspaceContext";
-import Logo from "../Common/Navigation/Header/Logo";
 import DisplayUserBadgeMenu from "../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu";
 import DisplayAdministrationMenu from "./DisplayAdministrationMenu/DisplayAdministrationMenu";
 import DisplayMfaAdministration from "./DisplayMfaAdministration/DisplayMfaAdministration";
@@ -43,6 +43,8 @@ import DisplayAdministrationUserPassphrasePolicies from "./DisplayAdministration
 import DisplayAdministrationPasswordExpiry from "./DisplayAdministrationPasswordExpiry/DisplayAdministrationPasswordExpiry";
 import DisplayHttpError from "../Common/Error/DisplayHttpError/DisplayHttpError";
 import DisplayHealthcheckAdministration from "./DisplayHealthcheckAdministration/DisplayHealthcheckAdministration";
+import {Trans} from "react-i18next";
+import ArrowLeftSVG from "../../../img/svg/arrow_left.svg";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -158,6 +160,13 @@ class AdministrationWorkspace extends Component {
   }
 
   /**
+   * Handle go back to resource workspace
+   */
+  handleGoBack() {
+    this.props.history.push({pathname: `/app/passwords`});
+  }
+
+  /**
    * If the page access is denied
    * @returns {boolean}
    */
@@ -186,20 +195,33 @@ class AdministrationWorkspace extends Component {
           <div className="panel main">
             <div className="panel left">
               {!this.isHttpError403 &&
-                  <div className="sidebar-content">
-                    <Logo/>
-                    <div className="sidebar-content-left">
-                      <DisplayAdministrationMenu/>
+                <div className="sidebar-content">
+                  <div className="top-bar-left-navigation">
+                    <div className="navigation">
+                      {/* Add onclick action */}
+                      <button type="button" className="button-transparent back" onClick={this.handleGoBack}>
+                        <ArrowLeftSVG/>
+                      </button>
+                      <span className="title"><Trans>Organisation settings</Trans></span>
                     </div>
                   </div>
+                  <div className="sidebar-content-left">
+                    <DisplayAdministrationMenu/>
+                  </div>
+                </div>
               }
             </div>
             <div className="panel middle">
-              {!this.isHttpError403 &&
-                  <div className="header">
-                    <DisplayUserBadgeMenu baseUrl={this.props.context.trustedDomain || this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
-                  </div>
-              }
+              <div className="header">
+                {!this.isHttpError403 &&
+                  <>
+                    <div className="header-left"></div>
+                    <div className="header-right">
+                      <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+                    </div>
+                  </>
+                }
+              </div>
               <div className="middle-right">
                 <div className="breadcrumbs-and-grid">
                   <div className="top-bar">
@@ -274,7 +296,8 @@ class AdministrationWorkspace extends Component {
 
 AdministrationWorkspace.propTypes = {
   context: PropTypes.any, // The application context provider
+  history: PropTypes.any,
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
 };
 
-export default withAppContext(withAdministrationWorkspace(AdministrationWorkspace));
+export default withRouter(withAppContext(withAdministrationWorkspace(AdministrationWorkspace)));
