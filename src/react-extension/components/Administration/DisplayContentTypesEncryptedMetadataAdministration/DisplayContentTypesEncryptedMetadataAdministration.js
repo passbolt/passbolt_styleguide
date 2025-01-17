@@ -87,7 +87,7 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.originalSettings = await this.metadataSettingsServiceWorkerService.getOrFindTypesSettings();
+    this.originalSettings = await this.metadataSettingsServiceWorkerService.findTypesSettings();
     this.formSettings = new MetadataTypesSettingsFormEntity(this.originalSettings.toDto(), {validate: false});
     const isProcessing = false;
     this.setState({settings: this.formSettings.toFormDto(), isProcessing});

@@ -47,6 +47,8 @@ import DisplayHttpError from "../Common/Error/DisplayHttpError/DisplayHttpError"
 import DisplayHealthcheckAdministration from "./DisplayHealthcheckAdministration/DisplayHealthcheckAdministration";
 import DisplayContentTypesEncryptedMetadataAdministration
   from "./DisplayContentTypesEncryptedMetadataAdministration/DisplayContentTypesEncryptedMetadataAdministration";
+import DisplayContentTypesMetadataKeyAdministration
+  from "./DisplayContentTypesMetadataKeyAdministration/DisplayContentTypesMetadataKeyAdministration";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -162,11 +164,19 @@ class AdministrationWorkspace extends Component {
   }
 
   /**
-   * If content types metadata is selected
+   * If content types encrypted metadata is selected
    * @returns {boolean}
    */
-  isContentTypesMetadataSelected() {
-    return AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA === this.props.administrationWorkspaceContext.selectedAdministration;
+  isContentTypesEncryptedMetadataSelected() {
+    return AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If content types metadata key is selected
+   * @returns {boolean}
+   */
+  isContentTypesMetadataKeySelected() {
+    return AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -271,8 +281,11 @@ class AdministrationWorkspace extends Component {
                   {this.isHealthcheckSelected() &&
                     <DisplayHealthcheckAdministration/>
                   }
-                  {this.isContentTypesMetadataSelected() &&
+                  {this.isContentTypesEncryptedMetadataSelected() &&
                     <DisplayContentTypesEncryptedMetadataAdministration/>
+                  }
+                  {this.isContentTypesMetadataKeySelected() &&
+                    <DisplayContentTypesMetadataKeyAdministration/>
                   }
                 </div>
               </div>
