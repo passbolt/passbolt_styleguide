@@ -34,11 +34,12 @@ describe("Display User Workspace Breadcrumb", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
 
-  it('As LU, I should see "Home" if the filter is set to Home', async() => {
-    expect.assertions(2);
+  it('As LU, I should see "Home" if the filter is set to All users', async() => {
+    expect.assertions(3);
     page = new FilterUsersByBreadcrumbPage(context, propsWithFilter(UserWorkspaceFilterTypes.ALL));
     await waitFor(() => {});
-    expect(page.breadcrumbLabels(1)).toBe('Home');
+    expect(page.breadcrumbLabels(1)).toBe('All users');
+    expect(page.breadcrumbLabels(2)).toBe('Home');
     expect(page.itemNumberDisplayed).toContain("3");
   });
 
@@ -46,7 +47,7 @@ describe("Display User Workspace Breadcrumb", () => {
     expect.assertions(3);
     page = new FilterUsersByBreadcrumbPage(context, propsWithFilter(UserWorkspaceFilterTypes.RECENTLY_MODIFIED));
     await waitFor(() => {});
-    expect(page.breadcrumbLabels(1)).toBe('Home');
+    expect(page.breadcrumbLabels(1)).toBe('All users');
     expect(page.breadcrumbLabels(2)).toBe('Recently modified');
     expect(page.itemNumberDisplayed).toContain("3");
   });
@@ -55,7 +56,7 @@ describe("Display User Workspace Breadcrumb", () => {
     expect.assertions(2);
     page = new FilterUsersByBreadcrumbPage(context, propsWithFilter(UserWorkspaceFilterTypes.SUSPENDED_USER));
     await waitFor(() => {});
-    expect(page.breadcrumbLabels(1)).toBe('Home');
+    expect(page.breadcrumbLabels(1)).toBe('All users');
     expect(page.breadcrumbLabels(2)).toBe('Suspended users');
   });
 
@@ -63,16 +64,16 @@ describe("Display User Workspace Breadcrumb", () => {
     expect.assertions(3);
     page = new FilterUsersByBreadcrumbPage(context, propsWithTextFilter());
     await waitFor(() => {});
-    expect(page.breadcrumbLabels(1)).toBe('Home');
+    expect(page.breadcrumbLabels(1)).toBe('All users');
     expect(page.breadcrumbLabels(2)).toBe('Search: Ada');
     expect(page.itemNumberDisplayed).toContain("1");
   });
 
-  it('As LU, I should see Home if the filter is set to an non-empty Text', async() => {
+  it('As LU, I should see All users if the filter is set to an non-empty Text', async() => {
     expect.assertions(3);
     page = new FilterUsersByBreadcrumbPage(context, propsWithEmptyTextFilter());
     await waitFor(() => {});
-    expect(page.breadcrumbLabels(1)).toBe('Home');
+    expect(page.breadcrumbLabels(1)).toBe('All users');
     expect(page.breadcrumbLabels(2)).toBeUndefined();
     expect(page.itemNumberDisplayed).toContain("0");
   });
@@ -81,7 +82,7 @@ describe("Display User Workspace Breadcrumb", () => {
     expect.assertions(3);
     page = new FilterUsersByBreadcrumbPage(context, propsWithGroupFilter());
     await waitFor(() => {});
-    expect(page.breadcrumbLabels(1)).toBe('Home');
+    expect(page.breadcrumbLabels(1)).toBe('All users');
     expect(page.breadcrumbLabels(2)).toBe('My super group (group)');
     expect(page.itemNumberDisplayed).toContain("6");
   });
@@ -90,7 +91,7 @@ describe("Display User Workspace Breadcrumb", () => {
     expect.assertions(3);
     page = new FilterUsersByBreadcrumbPage(context, propsWithEmptyGroupNameFilter());
     await waitFor(() => {});
-    expect(page.breadcrumbLabels(1)).toBe('Home');
+    expect(page.breadcrumbLabels(1)).toBe('All users');
     expect(page.breadcrumbLabels(2)).toBe("N/A (group)");
     expect(page.itemNumberDisplayed).toContain("0");
   });
