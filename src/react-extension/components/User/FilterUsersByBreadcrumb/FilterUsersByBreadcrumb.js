@@ -34,7 +34,7 @@ class FilterUsersByBreadcrumb extends Component {
       case UserWorkspaceFilterTypes.NONE:
         return [];
       case UserWorkspaceFilterTypes.ALL:
-        return items;
+        return [...items, this.getLastBreadcrumb(this.translate("Home"))];
       case UserWorkspaceFilterTypes.TEXT: {
         const isEmptySearchText = !this.props.userWorkspaceContext.filter.payload;
         const currentSearchText = this.props.userWorkspaceContext.filter.payload;
@@ -59,7 +59,7 @@ class FilterUsersByBreadcrumb extends Component {
    * @return {JSX.Element}
    */
   get allUsersBreadcrumb() {
-    return <Breadcrumb name={this.translate("Home")} onClick={this.props.navigationContext.onGoToUsersRequested}/>;
+    return <Breadcrumb name={this.translate("All users")} onClick={this.props.navigationContext.onGoToUsersRequested}/>;
   }
 
   /**
