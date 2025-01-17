@@ -61,7 +61,7 @@ describe("As a signed-in users I can see filters", () => {
   each([
     {filter: ResourceWorkspaceFilterTypes.FAVORITE, itemSelected: "Starred", itemIndex: 1},
     {filter: ResourceWorkspaceFilterTypes.SHARED_WITH_ME, itemSelected: "Shared with me", itemIndex: 2},
-    {filter: ResourceWorkspaceFilterTypes.ITEMS_I_OWN, itemSelected: "Private", itemIndex: 3},
+    {filter: ResourceWorkspaceFilterTypes.ITEMS_I_OWN, itemSelected: "Items I own", itemIndex: 3},
     {filter: ResourceWorkspaceFilterTypes.EXPIRED, itemSelected: "Expired", pathname: "/app/passwords/filter/expired", itemIndex: 4},
   ]).describe("I should be able to filter", scenario => {
     it(`for: ${scenario.filter}`, async() => {
@@ -86,7 +86,7 @@ describe("As a signed-in users I can see filters", () => {
   each([
     {filter: ResourceWorkspaceFilterTypes.FAVORITE, itemSelected: "Starred"},
     {filter: ResourceWorkspaceFilterTypes.SHARED_WITH_ME, itemSelected: "Shared with me"},
-    {filter: ResourceWorkspaceFilterTypes.ITEMS_I_OWN, itemSelected: "Private"},
+    {filter: ResourceWorkspaceFilterTypes.ITEMS_I_OWN, itemSelected: "Items I own"},
     {filter: ResourceWorkspaceFilterTypes.EXPIRED, itemSelected: "Expired"},
   ]).describe("I should be able to identify the filters", scenario => {
     it(`for: ${scenario.filter}`, async() => {
