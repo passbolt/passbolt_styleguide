@@ -47,7 +47,7 @@ describe("GpgServiceWorkerService", () => {
 
 
   describe("::keysInfo", () => {
-    it("requests the service worker with the expected event and return a gpg key info.", async() => {
+    it("requests the service worker with the expected event and return multiple gpg keys info.", async() => {
       expect.assertions(5);
       const dto1 = ed25519ExternalPublicGpgKeyEntityDto();
       const dto2 = adaExternalPrivateGpgKeyEntityDto();

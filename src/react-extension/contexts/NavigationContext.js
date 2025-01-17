@@ -116,7 +116,8 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationUserPassphrasePoliciesRequested: this.onGoToAdministrationUserPassphrasePoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace user passphrase policies
       onGoToAdministrationPasswordExpirySettingsRequested: this.onGoToAdministrationPasswordExpirySettingsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password expiry settings
       onGoToAdministrationHealthcheckRequested: this.onGoToAdministrationHealthcheckRequested.bind(this),
-      onGoToAdministrationContentTypesMetadataRequested: this.onGoToAdministrationContentTypesMetadataRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types metadata.
+      onGoToAdministrationContentTypesEncryptedMetadataRequested: this.onGoToAdministrationContentTypesEncryptedMetadataRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types encrypted metadata settings.
+      onGoToAdministrationContentTypesMetadataKeyRequested: this.onGoToAdministrationContentTypesMetadataKeyRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types metadata key settings.
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -311,11 +312,19 @@ class NavigationContextProvider extends React.Component {
   }
 
   /**
-   * Whenever the user wants to navigate to the administration workspace content types metadata.
+   * Whenever the user wants to navigate to the administration workspace content types encrypted metadata.
    * @returns {Promise<void>}
    */
-  async onGoToAdministrationContentTypesMetadataRequested() {
+  async onGoToAdministrationContentTypesEncryptedMetadataRequested() {
     await this.goTo("browser-extension", "/app/administration/content-types/metadata");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace content types metadata key.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationContentTypesMetadataKeyRequested() {
+    await this.goTo("browser-extension", "/app/administration/content-types/metadata-key");
   }
 
   /**
