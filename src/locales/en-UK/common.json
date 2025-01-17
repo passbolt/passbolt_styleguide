@@ -136,6 +136,7 @@
   "Algorithm and key size cannot be changed at the moment. These are secure default": "Algorithm and key size cannot be changed at the moment. These are secure default",
   "All groups": "All groups",
   "All items": "All items",
+  "All statuses": "All statuses",
   "All tags": "All tags",
   "All the users with an email address ending with the domain in the safe list are allowed to register on passbolt.": "All the users with an email address ending with the domain in the safe list are allowed to register on passbolt.",
   "Allow": "Allow",

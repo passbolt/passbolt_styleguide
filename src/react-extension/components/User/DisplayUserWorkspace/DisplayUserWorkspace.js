@@ -35,6 +35,7 @@ import InfoSVG from "../../../../img/svg/info.svg";
 import {Trans} from "react-i18next";
 import DisplayUserWorkspaceEmptyDetails from '../DisplayUserWorkspaceEmptyDetails/DisplayUserWorkspaceEmptyDetails';
 import Footer from '../../Common/Footer/Footer';
+import DisplayUsersWorkspaceFilterBar from '../DisplayUsersWorkspaceFilterBar/DisplayUsersWorkspaceFilterBar';
 
 /**
  * This component is a container for all the user workspace features
@@ -163,7 +164,7 @@ class DisplayUserWorkspace extends React.Component {
                       <div className="action-bar">
                         {this.props.userWorkspaceContext.selectedUsers?.length > 0
                           ? <DisplayUserWorkspaceActions/>
-                          : <div className="actions"></div>
+                          : <DisplayUsersWorkspaceFilterBar />
                         }
                         <div className="actions-secondary">
                           <button type="button"

@@ -12,6 +12,7 @@
  * @since         2.11.0
  */
 
+import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContext.test.data";
 
@@ -26,6 +27,28 @@ export function propsWithUserDetails() {
         user: 'some user',
         locked: true
       },
+      isAccessAllowed: () => true,
+    }),
+    history: {
+      push: jest.fn(),
+    }
+  };
+}
+
+/**
+ * Props with user details
+ */
+export function propsWithSelecteUser() {
+  const user = defaultUserDto();
+  return {
+    context: defaultAppContext(),
+    userWorkspaceContext: defaultUserWorkspaceContext({
+      details: {
+        user: 'some user',
+        locked: true
+      },
+      selectedUsers: [user],
+      filteredUsers: [user],
       isAccessAllowed: () => true,
     }),
     history: {

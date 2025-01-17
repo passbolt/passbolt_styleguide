@@ -54,6 +54,13 @@ export default class DisplayUserWorkspacePage {
   }
 
   /**
+   * Returns true if the user workspace filters bar is visible
+   */
+  get hasFilterBar() {
+    return Boolean(this._page.container.querySelector('.actions-filter'));
+  }
+
+  /**
    * Returns true if the user group details area is visible
    */
   get hasUserGroupDetails() {
@@ -86,4 +93,3 @@ export default class DisplayUserWorkspacePage {
     await waitFor(() => {});
   }
 }
-

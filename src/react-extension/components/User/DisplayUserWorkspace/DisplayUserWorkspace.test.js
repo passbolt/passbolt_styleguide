@@ -19,6 +19,7 @@ import React from 'react';
 import {
   propsWithGroupDetails,
   propsWithoutLock,
+  propsWithSelecteUser,
   propsWithUserDetails
 } from "./DisplayUserWorkspace.test.data";
 import DisplayUserWorkspacePage from "./DisplayUserWorkspace.test.page";
@@ -95,5 +96,19 @@ describe("Display User Workspace", () => {
 
     await page.lockDetails();
     expect(props.userWorkspaceContext.onDetailsLocked).toHaveBeenCalled();
+  });
+
+  it('AS LU I should see the filters bar if no user is selected', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspacePage(propsWithoutLock());
+    await waitFor(() => {});
+    expect(page.hasFilterBar).toBeTruthy();
+  });
+
+  it('AS LU I should not see the filters bar if a user is selected', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspacePage(propsWithSelecteUser());
+    await waitFor(() => {});
+    expect(page.hasFilterBar).toBeFalsy();
   });
 });
