@@ -43,6 +43,8 @@ import DisplayAdministrationUserPassphrasePolicies from "./DisplayAdministration
 import DisplayAdministrationPasswordExpiry from "./DisplayAdministrationPasswordExpiry/DisplayAdministrationPasswordExpiry";
 import DisplayHttpError from "../Common/Error/DisplayHttpError/DisplayHttpError";
 import DisplayHealthcheckAdministration from "./DisplayHealthcheckAdministration/DisplayHealthcheckAdministration";
+import DisplayContentTypesEncryptedMetadataAdministration
+  from "./DisplayContentTypesEncryptedMetadataAdministration/DisplayContentTypesEncryptedMetadataAdministration";
 import {Trans} from "react-i18next";
 import ArrowLeftSVG from "../../../img/svg/arrow_left.svg";
 
@@ -157,6 +159,14 @@ class AdministrationWorkspace extends Component {
    */
   isPasswordExpirySelected() {
     return AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If content types metadata is selected
+   * @returns {boolean}
+   */
+  isContentTypesMetadataSelected() {
+    return AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -278,6 +288,9 @@ class AdministrationWorkspace extends Component {
                     }
                     {this.isHealthcheckSelected() &&
                       <DisplayHealthcheckAdministration/>
+                    }
+                    {this.isContentTypesMetadataSelected() &&
+                      <DisplayContentTypesEncryptedMetadataAdministration/>
                     }
                   </div>
                   {/* TODO will be moved directly in specific administration menu item component <AdministrationWorkspaceAction/> */}

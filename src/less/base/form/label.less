@@ -46,10 +46,16 @@ label {
 
 .input.error label {
   color: var(--Palette-Contrast-3);
+  & > .info {
+    color: var(--Text-and-icons-Main-text);
+  }
 }
 
 .input.warning label {
     color: var(--Hint-warning-color);
+  & > .info {
+    color: var(--Text-and-icons-Main-text);
+  }
 }
 
 .input.text, .input-password-wrapper,

@@ -95,7 +95,7 @@ class LoginPage extends React.Component {
   async handleLoginSuccess() {
     const isMfaRequired = await this.props.context.port.request("passbolt.auth.is-mfa-required");
     if (!isMfaRequired) {
-      this.props.loginSuccessCallback();
+      await this.props.loginSuccessCallback();
       this.props.history.push("/webAccessibleResources/quickaccess/home");
     } else {
       this.props.mfaRequiredCallback(this.props.context.userSettings.getTrustedDomain());
