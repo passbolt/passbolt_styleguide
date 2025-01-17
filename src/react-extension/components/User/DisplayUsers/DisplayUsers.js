@@ -43,7 +43,7 @@ import ColumnUserAccountRecoveryModel from "../../../../shared/models/column/Col
 import CellUserAccountRecovery from "../../../../shared/components/Table/CellUserAccountRecovery";
 import ColumnsUserSettingCollection from "../../../../shared/models/entity/user/columnsUserSettingCollection";
 import ColumnModel from "../../../../shared/models/column/ColumnModel";
-
+import CircleOffSVG from "../../../../img/svg/circle_off.svg";
 
 /**
  * This component allows to display the filtered users into a grid
@@ -378,11 +378,26 @@ class DisplayUsers extends React.Component {
           </div>
         }
         {isEmpty &&
-          filterType === UserWorkspaceFilterTypes.TEXT &&
-          <div className="empty-content">
-            <h2><Trans>None of the users matched this search.</Trans></h2>
-            <p className="try-another-search"><Trans>Try another search or use the left panel to navigate into
-              your organization.</Trans></p>
+          <div className="tableview empty">
+            {filterType === UserWorkspaceFilterTypes.TEXT &&
+              <div className="empty-content">
+                <CircleOffSVG/>
+                <div className="message">
+                  <h1><Trans>None of the users matched this search.</Trans></h1>
+                  <p className="try-another-search"><Trans>Try another search or use the left panel to navigate into
+                    your organization.</Trans></p>
+                </div>
+              </div>
+            }
+            {filterType === UserWorkspaceFilterTypes.SUSPENDED_USER &&
+              <div className="empty-content">
+                <CircleOffSVG/>
+                <div className="message">
+                  <h1><Trans>There is no users.</Trans></h1>
+                  <p className="try-another-filter"><Trans>You could remove some filters.</Trans></p>
+                </div>
+              </div>
+            }
           </div>
         }
         {isGridReady &&

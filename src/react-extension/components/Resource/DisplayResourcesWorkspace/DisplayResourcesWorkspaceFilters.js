@@ -94,7 +94,7 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
       case ResourceWorkspaceFilterTypes.ITEMS_I_OWN:
         return <>
           <VenetianMaskSVG/>
-          <span><Trans>Private</Trans></span>
+          <span><Trans>Items I own</Trans></span>
         </>;
       default:
         return <>
@@ -172,7 +172,7 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
               <DropdownMenuItem>
                 <button type="button" className="no-border" onClick={this.handleItemsIOwnClick}>
                   <VenetianMaskSVG/>
-                  <span><Trans>Private</Trans></span>
+                  <span><Trans>Items I own</Trans></span>
                 </button>
               </DropdownMenuItem>
               {this.props.passwordExpiryContext.isFeatureEnabled() &&

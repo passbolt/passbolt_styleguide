@@ -58,6 +58,7 @@ import {
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import FavoriteSVG from "../../../../img/svg/favorite.svg";
 import CellName from "../../../../shared/components/Table/CellName";
+import CircleOffSVG from "../../../../img/svg/circle_off.svg";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -821,57 +822,77 @@ class DisplayResourcesList extends React.Component {
           <div className="tableview empty">
             {filterType === ResourceWorkspaceFilterTypes.TEXT &&
               <div className="empty-content">
-                <h2><Trans>None of your passwords matched this search.</Trans></h2>
-                <p><Trans>Try another search or use the left panel to navigate into your passwords.</Trans></p>
+                <CircleOffSVG/>
+                <div className="message">
+                  <h1><Trans>None of your passwords matched this search.</Trans></h1>
+                  <p><Trans>Try another search or use the left panel to navigate into your passwords.</Trans></p>
+                </div>
               </div>
             }
             {filterType === ResourceWorkspaceFilterTypes.FAVORITE &&
               <div className="empty-content">
-                <h2><Trans>None of your passwords are yet marked as favorite.</Trans></h2>
-                <p><Trans>Add stars to passwords you want to easily find later.</Trans></p>
+                <CircleOffSVG/>
+                <div className="message">
+                  <h1><Trans>None of your passwords are yet marked as favorite.</Trans></h1>
+                  <p><Trans>Add stars to passwords you want to easily find later.</Trans></p>
+                </div>
               </div>
             }
             {filterType === ResourceWorkspaceFilterTypes.GROUP &&
               <div className="empty-content">
-                <h2><Trans>No passwords are shared with this group yet.</Trans></h2>
-                <p><Trans>Share a password with this group or wait for a team member to share one with this group.</Trans></p>
+                <CircleOffSVG/>
+                <div className="message">
+                  <h1><Trans>No passwords are shared with this group yet.</Trans></h1>
+                  <p><Trans>Share a password with this group or wait for a team member to share one with this
+                    group.</Trans></p>
+                </div>
               </div>
             }
             {(filterType === ResourceWorkspaceFilterTypes.FOLDER || filterType === ResourceWorkspaceFilterTypes.ROOT_FOLDER) &&
               <div className="empty-content">
-                <h2><Trans>No passwords in this folder yet.</Trans></h2>
-                <p><Trans>It does feel a bit empty here.</Trans></p>
+                <CircleOffSVG/>
+                <div className="message">
+                  <h1><Trans>No passwords in this folder yet.</Trans></h1>
+                  <p><Trans>It does feel a bit empty here.</Trans></p>
+                </div>
               </div>
             }
             {filterType === ResourceWorkspaceFilterTypes.SHARED_WITH_ME &&
               <div className="empty-content">
-                <h2><Trans>No passwords are shared with you yet.</Trans></h2>
-                <p>
-                  <Trans>It does feel a bit empty here.</Trans>&nbsp;
-                  <Trans>Wait for a team member to share a password with you.</Trans>
-                </p>
+                <CircleOffSVG/>
+                <div className="message">
+                  <h1><Trans>No passwords are shared with you yet.</Trans></h1>
+                  <p>
+                    <Trans>It does feel a bit empty here.</Trans>&nbsp;
+                    <Trans>Wait for a team member to share a password with you.</Trans>
+                  </p>
+                </div>
               </div>
             }
             {filterType === ResourceWorkspaceFilterTypes.EXPIRED &&
               <div className="empty-content">
-                <h2><Trans>No passwords have expired yet.</Trans></h2>
-                <p>
-                  <Trans>It does feel a bit empty here.</Trans>&nbsp;
-                  <Trans>Wait for a password to expire.</Trans>
-                </p>
+                <CircleOffSVG/>
+                <div className="message">
+                  <h1><Trans>No passwords have expired yet.</Trans></h1>
+                  <p>
+                    <Trans>It does feel a bit empty here.</Trans>&nbsp;
+                    <Trans>Wait for a password to expire.</Trans>
+                  </p>
+                </div>
               </div>
             }
             {(filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN || filterType === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED ||
                 filterType === ResourceWorkspaceFilterTypes.ALL) &&
-              <React.Fragment>
-                <div className="empty-content">
+              <div className="empty-content">
+                <CircleOffSVG/>
+                <div className="message">
                   <h1><Trans>Welcome to passbolt!</Trans></h1>
                   <p>
                     <Trans>It does feel a bit empty here.</Trans>&nbsp;
                     <Trans>Create your first password or wait for a team member to share one with you.</Trans>
                   </p>
                 </div>
-              </React.Fragment>
+              </div>
             }
           </div>
         }
