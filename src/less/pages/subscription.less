@@ -1,60 +1,43 @@
 .subscription-key {
   .subscription-information {
-    flex: 1;
-    margin-left: 1.6rem;
-    ul {
-      margin: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
 
-      li {
-        .clearfix();
-        padding-bottom:.25em;
-
-        span {
-          .ellipsis();
-        }
-        .label {
-          min-width: 15rem;
-          width: 20%;
-          max-width: 25rem;
-          display: inline-block;
-          float: left;
-          height: 1.8em;
-          color: @text-lighter-color;
-
-          &.error {
-            color: @text-error-color;
-          }
-          &.warning {
-            color: @text-warning-color;
-          }
-        }
-        .value {
-          width: 55%;
-          display: inline-block;
-          float: left;
-          height: 1.8em;
-
-          &.error {
-            color: @text-error-color;
-          }
-          &.warning {
-            color: @text-warning-color;
-          }
-        }
-      }
-    }
-
-    p {
-      margin: 1.6rem;
-    }
-
-    .actions-wrapper {
+    .information {
       display: flex;
-      align-items: center;
-      margin: 1.6rem;
+      gap: 1.6rem;
+    }
 
-      a {
-        margin-left: 1.6rem;
+    .information-label, .secondary-information {
+      color: var(--Text-and-icons-Secondary-text);
+    }
+
+    .information-value {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .information-label, .information-value {
+      display: flex;
+      flex-direction: column;
+      gap: .8rem;
+
+      .label, .value {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 2rem; // set height for empty value
+
+        button {
+          display: block;
+          width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          text-align: left;
+        }
       }
     }
   }

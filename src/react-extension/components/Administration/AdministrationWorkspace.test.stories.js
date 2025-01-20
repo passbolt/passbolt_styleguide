@@ -136,6 +136,16 @@ export const ceVersion = {
   },
 };
 
+export const SubscriptionPage = {
+  args: {
+    port: port,
+    storage: storage,
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.SUBSCRIPTION
+    })
+  },
+};
+
 export const error403 = {
   args: {
     port: port,

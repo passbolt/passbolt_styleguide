@@ -16,9 +16,7 @@
  * Unit tests on AdministrationWorkspace in regard of specifications
  */
 import React from 'react';
-import {
-  defaultAppContext, defaultProps,
-} from "./AdministrationWorkspace.test.data";
+import {defaultProps} from "./AdministrationWorkspace.test.data";
 import AdministrationWorkspacePage from "./AdministrationWorkspace.test.page";
 import {waitFor} from "@testing-library/dom";
 import {AdministrationWorkspaceMenuTypes} from "../../contexts/AdministrationWorkspaceContext";
@@ -68,7 +66,7 @@ each(
   it(`As AD, I should see: ${currentScenario.selectedMenu}`, async() => {
     expect.assertions(scenarios.length);
 
-    const page = new AdministrationWorkspacePage(defaultAppContext(), defaultProps(currentScenario.selectedMenu));
+    const page = new AdministrationWorkspacePage(defaultProps(currentScenario.selectedMenu));
     await waitFor(() => {});
 
     expect(page[currentScenario.field]).toBeTruthy();

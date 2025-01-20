@@ -48,6 +48,7 @@ import DisplayContentTypesEncryptedMetadataAdministration
 import {Trans} from "react-i18next";
 import ArrowLeftSVG from "../../../img/svg/arrow_left.svg";
 import {withNavigationContext} from "../../contexts/NavigationContext";
+import Footer from "../Common/Footer/Footer.js";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -255,7 +256,7 @@ class AdministrationWorkspace extends Component {
                   <div className="top-bar">
                     <DisplayAdministrationWorkspaceBreadcrumb/>
                   </div>
-                  <div className="grid">
+                  <div className="main-page">
                     {this.isHttpError403 &&
                       <DisplayHttpError errorCode={403}/>
                     }
@@ -315,6 +316,12 @@ class AdministrationWorkspace extends Component {
                 </div>
                 <div className="help-panel">
                   {/* TODO Should display according help panel information */}
+                  <div className="sidebar-help">
+                    <div id="administration-help-panel">
+
+                    </div>
+                  </div>
+                  <Footer/>
                 </div>
               </div>
             </div>

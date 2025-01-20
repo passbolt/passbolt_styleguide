@@ -19,12 +19,13 @@ import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorks
 import {Trans, withTranslation} from "react-i18next";
 import {withDialog} from "../../../../react-extension/contexts/DialogContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
-import Icon from "../../../../shared/components/Icons/Icon";
 import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
 import SubscriptionActionService from '../../../../shared/services/actions/subscription/SubscriptionActionService';
 import DisplayAdministrationSubscriptionActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSubscriptionActions/DisplayAdministrationSubscriptionActions";
 import {withAdminSubscription} from "../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import {createSafePortal} from "../../../../shared/utils/portals";
+import EmailSVG from "../../../../img/svg/email.svg";
 
 /**
  * This component allows to display the subscription key for the administration
@@ -205,99 +206,79 @@ class DisplaySubscriptionKey extends React.Component {
     return (
       <div className="row">
         {!isProcessing &&
-        <div className="subscription-key col8 main-column">
-          <h3><Trans>Subscription key details</Trans></h3>
-          <div className="feedback-card">
-            {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() &&
-            <AnimatedFeedback name="success" />
-            }
-            {this.hasInvalidSubscription() &&
-            <AnimatedFeedback name="error" />
-            }
-            {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() &&
-            <AnimatedFeedback name="warning" />
-            }
-            <div className="subscription-information">
-              {!this.hasSubscriptionKey() &&
-              <>
-                <h4 className="no-border"><Trans>Your subscription key is either missing or not valid.</Trans></h4>
-                <p><Trans>Sorry your subscription is either missing or not readable.</Trans><br/>
-                  <Trans>Update the subscription key and try again.</Trans> <Trans>If this does not work get in touch with support.</Trans>
-                </p>
-              </>
+        <>
+          <div className="subscription-key main-column">
+            <h3><Trans>Subscription key details</Trans></h3>
+            <div className="feedback-card">
+              {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() &&
+              <AnimatedFeedback name="success" />
+              }
+              {this.hasInvalidSubscription() &&
+              <AnimatedFeedback name="error" />
               }
               {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() &&
-              <h4 className="no-border"><Trans>Your subscription key is going to expire.</Trans></h4>
+              <AnimatedFeedback name="warning" />
               }
-              {this.hasSubscriptionKey() && this.hasInvalidSubscription() &&
-              <h4 className="no-border"><Trans>Your subscription key is not valid.</Trans></h4>
-              }
-              {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() &&
-              <h4 className="no-border"><Trans>Your subscription key is valid and up to date!</Trans></h4>
-              }
-              {this.hasSubscriptionKey() &&
-              <ul>
-                <li className="customer-id">
-                  <span className="label"><Trans>Customer id:</Trans></span>
-                  <span className="value">{subscription.customerId}</span>
-                </li>
-                <li className="subscription-id">
-                  <span className="label"><Trans>Subscription id:</Trans></span>
-                  <span className="value">{subscription.subscriptionId}</span>
-                </li>
-                <li className="email">
-                  <span className="label"><Trans>Email:</Trans></span>
-                  <span className="value">{subscription.email}</span>
-                </li>
-                <li className="users">
-                  <span
-                    className={`label ${this.hasLimitUsersExceeded() ? "error" : ""}`}><Trans>Users limit:</Trans></span>
-                  <span
-                    className={`value ${this.hasLimitUsersExceeded() ? "error" : ""}`}>{subscription.users} (<Trans>currently:</Trans> {this.state.activeUsers})</span>
-                </li>
-                <li className="created">
-                  <span className="label"><Trans>Valid from:</Trans></span>
-                  <span className="value">{this.formatDate(subscription.created)}</span>
-                </li>
-                <li className="expiry">
-                  <span
-                    className={`label ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}><Trans>Expires on:</Trans></span>
-                  <span
-                    className={`value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(subscription.expiry)} ({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${formatDateTimeAgo(subscription.expiry, this.props.t, this.props.context.locale)}`})</span>
-                </li>
-              </ul>
-              }
-              {this.hasSubscriptionToRenew() &&
-              <div className="actions-wrapper">
-                {this.hasSubscriptionKey() &&
-                <button className="button primary" type="button" onClick={this.handleRenewKey}>
-                  <Trans>Renew key</Trans>
-                </button>
-                }
+              <div className="subscription-information">
                 {!this.hasSubscriptionKey() &&
-                <button className="button primary" type="button" onClick={this.handleUpdateKey}>
-                  <Trans>Update key</Trans>
-                </button>
+                <>
+                  <h4><Trans>Your subscription key is either missing or not valid.</Trans></h4>
+                  <p><Trans>Sorry your subscription is either missing or not readable.</Trans><br/>
+                    <Trans>Update the subscription key and try again.</Trans> <Trans>If this does not work get in touch with support.</Trans>
+                  </p>
+                </>
                 }
-                <a target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/contact"><Trans>or, contact us</Trans></a>
+                {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() &&
+                <h4><Trans>Your subscription key is going to expire.</Trans></h4>
+                }
+                {this.hasSubscriptionKey() && this.hasInvalidSubscription() &&
+                <h4><Trans>Your subscription key is not valid.</Trans></h4>
+                }
+                {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() &&
+                <h4><Trans>Your subscription key is valid and up to date!</Trans></h4>
+                }
+                {this.hasSubscriptionKey() &&
+                  <div className="information">
+                    <div className="information-label">
+                      <span className="customer-id label"><Trans>Customer id:</Trans></span>
+                      <span className="subscription-id label"><Trans>Subscription id:</Trans></span>
+                      <span className="email label"><Trans>Email:</Trans></span>
+                      <span className="users label"><Trans>Users limit:</Trans></span>
+                      <span className="created label"><Trans>Valid from:</Trans></span>
+                      <span className="expiry label"><Trans>Expires on:</Trans></span>
+                    </div>
+                    <div className="information-value">
+                      <span className="customer-id value">{subscription.customerId}</span>
+                      <span className="subscription-id value">{subscription.subscriptionId}</span>
+                      <span className="email value">{subscription.email}</span>
+                      <span className={`users value ${this.hasLimitUsersExceeded() ? "error" : ""}`}>{subscription.users} <span className="secondary-information">(<Trans>currently:</Trans> {this.state.activeUsers})</span></span>
+                      <span className="created value">{this.formatDate(subscription.created)}</span>
+                      <span className={`expiry value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(subscription.expiry)} <span className="secondary-information">({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${formatDateTimeAgo(subscription.expiry, this.props.t, this.props.context.locale)}`})</span></span>
+                    </div>
+                  </div>
+                }
               </div>
-              }
             </div>
           </div>
-        </div>
+          <div className="actions-wrapper">
+            {this.hasSubscriptionKey()
+              ? <button className="button primary" type="button" onClick={this.handleRenewKey}><Trans>Renew key</Trans></button>
+              : <button className="button primary" type="button" onClick={this.handleUpdateKey}><Trans>Update key</Trans></button>
+            }
+          </div>
+        </>
         }
-        {!isProcessing &&
-        <div className="col4 last">
-          <div className="sidebar-help">
+        {createSafePortal(
+          <>
             <h3><Trans>Need help?</Trans></h3>
             <p><Trans>For any change or question related to your passbolt subscription, kindly contact our sales team.</Trans></p>
             <a className="button" target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/contact">
-              <Icon name="envelope"/>
+              <EmailSVG />
               <span><Trans>Contact Sales</Trans></span>
             </a>
-          </div>
-        </div>
-        }
+          </>,
+          document.getElementById("administration-help-panel")
+        )}
       </div>
     );
   }

@@ -35,6 +35,7 @@ export default class DisplaySubscriptionKeyPage {
           <AdminSubscriptionContextProvider {...props}>
             <DisplaySubscriptionKeyActions {...props}/>
             <DisplaySubscriptionKey {...props}/>
+            <div id="administration-help-panel"></div>
           </AdminSubscriptionContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>
@@ -66,70 +67,63 @@ export default class DisplaySubscriptionKeyPage {
    * Returns the enew Key button element
    */
   get renewKeyButton() {
-    return this._page.container.querySelector('.subscription-information button');
-  }
-
-  /**
-   * Returns the contact us element
-   */
-  get contactUs() {
-    return this._page.container.querySelector('.subscription-information a');
+    return this._page.container.querySelector('.actions-wrapper button.primary');
   }
 
   /**
    * Returns the customer id element
    */
   get customerId() {
-    return this._page.container.querySelector('.customer-id .value').textContent;
+    return this._page.container.querySelector('.customer-id.value').textContent;
   }
 
   /**
    * Returns the subscription id element
    */
   get subscriptionId() {
-    return this._page.container.querySelector('.subscription-id .value').textContent;
+    return this._page.container.querySelector('.subscription-id.value').textContent;
   }
 
   /**
    * Returns the email element
    */
   get email() {
-    return this._page.container.querySelector('.email .value').textContent;
+    return this._page.container.querySelector('.email.value').textContent;
   }
 
   /**
    * Returns the users element
    */
   get users() {
-    return this._page.container.querySelector('.users .value').textContent;
+    return this._page.container.querySelector('.users.value').textContent;
   }
 
   /**
    * Returns the created element
    */
   get created() {
-    return this._page.container.querySelector('.created .value').textContent;
+    return this._page.container.querySelector('.created.value').textContent;
   }
 
   /**
    * Returns the expiry element
    */
   get expiry() {
-    return this._page.container.querySelector('.expiry .value').textContent;
+    return this._page.container.querySelector('.expiry.value').textContent;
   }
 
   /**
    * Returns the help element
    */
   get help() {
-    return this._page.container.querySelector('.col4.last') !== null;
+    return this._page.container.querySelector('#administration-help-panel') !== null;
   }
 
   /**
    * Returns the help contact sales element
    */
   get helpContactSales() {
-    return this._page.container.querySelector('.col4.last a');
+    return this._page.container.querySelector('#administration-help-panel a');
   }
 
   /**
