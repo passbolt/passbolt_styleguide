@@ -196,6 +196,17 @@ export const UserPassphrasePoliciesPage = {
   },
 };
 
+export const SingleSignOnPage = {
+  args: {
+    port: port,
+    storage: storage,
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.SSO
+    }),
+    routerInitialEntry: "/app/administration/sso"
+  },
+};
+
 export const error403 = {
   args: {
     port: port,
