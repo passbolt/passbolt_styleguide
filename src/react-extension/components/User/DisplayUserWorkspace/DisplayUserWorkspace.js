@@ -89,7 +89,7 @@ class DisplayUserWorkspace extends React.Component {
    * Handle go back to resource workspace
    */
   handleGoBack() {
-    this.props.history.push({pathname: `/app/passwords`});
+    this.props.history.push({pathname: "/app/passwords"});
   }
 
   /**

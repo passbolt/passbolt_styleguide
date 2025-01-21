@@ -47,8 +47,26 @@ import DisplayContentTypesEncryptedMetadataAdministration
   from "./DisplayContentTypesEncryptedMetadataAdministration/DisplayContentTypesEncryptedMetadataAdministration";
 import {Trans} from "react-i18next";
 import ArrowLeftSVG from "../../../img/svg/arrow_left.svg";
+import {withNavigationContext} from "../../contexts/NavigationContext";
 
 class AdministrationWorkspace extends Component {
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
+    this.bindCallbacks();
+  }
+
+  /**
+   * Bind callbacks methods
+   * @return {void}
+   */
+  bindCallbacks() {
+    this.handleGoBack = this.handleGoBack.bind(this);
+  }
+
   /**
    * If MFA menu is selected
    * @returns {boolean}
@@ -173,7 +191,7 @@ class AdministrationWorkspace extends Component {
    * Handle go back to resource workspace
    */
   handleGoBack() {
-    this.props.history.push({pathname: `/app/passwords`});
+    this.props.navigationContext.onGoToPasswordsRequested();
   }
 
   /**
@@ -212,7 +230,7 @@ class AdministrationWorkspace extends Component {
                       <button type="button" className="button-transparent back" onClick={this.handleGoBack}>
                         <ArrowLeftSVG/>
                       </button>
-                      <span className="title"><Trans>Organisation settings</Trans></span>
+                      <span className="title administration"><Trans>Organisation settings</Trans></span>
                     </div>
                   </div>
                   <div className="sidebar-content-left">
@@ -227,7 +245,7 @@ class AdministrationWorkspace extends Component {
                   <>
                     <div className="header-left"></div>
                     <div className="header-right">
-                      <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+                      <DisplayUserBadgeMenu baseUrl={this.props.context.trustedDomain || this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
                     </div>
                   </>
                 }
@@ -311,6 +329,7 @@ AdministrationWorkspace.propTypes = {
   context: PropTypes.any, // The application context provider
   history: PropTypes.any,
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
+  navigationContext: PropTypes.any, // The application navigation context
 };
 
-export default withRouter(withAppContext(withAdministrationWorkspace(AdministrationWorkspace)));
+export default withRouter(withAppContext(withNavigationContext(withAdministrationWorkspace(AdministrationWorkspace))));
