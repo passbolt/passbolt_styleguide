@@ -51,7 +51,7 @@ export default {
   title: 'Workspaces/Administration',
   component: AdministrationWorkspace,
   decorators: [(Story, {args}) =>
-    <MemoryRouter initialEntries={['/app/administration']}>
+    <MemoryRouter initialEntries={[args.routerInitialEntry]}>
       <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
         <ExtAppContextProvider storage={args.storage} port={args.port}>
           <RbacContextProvider>
@@ -81,7 +81,7 @@ export default {
                                   "/app/administration/user-passphrase-policies",
                                   "/app/administration/users-directory",
                                 ]}>
-                                  <AdministrationWorkspaceContextProvider>
+                                  <AdministrationWorkspaceContextProvider value={args.administrationWorkspaceContext}>
                                     <AdminAccountRecoveryContextProvider>
                                       <AdminSubscriptionContextProvider>
                                         <AdminSsoContextProvider>
@@ -122,7 +122,8 @@ const port = mockPort(storage);
 export const proVersion = {
   args: {
     port: port,
-    storage: storage
+    storage: storage,
+    routerInitialEntry: "/app/administration"
   },
 };
 
@@ -132,7 +133,8 @@ cePort.addRequestListener("passbolt.organization-settings.get", () => siteSettin
 export const ceVersion = {
   args: {
     port: cePort,
-    storage: ceStorage
+    storage: ceStorage,
+    routerInitialEntry: "/app/administration"
   },
 };
 
@@ -142,8 +144,34 @@ export const SubscriptionPage = {
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
       selectedAdministration: AdministrationWorkspaceMenuTypes.SUBSCRIPTION
-    })
+    }),
+    routerInitialEntry: "/app/administration/subscription"
   },
+};
+
+export const PasswordExpiryPage = {
+  args: {
+    port: port,
+    storage: storage,
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY
+    }),
+    routerInitialEntry: "/app/administration/password-expiry"
+  },
+};
+
+export const MfaPolicyPage = {
+  args: {
+    port: port,
+    storage: storage,
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.MFA_POLICY
+    }),
+    routerInitialEntry: "/app/administration/mfa-policy"
+  },
+  parameters: {
+    css: "api_main"
+  }
 };
 
 export const error403 = {
@@ -152,7 +180,8 @@ export const error403 = {
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
       selectedAdministration: AdministrationWorkspaceMenuTypes.HTTP_403_ACCESS_DENIED
-    })
+    }),
+    routerInitialEntry: "/app/administration"
   },
 };
 
@@ -162,6 +191,7 @@ export const error404 = {
     storage: storage,
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
       selectedAdministration: AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND
-    })
+    }),
+    routerInitialEntry: "/app/administration"
   },
 };
