@@ -36,6 +36,9 @@ import {Trans} from "react-i18next";
 import DisplayUserWorkspaceEmptyDetails from '../DisplayUserWorkspaceEmptyDetails/DisplayUserWorkspaceEmptyDetails';
 import Footer from '../../Common/Footer/Footer';
 import DisplayUsersWorkspaceFilterBar from '../DisplayUsersWorkspaceFilterBar/DisplayUsersWorkspaceFilterBar';
+import debounce from "debounce-promise";
+
+const GAP_AND_PADDING_BUTTONS = 22;
 
 /**
  * This component is a container for all the user workspace features
@@ -48,17 +51,67 @@ class DisplayUserWorkspace extends React.Component {
   constructor(props) {
     super(props);
     this.bindCallbacks();
+    this.createRefs();
+    window.addEventListener('resize', this.handleWindowResizeEventDebounced);
   }
 
   /**
    * Bind callbacks methods
-   * @return {void}
    */
   bindCallbacks() {
     this.handleGoBack = this.handleGoBack.bind(this);
     this.handleDetailsLockedEvent = this.handleDetailsLockedEvent.bind(this);
+    this.handleWindowResizeEventDebounced = debounce(this.handleWindowResizeEvent.bind(this), 50);
   }
 
+  /**
+   * Create DOM nodes or React elements references in order to be able to access them programmatically.
+   */
+  createRefs() {
+    this.actionsBar = React.createRef();
+    this.actionsFilter = React.createRef();
+    this.actionsButton = React.createRef();
+    this.actionsSecondary = React.createRef();
+  }
+
+  /**
+   * ComponentDidMount
+   */
+  componentDidMount() {
+    this.displayOnlyButtonIconsIfButtonsOverlay();
+  }
+
+  /**
+   * ComponentDidUpdate
+   */
+  componentDidUpdate() {
+    this.displayOnlyButtonIconsIfButtonsOverlay();
+  }
+
+  /**
+   * Handle window resize event
+   */
+  handleWindowResizeEvent() {
+    this.displayOnlyButtonIconsIfButtonsOverlay();
+  }
+
+  /**
+   * calculate the width pf buttons,
+   * if overlay the container, add classname to display only icons, else do nothing
+   */
+  displayOnlyButtonIconsIfButtonsOverlay() {
+    // Remove the class name to calculate with default width (text)
+    this.actionsBar.current?.classList.remove("icon-only");
+    // Get elements width
+    const offsetWidthActionBar = this.actionsBar.current?.offsetWidth;
+    const offsetActionsButton = this.actionsFilter.current ? this.actionsFilter.current.offsetWidth : this.actionsButton.current?.offsetWidth;
+    const offsetActionsSecondary = this.actionsSecondary.current?.offsetWidth;
+
+    // Check if the default width overlay the container to show only icons
+    if (offsetActionsButton + offsetActionsSecondary + GAP_AND_PADDING_BUTTONS > offsetWidthActionBar) {
+      this.actionsBar.current.classList.add("icon-only");
+    }
+  }
   /**
    * Returns true if the user details must be displayed
    * @returns {boolean}
@@ -161,12 +214,12 @@ class DisplayUserWorkspace extends React.Component {
                   <div className="breadcrumbs-and-grid">
                     <div className="top-bar">
                       <FilterUsersByBreadcrumb/>
-                      <div className="action-bar">
+                      <div className="action-bar" ref={this.actionsBar}>
                         {this.props.userWorkspaceContext.selectedUsers?.length > 0
-                          ? <DisplayUserWorkspaceActions/>
-                          : <DisplayUsersWorkspaceFilterBar />
+                          ? <DisplayUserWorkspaceActions actionsButtonRef={this.actionsButton}/>
+                          : <DisplayUsersWorkspaceFilterBar actionsFilterRef={this.actionsFilter}/>
                         }
-                        <div className="actions-secondary">
+                        <div className="actions-secondary" ref={this.actionsSecondary}>
                           <button type="button"
                             className={`button-toggle button-action button-action-icon info ${this.hasDetailsLocked() ? "active" : ""}`}
                             onClick={this.handleDetailsLockedEvent}>

@@ -97,12 +97,12 @@ class DisplayUsersWorkspaceFilterBar extends React.Component {
   render() {
     const shouldDisplayAllStatusDropdown = this.isAllItemsFilterToDisplay;
     return (
-      <div className="actions-filter">
+      <div className="actions-filter" ref={this.props.actionsFilterRef}>
         {shouldDisplayAllStatusDropdown &&
           <Dropdown>
             <DropdownButton>
               <UserCogSVG/>
-              <Trans>All statuses</Trans>
+              <span><Trans>All statuses</Trans></span>
               <CaretDownSVG/>
             </DropdownButton>
             <DropdownMenu>
@@ -131,6 +131,7 @@ class DisplayUsersWorkspaceFilterBar extends React.Component {
 }
 
 DisplayUsersWorkspaceFilterBar.propTypes = {
+  actionsFilterRef: PropTypes.object, // The forwarded ref of the filters buttons container
   passwordExpiryContext: PropTypes.object, // the password expiry context
   history: PropTypes.object, // The history property
   userWorkspaceContext: PropTypes.any, // the resource workspace context
