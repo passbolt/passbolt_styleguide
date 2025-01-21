@@ -144,9 +144,11 @@ class DisplayMfaPolicyAdministration extends React.Component {
           </div>
           {this.props.adminMfaPolicyContext.hasSettingsChanges() &&
           <div className="warning message" id="mfa-policy-setting-banner">
-            <p>
-              <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
-            </p>
+            <div>
+              <p>
+                <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+              </p>
+            </div>
           </div>
           }
         </div>

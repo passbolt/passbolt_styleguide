@@ -127,9 +127,11 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
           </div>
           {adminContext.hasSettingsChanges() &&
             <div className="warning message" id="password-expiry-settings-save-banner">
-              <p>
-                <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
-              </p>
+              <div>
+                <p>
+                  <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                </p>
+              </div>
             </div>
           }
         </div>
