@@ -198,6 +198,9 @@ const siteSettings = (isProEdition = true) => ({
       },
       "sso": {
         "enabled": isProEdition,
+      },
+      "passwordPoliciesUpdate": {
+        "enabled": isProEdition,
       }
     }
   }
