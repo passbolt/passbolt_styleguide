@@ -185,6 +185,17 @@ export const PasswordPoliciesPage = {
   },
 };
 
+export const UserPassphrasePoliciesPage = {
+  args: {
+    port: port,
+    storage: storage,
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES
+    }),
+    routerInitialEntry: "/app/administration/user-passphrase-policies"
+  },
+};
+
 export const error403 = {
   args: {
     port: port,
