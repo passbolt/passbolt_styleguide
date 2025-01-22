@@ -1,12 +1,12 @@
-._field-border() {
-  box-shadow: inset 0 0 0 .1rem var(--Field-Field-border);
+._field-border(@border-color: var(--Field-Field-border)) {
+  box-shadow: inset 0 0 0 .1rem @border-color;
 }
 
-._field-border-hover() {
+._field-border-hover(@border-color: var(--Field-Field-border)) {
   box-shadow:
     inset .1rem .1rem 0 0 var(--States-Hover-Highlight),
     inset -.1rem -.1rem 0 0 var(--States-Hover-Shadow),
-    inset 0 0 0 .1rem var(--Field-Field-border);
+    inset 0 0 0 .1rem @border-color;
 }
 
 ._field-border-focus() {
@@ -15,22 +15,22 @@
     0 0 .4rem 0 var(--States-Focus);
 }
 
-._field-border-active() {
+._field-border-active(@border-color: var(--Field-Field-border)) {
   box-shadow:
     inset -.1rem -.1rem 0 0 var(--States-Active-Highlight),
     inset .1rem .1rem 0 0 var(--States-Active-Shadow),
-    inset 0 0 0 .1rem var(--Field-Field-border);
+    inset 0 0 0 .1rem @border-color;
 }
 
-._field-border-disabled() {
-  box-shadow: inset 0 0 0 .1rem var(--Field-Field-border);
+._field-border-disabled(@border-color: var(--Field-Field-border)) {
+  box-shadow: inset 0 0 0 .1rem @border-color;
 }
 
-._field-borders() {
-  ._field-border();
+._field-borders(@border-color: var(--Field-Field-border)) {
+  ._field-border(@border-color);
 
   &:hover {
-    ._field-border-hover();
+    ._field-border-hover(@border-color);
   }
 
   &:focus, &:focus-visible {
@@ -38,10 +38,10 @@
   }
 
   &:active {
-    ._field-border-active();
+    ._field-border-active(@border-color);
   }
 
   &:disabled {
-    ._field-border-disabled();
+    ._field-border-disabled(@border-color);
   }
 }

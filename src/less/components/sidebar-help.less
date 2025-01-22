@@ -1,14 +1,10 @@
 .sidebar-help {
-  padding: 1.6rem;
+  padding: 0;
 
   & > div {
     display: flex;
     flex-direction: column;
-    gap: 2.4rem;
-  }
-
-  & + .sidebar-help {
-    margin-top: 1.6rem;
+    gap: 1.6rem;
   }
 
   h3 {
@@ -18,5 +14,16 @@
 
   .button {
     align-self: flex-start;
+  }
+
+  .sidebar-help-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+    padding: 1.6rem;
+
+    + .sidebar-help-section {
+      box-shadow: inset 0 .1rem .1rem var(--Workspace-Dividers);
+    }
   }
 }
