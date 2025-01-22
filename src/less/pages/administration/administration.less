@@ -4,8 +4,10 @@
     background: none;
 
     .top-bar {
+      padding-bottom: 1.2rem;
       background: var(--Workspace-Panels-background);
       border-radius: var(--Section-border-radius) var(--Section-border-radius) 0 0;
+      border-bottom: 1px solid var(--Workspace-Dividers);
     }
 
     .main-column {
@@ -34,8 +36,21 @@
     }
 
     .main-column {
-      padding: 0 1.6rem 1.6rem;
       height: 100%;
+      .main-content {
+        padding: 0 1.6rem 3.6rem;
+        max-height: calc(78vh - 5rem);
+        overflow-x: auto;
+
+        &.with-warning {
+          max-height: calc(78vh - 10rem);
+        }
+      }
+    }
+
+    .warning.message {
+      margin-top: auto;
+      border-radius: 0 0 var(--Section-border-radius) var(--Section-border-radius);
     }
 
     .row {
@@ -50,6 +65,10 @@
     display: flex;
     justify-content: flex-end;
     padding: 1.6rem 0;
+
+    .left-actions-wrapper {
+      margin-right: auto;
+    }
 
     .button.primary {
       padding: .8rem 2.4rem;
