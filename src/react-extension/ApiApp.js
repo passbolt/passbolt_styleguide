@@ -20,7 +20,6 @@ import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWor
 import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
 import ManageContextualMenu from "./components/Common/ContextualMenu/ManageContextualMenu";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
-import Footer from "./components/Common/Footer/Footer";
 import DisplayApiUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
 import NavigationContextProvider from "./contexts/NavigationContext";
@@ -130,7 +129,6 @@ class ApiApp extends Component {
                                 </Switch>
                               </NavigationContextProvider>
                             </Router>
-                            <Footer/>
                           </ContextualMenuContextProvider>
                         </AnnouncementContextProvider>
                       </DialogContextProvider>

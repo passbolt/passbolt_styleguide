@@ -13,6 +13,11 @@
     .main-column {
       background: var(--Workspace-Panels-background);
       border-radius: 0 0 var(--Section-border-radius) var(--Section-border-radius);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex: 1 0 0;
+      align-self: stretch;
 
       &:last-child {
         border-radius: 0;
@@ -21,6 +26,7 @@
   }
 
   .main-page {
+    display: flex;
     width: 100%;
     height: 100%;
 
@@ -28,52 +34,46 @@
       font-size: 2rem;
       margin: 0;
       padding: 1.6rem 0;
+      align-self: stretch;
     }
 
     h4 {
       font-size: 1.5rem;
       margin: 0;
+      align-self: stretch;
     }
 
     .main-column {
-      height: 100%;
       .main-content {
         padding: 0 1.6rem 3.6rem;
-        max-height: calc(78vh - 5rem);
-        overflow-x: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex: 1 0 0;
+        align-self: stretch;
+        overflow-y: scroll;
+
         .title {
           margin: 0;
         }
-        & > * {
-          margin-bottom: 1.6rem;
-      }
-
-      form {
-          margin: 0;
-          & > * {
-              margin-bottom: 1.6rem;
-          }
-      }
 
         & > * {
           margin-bottom: 1.6rem;
-      }
+        }
 
-      form {
-          margin: 0;
-          & > * {
-              margin-bottom: 1.6rem;
-          }
-      }
-
-        &.with-warning {
-          max-height: calc(78vh - 10rem);
+        form {
+            margin: 0;
+            align-self: stretch;
+            & > * {
+                margin-bottom: 1.6rem;
+            }
         }
       }
     }
 
     .warning.message {
       margin-top: auto;
+      align-self: stretch;
       border-radius: 0 0 var(--Section-border-radius) var(--Section-border-radius);
     }
 
@@ -85,8 +85,8 @@
     .row {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
       height: 100%;
+      width: 100%;
     }
   }
 
