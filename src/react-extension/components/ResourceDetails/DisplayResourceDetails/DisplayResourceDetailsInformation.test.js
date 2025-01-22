@@ -49,6 +49,7 @@ describe("DisplayResourceDetailsInformation", () => {
       page = new DisplayResourceDetailsInformationPage(props);
       await waitFor(() => {});
       expect.assertions(2);
+      await page.title.click();
       expect(page.title.hyperlink.textContent).toBe("Information");
       expect(page.displayInformationList.exists()).toBeTruthy();
     });
@@ -56,7 +57,7 @@ describe("DisplayResourceDetailsInformation", () => {
     it('I should be able to identify each information name', async() => {
       page = new DisplayResourceDetailsInformationPage(props);
       await waitFor(() => {});
-
+      await page.title.click();
       const absoluteModificationDate = props.resourceWorkspaceContext.details.resource.modified;
       const modificationDate = DateTime.fromISO(absoluteModificationDate).toRelative();
       const absoluteCreationDate = props.resourceWorkspaceContext.details.resource.created;
@@ -80,6 +81,7 @@ describe("DisplayResourceDetailsInformation", () => {
     it('I can see the folder a resource is contained in', async() => {
       page = new DisplayResourceDetailsInformationPage(props);
       expect.assertions(2);
+      await page.title.click();
       expect(page.displayInformationList.locationLabel).toBe('Location');
       expect(page.displayInformationList.location.textContent).toBe("My workspace");
     });
@@ -91,6 +93,7 @@ describe("DisplayResourceDetailsInformation", () => {
       props.context.port.addRequestListener("passbolt.resources.find-details", async() => resourceWithContain);
       page = new DisplayResourceDetailsInformationPage(props);
       expect.assertions(1);
+      await page.title.click();
       expect(page.displayInformationList.location).toBeNull();
     });
 
@@ -106,6 +109,7 @@ describe("DisplayResourceDetailsInformation", () => {
 
       page = new DisplayResourceDetailsInformationPage(props);
       expect.assertions(1);
+      await page.title.click();
       expect(page.displayInformationList.expiry).toBeNull();
     });
   });

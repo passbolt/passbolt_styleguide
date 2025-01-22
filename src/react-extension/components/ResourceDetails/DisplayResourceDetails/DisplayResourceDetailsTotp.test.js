@@ -48,10 +48,18 @@ describe("DisplayResourceDetailsTotp", () => {
       const props = defaultProps(); // The props to pass
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});
-      await page.click(page.title);
       expect.assertions(2);
       expect(page.title.textContent).toBe("TOTP");
       expect(page.exists()).toBeTruthy();
+    });
+
+    it('I should close the Totp of a resource', async() => {
+      const props = defaultProps(); // The props to pass
+      page = new DisplayResourceDetailsTotpPage(props);
+      await waitFor(() => {});
+      await page.click(page.title);
+      expect.assertions(1);
+      expect(page.exists()).toBeFalsy();
     });
 
     it('I should be able to identify each property of totp for a password description and totp resource', async() => {
@@ -59,7 +67,6 @@ describe("DisplayResourceDetailsTotp", () => {
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});
       expect.assertions(4);
-      await page.click(page.title);
       expect(page.totpLabel).toBe('TOTP');
       expect(page.totp.textContent).toBe("Copy TOTP to clipboard");
       expect(page.uriLabel).toBeUndefined();
@@ -71,7 +78,6 @@ describe("DisplayResourceDetailsTotp", () => {
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});
       expect.assertions(4);
-      await page.click(page.title);
       expect(page.totpLabel).toBe('TOTP');
       expect(page.totp.textContent).toBe("Copy TOTP to clipboard");
       expect(page.uriLabel).toBe('URI');
@@ -85,7 +91,6 @@ describe("DisplayResourceDetailsTotp", () => {
       page = new DisplayResourceDetailsTotpPage(props);
       const totp = defaultTotpViewModelDto();
       await waitFor(() => {});
-      await page.click(page.title);
       jest.spyOn(props.context.port, 'request').mockImplementation(copyClipboardMockImpl);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
@@ -104,7 +109,6 @@ describe("DisplayResourceDetailsTotp", () => {
       page = new DisplayResourceDetailsTotpPage(props);
       const totp = defaultTotpViewModelDto();
       await waitFor(() => {});
-      await page.click(page.title);
       jest.spyOn(props.context.port, 'request').mockImplementation(copyClipboardMockImpl);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
@@ -122,7 +126,6 @@ describe("DisplayResourceDetailsTotp", () => {
       const props = propsWithDenyUiAction();
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});
-      await page.click(page.title);
 
       expect.assertions(1);
       expect(page.totpLink.hasAttribute("disabled")).toBeTruthy();
@@ -135,7 +138,6 @@ describe("DisplayResourceDetailsTotp", () => {
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});
       const totp = defaultTotpViewModelDto();
-      await page.click(page.title);
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
 
@@ -159,7 +161,6 @@ describe("DisplayResourceDetailsTotp", () => {
       const props = defaultProps({context});
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});
-      await page.click(page.title);
 
       expect.assertions(1);
       expect(page.isViewTotpExist).toBeFalsy();
@@ -169,7 +170,6 @@ describe("DisplayResourceDetailsTotp", () => {
       const props = propsWithDenyUiAction();
       page = new DisplayResourceDetailsTotpPage(props);
       await waitFor(() => {});
-      await page.click(page.title);
 
       expect.assertions(1);
       expect(page.isViewTotpExist).toBeFalsy();

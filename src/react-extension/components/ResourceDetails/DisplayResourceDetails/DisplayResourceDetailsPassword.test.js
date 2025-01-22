@@ -47,17 +47,23 @@ describe("DisplayResourceDetailsPassword", () => {
     it('I should see the Password of a resource', async() => {
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
-      await page.click(page.title);
       expect.assertions(2);
       expect(page.title.textContent).toBe("Password");
       expect(page.exists()).toBeTruthy();
+    });
+
+    it('I should close the Password of a resource', async() => {
+      page = new DisplayResourceDetailsPasswordPage(props);
+      await waitFor(() => {});
+      await page.click(page.title);
+      expect.assertions(1);
+      expect(page.exists()).toBeFalsy();
     });
 
     it('I should be able to identify each Password name', async() => {
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
       expect.assertions(6);
-      await page.click(page.title);
       expect(page.usernameLabel).toBe('Username');
       expect(page.username.textContent).toBe(props.resourceWorkspaceContext.details.resource.metadata.username);
       expect(page.passwordLabel).toBe('Password');
@@ -73,7 +79,6 @@ describe("DisplayResourceDetailsPassword", () => {
       page = new DisplayResourceDetailsPasswordPage(props);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
-      await page.click(page.title);
       await page.click(page.username);
 
       expect.assertions(2);
@@ -86,7 +91,6 @@ describe("DisplayResourceDetailsPassword", () => {
     it('AS LU, I should be able to copy the secret of a resource to clipboard', async() => {
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
-      await page.click(page.title);
       mockContextRequest(copyClipboardMockImpl);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
@@ -103,7 +107,6 @@ describe("DisplayResourceDetailsPassword", () => {
       const props = propsWithDenyUiAction();
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
-      await page.click(page.title);
 
       expect.assertions(1);
       expect(page.passwordLink.hasAttribute("disabled")).toBeTruthy();
@@ -114,7 +117,6 @@ describe("DisplayResourceDetailsPassword", () => {
     it('AS LU, I should be able to preview secret of a resource', async() => {
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
-      await page.click(page.title);
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
 
@@ -137,7 +139,6 @@ describe("DisplayResourceDetailsPassword", () => {
       const props = defaultProps({context});
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
-      await page.click(page.title);
 
       expect.assertions(1);
       expect(page.isViewPasswordExist).toBeFalsy();
@@ -147,7 +148,6 @@ describe("DisplayResourceDetailsPassword", () => {
       const props = propsWithDenyUiAction();
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
-      await page.click(page.title);
 
       expect.assertions(1);
       expect(page.isViewPasswordExist).toBeFalsy();
