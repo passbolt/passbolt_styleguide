@@ -123,6 +123,14 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
   }
 
   /**
+   * Returns the generate a key button
+   * @returns {HTMLElement}
+   */
+  get generateKeyButton() {
+    return this.noMetadataActiveKeysWrapper.querySelector("button");
+  }
+
+  /**
    * Allow or disallow v4 resources creation
    * @returns {Promise<void>}
    */
@@ -133,22 +141,12 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
   }
 
   /**
-   * Allow or disallow v5 resources creation
+   * Generate a new shared metadata key
    * @returns {Promise<void>}
    */
-  async clickOnAllowCreationOfV5ResourcesInput() {
+  async clickOnGenerateKeyButton() {
     const leftClick = {button: 0};
-    fireEvent.click(this.allowUsageOfPersonalKeysInput, leftClick);
-    await waitFor(() => {});
-  }
-
-  /**
-   * Select v5 as default resource type.
-   * @returns {Promise<void>}
-   */
-  async clickOnDefaultResourceTypesV5Input() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.defaultResourceTypesV5Input, leftClick);
+    fireEvent.click(this.generateKeyButton, leftClick);
     await waitFor(() => {});
   }
 }

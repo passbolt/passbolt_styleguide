@@ -28,10 +28,18 @@ import ExternalGpgKeyCollection from "../../../../shared/models/entity/gpgkey/ex
 import {
   adaExternalPrivateGpgKeyEntityDto,
   bettyExternalPublicGpgKeyEntityDto,
-  caroleExternalPublicGpgKeyEntityDto,
+  caroleExternalPublicGpgKeyEntityDto, ed25519ExternalPrivateGpgKeyEntityDto,
   ed25519ExternalPublicGpgKeyEntityDto
 } from "../../../../shared/models/entity/gpgkey/externalGpgKeyEntity.test.data";
 import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import ExternalGpgKeyPairEntity from "../../../../shared/models/entity/gpgkey/external/externalGpgKeyPairEntity";
+
+const metadataKeysInfoDto = [
+  adaExternalPrivateGpgKeyEntityDto(),
+  bettyExternalPublicGpgKeyEntityDto(),
+  caroleExternalPublicGpgKeyEntityDto(),
+  ed25519ExternalPublicGpgKeyEntityDto(),
+];
 
 /**
  * Default props.
@@ -39,6 +47,8 @@ import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
  * @returns {object}
  */
 export function defaultProps(props = {}) {
+  const metadataKeysInfo = new ExternalGpgKeyCollection(metadataKeysInfoDto);
+
   return {
     context: defaultAdministratorAppContext(),
     dialogContext: defaultDialogContext(),
@@ -46,10 +56,15 @@ export function defaultProps(props = {}) {
       findKeysSettings: () => new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
     },
     metadataKeysServiceWorkerService: {
-      findAll: () => new MetadataKeysCollection([])
+      findAll: () => new MetadataKeysCollection([]),
+      generateKeyPair: () => new ExternalGpgKeyPairEntity({
+        public_key: ed25519ExternalPublicGpgKeyEntityDto(),
+        private_key: ed25519ExternalPrivateGpgKeyEntityDto()
+      })
     },
     gpgServiceWorkerService: {
-      keysInfo: () => new ExternalGpgKeyCollection([])
+      keyInfo: armoredKey => metadataKeysInfo.getFirst("armored_key", armoredKey),
+      keysInfo: () => metadataKeysInfo,
     },
     createPortal: jest.fn(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
@@ -68,16 +83,10 @@ export function defaultSettingsAndSingleActiveKeyProps(props = {}) {
     armored_key: pgpKeys.ada.public,
     fingerprint: pgpKeys.ada.fingerprint,
   })];
-  const metadataKeysInfoDto = [
-    adaExternalPrivateGpgKeyEntityDto(),
-  ];
 
   return defaultProps({
     metadataKeysServiceWorkerService: {
       findAll: () => new MetadataKeysCollection(metadataKeysDto)
-    },
-    gpgServiceWorkerService: {
-      keysInfo: () => new ExternalGpgKeyCollection(metadataKeysInfoDto)
     },
     ...props
   });
@@ -98,17 +107,10 @@ export function defaultSettingsAndMultipleActiveKeysProps(props = {}) {
       armored_key: pgpKeys.betty.public,
       fingerprint: pgpKeys.betty.fingerprint,
     })];
-  const metadataKeysInfoDto = [
-    adaExternalPrivateGpgKeyEntityDto(),
-    bettyExternalPublicGpgKeyEntityDto(),
-  ];
 
   return defaultProps({
     metadataKeysServiceWorkerService: {
       findAll: () => new MetadataKeysCollection(metadataKeysDto)
-    },
-    gpgServiceWorkerService: {
-      keysInfo: () => new ExternalGpgKeyCollection(metadataKeysInfoDto)
     },
     ...props
   });
@@ -139,19 +141,10 @@ export function defaultSettingsAndMultipleKeysProps(props = {}) {
       fingerprint: pgpKeys.eddsa_ed25519.fingerprint,
       expired: "2023-10-04T15:11:45+00:00",
     })];
-  const metadataKeysInfoDto = [
-    adaExternalPrivateGpgKeyEntityDto(),
-    bettyExternalPublicGpgKeyEntityDto(),
-    caroleExternalPublicGpgKeyEntityDto(),
-    ed25519ExternalPublicGpgKeyEntityDto(),
-  ];
 
   return defaultProps({
     metadataKeysServiceWorkerService: {
       findAll: () => new MetadataKeysCollection(metadataKeysDto)
-    },
-    gpgServiceWorkerService: {
-      keysInfo: () => new ExternalGpgKeyCollection(metadataKeysInfoDto)
     },
     ...props
   });

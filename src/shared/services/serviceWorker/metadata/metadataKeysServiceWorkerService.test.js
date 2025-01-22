@@ -46,7 +46,7 @@ describe("MetadataKeysServiceWorkerService", () => {
     });
   });
 
-  describe("::generatePrivate", () => {
+  describe("::generateKeyPair", () => {
     it("requests the service worker with the expected event and return the request output.", async() => {
       expect.assertions(4);
       const externalGpgKeyDto = ExternalGpgKeyEntityFixtures.minimal_dto;
@@ -55,7 +55,7 @@ describe("MetadataKeysServiceWorkerService", () => {
         private_key: externalGpgKeyDto
       };
       jest.spyOn(port, "request").mockReturnValue(dto);
-      const externalGpgKeyPair = await service.generatePrivate();
+      const externalGpgKeyPair = await service.generateKeyPair();
       expect(port.request).toHaveBeenCalledWith(METADATA_KEYS_GENERATE_EVENT);
       expect(externalGpgKeyPair).toBeInstanceOf(ExternalGpgKeyPairEntity);
       expect(externalGpgKeyPair.publicKey.armoredKey).toEqual(dto.public_key.armored_key);
