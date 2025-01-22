@@ -79,7 +79,6 @@ export default {
                                   "/app/administration/sso",
                                   "/app/administration/subscription",
                                   "/app/administration/user-passphrase-policies",
-                                  "/app/administration/users-directory",
                                 ]}>
                                   <AdministrationWorkspaceContextProvider value={args.administrationWorkspaceContext}>
                                     <AdminAccountRecoveryContextProvider>
@@ -185,17 +184,6 @@ export const PasswordPoliciesPage = {
   },
 };
 
-export const UserPassphrasePoliciesPage = {
-  args: {
-    port: port,
-    storage: storage,
-    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES
-    }),
-    routerInitialEntry: "/app/administration/user-passphrase-policies"
-  },
-};
-
 export const SingleSignOnPage = {
   args: {
     port: port,
@@ -215,6 +203,17 @@ export const AccountRecoveryPage = {
       selectedAdministration: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY
     }),
     routerInitialEntry: "/app/administration/account-recovery"
+  },
+};
+
+export const UserPassphrasePoliciesPage = {
+  args: {
+    port: port,
+    storage: storage,
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES
+    }),
+    routerInitialEntry: "/app/administration/user-passphrase-policies"
   },
 };
 

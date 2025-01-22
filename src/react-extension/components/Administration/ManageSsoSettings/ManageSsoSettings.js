@@ -205,9 +205,11 @@ class ManageSsoSettings extends React.Component {
         </div>
         {this.props.adminSsoContext.hasFormChanged() &&
           <div className="warning message" id="sso-setting-overridden-banner">
-            <p>
-              <Trans>Warning, Don&apos;t forget to save your settings to apply your modification.</Trans>
-            </p>
+            <div>
+              <p>
+                <Trans>Warning, Don&apos;t forget to save your settings to apply your modification.</Trans>
+              </p>
+            </div>
           </div>
         }
         <DisplayAdministrationSsoActions/>

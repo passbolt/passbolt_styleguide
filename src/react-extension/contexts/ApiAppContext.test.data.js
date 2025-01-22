@@ -11,26 +11,29 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {v4 as uuidv4} from "uuid";
 import SiteSettings from "../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../test/fixture/Settings/siteSettings";
 import {ApiClientOptions} from "../../shared/lib/apiClient/apiClientOptions";
 import MockPort from "../test/mock/MockPort";
+import UserSettings from "../../shared/lib/Settings/UserSettings";
+import userSettingsFixture from "../test/fixture/Settings/userSettings";
 /**
  * Returns the default api app context for the unit test
  * @param {Object} appContext (Optional)Properties to override
  * @returns {Object}
  * @deprecated Check what was done for ExtAppContext
  */
-export function defaultAppContext(appContext = {}, userId = uuidv4()) {
+export function defaultAppContext(appContext = {}) {
+  const userSettings = new UserSettings(userSettingsFixture);
   const siteSettings = new SiteSettings(siteSettingsFixture);
   const defaultAppContext = {
     locale: 'en-UK',
     onRefreshLocaleRequested: jest.fn(),
+    userSettings,
     siteSettings,
     trustedDomain: "https://localhost:6006",
     loggedInUser: {
-      id: userId,
+      id: userSettings.id,
       username: "user@passbolt.com",
       role: {
         name: 'admin'
