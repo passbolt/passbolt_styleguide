@@ -12,7 +12,9 @@
  * @since         4.11.0
  */
 import MetadataKeysCollection from "../../../models/entity/metadata/metadataKeysCollection";
+import ExternalGpgKeyPairEntity from "../../../models/entity/gpgkey/external/externalGpgKeyPairEntity";
 
+export const METADATA_KEYS_GENERATE_EVENT = "passbolt.metadata.generate-metadata-key";
 export const METADATA_KEYS_FIND_ALL_EVENT = "passbolt.metadata.find-all-non-deleted-metadata-keys";
 
 class MetadataKeysServiceWorkerService {
@@ -31,6 +33,15 @@ class MetadataKeysServiceWorkerService {
   async findAll() {
     const metadataKeysDto = await this.port.request(METADATA_KEYS_FIND_ALL_EVENT);
     return new MetadataKeysCollection(metadataKeysDto);
+  }
+
+  /**
+   * Generate a metadata private key.
+   * @returns {Promise<ExternalGpgKeyPairEntity>}
+   */
+  async generatePrivate() {
+    const externalGpgKeyPairDto = await this.port.request(METADATA_KEYS_GENERATE_EVENT);
+    return new ExternalGpgKeyPairEntity(externalGpgKeyPairDto);
   }
 }
 
