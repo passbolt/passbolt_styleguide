@@ -166,7 +166,7 @@ export default class DisplayMfaAdministrationPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSaveButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[0];
+    return this._page.container.querySelector("#save-settings");
   }
 
   /**
@@ -245,6 +245,34 @@ export default class DisplayMfaAdministrationPage {
    */
   isSaveButtonEnabled() {
     return !this.toolbarActionsSaveButton.hasAttribute("disabled");
+  }
+
+  /**
+   * Returns the help box
+   */
+  get helpBox() {
+    return this._page.container.querySelectorAll('.sidebar-help-section')[0];
+  }
+
+  /**
+   * Returns the help box title
+   */
+  get helpBoxTitle() {
+    return this.helpBox.querySelector('h3');
+  }
+
+  /**
+   * Returns the help box description
+   */
+  get helpBoxDescription() {
+    return this.helpBox.querySelector('p');
+  }
+
+  /**
+   * Returns the help box button
+   */
+  get helpBoxButton() {
+    return this.helpBox.querySelector('.button');
   }
 
   /**
