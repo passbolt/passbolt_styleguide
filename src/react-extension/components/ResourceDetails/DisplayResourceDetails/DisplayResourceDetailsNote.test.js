@@ -34,18 +34,19 @@ describe("See secure note", () => {
     expect.assertions(6);
 
     const page = new DisplayResourceDetailsNotePage(props);
+
+    // by default the description should be encrypted
+    expect(page.encryptedDescription.textContent).not.toBeNull();
+    expect(page.encryptedDescription.textContent).not.toBe("");
+
+    // closing the section
+    await page.clickOn(page.title);
+
     // the section should be available but the content not visible.
     expect(page.exists()).toBeTruthy();
     expect(page.encryptedDescription).toBeNull();
     expect(page.emptyMessage).toBeNull();
     expect(page.errorMessage).toBeNull();
-
-    //opening the section
-    await page.clickOn(page.title);
-
-    // by default the description should be encrypted
-    expect(page.encryptedDescription.textContent).not.toBeNull();
-    expect(page.encryptedDescription.textContent).not.toBe("");
   });
 
   it('See the decrypted description when clicking on the "show" button', async() => {
@@ -56,8 +57,6 @@ describe("See secure note", () => {
 
     const page = new DisplayResourceDetailsNotePage(props);
 
-    //opening the section and decrypting the description
-    await page.clickOn(page.title);
     expect(page.showButton).not.toBeNull();
     page.showButton.click();
 
@@ -82,8 +81,6 @@ describe("See secure note", () => {
 
     const page = new DisplayResourceDetailsNotePage(props);
 
-    //opening the section and decrypting the description
-    await page.clickOn(page.title);
     page.showButton.click();
     await waitForTrue(() => !page.isLoading());
 
@@ -108,7 +105,6 @@ describe("See secure note", () => {
     props.context.port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({description: ""}));
 
     const page = new DisplayResourceDetailsNotePage(props);
-    await page.clickOn(page.title);
 
     page.showButton.click();
 
@@ -124,7 +120,6 @@ describe("See secure note", () => {
     props.context.port.addRequestListener("passbolt.secret.find-by-resource-id", () => { throw new Error("Something went wrong!"); });
 
     const page = new DisplayResourceDetailsNotePage(props);
-    await page.clickOn(page.title);
 
     await page.showButton.click();
     await waitFor(() => {});

@@ -49,7 +49,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    */
   getDefaultState() {
     return {
-      open: true,
+      open: false,
       creator: null, // the data of the resource creator
       modifier: null, // the data of the resource creator
     };

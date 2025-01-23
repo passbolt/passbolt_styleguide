@@ -48,7 +48,7 @@ class DisplayResourceDetailsPassword extends React.Component {
    */
   getDefaultState() {
     return {
-      open: false,
+      open: true,
       isSecretPreviewed: null, // The is secret previewed boolean property
       plaintextSecret: null, // The current resource password decrypted
     };

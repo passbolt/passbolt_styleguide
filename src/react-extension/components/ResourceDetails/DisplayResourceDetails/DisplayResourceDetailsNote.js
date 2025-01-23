@@ -47,7 +47,7 @@ class DisplayResourceDetailsNote extends React.Component {
    */
   get defaultState() {
     return {
-      open: false,
+      open: true,
       error: false,
       isSecretDecrypting: false,
       isSecretDecrypted: false,
