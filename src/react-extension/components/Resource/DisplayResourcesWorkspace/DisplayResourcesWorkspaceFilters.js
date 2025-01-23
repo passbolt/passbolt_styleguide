@@ -148,12 +148,12 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
    */
   render() {
     return (
-      <div className="actions-filter">
+      <div className="actions-filter" ref={this.props.actionsFilterRef}>
         {this.isAllItemsFilterToDisplay &&
           <Dropdown>
             <DropdownButton>
               <FilterSVG/>
-              <Trans>All items</Trans>
+              <span><Trans>All items</Trans></span>
               <CaretDownSVG/>
             </DropdownButton>
             <DropdownMenu>
@@ -202,6 +202,7 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
 }
 
 DisplayResourcesWorkspaceFilters.propTypes = {
+  actionsFilterRef: PropTypes.object, // The forwarded ref of the filters buttons container
   passwordExpiryContext: PropTypes.object, // the password expiry context
   history: PropTypes.object, // The history property
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context

@@ -318,7 +318,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     const count = this.props.userWorkspaceContext.selectedUsers?.length;
 
     return (
-      <div className="actions">
+      <div className="actions" ref={this.props.actionsButtonRef}>
         <div className="actions-wrapper">
           <ul>
             {this.hasOneUserSelected() &&
@@ -326,7 +326,7 @@ class DisplayUserWorkspaceActions extends React.Component {
                 <Dropdown>
                   <DropdownButton className="button-action-contextual">
                     <CopySVG/>
-                    <Trans>Copy</Trans>
+                    <span><Trans>Copy</Trans></span>
                     <CaretDownSVG/>
                   </DropdownButton>
                   <DropdownMenu className="menu-action-contextual">
@@ -410,6 +410,7 @@ class DisplayUserWorkspaceActions extends React.Component {
 }
 
 DisplayUserWorkspaceActions.propTypes = {
+  actionsButtonRef: PropTypes.object, // The forwarded ref of the buttons container
   context: PropTypes.any, // The application context
   userWorkspaceContext: PropTypes.any, // the user workspace context
   workflowContext: PropTypes.any, // the workflow context

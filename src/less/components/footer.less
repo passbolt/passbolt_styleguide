@@ -9,6 +9,7 @@
   align-self: stretch;
   box-sizing: border-box;
   border-top: .1rem solid var(--Workspace-Dividers);
+  min-width: 0;
 
   .footer-links {
     display: flex;
@@ -17,13 +18,13 @@
     align-items: center;
     gap: 1.6rem;
     flex: 1 0 0;
+    min-width: 0;
 
     li {
       display: flex;
 
       &.error-message a {
-        background-color: @footer-background;
-        color: @text-error-color;
+        color: var(--Field-Error);
       }
 
       a {

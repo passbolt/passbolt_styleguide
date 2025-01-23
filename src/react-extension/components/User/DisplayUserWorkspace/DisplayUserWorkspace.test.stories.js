@@ -37,7 +37,7 @@ export default {
   component: DisplayUserWorkspace
 };
 
-const Template = ({...args}) =>
+const ExtApp = ({...args}) =>
   <MemoryRouter initialEntries={['/app/users']}>
     <ExtAppContextProvider storage={args.storage} port={args.port}>
       <RbacContextProvider>
@@ -73,17 +73,21 @@ const Template = ({...args}) =>
 const storage = mockStorage();
 const port = mockPort(storage);
 
-export const proVersion = Template.bind({});
-proVersion.args = {
-  port: port,
-  storage: storage
+export const proVersion = {
+  args: {
+    port: port,
+    storage: storage
+  },
+  render: ExtApp
 };
 
 const ceStorage = mockStorage();
 const cePort = mockPort(ceStorage);
 cePort.addRequestListener("passbolt.organization-settings.get", () => siteSettingsCe);
-export const ceVersion = Template.bind({});
-ceVersion.args = {
-  port: cePort,
-  storage: ceStorage
+export const ceVersion = {
+  args: {
+    port: cePort,
+    storage: ceStorage
+  },
+  render: ExtApp
 };

@@ -41,7 +41,7 @@ class CellUserMfa extends Component {
 }
 
 CellUserMfa.propTypes = {
-  value: PropTypes.bool.isRequired, // The value to display
+  value: PropTypes.bool, // The value to display
   t: PropTypes.func, // The translation function
 };
 

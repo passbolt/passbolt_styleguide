@@ -434,7 +434,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     const count = this.props.resourceWorkspaceContext.selectedResources?.length;
 
     return (
-      <div className="actions">
+      <div className="actions" ref={this.props.actionsButtonRef}>
         <div className="actions-wrapper">
           <ul>
             {canViewShare &&
@@ -450,7 +450,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                 <Dropdown>
                   <DropdownButton className="button-action-contextual">
                     <CopySVG/>
-                    <Trans>Copy</Trans>
+                    <span><Trans>Copy</Trans></span>
                     <CaretDownSVG/>
                   </DropdownButton>
                   <DropdownMenu className="menu-action-contextual">
@@ -567,6 +567,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
 }
 
 DisplayResourcesWorkspaceMenu.propTypes = {
+  actionsButtonRef: PropTypes.object, // The forwarded ref of the buttons container
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
   actionFeedbackContext: PropTypes.any, // The action feedback context

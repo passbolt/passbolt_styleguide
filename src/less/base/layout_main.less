@@ -21,11 +21,13 @@
         flex: 1 0 0;
         align-self: stretch;
         background: var(--Workspace-Workspace-background);
-        min-width: 0; // important to keep the container size for ellipsis
+        min-width: 110rem; // important to keep the container size for ellipsis
 
         .panel.left {
           display: flex;
-          width: 28.5rem; // 269px + 16px (285px)
+          width: 15%;
+          min-width: 20rem;
+          max-width: 40rem;
           flex-direction: column;
           align-items: flex-start;
           gap: 1.6rem;
@@ -176,7 +178,9 @@
 
             .panel.aside, .help-panel {
               display: flex;
-              width: 35rem;
+              width: 22%;
+              min-width: 30rem;
+              max-width: 50rem;
               flex-direction: column;
               align-items: flex-start;
               justify-content: space-between;
@@ -197,11 +201,5 @@
         }
       }
     }
-  }
-}
-
-/* TODO check what should be displayed for small screen */
-@media all and (max-width: 1024px) {
-  .page {
   }
 }

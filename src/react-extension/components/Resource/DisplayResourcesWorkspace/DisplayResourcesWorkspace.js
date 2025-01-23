@@ -44,6 +44,9 @@ import DisplayResourcesWorkspaceFilters from "./DisplayResourcesWorkspaceFilters
 import Footer from "../../Common/Footer/Footer";
 import DisplayEmptyDetails from "../../ResourceFolderDetails/DisplayResourceFolderDetails/DisplayEmptyDetails";
 import DisplayResourcesListDetails from "../../ResourceDetails/DisplayResourceDetails/DisplayResourcesListDetails";
+import debounce from "debounce-promise";
+
+const GAP_AND_PADDING_BUTTONS = 22;
 
 class Workspace extends Component {
   /**
@@ -53,6 +56,8 @@ class Workspace extends Component {
   constructor(props) {
     super(props);
     this.bindCallbacks();
+    this.createRefs();
+    window.addEventListener('resize', this.handleWindowResizeEventDebounced);
   }
 
   /**
@@ -61,7 +66,58 @@ class Workspace extends Component {
   bindCallbacks() {
     this.handleOnChangeColumnView = this.handleOnChangeColumnView.bind(this);
     this.handleViewDetailClickEvent = this.handleViewDetailClickEvent.bind(this);
+    this.handleWindowResizeEventDebounced = debounce(this.handleWindowResizeEvent.bind(this), 50);
   }
+
+  /**
+   * Create DOM nodes or React elements references in order to be able to access them programmatically.
+   */
+  createRefs() {
+    this.actionsBar = React.createRef();
+    this.actionsFilter = React.createRef();
+    this.actionsButton = React.createRef();
+    this.actionsSecondary = React.createRef();
+  }
+
+  /**
+   * ComponentDidMount
+   */
+  componentDidMount() {
+    this.displayOnlyButtonIconsIfButtonsOverlay();
+  }
+
+  /**
+   * ComponentDidUpdate
+   */
+  componentDidUpdate() {
+    this.displayOnlyButtonIconsIfButtonsOverlay();
+  }
+
+  /**
+   * Handle window resize event
+   */
+  handleWindowResizeEvent() {
+    this.displayOnlyButtonIconsIfButtonsOverlay();
+  }
+
+  /**
+   * calculate the width pf buttons,
+   * if overlay the container, add classname to display only icons, else do nothing
+   */
+  displayOnlyButtonIconsIfButtonsOverlay() {
+    // Remove the class name to calculate with default width (text)
+    this.actionsBar.current?.classList.remove("icon-only");
+    // Get elements width
+    const offsetWidthActionBar = this.actionsBar.current?.offsetWidth;
+    const offsetActionsButton = this.actionsFilter.current ? this.actionsFilter.current.offsetWidth : this.actionsButton.current?.offsetWidth;
+    const offsetActionsSecondary = this.actionsSecondary.current?.offsetWidth;
+
+    // Check if the default width overlay the container to show only icons
+    if (offsetActionsButton + offsetActionsSecondary + GAP_AND_PADDING_BUTTONS > offsetWidthActionBar) {
+      this.actionsBar.current.classList.add("icon-only");
+    }
+  }
+
   /**
    * Has lock for the detail display
    * @returns {boolean}
@@ -175,16 +231,16 @@ class Workspace extends Component {
             <div className="breadcrumbs-and-grid">
               <div className="top-bar">
                 <FilterResourcesByBreadcrumb/>
-                <div className="action-bar">
+                <div className="action-bar" ref={this.actionsBar}>
                   {this.props.resourceWorkspaceContext.selectedResources?.length > 0
-                    ? <DisplayResourcesWorkspaceMenu/>
-                    : <DisplayResourcesWorkspaceFilters/>
+                    ? <DisplayResourcesWorkspaceMenu actionsButtonRef={this.actionsButton}/>
+                    : <DisplayResourcesWorkspaceFilters actionsFilterRef={this.actionsFilter}/>
                   }
-                  <div className="actions-secondary">
+                  <div className="actions-secondary" ref={this.actionsSecondary}>
                     <Dropdown>
                       <DropdownButton>
                         <ColumnsSVG/>
-                        <Trans>Columns</Trans>
+                        <span><Trans>Columns</Trans></span>
                         <CaretDownSVG/>
                       </DropdownButton>
                       <DropdownMenu direction="left">
