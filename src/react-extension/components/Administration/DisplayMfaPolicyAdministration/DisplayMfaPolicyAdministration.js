@@ -44,7 +44,6 @@ class DisplayMfaPolicyAdministration extends React.Component {
    * On the component will unmount.
    */
   componentWillUnmount() {
-    this.props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction();
     this.props.adminMfaPolicyContext.clearContext();
   }
 
