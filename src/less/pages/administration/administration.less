@@ -41,6 +41,30 @@
         padding: 0 1.6rem 3.6rem;
         max-height: calc(78vh - 5rem);
         overflow-x: auto;
+        .title {
+          margin: 0;
+        }
+        & > * {
+          margin-bottom: 1.6rem;
+      }
+
+      form {
+          margin: 0;
+          & > * {
+              margin-bottom: 1.6rem;
+          }
+      }
+
+        & > * {
+          margin-bottom: 1.6rem;
+      }
+
+      form {
+          margin: 0;
+          & > * {
+              margin-bottom: 1.6rem;
+          }
+      }
 
         &.with-warning {
           max-height: calc(78vh - 10rem);
@@ -51,6 +75,11 @@
     .warning.message {
       margin-top: auto;
       border-radius: 0 0 var(--Section-border-radius) var(--Section-border-radius);
+    }
+
+    .divider {
+      margin: 0 -1.6rem;
+      border-bottom: .1rem solid var(--Workspace-Dividers);
     }
 
     .row {
