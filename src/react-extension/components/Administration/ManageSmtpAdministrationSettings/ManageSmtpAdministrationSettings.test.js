@@ -15,6 +15,7 @@
 /**
  * Unit tests on ManageSmtpAdministrationSettings in regard of specifications
  */
+import "../../../../../test/mocks/mockPortal.js";
 import SmtpProviders from "./SmtpProviders.data";
 import {ManageSmtpAdministrationSettings} from "./ManageSmtpAdministrationSettings";
 import ManageSmtpAdministrationSettingsPage from "./ManageSmtpAdministrationSettings.test.page";
