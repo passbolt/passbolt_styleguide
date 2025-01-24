@@ -12,7 +12,6 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {
   AdministrationWorkspaceMenuTypes,
@@ -237,7 +236,6 @@ class AdministrationWorkspace extends Component {
                 <div className="sidebar-content">
                   <div className="top-bar-left-navigation">
                     <div className="navigation">
-                      {/* Add onclick action */}
                       <button type="button" className="button-transparent back" onClick={this.handleGoBack}>
                         <ArrowLeftSVG/>
                       </button>
@@ -347,9 +345,8 @@ class AdministrationWorkspace extends Component {
 
 AdministrationWorkspace.propTypes = {
   context: PropTypes.any, // The application context provider
-  history: PropTypes.any,
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   navigationContext: PropTypes.any, // The application navigation context
 };
 
-export default withRouter(withAppContext(withNavigationContext(withAdministrationWorkspace(AdministrationWorkspace))));
+export default withAppContext(withNavigationContext(withAdministrationWorkspace(AdministrationWorkspace)));

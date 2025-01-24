@@ -37,6 +37,7 @@ import DisplayUserWorkspaceEmptyDetails from '../DisplayUserWorkspaceEmptyDetail
 import Footer from '../../Common/Footer/Footer';
 import DisplayUsersWorkspaceFilterBar from '../DisplayUsersWorkspaceFilterBar/DisplayUsersWorkspaceFilterBar';
 import debounce from "debounce-promise";
+import {withNavigationContext} from "../../../contexts/NavigationContext";
 
 const GAP_AND_PADDING_BUTTONS = 22;
 
@@ -142,7 +143,7 @@ class DisplayUserWorkspace extends React.Component {
    * Handle go back to resource workspace
    */
   handleGoBack() {
-    this.props.history.push({pathname: "/app/passwords"});
+    this.props.navigationContext.onGoToPasswordsRequested();
   }
 
   /**
@@ -191,7 +192,7 @@ class DisplayUserWorkspace extends React.Component {
                       <button type="button" className="button-transparent back" onClick={this.handleGoBack}>
                         <ArrowLeftSVG/>
                       </button>
-                      <span className="title"><Trans>Users & Groups</Trans></span>
+                      <span className="title users"><Trans>Users & Groups</Trans></span>
                     </div>
                   </div>
                   <DisplayUserWorkspaceMainActions/>
@@ -259,8 +260,9 @@ class DisplayUserWorkspace extends React.Component {
 
 DisplayUserWorkspace.propTypes = {
   context: PropTypes.any, // The application context
+  userWorkspaceContext: PropTypes.any,
   history: PropTypes.any,
-  userWorkspaceContext: PropTypes.any
+  navigationContext: PropTypes.any, // The application navigation context
 };
 
-export default withRouter(withAppContext(withUserWorkspace(DisplayUserWorkspace)));
+export default withRouter(withAppContext(withNavigationContext(withUserWorkspace(DisplayUserWorkspace))));
