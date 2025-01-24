@@ -6,33 +6,42 @@ a {
     font-size: 1.5rem;
     font-weight: 400;
     text-overflow: ellipsis;
-    line-height: normal;
-    border-bottom: .1rem solid var(--Palette-Gradient-7);
+    line-height: 2rem;
+    border: none;
     color: var(--Text-and-icons-Main-text);
     gap: 1.6rem;
     display: inline-flex;
     overflow: hidden;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: .1rem;
+      background-color: var(--Palette-Gradient-7);
+    }
 
     &:link, &:visited {
         color: var(--Text-and-icons-Main-text);
     }
+
     &:active, &:hover {
-        text-decoration: none;
-        cursor: pointer;
-        border-bottom: .1rem solid var(--Palette-Contrast-1);
+      box-shadow: none;
+      border: none;
+      cursor: pointer;
+      &::after {
+        background-color: var(--Palette-Contrast-1);
+      }
     }
 
     &:focus, &:focus-visible {
-        border-bottom: none;
-        display: inline;
-        position: relative;
+        box-shadow: none;
+        border: none;
+        cursor: pointer;
         &::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: .05rem;
             background-color: var(--Palette-Contrast-1);
             box-shadow: 0 0 .4rem 0 var(--States-Focus);
         }
@@ -45,6 +54,11 @@ a {
         cursor: default;
         opacity: .5;
         pointer-events: none;
+
+        &::after {
+          background-color: var(--Palette-Gradient-7);
+          box-shadow: none;
+        }
     }
 }
 
@@ -55,7 +69,7 @@ button.link {
     cursor: pointer;
     font-size: 1.5rem;
     line-height: 2rem;
-    border-bottom: 1px solid var(--Palette-Gradient-7);
+    border: none;
     border-radius: 0;
     padding: 0;
     text-align: inherit;
@@ -64,31 +78,36 @@ button.link {
     vertical-align: inherit;
     box-shadow: none;
     min-width: inherit;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: .1rem;
+      background-color: var(--Palette-Gradient-7);
+    }
 
     &:active, &:hover {
-        text-decoration: none;
-        cursor: pointer;
-        border-bottom: .1rem solid var(--Palette-Contrast-1);
         box-shadow: none;
+        border: none;
+        &::after {
+          background-color: var(--Palette-Contrast-1);
+        }
     }
 
     &:focus, &:focus-visible {
         box-shadow: none;
-        border-bottom: none;
-        position: relative;
+        border: none;
         &::after {
-          content: '';
-          position: absolute;
-          left: 0;
-          bottom: 0;
-          width: 100%;
-          height: .05rem;
           background-color: var(--Palette-Contrast-1);
           box-shadow: 0 0 .4rem 0 var(--States-Focus);
         }
     }
 
-    &:disabled {
+    &:disabled, &.disabled {
         background: transparent;
         outline: 0;
         text-decoration: none;
@@ -96,6 +115,11 @@ button.link {
         opacity: .5;
         pointer-events: none;
         box-shadow: none;
+
+        &::after {
+          background-color: var(--Palette-Gradient-7);
+          box-shadow: none;
+        }
     }
 
     &.inline {
@@ -103,7 +127,6 @@ button.link {
     }
 
     &.no-border {
-        border: none;
         &::after {
             content: none;
         }
