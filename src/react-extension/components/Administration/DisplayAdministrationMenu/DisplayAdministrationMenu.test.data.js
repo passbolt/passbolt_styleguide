@@ -37,7 +37,8 @@ export function defaultProps(data = {}) {
       onGoToAdministrationUserPassphrasePoliciesRequested: jest.fn(),
       onGoToAdministrationPasswordExpirySettingsRequested: jest.fn(),
       onGoToAdministrationHealthcheckRequested: jest.fn(),
-      onGoToAdministrationContentTypesMetadataRequested: jest.fn(),
+      onGoToAdministrationContentTypesEncryptedMetadataRequested: jest.fn(),
+      onGoToAdministrationContentTypesMetadataKeyRequested: jest.fn(),
     }
   }, data);
 }

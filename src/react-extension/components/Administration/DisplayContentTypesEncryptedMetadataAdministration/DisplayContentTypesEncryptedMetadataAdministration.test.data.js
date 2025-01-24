@@ -37,7 +37,7 @@ export function defaultProps(props = {}) {
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext(),
     actionFeedbackContext: defaultActionFeedbackContext(),
     metadataSettingsServiceWorkerService: {
-      getOrFindTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
+      findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
       saveTypesSettings: jest.fn(settings => new MetadataTypesSettingsEntity(settings.toDto())),
     },
     createPortal: jest.fn,
