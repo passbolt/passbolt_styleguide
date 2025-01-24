@@ -78,6 +78,7 @@ exports.pgpKeys = {
       email: "carl@passbolt.com",
       name: "Carol Shaw",
     }],
+    length: 4096,
     expires: "Infinity",
     created: "2016-09-07T13:13:42.000Z",
     algorithm: "RSA",
