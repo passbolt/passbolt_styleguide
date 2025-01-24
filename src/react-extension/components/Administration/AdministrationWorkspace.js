@@ -327,10 +327,7 @@ class AdministrationWorkspace extends Component {
                 </div>
                 <div className="help-panel">
                   {/* TODO Should display according help panel information */}
-                  <div className="sidebar-help">
-                    <div id="administration-help-panel">
-
-                    </div>
+                  <div className="sidebar-help" id="administration-help-panel">
                   </div>
                   <Footer/>
                 </div>

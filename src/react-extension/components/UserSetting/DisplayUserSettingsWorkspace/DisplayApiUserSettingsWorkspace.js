@@ -94,11 +94,15 @@ class DisplayApiUserSettingsWorkspace extends React.Component {
               <div className="top-bar">
                 <DisplayUserSettingsWorkspaceBreadcrumb/>
               </div>
-              <Route exact path="/app/settings/mfa/:provider" component={DisplayUserMfaProvider}></Route>
-              <Route exact path="/app/settings/mfa" component={DisplayUserMfa}></Route>
+              <div className="main-page">
+                <Route exact path="/app/settings/mfa/:provider" component={DisplayUserMfaProvider}></Route>
+                <Route exact path="/app/settings/mfa" component={DisplayUserMfa}></Route>
+              </div>
             </div>
             <div className="help-panel">
               {/* TODO Should display according help panel information */}
+              <div className="sidebar-help">
+              </div>
             </div>
           </div>
         </div>
