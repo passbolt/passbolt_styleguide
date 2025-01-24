@@ -15,6 +15,7 @@
 import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContext.test.data";
+import {defaultNavigationContext} from "../../../contexts/NavigationContext.test.data";
 
 /**
  * Props with user details
@@ -29,9 +30,7 @@ export function propsWithUserDetails() {
       },
       isAccessAllowed: () => true,
     }),
-    history: {
-      push: jest.fn(),
-    }
+    navigationContext: defaultNavigationContext(),
   };
 }
 
@@ -51,9 +50,7 @@ export function propsWithSelecteUser() {
       filteredUsers: [user],
       isAccessAllowed: () => true,
     }),
-    history: {
-      push: jest.fn(),
-    }
+    navigationContext: defaultNavigationContext(),
   };
 }
 

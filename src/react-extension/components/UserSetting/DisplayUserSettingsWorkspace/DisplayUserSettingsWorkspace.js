@@ -16,7 +16,6 @@
 import React from 'react';
 import {Route, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import Logo from "../../Common/Navigation/Header/Logo";
 import DisplayUserBadgeMenu from "../../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import NavigateIntoUserSettingsWorkspace from "../NavigateIntoUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
@@ -35,11 +34,31 @@ import ExportAccountToDesktop from '../ExportAccountToDesktop/ExportAccountToDes
 import OrchestrateMfaSettings from '../../MFA/OrchestrateMfaSettings/OrchestrateMfaSettings';
 import {withRbac} from '../../../../shared/context/Rbac/RbacContext';
 import {uiActions} from '../../../../shared/services/rbacs/uiActionEnumeration';
+import ArrowLeftSVG from "../../../../img/svg/arrow_left.svg";
+import {Trans} from "react-i18next";
+import {withNavigationContext} from "../../../contexts/NavigationContext";
 
 /**
  * This component is a container for all the user settings workspace features
  */
 class DisplayUserSettingsWorkspace extends React.Component {
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
+    this.bindCallbacks();
+  }
+
+  /**
+   * Bind callbacks methods
+   * @return {void}
+   */
+  bindCallbacks() {
+    this.handleGoBack = this.handleGoBack.bind(this);
+  }
+
   /**
    * Can the user access the theme capability.
    * @returns {bool}
@@ -84,6 +103,13 @@ class DisplayUserSettingsWorkspace extends React.Component {
   }
 
   /**
+   * Handle go back to resource workspace
+   */
+  handleGoBack() {
+    this.props.navigationContext.onGoToPasswordsRequested();
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -93,7 +119,14 @@ class DisplayUserSettingsWorkspace extends React.Component {
       <div className="panel main">
         <div className="panel left">
           <div className="sidebar-content">
-            <Logo/>
+            <div className="top-bar-left-navigation">
+              <div className="navigation">
+                <button type="button" className="button-transparent back" onClick={this.handleGoBack}>
+                  <ArrowLeftSVG/>
+                </button>
+                <span className="title my-profile"><Trans>My Profile</Trans></span>
+              </div>
+            </div>
             <div className="sidebar-content-left">
               <NavigateIntoUserSettingsWorkspace
                 hasPendingMfaChoice={this.isMfaChoiceRequired}
@@ -145,6 +178,7 @@ DisplayUserSettingsWorkspace.propTypes = {
   accountRecoveryContext: PropTypes.object, // The account recovery context
   mfaContext: PropTypes.object,
   rbacContext: PropTypes.any, // The role based access control context
+  navigationContext: PropTypes.any, // The application navigation context
 };
 
-export default withAppContext(withRbac(withAccountRecovery(withMfa(withRouter(DisplayUserSettingsWorkspace)))));
+export default withRouter(withAppContext(withRbac(withAccountRecovery(withMfa(withNavigationContext(DisplayUserSettingsWorkspace))))));

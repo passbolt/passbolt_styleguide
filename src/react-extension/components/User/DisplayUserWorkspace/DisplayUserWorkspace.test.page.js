@@ -33,7 +33,7 @@ export default class DisplayUserWorkspacePage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <DisplayUserWorkspace.WrappedComponent {...props}/>
+          <DisplayUserWorkspace {...props}/>
         </Router>
       </MockTranslationProvider>
     );
