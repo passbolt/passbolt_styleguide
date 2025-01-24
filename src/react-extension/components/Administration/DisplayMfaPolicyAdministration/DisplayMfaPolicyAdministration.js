@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import EmailSVG from "../../../../img/svg/email.svg";
+import FileTextSVG from "../../../../img/svg/file_text.svg";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
@@ -96,8 +96,9 @@ class DisplayMfaPolicyAdministration extends React.Component {
         <>
           <div className="mfa-policy-settings main-column">
             <div className={`main-content ${this.props.adminMfaPolicyContext.hasSettingsChanges() && "with-warning"}`}>
-              <h3 id="mfa-policy-settings-title"><Trans>MFA Policy</Trans></h3>
+              <h3 className="title" id="mfa-policy-settings-title"><Trans>MFA Policy</Trans></h3>
               <form className="form">
+                <div className="divider"/>
                 <h4 className="no-border" id="mfa-policy-subtitle"><Trans>Default users multi factor authentication policy</Trans></h4>
                 <p id="mfa-policy-description">
                   <Trans>You can choose the default behaviour of multi factor authentication for all users.</Trans>
@@ -158,7 +159,7 @@ class DisplayMfaPolicyAdministration extends React.Component {
             <h3><Trans>Need some help?</Trans></h3>
             <p><Trans>For more information about MFA policy settings, checkout the dedicated page on the help website.</Trans></p>
             <a className="button" href="https://passbolt.com/docs/admin/authentication/mfa-policy" target="_blank" rel="noopener noreferrer">
-              <EmailSVG />
+              <FileTextSVG />
               <span><Trans>Read the documentation</Trans></span>
             </a>
           </div>,
