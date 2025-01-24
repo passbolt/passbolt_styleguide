@@ -328,7 +328,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
       <div className="row">
         <>
           <div className="third-party-provider-settings smtp-settings main-column">
-            <div className={`main-content ${this.shouldShowSourceWarningMessage() && "with-warning"}`}>
+            <div className="main-content">
               <h3 className="title"><Trans>Email server</Trans></h3>
               {this.isReady() && !settings?.provider &&
               <>
@@ -354,7 +354,6 @@ export class ManageSmtpAdministrationSettings extends React.Component {
               {this.isReady() && settings?.provider &&
               <>
                 <form className="form">
-                  <div className="divider"/>
                   <h4 className="no-border"><Trans>SMTP server configuration</Trans></h4>
                   <div className={`select-wrapper input required ${this.isProcessing() ? 'disabled' : ''}`}>
                     <label htmlFor="smtp-settings-form-provider"><Trans>Email provider</Trans></label>
@@ -432,7 +431,6 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                       </div>
                     </div>
                   }
-                  <div className="divider"/>
                   <h4><Trans>Sender configuration</Trans></h4>
                   <div className={`input text required ${errors.sender_name ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
                     <label htmlFor="smtp-settings-form-sender-name"><Trans>Sender name</Trans></label>

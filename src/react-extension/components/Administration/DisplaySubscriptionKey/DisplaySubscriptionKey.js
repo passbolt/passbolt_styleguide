@@ -208,55 +208,57 @@ class DisplaySubscriptionKey extends React.Component {
         {!isProcessing &&
         <>
           <div className="subscription-key main-column">
-            <h3><Trans>Subscription key details</Trans></h3>
-            <div className="feedback-card">
-              {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() &&
-              <AnimatedFeedback name="success" />
-              }
-              {this.hasInvalidSubscription() &&
-              <AnimatedFeedback name="error" />
-              }
-              {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() &&
-              <AnimatedFeedback name="warning" />
-              }
-              <div className="subscription-information">
-                {!this.hasSubscriptionKey() &&
-                <>
-                  <h4><Trans>Your subscription key is either missing or not valid.</Trans></h4>
-                  <p><Trans>Sorry your subscription is either missing or not readable.</Trans><br/>
-                    <Trans>Update the subscription key and try again.</Trans> <Trans>If this does not work get in touch with support.</Trans>
-                  </p>
-                </>
+            <div className="main-content">
+              <h3 className="title"><Trans>Subscription key details</Trans></h3>
+              <div className="feedback-card">
+                {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() &&
+                <AnimatedFeedback name="success" />
+                }
+                {this.hasInvalidSubscription() &&
+                <AnimatedFeedback name="error" />
                 }
                 {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() &&
-                <h4><Trans>Your subscription key is going to expire.</Trans></h4>
+                <AnimatedFeedback name="warning" />
                 }
-                {this.hasSubscriptionKey() && this.hasInvalidSubscription() &&
-                <h4><Trans>Your subscription key is not valid.</Trans></h4>
-                }
-                {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() &&
-                <h4><Trans>Your subscription key is valid and up to date!</Trans></h4>
-                }
-                {this.hasSubscriptionKey() &&
-                  <div className="information">
-                    <div className="information-label">
-                      <span className="customer-id label"><Trans>Customer id:</Trans></span>
-                      <span className="subscription-id label"><Trans>Subscription id:</Trans></span>
-                      <span className="email label"><Trans>Email:</Trans></span>
-                      <span className="users label"><Trans>Users limit:</Trans></span>
-                      <span className="created label"><Trans>Valid from:</Trans></span>
-                      <span className="expiry label"><Trans>Expires on:</Trans></span>
+                <div className="subscription-information">
+                  {!this.hasSubscriptionKey() &&
+                  <>
+                    <h4 className="subscription-information-subtitle"><Trans>Your subscription key is either missing or not valid.</Trans></h4>
+                    <p><Trans>Sorry your subscription is either missing or not readable.</Trans><br/>
+                      <Trans>Update the subscription key and try again.</Trans> <Trans>If this does not work get in touch with support.</Trans>
+                    </p>
+                  </>
+                  }
+                  {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() &&
+                  <h4 className="subscription-information-subtitle"><Trans>Your subscription key is going to expire.</Trans></h4>
+                  }
+                  {this.hasSubscriptionKey() && this.hasInvalidSubscription() &&
+                  <h4 className="subscription-information-subtitle"><Trans>Your subscription key is not valid.</Trans></h4>
+                  }
+                  {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() &&
+                  <h4 className="subscription-information-subtitle"><Trans>Your subscription key is valid and up to date!</Trans></h4>
+                  }
+                  {this.hasSubscriptionKey() &&
+                    <div className="information">
+                      <div className="information-label">
+                        <span className="customer-id label"><Trans>Customer id:</Trans></span>
+                        <span className="subscription-id label"><Trans>Subscription id:</Trans></span>
+                        <span className="email label"><Trans>Email:</Trans></span>
+                        <span className="users label"><Trans>Users limit:</Trans></span>
+                        <span className="created label"><Trans>Valid from:</Trans></span>
+                        <span className="expiry label"><Trans>Expires on:</Trans></span>
+                      </div>
+                      <div className="information-value">
+                        <span className="customer-id value">{subscription.customerId}</span>
+                        <span className="subscription-id value">{subscription.subscriptionId}</span>
+                        <span className="email value">{subscription.email}</span>
+                        <span className={`users value ${this.hasLimitUsersExceeded() ? "error" : ""}`}>{subscription.users} <span className="secondary-information">(<Trans>currently:</Trans> {this.state.activeUsers})</span></span>
+                        <span className="created value">{this.formatDate(subscription.created)}</span>
+                        <span className={`expiry value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(subscription.expiry)} <span className="secondary-information">({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${formatDateTimeAgo(subscription.expiry, this.props.t, this.props.context.locale)}`})</span></span>
+                      </div>
                     </div>
-                    <div className="information-value">
-                      <span className="customer-id value">{subscription.customerId}</span>
-                      <span className="subscription-id value">{subscription.subscriptionId}</span>
-                      <span className="email value">{subscription.email}</span>
-                      <span className={`users value ${this.hasLimitUsersExceeded() ? "error" : ""}`}>{subscription.users} <span className="secondary-information">(<Trans>currently:</Trans> {this.state.activeUsers})</span></span>
-                      <span className="created value">{this.formatDate(subscription.created)}</span>
-                      <span className={`expiry value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(subscription.expiry)} <span className="secondary-information">({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${formatDateTimeAgo(subscription.expiry, this.props.t, this.props.context.locale)}`})</span></span>
-                    </div>
-                  </div>
-                }
+                  }
+                </div>
               </div>
             </div>
           </div>
@@ -269,14 +271,14 @@ class DisplaySubscriptionKey extends React.Component {
         </>
         }
         {createSafePortal(
-          <>
+          <div className="sidebar-help-section">
             <h3><Trans>Need help?</Trans></h3>
             <p><Trans>For any change or question related to your passbolt subscription, kindly contact our sales team.</Trans></p>
             <a className="button" target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/contact">
               <EmailSVG />
               <span><Trans>Contact Sales</Trans></span>
             </a>
-          </>,
+          </div>,
           document.getElementById("administration-help-panel")
         )}
       </div>

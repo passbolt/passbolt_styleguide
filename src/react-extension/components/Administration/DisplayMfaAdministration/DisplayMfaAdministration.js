@@ -163,7 +163,6 @@ class DisplayMfaAdministration extends React.Component {
               <Trans>The Time-based One Time Password provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
             </p>
               }
-              <div className="divider"/>
             </div>
             <div className="provider-section">
               <h4>
@@ -208,7 +207,6 @@ class DisplayMfaAdministration extends React.Component {
               </div>
             </>
               }
-              <div className="divider"/>
             </div>
             <div className="provider-section">
               <h4>
