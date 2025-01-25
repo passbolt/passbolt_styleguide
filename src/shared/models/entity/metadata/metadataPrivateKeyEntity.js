@@ -20,10 +20,9 @@ const PGP_STRING_MAX_LENGTH = 10_000;
 
 class MetadataPrivateKeyEntity extends EntityV2 {
   /**
-   * @constructor
-   * @param {object} dto
+   * @inheritDoc
    */
-  constructor(dto, options) {
+  constructor(dto, options = {}) {
     super(dto);
 
     if (this._props.data && typeof this._props.data !== 'string') {
@@ -57,6 +56,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
         "user_id": {
           "type": "string",
           "format": "uuid",
+          "nullable": true,
         },
         "data": {
           "anyOf": [{
@@ -169,6 +169,14 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    */
   get isDecrypted() {
     return Boolean(this._data);
+  }
+
+  /**
+   * Returns the user_id
+   * @returns {string}
+   */
+  get userId() {
+    return this._props.user_id;
   }
 }
 
