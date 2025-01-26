@@ -36,10 +36,10 @@ class MetadataKeysServiceWorkerService {
   }
 
   /**
-   * Generate a metadata private key.
+   * Generate a metadata key pair.
    * @returns {Promise<ExternalGpgKeyPairEntity>}
    */
-  async generatePrivate() {
+  async generateKeyPair() {
     const externalGpgKeyPairDto = await this.port.request(METADATA_KEYS_GENERATE_EVENT);
     return new ExternalGpgKeyPairEntity(externalGpgKeyPairDto);
   }

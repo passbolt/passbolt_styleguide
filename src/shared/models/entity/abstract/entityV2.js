@@ -221,17 +221,20 @@ class EntityV2 extends Entity {
     if (!(compareEntity instanceof EntityV2)) {
       throw new TypeError("The property \"compareEntity\" should be of \"EntityV2\" type.");
     }
+
     const diff = {};
-    for (const prop of Object.keys(this._props)) {
-      const schemaProperties = this.constructor.getSchema().properties[prop];
-      if (!SCALAR_PROPERTY_TYPES.includes(schemaProperties?.type)) {
-        continue;
-      }
-      const comparedPropValue = compareEntity.get(prop);
-      if (this.get(prop) !== comparedPropValue) {
-        diff[prop] = comparedPropValue;
+    const schema = this.constructor.getSchema();
+    const propertiesNamesToCompare = Object.keys(schema.properties)
+      .filter(propertyName => SCALAR_PROPERTY_TYPES.includes(schema.properties[propertyName].type));
+
+    for (const propertyName of propertiesNamesToCompare) {
+      const propValue = this.get(propertyName);
+      const comparedPropValue = compareEntity.get(propertyName);
+      if (propValue !== comparedPropValue) {
+        diff[propertyName] = comparedPropValue;
       }
     }
+
     return diff;
   }
 

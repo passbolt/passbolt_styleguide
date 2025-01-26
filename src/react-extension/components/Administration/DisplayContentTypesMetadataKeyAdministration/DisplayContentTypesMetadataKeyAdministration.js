@@ -27,18 +27,19 @@ import MetadataKeysServiceWorkerService
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
 import GpgServiceWorkerService from "../../../../shared/services/serviceWorker/crypto/gpgServiceWorkerService";
 import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
-import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import MetadataKeysSettingsFormEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsFormEntity";
+import MetadataKeyEntity from "../../../../shared/models/entity/metadata/metadataKeyEntity";
 
 class DisplayContentTypesMetadataKeyAdministration extends Component {
   /**
    * The original settings.
-   * @type {MetadataKeysSettingsEntity}
+   * @type {MetadataKeysSettingsFormEntity}
    */
   originalSettings = null;
 
   /**
    * The form settings.
-   * @type {MetadataKeysSettingsEntity}
+   * @type {MetadataKeysSettingsFormEntity}
    */
   formSettings = null;
 
@@ -68,6 +69,8 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
       settings: { // Form data
         allow_usage_of_personal_keys: true,
         zero_knowledge_key_share: false,
+        armored_metadata_private_key: null, // New shared metadata private key.
+        armored_metadata_public_key: null, // New shared metadata public key.
       },
       activeMetadataKeys: null, // Active metadata keys.
       expiredMetadataKeys: null, // Expired metadata keys.
@@ -79,6 +82,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    */
   bindCallbacks() {
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.generateMetadataKey = this.generateMetadataKey.bind(this);
   }
 
   /**
@@ -99,9 +103,10 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    */
   async loadKeysSettings() {
     try {
-      this.originalSettings = await this.metadataSettingsServiceWorkerService.findKeysSettings();
-      this.formSettings = new MetadataKeysSettingsEntity(this.originalSettings.toDto(), {validate: false});
-      this.setState({setting: this. formSettings.toDto()});
+      const settings = await this.metadataSettingsServiceWorkerService.findKeysSettings();
+      this.originalSettings = new MetadataKeysSettingsFormEntity(settings.toDto(), {validate: false});
+      this.formSettings = new MetadataKeysSettingsFormEntity(settings.toDto(), {validate: false});
+      this.setState({setting: this.formSettings.toFormDto()});
     } catch (error) {
       await this.handleUnexpectedError(error);
     }
@@ -140,15 +145,15 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    * Check if the data have been changed.
    * @param {object} formSetingsDto The form settings dto store in state, not used but required to ensure the memoized
    *   function is only triggered when the form is updated.
-   * @param {MetadataKeysSettingsEntity} originalSettings The metadata settings as originally provided by the API.
-   * @param {MetadataKeysSettingsEntity} formSettings The metadata settings updated by the user.
+   * @param {MetadataKeysSettingsFormEntity} originalSettings The metadata key settings as originally provided by the API.
+   * @param {MetadataKeysSettingsFormEntity} formSettings The metadata key settings updated by the user.
    * @param {object} formSetingsDto The form settings dto store in state, not used but required to ensure the memoized
    *   function is only triggered when the form is updated.
    * @param {ResourceTypesCollection} resourceTypes The resource types.
    * @return {EntityValidationError}
    */
   // eslint-disable-next-line no-unused-vars
-  hasSettingsChanges = memoize((originalSettings, formSettings, formSettingsDto) => this.originalSettings?.hasDiffProps(this.formSettings));
+  hasSettingsChanges = memoize((originalSettings, formSettings, formSettingsDto) => originalSettings?.hasDiffProps(formSettings));
 
   /**
    * Handle form input changes.
@@ -177,7 +182,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    */
   setFormPropertyValue(name, parsedValue) {
     this.formSettings.set(name, parsedValue, {validate: false});
-    this.setState({settings: this.formSettings.toDto()});
+    this.setState({settings: this.formSettings.toFormDto()});
   }
 
   /**
@@ -186,6 +191,31 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    */
   hasAllInputDisabled() {
     return this.state.isProcessing;
+  }
+
+  /**
+   * Generate a new metadata key
+   * @return {Promise}
+   */
+  async generateMetadataKey() {
+    this.setState({isProcessing: true});
+    try {
+      const metadataKeyPair = await this.metadataKeysServiceWorkerService.generateKeyPair();
+      const metadataKeyInfo = await this.gpgServiceWorkerService.keyInfo(metadataKeyPair.publicKey.armoredKey);
+      const metadataKeysInfo = this.state.metadataKeysInfo;
+      metadataKeysInfo.push(metadataKeyInfo);
+      const metadataKey = new MetadataKeyEntity({armored_key: metadataKeyPair.publicKey.armoredKey, fingerprint: metadataKeyInfo.fingerprint});
+      const activeMetadataKeys = this.state.activeMetadataKeys;
+      activeMetadataKeys.push(metadataKey);
+      this.formSettings.set("armored_metadata_private_key", metadataKeyPair.privateKey.armoredKey);
+      this.formSettings.set("armored_metadata_public_key", metadataKeyPair.publicKey.armoredKey);
+      this.setState({activeMetadataKeys, metadataKeysInfo, settings: this.formSettings.toFormDto()});
+    } catch (error) {
+      console.error(error);
+      await this.handleUnexpectedError(error);
+    }
+
+    this.setState({isProcessing: false});
   }
 
   /**
@@ -331,9 +361,14 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                       </tr>
                       <tr className="created">
                         <td className="label"><Trans>Created</Trans></td>
-                        <td className="value"><span
-                          title={metadataKey.created}>{formatDateTimeAgo(metadataKey.created, this.props.t, this.props.context.locale)}</span>
-                        </td>
+                        {metadataKey.created &&
+                          <td className="value"><span
+                            title={metadataKey.created}>{formatDateTimeAgo(metadataKey.created, this.props.t, this.props.context.locale)}</span>
+                          </td>
+                        }
+                        {!metadataKey.created &&
+                          <td className="empty-value"><Trans>Pending</Trans></td>
+                        }
                       </tr>
                     </tbody>
                   </table>;
@@ -346,10 +381,10 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                 <table id="no-metadata-active-keys" className="table-info">
                   <tbody>
                     <tr>
-                      <td className="empty-value"><Trans>You need to generate a new to enable encrypted metadata.</Trans></td>
+                      <td className="empty-value"><Trans>You need to generate a new shared key to enable encrypted metadata.</Trans></td>
                       <td className="table-button">
                         <button className="button primary medium" type="button" disabled={this.hasAllInputDisabled()}
-                          onClick={() => {}}>
+                          onClick={this.generateMetadataKey}>
                           <Trans>Generate key</Trans>
                         </button>
                       </td>

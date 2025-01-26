@@ -121,3 +121,21 @@ export const ed25519ExternalPublicGpgKeyEntityDto = (data = {}) => {
 
   return Object.assign(defaultData, data);
 };
+
+export const ed25519ExternalPrivateGpgKeyEntityDto = (data = {}) => {
+  const defaultData = {
+    armored_key: pgpKeys.eddsa_ed25519.private,
+    key_id: pgpKeys.eddsa_ed25519.key_id,
+    user_ids: pgpKeys.eddsa_ed25519.user_ids,
+    fingerprint: pgpKeys.eddsa_ed25519.fingerprint,
+    expires: 'Infinity',
+    created: pgpKeys.eddsa_ed25519.created,
+    algorithm: pgpKeys.eddsa_ed25519.algorithm?.toLowerCase(),
+    length: pgpKeys.eddsa_ed25519.length,
+    curve: pgpKeys.eddsa_ed25519.curve,
+    private: true,
+    revoked: pgpKeys.eddsa_ed25519.revoked,
+  };
+
+  return Object.assign(defaultData, data);
+};

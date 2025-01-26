@@ -25,6 +25,7 @@ import {
 } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import {waitFor} from "@testing-library/react";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 describe("DisplayContentTypesMetadataKeyAdministration", () => {
   beforeEach(() => {
@@ -34,7 +35,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
 
   describe("As a signed-in administrator I can see the content type metadata key administration", () => {
     it("As a signed-in administrator I can see the default settings", async() => {
-      expect.assertions(9);
+      expect.assertions(11);
       const props = defaultProps();
 
       const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
@@ -47,7 +48,9 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.enableZeroKnowledgeKeyShareInput.checked).toBe(false);
       expect(page.metadataActiveKeysWrapper).toBeNull();
       expect(page.noMetadataActiveKeysWrapper).not.toBeNull();
-      expect(page.noMetadataActiveKeysWrapper.textContent).toContain("You need to generate a new to enable encrypted metadata.");
+      expect(page.noMetadataActiveKeysWrapper.textContent).toContain("You need to generate a new shared key to enable encrypted metadata.");
+      expect(page.generateKeyButton).not.toBeNull();
+      expect(page.generateKeyButton.textContent).toContain("Generate key");
       expect(page.metadataExpiredKeysWrapper).toBeNull();
     });
 
@@ -164,6 +167,50 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       await page.clickOnDisallowUsageOfPersonalKeysInput();
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(false);
       expect(page.disallowUsageOfPersonalKeysInput.checked).toBe(true);
+    });
+  });
+
+  describe("As a signed-in administrator, I can generate a shared metadata key if none are active", () => {
+    it("displays a changes warning message when I generate a key", async() => {
+      expect.assertions(2);
+      const props = defaultProps();
+
+      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
+      await waitForTrue(() => page.exists());
+      await page.clickOnGenerateKeyButton();
+      expect(page.formBanner).not.toBeNull();
+      expect(page.formBanner.textContent).toEqual("Don't forget to save your settings to apply your modification.");
+    });
+
+    it("displays the new key details when I generate a key", async() => {
+      expect.assertions(7);
+      const props = defaultProps();
+
+      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
+      await waitForTrue(() => page.exists());
+      await page.clickOnGenerateKeyButton();
+
+      expect(page.metadataActiveKeysWrapper).not.toBeNull();
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.algorithm.toLowerCase());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.length.toString());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain("Pending");
+      expect(page.noMetadataActiveKeysWrapper).toBeNull();
+      expect(page.metadataExpiredKeysWrapper).toBeNull();
+    });
+
+    it("displays an unexpected error dialog if the key cannot be generated", async() => {
+      expect.assertions(1);
+      const error = new Error("Unexpected test error");
+      const props = defaultProps();
+      jest.spyOn(props.metadataKeysServiceWorkerService, "generateKeyPair").mockImplementation(() => {
+        throw error;
+      });
+
+      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
+      await waitForTrue(() => page.exists());
+      await page.clickOnGenerateKeyButton();
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
     });
   });
 });
