@@ -153,7 +153,6 @@ class ExtApp extends Component {
                                                       <DragContextProvider>
                                                         <div id="container" className="page password">
                                                           <div id="app" className="app" tabIndex="1000">
-                                                            {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
                                                             <DisplayResourcesWorkspace/>
                                                           </div>
                                                         </div>
@@ -179,7 +178,6 @@ class ExtApp extends Component {
                                               <ManageAnnouncements/>
                                               <div id="container" className="page user">
                                                 <div id="app" className="app" tabIndex="1000">
-                                                  {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
                                                   <DisplayUserWorkspace/>
                                                 </div>
                                               </div>
@@ -193,7 +191,6 @@ class ExtApp extends Component {
                                                 <ManageAnnouncements/>
                                                 <div id="container" className="page settings">
                                                   <div id="app" className="app" tabIndex="1000">
-                                                    {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
                                                     <DisplayUserSettingsWorkspace/>
                                                   </div>
                                                 </div>
