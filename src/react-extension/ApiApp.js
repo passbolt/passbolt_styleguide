@@ -20,8 +20,6 @@ import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWor
 import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
 import ManageContextualMenu from "./components/Common/ContextualMenu/ManageContextualMenu";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
-import DisplayApiUserSettingsWorkspace
-  from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import HandleSessionExpired from "./components/Authentication/HandleSessionExpired/HandleSessionExpired";
 import AnnouncementContextProvider from "./contexts/AnnouncementContext";
@@ -115,17 +113,6 @@ class ApiApp extends Component {
                                         </AdminUserDirectoryContextProvider>
                                       </AdminSmtpSettingsContextProvider>
                                     </AdministrationWorkspaceContextProvider>
-                                  </Route>
-                                  <Route path={["/app/settings/mfa"]}>
-                                    <ManageDialogs/>
-                                    <ManageContextualMenu/>
-                                    <ManageAnnouncements/>
-                                    <div id="container" className="page settings">
-                                      <div id="app" className="app" tabIndex="1000">
-                                        {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
-                                        <DisplayApiUserSettingsWorkspace/>
-                                      </div>
-                                    </div>
                                   </Route>
                                 </Switch>
                               </NavigationContextProvider>

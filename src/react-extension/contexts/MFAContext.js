@@ -16,8 +16,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../shared/context/AppContext/AppContext";
 import {MfaPolicyEnumerationTypes} from "../../shared/models/mfaPolicy/MfaPolicyEnumeration";
-import MFAService from "../../shared/services/api/Mfa/MfaService";
-import MfaPolicyService from "../../shared/services/api/mfaPolicy/MfaPolicyService";
 
 // The mfa settings workflow states.
 export const MfaSettingsWorkflowStates = {
@@ -71,10 +69,6 @@ export class MfaContextProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    if (this.props.context.getApiClientOptions) {
-      this.mfaService = new MFAService(this.props.context.getApiClientOptions());
-      this.mfaPolicyService = new MfaPolicyService(this.props.context.getApiClientOptions());
-    }
   }
 
   /**
@@ -123,12 +117,7 @@ export class MfaContextProvider extends React.Component {
 
     this.setProcessing(true);
     let policy = null;
-    let result = null;
-    if (this.mfaPolicyService) {
-      result = await this.mfaPolicyService.find();
-    } else {
-      result = await this.props.context.port.request("passbolt.mfa-policy.get-policy");
-    }
+    const result = await this.props.context.port.request("passbolt.mfa-policy.get-policy");
     policy = result ? result.policy : null;
     this.setState({policy});
     this.setProcessing(false);
@@ -140,14 +129,9 @@ export class MfaContextProvider extends React.Component {
    */
   async findMfaSettings() {
     this.setProcessing(true);
-    let settings = null;
     let mfaUserSettings =  null;
     let mfaOrganisationSettings = null;
-    if (this.mfaService) {
-      settings = await this.mfaService.getUserSettings();
-    } else {
-      settings = await this.props.context.port.request("passbolt.mfa-policy.get-mfa-settings");
-    }
+    const settings = await this.props.context.port.request("passbolt.mfa-policy.get-mfa-settings");
     mfaUserSettings = settings.MfaAccountSettings;
     mfaOrganisationSettings = settings.MfaOrganizationSettings;
     this.setState({mfaUserSettings});
