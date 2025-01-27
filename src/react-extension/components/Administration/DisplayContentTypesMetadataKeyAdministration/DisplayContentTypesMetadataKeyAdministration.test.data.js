@@ -33,6 +33,8 @@ import {
 } from "../../../../shared/models/entity/gpgkey/externalGpgKeyEntity.test.data";
 import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
 import ExternalGpgKeyPairEntity from "../../../../shared/models/entity/gpgkey/external/externalGpgKeyPairEntity";
+import MetadataKeyEntity from "../../../../shared/models/entity/metadata/metadataKeyEntity";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 
 const metadataKeysInfoDto = [
   adaExternalPrivateGpgKeyEntityDto(),
@@ -52,15 +54,20 @@ export function defaultProps(props = {}) {
   return {
     context: defaultAdministratorAppContext(),
     dialogContext: defaultDialogContext(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
     metadataSettingsServiceWorkerService: {
       findKeysSettings: () => new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
+      saveKeysSettings: settings => settings
     },
     metadataKeysServiceWorkerService: {
       findAll: () => new MetadataKeysCollection([]),
       generateKeyPair: () => new ExternalGpgKeyPairEntity({
         public_key: ed25519ExternalPublicGpgKeyEntityDto(),
         private_key: ed25519ExternalPrivateGpgKeyEntityDto()
-      })
+      }),
+      createKey: () => new MetadataKeyEntity(
+        defaultMetadataKeyDto({fingerprint: pgpKeys.eddsa_ed25519.fingerprint, armored_key: pgpKeys.eddsa_ed25519.public})
+      )
     },
     gpgServiceWorkerService: {
       keyInfo: armoredKey => metadataKeysInfo.getFirst("armored_key", armoredKey),

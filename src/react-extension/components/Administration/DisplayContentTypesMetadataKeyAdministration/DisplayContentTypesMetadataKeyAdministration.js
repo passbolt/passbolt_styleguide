@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import React, {Component} from 'react';
 import {Trans, withTranslation} from "react-i18next";
 import memoize from "memoize-one";
+import {createPortal} from "react-dom";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import MetadataSettingsServiceWorkerService
   from "../../../../shared/services/serviceWorker/metadata/metadataSettingsServiceWorkerService";
@@ -29,6 +30,10 @@ import GpgServiceWorkerService from "../../../../shared/services/serviceWorker/c
 import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
 import MetadataKeysSettingsFormEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsFormEntity";
 import MetadataKeyEntity from "../../../../shared/models/entity/metadata/metadataKeyEntity";
+import DisplayContentTypesMetadataKeyAdministrationActions from "./DisplayContentTypesMetadataKeyAdministrationActions";
+import EntityValidationError from "../../../../shared/models/entity/abstract/entityValidationError";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 
 class DisplayContentTypesMetadataKeyAdministration extends Component {
   /**
@@ -69,8 +74,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
       settings: { // Form data
         allow_usage_of_personal_keys: true,
         zero_knowledge_key_share: false,
-        armored_metadata_private_key: null, // New shared metadata private key.
-        armored_metadata_public_key: null, // New shared metadata public key.
+        generated_metadata_key: null, // The generated metadata key.
       },
       activeMetadataKeys: null, // Active metadata keys.
       expiredMetadataKeys: null, // Expired metadata keys.
@@ -81,8 +85,10 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.generateMetadataKey = this.generateMetadataKey.bind(this);
+    this.save = this.save.bind(this);
   }
 
   /**
@@ -106,7 +112,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
       const settings = await this.metadataSettingsServiceWorkerService.findKeysSettings();
       this.originalSettings = new MetadataKeysSettingsFormEntity(settings.toDto(), {validate: false});
       this.formSettings = new MetadataKeysSettingsFormEntity(settings.toDto(), {validate: false});
-      this.setState({setting: this.formSettings.toFormDto()});
+      this.setState({settings: this.formSettings.toDto()});
     } catch (error) {
       await this.handleUnexpectedError(error);
     }
@@ -118,6 +124,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    * @returns {Promise<string>} Return the dialog key identifier.
    */
   handleUnexpectedError(error) {
+    console.error(error);
     return this.props.dialogContext.open(NotifyError, {error});
   }
 
@@ -153,7 +160,8 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    * @return {EntityValidationError}
    */
   // eslint-disable-next-line no-unused-vars
-  hasSettingsChanges = memoize((originalSettings, formSettings, formSettingsDto) => originalSettings?.hasDiffProps(formSettings));
+  hasSettingsChanges = memoize((originalSettings, formSettings, formSettingsDto) => originalSettings?.hasDiffProps(formSettings)
+      || originalSettings?.generatedMetadataKey !== formSettings?.generatedMetadataKey);
 
   /**
    * Handle form input changes.
@@ -169,7 +177,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
     if (type === "checkbox") {
       parsedValue = checked;
     }
-    if (name === "allow_usage_of_personal_keys") {
+    if (name === "allow_usage_of_personal_keys" || name === "zero_knowledge_key_share") {
       parsedValue = value === "true";
     }
     this.setFormPropertyValue(name, parsedValue);
@@ -182,7 +190,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    */
   setFormPropertyValue(name, parsedValue) {
     this.formSettings.set(name, parsedValue, {validate: false});
-    this.setState({settings: this.formSettings.toFormDto()});
+    this.setState({settings: this.formSettings.toDto()});
   }
 
   /**
@@ -198,20 +206,19 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    * @return {Promise}
    */
   async generateMetadataKey() {
+    const metadataKeysInfo = this.state.metadataKeysInfo;
+    const activeMetadataKeys = this.state.activeMetadataKeys;
+
     this.setState({isProcessing: true});
     try {
       const metadataKeyPair = await this.metadataKeysServiceWorkerService.generateKeyPair();
       const metadataKeyInfo = await this.gpgServiceWorkerService.keyInfo(metadataKeyPair.publicKey.armoredKey);
-      const metadataKeysInfo = this.state.metadataKeysInfo;
       metadataKeysInfo.push(metadataKeyInfo);
       const metadataKey = new MetadataKeyEntity({armored_key: metadataKeyPair.publicKey.armoredKey, fingerprint: metadataKeyInfo.fingerprint});
-      const activeMetadataKeys = this.state.activeMetadataKeys;
       activeMetadataKeys.push(metadataKey);
-      this.formSettings.set("armored_metadata_private_key", metadataKeyPair.privateKey.armoredKey);
-      this.formSettings.set("armored_metadata_public_key", metadataKeyPair.publicKey.armoredKey);
-      this.setState({activeMetadataKeys, metadataKeysInfo, settings: this.formSettings.toFormDto()});
+      this.formSettings.generatedMetadataKey = metadataKeyPair;
+      this.setState({activeMetadataKeys, metadataKeysInfo, settings: this.formSettings.toDto()});
     } catch (error) {
-      console.error(error);
       await this.handleUnexpectedError(error);
     }
 
@@ -219,16 +226,111 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
   }
 
   /**
+   * Handle form submission that can be trigger when hitting `enter`
+   * @param {Event} event The html event triggering the form submit.
+   */
+  handleFormSubmit(event) {
+    // Avoid the form to be submitted natively by the browser and avoid a redirect to a broken page.
+    event.preventDefault();
+    this.save();
+  }
+
+  /**
+   * Save the settings.
+   * @returns {Promise<void>}
+   */
+  async save() {
+    if (this.state.isProcessing) {
+      return;
+    }
+
+    this.setState({isProcessing: true});
+    const validationError = this.validateForm(this.state.settings);
+    if (validationError?.hasErrors()) {
+      this.setState({isProcessing: false, hasAlreadyBeenValidated: true});
+      return;
+    }
+
+    try {
+      await this.saveMetadataKeysSettings();
+      await this.createMetadataKey();
+      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The metadata key settings were updated."));
+    } catch (error) {
+      await this.handleUnexpectedError(error);
+    }
+
+    this.setState({
+      isProcessing: false,
+      settings: this.formSettings.toDto()
+    });
+  }
+
+  /**
+   * Validate form.
+   * @param {object} formSetingsDto The form settings dto store in state, not used but required to ensure the memoized
+   *   function is only triggered when the form is updated.
+   * @return {EntityValidationError|null}
+   */
+  // eslint-disable-next-line no-unused-vars
+  validateForm = memoize(formSettingsDto => {
+    if (!this.formSettings) {
+      return null;
+    }
+    let validationErrors = this.formSettings.validate();
+    // An active metadata key is required to save the settings. If none is yet defined and no new key was generated, notify the administrator.
+    if (!this.state.activeMetadataKeys.length) {
+      validationErrors = validationErrors || new EntityValidationError();
+      validationErrors.addError("generated_metadata_key", "required", this.props.t("A shared metadata key is required."));
+    }
+
+    return validationErrors;
+  });
+
+  /**
+   * Save the metadata keys settings.
+   * @returns {Promise<void>}
+   */
+  async saveMetadataKeysSettings() {
+    const metadataKeysSettings = new MetadataKeysSettingsEntity(this.formSettings.toDto());
+    const savedMetadataKeysSettings = await this.metadataSettingsServiceWorkerService.saveKeysSettings(metadataKeysSettings);
+    // Update the form settings information with the saved metadata keys settings return by the API.
+    this.originalSettings = new MetadataKeysSettingsFormEntity({...this.originalSettings.toDto(), ...savedMetadataKeysSettings.toDto()});
+    this.formSettings = new MetadataKeysSettingsFormEntity({...this.formSettings.toDto(), ...savedMetadataKeysSettings.toDto()});
+  }
+
+  /**
+   * Create the metadata key.
+   * @returns {Promise<void>}
+   */
+  async createMetadataKey() {
+    if (!this.formSettings.generatedMetadataKey) {
+      return;
+    }
+    const metadataKey = await this.metadataKeysServiceWorkerService.createKey(this.formSettings.generatedMetadataKey);
+    const activeMetadataKeys = this.state.activeMetadataKeys;
+    activeMetadataKeys.pushOrReplace(metadataKey, {}, {replacePropertyName: "fingerprint"});
+    this.formSettings.generatedMetadataKey = null;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
+    const errors = this.state.hasAlreadyBeenValidated ? this.validateForm(this.state.settings) : null;
     const hasSettingsChanges = this.hasSettingsChanges(this.originalSettings, this.formSettings, this.state.settings);
 
     return (
       <div className="row">
+        {(this.props.createPortal || createPortal)(
+          <DisplayContentTypesMetadataKeyAdministrationActions
+            onSaveRequested={this.save}
+            isProcessing={this.state.isProcessing}
+          />,
+          document.getElementById("administration-actions-content-action")
+        )}
         <div id="content-types-metadata-key-settings" className="col8 main-column">
-          <form>
+          <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
             <h3><label><Trans>Metadata key</Trans></label></h3>
             {hasSettingsChanges &&
               <div className="warning message form-banner">
@@ -237,6 +339,14 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                 </p>
               </div>
             }
+            {errors?.hasError("generated_metadata_key", "required") &&
+              <div className="warning message form-banner">
+                <p>
+                  <Trans>A shared metadata key is required to save the metadata keys settings.</Trans>
+                </p>
+              </div>
+            }
+
             <p className="description">
               <Trans>This section controls the layer of encryption that is used to protect metadata such as the name of
                 a resource, URIs, etc.</Trans>
@@ -377,20 +487,23 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
             }
 
             {!this.state.activeMetadataKeys?.length &&
-              <div>
-                <table id="no-metadata-active-keys" className="table-info">
+              <div id="no-metadata-active-keys">
+                <table className="table-info">
                   <tbody>
                     <tr>
                       <td className="empty-value"><Trans>You need to generate a new shared key to enable encrypted metadata.</Trans></td>
                       <td className="table-button">
                         <button className="button primary medium" type="button" disabled={this.hasAllInputDisabled()}
-                          onClick={this.generateMetadataKey}>
+                          onClick={this.generateMetadataKey} data-testid="generate-key-buton">
                           <Trans>Generate key</Trans>
                         </button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
+                {errors?.hasError("generated_metadata_key", "required") &&
+                  <div className="name error-message"><Trans>A shared metadata key is required.</Trans></div>
+                }
               </div>
             }
 
@@ -444,6 +557,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
 
 DisplayContentTypesMetadataKeyAdministration.propTypes = {
   context: PropTypes.object, // Defined the expected type for context
+  actionFeedbackContext: PropTypes.object, // The action feedback context
   dialogContext: PropTypes.object, // The dialog context
   createPortal: PropTypes.func, // The mocked create portal react dom primitive if test needed.
   metadataSettingsServiceWorkerService: PropTypes.object, // The Bext service that handle metadata settings requests.
@@ -454,4 +568,5 @@ DisplayContentTypesMetadataKeyAdministration.propTypes = {
 
 export default withAppContext(
   withDialog(
-    withTranslation('common')(DisplayContentTypesMetadataKeyAdministration)));
+    withActionFeedback(
+      withTranslation('common')(DisplayContentTypesMetadataKeyAdministration))));

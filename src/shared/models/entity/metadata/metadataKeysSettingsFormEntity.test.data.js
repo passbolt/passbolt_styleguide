@@ -36,8 +36,14 @@ export const metadataKeysSettingsFormWithGeneratedKeyDto = (data = {}) => {
   const defaultData = {
     allow_usage_of_personal_keys: true,
     zero_knowledge_key_share: false,
-    armored_metadata_private_key: pgpKeys.eddsa_ed25519.private,
-    armored_metadata_public_key: pgpKeys.eddsa_ed25519.public,
+    generated_metadata_key: {
+      private_key: {
+        armored_key: pgpKeys.eddsa_ed25519.private
+      },
+      public_key: {
+        armored_key: pgpKeys.eddsa_ed25519.public
+      },
+    }
   };
   return Object.assign(defaultData, data);
 };

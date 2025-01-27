@@ -14,7 +14,9 @@
 
 import DisplayContentTypesMetadataKeyAdministrationPage from "./DisplayContentTypesMetadataKeyAdministration.test.page";
 import {
-  defaultProps, defaultSettingsAndMultipleActiveKeysProps, defaultSettingsAndMultipleKeysProps,
+  defaultProps,
+  defaultSettingsAndMultipleActiveKeysProps,
+  defaultSettingsAndMultipleKeysProps,
   defaultSettingsAndSingleActiveKeyProps
 } from "./DisplayContentTypesMetadataKeyAdministration.test.data";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
@@ -210,6 +212,82 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
       await waitForTrue(() => page.exists());
       await page.clickOnGenerateKeyButton();
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
+    });
+
+    it("does not display the generate key button if there is already an active key", async() => {
+      expect.assertions(1);
+      const props = defaultSettingsAndSingleActiveKeyProps();
+
+      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
+      await waitForTrue(() => page.exists());
+      expect(page.noMetadataActiveKeysWrapper).toBeNull();
+    });
+  });
+
+  describe("As a signed-in administrator, I cannot save if the settings does not validate", () => {
+    it("displays error messages when there is no active keys and I did not generate one", async() => {
+      expect.assertions(5);
+      const props = defaultProps();
+      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
+      await waitForTrue(() => page.exists());
+      await page.submitForm();
+      expect(page.errorMessagesCount).toBe(1);
+      expect(page.requiredSharedMetadataKeyError).not.toBeNull();
+      expect(page.requiredSharedMetadataKeyError.textContent).toContain("A shared metadata key is required.");
+      expect(page.formBanner).not.toBeNull();
+      expect(page.formBanner.textContent).toEqual("A shared metadata key is required to save the metadata keys settings.");
+    });
+  });
+
+  describe("As a signed-in administrator, I can save the settings", () => {
+    it("saves a newly generated key", async() => {
+      expect.assertions(10);
+      const props = defaultProps();
+      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
+      await waitForTrue(() => page.exists());
+      await page.clickOnGenerateKeyButton();
+      await page.submitForm();
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The metadata key settings were updated.");
+      expect(page.metadataActiveKeysWrapper).not.toBeNull();
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.algorithm.toLowerCase());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.length.toString());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00"));
+      expect(page.noMetadataActiveKeysWrapper).toBeNull();
+      expect(page.metadataExpiredKeysWrapper).toBeNull();
+      expect(page.formBanner).toBeNull();
+    });
+
+    it("saves again the original settings", async() => {
+      expect.assertions(10);
+      const props = defaultSettingsAndSingleActiveKeyProps();
+      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
+      await waitForTrue(() => page.exists());
+      await page.submitForm();
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The metadata key settings were updated.");
+      expect(page.metadataActiveKeysWrapper).not.toBeNull();
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.algorithm.toLowerCase());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.length.toString());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00"));
+      expect(page.noMetadataActiveKeysWrapper).toBeNull();
+      expect(page.metadataExpiredKeysWrapper).toBeNull();
+      expect(page.formBanner).toBeNull();
+    });
+
+    it("displays an unexpected error dialog if the settings cannot be saved", async() => {
+      expect.assertions(1);
+      const props = defaultSettingsAndSingleActiveKeyProps();
+      const error = new Error("Unexpected test error");
+      jest.spyOn(props.metadataSettingsServiceWorkerService, "saveKeysSettings").mockImplementation(() => {
+        throw error;
+      });
+      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
+      await waitForTrue(() => page.exists());
+      await page.submitForm();
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
     });
   });

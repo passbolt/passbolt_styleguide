@@ -13,7 +13,9 @@
  */
 import MetadataKeysCollection from "../../../models/entity/metadata/metadataKeysCollection";
 import ExternalGpgKeyPairEntity from "../../../models/entity/gpgkey/external/externalGpgKeyPairEntity";
+import MetadataKeyEntity from "../../../models/entity/metadata/metadataKeyEntity";
 
+export const METADATA_KEYS_CREATE_EVENT = "passbolt.metadata.create-key";
 export const METADATA_KEYS_GENERATE_EVENT = "passbolt.metadata.generate-metadata-key";
 export const METADATA_KEYS_FIND_ALL_EVENT = "passbolt.metadata.find-all-non-deleted-metadata-keys";
 
@@ -42,6 +44,20 @@ class MetadataKeysServiceWorkerService {
   async generateKeyPair() {
     const externalGpgKeyPairDto = await this.port.request(METADATA_KEYS_GENERATE_EVENT);
     return new ExternalGpgKeyPairEntity(externalGpgKeyPairDto);
+  }
+
+  /**
+   * Create a metadata key.
+   * @param {ExternalGpgKeyPairEntity} metadataKeyPair The metadata key pair.
+   * @returns {Promise<MetadataKeyEntity>}
+   */
+  async createKey(metadataKeyPair) {
+    if (!(metadataKeyPair instanceof ExternalGpgKeyPairEntity)) {
+      throw new TypeError("The parameter `metadataKeyPair` should be of type ExternalGpgKeyPairEntity.");
+    }
+    const contains = {public_key: true, private_key: true};
+    const metadataKeyDto = await this.port.request(METADATA_KEYS_CREATE_EVENT, metadataKeyPair.toDto(contains));
+    return new MetadataKeyEntity(metadataKeyDto);
   }
 }
 
