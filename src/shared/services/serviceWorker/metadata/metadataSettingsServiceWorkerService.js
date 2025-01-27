@@ -16,6 +16,7 @@ import MetadataKeysSettingsEntity from "../../../models/entity/metadata/metadata
 
 export const METADATA_FIND_KEYS_SETTINGS_EVENT = "passbolt.metadata.find-metadata-keys-settings";
 export const METADATA_FIND_TYPES_SETTINGS_EVENT = "passbolt.metadata.find-metadata-types-settings";
+export const METADATA_SAVE_KEYS_SETTINGS_EVENT = "passbolt.metadata.save-metadata-keys-settings";
 export const METADATA_SAVE_TYPES_SETTINGS_EVENT = "passbolt.metadata.save-metadata-types-settings";
 
 class MetadataSettingsServiceWorkerService {
@@ -58,6 +59,21 @@ class MetadataSettingsServiceWorkerService {
     }
     const savedSettingsDto = await this.port.request(METADATA_SAVE_TYPES_SETTINGS_EVENT, formSettings.toDto());
     return new MetadataTypesSettingsEntity(savedSettingsDto);
+  }
+
+  /**
+   * Save the metadata keys settings.
+   * @param {MetadataKeysSettingsEntity} settings The metadata keys settings to save.
+   * @return {Promise<MetadataKeysSettingsEntity>}
+   * @throws {TypeError} If the settings property is not of type MetadataKeysSettingsEntity.
+   * @throws {EntityValidationError} If the saved metadata keys settings does not validate.
+   */
+  async saveKeysSettings(settings) {
+    if (!(settings instanceof MetadataKeysSettingsEntity)) {
+      throw new TypeError("The 'settings' property should be of type 'MetadataKeysSettingsEntity'.");
+    }
+    const savedSettingsDto = await this.port.request(METADATA_SAVE_KEYS_SETTINGS_EVENT, settings.toDto());
+    return new MetadataKeysSettingsEntity(savedSettingsDto);
   }
 }
 

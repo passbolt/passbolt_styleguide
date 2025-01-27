@@ -17,8 +17,8 @@ import * as assertEntityProperty from "../../../../../test/assert/assertEntityPr
 import {
   defaultMetadataKeysSettingsFormDto,
   metadataKeysSettingsFormWithGeneratedKeyDto
-} from "./MetadataKeysSettingsFormEntity.test.data";
-import MetadataKeysSettingsFormEntity from "./MetadataKeysSettingsFormEntity";
+} from "./metadataKeysSettingsFormEntity.test.data";
+import MetadataKeysSettingsFormEntity from "./metadataKeysSettingsFormEntity";
 import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
 
 describe("MetadataKeysSettingsFormEntity", () => {
