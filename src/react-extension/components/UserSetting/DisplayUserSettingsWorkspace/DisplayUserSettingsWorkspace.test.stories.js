@@ -119,3 +119,11 @@ export const UserProfile = {
     initialEntries: "/app/settings/profile"
   },
 };
+
+export const gpgKeyInformation = {
+  args: {
+    port: port,
+    storage: storage,
+    initialEntries: "/app/settings/keys"
+  },
+};
