@@ -37,6 +37,8 @@ import {uiActions} from '../../../../shared/services/rbacs/uiActionEnumeration';
 import ArrowLeftSVG from "../../../../img/svg/arrow_left.svg";
 import {Trans} from "react-i18next";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
+import DisplayUserProfileHelp from "../DisplayUserProfile/DisplayUserProfileHelp";
+import Footer from "../../Common/Footer/Footer";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -143,27 +145,32 @@ class DisplayUserSettingsWorkspace extends React.Component {
               <div className="top-bar">
                 <DisplayUserSettingsWorkspaceBreadcrumb/>
               </div>
-              <Route path={`${path}/profile`} component={DisplayUserProfile}/>
-              <Route path={`${path}/passphrase`} component={DisplayUserPassphrase}/>
-              <Route path={`${path}/security-token`} component={DisplayUserChooseSecurityToken}></Route>
-              {this.canIUseThemeCapability &&
-                <Route path={`${path}/theme`} component={DisplayUserTheme}/>
-              }
-              {this.canIUseMobileTransferCapability &&
-                <Route path={`${path}/mobile`} component={TransferToMobile}></Route>
-              }
-              {this.canIUseDesktopExportCapability &&
-                <Route path={`${path}/desktop`} component={ExportAccountToDesktop}></Route>
-              }
-              {this.canIUseAccountRecoveryCapability &&
-                <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettings}></Route>
-              }
-              <Route path={`${path}/mfa`} component={OrchestrateMfaSettings}></Route>
-              <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
+              <div className="main-page">
+                <Route path={`${path}/profile`} component={DisplayUserProfile}/>
+                <Route path={`${path}/passphrase`} component={DisplayUserPassphrase}/>
+                <Route path={`${path}/security-token`} component={DisplayUserChooseSecurityToken}></Route>
+                {this.canIUseThemeCapability &&
+                  <Route path={`${path}/theme`} component={DisplayUserTheme}/>
+                }
+                {this.canIUseMobileTransferCapability &&
+                  <Route path={`${path}/mobile`} component={TransferToMobile}></Route>
+                }
+                {this.canIUseDesktopExportCapability &&
+                  <Route path={`${path}/desktop`} component={ExportAccountToDesktop}></Route>
+                }
+                {this.canIUseAccountRecoveryCapability &&
+                  <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettings}></Route>
+                }
+                <Route path={`${path}/mfa`} component={OrchestrateMfaSettings}></Route>
+                <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
+              </div>
               {/* TODO will be moved directly in specific administration menu item component <DisplayUserSettingsWorkspaceActions/> */}
             </div>
             <div className="help-panel">
-              {/* TODO Should display according help panel information */}
+              <div className="sidebar-help">
+                <Route path={`${path}/profile`} component={DisplayUserProfileHelp}/>
+              </div>
+              <Footer/>
             </div>
           </div>
         </div>

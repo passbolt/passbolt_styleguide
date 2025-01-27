@@ -46,7 +46,7 @@ export default {
   title: 'Workspaces/Profile',
   component: DisplayUserSettingsWorkspace,
   decorators: [(Story, {args}) =>
-    <MemoryRouter initialEntries={['/app/settings']}>
+    <MemoryRouter initialEntries={[args.initialEntries || '/app/settings']}>
       <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
         <ExtAppContextProvider storage={args.storage} port={args.port}>
           <RbacContextProvider>
@@ -109,5 +109,13 @@ export const ceVersion = {
   args: {
     port: cePort,
     storage: ceStorage
+  },
+};
+
+export const UserProfile = {
+  args: {
+    port: port,
+    storage: storage,
+    initialEntries: "/app/settings/profile"
   },
 };

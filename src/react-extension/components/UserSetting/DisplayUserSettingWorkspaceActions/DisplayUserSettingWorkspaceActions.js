@@ -17,8 +17,6 @@ import PropTypes from "prop-types";
 import {withRouter, Route} from "react-router-dom";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {withDialog} from "../../../contexts/DialogContext";
-import EditUserProfile from "../EditUserProfile/EditUserProfile";
 import {Trans, withTranslation} from "react-i18next";
 
 /**
@@ -38,16 +36,8 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleEdit = this.handleEdit.bind(this);
     this.handleDownloadPublicKey = this.handleDownloadPublicKey.bind(this);
     this.handleDownloadPrivateKey = this.handleDownloadPrivateKey.bind(this);
-  }
-
-  /**
-   * Whenever the user wants to edit his profile
-   */
-  handleEdit() {
-    this.props.dialogContext.open(EditUserProfile);
   }
 
   /**
@@ -74,17 +64,6 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
       <div className="col2_3 actions-wrapper">
         <div className="actions">
           <ul className="ready">
-            <Route path={`${path}/profile`}>
-              <li>
-                <button
-                  type="button"
-                  className="ready"
-                  onClick={this.handleEdit}>
-                  <Icon name="edit"/>
-                  <span><Trans>Edit</Trans></span>
-                </button>
-              </li>
-            </Route>
             <Route path={`${path}/keys`}>
               <li>
                 <button
@@ -115,7 +94,6 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
 DisplayUserSettingsWorkspaceActions.propTypes = {
   context: PropTypes.any, // The application context
   match: PropTypes.object, // The router match
-  dialogContext: PropTypes.any, // the dialog context
 };
 
-export default withAppContext(withRouter(withDialog(withTranslation("common")(DisplayUserSettingsWorkspaceActions))));
+export default withAppContext(withRouter(withTranslation("common")(DisplayUserSettingsWorkspaceActions)));
