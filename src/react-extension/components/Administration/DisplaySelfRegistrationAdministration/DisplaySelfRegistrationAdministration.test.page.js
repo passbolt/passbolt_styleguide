@@ -100,26 +100,24 @@ export default class DisplaySelfRegistrationAdministrationPage {
   get disabledDescription() {
     return this._page.container.querySelector('#disabled-description');
   }
-
   /**
    * Returns the help box
    */
   get helpBox() {
-    return this._page.container.querySelector('.sidebar-help');
-  }
-
-  /**
-   * Returns banner for settings changes
-   */
-  get settingsChangedBanner() {
-    return this._page.container.querySelector("#self-registration-setting-overridden-banner");
+    return this._page.container.querySelectorAll('.sidebar-help-section')[0];
   }
 
   /**
    * Returns the help box button
    */
   get helpBoxButton() {
-    return this._page.container.querySelector('.sidebar-help .button');
+    return this.helpBox.querySelector('.button');
+  }
+  /**
+   * Returns banner for settings changes
+   */
+  get settingsChangedBanner() {
+    return this._page.container.querySelector("#self-registration-setting-overridden-banner");
   }
 
   /**
