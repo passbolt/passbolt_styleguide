@@ -114,7 +114,7 @@ class MetadataKeyEntity extends EntityV2 {
       return;
     }
 
-    const keyId = this._props.id;
+    const keyId = this.id;
     const privateKeyId = this._metadata_private_keys.items[0].metadataKeyId;
 
     if (keyId !== privateKeyId) {

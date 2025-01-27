@@ -17,7 +17,6 @@ const PGP_STRING_MAX_LENGTH = 10_000;
 const DOMAIN_MAX_LENGTH = 1024;
 const PASSPHRASE_MAX_LENGTH = 1024;
 
-
 class MetadataPrivateKeyDataEntity extends EntityV2 {
   /**
    * Get metadata private key data entity schema
