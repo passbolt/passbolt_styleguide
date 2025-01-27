@@ -62,6 +62,7 @@ import mockRequestRbacsFindMe from "./request/mockRequestRbacsFindMe";
 import mockRequestAccountGet from "./request/mockRequestAccountGet";
 import mockRequestFindMyGropus from "./request/mockRequestGroups";
 import mockRequestResourcesFindDetails from "./request/mockRequestResourcesFindDetails";
+import {disabledSso} from "../../src/react-extension/components/Administration/ManageSsoSettings/ManageSsoSettings.test.data";
 
 export default storage => {
   const mockPort = new MockPort(storage);
@@ -116,6 +117,7 @@ export default storage => {
   mockPort.addRequestListener("passbolt.recover.has-user-enabled-account-recovery", mockRequestHasUserEnabledAccountRecovery);
   mockPort.addRequestListener("passbolt.rbacs.find-me", mockRequestRbacsFindMe);
   mockPort.addRequestListener("passbolt.account.get", mockRequestAccountGet);
+  mockPort.addRequestListener("passbolt.sso.get-current", () => disabledSso());
 
   // Deprecated events
   const deprecatedEvent = () => { throw new Error(`This event is deprecated.`); };
