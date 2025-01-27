@@ -18,6 +18,10 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import KeySVG from "../../../../img/svg/key.svg";
 import CloseSVG from "../../../../img/svg/close.svg";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 /**
  * This component display the note section of a resource
@@ -119,26 +123,28 @@ class DisplayResourcesListDetails extends React.Component {
         <div className="sidebar-title">
           {this.props.t(`${count} resources selected`)}
         </div>
-        {resources.map(resource =>
-          <div key={resource.id} className="sidebar-header">
-            <div className="teaser-image">
-              <KeySVG />
+        <div className="sidebar-content">
+          {resources.map(resource =>
+            <div key={resource.id} className="sidebar-header">
+              <div className="teaser-image">
+                <KeySVG />
+              </div>
+              <div className="title-area">
+                <h3>
+                  <div className="title-wrapper">
+                    <span className="name">{resource.metadata.name}</span>
+                  </div>
+                  <span className="subtitle">{this.getResourceTypeSubtitle(resource)}</span>
+                  <span className="subtitle">{this.getPermissionSubtitle(resource)}</span>
+                </h3>
+                <button type="button" className="title-link button-transparent inline" title={this.props.t("Remove this resource from the selection")} onClick={() => this.handleUnselectClickEvent(resource)}>
+                  <CloseSVG />
+                  <span className="visuallyhidden"><Trans>Remove this resource from the selection</Trans></span>
+                </button>
+              </div>
             </div>
-            <div className="title-area">
-              <h3>
-                <div className="title-wrapper">
-                  <span className="name">{resource.metadata.name}</span>
-                </div>
-                <span className="subtitle">{this.getResourceTypeSubtitle(resource)}</span>
-                <span className="subtitle">{this.getPermissionSubtitle(resource)}</span>
-              </h3>
-              <button type="button" className="title-link button-transparent inline" title={this.props.t("Remove this resource from the selection")} onClick={() => this.handleUnselectClickEvent(resource)}>
-                <CloseSVG />
-                <span className="visuallyhidden"><Trans>Remove this resource from the selection</Trans></span>
-              </button>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     );
   }
@@ -146,9 +152,9 @@ class DisplayResourcesListDetails extends React.Component {
 
 DisplayResourcesListDetails.propTypes = {
   context: PropTypes.any, // The application context
-  resourceTypes: PropTypes.any,
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection),
   resourceWorkspaceContext: PropTypes.any, // The resource
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withTranslation('common')(DisplayResourcesListDetails)));
+export default withAppContext(withResourceWorkspace(withResourceTypesLocalStorage(withTranslation('common')(DisplayResourcesListDetails))));
