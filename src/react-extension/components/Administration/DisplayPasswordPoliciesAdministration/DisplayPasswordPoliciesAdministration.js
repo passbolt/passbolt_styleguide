@@ -370,7 +370,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
           {hasWarnings &&
             <div className="warning message">
               {adminContext.isSourceChanging() &&
-              <div  id="password-policies-setting-source-changing-banner">
+              <div id="password-policies-setting-source-changing-banner">
                 <p>
                   <Trans>The current configuration comes from a file or environment variables. If you save them, they will be overwritten and come from the database instead.</Trans>
                 </p>

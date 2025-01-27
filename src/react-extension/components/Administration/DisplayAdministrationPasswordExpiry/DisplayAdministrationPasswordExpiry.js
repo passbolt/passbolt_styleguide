@@ -81,7 +81,7 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
     return (
       <div className="row">
         <div className="password-expiry-settings main-column">
-          <div className={`main-content ${adminContext.hasSettingsChanges() && "with-warning"}`}>
+          <div className="main-content">
             <h3 id="password-expiry-settings-title" className="title">
               <span className="input toggle-switch form-element">
                 <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordExpirySettingsToggle"
