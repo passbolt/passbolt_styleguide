@@ -201,6 +201,9 @@ const siteSettings = (isProEdition = true) => ({
       },
       "passwordPoliciesUpdate": {
         "enabled": isProEdition,
+      },
+      "userPassphrasePolicies": {
+        "enabled": isProEdition,
       }
     }
   }
