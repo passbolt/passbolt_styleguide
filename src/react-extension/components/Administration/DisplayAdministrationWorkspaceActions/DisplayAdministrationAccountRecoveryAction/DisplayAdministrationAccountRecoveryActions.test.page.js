@@ -37,28 +37,28 @@ export default class DisplayAdministrationAccountRecoveryActionsPage {
    * Returns the workspace action
    */
   get workspaceAction() {
-    return this._page.container.querySelector('.actions');
+    return this._page.container.querySelector('.actions-wrapper');
   }
 
   /**
    * Returns the number of actions
    */
   get count() {
-    return this._page.container.querySelectorAll('li').length;
+    return this._page.container.querySelectorAll('button').length;
   }
 
   /**
    * Returns the save button
    */
   get saveButton() {
-    return this._page.container.querySelectorAll('li button')[0];
+    return this._page.container.querySelectorAll('button')[1];
   }
 
   /**
    * Returns the reset button
    */
   get resetButton() {
-    return this._page.container.querySelectorAll('li button')[1];
+    return this._page.container.querySelectorAll('button')[0];
   }
 
   /**

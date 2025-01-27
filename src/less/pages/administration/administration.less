@@ -22,6 +22,12 @@
       &:last-child {
         border-radius: 0;
       }
+
+      .radiolist-alt {
+        display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
+      }
     }
   }
 
@@ -102,14 +108,17 @@
       align-self: stretch;
       border-radius: 0 0 var(--Section-border-radius) var(--Section-border-radius);
         & + .warning.message {
+          padding: 0;
           margin-top: auto;
           border-radius: 0 0 var(--Section-border-radius) var(--Section-border-radius);
 
           > div {
-            margin-top: 1.6rem;
+            margin: 0;
+            padding: .8rem 1.6rem;
+            border-bottom: .1rem solid var(--Palette-Contrast-2);
 
-            &:first-child {
-              margin-top: 0;
+            &:last-child {
+              border-bottom: none;
             }
           }
         }
@@ -133,8 +142,10 @@
 
   .actions-wrapper {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     padding: 1.6rem 0;
+    gap: 1.6rem;
+    width: 100%;
 
     .left-actions-wrapper {
       margin-right: auto;
@@ -143,6 +154,7 @@
     .button.primary {
       padding: .8rem 2.4rem;
       font-size: 1.8rem;
+      margin-left: auto;
     }
   }
 }

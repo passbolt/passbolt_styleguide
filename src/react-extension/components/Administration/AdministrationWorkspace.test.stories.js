@@ -207,6 +207,17 @@ export const SingleSignOnPage = {
   },
 };
 
+export const AccountRecoveryPage = {
+  args: {
+    port: port,
+    storage: storage,
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY
+    }),
+    routerInitialEntry: "/app/administration/account-recovery"
+  },
+};
+
 export const error403 = {
   args: {
     port: port,
