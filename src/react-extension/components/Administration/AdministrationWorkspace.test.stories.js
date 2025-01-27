@@ -174,6 +174,17 @@ export const MfaPolicyPage = {
   }
 };
 
+export const PasswordPoliciesPage = {
+  args: {
+    port: port,
+    storage: storage,
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES
+    }),
+    routerInitialEntry: "/app/administration/password-policies"
+  },
+};
+
 export const error403 = {
   args: {
     port: port,
