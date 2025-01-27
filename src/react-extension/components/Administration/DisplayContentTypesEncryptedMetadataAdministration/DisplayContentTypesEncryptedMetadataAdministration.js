@@ -251,16 +251,16 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
                   <span className="info">
                     <Trans>Enable encrypted metadata for resources.</Trans>
                   </span>
+                  {errors?.hasError("allow_creation_of_v5_resources", "is_default") &&
+                    <div className="name error-message"><Trans>Encrypted metadata must be enabled to set it as the default
+                      type.</Trans></div>
+                  }
+                  {!errors?.hasError("allow_creation_of_v5_resources") && warnings?.hasError("allow_creation_of_v5_resources", "resource_types_deleted") &&
+                    <div className="name warning-message"><Trans>All encrypted metadata resource types were previously
+                      disabled. Re-enable them if you want users to create resources of this type.
+                    </Trans></div>
+                  }
                 </label>
-                {errors?.hasError("allow_creation_of_v5_resources", "is_default") &&
-                  <div className="name error-message"><Trans>Encrypted metadata must be enabled to set it as the default
-                    type.</Trans></div>
-                }
-                {!errors?.hasError("allow_creation_of_v5_resources") && warnings?.hasError("allow_creation_of_v5_resources", "resource_types_deleted") &&
-                  <div className="name warning-message"><Trans>All encrypted metadata resource types were previously
-                    disabled. Re-enable them if you want users to create resources of this type.
-                  </Trans></div>
-                }
               </span>
             </div>
 
@@ -352,24 +352,23 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
             <h4 className="no-border">
               <Trans>Self served migration</Trans></h4>
             <div>
-              <div className={`input toggle-switch form-element
-                ${warnings?.hasError("allow_v4_v5_upgrade") ? "warning" : ""}`}>
+              <div className="input toggle-switch form-element">
                 <input type="checkbox" className="toggle-switch-checkbox checkbox" name="allow_v4_v5_upgrade"
                   id="allowV4V5UpgradeInput"
                   onChange={this.handleInputChange} checked={this.state.settings.allow_v4_v5_upgrade}
                   disabled={this.hasAllInputDisabled()}/>
                 <label htmlFor="allowV4V5UpgradeInput" className="text">
                   <Trans>Allow users to upgrade their content from cleartext to encrypted metadata type.</Trans>
-                </label>
-                {warnings?.hasError("allow_v4_v5_upgrade", "resource_types_deleted") &&
+                  {warnings?.hasError("allow_v4_v5_upgrade", "resource_types_deleted") &&
                   <div className="name warning-message"><Trans>All encrypted metadata resource types were previously
                     disabled. Re-enable them if you want users to upgrade their resources.
                   </Trans></div>
-                }
-                {warnings?.hasError("allow_v4_v5_upgrade", "allow_creation") &&
-                  <div className="name warning-message"><Trans>Encrypted metadata should be enabled to allow users to
-                    upgrade their resources.</Trans></div>
-                }
+                  }
+                  {warnings?.hasError("allow_v4_v5_upgrade", "allow_creation") &&
+                    <div className="name warning-message"><Trans>Encrypted metadata should be enabled to allow users to
+                      upgrade their resources.</Trans></div>
+                  }
+                </label>
               </div>
             </div>
 
@@ -382,16 +381,16 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
                   disabled={this.hasAllInputDisabled()}/>
                 <label htmlFor="allowV5V4DowngradeInput" className="text">
                   <Trans>Allow users to downgrade their content from encrypted to cleartext metadata type.</Trans>
+                  {warnings?.hasError("allow_v5_v4_downgrade", "resource_types_deleted") &&
+                    <div className="name warning-message"><Trans>All legacy cleartext resource types were previously
+                      disabled. Re-enable them if you want users to downgrade their resources.
+                    </Trans></div>
+                  }
+                  {warnings?.hasError("allow_v5_v4_downgrade", "allow_creation") &&
+                    <div className="name warning-message"><Trans>Legacy cleartext metadata should be enabled to allow
+                      users to downgrade their resources.</Trans></div>
+                  }
                 </label>
-                {warnings?.hasError("allow_v5_v4_downgrade", "resource_types_deleted") &&
-                  <div className="name warning-message"><Trans>All legacy cleartext resource types were previously
-                    disabled. Re-enable them if you want users to downgrade their resources.
-                  </Trans></div>
-                }
-                {warnings?.hasError("allow_v5_v4_downgrade", "allow_creation") &&
-                  <div className="name warning-message"><Trans>Legacy cleartext metadata should be enabled to allow
-                    users to downgrade their resources.</Trans></div>
-                }
               </div>
             </div>
           </form>
