@@ -20,6 +20,12 @@ import {
 } from "./metadataKeysSettingsFormEntity.test.data";
 import MetadataKeysSettingsFormEntity from "./metadataKeysSettingsFormEntity";
 import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import {
+  SCENARIO_EMPTY,
+  SCENARIO_FALSE, SCENARIO_FLOAT,
+  SCENARIO_INTEGER, SCENARIO_OBJECT,
+  SCENARIO_STRING, SCENARIO_TRUE
+} from "../../../../../test/assert/assertEntityProperty";
 
 describe("MetadataKeysSettingsFormEntity", () => {
   describe("::getSchema", () => {
@@ -37,18 +43,18 @@ describe("MetadataKeysSettingsFormEntity", () => {
       assertEntityProperty.required(MetadataKeysSettingsFormEntity, "zero_knowledge_key_share");
     });
 
-    it("validates armored_metadata_private_key property", () => {
-      assertEntityProperty.string(MetadataKeysSettingsFormEntity, "armored_metadata_private_key");
-      assertEntityProperty.maxLength(MetadataKeysSettingsFormEntity, "armored_metadata_private_key", 10_000);
-      assertEntityProperty.nullable(MetadataKeysSettingsFormEntity, "armored_metadata_private_key");
-      assertEntityProperty.armoredPrivateKey(MetadataKeysSettingsFormEntity, "armored_metadata_private_key");
-    });
+    it("validates generated_private_key property", () => {
+      const dto = metadataKeysSettingsFormWithGeneratedKeyDto();
+      const successScenario = [
+        {scenario: "valid gpg key pair entity", value: dto.generated_metadata_key},
+      ];
 
-    it("validates armored_metadata_public_key property", () => {
-      assertEntityProperty.string(MetadataKeysSettingsFormEntity, "armored_metadata_public_key");
-      assertEntityProperty.maxLength(MetadataKeysSettingsFormEntity, "armored_metadata_public_key", 10_000);
-      assertEntityProperty.nullable(MetadataKeysSettingsFormEntity, "armored_metadata_public_key");
-      assertEntityProperty.armoredPublicKey(MetadataKeysSettingsFormEntity, "armored_metadata_public_key");
+      const failingPrivateKeyScenario = {scenario: "invalid private key", value: {private_key: {armored_key: "invalid-armored-key"}}};
+      const failingPublicKeyScenario = {scenario: "invalid private key", value: {public_key: {armored_key: "invalid-armored-key"}}};
+      const failingScenario = [SCENARIO_EMPTY, SCENARIO_STRING, SCENARIO_INTEGER, SCENARIO_FLOAT, SCENARIO_OBJECT, SCENARIO_TRUE, SCENARIO_FALSE, failingPrivateKeyScenario, failingPublicKeyScenario];
+      assertEntityProperty.assertAssociation(MetadataKeysSettingsFormEntity, "generated_metadata_key", dto, successScenario, failingScenario);
+      assertEntityProperty.nullable(MetadataKeysSettingsFormEntity, "generated_private_key");
+      assertEntityProperty.notRequired(MetadataKeysSettingsFormEntity, "generated_metadata_key");
     });
   });
 
@@ -69,12 +75,12 @@ describe("MetadataKeysSettingsFormEntity", () => {
 
       expect(entity._props.allow_usage_of_personal_keys).toBeTruthy();
       expect(entity._props.zero_knowledge_key_share).toBeFalsy();
-      expect(entity._props.armored_metadata_private_key).toBe(dto.armored_metadata_private_key);
-      expect(entity._props.armored_metadata_public_key).toBe(dto.armored_metadata_public_key);
+      expect(entity._props.metadata_private_armored_key).toBe(dto.metadata_private_armored_key);
+      expect(entity._props.metadata_public_armored_key).toBe(dto.metadata_public_armored_key);
     });
   });
 
-  describe("::toFormDto", () => {
+  describe("::toDto", () => {
     it("exports form data when no key were generated", () => {
       expect.assertions(1);
 
@@ -84,8 +90,9 @@ describe("MetadataKeysSettingsFormEntity", () => {
       const expectedDto = {
         allow_usage_of_personal_keys: true,
         zero_knowledge_key_share: false,
+        generated_metadata_key: null,
       };
-      expect(settings.toFormDto()).toStrictEqual(expectedDto);
+      expect(settings.toDto()).toStrictEqual(expectedDto);
     });
 
     it("exports form data containing pending generated metadata key", () => {
@@ -97,10 +104,16 @@ describe("MetadataKeysSettingsFormEntity", () => {
       const expectedDto = {
         allow_usage_of_personal_keys: true,
         zero_knowledge_key_share: false,
-        armored_metadata_private_key: pgpKeys.eddsa_ed25519.private,
-        armored_metadata_public_key: pgpKeys.eddsa_ed25519.public,
+        generated_metadata_key: {
+          private_key: {
+            armored_key: pgpKeys.eddsa_ed25519.private,
+          },
+          public_key: {
+            armored_key: pgpKeys.eddsa_ed25519.public,
+          }
+        }
       };
-      expect(settings.toFormDto()).toStrictEqual(expectedDto);
+      expect(settings.toDto()).toStrictEqual(expectedDto);
     });
 
     it("exports even if invalid", () => {
@@ -109,17 +122,19 @@ describe("MetadataKeysSettingsFormEntity", () => {
       const settings = new MetadataKeysSettingsFormEntity({
         allow_usage_of_personal_keys: "",
         zero_knowledge_key_share: "",
-        armored_metadata_private_key: "",
-        armored_metadata_public_key: "",
+        metadata_private_armored_key: "",
+        metadata_public_armored_key: "",
+        generated_metadata_key: "",
       }, {validate: false});
 
       const expectedDto = {
         allow_usage_of_personal_keys: "",
         zero_knowledge_key_share: "",
-        armored_metadata_private_key: "",
-        armored_metadata_public_key: "",
+        metadata_private_armored_key: "",
+        metadata_public_armored_key: "",
+        generated_metadata_key: null,
       };
-      expect(settings.toFormDto()).toStrictEqual(expectedDto);
+      expect(settings.toDto()).toStrictEqual(expectedDto);
     });
   });
 });

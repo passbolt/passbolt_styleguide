@@ -161,7 +161,7 @@ class EntityV2Collection extends EntityCollection {
    *   constructor that will be utilized for its creation.
    * @param {object} [options] Options.
    * @param {object} [options.validateBuildRules] Options to pass to validate build rules function @see EntityV2Collection::validateBuildRules
-   * @param {object} [options.replacePropertyCompare] Property name to find the element to replace.
+   * @param {string} [options.replacePropertyName = "id"] Property name to find the element to replace.
    * @throws {EntityValidationError} If the item doesn't validate.
    */
   pushOrReplace(data, entityOptions = {}, options = {}) {

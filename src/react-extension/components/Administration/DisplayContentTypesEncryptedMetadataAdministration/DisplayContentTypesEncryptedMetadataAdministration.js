@@ -17,7 +17,6 @@ import React, {Component} from 'react';
 import {Trans, withTranslation} from "react-i18next";
 import memoize from "memoize-one";
 import {createPortal} from "react-dom";
-import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import MetadataTypesSettingsFormEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsFormEntity";
 import MetadataSettingsServiceWorkerService from "../../../../shared/services/serviceWorker/metadata/metadataSettingsServiceWorkerService";
@@ -405,7 +404,6 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
 DisplayContentTypesEncryptedMetadataAdministration.propTypes = {
   context: PropTypes.object, // Defined the expected type for context
   actionFeedbackContext: PropTypes.object, // The action feedback context
-  administrationWorkspaceContext: PropTypes.object, // The administration workspace context,
   dialogContext: PropTypes.object, // The dialog context
   createPortal: PropTypes.func, // The mocked create portal react dom primitive if test needed.
   metadataSettingsServiceWorkerService: PropTypes.object, // The bext service that handle metadata settings.
@@ -416,6 +414,5 @@ DisplayContentTypesEncryptedMetadataAdministration.propTypes = {
 export default withAppContext(
   withActionFeedback(
     withDialog(
-      withAdministrationWorkspace(
-        withResourceTypesLocalStorage(
-          withTranslation('common')(DisplayContentTypesEncryptedMetadataAdministration))))));
+      withResourceTypesLocalStorage(
+        withTranslation('common')(DisplayContentTypesEncryptedMetadataAdministration)))));

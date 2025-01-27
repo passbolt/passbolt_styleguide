@@ -12,17 +12,22 @@
  * @since         4.11.0
  */
 import MetadataKeysSettingsEntity from "./metadataKeysSettingsEntity";
-
-const PGP_STRING_MAX_LENGTH = 10_000;
-
-const formProperties = [
-  "allow_usage_of_personal_keys",
-  "zero_knowledge_key_share",
-  "armored_metadata_private_key",
-  "armored_metadata_public_key",
-];
+import ExternalGpgKeyPairEntity from "../gpgkey/external/externalGpgKeyPairEntity";
 
 class MetadataKeysSettingsFormEntity extends MetadataKeysSettingsEntity {
+  /**
+   * @inheritDoc
+   */
+  constructor(dto, options = {}) {
+    super(dto, options);
+
+    // Associations
+    if (this._props.generated_metadata_key) {
+      this._generated_metadata_key = new ExternalGpgKeyPairEntity(this._props.generated_metadata_key, {...options, clone: false});
+      delete this._props.generated_metadata_key;
+    }
+  }
+
   /**
    * Get resource entity schema
    * @returns {object} schema
@@ -36,18 +41,7 @@ class MetadataKeysSettingsFormEntity extends MetadataKeysSettingsEntity {
       ],
       properties: {
         ...MetadataKeysSettingsEntity.getSchema().properties,
-        armored_metadata_private_key: {
-          "type": "string",
-          "nullable": true,
-          "maxLength": PGP_STRING_MAX_LENGTH,
-          "pattern": /^-----BEGIN PGP PRIVATE KEY BLOCK-----([\r\n])([ -9;-~]{1,76}: [ -~]{1,76}([\r\n]))*\n([a-zA-Z0-9\/+=]{1,76}([\r\n]))*=[a-zA-Z0-9\/+=]{4}([\r\n])-----END PGP PRIVATE KEY BLOCK-----([\r\n]*)$/,
-        },
-        armored_metadata_public_key: {
-          "type": "string",
-          "nullable": true,
-          "maxLength": PGP_STRING_MAX_LENGTH,
-          "pattern": /^-----BEGIN PGP PUBLIC KEY BLOCK-----([\r\n])([ -9;-~]{1,76}: [ -~]{1,76}([\r\n]))*\n([a-zA-Z0-9\/+=]{1,76}([\r\n]))*=[a-zA-Z0-9\/+=]{4}([\r\n])-----END PGP PUBLIC KEY BLOCK-----([\r\n]*)$/,
-        }
+        generated_metadata_key: ExternalGpgKeyPairEntity.getSchema(),
       }
     };
   }
@@ -56,13 +50,31 @@ class MetadataKeysSettingsFormEntity extends MetadataKeysSettingsEntity {
    * Get the DTO of properties managed by the form.
    * @returns {object}
    */
-  toFormDto() {
-    return formProperties.reduce((result, prop) => {
-      if (typeof this._props[prop] !== "undefined") {
-        result[prop] = this._props[prop];
-      }
-      return result;
-    }, {});
+  toDto() {
+    return {
+      ...this._props,
+      generated_metadata_key: this.generatedMetadataKey?.toDto({public_key: true, private_key: true}) || null,
+    };
+  }
+
+  /**
+   * Get the generated metadata key.
+   * @returns {ExternalGpgKeyPairEntity|null}
+   */
+  get generatedMetadataKey() {
+    return this._generated_metadata_key || null;
+  }
+
+  /**
+   * Get the generated metadata key.
+   * @param {ExternalGpgKeyPairEntity|null} generatedMetadataKey The key to set.
+   * @throws {TypeError} if the parameter `generatedMetadataKey` is not of type ExternalGpgKeyPairEntity.
+   */
+  set generatedMetadataKey(generatedMetadataKey) {
+    if (generatedMetadataKey !== null && !(generatedMetadataKey instanceof ExternalGpgKeyPairEntity)) {
+      throw new TypeError("The parameter `generatedMetadataKey` should be of type ExternalGpgKeyPairEntity.");
+    }
+    this._generated_metadata_key = generatedMetadataKey;
   }
 }
 

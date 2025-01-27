@@ -67,6 +67,14 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
   }
 
   /**
+   * Returns the count of displayed error messages
+   * @returns {integer}
+   */
+  get errorMessagesCount() {
+    return this._page.container.querySelectorAll(".error-message").length;
+  }
+
+  /**
    * Returns the allow usage of personal keys radio button element
    * @returns {HTMLElement}
    */
@@ -115,6 +123,14 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
   }
 
   /**
+   * Returns the required shared metadata key error element
+   * @returns {HTMLElement}
+   */
+  get requiredSharedMetadataKeyError() {
+    return this.noMetadataActiveKeysWrapper.querySelector("div .error-message");
+  }
+
+  /**
    * Returns the metadata expired keys wrapper element
    * @returns {HTMLElement}
    */
@@ -147,6 +163,23 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
   async clickOnGenerateKeyButton() {
     const leftClick = {button: 0};
     fireEvent.click(this.generateKeyButton, leftClick);
+    await waitFor(() => {});
+  }
+
+  /**
+   * Returns the form element
+   * @returns {HTMLElement}
+   */
+  get form() {
+    return this.select("form");
+  }
+
+  /**
+   * Submit the form.
+   * @returns {Promise<void>}
+   */
+  async submitForm() {
+    fireEvent.submit(this.form);
     await waitFor(() => {});
   }
 }

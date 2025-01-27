@@ -20,6 +20,7 @@ import {
   defaultSettingsAndMultipleActiveKeysProps, defaultSettingsAndMultipleKeysProps,
   defaultSettingsAndSingleActiveKeyProps
 } from "./DisplayContentTypesMetadataKeyAdministration.test.data";
+import {within} from "@testing-library/dom";
 
 export default {
   title: 'Components/Administration/DisplayContentTypesMetadataKeyAdministration',
@@ -39,6 +40,24 @@ Template.propTypes = {
 
 export const Initial = Template.bind({});
 Initial.args = defaultProps();
+
+export const WithValidationError = Template.bind({});
+WithValidationError.args = defaultProps();
+// Trigger the form validation.
+WithValidationError.play = async({canvasElement}) => {
+  const canvas = within(canvasElement);
+  const form = canvas.getByTestId("submit-form");
+  form.requestSubmit();
+};
+
+export const GeneratedMetadataKey = Template.bind({});
+GeneratedMetadataKey.args = defaultProps();
+// Trigger a key generation.
+GeneratedMetadataKey.play = async({canvasElement}) => {
+  const canvas = within(canvasElement);
+  const form = canvas.getByTestId("generate-key-buton");
+  form.click();
+};
 
 export const SingleActiveMetadataKey = Template.bind({});
 SingleActiveMetadataKey.args = defaultSettingsAndSingleActiveKeyProps();

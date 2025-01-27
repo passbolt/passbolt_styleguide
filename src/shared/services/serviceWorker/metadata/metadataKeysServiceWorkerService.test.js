@@ -14,6 +14,7 @@
 
 import MockPort from "../../../../react-extension/test/mock/MockPort";
 import MetadataKeysServiceWorkerService, {
+  METADATA_KEYS_CREATE_EVENT,
   METADATA_KEYS_FIND_ALL_EVENT,
   METADATA_KEYS_GENERATE_EVENT
 } from "./metadataKeysServiceWorkerService";
@@ -21,6 +22,9 @@ import {defaultMetadataKeysDtos} from "../../../models/entity/metadata/metadataK
 import MetadataKeysCollection from "../../../models/entity/metadata/metadataKeysCollection";
 import {ExternalGpgKeyEntityFixtures} from "../../../models/entity/gpgkey/externalGpgKeyEntity.test.fixtures";
 import ExternalGpgKeyPairEntity from "../../../models/entity/gpgkey/external/externalGpgKeyPairEntity";
+import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import {defaultMetadataKeyDto} from "../../../models/entity/metadata/metadataKeyEntity.test.data";
+import MetadataKeyEntity from "../../../models/entity/metadata/metadataKeyEntity";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -60,6 +64,33 @@ describe("MetadataKeysServiceWorkerService", () => {
       expect(externalGpgKeyPair).toBeInstanceOf(ExternalGpgKeyPairEntity);
       expect(externalGpgKeyPair.publicKey.armoredKey).toEqual(dto.public_key.armored_key);
       expect(externalGpgKeyPair.privateKey.armoredKey).toEqual(dto.private_key.armored_key);
+    });
+  });
+
+  describe("::createKey", () => {
+    it("requests the service worker with the expected event and return the request output.", async() => {
+      expect.assertions(3);
+      const dto = {
+        public_key: {
+          armored_key: pgpKeys.eddsa_ed25519.public,
+        },
+        private_key: {
+          armored_key: pgpKeys.eddsa_ed25519.private,
+        },
+      };
+      const generatedKeyPair = new ExternalGpgKeyPairEntity(dto);
+
+      const metadataKeyDto = defaultMetadataKeyDto({armored_key: dto.public_key.armored_key});
+      jest.spyOn(port, "request").mockReturnValue(metadataKeyDto);
+      const metadataKey = await service.createKey(generatedKeyPair);
+      expect(port.request).toHaveBeenCalledWith(METADATA_KEYS_CREATE_EVENT, dto);
+      expect(metadataKey).toBeInstanceOf(MetadataKeyEntity);
+      expect(metadataKey.armoredKey).toEqual(dto.public_key.armored_key);
+    });
+
+    it("throws if the given generated metadata key pair is not of type ExternalGpgKeyPairEntity.", async() => {
+      expect.assertions(1);
+      await expect(() => service.createKey(42)).rejects.toThrow(TypeError);
     });
   });
 });

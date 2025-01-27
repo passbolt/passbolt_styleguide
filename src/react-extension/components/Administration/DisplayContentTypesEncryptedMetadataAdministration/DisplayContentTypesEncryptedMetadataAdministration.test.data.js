@@ -58,7 +58,7 @@ export function allowedVersionErrorProps(data = {}) {
 
   return defaultProps({
     metadataSettingsServiceWorkerService: {
-      getOrFindTypesSettings: () => new MetadataTypesSettingsEntity(settingsDto, {validate: false})
+      findTypesSettings: () => new MetadataTypesSettingsEntity(settingsDto, {validate: false})
     },
     ...data
   });
@@ -70,8 +70,15 @@ export function allowedVersionErrorProps(data = {}) {
  * @returns {object}
  */
 export function resourceTypesDeletedProps(data = {}) {
+  const settingsDto = defaultMetadataTypesSettingsV4Dto({
+    allow_v4_v5_upgrade: true,
+    allow_v5_v4_downgrade: true,
+  });
   return defaultProps({
     resourceTypes: new ResourceTypesCollection(),
+    metadataSettingsServiceWorkerService: {
+      findTypesSettings: () => new MetadataTypesSettingsEntity(settingsDto),
+    },
     ...data
   });
 }
