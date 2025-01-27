@@ -39,6 +39,7 @@ import {Trans} from "react-i18next";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import DisplayUserProfileHelp from "../DisplayUserProfile/DisplayUserProfileHelp";
 import Footer from "../../Common/Footer/Footer";
+import DisplayUserGpgInformationHelp from "../DisplayUserGpgInformation/DisplayUserGpgInformationHelp";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -164,11 +165,11 @@ class DisplayUserSettingsWorkspace extends React.Component {
                 <Route path={`${path}/mfa`} component={OrchestrateMfaSettings}></Route>
                 <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
               </div>
-              {/* TODO will be moved directly in specific administration menu item component <DisplayUserSettingsWorkspaceActions/> */}
             </div>
             <div className="help-panel">
               <div className="sidebar-help">
                 <Route path={`${path}/profile`} component={DisplayUserProfileHelp}/>
+                <Route path={`${path}/keys`} component={DisplayUserGpgInformationHelp}></Route>
               </div>
               <Footer/>
             </div>

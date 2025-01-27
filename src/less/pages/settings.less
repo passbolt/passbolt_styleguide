@@ -86,8 +86,11 @@
     display: flex;
     justify-content: flex-end;
     padding: 1.6rem 0;
+    gap: 1.6rem;
 
     .left-actions-wrapper {
+      display: flex;
+      gap: 1.6rem;
       margin-right: auto;
     }
 
@@ -96,25 +99,30 @@
       font-size: 1.8rem;
     }
   }
+
+  .profile, .key-info {
+    .table-info {
+      margin: 0;
+    }
+  }
+
+  .key-info .table-info {
+    .fingerprint {
+      line-height: 1.6rem;
+    }
+  }
+
+  .sidebar-help-section {
+    .input.textarea.gpgkey textarea.fluid.code {
+      max-height: 50rem;
+      height: 30rem;
+      margin-bottom: 0;
+    }
+  }
 }
 
 
 .page.settings {
-  .profile-key-inspector-information {
-    .key-info .table-info {
-      .fingerprint {
-        line-height: 1.6rem;
-      }
-    }
-  }
-
-  .key-export {
-    .input.textarea.gpgkey textarea.fluid.code {
-      height: 27em;
-      margin-bottom: 0;
-    }
-  }
-
   .profile-passphrase {
     .password-management-bg {
       background: transparent url('@{images}/illustrations/passphrase_intro.svg') center center no-repeat;
