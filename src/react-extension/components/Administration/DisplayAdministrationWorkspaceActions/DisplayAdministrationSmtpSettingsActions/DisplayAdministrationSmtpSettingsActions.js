@@ -114,7 +114,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
     return (
       <div className="actions-wrapper">
         <div className="left-actions-wrapper">
-          <button type="button" disabled={!this.isTestEnabled()} id="send-test-email" onClick={this.handleTestClick}>
+          <button type="button secondary" disabled={!this.isTestEnabled()} id="send-test-email" onClick={this.handleTestClick}>
             <Icon name="plug"/>
             <span><Trans>Send test email</Trans></span>
           </button>

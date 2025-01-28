@@ -24,7 +24,6 @@ import DisplayUserTheme from "../DisplayUserTheme/DisplayUserTheme";
 import DisplayUserSettingsWorkspaceBreadcrumb
   from "../DisplayUserSettingsWorkspaceBreadcrumb/DisplayUserSettingsWorkspaceBreadcrumb";
 import DisplayUserGpgInformation from "../DisplayUserGpgInformation/DisplayUserGpgInformation";
-import DisplayUserPassphrase from "../ChangeUserPassphrase/ChangeUserPassphrase";
 import DisplayUserChooseSecurityToken from "../ChangeUserSecurityToken/ChangeUserSecurityToken";
 import TransferToMobile from "../TransferToMobile/TransferToMobile";
 import DisplayAccountRecoveryUserSettings from '../DisplayUserAccountRecovery/DisplayAccountRecoveryUserSettings';
@@ -40,6 +39,8 @@ import {withNavigationContext} from "../../../contexts/NavigationContext";
 import DisplayUserProfileHelp from "../DisplayUserProfile/DisplayUserProfileHelp";
 import Footer from "../../Common/Footer/Footer";
 import DisplayUserGpgInformationHelp from "../DisplayUserGpgInformation/DisplayUserGpgInformationHelp";
+import ChangeUserPassphrase from "../ChangeUserPassphrase/ChangeUserPassphrase";
+import ChangeUserPassphraseHelp from "../ChangeUserPassphrase/ChangeUserPassphraseHelp";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -148,7 +149,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
               </div>
               <div className="main-page">
                 <Route path={`${path}/profile`} component={DisplayUserProfile}/>
-                <Route path={`${path}/passphrase`} component={DisplayUserPassphrase}/>
+                <Route path={`${path}/passphrase`} component={ChangeUserPassphrase}/>
                 <Route path={`${path}/security-token`} component={DisplayUserChooseSecurityToken}></Route>
                 {this.canIUseThemeCapability &&
                   <Route path={`${path}/theme`} component={DisplayUserTheme}/>
@@ -170,6 +171,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
               <div className="sidebar-help">
                 <Route path={`${path}/profile`} component={DisplayUserProfileHelp}/>
                 <Route path={`${path}/keys`} component={DisplayUserGpgInformationHelp}></Route>
+                <Route path={`${path}/passphrase`} component={ChangeUserPassphraseHelp}/>
               </div>
               <Footer/>
             </div>

@@ -271,14 +271,14 @@ class DisplayUserGpgInformation extends React.Component {
           <div className="left-actions-wrapper">
             <button
               type="button"
-              className="button"
+              className="button secondary"
               onClick={this.handleDownloadPublicKey}>
               <DownloadFileSVG/>
               <span><Trans>Public</Trans></span>
             </button>
             <button
               type="button"
-              className="button"
+              className="button secondary"
               onClick={this.handleDownloadPrivateKey}>
               <DownloadFileSVG/>
               <span><Trans>Private</Trans></span>

@@ -96,7 +96,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button type="button" disabled={!this.isResetEnabled()} onClick={this.handleEditSubscriptionClick}>
+        <button type="button secondary" disabled={!this.isResetEnabled()} onClick={this.handleEditSubscriptionClick}>
           <span><Trans>Reset settings</Trans></span>
         </button>
         <button type="button" className="button primary" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>

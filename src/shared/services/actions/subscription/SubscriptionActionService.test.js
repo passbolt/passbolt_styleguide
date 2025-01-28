@@ -28,7 +28,7 @@ describe("SubscriptionActionService", () => {
     dialogContext: {
       open: jest.fn()
     },
-    adminSubcriptionContext: {
+    adminSubscriptionContext: {
       getSubscription: () => ({data: "mockData"})
     }
   };
@@ -54,7 +54,7 @@ describe("SubscriptionActionService", () => {
     it("should kill the instance and create a new one", () => {
       expect.assertions(1);
       SubscriptionActionService.killInstance();
-      subscriptionActionService = SubscriptionActionService.getInstance({"context": null, "dialogContext": null, "adminSubcriptionContext": null});
+      subscriptionActionService = SubscriptionActionService.getInstance({"context": null, "dialogContext": null, "adminSubscriptionContext": null});
       expect(subscriptionActionService).toEqual({"context": null, "dialogContext": null, "subscriptionContext": null});
     });
   });
@@ -63,7 +63,7 @@ describe("SubscriptionActionService", () => {
     it("should kill the instance and create a new one", () => {
       expect.assertions(1);
       const editSubscriptionKey = {
-        key: props.adminSubcriptionContext.getSubscription().data
+        key: props.adminSubscriptionContext.getSubscription().data
       };
       subscriptionActionService.editSubscription();
       expect(props.context.setContext).toHaveBeenCalledWith({editSubscriptionKey});

@@ -115,7 +115,7 @@ describe("DisplaySubscriptionKeyPage", () => {
 
       expect(page.subscriptionDetailsTitle).toBe("Your subscription key is either missing or not valid.");
 
-      await page.goToRenewKey();
+      await page.updateKey();
       const editSubscriptionKey = {
         key: null
       };
@@ -126,12 +126,13 @@ describe("DisplaySubscriptionKeyPage", () => {
 
     it('As AD I should open edit subscription key', async() => {
       expect.assertions(2);
+      jest.spyOn(props.context, 'onGetSubscriptionKeyRequested').mockImplementationOnce(() => {});
       page = new DisplaySubscriptionKeyPage(props.context, props);
 
       await waitFor(() => {});
 
       const editSubscriptionKey = {
-        key: mockSubscription.data
+        key: null
       };
 
       await page.updateKey();

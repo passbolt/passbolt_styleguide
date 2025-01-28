@@ -37,21 +37,21 @@ export default class DownloadRecoveryKitPage {
    * Returns the user confirm passphrase element
    */
   get downloadRecoveryKit() {
-    return this._page.container.querySelector('.profile-passphrase');
+    return this._page.container.querySelector('.recovery-kit');
   }
 
   /**
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.profile-passphrase h3').textContent;
+    return this._page.container.querySelector('.recovery-kit h3').textContent;
   }
 
   /**
    * Returns the download backup button element
    */
   get downloadBackupButton() {
-    return this._page.container.querySelector('.additional-information button.button');
+    return this._page.container.querySelector('.actions-wrapper button.button');
   }
 
   /**
