@@ -21,7 +21,7 @@
         flex: 1 0 0;
         align-self: stretch;
         background: var(--Workspace-Workspace-background);
-        min-width: 110rem; // important to keep the container size for ellipsis
+        min-width: 120rem; // important to keep the container size for ellipsis
         min-height: 50rem; // important to keep the container size for ellipsis
 
         .panel.left {
@@ -114,13 +114,13 @@
               display: flex;
               align-items: center;
               flex: 1 0 0;
-              padding-right: 1.6rem;
-              width: calc(100% - 35rem);
             }
 
             .header-right {
               display: flex;
-              width: 33.4rem;
+              width: 22%;
+              min-width: 30rem;
+              max-width: 50rem;
               justify-content: flex-end;
               align-items: center;
               gap: 1.6rem;

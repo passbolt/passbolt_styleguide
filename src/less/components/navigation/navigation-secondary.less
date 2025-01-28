@@ -123,11 +123,10 @@
                 width: 100%;
                 line-height: normal;
 
-                .svg-icon.exclamation {
-                  margin-left: 0.8rem;
-                  svg {
-                    --icon-exclamation-background-color: @icon-exclamation-required-color;
-                  }
+                svg.attention-required {
+                  --icon-exclamation-color: var(--Alert-Alert-icon);
+                  --icon-exclamation-background-color: var(--Alert-Alert-background);
+                  --icon-exclamation-border-color: var(--Alert-Alert-background);
                 }
 
                 svg {
