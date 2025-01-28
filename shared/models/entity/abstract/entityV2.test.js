@@ -298,12 +298,16 @@ describe("EntityV2", () => {
       expect(Object.keys(diff).length).toEqual(0);
     });
 
-    it("returns no differences when the property defined in entity 1 are similar to the property defined in a second entity having more property defined.", () => {
-      expect.assertions(1);
+    it("returns differences when the property defined in entity 1 are similar to the property defined in a second entity having more property defined.", () => {
+      expect.assertions(5);
       const entity1 = new TestEntityV2(minimalTestEntityV2Dto());
       const entity2 = new TestEntityV2(defaultTestEntityV2Dto());
       const diff = entity1.diffProps(entity2);
-      expect(Object.keys(diff).length).toEqual(0);
+      expect(Object.keys(diff).length).toEqual(4);
+      expect(diff.id).toEqual(entity2.id);
+      expect(diff.number).toEqual(entity2.get("number"));
+      expect(diff.integer).toEqual(entity2.get("integer"));
+      expect(diff.boolean).toEqual(entity2.get("boolean"));
     });
 
     it("returns differences when the property defined in entity 1 are not equal to the property defined in a second entity.", () => {

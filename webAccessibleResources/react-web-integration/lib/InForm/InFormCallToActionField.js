@@ -141,9 +141,10 @@ class InFormCallToActionField {
     const browserExtensionUrl = browser.runtime.getURL("/");
     iframe.id = this.iframeId;
     iframe.style.position = "fixed";
+    iframe.style.display = "block";
     iframe.style.top = `${top}px`;
     iframe.style.left = `${left}px`;
-    iframe.style.border = 0;
+    iframe.style.border = "none";
     iframe.style.width = '18px';
     iframe.style.height = '18px';
     iframe.style.zIndex = "123456";  // For you Yahoo with love

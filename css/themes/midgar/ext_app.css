@@ -1889,6 +1889,13 @@ input[type=file] {
   display: block;
   font-size: 1.6rem;
 }
+.radiolist-alt .input.radio label .name.bold {
+  font-weight: 700;
+}
+.radiolist-alt .input.radio label .error-message,
+.radiolist-alt .input.radio label .warning-message {
+  font-size: 1.3rem;
+}
 .radiolist-alt .input.radio label .info {
   margin: 0;
   font-weight: normal;
@@ -1929,6 +1936,10 @@ input[type=file] {
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
+}
+.input.toggle-switch .toggle-switch-checkbox + label .error-message,
+.input.toggle-switch .toggle-switch-checkbox + label .warning-message {
+  font-size: 1.3rem;
 }
 .input.toggle-switch .toggle-switch-checkbox + label.text {
   font-weight: 400;
@@ -8669,6 +8680,47 @@ table.table-info.horizontal tbody tr:hover {
 }
 .page.administration .grid {
   overflow-y: scroll;
+}
+.page.administration .input.toggle-switch .warning-message {
+  margin: 0;
+}
+.page.administration .input.toggle-switch .toggle-switch-checkbox + label {
+  white-space: normal;
+}
+.page.administration .input.toggle-switch .toggle-switch-checkbox:focus-visible + label,
+.page.administration .input.toggle-switch .toggle-switch-checkbox:focus + label {
+  background: none;
+}
+.page.administration .metadata-key-info {
+  border: 1px solid #202020;
+  border-radius: 3px;
+  background-color: #353535;
+  padding: 1.6rem;
+  margin-top: 1.6rem;
+  margin-right: 0;
+}
+.page.administration .metadata-key-info.error {
+  border: 1px solid #D40101;
+  color: #D40101;
+}
+.page.administration .metadata-key-info.error .empty-value {
+  color: #FFFFFF;
+}
+.page.administration .metadata-key-info table {
+  margin-top: 0;
+  border-spacing: 0.8rem;
+}
+.page.administration .metadata-key-info table tr.error-message {
+  color: #D40101;
+}
+.page.administration .metadata-key-info table td {
+  line-height: normal;
+}
+.page.administration .metadata-key-info table td:first-child {
+  color: inherit;
+}
+.page.administration .metadata-key-info table td.table-button {
+  justify-items: end;
 }
 .recover-account-settings .input.radio,
 .save-recovery-account-settings-dialog .input.radio {

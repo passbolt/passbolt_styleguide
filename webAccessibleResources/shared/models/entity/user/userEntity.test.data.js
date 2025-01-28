@@ -96,6 +96,7 @@ export const defaultAdminUserDto = (data = {}) => {
 
 export const users = {
   ada: defaultUserDto({
+    id: "f848277c-5398-58f8-a82a-72397af2d450",
     username: "ada@passbolt.com",
     profile: defaultProfileDto({
       first_name: "Ada",
@@ -103,6 +104,7 @@ export const users = {
     })
   }),
   admin: defaultAdminUserDto({
+    id: "f642271d-bbb1-401e-bbd1-7ec370f8e19b",
     username: "admin@passbolt.com",
     profile: defaultProfileDto({
       first_name: "Admin",
@@ -110,6 +112,7 @@ export const users = {
     })
   }),
   betty: defaultUserDto({
+    id: "e97b14ba-8957-57c9-a357-f78a6e1e1a46",
     username: "betty@passbolt.com",
     profile: defaultProfileDto({
       first_name: "Betty",

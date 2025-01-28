@@ -64,7 +64,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect.assertions(6);
       const props = resourceTypesDeletedProps({
         metadataSettingsServiceWorkerService: {
-          getOrFindTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto())
+          findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto())
         },
       });
       const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
@@ -81,7 +81,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect.assertions(6);
       const props = resourceTypesDeletedProps({
         metadataSettingsServiceWorkerService: {
-          getOrFindTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto())
+          findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto())
         },
       });
       const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
@@ -98,7 +98,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect.assertions(12);
       const props = resourceTypesDeletedProps({
         metadataSettingsServiceWorkerService: {
-          getOrFindTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto())
+          findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto())
         },
       });
       const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
@@ -121,7 +121,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect.assertions(4);
       const props = defaultProps({
         metadataSettingsServiceWorkerService: {
-          getOrFindTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto({allow_v4_v5_upgrade: true}))
+          findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto({allow_v4_v5_upgrade: true}))
         },
       });
       const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
@@ -136,7 +136,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect.assertions(4);
       const props = defaultProps({
         metadataSettingsServiceWorkerService: {
-          getOrFindTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto({allow_v5_v4_downgrade: true}))
+          findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto({allow_v5_v4_downgrade: true}))
         },
       });
       const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
@@ -153,7 +153,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect.assertions(6);
       const props = defaultProps({
         metadataSettingsServiceWorkerService: {
-          getOrFindTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto({allow_creation_of_v4_resources: false}), {validate: false})
+          findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto({allow_creation_of_v4_resources: false}), {validate: false})
         },
       });
       const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
@@ -171,7 +171,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect.assertions(6);
       const props = defaultProps({
         metadataSettingsServiceWorkerService: {
-          getOrFindTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto({allow_creation_of_v5_resources: false}), {validate: false})
+          findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto({allow_creation_of_v5_resources: false}), {validate: false})
         },
       });
       const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
@@ -202,7 +202,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect.assertions(6);
       const props = resourceTypesDeletedProps({
         metadataSettingsServiceWorkerService: {
-          getOrFindTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto())
+          findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto())
         },
       });
       const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
@@ -220,7 +220,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect.assertions(6);
       let requestGetPromiseResolver;
       const props = defaultProps();
-      jest.spyOn(props.metadataSettingsServiceWorkerService, "getOrFindTypesSettings")
+      jest.spyOn(props.metadataSettingsServiceWorkerService, "findTypesSettings")
         .mockImplementation(() => new Promise(resolve => { requestGetPromiseResolver = resolve; }));
 
       const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);

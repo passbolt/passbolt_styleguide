@@ -284,7 +284,7 @@ describe("ResourceTypesCollection", () => {
       expect(resourceTypes.hasSomeOfVersion(RESOURCE_TYPE_VERSION_4)).toBeTruthy();
     });
 
-    it("should note have some v4 resource types.", () => {
+    it("should not have some v4 resource types.", () => {
       expect.assertions(1);
       const resourceTypes = new ResourceTypesCollection(resourceTypesV5CollectionDto());
       expect(resourceTypes.hasSomeOfVersion(RESOURCE_TYPE_VERSION_4)).toBeFalsy();
@@ -296,7 +296,7 @@ describe("ResourceTypesCollection", () => {
       expect(resourceTypes.hasSomeOfVersion(RESOURCE_TYPE_VERSION_5)).toBeTruthy();
     });
 
-    it("should note have some v5 resource types.", () => {
+    it("should not have some v5 resource types.", () => {
       expect.assertions(1);
       const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
       expect(resourceTypes.hasSomeOfVersion(RESOURCE_TYPE_VERSION_5)).toBeFalsy();

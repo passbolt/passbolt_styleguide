@@ -1134,6 +1134,13 @@ input[type=file] {
   display: block;
   font-size: 1.6rem;
 }
+.radiolist-alt .input.radio label .name.bold {
+  font-weight: 700;
+}
+.radiolist-alt .input.radio label .error-message,
+.radiolist-alt .input.radio label .warning-message {
+  font-size: 1.3rem;
+}
 .radiolist-alt .input.radio label .info {
   margin: 0;
   font-weight: normal;
@@ -1174,6 +1181,10 @@ input[type=file] {
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
+}
+.input.toggle-switch .toggle-switch-checkbox + label .error-message,
+.input.toggle-switch .toggle-switch-checkbox + label .warning-message {
+  font-size: 1.3rem;
 }
 .input.toggle-switch .toggle-switch-checkbox + label.text {
   font-weight: 400;

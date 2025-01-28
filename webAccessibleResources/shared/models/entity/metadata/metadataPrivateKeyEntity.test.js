@@ -41,6 +41,7 @@ describe("MetadataPrivateKeyEntity", () => {
     it("validates user_id property", () => {
       assertEntityProperty.uuid(MetadataPrivateKeyEntity, "user_id");
       assertEntityProperty.required(MetadataPrivateKeyEntity, "user_id");
+      assertEntityProperty.nullable(MetadataPrivateKeyEntity, "user_id");
     });
 
     it("validates data property", () => {
@@ -203,6 +204,18 @@ describe("MetadataPrivateKeyEntity", () => {
 
       expect(entity.data).toBeInstanceOf(MetadataPrivateKeyDataEntity);
       expect(entity.data.toDto()).toStrictEqual(dto.data);
+    });
+
+    it("`userId` should return the right value", () => {
+      expect.assertions(2);
+      const dto1 = minimalMetadataPrivateKeyDto();
+      const entity1 = new MetadataPrivateKeyEntity(dto1);
+
+      const dto2 = defaultMetadataPrivateKeyDto();
+      const entity2 = new MetadataPrivateKeyEntity(dto2);
+
+      expect(entity1.userId).toBeNull();
+      expect(entity2.userId).toStrictEqual(dto2.user_id);
     });
   });
 

@@ -20,7 +20,7 @@ import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
  * @returns {object}
  */
 export const minimalMetadataPrivateKeyDto = (data = {}) => ({
-  user_id: uuidv4(),
+  user_id: null,
   data: pgpKeys.metadataKey.encryptedMetadataPrivateKeyDataMessage,
   ...data
 });
@@ -32,6 +32,7 @@ export const minimalMetadataPrivateKeyDto = (data = {}) => ({
  */
 export const defaultMetadataPrivateKeyDto = (data = {}) => minimalMetadataPrivateKeyDto({
   id: uuidv4(),
+  user_id: uuidv4(),
   metadata_key_id: uuidv4(),
   modified: "2022-10-11T08:09:00+00:00",
   created_by: uuidv4(),
