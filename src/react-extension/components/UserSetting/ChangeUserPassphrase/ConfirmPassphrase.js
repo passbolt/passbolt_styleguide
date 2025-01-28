@@ -131,6 +131,7 @@ class ConfirmPassphrase extends React.Component {
     } else {
       const ErrorDialogProps = {error: error};
       this.props.dialogContext.open(NotifyError, ErrorDialogProps);
+      console.error(error);
     }
   }
 
@@ -176,60 +177,49 @@ class ConfirmPassphrase extends React.Component {
 
   render() {
     return (
-      <div className="grid grid-responsive-12 profile-passphrase">
-        <div className="row">
-          <div className="col7 main-column">
-            <form className="enter-passphrase" onSubmit={this.handleSubmit}>
-              <h3><Trans>Please enter your passphrase to continue</Trans></h3>
-              <div className="form-content">
-                <div className={`input-password-wrapper input required ${this.state.passphraseError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                  <label htmlFor="passphrase-input"><Trans>Passphrase</Trans></label>
-                  <Password
-                    id="passphrase-input"
-                    autoComplete="off"
-                    name="passphrase" placeholder={this.translate('Passphrase')}
-                    inputRef={this.passphraseInputRef}
-                    value={this.state.passphrase}
-                    onChange={this.handleInputChange}
-                    disabled={this.hasAllInputDisabled()}
-                    preview={true}
-                    securityToken={this.props.context.userSettings.getSecurityToken()}
-                  />
-                  {this.state.passphraseError &&
-                    <div className="error-message">{this.state.passphraseError}</div>
-                  }
-                  {!this.state.passphraseError &&
-                    <div className="help-message"><Trans>You need to enter your current passphrase.</Trans></div>
-                  }
-                </div>
-              </div>
-              <div className="submit-wrapper">
-                <button
-                  className="button cancel"
-                  type="button"
+      <form className="profile-passphrase" onSubmit={this.handleSubmit}>
+        <div className="main-column">
+          <div className="main-content">
+            <h3><Trans>Please enter your passphrase to continue</Trans></h3>
+            <div className="enter-passphrase">
+              <div className={`input-password-wrapper input required ${this.state.passphraseError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                <label htmlFor="passphrase-input"><Trans>Passphrase</Trans></label>
+                <Password
+                  id="passphrase-input"
+                  autoComplete="off"
+                  name="passphrase" placeholder={this.translate('Passphrase')}
+                  inputRef={this.passphraseInputRef}
+                  value={this.state.passphrase}
+                  onChange={this.handleInputChange}
                   disabled={this.hasAllInputDisabled()}
-                  onClick={this.handleCancel}>
-                  <Trans>Cancel</Trans>
-                </button>
-                <FormSubmitButton
-                  primary={true}
-                  disabled={this.mustBeDisabled()}
-                  processing={this.state.processing}
-                  value={this.translate('Verify')}/>
+                  preview={true}
+                  securityToken={this.props.context.userSettings.getSecurityToken()}
+                />
+                {this.state.passphraseError &&
+                  <div className="error-message">{this.state.passphraseError}</div>
+                }
+                {!this.state.passphraseError &&
+                  <div className="help-message"><Trans>You need to enter your current passphrase.</Trans></div>
+                }
               </div>
-            </form>
-          </div>
-          <div className="col4 last">
-            <div className="sidebar-help">
-              <h3><Trans>What if I forgot my passphrase?</Trans></h3>
-              <p><Trans>Unfortunately you need your passphrase in order to continue. If you forgot it, please contact your administrator.</Trans></p>
-              <a className="button" href="https://www.passbolt.com/docs/user/settings/browser/account-recovery-setup/" target="_blank" rel="noopener noreferrer">
-                <span><Trans>Learn more</Trans></span>
-              </a>
             </div>
           </div>
         </div>
-      </div>
+        <div className="actions-wrapper">
+          <button
+            className="button cancel secondary"
+            type="button"
+            disabled={this.hasAllInputDisabled()}
+            onClick={this.handleCancel}>
+            <Trans>Cancel</Trans>
+          </button>
+          <FormSubmitButton
+            primary={true}
+            disabled={this.mustBeDisabled()}
+            processing={this.state.processing}
+            value={this.translate('Verify')}/>
+        </div>
+      </form>
     );
   }
 }

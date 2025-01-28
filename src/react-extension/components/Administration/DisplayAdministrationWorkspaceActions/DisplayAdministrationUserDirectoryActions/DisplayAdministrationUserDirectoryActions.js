@@ -185,15 +185,15 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button type="button" disabled={!this.isTestEnabled()} onClick={() => this.handleFormSubmit('test')}>
+        <button type="button" className="button secondary" disabled={!this.isTestEnabled()} onClick={() => this.handleFormSubmit('test')}>
           <TestSVG />
           <span><Trans>Test settings</Trans></span>
         </button>
-        <button type="button" disabled={!this.isSynchronizeEnabled()} onClick={this.handleSimulateSynchronizeClick}>
+        <button type="button" className="button secondary" disabled={!this.isSynchronizeEnabled()} onClick={this.handleSimulateSynchronizeClick}>
           <SimulateSyncSVG />
           <span><Trans>Simulate synchronize</Trans></span>
         </button>
-        <button type="button" disabled={!this.isSynchronizeEnabled()} onClick={this.handleSynchronizeClick}>
+        <button type="button" className="button secondary" disabled={!this.isSynchronizeEnabled()} onClick={this.handleSynchronizeClick}>
           <RevertSVG />
           <span><Trans>Synchronize</Trans></span>
         </button>

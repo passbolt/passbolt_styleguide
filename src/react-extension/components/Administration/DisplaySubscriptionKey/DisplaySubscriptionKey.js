@@ -17,11 +17,10 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {DateTime} from "luxon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
-import {withDialog} from "../../../../react-extension/contexts/DialogContext";
+import {withDialog} from "../../../contexts/DialogContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
 import SubscriptionActionService from '../../../../shared/services/actions/subscription/SubscriptionActionService';
-import DisplayAdministrationSubscriptionActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSubscriptionActions/DisplayAdministrationSubscriptionActions";
 import {withAdminSubscription} from "../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {createSafePortal} from "../../../../shared/utils/portals";
@@ -59,7 +58,6 @@ class DisplaySubscriptionKey extends React.Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationSubscriptionActions);
     this.findActiveUsers();
     await this.findSubscriptionKey();
   }
@@ -69,8 +67,7 @@ class DisplaySubscriptionKey extends React.Component {
    * Use to clear the data from the form in case the user put something that needs to be cleared.
    */
   componentWillUnmount() {
-    this.props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction();
-    this.props.adminSubcriptionContext.clearContext();
+    this.props.adminSubscriptionContext.clearContext();
     SubscriptionActionService.killInstance();
     this.mfaFormService = null;
   }
@@ -87,7 +84,7 @@ class DisplaySubscriptionKey extends React.Component {
    * fetch the active users
    */
   async findActiveUsers() {
-    const activeUsers = await this.props.adminSubcriptionContext.getActiveUsers();
+    const activeUsers = await this.props.adminSubscriptionContext.getActiveUsers();
     this.setState({activeUsers});
   }
 
@@ -95,14 +92,14 @@ class DisplaySubscriptionKey extends React.Component {
    * fetch the subscription key
    */
   async findSubscriptionKey() {
-    this.props.adminSubcriptionContext.findSubscriptionKey();
+    this.props.adminSubscriptionContext.findSubscriptionKey();
   }
 
   /**
    * Handle renew key click event
    */
   handleRenewKey() {
-    const subscription = this.props.adminSubcriptionContext.getSubscription();
+    const subscription = this.props.adminSubscriptionContext.getSubscription();
     if (this.hasLimitUsersExceeded()) {
       this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${subscription.subscriptionId}&customer_id=${subscription.customerId}`);
     } else if (this.hasSubscriptionKeyExpired() || this.hasSubscriptionKeyGoingToExpire()) {
@@ -122,7 +119,7 @@ class DisplaySubscriptionKey extends React.Component {
    * @returns {boolean}
    */
   hasSubscriptionKeyExpired() {
-    return DateTime.fromISO(this.props.adminSubcriptionContext.getSubscription().expiry) < DateTime.now();
+    return DateTime.fromISO(this.props.adminSubscriptionContext.getSubscription().expiry) < DateTime.now();
   }
 
   /**
@@ -130,7 +127,7 @@ class DisplaySubscriptionKey extends React.Component {
    * @returns {boolean}
    */
   hasSubscriptionKeyGoingToExpire() {
-    return DateTime.fromISO(this.props.adminSubcriptionContext.getSubscription().expiry) < DateTime.now().plus({days: 30}) && !this.hasSubscriptionKeyExpired();
+    return DateTime.fromISO(this.props.adminSubscriptionContext.getSubscription().expiry) < DateTime.now().plus({days: 30}) && !this.hasSubscriptionKeyExpired();
   }
 
   /**
@@ -138,7 +135,7 @@ class DisplaySubscriptionKey extends React.Component {
    * @returns {boolean}
    */
   hasSubscriptionKey() {
-    return Boolean(this.props.adminSubcriptionContext.getSubscription().data);
+    return Boolean(this.props.adminSubscriptionContext.getSubscription().data);
   }
 
   /**
@@ -146,16 +143,8 @@ class DisplaySubscriptionKey extends React.Component {
    * @returns {boolean}
    */
   hasLimitUsersExceeded() {
-    const subscription = this.props.adminSubcriptionContext.getSubscription();
+    const subscription = this.props.adminSubscriptionContext.getSubscription();
     return subscription.users < this.state.activeUsers;
-  }
-
-  /**
-   * Has subscription to renew
-   * @returns {boolean}
-   */
-  hasSubscriptionToRenew() {
-    return this.hasInvalidSubscription() || this.hasSubscriptionKeyGoingToExpire();
   }
 
   /**
@@ -201,8 +190,8 @@ class DisplaySubscriptionKey extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const subscription = this.props.adminSubcriptionContext.getSubscription();
-    const isProcessing = this.props.adminSubcriptionContext.isProcessing();
+    const subscription = this.props.adminSubscriptionContext.getSubscription();
+    const isProcessing = this.props.adminSubscriptionContext.isProcessing();
     return (
       <div className="row">
         {!isProcessing &&
@@ -290,7 +279,7 @@ DisplaySubscriptionKey.propTypes = {
   context: PropTypes.any, // The application context
   navigationContext: PropTypes.any, // The application navigation context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
-  adminSubcriptionContext: PropTypes.object, // The administration subscription context
+  adminSubscriptionContext: PropTypes.object, // The administration subscription context
   dialogContext: PropTypes.any, // The dialog congtext
   t: PropTypes.func,
 };

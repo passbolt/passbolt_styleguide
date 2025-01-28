@@ -15,8 +15,8 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import DisplayUserSettingsWorkspace from "./DisplayUserSettingsWorkspace";
-import {UserSettingsContextProvider} from "../../../contexts/UserSettingsContext";
-import {UserPassphrasePoliciesContextProvider} from "../../../contexts/UserPassphrasePoliciesContext";
+import UserSettingsContextProvider from "../../../contexts/UserSettingsContext";
+import UserPassphrasePoliciesContextProvider from "../../../contexts/UserPassphrasePoliciesContext";
 import ManageAnnouncements from "../../Announcement/ManageAnnouncements/ManageAnnouncements";
 import TranslationProvider from "../../Common/Internationalisation/TranslationProvider";
 import ExtAppContextProvider from "../../../contexts/ExtAppContext";
@@ -125,5 +125,13 @@ export const gpgKeyInformation = {
     port: port,
     storage: storage,
     initialEntries: "/app/settings/keys"
+  },
+};
+
+export const changePassphrase = {
+  args: {
+    port: port,
+    storage: storage,
+    initialEntries: "/app/settings/passphrase"
   },
 };

@@ -64,6 +64,9 @@ import mockRequestFindMyGropus from "./request/mockRequestGroups";
 import mockRequestResourcesFindDetails from "./request/mockRequestResourcesFindDetails";
 import {disabledSso} from "../../src/react-extension/components/Administration/ManageSsoSettings/ManageSsoSettings.test.data";
 import {defaultAccountRecoveryPolicyDto} from "../../src/react-extension/components/UserSetting/DisplayUserAccountRecovery/DisplayAccountRecoveryUserSettings.test.data";
+import {
+  defaultUserPassphrasePoliciesEntityDto
+} from "../../src/shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data";
 
 export default storage => {
   const mockPort = new MockPort(storage);
@@ -120,6 +123,7 @@ export default storage => {
   mockPort.addRequestListener("passbolt.account.get", mockRequestAccountGet);
   mockPort.addRequestListener("passbolt.sso.get-current", () => disabledSso());
   mockPort.addRequestListener("passbolt.account-recovery.get-organization-policy", () => defaultAccountRecoveryPolicyDto());
+  mockPort.addRequestListener("passbolt.user-passphrase-policies.find", () => defaultUserPassphrasePoliciesEntityDto());
 
   // Deprecated events
   const deprecatedEvent = () => { throw new Error(`This event is deprecated.`); };

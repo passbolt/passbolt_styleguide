@@ -55,33 +55,31 @@ class DownloadRecoveryKit extends React.Component {
 
   render() {
     return (
-      <div className="grid grid-responsive-12 profile-passphrase">
-        <div className="row">
-          <div className="col7 main-column last">
+      <>
+        <div className="main-column recovery-kit">
+          <div className="main-content">
             <h3><Trans>The passphrase was updated!</Trans></h3>
-            <div className="message warning">
-              <p>
-                <strong>
-                  <Trans>Warning: This recovery kit replace the old one.</Trans>
-                </strong>
-              </p>
-              <p>
-                <strong>
-                  <Trans>You will need this recovery kit later to access your account (for example on a new device).</Trans>
-                </strong>
-              </p>
-            </div>
             <div className="feedback-card">
-              <AnimatedFeedback name='success' />
+              <AnimatedFeedback name='success'/>
               <div className="additional-information">
                 <p><Trans>Your passphrase has been changed. Make sure you keep a backup of your secret key encrypted with this new passphrase.</Trans></p>
                 <p><Trans>Keep this backup in a safe place, you will need it in case of emergency.</Trans></p>
-                <button type="button" className="button primary" onClick={this.handleDownloadBackup}><Trans>Download backup</Trans></button>
               </div>
             </div>
           </div>
+          <div className="message warning">
+            <p>
+              <Trans><strong>Warning</strong>: This recovery kit replace the old one.</Trans>
+            </p>
+            <p>
+              <Trans>You will need this recovery kit later to access your account (for example on a new device).</Trans>
+            </p>
+          </div>
         </div>
-      </div>
+        <div className="actions-wrapper">
+          <button type="button" className="button primary" onClick={this.handleDownloadBackup}><Trans>Download backup</Trans></button>
+        </div>
+      </>
     );
   }
 }

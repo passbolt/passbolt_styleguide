@@ -14,10 +14,9 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import DisplaySubscriptionKey from "./DisplaySubscriptionKey";
-import DisplaySubscriptionKeyActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSubscriptionActions/DisplayAdministrationSubscriptionActions";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {AdminSubscriptionContextProvider} from '../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription';
+import AdminSubscriptionContextProvider from '../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription';
 
 /**
  * The DisplaySubscriptionKey component represented as a page
@@ -33,7 +32,6 @@ export default class DisplaySubscriptionKeyPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <AdminSubscriptionContextProvider {...props}>
-            <DisplaySubscriptionKeyActions {...props}/>
             <DisplaySubscriptionKey {...props}/>
             <div id="administration-help-panel"></div>
           </AdminSubscriptionContextProvider>
@@ -131,7 +129,7 @@ export default class DisplaySubscriptionKeyPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsUpdateButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[0];
+    return this._page.container.querySelector(".actions-wrapper button");
   }
 
   /**

@@ -119,18 +119,22 @@
       margin-bottom: 0;
     }
   }
-}
 
-
-.page.settings {
   .profile-passphrase {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 0;
+    align-self: stretch;
+
     .password-management-bg {
       background: transparent url('@{images}/illustrations/passphrase_intro.svg') center center no-repeat;
       height: 16rem;
       max-width: 64rem;
+      align-self: stretch;
     }
 
     .enter-passphrase {
+      align-self: stretch;
       .input-password-wrapper {
         max-width: 45rem;
       }
@@ -143,17 +147,17 @@
         font-size: 1.6rem;
       }
     }
-
-    .submit-wrapper {
-      display: flex;
-      align-items: center;
-
-      .button.cancel {
-        margin-right: 1.6rem;
-      }
-    }
   }
 
+  .recovery-kit {
+    .warning.message p {
+      max-width: inherit;
+    }
+  }
+}
+
+
+.page.settings {
   .profile-choose-security-token {
     .input-security-token {
       .clearfix();
