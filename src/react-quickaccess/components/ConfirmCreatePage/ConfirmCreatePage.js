@@ -101,7 +101,7 @@ class ConfirmCreatePage extends React.PureComponent {
       metadata: {
         name: preparedResource.name,
         username: preparedResource.username,
-        uri: preparedResource.uri,
+        uris: [preparedResource.uri],
         resource_type_id: resourceTypeId,
         expired: this.props.passwordExpiryContext.getDefaultExpirationDate(),
       },

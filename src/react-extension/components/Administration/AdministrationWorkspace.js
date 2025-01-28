@@ -45,6 +45,10 @@ import DisplayAdministrationUserPassphrasePolicies from "./DisplayAdministration
 import DisplayAdministrationPasswordExpiry from "./DisplayAdministrationPasswordExpiry/DisplayAdministrationPasswordExpiry";
 import DisplayHttpError from "../Common/Error/DisplayHttpError/DisplayHttpError";
 import DisplayHealthcheckAdministration from "./DisplayHealthcheckAdministration/DisplayHealthcheckAdministration";
+import DisplayContentTypesEncryptedMetadataAdministration
+  from "./DisplayContentTypesEncryptedMetadataAdministration/DisplayContentTypesEncryptedMetadataAdministration";
+import DisplayContentTypesMetadataKeyAdministration
+  from "./DisplayContentTypesMetadataKeyAdministration/DisplayContentTypesMetadataKeyAdministration";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -160,6 +164,22 @@ class AdministrationWorkspace extends Component {
   }
 
   /**
+   * If content types encrypted metadata is selected
+   * @returns {boolean}
+   */
+  isContentTypesEncryptedMetadataSelected() {
+    return AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If content types metadata key is selected
+   * @returns {boolean}
+   */
+  isContentTypesMetadataKeySelected() {
+    return AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
    * If the page access is denied
    * @returns {boolean}
    */
@@ -194,8 +214,9 @@ class AdministrationWorkspace extends Component {
           </div>
           <div className="header third">
             <div className="col1 main-action-wrapper">
-            </div>
-            <AdministrationWorkspaceAction/>
+            </div>{/* Deprecated */}
+            <AdministrationWorkspaceAction/>{/* Deprecated */}
+            <div id="administration-actions-content-action"></div>
           </div>
           <div className="panel main">
             <div>
@@ -259,6 +280,12 @@ class AdministrationWorkspace extends Component {
                   }
                   {this.isHealthcheckSelected() &&
                     <DisplayHealthcheckAdministration/>
+                  }
+                  {this.isContentTypesEncryptedMetadataSelected() &&
+                    <DisplayContentTypesEncryptedMetadataAdministration/>
+                  }
+                  {this.isContentTypesMetadataKeySelected() &&
+                    <DisplayContentTypesMetadataKeyAdministration/>
                   }
                 </div>
               </div>

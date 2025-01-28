@@ -50,10 +50,16 @@ label {
 
 .input.error label {
     color: @text-error-color;
+    & > .info {
+      color: @default-text-color;
+    }
 }
 
 .input.warning label {
     color: @text-warning-color;
+    & > .info {
+      color: @default-text-color;
+    }
 }
 
 .input.text, .input-password-wrapper,
