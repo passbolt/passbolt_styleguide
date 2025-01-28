@@ -188,25 +188,40 @@
   }
 
   .profile-mobile-transfer {
+    .stores {
+      display: flex;
+      gap: 1.6rem;
+      flex-direction: column;
+    }
     .app-store {
-      display: block;
       background: transparent url('@{images}/third_party/appstore.svg') left center no-repeat;
-      height: 4.4rem;
-      border: 0;
     }
     .play-store {
-      display: block;
       background: transparent url('@{images}/third_party/playstore.svg') left center no-repeat;
-      height: 4.4rem;
-      border: 0;
     }
+
+    .app-store, .play-store {
+      width: 15.3rem;
+      border: 0;
+      height: 4.4rem;
+
+      &::after {
+        content: none;
+      }
+    }
+
     .transfer-account {
       display: flex;
-      .submit-wrapper {
-        margin: 0 0 0 1.6rem;
-        .button {
-          margin: 1.6rem 0 0 0;
-        }
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+
+      & > * {
+        margin: .8rem 0;
+      }
+
+      svg {
+        width: 40.9rem;
       }
     }
     #qr-canvas {
