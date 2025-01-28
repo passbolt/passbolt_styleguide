@@ -125,7 +125,9 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    */
   handleUnexpectedError(error) {
     console.error(error);
-    return this.props.dialogContext.open(NotifyError, {error});
+    if (error.name !== "UserAbortsOperationError") {
+      return this.props.dialogContext.open(NotifyError, {error});
+    }
   }
 
   /**
@@ -450,72 +452,12 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
             <h4 className="no-border">
               <Trans>Shared metadata keys</Trans></h4>
 
-            {this.state.activeMetadataKeys?.length > 0 &&
-              <div id="metadata-active-keys">
-                {this.state.activeMetadataKeys?.items.map(metadataKey => {
-                  const metadataKeyInfo = this.state.metadataKeysInfo?.getFirst("fingerprint", metadataKey.fingerprint);
-                  return <table key={metadataKey.fingerprint}className="table-info">
-                    <tbody>
-                      <tr className="fingerprint">
-                        <td className="label"><Trans>Fingerprint</Trans></td>
-                        <td className="value"><Fingerprint fingerprint={metadataKey.fingerprint}/></td>
-                      </tr>
-                      <tr className="algorithm">
-                        <td className="label"><Trans>Algorithm</Trans></td>
-                        <td
-                          className="value">{metadataKeyInfo?.algorithm} {metadataKeyInfo?.curve}</td>
-                      </tr>
-                      <tr className="key-length">
-                        <td className="label"><Trans>Key length</Trans></td>
-                        <td className="value">{metadataKeyInfo?.length}</td>
-                      </tr>
-                      <tr className="created">
-                        <td className="label"><Trans>Created</Trans></td>
-                        {metadataKey.created &&
-                          <td className="value"><span
-                            title={metadataKey.created}>{formatDateTimeAgo(metadataKey.created, this.props.t, this.props.context.locale)}</span>
-                          </td>
-                        }
-                        {!metadataKey.created &&
-                          <td className="empty-value"><Trans>Pending</Trans></td>
-                        }
-                      </tr>
-                    </tbody>
-                  </table>;
-                })}
-              </div>
-            }
-
-            {!this.state.activeMetadataKeys?.length &&
-              <div id="no-metadata-active-keys">
-                <table className="table-info">
-                  <tbody>
-                    <tr>
-                      <td className="empty-value"><Trans>You need to generate a new shared key to enable encrypted metadata.</Trans></td>
-                      <td className="table-button">
-                        <button className="button primary medium" type="button" disabled={this.hasAllInputDisabled()}
-                          onClick={this.generateMetadataKey} data-testid="generate-key-buton">
-                          <Trans>Generate key</Trans>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                {errors?.hasError("generated_metadata_key", "required") &&
-                  <div className="name error-message"><Trans>A shared metadata key is required.</Trans></div>
-                }
-              </div>
-            }
-
-            {this.state.expiredMetadataKeys?.length > 0 &&
-              <>
-                <h4 className="no-border">
-                  <Trans>Previous keys</Trans></h4>
-
-                <div id="metadata-expired-keys">
-                  {this.state.expiredMetadataKeys?.items.map(metadataKey => {
-                    const metadataKeyInfo = this.state.metadataKeysInfo.getFirst("fingerprint", metadataKey.fingerprint);
-                    return <table key={metadataKey.fingerprint} className="table-info">
+            <div className={`metadata-key-info ${errors?.hasError("generated_metadata_key", "required") && "error"}`}>
+              {this.state.activeMetadataKeys?.length > 0 &&
+                <div id="metadata-active-keys">
+                  {this.state.activeMetadataKeys?.items.map(metadataKey => {
+                    const metadataKeyInfo = this.state.metadataKeysInfo?.getFirst("fingerprint", metadataKey.fingerprint);
+                    return <table key={metadataKey.fingerprint}className="table-info">
                       <tbody>
                         <tr className="fingerprint">
                           <td className="label"><Trans>Fingerprint</Trans></td>
@@ -532,22 +474,86 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                         </tr>
                         <tr className="created">
                           <td className="label"><Trans>Created</Trans></td>
-                          <td className="value"><span
-                            title={metadataKey.created}>{formatDateTimeAgo(metadataKey.created, this.props.t, this.props.context.locale)}</span>
-                          </td>
-                        </tr>
-                        <tr className="expired">
-                          <td className="label"><Trans>Expired</Trans></td>
-                          <td className="value"><span
-                            title={metadataKey.expired}>{formatDateTimeAgo(metadataKey.expired, this.props.t, this.props.context.locale)}</span>
-                          </td>
+                          {metadataKey.created &&
+                            <td className="value"><span
+                              title={metadataKey.created}>{formatDateTimeAgo(metadataKey.created, this.props.t, this.props.context.locale)}</span>
+                            </td>
+                          }
+                          {!metadataKey.created &&
+                            <td className="empty-value"><Trans>Pending</Trans></td>
+                          }
                         </tr>
                       </tbody>
                     </table>;
                   })}
                 </div>
-              </>
-            }
+              }
+
+              {!this.state.activeMetadataKeys?.length &&
+                <div id="no-metadata-active-keys">
+                  <table className="table-info">
+                    <tbody>
+                      <tr>
+                        <td className="empty-value"><Trans>You need to generate a new shared key to enable encrypted metadata.</Trans></td>
+                        <td className="table-button">
+                          <button className="button primary medium" type="button" disabled={this.hasAllInputDisabled()}
+                            onClick={this.generateMetadataKey} data-testid="generate-key-buton">
+                            <Trans>Generate key</Trans>
+                          </button>
+                        </td>
+                      </tr>
+                      {errors?.hasError("generated_metadata_key", "required") &&
+                        <tr className="error-message">
+                          <Trans>A shared metadata key is required.</Trans>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              }
+
+              {this.state.expiredMetadataKeys?.length > 0 &&
+                <>
+                  <h4 className="no-border">
+                    <Trans>Previous keys</Trans></h4>
+
+                  <div id="metadata-expired-keys">
+                    {this.state.expiredMetadataKeys?.items.map(metadataKey => {
+                      const metadataKeyInfo = this.state.metadataKeysInfo.getFirst("fingerprint", metadataKey.fingerprint);
+                      return <table key={metadataKey.fingerprint} className="table-info">
+                        <tbody>
+                          <tr className="fingerprint">
+                            <td className="label"><Trans>Fingerprint</Trans></td>
+                            <td className="value"><Fingerprint fingerprint={metadataKey.fingerprint}/></td>
+                          </tr>
+                          <tr className="algorithm">
+                            <td className="label"><Trans>Algorithm</Trans></td>
+                            <td
+                              className="value">{metadataKeyInfo?.algorithm} {metadataKeyInfo?.curve}</td>
+                          </tr>
+                          <tr className="key-length">
+                            <td className="label"><Trans>Key length</Trans></td>
+                            <td className="value">{metadataKeyInfo?.length}</td>
+                          </tr>
+                          <tr className="created">
+                            <td className="label"><Trans>Created</Trans></td>
+                            <td className="value"><span
+                              title={metadataKey.created}>{formatDateTimeAgo(metadataKey.created, this.props.t, this.props.context.locale)}</span>
+                            </td>
+                          </tr>
+                          <tr className="expired">
+                            <td className="label"><Trans>Expired</Trans></td>
+                            <td className="value"><span
+                              title={metadataKey.expired}>{formatDateTimeAgo(metadataKey.expired, this.props.t, this.props.context.locale)}</span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>;
+                    })}
+                  </div>
+                </>
+              }
+            </div>
           </form>
         </div>
       </div>
