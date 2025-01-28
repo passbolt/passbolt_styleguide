@@ -141,5 +141,13 @@ export const accountRecovery = {
     port: port,
     storage: storage,
     initialEntries: "/app/settings/account-recovery"
+  }
+};
+
+export const securityToken = {
+  args: {
+    port: port,
+    storage: storage,
+    initialEntries: "/app/settings/security-token"
   },
 };
