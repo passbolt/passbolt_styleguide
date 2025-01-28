@@ -154,6 +154,20 @@ export default class DisplayAdministrationMenuPage {
   }
 
   /**
+   * Returns the Content Types Encrypted Metadata.
+   */
+  get contentTypesEncryptedMetadata() {
+    return this._page.container.querySelector('#encrypted_metadata_menu .row .main-cell-wrapper .main-cell button');
+  }
+
+  /**
+   * Returns the Content Types Encrypted Metadata.
+   */
+  get contentTypesMetadataKey() {
+    return this._page.container.querySelector('#metadata_key_menu .row .main-cell-wrapper .main-cell button');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -236,5 +250,15 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the Password Expiry settings element */
   async gotoPasswordExpirySettings() {
     await this.click(this.passwordExpirySettings);
+  }
+
+  /** Click on the Content Types Encrypted Metadata element */
+  async gotoContentTypesEncryptedMetadata() {
+    await this.click(this.contentTypesEncryptedMetadata);
+  }
+
+  /** Click on the Content Types Metadata Key element */
+  async gotoContentTypesMetadataKey() {
+    await this.click(this.contentTypesMetadataKey);
   }
 }

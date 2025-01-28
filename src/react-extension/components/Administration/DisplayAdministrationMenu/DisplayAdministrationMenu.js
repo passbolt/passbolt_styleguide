@@ -157,6 +157,14 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Can I use the metadata plugin
+   * @returns {boolean}
+   */
+  get canIUseMetadata() {
+    return this.canIUse('metadata');
+  }
+
+  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
@@ -175,6 +183,8 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleUserPassphrasePoliciesClick = this.handleUserPassphrasePoliciesClick.bind(this);
     this.handlePasswordExpirySettingsClick = this.handlePasswordExpirySettingsClick.bind(this);
     this.handleHealthcheckClick = this.handleHealthcheckClick.bind(this);
+    this.handleContentTypesEncryptedMetadataClick = this.handleContentTypesEncryptedMetadataClick.bind(this);
+    this.handleContentTypesMetadataKeyClick = this.handleContentTypesMetadataKeyClick.bind(this);
   }
 
   /**
@@ -280,6 +290,20 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleHealthcheckClick() {
     this.props.navigationContext.onGoToAdministrationHealthcheckRequested();
+  }
+
+  /**
+   * Handle when the user click on the content types encrypted metadata settings menu
+   */
+  handleContentTypesEncryptedMetadataClick() {
+    this.props.navigationContext.onGoToAdministrationContentTypesEncryptedMetadataRequested();
+  }
+
+  /**
+   * Handle when the user click on the content types metadata key settings menu
+   */
+  handleContentTypesMetadataKeyClick() {
+    this.props.navigationContext.onGoToAdministrationContentTypesMetadataKeyRequested();
   }
 
   /**
@@ -400,6 +424,22 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isHealthcheckSelected() {
     return AdministrationWorkspaceMenuTypes.HEALTHCHECK === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If content types encrypted metadata menu is selected
+   * @returns {boolean}
+   */
+  isContentTypesEncryptedMetadataSelected() {
+    return AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If content types metadata key menu is selected
+   * @returns {boolean}
+   */
+  isContentTypesMetadataKeySelected() {
+    return AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -588,6 +628,35 @@ class DisplayAdministrationMenu extends React.Component {
               </div>
             </div>
           </li>
+          }
+          {this.canIUseMetadata &&
+          <li id="encrypted_metadata_menu">
+            <div className={`row  ${this.isContentTypesEncryptedMetadataSelected() ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button className="link no-border" type="button"
+                    onClick={this.handleContentTypesEncryptedMetadataClick}>
+                    <span><Trans>Encrypted metadata</Trans></span>
+                    <span className="chips beta">beta</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
+          {this.canIUseMetadata &&
+            <li id="metadata_key_menu">
+              <div className={`row  ${this.isContentTypesMetadataKeySelected() ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button className="link no-border" type="button" onClick={this.handleContentTypesMetadataKeyClick}>
+                      <span><Trans>Metadata key</Trans></span>
+                      <span className="chips beta">beta</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
           }
         </ul>
       </div>

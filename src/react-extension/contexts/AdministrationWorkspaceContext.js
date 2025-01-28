@@ -191,7 +191,8 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const isUserPassphrasePolicies = ADMIN_URL_REGEXP.userPassphrasePolicies.test(location);
     const isPasswordExpirySettings = ADMIN_URL_REGEXP.passwordExpirySettings.test(location);
     const healthcheck = ADMIN_URL_REGEXP.healthcheck.test(location);
-
+    const contentTypesEncryptedMetadata = ADMIN_URL_REGEXP.contentTypesEncryptedMetadata.test(location);
+    const contentTypesMetadataKey = ADMIN_URL_REGEXP.contentTypesMetadataKey.test(location);
 
     let selectedAdministration;
     if (isAdminHomePageLocation) {
@@ -226,6 +227,10 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY;
     } else if (healthcheck) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.HEALTHCHECK;
+    } else if (contentTypesEncryptedMetadata) {
+      selectedAdministration = AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA;
+    } else if (contentTypesMetadataKey) {
+      selectedAdministration = AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY;
     }
 
     // let's check if the current URL is actually supported
@@ -344,7 +349,9 @@ export const AdministrationWorkspaceMenuTypes = {
   PASSWORD_EXPIRY: "PASSWORD-EXPIRY", // Password Expiry administration menu selected
   HTTP_403_ACCESS_DENIED: "403-ACCESS-DENIED", // The HTTP error 403 access denied page
   HTTP_404_NOT_FOUND: "404-NOT-FOUND", // The HTTP error 404 not found page
-  HEALTHCHECK: "HEALTHCHECK" // Healthcheck administration menu selected
+  HEALTHCHECK: "HEALTHCHECK", // Healthcheck administration menu selected
+  CONTENT_TYPES_ENCRYPTED_METADATA: "CONTENT_TYPES_ENCRYPTED_METADATA", // Content types encrypted metadata administration menu selected
+  CONTENT_TYPES_METADATA_KEY: "CONTENT_TYPES_METADATA_KEY", // Content types metadata key administration menu selected
 };
 
 /**
@@ -365,6 +372,8 @@ export const AdministrationWorkspaceFeatureFlag = {
   [AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES]: "userPassphrasePolicies", // User Passphrase Policies administration feature flag
   [AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY]: "passwordExpiry", // Password Expiry administration feature flag
   [AdministrationWorkspaceMenuTypes.HEALTHCHECK]: "healthcheckUi", // HealthCheck UI administration feature flag
+  [AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA]: "metadata", // Content types encrypted metadata settings
+  [AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY]: "metadata", // Content types metadata key settings
 };
 
 /**
@@ -386,5 +395,7 @@ const ADMIN_URL_REGEXP = {
   rbac: /^\/app\/administration\/rbacs\/?$/,
   userPassphrasePolicies: /^\/app\/administration\/user-passphrase-policies\/?$/,
   passwordExpirySettings: /^\/app\/administration\/password-expiry\/?$/,
-  healthcheck: /^\/app\/administration\/healthcheck\/?$/
+  healthcheck: /^\/app\/administration\/healthcheck\/?$/,
+  contentTypesEncryptedMetadata: /^\/app\/administration\/content-types\/metadata\/?$/,
+  contentTypesMetadataKey: /^\/app\/administration\/content-types\/metadata-key\/?$/,
 };

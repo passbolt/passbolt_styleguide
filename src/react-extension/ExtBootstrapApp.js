@@ -111,6 +111,8 @@ class ExtBootstrapApp extends Component {
               "/app/administration/password-policies",
               "/app/administration/user-passphrase-policies",
               "/app/administration/password-expiry",
+              "/app/administration/content-types/metadata",
+              "/app/administration/content-types/metadata-key",
               "/app/folders/view/:filterByFolderId",
               "/app/groups/view/:selectedGroupId",
               "/app/groups/edit/:selectedGroupId",
