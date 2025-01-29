@@ -1021,7 +1021,7 @@
   "The name is required.": "Se requiere el nombre.",
   "The new organization recovery key should not be a formerly used organization recovery key.": "La nueva clave de recuperación de la organización no debe ser una clave de recuperación de la organización usada anteriormente.",
   "The new SSO provider: {this.props.newProvider.name}": "El nuevo proveedor de SSO: {this.props.newProvider.name}",
-  "The OAuth2 authentication endpoint.": "El punto final de autenticación OAuth2.",
+  "The OAuth2 authentication endpoint.": "El endpoint de autenticación OAuth2.",
   "The OpenId configuration relative path from the given login url.": "Ruta relativa a la configuración del OpenID desde la url de inicio de sesión dada.",
   "The OpenId scope.": "El ámbito de aplicación del OpenID.",
   "The operation failed with the following error:": "La operación falló con el siguiente error:",
