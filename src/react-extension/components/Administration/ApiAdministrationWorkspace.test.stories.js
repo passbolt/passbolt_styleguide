@@ -76,7 +76,8 @@ export default {
                           "/app/administration/users-directory",
                           "/app/administration/mfa-policy",
                           "/app/administration/password-policies",
-                          "/app/administration/user-passphrase-policies"
+                          "/app/administration/user-passphrase-policies",
+                          "/app/administration/healthcheck",
                         ]}>
                           <AdministrationWorkspaceContextProvider value={args.administrationWorkspaceContext}>
                             <AdminUserDirectoryContextProvider>
@@ -115,5 +116,14 @@ export const MfaPolicyPage = {
       selectedAdministration: AdministrationWorkspaceMenuTypes.MFA_POLICY
     }),
     routerInitialEntry: "/app/administration/mfa-policy"
+  },
+};
+
+export const HealthcheckPage = {
+  args: {
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.HEALTHCHECK
+    }),
+    routerInitialEntry: "/app/administration/healthcheck"
   },
 };

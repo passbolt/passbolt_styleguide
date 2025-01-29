@@ -99,7 +99,7 @@ class DisplayAdministrationInternationalisationActions extends React.Component {
     return (
       <div className="actions-wrapper">
         <button className="button primary" id="save-settings" type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
-          <span><Trans>Save </Trans></span>
+          <span><Trans>Save</Trans></span>
         </button>
       </div>
     );

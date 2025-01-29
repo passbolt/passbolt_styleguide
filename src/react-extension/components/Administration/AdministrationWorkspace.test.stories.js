@@ -71,7 +71,6 @@ export default {
                                   "/app/administration",
                                   "/app/administration/account-recovery",
                                   "/app/administration/email-notification",
-                                  "/app/administration/healthcheck",
                                   "/app/administration/mfa",
                                   "/app/administration/password-expiry",
                                   "/app/administration/password-policies",
