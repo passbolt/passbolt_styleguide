@@ -125,6 +125,7 @@ class ExtBootstrapApp extends Component {
               "/app/settings/passphrase",
               "/app/settings/security-token",
               "/app/settings/mfa",
+              "/app/settings/mfa/:provider",
               "/app/settings/mobile",
               "/app/settings/desktop",
               "/app/settings/account-recovery",

@@ -182,7 +182,7 @@ class ExtApp extends Component {
                                             </UserWorkspaceContextProvider>
                                           </Route>
                                           {/* User settings workspace */}
-                                          <Route path={"/app/settings"}>
+                                          <Route path={["/app/settings", "/app/settings/mfa/:provider"]}>
                                             <UserSettingsContextProvider>
                                               <UserPassphrasePoliciesContextProvider>
                                                 <ManageDialogs/>

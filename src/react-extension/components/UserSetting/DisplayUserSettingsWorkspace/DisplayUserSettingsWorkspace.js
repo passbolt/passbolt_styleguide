@@ -163,7 +163,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
                 {this.canIUseAccountRecoveryCapability &&
                   <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettings}></Route>
                 }
-                <Route path={`${path}/mfa`} component={OrchestrateMfaSettings}></Route>
+                <Route path={[`${path}/mfa/:provider`, `${path}/mfa`]} component={OrchestrateMfaSettings}></Route>
                 <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
               </div>
             </div>
