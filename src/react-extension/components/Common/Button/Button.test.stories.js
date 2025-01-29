@@ -39,27 +39,27 @@ export const PrimaryButton = {
   render: () => <div style={{display: "flex", flexWrap: "wrap"}}>
     <span style={{width: "100%"}}>Primary Form button</span>
     <div style={{width: "25%", marginTop: ".5rem"}}>
-      <button className="button primary primary-form"><Trans>Save</Trans></button>
+      <button className="button primary form"><Trans>Save</Trans></button>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
-      <button className="button primary primary-form" disabled={true}><Trans>Save</Trans></button>
+      <button className="button primary form" disabled={true}><Trans>Save</Trans></button>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
-      <button type="submit" className="button primary primary-form processing" disabled={true}>
+      <button type="submit" className="button primary form processing" disabled={true}>
         Save
         <SpinnerSVG/>
       </button>
     </div>
     <span style={{width: "100%", marginTop: "3rem"}}>Primary Create button</span>
     <div style={{width: "25%", marginTop: ".5rem"}}>
-      <button className="button primary primary-create">
+      <button className="button primary create">
         <AddSVG/>
         <Trans>Create</Trans>
         <CaretDownSVG/>
       </button>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
-      <button className="button primary primary-create" disabled={true}>
+      <button className="button primary create" disabled={true}>
         <AddSVG/>
         <Trans>Create</Trans>
         <CaretDownSVG/>
@@ -360,7 +360,7 @@ export const SpinnerButton = {
     <>
       <div style={{display: "flex", flexWrap: "wrap", flexDirection: "column"}}>
         <div style={{width: "25%", marginTop: ".5rem"}}>
-          <button className="button primary primary-form processing" type="button">
+          <button className="button primary form processing" type="button">
             <SpinnerSVG/>
           </button>
         </div>

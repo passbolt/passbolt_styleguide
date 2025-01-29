@@ -309,15 +309,22 @@ button,
         color: var(--Primary-button-Primary-button-text);
         box-shadow: none;
 
-        &-create {
+        &.create {
           background: var(--Primary-button-Primary-button-background);
           color: var(--Primary-button-Primary-button-text);
         }
 
-        &-form {
+        &.form {
           border-radius: var(--Login-button-radius);
           padding: .8rem 2.4rem;
           font-size: 1.8rem;
+          font-weight: 700;
+        }
+
+        &.login {
+          border-radius: var(--Login-button-radius);
+          padding: 1rem 2.4rem;
+          font-size: 1.7rem;
           font-weight: 700;
         }
 
