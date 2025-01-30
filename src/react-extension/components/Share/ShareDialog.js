@@ -363,19 +363,19 @@ class ShareDialog extends Component {
       return this.translate("Loading...");
     }
     if (this.isAboutItems()) {
-      return this.translate("Share {{numberItems}} items", {numberItems: this.props.context.shareDialogProps.resourcesIds.length + this.props.context.shareDialogProps.foldersIds.length});
+      return this.translate("Share {{count}} items", {count: this.props.context.shareDialogProps.resourcesIds.length + this.props.context.shareDialogProps.foldersIds.length});
     }
     if (this.isAboutAResource()) {
       return this.translate("Share resource");
     }
     if (this.isAboutResources()) {
-      return this.translate("Share {{numberResource}} resources", {numberResource: this.props.context.shareDialogProps.resourcesIds.length});
+      return this.translate("Share {{count}} resources", {count: this.props.context.shareDialogProps.resourcesIds.length});
     }
     if (this.isAboutAFolder()) {
       return this.translate("Share folder");
     }
     if (this.isAboutFolders()) {
-      return this.translate("Share {numberFolder} folders", {numberFolder: this.props.context.shareDialogProps.foldersIds.length});
+      return this.translate("Share {{count}} folders", {count: this.props.context.shareDialogProps.foldersIds.length});
     }
   }
 

@@ -324,6 +324,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
   render() {
     const settings = this.props.adminSmtpSettingsContext.getCurrentSmtpSettings();
     const errors = this.props.adminSmtpSettingsContext.getErrors();
+    const smtpProviderName = settings?.provider?.name;
     return (
       <div className="row">
         <>
@@ -484,10 +485,10 @@ export class ManageSmtpAdministrationSettings extends React.Component {
             </div>
             {settings?.provider && settings?.provider.id !== "other" &&
             <div className="sidebar-help-section">
-              <h3><Trans>How do I configure a {settings.provider.name} SMTP server?</Trans></h3>
+              <h3><Trans>How do I configure a {{smtpProviderName}} SMTP server?</Trans></h3>
               <a className="button" href={settings.provider.help_page} target="_blank" rel="noopener noreferrer">
                 <LinkSVG/>
-                <span><Trans>See the {settings.provider.name} documentation</Trans></span>
+                <span><Trans>See the {{smtpProviderName}} documentation</Trans></span>
               </a>
             </div>
             }

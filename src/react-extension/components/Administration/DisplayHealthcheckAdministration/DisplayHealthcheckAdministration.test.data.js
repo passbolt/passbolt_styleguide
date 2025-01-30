@@ -20,7 +20,7 @@ import {
 export function defaultProps(data = {}) {
   const defaultProps = {
     context: defaultAppContext(data?.context),
-    adminHealthcheckContext: defaultAdministrationHealthcheckContext(),
+    adminHealthcheckContext: defaultAdministrationHealthcheckContext(data?.adminHealthcheckContext),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
       resetDisplayAdministrationWorkspaceAction: jest.fn(),
