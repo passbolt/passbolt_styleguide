@@ -194,3 +194,11 @@ export const mobileCanceled = {
     initialEntries: "/app/settings/mobile",
   },
 };
+
+export const desktop = {
+  args: {
+    port: port,
+    storage: storage,
+    initialEntries: "/app/settings/desktop"
+  },
+};
