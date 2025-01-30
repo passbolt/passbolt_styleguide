@@ -39,7 +39,7 @@ class FormSubmitButton extends Component {
    * @returns {string}
    */
   getClassName() {
-    let name = 'button primary';
+    let name = 'button primary form';
     if (this.props.warning) {
       name += ' warning';
     } else if (this.props.attention) {

@@ -214,7 +214,6 @@ class ConfirmPassphrase extends React.Component {
             <Trans>Cancel</Trans>
           </button>
           <FormSubmitButton
-            primary={true}
             disabled={this.mustBeDisabled()}
             processing={this.state.processing}
             value={this.translate('Verify')}/>

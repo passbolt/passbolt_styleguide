@@ -280,7 +280,7 @@ class EnterNewPassphrase extends React.Component {
           <button className="button cancel secondary" type="button" disabled={!this.areActionsAllowed} onClick={this.handleCancel}>
             <Trans>Cancel</Trans>
           </button>
-          <FormSubmitButton primary={true} disabled={this.mustBeDisabled} processing={this.isProcessing} value={this.props.t('Update')}/>
+          <FormSubmitButton disabled={this.mustBeDisabled} processing={this.isProcessing} value={this.props.t('Update')}/>
         </div>
       </form>
     );

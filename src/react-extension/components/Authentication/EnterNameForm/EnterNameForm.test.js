@@ -62,7 +62,7 @@ describe("As AN I should see the Enter Name Form Page", () => {
         expect(page.firstname.getAttribute("disabled")).not.toBeNull();
         expect(page.lastname.getAttribute("disabled")).not.toBeNull();
         expect(page.registerButton.getAttribute("disabled")).not.toBeNull();
-        expect(page.registerButton.className).toBe('button primary disabled processing big full-width');
+        expect(page.registerButton.className).toBe('button primary form disabled processing big full-width');
       });
     });
 
