@@ -32,38 +32,39 @@
                 font-size: 1.2rem;
 
                 .dateTimeAgo {
-                    color: @default-text-color;
+                    color: var(--Text-and-icons-Main-text);
                 }
 
                 .chips-group {
                     float: right;
                     .chips {
                         font-size: 1.2rem;
-                        color: @chips-user-status-text-color;
+                        color: var(--Status-and-role-pills-Status-pill-text);
                         padding-top: 0.1rem;
                         padding-bottom: 0.1rem;
                         border-radius: 1.2rem;
                         margin-top: -0.1rem;
 
                         &.user-role {
-                            background-color: @chips-user-status-background;
+                            color: var(--Status-and-role-pills-Role-pill-user-text);
+                            background-color: var(--Status-and-role-pills-Role-pill-user-background);
 
                             &.admin {
-                                color: @chips-user-status-admin-text-color;
-                                background-color: @chips-user-status-admin-background;
+                                color: var(--Status-and-role-pills-Role-pill-admin-text);
+                                background-color: var(--Status-and-role-pills-Role-pill-admin-background);
                             }
                         }
 
                         &.active {
-                            background-color: @message-success-background;
+                            background-color: var(--Status-and-role-pills-Status-pill-active-background);
                         }
 
                         &.suspended {
-                            background-color: @message-warning-background;
+                            background-color: var(--Status-and-role-pills-Status-pill-suspended-background);
                         }
 
                         &.deleted {
-                            background-color: @message-error-background;
+                            background-color: var(--Status-and-role-pills-Status-pill-deleted-background);
                         }
 
                         & + .chips {
@@ -171,13 +172,13 @@
 
     // Animation used to show that an activity is new.
     @keyframes highlight {
-        from { background-color: @tableview-selected-background; }
+        from { background-color: var(--Palette-Select-highlight-2); }
         to { background-color: transparent; }
     }
 
     // Style to apply when an activity is new.
     &.highlight {
-        background-color: @tableview-selected-background;
+        background-color: var(--Palette-Select-highlight-2);
         animation-delay: 2s;
         animation-duration: 5s;
         animation-name: highlight;
@@ -186,14 +187,14 @@
 
     .content-wrapper .content {
         .name, .subinfo {
-            color: @text-info-color;
+          color: var(--Text-and-icons-Secondary-text);
         }
     }
 
     .content-wrapper .content .name {
         white-space: normal;
         .creator, .item {
-            color: @default-text-color;
+            color: var(--Text-and-icons-Main-text);
         }
     }
 }

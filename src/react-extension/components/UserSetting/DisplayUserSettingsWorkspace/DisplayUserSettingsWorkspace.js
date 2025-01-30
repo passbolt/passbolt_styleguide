@@ -41,6 +41,8 @@ import Footer from "../../Common/Footer/Footer";
 import DisplayUserGpgInformationHelp from "../DisplayUserGpgInformation/DisplayUserGpgInformationHelp";
 import ChangeUserPassphrase from "../ChangeUserPassphrase/ChangeUserPassphrase";
 import ChangeUserPassphraseHelp from "../ChangeUserPassphrase/ChangeUserPassphraseHelp";
+import DisplayAccountRecoveryUserSettingsHelp
+  from "../DisplayUserAccountRecovery/DisplayAccountRecoveryUserSettingsHelp";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -172,6 +174,9 @@ class DisplayUserSettingsWorkspace extends React.Component {
                 <Route path={`${path}/profile`} component={DisplayUserProfileHelp}/>
                 <Route path={`${path}/keys`} component={DisplayUserGpgInformationHelp}></Route>
                 <Route path={`${path}/passphrase`} component={ChangeUserPassphraseHelp}/>
+                {this.canIUseAccountRecoveryCapability &&
+                  <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettingsHelp}></Route>
+                }
               </div>
               <Footer/>
             </div>

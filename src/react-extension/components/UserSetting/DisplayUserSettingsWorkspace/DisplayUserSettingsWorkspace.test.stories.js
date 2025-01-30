@@ -135,3 +135,11 @@ export const changePassphrase = {
     initialEntries: "/app/settings/passphrase"
   },
 };
+
+export const accountRecovery = {
+  args: {
+    port: port,
+    storage: storage,
+    initialEntries: "/app/settings/account-recovery"
+  },
+};

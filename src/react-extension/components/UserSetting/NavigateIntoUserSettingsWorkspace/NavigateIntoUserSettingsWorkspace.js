@@ -18,9 +18,9 @@ import {withRouter} from "react-router-dom";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 /**
  * This component allows to navigate throught the differents sections of the user settings workspace
@@ -147,7 +147,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                     <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsMfaRequested}>
                       <span><Trans>Multi Factor Authentication</Trans></span>
                       {this.props.hasPendingMfaChoice &&
-                      <Icon name="exclamation" baseline={true}/>
+                        <AttentionSVG className="attention-required"/>
                       }
                     </button>
                   </div>
@@ -166,7 +166,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                       <Trans>Account Recovery</Trans>
                     </span>
                     {this.props.hasPendingAccountRecoveryChoice &&
-                      <Icon name="exclamation" baseline={true}/>
+                      <AttentionSVG className="attention-required"/>
                     }
                   </button>
                 </div>
