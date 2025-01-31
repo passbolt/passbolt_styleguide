@@ -6,7 +6,7 @@
             overflow-y: auto;
         }
         .list-title {
-            background: @quickaccess-list-title-background;
+            background: var(--Quick-Access-Header-and-footer-background);
         }
         .processing-text {
             position: relative;
@@ -23,6 +23,11 @@
         .suggested-resource-entry {
             display: flex;
             flex-direction: row;
+
+            button::after {
+                content: none;
+            }
+
             &:last-child {
               .resource-details {
                 box-shadow: none;
@@ -33,28 +38,28 @@
             }
             .resource-details {
                 flex-direction: column;
-                color:@default-text-color;
+                color: var(--Text-and-icons-Main-text);
                 padding: 1.6rem;
                 box-sizing: border-box;
                 border: none;
-                box-shadow: inset 0 -.1rem 0 @quickaccess-border;
+                box-shadow: inset 0 -.1rem 0 var(--Workspace-Dividers);
                 width: 80%;
                 flex: 1 1 auto;
                 font-size: 1.5rem;
                 .ellipsis();
 
                 &:focus {
-                    color: @default-text-color;
+                    color: var(--Text-and-icons-Main-text);
                 }
                 &:hover {
-                    background: @quickaccess-list-title-hover-background;
-                    color: @default-text-color;
+                    background: var(--Quick-Access-Filter-hover);
+                    color: var(--Text-and-icons-Main-text);
                     text-decoration: none;
                 }
                 /* active */
                 &:active {
-                    background: @quickaccess-list-title-active-background;
-                    color: @default-text-color;
+                    background: var(--Sections-Filter-selected);
+                    color: var(--Text-and-icons-Main-text);
                     text-decoration: none;
                 }
                 .inline-resource-name {
@@ -64,7 +69,7 @@
                     display:block;
                     font-size:1.3rem;
                     padding-top:.4rem;
-                    color:@text-info-color;
+                    color: var(--Text-and-icons-Secondary-text);
                     .ellipsis();
                 }
             }
@@ -75,17 +80,17 @@
                 background: transparent;
                 box-sizing: border-box;
                 border: none;
-                box-shadow: inset 0 -.1rem 0 @quickaccess-border;
+                box-shadow: inset 0 -.1rem 0 var(--Workspace-Dividers);
                 width: 4rem;
                 flex: 0 1 auto;
 
                 &:focus, &:hover {
-                    background: @quickaccess-list-title-hover-background;
+                    background: var(--Quick-Access-Filter-hover);
                 }
 
                 /* active */
                 &:active {
-                    background: @quickaccess-list-title-active-background;
+                    background: var(--Sections-Filter-selected);
                 }
             }
         }
@@ -103,7 +108,7 @@
                 display:block;
                 font-size:1.3rem;
                 padding-top:.4rem;
-                color:@text-info-color;
+                color: var(--Text-and-icons-Secondary-text);
                 .ellipsis();
               }
             }
@@ -117,25 +122,25 @@
               }
             }
             a {
-                color: @default-text-color;
+                color:var(--Text-and-icons-Main-text);
                 display: flex;
                 align-items: center;
                 border: none;
-                box-shadow: inset 0 -.1rem 0 @quickaccess-border;
+                box-shadow: inset 0 -.1rem 0 var(--Workspace-Dividers);
                 padding: 1.6rem;
                 position:relative;
                 font-size: 1.5rem;
 
                 &:hover {
-                    background: @quickaccess-list-title-hover-background;
-                    color: @default-text-color;
+                    background: var(--Quick-Access-Filter-hover);
+                    color: var(--Text-and-icons-Main-text);
                     text-decoration: none;
                 }
 
                 /* active */
                 &:active {
-                    background: @quickaccess-list-title-active-background;
-                    color: @default-text-color;
+                    background: var(--Sections-Filter-selected);
+                    color: var(--Text-and-icons-Main-text);
                     text-decoration: none;
                 }
             }

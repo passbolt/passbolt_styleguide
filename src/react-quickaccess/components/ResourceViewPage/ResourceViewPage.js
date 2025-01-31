@@ -554,7 +554,7 @@ class ResourceViewPage extends React.Component {
                         onClick={this.handleCopyTotpClick}/>
                     }
                     {!isTotpPreviewed &&
-                      <button type="button" className="link no-border" onClick={this.handleCopyTotpClick} disabled={!canCopySecret}>
+                      <button type="button" className="no-border" onClick={this.handleCopyTotpClick} disabled={!canCopySecret}>
                         <span>Copy TOTP to clipboard</span>
                       </button>
                     }
@@ -641,7 +641,7 @@ class ResourceViewPage extends React.Component {
               <SpinnerSVG/>
             }
             {!this.state.usingOnThisTab &&
-              <Trans>use on this page</Trans>
+              <Trans>Use on this page</Trans>
             }
           </a>
           {this.state.error &&
