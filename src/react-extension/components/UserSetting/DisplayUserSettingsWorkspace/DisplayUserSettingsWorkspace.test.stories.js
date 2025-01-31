@@ -159,3 +159,38 @@ export const theme = {
     initialEntries: "/app/settings/theme"
   },
 };
+
+const transfertToMobileStorage = mockStorage();
+const _passbolt_data = transfertToMobileStorage.local.get(["_passbolt_data"])["_passbolt_data"];
+_passbolt_data.config["user.settings.trustedDomain"] = "https://storybook.passbolt.com";
+transfertToMobileStorage.local.set({_passbolt_data});
+
+export const mobile = {
+  args: {
+    port: port,
+    storage: transfertToMobileStorage,
+    initialEntries: "/app/settings/mobile",
+  },
+};
+
+const transferToMobilePortWithOperationError = mockPort(transfertToMobileStorage);
+const error = new Error("Something went wrong!");
+error.data = "Additionnal data error";
+transferToMobilePortWithOperationError.addRequestListener("passbolt.mobile.transfer.get", () => { throw error; });
+export const mobileError = {
+  args: {
+    port: transferToMobilePortWithOperationError,
+    storage: transfertToMobileStorage,
+    initialEntries: "/app/settings/mobile",
+  },
+};
+
+const transferToMobilePortWithOperationCanceled = mockPort(transfertToMobileStorage);
+transferToMobilePortWithOperationCanceled.addRequestListener("passbolt.mobile.transfer.get", () => ({status: "cancel"}));
+export const mobileCanceled = {
+  args: {
+    port: transferToMobilePortWithOperationCanceled,
+    storage: transfertToMobileStorage,
+    initialEntries: "/app/settings/mobile",
+  },
+};

@@ -369,12 +369,10 @@ class ChangeUserSecurityToken extends Component {
               {this.state.hasBeenValidated &&
               <div className="input text">
                 {this.state.errors.emptyCode &&
-                <div className="empty-code error-message"><Trans>The security token code should not be empty.</Trans>
-                </div>
+                  <div className="empty-code error-message"><Trans>The security token code should not be empty.</Trans></div>
                 }
                 {this.state.errors.lengthCode &&
-                <div className="not-good-length-code error-message"><Trans>The security token code should be 3
-                  characters long.</Trans></div>
+                  <div className="not-good-length-code error-message"><Trans>The security token code should be 3 characters long.</Trans></div>
                 }
                 {this.state.errors.invalidRegex &&
                   <div className="not-good-regex-code error-message"><Trans>The security token code should contains only alphanumeric, dash and underscore characters.</Trans></div>
