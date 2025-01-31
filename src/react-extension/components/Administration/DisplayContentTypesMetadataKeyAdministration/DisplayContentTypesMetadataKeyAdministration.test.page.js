@@ -67,6 +67,14 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
   }
 
   /**
+   * Returns the count of displayed error messages
+   * @returns {integer}
+   */
+  get errorMessagesCount() {
+    return this._page.container.querySelectorAll(".error-message").length;
+  }
+
+  /**
    * Returns the allow usage of personal keys radio button element
    * @returns {HTMLElement}
    */
@@ -115,11 +123,27 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
   }
 
   /**
+   * Returns the required shared metadata key error element
+   * @returns {HTMLElement}
+   */
+  get requiredSharedMetadataKeyError() {
+    return this.noMetadataActiveKeysWrapper.querySelector("div .error-message");
+  }
+
+  /**
    * Returns the metadata expired keys wrapper element
    * @returns {HTMLElement}
    */
   get metadataExpiredKeysWrapper() {
     return this.select("#metadata-expired-keys");
+  }
+
+  /**
+   * Returns the generate a key button
+   * @returns {HTMLElement}
+   */
+  get generateKeyButton() {
+    return this.noMetadataActiveKeysWrapper.querySelector("button");
   }
 
   /**
@@ -133,22 +157,29 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
   }
 
   /**
-   * Allow or disallow v5 resources creation
+   * Generate a new shared metadata key
    * @returns {Promise<void>}
    */
-  async clickOnAllowCreationOfV5ResourcesInput() {
+  async clickOnGenerateKeyButton() {
     const leftClick = {button: 0};
-    fireEvent.click(this.allowUsageOfPersonalKeysInput, leftClick);
+    fireEvent.click(this.generateKeyButton, leftClick);
     await waitFor(() => {});
   }
 
   /**
-   * Select v5 as default resource type.
+   * Returns the form element
+   * @returns {HTMLElement}
+   */
+  get form() {
+    return this.select("form");
+  }
+
+  /**
+   * Submit the form.
    * @returns {Promise<void>}
    */
-  async clickOnDefaultResourceTypesV5Input() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.defaultResourceTypesV5Input, leftClick);
+  async submitForm() {
+    fireEvent.submit(this.form);
     await waitFor(() => {});
   }
 }

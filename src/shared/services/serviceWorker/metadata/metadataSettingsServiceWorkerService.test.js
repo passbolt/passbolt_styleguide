@@ -15,7 +15,7 @@
 import MockPort from "../../../../react-extension/test/mock/MockPort";
 import MetadataSettingsServiceWorkerService, {
   METADATA_FIND_KEYS_SETTINGS_EVENT,
-  METADATA_FIND_TYPES_SETTINGS_EVENT, METADATA_SAVE_TYPES_SETTINGS_EVENT
+  METADATA_FIND_TYPES_SETTINGS_EVENT, METADATA_SAVE_KEYS_SETTINGS_EVENT, METADATA_SAVE_TYPES_SETTINGS_EVENT
 } from "./metadataSettingsServiceWorkerService";
 import MetadataTypesSettingsEntity from "../../../models/entity/metadata/metadataTypesSettingsEntity";
 import {
@@ -74,6 +74,24 @@ describe("MetadataSettingsServiceWorkerService", () => {
     });
 
     it("throws if the given metadata types settings is not of type MetadataTypesSettingsEntity.", async() => {
+      expect.assertions(1);
+      await expect(() => service.saveTypesSettings(42)).rejects.toThrow(TypeError);
+    });
+  });
+
+  describe("::saveKeysSettings", () => {
+    it("requests the service worker with the expected event and parameters, and return the updated metadata keys settings entity.", async() => {
+      expect.assertions(3);
+      const settings = new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto());
+      const updatedSettingsDto = defaultMetadataKeysSettingsDto({zero_knowledge_key_share: false});
+      jest.spyOn(port, "request").mockReturnValue(updatedSettingsDto);
+      const updatedSettings = await service.saveKeysSettings(settings);
+      expect(port.request).toHaveBeenCalledWith(METADATA_SAVE_KEYS_SETTINGS_EVENT, settings.toDto());
+      expect(updatedSettings).toBeInstanceOf(MetadataKeysSettingsEntity);
+      expect(updatedSettings.toDto()).toEqual(updatedSettingsDto);
+    });
+
+    it("throws if the given metadata types settings is not of type MetadataKeysSettingsEntity.", async() => {
       expect.assertions(1);
       await expect(() => service.saveTypesSettings(42)).rejects.toThrow(TypeError);
     });

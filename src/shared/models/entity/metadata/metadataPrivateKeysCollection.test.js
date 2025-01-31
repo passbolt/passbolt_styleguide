@@ -40,6 +40,8 @@ describe("MetadataPrivateKeysCollection", () => {
       expect.assertions(3);
 
       const dtos = defaultMinimalMetadataPrivateKeysDtos();
+      dtos[0].user_id = uuidv4();
+      dtos[1].user_id = uuidv4();
       const collection = new MetadataPrivateKeysCollection(dtos);
 
       expect(collection).toHaveLength(2);

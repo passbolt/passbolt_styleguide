@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import React, {Component} from 'react';
 import {Trans, withTranslation} from "react-i18next";
 import memoize from "memoize-one";
+import {createPortal} from "react-dom";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import MetadataSettingsServiceWorkerService
   from "../../../../shared/services/serviceWorker/metadata/metadataSettingsServiceWorkerService";
@@ -27,18 +28,23 @@ import MetadataKeysServiceWorkerService
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
 import GpgServiceWorkerService from "../../../../shared/services/serviceWorker/crypto/gpgServiceWorkerService";
 import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
+import MetadataKeysSettingsFormEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsFormEntity";
+import MetadataKeyEntity from "../../../../shared/models/entity/metadata/metadataKeyEntity";
+import DisplayContentTypesMetadataKeyAdministrationActions from "./DisplayContentTypesMetadataKeyAdministrationActions";
+import EntityValidationError from "../../../../shared/models/entity/abstract/entityValidationError";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 
 class DisplayContentTypesMetadataKeyAdministration extends Component {
   /**
    * The original settings.
-   * @type {MetadataKeysSettingsEntity}
+   * @type {MetadataKeysSettingsFormEntity}
    */
   originalSettings = null;
 
   /**
    * The form settings.
-   * @type {MetadataKeysSettingsEntity}
+   * @type {MetadataKeysSettingsFormEntity}
    */
   formSettings = null;
 
@@ -68,6 +74,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
       settings: { // Form data
         allow_usage_of_personal_keys: true,
         zero_knowledge_key_share: false,
+        generated_metadata_key: null, // The generated metadata key.
       },
       activeMetadataKeys: null, // Active metadata keys.
       expiredMetadataKeys: null, // Expired metadata keys.
@@ -78,7 +85,10 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.generateMetadataKey = this.generateMetadataKey.bind(this);
+    this.save = this.save.bind(this);
   }
 
   /**
@@ -99,9 +109,10 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    */
   async loadKeysSettings() {
     try {
-      this.originalSettings = await this.metadataSettingsServiceWorkerService.findKeysSettings();
-      this.formSettings = new MetadataKeysSettingsEntity(this.originalSettings.toDto(), {validate: false});
-      this.setState({setting: this. formSettings.toDto()});
+      const settings = await this.metadataSettingsServiceWorkerService.findKeysSettings();
+      this.originalSettings = new MetadataKeysSettingsFormEntity(settings.toDto(), {validate: false});
+      this.formSettings = new MetadataKeysSettingsFormEntity(settings.toDto(), {validate: false});
+      this.setState({settings: this.formSettings.toDto()});
     } catch (error) {
       await this.handleUnexpectedError(error);
     }
@@ -113,7 +124,10 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    * @returns {Promise<string>} Return the dialog key identifier.
    */
   handleUnexpectedError(error) {
-    return this.props.dialogContext.open(NotifyError, {error});
+    console.error(error);
+    if (error.name !== "UserAbortsOperationError") {
+      return this.props.dialogContext.open(NotifyError, {error});
+    }
   }
 
   /**
@@ -140,15 +154,16 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    * Check if the data have been changed.
    * @param {object} formSetingsDto The form settings dto store in state, not used but required to ensure the memoized
    *   function is only triggered when the form is updated.
-   * @param {MetadataKeysSettingsEntity} originalSettings The metadata settings as originally provided by the API.
-   * @param {MetadataKeysSettingsEntity} formSettings The metadata settings updated by the user.
+   * @param {MetadataKeysSettingsFormEntity} originalSettings The metadata key settings as originally provided by the API.
+   * @param {MetadataKeysSettingsFormEntity} formSettings The metadata key settings updated by the user.
    * @param {object} formSetingsDto The form settings dto store in state, not used but required to ensure the memoized
    *   function is only triggered when the form is updated.
    * @param {ResourceTypesCollection} resourceTypes The resource types.
    * @return {EntityValidationError}
    */
   // eslint-disable-next-line no-unused-vars
-  hasSettingsChanges = memoize((originalSettings, formSettings, formSettingsDto) => this.originalSettings?.hasDiffProps(this.formSettings));
+  hasSettingsChanges = memoize((originalSettings, formSettings, formSettingsDto) => originalSettings?.hasDiffProps(formSettings)
+      || originalSettings?.generatedMetadataKey !== formSettings?.generatedMetadataKey);
 
   /**
    * Handle form input changes.
@@ -164,7 +179,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
     if (type === "checkbox") {
       parsedValue = checked;
     }
-    if (name === "allow_usage_of_personal_keys") {
+    if (name === "allow_usage_of_personal_keys" || name === "zero_knowledge_key_share") {
       parsedValue = value === "true";
     }
     this.setFormPropertyValue(name, parsedValue);
@@ -189,16 +204,135 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
   }
 
   /**
+   * Generate a new metadata key
+   * @return {Promise}
+   */
+  async generateMetadataKey() {
+    const metadataKeysInfo = this.state.metadataKeysInfo;
+    const activeMetadataKeys = this.state.activeMetadataKeys;
+
+    this.setState({isProcessing: true});
+    try {
+      const metadataKeyPair = await this.metadataKeysServiceWorkerService.generateKeyPair();
+      const metadataKeyInfo = await this.gpgServiceWorkerService.keyInfo(metadataKeyPair.publicKey.armoredKey);
+      metadataKeysInfo.push(metadataKeyInfo);
+      const metadataKey = new MetadataKeyEntity({armored_key: metadataKeyPair.publicKey.armoredKey, fingerprint: metadataKeyInfo.fingerprint});
+      activeMetadataKeys.push(metadataKey);
+      this.formSettings.generatedMetadataKey = metadataKeyPair;
+      this.setState({activeMetadataKeys, metadataKeysInfo, settings: this.formSettings.toDto()});
+    } catch (error) {
+      await this.handleUnexpectedError(error);
+    }
+
+    this.setState({isProcessing: false});
+  }
+
+  /**
+   * Handle form submission that can be trigger when hitting `enter`
+   * @param {Event} event The html event triggering the form submit.
+   */
+  handleFormSubmit(event) {
+    // Avoid the form to be submitted natively by the browser and avoid a redirect to a broken page.
+    event.preventDefault();
+    this.save();
+  }
+
+  /**
+   * Save the settings.
+   * @returns {Promise<void>}
+   */
+  async save() {
+    if (this.state.isProcessing) {
+      return;
+    }
+
+    this.setState({isProcessing: true});
+    const validationError = this.validateForm(this.state.settings);
+    if (validationError?.hasErrors()) {
+      this.setState({isProcessing: false, hasAlreadyBeenValidated: true});
+      return;
+    }
+
+    try {
+      await this.saveMetadataKeysSettings();
+      await this.createMetadataKey();
+      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The metadata key settings were updated."));
+    } catch (error) {
+      await this.handleUnexpectedError(error);
+    }
+
+    this.setState({
+      isProcessing: false,
+      settings: this.formSettings.toDto()
+    });
+  }
+
+  /**
+   * Validate form.
+   * @param {object} formSetingsDto The form settings dto store in state, not used but required to ensure the memoized
+   *   function is only triggered when the form is updated.
+   * @return {EntityValidationError|null}
+   */
+  // eslint-disable-next-line no-unused-vars
+  validateForm = memoize(formSettingsDto => {
+    if (!this.formSettings) {
+      return null;
+    }
+    let validationErrors = this.formSettings.validate();
+    // An active metadata key is required to save the settings. If none is yet defined and no new key was generated, notify the administrator.
+    if (!this.state.activeMetadataKeys.length) {
+      validationErrors = validationErrors || new EntityValidationError();
+      validationErrors.addError("generated_metadata_key", "required", this.props.t("A shared metadata key is required."));
+    }
+
+    return validationErrors;
+  });
+
+  /**
+   * Save the metadata keys settings.
+   * @returns {Promise<void>}
+   */
+  async saveMetadataKeysSettings() {
+    const metadataKeysSettings = new MetadataKeysSettingsEntity(this.formSettings.toDto());
+    const savedMetadataKeysSettings = await this.metadataSettingsServiceWorkerService.saveKeysSettings(metadataKeysSettings);
+    // Update the form settings information with the saved metadata keys settings return by the API.
+    this.originalSettings = new MetadataKeysSettingsFormEntity({...this.originalSettings.toDto(), ...savedMetadataKeysSettings.toDto()});
+    this.formSettings = new MetadataKeysSettingsFormEntity({...this.formSettings.toDto(), ...savedMetadataKeysSettings.toDto()});
+  }
+
+  /**
+   * Create the metadata key.
+   * @returns {Promise<void>}
+   */
+  async createMetadataKey() {
+    if (!this.formSettings.generatedMetadataKey) {
+      return;
+    }
+    const metadataKey = await this.metadataKeysServiceWorkerService.createKey(this.formSettings.generatedMetadataKey);
+    const activeMetadataKeys = this.state.activeMetadataKeys;
+    activeMetadataKeys.pushOrReplace(metadataKey, {}, {replacePropertyName: "fingerprint"});
+    this.formSettings.generatedMetadataKey = null;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
+    const errors = this.state.hasAlreadyBeenValidated ? this.validateForm(this.state.settings) : null;
     const hasSettingsChanges = this.hasSettingsChanges(this.originalSettings, this.formSettings, this.state.settings);
 
     return (
       <div className="row">
+        {(this.props.createPortal || createPortal)(
+          <DisplayContentTypesMetadataKeyAdministrationActions
+            onSaveRequested={this.save}
+            isProcessing={this.state.isProcessing}
+          />,
+          document.getElementById("administration-actions-content-action")
+        )}
         <div id="content-types-metadata-key-settings" className="col8 main-column">
-          <form>
+          <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
             <h3><label><Trans>Metadata key</Trans></label></h3>
             {hasSettingsChanges &&
               <div className="warning message form-banner">
@@ -207,6 +341,14 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                 </p>
               </div>
             }
+            {errors?.hasError("generated_metadata_key", "required") &&
+              <div className="warning message form-banner">
+                <p>
+                  <Trans>A shared metadata key is required to save the metadata keys settings.</Trans>
+                </p>
+              </div>
+            }
+
             <p className="description">
               <Trans>This section controls the layer of encryption that is used to protect metadata such as the name of
                 a resource, URIs, etc.</Trans>
@@ -310,64 +452,12 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
             <h4 className="no-border">
               <Trans>Shared metadata keys</Trans></h4>
 
-            {this.state.activeMetadataKeys?.length > 0 &&
-              <div id="metadata-active-keys">
-                {this.state.activeMetadataKeys?.items.map(metadataKey => {
-                  const metadataKeyInfo = this.state.metadataKeysInfo?.getFirst("fingerprint", metadataKey.fingerprint);
-                  return <table key={metadataKey.fingerprint}className="table-info">
-                    <tbody>
-                      <tr className="fingerprint">
-                        <td className="label"><Trans>Fingerprint</Trans></td>
-                        <td className="value"><Fingerprint fingerprint={metadataKey.fingerprint}/></td>
-                      </tr>
-                      <tr className="algorithm">
-                        <td className="label"><Trans>Algorithm</Trans></td>
-                        <td
-                          className="value">{metadataKeyInfo?.algorithm} {metadataKeyInfo?.curve}</td>
-                      </tr>
-                      <tr className="key-length">
-                        <td className="label"><Trans>Key length</Trans></td>
-                        <td className="value">{metadataKeyInfo?.length}</td>
-                      </tr>
-                      <tr className="created">
-                        <td className="label"><Trans>Created</Trans></td>
-                        <td className="value"><span
-                          title={metadataKey.created}>{formatDateTimeAgo(metadataKey.created, this.props.t, this.props.context.locale)}</span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>;
-                })}
-              </div>
-            }
-
-            {!this.state.activeMetadataKeys?.length &&
-              <div>
-                <table id="no-metadata-active-keys" className="table-info">
-                  <tbody>
-                    <tr>
-                      <td className="empty-value"><Trans>You need to generate a new to enable encrypted metadata.</Trans></td>
-                      <td className="table-button">
-                        <button className="button primary medium" type="button" disabled={this.hasAllInputDisabled()}
-                          onClick={() => {}}>
-                          <Trans>Generate key</Trans>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            }
-
-            {this.state.expiredMetadataKeys?.length > 0 &&
-              <>
-                <h4 className="no-border">
-                  <Trans>Previous keys</Trans></h4>
-
-                <div id="metadata-expired-keys">
-                  {this.state.expiredMetadataKeys?.items.map(metadataKey => {
-                    const metadataKeyInfo = this.state.metadataKeysInfo.getFirst("fingerprint", metadataKey.fingerprint);
-                    return <table key={metadataKey.fingerprint} className="table-info">
+            <div className={`metadata-key-info ${errors?.hasError("generated_metadata_key", "required") && "error"}`}>
+              {this.state.activeMetadataKeys?.length > 0 &&
+                <div id="metadata-active-keys">
+                  {this.state.activeMetadataKeys?.items.map(metadataKey => {
+                    const metadataKeyInfo = this.state.metadataKeysInfo?.getFirst("fingerprint", metadataKey.fingerprint);
+                    return <table key={metadataKey.fingerprint}className="table-info">
                       <tbody>
                         <tr className="fingerprint">
                           <td className="label"><Trans>Fingerprint</Trans></td>
@@ -384,22 +474,86 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                         </tr>
                         <tr className="created">
                           <td className="label"><Trans>Created</Trans></td>
-                          <td className="value"><span
-                            title={metadataKey.created}>{formatDateTimeAgo(metadataKey.created, this.props.t, this.props.context.locale)}</span>
-                          </td>
-                        </tr>
-                        <tr className="expired">
-                          <td className="label"><Trans>Expired</Trans></td>
-                          <td className="value"><span
-                            title={metadataKey.expired}>{formatDateTimeAgo(metadataKey.expired, this.props.t, this.props.context.locale)}</span>
-                          </td>
+                          {metadataKey.created &&
+                            <td className="value"><span
+                              title={metadataKey.created}>{formatDateTimeAgo(metadataKey.created, this.props.t, this.props.context.locale)}</span>
+                            </td>
+                          }
+                          {!metadataKey.created &&
+                            <td className="empty-value"><Trans>Pending</Trans></td>
+                          }
                         </tr>
                       </tbody>
                     </table>;
                   })}
                 </div>
-              </>
-            }
+              }
+
+              {!this.state.activeMetadataKeys?.length &&
+                <div id="no-metadata-active-keys">
+                  <table className="table-info">
+                    <tbody>
+                      <tr>
+                        <td className="empty-value"><Trans>You need to generate a new shared key to enable encrypted metadata.</Trans></td>
+                        <td className="table-button">
+                          <button className="button primary medium" type="button" disabled={this.hasAllInputDisabled()}
+                            onClick={this.generateMetadataKey} data-testid="generate-key-buton">
+                            <Trans>Generate key</Trans>
+                          </button>
+                        </td>
+                      </tr>
+                      {errors?.hasError("generated_metadata_key", "required") &&
+                        <tr className="error-message">
+                          <Trans>A shared metadata key is required.</Trans>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              }
+
+              {this.state.expiredMetadataKeys?.length > 0 &&
+                <>
+                  <h4 className="no-border">
+                    <Trans>Previous keys</Trans></h4>
+
+                  <div id="metadata-expired-keys">
+                    {this.state.expiredMetadataKeys?.items.map(metadataKey => {
+                      const metadataKeyInfo = this.state.metadataKeysInfo.getFirst("fingerprint", metadataKey.fingerprint);
+                      return <table key={metadataKey.fingerprint} className="table-info">
+                        <tbody>
+                          <tr className="fingerprint">
+                            <td className="label"><Trans>Fingerprint</Trans></td>
+                            <td className="value"><Fingerprint fingerprint={metadataKey.fingerprint}/></td>
+                          </tr>
+                          <tr className="algorithm">
+                            <td className="label"><Trans>Algorithm</Trans></td>
+                            <td
+                              className="value">{metadataKeyInfo?.algorithm} {metadataKeyInfo?.curve}</td>
+                          </tr>
+                          <tr className="key-length">
+                            <td className="label"><Trans>Key length</Trans></td>
+                            <td className="value">{metadataKeyInfo?.length}</td>
+                          </tr>
+                          <tr className="created">
+                            <td className="label"><Trans>Created</Trans></td>
+                            <td className="value"><span
+                              title={metadataKey.created}>{formatDateTimeAgo(metadataKey.created, this.props.t, this.props.context.locale)}</span>
+                            </td>
+                          </tr>
+                          <tr className="expired">
+                            <td className="label"><Trans>Expired</Trans></td>
+                            <td className="value"><span
+                              title={metadataKey.expired}>{formatDateTimeAgo(metadataKey.expired, this.props.t, this.props.context.locale)}</span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>;
+                    })}
+                  </div>
+                </>
+              }
+            </div>
           </form>
         </div>
       </div>
@@ -409,6 +563,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
 
 DisplayContentTypesMetadataKeyAdministration.propTypes = {
   context: PropTypes.object, // Defined the expected type for context
+  actionFeedbackContext: PropTypes.object, // The action feedback context
   dialogContext: PropTypes.object, // The dialog context
   createPortal: PropTypes.func, // The mocked create portal react dom primitive if test needed.
   metadataSettingsServiceWorkerService: PropTypes.object, // The Bext service that handle metadata settings requests.
@@ -419,4 +574,5 @@ DisplayContentTypesMetadataKeyAdministration.propTypes = {
 
 export default withAppContext(
   withDialog(
-    withTranslation('common')(DisplayContentTypesMetadataKeyAdministration)));
+    withActionFeedback(
+      withTranslation('common')(DisplayContentTypesMetadataKeyAdministration))));

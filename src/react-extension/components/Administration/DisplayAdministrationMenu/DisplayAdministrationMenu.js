@@ -634,8 +634,10 @@ class DisplayAdministrationMenu extends React.Component {
             <div className={`row  ${this.isContentTypesEncryptedMetadataSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.handleContentTypesEncryptedMetadataClick}>
+                  <button className="link no-border" type="button"
+                    onClick={this.handleContentTypesEncryptedMetadataClick}>
                     <span><Trans>Encrypted metadata</Trans></span>
+                    <span className="chips beta">beta</span>
                   </button>
                 </div>
               </div>
@@ -649,6 +651,7 @@ class DisplayAdministrationMenu extends React.Component {
                   <div className="main-cell">
                     <button className="link no-border" type="button" onClick={this.handleContentTypesMetadataKeyClick}>
                       <span><Trans>Metadata key</Trans></span>
+                      <span className="chips beta">beta</span>
                     </button>
                   </div>
                 </div>
