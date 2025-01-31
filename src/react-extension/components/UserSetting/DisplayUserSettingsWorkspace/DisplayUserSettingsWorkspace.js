@@ -43,6 +43,7 @@ import ChangeUserPassphrase from "../ChangeUserPassphrase/ChangeUserPassphrase";
 import ChangeUserPassphraseHelp from "../ChangeUserPassphrase/ChangeUserPassphraseHelp";
 import DisplayAccountRecoveryUserSettingsHelp
   from "../DisplayUserAccountRecovery/DisplayAccountRecoveryUserSettingsHelp";
+import DisplayUserSecurityTokenHelp from "../ChangeUserSecurityToken/DisplayUserSecurityTokenHelp";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -174,6 +175,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
                 <Route path={`${path}/profile`} component={DisplayUserProfileHelp}/>
                 <Route path={`${path}/keys`} component={DisplayUserGpgInformationHelp}></Route>
                 <Route path={`${path}/passphrase`} component={ChangeUserPassphraseHelp}/>
+                <Route path={`${path}/security-token`} component={DisplayUserSecurityTokenHelp}></Route>
                 {this.canIUseAccountRecoveryCapability &&
                   <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettingsHelp}></Route>
                 }
