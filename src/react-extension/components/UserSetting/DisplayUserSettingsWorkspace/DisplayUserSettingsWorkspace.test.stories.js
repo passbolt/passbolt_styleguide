@@ -151,3 +151,11 @@ export const securityToken = {
     initialEntries: "/app/settings/security-token"
   },
 };
+
+export const theme = {
+  args: {
+    port: port,
+    storage: storage,
+    initialEntries: "/app/settings/theme"
+  },
+};

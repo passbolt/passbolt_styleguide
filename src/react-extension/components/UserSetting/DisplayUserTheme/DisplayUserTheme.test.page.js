@@ -14,7 +14,6 @@
 
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayUserTheme from "./DisplayUserTheme";
 
@@ -29,9 +28,7 @@ export default class DisplayUserThemePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <Router>
-          <DisplayUserTheme {...props}/>
-        </Router>
+        <DisplayUserTheme {...props}/>
       </MockTranslationProvider>
     );
   }
@@ -40,7 +37,7 @@ export default class DisplayUserThemePage {
    * Returns the number of displayed themes
    */
   get themesCount() {
-    return this._page.container.querySelectorAll('.themes li').length;
+    return this._page.container.querySelectorAll('.themes button').length;
   }
 
   /**
@@ -48,7 +45,7 @@ export default class DisplayUserThemePage {
    * @index The resource index
    */
   theme(index) {
-    const element = this._page.container.querySelectorAll('.themes li')[index - 1].querySelector('button');
+    const element = this._page.container.querySelectorAll('.themes button')[index - 1];
     return {
       get name() {
         return element.querySelector(".theme-desc").textContent;
