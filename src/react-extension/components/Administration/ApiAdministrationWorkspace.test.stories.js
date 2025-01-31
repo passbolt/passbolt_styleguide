@@ -84,7 +84,9 @@ export default {
                               <ManageContextualMenu/>
                               <ManageAnnouncements/>
                               <ManageDialogs/>
-                              <Story {...args}/>
+                              <div style={{margin: "-1rem"}}>
+                                <Story {...args}/>
+                              </div>
                             </AdminUserDirectoryContextProvider>
                           </AdministrationWorkspaceContextProvider>
                         </Route>

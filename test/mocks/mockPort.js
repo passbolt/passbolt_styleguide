@@ -67,6 +67,10 @@ import {defaultAccountRecoveryPolicyDto} from "../../src/react-extension/compone
 import {
   defaultUserPassphrasePoliciesEntityDto
 } from "../../src/shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data";
+import MetadataTypesSettingsEntity from "../../src/shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV4Dto
+} from "../../src/shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 
 export default storage => {
   const mockPort = new MockPort(storage);
@@ -124,6 +128,7 @@ export default storage => {
   mockPort.addRequestListener("passbolt.sso.get-current", () => disabledSso());
   mockPort.addRequestListener("passbolt.account-recovery.get-organization-policy", () => defaultAccountRecoveryPolicyDto());
   mockPort.addRequestListener("passbolt.user-passphrase-policies.find", () => defaultUserPassphrasePoliciesEntityDto());
+  mockPort.addRequestListener("passbolt.metadata.find-metadata-types-settings", () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()));
 
   // Deprecated events
   const deprecatedEvent = () => { throw new Error(`This event is deprecated.`); };

@@ -72,6 +72,8 @@
         flex: 1 0 0;
         align-self: stretch;
         overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--Workspace-Elevator) transparent;
 
         .title {
           margin: 0;
@@ -83,6 +85,10 @@
         }
         & > * {
           margin-bottom: 1.6rem;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
         }
 
         form {
@@ -90,6 +96,10 @@
             align-self: stretch;
             & > * {
                 margin-bottom: 1.6rem;
+
+                &:last-child {
+                  margin-bottom: 0;
+                }
             }
         }
       }
@@ -130,7 +140,7 @@
       margin-right: auto;
     }
 
-    .button.primary {
+    button.primary {
       padding: .8rem 2.4rem;
       font-size: 1.8rem;
       margin-left: auto;

@@ -229,7 +229,6 @@ class AdministrationWorkspace extends Component {
     return (
       <div id="container" className="page administration">
         <div id="app" className="app" tabIndex="1000">
-          {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
           <div className="panel main">
             <div className="panel left">
               {!this.isHttpError403 &&
@@ -323,7 +322,6 @@ class AdministrationWorkspace extends Component {
                       <DisplayContentTypesMetadataKeyAdministration/>
                     }
                   </div>
-                  {/* TODO will be moved directly in specific administration menu item component <AdministrationWorkspaceAction/> */}
                 </div>
                 <div className="help-panel">
                   {/* TODO Should display according help panel information */}

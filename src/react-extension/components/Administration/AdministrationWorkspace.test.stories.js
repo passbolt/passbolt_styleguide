@@ -78,6 +78,7 @@ export default {
                                   "/app/administration/sso",
                                   "/app/administration/subscription",
                                   "/app/administration/user-passphrase-policies",
+                                  "/app/administration/content-types/metadata",
                                 ]}>
                                   <AdministrationWorkspaceContextProvider value={args.administrationWorkspaceContext}>
                                     <AdminAccountRecoveryContextProvider>
@@ -88,7 +89,9 @@ export default {
                                               <AdministrationPasswordExpiryContextProvider>
                                                 <ManageDialogs/>
                                                 <ManageWorkflows/>
-                                                <Story {...args}/>
+                                                <div style={{margin: "-1rem"}}>
+                                                  <Story {...args}/>
+                                                </div>
                                               </AdministrationPasswordExpiryContextProvider>
                                             </AdministrationUserPassphrasePoliciesContextProvider>
                                           </AdminPasswordPoliciesContextProvider>
@@ -213,6 +216,17 @@ export const UserPassphrasePoliciesPage = {
       selectedAdministration: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES
     }),
     routerInitialEntry: "/app/administration/user-passphrase-policies"
+  },
+};
+
+export const ContentTypesEncryptedMetadataPage = {
+  args: {
+    port: port,
+    storage: storage,
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA
+    }),
+    routerInitialEntry: "/app/administration/content-types/metadata"
   },
 };
 
