@@ -12,6 +12,7 @@
  * @since         4.1.0
  */
 
+import "../../../../../test/mocks/mockPortal.js";
 import {enableFetchMocks} from 'jest-fetch-mock';
 import {waitFor} from '@testing-library/react';
 import {

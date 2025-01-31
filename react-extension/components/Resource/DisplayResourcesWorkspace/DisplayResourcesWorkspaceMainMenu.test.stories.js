@@ -11,8 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-
-import React from "react";
 import DisplayResourcesWorkspaceMainMenu from "./DisplayResourcesWorkspaceMainMenu";
 import {
   defaultPropsFolderNotOwned,
@@ -27,19 +25,11 @@ export default {
   component: DisplayResourcesWorkspaceMainMenu
 };
 
-const Template = ({...args}) =>
-  <div className="header third">
-    <div className="col1 main-action-wrapper">
-      <DisplayResourcesWorkspaceMainMenu {...args}/>
-    </div>
-  </div>;
+export const FolderOwned = {
+  args: defaultPropsFolderOwned()
+};
 
-const props = defaultPropsFolderOwned();
-
-export const FolderOwned = Template.bind({});
-FolderOwned.args = {...props};
-
-const propsFolderNotOwned = defaultPropsFolderNotOwned();
-export const FolderNotOwned = Template.bind({});
-FolderNotOwned.args = {...propsFolderNotOwned};
+export const FolderNotOwned = {
+  args: defaultPropsFolderNotOwned()
+};
 

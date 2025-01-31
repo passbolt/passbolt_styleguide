@@ -83,7 +83,7 @@ describe("Add comments", () => {
       expect(context.port.request).toBeCalled();
 
       await page.addIcon.click();
-      expect(page.addIcon.exists()).toBeTruthy();
+      expect(page.addIcon.exists()).toBeFalsy();
       expect(page.addComment.exists()).toBeTruthy();
     });
   });
@@ -104,8 +104,9 @@ describe("Add comments", () => {
       await page.title.click();
       await page.addIcon.click();
       await page.addComment.write("I'm starting a new comment");
-      await page.addIcon.click();
-      expect(page.addComment.hasFocus()).toBeFalsy();
+      await page.addComment.cancel();
+      expect(page.addIcon.exists()).toBeTruthy();
+      expect(page.addComment.exists()).toBeFalsy();
     });
   });
 

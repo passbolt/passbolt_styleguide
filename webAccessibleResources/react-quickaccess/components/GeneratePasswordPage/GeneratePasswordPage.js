@@ -24,6 +24,7 @@ import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerat
 import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
 import Transition from "react-transition-group/cjs/Transition";
 import Icon from "../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../img/svg/spinner.svg";
 import Password from "../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
 import ClipBoard from '../../../shared/lib/Browser/clipBoard';
@@ -238,7 +239,7 @@ class GeneratePasswordPage extends React.Component {
                   <Transition in={this.state.copySecretState === "processing"} appear={true} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copySecretState !== "processing" ? "visually-hidden" : ""}`}>
-                        <Icon name="spinner"/>
+                        <SpinnerSVG/>
                       </span>
                     )}
                   </Transition>
@@ -258,7 +259,8 @@ class GeneratePasswordPage extends React.Component {
             <Tabs activeTabName={generatorConfiguration.default_generator}>
               <Tab
                 key={"password"}
-                name={"password"}
+                name={this.props.t("password")}
+                type={"password"}
                 onClick={() => this.handleGeneratorTypeChanged("password")}>
                 {generatorConfiguration.default_generator === "password" &&
                 <ConfigurePasswordGenerator
@@ -268,7 +270,8 @@ class GeneratePasswordPage extends React.Component {
               </Tab>
               <Tab
                 key={"passphrase"}
-                name={"passphrase"}
+                name={this.props.t("passphrase")}
+                type={"passphrase"}
                 onClick={() => this.handleGeneratorTypeChanged("passphrase")}>
                 {generatorConfiguration.default_generator === "passphrase" &&
                 <ConfigurePassphraseGenerator
@@ -286,7 +289,7 @@ class GeneratePasswordPage extends React.Component {
               disabled={this.state.processing || this.isPasswordEmpty()}>
               <Trans>Apply</Trans>
               {this.state.processing &&
-                <Icon name="spinner"/>
+                <SpinnerSVG/>
               }
             </button>
           </div>

@@ -1,28 +1,38 @@
 .sidebar-help {
-  padding: 1.6rem;
-  background-color: @notice-background;
-  border-radius: .3rem;
-
-  & + .sidebar-help {
-    margin-top: 1.6rem;
-  }
-
-  &.transparent {
-    background-color: transparent;
-    border: 1px solid @info-panel-border;
-  }
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  flex: 1 0 0;
+  gap: 1.6rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--Workspace-Elevator) transparent;
 
   h3 {
-    margin: 0 0 1.6rem 0;
-    border-bottom: none;
+    margin: 0;
+    font-size: 1.8rem;
   }
 
-  p {
-    margin-bottom: 1.6rem;
+  .button {
+    align-self: flex-start;
   }
 
-  a.button {
-    display: inline-flex;
-    text-align: left;
+  .sidebar-help-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+    padding: 1.6rem;
+
+    + .sidebar-help-section {
+      box-shadow: inset 0 .1rem .1rem var(--Workspace-Dividers);
+    }
+
+    &.warning {
+      border-radius: var(--Section-border-radius) var(--Section-border-radius) 0 0;
+
+      & + .sidebar-help-section {
+        box-shadow: none;
+      }
+    }
   }
 }

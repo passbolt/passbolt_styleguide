@@ -18,12 +18,17 @@ import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {withDialog} from "../../../contexts/DialogContext";
-import Icon from "../../../../shared/components/Icons/Icon";
 import SmtpProviders from "./SmtpProviders.data";
 import Password from "../../../../shared/components/Password/Password";
 import Select from "../../Common/Select/Select";
 import {withAdminSmtpSettings} from "../../../contexts/AdminSmtpSettingsContext";
 import DisplayAdministrationSmtpSettingsActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSmtpSettingsActions/DisplayAdministrationSmtpSettingsActions";
+import {createSafePortal} from "../../../../shared/utils/portals";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import EmailSVG from "../../../../img/svg/email.svg";
+import FileTextSVG from "../../../../img/svg/file_text.svg";
+import LinkSVG from "../../../../img/svg/link.svg";
 
 /*
  * Supported authentication methods.
@@ -319,20 +324,23 @@ export class ManageSmtpAdministrationSettings extends React.Component {
   render() {
     const settings = this.props.adminSmtpSettingsContext.getCurrentSmtpSettings();
     const errors = this.props.adminSmtpSettingsContext.getErrors();
+    const smtpProviderName = settings?.provider?.name;
     return (
-      <div className="grid grid-responsive-12">
-        <div className="row">
-          <div className="third-party-provider-settings smtp-settings col8 main-column">
-            <h3><Trans>Email server</Trans></h3>
-            {this.isReady() && !settings?.provider &&
+      <div className="row">
+        <>
+          <div className="third-party-provider-settings smtp-settings main-column">
+            <div className="main-content">
+              <h3 className="title"><Trans>Email server</Trans></h3>
+              {this.isReady() && !settings?.provider &&
               <>
+
                 <h4 className="no-border"><Trans>Select a provider</Trans></h4>
                 <div className="provider-list">
                   {SmtpProviders.map(provider =>
                     <div key={provider.id} className="provider button" id={provider.id} onClick={() => this.props.adminSmtpSettingsContext.changeProvider(provider)}>
                       <div className="provider-logo">
                         {provider.id === "other" &&
-                          <Icon name="envelope"/>
+                          <EmailSVG/>
                         }
                         {provider.id !== "other" &&
                           <img src={`${this.props.context.trustedDomain}/img/third_party/${provider.icon}`}/>
@@ -343,14 +351,9 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                   )}
                 </div>
               </>
-            }
-            {this.isReady() && settings?.provider &&
+              }
+              {this.isReady() && settings?.provider &&
               <>
-                {this.shouldShowSourceWarningMessage() &&
-                  <div className="warning message">
-                    <Trans><b>Warning:</b> These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.</Trans>
-                  </div>
-                }
                 <form className="form">
                   <h4 className="no-border"><Trans>SMTP server configuration</Trans></h4>
                   <div className={`select-wrapper input required ${this.isProcessing() ? 'disabled' : ''}`}>
@@ -391,7 +394,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                   }
                   <div className="accordion-header">
                     <button type="button" className="link no-border" onClick={this.handleAdvancedSettingsToggle}>
-                      <Icon name={this.state.showAdvancedSettings ? "caret-down" : "caret-right"}/><Trans>Advanced settings</Trans>
+                      {this.state.showAdvancedSettings ? <CaretDownSVG/> : <CaretRightSVG/>}<Trans>Advanced settings</Trans>
                     </button>
                   </div>
                   {this.state.showAdvancedSettings &&
@@ -456,42 +459,52 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                   </div>
                 </form>
               </>
+              }
+            </div>
+            {this.shouldShowSourceWarningMessage() &&
+                  <div className="warning message">
+                    <Trans><b>Warning:</b> These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.</Trans>
+                  </div>
             }
           </div>
-          <div className="col4 last">
-            <div className="sidebar-help" id="smtp-settings-source">
+          <DisplayAdministrationSmtpSettingsActions/>
+        </>
+        {createSafePortal(
+          <>
+            <div className="sidebar-help-section" id="smtp-settings-source">
               <h3><Trans>Configuration source</Trans></h3>
               <p><Trans>This current configuration source is: </Trans>{this.configurationSource}.</p>
             </div>
-            <div className="sidebar-help">
+            <div className="sidebar-help-section">
               <h3><Trans>Why do I need an SMTP server?</Trans></h3>
               <p><Trans>Passbolt needs an smtp server in order to send invitation emails after an account creation and to send email notifications.</Trans></p>
               <a className="button" href="https://passbolt.com/docs/admin/emails/email-server/" target="_blank" rel="noopener noreferrer">
-                <Icon name="document"/>
+                <FileTextSVG />
                 <span><Trans>Read the documentation</Trans></span>
               </a>
             </div>
             {settings?.provider && settings?.provider.id !== "other" &&
-            <div className="sidebar-help">
-              <h3><Trans>How do I configure a {settings.provider.name} SMTP server?</Trans></h3>
+            <div className="sidebar-help-section">
+              <h3><Trans>How do I configure a {{smtpProviderName}} SMTP server?</Trans></h3>
               <a className="button" href={settings.provider.help_page} target="_blank" rel="noopener noreferrer">
-                <Icon name="link"/>
-                <span><Trans>See the {settings.provider.name} documentation</Trans></span>
+                <LinkSVG/>
+                <span><Trans>See the {{smtpProviderName}} documentation</Trans></span>
               </a>
             </div>
             }
             {settings?.provider && (settings.provider.id === "google-mail" || settings.provider.id === "google-workspace") &&
-            <div className="sidebar-help">
+            <div className="sidebar-help-section">
               <h3><Trans>Why shouldn&apos;t I use my login password ?</Trans></h3>
               <p><Trans>In order to use the &quot;Username & Password&quot; authentication method with Google, you will need to enable MFA on your Google Account. The password should not be your login password, you have to create an &quot;App Password&quot; generated by Google.. However, the email remain the same.</Trans></p>
               <a className="button" href="https://support.google.com/mail/answer/185833" target="_blank" rel="noopener noreferrer">
-                <Icon name="document"/>
+                <FileTextSVG />
                 <span><Trans>More informations</Trans></span>
               </a>
             </div>
             }
-          </div>
-        </div>
+          </>,
+          document.getElementById("administration-help-panel")
+        )}
       </div>
     );
   }

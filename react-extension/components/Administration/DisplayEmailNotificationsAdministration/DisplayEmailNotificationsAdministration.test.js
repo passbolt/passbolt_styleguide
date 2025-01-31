@@ -15,6 +15,7 @@
 /**
  * Unit tests on DisplayEmailNotificationsAdministration in regard of specifications
  */
+import "../../../../../test/mocks/mockPortal.js";
 import {
   defaultEmailNotificationSettings,
   defaultProps,

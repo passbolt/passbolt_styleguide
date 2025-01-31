@@ -30,6 +30,7 @@ import AzureSsoSettingsEntity from "../../../../shared/models/entity/ssoSettings
 import GoogleSsoSettingsEntity from "../../../../shared/models/entity/ssoSettings/GoogleSsoSettingsEntity";
 import OAuth2SsoSettingsEntity from "../../../../shared/models/entity/ssoSettings/OAuth2SsoSettingsEntity";
 import AdfsSsoSettingsEntity from "../../../../shared/models/entity/ssoSettings/AdfsSsoSettingsEntity";
+import {createSafePortal} from "../../../../shared/utils/portals";
 
 /**
  * This component displays the SSO administration settings
@@ -57,7 +58,6 @@ class ManageSsoSettings extends React.Component {
   }
 
   async componentDidMount() {
-    this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationSsoActions);
     await this.props.adminSsoContext.loadSsoConfiguration();
     this.setState({
       loading: false,
@@ -160,99 +160,106 @@ class ManageSsoSettings extends React.Component {
     const isSsoActivated = ssoContext.isSsoConfigActivated();
     return (
       <div className="row">
-        <div className="third-party-provider-settings sso-settings col8 main-column">
-          <h3>
-            <span className="input toggle-switch form-element">
-              <input type="checkbox" className="toggle-switch-checkbox checkbox" name="ssoToggle"
-                onChange={this.handleSsoSettingToggle} checked={isSsoActivated} disabled={this.hasAllInputDisabled()}
-                id="ssoToggle"/>
-              <label htmlFor="ssoToggle"><Trans>Single Sign-On</Trans></label>
-            </span>
-          </h3>
-          {this.props.adminSsoContext.hasFormChanged() &&
-            <div className="warning message" id="sso-setting-overridden-banner">
+        <div className="third-party-provider-settings sso-settings main-column">
+          <div className="main-content">
+            <h3 className="title">
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="ssoToggle"
+                  onChange={this.handleSsoSettingToggle} checked={isSsoActivated} disabled={this.hasAllInputDisabled()}
+                  id="ssoToggle"/>
+                <label htmlFor="ssoToggle"><Trans>Single Sign-On</Trans></label>
+              </span>
+            </h3>
+            {this.isReady() && !isSsoActivated &&
+              <>
+                <h4 className="no-border"><Trans>Select a provider</Trans></h4>
+                <div className="provider-list">
+                  {this.allSsoProviders.map(provider =>
+                    <div key={provider.id} className={`provider button ${provider.disabled ? "disabled" : ""}`} id={provider.id} onClick={() => this.props.adminSsoContext.changeProvider(provider)}>
+                      <div className="provider-logo">
+                        {provider.icon}
+                      </div>
+                      <p className="provider-name">{provider.name}<br/>
+                        {provider.disabled &&
+                          <Trans>(not yet available)</Trans>
+                        }
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </>
+            }
+            {this.isReady() && isSsoActivated &&
+              <form className="form">
+                <div className="select-wrapper input">
+                  <label htmlFor="sso-provider-input"><Trans>Single Sign-On provider</Trans></label>
+                  <Select id="sso-provider-input" name="provider" items={this.supportedSsoProviders} value={ssoConfig?.provider} onChange={this.handleProviderInputChange}/>
+                </div>
+                {ssoConfig?.provider === AzureSsoSettingsEntity.PROVIDER_ID && <AzureSsoProviderForm/>}
+                {ssoConfig?.provider === GoogleSsoSettingsEntity.PROVIDER_ID && <GoogleSsoProviderForm/>}
+                {ssoConfig?.provider === OAuth2SsoSettingsEntity.PROVIDER_ID && <OAuth2SsoProviderForm/>}
+                {ssoConfig?.provider === AdfsSsoSettingsEntity.PROVIDER_ID && <AdfsSsoProviderForm/>}
+              </form>
+            }
+          </div>
+        </div>
+        {this.props.adminSsoContext.hasFormChanged() &&
+          <div className="warning message" id="sso-setting-overridden-banner">
+            <div>
               <p>
                 <Trans>Warning, Don&apos;t forget to save your settings to apply your modification.</Trans>
               </p>
             </div>
-          }
-          {this.isReady() && !isSsoActivated &&
-            <>
-              <h4 className="no-border"><Trans>Select a provider</Trans></h4>
-              <div className="provider-list">
-                {this.allSsoProviders.map(provider =>
-                  <div key={provider.id} className={`provider button ${provider.disabled ? "disabled" : ""}`} id={provider.id} onClick={() => this.props.adminSsoContext.changeProvider(provider)}>
-                    <div className="provider-logo">
-                      {provider.icon}
-                    </div>
-                    <p className="provider-name">{provider.name}<br/>
-                      {provider.disabled &&
-                        <Trans>(not yet available)</Trans>
-                      }
-                    </p>
-                  </div>
-                )}
-              </div>
-            </>
-          }
-          {this.isReady() && isSsoActivated &&
-            <form className="form">
-              <div className="select-wrapper input">
-                <label htmlFor="sso-provider-input"><Trans>Single Sign-On provider</Trans></label>
-                <Select id="sso-provider-input" name="provider" items={this.supportedSsoProviders} value={ssoConfig?.provider} onChange={this.handleProviderInputChange}/>
-              </div>
-              <hr/>
-              {ssoConfig?.provider === AzureSsoSettingsEntity.PROVIDER_ID && <AzureSsoProviderForm/>}
-              {ssoConfig?.provider === GoogleSsoSettingsEntity.PROVIDER_ID && <GoogleSsoProviderForm/>}
-              {ssoConfig?.provider === OAuth2SsoSettingsEntity.PROVIDER_ID && <OAuth2SsoProviderForm/>}
-              {ssoConfig?.provider === AdfsSsoSettingsEntity.PROVIDER_ID && <AdfsSsoProviderForm/>}
-            </form>
-          }
-        </div>
-        <div className="col4 last">
-          <div className="sidebar-help warning message" id="sso-setting-security-warning-banner">
-            <h3><Trans>Important notice:</Trans></h3>
-            <p>
-              <Trans>Enabling SSO changes the security risks.</Trans> <Trans>For example an attacker with a local machine access maybe be able to access secrets, if the user is still logged in with the Identity provider.</Trans> <Trans>Make sure users follow screen lock best practices.</Trans>
-              <a href="https://passbolt.com/docs/admin/authentication/sso/" target="_blank" rel="noopener noreferrer"><Trans>Learn more</Trans></a>
-            </p>
           </div>
-          <div className="sidebar-help">
-            <h3><Trans>Need some help?</Trans></h3>
-            <p><Trans>For more information about SSO, checkout the dedicated page on the help website.</Trans></p>
-            <a className="button" href="https://passbolt.com/docs/admin/authentication/sso/" target="_blank" rel="noopener noreferrer">
-              <Icon name="document"/>
-              <span><Trans>Read the documentation</Trans></span>
-            </a>
-          </div>
-          {ssoConfig?.provider === AzureSsoSettingsEntity.PROVIDER_ID &&
-          <div className="sidebar-help">
-            <h3><Trans>How do I configure a AzureAD SSO?</Trans></h3>
-            <a className="button" href="https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/add-application-portal-setup-sso" target="_blank" rel="noopener noreferrer">
-              <Icon name="external-link"/>
-              <span><Trans>Read the documentation</Trans></span>
-            </a>
-          </div>
-          }
-          {ssoConfig?.provider === GoogleSsoSettingsEntity.PROVIDER_ID &&
-          <div className="sidebar-help">
-            <h3><Trans>How do I configure a Google SSO?</Trans></h3>
-            <a className="button" href="https://developers.google.com/identity/openid-connect/openid-connect" target="_blank" rel="noopener noreferrer">
-              <Icon name="external-link"/>
-              <span><Trans>Read the documentation</Trans></span>
-            </a>
-          </div>
-          }
-          {ssoConfig?.provider === AdfsSsoSettingsEntity.PROVIDER_ID &&
-          <div className="sidebar-help">
-            <h3><Trans>How do I configure an AD FS SSO?</Trans></h3>
-            <a className="button" href="https://learn.microsoft.com/en-gb/microsoft-365/troubleshoot/active-directory/set-up-adfs-for-single-sign-on" target="_blank" rel="noopener noreferrer">
-              <Icon name="external-link"/>
-              <span><Trans>Read the documentation</Trans></span>
-            </a>
-          </div>
-          }
-        </div>
+        }
+        <DisplayAdministrationSsoActions/>
+        {createSafePortal(
+          <>
+            <div className="sidebar-help-section warning message" id="sso-setting-security-warning-banner">
+              <h3><Trans>Important notice:</Trans></h3>
+              <p>
+                <Trans>Enabling SSO changes the security risks.</Trans> <Trans>For example an attacker with a local machine access maybe be able to access secrets, if the user is still logged in with the Identity provider.</Trans> <Trans>Make sure users follow screen lock best practices.</Trans>
+                &nbsp;<a href="https://passbolt.com/docs/admin/authentication/sso/" target="_blank" rel="noopener noreferrer"><Trans>Learn more</Trans></a>
+              </p>
+            </div>
+            <div className="sidebar-help-section">
+              <h3><Trans>Need some help?</Trans></h3>
+              <p><Trans>For more information about SSO, checkout the dedicated page on the help website.</Trans></p>
+              <a className="button" href="https://passbolt.com/docs/admin/authentication/sso/" target="_blank" rel="noopener noreferrer">
+                <Icon name="document"/>
+                <span><Trans>Read the documentation</Trans></span>
+              </a>
+            </div>
+            {ssoConfig?.provider === AzureSsoSettingsEntity.PROVIDER_ID &&
+            <div className="sidebar-help-section">
+              <h3><Trans>How do I configure a AzureAD SSO?</Trans></h3>
+              <a className="button" href="https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/add-application-portal-setup-sso" target="_blank" rel="noopener noreferrer">
+                <Icon name="external-link"/>
+                <span><Trans>Read the documentation</Trans></span>
+              </a>
+            </div>
+            }
+            {ssoConfig?.provider === GoogleSsoSettingsEntity.PROVIDER_ID &&
+            <div className="sidebar-help-section">
+              <h3><Trans>How do I configure a Google SSO?</Trans></h3>
+              <a className="button" href="https://developers.google.com/identity/openid-connect/openid-connect" target="_blank" rel="noopener noreferrer">
+                <Icon name="external-link"/>
+                <span><Trans>Read the documentation</Trans></span>
+              </a>
+            </div>
+            }
+            {ssoConfig?.provider === AdfsSsoSettingsEntity.PROVIDER_ID &&
+            <div className="sidebar-help-section">
+              <h3><Trans>How do I configure an AD FS SSO?</Trans></h3>
+              <a className="button" href="https://learn.microsoft.com/en-gb/microsoft-365/troubleshoot/active-directory/set-up-adfs-for-single-sign-on" target="_blank" rel="noopener noreferrer">
+                <Icon name="external-link"/>
+                <span><Trans>Read the documentation</Trans></span>
+              </a>
+            </div>
+            }
+          </>,
+          document.getElementById("administration-help-panel")
+        )}
       </div>
     );
   }

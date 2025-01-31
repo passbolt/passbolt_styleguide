@@ -14,7 +14,6 @@
 
 import React, {Fragment} from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import DisplayAdministrationAccountRecoveryActions
@@ -26,6 +25,8 @@ import SelectAccountRecoveryOrganizationKey
 import DownloadOrganizationKey from "../SelectAccountRecoveryOrganizationKey/DownloadOrganizationKey";
 import {withAdminAccountRecovery} from "../../../contexts/AdminAccountRecoveryContext";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import {createSafePortal} from "../../../../shared/utils/portals";
+import BuoySVG from "../../../../img/svg/buoy.svg";
 
 class ManageAccountRecoveryAdministrationSettings extends React.Component {
   /**
@@ -55,7 +56,6 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
    *
    */
   async componentDidMount() {
-    this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationAccountRecoveryActions);
     this.findAccountRecoveryPolicy();
   }
 
@@ -63,7 +63,6 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
    * On the component will unmount.
    */
   componentWillUnmount() {
-    this.props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction();
     this.props.adminAccountRecoveryContext.resetChanges();
   }
 
@@ -256,160 +255,170 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const hasWarnings = this.props.adminAccountRecoveryContext.hasPolicyChanges()
+      || (!this.hasOrganisationRecoveryKey() && this.isPolicyEnabled());
     return (
       <div className="row">
-        <div className="recover-account-settings col8 main-column">
-          <h3><Trans>Account Recovery</Trans></h3>
-          {this.props.adminAccountRecoveryContext.hasPolicyChanges() &&
-            <div className="warning message" id="email-notification-setting-overridden-banner">
+        <div className="recover-account-settings main-column">
+          <div className="main-content">
+            <h3 className="title"><Trans>Account Recovery</Trans></h3>
+            <form className="form">
+              <h4 className="no-border"><Trans>Account Recovery Policy</Trans></h4>
               <p>
-                <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                <Trans>In this section you can choose the default behavior of account recovery for all users.</Trans>
               </p>
-            </div>
-          }
-          {!this.hasOrganisationRecoveryKey() && this.isPolicyEnabled() &&
-          <div className="warning message" id="email-notification-setting-overridden-banner">
-            <p>
-              <Trans>Warning, Don&apos;t forget to add an organization recovery key.</Trans>
-            </p>
-          </div>
-          }
-          <form className="form">
-            <h4 className="no-border"><Trans>Account Recovery Policy</Trans></h4>
-            <p>
-              <Trans>In this section you can choose the default behavior of account recovery for all users.</Trans>
-            </p>
-            <div className="radiolist-alt">
-              <div className={`input radio ${this.policy === "mandatory" ? 'checked' : ''}`}>
-                <input type="radio"
-                  value="mandatory"
-                  onChange={this.handlePolicyInputChange}
-                  name="accountRecoveryPolicy"
-                  checked={this.policy === "mandatory"}
-                  id="accountRecoveryPolicyMandatory"
-                  disabled={this.hasAllInputDisabled()}/>
-                <label htmlFor="accountRecoveryPolicyMandatory">
-                  <span className="name"><Trans>Prompt</Trans></span>
-                  <span className="info">
-                    <Trans>Every user is required to provide a copy of their private key and passphrase during setup.</Trans><br/>
-                    <Trans>You should inform your users not to store personal passwords.</Trans>
-                  </span>
-                </label>
-              </div>
-              <div className={`input radio ${this.policy === "opt-out" ? 'checked' : ''}`}>
-                <input type="radio"
-                  value="opt-out"
-                  onChange={this.handlePolicyInputChange}
-                  name="accountRecoveryPolicy"
-                  checked={this.policy === "opt-out"}
-                  id="accountRecoveryPolicyOptOut"
-                  disabled={this.hasAllInputDisabled()}/>
-                <label htmlFor="accountRecoveryPolicyOptOut">
-                  <span className="name"><Trans>Optional, Opt-out</Trans></span>
-                  <span className="info">
-                    <Trans>Every user will be prompted to provide a copy of their private key and passphrase by default during the setup, but they can opt out.</Trans>
-                  </span>
-                </label>
-              </div>
-              <div className={`input radio ${this.policy === "opt-in" ? 'checked' : ''}`}>
-                <input type="radio"
-                  value="opt-in"
-                  onChange={this.handlePolicyInputChange}
-                  name="accountRecoveryPolicy"
-                  checked={this.policy === "opt-in"}
-                  id="accountRecoveryPolicyOptIn"
-                  disabled={this.hasAllInputDisabled()}/>
-                <label htmlFor="accountRecoveryPolicyOptIn">
-                  <span className="name"><Trans>Optional, Opt-in</Trans></span>
-                  <span className="info">
-                    <Trans>Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.</Trans>
-                  </span>
-                </label>
-              </div>
-              <div className={`input radio ${this.policy === "disabled" ? 'checked' : ''}`}>
-                <input type="radio"
-                  value="disabled"
-                  onChange={this.handlePolicyInputChange}
-                  name="accountRecoveryPolicy"
-                  checked={this.policy === "disabled"}
-                  id="accountRecoveryPolicyDisable"
-                  disabled={this.hasAllInputDisabled()}/>
-                <label htmlFor="accountRecoveryPolicyDisable">
-                  <span className="name"><Trans>Disable (Default)</Trans></span>
-                  <span className="info">
-                    <Trans>Backup of the private key and passphrase will not be stored. This is the safest option.</Trans>
-                    <Trans>If users lose their private key and passphrase they will not be able to recover their account.</Trans>
-                  </span>
-                </label>
-              </div>
-            </div>
-            <h4>
-              <span className="input toggle-switch form-element ">
-                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="organisationRecoveryKeyToggle" disabled={this.hasAllInputDisabled()} checked={this.isPolicyEnabled()} id="recovery-key-toggle-button" />
-                <label htmlFor="recovery-key-toggle-button"><Trans>Organization Recovery Key</Trans></label>
-              </span>
-            </h4>
-            {this.isPolicyEnabled() &&
-              <>
-                <p>
-                  <Trans>Your organization recovery key will be used to decrypt and recover the private key and passphrase of the users that are participating in the account recovery program.</Trans> <Trans>The organization private recovery key should not be stored in passbolt.</Trans> <Trans>You should keep it offline in a safe place.</Trans>
-                </p>
-                <div className="recovery-key-details">
-                  <table className="table-info recovery-key">
-                    <tbody>
-                      <tr className="user-ids">
-                        <td className="label"><Trans>User ids</Trans></td>
-                        {this.organizationKeyInfo?.user_ids && <td className="value">{this.formatUserIds(this.organizationKeyInfo.user_ids)}</td>}
-                        {!this.organizationKeyInfo?.user_ids && <td className="empty-value"><Trans>not available</Trans></td>}
-                        <td className="table-button">
-                          <button className="button primary medium" type="button" disabled={this.hasAllInputDisabled()} onClick={this.HandleUpdatePublicKeyClick}>
-                            {this.hasOrganisationRecoveryKey() && <Trans>Rotate Key</Trans>}
-                            {!this.hasOrganisationRecoveryKey() && <Trans>Add an Organization Recovery Key</Trans>}
-                          </button>
-                        </td>
-                      </tr>
-                      <tr className="fingerprint">
-                        <td className="label"><Trans>Fingerprint</Trans></td>
-                        {this.organizationKeyInfo?.fingerprint && <td className="value">{this.formatFingerprint(this.organizationKeyInfo.fingerprint)}</td>}
-                        {!this.organizationKeyInfo?.fingerprint && <td className="empty-value"><Trans>not available</Trans></td>}
-                      </tr>
-                      <tr className="algorithm">
-                        <td className="label"><Trans>Algorithm</Trans></td>
-                        {this.organizationKeyInfo?.algorithm && <td className="value">{this.organizationKeyInfo.algorithm}</td>}
-                        {!this.organizationKeyInfo?.algorithm && <td className="empty-value"><Trans>not available</Trans></td>}
-                      </tr>
-                      <tr className="key-length">
-                        <td className="label"><Trans>Key length</Trans></td>
-                        {this.organizationKeyInfo?.length && <td className="value">{this.organizationKeyInfo.length}</td>}
-                        {!this.organizationKeyInfo?.length && <td className="empty-value"><Trans>not available</Trans></td>}
-                      </tr>
-                      <tr className="created">
-                        <td className="label"><Trans>Created</Trans></td>
-                        {this.organizationKeyInfo?.created && <td className="value">{formatDateTimeAgo(this.organizationKeyInfo.created, this.props.t, this.props.context.locale)}</td>}
-                        {!this.organizationKeyInfo?.created && <td className="empty-value"><Trans>not available</Trans></td>}
-                      </tr>
-                      <tr className="expires">
-                        <td className="label"><Trans>Expires</Trans></td>
-                        {this.organizationKeyInfo?.expires && <td className="value">{formatDateTimeAgo(this.organizationKeyInfo.expires, this.props.t, this.props.context.locale)}</td>}
-                        {!this.organizationKeyInfo?.expires && <td className="empty-value"><Trans>not available</Trans></td>}
-                      </tr>
-                    </tbody>
-                  </table>
+              <div className="radiolist-alt">
+                <div className={`input radio ${this.policy === "mandatory" ? 'checked' : ''}`}>
+                  <input type="radio"
+                    value="mandatory"
+                    onChange={this.handlePolicyInputChange}
+                    name="accountRecoveryPolicy"
+                    checked={this.policy === "mandatory"}
+                    id="accountRecoveryPolicyMandatory"
+                    disabled={this.hasAllInputDisabled()}/>
+                  <label htmlFor="accountRecoveryPolicyMandatory">
+                    <span className="name"><Trans>Prompt</Trans></span>
+                    <span className="info">
+                      <Trans>Every user is required to provide a copy of their private key and passphrase during setup.</Trans><br/>
+                      <Trans>You should inform your users not to store personal passwords.</Trans>
+                    </span>
+                  </label>
                 </div>
-              </>
-            }
-          </form>
+                <div className={`input radio ${this.policy === "opt-out" ? 'checked' : ''}`}>
+                  <input type="radio"
+                    value="opt-out"
+                    onChange={this.handlePolicyInputChange}
+                    name="accountRecoveryPolicy"
+                    checked={this.policy === "opt-out"}
+                    id="accountRecoveryPolicyOptOut"
+                    disabled={this.hasAllInputDisabled()}/>
+                  <label htmlFor="accountRecoveryPolicyOptOut">
+                    <span className="name"><Trans>Optional, Opt-out</Trans></span>
+                    <span className="info">
+                      <Trans>Every user will be prompted to provide a copy of their private key and passphrase by default during the setup, but they can opt out.</Trans>
+                    </span>
+                  </label>
+                </div>
+                <div className={`input radio ${this.policy === "opt-in" ? 'checked' : ''}`}>
+                  <input type="radio"
+                    value="opt-in"
+                    onChange={this.handlePolicyInputChange}
+                    name="accountRecoveryPolicy"
+                    checked={this.policy === "opt-in"}
+                    id="accountRecoveryPolicyOptIn"
+                    disabled={this.hasAllInputDisabled()}/>
+                  <label htmlFor="accountRecoveryPolicyOptIn">
+                    <span className="name"><Trans>Optional, Opt-in</Trans></span>
+                    <span className="info">
+                      <Trans>Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.</Trans>
+                    </span>
+                  </label>
+                </div>
+                <div className={`input radio ${this.policy === "disabled" ? 'checked' : ''}`}>
+                  <input type="radio"
+                    value="disabled"
+                    onChange={this.handlePolicyInputChange}
+                    name="accountRecoveryPolicy"
+                    checked={this.policy === "disabled"}
+                    id="accountRecoveryPolicyDisable"
+                    disabled={this.hasAllInputDisabled()}/>
+                  <label htmlFor="accountRecoveryPolicyDisable">
+                    <span className="name"><Trans>Disable (Default)</Trans></span>
+                    <span className="info">
+                      <Trans>Backup of the private key and passphrase will not be stored. This is the safest option.</Trans>
+                      <Trans>If users lose their private key and passphrase they will not be able to recover their account.</Trans>
+                    </span>
+                  </label>
+                </div>
+              </div>
+              <h4>
+                <span className="input toggle-switch form-element ">
+                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="organisationRecoveryKeyToggle" disabled={this.hasAllInputDisabled()} checked={this.isPolicyEnabled()} id="recovery-key-toggle-button" />
+                  <label htmlFor="recovery-key-toggle-button"><Trans>Organization Recovery Key</Trans></label>
+                </span>
+              </h4>
+              {this.isPolicyEnabled() &&
+                <>
+                  <p>
+                    <Trans>Your organization recovery key will be used to decrypt and recover the private key and passphrase of the users that are participating in the account recovery program.</Trans> <Trans>The organization private recovery key should not be stored in passbolt.</Trans> <Trans>You should keep it offline in a safe place.</Trans>
+                  </p>
+                  <div className="recovery-key-details">
+                    <table className="table-info recovery-key">
+                      <tbody>
+                        <tr className="user-ids">
+                          <td className="label"><Trans>User ids</Trans></td>
+                          {this.organizationKeyInfo?.user_ids && <td className="value">{this.formatUserIds(this.organizationKeyInfo.user_ids)}</td>}
+                          {!this.organizationKeyInfo?.user_ids && <td className="empty-value"><Trans>not available</Trans></td>}
+                          <td className="table-button">
+                            <button className="button primary medium" type="button" disabled={this.hasAllInputDisabled()} onClick={this.HandleUpdatePublicKeyClick}>
+                              {this.hasOrganisationRecoveryKey() && <Trans>Rotate Key</Trans>}
+                              {!this.hasOrganisationRecoveryKey() && <Trans>Add an Organization Recovery Key</Trans>}
+                            </button>
+                          </td>
+                        </tr>
+                        <tr className="fingerprint">
+                          <td className="label"><Trans>Fingerprint</Trans></td>
+                          {this.organizationKeyInfo?.fingerprint && <td className="value">{this.formatFingerprint(this.organizationKeyInfo.fingerprint)}</td>}
+                          {!this.organizationKeyInfo?.fingerprint && <td className="empty-value"><Trans>not available</Trans></td>}
+                        </tr>
+                        <tr className="algorithm">
+                          <td className="label"><Trans>Algorithm</Trans></td>
+                          {this.organizationKeyInfo?.algorithm && <td className="value">{this.organizationKeyInfo.algorithm}</td>}
+                          {!this.organizationKeyInfo?.algorithm && <td className="empty-value"><Trans>not available</Trans></td>}
+                        </tr>
+                        <tr className="key-length">
+                          <td className="label"><Trans>Key length</Trans></td>
+                          {this.organizationKeyInfo?.length && <td className="value">{this.organizationKeyInfo.length}</td>}
+                          {!this.organizationKeyInfo?.length && <td className="empty-value"><Trans>not available</Trans></td>}
+                        </tr>
+                        <tr className="created">
+                          <td className="label"><Trans>Created</Trans></td>
+                          {this.organizationKeyInfo?.created && <td className="value">{formatDateTimeAgo(this.organizationKeyInfo.created, this.props.t, this.props.context.locale)}</td>}
+                          {!this.organizationKeyInfo?.created && <td className="empty-value"><Trans>not available</Trans></td>}
+                        </tr>
+                        <tr className="expires">
+                          <td className="label"><Trans>Expires</Trans></td>
+                          {this.organizationKeyInfo?.expires && <td className="value">{formatDateTimeAgo(this.organizationKeyInfo.expires, this.props.t, this.props.context.locale)}</td>}
+                          {!this.organizationKeyInfo?.expires && <td className="empty-value"><Trans>not available</Trans></td>}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              }
+            </form>
+          </div>
+          {hasWarnings &&
+            <div className="warning message" id="email-notification-setting-overridden-banner">
+              {this.props.adminAccountRecoveryContext.hasPolicyChanges() &&
+                <div id="email-notification-setting-overridden-banner">
+                  <p>
+                    <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                  </p>
+                </div>
+              }
+              {!this.hasOrganisationRecoveryKey() && this.isPolicyEnabled() &&
+                <div id="email-notification-setting-overridden-banner">
+                  <p>
+                    <Trans>Warning, Don&apos;t forget to add an organization recovery key.</Trans>
+                  </p>
+                </div>
+              }
+            </div>
+          }
         </div>
-        <div className="col4 last">
-          <div className="sidebar-help">
+        <DisplayAdministrationAccountRecoveryActions/>
+        {createSafePortal(
+          <div className="sidebar-help-section">
             <h3><Trans>Need some help?</Trans></h3>
             <p><Trans>For more information about account recovery, checkout the dedicated page on the help website.</Trans></p>
             <a className="button" href="https://passbolt.com/docs/admin/authentication/account-recovery/" target="_blank" rel="noopener noreferrer">
-              <Icon name="life-ring"/>
+              <BuoySVG />
               <span><Trans>Read the documentation</Trans></span>
             </a>
-          </div>
-        </div>
+          </div>,
+          document.getElementById("administration-help-panel")
+        )}
       </div>
     );
   }

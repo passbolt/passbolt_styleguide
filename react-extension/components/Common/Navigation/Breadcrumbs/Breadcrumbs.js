@@ -26,7 +26,7 @@ class Breadcrumbs extends Component {
         <ul className="menu">
           {(this.props.items && this.props.items.map(breadcrumb => {
             index++;
-            return <li className="ellipsis" key={index}>{breadcrumb}</li>;
+            return <li key={index}>{breadcrumb}</li>;
           }))}
         </ul>
         {this.props.children}

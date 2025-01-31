@@ -1,35 +1,15 @@
-import MockPort from "../../../test/mock/MockPort";
 import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
-
-/**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
- */
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    port: new MockPort(),
-    siteSettings: {
-      canIUse: () => true
-    },
-    userSettings: {
-      getTrustedDomain: () => 'https://passbolt.local'
-    },
-    loggedInUser: {
-      id: "220ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-      role: {
-        name: "admin"
-      }
-    }
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
+import {defaultAppContext, defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 
 /**
  * Props with selected user
  */
-export function propsWithSelectedUser() {
+export function propsWithSelectedUser(props) {
   return {
+    context: defaultAppContext(),
     userWorkspaceContext: {
       onDetailsLocked: () => {},
       details: {
@@ -86,44 +66,47 @@ export function propsWithSelectedUser() {
           },
         }
       ]
-    }
+    },
+    workflowContext: defaultWorkflowContext(),
+    dialogContext: defaultDialogContext(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
+    ...props
   };
 }
 
 
 /**
- * Props with selected user
+ * Props with user Role
  */
-export function propsWithoutSelectedUser() {
-  return {
-    userWorkspaceContext: {
-      details: {
-        locked: true
-      },
-      selectedUsers: []
-    }
-  };
+export function propsUserRole() {
+  return propsWithSelectedUser({
+    context: defaultUserAppContext(),
+  });
 }
 
 /**
  * Props with logged in user as selected user
  */
 export function propsWithMyselfAsSelectedUser() {
-  return {
+  const context = defaultAppContext();
+  return propsWithSelectedUser({
+    context,
     userWorkspaceContext: {
       details: {
         locked: true
       },
       selectedUsers: [
         {
-          id: "220ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+          id: context.loggedInUser.id,
           role: {
             name: "admin"
-          }
+          },
+          active: true,
+          is_mfa_enabled: true,
         }
       ]
     }
-  };
+  });
 }
 
 /**

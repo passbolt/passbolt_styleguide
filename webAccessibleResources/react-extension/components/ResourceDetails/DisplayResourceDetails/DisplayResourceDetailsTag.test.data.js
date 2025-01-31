@@ -1,4 +1,4 @@
-import MockPort from "../../../test/mock/MockPort";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -6,9 +6,7 @@ import MockPort from "../../../test/mock/MockPort";
  * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
 export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    port: new MockPort(),
-  };
+  const defaultAppContext = defaultUserAppContext();
   return Object.assign(defaultAppContext, appContext || {});
 }
 
@@ -17,8 +15,9 @@ export function defaultAppContext(appContext) {
  * Default props
  * @returns {any}
  */
-export function defaultProps() {
+export function defaultProps(props) {
   return {
+    ...props
   };
 }
 

@@ -12,7 +12,7 @@ body {
     margin: auto;
 
     &--scrollable {
-      overflow-y: scroll;
+      overflow-y: auto;
       height: 20rem;
     }
 
@@ -109,5 +109,9 @@ body {
         }
       }
     }
+  }
+
+  a:after {
+    content: none;
   }
 }

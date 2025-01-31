@@ -1,10 +1,18 @@
 .account-recovery-profile {
 
-  .account-recovery-status {
-    background: @account-recovery-card-background;
-    padding: 1.6rem;
-    border-radius: .3rem;
+  p {
     max-width: 100rem;
+  }
+
+  .account-recovery-status {
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+    background: var(--Workspace-Workspace-background);
+    padding: 1.6rem 0;
+    border-radius: var(--Button-border-radius);
+    max-width: 100rem;
+    align-self: stretch;
 
     .account-recovery-review {
       display: flex;
@@ -13,6 +21,11 @@
       .status-wrapper {
         flex: 1 1 auto;
         margin: 0;
+        padding: 0 1.6rem;
+
+        .title {
+          font-weight: 600;
+        }
 
         .status {
           text-transform: capitalize;
@@ -26,19 +39,31 @@
         padding: 0 .5rem;
       }
       &.approved {
-        color: @hint-success-color;
+        color: var(--Progress-and-entropy-bar-success);
       }
       &.rejected {
-        color: @hint-error-color;
+        color: var(--Progress-and-entropy-bar-error);
       }
       &.pending {
-        color: @hint-warning-color;
+        color: var(--Progress-and-entropy-bar-warning);
       }
     }
 
     .name-with-tooltip {
       font-weight: bold;
       .ellipsis();
+    }
+
+    .usercard-detailed-col-2 {
+      .content-wrapper {
+        overflow: inherit;
+        .content {
+          .name, .subinfo {
+            opacity: 1;
+            overflow: inherit;
+          }
+        }
+      }
     }
   }
 }

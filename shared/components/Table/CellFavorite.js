@@ -13,7 +13,7 @@
  */
 import React, {Component, memo} from "react";
 import PropTypes from "prop-types";
-import Icon from "../Icons/Icon";
+import FavoriteSVG from "../../../img/svg/favorite.svg";
 
 /**
  * This component represents a table cell favorite
@@ -59,8 +59,8 @@ class CellFavorite extends Component {
   render() {
     const isFavorite = this.value.favorite !== null && this.value.favorite !== undefined;
     return (
-      <button type="button" className={`link no-border no-text ${isFavorite ? "fav" : "unfav"}`} onClick={this.handleClick}>
-        <Icon name="star"/>
+      <button type="button" className={`no-border no-text ${isFavorite ? "fav" : "unfav"}`} onClick={this.handleClick}>
+        <FavoriteSVG/>
       </button>
     );
   }

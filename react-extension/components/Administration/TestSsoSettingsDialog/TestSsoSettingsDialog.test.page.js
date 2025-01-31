@@ -91,7 +91,7 @@ export default class TestSsoSettingsDialogPage {
    * @returns {boolean}
    */
   isSaveButtonProcessing() {
-    return Boolean(this.select(".test-sso-settings-dialog button[type='submit'] .svg-icon.spinner"));
+    return Boolean(this.select(".test-sso-settings-dialog button[type='submit'].processing"));
   }
 
   /**

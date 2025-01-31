@@ -20,12 +20,14 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {v4 as uuidv4} from "uuid";
 import DomainUtil from "../../../lib/Domain/DomainUtil";
 import MapObject from '../../../lib/Map/MapObject';
-import DisplayAdministrationSelfRegistrationActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSelfRegistrationActions/DisplayAdministrationSelfRegistrationActions";
 import {withAdminSelfRegistration} from "../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
 import useDynamicRefs from "../../../lib/Map/DynamicRef";
 import {withDialog} from "../../../contexts/DialogContext";
 import SelfRegistrationDomainsViewModel from "../../../../shared/models/selfRegistration/SelfRegistrationDomainsViewModel";
 import debounce from "debounce-promise";
+import {createSafePortal} from "../../../../shared/utils/portals";
+import FileTextSVG from "../../../../img/svg/file_text.svg";
+import DisplayAdministrationSelfRegistrationActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSelfRegistrationActions/DisplayAdministrationSelfRegistrationActions";
 
 /**
  * This component allows to display the Self registration for the administration
@@ -50,7 +52,6 @@ class DisplaySelfRegistrationAdministration extends React.Component {
    */
 
   async componentDidMount() {
-    this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationSelfRegistrationActions);
     await this.findSettings();
   }
 
@@ -290,71 +291,78 @@ class DisplaySelfRegistrationAdministration extends React.Component {
 
     return (
       <div className="row">
-        <div className="self-registration col7 main-column">
-          <h3>
-            <span className="input toggle-switch form-element">
-              <input type="checkbox" className="toggle-switch-checkbox checkbox" name="settings-toggle"
-                onChange={this.handleToggleClicked} checked={this.state.isEnabled} disabled={this.hasAllInputDisabled()}
-                id="settings-toggle"/>
-              <label htmlFor="settings-toggle"><Trans>Self Registration</Trans></label>
-            </span>
-          </h3>
-          {this.props.adminSelfRegistrationContext.hasSettingsChanges() &&
+        <>
+          <div className="self-registration main-column">
+            <div className="main-content">
+              <h3>
+                <span className="input toggle-switch form-element">
+                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="settings-toggle"
+                    onChange={this.handleToggleClicked} checked={this.state.isEnabled} disabled={this.hasAllInputDisabled()}
+                    id="settings-toggle"/>
+                  <label htmlFor="settings-toggle"><Trans>Self Registration</Trans></label>
+                </span>
+              </h3>
+              {!this.state.isEnabled &&
+            <p className="description" id="disabled-description">
+              <Trans>User self registration is disabled.</Trans> <Trans>Only administrators can invite users to register.</Trans>
+            </p>
+              }
+              {this.state.isEnabled && <div className="self-registration-form">
+                <div id="self-registration-subtitle" className={`input ${this.hasWarnings() && "warning"} ${isSubmitted && errors.size > 0 && "error"}`}>
+                  <label id="enabled-label">
+                    <Trans>Email domain safe list</Trans>
+                  </label>
+                </div>
+                <p className="description" id="enabled-description">
+                  <Trans>All the users with an email address ending with the domain in the safe list are allowed to register on passbolt.</Trans>
+                </p>
+                {
+                  MapObject.iterators(this.allowedDomains).map(key => (
+                    <div key={key} className="input">
+                      <div className="domain-row">
+                        <input type="text" className="full-width" onChange={this.handleInputChange} id={`input-${key}`} name={key} value={this.allowedDomains.get(key)}
+                          disabled={!this.hasAllInputDisabled} ref={this.dynamicRefs.setRef(key)} placeholder={this.props.t("domain")} />
+                        <button type="button" disabled={!this.canDelete()} className="button-icon" id={`delete-${key}`} onClick={() => this.handleDeleteRow(key)}><Icon name="trash"/></button>
+                      </div>
+                      {this.hasWarnings() && this.state.warnings.get(key) &&
+                   <div id="domain-name-input-feedback" className="warning-message"><Trans>{this.state.warnings.get(key)}</Trans></div>
+                      }
+                      {(errors.get(key) && isSubmitted) &&
+                  <div className="error-message"><Trans>{errors.get(key)}</Trans></div>
+                      }
+                    </div>
+                  ))
+                }
+                <div className="domain-add">
+                  <button type="button" onClick={this.handleAddRowClick}>
+                    <Icon name="add"/>
+                    <span><Trans>Add</Trans></span>
+                  </button>
+                </div>
+              </div>
+              }
+            </div>
+            {this.props.adminSelfRegistrationContext.hasSettingsChanges() &&
             <div className="warning message" id="self-registration-setting-overridden-banner">
               <p>
                 <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
               </p>
             </div>
-          }
-          {!this.state.isEnabled &&
-            <p className="description" id="disabled-description">
-              <Trans>User self registration is disabled.</Trans> <Trans>Only administrators can invite users to register.</Trans>
-            </p>
-          }
-          {this.state.isEnabled && <>
-            <div id="self-registration-subtitle" className={`input ${this.hasWarnings() && "warning"} ${isSubmitted && errors.size > 0 && "error"}`}>
-              <label id="enabled-label">
-                <Trans>Email domain safe list</Trans>
-              </label>
-            </div>
-            <p className="description" id="enabled-description">
-              <Trans>All the users with an email address ending with the domain in the safe list are allowed to register on passbolt.</Trans>
-            </p>
-            {
-              MapObject.iterators(this.allowedDomains).map(key => (
-                <div key={key} className="input">
-                  <div className="domain-row">
-                    <input type="text" className="full-width" onChange={this.handleInputChange} id={`input-${key}`} name={key} value={this.allowedDomains.get(key)}
-                      disabled={!this.hasAllInputDisabled} ref={this.dynamicRefs.setRef(key)} placeholder={this.props.t("domain")} />
-                    <button type="button" disabled={!this.canDelete()} className="button-icon" id={`delete-${key}`} onClick={() => this.handleDeleteRow(key)}><Icon name="trash"/></button>
-                  </div>
-                  {this.hasWarnings() && this.state.warnings.get(key) &&
-                   <div id="domain-name-input-feedback" className="warning-message"><Trans>{this.state.warnings.get(key)}</Trans></div>
-                  }
-                  {(errors.get(key) && isSubmitted) &&
-                  <div className="error-message"><Trans>{errors.get(key)}</Trans></div>
-                  }
-                </div>
-              ))
             }
-            <div className="domain-add">
-              <button type="button" onClick={this.handleAddRowClick}>
-                <Icon name="add"/>
-                <span><Trans>Add</Trans></span>
-              </button>
-            </div>
-          </>}
-        </div>
-        <div className="col4 last">
-          <div className="sidebar-help">
+          </div>
+          <DisplayAdministrationSelfRegistrationActions />
+        </>
+        {createSafePortal(
+          <div className="sidebar-help-section">
             <h3><Trans>What is user self registration?</Trans></h3>
             <p><Trans>User self registration enables users with an email from a whitelisted domain to create their passbolt account without prior admin invitation.</Trans></p>
             <a className="button" href="https://passbolt.com/docs/admin/user-provisioning/self-registration/" target="_blank" rel="noopener noreferrer">
-              <Icon name="document"/>
+              <FileTextSVG />
               <span><Trans>Read the documentation</Trans></span>
             </a>
-          </div>
-        </div>
+          </div>,
+          document.getElementById("administration-help-panel")
+        )}
       </div>
     );
   }

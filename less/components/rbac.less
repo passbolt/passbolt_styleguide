@@ -9,25 +9,18 @@
   display: flex;
   justify-content: space-between;
   flex:0 100%;
+  border-top: .1rem solid var(--Workspace-Dividers);
 
   &.highlighted {
-    background: @dialog-permission-updated-background !important;
-  }
-
-  &.header {
-    background: @tableview-header-background !important;
-  }
-
-  &:nth-child(odd) {
-    background: @tableview-even-background;
+    background: var(--Grid-Grid-selected-row);
   }
 
   &:hover {
-    background: @tableview-hover-background;
+    background: var(--Grid-Grid-hover-row);
   }
 
-  &:nth-child(odd):hover {
-    background: @tableview-hover-background;
+  &.header-flex {
+    background: var(--Grid-Grid-background);
   }
 }
 
@@ -86,10 +79,6 @@
     padding-left:20px;
     width: calc(33.33% - 40px); /* subtracting margin and border widths */
   }
-}
-
-.flex-item.border-right {
-  border-right: 1px solid @default-border;
 }
 
 @media all and (max-width: 768px) {

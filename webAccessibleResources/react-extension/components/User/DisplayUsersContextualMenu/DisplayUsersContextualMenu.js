@@ -26,6 +26,14 @@ import {Trans, withTranslation} from "react-i18next";
 import {withWorkflow} from "../../../contexts/WorkflowContext";
 import HandleReviewAccountRecoveryRequestWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
+import LinkSVG from '../../../../img/svg/link.svg';
+import EmailSVG from '../../../../img/svg/email.svg';
+import KeySVG from '../../../../img/svg/key.svg';
+import EditSVG from '../../../../img/svg/edit.svg';
+import SendSVG from '../../../../img/svg/send.svg';
+import FingerprintDisabledSVG from '../../../../img/svg/fingerprint_disabled.svg';
+import DeleteSVG from '../../../../img/svg/delete.svg';
+import BuoySVG from '../../../../img/svg/buoy.svg';
 
 class DisplayUsersContextualMenu extends React.Component {
   /**
@@ -314,7 +322,8 @@ class DisplayUsersContextualMenu extends React.Component {
       <ContextualMenuWrapper
         hide={this.props.hide}
         left={this.props.left}
-        top={this.props.top}>
+        top={this.props.top}
+        className="floating">
         <li
           key="copy-user-permalink"
           className="opened">
@@ -322,7 +331,7 @@ class DisplayUsersContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <button className="link no-border" type="button"  onClick={this.handlePermalinkCopy}>
-                  <span><Trans>Copy permalink</Trans></span>
+                  <LinkSVG/><span><Trans>Copy permalink</Trans></span>
                 </button>
               </div>
             </div>
@@ -338,7 +347,7 @@ class DisplayUsersContextualMenu extends React.Component {
                   onClick={this.handlePublicKeyCopy}
                   disabled={!this.canCopyPublicKey()}
                   className="link no-border">
-                  <span><Trans>Copy public key</Trans></span>
+                  <KeySVG/><span><Trans>Copy public key</Trans></span>
                 </button>
               </div>
             </div>
@@ -351,7 +360,7 @@ class DisplayUsersContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <button className="link no-border" type="button"  onClick={this.handleUsernameCopy}>
-                  <span><Trans>Copy email address</Trans></span>
+                  <EmailSVG/><span><Trans>Copy email address</Trans></span>
                 </button>
               </div>
             </div>
@@ -362,7 +371,9 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button className="link no-border" type="button"  id="edit" onClick={this.handleEditClickEvent}><span><Trans>Edit</Trans></span></button>
+                <button className="link no-border" type="button"  id="edit" onClick={this.handleEditClickEvent}>
+                  <EditSVG/><span><Trans>Edit</Trans></span>
+                </button>
               </div>
             </div>
           </div>
@@ -376,7 +387,9 @@ class DisplayUsersContextualMenu extends React.Component {
                 <button type="button"  id="resend"
                   onClick={this.handleResendInviteClickEvent}
                   disabled={!this.canResendInviteToUser}
-                  className="link no-border"><span><Trans>Resend invite</Trans></span></button>
+                  className="link no-border">
+                  <SendSVG/><span><Trans>Resend invite</Trans></span>
+                </button>
               </div>
             </div>
           </div>
@@ -392,7 +405,7 @@ class DisplayUsersContextualMenu extends React.Component {
                   onClick={this.handleDisableMfaEvent}
                   disabled={!this.canDisableMfaForUser}
                   className="link no-border">
-                  <span><Trans>Disable MFA</Trans></span>
+                  <FingerprintDisabledSVG/><span><Trans>Disable MFA</Trans></span>
                 </button>
               </div>
             </div>
@@ -404,7 +417,9 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button"  id="delete" onClick={this.handleDeleteClickEvent} disabled={!this.canDeleteUser()} className="link no-border"><span><Trans>Delete</Trans></span></button>
+                <button type="button"  id="delete" onClick={this.handleDeleteClickEvent} disabled={!this.canDeleteUser()} className="link no-border">
+                  <DeleteSVG/><span><Trans>Delete</Trans></span>
+                </button>
               </div>
             </div>
           </div>
@@ -415,7 +430,9 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button"  id="review-recovery" onClick={this.handleReviewRecoveryRequestClickEvent} disabled={!this.hasPendingAccountRecoveryRequest()} className="link no-border"><span><Trans>Review recovery request</Trans></span></button>
+                <button type="button"  id="review-recovery" onClick={this.handleReviewRecoveryRequestClickEvent} disabled={!this.hasPendingAccountRecoveryRequest()} className="link no-border">
+                  <BuoySVG/><span><Trans>Review recovery request</Trans></span>
+                </button>
               </div>
             </div>
           </div>

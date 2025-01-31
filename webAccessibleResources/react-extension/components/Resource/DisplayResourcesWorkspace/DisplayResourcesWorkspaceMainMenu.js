@@ -15,7 +15,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
@@ -42,6 +41,16 @@ import {
   RESOURCE_TYPE_V5_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import DropdownButton from "../../Common/Dropdown/DropdownButton";
+import AddSVG from "../../../../img/svg/add.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import DropdownItem from "../../Common/Dropdown/DropdownMenuItem";
+import KeySVG from "../../../../img/svg/key.svg";
+import TotpSVG from "../../../../img/svg/totp.svg";
+import FolderPlusSVG from "../../../../img/svg/folder_plus.svg";
+import UploadFileSVG from "../../../../img/svg/upload_file.svg";
+import Dropdown from "../../Common/Dropdown/Dropdown";
+import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 
 /**
  * This component allows the current user to create a new resource
@@ -53,104 +62,23 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
     this.bindCallbacks();
-    this.createRefs();
-  }
-
-  /**
-   * Get default state
-   * @returns {*}
-   */
-  get defaultState() {
-    return {
-      createMenuOpen: false, // create menu open or not
-    };
-  }
-
-  /**
-   * Create DOM nodes or React elements references in order to be able to access them programmatically.
-   */
-  createRefs() {
-    this.createMenuRef = React.createRef();
   }
 
   /**
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
-    this.handleDocumentContextualMenuEvent = this.handleDocumentContextualMenuEvent.bind(this);
-    this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
-    this.handleCreateClickEvent = this.handleCreateClickEvent.bind(this);
     this.handleCreateMenuPasswordClickEvent = this.handleCreateMenuPasswordClickEvent.bind(this);
     this.handleMenuCreateTotpClickEvent = this.handleMenuCreateTotpClickEvent.bind(this);
     this.handleMenuCreateFolderClickEvent = this.handleMenuCreateFolderClickEvent.bind(this);
     this.handleImportClickEvent = this.handleImportClickEvent.bind(this);
   }
-
-  componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
-    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent, {capture: true});
-    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
-  }
-
-  /**
-   * Handle click events on document. Hide the component if the click occurred outside of the component.
-   * @param {ReactEvent} event The event
-   */
-  handleDocumentClickEvent(event) {
-    // Prevent closing when the user click on an element of the menu
-    if (this.createMenuRef.current.contains(event.target)) {
-      return;
-    }
-    this.handleCloseCreateMenu();
-  }
-
-  /**
-   * Handle contextual menu events on document. Hide the component if the click occurred outside of the component.
-   * @param {ReactEvent} event The event
-   */
-  handleDocumentContextualMenuEvent(event) {
-    // Prevent closing when the user right click on an element of the menu
-    if (this.createMenuRef.current.contains(event.target)) {
-      return;
-    }
-    this.handleCloseCreateMenu();
-  }
-
-  /**
-   * Handle drag start event on document. Hide the component if any.
-   */
-  handleDocumentDragStartEvent() {
-    this.handleCloseCreateMenu();
-  }
-
-  /**
-   * Handle create click event
-   */
-  handleCreateClickEvent() {
-    const canUseFolders = this.props.context.siteSettings.canIUse('folders');
-    if (canUseFolders) {
-      const createMenuOpen = !this.state.createMenuOpen;
-      this.setState({createMenuOpen});
-    } else {
-      this.openPasswordCreateDialog();
-    }
-  }
-
   /**
    * Handle password click event
    */
   handleCreateMenuPasswordClickEvent() {
     this.openPasswordCreateDialog();
-    this.handleCloseCreateMenu();
   }
 
   /**
@@ -178,7 +106,6 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    */
   handleMenuCreateTotpClickEvent() {
     this.openStandaloneTotpCreateDialog();
-    this.handleCloseCreateMenu();
   }
 
   /**
@@ -199,7 +126,6 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    */
   handleMenuCreateFolderClickEvent() {
     this.openFolderCreateDialog();
-    this.handleCloseCreateMenu();
   }
 
   /**
@@ -207,13 +133,6 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    */
   openFolderCreateDialog() {
     this.props.dialogContext.open(CreateResourceFolder, {folderParentId: this.folderIdSelected});
-  }
-
-  /**
-   * Close the create menu
-   */
-  handleCloseCreateMenu() {
-    this.setState({createMenuOpen: false});
   }
 
   /**
@@ -293,99 +212,73 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     const canUseTotp = this.props.context.siteSettings.canIUse('totpResourceTypes');
 
     return (
-      <>
-        <div className="dropdown" ref={this.createMenuRef}>
-          <button type="button" className={`create primary ${this.state.createMenuOpen ? "open" : ""}`} disabled={!this.canCreate()} onClick={this.handleCreateClickEvent}>
-            <Icon name="add"/>
-            <span><Trans>Create</Trans></span>
-          </button>
-          <ul className={`dropdown-content menu right ${this.state.createMenuOpen ? "visible" : ""}`}>
-            {!this.hasMetadataTypesSettings() &&
-              <>
-                <li id="password_action">
-                  <div className="row">
-                    <div className="main-cell-wrapper">
-                      <div className="main-cell">
-                        <Tooltip message={this.props.t("Loading metadata types settings")}>
-                          <button type="button" className="link no-border" disabled={true}>
-                            <span><Trans>New password</Trans></span>
-                          </button>
-                        </Tooltip>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                {canUseTotp &&
-                  <li id="totp_action">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <Tooltip message={this.props.t("Loading metadata types settings")}>
-                            <button type="button" className="link no-border" disabled={true}>
-                              <span><Trans>New TOTP</Trans></span>
-                            </button>
-                          </Tooltip>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                }
-              </>
-            }
-            {this.hasMetadataTypesSettings() &&
-              <>
-                {this.canCreatePassword() &&
-                  <li id="password_action">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button type="button" className="link no-border" onClick={this.handleCreateMenuPasswordClickEvent}>
-                            <span><Trans>New password</Trans></span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                }
-                {canUseTotp && this.canCreateStandaloneTotp() &&
-                  <li id="totp_action">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button type="button" className="link no-border" onClick={this.handleMenuCreateTotpClickEvent}>
-                            <span><Trans>New TOTP</Trans></span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                }
-              </>
-            }
-            {canUseFolders &&
-              <li id="folder_action">
-                <div className="row">
-                  <div className="main-cell-wrapper">
-                    <div className="main-cell">
-                      <button type="button" className="link no-border" onClick={this.handleMenuCreateFolderClickEvent}>
-                        <span><Trans>New folder</Trans></span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            }
-          </ul>
-        </div>
-        {canImport &&
-          <button
-            type="button"
-            className="import button-action-icon" onClick={this.handleImportClickEvent}>
-            <Icon name="upload" />
-            <span className="visuallyhidden"><Trans>upload</Trans></span>
-          </button>
-        }
-      </>
+      <Dropdown>
+        <DropdownButton className="create primary" disabled={!this.canCreate()}>
+          <AddSVG/>
+          <Trans>Create</Trans>
+          <CaretDownSVG/>
+        </DropdownButton>
+        <DropdownMenu className="menu-create-primary">
+          {!this.hasMetadataTypesSettings() &&
+            <>
+              <DropdownItem separator={!canUseTotp}>
+                <Tooltip message={this.props.t("Loading metadata types settings")}>
+                  <button id="password_action" type="button" className="no-border" disabled={true}>
+                    <KeySVG/>
+                    <span><Trans>Password</Trans></span>
+                  </button>
+                </Tooltip>
+              </DropdownItem>
+              {canUseTotp &&
+                <DropdownItem separator={true}>
+                  <Tooltip message={this.props.t("Loading metadata types settings")}>
+                    <button id="totp_action" type="button" className="no-border" disabled={true}>
+                      <TotpSVG/>
+                      <span><Trans>TOTP</Trans></span>
+                    </button>
+                  </Tooltip>
+                </DropdownItem>
+              }
+            </>
+          }
+          {this.hasMetadataTypesSettings() &&
+            <>
+              {this.canCreatePassword() &&
+                <DropdownItem separator={!canUseTotp}>
+                  <button id="password_action" type="button" className="no-border" onClick={this.handleCreateMenuPasswordClickEvent}>
+                    <KeySVG/>
+                    <span><Trans>Password</Trans></span>
+                  </button>
+                </DropdownItem>
+              }
+              {canUseTotp && this.canCreateStandaloneTotp() &&
+                <DropdownItem separator={true}>
+                  <button id="totp_action" type="button" className="no-border" onClick={this.handleMenuCreateTotpClickEvent}>
+                    <TotpSVG/>
+                    <span><Trans>TOTP</Trans></span>
+                  </button>
+                </DropdownItem>
+              }
+            </>
+          }
+          {canUseFolders &&
+            <DropdownItem separator={canImport}>
+              <button id="folder_action" type="button" className="no-border" onClick={this.handleMenuCreateFolderClickEvent}>
+                <FolderPlusSVG/>
+                <span><Trans>Folder</Trans></span>
+              </button>
+            </DropdownItem>
+          }
+          {canImport &&
+            <DropdownItem>
+              <button id="import_action" type="button" className="no-border" onClick={this.handleImportClickEvent}>
+                <UploadFileSVG/>
+                <span><Trans>Import resources</Trans></span>
+              </button>
+            </DropdownItem>
+          }
+        </DropdownMenu>
+      </Dropdown>
     );
   }
 }

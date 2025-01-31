@@ -2,68 +2,186 @@
  * Profile user card
  */
 .user.profile {
-  float: right;
-  margin: .8rem 1.6rem 0 0;
-
   .button {
-    text-align: left;
+    &.avatar-button {
+      text-align: left;
+      background: none;
+      box-shadow: none;
+      border-radius: 50%;
+      padding: 0;
+      min-width: inherit;
+      isolation: isolate;
 
-    /* active */
-    &:active {
-      background: @button-background;
+      .default-avatar {
+        &:hover {
+          background: transparent;
+          box-shadow: .1rem .1rem 0 0 var(--States-Hover-Highlight, rgba(255, 255, 255, 0.75)) inset, -.1rem -.1rem 0 0 var(--States-Hover-Shadow, rgba(0, 0, 0, 0.10)) inset;
+            text-decoration: none;
+          border: none;
+          img, svg  {
+              z-index:-1;
+              position: relative;
+          }
+        }
+      }
+
+      /* focus visible (display with keyboard navigation) */
+      &:focus-visible {
+        .default-avatar {
+          background: transparent;
+          box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
+          color: var(--Text-and-icons-Main-text);
+          text-decoration: none;
+          border: none;
+
+          img, svg  {
+            z-index:-1;
+            position: relative;
+          }
+        }
+      }
     }
 
     &.open {
-      background: @dropdown-profile-background;
+      .avatar {
+        svg.attention-required {
+          display: none;
+        }
+
+        .default-avatar {
+          box-shadow: none
+        }
+      }
+      +.dropdown-content {
+        top: calc(100% - 3.2rem);
+        min-width: 100%;
+        width: 25.1rem;
+        background: var(--Workspace-Workspace-button-background);
+        border-radius: var(--Menu-radius);
+        border: none;
+        z-index: 10;
+        padding: 2.4rem 0 .4rem 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        align-self: stretch;
+        box-shadow:
+        inset 0 0 0 .1rem var(--Action-button-Action-button-border),
+        var(--Menu-drop-shadow-Menu-drop-shadow-X) var(--Menu-drop-shadow-Menu-drop-shadow-Y) var(--Menu-drop-shadow-Menu-drop-shadow-blur) 0 var(--Menu-drop-shadow-Menu-drop-shadow);
+
+        a>span {
+          display: block;
+          .ellipsis();
+        }
+
+        .avatar {
+
+          img,
+          svg {
+            width: 8rem;
+            height: 8rem;
+          }
+        }
+
+        .informations {
+          gap: 1.6rem;
+          align-self: stretch;
+          padding: .8rem 1.6rem;
+
+          .name,
+          .email {
+            color: var(--Text-and-icons-Main-text);
+            overflow: hidden;
+            text-align: center;
+            text-overflow: ellipsis;
+            line-height: normal;
+            font-style: normal;
+            text-overflow: ellipsis;
+            justify-content: center;
+            flex-direction: column;
+            display: flex;
+          }
+
+          .name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: .8rem;
+            height: 1.9rem;
+          }
+
+          .email {
+            font-size: 1.4rem;
+            font-weight: 400;
+          }
+        }
+
+        .manage-account {
+          display: flex;
+          padding: .8rem 1.6rem 1.5rem 1.6rem;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 1.6rem;
+          align-self: stretch;
+          border-bottom: .1rem solid var(--Workspace-Dividers);
+          margin-bottom: 0.3rem;
+
+          svg.attention-required {
+              position: absolute;
+              top: -1rem;
+              right: -1rem;
+              width: 2rem;
+              height: 2rem;
+              --icon-exclamation-color: var(--Alert-Alert-icon);
+              --icon-exclamation-background-color: var(--Alert-Alert-background);
+              --icon-exclamation-border-color: var(--Alert-Alert-background);
+          }
+        }
+
+        .user-profile-close {
+          position: absolute;
+          right: 0.4rem;
+          top: 0.4rem;
+          min-width: fit-content;
+          padding: 0.4rem;
+        }
+
+        .sign-out {
+          display: flex;
+          padding: .8rem 1.6rem;
+          justify-content: center;
+          align-items: center;
+          gap: .8rem;
+          align-self: stretch;
+        }
+      }
+    }
+
+    .avatar {
+      .default-avatar {
+        img,
+        svg {
+          width: 3.2rem;
+          height: 3.2rem;
+          border-radius: 50%;
+        }
+      }
+
+      svg.attention-required {
+        position: absolute;
+        width: 1.6rem;
+        height: 1.6rem;
+        left: 1.9rem;
+        top: -.2rem;
+        --icon-exclamation-color: var(--Alert-Alert-icon);
+        --icon-exclamation-background-color: var(--Alert-Alert-background);
+        --icon-exclamation-border-color: var(--Alert-Alert-background);
+      }
     }
   }
 
   .center-cell {
     width: 14.5rem;
     margin-right: .5rem;
-  }
-
-  .more a {
-    border: 0;
-  }
-
-  .dropdown-content {
-    top: calc(100% - .3rem);
-    min-width: 100%;
-    width: 100%;
-    background: @dropdown-profile-background;
-    border-radius: 0 0 0.4rem 0.4rem;
-
-    a > span {
-      display: block;
-      .ellipsis();
-    }
-
-    .svg-icon.exclamation {
-      --icon-exclamation-background-color: @icon-exclamation-required-color;
-      margin-left: 0.8rem;
-    }
-
-    .chips {
-      margin-left: 0.8rem;
-      padding-bottom: .1rem;
-    }
-  }
-}
-
-/* hide left column when there is no space */
-@media all and (max-width: 1024px) {
-  .user.profile {
-    display: block;
-    width: auto;
-    padding: .8rem;
-
-    .center-cell {
-      display: none;
-    }
-
-    .right-cell {
-      display: none;
-    }
   }
 }

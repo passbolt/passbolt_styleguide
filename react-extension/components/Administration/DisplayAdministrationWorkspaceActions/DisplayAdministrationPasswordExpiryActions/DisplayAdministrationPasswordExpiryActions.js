@@ -15,7 +15,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../../contexts/DialogContext";
 import {withActionFeedback} from '../../../../contexts/ActionFeedbackContext';
 import NotifyError from "../../../Common/Error/NotifyError/NotifyError";
@@ -95,17 +94,10 @@ class DisplayAdministrationPasswordExpiryActions extends React.Component {
   render() {
     const isDisabled = !this.isActionEnabled;
     return (
-      <div className="col2_3 actions-wrapper">
-        <div className="actions">
-          <ul>
-            <li>
-              <button type="button" disabled={isDisabled} id="save-settings" onClick={this.handleSave}>
-                <Icon name="save"/>
-                <span><Trans>Save settings</Trans></span>
-              </button>
-            </li>
-          </ul>
-        </div>
+      <div className="actions-wrapper">
+        <button type="button" className="button primary" disabled={isDisabled} id="save-settings" onClick={this.handleSave}>
+          <span><Trans>Save</Trans></span>
+        </button>
       </div>
     );
   }

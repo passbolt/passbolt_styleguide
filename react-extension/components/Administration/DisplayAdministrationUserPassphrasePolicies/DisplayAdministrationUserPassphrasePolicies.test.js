@@ -12,6 +12,7 @@
  * @since         4.3.0
  */
 
+import "../../../../../test/mocks/mockPortal";
 import each from 'jest-each';
 import {defaultAppContext} from '../../../contexts/ApiAppContext.test.data';
 import {defaultProps} from './DisplayAdministrationUserPassphrasePolicies.test.data';

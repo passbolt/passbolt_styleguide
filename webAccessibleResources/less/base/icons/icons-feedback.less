@@ -1,25 +1,209 @@
 .icon-feedback {
+  height: 12.8rem;
+  width: 12.8rem;
+
   .success {
-    background: url('@{images}/controls/success.svg') no-repeat;
-    height: 11rem;
-    width: 11rem;
+    stroke: var(--Palette-Contrast-4);
+
+    #success-circle {
+      animation: success-circle_s_do 1000ms linear 1 normal forwards
+    }
+
+    @keyframes success-circle_s_do {
+      0% {
+        stroke-dashoffset: 392.7;
+        animation-timing-function: cubic-bezier(1, 0, 0, 1)
+      }
+      70% {
+        stroke-dashoffset: 785.4
+      }
+      100% {
+        stroke-dashoffset: 785.4
+      }
+    }
+
+    #success-check {
+      animation: success-check_s_do 1000ms linear 1 normal forwards
+    }
+
+    @keyframes success-check_s_do {
+      0% {
+        stroke-dashoffset: 65.24
+      }
+      50% {
+        stroke-dashoffset: 65.24;
+        animation-timing-function: cubic-bezier(1, 0, 0, 1)
+      }
+      100% {
+        stroke-dashoffset: 130.48
+      }
+    }
   }
 
   .error {
-    background: url('@{images}/controls/fail.svg') no-repeat;
-    height: 11rem;
-    width: 11rem;
+    stroke: var(--Palette-Contrast-3);
+
+    #error-circle {
+      animation: error-circle_s_do 1000ms linear 1 normal forwards
+    }
+
+    @keyframes error-circle_s_do {
+      0% {
+        stroke-dashoffset: 392.7;
+        animation-timing-function: cubic-bezier(1, 0, 0, 1)
+      }
+      70% {
+        stroke-dashoffset: 785.4
+      }
+      100% {
+        stroke-dashoffset: 785.4
+      }
+    }
+
+    #error-stroke-1 {
+      animation: error-stroke-1_s_do 1000ms linear 1 normal forwards
+    }
+
+    @keyframes error-stroke-1_s_do {
+      0% {
+        stroke-dashoffset: 37.96
+      }
+      50% {
+        stroke-dashoffset: 37.96;
+        animation-timing-function: cubic-bezier(1, 0, 0, 1)
+      }
+      80% {
+        stroke-dashoffset: 75.92
+      }
+      100% {
+        stroke-dashoffset: 75.92
+      }
+    }
+
+    #error-stroke-2 {
+      animation: error-stroke-2_s_do 1000ms linear 1 normal forwards
+    }
+
+    @keyframes error-stroke-2_s_do {
+      0% {
+        stroke-dashoffset: 37.96
+      }
+      70% {
+        stroke-dashoffset: 37.96;
+        animation-timing-function: cubic-bezier(1, 0, 0, 1)
+      }
+      100% {
+        stroke-dashoffset: 75.92
+      }
+    }
+
   }
 
   .warning {
-    background: url('@{images}/controls/warning.svg') no-repeat;
-    height: 11rem;
-    width: 11rem;
+    stroke: var(--Alert-Alert-background);
+
+    #warning-dot {
+      animation: warning-dot_s_do 1000ms linear 1 normal forwards
+    }
+
+    @keyframes warning-dot_s_do {
+      0% {
+        stroke-dashoffset: 23.42
+      }
+      50% {
+        stroke-dashoffset: 23.42;
+        animation-timing-function: cubic-bezier(1, 0, 0, 1)
+      }
+      100% {
+        stroke-dashoffset: 0
+      }
+    }
+
+    #warning-bar {
+      animation: warning-bar_s_do 1000ms linear 1 normal forwards
+    }
+
+    @keyframes warning-bar_s_do {
+      0% {
+        stroke-dashoffset: 0.09
+      }
+      90% {
+        stroke-dashoffset: 0.09
+      }
+      100% {
+        stroke-dashoffset: 0.18
+      }
+    }
+
+    #warning-triangle {
+      animation: warning-triangle_s_do 1000ms linear 1 normal forwards
+    }
+
+    @keyframes warning-triangle_s_do {
+      0% {
+        stroke-dashoffset: 364.98;
+        animation-timing-function: cubic-bezier(1, 0, 0, 1)
+      }
+      70% {
+        stroke-dashoffset: 729.96
+      }
+      100% {
+        stroke-dashoffset: 729.96
+      }
+    }
   }
 
   .attention {
-    background: url('@{images}/controls/attention.svg') no-repeat;
-    height: 11rem;
-    width: 11rem;
+    stroke: var(--Palette-Contrast-3);
+
+    #attention-circle {
+      animation: attention-circle_s_do 1000ms linear 1 normal forwards
+    }
+
+    @keyframes attention-circle_s_do {
+      0% {
+        stroke-dashoffset: 392.7;
+        animation-timing-function: cubic-bezier(1, 0, 0, 1)
+      }
+      70% {
+        stroke-dashoffset: 785.4
+      }
+      100% {
+        stroke-dashoffset: 785.4
+      }
+    }
+
+    #attention-dot {
+      animation: attention-dot_s_do 1000ms linear 1 normal forwards
+    }
+
+    @keyframes attention-dot_s_do {
+      0% {
+        stroke-dashoffset: 23.42
+      }
+      50% {
+        stroke-dashoffset: 23.42;
+        animation-timing-function: cubic-bezier(1, 0, 0, 1)
+      }
+      100% {
+        stroke-dashoffset: 46.84
+      }
+    }
+
+    #attention-bar {
+      animation: attention-bar_s_do 1000ms linear 1 normal forwards
+    }
+
+    @keyframes attention-bar_s_do {
+      0% {
+        stroke-dashoffset: 0.09
+      }
+      90% {
+        stroke-dashoffset: 0.09
+      }
+      100% {
+        stroke-dashoffset: 0.18
+      }
+    }
   }
 }

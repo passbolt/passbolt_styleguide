@@ -1,27 +1,5 @@
-import UserSettings from "../../../../shared/lib/Settings/UserSettings";
-import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
-import MockPort from "../../../test/mock/MockPort";
 import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
-import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
-
-/**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
- */
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    userSettings: new UserSettings(userSettingsFixture),
-    port: new MockPort(),
-    setContext: function(newContext) {
-      // In this scope this reference the object context.
-      Object.assign(this, newContext);
-    },
-    siteSettings: new SiteSettings(siteSettingsFixture)
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 
 /**
@@ -30,6 +8,7 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
+    context: defaultUserAppContext(),
     resourceWorkspaceContext: {
       details: {
         resource: {

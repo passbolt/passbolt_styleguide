@@ -1,17 +1,4 @@
-import UserSettings from "../../../../shared/lib/Settings/UserSettings";
-import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
-
-/**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings)}
- */
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    userSettings: new UserSettings(userSettingsFixture),
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props
@@ -19,6 +6,7 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   const props = {
+    context: defaultUserAppContext(),
     userSettingsContext: {
       onProvidePassphraseRequested: jest.fn(),
     },

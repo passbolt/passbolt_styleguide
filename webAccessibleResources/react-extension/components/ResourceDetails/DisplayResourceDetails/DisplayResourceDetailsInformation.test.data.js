@@ -18,10 +18,6 @@ import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspa
 import {resourceWithTotpDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
-import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  resourceTypesCollectionDto
-} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Default component props with folder having owner permission
@@ -49,7 +45,6 @@ export function defaultProps(data = {}) {
         }),
       }
     }),
-    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     ...data
   };
 }

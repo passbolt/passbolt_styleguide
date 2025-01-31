@@ -22,6 +22,8 @@ import ScanTotpCode from "../TotpSetup/ScanTotpCode/ScanTotpCode";
 import TotpGetStarted from "../TotpSetup/TotpGetStarted/TotpGetStarted";
 import DisplayMfaProviderConfiguration from "../DisplayMfaProviderConfiguration/DisplayMfaProviderConfiguration";
 import YubikeySetup from "../YubikeySetup/YubikeySetup";
+import DuoGetStarted from "../DuoSetup/DuoGetStarted";
+import {withRouter} from "react-router-dom";
 
 /**
  * The component orchestrates the mfa settings flow.
@@ -32,7 +34,18 @@ class OrchestrateMfaSettings extends Component {
    */
   async componentDidMount() {
     await this.props.mfaContext.findMfaSettings();
-    await this.props.mfaContext.goToProviderList();
+    await this.initInitialView();
+  }
+
+  async initInitialView() {
+    const provider = this.props.match.params.provider;
+
+    if (provider) {
+      this.props.mfaContext.setProvider(provider);
+      this.props.mfaContext.navigate(MfaSettingsWorkflowStates.VIEWCONFIGURATION);
+    } else {
+      await this.props.mfaContext.goToProviderList();
+    }
   }
   /**
    * Render the component
@@ -47,6 +60,8 @@ class OrchestrateMfaSettings extends Component {
         return <ScanTotpCode />;
       case MfaSettingsWorkflowStates.SETUPYUBIKEY:
         return <YubikeySetup />;
+      case MfaSettingsWorkflowStates.SETUPDUO:
+        return <DuoGetStarted />;
       case MfaSettingsWorkflowStates.VIEWCONFIGURATION:
         return <DisplayMfaProviderConfiguration />;
     }
@@ -55,7 +70,8 @@ class OrchestrateMfaSettings extends Component {
 OrchestrateMfaSettings.propTypes = {
   t: PropTypes.func, // The translation function
   context: PropTypes.any.isRequired, // The application context
+  match: PropTypes.object, // The router match helper
   mfaContext: PropTypes.any.isRequired, // The mfa content
 };
-export default withAppContext(withMfa(withTranslation("common")(OrchestrateMfaSettings)));
+export default withAppContext(withMfa(withRouter(withTranslation("common")(OrchestrateMfaSettings))));
 

@@ -1,12 +1,14 @@
 .accordion {
     .accordion-header {
-        .clearfix();
-
         a {
             display:block;
         }
         a:hover, button:hover {
-            color:@text-focus-color;
+            color: var(--Palette-Contrast-1);
+
+            &:disabled, &.disabled {
+              color: var(--Text-and-icons-Main-text);
+            }
         }
     }
 
@@ -21,8 +23,13 @@
     }
 
     .accordion-content {
-        .clearfix();
+        a:hover, button:hover {
+          color: var(--Palette-Contrast-1);
 
+          &:disabled, &.disabled {
+            color: var(--Text-and-icons-Main-text);
+          }
+        }
         .processing-wrapper {
             display: flex;
             align-items: center;
@@ -80,11 +87,9 @@
             border:0;
 
             .svg-icon {
-              margin-right: .8rem;
               &.exclamation {
                 position: relative;
                 right: inherit;
-                margin-left: .8rem;
                 padding-right: .3rem;
               }
             }

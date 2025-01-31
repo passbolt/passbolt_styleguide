@@ -12,17 +12,19 @@
     cursor: pointer;
     width: 3.2rem;
     height: 1.6rem;
-    background: @input-toggle-background;
+    background: var(--Toggle-Toggle-off-background);
     border-radius: 3.2rem;
     box-sizing: border-box;
     margin: 0;
 
     & + label {
       margin: 0 0 0 1.2rem;
+      color: var(--Text-and-icons-Main-text);
+      font-size: 1.5rem;
+      line-height: normal;
       display: inline-block;
       cursor: pointer;
       padding: 0;
-      line-height: 2rem;
       .ellipsis();
 
       .error-message, .warning-message {
@@ -35,48 +37,38 @@
     }
 
     // Toggle hover
-    &:hover {
-      box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black);
+    &:hover, &:hover:before {
+      box-shadow: inset .1rem .1rem 0 0 var(--States-Hover-Highlight), inset -.1rem -.1rem 0 0 var(--States-Hover-Shadow);
     }
 
-    // Toggle dot hover
-    &:hover:before {
-      box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black);
-    }
-
-    // Toggle focus
-    &:focus, &:focus-visible {
-      box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @input-toggle-focus-border;
-      outline: @outline-default-border;
-
-      + label {
-        background: @input-focus-background;
-        color: @input-focus-text-color;
-      }
+    &:focus-visible {
+      box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
+      background-color: var(--States-Focus);
+      text-decoration: none;
+      border: none;
     }
 
     // Toggle pressed
     &:active {
-      box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
-
-      + label {
-        background: @label-active-background;
-        color: @label-active-text-color;
-      }
+      box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1px var(--Action-button-Action-button-border);
     }
 
     // Toggle dot pressed
     &:active:before {
-      box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
+      box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1px var(--Action-button-Action-button-border);
       margin: 0 0 0 0.7rem;
       padding: 0 0 0 0.3rem;
     }
 
     // Toggle checked
     &:checked {
-      background: @input-toggle-checked-background;
-      &:focus {
-        background: @input-toggle-focus-background;
+      background: var(--Toggle-Toggle-on-background);
+      &:focus-visible {
+        box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
+        background-color: var(--States-Focus);
+        text-decoration: none;
+        border: none;
+        outline: none;
       }
     }
 
@@ -116,7 +108,7 @@
       width: 1.2rem;
       height: 1.2rem;
       border-radius: 1rem;
-      background: @input-toggle-dot-background;
+      background: var(--Toggle-Toggle-knob);
       transform: translateX(-65%);
       // Dot animation
       transition: all .4s ease, padding .3s ease, margin .3s ease;
@@ -126,9 +118,9 @@
 
 .togglelist-alt {
   margin-top: 1.6rem;
-  border: 1px solid @default-border;
+  border: 1px solid var(--Checkbox-Checkbox-border);
   border-radius: 3px;
-  background-color: @input-radio-list-background;
+  background-color: var(--Workspace-Panels-background);
   padding: 1.6rem;
 
   .toggle-input {
@@ -148,14 +140,14 @@
         margin: 0;
         display:block;
         font-size: 1.6rem;
-        background-color: @input-radio-list-background;
+        background-color: var(--Workspace-Panels-background);
       }
       .info-input {
         display: flex;
         margin: 0;
         font-weight: normal;
         font-size: 1.3rem;
-        background-color: @input-radio-list-background;
+        background-color: var(--Workspace-Panels-background);
 
         input {
           margin-left: 4px;
@@ -174,7 +166,7 @@
         font-size: 1.3rem;
         display:block;
         white-space: pre-wrap;
-        background-color: @input-radio-list-background;
+        background-color: var(--Workspace-Panels-background);
 
         span {
           font-weight: bold;

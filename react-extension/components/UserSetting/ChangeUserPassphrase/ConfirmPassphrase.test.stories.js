@@ -14,23 +14,44 @@
 
 import ConfirmPassphrase from "./ConfirmPassphrase";
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
 import {defaultProps} from "./ConfirmPassphrase.test.data";
+import ConfirmPassphraseHelp from "./ConfirmPassphraseHelp";
 
 export default {
   title: 'Components/UserSetting/ConfirmPassphase',
-  component: ConfirmPassphrase
-};
-
-const Template = args =>
-  <MemoryRouter initialEntries={['/']}>
-    <div className="page">
-      <div className="panel">
-        <Route component={routerProps => <ConfirmPassphrase {...args} {...routerProps}/>}></Route>
+  component: ConfirmPassphrase,
+  decorators: [(Story, {args}) =>
+    <div id="container" className="page settings">
+      <div id="app" className="app" tabIndex="1000" style={{margin: "-1rem"}}>
+        <div className="panel main">
+          <div className="panel left">
+            <div className="sidebar-content">
+            </div>
+          </div>
+          <div className="panel middle">
+            <div className="header">
+            </div>
+            <div className="middle-right">
+              <div className="breadcrumbs-and-grid">
+                <div className="top-bar">
+                </div>
+                <div className="main-page">
+                  <Story {...args}/>
+                </div>
+              </div>
+              <div className="help-panel">
+                <div className="sidebar-help">
+                  <ConfirmPassphraseHelp {...args}/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </MemoryRouter>;
+  ],
+};
 
-export const Initial = Template.bind({});
-Initial.args = defaultProps();
-
+export const Initial = {
+  args: defaultProps()
+};

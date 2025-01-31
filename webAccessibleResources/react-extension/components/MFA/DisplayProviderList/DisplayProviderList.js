@@ -127,7 +127,7 @@ class DisplayProviderList extends Component {
           this.props.mfaContext.navigate(MfaSettingsWorkflowStates.TOTPOVERVIEW);
           break;
         case Providers.DUO:
-          this.props.navigationContext.onGoToUserSettingsDuoSetupRequested();
+          this.props.mfaContext.navigate(MfaSettingsWorkflowStates.SETUPDUO);
           break;
         case Providers.YUBIKEY:
           this.props.mfaContext.navigate(MfaSettingsWorkflowStates.SETUPYUBIKEY);

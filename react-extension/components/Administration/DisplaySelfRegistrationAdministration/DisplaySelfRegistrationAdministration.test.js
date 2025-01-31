@@ -12,6 +12,7 @@
  * @since         3.8.3
  */
 
+import "../../../../../test/mocks/mockPortal.js";
 import {enableFetchMocks} from 'jest-fetch-mock';
 import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
 import {defaultAppContext} from '../../../contexts/ApiAppContext.test.data';

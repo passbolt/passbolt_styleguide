@@ -31,10 +31,10 @@ export default class DisplayUsersPage {
    * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
+        <AppContext.Provider value={props.context}>
           <UserWorkspaceContext.Provider value={props.userWorkspaceContext}>
             <Router>
               <DisplayUsers {...props}/>
@@ -74,10 +74,10 @@ export default class DisplayUsersPage {
     const element = this._page.container.querySelectorAll('table tbody tr')[index - 1];
     return {
       get username() {
-        return element.querySelector('.username div').textContent;
+        return element.querySelector('.cell-username div').textContent;
       },
       get attentionRequired() {
-        return Boolean(element.querySelector('.attention-required .exclamation'));
+        return Boolean(element.querySelector('.attention-required'));
       },
       async select() {
         const leftClick = {button: 0};
@@ -90,18 +90,8 @@ export default class DisplayUsersPage {
   /**
    * Sort the users by their full name
    */
-  async sortByAttentionRequired() {
-    const element = this._page.container.querySelectorAll('thead th button')[0];
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
-  }
-
-  /**
-   * Sort the users by their full name
-   */
   async sortByFullname() {
-    const element = this._page.container.querySelectorAll('thead th button')[1];
+    const element = this._page.container.querySelectorAll('thead th button')[0];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -111,7 +101,7 @@ export default class DisplayUsersPage {
    * Sort the users by their username
    */
   async sortByUsername() {
-    const element = this._page.container.querySelectorAll('thead th button')[2];
+    const element = this._page.container.querySelectorAll('thead th button')[1];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -121,7 +111,7 @@ export default class DisplayUsersPage {
    * Sort the users by role
    */
   async sortByRole() {
-    const element = this._page.container.querySelectorAll('thead th button')[3];
+    const element = this._page.container.querySelectorAll('thead th button')[2];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -131,7 +121,7 @@ export default class DisplayUsersPage {
    * Sort the users by their last date of modification
    */
   async sortBySuspended() {
-    const element = this._page.container.querySelectorAll('thead th button')[4];
+    const element = this._page.container.querySelectorAll('thead th button')[3];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -141,7 +131,7 @@ export default class DisplayUsersPage {
    * Sort the users by their last date of modification
    */
   async sortByModified() {
-    const element = this._page.container.querySelectorAll('thead th button')[5];
+    const element = this._page.container.querySelectorAll('thead th button')[4];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -151,7 +141,7 @@ export default class DisplayUsersPage {
    * Sort the users by their last date of login
    */
   async sortByLastLoggedIn() {
-    const element = this._page.container.querySelectorAll('thead th button')[6];
+    const element = this._page.container.querySelectorAll('thead th button')[5];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -161,7 +151,7 @@ export default class DisplayUsersPage {
    * Sort the users by their mfa enable status
    */
   async sortByMFAEnabled() {
-    const element = this._page.container.querySelectorAll('thead th button')[7];
+    const element = this._page.container.querySelectorAll('thead th button')[6];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -171,7 +161,7 @@ export default class DisplayUsersPage {
    * Sort the users by their account recovery status
    */
   async sortByAccountRecoveryStatus() {
-    const element = this._page.container.querySelectorAll('thead th button')[8];
+    const element = this._page.container.querySelectorAll('thead th button')[7];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});

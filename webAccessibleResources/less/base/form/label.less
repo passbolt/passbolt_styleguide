@@ -1,11 +1,12 @@
 /* input label */
 label {
     font-weight: 700;
-    font-size: 1.5rem; /* 15px */
-    line-height: 2rem; /* 20px */
+    font-size: 1.5rem;
+    line-height: normal;
     display: block;
     width: max-content;
     max-width: 100%;
+    color: var(--Text-and-icons-Main-text);
 
     & > * {
         margin-left: .4rem;
@@ -13,17 +14,12 @@ label {
 
     .svg-icon {
         &.exclamation {
-            --icon-exclamation-background-color: @icon-exclamation-required-color;
+          --icon-exclamation-background-color: var(--Palette-Contrast-3);
         }
         svg {
             height: 1.2rem;
             width: 1.2rem;
         }
-    }
-
-    &:active {
-      background: @label-active-background;
-      color: @label-active-text-color;
     }
 }
 
@@ -36,8 +32,8 @@ label {
 .required {
   > label:after, .label-required-inline > label:after {
     content: "\002A"; /* unicode character * */
-    color: @text-error-color;
-    font-weight: bold;
+    color: var(--Palette-Contrast-3);
+    font-weight: 700;
     margin-left: .4rem;
   }
   .label-required-inline {
@@ -49,17 +45,17 @@ label {
 }
 
 .input.error label {
-    color: @text-error-color;
-    & > .info {
-      color: @default-text-color;
-    }
+  color: var(--Palette-Contrast-3);
+  & > .info {
+    color: var(--Text-and-icons-Main-text);
+  }
 }
 
 .input.warning label {
-    color: @text-warning-color;
-    & > .info {
-      color: @default-text-color;
-    }
+    color: var(--Progress-and-entropy-bar-warning);
+  & > .info {
+    color: var(--Text-and-icons-Main-text);
+  }
 }
 
 .input.text, .input-password-wrapper,

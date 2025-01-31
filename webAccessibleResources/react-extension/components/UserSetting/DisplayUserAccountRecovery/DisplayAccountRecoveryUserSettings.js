@@ -19,7 +19,6 @@ import {Trans, withTranslation} from "react-i18next";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import ManageAccountRecoveryUserSettings from "../../AccountRecovery/ManageAccountRecoveryUserSettings/ManageAccountRecoveryUserSettings";
 import HandleAccountRecoveryUserSettingsRoute from "../../AccountRecovery/HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute";
@@ -171,77 +170,67 @@ class DisplayAccountRecoveryUserSettings extends Component {
         {this.props.context.loggedInUser && this.props.accountRecoveryContext.getOrganizationPolicy() &&
           <Route exact path="/app/settings/account-recovery/edit" component={HandleAccountRecoveryUserSettingsRoute}/>
         }
-        <div className="grid grid-responsive-12">
-          <div className="row">
-            <div className="col8 account-recovery-profile main-column">
-              {this.isReady && this.isAccountRecoveryFeatureEnabled &&
-                <>
-                  <h3><Trans>Account Recovery</Trans></h3>
-                  <p>
-                    <Trans>It is possible to share securely your recovery kit with the administrator.</Trans>&nbsp;
-                    <Trans>They will be able to help you in case you lose it.</Trans>&nbsp;
-                    <Trans>Otherwise, you may lose access to your data.</Trans>
-                  </p>
-                  <div className="account-recovery-status">
-                    <div className="account-recovery-review">
-                      <p className="status-wrapper">
-                        <Trans>Status</Trans>:
-                        <span className={`account-recovery-hints ${this.props.accountRecoveryContext.status}`}/>
-                        <span className="status">{this.props.accountRecoveryContext.status}</span>
-                      </p>
-                      {this.hasNotApprovedStatus() && !this.isStatusApproved() &&
-                      <button type='button' className="button primary" onClick={this.handleReviewClick}><Trans>Review</Trans></button>
-                      }
-                    </div>
-                    {this.hasNotApprovedStatus() &&
-                    <ul>
-                      <li className="usercard-detailed-col-2">
-                        <div className="content-wrapper">
-                          <div className="content">
-                            <div>
-                              <Tooltip message={this.formatFingerprint(this.requestorFingerprint)} direction="bottom">
-                                <span className="name-with-tooltip">{this.requestorName}</span>
-                              </Tooltip>
-                              &nbsp;
-                              <span className="name"><Trans>requested this operation</Trans></span>
-                            </div>
-                            <div className="subinfo light">
-                              <span className="dateTimeAgo">{formatDateTimeAgo(this.requestedDate, this.props.t, this.props.context.locale)}</span>
-                              <span className="chips-group">
-                                <span className={`chips user-status ${requestorStatus}`}>{this.props.t(requestorStatus)}</span>
-                                <span className={`chips user-role ${this.requestorRole}`}>{this.requestorRole}</span>
-                              </span>
-                            </div>
+        <div className="main-column account-recovery-profile">
+          <div className="main-content">
+            {this.isReady && this.isAccountRecoveryFeatureEnabled &&
+              <>
+                <h3><Trans>Account Recovery</Trans></h3>
+                <p>
+                  <Trans>It is possible to share securely your recovery kit with the administrator.</Trans>&nbsp;
+                  <Trans>They will be able to help you in case you lose it.</Trans>&nbsp;
+                  <Trans>Otherwise, you may lose access to your data.</Trans>
+                </p>
+                <div className="account-recovery-status">
+                  <div className="account-recovery-review">
+                    <p className="status-wrapper">
+                      <span className="title"><Trans>Status</Trans></span>:
+                      <span className={`account-recovery-hints ${this.props.accountRecoveryContext.status}`}/>
+                      <span className="status">{this.props.accountRecoveryContext.status}</span>
+                    </p>
+                  </div>
+                  {this.hasNotApprovedStatus() &&
+                  <ul>
+                    <li className="usercard-detailed-col-2">
+                      <div className="content-wrapper">
+                        <div className="content">
+                          <div>
+                            <Tooltip message={this.formatFingerprint(this.requestorFingerprint)} direction="bottom">
+                              <span className="name-with-tooltip">{this.requestorName}</span>
+                            </Tooltip>
+                            &nbsp;
+                            <span className="name"><Trans>requested this operation</Trans></span>
+                          </div>
+                          <div className="subinfo light">
+                            <span className="dateTimeAgo">{formatDateTimeAgo(this.requestedDate, this.props.t, this.props.context.locale)}</span>
+                            <span className="chips-group">
+                              <span className={`chips user-status ${requestorStatus}`}>{this.props.t(requestorStatus)}</span>
+                              <span className={`chips user-role ${this.requestorRole}`}>{this.requestorRole}</span>
+                            </span>
                           </div>
                         </div>
-                        <UserAvatar user={this.requestor} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
-                      </li>
-                    </ul>
-                    }
-                  </div>
-                </>
-              }
-              {this.isReady && !this.isAccountRecoveryFeatureEnabled &&
-                <>
-                  <h3><Trans>Account Recovery</Trans></h3>
-                  <h4 className="no-border"><Trans>Sorry the account recovery feature is not enabled for this organization.</Trans></h4>
-                  <p>
-                    <Trans>Please contact your administrator to enable the account recovery feature.</Trans>
-                  </p>
-                </>
-              }
-            </div>
-            <div className="col4 last">
-              <div className="sidebar-help">
-                <h3><Trans>Need some help?</Trans></h3>
-                <p><Trans>For more information about account recovery, checkout the dedicated page on the help website.</Trans></p>
-                <a className="button" href="https://help.passbolt.com/faq/start/account-recovery/subscribe" target="_blank" rel="noopener noreferrer">
-                  <Icon name="life-ring"/>
-                  <span><Trans>Read the documentation</Trans></span>
-                </a>
-              </div>
-            </div>
+                      </div>
+                      <UserAvatar user={this.requestor} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+                    </li>
+                  </ul>
+                  }
+                </div>
+              </>
+            }
+            {this.isReady && !this.isAccountRecoveryFeatureEnabled &&
+              <>
+                <h3><Trans>Account Recovery</Trans></h3>
+                <h4 className="no-border"><Trans>Sorry the account recovery feature is not enabled for this organization.</Trans></h4>
+                <p>
+                  <Trans>Please contact your administrator to enable the account recovery feature.</Trans>
+                </p>
+              </>
+            }
           </div>
+        </div>
+        <div className="actions-wrapper">
+          {this.hasNotApprovedStatus() && !this.isStatusApproved() &&
+            <button type='button' className="button primary" onClick={this.handleReviewClick}><Trans>Review</Trans></button>
+          }
         </div>
       </>
     );

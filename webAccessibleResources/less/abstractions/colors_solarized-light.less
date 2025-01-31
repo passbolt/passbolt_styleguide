@@ -13,10 +13,12 @@
 @primary-color-3: hsl(194,100%,15%);
 @primary-color-4: hsl(194,100%,10%);
 
+@islamic-green: #0EAA00;
 @success-1: hsl(68,100%,30%);
 @success-2: hsl(45,100%,35%);
 @success-3: hsl(68,50%,50%);
 
+@bright-yellow: #FFA724;
 @warning-1: hsl(18,80%,54%);
 @warning-2: hsl(18,80%,64%);
 @warning-3: hsl(18,80%,74%);
@@ -30,6 +32,7 @@
 @queen-blue: #396e98;
 @international-orange: #bf2812;
 @rosso-corsa: #D40101;
+@dark-candy-apple-red: #A40000;
 @cultured-2: #F8F8F8;
 @chinese-white: #E0E0E0;
 @black: #000000;
@@ -230,7 +233,7 @@
 @input-checkbox-focus-border: @primary-color-3;
 
 /* controls */
-@controls-check: url('@{images}/controls/check_black.svg');
+@controls-check: url('@{images}/controls/check_tick.svg');
 
 /* radio */
 @input-radio-background: @main-color;
@@ -274,9 +277,9 @@
 /* complexity */
 @complexity-text-color: @text-icon-main-color;
 @complexity-bar-default-background: @main-color-gradient-12;
-@complexity-bar-gradient-background: linear-gradient(to right,#A40000, #FFA724, #0EAA00);
-@complexity-bar-low-color: #a40000;
-@complexity-bar-high-color: #0eaa00;
+@complexity-bar-gradient-background: linear-gradient(to right, @dark-candy-apple-red, @bright-yellow, @islamic-green);
+@complexity-bar-low-color: @dark-candy-apple-red;
+@complexity-bar-high-color: @complexity-bar-low-color;
 
 /* hints */
 @hint-success-color: @success-2;
