@@ -14,7 +14,7 @@
  */
 
 import React from 'react';
-import {Route, withRouter} from "react-router-dom";
+import {Route, withRouter, Switch} from "react-router-dom";
 import PropTypes from "prop-types";
 import DisplayUserBadgeMenu from "../../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
@@ -170,18 +170,23 @@ class DisplayUserSettingsWorkspace extends React.Component {
                 <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
               </div>
             </div>
-            <div className="help-panel">
-              <div className="sidebar-help">
-                <Route path={`${path}/profile`} component={DisplayUserProfileHelp}/>
-                <Route path={`${path}/keys`} component={DisplayUserGpgInformationHelp}></Route>
-                <Route path={`${path}/passphrase`} component={ChangeUserPassphraseHelp}/>
-                <Route path={`${path}/security-token`} component={DisplayUserSecurityTokenHelp}></Route>
-                {this.canIUseAccountRecoveryCapability &&
-                  <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettingsHelp}></Route>
-                }
-              </div>
-              <Footer/>
-            </div>
+            <Switch>
+              <Route path={`${path}/theme`} />
+              <Route>
+                <div className="help-panel">
+                  <div className="sidebar-help">
+                    <Route path={`${path}/profile`} component={DisplayUserProfileHelp}/>
+                    <Route path={`${path}/keys`} component={DisplayUserGpgInformationHelp}></Route>
+                    <Route path={`${path}/passphrase`} component={ChangeUserPassphraseHelp}/>
+                    <Route path={`${path}/security-token`} component={DisplayUserSecurityTokenHelp}></Route>
+                    {this.canIUseAccountRecoveryCapability &&
+                      <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettingsHelp}></Route>
+                    }
+                  </div>
+                  <Footer/>
+                </div>
+              </Route>
+            </Switch>
           </div>
         </div>
       </div>
