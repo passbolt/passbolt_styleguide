@@ -37,7 +37,6 @@ const _passbolt_data = {
     "user.settings.theme": {
       "id": "9a5ecc88-f4df-5cc2-b152-6ca310127a67",
       "name": "default",
-      "preview": `${baseURL}\/img\/themes\/default.png`
     },
     "user.username": "ada@passbolt.com",
   }
