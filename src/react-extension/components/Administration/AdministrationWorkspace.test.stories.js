@@ -230,6 +230,17 @@ export const ContentTypesEncryptedMetadataPage = {
   },
 };
 
+export const ContentTypesMetadataKeyPage = {
+  args: {
+    port: port,
+    storage: storage,
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY
+    }),
+    routerInitialEntry: "/app/administration/content-types/metadata-key"
+  },
+};
+
 export const error403 = {
   args: {
     port: port,

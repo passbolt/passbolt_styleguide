@@ -71,6 +71,16 @@ import MetadataTypesSettingsEntity from "../../src/shared/models/entity/metadata
 import {
   defaultMetadataTypesSettingsV4Dto
 } from "../../src/shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import MetadataKeysSettingsEntity from "../../src/shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../src/shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import {
+  ed25519ExternalPrivateGpgKeyEntityDto,
+  ed25519ExternalPublicGpgKeyEntityDto
+} from "../../src/shared/models/entity/gpgkey/externalGpgKeyEntity.test.data";
+import {defaultMetadataKeyDto} from "../../src/shared/models/entity/metadata/metadataKeyEntity.test.data";
+import {pgpKeys} from "../fixture/pgpKeys/keys";
 
 export default storage => {
   const mockPort = new MockPort(storage);
@@ -129,6 +139,13 @@ export default storage => {
   mockPort.addRequestListener("passbolt.account-recovery.get-organization-policy", () => defaultAccountRecoveryPolicyDto());
   mockPort.addRequestListener("passbolt.user-passphrase-policies.find", () => defaultUserPassphrasePoliciesEntityDto());
   mockPort.addRequestListener("passbolt.metadata.find-metadata-types-settings", () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()));
+  mockPort.addRequestListener("passbolt.metadata.find-metadata-keys-settings", () => new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()));
+  mockPort.addRequestListener("passbolt.metadata.save-metadata-types-settings", settings => settings);
+  mockPort.addRequestListener("passbolt.metadata.save-metadata-keys-settings", settings => settings);
+  mockPort.addRequestListener("passbolt.metadata.create-key", () => defaultMetadataKeyDto({fingerprint: pgpKeys.eddsa_ed25519.fingerprint, armored_key: pgpKeys.eddsa_ed25519.public}));
+  mockPort.addRequestListener("passbolt.keyring.get-key-info", () => ed25519ExternalPublicGpgKeyEntityDto());
+  mockPort.addRequestListener("passbolt.metadata.generate-metadata-key", () => ({public_key: ed25519ExternalPublicGpgKeyEntityDto(),
+    private_key: ed25519ExternalPrivateGpgKeyEntityDto()}));
 
   // Deprecated events
   const deprecatedEvent = () => { throw new Error(`This event is deprecated.`); };
