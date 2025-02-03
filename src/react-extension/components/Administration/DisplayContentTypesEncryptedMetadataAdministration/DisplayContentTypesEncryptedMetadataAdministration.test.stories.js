@@ -13,7 +13,6 @@
  */
 
 import React from "react";
-import PropTypes from "prop-types";
 import {within} from '@storybook/test';
 import {
   allowedVersionErrorProps,
@@ -21,34 +20,75 @@ import {
   resourceTypesDeletedProps
 } from "./DisplayContentTypesEncryptedMetadataAdministration.test.data";
 import DisplayContentTypesEncryptedEncryptedMetadataAdministration from "./DisplayContentTypesEncryptedMetadataAdministration";
+import {MemoryRouter} from "react-router-dom";
+import TranslationProvider from "../../Common/Internationalisation/TranslationProvider";
+import {AdminRbacContext} from "../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
+import DisplayAdministrationWorkspaceBreadcrumb
+  from "../DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
 
 export default {
   title: 'Components/Administration/DisplayContentTypesEncryptedMetadataAdministration',
-  component: DisplayContentTypesEncryptedEncryptedMetadataAdministration
+  component: DisplayContentTypesEncryptedEncryptedMetadataAdministration,
+  decorators: [(Story, {args}) =>
+    <MemoryRouter initialEntries={['/app/administration']}>
+      <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
+        <AdminRbacContext.Provider value={args.adminRbacContext}>
+          <div id="container" className="page administration">
+            <div id="app" className="app" style={{margin: "-1rem"}}>
+              <div className="panel main">
+                <div className="panel left">
+                  <div className="sidebar-content">
+                    <div className="top-bar-left-navigation">
+                      <div className="navigation">
+                      </div>
+                    </div>
+                    <div className="sidebar-content-left">
+                    </div>
+                  </div>
+                </div>
+                <div className="panel middle">
+                  <div className="header">
+                  </div>
+                  <div className="middle-right">
+                    <div className="breadcrumbs-and-grid">
+                      <div className="top-bar">
+                        <DisplayAdministrationWorkspaceBreadcrumb/>
+                      </div>
+                      <div className="main-page">
+                        <Story {...args}/>
+                      </div>
+                    </div>
+                    <div className="help-panel">
+                      <div className="sidebar-help">
+                        <div id="administration-help-panel">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </AdminRbacContext.Provider>
+      </TranslationProvider>
+    </MemoryRouter>
+  ],
 };
 
-const Template = args =>
-  <div className="panel middle">
-    <div className="grid grid-responsive-12">
-      <DisplayContentTypesEncryptedEncryptedMetadataAdministration {...args}/>
-    </div>
-  </div>;
-
-Template.propTypes = {
-  context: PropTypes.object,
+export const Initial = {
+  args: defaultProps()
 };
 
-export const Initial = Template.bind({});
-Initial.args = defaultProps();
-
-export const WithValidationError = Template.bind({});
-WithValidationError.args = allowedVersionErrorProps();
-// Trigger the form validation.
-WithValidationError.play = async({canvasElement}) => {
-  const canvas = within(canvasElement);
-  const form = canvas.getByTestId("submit-form");
-  form.requestSubmit();
+export const WithValidationError = {
+  args: allowedVersionErrorProps(),
+  // Trigger the form validation.
+  play:  async({canvasElement}) => {
+    const canvas = within(canvasElement);
+    const form = canvas.getByTestId("submit-form");
+    form.requestSubmit();
+  }
 };
 
-export const WithWarnings = Template.bind({});
-WithWarnings.args = resourceTypesDeletedProps();
+export const WithWarnings = {
+  args: resourceTypesDeletedProps()
+};
