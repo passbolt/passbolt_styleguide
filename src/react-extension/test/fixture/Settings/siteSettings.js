@@ -207,6 +207,9 @@ const siteSettings = (isProEdition = true) => ({
       },
       "userPassphrasePolicies": {
         "enabled": isProEdition,
+      },
+      "metadata": {
+        "enabled": true,
       }
     }
   }
