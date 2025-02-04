@@ -72,7 +72,7 @@ export default class DisplayMfaProviderConfigurationPage {
    * Returns the turn off button
    */
   get turnedOffButton() {
-    return this._page.container.querySelector('.button.warning');
+    return this._page.container.querySelector('.button.primary');
   }
 
   /**

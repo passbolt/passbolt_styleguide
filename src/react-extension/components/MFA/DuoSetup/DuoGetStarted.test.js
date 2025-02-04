@@ -46,15 +46,5 @@ describe("DuoGetStartedP", () => {
       expect(page.duoSuccessLoginIllustation).not.toBeNull();
       expect(page.duoSuccessLoginIllustationDescription.textContent).toEqual("Follow the procedure to login.");
     });
-
-    it('I should see an help box in the scan totp screen ', async() => {
-      expect.assertions(5);
-
-      expect(page.helpBox).not.toBeNull();
-      expect(page.helpBoxTitle.textContent).toBe("Requirements");
-      expect(page.helpBoxDescription.textContent).toBe("To proceed, you need to install the Duo mobile application or to have a device to authenticate which is supported by Duo. For the list of supported devices, see: Duo authentication methods.");
-      expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/start');
-    });
   });
 });

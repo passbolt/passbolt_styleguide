@@ -45,6 +45,7 @@ import DisplayAccountRecoveryUserSettingsHelp
   from "../DisplayUserAccountRecovery/DisplayAccountRecoveryUserSettingsHelp";
 import DisplayUserSecurityTokenHelp from "../ChangeUserSecurityToken/DisplayUserSecurityTokenHelp";
 import ExportAccountToDesktopHelp from '../ExportAccountToDesktop/ExportAccountToDesktopHelp';
+import DisplayMfaSettingsHelp from '../../MFA/DisplayMfaSettingsHelp/DisplayMfaSettingsHelp';
 
 /**
  * This component is a container for all the user settings workspace features
@@ -184,6 +185,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
                     {this.canIUseAccountRecoveryCapability &&
                       <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettingsHelp}></Route>
                     }
+                    <Route path={[`${path}/mfa/:provider`, `${path}/mfa`]} component={DisplayMfaSettingsHelp}></Route>
                   </div>
                   <Footer/>
                 </div>
