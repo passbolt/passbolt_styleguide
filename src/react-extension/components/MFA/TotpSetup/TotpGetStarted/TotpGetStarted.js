@@ -18,7 +18,6 @@ import {withTranslation} from "react-i18next";
 import {Trans} from 'react-i18next';
 import {MfaSettingsWorkflowStates, withMfa} from "../../../../contexts/MFAContext";
 import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
-import Icon from "../../../../../shared/components/Icons/Icon";
 import TotpPhoneIllustration from "./TotpPhoneIllustration";
 import TotpSignInIllustration from "./TotpSignInIllustration";
 import TotpEnterCodeIllustration from "./TotpEnterCodeIllustration";
@@ -59,9 +58,9 @@ class TotpGetStarted extends Component {
    */
   render() {
     return (
-      <div className="grid grid-responsive-12">
-        <div className="row mfa-setup totp-get-started">
-          <div className="col8 main-column how-it-works">
+      <>
+        <div className="main-column mfa-setup totp-get-started">
+          <div className="main-content how-it-works">
             <h3><Trans>Getting started with Time based One Time Password (TOTP)</Trans></h3>
             <h4 className="no-border"><Trans>How does it work?</Trans></h4>
             <div className="instruction">
@@ -78,33 +77,23 @@ class TotpGetStarted extends Component {
                 <p><Trans>Once you enter this code, you can log in.</Trans></p>
               </div>
             </div>
-            <div className="actions-wrapper">
-              <button
-                className="button cancel"
-                type='button'
-                onClick={this.handleCancelClick}>
-                <span><Trans>Cancel</Trans></span>
-              </button>
-              <button
-                className="button primary"
-                type='button'
-                onClick={this.handleGetStartedClick}>
-                <span><Trans>Get started</Trans></span>
-              </button>
-            </div>
-          </div>
-          <div className="col4 last">
-            <div className="sidebar-help">
-              <h3><Trans>Requirements</Trans></h3>
-              <p><Trans>To proceed you need to install an application that supports Time Based One Time Passwords (TOTP) on your phone or tablet such as:</Trans><a href="https://support.google.com/accounts/answer/1066447" target="_blank" rel="noopener noreferrer">Google Authenticator</a> <Trans>or</Trans> <a href="https://freeotp.github.io/" target="_blank" rel="noopener noreferrer">FreeOTP</a>.</p>
-              <a className="button" href="https://help.passbolt.com/start" target="_blank" rel="noopener noreferrer">
-                <Icon name="document" />
-                <span><Trans>Read the documentation</Trans></span>
-              </a>
-            </div>
           </div>
         </div>
-      </div>
+        <div className="actions-wrapper">
+          <button
+            className="button cancel secondary"
+            type='button'
+            onClick={this.handleCancelClick}>
+            <span><Trans>Cancel</Trans></span>
+          </button>
+          <button
+            className="button primary primary"
+            type='button'
+            onClick={this.handleGetStartedClick}>
+            <span><Trans>Get started</Trans></span>
+          </button>
+        </div>
+      </>
     );
   }
 }

@@ -1,262 +1,3 @@
-//Will be removed after migration
-
-#setup-mfa {
-  width:100%;
-  height:calc(100% - 3.9rem);
-  display: block;
-}
-.mfa.iframe {
-  background: @workspace-middle-background;
-  .grid-responsive-12, .grid {
-      height: 100%;
-      margin-right: 1.6rem;
-      max-width: none;
-
-      .row {
-        margin: 0;
-        form .actions-wrapper {
-          margin-top: 3.6rem;
-        }
-      }
-
-      form.yubikey-setup {
-        height: 100%;
-      }
-
-  }
-  .actions-wrapper {
-      display: flex;
-      margin-top: 3.6rem;
-      clear: both;
-
-      a + a, a + button {
-        margin-left: 1.6rem;
-      }
-  }
-
-  .totp-setup {
-      .input-verify {
-          float:left;
-          background:@mfa-background;
-          padding:2.5em;
-          width: calc(100% - 294px); // 100% - (262px + 32px)
-          height:262px;
-          box-sizing: border-box;
-          border:3px solid @mfa-border;
-          border-left:0;
-          margin: 1.6rem 0;
-
-          .helptext {
-              max-width:18em;
-          }
-      }
-      .qrcode {
-          float:left;
-          max-width:262px;
-          box-sizing: border-box;
-          max-height:262px;
-          border:3px solid @mfa-border;
-          margin: 1.6rem 0 1.6rem 1.6rem;
-      }
-      .input.password {
-          display: block;
-          background: initial;
-          margin-bottom: 1.6rem;
-          box-shadow: none;
-
-          label {
-              margin-bottom: 1.2rem;
-          }
-
-          input[type=password] {
-              color: @default-text-color;
-              background: @input-background;
-              padding: .8rem .8rem;
-              margin-bottom: 1.2rem;
-              box-shadow: inset 0 0 0 .1rem @input-border;
-              border-radius: .4rem;
-
-              // Fields hover
-              &:hover {
-                  box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-border;
-              }
-
-              // Fields focus
-              &:focus {
-                  box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @input-focus-border;
-                  outline: 0;
-              }
-
-              // Fields pressed
-              &:active {
-                  box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-border;
-              }
-
-              // Disabled fields.
-              &:disabled {
-                  cursor: default;
-                  box-shadow: inset 0 0 0 .1rem @input-border;
-                  opacity: .5;
-              }
-          }
-      }
-  }
-
-  .yubikey-setup {
-    .input.password {
-      display: block;
-      background: initial;
-      margin-bottom: 1.6rem;
-      box-shadow: none;
-
-      label {
-        margin-bottom: 1.2rem;
-      }
-
-      input[type=password] {
-        color: @default-text-color;
-        background: @input-background;
-        padding: .8rem .8rem;
-        margin-bottom: 1.2rem;
-        box-shadow: inset 0 0 0 .1rem @input-border;
-        border-radius: .4rem;
-        max-width: 64rem;
-
-        // Fields hover
-        &:hover {
-          box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-border;
-        }
-
-        // Fields focus
-        &:focus {
-          box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @input-focus-border;
-          outline: 0;
-        }
-
-        // Fields pressed
-        &:active {
-          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-border;
-        }
-
-        // Disabled fields.
-        &:disabled {
-          cursor: default;
-          box-shadow: inset 0 0 0 .1rem @input-border;
-          opacity: .5;
-        }
-      }
-    }
-  }
-
-  .how-it-works {
-      .instruction {
-        display: flex;
-        width: calc(100% - 3.2rem);
-        max-width: 100.8rem;
-        gap: 1.6rem;
-        justify-content: center;
-        align-items: baseline;
-
-        &.no-margin-top {
-          margin-top: 0;
-        }
-
-        .step{
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-
-          svg {
-            flex: 1;
-            width: 100%;
-            height: auto;
-          }
-
-          p {
-            margin: 0 1.6rem;
-          }
-        }
-      }
-  }
-
-  .mfa-providers {
-      .clearfix();
-      li {
-          float: left;
-          .rounded();
-          width:12.5em;
-          margin-bottom:2em;
-          margin-right:2em;
-          border:1px solid @mfa-provider-border;
-          &:hover {
-              border:1px solid @default-border;
-              box-shadow: 0 0 1rem 0 rgba(0, 0, 0, @shadow-opacity-dropdown);
-          }
-      }
-
-      a {
-          border-bottom:1px solid @mfa-provider-border;
-          display:block;
-          text-align: center;
-
-          span {
-              padding:1em 0 2em 0;
-              display: block;
-          }
-          img{
-              display: block;
-              padding:2em 0 .5em 0;
-              height:5em;
-          }
-
-      }
-      .mfa-provider-status {
-          padding:1em;
-          background:@mfa-background;
-          text-align: center;
-      }
-  }
-
-  .mfa-trusted-device {
-      padding:1em;
-      display:flex;
-
-      &:nth-child(even) {
-          background: @mfa-background;
-      }
-      .device {
-          flex:1;
-          font-size:2.5em;
-          text-align: center;
-          color:@text-info-color;
-
-          &.current:before {
-              content:'\2022'; /* unicode character • */
-              color:@mfa-hint-trusted-device-color;
-              font-size:.75em;
-              position:absolute;
-              margin-left:-.5em;
-          }
-      }
-      .session {
-          flex:2 0 10em;
-      }
-      .action {
-          flex:1;
-          padding-top:.5em;
-      }
-      table {
-          td, th {
-              padding:0.125em 1em;
-          }
-          th {
-              font-weight: bold;
-          }
-      }
-  }
-}
-
 @media all and (max-width: 780px) {
 .totp-setup {
   .input-verify {
@@ -270,47 +11,64 @@
 //Used for migration
 .mfa-setup {
   .mfa-providers {
+    display: flex;     
     .clearfix();
 
     li {
       float: left;
-      .rounded();
-      width: 12.5em;
-      margin-bottom: 2em;
-      margin-right: 2em;
-      border: 1px solid @mfa-provider-border;
-
+      width: 15rem;
+      min-width: 10rem;
+      max-width: 32rem;
+      margin-bottom: 1.6rem;
+      margin-right:1.6rem;
+      box-shadow: inset 0 0 0 0.1rem var(--Action-button-Action-button-border); 
+      border-radius: var(--Button-border-radius);
+      background: var(--Action-button-Action-button-background);
       &:hover {
-        border: 1px solid @default-border;
-        box-shadow: 0 0 1rem 0 rgba(0, 0, 0, @shadow-opacity-dropdown);
-      }
-    }
-
-    a {
-      border-bottom: 1px solid @mfa-provider-border;
-      display: block;
-      text-align: center;
-
-      span {
-        padding: 1em 0 2em 0;
-        display: block;
-      }
-
-      .provider-img {
-        display: block;
-        padding: 2em 0 .5em 0;
-        svg {
-          height: 5em;
+        background: var(--Action-button-Active-action-button-background);
+        box-shadow: inset 0 0 0 0.1rem var(--Action-button-Active-action-button-border);
+        .mfa-provider-status {
+          background: var(--Action-button-Active-action-button-border);
         }
       }
+  }
 
-    }
+  a {
+    display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
+        padding: 1.6rem 0;
 
-    .mfa-provider-status {
-      padding: 1em;
-      background: @mfa-background;
-      text-align: center;
-    }
+      .provider-img {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        svg {
+          width: 4.2rem;
+          height: 4.2rem;
+        }
+      }
+      .provider-name {
+        font-size: 1.4rem;
+        text-align: center;
+      }
+
+      &::after {
+        content: none;
+      }
+  }
+  .mfa-provider-status {
+    text-align: center;
+    background: var(--Action-button-Action-button-border);
+    display: flex;
+    padding: .8rem 1.6rem;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    border-bottom-left-radius: var(--Button-border-radius);
+    border-bottom-right-radius: var(--Button-border-radius);
+  }
   }
 
   .how-it-works {
@@ -345,16 +103,6 @@
     }
   }
 
-  .actions-wrapper {
-    display: flex;
-    margin-top: 3.6rem;
-    clear: both;
-
-    button+button {
-      margin-left: 1.6rem;
-    }
-  }
-
   .yubikey-setup {
     .input {
       display: block;
@@ -367,64 +115,43 @@
       }
 
       input[type=password] {
-        color: @default-text-color;
-        background: @input-background;
         padding: .8rem .8rem;
         margin-bottom: 1.2rem;
-        box-shadow: inset 0 0 0 .1rem @input-border;
-        border-radius: .4rem;
         max-width: 64rem;
-
-        // Fields hover
-        &:hover {
-          box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-border;
-        }
-
-        // Fields focus
-        &:focus {
-          box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @input-focus-border;
-          outline: 0;
-        }
-
-        // Fields pressed
-        &:active {
-          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-border;
-        }
-
-        // Disabled fields.
-        &:disabled {
-          cursor: default;
-          box-shadow: inset 0 0 0 .1rem @input-border;
-          opacity: .5;
-        }
       }
     }
   }
 
   .totp-setup {
+    .totp-setup-form {
+      display: flex;
+      width: 100%;
+      gap: 1.6rem
+    }
     .input-verify {
       float: left;
-      background: @mfa-background;
-      padding: 2.5em;
-      width: calc(100% - 294px); // 100% - (262px + 32px)
-      height: 235px;      
+      background: var(--Action-button-Action-button-background);
+      padding: 2.5rem;
+      width: calc(100% - 525px);
+      height: 22.8rem;
       box-sizing: border-box;
-      border: 3px solid @mfa-border;
+      box-shadow: inset 0 0 0 0.1rem var(--Action-button-Action-button-border);
       border-left: 0;
       margin: 1.6rem 0;
-
-      .helptext {
-        max-width: 18em;
-      }
+      border-radius: var(--Button-border-radius);
     }
 
     .qrcode {
       float: left;
-      height: 235px;
-      max-width: 262px;
+      height: 22.8rem;
+      max-width: 26.2rem;
       box-sizing: border-box;
-      border: 3px solid @mfa-border;
-      margin: 1.6rem 0 1.6rem 1.6rem;
+      box-shadow: inset 0 0 0 0.1rem var(--Action-button-Action-button-border);
+      margin: 1.6rem 0;
+      border-radius: var(--Button-border-radius);
+      img {
+        border-radius: var(--Button-border-radius);
+      }
     }
 
     .input.password {
@@ -438,35 +165,8 @@
       }
 
       input[type=password] {
-        color: @default-text-color;
-        background: @input-background;
         padding: .8rem .8rem;
         margin-bottom: 1.2rem;
-        box-shadow: inset 0 0 0 .1rem @input-border;
-        border-radius: .4rem;
-
-        // Fields hover
-        &:hover {
-          box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-border;
-        }
-
-        // Fields focus
-        &:focus {
-          box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @input-focus-border;
-          outline: 0;
-        }
-
-        // Fields pressed
-        &:active {
-          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-border;
-        }
-
-        // Disabled fields.
-        &:disabled {
-          cursor: default;
-          box-shadow: inset 0 0 0 .1rem @input-border;
-          opacity: .5;
-        }
       }
     }
   }
