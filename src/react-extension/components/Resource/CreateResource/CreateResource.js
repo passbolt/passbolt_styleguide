@@ -58,6 +58,12 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import ResourceViewModelFactory from "../../../../shared/models/resource/ResourceViewModelFactory";
+import EditSVG from "../../../../img/svg/edit.svg";
+import DeleteSVG from "../../../../img/svg/delete.svg";
+import DiceSVG from "../../../../img/svg/dice.svg";
+import SettingSVG from "../../../../img/svg/settings.svg";
+import LockSVG from "../../../../img/svg/lock.svg";
+import UnlockSVG from "../../../../img/svg/unlock.svg";
 
 class CreateResource extends Component {
   constructor(props) {
@@ -697,13 +703,13 @@ class CreateResource extends Component {
                   inputRef={this.passwordInputRef}/>
                 <button type="button" onClick={this.handleGeneratePasswordButtonClick}
                   className={`password-generate button-icon ${this.state.processing ? "disabled" : ""}`}>
-                  <Icon name='dice' big={true}/>
+                  <DiceSVG/>
                   <span className="visually-hidden"><Trans>Generate</Trans></span>
                 </button>
                 {this.canUsePasswordGenerator &&
                   <button type="button" onClick={this.handleOpenGenerator}
                     className={`password-generator button-icon ${this.state.processing ? "disabled" : ""}`}>
-                    <Icon name='settings' big={true}/>
+                    <SettingSVG/>
                     <span className="visually-hidden"><Trans>Open generator</Trans></span>
                   </button>
                 }
@@ -721,14 +727,14 @@ class CreateResource extends Component {
                 {isMaxLengthDescriptionWarning &&
                   <Icon name="exclamation"/>
                 }
-                <button type="button" onClick={this.handleDescriptionToggle} className="link inline lock-toggle">
+                <button type="button" onClick={this.handleDescriptionToggle} className="button-transparent inline lock-toggle">
                   {resourceViewModel.isDescriptionUnencrypted() ? (
                     <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
-                      <Icon name="lock-open"/>
+                      <UnlockSVG/>
                     </Tooltip>
                   ) : (
                     <Tooltip message={this.translate("The description content will be encrypted.")}>
-                      <Icon name="lock"/>
+                      <LockSVG/>
                     </Tooltip>
                   )}
                 </button>
@@ -755,10 +761,10 @@ class CreateResource extends Component {
                 <div className="input-wrapper-inline totp">
                   <Totp totp={resourceViewModel.totp}/>
                   <button type="button" className="edit-totp button-icon" onClick={this.handleTotpClick} disabled={this.state.processing}>
-                    <Icon name='edit' big={true}/>
+                    <EditSVG/>
                   </button>
                   <button type="button" className="delete-totp button-icon" onClick={this.handleDeleteTotpClick} disabled={this.state.processing}>
-                    <Icon name='trash' big={true}/>
+                    <DeleteSVG/>
                   </button>
                 </div>
               </div>
