@@ -30,9 +30,27 @@
       .error-message, .warning-message {
         font-size: 1.3rem;
       }
-  
+
       &.text {
         font-weight: 400;
+      }
+
+      .name {
+        margin: 0;
+        display:block;
+        font-size: 1.6rem;
+      }
+
+      .info {
+        margin: 0;
+        font-weight: normal;
+        font-size: 1.3rem;
+        display:block;
+        white-space: pre-wrap;
+
+        span {
+          font-weight: bold;
+        }
       }
     }
 
@@ -117,11 +135,9 @@
 }
 
 .togglelist-alt {
-  margin-top: 1.6rem;
-  border: 1px solid var(--Checkbox-Checkbox-border);
-  border-radius: 3px;
-  background-color: var(--Workspace-Panels-background);
-  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
 
   .toggle-input {
     width: 4.2rem
@@ -130,24 +146,48 @@
   .input.has-error.toggle-switch {
     margin-bottom: 1.2rem;
   }
-  .toggle-switch {
-    margin-bottom: 0;
+  .input.toggle-switch {
+    ._field-borders(var(--Action-button-Action-button-border));
+    border-radius: var(--Button-border-radius);
+    background-color: var(--Workspace-Panels-background);
+    margin: 0;
+    position: relative;
+
+    &.checked {
+      box-shadow:
+                inset -.1rem -.1rem 0 0 var(--States-Active-Highlight),
+              inset .1rem .1rem 0 0 var(--States-Active-Shadow);
+      background: var(--Action-button-Active-action-button-background);
+
+      input[type="checkbox"]:hover, input[type="checkbox"]:active {
+        box-shadow: none;
+      }
+    }
+
+    input[type="checkbox"]:hover, input[type="checkbox"]:active {
+      box-shadow: none;
+    }
+
+    .toggle-switch-checkbox {
+      position: absolute;
+      left: 1.6rem;
+    }
 
     label {
-      margin-left: 1.6rem;
+      margin: 0;
+      padding: 1.6rem 1.6rem 1.6rem 6.4rem;
+      width: 100%;
 
       .name {
         margin: 0;
         display:block;
         font-size: 1.6rem;
-        background-color: var(--Workspace-Panels-background);
       }
       .info-input {
         display: flex;
         margin: 0;
         font-weight: normal;
         font-size: 1.3rem;
-        background-color: var(--Workspace-Panels-background);
 
         input {
           margin-left: 4px;
@@ -166,7 +206,6 @@
         font-size: 1.3rem;
         display:block;
         white-space: pre-wrap;
-        background-color: var(--Workspace-Panels-background);
 
         span {
           font-weight: bold;

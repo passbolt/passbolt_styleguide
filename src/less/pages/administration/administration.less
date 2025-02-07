@@ -22,12 +22,6 @@
       &:last-child {
         border-radius: 0;
       }
-
-      .radiolist-alt {
-        display: flex;
-        flex-direction: column;
-        gap: 1.6rem;
-      }
     }
   }
 
@@ -78,11 +72,13 @@
         .title {
           margin: 0;
         }
+
         .divider {
           margin: 0px -1.6rem .8rem -1.6rem;
           border-bottom: .1rem solid var(--Workspace-Dividers);
           align-self: stretch;
         }
+
         & > * {
           margin-bottom: 1.6rem;
 
@@ -182,6 +178,7 @@
     table {
       margin-top: 0;
       border-spacing: .8rem;
+      width: 100%;
 
       tr.error-message {
         color: @text-error-color;
