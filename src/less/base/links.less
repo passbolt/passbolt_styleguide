@@ -160,19 +160,18 @@ button.link-icon {
         height: 1.6rem;
     }
     .link-label {
-        border-bottom: .1rem solid @link-border;
+        border-bottom: .1rem solid var(--Palette-Gradient-7);
     }
 
     &:focus {
         box-shadow: none;
         .link-label {
-            border-bottom: .1rem solid @link-border;
+            border-bottom: .1rem solid var(--Palette-Gradient-7);
         }
     }
 
     &:focus-visible {
-        box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @button-focus-border;
-        outline: @outline-default-border;
+        box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
         .link-label {
             border: none;
         }
@@ -181,20 +180,19 @@ button.link-icon {
     &:hover  {
         text-decoration: none;
         cursor: pointer;
-        color: @text-focus-color;
-        --icon-color: @text-focus-color;
+        color: var(--States-Focus);
+        --icon-color: var(--States-Focus);
         .link-label {
-            border-bottom: 1px solid @link-hover-border;
+            border-bottom: 1px solid var(--Palette-Contrast-1);
             box-shadow: none;
         }
     }
 
     &:active {
-        --icon-color: @text-focus-color;
+        --icon-color: var(--States-Focus);
         .link-label {
             background: transparent;
-            outline: @outline-default-border;
-            color: @text-focus-color;
+            color: var(--States-Focus);
             margin-bottom: .1rem; // Prevent a difference of 1px due to the border none
             border: none;
             box-shadow: none;
