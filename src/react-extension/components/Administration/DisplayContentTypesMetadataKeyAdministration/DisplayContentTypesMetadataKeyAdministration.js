@@ -328,7 +328,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
         <div id="content-types-metadata-key-settings" className="main-column">
           <div className="main-content">
             <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
-              <h3><label><Trans>Metadata key</Trans></label></h3>
+              <h3 className="title"><label><Trans>Metadata key</Trans></label></h3>
               <p className="description">
                 <Trans>This section controls the layer of encryption that is used to protect metadata such as the name of
                   a resource, URIs, etc.</Trans>
@@ -358,12 +358,10 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                     <span className="name"><Trans>Allow the use of personal keys. (Recommended)</Trans></span>
                     <span className="info">
                       <Trans>Users can use shared and personal keys. By default personal resources that are not shared
-                    will be encrypted with the users personal keys.</Trans><br/>
+                  will be encrypted with the users personal keys.</Trans><br/>
                     </span>
                   </label>
                 </div>
-              </div>
-              <div className="radiolist-alt">
                 <div
                   className={`input radio ${this.state.settings.allow_usage_of_personal_keys === false ? "checked" : ""}`}>
                   <input type="radio"
@@ -377,14 +375,13 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                     <span className="name"><Trans>Enforce the use of shared metadata keys.</Trans></span>
                     <span className="info">
                       <Trans>By default, metadata wil be encrypted with the shared keys. It is not possible to use
-                      personal keys to encrypt metadata.</Trans><br/>
+                    personal keys to encrypt metadata.</Trans><br/>
                     </span>
                   </label>
                 </div>
               </div>
 
-              <h4 className="no-border">
-                <Trans>Zero knowledge (Coming soon)</Trans></h4>
+              <h4><Trans>Zero knowledge (Coming soon)</Trans></h4>
 
               <p className="description">
                 <Trans>This section defines how the shared metadata key is shared with users.</Trans>
@@ -403,13 +400,10 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                     <span className="name"><Trans>User-friendly mode (Better on-boarding)</Trans></span>
                     <span className="info">
                       <Trans>The shared metadata key is accessible to the server and can be shared by the server when a
-                      user completes the setup. In practice, an attacker with full server access can see the shared metadata.</Trans><br/>
+                    user completes the setup. In practice, an attacker with full server access can see the shared metadata.</Trans><br/>
                     </span>
                   </label>
                 </div>
-              </div>
-
-              <div className="radiolist-alt">
                 <div
                   className={`input radio ${this.state.settings.zero_knowledge_key_share === true ? "checked" : ""}`}>
                   <input type="radio"
@@ -422,15 +416,13 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                     <span className="name"><Trans>Zero-knowledge mode (More secure)</Trans></span>
                     <span className="info">
                       <Trans>The shared metadata key is not available to the server and must be shared with users by the
-                      admins. New users are not allowed to create or access shared content until they are provided the
-                      metadata key. It is recommended to rotate the key if you switch to that mode.</Trans><br/>
+                    admins. New users are not allowed to create or access shared content until they are provided the
+                    metadata key. It is recommended to rotate the key if you switch to that mode.</Trans><br/>
                     </span>
                   </label>
                 </div>
               </div>
-
-              <h4 className="no-border">
-                <Trans>Shared metadata keys</Trans></h4>
+              <h4><Trans>Shared metadata keys</Trans></h4>
 
               <div className={`metadata-key-info ${errors?.hasError("generated_metadata_key", "required") && "error"}`}>
                 {this.state.activeMetadataKeys?.length > 0 &&
@@ -494,8 +486,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
 
                 {this.state.expiredMetadataKeys?.length > 0 &&
                   <>
-                    <h4 className="no-border">
-                      <Trans>Previous keys</Trans></h4>
+                    <h4><Trans>Previous keys</Trans></h4>
 
                     <div id="metadata-expired-keys">
                       {this.state.expiredMetadataKeys?.items.map(metadataKey => {
