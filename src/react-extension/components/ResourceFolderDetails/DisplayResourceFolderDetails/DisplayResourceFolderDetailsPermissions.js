@@ -23,7 +23,6 @@ import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext"
 import {Trans, withTranslation} from "react-i18next";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
-import EditSVG from "../../../../img/svg/edit.svg";
 
 class DisplayResourceFolderDetailsPermissions extends React.Component {
   /**
@@ -174,14 +173,6 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
   }
 
   /**
-   * Check if the user can share the folder.
-   * @returns {boolean}
-   */
-  canShare() {
-    return this.folder.permission && this.folder.permission.type === 15;
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -211,12 +202,6 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
         </div>
         {this.state.open &&
           <div className="accordion-content">
-            {this.canShare() &&
-            <button type="button" onClick={this.handlePermissionsEditClickEvent} id="share-folder" className="section-action button-transparent">
-              <EditSVG />
-              <span className="visuallyhidden"><Trans>modify</Trans></span>
-            </button>
-            }
             <div>
               <ul className="shared-with ready">
                 {this.isLoading() &&

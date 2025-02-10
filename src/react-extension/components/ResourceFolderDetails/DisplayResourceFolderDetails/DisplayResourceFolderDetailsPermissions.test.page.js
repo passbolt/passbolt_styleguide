@@ -133,13 +133,6 @@ class DisplayPermissionPageObject {
   }
 
   /**
-   * Returns the edit icon
-   */
-  get editIcon() {
-    return this._container.querySelector('.section-action');
-  }
-
-  /**
    * Returns the displayed permission name for the 'index' one
    * @param index The display rank of name's permission
    */
@@ -156,14 +149,6 @@ class DisplayPermissionPageObject {
   }
 
   /**
-   * Returns the share button html element
-   * @returns {HTMLElement}
-   */
-  get shareButton() {
-    return this.container.querySelector("#share-folder");
-  }
-
-  /**
    * Wait for the activities to be loaded while an in-progress function should be satisfied
    * @param inProgressFn An in-progress function
    * @returns {Promise<void>} The promise that the load operation is completed
@@ -177,11 +162,6 @@ class DisplayPermissionPageObject {
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
-  }
-
-  /** Click on edit */
-  async edit() {
-    await this.click(this.editIcon);
   }
 }
 
