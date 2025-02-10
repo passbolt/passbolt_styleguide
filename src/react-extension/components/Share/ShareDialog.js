@@ -294,16 +294,6 @@ class ShareDialog extends Component {
   }
 
   /**
-   * Find a user gpg key
-   * @param {string} userId
-   * @returns {Promise<object>}
-   */
-  async getFingerprintForUser(userId) {
-    const keyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', userId);
-    return keyInfo.fingerprint;
-  }
-
-  /**
    * Should input be disabled? True if state is loading or processing
    * @returns {boolean}
    */
@@ -516,50 +506,52 @@ class ShareDialog extends Component {
         onClose={this.handleClose}
         disabled={this.hasAllInputDisabled()}>
         <form className="share-form" onSubmit={this.handleFormSubmit} noValidate>
-          <div className="form-content scroll permission-edit">
-            {(this.state.loading) &&
-              <ul className="permissions">
-                <SharePermissionItemSkeleton/>
-                <SharePermissionItemSkeleton/>
-                <SharePermissionItemSkeleton/>
-              </ul>
-            }
-            {!(this.state.loading) &&
-              <ReactList
-                itemRenderer={this.renderItem}
-                itemsRenderer={this.renderContainer}
-                length={this.state.permissions.length}
-                minSize={this.props.listMinSize}
-                type={this.state.permissions.length < 3 ? "simple" : "uniform"}
-                ref={this.permissionListRef}
-                threshold={30}>
-              </ReactList>
-            }
-          </div>
-          {(this.hasNoOwner()) &&
-            <div className="message error">
-              <Trans>Please make sure there is at least one owner.</Trans>
+          <div className="form-content">
+            <div className="scroll permission-edit">
+              {(this.state.loading) &&
+                <ul className="permissions">
+                  <SharePermissionItemSkeleton/>
+                  <SharePermissionItemSkeleton/>
+                  <SharePermissionItemSkeleton/>
+                </ul>
+              }
+              {!(this.state.loading) &&
+                <ReactList
+                  itemRenderer={this.renderItem}
+                  itemsRenderer={this.renderContainer}
+                  length={this.state.permissions.length}
+                  minSize={this.props.listMinSize}
+                  type={this.state.permissions.length < 3 ? "simple" : "uniform"}
+                  ref={this.permissionListRef}
+                  threshold={30}>
+                </ReactList>
+              }
             </div>
-          }
-          {(this.hasChanges() && !this.hasNoOwner()) &&
-            <div className="message warning">
-              <Trans>Click save to apply your pending changes.</Trans>
+            <div className="permission-add">
+              <Autocomplete
+                id="share-name-input"
+                name="name"
+                label={this.translate("Share with people or groups")}
+                placeholder={this.translate("Start typing a user or group name")}
+                searchCallback={this.fetchAutocompleteItems}
+                onSelect={this.handleAutocompleteSelect}
+                onOpen={this.handleAutocompleteOpen}
+                onClose={this.handleAutocompleteClose}
+                disabled={this.hasAllInputDisabled()}
+                baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
+              />
             </div>
-          }
-          <div className="form-content permission-add">
-            <Autocomplete
-              id="share-name-input"
-              name="name"
-              label={this.translate("Share with people or groups")}
-              placeholder={this.translate("Start typing a user or group name")}
-              searchCallback={this.fetchAutocompleteItems}
-              onSelect={this.handleAutocompleteSelect}
-              onOpen={this.handleAutocompleteOpen}
-              onClose={this.handleAutocompleteClose}
-              disabled={this.hasAllInputDisabled()}
-              baseUrl={this.props.context.userSettings.getTrustedDomain()}
-              canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
-            />
+            {(this.hasNoOwner()) &&
+              <div className="message error">
+                <Trans>Please make sure there is at least one owner.</Trans>
+              </div>
+            }
+            {(this.hasChanges() && !this.hasNoOwner()) &&
+              <div className="message warning">
+                <Trans>Click save to apply your pending changes.</Trans>
+              </div>
+            }
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
