@@ -386,7 +386,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.isLoading()} onClick={this.handleClose}/>
-            <button type="submit" disabled={this.isLoading()} className="primary" onClick={this.handleSynchronize}><Trans>Synchronize</Trans></button>
+            <button type="submit" disabled={this.isLoading()} className="primary button form" onClick={this.handleSynchronize}><Trans>Synchronize</Trans></button>
           </div>
         </DialogWrapper>
         }
