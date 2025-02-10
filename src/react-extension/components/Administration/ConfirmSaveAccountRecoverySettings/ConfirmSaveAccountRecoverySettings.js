@@ -146,27 +146,23 @@ class ConfirmSaveAccountRecoverySettings extends Component {
             {this.props.policy &&
               <>
                 <label><Trans>New Account Recovery Policy</Trans></label>
-                <div className="radiolist-alt">
-                  <div className="input radio">
-                    <label htmlFor="accountPolicy">
-                      <span className="name">
-                        {{
-                          mandatory: <Trans>Prompt</Trans>,
-                          'opt-out': <Trans>Optional, Opt-out</Trans>,
-                          'opt-in': <Trans>Optional, Opt-in</Trans>,
-                          disabled: <Trans>Disable</Trans>
-                        }[this.props.policy]}
-                      </span>
-                      <span className="info">
-                        {{
-                          mandatory: <><Trans>Every user is required to provide a copy of their private key and passphrase during setup.</Trans><br/><Trans>Warning: You should inform your users not to store personal passwords.</Trans></>,
-                          'opt-out': <Trans>Every user will be prompted to provide a copy of their private key and passphrase by default during the setup, but they can opt out.</Trans>,
-                          'opt-in': <Trans>Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.</Trans>,
-                          disabled: <><Trans>Backup of the private key and passphrase will not be stored. This is the safest option.</Trans><br/><Trans>Warning: If users lose their private key and passphrase they will not be able to recover their account.</Trans></>
-                        }[this.props.policy]}
-                      </span>
-                    </label>
-                  </div>
+                <div className="account-recovery-setting-save">
+                  <p className="name">
+                    {{
+                      mandatory: <Trans>Prompt</Trans>,
+                      'opt-out': <Trans>Optional, Opt-out</Trans>,
+                      'opt-in': <Trans>Optional, Opt-in</Trans>,
+                      disabled: <Trans>Disable</Trans>
+                    }[this.props.policy]}
+                  </p>
+                  <p className="info">
+                    {{
+                      mandatory: <><Trans>Every user is required to provide a copy of their private key and passphrase during setup.</Trans><br/><Trans>Warning: You should inform your users not to store personal passwords.</Trans></>,
+                      'opt-out': <Trans>Every user will be prompted to provide a copy of their private key and passphrase by default during the setup, but they can opt out.</Trans>,
+                      'opt-in': <Trans>Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.</Trans>,
+                      disabled: <><Trans>Backup of the private key and passphrase will not be stored. This is the safest option.</Trans><br/><Trans>Warning: If users lose their private key and passphrase they will not be able to recover their account.</Trans></>
+                    }[this.props.policy]}
+                  </p>
                 </div>
               </>
             }
