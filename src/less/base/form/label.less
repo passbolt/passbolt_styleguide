@@ -12,14 +12,12 @@ label {
         margin-left: .4rem;
     }
 
-    .svg-icon {
-        &.exclamation {
-          --icon-exclamation-background-color: var(--Palette-Contrast-3);
-        }
-        svg {
-            height: 1.2rem;
-            width: 1.2rem;
-        }
+    svg.attention-required {
+        height: 1.4rem;
+        width: 1.4rem;
+        --icon-exclamation-color: var(--Alert-Alert-icon);
+        --icon-exclamation-background-color: var(--Alert-Alert-background);
+        --icon-exclamation-border-color: var(--Alert-Alert-background);
     }
 }
 

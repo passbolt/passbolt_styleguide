@@ -22,6 +22,9 @@ import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelBut
 import {Trans, withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
 import StandaloneTotpViewModel from "../../../../shared/models/standaloneTotp/StandaloneTotpViewModel";
+import AttentionSVG from "../../../../img/svg/attention.svg";
+import CarretDownSVG from "../../../../img/svg/caret_down.svg";
+import CarretRightSVG from "../../../../img/svg/caret_right.svg";
 
 class CreateStandaloneTotp extends Component {
   /**
@@ -332,7 +335,7 @@ class CreateStandaloneTotp extends Component {
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.isFieldError("name") ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-standalone-totp-form-name"><Trans>Name</Trans> (<Trans>Label</Trans>){this.isFieldWarning("name") && <Icon name="exclamation" />}</label>
+              <label htmlFor="create-standalone-totp-form-name"><Trans>Name</Trans> (<Trans>Label</Trans>){this.isFieldWarning("name") && <AttentionSVG className="attention-required"/>}</label>
               <input id="create-standalone-totp-form-name" name="name" type="text" value={this.state.standaloneTotp.name}
                 onKeyUp={this.handleInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="255"
@@ -347,7 +350,7 @@ class CreateStandaloneTotp extends Component {
               )}
             </div>
             <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-standalone-totp-form-uri"><Trans>URI</Trans> (<Trans>Issuer</Trans>){this.isFieldWarning("uri") && <Icon name="exclamation" />}</label>
+              <label htmlFor="create-standalone-totp-form-uri"><Trans>URI</Trans> (<Trans>Issuer</Trans>){this.isFieldWarning("uri") && <AttentionSVG className="attention-required"/>}</label>
               <input id="create-standalone-totp-form-uri" name="uri" className="fluid" maxLength="1024" type="text" onKeyUp={this.handleInputKeyUp}
                 autoComplete="off" value={this.state.standaloneTotp.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.state.processing}/>
@@ -359,7 +362,7 @@ class CreateStandaloneTotp extends Component {
             </div>
             <div className={`input text required ${this.isFieldError("secret_key") ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-standalone-totp-form-key">
-                <Trans>Key</Trans> (<Trans>secret</Trans>){this.isFieldWarning("secret_key") && <Icon name="exclamation"/>}
+                <Trans>Key</Trans> (<Trans>secret</Trans>){this.isFieldWarning("secret_key") && <AttentionSVG className="attention-required"/>}
               </label>
               <div className="input-wrapper-inline">
                 <input id="create-standalone-totp-form-key" name="secret_key" maxLength="1024" type="text" onKeyUp={this.handleInputKeyUp}
@@ -377,53 +380,52 @@ class CreateStandaloneTotp extends Component {
                 <div className="key warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.warnings.secret_key}</div>
               }
             </div>
-          </div>
-          <div className="form-content no-padding">
-            <div className={`accordion accordion-section ${this.state.openAdvancedSettings ? "" : "closed"}`}>
+            <div className="accordion accordion-section no-padding-bottom no-margin-divider">
               <div className="accordion-header">
                 <h4>
                   <button className="link no-border" type="button" onClick={this.handleAdvancedSettingClickEvent}>
-                    <Trans>Advanced settings</Trans>
-                    {this.state.openAdvancedSettings &&
-                      <Icon name="caret-down"/>
-                    }
-                    {!this.state.openAdvancedSettings &&
-                      <Icon name="caret-right"/>
+                    <span><Trans>Advanced settings</Trans></span>
+                    {this.state.openAdvancedSettings
+                      ? <CarretDownSVG />
+                      : <CarretRightSVG />
                     }
                   </button>
                 </h4>
               </div>
-              <div className="accordion-content">
-                <div className={`input text required ${this.isFieldError("period") ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-                  <label htmlFor="create-standalone-totp-form-period"><Trans>TOTP expiry</Trans></label>
-                  <div className="input-wrapper-inline">
-                    <input id="create-standalone-totp-form-period" name="period" type="number" value={this.state.standaloneTotp.period} onChange={this.handleInputChange}
-                      disabled={this.state.processing} ref={this.periodInputRef} onKeyUp={this.handleInputKeyUp} className="required" min="1" max="120"/>
-                    <span><Trans>seconds until the TOTP expires</Trans></span>
+              {this.state.openAdvancedSettings &&
+                <div className="accordion-content">
+                  <div className={`input text required ${this.isFieldError("period") ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
+                    <label htmlFor="create-standalone-totp-form-period"><Trans>TOTP expiry</Trans></label>
+                    <div className="input-wrapper-inline">
+                      <input id="create-standalone-totp-form-period" name="period" type="number" value={this.state.standaloneTotp.period} onChange={this.handleInputChange}
+                        disabled={this.state.processing} ref={this.periodInputRef} onKeyUp={this.handleInputKeyUp} className="required" min="1" max="120"/>
+                      <span><Trans>seconds until the TOTP expires</Trans></span>
+                    </div>
+                    {this.isFieldError("period") &&
+                      <div className="period error-message">{this.periodErrorMessage}</div>
+                    }
                   </div>
-                  {this.isFieldError("period") &&
-                    <div className="period error-message">{this.periodErrorMessage}</div>
-                  }
-                </div>
-                <div className={`input text required ${this.isFieldError("digits") ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-                  <label htmlFor="create-standalone-totp-form-digits"><Trans>TOTP length</Trans></label>
-                  <div className="input-wrapper-inline">
-                    <input id="create-standalone-totp-form-digits" name="digits" type="number" value={this.state.standaloneTotp.digits} onChange={this.handleInputChange}
-                      disabled={this.state.processing} className="required" min="6" max="8" onKeyUp={this.handleInputKeyUp} ref={this.digitsInputRef}/>
-                    <span><Trans>digits</Trans></span>
+                  <div className={`input text required ${this.isFieldError("digits") ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
+                    <label htmlFor="create-standalone-totp-form-digits"><Trans>TOTP length</Trans></label>
+                    <div className="input-wrapper-inline">
+                      <input id="create-standalone-totp-form-digits" name="digits" type="number" value={this.state.standaloneTotp.digits} onChange={this.handleInputChange}
+                        disabled={this.state.processing} className="required" min="6" max="8" onKeyUp={this.handleInputKeyUp} ref={this.digitsInputRef}/>
+                      <span><Trans>digits</Trans></span>
+                    </div>
+                    {this.isFieldError("digits") &&
+                      <div className="digits error-message">{this.digitsErrorMessage}</div>
+                    }
                   </div>
-                  {this.isFieldError("digits") &&
-                    <div className="digits error-message">{this.digitsErrorMessage}</div>
-                  }
+                  <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
+                    <label htmlFor="create-standalone-totp-form-algorithm"><Trans>Algorithm</Trans></label>
+                    <Select id="create-standalone-totp-form-algorithm" name="algorithm" value={this.state.standaloneTotp.algorithm}
+                      items={this.supportedAlgorithms} disabled={this.state.processing} onChange={this.handleInputChange}/>
+                  </div>
                 </div>
-                <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
-                  <label htmlFor="create-standalone-totp-form-algorithm"><Trans>Algorithm</Trans></label>
-                  <Select id="create-standalone-totp-form-algorithm" name="algorithm" value={this.state.standaloneTotp.algorithm}
-                    items={this.supportedAlgorithms} disabled={this.state.processing} onChange={this.handleInputChange}/>
-                </div>
-              </div>
+              }
             </div>
           </div>
+
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
             <FormSubmitButton value={this.translate("Create")} disabled={this.state.processing} processing={this.state.processing}/>
