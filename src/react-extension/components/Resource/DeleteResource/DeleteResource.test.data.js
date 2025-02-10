@@ -35,7 +35,7 @@ export function defaultPropsMultipleResource() {
  */
 export function defaultPropsOneResourceLongPassword() {
   const resource = resourcesMock[0];
-  resource.name = "MyPassword".repeat(10);
+  resource.metadata.name = "MyPassword".repeat(10);
   return {
     context: defaultUserAppContext(),
     resources: [resource],
