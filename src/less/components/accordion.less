@@ -49,12 +49,19 @@
 }
 .dialog .accordion, .login .accordion {
     &.accordion-section {
-      border-top:1px solid @dialog-divider-border;
+      border-top:1px solid var(--Workspace-Dividers);
       padding: 1.6rem;
       margin: 0;
+
+      &.no-padding-bottom {
+        padding-bottom: 0;
+      }
+
+      &.no-margin-divider {
+        margin: 0 -1.6rem;
+      }
     }
     .accordion-header {
-        margin-bottom: 1.2rem;
         h4 {
           margin:0;
           display:block;
@@ -75,6 +82,9 @@
                 margin-left:.5rem;
             }
         }
+    }
+    .accordion-content {
+      margin-top: 1.2rem;
     }
 }
 .accordion.sidebar-section {
