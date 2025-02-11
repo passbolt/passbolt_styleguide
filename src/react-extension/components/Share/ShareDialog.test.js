@@ -147,7 +147,7 @@ describe("As Lu I should see the share dialog", () => {
       await waitFor(() => {
         expect(page.shareNameInput.getAttribute("disabled")).not.toBeNull();
         expect(page.selectRights(1).className).toBe("selected-value disabled");
-        expect(page.removeAro(1).className).toBe('remove-item button button-transparent disabled');
+        expect(page.removeAro(1).className).toBe('remove-item button inline button-transparent disabled');
         expect(page.cancelButton.className).toBe('link cancel');
         expect(page.cancelButton.hasAttribute("disabled")).toBeTruthy();
         expect(page.saveButton.hasAttribute("disabled")).toBeTruthy();
