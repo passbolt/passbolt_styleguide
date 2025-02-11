@@ -23,8 +23,8 @@ import {Trans, withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
 import StandaloneTotpViewModel from "../../../../shared/models/standaloneTotp/StandaloneTotpViewModel";
 import AttentionSVG from "../../../../img/svg/attention.svg";
-import CarretDownSVG from "../../../../img/svg/caret_down.svg";
-import CarretRightSVG from "../../../../img/svg/caret_right.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 class CreateStandaloneTotp extends Component {
   /**
@@ -386,8 +386,8 @@ class CreateStandaloneTotp extends Component {
                   <button className="link no-border" type="button" onClick={this.handleAdvancedSettingClickEvent}>
                     <span><Trans>Advanced settings</Trans></span>
                     {this.state.openAdvancedSettings
-                      ? <CarretDownSVG />
-                      : <CarretRightSVG />
+                      ? <CaretDownSVG/>
+                      : <CaretRightSVG/>
                     }
                   </button>
                 </h4>
