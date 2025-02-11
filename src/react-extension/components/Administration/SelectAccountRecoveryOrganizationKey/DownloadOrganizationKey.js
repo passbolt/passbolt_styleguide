@@ -67,7 +67,8 @@ class DownloadOrganizationKey extends React.Component {
         disabled={false}
         className="organization-recover-key-download-dialog">
         <div className="dialog-body">
-          <p><Trans>A download of the organization private key has automatically started.</Trans><br /><Trans>Make sure your print it or store it in a safe place. You may need it later!</Trans></p>
+          <p><Trans>A download of the organization private key has automatically started.</Trans></p>
+          <p><Trans>Make sure your print it or store it in a safe place. You may need it later!</Trans></p>
         </div>
         <div className="dialog-footer clearfix">
           <button
@@ -77,7 +78,7 @@ class DownloadOrganizationKey extends React.Component {
             <Trans>Download again</Trans>
           </button>
           <button
-            className="button primary"
+            className="button primary form"
             type='button'
             onClick={this.handleCloseClick}
             disabled={this.isProcessing}>
