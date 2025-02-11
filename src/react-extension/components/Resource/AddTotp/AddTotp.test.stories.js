@@ -12,7 +12,6 @@
  * @since         4.4.0
  */
 
-import React from "react";
 import AddTotp from "./AddTotp";
 import {defaultProps} from "./AddTotp.test.data";
 
@@ -21,8 +20,6 @@ export default {
   component: AddTotp,
 };
 
-const Template = args  =>
-  <AddTotp {...args}/>;
-
-export const Initial = Template.bind({});
-Initial.args = defaultProps();
+export const Initial = {
+  args: defaultProps()
+};
