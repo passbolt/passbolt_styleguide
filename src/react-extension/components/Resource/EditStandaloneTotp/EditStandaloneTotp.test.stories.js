@@ -12,7 +12,6 @@
  * @since         4.4.0
  */
 
-import React from "react";
 import {defaultProps} from "./EditStandaloneTotp.test.data";
 import EditStandaloneTotp from "./EditStandaloneTotp";
 import MockPort from "../../../test/mock/MockPort";
@@ -27,8 +26,6 @@ export default {
 const port = new MockPort();
 port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({totp: defaultTotpViewModelDto()}));
 
-const Template = args  =>
-  <EditStandaloneTotp {...args}/>;
-
-export const Initial = Template.bind({});
-Initial.args = defaultProps({context: defaultUserAppContext({port})});
+export const Initial = {
+  args:  defaultProps({context: defaultUserAppContext({port})})
+};
