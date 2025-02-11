@@ -11,7 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
-import React from "react";
 import ConfirmDeleteSsoSettingsDialog from "./ConfirmDeleteSsoSettingsDialog";
 import {defaultProps} from "./ConfirmDeleteSsoSettingsDialog.test.data";
 
@@ -21,7 +20,6 @@ export default {
   component: ConfirmDeleteSsoSettingsDialog
 };
 
-const Template = args => <ConfirmDeleteSsoSettingsDialog {...args}/>;
-
-export const Default = Template.bind({});
-Default.args = defaultProps();
+export const Default = {
+  args: defaultProps()
+};
