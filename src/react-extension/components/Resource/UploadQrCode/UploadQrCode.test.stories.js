@@ -12,7 +12,6 @@
  * @since         4.4.0
  */
 
-import React from "react";
 import UploadQrCode from "./UploadQrCode";
 import {defaultProps} from "./UploadQrCode.test.data";
 
@@ -21,7 +20,6 @@ export default {
   component: UploadQrCode,
 };
 
-const Template = args  => <UploadQrCode {...args}/>;
-
-export const Initial = Template.bind({});
-Initial.args = defaultProps();
+export const Initial = {
+  args: defaultProps()
+};
