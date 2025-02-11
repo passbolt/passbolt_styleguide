@@ -64,6 +64,7 @@ import DiceSVG from "../../../../img/svg/dice.svg";
 import SettingSVG from "../../../../img/svg/settings.svg";
 import LockSVG from "../../../../img/svg/lock.svg";
 import UnlockSVG from "../../../../img/svg/unlock.svg";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class CreateResource extends Component {
   constructor(props) {
@@ -652,7 +653,7 @@ class CreateResource extends Component {
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${isNameError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-password-form-name"><Trans>Name</Trans>{isMaxLengthNameWarning && <Icon name="exclamation" />}</label>
+              <label htmlFor="create-password-form-name"><Trans>Name</Trans>{isMaxLengthNameWarning && <AttentionSVG className="attention-required"/>}</label>
               <input id="create-password-form-name" name="name" type="text" value={resourceViewModel.name || ""} onChange={this.handleInputChange}
                 disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="255"
                 required="required" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
@@ -666,7 +667,7 @@ class CreateResource extends Component {
               }
             </div>
             <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-password-form-uri"><Trans>URI</Trans>{isMaxLengthUriWarning && <Icon name="exclamation" />}</label>
+              <label htmlFor="create-password-form-uri"><Trans>URI</Trans>{isMaxLengthUriWarning && <AttentionSVG className="attention-required"/>}</label>
               <input id="create-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
                 autoComplete="off" value={resourceViewModel.uri || ""} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.state.processing}/>
@@ -677,7 +678,7 @@ class CreateResource extends Component {
               }
             </div>
             <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-password-form-username"><Trans>Username</Trans>{isMaxLengthUsernameWarning && <Icon name="exclamation" />}</label>
+              <label htmlFor="create-password-form-username"><Trans>Username</Trans>{isMaxLengthUsernameWarning && <AttentionSVG className="attention-required"/>}</label>
               <input id="create-password-form-username" name="username" type="text" className="fluid" maxLength="255"
                 autoComplete="off" value={resourceViewModel.username || ""} onChange={this.handleInputChange} placeholder={this.translate("Username")}
                 disabled={this.state.processing}/>
@@ -689,7 +690,7 @@ class CreateResource extends Component {
             </div>
             <div className={`input-password-wrapper input required ${isPasswordError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-password-form-password">
-                <Trans>Password</Trans>{isMaxLengthPasswordWarning && <Icon name="exclamation"/>}
+                <Trans>Password</Trans>{isMaxLengthPasswordWarning && <AttentionSVG className="attention-required"/>}
               </label>
               <div className="password-button-inline">
                 <Password id="create-password-form-password"
@@ -725,7 +726,7 @@ class CreateResource extends Component {
             <div className={`input textarea ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-password-form-description"><Trans>Description</Trans>
                 {isMaxLengthDescriptionWarning &&
-                  <Icon name="exclamation"/>
+                  <AttentionSVG className="attention-required"/>
                 }
                 <button type="button" onClick={this.handleDescriptionToggle} className="button-transparent inline lock-toggle">
                   {resourceViewModel.isDescriptionUnencrypted() ? (

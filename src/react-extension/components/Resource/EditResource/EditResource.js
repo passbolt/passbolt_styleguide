@@ -57,6 +57,13 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import EditSVG from "../../../../img/svg/edit.svg";
+import DeleteSVG from "../../../../img/svg/delete.svg";
+import DiceSVG from "../../../../img/svg/dice.svg";
+import SettingSVG from "../../../../img/svg/settings.svg";
+import LockSVG from "../../../../img/svg/lock.svg";
+import UnlockSVG from "../../../../img/svg/unlock.svg";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class EditResource extends Component {
   constructor(props) {
@@ -769,7 +776,7 @@ class EditResource extends Component {
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${isNameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="edit-password-form-name"><Trans>Name</Trans>{isMaxLengthNameWarning && <Icon name="exclamation"/>}</label>
+              <label htmlFor="edit-password-form-name"><Trans>Name</Trans>{isMaxLengthNameWarning && <AttentionSVG className="attention-required"/>}</label>
               <input id="edit-password-form-name" name="name" type="text" value={resourceViewModel.name || ""} onChange={this.handleInputChange}
                 disabled={this.hasAllInputDisabled()} ref={this.nameInputRef} className="required fluid" maxLength="255"
                 required="required" autoComplete="off" autoFocus={true}/>
@@ -783,7 +790,7 @@ class EditResource extends Component {
               )}
             </div>
             <div className={`input text} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="edit-password-form-uri"><Trans>URI</Trans>{isMaxLengthUriWarning && <Icon name="exclamation"/>}</label>
+              <label htmlFor="edit-password-form-uri"><Trans>URI</Trans>{isMaxLengthUriWarning && <AttentionSVG className="attention-required"/>}</label>
               <input id="edit-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
                 autoComplete="off" value={resourceViewModel.uri || ""} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.hasAllInputDisabled()}/>
@@ -794,7 +801,7 @@ class EditResource extends Component {
               )}
             </div>
             <div className={`input text ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="edit-password-form-username"><Trans>Username</Trans>{isMaxLengthUsernameWarning && <Icon name="exclamation"/>}</label>
+              <label htmlFor="edit-password-form-username"><Trans>Username</Trans>{isMaxLengthUsernameWarning && <AttentionSVG className="attention-required"/>}</label>
               <input id="edit-password-form-username" name="username" type="text" className="fluid" maxLength="255"
                 autoComplete="off" value={resourceViewModel.username || ""} onChange={this.handleInputChange}
                 placeholder={this.translate("Username")}
@@ -807,7 +814,7 @@ class EditResource extends Component {
             </div>
             <div className={`input-password-wrapper input required ${isPasswordError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-password">
-                <Trans>Password</Trans>{isMaxLengthPasswordWarning && <Icon name="exclamation"/>}
+                <Trans>Password</Trans>{isMaxLengthPasswordWarning && <AttentionSVG className="attention-required"/>}
               </label>
               <div className="password-button-inline">
                 <Password id="edit-password-form-password" name="password"
@@ -821,13 +828,13 @@ class EditResource extends Component {
                 />
                 <button type="button" onClick={this.handleGeneratePasswordButtonClick}
                   className={`password-generate button-icon ${this.hasAllInputDisabled() || this.isPasswordDisabled() ? "disabled" : ""}`}>
-                  <Icon name='dice' big={true}/>
+                  <DiceSVG/>
                   <span className="visually-hidden"><Trans>Generate</Trans></span>
                 </button>
                 {this.canUsePasswordGenerator &&
                   <button type="button" onClick={this.handleOpenGenerator}
                     className={`password-generator button-icon ${this.hasAllInputDisabled() || this.isPasswordDisabled() ? "disabled" : ""}`}>
-                    <Icon name='settings' big={true}/>
+                    <SettingSVG/>
                     <span className="visually-hidden"><Trans>Open generator</Trans></span>
                   </button>
                 }
@@ -845,19 +852,19 @@ class EditResource extends Component {
             <div className={`input textarea ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-description"><Trans>Description</Trans>
                 {isMaxLengthDescriptionWarning &&
-                  <Icon name="exclamation"/>
+                  <AttentionSVG className="attention-required"/>
                 }
                 {!this.mustEncryptDescription &&
                 <button type="button" onClick={this.handleDescriptionToggle} className="link inline lock-toggle">
                   <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
-                    <Icon name="lock-open"/>
+                    <UnlockSVG/>
                   </Tooltip>
                 </button>
                 }
                 {this.mustEncryptDescription &&
                 <button type="button" onClick={this.handleDescriptionToggle} className="link inline lock-toggle">
                   <Tooltip message={this.translate("The description content will be encrypted.")}>
-                    <Icon name="lock"/>
+                    <LockSVG/>
                   </Tooltip>
                 </button>
                 }
@@ -886,10 +893,10 @@ class EditResource extends Component {
                 <div className="input-wrapper-inline totp">
                   <Totp totp={resourceViewModel.totp}/>
                   <button type="button" className="edit-totp button-icon" onClick={this.handleTotpClick} disabled={this.state.processing}>
-                    <Icon name='edit' big={true}/>
+                    <EditSVG/>
                   </button>
                   <button type="button" className="delete-totp button-icon" onClick={this.handleDeleteTotpClick} disabled={this.state.processing}>
-                    <Icon name='trash' big={true}/>
+                    <DeleteSVG/>
                   </button>
                 </div>
               </div>
