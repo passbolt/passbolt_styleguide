@@ -21,27 +21,6 @@ label {
     }
 }
 
-/*
-	Required Label
-
-	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
-	.required		- additional red star
-*/
-.required {
-  > label:after, .label-required-inline > label:after {
-    content: "\002A"; /* unicode character * */
-    color: var(--Palette-Contrast-3);
-    font-weight: 700;
-    margin-left: .4rem;
-  }
-  .label-required-inline {
-    display: flex;
-    label + .tooltip {
-      margin-left: .5rem;
-    }
-  }
-}
-
 .input.error label {
   color: var(--Palette-Contrast-3);
   & > .info {
@@ -50,7 +29,7 @@ label {
 }
 
 .input.warning label {
-    color: var(--Progress-and-entropy-bar-warning);
+  color: var(--Progress-and-entropy-bar-warning);
   & > .info {
     color: var(--Text-and-icons-Main-text);
   }
@@ -69,3 +48,38 @@ label {
     margin-bottom: 1.2rem;
   }
 }
+
+/*
+	Required Label
+
+	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
+	.required		- additional red star
+*/
+.required {
+  > label:after, .label-required-inline > label:after {
+    content: "\002A"; /* unicode character * */
+    color: var(--Palette-Contrast-3);
+    font-weight: 700;
+    margin-left: .4rem;
+  }
+  .label-required-inline {
+    display: flex;
+    margin-bottom: 1.2rem;
+
+    label {
+      margin-bottom: 0;
+
+      & + .tooltip {
+        display: flex;
+        margin-left: .5rem;
+
+        svg {
+          width: 1.6rem;
+          height: 1.6rem;
+        }
+      }
+    }
+  }
+}
+
+

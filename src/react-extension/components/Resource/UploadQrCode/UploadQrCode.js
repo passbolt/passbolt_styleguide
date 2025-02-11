@@ -19,9 +19,9 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {Trans, withTranslation} from "react-i18next";
 import Tooltip from "../../Common/Tooltip/Tooltip";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {Html5Qrcode, Html5QrcodeSupportedFormats} from "html5-qrcode";
 import StandaloneTotpViewModel from "../../../../shared/models/standaloneTotp/StandaloneTotpViewModel";
+import InfoSVG from "../../../../img/svg/info.svg";
 
 class UploadQrCode extends Component {
   /**
@@ -273,7 +273,7 @@ class UploadQrCode extends Component {
                   <Trans>Upload a QR code</Trans>
                 </label>
                 <Tooltip message={this.translate("Only PNG or JPEG file are accepted.")}>
-                  <Icon name="info-circle"/>
+                  <InfoSVG/>
                 </Tooltip>
               </div>
               <div className="input-file-inline">
