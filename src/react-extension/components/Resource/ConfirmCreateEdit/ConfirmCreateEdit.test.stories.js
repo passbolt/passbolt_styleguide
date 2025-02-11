@@ -11,8 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.6.1
  */
-import {MemoryRouter, Route} from "react-router-dom";
-import React from "react";
 import ConfirmCreateEdit, {
   ConfirmEditCreateOperationVariations,
   ConfirmEditCreateRuleVariations
@@ -24,35 +22,34 @@ export default {
   component: ConfirmCreateEdit
 };
 
-const Template = () => args =>
-  <MemoryRouter initialEntries={['/']}>
-    <Route component={routerProps => <ConfirmCreateEdit {...args} {...routerProps}/>}></Route>
-  </MemoryRouter>;
-
-export const CreateConfirmPwnedPassword = Template().bind({});
-CreateConfirmPwnedPassword.args = {
-  operation: ConfirmEditCreateOperationVariations.CREATE,
-  rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
-  resourceName: defaultResourceDto().name
+export const CreateConfirmPwnedPassword = {
+  args: {
+    operation: ConfirmEditCreateOperationVariations.CREATE,
+    rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+    resourceName: defaultResourceDto().metadata.name
+  }
 };
 
-export const CreateConfirmMinimumEntropyPassword = Template().bind({});
-CreateConfirmMinimumEntropyPassword.args = {
-  operation: ConfirmEditCreateOperationVariations.CREATE,
-  rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
-  resourceName: defaultResourceDto().name
+export const CreateConfirmMinimumEntropyPassword = {
+  args: {
+    operation: ConfirmEditCreateOperationVariations.CREATE,
+    rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+    resourceName: defaultResourceDto().metadata.name
+  }
 };
 
-export const EditConfirmPwnedPassword = Template().bind({});
-EditConfirmPwnedPassword.args = {
-  operation: ConfirmEditCreateOperationVariations.EDIT,
-  rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
-  resourceName: defaultResourceDto().name
+export const EditConfirmPwnedPassword = {
+  args: {
+    operation: ConfirmEditCreateOperationVariations.EDIT,
+    rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+    resourceName: defaultResourceDto().metadata.name
+  }
 };
 
-export const EditConfirmMinimumEntropyPassword = Template().bind({});
-EditConfirmMinimumEntropyPassword.args = {
-  operation: ConfirmEditCreateOperationVariations.EDIT,
-  rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
-  resourceName: defaultResourceDto().name
+export const EditConfirmMinimumEntropyPassword = {
+  args: {
+    operation: ConfirmEditCreateOperationVariations.EDIT,
+    rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+    resourceName: defaultResourceDto().metadata.name
+  }
 };
