@@ -191,76 +191,70 @@ class PasswordExpiryDialog extends React.Component {
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className="radiolist-alt">
-              <div className={`input radio`}>
+              <div className={`input radio ${viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.AUTOMATIC ? "checked" : ""}`}>
+                <input type="radio"
+                  value={PasswordExpiryOptionEnum.AUTOMATIC}
+                  onChange={() => this.selectExpiryOption(PasswordExpiryOptionEnum.AUTOMATIC)}
+                  name="passwordExpiryOption"
+                  checked={viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.AUTOMATIC}
+                  id="passwordExpiryOptionAutomatic"
+                  disabled={this.hasAllInputDisabled()}/>
                 <label htmlFor="passwordExpiryOptionAutomatic">
-                  <input type="radio"
-                    value={PasswordExpiryOptionEnum.AUTOMATIC}
-                    onChange={() => this.selectExpiryOption(PasswordExpiryOptionEnum.AUTOMATIC)}
-                    name="passwordExpiryOption"
-                    checked={viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.AUTOMATIC}
-                    id="passwordExpiryOptionAutomatic"
-                    disabled={this.hasAllInputDisabled()}/>
-                  <span>
-                    <span className="name"><Trans>Set the date automatically:</Trans></span>
-                    <span className="info">
-                      <input
-                        type="number"
-                        value={viewModel.passwordExpiryDurationInDay}
-                        id="passwordExpiryDateAutomatic"
-                        name="passwordExpiryDurationInDay"
-                        onChange={this.handleDurationInDayChange}
-                        disabled={this.hasAllInputDisabled()}
-                        min="1"
-                        max="365"/>
-                      <Trans>days from now.</Trans>
-                    </span>
-                    {errors?.hasError("passwordExpiryDurationInDay") && this.displayErrors(errors.getError("passwordExpiryDurationInDay"))}
+                  <span className="name"><Trans>Set the date automatically:</Trans></span>
+                  <span className="info">
+                    <input
+                      type="number"
+                      value={viewModel.passwordExpiryDurationInDay}
+                      id="passwordExpiryDateAutomatic"
+                      name="passwordExpiryDurationInDay"
+                      onChange={this.handleDurationInDayChange}
+                      disabled={this.hasAllInputDisabled()}
+                      min="1"
+                      max="365"/>
+                    <Trans>days from now.</Trans>
                   </span>
+                  {errors?.hasError("passwordExpiryDurationInDay") && this.displayErrors(errors.getError("passwordExpiryDurationInDay"))}
                 </label>
               </div>
-              <div className={`input radio`}>
+              <div className={`input radio ${viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.MANUAL ? "checked" : ""}`}>
+                <input type="radio"
+                  value={PasswordExpiryOptionEnum.MANUAL}
+                  onChange={() => this.selectExpiryOption(PasswordExpiryOptionEnum.MANUAL)}
+                  name="passwordExpiryOption"
+                  checked={viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.MANUAL}
+                  id="passwordExpiryOptionManual"
+                  disabled={this.hasAllInputDisabled()}/>
                 <label htmlFor="passwordExpiryOptionManual">
-                  <input type="radio"
-                    value={PasswordExpiryOptionEnum.MANUAL}
-                    onChange={() => this.selectExpiryOption(PasswordExpiryOptionEnum.MANUAL)}
-                    name="passwordExpiryOption"
-                    checked={viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.MANUAL}
-                    id="passwordExpiryOptionManual"
-                    disabled={this.hasAllInputDisabled()}/>
-                  <span>
-                    <span className="name"><Trans>Set the date manually:</Trans></span>
-                    <span className="info date-wrapper">
-                      <div className="button-inline">
-                        <input
-                          className={`fluid form-element ${viewModel.passwordExpiryDate ? "" : "empty"}`}
-                          type="date"
-                          value={viewModel.passwordExpiryDate}
-                          id="passwordExpiryDateManual"
-                          name="passwordExpiryDate"
-                          onChange={this.handleDateChange}
-                          disabled={this.hasAllInputDisabled()}
-                        />
-                        <Icon name="calendar"/>
-                      </div>
-                    </span>
-                    {errors?.hasError("passwordExpiryDate") && this.displayErrors(errors.getError("passwordExpiryDate"))}
+                  <span className="name"><Trans>Set the date manually:</Trans></span>
+                  <span className="info date-wrapper">
+                    <div className="button-inline">
+                      <input
+                        className={`fluid form-element ${viewModel.passwordExpiryDate ? "" : "empty"}`}
+                        type="date"
+                        value={viewModel.passwordExpiryDate}
+                        id="passwordExpiryDateManual"
+                        name="passwordExpiryDate"
+                        onChange={this.handleDateChange}
+                        disabled={this.hasAllInputDisabled()}
+                      />
+                      <Icon name="calendar"/>
+                    </div>
                   </span>
+                  {errors?.hasError("passwordExpiryDate") && this.displayErrors(errors.getError("passwordExpiryDate"))}
                 </label>
               </div>
-              <div className={`input radio`}>
+              <div className={`input radio ${viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.NEVER ? "checked" : ""}`}>
+                <input type="radio"
+                  value={PasswordExpiryOptionEnum.NEVER}
+                  onChange={() => this.selectExpiryOption(PasswordExpiryOptionEnum.NEVER)}
+                  name="passwordExpiryOption"
+                  checked={viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.NEVER}
+                  id="passwordExpiryOptionNever"
+                  disabled={this.hasAllInputDisabled()}/>
                 <label htmlFor="passwordExpiryOptionNever">
-                  <input type="radio"
-                    value={PasswordExpiryOptionEnum.NEVER}
-                    onChange={() => this.selectExpiryOption(PasswordExpiryOptionEnum.NEVER)}
-                    name="passwordExpiryOption"
-                    checked={viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.NEVER}
-                    id="passwordExpiryOptionNever"
-                    disabled={this.hasAllInputDisabled()}/>
-                  <span>
-                    <span className="name"><Trans>Not set</Trans></span>
-                    <span className="info">
-                      <Trans count={this.resourceCount}>This resource does not need an expiry date.</Trans>
-                    </span>
+                  <span className="name"><Trans>Not set</Trans></span>
+                  <span className="info">
+                    <Trans count={this.resourceCount}>This resource does not need an expiry date.</Trans>
                   </span>
                 </label>
               </div>
