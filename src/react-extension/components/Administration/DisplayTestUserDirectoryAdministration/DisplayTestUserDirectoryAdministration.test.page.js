@@ -170,7 +170,7 @@ class DisplayTestUserDirectoryAdministrationDialogPageObject {
    * Returns the number of errors element
    */
   get errors() {
-    return this._container.querySelector('.directory-errors.error').textContent;
+    return this._container.querySelector('.accordion-directory-errors + .warning').textContent;
   }
 
   /**
