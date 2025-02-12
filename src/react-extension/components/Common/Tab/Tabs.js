@@ -61,7 +61,7 @@ class Tabs extends React.Component {
   render() {
     return (
       <div className="tabs">
-        <ul className="tabs-nav tabs-nav--bordered">
+        <ul className="tabs-nav">
           {
             this.props.children.map(({key, props}) =>
               <Tab
