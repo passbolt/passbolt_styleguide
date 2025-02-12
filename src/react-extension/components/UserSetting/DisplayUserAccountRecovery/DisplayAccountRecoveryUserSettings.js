@@ -22,9 +22,10 @@ import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext"
 import {withDialog} from "../../../contexts/DialogContext";
 import ManageAccountRecoveryUserSettings from "../../AccountRecovery/ManageAccountRecoveryUserSettings/ManageAccountRecoveryUserSettings";
 import HandleAccountRecoveryUserSettingsRoute from "../../AccountRecovery/HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute";
-import Tooltip from "../../Common/Tooltip/Tooltip";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {getUserStatus} from "../../../../shared/utils/userUtils";
+import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
+import Fingerprint from "../../Common/Fingerprint/Fingerprint";
 
 class DisplayAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -194,10 +195,9 @@ class DisplayAccountRecoveryUserSettings extends Component {
                       <div className="content-wrapper">
                         <div className="content">
                           <div>
-                            <Tooltip message={this.formatFingerprint(this.requestorFingerprint)} direction="bottom">
+                            <TooltipPortal message={<Fingerprint fingerprint={this.requestorFingerprint} />}>
                               <span className="name-with-tooltip">{this.requestorName}</span>
-                            </Tooltip>
-                            &nbsp;
+                            </TooltipPortal>
                             <span className="name"><Trans>requested this operation</Trans></span>
                           </div>
                           <div className="subinfo light">

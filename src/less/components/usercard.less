@@ -24,7 +24,6 @@
 
             .subinfo {
                 .ellipsis();
-                opacity: .5;
                 &.third-level {
                     padding-top: .8rem;
                 }
@@ -81,8 +80,17 @@
         height: @avatar-size;
 
         svg {
-          width: @avatar-size;
-          height: @avatar-size;
+            &:not(.attention-required) {
+                width: @avatar-size;
+                height: @avatar-size;
+            }
+
+            &.attention-required {
+                width: 1.4rem;
+                height: 1.4rem;
+                top: -0.07rem;
+                left: 2.8rem;
+            }
         }
 
         img {
