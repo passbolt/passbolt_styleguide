@@ -185,6 +185,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleHealthcheckClick = this.handleHealthcheckClick.bind(this);
     this.handleContentTypesEncryptedMetadataClick = this.handleContentTypesEncryptedMetadataClick.bind(this);
     this.handleContentTypesMetadataKeyClick = this.handleContentTypesMetadataKeyClick.bind(this);
+    this.handleMigrateMetadataClick = this.handleMigrateMetadataClick.bind(this);
   }
 
   /**
@@ -304,6 +305,13 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleContentTypesMetadataKeyClick() {
     this.props.navigationContext.onGoToAdministrationContentTypesMetadataKeyRequested();
+  }
+
+  /**
+   * Handle when the user click on the migrate metadata key settings menu
+   */
+  handleMigrateMetadataClick() {
+    this.props.navigationContext.onGoToAdministrationMigrateMetadataRequested();
   }
 
   /**
@@ -440,6 +448,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isContentTypesMetadataKeySelected() {
     return AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If content types metadata key menu is selected
+   * @returns {boolean}
+   */
+  isMigrateMetadataSelected() {
+    return AdministrationWorkspaceMenuTypes.MIGRATE_METADATA === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -651,6 +667,20 @@ class DisplayAdministrationMenu extends React.Component {
                   <div className="main-cell">
                     <button className="link no-border" type="button" onClick={this.handleContentTypesMetadataKeyClick}>
                       <span><Trans>Metadata key</Trans></span>
+                      <span className="chips beta">beta</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          }
+          {this.canIUseMetadata &&
+            <li id="migrate_metadata_menu">
+              <div className={`row  ${this.isMigrateMetadataSelected() ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button className="link no-border" type="button" onClick={this.handleMigrateMetadataClick}>
+                      <span><Trans>Migrate metadata</Trans></span>
                       <span className="chips beta">beta</span>
                     </button>
                   </div>
