@@ -12,9 +12,6 @@
  * @since         2.14.0
  */
 
-import {MemoryRouter, Route} from "react-router-dom";
-import React from "react";
-import PropTypes from "prop-types";
 import DeleteUserWithConflicts from "./DeleteUserWithConflicts";
 import {defaultContext} from "./DeleteUserWithConflicts.test.data";
 
@@ -24,17 +21,9 @@ export default {
   component: DeleteUserWithConflicts
 };
 
-const Template = args =>
-  <MemoryRouter initialEntries={['/']}>
-    <Route component={routerProps => <DeleteUserWithConflicts {...args} {...routerProps}/>}></Route>
-  </MemoryRouter>;
-
-Template.propTypes = {
-  context: PropTypes.object,
-};
-
-export const Initial = Template.bind({});
-Initial.args = {
-  onClose: () => {},
-  context: defaultContext()
+export const Initial = {
+  args: {
+    onClose: () => {},
+    context: defaultContext()
+  }
 };
