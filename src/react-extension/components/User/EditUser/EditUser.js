@@ -516,12 +516,12 @@ class EditUser extends Component {
                 </span>
               }
             </div>
+            {!isUserSuspended && this.state.disabled &&
+              <div className="message warning no-margin">
+                <Trans><b>Warning:</b> Suspension is scheduled for the {{suspendedDate}}</Trans>
+              </div>
+            }
           </div>
-          {!isUserSuspended && this.state.disabled &&
-            <div className="message warning">
-              <Trans><b>Warning:</b> Suspension is scheduled for the {{suspendedDate}}</Trans>
-            </div>
-          }
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
             <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
