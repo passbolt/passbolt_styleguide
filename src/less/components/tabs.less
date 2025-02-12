@@ -1,12 +1,32 @@
 /* tabs */
 .tabs {
     width: 100%;
+
+    .form-content {
+      border-radius: 0px;
+    }
 }
 
 .tabs-nav {
-    border-bottom: 1px solid @tab-border;
+    background: var(--Workspace-Panels-background);
+    border-top-left-radius: var(--Button-border-radius);
+    border-top-right-radius: var(--Button-border-radius);
+    display: flex;
+    width: 100%;
+    border-bottom: .1rem solid var(--Workspace-Dividers);
 
     li {
+        &.tab {
+          width: 100%;
+          text-align: center;
+          &.active {
+            button {
+              border-bottom: 1px solid var(--Palette-Contrast-1);
+              border-radius: 0;
+              margin-bottom: -1px;
+            }
+            }
+        }
         display: inline;
         div {
             display: inline-block;
@@ -15,20 +35,9 @@
             background: transparent;
             display: inline-block;
             padding: .4em 1.75em;
-            margin-left: 1.25em;
             font-size: 1.5rem;
             border: 0;
             box-shadow: none;
-
-            &.selected {
-                margin-bottom: -1px;
-                border: 1px solid @tab-border;
-                border-bottom: 1px solid @tab-selected-background;
-                background: @tab-selected-background;
-                .rounded();
-                border-bottom-left-radius: 0;
-                border-bottom-right-radius: 0;
-            }
         }
     }
 
