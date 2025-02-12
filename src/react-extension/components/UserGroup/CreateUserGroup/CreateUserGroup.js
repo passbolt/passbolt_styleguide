@@ -543,7 +543,7 @@ class CreateUserGroup extends Component {
                     itemsRenderer={this.renderContainer}
                     length={this.state.groups_users.length}
                     minSize={4}
-                    type={this.state.groups_users.length < 3 ? "simple" : "uniform"}
+                    type={this.state.groups_users.length < 4 ? "simple" : "uniform"}
                     threshold={30}>
                   </ReactList>
                 }
