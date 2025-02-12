@@ -1,26 +1,9 @@
 /*
-	form to add new permissions
-	basically this form is embedded in a dedicated iframe released by the plugin
-*/
-.form-content.permission-add {
-    label {
-        margin-top: .4rem;
-    }
-    .autocomplete.input {
-        margin-bottom: 0;
-    }
-    .message {
-        padding-left: 0;
-    }
-}
-
-/*
 	autocomplete users results
 	basically this list of users is embedded in a dedicated iframe released by the plugin
 */
 .autocomplete-wrapper {
     position: relative;
-    margin-top: -.7rem;
 
     .autocomplete-content {
         position: absolute;
@@ -31,8 +14,10 @@
         padding: 0;
         margin: 0;
         background: var(--Field-Field-background);
-        border: 1px solid var(--Field-Field-border);
-        border-radius: 0 var(--Menu-radius);
+        border-right: 1px solid var(--Field-Field-border);
+        border-left: 1px solid var(--Field-Field-border);
+        border-bottom: 1px solid var(--Field-Field-border);
+        border-radius: 0 0 var(--Menu-radius) var(--Menu-radius);
         max-height: 19.8rem;
         overflow: auto;
         box-sizing: border-box;
@@ -131,4 +116,11 @@
             max-height: none;
         }
     }
+}
+
+.input.autocomplete.no-focus {
+  input:focus, input:focus-visible {
+    border-radius: var(--Button-border-radius) var(--Button-border-radius) 0 0;
+    box-shadow: inset 0 0 0 .1rem var(--Field-Field-border);
+  }
 }
