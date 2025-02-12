@@ -23,11 +23,15 @@ import ConfigurePasswordGenerator from "../../../shared/components/GeneratePassw
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
 import Transition from "react-transition-group/cjs/Transition";
-import Icon from "../../../shared/components/Icons/Icon";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import Password from "../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
 import ClipBoard from '../../../shared/lib/Browser/clipBoard';
+import CloseSvg from "../../../img/svg/close.svg";
+import DiceSVG from "../../../img/svg/dice.svg";
+import CopySVG from "../../../img/svg/copy.svg";
+import HealthCheckSuccessSvg from "../../../img/svg/healthcheck_success.svg";
+import Icon from "../../../shared/components/Icons/Icon";
 
 class GeneratePasswordPage extends React.Component {
   constructor(props) {
@@ -205,7 +209,7 @@ class GeneratePasswordPage extends React.Component {
           </a>
           <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button"
             title={this.translate("Cancel")}>
-            <Icon name="close"/>
+            <CloseSvg/>
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>
         </div>
@@ -225,14 +229,14 @@ class GeneratePasswordPage extends React.Component {
                   onChange={this.handleInputChange}
                   disabled={this.state.processing}/>
                 <a onClick={this.handleGeneratePasswordButtonClick} className="password-generate button button-icon">
-                  <Icon name="dice"/>
+                  <DiceSVG/>
                   <span className="visually-hidden"><Trans>Generate</Trans></span>
                 </a>
                 <a onClick={this.handleCopyPassword} className="copy-to-clipboard button button-icon">
                   <Transition in={this.state.copySecretState === "default"} appear={false} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copySecretState !== "default" ? "visually-hidden" : ""}`}>
-                        <Icon name="copy-to-clipboard"/>
+                        <CopySVG/>
                       </span>
                     )}
                   </Transition>
@@ -246,7 +250,7 @@ class GeneratePasswordPage extends React.Component {
                   <Transition in={this.state.copySecretState === "done"} appear={true} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copySecretState !== "done" ? "visually-hidden" : ""}`}>
-                        <Icon name="check"/>
+                        <HealthCheckSuccessSvg/>
                       </span>
                     )}
                   </Transition>
