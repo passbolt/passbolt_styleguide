@@ -68,7 +68,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button type="button" className="button primary" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
+        <button type="button" className="button primary form" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
           <span><Trans>Save</Trans></span>
         </button>
       </div>

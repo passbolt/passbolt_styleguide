@@ -65,7 +65,7 @@ export default class DisplaySubscriptionKeyPage {
    * Returns the enew Key button element
    */
   get renewKeyButton() {
-    return this._page.container.querySelector('.actions-wrapper button.primary');
+    return this._page.container.querySelector('.actions-wrapper button.secondary');
   }
 
   /**
@@ -129,7 +129,7 @@ export default class DisplaySubscriptionKeyPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsUpdateButton() {
-    return this._page.container.querySelector(".actions-wrapper button");
+    return this._page.container.querySelector(".actions-wrapper button.primary");
   }
 
   /**

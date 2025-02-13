@@ -96,10 +96,12 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button type="button secondary" disabled={!this.isResetEnabled()} onClick={this.handleEditSubscriptionClick}>
-          <span><Trans>Reset settings</Trans></span>
-        </button>
-        <button type="button" className="button primary" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
+        <div className="left-actions-wrapper">
+          <button type="button" className="button secondary" disabled={!this.isResetEnabled()} onClick={this.handleEditSubscriptionClick}>
+            <span><Trans>Reset settings</Trans></span>
+          </button>
+        </div>
+        <button type="button" className="button primary form" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
           <span><Trans>Save</Trans></span>
         </button>
       </div>

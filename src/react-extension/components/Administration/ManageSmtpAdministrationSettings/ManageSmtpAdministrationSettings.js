@@ -463,7 +463,9 @@ export class ManageSmtpAdministrationSettings extends React.Component {
             </div>
             {this.shouldShowSourceWarningMessage() &&
                   <div className="warning message">
-                    <Trans><b>Warning:</b> These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.</Trans>
+                    <div>
+                      <Trans><b>Warning:</b> These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.</Trans>
+                    </div>
                   </div>
             }
           </div>

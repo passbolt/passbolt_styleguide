@@ -93,7 +93,7 @@ class DisplayAdministrationUserPassphrasePoliciesActions extends React.Component
     const isDisabled = !this.isActionEnabled;
     return (
       <div className="actions-wrapper">
-        <button type="button" className="button primary" disabled={isDisabled} id="save-settings" onClick={this.handleSave}>
+        <button type="button" className="button primary form" disabled={isDisabled} id="save-settings" onClick={this.handleSave}>
           <span><Trans>Save</Trans></span>
         </button>
       </div>

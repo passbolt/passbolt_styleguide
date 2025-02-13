@@ -87,7 +87,7 @@ class TotpGetStarted extends Component {
             <span><Trans>Cancel</Trans></span>
           </button>
           <button
-            className="button primary primary"
+            className="button primary form"
             type='button'
             onClick={this.handleGetStartedClick}>
             <span><Trans>Get started</Trans></span>

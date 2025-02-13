@@ -115,7 +115,7 @@ class ExportAccountToDesktop extends React.Component {
           </div>
         </div>
         <div className="actions-wrapper">
-          <button type="button" id="download-account-kit" className={`button primary`} role="button" onClick={this.handleDownloadAccount}>
+          <button type="button" id="download-account-kit" className={`button primary form`} role="button" onClick={this.handleDownloadAccount}>
             <Trans>Download your account kit</Trans>
           </button>
         </div>

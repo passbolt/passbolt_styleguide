@@ -383,7 +383,7 @@ class ChangeUserSecurityToken extends Component {
           </div>
         </div>
         <div className="actions-wrapper">
-          <button className={`button primary ${processingClassName}`} type="submit" disabled={this.isProcessing} onClick={this.handleSubmit}>
+          <button className={`button primary form ${processingClassName}`} type="submit" disabled={this.isProcessing} onClick={this.handleSubmit}>
             <Trans>Save</Trans>
           </button>
         </div>

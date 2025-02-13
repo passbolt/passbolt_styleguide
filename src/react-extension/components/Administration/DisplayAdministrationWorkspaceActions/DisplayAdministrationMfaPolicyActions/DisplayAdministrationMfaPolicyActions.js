@@ -91,7 +91,7 @@ class DisplayAdministrationMfaPolicyActions extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button className="button primary" type="button" disabled={!this.isSaveEnabled()} id="save-settings" onClick={this.handleSave}>
+        <button className="button primary form" type="button" disabled={!this.isSaveEnabled()} id="save-settings" onClick={this.handleSave}>
           <span><Trans>Save</Trans></span>
         </button>
       </div>

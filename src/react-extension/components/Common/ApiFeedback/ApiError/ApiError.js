@@ -17,6 +17,7 @@ import {Trans, withTranslation} from "react-i18next";
 import AnimatedFeedback from "../../../../../shared/components/Icons/AnimatedFeedback";
 import CarretDownSVG from "../../../../../img/svg/caret_down.svg";
 import CarretRightSVG from "../../../../../img/svg/caret_right.svg";
+import LogoSVG from "../../../../../img/svg/logo.svg";
 
 class ApiError extends Component {
   /**
@@ -59,7 +60,9 @@ class ApiError extends Component {
       <div id="container" className="container api-feedback page">
         <div className="content">
           <div className="header">
-            <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+            <div className="logo-svg">
+              <LogoSVG role="img" width="20rem" height="3.5rem"/>
+            </div>
           </div>
           <div className="api-feedback-card">
             <AnimatedFeedback name="attention"/>

@@ -704,7 +704,7 @@ class TransferToMobile extends React.Component {
         </div>
         <div className='actions-wrapper'>
           {this.state.step === TransferToMobileSteps.START &&
-            <button type="button" className={`button primary ${processingClassName}`} role="button" onClick={this.handleClickStart}>
+            <button type="button" className={`button primary form ${processingClassName}`} role="button" onClick={this.handleClickStart}>
               <Trans>Start</Trans>
             </button>
           }
@@ -714,12 +714,12 @@ class TransferToMobile extends React.Component {
             </button>
           }
           {this.state.step === TransferToMobileSteps.COMPLETE  &&
-            <button className={`button primary ${processingClassName}`} type="button" onClick={this.handleClickDone}>
+            <button className={`button primary form ${processingClassName}`} type="button" onClick={this.handleClickDone}>
               <Trans>Configure another phone</Trans>
             </button>
           }
           {(this.state.step === TransferToMobileSteps.CANCEL || this.state.step === TransferToMobileSteps.ERROR) &&
-            <button className={`button primary ${processingClassName}`} type="button" onClick={this.handleClickStart}>
+            <button className={`button primary form ${processingClassName}`} type="button" onClick={this.handleClickStart}>
               <Trans>Restart</Trans>
             </button>
           }
