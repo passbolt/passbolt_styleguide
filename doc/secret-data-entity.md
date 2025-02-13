@@ -13,6 +13,12 @@ classDiagram
         description? string
     }
 
-    SecretData <|-- SecretDataV4DefaultEntity
+    class SecretDataV4DefaultTotpEntity {
+        password string
+        totp TotpEntity
+        description? string
+    }
 
+    SecretData <|-- SecretDataV4DefaultEntity
+    SecretData <|-- SecretDataV4DefaultTotpEntity
 ```
