@@ -218,6 +218,7 @@ class ExtApp extends Component {
                                             "/app/administration/password-expiry",
                                             "/app/administration/content-types/metadata",
                                             "/app/administration/content-types/metadata-key",
+                                            "/app/administration/migrate-metadata",
                                           ]}>
                                             <AdministrationWorkspaceContextProvider>
                                               <AdminAccountRecoveryContextProvider>

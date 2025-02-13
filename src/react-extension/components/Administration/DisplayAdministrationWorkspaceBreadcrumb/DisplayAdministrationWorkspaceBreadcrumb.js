@@ -83,6 +83,8 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("Encrypted metadata");
       case AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY:
         return this.translate("Metadata key");
+      case AdministrationWorkspaceMenuTypes.MIGRATE_METADATA:
+        return this.translate("Migrate metadata");
       default:
         return "";
     }
