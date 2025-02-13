@@ -12,21 +12,31 @@
  * @since         5.0.0
  */
 
-import EntityV2 from "../abstract/entityV2";
+import SecretDataEntity from "./secretDataEntity";
 
-class SecretDataEntity extends EntityV2 {
+class SecretDataV5DefaultEntity extends SecretDataEntity {
   /**
-   * Get the secret data schema
+   * Get the secret data v5 default schema
    * @returns {object}
    */
   static getSchema() {
     return {
       "type": "object",
-      "required": [],
+      "required": [
+        "object_type",
+        "password",
+      ],
       "properties": {
-        "object_type": {
+        ...SecretDataEntity.getSchema().properties,
+        "password": {
           "type": "string",
-          "enum": ["PASSBOLT_SECRET_DATA"],
+          "maxLength": 4096,
+          "nullable": true
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 10000,
+          "nullable": true,
         },
       }
     };
@@ -38,12 +48,20 @@ class SecretDataEntity extends EntityV2 {
    * ==================================================
    */
   /**
-   * Get object type
-   * @returns {string} object_type
+   * Get password
+   * @returns {string} password
    */
-  get objectType() {
-    return this._props.object_type;
+  get password() {
+    return this._props.password;
+  }
+
+  /**
+   * Get description
+   * @returns {string} description
+   */
+  get description() {
+    return this._props.description;
   }
 }
 
-export default SecretDataEntity;
+export default SecretDataV5DefaultEntity;

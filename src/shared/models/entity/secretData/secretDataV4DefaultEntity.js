@@ -45,6 +45,27 @@ class SecretDataV4DefaultEntity extends secretDataEntity {
       }
     };
   }
+
+  /*
+   * ==================================================
+   * Dynamic properties getters
+   * ==================================================
+   */
+  /**
+   * Get password
+   * @returns {string} password
+   */
+  get password() {
+    return this._props.password;
+  }
+
+  /**
+   * Get description
+   * @returns {string} description
+   */
+  get description() {
+    return this._props.description;
+  }
 }
 
 export default SecretDataV4DefaultEntity;
