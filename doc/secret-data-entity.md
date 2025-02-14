@@ -19,6 +19,11 @@ classDiagram
         description? string
     }
 
+    class secretDataV4PasswordStringEntity {
+        password string
+    }
+
     SecretData <|-- SecretDataV4DefaultEntity
     SecretData <|-- SecretDataV4DefaultTotpEntity
+    SecretData <|-- secretDataV4PasswordStringEntity
 ```
