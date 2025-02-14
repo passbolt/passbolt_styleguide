@@ -16,8 +16,8 @@ import EntityV2 from "../abstract/entityV2";
 
 class SecretDataEntity extends EntityV2 {
   /**
-   * Get session keys bundle data entity schema
-   * @returns {Object} schema
+   * Get the secret data schema
+   * @returns {object}
    */
   static getSchema() {
     return {

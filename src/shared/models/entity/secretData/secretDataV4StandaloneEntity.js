@@ -12,39 +12,56 @@
  * @since         5.0.0
  */
 
-import secretDataEntity from "./secretDataEntity";
+import TotpEntity from "../totp/totpEntity";
+import SecretDataEntity from "./secretDataEntity";
 
-class SecretDataV4DefaultEntity extends secretDataEntity {
+class SecretDataV4StandaloneEntity extends SecretDataEntity {
   /**
    * @inheritDoc
    */
-  constructor(dto = {}, options = {}) {
+  constructor(dto, options = {}) {
     super(dto, options);
+
+    // Associations
+    if (this._props.totp) {
+      this._totp = new TotpEntity(this._props.totp, {...options, clone: false});
+      delete this._props.totp;
+    }
   }
   /**
-   * Get the secret data v4 default schema
+   * Get the secret data v4 standalone schema
    * @returns {object}
    */
   static getSchema() {
     return {
       "type": "object",
       "required": [
-        "password",
+        "totp"
       ],
       "properties": {
-        "password": {
-          "type": "string",
-          "maxLength": 4096,
-        },
-        "description": {
-          "type": "string",
-          "maxLength": 10000,
-          "nullable": true,
-        },
-
+        "totp": TotpEntity.getSchema(),
       }
     };
   }
+
+  /**
+   * Get the DTO of properties managed by the form.
+   * @returns {object}
+   */
+  toDto() {
+    return {
+      ...this._props,
+      totp: this.totp.toDto(),
+    };
+  }
+
+  /**
+   * Get the totp association.
+   * @returns {TotpEntity}
+   */
+  get totp() {
+    return this._totp;
+  }
 }
 
-export default SecretDataV4DefaultEntity;
+export default SecretDataV4StandaloneEntity;
