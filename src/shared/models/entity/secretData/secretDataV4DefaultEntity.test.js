@@ -43,15 +43,15 @@ describe("SecretDataV4DefaultEntity", () => {
       const dto = minimalDefaultSecretDataV4DefaultData();
       const entity = new SecretDataV4DefaultEntity(dto);
 
-      expect(entity._props.password).toStrictEqual(dto.password);
+      expect(entity.password).toStrictEqual(dto.password);
     });
     it("constructor works if valid DTO is provided", () => {
       expect.assertions(2);
       const dto = defaultSecretDataV4DefaultData();
       const entity = new SecretDataV4DefaultEntity(dto);
 
-      expect(entity._props.password).toStrictEqual(dto.password);
-      expect(entity._props.description).toStrictEqual(dto.description);
+      expect(entity.password).toStrictEqual(dto.password);
+      expect(entity.description).toStrictEqual(dto.description);
     });
   });
 });

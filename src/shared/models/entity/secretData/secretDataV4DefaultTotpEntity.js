@@ -13,9 +13,9 @@
  */
 
 import TotpEntity from "../totp/totpEntity";
-import SecretDataEntity from "./secretDataEntity";
+import SecretDataV4DefaultEntity from "./secretDataV4DefaultEntity";
 
-class SecretDataV4DefaultTotpEntity extends SecretDataEntity {
+class SecretDataV4DefaultTotpEntity extends SecretDataV4DefaultEntity {
   /**
    * @inheritDoc
    */
@@ -40,16 +40,8 @@ class SecretDataV4DefaultTotpEntity extends SecretDataEntity {
         "totp"
       ],
       "properties": {
-        "password": {
-          "type": "string",
-          "maxLength": 4096,
-        },
+        ...SecretDataV4DefaultEntity.getSchema().properties,
         "totp": TotpEntity.getSchema(),
-        "description": {
-          "type": "string",
-          "maxLength": 10000,
-          "nullable": true,
-        },
       }
     };
   }

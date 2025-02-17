@@ -37,7 +37,7 @@ describe("SecretData", () => {
       const dto = defaultSecretDataDto();
       const entity = new SecretDataEntity(dto);
 
-      expect(entity._props.object_type).toStrictEqual("PASSBOLT_SECRET_DATA");
+      expect(entity.objectType).toStrictEqual("PASSBOLT_SECRET_DATA");
     });
   });
 });
