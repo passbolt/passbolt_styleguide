@@ -105,7 +105,7 @@ class PasswordCreatePageObject {
    * Returns the dialog element
    */
   get dialog() {
-    return this._container.querySelector('.create-password-dialog');
+    return this._container.querySelector('.create-resource');
   }
   /**
    * Returns the dialog close element

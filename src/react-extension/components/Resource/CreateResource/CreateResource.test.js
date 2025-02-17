@@ -70,7 +70,7 @@ describe("See the Create Resource", () => {
         await waitFor(() => {});
         // Dialog title exists and correct
         expect(page.passwordCreate.exists()).toBeTruthy();
-        expect(page.title.header.textContent).toBe("Create a password");
+        expect(page.title.header.textContent).toBe("Create a resource");
 
         // Close button exists
         expect(page.passwordCreate.dialogClose).not.toBeNull();
