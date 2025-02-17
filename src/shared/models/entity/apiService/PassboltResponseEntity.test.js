@@ -17,6 +17,7 @@ import PassboltResponseEntity from "./PassboltResponseEntity";
 import PassboltResponsePaginationHeaderEntity from "./PassboltResponsePaginationHeaderEntity";
 import {defaultPassboltResponseDto} from "./PassboltResponseEntity.test.data";
 import {defaultPassboltResponseHeaderDto} from "./PassboltResponseHeaderEntity.test.data";
+import PassboltResponseHeaderEntity from "./PassboltResponseHeaderEntity";
 
 describe("PassboltResponseEntity", () => {
   describe("PassboltResponseEntity::getSchema", () => {
@@ -51,6 +52,16 @@ describe("PassboltResponseEntity", () => {
       const dto = defaultPassboltResponseDto();
       const entity = new PassboltResponseEntity(dto);
       expect(entity).toBeInstanceOf(PassboltResponseEntity);
+    });
+  });
+
+  describe("::header", () => {
+    it("should return the header part of the Passbolt Api Response", () => {
+      expect.assertions(2);
+      const dto = defaultPassboltResponseDto();
+      const entity = new PassboltResponseEntity(dto);
+      expect(entity.header).toBeInstanceOf(PassboltResponseHeaderEntity);
+      expect(entity.header.toDto()).toStrictEqual(dto.header);
     });
   });
 });
