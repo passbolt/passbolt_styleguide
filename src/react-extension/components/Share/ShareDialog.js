@@ -521,7 +521,7 @@ class ShareDialog extends Component {
                   itemsRenderer={this.renderContainer}
                   length={this.state.permissions.length}
                   minSize={this.props.listMinSize}
-                  type={this.state.permissions.length < 3 ? "simple" : "uniform"}
+                  type={this.state.permissions.length < 4 ? "simple" : "uniform"}
                   ref={this.permissionListRef}
                   threshold={30}>
                 </ReactList>

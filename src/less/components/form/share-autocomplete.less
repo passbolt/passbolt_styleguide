@@ -119,7 +119,10 @@
 }
 
 .input.autocomplete.no-focus {
-  input:focus, input:focus-visible {
+  z-index: 100;
+  position: relative;
+
+  input {
     border-radius: var(--Button-border-radius) var(--Button-border-radius) 0 0;
     box-shadow: inset 0 0 0 .1rem var(--Field-Field-border);
   }
