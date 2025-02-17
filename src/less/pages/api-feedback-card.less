@@ -1,8 +1,18 @@
 .page.api-feedback {
+    height: 100vh;
     width: 100%;
     margin: auto;
 
     .content {
+        flex: 1 0 0;
+        align-self: stretch;
+        padding: 3.2rem;
+
+        .logo-svg {
+            margin: auto auto 1.6rem auto;
+            width: 20rem;
+        }
+
         .api-feedback-card {
             display: flex;
             align-items: center;
@@ -65,11 +75,6 @@
             }
         }
     }
-
-    .logo {
-        margin-left: auto;
-        margin-right: auto;
-    }
 }
 
 
@@ -80,19 +85,18 @@
 
     .page.api-feedback {
         display: grid;
-        height: calc(100% - 4rem);
         grid-template-columns: 1fr 1.5fr 1fr;
-        grid-template-rows: 0 1fr 0.05fr;
-        grid-gap: 1px;
+        grid-template-rows: 0 1fr 0.01fr;
         grid-template-areas: ". . ." ". api-feedback-card ." "footer footer footer";
 
         .content {
+            flex: inherit;
+            align-self: inherit;
+            padding: 0;
             grid-area: api-feedback-card;
 
-            .logo {
-                margin: 1.6em auto;
-                width: 20rem;
-                background-size: 20rem auto;
+            .logo-svg {
+                margin: 6.4rem auto 1.6rem auto;
             }
 
             .api-feedback-card {

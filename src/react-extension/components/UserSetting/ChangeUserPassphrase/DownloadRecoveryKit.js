@@ -77,7 +77,7 @@ class DownloadRecoveryKit extends React.Component {
           </div>
         </div>
         <div className="actions-wrapper">
-          <button type="button" className="button primary" onClick={this.handleDownloadBackup}><Trans>Download backup</Trans></button>
+          <button type="button" className="button primary form" onClick={this.handleDownloadBackup}><Trans>Download backup</Trans></button>
         </div>
       </>
     );

@@ -344,9 +344,11 @@ class DisplaySelfRegistrationAdministration extends React.Component {
             </div>
             {this.props.adminSelfRegistrationContext.hasSettingsChanges() &&
             <div className="warning message" id="self-registration-setting-overridden-banner">
-              <p>
-                <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
-              </p>
+              <div>
+                <p>
+                  <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                </p>
+              </div>
             </div>
             }
           </div>

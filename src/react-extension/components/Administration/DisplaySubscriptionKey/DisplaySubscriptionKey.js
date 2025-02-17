@@ -139,6 +139,14 @@ class DisplaySubscriptionKey extends React.Component {
   }
 
   /**
+   * Should show renew key
+   * @returns {boolean}
+   */
+  get shouldShowRenewKey() {
+    return this.hasSubscriptionKey() && (this.hasLimitUsersExceeded() || this.hasSubscriptionKeyExpired() || this.hasSubscriptionKeyGoingToExpire());
+  }
+
+  /**
    * Has limit of users exceeded
    * @returns {boolean}
    */
@@ -252,9 +260,12 @@ class DisplaySubscriptionKey extends React.Component {
             </div>
           </div>
           <div className="actions-wrapper">
+            {this.shouldShowRenewKey &&
+              <button className="button secondary" type="button" onClick={this.handleRenewKey}><Trans>Renew key</Trans></button>
+            }
             {this.hasSubscriptionKey()
-              ? <button className="button primary" type="button" onClick={this.handleRenewKey}><Trans>Renew key</Trans></button>
-              : <button className="button primary" type="button" onClick={this.handleUpdateKey}><Trans>Update key</Trans></button>
+              ? <button className="button primary form" type="button" onClick={this.handleUpdateKey}><Trans>Update key</Trans></button>
+              : <button className="button primary form" type="button" onClick={this.handleUpdateKey}><Trans>Add key</Trans></button>
             }
           </div>
         </>

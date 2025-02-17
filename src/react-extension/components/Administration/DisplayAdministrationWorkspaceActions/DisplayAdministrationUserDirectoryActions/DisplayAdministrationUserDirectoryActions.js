@@ -185,19 +185,21 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button type="button" className="button secondary" disabled={!this.isTestEnabled()} onClick={() => this.handleFormSubmit('test')}>
-          <TestSVG />
-          <span><Trans>Test settings</Trans></span>
-        </button>
-        <button type="button" className="button secondary" disabled={!this.isSynchronizeEnabled()} onClick={this.handleSimulateSynchronizeClick}>
-          <SimulateSyncSVG />
-          <span><Trans>Simulate synchronize</Trans></span>
-        </button>
-        <button type="button" className="button secondary" disabled={!this.isSynchronizeEnabled()} onClick={this.handleSynchronizeClick}>
-          <RevertSVG />
-          <span><Trans>Synchronize</Trans></span>
-        </button>
-        <button type="button" className="button primary" disabled={!this.isSaveEnabled()} onClick={() => this.handleFormSubmit('save')}>
+        <div className="left-actions-wrapper">
+          <button type="button" className="button secondary" disabled={!this.isTestEnabled()} onClick={() => this.handleFormSubmit('test')}>
+            <TestSVG />
+            <span><Trans>Test settings</Trans></span>
+          </button>
+          <button type="button" className="button secondary " disabled={!this.isSynchronizeEnabled()} onClick={this.handleSimulateSynchronizeClick}>
+            <SimulateSyncSVG />
+            <span><Trans>Simulate synchronize</Trans></span>
+          </button>
+          <button type="button" className="button secondary" disabled={!this.isSynchronizeEnabled()} onClick={this.handleSynchronizeClick}>
+            <RevertSVG />
+            <span><Trans>Synchronize</Trans></span>
+          </button>
+        </div>
+        <button type="button" className="button primary form" disabled={!this.isSaveEnabled()} onClick={() => this.handleFormSubmit('save')}>
           <span><Trans>Save</Trans></span>
         </button>
       </div>

@@ -229,7 +229,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
         </div>
         <div className="actions-wrapper">
           {this.hasNotApprovedStatus() && !this.isStatusApproved() &&
-            <button type='button' className="button primary" onClick={this.handleReviewClick}><Trans>Review</Trans></button>
+            <button type='button' className="button primary form" onClick={this.handleReviewClick}><Trans>Review</Trans></button>
           }
         </div>
       </>

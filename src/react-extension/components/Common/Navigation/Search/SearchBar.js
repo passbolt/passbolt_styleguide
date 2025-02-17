@@ -33,21 +33,8 @@ class SearchBar extends Component {
    */
   bindCallbacks() {
     this.handleChangeEvent = this.handleChangeEvent.bind(this);
-    this.handleSubmitButtonFocus = this.handleSubmitButtonFocus.bind(this);
-    this.handleSubmitButtonBlur = this.handleSubmitButtonBlur.bind(this);
     this.handleOnSubmitEvent = this.handleOnSubmitEvent.bind(this);
   }
-
-  /**
-   * Get default state
-   * @returns {*}
-   */
-  get defaultState() {
-    return {
-      hasSubmitButtonFocus: false, // true if the form button has focus
-    };
-  }
-
   /**
    * Create elements references
    */
@@ -65,20 +52,6 @@ class SearchBar extends Component {
     if (this.props.onSearch) {
       this.props.onSearch(text);
     }
-  }
-
-  /**
-   * Handle submit button focus
-   */
-  handleSubmitButtonFocus() {
-    this.setState({hasSubmitButtonFocus: true});
-  }
-
-  /**
-   * Handle submit button blur
-   */
-  handleSubmitButtonBlur() {
-    this.setState({hasSubmitButtonFocus: false});
   }
 
   /**
@@ -105,10 +78,10 @@ class SearchBar extends Component {
     return (
       <div className="col2 search-wrapper">
         <form className="search" onSubmit={this.handleOnSubmitEvent}>
-          <div className={`input search required ${this.state.hasSubmitButtonFocus ? "no-focus" : ""} ${this.props.disabled ? 'disabled' : ''}`}>
+          <div className={`input search required ${this.props.disabled ? 'disabled' : ''}`}>
             <label className="visuallyhidden"><Trans>Search</Trans></label>
             <input ref={this.searchInputRef} className="required" type="search"
-              disabled={this.props.disabled ? 'disabled' : ''}
+              disabled={this.props.disabled}
               onChange={this.handleChangeEvent}
               placeholder={this.placeholderLabel}
               value={this.props.value}/>

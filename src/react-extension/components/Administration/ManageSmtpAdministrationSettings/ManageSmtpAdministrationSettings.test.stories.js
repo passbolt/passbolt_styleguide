@@ -14,97 +14,82 @@
 
 import React from "react";
 import ManageSmtpAdministrationSettings from "../ManageSmtpAdministrationSettings/ManageSmtpAdministrationSettings";
-import DialogContextProvider from "../../../contexts/DialogContext";
-import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import {defaultProps} from "./ManageSmtpAdministrationSettings.test.data";
 import {withExistingSmtpSettings, withAwsSesSmtpSettings, emptySmtpSettings} from "../../../contexts/AdminSmtpSettingsContext.test.data";
 import MockFetch from "../../../test/mock/MockFetch";
 import AdminSmtpSettingsContextProvider from "../../../contexts/AdminSmtpSettingsContext";
 import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
 
+let currentStory = null;
+
 export default {
   title: 'Components/Administration/ManageSmtpAdministrationSettings',
-  component: ManageSmtpAdministrationSettings
+  component: ManageSmtpAdministrationSettings,
+  decorators: [(Story, {args}) => {
+    currentStory = args.id;
+    return <AdminSmtpSettingsContextProvider{...args}>
+      <div id="container" className="page administration">
+        <div id="app" className="app" tabIndex="1000">
+          <div className="panel main">
+            <div className="panel middle">
+              <div className="middle-right">
+                <div className="breadcrumbs-and-grid">
+                  <div className="main-page">
+                    <Story {...args}/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </AdminSmtpSettingsContextProvider>;
+  }],
+  parameters: {
+    css: "api_main"
+  }
 };
 
-let currentStory = null;
 const mockFetch = new MockFetch();
 mockFetch.addGetFetchRequest(/smtp\/settings\.json/, async() => {
   switch (currentStory) {
-    case 'components-administration-managesmtpadministrationsettings--default': {
+    case 'default': {
       return mockApiResponse(emptySmtpSettings());
     }
-    case 'components-administration-managesmtpadministrationsettings--with-smtp-settings': {
+    case 'with-smtp-settings': {
       return mockApiResponse(withExistingSmtpSettings());
     }
-    case 'components-administration-managesmtpadministrationsettings--with-smtp-settings-from-file': {
+    case 'with-smtp-settings-from-file': {
       return mockApiResponse(withExistingSmtpSettings({source: "file"}));
     }
-    case 'components-administration-managesmtpadministrationsettings--with-known-smtp-settings': {
+    case 'with-known-smtp-settings': {
       return mockApiResponse(withAwsSesSmtpSettings());
     }
-    case 'components-administration-managesmtpadministrationsettings--with-error-from-server': {
+    case 'with-error-from-server': {
       throw new Error("Something went wrong!");
     }
   }
   throw new Error("Unsupported story");
 });
 
-const decorators = [
-  (Story, context) => {
-    currentStory = context.id;
-    return <>
-      <Story/>
-    </>;
-  }
-];
 
 
-const Template = args =>
-  <DialogContextProvider>
-    <ManageDialogs/>
-    <AdminSmtpSettingsContextProvider {...args}>
-      <div className="panel main">
-        <div className="panel middle">
-          <div className="grid grid-responsive-12">
-            <ManageSmtpAdministrationSettings {...args}/>
-          </div>
-        </div>
-      </div>
-    </AdminSmtpSettingsContextProvider>
-  </DialogContextProvider>;
-
-export const Default = Template.bind({});
-Default.args = defaultProps();
-Default.decorators = decorators;
-Default.parameters = {
-  css: "api_main"
+export const Default = {
+  args: defaultProps({id: "default"})
 };
 
-export const WithSmtpSettings = Template.bind({});
-WithSmtpSettings.args = defaultProps();
-WithSmtpSettings.decorators = decorators;
-WithSmtpSettings.parameters = {
-  css: "api_main"
+export const WithSmtpSettings = {
+  args: defaultProps({id: "with-smtp-settings"})
 };
 
-export const WithSmtpSettingsFromFile = Template.bind({});
-WithSmtpSettingsFromFile.args = defaultProps();
-WithSmtpSettingsFromFile.decorators = decorators;
-WithSmtpSettingsFromFile.parameters = {
-  css: "api_main"
+export const WithSmtpSettingsFromFile = {
+  args: defaultProps({id: "with-smtp-settings-from-file"})
 };
 
-export const WithKnownSmtpSettings = Template.bind({});
-WithKnownSmtpSettings.args = defaultProps();
-WithKnownSmtpSettings.decorators = decorators;
-WithKnownSmtpSettings.parameters = {
-  css: "api_main"
+export const WithKnownSmtpSettings = {
+  args: defaultProps({id: "with-known-smtp-settings"})
 };
 
-export const WithErrorFromServer = Template.bind({});
-WithErrorFromServer.args = defaultProps();
-WithErrorFromServer.decorators = decorators;
-WithErrorFromServer.parameters = {
-  css: "api_main"
+export const WithErrorFromServer = {
+  args: defaultProps({id: "with-error-from-server"})
 };

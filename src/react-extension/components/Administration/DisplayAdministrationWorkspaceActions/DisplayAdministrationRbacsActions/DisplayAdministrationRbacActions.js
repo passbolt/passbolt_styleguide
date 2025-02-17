@@ -78,7 +78,7 @@ class DisplayAdministrationRbacActions extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button className="button primary" type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
+        <button className="button primary form" type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
           <span><Trans>Save</Trans></span>
         </button>
       </div>

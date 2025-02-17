@@ -229,7 +229,7 @@ class ScanTotpCode extends Component {
             <span><Trans>Cancel</Trans></span>
           </button>
           <button
-            className="button primary"
+            className="button primary form"
             type='button'
             disabled={this.hasAllInputDisabled()}
             onClick={this.handleSubmit}>

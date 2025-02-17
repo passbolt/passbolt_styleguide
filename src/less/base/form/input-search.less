@@ -6,14 +6,6 @@
     position: relative;
     display: flex;
     align-items: center;
-    background: var(--Workspace-Main-search-field);
-    color: var(--Text-and-icons-Main-text);
-    border-radius: var(--Button-border-radius);
-
-    // Focus within button search
-    &.no-focus:focus-within {
-      ._field-border();
-    }
 
     // Pressed
     &:active {
@@ -23,7 +15,8 @@
     input[type=search] {
         flex: 1;
         height: 3.6rem; // For firefox to avoid line height 21px
-        padding: .3rem .3rem .3rem var(--Search-field-padding);
+        padding: .3rem 4.6rem .3rem var(--Search-field-padding); // padding right = search button + .3rem + .3rem
+        background: var(--Workspace-Main-search-field);
         max-width: none;
         margin: 0;
 
@@ -41,10 +34,13 @@
       top: .3rem;
 
       .button {
-        padding: .8rem;
-        width: 4.2rem;
-        height: 3rem;
+        padding: .5rem var(--Infield-boxless-padding);
         border-radius: var(--Token-radius);
+
+        svg:first-child {
+          width: 2rem;
+          height: 2rem;
+        }
       }
     }
 }

@@ -350,7 +350,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                           {this.organizationKeyInfo?.user_ids && <td className="value">{this.formatUserIds(this.organizationKeyInfo.user_ids)}</td>}
                           {!this.organizationKeyInfo?.user_ids && <td className="empty-value"><Trans>not available</Trans></td>}
                           <td className="table-button">
-                            <button className="button primary medium" type="button" disabled={this.hasAllInputDisabled()} onClick={this.HandleUpdatePublicKeyClick}>
+                            <button className="button primary" type="button" disabled={this.hasAllInputDisabled()} onClick={this.HandleUpdatePublicKeyClick}>
                               {this.hasOrganisationRecoveryKey() && <Trans>Rotate Key</Trans>}
                               {!this.hasOrganisationRecoveryKey() && <Trans>Add an Organization Recovery Key</Trans>}
                             </button>
@@ -392,16 +392,20 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
             <div className="warning message" id="email-notification-setting-overridden-banner">
               {this.props.adminAccountRecoveryContext.hasPolicyChanges() &&
                 <div id="email-notification-setting-overridden-banner">
-                  <p>
-                    <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
-                  </p>
+                  <div>
+                    <p>
+                      <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                    </p>
+                  </div>
                 </div>
               }
               {!this.hasOrganisationRecoveryKey() && this.isPolicyEnabled() &&
                 <div id="email-notification-setting-overridden-banner">
-                  <p>
-                    <Trans>Warning, Don&apos;t forget to add an organization recovery key.</Trans>
-                  </p>
+                  <div>
+                    <p>
+                      <Trans>Warning, Don&apos;t forget to add an organization recovery key.</Trans>
+                    </p>
+                  </div>
                 </div>
               }
             </div>

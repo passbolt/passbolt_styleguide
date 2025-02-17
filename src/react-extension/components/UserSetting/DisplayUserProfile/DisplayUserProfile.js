@@ -129,7 +129,7 @@ class DisplayUserProfile extends React.Component {
             </div>
           </div>
           <div className="actions-wrapper">
-            <button className="button primary" type="button" onClick={this.handleEdit}>
+            <button className="button primary form" type="button" onClick={this.handleEdit}>
               <span><Trans>Edit</Trans></span>
             </button>
           </div>

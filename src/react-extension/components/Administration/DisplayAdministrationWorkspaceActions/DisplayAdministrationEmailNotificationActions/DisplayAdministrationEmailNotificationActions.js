@@ -98,7 +98,7 @@ class DisplayAdministrationEmailNotificationActions extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button className="button primary" type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick} id="save-settings">
+        <button className="button primary form" type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick} id="save-settings">
           <span><Trans>Save</Trans></span>
         </button>
       </div>

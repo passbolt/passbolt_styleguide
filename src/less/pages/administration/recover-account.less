@@ -19,17 +19,19 @@
     display: flex;
     align-items: baseline;
     border-radius: var(--Menu-radius);
-    background: var(--Action-button-Action-button-background-2); 
+    background: var(--Action-button-Action-button-background-2);
     width: calc(100% - 3.2rem);
     .table-info {
       &.recovery-key {
         margin-top: 0;
+        width: 100%;
       }
       .table-button {
         float: right;
 
         button {
           margin: 0;
+          max-width: 30rem;
         }
       }
 
@@ -72,13 +74,13 @@
       gap: 0.4rem;
       padding: 1.6rem;
       border-radius: var(--Menu-radius);
-      background: var(--Action-button-Action-button-background-2); 
+      background: var(--Action-button-Action-button-background-2);
 
       .name {
         font-weight: 700;
         font-size: 15px;
       }
-  
+
       .info {
         margin-top: 0.4rem;
         font-size: 13px;

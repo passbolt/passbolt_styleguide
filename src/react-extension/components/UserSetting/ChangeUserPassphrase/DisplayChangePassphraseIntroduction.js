@@ -141,7 +141,7 @@ class DisplayChangePassphraseIntroduction extends React.Component {
           </div>
         </div>
         <div className="actions-wrapper">
-          <button className="button primary submit" type="submit" disabled={this.hasAllInputDisabled()}>
+          <button className="button primary form submit" type="submit" disabled={this.hasAllInputDisabled()}>
             <Trans>Start</Trans>
           </button>
         </div>
