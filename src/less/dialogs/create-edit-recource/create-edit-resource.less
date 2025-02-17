@@ -1,0 +1,97 @@
+/* Create and edit resource dialog */
+.create-resource, .edit-resource {
+  /* dialog wrapper */
+  .dialog {
+    padding: 0;
+    max-width: 96rem;
+    min-width: 38rem;
+  }
+  /* header */
+  .dialog-header {
+    padding: 2.4rem;
+
+    h2 {
+      font-size: 2.4rem;
+    }
+  }
+
+  .sidebar-and-grid {
+    display: flex;
+    padding-right: 1.6rem;
+    align-items: center;
+    flex: 1 0 0;
+    align-self: stretch;
+
+    .left-sidebar {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.6rem;
+      align-self: stretch;
+      min-height: 0;
+
+      .main-action-wrapper {
+        padding: 0 1.6rem;
+      }
+
+      .sidebar-content-sections {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .8rem;
+        align-self: stretch;
+        padding: 0 1.6rem;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--Workspace-Elevator) transparent;
+      }
+    }
+
+    .grid-and-footer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      flex: 1 0 0;
+      align-self: stretch;
+
+      .grid {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.6rem;
+        flex: 1 0 0;
+        align-self: stretch;
+
+        .resource-info {
+          display: flex;
+          padding-left: 1.6rem;
+          align-items: center;
+          align-self: stretch;
+          border-radius: var(--Section-border-radius);
+          background: var(--Workspace-Panels-background);
+        }
+
+        .create-workspace, .edit-workspace {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-start;
+          flex: 1 0 0;
+          align-self: stretch;
+          border-radius: var(--Section-border-radius);
+          background: var(--Workspace-Panels-background);
+        }
+      }
+
+      .submit-wrapper {
+        display: flex;
+        padding: 1.6rem 0;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 2.4rem;
+        align-self: stretch;
+      }
+    }
+  }
+}
