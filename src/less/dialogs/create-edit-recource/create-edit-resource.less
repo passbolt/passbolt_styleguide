@@ -209,3 +209,91 @@
     }
   }
 }
+
+/* Resource creation menu dialog */
+.create-resource-menu {
+  /* dialog wrapper */
+  .dialog {
+    max-width: 77rem;
+    padding: 0 1.6rem 1.6rem 1.6rem;
+  }
+
+  /* header */
+  .dialog-header {
+    padding: 1.2rem 1.6rem;
+    align-self: stretch;
+
+    h2 {
+      font-size: 2.4rem;
+    }
+  }
+
+  /* body */
+  .dialog-body {
+    padding: 0;
+
+    .grid {
+      display: flex;
+      padding: 1.6rem 1.6rem .8rem 1.6rem;
+      align-items: flex-start;
+      align-content: flex-start;
+      gap: 1.6rem;
+      align-self: stretch;
+      flex-wrap: wrap;
+      position: relative;
+
+      &:before {
+        content: "";
+        display: flex;
+        position: absolute;
+        background: repeating-linear-gradient(var(--Dialog-Dialog-fill),var(--Dialog-Dialog-fill) 7.9rem, var(--Workspace-Dividers), var(--Workspace-Dividers) 8rem);
+        width: 100%;
+        height: calc(100% - .8rem);
+        top: .8rem;
+        left: 0;
+      }
+
+      .card {
+        display: flex;
+        height: 6.4rem;
+        min-width: 17.6rem;
+        max-width: 22rem;
+        padding: .8rem 1.6rem;
+        align-items: center;
+        gap: 3.2rem;
+        flex: 1 0 0;
+        border-radius: var(--Button-border-radius);
+
+        svg {
+          display: flex;
+          width: 3.2rem;
+          height: 3.2rem;
+          justify-content: center;
+          align-items: center;
+          flex-shrink: 0;
+        }
+
+        .card-information {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-start;
+          gap: .4rem;
+          flex: 1 0 0;
+
+          .title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            .ellipsis();
+          }
+
+          .info {
+            font-size: .8rem;
+            line-height: normal;
+            .ellipsis();
+          }
+        }
+      }
+    }
+  }
+}
