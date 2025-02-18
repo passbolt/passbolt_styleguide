@@ -10,7 +10,7 @@
   .dialog-header {
     padding: 2.4rem;
 
-    h2 {
+    .dialog-title-wrapper h2 {
       font-size: 2.4rem;
     }
   }
@@ -195,6 +195,48 @@
           align-self: stretch;
           border-radius: var(--Section-border-radius);
           background: var(--Workspace-Panels-background);
+
+          .title {
+            display: flex;
+            padding: 1.6rem;
+            align-items: center;
+            align-self: stretch;
+            border-bottom: 1px solid var(--Workspace-Dividers);
+
+            h2 {
+              font-style: normal;
+              font-weight: 700;
+              line-height: normal;
+              margin: 0;
+            }
+          }
+
+          .content {
+            display: flex;
+            padding-bottom: 2.4rem;
+            flex-direction: column;
+            align-items: flex-start;
+            flex: 1 0 0;
+            align-self: stretch;
+
+            .password-fields {
+              display: flex;
+              padding: 1.6rem 1.6rem 2.4rem 1.6rem;
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 1.6rem;
+              align-self: stretch;
+            }
+
+            .input {
+              align-self: stretch;
+
+              input {
+                max-width: inherit;
+                margin-bottom: 0;
+              }
+            }
+          }
         }
       }
 
@@ -223,7 +265,7 @@
     padding: 1.2rem 1.6rem;
     align-self: stretch;
 
-    h2 {
+    .dialog-title-wrapper h2 {
       font-size: 2.4rem;
     }
   }
@@ -231,6 +273,7 @@
   /* body */
   .dialog-body {
     padding: 0;
+    overflow: hidden;
 
     .grid {
       display: flex;
@@ -250,6 +293,17 @@
         width: 100%;
         height: calc(100% - .8rem);
         top: .8rem;
+        left: 0;
+      }
+
+      &:after {
+        content: "";
+        display: flex;
+        position: absolute;
+        background: var(--Dialog-Dialog-fill);
+        width: 100%;
+        height: .1rem;
+        bottom: 0;
         left: 0;
       }
 
