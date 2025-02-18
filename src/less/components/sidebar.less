@@ -486,7 +486,7 @@
       }
     }
 
-    .tabs-nav--bordered {
+    .tabs-nav {
       display: flex;
       justify-content: space-around;
       margin: 0;
@@ -510,13 +510,13 @@
             border-bottom: 1px solid var(--Palette-Contrast-1);
             margin-bottom: -.1rem;
             box-shadow: none;
-            font-weight: 700;
           }
         }
 
         &.active {
           button {
             border-bottom: 1px solid var(--Palette-Contrast-1);
+            border-radius: var(--Button-border-radius) var(--Button-border-radius) 0 0;
             margin-bottom: -.1rem;
             box-shadow: none;
             font-weight: 700;
