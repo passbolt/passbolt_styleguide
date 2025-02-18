@@ -1,0 +1,144 @@
+/* Create and edit resource dialog workspace */
+.create-resource, .edit-resource {
+  .create-workspace, .edit-workspace {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: var(--Section-border-radius);
+    background: var(--Workspace-Panels-background);
+
+    /* HEADER TITLE */
+    .title {
+      display: flex;
+      padding: 1.6rem;
+      align-items: center;
+      align-self: stretch;
+      border-bottom: 1px solid var(--Workspace-Dividers);
+
+      h2 {
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        margin: 0;
+      }
+    }
+
+    /* CONTENT */
+    .content {
+      display: flex;
+      padding-bottom: 2.4rem;
+      flex-direction: column;
+      align-items: flex-start;
+      flex: 1 0 0;
+      align-self: stretch;
+
+      /* PASSWORD FIELDS LAYOUT*/
+      .password-fields {
+        display: flex;
+        padding: 1.6rem 1.6rem 2.4rem 1.6rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.6rem;
+        align-self: stretch;
+      }
+
+      /* INPUT FIELDS */
+      .input {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+        align-self: stretch;
+
+        label, input {
+          max-width: inherit;
+          margin-bottom: 0;
+        }
+
+        &.input-password-wrapper {
+          margin-bottom: 0;
+
+          .password-button-inline {
+            align-self: stretch;
+          }
+
+          .password-complexity {
+            margin-bottom: 0;
+            align-self: stretch;
+          }
+        }
+
+        &.password, &.checkbox {
+          flex-direction: row;
+          align-items: center;
+          flex: 1 0 0;
+          align-self: stretch;
+          margin-bottom: 0;
+
+          label, input {
+            margin: 0;
+          }
+        }
+
+        &.select-wrapper {
+          .select-container {
+            align-self: stretch;
+          }
+        }
+      }
+
+      /* ADDITIONAL INFORMATIONS */
+      .additional-information {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        align-self: stretch;
+        border-top: 1px solid var(--Workspace-Dividers);
+
+        .section-header {
+          display: flex;
+          padding: 1.2rem 1.6rem;
+          align-items: center;
+          gap: 1.6rem;
+          align-self: stretch;
+
+          h4 {
+            display: flex;
+            align-items: center;
+            flex: 1 0 0;
+            margin: 0;
+            font-size: 15px;
+            font-weight: 700;
+            line-height: normal;
+          }
+
+          // Hover and Focus visible state
+          &:hover, &:focus-visible {
+            color: var(--States-Focus);
+          }
+        }
+
+        /* TABS */
+        .tabs {
+          gap: 1.6rem;
+
+          .tabs-nav {
+            padding: 0 1.6rem;
+          }
+
+          .tabs-active-content {
+            display: flex;
+            padding: 0 1.6rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.6rem;
+            align-self: stretch;
+          }
+        }
+      }
+    }
+  }
+}

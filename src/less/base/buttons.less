@@ -500,8 +500,8 @@ button,
 
 /* toggle selected */
 .button-toggle.selected {
-    box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1px var(--Field-Field-button-border);
-    background: var(--Field-Field-button-background);
+    box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1px var(--Action-button-Active-action-button-border);
+    background: var(--Action-button-Active-action-button-background);
     text-decoration: none;
     border: none;
 }
@@ -511,7 +511,7 @@ button,
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    gap: .6rem;
+    gap: .8rem;
 
     &--nowrap {
       & > .button {
@@ -521,8 +521,6 @@ button,
 
     & > * {
       min-width: inherit;
-      max-width: 50%;
-      flex-grow: 1;
       &:last-child {
         flex: 0;
       }
