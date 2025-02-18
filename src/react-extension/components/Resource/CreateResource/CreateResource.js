@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
  */
-import React, {Component} from "react";
+import React, {Component, Fragment} from "react";
 import PropTypes from "prop-types";
 
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
@@ -76,6 +76,7 @@ import TotpSVG from "../../../../img/svg/totp.svg";
 import NotesSVG from "../../../../img/svg/notes.svg";
 import AlignLeftSVG from "../../../../img/svg/align_left.svg";
 import Dropdown from "../../Common/Dropdown/Dropdown";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class CreateResource extends Component {
   constructor(props) {
@@ -646,6 +647,24 @@ class CreateResource extends Component {
   }
 
   /**
+   * Returns the current list of breadcrumb items
+   */
+  get breadcrumbItems() {
+    const foldersHierarchy = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.props.folderParentId);
+    return <div className="breadcrumbs">
+      <div className="folder-name"><Trans>My workspace</Trans></div>
+      {foldersHierarchy?.map(folder =>
+        <Fragment key={folder.id}>
+          {folder.folder_parent_id !== null &&
+            <span className="caret">›</span>
+          }
+          <div className="folder-name">{folder.name}</div>
+        </Fragment>
+      )}
+    </div>;
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -753,19 +772,24 @@ class CreateResource extends Component {
         <form className="grid-and-footer" onSubmit={this.handleFormSubmit} noValidate>
           <div className="grid">
             <div className="resource-info">
-              <div className={`input text required ${isNameError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-                <label htmlFor="create-password-form-name"><Trans>Name</Trans>{isMaxLengthNameWarning && <AttentionSVG className="attention-required"/>}</label>
-                <input id="create-password-form-name" name="name" type="text" value={resourceViewModel.name || ""} onChange={this.handleInputChange}
-                  disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="255"
-                  required="required" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
-                {isNameError &&
-                  <div className="name error-message"><Trans>A name is required.</Trans></div>
-                }
-                {isMaxLengthNameWarning &&
-                  <div className="name warning-message">
-                    <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
-                  </div>
-                }
+              <div className="resource-icon">
+                <KeySVG/>
+              </div>
+              <div className="information">
+                <div className="input text">
+                  <input id="create-password-form-name" name="name" type="text" value={resourceViewModel.name || ""} onChange={this.handleInputChange}
+                    disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="255"
+                    required="required" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
+                  {isNameError &&
+                    <div className="name error-message"><Trans>A name is required.</Trans></div>
+                  }
+                  {isMaxLengthNameWarning &&
+                    <div className="name warning-message">
+                      <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
+                    </div>
+                  }
+                </div>
+                {this.breadcrumbItems}
               </div>
             </div>
             <div className="create-workspace">
@@ -893,6 +917,7 @@ CreateResource.propTypes = {
   resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
   passwordExpiryContext: PropTypes.object, // The password expiry context
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   dialogContext: PropTypes.any, // The dialog context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource types collection
@@ -901,5 +926,5 @@ CreateResource.propTypes = {
   workflowContext: PropTypes.any, // The workflow context
 };
 
-export default  withRouter(withAppContext(withPasswordPolicies(withResourceTypesLocalStorage(withPasswordExpiry(withActionFeedback(withResourcePasswordGeneratorContext(withDialog(withWorkflow(withTranslation('common')(CreateResource))))))))));
+export default  withRouter(withAppContext(withPasswordPolicies(withResourceTypesLocalStorage(withPasswordExpiry(withActionFeedback(withResourcePasswordGeneratorContext(withResourceWorkspace(withDialog(withWorkflow(withTranslation('common')(CreateResource)))))))))));
 

@@ -18,6 +18,7 @@ import {
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -51,6 +52,9 @@ export function defaultProps(data = {}) {
     resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
     passwordPoliciesContext: defaultPasswordPoliciesContext(),
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      getHierarchyFolderCache: () => [{name: "Folder"}, {name: "subfolder"}]
+    }),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()),
     onClose: jest.fn(),
