@@ -119,6 +119,9 @@ class ResourceTypeEntity extends EntityV2 {
           "maxLength": RESOURCE_TYPE_DESCRIPTION_MAX_LENGTH,
           "nullable": true,
         },
+        "resources_count": {
+          "type": "integer",
+        },
         "created": {
           "type": "string",
           "format": "date-time"
@@ -127,6 +130,11 @@ class ResourceTypeEntity extends EntityV2 {
           "type": "string",
           "format": "date-time"
         },
+        "deleted": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true,
+        }
       }
     };
   }
