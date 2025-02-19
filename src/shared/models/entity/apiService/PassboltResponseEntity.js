@@ -51,11 +51,19 @@ class PassboltResponseEntity extends EntityV2 {
   }
 
   /**
-   * Returns the header part of the API response.
-   * @returns {PassboltResponseHeaderEntity}
+   * Returns the header part of the Passbolt Api Response.
+   * @returns {object}
    */
   get header() {
     return this._header;
+  }
+
+  /**
+   * Returns the body part of the Passbolt Api Response.
+   * @returns {string|object|array|null}
+   */
+  get body() {
+    return this._props.body;
   }
 }
 
