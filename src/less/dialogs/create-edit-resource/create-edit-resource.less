@@ -29,7 +29,7 @@
       gap: 1.6rem;
       align-self: stretch;
       width: 20%;
-      min-width: 20rem;
+      min-width: 23rem;
       max-width: 40rem;
       min-height: 0;
 
@@ -43,6 +43,7 @@
         align-items: flex-start;
         gap: .8rem;
         align-self: stretch;
+        flex: 1 0 0;
         padding: 0 1.6rem;
         overflow-y: auto;
         scrollbar-width: thin;
@@ -90,6 +91,83 @@
 
           &.selected {
             font-weight: 700;
+          }
+        }
+      }
+
+      .section-card {
+        display: flex;
+        padding: 1.6rem;
+        justify-content: center;
+        align-items: center;
+        align-self: stretch;
+
+        .card {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          flex: 1 0 0;
+          border-radius: var(--Section-border-radius);
+          background: var(--Context-buttons-Updgrade-resource-card-title);
+          min-width: 0;
+
+          .title {
+            display: flex;
+            padding: .8rem 1.2rem;
+            justify-content: center;
+            align-items: center;
+            align-self: stretch;
+
+            .text {
+              font-size: 13px;
+              font-weight: 600;
+              line-height: normal;
+              flex: 1 0 0;
+              text-align: left;
+            }
+
+            svg &:first-child {
+              width: 1.8rem;
+              height: 1.8rem;
+            }
+          }
+
+          .content {
+            display: flex;
+            padding: .8rem;
+            flex-direction: column;
+            align-items: center;
+            gap: .8rem;
+            align-self: stretch;
+            border-top: 1px solid var(--Action-button-Active-action-button-border);
+            background: var(--Context-buttons-Updgrade-resource-card-background);
+            border-radius: 0 0 var(--Section-border-radius) var(--Section-border-radius);
+            box-sizing: border-box;
+
+            p {
+              font-size: 13px;
+              font-weight: 400;
+              line-height: normal;
+            }
+
+            .actions-wrapper {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              gap: 1.6rem;
+              align-self: stretch;
+              min-width: 0;
+
+              button {
+                font-size: 13px;
+                font-weight: 600;
+                line-height: normal;
+
+                &.link {
+                  font-weight: 400;
+                }
+              }
+            }
           }
         }
       }

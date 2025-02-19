@@ -26,6 +26,7 @@ import TotpSVG from "../../../../img/svg/totp.svg";
 import NotesSVG from "../../../../img/svg/notes.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import AlignLeftSVG from "../../../../img/svg/align_left.svg";
+import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
 
 class SelectResourceForm extends Component {
   constructor(props) {
@@ -42,6 +43,7 @@ class SelectResourceForm extends Component {
     return {
       displaySecrets: true,
       displayMetadata: true,
+      displayUpgrade: true,
     };
   }
 
@@ -51,6 +53,7 @@ class SelectResourceForm extends Component {
   bindCallbacks() {
     this.handleDisplaySecretsClick = this.handleDisplaySecretsClick.bind(this);
     this.handleDisplayMetadataClick = this.handleDisplayMetadataClick.bind(this);
+    this.handleDisplayUpgradeClick = this.handleDisplayUpgradeClick.bind(this);
   }
 
   /**
@@ -65,6 +68,13 @@ class SelectResourceForm extends Component {
    */
   handleDisplayMetadataClick() {
     this.setState({displayMetadata: !this.state.displayMetadata});
+  }
+
+  /**
+   * Handles the click on the display upgrade button.
+   */
+  handleDisplayUpgradeClick() {
+    this.setState({displayUpgrade: !this.state.displayUpgrade});
   }
 
   /**
@@ -87,7 +97,7 @@ class SelectResourceForm extends Component {
           <Dropdown>
             <DropdownButton className="add-secret">
               <AddSVG/>
-              <Trans>Add secret</Trans>
+              <span><Trans>Add secret</Trans></span>
               <CaretDownSVG/>
             </DropdownButton>
             <DropdownMenu className="menu-create-primary">
@@ -118,21 +128,21 @@ class SelectResourceForm extends Component {
               ? <CaretDownSVG className="caret-down"/>
               : <CaretRightSVG className="caret-right"/>
             }
-            <span><Trans>Secrets</Trans></span>
+            <span className="ellipsis"><Trans>Secrets</Trans></span>
           </button>
           {this.state.displaySecrets &&
             <>
               <button type="button" className="section-content no-border selected">
                 <KeySVG/>
-                <span><Trans>Passwords</Trans></span>
+                <span className="ellipsis"><Trans>Passwords</Trans></span>
               </button>
               <button type="button" className="section-content no-border">
                 <TotpSVG/>
-                <span><Trans>TOTP</Trans></span>
+                <span className="ellipsis"><Trans>TOTP</Trans></span>
               </button>
               <button type="button" className="section-content no-border">
                 <NotesSVG/>
-                <span><Trans>Note</Trans></span>
+                <span className="ellipsis"><Trans>Note</Trans></span>
               </button>
             </>
           }
@@ -141,16 +151,41 @@ class SelectResourceForm extends Component {
               ? <CaretDownSVG className="caret-down"/>
               : <CaretRightSVG className="caret-right"/>
             }
-            <span><Trans>Metadata</Trans></span>
+            <span className="ellipsis"><Trans>Metadata</Trans></span>
           </button>
           {this.state.displayMetadata &&
             <>
               <button type="button" className="section-content no-border">
                 <AlignLeftSVG/>
-                <span><Trans>Description</Trans></span>
+                <span className="ellipsis"><Trans>Description</Trans></span>
               </button>
             </>
           }
+        </div>
+        <div className="section-card">
+          <div className="card">
+            <button type="button" className="title no-border" onClick={this.handleDisplayUpgradeClick}>
+              <ArrowBigUpDashSVG/>
+              <span className="text ellipsis"><Trans>Upgrade available</Trans></span>
+              {this.state.displayUpgrade
+                ? <CaretDownSVG className="caret-down"/>
+                : <CaretRightSVG className="caret-right"/>
+              }
+            </button>
+            {this.state.displayUpgrade &&
+              <div className="content">
+                <p><Trans>Upgrade for security improvements and new features.</Trans></p>
+                <div className="actions-wrapper">
+                  <button type="button" className="button link">
+                    <span className="ellipsis"><Trans>Learn more</Trans></span>
+                  </button>
+                  <button type="button">
+                    <span className="ellipsis"><Trans>Upgrade</Trans></span>
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
         </div>
       </div>
     );
