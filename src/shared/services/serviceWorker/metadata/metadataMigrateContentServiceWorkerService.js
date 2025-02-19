@@ -14,6 +14,7 @@
 import PassboltResponsePaginationHeaderEntity from "../../../models/entity/apiService/PassboltResponsePaginationHeaderEntity";
 
 export const METADATA_FIND_MIGRATION_COUNT_DETAILS_EVENT = "passbolt.metadata.find-metadata-migrate-resources-details";
+export const METADATA_MIGRATE_RESOURCES_EVENT = "passbolt.metadata.migrate-resources-metadata";
 
 class MetadataMigrateContentServiceWorkerService {
   /**
@@ -26,11 +27,22 @@ class MetadataMigrateContentServiceWorkerService {
 
   /**
    * Find the metadata migration count details.
+   * @param {boolean} [sharedContentOnly=true]
    * @returns {Promise<PassboltResponsePaginationHeaderEntity>}
    */
-  async findCountMetadataMigrateResources() {
-    const metadataCountDetails = await this.port.request(METADATA_FIND_MIGRATION_COUNT_DETAILS_EVENT);
+  async findCountMetadataMigrateResources(sharedContentOnly = false) {
+    const metadataCountDetails = await this.port.request(METADATA_FIND_MIGRATION_COUNT_DETAILS_EVENT, sharedContentOnly);
     return new PassboltResponsePaginationHeaderEntity(metadataCountDetails);
+  }
+
+  /**
+   * Run the migration process on the service worker.
+   * @param {object} migrateMetdataDto
+   * @param {PassboltResponsePaginationHeaderEntity} paginationDetails
+   * @return {Promise<void>}
+   */
+  async migrate(migrateMetdataDto, paginationDetails) {
+    await this.port.request(METADATA_MIGRATE_RESOURCES_EVENT, migrateMetdataDto, paginationDetails);
   }
 }
 

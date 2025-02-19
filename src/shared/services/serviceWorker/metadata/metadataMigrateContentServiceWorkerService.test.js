@@ -35,7 +35,24 @@ describe("MetadataMigrateContentServiceWorkerService", () => {
       const countDetails = await service.findCountMetadataMigrateResources();
 
       expect(port.request).toHaveBeenCalledTimes(1);
-      expect(port.request).toHaveBeenCalledWith(METADATA_FIND_MIGRATION_COUNT_DETAILS_EVENT);
+      expect(port.request).toHaveBeenCalledWith(METADATA_FIND_MIGRATION_COUNT_DETAILS_EVENT, false);
+      expect(countDetails).toBeInstanceOf(PassboltResponsePaginationHeaderEntity);
+      expect(countDetails.toDto()).toEqual(dto);
+    });
+
+    it("requests the service worker for count details of shared resources only .", async() => {
+      expect.assertions(4);
+
+      const dto = defaultPassboltResponsePaginationHeaderDto();
+
+      const port = new MockPort();
+      jest.spyOn(port, "request").mockReturnValue(dto);
+
+      const service = new MetadataMigrateContentServiceWorkerService(port);
+      const countDetails = await service.findCountMetadataMigrateResources(true);
+
+      expect(port.request).toHaveBeenCalledTimes(1);
+      expect(port.request).toHaveBeenCalledWith(METADATA_FIND_MIGRATION_COUNT_DETAILS_EVENT, true);
       expect(countDetails).toBeInstanceOf(PassboltResponsePaginationHeaderEntity);
       expect(countDetails.toDto()).toEqual(dto);
     });
