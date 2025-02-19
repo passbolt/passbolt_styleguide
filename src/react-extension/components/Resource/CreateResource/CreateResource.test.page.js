@@ -118,7 +118,7 @@ class PasswordCreatePageObject {
    * Returns the name input element
    */
   get name() {
-    return this._container.querySelector('#create-password-form-name');
+    return this._container.querySelector('#resource-name');
   }
 
   /**

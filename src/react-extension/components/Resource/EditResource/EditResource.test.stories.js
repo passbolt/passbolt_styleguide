@@ -1,13 +1,19 @@
 import {defaultProps} from "./EditResource.test.data";
 import EditResource from "./EditResource";
 import MockPort from "../../../test/mock/MockPort";
+import React from "react";
 
 /**
  * EditResource stories
  */
 export default {
   title: 'Components/Resource/EditResource',
-  component: EditResource
+  component: EditResource,
+  decorators: [(Story, {args}) =>
+    <div style={{margin: "-1rem"}}>
+      <Story {...args}/>
+    </div>
+  ],
 };
 
 const props = defaultProps();

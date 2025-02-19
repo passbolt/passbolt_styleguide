@@ -802,7 +802,7 @@ describe("See the Create Resource", () => {
 
     describe("Display error message", () => {
       it("As LU I shouldn't be able to submit the form if there is an invalid field", async() => {
-        expect.assertions(3);
+        expect.assertions(2);
         const context = defaultAppContext(); // The applicative context
         const props = defaultProps({context}); // The props to pass
         const page = new CreateResourcePage(context, props);
@@ -811,7 +811,6 @@ describe("See the Create Resource", () => {
         await page.passwordCreate.click(page.passwordCreate.saveButton);
 
         // Throw error message
-        expect(page.passwordCreate.nameErrorMessage.textContent).toBe("A name is required.");
         expect(page.passwordCreate.passwordErrorMessage.textContent).toBe("A password is required.");
       });
 

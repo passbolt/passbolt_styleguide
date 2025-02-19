@@ -3,6 +3,7 @@ import React from "react";
 import CreateResource from "./CreateResource";
 import MockPort from "../../../test/mock/MockPort";
 import {defaultAppContext, defaultProps} from "./CreateResource.test.data";
+import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
 
 export default {
   title: 'Components/Resource/CreateResource',
@@ -10,7 +11,9 @@ export default {
   decorators: [(Story, {args}) =>
     <MemoryRouter initialEntries={['/app/passwords']}>
       <div style={{margin: "-1rem"}}>
-        <Story {...args}/>
+        <ResourceWorkspaceContext.Provider value={args.resourceWorkspaceContext}>
+          <Story {...args}/>
+        </ResourceWorkspaceContext.Provider>
       </div>
     </MemoryRouter>
   ],
