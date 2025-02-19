@@ -40,8 +40,8 @@ class PassboltResponseHeaderEntity extends EntityV2 {
   }
 
   /**
-   * Returns the pagination part of the header response if any (null otherwise).
-   * @returns {PassboltResponsePaginationHeaderEntity|null}
+   * Returns the 'pagination' part of the header response if any.
+   * @returns {PassboltResponsePaginationHeaderEntity | null}
    */
   get pagination() {
     return this._pagination || null;

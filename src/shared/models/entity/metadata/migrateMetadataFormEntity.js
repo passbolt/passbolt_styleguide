@@ -13,27 +13,11 @@
  */
 
 import EntityValidationError from "../abstract/entityValidationError";
-import {
-  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
-  RESOURCE_TYPE_PASSWORD_STRING_SLUG,
-  RESOURCE_TYPE_TOTP_SLUG,
-  RESOURCE_TYPE_V5_DEFAULT_SLUG,
-  RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
-  RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
-  RESOURCE_TYPE_V5_TOTP_SLUG
-} from "../resourceType/resourceTypeSchemasDefinition";
+import {V4_TO_V5_RESOURCE_TYPE_MAPPING} from "../resourceType/resourceTypeSchemasDefinition";
 import ResourceTypesCollection from "../resourceType/resourceTypesCollection";
 import MetadataKeysCollection from "./metadataKeysCollection";
 import MetadataTypesSettingsEntity, {RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5} from "./metadataTypesSettingsEntity";
 import MigrateMetadataEntity from "./migrateMetadataEntity";
-
-const V4_TO_V5_RESOURCE_TYPE_MAPPING = {
-  [RESOURCE_TYPE_PASSWORD_STRING_SLUG]: RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
-  [RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG]: RESOURCE_TYPE_V5_DEFAULT_SLUG,
-  [RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG]: RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
-  [RESOURCE_TYPE_TOTP_SLUG]: RESOURCE_TYPE_V5_TOTP_SLUG,
-};
 
 class MigrateMetadataFormEntity extends MigrateMetadataEntity {
   /**

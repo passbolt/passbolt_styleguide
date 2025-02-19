@@ -42,6 +42,16 @@ class PassboltResponsePaginationHeaderEntity extends EntityV2 {
       }
     };
   }
+
+  /**
+   * Returns the page count computed based on the pagination data.
+   * @returns {number}
+   */
+  get pageCount() {
+    const count = parseInt(this._props.count, 10);
+    const limit = parseInt(this._props.limit, 10);
+    return Math.ceil(count / limit);
+  }
 }
 
 export default PassboltResponsePaginationHeaderEntity;

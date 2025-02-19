@@ -11,10 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.12.0
  */
-import {defaultPassboltResponseHeaderDto} from "./PassboltResponseHeaderEntity.test.data";
+import {defaultPassboltResponseHeaderDto, paginatedPassboltResponseDto} from "./PassboltResponseHeaderEntity.test.data";
 
 export const defaultPassboltResponseDto = (data = {}) => ({
   body: {},
   ...data,
   header: defaultPassboltResponseHeaderDto(data?.header),
+});
+
+export const passboltReponseWithCollectionDto = (collection, data = {}) => ({
+  body: collection,
+  ...data,
+  header: paginatedPassboltResponseDto(collection, data?.header),
 });

@@ -59,6 +59,46 @@ class MigrateMetadataEntity extends EntityV2 {
     this._props.migrate_comments_to_v5 = this._props.migrate_comments_to_v5 ?? false;
     this._props.migrate_personal_content = this._props.migrate_personal_content ?? false;
   }
+
+  /**
+   * Returns true if the resources should be migrated, false otherwise.
+   * @returns {boolean}
+   */
+  get migrateResources() {
+    return !this._props.migrate_resources_to_v5;
+  }
+
+  /**
+   * Returns true if the folders should be migrated, false otherwise.
+   * @returns {boolean}
+   */
+  get migrateFolders() {
+    return !this._props.migrate_folders_to_v5;
+  }
+
+  /**
+   * Returns true if the tags should be migrated, false otherwise.
+   * @returns {boolean}
+   */
+  get migrateTags() {
+    return !this._props.migrate_tags_to_v5;
+  }
+
+  /**
+   * Returns true if the comments should be migrated, false otherwise.
+   * @returns {boolean}
+   */
+  get migrateComments() {
+    return !this._props.migrate_comments_to_v5;
+  }
+
+  /**
+   * Returns true if only the shared content should be migrated, false otherwise.
+   * @returns {boolean}
+   */
+  get sharedContentOnly() {
+    return !this._props.migrate_personal_content;
+  }
 }
 
 export default MigrateMetadataEntity;
