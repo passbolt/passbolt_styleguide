@@ -15,6 +15,7 @@
 import AddResourcePassword from "./AddResourcePassword";
 import React from "react";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
+import {defaultProps} from "./AddResourcePassword.test.data";
 
 export default {
   title: 'Components/Resource/AddResourcePassword',
@@ -46,4 +47,6 @@ export default {
   ],
 };
 
-export const Default = {};
+export const Default = {
+  args: defaultProps(),
+};

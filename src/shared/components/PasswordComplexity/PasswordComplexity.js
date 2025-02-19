@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {SecretGeneratorComplexity} from "../../lib/SecretGenerator/SecretGeneratorComplexity";
 import Tooltip from "../../../react-extension/components/Common/Tooltip/Tooltip";
-import Icon from "../Icons/Icon";
+import InfoSVG from "../../../img/svg/info.svg";
 
 const COLOR_GRADIENT = {
   COLOR_1: hexToRgb("#BA2809"),
@@ -158,7 +158,7 @@ class PasswordComplexity extends Component {
       <div className="password-complexity">
         <span className="complexity-text">
           <Tooltip message={this.tooltipMessage}>
-            {this.passwordStrengthLabel} <Icon name="info-circle"/>
+            {this.passwordStrengthLabel} <InfoSVG/>
           </Tooltip>
         </span>
         <span className="progress">
