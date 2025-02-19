@@ -168,6 +168,7 @@ import UsersSVG from "../../../img/svg/users.svg";
 import VenetianMaskSVG from "../../../img/svg/venetian_mask.svg";
 import WalletSVG from "../../../img/svg/wallet.svg";
 import AnimatedFeedback from "./AnimatedFeedback";
+import QrCodeSVG from "../../../img/svg/qr_code.svg";
 
 export default {
   title: 'Foundations/Icon',
@@ -280,6 +281,7 @@ const iconsSVGs = [
   PinSVG,
   PowerSVG,
   ProfileSVG,
+  QrCodeSVG,
   RefreshSVG,
   RenameSVG,
   ReplySVG,

@@ -36,7 +36,7 @@
       align-self: stretch;
 
       /* PASSWORD FIELDS LAYOUT*/
-      .password-fields {
+      .password-fields, .totp-fields {
         display: flex;
         padding: 1.6rem 1.6rem 2.4rem 1.6rem;
         flex-direction: column;
@@ -90,6 +90,57 @@
         }
       }
 
+      .totp-view {
+        display: flex;
+        align-self: stretch;
+        padding: 1.6rem;
+
+        .totp-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          align-self: stretch;
+          flex: 1 0 0;
+          padding: .8rem 1.6rem;
+          border-radius: var(--Contextual-bar-radius, 8px);
+
+          .secret-totp {
+            display: flex;
+            gap: 1.6rem;
+
+            button {
+              gap: 1.6rem;
+
+              .totp-code {
+                display: flex;
+
+                span {
+                  font-size: 24px;
+                  font-weight: 600;
+                  line-height: 2.4rem;
+                }
+              }
+            }
+
+            svg {
+              width: 1.8rem;
+              height: 1.8rem;
+              margin: 0;
+            }
+          }
+
+          &.disabled {
+            background-color: var(--Workspace-Dividers-lighter);
+          }
+        }
+      }
+
+      .upload-qr-code {
+        display: flex;
+        align-items: center;
+        padding: 3.2rem 0 1.6rem 0;
+      }
+
       /* ADDITIONAL INFORMATIONS */
       .additional-information {
         display: flex;
@@ -119,6 +170,11 @@
           &:hover, &:focus-visible {
             color: var(--States-Focus);
           }
+        }
+
+        .advanced-settings {
+          align-self: stretch;
+          padding: 1.6rem 1.6rem 0 1.6rem;
         }
 
         /* TABS */
