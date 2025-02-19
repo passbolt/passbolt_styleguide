@@ -130,7 +130,7 @@ class AddResourcePassword extends Component {
   }
 
   /**
-   * Get the translate function
+   * Get the translation function
    * @returns {function(...[*]=)}
    */
   get translate() {
