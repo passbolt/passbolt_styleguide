@@ -117,7 +117,7 @@ class PasswordEditPageObject {
    * Returns the dialog element
    */
   get dialog() {
-    return this._container.querySelector('.edit-password-dialog');
+    return this._container.querySelector('.edit-resource');
   }
   /**
    * Returns the dialog close element
@@ -137,14 +137,7 @@ class PasswordEditPageObject {
    * Returns the name input element
    */
   get name() {
-    return this._container.querySelector('#edit-password-form-name');
-  }
-
-  /**
-   * Returns the name error mesage input element
-   */
-  get nameErrorMessage() {
-    return this._container.querySelector('.name.error-message');
+    return this._container.querySelector('#resource-name');
   }
 
   /**

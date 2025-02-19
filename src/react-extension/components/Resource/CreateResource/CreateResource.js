@@ -11,9 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
  */
-import React, {Component, Fragment} from "react";
+import React, {Component} from "react";
 import PropTypes from "prop-types";
-
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
@@ -24,7 +23,6 @@ import {withRouter} from "react-router-dom";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-
 import {Trans, withTranslation} from "react-i18next";
 import GenerateResourcePassword from "../../ResourcePassword/GenerateResourcePassword/GenerateResourcePassword";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
@@ -65,18 +63,8 @@ import SettingSVG from "../../../../img/svg/settings.svg";
 import LockSVG from "../../../../img/svg/lock.svg";
 import UnlockSVG from "../../../../img/svg/unlock.svg";
 import AttentionSVG from "../../../../img/svg/attention.svg";
-import DropdownButton from "../../Common/Dropdown/DropdownButton";
-import AddSVG from "../../../../img/svg/add.svg";
-import CaretDownSVG from "../../../../img/svg/caret_down.svg";
-import CaretRightSVG from "../../../../img/svg/caret_right.svg";
-import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
-import DropdownItem from "../../Common/Dropdown/DropdownMenuItem";
+import SelectResourceForm from "../ResourceForm/SelectResourceForm";
 import KeySVG from "../../../../img/svg/key.svg";
-import TotpSVG from "../../../../img/svg/totp.svg";
-import NotesSVG from "../../../../img/svg/notes.svg";
-import AlignLeftSVG from "../../../../img/svg/align_left.svg";
-import Dropdown from "../../Common/Dropdown/Dropdown";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class CreateResource extends Component {
   constructor(props) {
@@ -97,8 +85,6 @@ class CreateResource extends Component {
       passwordEntropy: null,
       generatorSettings: null,
       processing: false,
-      displaySecrets: true,
-      displayMetadata: true,
     };
   }
 
@@ -115,15 +101,12 @@ class CreateResource extends Component {
     this.handleDeleteTotpClick = this.handleDeleteTotpClick.bind(this);
     this.save = this.save.bind(this);
     this.rejectCreationConfirmation = this.rejectCreationConfirmation.bind(this);
-    this.handleDisplaySecretsClick = this.handleDisplaySecretsClick.bind(this);
-    this.handleDisplayMetadataClick = this.handleDisplayMetadataClick.bind(this);
   }
 
   /**
    * Create DOM nodes or React elements references in order to be able to access them programmatically.
    */
   createInputRef() {
-    this.nameInputRef = React.createRef();
     this.passwordInputRef = React.createRef();
   }
 
@@ -450,9 +433,7 @@ class CreateResource extends Component {
    * @param {EntityValidationError} validationErrors
    */
   focusFirstFieldError(validationErrors) {
-    if (validationErrors.hasError("name")) {
-      this.nameInputRef.current.focus();
-    } else if (validationErrors.hasError("password")) {
+    if (validationErrors.hasError("password")) {
       this.passwordInputRef.current.focus();
     }
   }
@@ -633,38 +614,6 @@ class CreateResource extends Component {
   }
 
   /**
-   * Handles the click on the display secrets button.
-   */
-  handleDisplaySecretsClick() {
-    this.setState({displaySecrets: !this.state.displaySecrets});
-  }
-
-  /**
-   * Handles the click on the display metadata button.
-   */
-  handleDisplayMetadataClick() {
-    this.setState({displayMetadata: !this.state.displayMetadata});
-  }
-
-  /**
-   * Returns the current list of breadcrumb items
-   */
-  get breadcrumbItems() {
-    const foldersHierarchy = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.props.folderParentId);
-    return <div className="breadcrumbs">
-      <div className="folder-name"><Trans>My workspace</Trans></div>
-      {foldersHierarchy?.map(folder =>
-        <Fragment key={folder.id}>
-          {folder.folder_parent_id !== null &&
-            <span className="caret">›</span>
-          }
-          <div className="folder-name">{folder.name}</div>
-        </Fragment>
-      )}
-    </div>;
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -683,7 +632,6 @@ class CreateResource extends Component {
       return null;
     }
 
-    const isNameError = this.state.errors.hasError("name", "required");
     const isPasswordError = this.state.errors.hasError("password", "required");
 
     const isMaxLengthNameWarning = this.isFieldMaxSizeReached("name");
@@ -698,77 +646,7 @@ class CreateResource extends Component {
     return (
       <DialogWrapper title={this.translate("Create a resource")} className="create-resource"
         disabled={this.state.processing} onClose={this.handleClose}>
-        <div className="left-sidebar">
-          <div className="main-action-wrapper">
-            <Dropdown>
-              <DropdownButton className="add-secret">
-                <AddSVG/>
-                <Trans>Add secret</Trans>
-                <CaretDownSVG/>
-              </DropdownButton>
-              <DropdownMenu className="menu-create-primary">
-                <DropdownItem>
-                  <button id="password_action" type="button" className="no-border">
-                    <KeySVG/>
-                    <span><Trans>Password</Trans></span>
-                  </button>
-                </DropdownItem>
-                <DropdownItem>
-                  <button id="totp_action" type="button" className="no-border">
-                    <TotpSVG/>
-                    <span><Trans>TOTP</Trans></span>
-                  </button>
-                </DropdownItem>
-                <DropdownItem>
-                  <button id="note_action" type="button" className="no-border">
-                    <NotesSVG/>
-                    <span><Trans>Note</Trans></span>
-                  </button>
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-          <div className="sidebar-content-sections">
-            <button type="button" className="section-header no-border" onClick={this.handleDisplaySecretsClick}>
-              {this.state.displaySecrets
-                ? <CaretDownSVG className="caret-down"/>
-                : <CaretRightSVG className="caret-right"/>
-              }
-              <span><Trans>Secrets</Trans></span>
-            </button>
-            {this.state.displaySecrets &&
-              <>
-                <button type="button" className="section-content no-border selected">
-                  <KeySVG/>
-                  <span><Trans>Passwords</Trans></span>
-                </button>
-                <button type="button" className="section-content no-border">
-                  <TotpSVG/>
-                  <span><Trans>TOTP</Trans></span>
-                </button>
-                <button type="button" className="section-content no-border">
-                  <NotesSVG/>
-                  <span><Trans>Note</Trans></span>
-                </button>
-              </>
-            }
-            <button type="button" className="section-header no-border" onClick={this.handleDisplayMetadataClick}>
-              {this.state.displayMetadata
-                ? <CaretDownSVG className="caret-down"/>
-                : <CaretRightSVG className="caret-right"/>
-              }
-              <span><Trans>Metadata</Trans></span>
-            </button>
-            {this.state.displayMetadata &&
-              <>
-                <button type="button" className="section-content no-border">
-                  <AlignLeftSVG/>
-                  <span><Trans>Description</Trans></span>
-                </button>
-              </>
-            }
-          </div>
-        </div>
+        <SelectResourceForm/>
         <form className="grid-and-footer" onSubmit={this.handleFormSubmit} noValidate>
           <div className="grid">
             <div className="resource-info">
@@ -777,19 +655,13 @@ class CreateResource extends Component {
               </div>
               <div className="information">
                 <div className="input text">
-                  <input id="create-password-form-name" name="name" type="text" value={resourceViewModel.name || ""} onChange={this.handleInputChange}
-                    disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="255"
-                    required="required" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
-                  {isNameError &&
-                    <div className="name error-message"><Trans>A name is required.</Trans></div>
-                  }
+                  <input id="resource-name" name="name" type="text" value={this.state.resourceViewModel.name || ""} onChange={this.handleInputChange} disabled={this.state.processing} maxLength="255" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
                   {isMaxLengthNameWarning &&
                     <div className="name warning-message">
                       <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
                     </div>
                   }
                 </div>
-                {this.breadcrumbItems}
               </div>
             </div>
             <div className="create-workspace">
@@ -917,7 +789,6 @@ CreateResource.propTypes = {
   resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
   passwordExpiryContext: PropTypes.object, // The password expiry context
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   dialogContext: PropTypes.any, // The dialog context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource types collection
@@ -926,5 +797,5 @@ CreateResource.propTypes = {
   workflowContext: PropTypes.any, // The workflow context
 };
 
-export default  withRouter(withAppContext(withPasswordPolicies(withResourceTypesLocalStorage(withPasswordExpiry(withActionFeedback(withResourcePasswordGeneratorContext(withResourceWorkspace(withDialog(withWorkflow(withTranslation('common')(CreateResource)))))))))));
+export default  withRouter(withAppContext(withPasswordPolicies(withResourceTypesLocalStorage(withPasswordExpiry(withActionFeedback(withResourcePasswordGeneratorContext(withDialog(withWorkflow(withTranslation('common')(CreateResource))))))))));
 
