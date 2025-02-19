@@ -97,12 +97,12 @@ describe("migrateMetadataFormEntity", () => {
 
       expect(healthIssues).toBeInstanceOf(EntityValidationError);
       expect(Object.keys(healthIssues.details)).toHaveLength(1);
-      expect(healthIssues.hasError("migrate_resources_to_v5", "resource_types_v5_deleted")).toBeTruthy();
-      expect(healthIssues.getError("migrate_resources_to_v5", "resource_types_v5_deleted")).toStrictEqual("Some resource types v5 are missing.");
+      expect(healthIssues.hasError("migrate_resources_to_v5", "resource_types_v5_partially_deleted")).toBeTruthy();
+      expect(healthIssues.getError("migrate_resources_to_v5", "resource_types_v5_partially_deleted")).toStrictEqual("Some resource types v5 are missing.");
     });
 
     it("add an error if there is no metadata keys from to migrate with", () => {
-      expect.assertions(4);
+      expect.assertions(3);
 
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
       const metadataTypesSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto());
@@ -111,9 +111,8 @@ describe("migrateMetadataFormEntity", () => {
       const healthIssues = settings.verifyHealth(resourceTypes, metadataTypesSettings, metadataKeysCollection);
 
       expect(healthIssues).toBeInstanceOf(EntityValidationError);
-      expect(Object.keys(healthIssues.details)).toHaveLength(1);
-      expect(healthIssues.hasError("migrate_resources_to_v5", "active_metadata_key")).toBeTruthy();
-      expect(healthIssues.getError("migrate_resources_to_v5", "active_metadata_key")).toStrictEqual("No active metadata key defined.");
+      expect(Object.keys(healthIssues.details)).toHaveLength(2);
+      expect(healthIssues.hasError("global_form", "active_metadata_key")).toBeTruthy();
     });
 
     it("add an error if there is are metadata keys but no active ones to migrate with", () => {
@@ -128,9 +127,9 @@ describe("migrateMetadataFormEntity", () => {
       const healthIssues = settings.verifyHealth(resourceTypes, metadataTypesSettings, metadataKeysCollection);
 
       expect(healthIssues).toBeInstanceOf(EntityValidationError);
-      expect(Object.keys(healthIssues.details)).toHaveLength(1);
-      expect(healthIssues.hasError("migrate_resources_to_v5", "active_metadata_key")).toBeTruthy();
-      expect(healthIssues.getError("migrate_resources_to_v5", "active_metadata_key")).toStrictEqual("No active metadata key defined.");
+      expect(Object.keys(healthIssues.details)).toHaveLength(2);
+      expect(healthIssues.hasError("global_form", "active_metadata_key")).toBeTruthy();
+      expect(healthIssues.getError("global_form", "active_metadata_key")).toStrictEqual("No active metadata key defined.");
     });
 
     it("add an error if there is are metadata keys but no active ones to migrate with", () => {
@@ -143,7 +142,7 @@ describe("migrateMetadataFormEntity", () => {
       const healthIssues = settings.verifyHealth(resourceTypes, metadataTypesSettings, metadataKeysCollection);
 
       expect(healthIssues).toBeInstanceOf(EntityValidationError);
-      expect(Object.keys(healthIssues.details)).toHaveLength(1);
+      expect(Object.keys(healthIssues.details)).toHaveLength(2);
       expect(healthIssues.hasError("migrate_resources_to_v5", "allow_v4_v5_upgrade")).toBeTruthy();
       expect(healthIssues.getError("migrate_resources_to_v5", "allow_v4_v5_upgrade")).toStrictEqual("Resource types v5 creation is not allowed.");
       expect(healthIssues.hasError("migrate_resources_to_v5", "allow_creation_of_v5_resources")).toBeTruthy();

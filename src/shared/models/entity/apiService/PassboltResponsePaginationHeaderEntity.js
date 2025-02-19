@@ -33,7 +33,8 @@ class PassboltResponsePaginationHeaderEntity extends EntityV2 {
         },
         "limit": {
           "type": "integer",
-          "minimum": 0
+          "minimum": 0,
+          "nullable": true,
         },
         "page": {
           "type": "integer",
@@ -41,6 +42,30 @@ class PassboltResponsePaginationHeaderEntity extends EntityV2 {
         },
       }
     };
+  }
+
+  /**
+   * Returns the "count" property of the pagintion entity.
+   * @returns {number}
+   */
+  get count() {
+    return this._props.count;
+  }
+
+  /**
+   * Returns the "limit" property of the pagintion entity.
+   * @returns {number|null}
+   */
+  get limit() {
+    return this._props.limit;
+  }
+
+  /**
+   * Returns the "page" property of the pagintion entity.
+   * @returns {number}
+   */
+  get page() {
+    return this._props.page;
   }
 
   /**

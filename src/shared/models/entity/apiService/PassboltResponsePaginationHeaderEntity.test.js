@@ -28,6 +28,7 @@ describe("PassboltResponsePaginationHeaderEntity", () => {
       assertEntityProperty.integer(PassboltResponsePaginationHeaderEntity, "limit");
       assertEntityProperty.minimum(PassboltResponsePaginationHeaderEntity, "limit", 0);
       assertEntityProperty.required(PassboltResponsePaginationHeaderEntity, "limit");
+      assertEntityProperty.nullable(PassboltResponsePaginationHeaderEntity, "limit");
     });
 
     it("validates page property", () => {
@@ -43,6 +44,29 @@ describe("PassboltResponsePaginationHeaderEntity", () => {
       const dto = defaultPassboltResponsePaginationHeaderDto();
       const entity = new PassboltResponsePaginationHeaderEntity(dto);
       expect(entity).toBeInstanceOf(PassboltResponsePaginationHeaderEntity);
+    });
+  });
+
+  describe("::getters", () => {
+    it("::count", () => {
+      expect.assertions(1);
+      const dto = defaultPassboltResponsePaginationHeaderDto();
+      const entity = new PassboltResponsePaginationHeaderEntity(dto);
+      expect(entity.count).toStrictEqual(dto.count);
+    });
+
+    it("::limit", () => {
+      expect.assertions(1);
+      const dto = defaultPassboltResponsePaginationHeaderDto();
+      const entity = new PassboltResponsePaginationHeaderEntity(dto);
+      expect(entity.limit).toStrictEqual(dto.limit);
+    });
+
+    it("::page", () => {
+      expect.assertions(1);
+      const dto = defaultPassboltResponsePaginationHeaderDto();
+      const entity = new PassboltResponsePaginationHeaderEntity(dto);
+      expect(entity.page).toStrictEqual(dto.page);
     });
   });
 });
