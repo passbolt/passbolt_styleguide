@@ -25,9 +25,12 @@ button,
     box-sizing: border-box;
     min-width: 7rem;
 
-    svg:first-child {
-      width: 1.6rem;
-      height: 1.6rem;
+    svg {
+      flex-shrink: 0;
+      &:first-child {
+        width: 1.6rem;
+        height: 1.6rem;
+      }
     }
 
     /* hover */
