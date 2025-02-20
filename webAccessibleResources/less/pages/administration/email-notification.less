@@ -1,25 +1,21 @@
 .email-notification-settings {
-  .main-content {
-    .section {
-      display: flex;
-      column-gap: 1.6rem;
-      
-      .password-section, .folder-section, .comment-section, .group-section, .group-admin-section, .admin-section, .user-section, .password-expiry-section {
-        & > * {
-          margin-bottom: 1.6rem;
-        }
-      }
+  .section {
+    display: flex;
+    column-gap: 1.6rem;
 
-      .input.toggle-switch .toggle-switch-checkbox + label {
-        width: initial;
-        white-space: initial;
-        overflow: initial;
-        text-overflow: initial;
-      }
-  
-      & > div {
-        flex: 1;
-      }
+    label {
+      margin-bottom: 1.2rem;
+    }
+
+    .input.toggle-switch .toggle-switch-checkbox + label {
+      width: initial;
+      white-space: initial;
+      overflow: initial;
+      text-overflow: initial;
+    }
+
+    & > div {
+      flex: 1;
     }
   }
 }

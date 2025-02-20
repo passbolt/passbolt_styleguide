@@ -173,6 +173,7 @@ class AdfsSsoProviderForm extends React.Component {
             <Trans>The AD FS authentication endpoint.</Trans>
           </p>
         </div>
+        <hr/>
         <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>Redirect URL</Trans></label>
           <div className="button-inline">
@@ -186,6 +187,7 @@ class AdfsSsoProviderForm extends React.Component {
             <Trans>The URL to provide to the AD FS platform when registering the application.</Trans>
           </p>
         </div>
+        <hr/>
         <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>OpenId Configuration Path</Trans></label>
           <input id="sso-adfs-openid-configuration-path-input" type="text" className="fluid form-element" name="openid_configuration_path" ref={this.openIdConfigurationPathInputRef}
@@ -198,6 +200,7 @@ class AdfsSsoProviderForm extends React.Component {
             <Trans>The AD FS configuration relative path from the given login url.</Trans>
           </p>
         </div>
+        <hr/>
         <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>Scope</Trans></label>
           <input id="sso-adfs-scope-input" type="text" className="fluid form-element" name="scope" ref={this.scopeInputRef}
@@ -210,6 +213,7 @@ class AdfsSsoProviderForm extends React.Component {
             <Trans>The AD FS scope.</Trans>
           </p>
         </div>
+        <hr/>
         <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>Application (client) ID</Trans></label>
           <input id="sso-adfs-client-id-input" type="text" className="fluid form-element" name="client_id" ref={this.clientIdInputRef}

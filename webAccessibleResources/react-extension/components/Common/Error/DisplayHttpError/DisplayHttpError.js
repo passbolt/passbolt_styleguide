@@ -49,15 +49,11 @@ class DisplayHttpError extends React.Component {
    */
   render() {
     return (
-      <div className="row">
-        <div className="http-error main-column">
-          <div className="main-content">
-            <h3>{this.props.errorCode}</h3>
-            <h4>{this.errorTitle}</h4>
-            <div>
-              <p>{this.errorDescription}</p>
-            </div>
-          </div>
+      <div className="http-error">
+        <h3>{this.props.errorCode}</h3>
+        <h4>{this.errorTitle}</h4>
+        <div>
+          <p>{this.errorDescription}</p>
         </div>
       </div>
     );

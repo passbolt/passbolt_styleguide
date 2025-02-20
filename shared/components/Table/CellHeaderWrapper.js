@@ -290,7 +290,7 @@ class CellHeaderWrapper extends Component {
           </div>
         }
         {this.column.sortable &&
-          <button className="no-border" type="button" onClick={this.handleSortByColumnClick}>
+          <button className="link no-border" type="button" onClick={this.handleSortByColumnClick}>
             <div className="cell-header">
               <CellHeader {...this.propsCellHeader}/>
               <span className="cell-header-icon-sort">

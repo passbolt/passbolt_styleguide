@@ -17,7 +17,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import SpinnerSVG from "../../../../img/svg/spinner.svg";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
@@ -40,19 +40,20 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
    */
   get defaultState() {
     return {
-      activities: [], // list of activities
+      activities: null, // list of activities
       activitiesPage: 1, // pagination for activity
       loadingMore: false, // processing when the user want to see more activities
+      open: false,
       loading: true,
     };
   }
 
   /**
-   * Whenever the component has mounted
+   * Bind callbacks methods
    */
-  async componentDidMount() {
-    await this.fetch();
-    this.setState({loading: false});
+  bindCallbacks() {
+    this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
+    this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
   }
 
   /**
@@ -64,26 +65,33 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
   }
 
   /**
-   * Bind callbacks methods
-   */
-  bindCallbacks() {
-    this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
-  }
-
-  /**
    * Check if the folder has changed and fetch
    * @param previousFolder
    */
   async handleResourceChange(previousFolder) {
-    //do nothing if the folder doesn't change
-    if (this.folder.id === previousFolder.id) {
-      return;
+    if (this.state.open && this.folder.id !== previousFolder.id) {
+      // Reset the component, and fetch activities for the new folder.
+      const state = Object.assign({}, this.defaultState, {open: true});
+      await this.setState(state);
+      await this.fetch();
+      this.setState({loading: false});
     }
+  }
 
-    // Reset the component, and fetch activities for the new folder.
-    this.setState(this.defaultState);
-    await this.fetch();
-    this.setState({loading: false});
+  /**
+   * handle when the users click on the section header.
+   * Open/Close it.
+   */
+  async handleTitleClickEvent() {
+    // If the section is open, reset the component and close the section.
+    if (this.state.open) {
+      const defaultState = this.defaultState;
+      this.setState(defaultState);
+    } else {
+      await this.setState({loading: true, open: true});
+      await this.fetch();
+      this.setState({loading: false});
+    }
   }
 
   /**
@@ -91,7 +99,8 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
    */
   async handleMoreClickEvent() {
     const activitiesPage = this.state.activitiesPage + 1;
-    this.setState({activitiesPage, loadingMore: true});
+    const loadingMore = true;
+    await this.setState({activitiesPage, loadingMore});
     await this.fetch();
     this.setState({loadingMore: false});
   }
@@ -104,9 +113,15 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
     const limit = LIMIT_ACTIVITIES_PER_PAGE;
     const page = this.state.activitiesPage;
     const options = {limit, page};
-    const newActivities = await this.props.context.port.request("passbolt.actionlogs.find-all-for", "Folder", this.folder.id, options) || [];
+    const newActivities = await this.props.context.port.request("passbolt.actionlogs.find-all-for", "Folder", this.folder.id, options);
 
-    const activities = [...this.state.activities, ...newActivities];
+    let activities;
+    // For the first page need to reset activities state
+    if (this.state.activitiesPage > 1) {
+      activities = [...(this.state.activities || []), ...newActivities];
+    } else {
+      activities = [...newActivities];
+    }
     this.setState({activities});
   }
 
@@ -228,7 +243,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
     const changeTypeLabel = this.getPermissionChangeTypeLabel(changeType);
 
     return (
-      <li key={permission.id}>
+      <li key={permission.id} className="clearfix">
         {permission.user &&
         <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
         }
@@ -237,7 +252,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
         }
         <div className="name">
           <span className="creator">{permissionAroName}</span>
-          <span className="permission-type"> {permissionLabel}</span>
+          <span className="permission-type"> - {permissionLabel}</span>
         </div>
         <div className="type"><span className={changeType}>{changeTypeLabel}</span></div>
       </li>
@@ -263,12 +278,12 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> changed permissions of folder <span className="item">{{folderName}}</span> with
               </Trans>
             </div>
+            <div className="subinfo light">{activityFormattedDate}</div>
             <ul className="permissions-list">
               {activity.data.permissions.added.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "created"))}
               {activity.data.permissions.updated.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "updated"))}
               {activity.data.permissions.removed.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "removed"))}
             </ul>
-            <div className="subinfo third-level light">{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
@@ -353,28 +368,44 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const loadingActivities = this.state.activities === null;
+    const isMoreButtonVisible = this.isMoreButtonVisible();
+
     return (
       <div className={`activity accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
+        <div className="accordion-header">
+          <h4>
+            <button type="button" className="link no-border" onClick={this.handleTitleClickEvent}>
+              <Trans>Activity</Trans>
+              {this.state.open &&
+              <Icon name="caret-down"/>
+              }
+              {!this.state.open &&
+              <Icon name="caret-right"/>
+              }
+            </button>
+          </h4>
+        </div>
         <div className="accordion-content">
-          {this.state.loading &&
+          {loadingActivities &&
           <div className="processing-wrapper">
-            <SpinnerSVG/>
+            <Icon name="spinner"/>
             <span className="processing-text"><Trans>Retrieving activities</Trans></span>
           </div>
           }
-          {!this.state.loading &&
-          <>
+          {!loadingActivities &&
+          <React.Fragment>
             <ul className="ready">
               {this.state.activities.map(activity => this.renderActivity(activity))}
             </ul>
-            {this.isMoreButtonVisible() &&
+            {isMoreButtonVisible &&
             <div className="actions">
               <button type="button" onClick={this.handleMoreClickEvent} disabled={this.state.loadingMore} className={`link no-border action-logs-load-more ${this.state.loadingMore ? "processing" : ""}`}>
                 <span><Trans>More</Trans></span>
               </button>
             </div>
             }
-          </>
+          </React.Fragment>
           }
         </div>
       </div>

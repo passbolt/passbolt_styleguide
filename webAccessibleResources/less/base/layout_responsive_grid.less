@@ -7,13 +7,39 @@
  */
 .grid-responsive-12,
 .grid {
+    margin: 0 auto;
+    padding: 0;
+    max-width: 1220px;
+
     .row {
-        position: absolute;
-        width: 100%;
-        height: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        margin: 0 1.6rem;
+        .clearfix();
+
+        .col1, .col2, .col3, .col4, .col5, .col6, .col7, .col8, .col9, .col10, .col11, .col12 {
+            .clearfix();
+            position:relative;
+            left: auto;
+            float: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .col1 img, .col2 img, .col3 img, .col4 img, .col5 img, .col6 img, .col7 img, .col8 img, .col9 img, .col10 img, .col11 img, .col12 img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
 
         .main-column {
-            border-radius: var(--Section-border-radius) var(--Section-border-radius) 0 0;
+            min-height: fit-content;
+            background: @default-background;
+            flex: 1;
+            border-radius: 0.3rem 0.3rem 0 0;
+            border: 1px solid @default-border;
+            border-bottom: none;
 
             & > * {
                 margin: 1.6rem;
@@ -52,10 +78,11 @@
             }
 
             h3 {
-                padding: 1.6rem;
+                padding: .8rem 1.6rem 1.1rem 1.6rem;
                 margin: 0;
+                border-bottom: .1rem solid @workspace-title-border;
                 font-size: 2rem;
-                line-height: normal;
+                line-height: 2.7rem;
 
                 & > * {
                   margin: 0;
@@ -68,13 +95,15 @@
             }
 
             h4 {
+                padding: 1.1rem 1.6rem 0 1.6rem;
+                margin: .8rem 0 0 0;
                 border-top: .1rem solid @workspace-title-border;
                 font-size: 1.8rem;
                 line-height: 2.5rem;
 
                 &.no-border {
                   border: none;
-                  margin: 0;
+                  margin-top: 0;
                 }
 
                 button {
@@ -89,17 +118,11 @@
         }
 
         .last {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1.6rem;
-            align-self: stretch;
-            padding-right: 1.6rem;
+            margin: 1.6rem 0;
 
             .sidebar {
-                background: var(--Workspace-Panels-background);
-                border-radius: var(--Section-border-radius) var(--Section-border-radius) 0 0;
-                height: 100%;
+                background-color: @notice-background;
+                border-radius: .3rem;
 
                 & > * {
                     margin: 1.6rem;
@@ -119,5 +142,88 @@
                 }
             }
         }
+    }
+}
+
+/*
+ * large devices
+ */
+@media all and (min-width: 780px) {
+
+    /*
+     * Common columns definitions
+     */
+    .grid .row {
+        flex-direction: row;
+        margin: 0 1.6rem 0 0;
+        .col1, .col2, .col3, .col4, .col5, .col6, .col7, .col8, .col9, .col10, .col11, .col12 {
+            float: left;
+            position:relative;
+        }
+
+        .last {
+            margin: 0 0 0 1.6rem;
+        }
+
+        .col1 {
+            width: 5.5%;
+        }
+        .col2 {
+            width: 14%;
+        }
+        .col3 {
+            width: 22.5%;
+        }
+        .col4 {
+            width: 31%;
+        }
+        .col5 {
+            width: 39.5%;
+        }
+        .col6 {
+            width: 48%;
+        }
+        .col7 {
+            width: 56.5%;
+        }
+        .col8 {
+            width: 65%;
+        }
+        .col9 {
+            width: 73.5%;
+        }
+        .col10 {
+            width: 82%;
+        }
+        .col11 {
+            width: 90.5%;
+        }
+        .col12 {
+            width: 99%;
+            margin: 0;
+        }
+
+        .push1 {
+            margin-left: 5.5%;
+        }
+        .push2 {
+            margin-left: 14%;
+        }
+        .push3 {
+            margin-left: 22.5%;
+        }
+        .push4 {
+            margin-left: 31%;
+        }
+
+    }
+}
+
+/*
+ * Utilities
+ */
+@media all and (max-width: 768px) {
+    .hidden-xs {
+        display: none;
     }
 }

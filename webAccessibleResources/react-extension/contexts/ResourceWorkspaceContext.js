@@ -1132,7 +1132,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async loadGridResourceSetting() {
     const gridUserSettingEntity = await this.gridResourceUserSetting.getSetting();
     // Merge the columns setting collection by ID
-    const columnsResourceSetting = ColumnsResourceSettingCollection.createFromDefault(gridUserSettingEntity?.columnsSetting, {keepUnknownValue: false});
+    const columnsResourceSetting = ColumnsResourceSettingCollection.createFromDefault(gridUserSettingEntity?.columnsSetting);
     if (!this.props.context.siteSettings.canIUse('totpResourceTypes')) {
       columnsResourceSetting.removeById(ColumnModelTypes.TOTP);
     }
@@ -1185,7 +1185,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleChangeColumnsSettings(columns) {
     // Merge the columns setting
-    const columnsResourceSetting = this.state.columnsResourceSetting.deepMerge(new ColumnsResourceSettingCollection(columns), {keepUnknownValue: false});
+    const columnsResourceSetting = this.state.columnsResourceSetting.deepMerge(new ColumnsResourceSettingCollection(columns));
     this.setState({columnsResourceSetting}, () => this.updateGridSetting());
   }
 

@@ -130,7 +130,7 @@ class FilterResourcesByFoldersPageObject {
    * Returns the root folder caret
    */
   get rootFolderCaret() {
-    return this._container.querySelector('.folders-label .toggle-folder');
+    return this._container.querySelector('.folders-label span svg');
   }
 
   /**

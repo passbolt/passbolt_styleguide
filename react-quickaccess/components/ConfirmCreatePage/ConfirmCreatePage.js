@@ -17,7 +17,6 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
-import SpinnerSVG from "../../../img/svg/spinner.svg";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
 import {withPasswordExpiry} from "../../../react-extension/contexts/PasswordExpirySettingsContext";
@@ -186,7 +185,7 @@ class ConfirmCreatePage extends React.PureComponent {
             role="button" disabled={this.state.processing}>
             <Trans>Proceed anyway</Trans>
             {this.state.processing &&
-              <SpinnerSVG/>
+              <Icon name="spinner"/>
             }
           </button>
           {this.state.error &&

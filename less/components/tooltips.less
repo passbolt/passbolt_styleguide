@@ -11,7 +11,7 @@
 
   // Tooltip focus
   &:focus, :focus-visible {
-    outline: 0;
+    outline: @outline-default-border;
   }
 
   /* Tooltip text */
@@ -28,9 +28,9 @@
     max-width: 24rem;
     width: max-content;
     padding: .4rem .8rem;
-    background: var(--Tool-tip-Tool-tip-background);
-    color: var(--Tool-tip-Tool-tip-text);
-    border-radius: var(--Menu-radius);
+    background: @tooltip-background;
+    color: @tooltip-text-color;
+    border-radius: .3rem;
     font-size: 1.2rem;
     line-height: 1.6rem;
     font-weight: normal;
@@ -54,7 +54,7 @@
       &::after {
         left: 50%;
         top: 100%;
-        border-top-color: var(--Tool-tip-Tool-tip-background);
+        border-top-color: @tooltip-background;
       }
     }
     &.right {
@@ -64,7 +64,7 @@
       &::after {
         bottom: 50%;
         right: 100%;
-        border-right-color: var(--Tool-tip-Tool-tip-background);
+        border-right-color: @tooltip-background;
       }
     }
     &.bottom {
@@ -74,7 +74,7 @@
       &::after {
         right: 50%;
         bottom: 100%;
-        border-bottom-color: var(--Tool-tip-Tool-tip-background);
+        border-bottom-color: @tooltip-background;
       }
     }
     &.left {
@@ -84,7 +84,7 @@
       &::after {
         top: 50%;
         left: 100%;
-        border-left-color: var(--Tool-tip-Tool-tip-background);
+        border-left-color: @tooltip-background;
       }
     }
   }

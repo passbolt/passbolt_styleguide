@@ -17,8 +17,7 @@ import FilterResourcesByTagsListContextualMenu from "./FilterResourcesByTagsList
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import {withRouter} from "react-router-dom";
-import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
-import SpinnerSVG from "../../../../img/svg/spinner.svg";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {withDrag} from "../../../contexts/DragContext";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -88,7 +87,7 @@ class FilterResourcesByTagsList extends React.Component {
     this.setState({moreMenuOpenTagId});
     if (moreMenuOpenTagId) {
       const {left, top} = event.currentTarget.getBoundingClientRect();
-      this.showContextualMenu(top + 19, left, selectedTag, "right", this.handleCloseMoreMenu);
+      this.showContextualMenu(top + 18, left, selectedTag, "right", this.handleCloseMoreMenu);
     }
   }
 
@@ -311,7 +310,7 @@ class FilterResourcesByTagsList extends React.Component {
       <div className="accordion-content">
         {this.isLoading() &&
         <div className="processing-wrapper">
-          <SpinnerSVG/>
+          <Icon name="spinner"/>
           <span className="processing-text"><Trans>Retrieving tags</Trans></span>
         </div>
         }
@@ -327,15 +326,16 @@ class FilterResourcesByTagsList extends React.Component {
                 onDragOver={ event => this.handleDragOverEvent(event, tag.id)}
                 onDragLeave={this.handleDragLeaveEvent}>
                 <div className="main-cell-wrapper"
+                  onClick={() => this.handleOnClickTag(tag)}
                   onContextMenu={event => this.handleContextualMenuEvent(event, tag)}>
                   <div className="main-cell">
-                    <button className="link no-border" type="button" title={tag.slug}><span className="ellipsis tag-name" onClick={() => this.handleOnClickTag(tag)}>{tag.slug}</span></button>
+                    <button className="link no-border" type="button" title={tag.slug}><span className="ellipsis tag-name">{tag.slug}</span></button>
                   </div>
                 </div>
                 {!tag.is_shared &&
                 <div className="dropdown right-cell more-ctrl">
-                  <button type="button" className={`button-transparent inline-menu-horizontal ${this.state.moreMenuOpenTagId === tag.id ? "open" : ""}`} onClick={event => this.handleMoreClickEvent(event, tag)}>
-                    <MoreHorizontalSVG />
+                  <button type="button" className={`${this.state.moreMenuOpenTagId === tag.id ? "open" : ""}`} onClick={event => this.handleMoreClickEvent(event, tag)}>
+                    <Icon name="3-dots-h"/>
                   </button>
                 </div>
                 }

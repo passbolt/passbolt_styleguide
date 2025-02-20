@@ -191,7 +191,7 @@ describe("See the Edit Standalone TOTP", () => {
         expect(page.uri.getAttribute("disabled")).not.toBeNull();
         expect(page.secretKey.getAttribute("disabled")).not.toBeNull();
         expect(page.saveButton.getAttribute("disabled")).not.toBeNull();
-        expect(page.saveButton.className).toBe("button primary form disabled processing");
+        expect(page.saveButton.className).toBe("button primary disabled processing");
         expect(page.cancelButton.className).toBe("link cancel");
         updateResolve();
       });

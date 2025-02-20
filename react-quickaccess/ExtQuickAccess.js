@@ -28,7 +28,7 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import SaveResource from "./components/ResourceAutoSave/SaveResource";
 import GeneratePasswordPage from "./components/GeneratePasswordPage/GeneratePasswordPage";
 import PrepareResourceContextProvider from "./contexts/PrepareResourceContext";
-import SpinnerSVG from "../img/svg/spinner.svg";
+import Icon from "../shared/components/Icons/Icon";
 import SsoContextProvider from "./contexts/SsoContext";
 import RbacsCollection from "../shared/models/entity/rbac/rbacsCollection";
 import AppContext from "../shared/context/AppContext/AppContext";
@@ -368,7 +368,7 @@ class ExtQuickAccess extends React.Component {
               <Header logoutSuccessCallback={this.logoutSuccessCallback}/>
               {!isReady && !this.state.hasError &&
               <div className="processing-wrapper">
-                <SpinnerSVG/>
+                <Icon name="spinner"/>
                 <p className="processing-text">Connecting your account</p>
               </div>
               }

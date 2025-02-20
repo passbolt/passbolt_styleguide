@@ -12,7 +12,6 @@
  * @since         4.2.0
  */
 
-import "../../../../../test/mocks/mockPortal";
 import {defaultAppContext} from '../../../contexts/ApiAppContext.test.data';
 import {defaultProps} from './DisplayPasswordPoliciesAdministration.test.data';
 import DisplayPasswordPoliciesAdministrationPage from './DisplayPasswordPoliciesAdministration.test.page';

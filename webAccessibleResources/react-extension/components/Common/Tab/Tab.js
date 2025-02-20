@@ -46,7 +46,7 @@ class Tab extends React.Component {
   render() {
     return (
       <li className={`tab ${this.props.isActive ? 'active' : ''}`}>
-        <button type="button" className="tab-link" onClick={this.handleClick}>
+        <button type="button" className="tab-link"  onClick={this.handleClick}>
           {this.props.name}
         </button>
       </li>
@@ -56,7 +56,7 @@ class Tab extends React.Component {
 
 Tab.propTypes = {
   name: PropTypes.string, // The tab name as label
-  type: PropTypes.string.isRequired, // The tab type
+  type: PropTypes.string, // The tab type
   isActive: PropTypes.bool, // The current tab is active
   onClick: PropTypes.func, // The click event callback
   children: PropTypes.any // The childrent content of the tab

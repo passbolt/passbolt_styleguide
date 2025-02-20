@@ -12,7 +12,6 @@
  * @since         3.10.O
  */
 
-import "../../../../../test/mocks/mockPortal.js";
 import {enableFetchMocks} from 'jest-fetch-mock';
 import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
 import {ActionFeedbackContext} from '../../../contexts/ActionFeedbackContext';
@@ -65,9 +64,8 @@ describe("DisplayMfaPolicyAdministration", () => {
     });
 
     it('As a logged in administrator I can see an help box in the MFA policy administration screen ', async() => {
-      expect.assertions(6);
+      expect.assertions(5);
 
-      expect(page.exists()).toBeTruthy();
       expect(page.helpBox).not.toBeNull();
       expect(page.helpBoxTitle.textContent).toBe("Need some help?");
       expect(page.helpBoxDescription.textContent).toBe("For more information about MFA policy settings, checkout the dedicated page on the help website.");

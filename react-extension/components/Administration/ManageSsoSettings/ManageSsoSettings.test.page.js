@@ -276,7 +276,7 @@ export default class ManageSsoSettingsPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSaveSettingsButton() {
-    return this.selectAll(".actions-wrapper button")[0];
+    return this.selectAll(".actions-wrapper .actions button")[0];
   }
 
   /**

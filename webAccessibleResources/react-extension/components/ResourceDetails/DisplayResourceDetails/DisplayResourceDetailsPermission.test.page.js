@@ -13,6 +13,7 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import DisplayResourceDetailsPermission from "./DisplayResourceDetailsPermission";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -23,12 +24,15 @@ import MockTranslationProvider from "../../../test/mock/components/International
 export default class PasswordSidebarPermissionSectionPage {
   /**
    * Default constructor
+   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(props) {
+  constructor(appContext, props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayResourceDetailsPermission {...props}/>
+        <AppContext.Provider value={appContext}>
+          <DisplayResourceDetailsPermission debug {...props}/>
+        </AppContext.Provider>
       </MockTranslationProvider>
     );
     this.setupPageObjects();
@@ -95,10 +99,10 @@ class DisplayPermissionPageObject {
   }
 
   /**
-   * Returns the list elements of permissions
+   * Returns the list elements of activities
    */
   get list() {
-    return this._container.querySelectorAll('.usercard-col-2');
+    return this._container.querySelector('ul');
   }
 
   /**
@@ -126,7 +130,14 @@ class DisplayPermissionPageObject {
    * Returns the number of displayed permissions
    */
   count() {
-    return this.list.length;
+    return this.list.querySelectorAll('.content').length;
+  }
+
+  /**
+   * Returns the edit icon
+   */
+  get editIcon() {
+    return this._container.querySelector('.section-action');
   }
 
   /**
@@ -134,7 +145,7 @@ class DisplayPermissionPageObject {
    * @param index The display rank of name's permission
    */
   name(index) {
-    return this.list[index - 1].querySelector('.name').textContent;
+    return this.list.querySelectorAll('.content')[index - 1].querySelector('.name').textContent;
   }
 
   /**
@@ -142,7 +153,7 @@ class DisplayPermissionPageObject {
    * @param index The display rank of permission
    */
   type(index) {
-    return this.list[index - 1].querySelector('.subinfo').textContent;
+    return this.list.querySelectorAll('.content')[index - 1].querySelector('.subinfo').textContent;
   }
 
   /**

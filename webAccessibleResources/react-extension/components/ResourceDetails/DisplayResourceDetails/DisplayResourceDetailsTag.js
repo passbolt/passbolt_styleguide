@@ -15,11 +15,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import EditResourceTagsItemViewer from "../../ResourceTag/EditResourceTags/EditResourceTagsItemViewer";
 import EditResourceTags from "../../ResourceTag/EditResourceTags/EditResourceTags";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
-import CaretDownSVG from "../../../../img/svg/caret_down.svg";
-import CaretRightSVG from "../../../../img/svg/caret_right.svg";
-import EditSVG from "../../../../img/svg/edit.svg";
 
 class DisplayResourceDetailsTag extends React.Component {
   /**
@@ -84,45 +82,41 @@ class DisplayResourceDetailsTag extends React.Component {
     const tags = hasResource && this.resource.tags;
 
     return (
-      <div className={`detailed-tags accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
+      <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
-              <span className="accordion-title">
-                <Trans>Tags</Trans>
-              </span>
+              <Trans>Tags</Trans>
               {this.state.open &&
-                <CaretDownSVG/>
+              <Icon name="caret-down"/>
               }
               {!this.state.open &&
-                <CaretRightSVG/>
+              <Icon name="caret-right"/>
               }
             </button>
           </h4>
         </div>
-        {this.state.open &&
-          <div className="accordion-content">
-            {!this.state.showTagEditor &&
-              <>
-                <EditResourceTagsItemViewer
-                  tags={tags}/>
-                <div className="edit-tags">
-                  <button type="button" className="section-action" onClick={this.toggleInputTagEditor}>
-                    <EditSVG/>
-                    <Trans>Edit tags</Trans>
-                  </button>
-                </div>
-              </>
-            }
-            {this.state.showTagEditor &&
-              <EditResourceTags
-                tags={tags}
-                isOwner={isOwner}
-                toggleInputTagEditor={this.toggleInputTagEditor}
-                resourceId={this.resource.id}/>
-            }
-          </div>
-        }
+        <div className="accordion-content">
+          <button type="button" className="section-action button-transparent" onClick={this.toggleInputTagEditor}>
+            <Icon name="edit"/>
+            <span className="visuallyhidden"><Trans>Edit</Trans></span>
+          </button>
+
+          {!this.state.showTagEditor &&
+          <EditResourceTagsItemViewer
+            tags={tags}
+            toggleInputTagEditor={this.toggleInputTagEditor}/>
+          }
+
+          {this.state.showTagEditor &&
+          <EditResourceTags
+            tags={tags}
+            isOwner={isOwner}
+            toggleInputTagEditor={this.toggleInputTagEditor}
+            resourceId={this.resource.id}/>
+          }
+
+        </div>
       </div>
     );
   }

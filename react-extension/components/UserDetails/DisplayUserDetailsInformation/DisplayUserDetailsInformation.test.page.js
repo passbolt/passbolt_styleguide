@@ -41,28 +41,28 @@ export default class DisplayUserDetailsInformationPage {
    * Returns the detailed user role
    */
   get role() {
-    return this._page.container.querySelector('.role.value').innerHTML;
+    return this._page.container.querySelector('.role .value').innerHTML;
   }
 
   /**
    * Returns the detailed user status
    */
   get status() {
-    return this._page.container.querySelector('.status.value').textContent;
+    return this._page.container.querySelector('.status .value').textContent;
   }
 
   /**
    * Returns the detailed account recovery status
    */
   get accountRecoveryStatus() {
-    return this._page.container.querySelector('.account-recovery-status.value').textContent;
+    return this._page.container.querySelector('.account-recovery-status .value').textContent;
   }
 
   /**
    * Returns the detailed mfa status
    */
   get mfaStatus() {
-    return this._page.container.querySelector('.mfa.value').textContent;
+    return this._page.container.querySelector('.mfa .value').textContent;
   }
 
   /**

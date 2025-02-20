@@ -11,15 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React from "react";
-import {Trans, withTranslation} from "react-i18next";
+import React, {Fragment} from "react";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import CarretDownSVG from "../../../../img/svg/caret_down.svg";
-import CarretRightSVG from "../../../../img/svg/caret_right.svg";
-import UsersSVG from "../../../../img/svg/users.svg";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component display groups to filter the resources
@@ -108,7 +106,7 @@ class FilterResourcesByGroups extends React.Component {
    * @returns {*|boolean}
    */
   hasGroup() {
-    return this.groups?.length > 0;
+    return this.groups && this.groups.length > 0;
   }
 
   /**
@@ -141,17 +139,18 @@ class FilterResourcesByGroups extends React.Component {
               <div className="row title" onClick={this.handleTitleClickEvent}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <h3 className="section-title">
+                    <h3>
                       <span className="folders-label">
                         <button type="button" className="link no-border">
-                          <UsersSVG />
-                          <span><Trans>Groups</Trans></span>
-                          <div className="toggle-folder">
-                            {this.state.open
-                              ? <CarretDownSVG />
-                              : <CarretRightSVG />
+                          <>
+                            {this.state.open &&
+                              <Icon name="caret-down"/>
                             }
-                          </div>
+                            {!this.state.open &&
+                              <Icon name="caret-right"/>
+                            }
+                          </>
+                          <Trans>Groups</Trans>
                         </button>
                       </span>
                     </h3>
@@ -169,6 +168,7 @@ class FilterResourcesByGroups extends React.Component {
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
                         <button type="button" className="link no-border" title={group.name}>
+                          <Icon name="users"/>
                           <span className="ellipsis">{group.name}</span>
                         </button>
                       </div>

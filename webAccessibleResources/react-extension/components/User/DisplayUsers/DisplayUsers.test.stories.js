@@ -14,44 +14,24 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import DisplayUsers from "./DisplayUsers";
-import {defaultProps, propsWithFirstUserAttentionRequired} from "./DisplayUsers.test.data";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {UserWorkspaceContext} from "../../../contexts/UserWorkspaceContext";
+import {defaultContext, defaultProps, propsWithFirstUserAttentionRequired} from "./DisplayUsers.test.data";
 
 export default {
   title: 'Components/User/DisplayUsers',
-  component: DisplayUsers,
-  decorators: [
-    (Story, {args}) => (
-      <AppContext.Provider value={args.context}>
-        <UserWorkspaceContext.Provider value={args.userWorkspaceContext}>
-          <MemoryRouter initialEntries={['/']}>
-            <div id="container" className="page user">
-              <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
-                <div className="panel main">
-                  <div className="panel middle">
-                    <div className="middle-right">
-                      <div className="breadcrumbs-and-grid">
-                        <Route component={routerProps =>
-                          <Story {...args} {...routerProps}/>}>
-                        </Route>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </MemoryRouter>
-        </UserWorkspaceContext.Provider>
-      </AppContext.Provider>
-    ),
-  ]
+  component: DisplayUsers
 };
 
-export const Default = {
-  args: defaultProps(),
-};
+const Template = args =>
+  <MemoryRouter initialEntries={['/']}>
+    <div className="page">
+      <div className="panel">
+        <Route component={routerProps => <DisplayUsers {...args} {...routerProps}/>}></Route>
+      </div>
+    </div>
+  </MemoryRouter>;
 
-export const AccountRecoveryPending = {
-  args: propsWithFirstUserAttentionRequired(),
-};
+export const Initial = Template.bind({});
+Initial.args = Object.assign(defaultProps(), {context: defaultContext()});
+
+export const AccountRecoveryPending = Template.bind({});
+AccountRecoveryPending.args = Object.assign(propsWithFirstUserAttentionRequired(), {context: defaultContext()});

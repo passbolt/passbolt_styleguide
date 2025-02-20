@@ -14,6 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import Icon from "../../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {withAdminAccountRecovery} from "../../../../contexts/AdminAccountRecoveryContext";
 import {AccountRecoveryUserContextProvider} from "../../../../contexts/AccountRecoveryUserContext";
@@ -72,7 +73,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
       return true;
     }
 
-    const effectiveOrk = changes.publicKey || currentPolicy?.account_recovery_organization_public_key?.armored_key;
+    const effectiveOrk = changes.publicKey || currentPolicy.account_recovery_organization_public_key?.armored_key;
     if (Boolean(changes.policy) && Boolean(effectiveOrk)) {
       //the policy has changed to an enabled type and there is an applicable ORK, we can save
       return true;
@@ -95,13 +96,23 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    */
   render() {
     return (
-      <div className="actions-wrapper">
-        <button type="button secondary" disabled={!this.isResetEnabled()} onClick={this.handleEditSubscriptionClick}>
-          <span><Trans>Reset settings</Trans></span>
-        </button>
-        <button type="button" className="button primary" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
-          <span><Trans>Save</Trans></span>
-        </button>
+      <div className="col2_3 actions-wrapper">
+        <div className="actions">
+          <ul>
+            <li>
+              <button type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
+                <Icon name="save"/>
+                <span><Trans>Save settings</Trans></span>
+              </button>
+            </li>
+            <li>
+              <button type="button" disabled={!this.isResetEnabled()} onClick={this.handleEditSubscriptionClick}>
+                <Icon name="edit"/>
+                <span><Trans>Reset settings</Trans></span>
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     );
   }

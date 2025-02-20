@@ -123,29 +123,41 @@ class DisplayChangePassphraseIntroduction extends React.Component {
 
   render() {
     return (
-      <form className="profile-passphrase" onSubmit={this.handleSubmit}>
-        <div className="main-column">
-          <div className="main-content">
-            <h3><Trans>Before getting started...</Trans></h3>
-            <div className="password-management-bg">
-            </div>
-            <p><Trans>The passphrase is stored on your device and never sent server side.</Trans>&nbsp;
-              <Trans>Changing your passphrase will only change it locally.</Trans>&nbsp;
-              <Trans>If you have multiple browsers configured, the passphrase will need to be changed in all places individually.</Trans>
-            </p>
-            <div className={`input checkbox ${this.state.understandPassphraseError ? 'error' : ''}`}>
-              <input id="passphrase-update-understand" type="checkbox" checked={this.state.understandPassphrase}
-                disabled={this.hasAllInputDisabled()} name="understandPassphrase" onChange={this.handleInputChange}/>
-              <label htmlFor="passphrase-update-understand"> <Trans>Ok, I understand what I need to do.</Trans></label>
+      <div className="grid grid-responsive-12 profile-passphrase">
+        <div className="row">
+          <div className="col7 main-column">
+            <form onSubmit={this.handleSubmit}>
+              <h3><Trans>Before getting started...</Trans></h3>
+              <div className="password-management-bg">
+              </div>
+              <p><Trans>The passphrase is stored on your device and never sent server side.</Trans>&nbsp;
+                <Trans>Changing your passphrase will only change it locally.</Trans>&nbsp;
+                <Trans>If you have multiple browsers configured, the passphrase will need to be changed in all places individually.</Trans>
+              </p>
+              <div className={`input checkbox ${this.state.understandPassphraseError ? 'error' : ''}`}>
+                <input id="passphrase-update-understand" type="checkbox" checked={this.state.understandPassphrase}
+                  disabled={this.hasAllInputDisabled()} name="understandPassphrase" onChange={this.handleInputChange}/>
+                <label htmlFor="passphrase-update-understand"> <Trans>Ok, I understand what I need to do.</Trans></label>
+              </div>
+              <div className="submit-wrapper">
+                <button className="button primary submit" type="submit" disabled={this.hasAllInputDisabled()}>
+                  <Trans>Start</Trans>
+                </button>
+              </div>
+            </form>
+          </div>
+          <div className="col4 last">
+            <div className="sidebar-help">
+              <h3><Trans>What is the role of the passphrase?</Trans></h3>
+              <p><Trans>The passphrase is used to encrypt your secret key, which is required to decrypt your secrets, such as the passwords.</Trans></p>
+              <p><Trans>Without the private key and the passphrase it is not possible to decrypt!</Trans></p>
+              <a className="button" href="https://help.passbolt.com/tech/auth.html" target="_blank" rel="noopener noreferrer">
+                <span><Trans>Learn more</Trans></span>
+              </a>
             </div>
           </div>
         </div>
-        <div className="actions-wrapper">
-          <button className="button primary submit" type="submit" disabled={this.hasAllInputDisabled()}>
-            <Trans>Start</Trans>
-          </button>
-        </div>
-      </form>
+      </div>
     );
   }
 }

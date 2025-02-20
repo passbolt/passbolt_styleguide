@@ -68,6 +68,11 @@ describe("See Resource Sidebar", () => {
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The permalink has been copied to clipboard");
     });
 
+    it('As LU I should be able to close the folder details', async() => {
+      await page.closeFolderDetails();
+      expect(props.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
+    });
+
     it("I should see the share option when rbac is available", async() => {
       expect.assertions(1);
 

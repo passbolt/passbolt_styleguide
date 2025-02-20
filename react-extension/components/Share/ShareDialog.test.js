@@ -151,7 +151,7 @@ describe("As Lu I should see the share dialog", () => {
         expect(page.cancelButton.className).toBe('link cancel');
         expect(page.cancelButton.hasAttribute("disabled")).toBeTruthy();
         expect(page.saveButton.hasAttribute("disabled")).toBeTruthy();
-        expect(page.saveButton.className).toBe("button primary form disabled processing");
+        expect(page.saveButton.className).toBe("button primary disabled processing");
         updateResolve();
       });
     });

@@ -185,6 +185,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleHealthcheckClick = this.handleHealthcheckClick.bind(this);
     this.handleContentTypesEncryptedMetadataClick = this.handleContentTypesEncryptedMetadataClick.bind(this);
     this.handleContentTypesMetadataKeyClick = this.handleContentTypesMetadataKeyClick.bind(this);
+    this.handleMigrateMetadataClick = this.handleMigrateMetadataClick.bind(this);
   }
 
   /**
@@ -304,6 +305,13 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleContentTypesMetadataKeyClick() {
     this.props.navigationContext.onGoToAdministrationContentTypesMetadataKeyRequested();
+  }
+
+  /**
+   * Handle when the user click on the migrate metadata key settings menu
+   */
+  handleMigrateMetadataClick() {
+    this.props.navigationContext.onGoToAdministrationMigrateMetadataRequested();
   }
 
   /**
@@ -443,6 +451,14 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * If content types metadata key menu is selected
+   * @returns {boolean}
+   */
+  isMigrateMetadataSelected() {
+    return AdministrationWorkspaceMenuTypes.MIGRATE_METADATA === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -452,7 +468,7 @@ class DisplayAdministrationMenu extends React.Component {
         <ul id="administration_menu" className="clearfix menu ready">
           {this.isMfaEnabled &&
             <li id="mfa_menu">
-              <div className={`row ${this.isMfaSelected() ? "selected" : ""}`}>
+              <div className={`row  ${this.isMfaSelected() ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <button className="link no-border" type="button" onClick={this.handleMfaClick}><span><Trans>Multi Factor Authentication</Trans></span></button>
@@ -463,7 +479,7 @@ class DisplayAdministrationMenu extends React.Component {
           }
           {this.canIUseMfaPolicy &&
             <li id="mfa_policy_menu">
-              <div className={`row ${this.isMfaPolicySelected() ? "selected" : ""}`}>
+              <div className={`row  ${this.isMfaPolicySelected() ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <button className="link no-border" type="button" onClick={this.handleMfaPolicyClick}><span><Trans>MFA Policy</Trans></span></button>
@@ -474,7 +490,7 @@ class DisplayAdministrationMenu extends React.Component {
           }
           {this.canIUsePasswordPolicies &&
             <li id="password_policy_menu">
-              <div className={`row ${this.isPasswordPoliciesSelected() ? "selected" : ""}`}>
+              <div className={`row  ${this.isPasswordPoliciesSelected() ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <button className="link no-border" type="button" onClick={this.handlePasswordPoliciesClick}><span><Trans>Password Policy</Trans></span></button>
@@ -485,7 +501,7 @@ class DisplayAdministrationMenu extends React.Component {
           }
           {this.isUserDirectoryEnabled &&
             <li id="user_directory_menu">
-              <div className={`row ${this.isUserDirectorySelected() ? "selected" : ""}`}>
+              <div className={`row  ${this.isUserDirectorySelected() ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <button className="link no-border" type="button" onClick={this.handleUserDirectoryClick}><span><Trans>Users Directory</Trans></span></button>
@@ -495,7 +511,7 @@ class DisplayAdministrationMenu extends React.Component {
             </li>
           }
           <li id="email_notification_menu">
-            <div className={`row ${this.isEmailNotificationsSelected() ? "selected" : ""}`}>
+            <div className={`row  ${this.isEmailNotificationsSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handleEmailNotificationsClick}><span><Trans>Email Notifications</Trans></span></button>
@@ -505,7 +521,7 @@ class DisplayAdministrationMenu extends React.Component {
           </li>
           {this.canIUseLocale &&
           <li id="internationalization_menu">
-            <div className={`row ${this.isInternationalizationSelected() ? "selected" : ""}`}>
+            <div className={`row  ${this.isInternationalizationSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handleInternationalizationClick}><span><Trans>Internationalisation</Trans></span></button>
@@ -516,7 +532,7 @@ class DisplayAdministrationMenu extends React.Component {
           }
           {this.canIUseEE &&
           <li id="subscription_menu">
-            <div className={`row ${this.isSubscriptionSelected() ? "selected" : ""}`}>
+            <div className={`row  ${this.isSubscriptionSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handleSubscriptionClick}><span><Trans>Subscription</Trans></span></button>
@@ -527,7 +543,7 @@ class DisplayAdministrationMenu extends React.Component {
           }
           {this.canIUseAccountRecovery &&
           <li id="account_recovery_menu">
-            <div className={`row ${this.isAccountRecoverySelected() ? "selected" : ""}`}>
+            <div className={`row  ${this.isAccountRecoverySelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handleAccountRecoveryClick}>
@@ -540,7 +556,7 @@ class DisplayAdministrationMenu extends React.Component {
           }
           {this.canIUseSmtpSettings &&
           <li id="smtp_settings_menu">
-            <div className={`row ${this.isSmtpSettingsSelected() ? "selected" : ""}`}>
+            <div className={`row  ${this.isSmtpSettingsSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handleSmtpSettingsClick}>
@@ -553,7 +569,7 @@ class DisplayAdministrationMenu extends React.Component {
           }
           {this.canIUseSelfRegistrationSettings &&
           <li id="self_registration_menu">
-            <div className={`row ${this.isSelfRegistrationSettingsSelected() ? "selected" : ""}`}>
+            <div className={`row  ${this.isSelfRegistrationSettingsSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handleSelfRegistrationClick}>
@@ -566,7 +582,7 @@ class DisplayAdministrationMenu extends React.Component {
           }
           {this.canIUseSso &&
           <li id="sso_menu">
-            <div className={`row ${this.isSsoSelected() ? "selected" : ""}`}>
+            <div className={`row  ${this.isSsoSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handleSsoClick}>
@@ -579,7 +595,7 @@ class DisplayAdministrationMenu extends React.Component {
           }
           {this.canIUseRbacs &&
           <li id="rbacs_menu">
-            <div className={`row ${this.isRbacSelected() ? "selected" : ""}`}>
+            <div className={`row  ${this.isRbacSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handleRbacsClick}>
@@ -592,7 +608,7 @@ class DisplayAdministrationMenu extends React.Component {
           }
           {this.canIUseUserPassphrasePolicies &&
           <li id="user_passphrase_policies_menu">
-            <div className={`row ${this.isUserPassphrasePoliciesSelected() ? "selected" : ""}`}>
+            <div className={`row  ${this.isUserPassphrasePoliciesSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handleUserPassphrasePoliciesClick}>
@@ -605,7 +621,7 @@ class DisplayAdministrationMenu extends React.Component {
           }
           {this.canIUsePasswordExpiry &&
           <li id="password_expiry_menu">
-            <div className={`row ${this.isPasswordExpirySettingsSelected() ? "selected" : ""}`}>
+            <div className={`row  ${this.isPasswordExpirySettingsSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handlePasswordExpirySettingsClick}>
@@ -618,7 +634,7 @@ class DisplayAdministrationMenu extends React.Component {
           }
           {this.canIUseHealthcheck &&
           <li id="healthcheck_menu">
-            <div className={`row ${this.isHealthcheckSelected() ? "selected" : ""}`}>
+            <div className={`row  ${this.isHealthcheckSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handleHealthcheckClick}>
@@ -651,6 +667,20 @@ class DisplayAdministrationMenu extends React.Component {
                   <div className="main-cell">
                     <button className="link no-border" type="button" onClick={this.handleContentTypesMetadataKeyClick}>
                       <span><Trans>Metadata key</Trans></span>
+                      <span className="chips beta">beta</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          }
+          {this.canIUseMetadata &&
+            <li id="migrate_metadata_menu">
+              <div className={`row  ${this.isMigrateMetadataSelected() ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button className="link no-border" type="button" onClick={this.handleMigrateMetadataClick}>
+                      <span><Trans>Migrate metadata</Trans></span>
                       <span className="chips beta">beta</span>
                     </button>
                   </div>

@@ -16,7 +16,7 @@
  * Unit tests on DisplayInternationalisationAdministration in regard of specifications
  */
 
-import "../../../../../test/mocks/mockPortal.js";
+
 import {defaultProps} from "./DisplayInternationalizationAdministration.test.data";
 import DisplayInternationalisationAdministrationPage from "./DisplayInternationalizationAdministration.test.page";
 import {waitFor} from "@testing-library/react";
@@ -46,18 +46,6 @@ describe("As AD I should see the internationalisation page", () => {
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Internationalisation");
       expect(page.languageSelected).toBe(props.context.siteSettings.language);
-    });
-
-
-    it('As a logged in administrator I can see an help box in the internationalisation administration screen ', async() => {
-      expect.assertions(6);
-
-      expect(page.exists()).toBeTruthy();
-      expect(page.helpBox).not.toBeNull();
-      expect(page.helpBoxTitle.textContent).toBe("Want to contribute?");
-      expect(page.helpBoxDescription.textContent).toBe("Your language is missing or you discovered an error in the translation, help us to improve passbolt.");
-      expect(page.helpBoxButton.textContent).toEqual("Contribute");
-      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/contribute/translation');
     });
 
     it('As AD I should be able to see a visual feedback after I saved the internationalisation settings in the administration internationalisation page', async() => {

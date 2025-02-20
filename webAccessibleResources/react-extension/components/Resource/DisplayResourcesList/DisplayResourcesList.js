@@ -28,6 +28,7 @@ import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import GridTable from "../../../../shared/components/Table/GridTable";
 import CellFavorite from "../../../../shared/components/Table/CellFavorite";
+import CellHeaderIcon from "../../../../shared/components/Table/CellHeaderIcon";
 import CellLink from "../../../../shared/components/Table/CellLink";
 import CellPassword from "../../../../shared/components/Table/CellPassword";
 import CellButton from "../../../../shared/components/Table/CellButton";
@@ -45,6 +46,8 @@ import {withProgress} from "../../../contexts/ProgressContext";
 import CellTotp from "../../../../shared/components/Table/CellTotp";
 import ColumnTotpModel from "../../../../shared/models/column/ColumnTotpModel";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import ColumnAttentionRequiredModel from "../../../../shared/models/column/ColumnAttentionRequiredModel";
+import CellAttentionRequired from "../../../../shared/components/Table/CellAttentionRequired";
 import ColumnExpiredModel from "../../../../shared/models/column/ColumnExpiredModel";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import CellDate from "../../../../shared/components/Table/CellDate";
@@ -56,9 +59,6 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import FavoriteSVG from "../../../../img/svg/favorite.svg";
-import CellName from "../../../../shared/components/Table/CellName";
-import CircleOffSVG from "../../../../img/svg/circle_off.svg";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -127,8 +127,12 @@ class DisplayResourcesList extends React.Component {
    */
   initColumns() {
     this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}));
-    this.defaultColumns.push(new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: FavoriteSVG}}));
-    this.defaultColumns.push(new ColumnNameModel({cellRenderer: {component: CellName, props: {hasAttentionRequiredFeature: this.hasAttentionRequiredFeature}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
+    this.defaultColumns.push(new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "star"}}}));
+    if (this.hasAttentionRequiredFeature) {
+      this.defaultColumns.push(new ColumnAttentionRequiredModel({cellRenderer: {component: CellAttentionRequired}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "exclamation"}}}));
+    }
+
+    this.defaultColumns.push(new ColumnNameModel({headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
     if (this.props.passwordExpiryContext.isFeatureEnabled()) {
       this.defaultColumns.push(new ColumnExpiredModel({cellRenderer: {component: CellExpiryDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Expiry")}}}));
     }
@@ -652,7 +656,7 @@ class DisplayResourcesList extends React.Component {
    * @param event
    */
   async selectResource(resource, event) {
-    const isMultipleSelection = event && event.metaKey;
+    const isMultipleSelection = event && this.isMacOS ? event.metaKey : event.ctrlKey;
     const isRangeSelection = event && event.shiftKey;
     const hasNoEvent = !event;
 
@@ -663,6 +667,16 @@ class DisplayResourcesList extends React.Component {
     } else {
       await this.props.resourceWorkspaceContext.onResourceSelected.single(resource);
     }
+  }
+
+  /**
+   * Is mac os system
+   * @returns {boolean}
+   */
+  get isMacOS() {
+    // userAgentData only available on chromium
+    const platform = navigator.userAgentData ? navigator.userAgentData.platform : navigator.userAgent;
+    return /mac/i.test(platform);
   }
 
   async favoriteResource(resource) {
@@ -822,77 +836,57 @@ class DisplayResourcesList extends React.Component {
           <div className="tableview empty">
             {filterType === ResourceWorkspaceFilterTypes.TEXT &&
               <div className="empty-content">
-                <CircleOffSVG/>
-                <div className="message">
-                  <h1><Trans>None of your passwords matched this search.</Trans></h1>
-                  <p><Trans>Try another search or use the left panel to navigate into your passwords.</Trans></p>
-                </div>
+                <h2><Trans>None of your passwords matched this search.</Trans></h2>
+                <p><Trans>Try another search or use the left panel to navigate into your passwords.</Trans></p>
               </div>
             }
             {filterType === ResourceWorkspaceFilterTypes.FAVORITE &&
               <div className="empty-content">
-                <CircleOffSVG/>
-                <div className="message">
-                  <h1><Trans>None of your passwords are yet marked as favorite.</Trans></h1>
-                  <p><Trans>Add stars to passwords you want to easily find later.</Trans></p>
-                </div>
+                <h2><Trans>None of your passwords are yet marked as favorite.</Trans></h2>
+                <p><Trans>Add stars to passwords you want to easily find later.</Trans></p>
               </div>
             }
             {filterType === ResourceWorkspaceFilterTypes.GROUP &&
               <div className="empty-content">
-                <CircleOffSVG/>
-                <div className="message">
-                  <h1><Trans>No passwords are shared with this group yet.</Trans></h1>
-                  <p><Trans>Share a password with this group or wait for a team member to share one with this
-                    group.</Trans></p>
-                </div>
+                <h2><Trans>No passwords are shared with this group yet.</Trans></h2>
+                <p><Trans>Share a password with this group or wait for a team member to share one with this group.</Trans></p>
               </div>
             }
             {(filterType === ResourceWorkspaceFilterTypes.FOLDER || filterType === ResourceWorkspaceFilterTypes.ROOT_FOLDER) &&
               <div className="empty-content">
-                <CircleOffSVG/>
-                <div className="message">
-                  <h1><Trans>No passwords in this folder yet.</Trans></h1>
-                  <p><Trans>It does feel a bit empty here.</Trans></p>
-                </div>
+                <h2><Trans>No passwords in this folder yet.</Trans></h2>
+                <p><Trans>It does feel a bit empty here.</Trans></p>
               </div>
             }
             {filterType === ResourceWorkspaceFilterTypes.SHARED_WITH_ME &&
               <div className="empty-content">
-                <CircleOffSVG/>
-                <div className="message">
-                  <h1><Trans>No passwords are shared with you yet.</Trans></h1>
-                  <p>
-                    <Trans>It does feel a bit empty here.</Trans>&nbsp;
-                    <Trans>Wait for a team member to share a password with you.</Trans>
-                  </p>
-                </div>
+                <h2><Trans>No passwords are shared with you yet.</Trans></h2>
+                <p>
+                  <Trans>It does feel a bit empty here.</Trans>&nbsp;
+                  <Trans>Wait for a team member to share a password with you.</Trans>
+                </p>
               </div>
             }
             {filterType === ResourceWorkspaceFilterTypes.EXPIRED &&
               <div className="empty-content">
-                <CircleOffSVG/>
-                <div className="message">
-                  <h1><Trans>No passwords have expired yet.</Trans></h1>
-                  <p>
-                    <Trans>It does feel a bit empty here.</Trans>&nbsp;
-                    <Trans>Wait for a password to expire.</Trans>
-                  </p>
-                </div>
+                <h2><Trans>No passwords have expired yet.</Trans></h2>
+                <p>
+                  <Trans>It does feel a bit empty here.</Trans>&nbsp;
+                  <Trans>Wait for a password to expire.</Trans>
+                </p>
               </div>
             }
             {(filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN || filterType === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED ||
                 filterType === ResourceWorkspaceFilterTypes.ALL) &&
-              <div className="empty-content">
-                <CircleOffSVG/>
-                <div className="message">
+              <React.Fragment>
+                <div className="empty-content">
                   <h1><Trans>Welcome to passbolt!</Trans></h1>
                   <p>
                     <Trans>It does feel a bit empty here.</Trans>&nbsp;
                     <Trans>Create your first password or wait for a team member to share one with you.</Trans>
                   </p>
                 </div>
-              </div>
+              </React.Fragment>
             }
           </div>
         }

@@ -1,8 +1,4 @@
-.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings {
-  .main-content {
-    align-items: stretch;
-  }
-
+.healthcheck-settings {
   .healthcheck-environment-section,
   .healthcheck-configFiles-section,
   .healthcheck-core-section,
@@ -22,23 +18,23 @@
       margin: 1rem 0;
       gap: 1rem;
       padding: 1rem;
-      border-radius: var(--Section-border-radius);
+      border-radius: .5rem;
 
       .tooltip {
         margin: .3rem 0 0 -.5rem;
       }
     }
     .healthcheck-success {
-      background: var(--Healthcheck-Healthcheck-Success);
+      background-color: @healthcheck-pass;
     }
     .healthcheck-warning {
-      background: var(--Healthcheck-Healthcheck-Warning);
+      background-color: @healthcheck-warning;
     }
     .healthcheck-fail {
-      background: var(--Healthcheck-Healthcheck-Error);
+      background-color: @healthcheck-fail;
     }
     .healthcheck-info {
-      background: var(--Healthcheck-Healthcheck-Ignored);
+      background-color: @healthcheck-info;
     }
   }
 
@@ -65,22 +61,15 @@
   }
 
   .healthcheck-success {
-    background: var(--Healthcheck-Healthcheck-Success);
+    background-color: @healthcheck-pass;
   }
   .healthcheck-warning {
-    background: var(--Healthcheck-Healthcheck-Warning);
+    background-color: @healthcheck-warning;
   }
   .healthcheck-fail {
-    background: var(--Healthcheck-Healthcheck-Error);
+    background-color: @healthcheck-fail;
   }
   .healthcheck-info {
-    background: var(--Healthcheck-Healthcheck-Ignored);
-  }
-
-  svg {
-    min-width: 1.8rem;
-    min-height: 1.8rem;
-    max-width: 1.8rem;
-    max-height: 1.8rem;
+    background-color: @healthcheck-info;
   }
 }

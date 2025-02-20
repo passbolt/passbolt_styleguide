@@ -15,7 +15,6 @@
 /**
  * Unit tests on ManageAccountRecoveryAdministrationSettings in regard of specifications
  */
-import "../../../../../test/mocks/mockPortal";
 import {
   defaultProps,
   hasChangedPolicyProps,
@@ -25,6 +24,8 @@ import {
 } from "./ManageAccountRecoveryAdministrationSettings.test.data";
 import ManageAccountRecoveryAdministrationSettingsPage from "./ManageAccountRecoveryAdministrationSettings.test.page";
 import {waitFor} from "@testing-library/react";
+import DisplayAdministrationAccountRecoveryActions
+  from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationAccountRecoveryAction/DisplayAdministrationAccountRecoveryActions";
 
 beforeEach(() => {
   jest.resetModules();
@@ -34,10 +35,11 @@ describe("As AD I should see the account recovery settings", () => {
   let page; // The page to test against
 
   it('As AD in the administration workspace, I can see the account recovery section populated with the default value', async() => {
-    expect.assertions(10);
+    expect.assertions(12);
     const props = defaultProps(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
     await waitFor(() => {});
+    expect(props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction).toHaveBeenCalledWith(DisplayAdministrationAccountRecoveryActions);
     expect(props.adminAccountRecoveryContext.findAccountRecoveryPolicy).toBeCalled();
     expect(page.exists()).toBeTruthy();
     expect(page.title).toBe("Account Recovery");
@@ -49,6 +51,7 @@ describe("As AD I should see the account recovery settings", () => {
     expect(page.help).toBeTruthy();
     expect(page.helpReadDocumentation.getAttribute("rel")).toBe("noopener noreferrer");
     await page.unmount();
+    expect(props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction).toHaveBeenCalled();
   });
 
   it('As AD in the administration workspace, I can see the account recovery section populated with the mandatory value', async() => {
@@ -92,6 +95,6 @@ describe("As AD I should see the account recovery settings", () => {
     await page.clickOnOptInPolicyButton();
     const newPolicy = "opt-in";
     expect(props.adminAccountRecoveryContext.changePolicy).toHaveBeenCalledWith(newPolicy);
-    expect(page.warningMessage).toBe("Don't forget to save your settings to apply your modification.Warning, Don't forget to add an organization recovery key.");
+    expect(page.warningMessage).toBe("Don't forget to save your settings to apply your modification.");
   });
 });

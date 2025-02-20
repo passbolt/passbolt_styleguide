@@ -25,10 +25,10 @@ class DisplayRbacSection extends React.Component {
     return (
       <>
         <div className={`flex-container inner level-${this.props.level}`}>
-          <div className="flex-item first">
+          <div className="flex-item first border-right">
             <span><Icon name="caret-down" baseline={true}/>&nbsp;&nbsp;{this.props.label}</span>
           </div>
-          <div className="flex-item">
+          <div className="flex-item border-right">
             &nbsp;
           </div>
           <div className="flex-item">

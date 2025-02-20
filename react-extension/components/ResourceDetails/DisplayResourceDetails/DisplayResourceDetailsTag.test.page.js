@@ -131,7 +131,7 @@ class PasswordSidebarTagSectionPageObject {
    * Returns the loading element
    */
   get editIcon() {
-    return this._container.querySelector('button.section-action');
+    return this._container.querySelector('.section-action span');
   }
 
   /**

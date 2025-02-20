@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
-import SpinnerSVG from "../../../../../img/svg/spinner.svg";
+import Icon from "../../../../../shared/components/Icons/Icon";
 
 class AutocompleteItemLoading extends Component {
   /**
@@ -26,7 +26,7 @@ class AutocompleteItemLoading extends Component {
           <div className="main-cell-wrapper">
             <div className="main-cell">
               <div className="loading">
-                <SpinnerSVG/>
+                <Icon name="spinner"/>
               </div>
               <div className="info">
                 <span className="name">Loading...</span>

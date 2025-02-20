@@ -67,7 +67,7 @@ describe("As LU I should see each folders", () => {
 
     it('As LU I should be able to open a contextual menu for a folder with the more button', async() => {
       await page.filterResourcesByFoldersItem.openContextualMenuWithButton(1);
-      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {folder: foldersMock[0], className: 'right', left: 0, top: 19, onBeforeHide: expect.any(Function)});
+      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {folder: foldersMock[0], className: 'right', left: 0, top: 18, onBeforeHide: expect.any(Function)});
     });
 
     it('As LU I should be able to open a contextual menu for a folder with right click on parent folder', async() => {

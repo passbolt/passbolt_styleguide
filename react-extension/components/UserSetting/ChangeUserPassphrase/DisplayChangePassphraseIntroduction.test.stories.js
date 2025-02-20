@@ -13,47 +13,28 @@
  */
 
 import React from "react";
-import {defaultProps} from "./DisplayChangePassphraseIntroduction.test.data";
+import {MemoryRouter, Route} from "react-router-dom";
+import {defaultAppContext, defaultProps} from "./DisplayChangePassphraseIntroduction.test.data";
 import DisplayChangePassphraseIntroduction from "./DisplayChangePassphraseIntroduction";
-import DisplayChangePassphraseIntroductionHelp from "./DisplayChangePassphraseIntroductionHelp";
 
 export default {
   title: 'Components/UserSetting/DisplayChangePassphraseIntroduction',
-  component: DisplayChangePassphraseIntroduction,
-  decorators: [(Story, {args}) =>
-    <div id="container" className="page settings">
-      <div id="app" className="app" tabIndex="1000" style={{margin: "-1rem"}}>
-        <div className="panel main">
-          <div className="panel left">
-            <div className="sidebar-content">
-            </div>
-          </div>
-          <div className="panel middle">
-            <div className="header">
-            </div>
-            <div className="middle-right">
-              <div className="breadcrumbs-and-grid">
-                <div className="top-bar">
-                </div>
-                <div className="main-page">
-                  <Story {...args}/>
-                </div>
-              </div>
-              <div className="help-panel">
-                <div className="sidebar-help">
-                  <DisplayChangePassphraseIntroductionHelp {...args}/>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+  component: DisplayChangePassphraseIntroduction
+};
+
+const Template = args =>
+  <MemoryRouter initialEntries={['/']}>
+    <div className="page settings">
+      <div className="panel">
+        <Route component={routerProps => <DisplayChangePassphraseIntroduction {...args} {...routerProps}/>}></Route>
       </div>
     </div>
-  ],
-};
+  </MemoryRouter>;
+
+export const Initial = Template.bind({});
+Initial.args = Object.assign(defaultProps(), defaultAppContext());
 
 
 
-export const Initial = {
-  args: defaultProps()
-};
+
+

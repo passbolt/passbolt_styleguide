@@ -1,0 +1,52 @@
+#migrate-metadata-settings {
+    .feedback-card {
+        border: none;
+        gap:3.2rem;
+
+        .migration-status-information ul {
+            display: table;
+            gap: .8rem;
+            font-size: 1.5rem;
+            line-height: 2.043rem;
+            border-collapse: separate;
+            border-spacing: 1.6rem .8rem;
+
+            .label {
+                color: @text-info-color;
+            }
+
+            li {
+                display: table-row;
+                span {
+                    display: table-cell;
+                }
+            }
+        }
+    }
+
+    .togglelist {
+        label {
+            font-weight: normal;
+
+            .info {
+                color: @text-info-color
+            }
+        }
+
+        .warning-message {
+            display: list-item;
+            list-style: disc;
+            list-style-position: inside;
+        }
+    }
+
+    .radiolist-alt {
+        .name {
+            font-weight: bold;
+        }
+    }
+
+    .warning-message {
+        margin-bottom: 0;
+    }
+}

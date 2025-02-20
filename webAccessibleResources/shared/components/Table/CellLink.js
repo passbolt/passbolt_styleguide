@@ -74,7 +74,7 @@ class CellLink extends Component {
     return (
       <div title={this.value}>
         {safeLink &&
-          <button className="no-border" type="button" onClick={this.handleClick}><span>{this.value}</span></button>
+          <button className="link no-border" type="button" onClick={this.handleClick}><span>{this.value}</span></button>
         }
         {!safeLink &&
           <span>{this.value}</span>

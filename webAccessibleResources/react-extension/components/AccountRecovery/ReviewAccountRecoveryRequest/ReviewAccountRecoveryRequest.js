@@ -183,7 +183,6 @@ class ReviewAccountRecoveryRequest extends Component {
    */
   render() {
     const creatorStatus = getUserStatus(this.creator);
-    const creatorName = this.creatorName;
     return (
       <DialogWrapper
         title={this.translate("Review account recovery request")}
@@ -231,7 +230,7 @@ class ReviewAccountRecoveryRequest extends Component {
                 <label htmlFor="statusRecoverAccountReject">
                   <span className="name"><Trans>Reject</Trans></span>
                   <span className="info">
-                    <Trans>{{creatorName}} did not initiate this request.</Trans>
+                    <Trans>{this.creatorName} did not initiate this request.</Trans>
                   </span>
                 </label>
               </div>
@@ -246,7 +245,7 @@ class ReviewAccountRecoveryRequest extends Component {
                 <label htmlFor="statusRecoverAccountAccept">
                   <span className="name"><Trans>Approve</Trans></span>
                   <span className="info">
-                    <Trans>I verified with <span>{{creatorName}}</span> that the request is valid.</Trans>
+                    <Trans>I verified with <span>{this.creatorName}</span> that the request is valid.</Trans>
                   </span>
                 </label>
               </div>

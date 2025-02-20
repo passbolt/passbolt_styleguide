@@ -12,6 +12,7 @@
  * @since         2.13.0
  */
 import React from "react";
+import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import DisplayResourceDetailsInformation from "./DisplayResourceDetailsInformation";
 import DisplayResourceDetailsTag from "./DisplayResourceDetailsTag";
@@ -30,13 +31,6 @@ import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import DisplayResourceDetailsPassword from "./DisplayResourceDetailsPassword";
-import DisplayResourceDetailsTotp from "./DisplayResourceDetailsTotp";
-import KeySVG from "../../../../img/svg/key.svg";
-import LinkSVG from "../../../../img/svg/link.svg";
-import Tabs from "../../Common/Tab/Tabs";
-import Tab from "../../Common/Tab/Tab";
-import DisplayResourceDetailsNote from "./DisplayResourceDetailsNote";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -108,38 +102,6 @@ class DisplayResourceDetails extends React.Component {
   }
 
   /**
-   * Is password resource
-   * @return {boolean}
-   */
-  get isPasswordResources() {
-    return this.props.resourceTypes?.getFirstById(this.props.resourceWorkspaceContext.details.resource.resource_type_id)?.hasPassword();
-  }
-
-  /**
-   * Is totp resource
-   * @return {boolean}
-   */
-  get isTotpResources() {
-    return this.props.resourceTypes?.getFirstById(this.props.resourceWorkspaceContext.details.resource.resource_type_id)?.hasTotp();
-  }
-
-  /**
-   * Has description
-   * @return {boolean}
-   */
-  get hasDescription() {
-    return this.props.resourceTypes?.getFirstById(this.props.resourceWorkspaceContext.details.resource.resource_type_id)?.hasMetadataDescription();
-  }
-
-  /*
-   * Is resource with secure note
-   * @return {boolean}
-   */
-  get hasSecureNote() {
-    return this.props.resourceTypes?.getFirstById(this.props.resourceWorkspaceContext.details.resource.resource_type_id)?.hasSecretDescription();
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -148,83 +110,55 @@ class DisplayResourceDetails extends React.Component {
   }
 
   /**
-   * Renders the "Details" section tab of a resource.
-   * @returns {JSX}
-   */
-  renderResourceDetail() {
-    const canUseTags = this.props.context.siteSettings.canIUse("tags")
-      && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
-    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
-    const canSeeComments = this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_COMMENTS);
-
-    return (
-      <>
-        <DisplayResourceDetailsInformation />
-        {this.isPasswordResources &&
-          <DisplayResourceDetailsPassword/>
-        }
-        {this.isTotpResources &&
-          <DisplayResourceDetailsTotp isStandaloneTotp={this.isStandaloneTotpResource}/>
-        }
-        {this.hasDescription &&
-          <DisplayResourceDetailsDescription />
-        }
-        {this.hasSecureNote &&
-          <DisplayResourceDetailsNote />
-        }
-        {canViewShare &&
-          <DisplayResourceDetailsPermission />
-        }
-        {canUseTags &&
-        <DisplayResourceDetailsTag />
-        }
-        {canSeeComments &&
-          <DisplayResourceDetailsComment />
-        }
-      </>
-    );
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
+    const canUseTags = this.props.context.siteSettings.canIUse("tags")
+      && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
     const canUseAuditLog = (this.props.context.siteSettings.canIUse("auditLog")
       || this.props.context.siteSettings.canIUse("audit_log")) // @deprecated remove with v4
       && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_ACTIVITIES);
+    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
+    const canSeeComments = this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_COMMENTS);
 
     return (
-      <div className="sidebar resource">
-        <div className={`sidebar-header ${canUseAuditLog ? "" : "with-separator"}`}>
-          <div className="teaser-image">
-            <KeySVG/>
-          </div>
-          <div className="title-area">
+      <div className="panel aside ready">
+        <div className="sidebar resource">
+          <div className="sidebar-header">
+            <div className="teaser-image">
+              <Icon name="key"/>
+            </div>
             <h3>
               <div className="title-wrapper">
                 <span className="name">{this.props.resourceWorkspaceContext.details.resource.metadata.name}</span>
+                <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this password")} onClick={this.handlePermalinkClick}>
+                  <Icon name="link"/>
+                  <span className="visuallyhidden"><Trans>Copy the link to this password</Trans></span>
+                </button>
               </div>
               <span className="subtitle">{this.subtitle}</span>
             </h3>
-            <button type="button" className="title-link button-transparent inline" title={this.translate("Copy the link to this password")} onClick={this.handlePermalinkClick}>
-              <LinkSVG/>
-              <span className="visuallyhidden"><Trans>Copy the link to this password</Trans></span>
+            <button type="button" className="dialog-close button-transparent" onClick={this.handleCloseClick}>
+              <Icon name="close"/>
+              <span className="visuallyhidden"><Trans>Close</Trans></span>
             </button>
           </div>
-        </div>
-
-        <div className="sidebar-content">
-          {!canUseAuditLog
-            ? this.renderResourceDetail()
-            : <Tabs activeTabName='Details'>
-              <Tab key='Details' name={this.props.t('Details')} type='Details'>
-                {this.renderResourceDetail()}
-              </Tab>
-              <Tab key='Activity' name={this.props.t('Activity')} type='Activity'>
-                <DisplayResourceDetailsActivity />
-              </Tab>
-            </Tabs>
+          <DisplayResourceDetailsInformation/>
+          {!this.isStandaloneTotpResource &&
+            <DisplayResourceDetailsDescription/>
+          }
+          {canViewShare &&
+            <DisplayResourceDetailsPermission/>
+          }
+          {canUseTags &&
+          <DisplayResourceDetailsTag/>
+          }
+          {canSeeComments &&
+          <DisplayResourceDetailsComment/>
+          }
+          {canUseAuditLog &&
+          <DisplayResourceDetailsActivity/>
           }
         </div>
       </div>

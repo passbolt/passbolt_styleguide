@@ -95,10 +95,10 @@ class DisplayRbacItem extends React.Component {
     return (
       <>
         <div className={`rbac-row ${this.rowClassName} flex-container inner level-${this.props.level} ${this.hasChanged() ? 'highlighted' : ''}`}>
-          <div className="flex-item first">
+          <div className="flex-item first border-right">
             <span>{this.props.label}</span>
           </div>
-          <div className="flex-item">
+          <div className="flex-item border-right">
             <Select
               className={`medium admin`}
               items={this.allowedCtlFunctions}

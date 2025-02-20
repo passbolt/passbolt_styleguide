@@ -37,14 +37,14 @@ export default class DisplayUserDetailsAccountRecoveryPage {
    * Returns the current status label
    */
   get currentStatus() {
-    return this._page.container.querySelector('.pending-request-status.label').textContent;
+    return this._page.container.querySelector('.pending-request-status .label').textContent;
   }
 
   /**
    * Returns the current status button
    */
   get currentStatusButton() {
-    return this._page.container.querySelector('.review-request');
+    return this._page.container.querySelector('.pending-request-status button');
   }
 
 
@@ -52,14 +52,14 @@ export default class DisplayUserDetailsAccountRecoveryPage {
    * Returns the previous recovery request value
    */
   get previousRecoveryRequest() {
-    return this._page.container.querySelector('.previous-request.value').textContent;
+    return this._page.container.querySelector('.previous-request .value').textContent;
   }
 
   /**
    * Returns the number of request value
    */
   get numberOfRecovery() {
-    return this._page.container.querySelector('.requests-count.value').textContent;
+    return this._page.container.querySelector('.requests-count .value').textContent;
   }
 
   /**

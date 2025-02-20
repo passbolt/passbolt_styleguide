@@ -85,7 +85,6 @@ class InFormMenuField {
     iframe.style.width = '370px'; // width of the menu 350px + 20px to display shadows
     iframe.style.height = '220px'; // For 3 items in a row to be display
     iframe.style.zIndex = "123456";
-    iframe.style.colorScheme = "auto"; // To have the transparency on dark theme
     iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-menu.html?passbolt=${portId}`;
     return iframe;
   }

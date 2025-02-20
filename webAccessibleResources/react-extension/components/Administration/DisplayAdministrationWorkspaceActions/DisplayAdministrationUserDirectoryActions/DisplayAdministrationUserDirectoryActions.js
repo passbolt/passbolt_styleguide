@@ -15,6 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
+import Icon from "../../../../../shared/components/Icons/Icon";
 import DisplaySimulateSynchronizeUserDirectoryAdministration from "../../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministration";
 import DisplaySynchronizeUserDirectoryAdministration from "../../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration";
 import UserDirectoryFormService from '../../../../../shared/services/forms/userDirectory/UserDirectoryFormService';
@@ -23,9 +24,7 @@ import {withActionFeedback} from "../../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../../contexts/DialogContext";
 import DisplayTestUserDirectoryAdministration from "../../DisplayTestUserDirectoryAdministration/DisplayTestUserDirectoryAdministration";
 import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
-import TestSVG from "../../../../../img/svg/test.svg";
-import SimulateSyncSVG from "../../../../../img/svg/simulate-sync.svg";
-import RevertSVG from "../../../../../img/svg/revert.svg";
+
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -184,22 +183,35 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
    */
   render() {
     return (
-      <div className="actions-wrapper">
-        <button type="button" className="button secondary" disabled={!this.isTestEnabled()} onClick={() => this.handleFormSubmit('test')}>
-          <TestSVG />
-          <span><Trans>Test settings</Trans></span>
-        </button>
-        <button type="button" className="button secondary" disabled={!this.isSynchronizeEnabled()} onClick={this.handleSimulateSynchronizeClick}>
-          <SimulateSyncSVG />
-          <span><Trans>Simulate synchronize</Trans></span>
-        </button>
-        <button type="button" className="button secondary" disabled={!this.isSynchronizeEnabled()} onClick={this.handleSynchronizeClick}>
-          <RevertSVG />
-          <span><Trans>Synchronize</Trans></span>
-        </button>
-        <button type="button" className="button primary" disabled={!this.isSaveEnabled()} onClick={() => this.handleFormSubmit('save')}>
-          <span><Trans>Save</Trans></span>
-        </button>
+      <div className="col2_3 actions-wrapper">
+        <div className="actions">
+          <ul>
+            <li>
+              <button type="button" disabled={!this.isSaveEnabled()} onClick={() => this.handleFormSubmit('save')}>
+                <Icon name="save"/>
+                <span><Trans>Save settings</Trans></span>
+              </button>
+            </li>
+            <li>
+              <button type="button" disabled={!this.isTestEnabled()} onClick={() => this.handleFormSubmit('test')}>
+                <Icon name="plug"/>
+                <span><Trans>Test settings</Trans></span>
+              </button>
+            </li>
+            <li>
+              <button type="button" disabled={!this.isSynchronizeEnabled()} onClick={this.handleSimulateSynchronizeClick}>
+                <Icon name="magic-wand"/>
+                <span><Trans>Simulate synchronize</Trans></span>
+              </button>
+            </li>
+            <li>
+              <button type="button" disabled={!this.isSynchronizeEnabled()} onClick={this.handleSynchronizeClick}>
+                <Icon name="refresh"/>
+                <span><Trans>Synchronize</Trans></span>
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     );
   }

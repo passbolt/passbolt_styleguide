@@ -12,6 +12,7 @@
  * @since         3.6.0
  */
 
+import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import ManageAccountRecoveryAdministrationSettings from "./ManageAccountRecoveryAdministrationSettings";
 import {
@@ -19,60 +20,43 @@ import {
   mandatoryPolicyProps, mandatoryPolicyPropsWithOrganisationKey, optInPolicyProps, optInPolicyPropsWithOrganisationKey,
   optOutPolicyProps, optOutPolicyPropsWithOrganisationKey
 } from "./ManageAccountRecoveryAdministrationSettings.test.data";
-import {AdminSubscriptionContextProvider} from "../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription";
 
 export default {
   title: 'Components/Administration/ManageAccountRecoveryAdministrationSettings',
-  component: ManageAccountRecoveryAdministrationSettings,
-  decorators: [(Story, {args}) =>
-    <AdminSubscriptionContextProvider {...args}>
-      <div id="container" className="page administration">
-        <div id="app" className="app" tabIndex="1000">
-          <div className="panel main">
-            <div className="panel middle">
-              <div className="middle-right">
-                <div className="breadcrumbs-and-grid">
-                  <div className="main-page">
-                    <Story {...args}/>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+  component: ManageAccountRecoveryAdministrationSettings
+};
+
+const Template = args =>
+  <MemoryRouter initialEntries={['/']}>
+    <div className="panel main">
+      <div className="panel middle">
+        <div className="grid grid-responsive-12">
+          <Route component={routerProps => <ManageAccountRecoveryAdministrationSettings {...args} {...routerProps}/>}></Route>
         </div>
       </div>
-    </AdminSubscriptionContextProvider>
-  ]
-};
+    </div>
+  </MemoryRouter>;
 
-export const Default = {
-  args: disabledPolicyProps(),
-};
+export const Default = Template.bind({});
+Default.args = disabledPolicyProps();
 
-export const Mandatory = {
-  args: mandatoryPolicyProps(),
-};
+export const Mandatory = Template.bind({});
+Mandatory.args = mandatoryPolicyProps();
 
-export const OptOut = {
-  args: optOutPolicyProps(),
-};
+export const OptOut = Template.bind({});
+OptOut.args = optOutPolicyProps();
 
-export const OptIn = {
-  args: optInPolicyProps(),
-};
+export const OptIn = Template.bind({});
+OptIn.args = optInPolicyProps();
 
-export const DefaultWithOrganisationRecoveryKey = {
-  args: disabledPolicyPropsWithOrganisationKey(),
-};
+export const DefaultWithOrganisationRecoveryKey = Template.bind({});
+DefaultWithOrganisationRecoveryKey.args = disabledPolicyPropsWithOrganisationKey();
 
-export const MandatoryWithOrganisationRecoveryKey = {
-  args: mandatoryPolicyPropsWithOrganisationKey(),
-};
+export const MandatoryWithOrganisationRecoveryKey = Template.bind({});
+MandatoryWithOrganisationRecoveryKey.args = mandatoryPolicyPropsWithOrganisationKey();
 
-export const OptOutWithOrganisationRecoveryKey = {
-  args: optOutPolicyPropsWithOrganisationKey(),
-};
+export const OptOutWithOrganisationRecoveryKey = Template.bind({});
+OptOutWithOrganisationRecoveryKey.args = optOutPolicyPropsWithOrganisationKey();
 
-export const OptInWithOrganisationRecoveryKey = {
-  args: optInPolicyPropsWithOrganisationKey(),
-};
+export const OptInWithOrganisationRecoveryKey = Template.bind({});
+OptInWithOrganisationRecoveryKey.args = optInPolicyPropsWithOrganisationKey();

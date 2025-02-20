@@ -67,7 +67,7 @@ class CellButton extends Component {
     return (
       <div title={this.value}>
         {this.hasValue() &&
-          <button className="no-border" type="button" onClick={this.handleClick}><span>{this.value}</span></button>
+          <button className="link no-border" type="button" onClick={this.handleClick}><span>{this.value}</span></button>
         }
       </div>
     );

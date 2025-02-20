@@ -30,7 +30,7 @@ export default class DisplayResourceCommentListPageObject {
    * Returns the list elements of comments
    */
   get list() {
-    return this._container.querySelectorAll('.comment');
+    return this._container.querySelector('ul');
   }
 
   /**
@@ -58,7 +58,7 @@ export default class DisplayResourceCommentListPageObject {
    * Returns the number of displayed comments
    */
   count() {
-    return this.list.length;
+    return this.list.querySelectorAll('.comment').length;
   }
 
   /**
@@ -66,7 +66,7 @@ export default class DisplayResourceCommentListPageObject {
    * @param index The display rank of author's comment
    */
   author(index) {
-    return this.list[index - 1].querySelector('.author.username').textContent;
+    return this.list.querySelectorAll('.comment')[index - 1].querySelector('.author.username').textContent;
   }
 
   /**
@@ -74,7 +74,7 @@ export default class DisplayResourceCommentListPageObject {
    * @param index The display rank of comment
    */
   creationTime(index) {
-    return this.list[index - 1].querySelector('.metadata .modified').textContent;
+    return this.list.querySelectorAll('.comment')[index - 1].querySelector('.metadata .modified').textContent;
   }
 
   /**
@@ -91,7 +91,7 @@ export default class DisplayResourceCommentListPageObject {
    * @param index The rank of the comment
    */
   async delete(index) {
-    const deleteButton = this._container.querySelectorAll('.delete-comment')[index - 1];
+    const deleteButton = this.list.querySelectorAll('.delete-comment')[index - 1];
     const leftClick = {button: 0};
     fireEvent.click(deleteButton, leftClick);
     await waitFor(() => {});
@@ -102,6 +102,6 @@ export default class DisplayResourceCommentListPageObject {
    * @param index The rank of the comment
    */
   canDelete(index) {
-    return typeof this._container.querySelectorAll('.delete-comment')[index - 1] !== 'undefined';
+    return typeof this.list.querySelectorAll('.delete-comment')[index - 1] !== 'undefined';
   }
 }

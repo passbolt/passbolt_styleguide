@@ -4,15 +4,28 @@
  * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
 
-import {defaultAppContext} from "../../contexts/ExtAppContext.test.data";
 import DisplayAdministrationEmailNotificationActions from "./DisplayAdministrationWorkspaceActions/DisplayAdministrationEmailNotificationActions/DisplayAdministrationEmailNotificationActions";
+
+export function defaultAppContext(appContext) {
+  const defaultAppContext = {
+    siteSettings: {
+      canIUse: () => true
+    },
+  };
+  return Object.assign(defaultAppContext, appContext || {});
+}
 
 /**
  * Props with user group details
  */
 export function defaultProps(selectedAdministration) {
   return {
-    context: defaultAppContext(),
+    context: {
+      trustedDomain: "",
+      userSettings: {
+        getTrustedDomain: jest.fn()
+      }
+    },
     mfaContext: {
       checkMfaChoiceRequired: jest.fn()
     },

@@ -82,7 +82,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
    * @returns {HTMLElement}
    */
   get helpPageLink() {
-    return this.select('.sidebar-help-section a.button');
+    return this.select('.sidebar-help a.button');
   }
 
   /**
@@ -90,7 +90,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
    * @returns {HTMLElement}
    */
   get saveSettingsButton() {
-    return this.select("#save-settings");
+    return this.select(".actions #save-settings");
   }
 
   /**

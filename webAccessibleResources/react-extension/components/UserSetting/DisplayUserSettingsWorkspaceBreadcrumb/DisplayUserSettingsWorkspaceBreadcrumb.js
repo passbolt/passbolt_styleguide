@@ -61,7 +61,6 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
       mobile: this.translate("Mobile transfer"),
       'account-recovery': this.translate("Account Recovery"),
       'smtp-settings': this.translate("Email server"),
-      desktop: this.translate("Desktop app setup"),
     };
     const matchedKey = Object.keys(names).find(matchPathSuffix);
     return names[matchedKey];

@@ -16,7 +16,7 @@
  * Unit tests on DisplayResourceFolderDetailsActivity in regard of specifications
  */
 
-import {waitForTrue} from "../../../../../test/utils/waitFor";
+
 import {
   activitiesMock,
   defaultAppContext,
@@ -55,41 +55,43 @@ describe("See activities", () => {
       mockContextRequest(activitiesFoundRequestMockImpl);
     });
 
-    it('I should see the 5 activities made on the folder', async() => {
-      expect.assertions(2);
-      const page = new DisplayResourceFolderDetailsActivityPage(context, props);
-      mockContextRequest(activitiesFoundRequestMockImpl);
+    it('I should see the 4 activities made on the resource', async() => {
+      await page.title.click();
 
-      await waitForTrue(() => Boolean(page.creator(1)));
-
-      expect(page.exists()).toBeTruthy();
-      expect(page.count()).toBe(5);
+      expect(page.displayActivityList.exists()).toBeTruthy();
+      expect(page.displayActivityList.count()).toBe(5);
     });
 
     it('I should be able to identify each activity creators', async() => {
-      expect(page.creator(1)).toBe('Admin User');
-      expect(page.creator(2)).toBe('Admin User');
-      expect(page.creator(3)).toBe('Admin User');
-      expect(page.creator(4)).toBe('Admin User');
-      expect(page.creator(5)).toBe('Admin User');
+      await page.title.click();
+
+      expect(page.displayActivityList.creator(1)).toBe('Admin User');
+      expect(page.displayActivityList.creator(2)).toBe('Admin User');
+      expect(page.displayActivityList.creator(3)).toBe('Admin User');
+      expect(page.displayActivityList.creator(4)).toBe('Admin User');
+      expect(page.displayActivityList.creator(5)).toBe('Admin User');
     });
 
     it('I should be able to see each activity timestamps', async() => {
-      expect(page.creationTime(1)).toBeDefined();
-      expect(page.creationTime(2)).toBeDefined();
-      expect(page.creationTime(3)).toBeDefined();
-      expect(page.creationTime(4)).toBeDefined();
-      expect(page.creationTime(5)).toBeDefined();
+      await page.title.click();
+
+      expect(page.displayActivityList.creationTime(1)).toBeDefined();
+      expect(page.displayActivityList.creationTime(2)).toBeDefined();
+      expect(page.displayActivityList.creationTime(3)).toBeDefined();
+      expect(page.displayActivityList.creationTime(4)).toBeDefined();
+      expect(page.displayActivityList.creationTime(5)).toBeDefined();
     });
 
     it('I should be able to see each other activities with more button ', async() => {
+      await page.title.click();
+
       mockContextRequest(activitiesMoreFoundRequestMockImpl);
-      expect(page.moreButtonExists()).toBeTruthy();
-      await page.moreButtonClick();
-      expect(page.count()).toBe(7);
-      expect(page.creator(6)).toBe('Admin User');
-      expect(page.creator(7)).toBe('Ada Lovelace');
-      expect(!page.moreButtonExists()).toBeTruthy();
+      expect(page.displayActivityList.moreButtonExists()).toBeTruthy();
+      await page.displayActivityList.moreButtonClick();
+      expect(page.displayActivityList.count()).toBe(7);
+      expect(page.displayActivityList.creator(6)).toBe('Admin User');
+      expect(page.displayActivityList.creator(7)).toBe('Ada Lovelace');
+      expect(!page.displayActivityList.moreButtonExists()).toBeTruthy();
     });
   });
 
@@ -112,12 +114,14 @@ describe("See activities", () => {
     });
 
     it('I should see the loading message “Retrieving activities”', async() => {
+      await page.title.click();
+
       const inProgressFn = () => {
-        expect(page.isLoading()).toBeTruthy();
+        expect(page.displayActivityList.isLoading()).toBeTruthy();
         findResolve([]);
       };
-      await page.waitForLoading(inProgressFn);
-      expect(page.isLoading()).toBeFalsy();
+      await page.displayActivityList.waitForLoading(inProgressFn);
+      expect(page.displayActivityList.isLoading()).toBeFalsy();
     });
   });
 });

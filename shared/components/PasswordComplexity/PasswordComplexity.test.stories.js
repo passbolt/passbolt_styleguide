@@ -11,22 +11,38 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
+import React from "react";
 import PasswordComplexity from "./PasswordComplexity";
 
 export default {
   title: 'Foundations/PasswordComplexity',
-  component: PasswordComplexity,
+  component: "PasswordComplexity"
 };
 
-export const DefaultPasswordComplexity = {
-  args: {
-    entropy: 87.9,
-    error: false
-  }
-};
 
-export const ErrorPasswordComplexity = {
-  args: {
-    error: true
-  }
-};
+const Template = () =>
+  <div style={{display: "flex", flexWrap: "wrap"}}>
+    <div style={{width: "49%", marginRight: "1%"}}>
+      <PasswordComplexity/>
+    </div>
+    <div style={{width: "49%", marginRight: "1%"}}>
+      <PasswordComplexity error={true}/>
+    </div>
+    <div style={{width: "49%", marginRight: "1%"}}>
+      <PasswordComplexity entropy={29.9}/>
+    </div>
+    <div style={{width: "49%", marginRight: "1%"}}>
+      <PasswordComplexity entropy={65.9} error={true}/>
+    </div>
+    <div style={{width: "49%", marginRight: "1%"}}>
+      <PasswordComplexity entropy={87.9} error={true}/>
+    </div>
+    <div style={{width: "49%", marginRight: "1%"}}>
+      <PasswordComplexity entropy={117.98}/>
+    </div>
+    <div style={{width: "49%", marginRight: "1%"}}>
+      <PasswordComplexity entropy={158.7}/>
+    </div>
+  </div>;
+
+export const Default = Template.bind({});

@@ -148,7 +148,6 @@ class InFormCallToActionField {
     iframe.style.width = '18px';
     iframe.style.height = '18px';
     iframe.style.zIndex = "123456";  // For you Yahoo with love
-    iframe.style.colorScheme = "auto"; // To have the transparency on dark theme
     iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-call-to-action.html?passbolt=${portId}`;
     return iframe;
   }

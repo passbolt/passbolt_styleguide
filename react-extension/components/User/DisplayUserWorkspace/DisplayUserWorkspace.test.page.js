@@ -14,12 +14,12 @@
  */
 
 
-import {fireEvent, render} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import React from "react";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import DisplayUserWorkspace from "./DisplayUserWorkspace";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {waitFor} from "@testing-library/dom";
 
 /**
  * The DisplayUserWorkspacePage component represented as a page
@@ -27,14 +27,17 @@ import {waitFor} from "@testing-library/dom";
 export default class DisplayUserWorkspacePage {
   /**
    * Default constructor
+   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(props) {
+  constructor(appContext, props) {
     this._page = render(
       <MockTranslationProvider>
-        <Router>
-          <DisplayUserWorkspace {...props}/>
-        </Router>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <DisplayUserWorkspace {...props}/>
+          </Router>
+        </AppContext.Provider>
       </MockTranslationProvider>
     );
   }
@@ -43,7 +46,7 @@ export default class DisplayUserWorkspacePage {
    * Returns true if the user details area is visible
    */
   get isGridDisplayed() {
-    return Boolean(this._page.container.querySelector('.tableview'));
+    return Boolean(this._page.container.querySelector('.tableview.ready'));
   }
 
   /**
@@ -54,42 +57,10 @@ export default class DisplayUserWorkspacePage {
   }
 
   /**
-   * Returns true if the user workspace filters bar is visible
-   */
-  get hasFilterBar() {
-    return Boolean(this._page.container.querySelector('.actions-filter'));
-  }
-
-  /**
    * Returns true if the user group details area is visible
    */
   get hasUserGroupDetails() {
     return Boolean(this._page.container.querySelector('.user-group-details'));
   }
-
-  /**
-   * Returns the go back button
-   */
-  get goBackButton() {
-    return this._page.container.querySelector('button.back');
-  }
-
-  /**
-   * Click on the go back button element
-   */
-  async goBack() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.goBackButton, leftClick);
-    await waitFor(() => {});
-  }
-
-  /**
-   * Toggle the lock of the display of the details
-   */
-  async lockDetails() {
-    const element = this._page.container.querySelector('.button-toggle.info');
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
-  }
 }
+

@@ -53,7 +53,7 @@ export default class ChangeUserSecurityTokenPage {
    * Returns the next button element
    */
   get updateButton() {
-    return this._page.container.querySelector('.actions-wrapper button');
+    return this._page.container.querySelector('.submit-wrapper button');
   }
 
 

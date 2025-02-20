@@ -13,53 +13,30 @@
  */
 
 import React from "react";
+import {MemoryRouter, Route} from "react-router-dom";
 import DisplayAccountRecoveryUserSettings from "./DisplayAccountRecoveryUserSettings";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import {users} from "../../../../shared/models/entity/user/userEntity.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultAccountRecoveryPolicyDto} from "./DisplayAccountRecoveryUserSettings.test.data";
-import DisplayAccountRecoveryUserSettingsHelp from "./DisplayAccountRecoveryUserSettingsHelp";
-import {MemoryRouter} from "react-router-dom";
 
 export default {
   title: "Components/UserSetting/DisplayAccountRecoveryUserSettings",
-  component: DisplayAccountRecoveryUserSettings,
-  decorators: [(Story, {args}) =>
-    <MemoryRouter initialEntries={['/app/settings/account-recovery']}>
-      <div id="container" className="page settings">
-        <div id="app" className="app" tabIndex="1000" style={{margin: "-1rem"}}>
-          <div className="panel main">
-            <div className="panel left">
-              <div className="sidebar-content">
-              </div>
-            </div>
-            <div className="panel middle">
-              <div className="header">
-              </div>
-              <div className="middle-right">
-                <div className="breadcrumbs-and-grid">
-                  <div className="top-bar">
-                  </div>
-                  <div className="main-page">
-                    <Story {...args}/>
-                  </div>
-                </div>
-                <div className="help-panel">
-                  <div className="sidebar-help">
-                    <DisplayAccountRecoveryUserSettingsHelp {...args}/>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </MemoryRouter>
-  ],
+  component: DisplayAccountRecoveryUserSettings
 };
 
 
-const accountRecoveryContext = props => (
-  {
+const Template = args =>
+  <MockTranslationProvider>
+    <MemoryRouter initialEntries={['/']}>
+      <Route component={routerProps => <DisplayAccountRecoveryUserSettings {...args} {...routerProps}/>}></Route>
+    </MemoryRouter>
+  </MockTranslationProvider>;
+
+
+const getTemplateArgs = () => ({
+  context: defaultAppContext(),
+  accountRecoveryContext: {
     status: "approved",
     isReady: () => true,
     loadAccountRecoveryPolicy: () => {},
@@ -73,28 +50,17 @@ const accountRecoveryContext = props => (
       }
     }),
     getRequestedDate: () => "2021-05-25T09:08:34.123",
-    getOrganizationPolicy: () => defaultAccountRecoveryPolicyDto(),
-    ...props
+    getOrganizationPolicy: () => defaultAccountRecoveryPolicyDto()
   }
-);
+});
 
-export const Enabled = {
-  args: {
-    context: defaultAppContext(),
-    accountRecoveryContext: accountRecoveryContext(),
-  }
-};
+export const Enabled = Template.bind({});
+Enabled.args = getTemplateArgs();
 
-export const Pending = {
-  args: {
-    context: defaultAppContext(),
-    accountRecoveryContext: accountRecoveryContext({status: "pending"}),
-  }
-};
+export const Pending = Template.bind({});
+Pending.args = getTemplateArgs();
+Pending.args.accountRecoveryContext.status = "pending";
 
-export const Disabled = {
-  args: {
-    context: defaultAppContext(),
-    accountRecoveryContext: accountRecoveryContext({status: "rejected"}),
-  }
-};
+export const Disabled = Template.bind({});
+Disabled.args = getTemplateArgs();
+Disabled.args.accountRecoveryContext.status = "rejected";

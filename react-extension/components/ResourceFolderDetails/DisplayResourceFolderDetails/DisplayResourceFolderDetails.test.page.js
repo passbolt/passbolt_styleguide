@@ -76,6 +76,13 @@ export default class DisplayResourceFolderDetailsPage {
   }
 
   /**
+   * Returns the close button
+   */
+  get closeButton() {
+    return this._page.container.querySelector('.dialog-close');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -92,6 +99,11 @@ export default class DisplayResourceFolderDetailsPage {
   /** Click on the permalink */
   async selectPermalink()  {
     await this.click(this.permalink);
+  }
+
+  /** Click on the close */
+  async closeFolderDetails() {
+    await this.click(this.closeButton);
   }
 }
 

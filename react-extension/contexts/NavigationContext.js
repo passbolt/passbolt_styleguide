@@ -78,6 +78,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user want to navigate to a new url.
   onGoToAdministrationRbacsRequested: () => {
   }, // Whenever the user wants to navigate to the administration workspace rbacs section.
+  onGoToAdministrationMigrateMetadataRequested: () => {
+  }, // Whenever the user wants to navigate to the administration workspace migrate metadata section.
 });
 
 /**
@@ -118,6 +120,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationHealthcheckRequested: this.onGoToAdministrationHealthcheckRequested.bind(this),
       onGoToAdministrationContentTypesEncryptedMetadataRequested: this.onGoToAdministrationContentTypesEncryptedMetadataRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types encrypted metadata settings.
       onGoToAdministrationContentTypesMetadataKeyRequested: this.onGoToAdministrationContentTypesMetadataKeyRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types metadata key settings.
+      onGoToAdministrationMigrateMetadataRequested: this.onGoToAdministrationMigrateMetadataRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types metadata key settings.
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -328,6 +331,14 @@ class NavigationContextProvider extends React.Component {
   }
 
   /**
+   * Whenever the user wants to navigate to the administration workspace migrate metadata.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationMigrateMetadataRequested() {
+    await this.goTo("browser-extension", "/app/administration/migrate-metadata");
+  }
+
+  /**
    * Returns true if the user has the MFA capability
    * @returns {boolean}
    */
@@ -461,7 +472,12 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToUserSettingsMfaRequested() {
-    await this.goTo("browser-extension", "/app/settings/mfa");
+    //Application to point
+    let app = "api";
+    if (window.chrome?.webview) {
+      app = "browser-extension";
+    }
+    await this.goTo(app, "/app/settings/mfa");
   }
 
   /**

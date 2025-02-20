@@ -904,7 +904,7 @@ describe("See the Create Resource", () => {
           expect(page.passwordCreate.username.getAttribute("disabled")).not.toBeNull();
           expect(page.passwordCreate.password.getAttribute("disabled")).not.toBeNull();
           expect(page.passwordCreate.saveButton.getAttribute("disabled")).not.toBeNull();
-          expect(page.passwordCreate.saveButton.className).toBe("button primary form disabled processing");
+          expect(page.passwordCreate.saveButton.className).toBe("button primary disabled processing");
           expect(page.passwordCreate.cancelButton.className).toBe("link cancel");
           updateResolve();
         });

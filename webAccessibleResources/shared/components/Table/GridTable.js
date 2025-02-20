@@ -31,13 +31,11 @@ class GridTable extends Component {
    */
   renderItem(index, key) {
     const item = this.props.rows[index];
-    // Apply the function if is row inactive is defined in props
-    const isRowInactive = this.props.isRowInactive?.(item);
 
     return <Row
       key={key}
       item={item}
-      className={isRowInactive ? "inactive" : ""}
+      className={index % 2 === 0 ? "even" : "odd"}
       onClick={this.props.onRowClick}
       onContextMenu={this.props.onRowContextMenu}
       onDragStart={this.props.onRowDragStart}
@@ -92,7 +90,6 @@ GridTable.propTypes = {
   rows: PropTypes.array.isRequired, // The rows to display
   sorter: PropTypes.object, // The sorter object containing the property name and the direction
   selectedRowsIds: PropTypes.array, // The selected row ids
-  isRowInactive: PropTypes.func, // The inactive row function to apply to add inactive class name
   onSortChange: PropTypes.func, // The on sort property
   onRowClick: PropTypes.func, // The onRowClick property
   onRowContextMenu: PropTypes.func, // The onRowContextMenu property

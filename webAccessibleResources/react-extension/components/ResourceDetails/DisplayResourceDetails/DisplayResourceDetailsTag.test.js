@@ -17,7 +17,7 @@
  */
 import {
   defaultAppContext,
-  resourceWithLastSharedTagMock,
+  defaultProps, resourceWithLastSharedTagMock,
   resourceWithNoTagMock,
   resourceWithTagMock, TagMock,
 } from "./DisplayResourceDetailsTag.test.data";
@@ -32,6 +32,7 @@ beforeEach(() => {
 describe("See tags", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
+  const props = defaultProps(); // The props to pass
 
   const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
   const saveTagMockImpl = jest.fn((message, data) => Object.assign({id: resourceWithNoTagMock.id}, data));
@@ -86,7 +87,7 @@ describe("See tags", () => {
 
       expect(page.tagEditor.component).not.toBeNull();
 
-      await page.passwordSidebarTagSection.click(page.tagEditor.cancelButton);
+      await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
       expect(page.tagEditor.component).toBeNull();
     });
 
@@ -183,16 +184,16 @@ describe("See tags", () => {
       expect(page.tagItemViewer.isEmpty()).toBeTruthy();
     });
 
-    it('Start editing by clicking on the edit button', async() => {
+    it('Start editing by clicking on the empty message', async() => {
       await page.title.click();
-      await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
+      await page.passwordSidebarTagSection.click(page.tagItemViewer.emptyMessage);
       expect(page.tagEditor.component).not.toBeNull();
       expect(page.tagEditor.noticeMessage.textContent).toBe("Pro tip: Tags starting with # are shared with all users who have access. Separate tags using commas.");
     });
 
     it('Add a new tag to a resource', async() => {
       await page.title.click();
-      await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
+      await page.passwordSidebarTagSection.click(page.tagItemViewer.emptyMessage);
 
       expect(page.tagEditor.component).not.toBeNull();
       await page.passwordSidebarTagSection.input(page.tagEditor.component, "tardis");
@@ -212,7 +213,7 @@ describe("See tags", () => {
 
     it('Add multiple tags to a resource', async() => {
       await page.title.click();
-      await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
+      await page.passwordSidebarTagSection.click(page.tagItemViewer.emptyMessage);
 
       expect(page.tagEditor.component).not.toBeNull();
       await page.passwordSidebarTagSection.input(page.tagEditor.component, "tardis");
@@ -239,7 +240,7 @@ describe("See tags", () => {
 
     it('Cannot add a tag longer than 128 characters', async() => {
       await page.title.click();
-      await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
+      await page.passwordSidebarTagSection.click(page.tagItemViewer.emptyMessage);
 
       expect(page.tagEditor.component).not.toBeNull();
       await page.passwordSidebarTagSection.input(page.tagEditor.component, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
@@ -250,7 +251,7 @@ describe("See tags", () => {
 
     it('Trim tag', async() => {
       await page.title.click();
-      await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
+      await page.passwordSidebarTagSection.click(page.tagItemViewer.emptyMessage);
 
       expect(page.tagEditor.component).not.toBeNull();
       await page.passwordSidebarTagSection.input(page.tagEditor.component, "   trim   ");
@@ -263,7 +264,7 @@ describe("See tags", () => {
 
     it('Cannot edit and Show progress feedback while submitting changes', async() => {
       await page.title.click();
-      await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
+      await page.passwordSidebarTagSection.click(page.tagItemViewer.emptyMessage);
 
       expect(page.tagEditor.component).not.toBeNull();
 
@@ -281,7 +282,7 @@ describe("See tags", () => {
         expect(page.tagEditor.component.getAttribute("contenteditable")).toBe("false");
         expect(page.tagEditor.saveButton.className).toBe("primary tag-editor-submit processing");
         expect(page.tagEditor.saveButton.hasAttribute('disabled')).toBeTruthy();
-        expect(page.tagEditor.cancelButton.className).toBe("link cancel tag-editor-cancel");
+        expect(page.tagEditor.cancelButton.className).toBe("cancel tag-editor-cancel");
         expect(page.tagEditor.cancelButton.hasAttribute('disabled')).toBeTruthy();
         updateResolve();
       });
@@ -290,7 +291,7 @@ describe("See tags", () => {
     it('Add suggested tag to a resource', async() => {
       await page.title.click();
 
-      await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
+      await page.passwordSidebarTagSection.click(page.tagItemViewer.emptyMessage);
       expect(page.tagEditor.component).not.toBeNull();
       await page.passwordSidebarTagSection.input(page.tagEditor.component, "tard");
       expect(page.tagEditor.autocompleteItem(1)).not.toBeNull();
@@ -308,7 +309,7 @@ describe("See tags", () => {
       const tagSuggested = jest.fn(() => TagMock);
       mockContextRequest(tagSuggested);
 
-      await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
+      await page.passwordSidebarTagSection.click(page.tagItemViewer.emptyMessage);
       expect(page.tagEditor.component).not.toBeNull();
       await page.passwordSidebarTagSection.input(page.tagEditor.component, "tar");
       expect(page.tagEditor.autocompleteContent).not.toBeNull();
@@ -337,7 +338,7 @@ describe("See tags", () => {
       const tagSuggested = jest.fn(() => TagMock);
       mockContextRequest(tagSuggested);
 
-      await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
+      await page.passwordSidebarTagSection.click(page.tagItemViewer.emptyMessage);
       expect(page.tagEditor.component).not.toBeNull();
       await page.passwordSidebarTagSection.input(page.tagEditor.component, "tar");
       expect(page.tagEditor.autocompleteContent).not.toBeNull();
@@ -353,7 +354,7 @@ describe("See tags", () => {
 
     it('Save tags on keyboard enter', async() => {
       await page.title.click();
-      await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
+      await page.passwordSidebarTagSection.click(page.tagItemViewer.emptyMessage);
 
       expect(page.tagEditor.component).not.toBeNull();
       await page.passwordSidebarTagSection.input(page.tagEditor.component, "tardis");
@@ -375,7 +376,7 @@ describe("See tags", () => {
 
     it('As LU I should see an error message in the tag section when the API call fails', async() => {
       await page.title.click();
-      await page.passwordSidebarTagSection.click(page.passwordSidebarTagSection.editIcon);
+      await page.passwordSidebarTagSection.click(page.tagItemViewer.emptyMessage);
 
       expect(page.tagEditor.component).not.toBeNull();
       await page.passwordSidebarTagSection.input(page.tagEditor.component, "tardis");
@@ -399,11 +400,10 @@ describe("See tags", () => {
      */
 
     beforeEach(() => {
-      page = new PasswordSidebarTagSectionPage(context, {});
+      page = new PasswordSidebarTagSectionPage(context, props);
     });
 
     it('I should see the loading message “Retrieving tags”', async() => {
-      await page.title.click();
       expect(page.tagItemViewer.isLoading()).toBeTruthy();
     });
   });

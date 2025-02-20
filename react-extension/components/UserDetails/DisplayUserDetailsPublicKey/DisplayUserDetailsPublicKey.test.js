@@ -60,6 +60,14 @@ describe("Display User Details Information", () => {
     expect(page.isCollapsed).toBeTruthy();
   });
 
+  it('As LU I should copy the public key', async() => {
+    expect.assertions(2);
+    jest.spyOn(props.actionFeedbackContext, "displaySuccess").mockImplementationOnce(() => {});
+    await page.toggleCollapse();
+    await page.copyPublicKey();
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", "54c6278e-f824-5fda-91ff-3e946b18d994");
+    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
+  });
 
   it('As LU I should see the appropriate detailed user fingerprint', async() => {
     expect.assertions(2);

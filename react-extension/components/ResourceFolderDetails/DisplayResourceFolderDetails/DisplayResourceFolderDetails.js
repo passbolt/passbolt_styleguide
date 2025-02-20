@@ -12,6 +12,7 @@
  * @since         2.13.0
  */
 import React from "react";
+import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import DisplayResourceFolderDetailsInformation from "./DisplayResourceFolderDetailsInformation";
 import DisplayResourceFolderDetailsPermissions from "./DisplayResourceFolderDetailsPermissions";
@@ -23,10 +24,6 @@ import {Trans, withTranslation} from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import FolderSVG from "../../../../img/svg/folder.svg";
-import LinkSVG from "../../../../img/svg/link.svg";
-import Tabs from "../../Common/Tab/Tabs";
-import Tab from "../../Common/Tab/Tab";
 
 class DisplayResourceFolderDetails extends React.Component {
   /**
@@ -42,7 +39,15 @@ class DisplayResourceFolderDetails extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
+    this.handleCloseClick = this.handleCloseClick.bind(this);
     this.handlePermalinkClick = this.handlePermalinkClick.bind(this);
+  }
+
+  /**
+   * Handle when the user closes the sidebar.
+   */
+  handleCloseClick() {
+    this.props.resourceWorkspaceContext.onLockDetail();
   }
 
   /**
@@ -64,61 +69,41 @@ class DisplayResourceFolderDetails extends React.Component {
   }
 
   /**
-   * Renders the "Details" section tab of a folder.
-   * @returns {JSX}
-   */
-  renderFolderDetail() {
-    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
-
-    return (
-      <>
-        <DisplayResourceFolderDetailsInformation/>
-        {canViewShare &&
-          <DisplayResourceFolderDetailsPermissions/>
-        }
-      </>
-    );
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
-    const canUseAuditLog = (this.props.context.siteSettings.canIUse("auditLog")
-    || this.props.context.siteSettings.canIUse("audit_log")) // @deprecated remove with v4
-    && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_ACTIVITIES);
+    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_FOLDER);
+    const canUseAuditLog = this.props.context.siteSettings.canIUse("auditLog");
 
     return (
-      <div className="sidebar resource">
-        <div className={`sidebar-header ${canUseAuditLog ? "" : "with-separator"}`}>
-          <div className="teaser-image">
-            <FolderSVG/>
-          </div>
-          <div className="title-area">
+      <div className="panel aside ready">
+        <div className="sidebar resource">
+          <div className="sidebar-header">
+            <div className="teaser-image">
+              <Icon name="folder"/>
+            </div>
             <h3>
               <div className="title-wrapper">
                 <span className="name">{this.props.resourceWorkspaceContext.details.folder.name}</span>
+                <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this folder")} onClick={this.handlePermalinkClick}>
+                  <Icon name="link"/>
+                  <span className="visuallyhidden"><Trans>Copy the link to this folder</Trans></span>
+                </button>
               </div>
               <span className="subtitle"><Trans>folder</Trans></span>
             </h3>
-            <button type="button" className="title-link button-transparent inline" title={this.translate("Copy the link to this folder")} onClick={this.handlePermalinkClick}>
-              <LinkSVG/>
-              <span className="visuallyhidden"><Trans>Copy the link to this folder</Trans></span>
+            <button type="button" className="link no-border dialog-close" onClick={this.handleCloseClick}>
+              <Icon name="close"/>
+              <span className="visuallyhidden"><Trans>Close</Trans></span>
             </button>
           </div>
-        </div>
-        <div className="sidebar-content">
-          {!canUseAuditLog
-            ? this.renderFolderDetail()
-            : <Tabs activeTabName='Details'>
-              <Tab key='Details' name={this.props.t('Details')} type='Details'>
-                {this.renderFolderDetail()}
-              </Tab>
-              <Tab key='Activity' name={this.props.t('Activity')} type='Activity'>
-                <DisplayResourceFolderDetailsActivity />
-              </Tab>
-            </Tabs>
+          <DisplayResourceFolderDetailsInformation/>
+          {canViewShare &&
+            <DisplayResourceFolderDetailsPermissions/>
+          }
+          {canUseAuditLog &&
+            <DisplayResourceFolderDetailsActivity/>
           }
         </div>
       </div>

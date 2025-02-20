@@ -25,7 +25,15 @@
                 align-items: center;
 
                 .password-view, .totp-view {
+                  width: 2.2rem;
+                  height: 2.1rem;
                   margin: 0 0 0 .8rem;
+                  padding: 0;
+
+                  .svg-icon svg {
+                    width: 1.4rem;
+                    height: 100%;
+                  }
                 }
 
                 .totp-code + .svg-icon.timer {
@@ -62,7 +70,7 @@
                     }
 
                     &:before, &:after {
-                      font-family: 'Obfuscation', sans-serif;
+                      font-family: 'Passbolt', sans-serif;
                       font-style: normal;
                       font-weight: 400;
                       font-size: 1.8rem;
@@ -72,18 +80,18 @@
 
                   &.secret-password {
                     > button:before {
-                      content: '00000000';
+                      content: 'BBBBBBBBB';
                     }
                   }
 
                   &.secret-totp {
                     > button {
                       &:before {
-                        content: '000';
+                        content: 'BBB';
                       }
                       &:after {
                         margin-left: .5rem;
-                        content: '000';
+                        content: 'BBB';
                       }
                     }
                   }

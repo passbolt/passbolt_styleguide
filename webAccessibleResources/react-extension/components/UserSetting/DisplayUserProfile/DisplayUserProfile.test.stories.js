@@ -1,43 +1,14 @@
+import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
+import PropTypes from "prop-types";
 import DisplayUserProfile from "./DisplayUserProfile";
 import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
-import DisplayUserProfileHelp from "./DisplayUserProfileHelp";
-import {defaultUserRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 
 export default {
   title: 'Components/UserSetting/DisplayUserProfile',
-  component: DisplayUserProfile,
-  decorators: [(Story, {args}) =>
-    <div id="container" className="page settings">
-      <div id="app" className="app" tabIndex="1000" style={{margin: "-1rem"}}>
-        <div className="panel main">
-          <div className="panel left">
-            <div className="sidebar-content">
-            </div>
-          </div>
-          <div className="panel middle">
-            <div className="header">
-            </div>
-            <div className="middle-right">
-              <div className="breadcrumbs-and-grid">
-                <div className="top-bar">
-                </div>
-                <div className="main-page">
-                  <Story {...args}/>
-                </div>
-              </div>
-              <div className="help-panel">
-                <div className="sidebar-help">
-                  <DisplayUserProfileHelp {...args}/>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  ],
+  component: DisplayUserProfile
 };
 
 const context = {
@@ -77,9 +48,18 @@ const context = {
   }
 };
 
-export const Initial = {
-  args: {
-    context: context,
-    rbacContext: defaultUserRbacContext(),
-  }
+
+const Template = args =>
+  <AppContext.Provider value={context}>
+    <div id="container" className="page settings">
+      <MemoryRouter initialEntries={['/']}>
+        <Route component={routerProps => <DisplayUserProfile {...args} {...routerProps}/>}></Route>
+      </MemoryRouter>
+    </div>
+  </AppContext.Provider>;
+
+Template.propTypes = {
+  context: PropTypes.object,
 };
+
+export const Initial = Template.bind({});

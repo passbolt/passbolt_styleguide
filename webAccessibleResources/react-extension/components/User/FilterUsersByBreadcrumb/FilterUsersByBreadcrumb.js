@@ -18,7 +18,7 @@ import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import Breadcrumb from "../../Common/Navigation/Breadcrumbs/Breadcrumb";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {Trans, withTranslation} from "react-i18next";
+import {withTranslation} from "react-i18next";
 
 /**
  * The component displays a navigation breadcrumb given the applied users filter
@@ -34,7 +34,7 @@ class FilterUsersByBreadcrumb extends Component {
       case UserWorkspaceFilterTypes.NONE:
         return [];
       case UserWorkspaceFilterTypes.ALL:
-        return [...items, this.getLastBreadcrumb(this.translate("Home"))];
+        return items;
       case UserWorkspaceFilterTypes.TEXT: {
         const isEmptySearchText = !this.props.userWorkspaceContext.filter.payload;
         const currentSearchText = this.props.userWorkspaceContext.filter.payload;
@@ -55,7 +55,7 @@ class FilterUsersByBreadcrumb extends Component {
   }
 
   /**
-   * Returns the home breadcrumb items
+   * Returns the all users breadcrumb items
    * @return {JSX.Element}
    */
   get allUsersBreadcrumb() {
@@ -93,10 +93,9 @@ class FilterUsersByBreadcrumb extends Component {
    * @returns {JSX}
    */
   render() {
-    const count = this.props.userWorkspaceContext.filteredUsers.length;
     return (
       <Breadcrumbs items={this.items}>
-        <span className="counter"><Trans count={count}>{{count}} items</Trans></span>
+        <span className="chips">{this.props.userWorkspaceContext.filteredUsers.length}</span>
       </Breadcrumbs>
     );
   }

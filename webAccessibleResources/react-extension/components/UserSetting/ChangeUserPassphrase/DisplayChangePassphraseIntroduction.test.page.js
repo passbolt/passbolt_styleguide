@@ -15,6 +15,7 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import DisplayChangePassphraseIntroduction from "./DisplayChangePassphraseIntroduction";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -25,11 +26,13 @@ export default class DisplayChangePassphraseIntroductionPage {
    * Default constructor
    * @param props Props to attach
    */
-  constructor(props) {
+  constructor(appContext, props) {
     this._page = render(
-      <MockTranslationProvider>
-        <DisplayChangePassphraseIntroduction {...props}/>
-      </MockTranslationProvider>
+      <AppContext.Provider value={appContext}>
+        <MockTranslationProvider>
+          <DisplayChangePassphraseIntroduction {...props}/>
+        </MockTranslationProvider>
+      </AppContext.Provider>
     );
   }
 
@@ -65,7 +68,7 @@ export default class DisplayChangePassphraseIntroductionPage {
    * Returns the start button element
    */
   get startButton() {
-    return this._page.container.querySelector('.actions-wrapper button[type=\"submit\"]');
+    return this._page.container.querySelector('.submit-wrapper button[type=\"submit\"]');
   }
 
   /**

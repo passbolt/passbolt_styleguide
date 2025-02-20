@@ -14,8 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import CaretDownSVG from "../../../../img/svg/caret_down.svg";
-import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {Trans, withTranslation} from "react-i18next";
@@ -83,34 +82,36 @@ class DisplayUserGroupDetailsInformation extends React.Component {
     const modifiedByUserName = modifiedByUser ? `${modifiedByUser.profile.first_name} ${modifiedByUser.profile.last_name}` : this.translate("Unknown user");
     const membersCount = this.group.groups_users.length;
     return (
-      <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>        <div className="accordion-header">
-        <h4>
-          <button type="button" className="link no-border section-opener" onClick={this.handleTitleClicked}>
-            <span className="accordion-title">
+      <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
+        <div className="accordion-header">
+          <h4>
+            <button type="button" className="link no-border" onClick={this.handleTitleClicked}>
               <Trans>Information</Trans>
-            </span>
-            {this.state.open && <CaretDownSVG/>}
-            {!this.state.open && <CaretRightSVG/>}
-          </button>
-        </h4>
-      </div>
-      {this.state.open &&
-        <div className="accordion-content">
-          <div className="information-label">
-            <span className="created label"><Trans>Created</Trans></span>
-            <span className="modified label"><Trans>Modified</Trans></span>
-            <span className="modified-by label"><Trans>Modified by</Trans></span>
-            <span className="members label"><Trans>Members</Trans></span>
-
-          </div>
-          <div className="information-value">
-            <span className="created value" title={this.group.created}>{created}</span>
-            <span className="modified value" title={this.group.modified}>{modified}</span>
-            <span className="modified-by value">{modifiedByUserName}</span>
-            <span className="members value">{membersCount}</span>
-          </div>
+              {this.state.open && <Icon name="caret-down"/>}
+              {!this.state.open && <Icon name="caret-right"/>}
+            </button>
+          </h4>
         </div>
-      }
+        <div className="accordion-content">
+          <ul>
+            <li className="created">
+              <span className="label"><Trans>Created</Trans></span>
+              <span className="value" title={this.group.created}>{created}</span>
+            </li>
+            <li className="modified">
+              <span className="label"><Trans>Modified</Trans></span>
+              <span className="value" title={this.group.modified}>{modified}</span>
+            </li>
+            <li className="modified-by">
+              <span className="label"><Trans>Modified by</Trans></span>
+              <span className="value">{modifiedByUserName}</span>
+            </li>
+            <li className="members">
+              <span className="label"><Trans>Members</Trans></span>
+              <span className="value">{membersCount}</span>
+            </li>
+          </ul>
+        </div>
       </div>
     );
   }

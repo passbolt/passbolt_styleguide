@@ -13,7 +13,6 @@
  */
 
 import {defaultUserRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 
 /**
  * Default props
@@ -43,8 +42,7 @@ export function defaultProps(props) {
         canIUse: () => true
       }
     },
-    rbacContext: defaultUserRbacContext(),
-    dialogContext: defaultDialogContext()
+    rbacContext: defaultUserRbacContext()
   };
   return Object.assign(defaultProps, props || {});
 }

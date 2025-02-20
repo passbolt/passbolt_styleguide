@@ -21,10 +21,10 @@ export default {
   component: Range
 };
 
-export const defaultRange = {
-  args: defaultProps({value: 80}),
-  render: args =>
-    <div>
-      <Range {...args} />
-    </div>
-};
+const Template = args =>
+  <div>
+    <Range {...args} />
+  </div>;
+
+export const Default = Template.bind({});
+Default.args = defaultProps();

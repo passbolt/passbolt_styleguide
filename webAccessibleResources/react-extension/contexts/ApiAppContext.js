@@ -46,10 +46,6 @@ class ApiAppContextProvider extends React.Component {
     await this.getRbacs();
     this.initLocale();
     this.removeSplashScreen();
-    const skeleton = document.querySelector(".temporary.skeleton");
-    if (skeleton) {
-      skeleton.remove();
-    }
   }
 
   /**

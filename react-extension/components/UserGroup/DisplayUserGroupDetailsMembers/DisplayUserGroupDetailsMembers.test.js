@@ -18,6 +18,7 @@
 
 import {defaultAppContext, defaultProps} from "./DisplayUserGroupDetailsMembers.test.data";
 import DisplayUserGroupDetailsMembersPage from "./DisplayUserGroupDetailsMembers.test.page";
+import EditUserGroup from "../EditUserGroup/EditUserGroup";
 
 beforeEach(() => {
   jest.resetModules();
@@ -42,6 +43,14 @@ describe("Display User Group Details Information", () => {
 
     await page.toggleCollapse();
     expect(page.isCollapsed).toBeTruthy();
+  });
+
+  it("As LU I should have access to the edit of the group", async() => {
+    jest.spyOn(props.dialogContext, "open").mockImplementationOnce(() => {});
+    jest.spyOn(props.userWorkspaceContext, "onGroupToEdit").mockImplementationOnce(() => {});
+    await page.editGroup();
+    expect(props.dialogContext.open).toHaveBeenCalledWith(EditUserGroup);
+    expect(props.userWorkspaceContext.onGroupToEdit).toHaveBeenCalledWith(props.userWorkspaceContext.details.group);
   });
 
   it("As LU I should see the appropriate members of the group", async() => {

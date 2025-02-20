@@ -17,27 +17,18 @@ import DisplayHttpError from "./DisplayHttpError";
 
 export default {
   title: 'Components/Common/Error/DisplayHttpError',
-  component: DisplayHttpError,
-  decorators: [
-    (Story, {args}) =>
-      <div className="panel main">
-        <div className="panel middle">
-          <div className="main-page">
-            <Story {...args} />
-          </div>
-        </div>
-      </div>
-  ],
+  component: DisplayHttpError
 };
 
-export const Error404 = {
-  args: {
-    errorCode: 404
-  }
+const Template = args =>
+  <DisplayHttpError {...args}/>;
+
+export const Error404 = Template.bind({});
+Error404.args = {
+  errorCode: 404
 };
 
-export const Error403 = {
-  args: {
-    errorCode: 403
-  }
+export const Error403 = Template.bind({});
+Error403.args = {
+  errorCode: 403
 };

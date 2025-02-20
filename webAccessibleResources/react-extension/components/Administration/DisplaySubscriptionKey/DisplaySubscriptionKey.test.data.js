@@ -42,7 +42,7 @@ export function defaultProps(props = {}) {
       resetDisplayAdministrationWorkspaceAction: jest.fn()
     },
     dialogContext: defaultDialogContext(),
-    navigationContext: defaultNavigationContext(),
+    navigationContext: defaultNavigationContext()
   };
   delete props.context; // Treated in the default
 

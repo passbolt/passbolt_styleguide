@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React from "react";
-import LinkSVG from "../../../../img/svg/link.svg";
+import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
@@ -114,18 +114,11 @@ class DisplayUserDetails extends React.Component {
 
   /**
    * Returns true if the feature flag disableUser is enabled and the given user is suspended.
+   * @param {object} user
    * @returns {boolean}
    */
-  get isUserSuspended() {
-    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(this.user);
-  }
-
-  /**
-   * Returns true if the given user is not active.
-   * @returns {boolean}
-   */
-  get isUserInactive() {
-    return !this.user.active;
+  isUserSuspended(user) {
+    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(user);
   }
 
   /**
@@ -134,28 +127,30 @@ class DisplayUserDetails extends React.Component {
    */
   render() {
     return (
-      <div className="sidebar user">
-        <div className={`sidebar-header ${this.isUserInactive ? "inactive" : ""} ${this.isUserSuspended ? "suspended" : ""}`}>
-          <div className="teaser-image">
-            <UserAvatar
-              user={this.user}
-              baseUrl={this.baseUrl}
-              attentionRequired={this.hasAttentionRequired}/>
-          </div>
-          <div className="title-area">
+      <div className="panel aside ready">
+        <div className="sidebar user">
+          <div className={`sidebar-header ${this.isUserSuspended(this.user) ? "suspended" : ""}`}>
+            <div className={`teaser-image  ${this.hasAttentionRequired ? "attention-required" : ""}`}>
+              <UserAvatar
+                user={this.user}
+                baseUrl={this.baseUrl}
+                attentionRequired={this.hasAttentionRequired}/>
+            </div>
             <h3>
               <div className="title-wrapper">
                 <span className="name">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}</span>
+                <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this user")} onClick={this.handlePermalinkClick}>
+                  <Icon name="link"/>
+                  <span className="visuallyhidden"><Trans>Copy the link to this user</Trans></span>
+                </button>
               </div>
               <span className="subtitle">{this.user.username}</span>
             </h3>
-            <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this user")} onClick={this.handlePermalinkClick}>
-              <LinkSVG/>
-              <span className="visuallyhidden"><Trans>Copy the link to this user</Trans></span>
+            <button type="button" className="dialog-close button-transparent" onClick={this.handleCloseClick}>
+              <Icon name="close"/>
+              <span className="visuallyhidden"><Trans>Close</Trans></span>
             </button>
           </div>
-        </div>
-        <div className="sidebar-content">
           <DisplayUserDetailsInformation/>
           {this.user.active && <DisplayUserDetailsGroups/>}
           {this.user.active && <DisplayUserDetailsPublicKey/>}

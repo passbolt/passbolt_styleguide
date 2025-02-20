@@ -819,7 +819,7 @@ describe("See the Edit Resource", () => {
         expect(page.passwordEdit.password.getAttribute("disabled")).not.toBeNull();
         expect(page.passwordEdit.saveButton.getAttribute("disabled")).not.toBeNull();
         expect(page.passwordEdit.cancelButton.getAttribute("disabled")).not.toBeNull();
-        expect(page.passwordEdit.saveButton.className).toBe("button primary form disabled processing");
+        expect(page.passwordEdit.saveButton.className).toBe("button primary disabled processing");
 
         await waitFor(() => {});
         updateResolve();

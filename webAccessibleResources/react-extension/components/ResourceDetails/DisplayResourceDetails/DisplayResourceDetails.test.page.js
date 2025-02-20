@@ -37,7 +37,6 @@ export default class DisplayResourceDetailsPage {
 
   /**
    * Returns the resource sidebar
-   * @returns {HTMLElement}
    */
   get resourceSidebar() {
     return this._page.container.querySelector('.sidebar.resource');
@@ -45,7 +44,6 @@ export default class DisplayResourceDetailsPage {
 
   /**
    * Returns the name element
-   * @returns {string}
    */
   get name() {
     return this._page.container.querySelector('.name').textContent;
@@ -53,7 +51,6 @@ export default class DisplayResourceDetailsPage {
 
   /**
    * Returns the subtitle element
-   * @returns {string}
    */
   get subtitle() {
     return this._page.container.querySelector('.subtitle').textContent;
@@ -61,71 +58,16 @@ export default class DisplayResourceDetailsPage {
 
   /**
    * Returns the permalink
-   * @returns {HTMLElement}
    */
   get permalink() {
     return this._page.container.querySelector('.title-link');
   }
 
   /**
-   * Returns the password
-   */
-  get password() {
-    return this._page.container.querySelector('.password');
-  }
-
-  /**
-   * Returns the totp
-   */
-  get totp() {
-    return this._page.container.querySelector('.totp');
-  }
-
-  /**
-   * Returns the description
-   */
-  get description() {
-    return this._page.container.querySelector('.description');
-  }
-
-  /**
    * Returns the close button
-   * @returns {HTMLElement}
    */
   get closeButton() {
     return this._page.container.querySelector('.dialog-close');
-  }
-
-  /**
-   * Returns the activity section
-   * @returns {HTMLElement}
-   */
-  get activitySection() {
-    return this._page.container.querySelector('.activity');
-  }
-
-  /**
-   * Returns the currently selected tab
-   * @returns {HTMLElement}
-   */
-  get activeTab() {
-    return this._page.container.querySelector('.sidebar-content .tabs .active');
-  }
-
-  /**
-   * Returns the Tabs element if any
-   * @returns {HTMLElement}
-   */
-  tabs() {
-    return this._page.container.querySelector('.sidebar-content .tabs');
-  }
-
-  /**
-   * Returns the Tab element given its index if any
-   * @returns {HTMLElement}
-   */
-  tab(index) {
-    return this._page.container.querySelectorAll('.sidebar-content .tabs li button')?.[index];
   }
 
   /**

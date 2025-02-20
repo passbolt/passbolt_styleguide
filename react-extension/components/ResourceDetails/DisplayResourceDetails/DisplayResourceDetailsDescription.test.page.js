@@ -16,8 +16,13 @@
 
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
+import {BrowserRouter as Router} from "react-router-dom";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import DisplayResourceDetailsDescription from "./DisplayResourceDetailsDescription";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import {
+  ResourceTypesLocalStorageContext
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 
 /**
  * The PasswordSidebarDescriptionSection component represented as a page
@@ -25,12 +30,19 @@ import MockTranslationProvider from "../../../test/mock/components/International
 export default class PasswordSidebarDescriptionSectionPage {
   /**
    * Default constructor
+   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(props) {
+  constructor(appContext, props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayResourceDetailsDescription  {...props}/>
+        <AppContext.Provider value={appContext}>
+          <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes}}>
+            <Router>
+              <DisplayResourceDetailsDescription  {...props}/>
+            </Router>
+          </ResourceTypesLocalStorageContext.Provider>
+        </AppContext.Provider>
       </MockTranslationProvider>
     );
     this.setupPageObjects();
@@ -56,6 +68,41 @@ export default class PasswordSidebarDescriptionSectionPage {
    */
   get passwordSidebarDescriptionSection() {
     return this._passwordSidebarDescriptionSection;
+  }
+
+  /**
+   * Returns the description editor element
+   */
+  get component() {
+    return this._page.container.querySelector('.description-editor');
+  }
+
+  /**
+   * Returns the textarea input element
+   */
+  get descriptionInput() {
+    return this._page.container.querySelector('.input.textarea.required textarea');
+  }
+
+  /**
+   * Returns the error message content
+   */
+  get errorMessage() {
+    return this._page.container.querySelector('.feedbacks.error-message').textContent;
+  }
+
+  /**
+   * Returns the save button element
+   */
+  get saveButton() {
+    return this._page.container.querySelector('.description-editor-submit');
+  }
+
+  /**
+   * Returns the cancel button element
+   */
+  get cancelButton() {
+    return this._page.container.querySelector('button.cancel');
   }
 }
 
@@ -110,6 +157,20 @@ class PasswordSidebarDescriptionSectionPageObject {
   }
 
   /**
+   * Returns the loading element
+   */
+  get loadingMessage() {
+    return this._container.querySelector('.processing-text');
+  }
+
+  /**
+   * Returns true
+   */
+  isLoading() {
+    return this.loadingMessage !== null && this.loadingMessage.innerHTML === 'Retrieving dsecr';
+  }
+
+  /**
    * Returns the empty element
    */
   get emptyMessage() {
@@ -130,10 +191,46 @@ class PasswordSidebarDescriptionSectionPageObject {
     return this.content !== null;
   }
 
+  /**
+   * Wait for the activities to be loaded while an in-progress function should be satisfied
+   * @param inProgressFn An in-progress function
+   * @returns {Promise<void>} The promise that the load operation is completed
+   */
+  async waitForLoading(inProgressFn) {
+    await waitFor(inProgressFn);
+  }
+
   /** Click on the component */
   async click(component)  {
     const leftClick = {button: 0};
     fireEvent.click(component, leftClick);
+    await waitFor(() => {});
+  }
+
+  /** Click without wait for on the component */
+  clickWithoutWaitFor(component)  {
+    const leftClick = {button: 0};
+    fireEvent.click(component, leftClick);
+  }
+
+  /** change input value on the component */
+  async input(component, data)  {
+    const options = {target: {textContent: data}};
+    fireEvent.input(component, options);
+    await waitFor(() => {});
+  }
+
+  /** enter key pressed on the component */
+  async enterKeyPressed(component)  {
+    const enterKeyPressed = {keyCode: 13};
+    fireEvent.keyPress(component, enterKeyPressed);
+    await waitFor(() => {});
+  }
+
+  /** escape key down on the component */
+  async escapeKeyDown(component)  {
+    const escapeKeyDown = {keyCode: 27};
+    fireEvent.keyDown(component, escapeKeyDown);
     await waitFor(() => {});
   }
 }

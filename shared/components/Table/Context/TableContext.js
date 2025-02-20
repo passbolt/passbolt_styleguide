@@ -16,8 +16,7 @@ import PropTypes from "prop-types";
 import debounce from "debounce-promise";
 
 
-const PADDING_SIZE = 8;
-const PADDING_LEFT_FIRST_COLUMN_ADDED = 4;
+const PADDING_SIZE = 6;
 
 export const TableContext = React.createContext({
   columns: [], // The columns to display
@@ -244,7 +243,7 @@ export default class TableContextProvider extends Component {
    */
   get columnsPaddingWidth() {
     // Get the columns padding widths from the displayed columns
-    return PADDING_SIZE * this.state.columns.length + PADDING_LEFT_FIRST_COLUMN_ADDED;
+    return PADDING_SIZE * this.state.columns.length;
   }
 
   /**

@@ -55,8 +55,7 @@ export const UserWorkspaceContext = React.createContext({
   onDetailsLocked: () => {}, // Lock or unlock detail  (hide or display the group or user details)
   onSorterChanged: () => {}, // Whenever the sorter changed
   onUserSelected: {
-    single: () => {}, // Whenever a single user has been selected
-    none: () => {} // Whenever none users have been selected
+    single: () => {}// Whenever a single user has been selected
   },
   onGroupToEdit: () => {}, // Whenever a group will be edited
   shouldDisplaySuspendedUsersFilter: () => {}, // returns true if the 'Suspended user' filter should be displayed in the UI
@@ -103,8 +102,7 @@ class UserWorkspaceContextProvider extends React.Component {
       onDetailsLocked: this.handleDetailsLocked.bind(this), // Lock or unlock detail  (hide or display the group or user details)
       onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
       onUserSelected: {
-        single: this.handleUserSelected.bind(this), // Whenever a single user has been selected
-        none: this.handleNoneUsersSelected.bind(this), // Whenever none users have been selected
+        single: this.handleUserSelected.bind(this)// Whenever a single user has been selected
       },
       onGroupToEdit: this.handleGroupToEdit.bind(this), // Whenever a group will be edited
       isAttentionRequired: this.isAttentionRequired.bind(this), // Whenever a user needs attention
@@ -338,14 +336,6 @@ class UserWorkspaceContextProvider extends React.Component {
   async handleUserSelected(user) {
     await this.select(user);
     this.redirectAfterSelection();
-  }
-
-  /**
-   * Handle the single user selection
-   */
-  async handleNoneUsersSelected() {
-    await this.unselectAll();
-    await this.detailNothing();
   }
 
   /**
@@ -600,11 +590,13 @@ class UserWorkspaceContextProvider extends React.Component {
     const roleNameSorter = (roleIdU1, roleIdU2) => this.getTranslatedRoleName(roleIdU1).localeCompare(this.getTranslatedRoleName(roleIdU2));
     const suspendedSorter = (u1, u2) => (isUserSuspended(u1) === isUserSuspended(u2)) ? 0 : isUserSuspended(u2) ? -1 : 1;
     const dateOrStringSorter = ['modified', 'last_logged_in'].includes(this.state.sorter.propertyName) ? dateSorter : stringSorter;
+    const attentionRequireSorter = (u1, u2) => (this.isAttentionRequired(u2) === this.isAttentionRequired(u1)) ? 0 : this.isAttentionRequired(u2) ? 1 : -1;
 
-    const isNameProperty = this.state.sorter.propertyName === 'profile';
+    const isNameProperty = this.state.sorter.propertyName === 'name';
     const isMfaProperty = this.state.sorter.propertyName === 'is_mfa_enabled';
-    const isRoleNameProperty = this.state.sorter.propertyName === 'role_id';
+    const isRoleNameProperty = this.state.sorter.propertyName === 'role.name';
     const isSuspendedProperty = this.state.sorter.propertyName === 'disabled';
+    const isAttentionRequiredProperty = this.state.sorter.propertyName === 'attentionRequired';
     const isAccountRecoveryUserSettingStatusProperty = this.state.sorter.propertyName === 'account_recovery_user_setting.status';
 
     let propertySorter;
@@ -612,6 +604,8 @@ class UserWorkspaceContextProvider extends React.Component {
       propertySorter = plainObjectSorter(nameSorter);
     } else if (isMfaProperty) {
       propertySorter = plainObjectSorter(mfaSorter);
+    } else if (isAttentionRequiredProperty) {
+      propertySorter = plainObjectSorter(attentionRequireSorter);
     } else if (isRoleNameProperty) {
       propertySorter = keySorter("role_id", roleNameSorter);
     } else if (isAccountRecoveryUserSettingStatusProperty) {

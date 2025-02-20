@@ -23,7 +23,7 @@ import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import {Trans, withTranslation} from "react-i18next";
 import {isValidSecurityToken} from "../../../../shared/utils/assertions";
 import Tooltip from "../../Common/Tooltip/Tooltip";
-import InfoSVG from "../../../../img/svg/info.svg";
+import Icon from "../../../../shared/components/Icons/Icon";
 
 /**
  * This component displays the user choose security token information
@@ -320,9 +320,9 @@ class ChangeUserSecurityToken extends Component {
   render() {
     const processingClassName = this.isProcessing ? 'processing' : '';
     return (
-      <>
-        <div className="main-column profile-choose-security-token">
-          <div className="main-content">
+      <div className="grid grid-responsive-12 profile-choose-security-token">
+        <div className="row">
+          <div className="col7 main-column">
             <form onSubmit={this.handleSubmit}>
               <h3><Trans>Update the Security Token</Trans></h3>
               <div className={`input-security-token input required ${this.hasErrors ? "error" : ""} ${!this.areActionsAllowed ? 'disabled' : ''}`}>
@@ -331,7 +331,7 @@ class ChangeUserSecurityToken extends Component {
                     <Trans>Security token</Trans>
                   </label>
                   <Tooltip message={this.props.t("Only alphanumeric, dash and underscore characters are accepted.")}>
-                    <InfoSVG className="baseline svg-icon"/>
+                    <Icon name="info-circle"/>
                   </Tooltip>
                 </div>
                 <input
@@ -369,25 +369,38 @@ class ChangeUserSecurityToken extends Component {
               {this.state.hasBeenValidated &&
               <div className="input text">
                 {this.state.errors.emptyCode &&
-                  <div className="empty-code error-message"><Trans>The security token code should not be empty.</Trans></div>
+                <div className="empty-code error-message"><Trans>The security token code should not be empty.</Trans>
+                </div>
                 }
                 {this.state.errors.lengthCode &&
-                  <div className="not-good-length-code error-message"><Trans>The security token code should be 3 characters long.</Trans></div>
+                <div className="not-good-length-code error-message"><Trans>The security token code should be 3
+                  characters long.</Trans></div>
                 }
                 {this.state.errors.invalidRegex &&
                   <div className="not-good-regex-code error-message"><Trans>The security token code should contains only alphanumeric, dash and underscore characters.</Trans></div>
                 }
               </div>
               }
+              <div className="submit-wrapper">
+                <button className={`button primary medium ${processingClassName}`} type="submit" disabled={this.isProcessing}>
+                  <Trans>Save</Trans>
+                </button>
+              </div>
             </form>
           </div>
+          <div className="col4 last">
+            <div className="sidebar-help">
+              <h3><Trans>Why is this token needed?</Trans></h3>
+              <p>
+                <Trans>This security token will be displayed when your passphrase is requested,
+                  so you can verify quickly the form is coming from passbolt.</Trans>&nbsp;
+                <Trans>This will help protect you from <a href="https://en.wikipedia.org/wiki/Phishing" target="_blank" rel="noopener noreferrer">
+                phishing attacks</a>.</Trans>
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="actions-wrapper">
-          <button className={`button primary ${processingClassName}`} type="submit" disabled={this.isProcessing} onClick={this.handleSubmit}>
-            <Trans>Save</Trans>
-          </button>
-        </div>
-      </>
+      </div>
     );
   }
 }

@@ -14,15 +14,13 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import SpinnerSVG from "../../../../img/svg/spinner.svg";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import DisplayUserGroupDetailsMembersGroupMember from "./DisplayUserGroupDetailsMembersGroupMember";
 import EditUserGroup from "../EditUserGroup/EditUserGroup";
 import {withDialog} from "../../../contexts/DialogContext";
 import {Trans, withTranslation} from "react-i18next";
-import CaretDownSVG from "../../../../img/svg/caret_down.svg";
-import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 /**
  * This component displays the group details about members
@@ -97,41 +95,39 @@ class DisplayUserGroupDetailsMembers extends React.Component {
    */
   render() {
     return (
-      <div className={`detailed-members accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
+      <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
-            <button type="button" className="link no-border section-opener" onClick={this.handleTitleClicked}>
-              <span className="accordion-title">
-                <Trans>Group members</Trans>
-              </span>
-              {this.state.open &&
-                <CaretDownSVG/>
-              }
-              {!this.state.open &&
-                <CaretRightSVG/>
-              }
+            <button type="button" className="link no-border" onClick={this.handleTitleClicked}>
+              <Trans>Group members</Trans>
+              {this.state.open && <Icon name="caret-down"/>}
+              {!this.state.open && <Icon name="caret-right"/>}
             </button>
           </h4>
         </div>
-        {this.state.open &&
-          <div className="accordion-content">
-            {this.isLoading() &&
-              <div className="processing-wrapper">
-                <SpinnerSVG/>
-                <span className="processing-text"><Trans>Retrieving permissions</Trans></span>
-              </div>
-            }
-            {!this.isLoading() &&
-            <>
-              {
-                this.group.groups_users.map(groupUser => (
-                  <DisplayUserGroupDetailsMembersGroupMember key={groupUser.id} groupUser={groupUser}/>
-                ))
-              }
-            </>
-            }
+        <div className="accordion-content">
+          <button type="button" className="section-action button-transparent" onClick={this.handleEditGroup}>
+            <Icon name="edit"/>
+            <span className="visuallyhidden"><Trans>Edit</Trans></span>
+          </button>
+          {this.isLoading() &&
+          <div className="processing-wrapper">
+            <Icon name="spinner"/>
+            <span className="processing-text"><Trans>Retrieving group members</Trans></span>
           </div>
-        }
+          }
+          {!this.isLoading() && this.state.open &&
+            <>
+              <ul>
+                {
+                  this.group.groups_users.map(groupUser => (
+                    <DisplayUserGroupDetailsMembersGroupMember key={groupUser.id} groupUser={groupUser}/>
+                  ))
+                }
+              </ul>
+            </>
+          }
+        </div>
       </div>
     );
   }

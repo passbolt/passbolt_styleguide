@@ -112,12 +112,11 @@ class DisplaySsoProviderMismatchError extends Component {
    */
   render() {
     const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
-    const ssoProviderName = this.props.newProvider.name;
     return (
       <div className="sso-provider-mismatch-error">
         <h1><Trans>Sorry, the SSO provider has changed.</Trans></h1>
         <p><Trans>For security reasons please check with your administrator that this is a change that they initiated.</Trans><br/>
-          <Trans>The new SSO provider: {{ssoProviderName}}</Trans></p>
+          <Trans>The new SSO provider: {this.props.newProvider.name}</Trans></p>
         <form
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>

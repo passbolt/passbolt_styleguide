@@ -100,91 +100,161 @@ class DisplayInformationPageObject {
    * Returns the list elements of information
    */
   get list() {
-    return this._container.querySelector('.accordion-content');
+    return this._container.querySelector('ul');
   }
 
   /**
-   * Returns the created elements of information
+   * Returns the username label elements of information
    */
-  get created() {
-    return this._container.querySelector('.created.value');
+  get usernameLabel() {
+    return this._container.querySelector('.username .label').textContent;
   }
 
   /**
-   * Returns the created label elements of information
+   * Returns the username elements of information
    */
-  get createdLabel() {
-    return this._container.querySelector('.created.label').textContent;
+  get username() {
+    return this._container.querySelector('.username .value button');
   }
 
   /**
-   * Returns the created by elements of information
+   * Returns the password label elements of information
    */
-  get createdBy() {
-    return this._container.querySelector('.created-by.value');
+  get passwordLabel() {
+    return this._container.querySelector('.password .label').textContent;
   }
 
   /**
-   * Returns the created by label elements of information
+   * Returns the password link element of information
    */
-  get createdByLabel() {
-    return this._container.querySelector('.created-by.label').textContent;
+  get passwordLink() {
+    return this._container.querySelector('.secret-password button');
+  }
+
+  /**
+   * Returns the password elements of information
+   */
+  get password() {
+    return this.passwordLink.querySelector('span');
+  }
+
+  /**
+   * Returns the view password elements of information
+   */
+  get viewPassword() {
+    return this._container.querySelector('.password .password-view');
+  }
+
+  /**
+   * Get view password exist
+   */
+  get isViewPasswordExist() {
+    return Boolean(this._container.querySelector('.password .password-view'));
+  }
+
+  /**
+   * Returns the totp label elements of information
+   */
+  get totpLabel() {
+    return this._container.querySelector('.totp .label').textContent;
+  }
+
+  /**
+   * Returns the totp link element of information
+   */
+  get totpLink() {
+    return this._container.querySelector('.secret-totp button');
+  }
+
+  /**
+   * Returns the totp elements of information
+   */
+  get totp() {
+    return this.totpLink.querySelector('span');
+  }
+
+  /**
+   * Returns the view totp elements of information
+   */
+  get viewTotp() {
+    return this._container.querySelector('.totp .totp-view');
+  }
+
+  /**
+   * Get view totp exist
+   */
+  get isViewTotpExist() {
+    return Boolean(this._container.querySelector('.totp .totp-view'));
+  }
+
+  /**
+   * Returns the uri elements of information
+   */
+  get uri() {
+    return this._container.querySelector('.uri .value button');
+  }
+
+  /**
+   * Returns the uri label elements of information
+   */
+  get uriLabel() {
+    return this._container.querySelector('.uri .label').textContent;
   }
 
   /**
    * Returns the modified elements of information
    */
-  get modified() {
-    return this._container.querySelector('.modified.value');
+  modified(index) {
+    return this._container.querySelectorAll('.modified .value')[index - 1];
   }
 
   /**
    * Returns the modified label elements of information
    */
-  get modifiedLabel() {
-    return this._container.querySelector('.modified.label').textContent;
+  modifiedLabel(index) {
+    return this._container.querySelectorAll('.modified .label')[index - 1].textContent;
   }
 
   /**
    * Returns the modified by elements of information
    */
-  get modifiedBy() {
-    return this._container.querySelector('.modified-by.value');
+  modifiedBy(index) {
+    return this._container.querySelectorAll('.modified-by .value')[index - 1];
   }
 
   /**
    * Returns the modified by label elements of information
    */
-  get modifiedByLabel() {
-    return this._container.querySelector('.modified-by.label').textContent;
+  modifiedByLabel(index) {
+    return this._container.querySelectorAll('.modified-by .label')[index - 1].textContent;
   }
 
   /**
    * Returns the location elements of information
    */
   get location() {
-    return this._container.querySelector('.location.value button');
+    return this._container.querySelector('.location .value button');
   }
 
   /**
    * Returns the location label elements of information
    */
   get locationLabel() {
-    return this._container.querySelector('.location.label').textContent;
+    return this._container.querySelector('.location .label').textContent;
   }
 
   /**
    * Returns the expiry elements of information
    */
   get expiry() {
-    return this._container.querySelector('.expiry.value');
+    return this._container.querySelector('.expiry .value');
   }
 
   /**
    * Returns the expiry label elements of information
    */
   get expiryLabel() {
-    return this._container.querySelector('.expiry.label').textContent;
+    return this._container.querySelector('.expiry .label').textContent;
   }
 
   /**

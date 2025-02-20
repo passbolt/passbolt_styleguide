@@ -11,8 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React from "react";
+import React, {Fragment} from "react";
 import PropTypes from "prop-types";
+import Icon from "../../../../shared/components/Icons/Icon";
 import FilterResourcesByTagsContextualMenu from "./FilterResourcesByTagsContextualMenu";
 import FilterResourcesByTagsList from "./FilterResourcesByTagsList";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
@@ -20,10 +21,6 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withRouter} from "react-router-dom";
 import {withTranslation} from "react-i18next";
-import CarretDownSVG from "../../../../img/svg/caret_down.svg";
-import CarretRightSVG from "../../../../img/svg/caret_right.svg";
-import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
-import TagV2SVG from "../../../../img/svg/tag_v2.svg";
 
 /**
  * This component display the tag to filter the resources
@@ -200,26 +197,25 @@ class FilterResourcesByTags extends React.Component {
             <div className="row title">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <h3 className="section-title">
+                  <h3>
                     <span className="folders-label" onClick={this.handleTitleClickEvent} onContextMenu={this.handleTitleContextualMenuEvent}>
                       <button type="button" className="link no-border">
-                        <TagV2SVG />
-                        <span>{this.state.title}</span>
-                        <div className="toggle-folder">
-                          {this.state.open
-                            ? <CarretDownSVG />
-                            : <CarretRightSVG />
+                        <>
+                          {this.state.open &&
+                            <Icon name="caret-down"/>
                           }
-                        </div>
+                          {!this.state.open &&
+                            <Icon name="caret-right"/>
+                          }
+                        </>
+                        {this.state.title}
                       </button>
                     </span>
                   </h3>
                 </div>
               </div>
               <div className="dropdown right-cell more-ctrl">
-                <button type="button" className={`button-transparent inline-menu-horizontal ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}>
-                  <MoreHorizontalSVG />
-                </button>
+                <button type="button" className={`${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}><Icon name="3-dots-h"/></button>
               </div>
             </div>
           </li>

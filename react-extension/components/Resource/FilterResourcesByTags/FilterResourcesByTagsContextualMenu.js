@@ -16,9 +16,6 @@ import PropTypes from "prop-types";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {filterByTagsOptions} from "./FilterResourcesByTagsList";
 import {Trans, withTranslation} from "react-i18next";
-import TagsSVG from "../../../../img/svg/tags.svg";
-import VenetianMaskSVG from "../../../../img/svg/venetian_mask.svg";
-import ShareSVG from "../../../../img/svg/share.svg";
 
 class FilterResourcesByTagsContextualMenu extends React.Component {
   /**
@@ -72,10 +69,7 @@ class FilterResourcesByTagsContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button" className="link no-border" id="all-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.all)}>
-                  <TagsSVG />
-                  <span><Trans>All tags</Trans></span>
-                </button>
+                <button type="button" className="link no-border" id="all-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.all)}><span><Trans>All tags</Trans></span></button>
               </div>
             </div>
           </div>
@@ -84,10 +78,7 @@ class FilterResourcesByTagsContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button" className="link no-border" id="personal-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.personal)}>
-                  <VenetianMaskSVG />
-                  <span><Trans>My tags</Trans></span>
-                </button>
+                <button type="button" className="link no-border" id="personal-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.personal)}><span><Trans>My tags</Trans></span></button>
               </div>
             </div>
           </div>
@@ -96,10 +87,7 @@ class FilterResourcesByTagsContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button" className="link no-border" id="shared-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.shared)}>
-                  <ShareSVG />
-                  <span><Trans>Shared tags</Trans></span>
-                </button>
+                <button type="button" className="link no-border" id="shared-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.shared)}><span><Trans>Shared tags</Trans></span></button>
               </div>
             </div>
           </div>

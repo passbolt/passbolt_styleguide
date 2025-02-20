@@ -109,7 +109,7 @@ export default class DisplayAccountRecoveryUserSettingsPage {
    * @returns {HTMLElement}
    */
   get reviewButton() {
-    return this.selector('.actions-wrapper button');
+    return this.selector('.account-recovery-profile .account-recovery-status button');
   }
 
   /**

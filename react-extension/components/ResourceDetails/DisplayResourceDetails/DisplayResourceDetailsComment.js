@@ -18,10 +18,8 @@ import AddResourceComment from "../../ResourceComment/AddResourceComment/AddReso
 import PropTypes from "prop-types";
 import DisplayResourceCommentList from "../../ResourceComment/DisplayResourceCommentList/DisplayResourceCommentList";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
-import ReplySVG from "../../../../img/svg/reply.svg";
-import CaretDownSVG from "../../../../img/svg/caret_down.svg";
-import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 class DisplayResourceDetailsComment extends React.Component {
   /**
@@ -132,49 +130,38 @@ class DisplayResourceDetailsComment extends React.Component {
   }
 
   /**
-   * Must show add delete button
-   * @returns {boolean}
-   */
-  get mustShowAddComment() {
-    return this.state.canAddByIcon && !this.state.canAdd;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     return (
-      <div className={`detailed-comments accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
+      <div className={`comments accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClickedEvent}>
-              <span className="accordion-title">
-                <Trans>Comments</Trans>
-              </span>
+              <Trans>Comments</Trans>
               {this.state.open &&
-                <CaretDownSVG/>
+              <Icon name="caret-down"/>
               }
               {!this.state.open &&
-                <CaretRightSVG/>
+              <Icon name="caret-right"/>
               }
             </button>
           </h4>
         </div>
-        {this.state.open &&
+        { this.state.open &&
           <div className="accordion-content">
-            {this.mustShowAddComment &&
-              <div className="add-comments">
-                <button
-                  type="button"
-                  className="section-action"
-                  onClick={this.handleRequestedAddEvent}>
-                  <ReplySVG/>
-                  <Trans>Add comment</Trans>
-                </button>
-              </div>
+            {this.state.canAddByIcon &&
+              <button
+                type="button"
+                className="section-action button-transparent"
+                onClick={this.handleRequestedAddEvent}>
+                <Icon name="plus-circle"/>
+                <span className="visuallyhidden"><Trans>Create</Trans></span>
+              </button>
             }
-            {this.state.canAdd &&
+
+            { this.state.canAdd &&
               <AddResourceComment
                 resource={this.resource}
                 onAdd={this.handleAddedEvent}

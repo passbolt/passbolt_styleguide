@@ -94,9 +94,9 @@ class PasswordComplexityWithGoal extends React.PureComponent {
    * @returns {JSX}
    */
   get currentEntropyTooltipMessage() {
-    const currentEntropy = this.formatEntropy(this.props.entropy);
-    const targettedEntropy = this.formatEntropy(this.props.targetEntropy);
-    return <Trans>Entropy: {{currentEntropy}} / {{targettedEntropy}} bits</Trans>;
+    return (<>
+      <Trans>Entropy: {this.formatEntropy(this.props.entropy)} / {this.formatEntropy(this.props.targetEntropy)} bits</Trans>
+    </>);
   }
 
   /**

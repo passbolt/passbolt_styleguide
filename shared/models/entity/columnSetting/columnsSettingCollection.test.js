@@ -57,28 +57,4 @@ describe("ColumnsSetting Collection", () => {
       expect(collection.items[0].id).toEqual("idB");
     });
   });
-
-  describe("ColumnsSetting:deepMerge", () => {
-    it("should merge and add unique column", () => {
-      expect.assertions(2);
-      const collectionDtoDefault = [defaultColumnSettingData(), defaultColumnSettingData({id: "idB"})];
-      const collectionDto = [defaultColumnSettingData({label: "labelD"}), defaultColumnSettingData({id: "idC"})];
-      const collection = new ColumnsSettingCollection(collectionDtoDefault);
-      const collectionResult = collection.deepMerge(new ColumnsSettingCollection(collectionDto));
-      collection.removeById("id");
-      expect(collectionResult.length).toEqual(3);
-      expect(collectionResult.items[0].label).toEqual("labelD");
-    });
-
-    it("should merge and ignore unique column", () => {
-      expect.assertions(2);
-      const collectionDtoDefault = [defaultColumnSettingData(), defaultColumnSettingData({id: "idB"})];
-      const collectionDto = [defaultColumnSettingData({label: "labelD"}), defaultColumnSettingData({id: "idC"})];
-      const collection = new ColumnsSettingCollection(collectionDtoDefault);
-      const collectionResult = collection.deepMerge(new ColumnsSettingCollection(collectionDto), {keepUnknownValue: false});
-      collection.removeById("id");
-      expect(collectionResult.length).toEqual(2);
-      expect(collectionResult.items[0].label).toEqual("labelD");
-    });
-  });
 });

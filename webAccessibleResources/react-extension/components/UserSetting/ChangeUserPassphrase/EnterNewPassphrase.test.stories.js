@@ -13,45 +13,25 @@
  */
 
 import React from "react";
+import {MemoryRouter, Route} from "react-router-dom";
 import {defaultProps} from "./EnterNewPassphrase.test.data";
 import EnterNewPassphrase from "./EnterNewPassphrase";
-import EnterNewPassphraseHelp from "./EnterNewPassphraseHelp";
 
 export default {
   title: 'Components/UserSetting/EnterNewPassphrase',
-  component: EnterNewPassphrase,
-  decorators: [(Story, {args}) =>
-    <div id="container" className="page settings">
-      <div id="app" className="app" tabIndex="1000" style={{margin: "-1rem"}}>
-        <div className="panel main">
-          <div className="panel left">
-            <div className="sidebar-content">
-            </div>
-          </div>
-          <div className="panel middle">
-            <div className="header">
-            </div>
-            <div className="middle-right">
-              <div className="breadcrumbs-and-grid">
-                <div className="top-bar">
-                </div>
-                <div className="main-page">
-                  <Story {...args}/>
-                </div>
-              </div>
-              <div className="help-panel">
-                <div className="sidebar-help">
-                  <EnterNewPassphraseHelp {...args}/>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  ],
+  component: EnterNewPassphrase
 };
 
-export const Initial = {
-  args: defaultProps()
-};
+const Template = args =>
+  <MemoryRouter initialEntries={['/']}>
+    <div className="page">
+      <div className="panel">
+        <Route component={routerProps => <EnterNewPassphrase {...args} {...routerProps}/>}></Route>
+      </div>
+    </div>
+  </MemoryRouter>;
+
+export const Initial = Template.bind({});
+Initial.args = defaultProps();
+
+

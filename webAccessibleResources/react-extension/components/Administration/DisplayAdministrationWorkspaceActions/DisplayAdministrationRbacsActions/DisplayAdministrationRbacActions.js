@@ -15,6 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
+import Icon from "../../../../../shared/components/Icons/Icon";
 import {withActionFeedback} from "../../../../contexts/ActionFeedbackContext";
 import {withAdminRbac} from "../../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
 
@@ -77,10 +78,17 @@ class DisplayAdministrationRbacActions extends React.Component {
    */
   render() {
     return (
-      <div className="actions-wrapper">
-        <button className="button primary" type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
-          <span><Trans>Save</Trans></span>
-        </button>
+      <div className="col2_3 actions-wrapper">
+        <div className="actions">
+          <ul>
+            <li>
+              <button type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
+                <Icon name="save"/>
+                <span><Trans>Save settings</Trans></span>
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     );
   }

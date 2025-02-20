@@ -43,4 +43,11 @@ describe("Display User Details", () => {
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith("http://localhost/app/groups/view/516c2db6-0aed-52d8-854f-b3f3499995e7");
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
   });
+
+
+  it('As LU I should close the details area', async() => {
+    jest.spyOn(props.userWorkspaceContext, "onDetailsLocked").mockImplementationOnce(() => {});
+    await page.close();
+    expect(props.userWorkspaceContext.onDetailsLocked).toHaveBeenCalled();
+  });
 });

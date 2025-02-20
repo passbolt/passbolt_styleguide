@@ -13,7 +13,9 @@
  */
 import PropTypes from "prop-types";
 import React from "react";
+import ReactList from "react-list";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withRouter} from "react-router-dom";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
@@ -21,29 +23,9 @@ import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/Use
 import DisplayUsersContextualMenu from "../DisplayUsersContextualMenu/DisplayUsersContextualMenu";
 import {Trans, withTranslation} from "react-i18next";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {isUserSuspended} from "../../../../shared/utils/userUtils";
-import ColumnCheckboxModel from "../../../../shared/models/column/ColumnCheckboxModel";
-import CellCheckbox from "../../../../shared/components/Table/CellChecbox";
-import CellHeaderCheckbox from "../../../../shared/components/Table/CellHeaderCheckbox";
-import CellHeaderDefault from "../../../../shared/components/Table/CellHeaderDefault";
-import ColumnModifiedModel from "../../../../shared/models/column/ColumnModifiedModel";
-import CellDate from "../../../../shared/components/Table/CellDate";
-import GridTable from "../../../../shared/components/Table/GridTable";
-import CellUserProfile from "../../../../shared/components/Table/CellUserProfile";
-import ColumnUserUsernameModel from "../../../../shared/models/column/ColumnUserUsernameModel";
-import CellUserRole from "../../../../shared/components/Table/CellUserRole";
-import ColumnUserRoleModel from "../../../../shared/models/column/ColumnUserRoleModel";
-import ColumnUserProfileModel from "../../../../shared/models/column/ColumnUserProfileModel";
-import ColumnUserSuspendedModel from "../../../../shared/models/column/ColumnUserSuspendedModel";
-import ColumnUserLastLoggedInModel from "../../../../shared/models/column/ColumnUserLastLoggedInModel";
-import ColumnUserMfaModel from "../../../../shared/models/column/ColumnUserMfaModel";
-import CellUserSuspended from "../../../../shared/components/Table/CellUserSuspended";
-import CellUserMfa from "../../../../shared/components/Table/CellUserMfa";
-import ColumnUserAccountRecoveryModel from "../../../../shared/models/column/ColumnUserAccountRecoveryModel";
-import CellUserAccountRecovery from "../../../../shared/components/Table/CellUserAccountRecovery";
-import ColumnsUserSettingCollection from "../../../../shared/models/entity/user/columnsUserSettingCollection";
-import ColumnModel from "../../../../shared/models/column/ColumnModel";
-import CircleOffSVG from "../../../../img/svg/circle_off.svg";
+
 
 /**
  * This component allows to display the filtered users into a grid
@@ -55,8 +37,6 @@ class DisplayUsers extends React.Component {
    */
   constructor(props) {
     super(props);
-    // The grid columns
-    this.defaultColumns = [];
     this.state = this.getDefaultState();
     this.initEventHandlers();
     this.createRefs();
@@ -66,9 +46,7 @@ class DisplayUsers extends React.Component {
    * Returns the component default state
    */
   getDefaultState() {
-    return {
-      columns: [], // The current list of columns to display.
-    };
+    return {};
   }
 
   /**
@@ -79,7 +57,6 @@ class DisplayUsers extends React.Component {
     this.handleUserRightClick = this.handleUserRightClick.bind(this);
     this.handleCheckboxWrapperClick = this.handleCheckboxWrapperClick.bind(this);
     this.handleSortByColumnClick = this.handleSortByColumnClick.bind(this);
-    this.isRowInactive = this.isRowInactive.bind(this);
   }
 
   /**
@@ -87,6 +64,7 @@ class DisplayUsers extends React.Component {
    */
   createRefs() {
     this.listRef = React.createRef();
+    this.dragFeedbackElement = React.createRef();
   }
 
   /**
@@ -96,8 +74,6 @@ class DisplayUsers extends React.Component {
    */
   componentDidMount() {
     this.props.accountRecoveryContext.loadAccountRecoveryPolicy();
-    this.initColumns();
-    this.mergeAndSortColumns();
   }
 
   /**
@@ -105,40 +81,6 @@ class DisplayUsers extends React.Component {
    */
   componentDidUpdate() {
     this.handleUserScroll();
-  }
-
-  /**
-   * Init the grid columns.
-   */
-  initColumns() {
-    this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {disabled: true}}}));
-    this.defaultColumns.push(new ColumnUserProfileModel({cellRenderer: {component: CellUserProfile, props: {hasAttentionRequiredFeature: this.hasAttentionRequiredColumn}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
-    this.defaultColumns.push(new ColumnUserUsernameModel({headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Username")}}}));
-    this.defaultColumns.push(new ColumnUserRoleModel({cellRenderer: {component: CellUserRole}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Role")}}}));
-    if (this.hasSuspendedColumn) {
-      this.defaultColumns.push(new ColumnUserSuspendedModel({cellRenderer: {component: CellUserSuspended}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Suspended")}}}));
-    }
-    this.defaultColumns.push(new ColumnModifiedModel({cellRenderer: {component: CellDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Modified")}}}));
-    this.defaultColumns.push(new ColumnUserLastLoggedInModel({cellRenderer: {component: CellDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Last logged in")}}}));
-    if (this.hasMfaColumn) {
-      this.defaultColumns.push(new ColumnUserMfaModel({cellRenderer: {component: CellUserMfa}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("MFA")}}}));
-    }
-    if (this.hasAccountRecoveryColumn) {
-      this.defaultColumns.push(new ColumnUserAccountRecoveryModel({cellRenderer: {component: CellUserAccountRecovery}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Account recovery")}}}));
-    }
-  }
-
-  /**
-   * Merge and sort columns
-   */
-  mergeAndSortColumns() {
-    // Get the column with id as a key from the column to merge
-    const columnsUserSetting = this.columnsUserSetting.toHashTable();
-    // Merge the column values
-    const columns = this.defaultColumns.map(column => Object.assign(new ColumnModel(column), columnsUserSetting[column.id]));
-    // Sort the position of the column, the column with no position will be at the beginning
-    columns.sort((columnA, columnB) => (columnA.position || 0) < (columnB.position || 0) ? -1 : 1);
-    this.setState({columns});
   }
 
   /**
@@ -192,9 +134,10 @@ class DisplayUsers extends React.Component {
 
   /**
    * Handle the user sorter change
+   * @param event A DOM event
    * @param sortProperty The user property to sort on
    */
-  async handleSortByColumnClick(sortProperty) {
+  async handleSortByColumnClick(event, sortProperty) {
     this.props.userWorkspaceContext.onSorterChanged(sortProperty);
   }
 
@@ -213,11 +156,11 @@ class DisplayUsers extends React.Component {
   }
 
   /**
-   * get columns user setting
-   * @return {ColumnsSettingCollection}
+   * Returns true if the given user is selected
+   * @param user A user
    */
-  get columnsUserSetting() {
-    return ColumnsUserSettingCollection.DEFAULT;
+  isUserSelected(user) {
+    return this.props.userWorkspaceContext.selectedUsers.some(selectedUser => user.id === selectedUser.id);
   }
 
   /**
@@ -268,6 +211,27 @@ class DisplayUsers extends React.Component {
   }
 
   /**
+   * Render the users table
+   * @param items Items to display
+   * @param ref The table element reference
+   * @returns {JSX.Element}
+   */
+  renderTable(items, ref) {
+    const tableStyle = {
+      MozUserSelect: "none",
+      WebkitUserSelect: "none",
+      msUserSelect: "none"
+    };
+    return (
+      <table style={tableStyle}>
+        <tbody ref={ref}>
+          {items}
+        </tbody>
+      </table>
+    );
+  }
+
+  /**
    * Check if the grid is sorted for a given column
    * @param column The column name
    */
@@ -287,7 +251,7 @@ class DisplayUsers extends React.Component {
    * Check if the logged in user is admin
    * @return {boolean}
    */
-  get isLoggedInUserAdmin() {
+  isLoggedInUserAdmin() {
     return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
   }
 
@@ -295,61 +259,118 @@ class DisplayUsers extends React.Component {
    * Returns true if the accountRecovery feature is enabled and if the logged in user is an admin.
    * @returns {boolean}
    */
-  get hasAttentionRequiredColumn() {
-    return this.props.context.siteSettings.canIUse("accountRecovery") && this.isLoggedInUserAdmin;
+  hasAttentionRequiredColumn() {
+    return this.props.context.siteSettings.canIUse("accountRecovery") && this.isLoggedInUserAdmin();
   }
 
   /**
    * Returns true if the mfa feature is enabled and if the logged in user is an admin.
    * @returns {boolean}
    */
-  get hasMfaColumn() {
-    return this.props.context.siteSettings.canIUse("multiFactorAuthentication") && this.isLoggedInUserAdmin;
+  hasMfaColumn() {
+    return this.props.context.siteSettings.canIUse("multiFactorAuthentication") && this.isLoggedInUserAdmin();
   }
 
   /**
    * Returns true if the suspended user feature is enabled.
    * @returns {boolean}
    */
-  get hasSuspendedColumn() {
-    return this.props.context.siteSettings.canIUse('disableUser') && this.isLoggedInUserAdmin;
+  hasSuspendedColumn() {
+    return this.props.context.siteSettings.canIUse('disableUser') && this.isLoggedInUserAdmin();
   }
 
   /**
    * Returns true if the accountRecovery feature is enabled and if the logged in user is an admin.
    * @returns {boolean}
    */
-  get hasAccountRecoveryColumn() {
+  hasAccountRecoveryColumn() {
     return this.props.context.siteSettings.canIUse("accountRecovery")
-      && this.isLoggedInUserAdmin
+      && this.isLoggedInUserAdmin()
       && this.props.accountRecoveryContext.isPolicyEnabled();
   }
 
-  /**
-   * Get selected users ids
-   * @return {*}
-   */
-  get selectedUsersIds() {
-    const getIds = user => user.id;
-    return this.selectedUsers.map(getIds);
-  }
+  renderItem(index, key) {
+    const user = this.users[index];
+    const isSelected = this.isUserSelected(user);
+    const isSuspended = this.hasSuspendedColumn() && isUserSuspended(user);
+    const modifiedFormatted = formatDateTimeAgo(user.modified, this.props.t, this.props.context.locale);
+    const lastLoggedInFormatted = user.last_logged_in ? formatDateTimeAgo(user.last_logged_in, this.props.t, this.props.context.locale) : "";
+    const roleName = this.props.userWorkspaceContext.getTranslatedRoleName(user.role_id);
+    const mfa = user.is_mfa_enabled ? this.translate("Enabled") : this.translate("Disabled");
+    const rowClassName = `${isSelected ? "selected" : ""} ${user.active ? "" : "inactive"} ${isSuspended ? "suspended" : ""}`;
+    const hasUserAttentionRequired = Boolean(user.pending_account_recovery_request);
 
-  /**
-   * Is row inactive
-   * @param user
-   * @returns {boolean}
-   */
-  isRowInactive(user) {
-    return !user.active || (this.hasSuspendedColumn && isUserSuspended(user));
-  }
-
-  /**
-   * Get the columns to display
-   * @return {[]}
-   */
-  get columnsFiltered() {
-    const filteredByColumnToDisplay = column => column.id === 'checkbox' || column.show;
-    return this.state.columns.filter(filteredByColumnToDisplay);
+    return (
+      <tr
+        id={`user_${user.id}`} key={key}
+        className={rowClassName}
+        onClick={event => this.handleUserSelected(event, user)}
+        onContextMenu={event => this.handleUserRightClick(event, user)}>
+        <td className="cell-checkbox selections s-cell">
+          <div className="input checkbox">
+            <input type="checkbox" id={`checkbox_multiple_select_checkbox_${user.id}`} checked={isSelected} readOnly={true} onClick={ev => this.handleCheckboxWrapperClick(ev, user)}/>
+            <span className="visually-hidden"><Trans>Select user</Trans></span>
+          </div>
+        </td>
+        {this.hasAttentionRequiredColumn() &&
+          <td className="s-cell attention-required">
+            {hasUserAttentionRequired &&
+            <Icon name="exclamation" baseline={true}/>
+            }
+          </td>
+        }
+        <td className="cell-name l-cell">
+          <div title={`${user.profile.first_name} ${user.profile.last_name}`}>
+            {`${user.profile.first_name} ${user.profile.last_name}`}
+          </div>
+        </td>
+        <td className="cell-username l-cell username">
+          <div title={user.username}>
+            {user.username}
+          </div>
+        </td>
+        <td className="cell-role m-cell role">
+          <div title={roleName}>
+            {roleName}
+          </div>
+        </td>
+        {this.hasSuspendedColumn() &&
+          <td className="cell-role m-cell suspended">
+            <div>
+              {isSuspended ? this.translate("Yes") : this.translate("No")}
+            </div>
+          </td>
+        }
+        <td className="cell-modified m-cell">
+          <div title={user.modified}>
+            {modifiedFormatted}
+          </div>
+        </td>
+        <td className="cell-last_logged_in m-cell">
+          <div title={user.last_logged_in}>
+            {lastLoggedInFormatted}
+          </div>
+        </td>
+        {this.hasMfaColumn() &&
+        <td className="cell-is_mfa_enabled m-cell">
+          <div>
+            {mfa}
+          </div>
+        </td>
+        }
+        {this.hasAccountRecoveryColumn() &&
+        <td className="cell-is_account_recovery_enabled m-cell">
+          <div>
+            {{
+              "approved": <Trans>Approved</Trans>,
+              "rejected": <Trans>Rejected</Trans>,
+              [undefined]: <Trans>Pending</Trans>,
+            }[user?.account_recovery_user_setting?.status]}
+          </div>
+        </td>
+        }
+      </tr>
+    );
   }
 
   /**
@@ -367,53 +388,216 @@ class DisplayUsers extends React.Component {
     const isReady = this.users !== null;
     const isEmpty = isReady && this.users.length === 0;
     const filterType = this.props.userWorkspaceContext.filter.type;
-    const isGridReady = isReady && this.users.length !== 0 && this.columnsFiltered.length !== 0;
 
     return (
-      <>
+      <div className={`tableview ready ${isEmpty ? "empty" : ""}`}>
         {!isReady &&
-          <div className="tableview empty">
-            <div className="empty-content">
+        <div className="empty-content">
+        </div>
+        }
+        {isReady &&
+        <React.Fragment>
+          {isEmpty &&
+           filterType === UserWorkspaceFilterTypes.TEXT &&
+          <div className="empty-content">
+            <h2><Trans>None of the users matched this search.</Trans></h2>
+            <p className="try-another-search"><Trans>Try another search or use the left panel to navigate into your organization.</Trans></p>
+          </div>
+          }
+          {!isEmpty &&
+          <React.Fragment>
+            <div className="tableview-header">
+              <table>
+                <thead>
+                  <tr>
+                    <th className="cell-checkbox selections s-cell">
+                      <div className="input checkbox">
+                        <input type="checkbox" name="select all" checked={false} readOnly={true}/>
+                        <span className="visually-hidden"><Trans>Select all</Trans></span>
+                      </div>
+                    </th>
+                    {this.hasAttentionRequiredColumn() &&
+                    <th className="s-cell attention-required">
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "attentionRequired")}>
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Icon name="exclamation" baseline={true}/>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("attentionRequired") && this.isSortedAsc() &&
+                            <Icon name="ascending"/>
+                            }
+                            {this.isSortedColumn("attentionRequired") && !this.isSortedAsc() &&
+                            <Icon  name="descending"/>
+                            }
+                          </span>
+                        </div>
+                      </button>
+                    </th>
+                    }
+                    <th className="cell-name l-cell sortable">
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "name")}>
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>Name</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("name") && this.isSortedAsc() &&
+                            <Icon name="ascending"/>
+                            }
+                            {this.isSortedColumn("name") && !this.isSortedAsc() &&
+                            <Icon name="descending"/>
+                            }
+                          </span>
+                        </div>
+                      </button>
+                    </th>
+                    <th className="cell-username l-cell username sortable">
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "username")}>
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>Username</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("username") && this.isSortedAsc() &&
+                            <Icon name="ascending"/>
+                            }
+                            {this.isSortedColumn("username") && !this.isSortedAsc() &&
+                            <Icon name="descending"/>
+                            }
+                          </span>
+                        </div>
+                      </button>
+                    </th>
+                    <th className="cell-role m-cell role sortable">
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "role.name")}>
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>Role</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("role.name") && this.isSortedAsc() &&
+                            <Icon name="ascending"/>
+                            }
+                            {this.isSortedColumn("role.name") && !this.isSortedAsc() &&
+                            <Icon name="descending"/>
+                            }
+                          </span>
+                        </div>
+                      </button>
+                    </th>
+                    {this.hasSuspendedColumn() &&
+                      <th className="cell-role m-cell suspended">
+                        <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "disabled")}>
+                          <div className="cell-header">
+                            <span className="cell-header-text">
+                              <Trans>Suspended</Trans>
+                            </span>
+                            <span className="cell-header-icon-sort">
+                              {this.isSortedColumn("disabled") && this.isSortedAsc() &&
+                              <Icon name="ascending"/>
+                              }
+                              {this.isSortedColumn("disabled") && !this.isSortedAsc() &&
+                              <Icon name="descending"/>
+                              }
+                            </span>
+                          </div>
+                        </button>
+                      </th>
+                    }
+                    <th className="cell-modified m-cell sortable">
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>Modified</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("modified") && this.isSortedAsc() &&
+                            <Icon name="ascending"/>
+                            }
+                            {this.isSortedColumn("modified") && !this.isSortedAsc() &&
+                            <Icon name="descending"/>
+                            }
+                          </span>
+                        </div>
+                      </button>
+                    </th>
+                    <th className="cell-last_logged_in m-cell sortable">
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "last_logged_in")}>
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>Last logged in</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("last_logged_in") && this.isSortedAsc() &&
+                            <Icon name="ascending"/>
+                            }
+                            {this.isSortedColumn("last_logged_in") && !this.isSortedAsc() &&
+                            <Icon name="descending"/>
+                            }
+                          </span>
+                        </div>
+                      </button>
+
+                    </th>
+                    {this.hasMfaColumn() &&
+                      <th className="cell-is_mfa_enabled m-cell sortable">
+                        <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "is_mfa_enabled")}>
+                          <div className="cell-header">
+                            <span className="cell-header-text">
+                              <Trans>MFA</Trans>
+                            </span>
+                            <span className="cell-header-icon-sort">
+                              {this.isSortedColumn("is_mfa_enabled") && this.isSortedAsc() &&
+                              <Icon name="ascending"/>
+                              }
+                              {this.isSortedColumn("is_mfa_enabled") && !this.isSortedAsc() &&
+                              <Icon  name="descending"/>
+                              }
+                            </span>
+                          </div>
+                        </button>
+                      </th>
+                    }
+                    {this.hasAccountRecoveryColumn() &&
+                    <th className="cell-account_recovery_user_setting_status m-cell sortable">
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "account_recovery_user_setting.status")}>
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>Account recovery</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("account_recovery_user_setting.status") && this.isSortedAsc() &&
+                              <Icon name="ascending"/>
+                            }
+                            {this.isSortedColumn("account_recovery_user_setting.status") && !this.isSortedAsc() &&
+                            <Icon name="descending"/>
+                            }
+                          </span>
+                        </div>
+                      </button>
+                    </th>
+                    }
+                  </tr>
+                </thead>
+              </table>
             </div>
-          </div>
+            <div className="tableview-content scroll">
+              <ReactList
+                itemRenderer={(index, key) => this.renderItem(index, key)}
+                itemsRenderer={(items, ref) => this.renderTable(items, ref)}
+                length={this.users.length}
+                pageSize={20}
+                minSize={20}
+                type="uniform"
+                ref={this.listRef}>
+              </ReactList>
+            </div>
+          </React.Fragment>
+          }
+        </React.Fragment>
         }
-        {isEmpty &&
-          <div className="tableview empty">
-            {filterType === UserWorkspaceFilterTypes.TEXT &&
-              <div className="empty-content">
-                <CircleOffSVG/>
-                <div className="message">
-                  <h1><Trans>None of the users matched this search.</Trans></h1>
-                  <p className="try-another-search"><Trans>Try another search or use the left panel to navigate into
-                    your organization.</Trans></p>
-                </div>
-              </div>
-            }
-            {filterType === UserWorkspaceFilterTypes.SUSPENDED_USER &&
-              <div className="empty-content">
-                <CircleOffSVG/>
-                <div className="message">
-                  <h1><Trans>There is no users.</Trans></h1>
-                  <p className="try-another-filter"><Trans>You could remove some filters.</Trans></p>
-                </div>
-              </div>
-            }
-          </div>
-        }
-        {isGridReady &&
-          <GridTable
-            columns={this.columnsFiltered}
-            rows={this.users}
-            sorter={this.props.userWorkspaceContext.sorter}
-            onSortChange={this.handleSortByColumnClick}
-            onRowClick={this.handleUserSelected}
-            onRowContextMenu={this.handleUserRightClick}
-            selectedRowsIds={this.selectedUsersIds}
-            isRowInactive={this.isRowInactive}
-            rowsRef={this.listRef}>
-          </GridTable>
-        }
-      </>
+      </div>
     );
   }
 }

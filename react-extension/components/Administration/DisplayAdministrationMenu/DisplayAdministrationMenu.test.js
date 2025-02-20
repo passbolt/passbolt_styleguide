@@ -415,4 +415,34 @@ describe("As AD I can see the administration menu", () => {
       expect(page.contentTypesMetadataKey).toBeNull();
     });
   });
+
+  describe("As a signed-in administrator on the administration workspace, I can see the Migrate Metadata option in the left-side bar", () => {
+    it('If the feature flag is true, the menu should be visible', async() => {
+      expect.assertions(4);
+      const props = defaultProps({
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      await page.gotoContentTypesMetadataKey();
+      expect(page.contentTypesMetadataKey).toBeTruthy();
+      expect(page.menuSelected).toBe('Migrate metadata');
+      expect(props.navigationContext.onGoToAdministrationContentTypesMetadataKeyRequested).toHaveBeenCalled();
+    });
+
+    it('If the feature flag is false, the menu should not be visible', async() => {
+      expect.assertions(2);
+      const props = defaultProps({
+        context: {
+          siteSettings: {
+            canIUse: feature => feature !== "metadata"
+          }
+        },
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      expect(page.contentTypesMetadataKey).toBeNull();
+    });
+  });
 });

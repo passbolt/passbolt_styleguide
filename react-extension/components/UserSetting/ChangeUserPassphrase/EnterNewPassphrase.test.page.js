@@ -136,14 +136,14 @@ export default class EnterNewPassphrasePage {
    * Returns the update button element
    */
   get updateButton() {
-    return this._page.container.querySelector('.actions-wrapper button[type=\"submit\"]');
+    return this._page.container.querySelector('.submit-wrapper button[type=\"submit\"]');
   }
 
   /**
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.actions-wrapper button[type=\"button\"]');
+    return this._page.container.querySelector('.submit-wrapper button[type=\"button\"]');
   }
 
   /**

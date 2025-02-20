@@ -158,6 +158,7 @@ class GoogleSsoProviderForm extends React.PureComponent {
             <Trans>The URL to provide to Google when registering the application.</Trans>
           </p>
         </div>
+        <hr/>
         <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>Application (client) ID</Trans></label>
           <input id="sso-google-client-id-input" type="text" className="fluid form-element" name="client_id" ref={this.clientIdInputRef}

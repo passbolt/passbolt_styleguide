@@ -18,17 +18,32 @@ import {
   defaultAccountRecoveryUserContext,
 } from "../../../contexts/AccountRecoveryUserContext.test.data";
 import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
-import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContext.test.data";
+
+/**
+ * Returns the default app context for the unit test
+ * @param appContext An existing app context
+ * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
+ */
+export function defaultContext(data = {}) {
+  const defaultData = defaultAppContext({
+    loggedInUser: {
+      role: {
+        name: 'admin'
+      }
+    }
+  });
+  return Object.assign(defaultData, data);
+}
+
 
 /**
  * Default props
  * @returns {any}
  */
-export function defaultProps(props) {
+export function defaultProps() {
   return {
-    context: defaultAppContext(),
     accountRecoveryContext: defaultAccountRecoveryUserContext(),
-    userWorkspaceContext: defaultUserWorkspaceContext({
+    userWorkspaceContext: {
       onUserScrolled: () => {},
       scrollTo: {
         user: {
@@ -182,8 +197,7 @@ export function defaultProps(props) {
         type: UserWorkspaceFilterTypes.ALL
       },
       getTranslatedRoleName: name => name,
-    }),
-    ...props
+    }
   };
 }
 
@@ -192,14 +206,14 @@ export function defaultProps(props) {
  * @returns {any}
  */
 export function propsWithNullUsers() {
-  return defaultProps({
-    userWorkspaceContext: defaultUserWorkspaceContext({
+  return {
+    userWorkspaceContext: {
       filteredUsers: null,
       filter: {
         type: UserWorkspaceFilterTypes.ALL
       }
-    })
-  });
+    }
+  };
 }
 
 /**
@@ -207,14 +221,14 @@ export function propsWithNullUsers() {
  * @returns {any}
  */
 export function propsWithNoUsersWithTextSearch() {
-  return defaultProps({
-    userWorkspaceContext: defaultUserWorkspaceContext({
+  return {
+    userWorkspaceContext: {
       filteredUsers: [],
       filter: {
         type: UserWorkspaceFilterTypes.TEXT
       }
-    })
-  });
+    }
+  };
 }
 
 /**

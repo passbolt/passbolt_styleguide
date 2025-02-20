@@ -8,44 +8,31 @@ import {
 
 export default {
   title: 'Components/Administration/DisplaySubscriptionKey',
-  component: DisplaySubscriptionKey,
-  decorators: [(Story, {args}) =>
-    <AdminSubscriptionContextProvider{...args}>
-      <div id="container" className="page administration">
-        <div id="app" className="app" tabIndex="1000">
-          <div className="panel main">
-            <div className="panel middle">
-              <div className="middle-right">
-                <div className="breadcrumbs-and-grid">
-                  <div className="main-page">
-                    <Story {...args}/>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+  component: DisplaySubscriptionKey
+};
+
+const Template = args =>
+  <AdminSubscriptionContextProvider{...args}>
+    <div className="panel middle">
+      <div className="grid grid-responsive-12">
+        <DisplaySubscriptionKey {...args}/>
       </div>
-    </AdminSubscriptionContextProvider>
-  ]
-};
+    </div>
+  </AdminSubscriptionContextProvider>
+;
 
-export const Initial = {
-  args: defaultProps()
-};
 
-export const SubscriptionGoingToExpire = {
-  args: goingToExpireProps()
-};
+export const Initial = Template.bind({});
+Initial.args = defaultProps();
 
-export const SubscriptionExpired = {
-  args: expiredProps()
-};
+export const SubscriptionGoingToExpire = Template.bind({});
+SubscriptionGoingToExpire.args = goingToExpireProps();
 
-export const SubscriptionUsersExceeded = {
-  args: usersExceededProps()
-};
+export const SubscriptionExpired = Template.bind({});
+SubscriptionExpired.args = expiredProps();
 
-export const NoSubscriptionKey = {
-  args: notFoundProps()
-};
+export const SubscriptionUsersExceeded = Template.bind({});
+SubscriptionUsersExceeded.args = usersExceededProps();
+
+export const NoSubscriptionKey = Template.bind({});
+NoSubscriptionKey.args = notFoundProps();

@@ -13,45 +13,26 @@
  */
 
 import React from "react";
+import {MemoryRouter, Route} from "react-router-dom";
 import {defaultProps} from "./DownloadRecoveryKit.test.data";
 import DownloadRecoveryKit from "./DownloadRecoveryKit";
-import DisplayChangePassphraseIntroductionHelp from "./DisplayChangePassphraseIntroductionHelp";
 
 export default {
   title: 'Components/UserSetting/DownloadRecoveryKit',
-  component: DownloadRecoveryKit,
-  decorators: [(Story, {args}) =>
-    <div id="container" className="page settings">
-      <div id="app" className="app" tabIndex="1000" style={{margin: "-1rem"}}>
-        <div className="panel main">
-          <div className="panel left">
-            <div className="sidebar-content">
-            </div>
-          </div>
-          <div className="panel middle">
-            <div className="header">
-            </div>
-            <div className="middle-right">
-              <div className="breadcrumbs-and-grid">
-                <div className="top-bar">
-                </div>
-                <div className="main-page">
-                  <Story {...args}/>
-                </div>
-              </div>
-              <div className="help-panel">
-                <div className="sidebar-help">
-                  <DisplayChangePassphraseIntroductionHelp/>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  ],
+  component: DownloadRecoveryKit
 };
 
-export const Initial = {
-  args: defaultProps(),
-};
+const Template = args =>
+  <MemoryRouter initialEntries={['/']}>
+    <div className="page">
+      <div className="panel">
+        <Route component={routerProps => <DownloadRecoveryKit {...args} {...routerProps}/>}></Route>
+      </div>
+    </div>
+  </MemoryRouter>;
+
+export const Initial = Template.bind({});
+Initial.args = defaultProps();
+
+
+

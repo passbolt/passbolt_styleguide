@@ -18,7 +18,6 @@ import canSuggestUrl from "./canSuggestUrl";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
-import SpinnerSVG from "../../../img/svg/spinner.svg";
 import {withRbac} from "../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
@@ -238,7 +237,7 @@ class HomePage extends React.Component {
               <ul className="list-items">
                 {!isReady &&
                   <li className="empty-entry">
-                    <SpinnerSVG/>
+                    <Icon name="spinner"/>
                     <p className="processing-text"><Trans>Retrieving your passwords</Trans></p>
                   </li>
                 }
@@ -274,7 +273,7 @@ class HomePage extends React.Component {
                 <React.Fragment>
                   {!isReady &&
                     <li className="empty-entry">
-                      <SpinnerSVG/>
+                      <Icon name="spinner"/>
                       <p className="processing-text"><Trans>Retrieving your passwords</Trans></p>
                     </li>
                   }

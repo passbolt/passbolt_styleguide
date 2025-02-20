@@ -1,18 +1,18 @@
 .usercard-col-2(@avatar-size) {
-    display: flex;
-    gap: 1.6rem;
-    padding: .8rem 1.6rem;
-    border-top: .1rem solid var(--Workspace-Dividers-lighter);
+    .clearfix();
+    margin: 0 0 1.2rem 0;
 
     &:last-of-type {
         margin-bottom: 0;
     }
 
     .content-wrapper {
-        overflow: hidden;
+        float: left;
         width: 100%;
 
         .content {
+            margin: 0 0 0 calc(@avatar-size + 1.6rem);
+
             .name {
                 .ellipsis();
 
@@ -23,48 +23,43 @@
             }
 
             .subinfo {
-                .ellipsis();
-                opacity: .5;
-                &.third-level {
-                    padding-top: .8rem;
-                }
-                color: var(--Text-and-icons-Secondary-text);
-                font-size: 1.2rem;
+                color: @default-text-color;
+                font-size: 0.929em; /* 13px */
+                margin-top: 0.4rem;
 
                 .dateTimeAgo {
-                    color: var(--Text-and-icons-Main-text);
+                    color: @default-text-color;
                 }
 
                 .chips-group {
                     float: right;
                     .chips {
-                        font-size: 1.2rem;
-                        color: var(--Status-and-role-pills-Status-pill-text);
+                        font-size: 1.4rem;
+                        color: @chips-user-status-text-color;
                         padding-top: 0.1rem;
                         padding-bottom: 0.1rem;
                         border-radius: 1.2rem;
                         margin-top: -0.1rem;
 
                         &.user-role {
-                            color: var(--Status-and-role-pills-Role-pill-user-text);
-                            background-color: var(--Status-and-role-pills-Role-pill-user-background);
+                            background-color: @chips-user-status-background;
 
                             &.admin {
-                                color: var(--Status-and-role-pills-Role-pill-admin-text);
-                                background-color: var(--Status-and-role-pills-Role-pill-admin-background);
+                                color: @chips-user-status-admin-text-color;
+                                background-color: @chips-user-status-admin-background;
                             }
                         }
 
                         &.active {
-                            background-color: var(--Status-and-role-pills-Status-pill-active-background);
+                            background-color: @message-success-background;
                         }
 
                         &.suspended {
-                            background-color: var(--Status-and-role-pills-Status-pill-suspended-background);
+                            background-color: @message-warning-background;
                         }
 
                         &.deleted {
-                            background-color: var(--Status-and-role-pills-Status-pill-deleted-background);
+                            background-color: @message-error-background;
                         }
 
                         & + .chips {
@@ -77,8 +72,10 @@
     }
 
     .avatar {
+        float: left;
         width: @avatar-size;
         height: @avatar-size;
+        margin-left: -100%;
 
         svg {
           width: @avatar-size;
@@ -92,37 +89,31 @@
     }
 
     ul.permissions-list {
-        display: flex;
-        flex-direction: column;
-        gap: .8rem;
-        padding-top: .8rem;
-        font-size: 1.4rem;
+        margin-top: 1em;
+        font-size: 0.8em;
 
         li {
-            display: flex;
-            gap: .8rem;
-            width: 100%;
-            align-items: center;
-
             .avatar {
                 margin-left: 0;
                 float: left;
-                width: 2.4rem;
-                height: 2.4rem;
+                width: (@avatar-size / 2);
+                height: (@avatar-size / 2);
                 align-items: center;
 
                 svg {
-                    width: 2.4rem;
-                    height: 2.4rem;
+                  width: (@avatar-size / 2);
+                  height: (@avatar-size / 2);
                 }
 
                 img {
-                    width: 2.4rem;
-                    height: 2.4rem;
+                    width: (@avatar-size / 2);
+                    height: (@avatar-size / 2);
                 }
             }
             .name {
-                width: 100%;
+                display: inline-block;
+                padding-left:7%;
+                line-height: (@avatar-size / 2);
                 &.crossed {
                     text-decoration: line-through;
                 }
@@ -130,20 +121,25 @@
                     font-weight: bold;
                 }
             }
-            .type {
+            .type{
+                float: right;
+                text-align: right;
+                line-height: (@avatar-size / 2);
+                color: @text-info-color;
                 span {
-                    font-size: 1.2rem;
-                    color: var(--Text-and-icons-Main-text-reversed);;
-                    padding: 0 .8rem .2rem;
-                    border-radius: var(--Button-border-radius);
+                    background-color: white;
+                    font-size: 0.8em;
+                    color: white;
+                    padding: 0.1em 0.5em;
+                    border-radius: 0.5em;
                     &.created {
-                        background: var(--Palette-Contrast-4);
+                        background-color: @usercard-created-background;
                     }
                     &.updated {
-                        background: var(--Palette-Contrast-1);
+                        background-color: @usercard-updated-background;
                     }
                     &.removed {
-                        background: var(--Palette-Contrast-3);
+                        background-color: @usercard-removed-background;
                     }
                 }
             }
@@ -157,28 +153,22 @@
     }
 }
 
-
 .usercard-col-2 {
-    .usercard-col-2(34px);
+    .usercard-col-2(42px);
 }
 
 .usercard-detailed-col-2 {
-    display: flex;
-    gap: 1.6rem;
-    flex-direction: row-reverse;
-    align-items: flex-start;
-
     .usercard-col-2(42px);
 
     // Animation used to show that an activity is new.
     @keyframes highlight {
-        from { background-color: var(--Palette-Select-highlight-2); }
+        from { background-color: @tableview-selected-background; }
         to { background-color: transparent; }
     }
 
     // Style to apply when an activity is new.
     &.highlight {
-        background-color: var(--Palette-Select-highlight-2);
+        background-color: @tableview-selected-background;
         animation-delay: 2s;
         animation-duration: 5s;
         animation-name: highlight;
@@ -187,14 +177,14 @@
 
     .content-wrapper .content {
         .name, .subinfo {
-          color: var(--Text-and-icons-Secondary-text);
+            color: @text-info-color;
         }
     }
 
     .content-wrapper .content .name {
         white-space: normal;
         .creator, .item {
-            color: var(--Text-and-icons-Main-text);
+            color: @default-text-color;
         }
     }
 }

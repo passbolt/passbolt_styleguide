@@ -85,7 +85,7 @@ export class FilterResourcesByFoldersItemPageObject {
    * Returns the folder item caret for the index one
    */
   itemCaret(index) {
-    return this._container.querySelectorAll('li.folder-item .row .main-cell-wrapper .main-cell button')[index - 1].querySelector('.toggle-folder');
+    return this._container.querySelectorAll('li.folder-item .row .main-cell-wrapper .main-cell button')[index - 1].querySelector('span svg');
   }
 
   /**

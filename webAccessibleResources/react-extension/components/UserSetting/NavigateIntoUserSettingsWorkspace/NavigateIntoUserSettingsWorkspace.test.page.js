@@ -46,7 +46,7 @@ export default class NavigateIntoUserSettingsWorkspacePage {
    * Returns true if the badge for attention required is display for account recovery
    */
   get attentionRequired() {
-    return this._page.container.querySelectorAll('.attention-required');
+    return this._page.container.querySelectorAll('.exclamation');
   }
 
   /**

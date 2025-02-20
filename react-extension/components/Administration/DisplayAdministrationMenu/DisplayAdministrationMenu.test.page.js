@@ -168,6 +168,14 @@ export default class DisplayAdministrationMenuPage {
   }
 
   /**
+   * Returns the Content Types Encrypted Metadata.
+   */
+  get migrateMetadata() {
+    return this._page.container.querySelector('#migrate_metadata_menu .row .main-cell-wrapper .main-cell button');
+  }
+
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -259,6 +267,11 @@ export default class DisplayAdministrationMenuPage {
 
   /** Click on the Content Types Metadata Key element */
   async gotoContentTypesMetadataKey() {
+    await this.click(this.contentTypesMetadataKey);
+  }
+
+  /** Click on the Content Types Metadata Key element */
+  async gotoMigrateMetadata() {
     await this.click(this.contentTypesMetadataKey);
   }
 }

@@ -12,6 +12,7 @@
  * @since         2.13.0
  */
 import React from "react";
+import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {
@@ -20,17 +21,22 @@ import {
   withResourceWorkspace
 } from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
+import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import HiddenPassword from "../../../../shared/components/Password/HiddenPassword";
+import {withProgress} from "../../../contexts/ProgressContext";
+import Totp from "../../../../shared/components/Totp/Totp";
+import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import {formatDateTimeAgo, formatExpirationDateTimeAgo} from "../../../../shared/utils/dateUtils";
-import AttentionSVG from "../../../../img/svg/attention.svg";
-import ShareFolderSVG from "../../../../img/svg/share_folder.svg";
-import FolderSVG from "../../../../img/svg/folder.svg";
-import CaretDownSVG from "../../../../img/svg/caret_down.svg";
-import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 class DisplayResourceDetailsInformation extends React.Component {
   /**
@@ -49,7 +55,9 @@ class DisplayResourceDetailsInformation extends React.Component {
    */
   getDefaultState() {
     return {
-      open: false,
+      open: true,
+      previewedSecret: null, // The type of previewed secret
+      plaintextSecretDto: null, // The current resource password decrypted
       creator: null, // the data of the resource creator
       modifier: null, // the data of the resource creator
     };
@@ -61,6 +69,12 @@ class DisplayResourceDetailsInformation extends React.Component {
   bindCallbacks() {
     this.handleFolderParentClickEvent = this.handleFolderParentClickEvent.bind(this);
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
+    this.handleUsernameClickEvent = this.handleUsernameClickEvent.bind(this);
+    this.handlePasswordClickEvent = this.handlePasswordClickEvent.bind(this);
+    this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
+    this.handleTotpClick = this.handleTotpClick.bind(this);
+    this.handlePreviewTotpButtonClick = this.handlePreviewTotpButtonClick.bind(this);
+    this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
     this.isFolderParentShared = this.isFolderParentShared.bind(this);
   }
 
@@ -167,20 +181,28 @@ class DisplayResourceDetailsInformation extends React.Component {
     this.setState({open});
 
     if (!open) {
-      this.setState({creator: null, modifier: null});
+      this.setState({creator: null, modifier: null, plaintextSecretDto: null, previewedSecret: null});
     } else {
       this.loadUserInformation();
     }
   }
 
   /**
+   * Handle when the user select the username of the resource
+   */
+  async handleUsernameClickEvent() {
+    await ClipBoard.copy(this.resource.metadata.username, this.props.context.port);
+    this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
+  }
+
+  /**
    * Get the folder name.
-   * @param {string} folderParentId The folder parent id
+   * @param {string} folderId The folder id
    * @returns {string}
    */
   getFolderName(folderParentId) {
     if (folderParentId === null) {
-      return this.translate("My workspace");
+      return this.translate("root");
     }
 
     if (this.props.context.folders) {
@@ -208,6 +230,260 @@ class DisplayResourceDetailsInformation extends React.Component {
     }
 
     return isShared;
+  }
+
+  /**
+   * Handle copy password click.
+   */
+  async handlePasswordClickEvent() {
+    await this.copyPasswordToClipboard();
+  }
+
+  /**
+   * Handle preview password button click.
+   */
+  async handleViewPasswordButtonClick() {
+    await this.togglePreviewPassword();
+  }
+
+  /**
+   * Copy the resource password to clipboard.
+   * @returns {Promise<void>}
+   */
+  async copyPasswordToClipboard() {
+    const resourceId = this.resource.id;
+    const isPasswordPreviewed = this.isPasswordPreviewed();
+    let plaintextSecretDto;
+
+    this.props.progressContext.open(this.props.t('Decrypting secret'));
+
+    if (isPasswordPreviewed) {
+      plaintextSecretDto = this.state.plaintextSecretDto;
+    } else {
+      try {
+        plaintextSecretDto = await this.decryptResourceSecret(resourceId);
+      } catch (error) {
+        if (error.name !== "UserAbortsOperationError") {
+          this.props.actionFeedbackContext.displayError(error.message);
+        }
+      }
+    }
+
+    this.props.progressContext.close();
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto?.password?.length) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The password is empty and cannot be copied to clipboard."));
+      return;
+    }
+
+    await ClipBoard.copy(plaintextSecretDto.password, this.props.context.port);
+    await this.props.resourceWorkspaceContext.onResourceCopied();
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
+  }
+
+  /**
+   * Toggle preview password
+   * @returns {Promise<void>}
+   */
+  async togglePreviewPassword() {
+    const isPasswordPreviewed = this.isPasswordPreviewed();
+    this.hidePreviewedSecret();
+    if (!isPasswordPreviewed) {
+      await this.previewPassword();
+      await this.props.resourceWorkspaceContext.onResourcePreviewed();
+    }
+  }
+
+  /**
+   * Hide the previewed resource secret.
+   */
+  hidePreviewedSecret() {
+    this.setState({plaintextSecretDto: null, previewedSecret: null});
+  }
+
+  /**
+   * Preview password
+   * @returns {Promise<void>}
+   */
+  async previewPassword() {
+    const resourceId = this.resource.id;
+    const previewedSecret = "password";
+    let plaintextSecretDto;
+
+    this.props.progressContext.open(this.props.t('Decrypting secret'));
+
+    try {
+      plaintextSecretDto = await this.decryptResourceSecret(resourceId);
+    } catch (error) {
+      if (error.name !== "UserAbortsOperationError") {
+        this.props.actionFeedbackContext.displayError(error.message);
+      }
+    }
+
+    this.props.progressContext.close();
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto?.password?.length) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The password is empty and cannot be previewed."));
+      return;
+    }
+
+    this.setState({plaintextSecretDto, previewedSecret});
+  }
+
+  /**
+   * Decrypt the resource secret
+   * @param {string} resourceId The target resource id
+   * @returns {Promise<object>} The plaintext secret DTO
+   * @throw UserAbortsOperationError If the user cancel the operation
+   */
+  decryptResourceSecret(resourceId) {
+    return this.props.context.port.request("passbolt.secret.find-by-resource-id", resourceId);
+  }
+
+  /**
+   * Handle copy totp
+   * @return {Promise<void>}
+   */
+  async handleTotpClick() {
+    let plaintextSecretDto, code;
+    const isTotpPreviewed = this.isTotpPreviewed();
+
+    if (isTotpPreviewed) {
+      plaintextSecretDto = this.state.plaintextSecretDto;
+    } else {
+      this.props.progressContext.open(this.props.t('Decrypting secret'));
+
+      try {
+        plaintextSecretDto = await this.decryptResourceSecret(this.resource.id);
+      } catch (error) {
+        if (error.name !== "UserAbortsOperationError") {
+          this.props.actionFeedbackContext.displayError(error.message);
+        }
+      }
+
+      this.props.progressContext.close();
+    }
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto.totp) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The TOTP is empty and cannot be copied to clipboard."));
+      return;
+    }
+
+    try {
+      code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
+    } catch (error) {
+      await this.props.actionFeedbackContext.displayError(this.translate("Unable to copy the TOTP"));
+      return;
+    }
+
+    await ClipBoard.copy(code, this.props.context.port);
+    await this.props.resourceWorkspaceContext.onResourceCopied();
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The TOTP has been copied to clipboard"));
+  }
+
+  /**
+   * Handle preview totp button click.
+   */
+  handlePreviewTotpButtonClick() {
+    const isTotpPreviewed = this.isTotpPreviewed();
+    this.hidePreviewedSecret();
+    if (!isTotpPreviewed) {
+      this.previewTotp();
+      this.props.resourceWorkspaceContext.onResourcePreviewed();
+    }
+  }
+
+  /**
+   * Preview totp
+   * @returns {Promise<void>}
+   */
+  async previewTotp() {
+    const resourceId = this.resource.id;
+    const previewedSecret = "totp";
+    let plaintextSecretDto;
+
+    this.props.progressContext.open(this.props.t("Decrypting secret"));
+
+    try {
+      plaintextSecretDto = await this.decryptResourceSecret(resourceId);
+    } catch (error) {
+      if (error.name !== "UserAbortsOperationError") {
+        this.props.actionFeedbackContext.displayError(error.message);
+      }
+    }
+
+    this.props.progressContext.close();
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto.totp) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The TOTP is empty and cannot be previewed."));
+      return;
+    }
+
+    this.setState({plaintextSecretDto, previewedSecret});
+  }
+
+  /**
+   * Check if the password is previewed
+   * @returns {boolean}
+   */
+  isPasswordPreviewed() {
+    return this.state.previewedSecret === 'password';
+  }
+
+  /**
+   * Check if the totp is previewed
+   * @returns {boolean}
+   */
+  isTotpPreviewed() {
+    return this.state.previewedSecret === 'totp';
+  }
+
+  /**
+   * Whenever the user wants to follow a resource uri.
+   */
+  handleGoToResourceUriClick() {
+    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.resource.metadata.uris[0]);
+  }
+
+  /**
+   * display a success notification message
+   * @param message
+   */
+  displaySuccessNotification(message) {
+    this.props.actionFeedbackContext.displaySuccess(message);
+  }
+
+  /**
+   * Is password resource
+   * @return {boolean}
+   */
+  isPasswordResources() {
+    // TODO: How to handle if resource type is not enabled or not loaded yet ?
+    return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasPassword();
+  }
+
+  /**
+   * Is TOTP resource
+   * @return {boolean}
+   */
+  isTotpResources() {
+    return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasTotp();
   }
 
   /**
@@ -257,69 +533,131 @@ class DisplayResourceDetailsInformation extends React.Component {
   render() {
     const canUseFolders = this.props.context.siteSettings.canIUse("folders")
       && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
+    const canPreviewSecret = this.props.context.siteSettings.canIUse("previewPassword")
+      && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
     const canUsePasswordExpiry = this.props.passwordExpiryContext.isFeatureEnabled();
+    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
 
     const creatorUsername = this.state.creator?.username || "";
     const modifierUsername = this.state.modifier?.username || "";
     const createdDateTimeAgo = formatDateTimeAgo(this.resource.created, this.props.t, this.props.context.locale);
     const modifiedDateTimeAgo = formatDateTimeAgo(this.resource.modified, this.props.t, this.props.context.locale);
+    const isPasswordPreviewed = this.isPasswordPreviewed();
+    const isTotpPreviewed = this.isTotpPreviewed();
 
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
-              <span className="accordion-title">
+              <span>
                 <Trans>Information</Trans>
-                {canUsePasswordExpiry && this.isAttentionRequired && <AttentionSVG className="attention-required"/>}
+                {canUsePasswordExpiry && this.isAttentionRequired && <Icon name="exclamation" baseline={true}/>}
               </span>
-              {this.state.open
-                ? <CaretDownSVG/>
-                : <CaretRightSVG/>
+              {this.state.open &&
+              <Icon name="caret-down"/>
+              }
+              {!this.state.open &&
+              <Icon name="caret-right"/>
               }
             </button>
           </h4>
         </div>
-        {this.state.open &&
-          <div className="accordion-content">
-            <div className="information-label">
-              <span className="created label"><Trans>Created</Trans></span>
-              <span className="created-by label"><Trans>Created by</Trans></span>
-              <span className="modified label"><Trans>Modified</Trans></span>
-              <span className="modified-by label"><Trans>Modified by</Trans></span>
-              {canUseFolders &&
-                <span className="location label"><Trans>Location</Trans></span>
-              }
-              {canUsePasswordExpiry &&
-                <div className="expiry label label-with-icon">
-                  <span className="ellipsis">
-                    <Trans>Expiry</Trans>
-                  </span>
-                  {this.isAttentionRequiredOnExpiryDate &&
-                    <AttentionSVG className="attention-required"/>
+        <ul className="accordion-content">
+          {this.isPasswordResources() &&
+            <>
+              <li className="username">
+                <span className="label"><Trans>Username</Trans></span>
+                <span className="value"><button type="button" className="link no-border" onClick={this.handleUsernameClickEvent}><span>{this.resource.metadata.username}</span></button></span>
+              </li>
+              <li className="password">
+                <span className="label"><Trans>Password</Trans></span>
+                <div className="value">
+                  <div className={`secret secret-password ${isPasswordPreviewed ? "" : "secret-copy"}`}
+                    title={isPasswordPreviewed ? this.state.plaintextSecretDto?.password : "secret"}>
+                    <HiddenPassword
+                      canClick={canCopySecret}
+                      preview={this.state.plaintextSecretDto?.password}
+                      onClick={this.handlePasswordClickEvent} />
+                  </div>
+                  {canPreviewSecret &&
+                    <button type="button" onClick={this.handleViewPasswordButtonClick}
+                      className="password-view button-transparent">
+                      <Icon name={isPasswordPreviewed ? 'eye-close' : 'eye-open'}/>
+                      <span className="visually-hidden"><Trans>View</Trans></span>
+                    </button>
                   }
                 </div>
-              }
-            </div>
-            <div className="information-value">
-              <span className="created value" title={this.resource.created}>{createdDateTimeAgo}</span>
-              <span className="created-by value">{creatorUsername}</span>
-              <span className="modified value" title={this.resource.modified}>{modifiedDateTimeAgo}</span>
-              <span className="modified-by value">{modifierUsername}</span>
-              {canUseFolders &&
-                <span className="location value">
-                  <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="no-border folder-link">
-                    {this.isFolderParentShared() ? <ShareFolderSVG/> : <FolderSVG/>}
-                    <span>{this.getFolderName(this.resource.folder_parent_id)}</span>
+              </li>
+            </>
+          }
+          {this.isTotpResources() &&
+            <li className="totp">
+              <span className="label"><Trans>TOTP</Trans></span>
+              <div className="value">
+                <div className={`secret secret-totp ${isTotpPreviewed ? "" : "secret-copy"}`}>
+                  {isTotpPreviewed &&
+                    <Totp
+                      totp={this.state.plaintextSecretDto?.totp}
+                      canClick={canCopySecret}
+                      onClick={this.handleTotpClick}/>
+                  }
+                  {!isTotpPreviewed &&
+                    <button type="button" className="link no-border" onClick={this.handleTotpClick} disabled={!canCopySecret}>
+                      <span>Copy TOTP to clipboard</span>
+                    </button>
+                  }
+                </div>
+                {canPreviewSecret &&
+                  <button type="button" onClick={this.handlePreviewTotpButtonClick} className="totp-view button-transparent">
+                    <Icon name={isTotpPreviewed ? 'eye-close' : 'eye-open'}/>
                   </button>
-                </span>
-              }
-              {canUsePasswordExpiry &&
-                <span className="expiry value">{this.resourceExpirationStatus}</span>
-              }
-            </div>
-          </div>
-        }
+                }
+              </div>
+            </li>
+          }
+          <li className="uri">
+            <span className="label"><Trans>URI</Trans></span>
+            <span className="value">
+              {this.safeUri && <button type="button" className="link no-border" onClick={this.handleGoToResourceUriClick}><span>{this.resource.metadata.uris?.[0]}</span></button>}
+              {!this.safeUri && <span>{this.resource.metadata.uris?.[0]}</span>}
+            </span>
+          </li>
+          <li className="modified">
+            <span className="label"><Trans>Modified</Trans></span>
+            <span className="value" title={this.resource.modified}>{modifiedDateTimeAgo}</span>
+          </li>
+          <li className="modified-by">
+            <span className="label"><Trans>Modified by</Trans></span>
+            <span className="value">{modifierUsername}</span>
+          </li>
+          <li className="modified">
+            <span className="label"><Trans>Created</Trans></span>
+            <span className="value" title={this.resource.created}>{createdDateTimeAgo}</span>
+          </li>
+          <li className="modified-by">
+            <span className="label"><Trans>Created by</Trans></span>
+            <span className="value">{creatorUsername}</span>
+          </li>
+          {canUseFolders &&
+          <li className="location">
+            <span className="label"><Trans>Location</Trans></span>
+            <span className="value">
+              <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="link no-border folder-link">
+                { this.isFolderParentShared() ? <Icon name="folder-shared"/> : <Icon name="folder"/>}
+                <span>{this.getFolderName(this.resource.folder_parent_id)}</span>
+              </button>
+            </span>
+          </li>
+          }
+          {canUsePasswordExpiry &&
+            <li className="expiry">
+              <span className="label"><Trans>Expiry</Trans> {this.isAttentionRequiredOnExpiryDate && <Icon name="exclamation" baseline={true}/>}
+              </span>
+              <span className="value" title={this.resource.expired}>{this.resourceExpirationStatus}</span>
+            </li>
+          }
+        </ul>
       </div>
     );
   }
@@ -332,8 +670,11 @@ DisplayResourceDetailsInformation.propTypes = {
   onSelectRoot: PropTypes.func,
   history: PropTypes.object,
   resourceWorkspaceContext: PropTypes.object,
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  progressContext: PropTypes.any, // The progress context
   passwordExpiryContext: PropTypes.object, // the passowrd expiry context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withResourceWorkspace(withPasswordExpiry(withTranslation('common')(DisplayResourceDetailsInformation))))));
+export default withAppContext(withRbac(withRouter(withActionFeedback(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withProgress(withTranslation('common')(DisplayResourceDetailsInformation)))))))));

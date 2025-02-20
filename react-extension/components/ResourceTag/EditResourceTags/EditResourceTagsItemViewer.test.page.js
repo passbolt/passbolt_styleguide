@@ -50,7 +50,7 @@ export default class EditResourceTagsItemViewerPageObject {
    * Returns true
    */
   isEmpty() {
-    return this.emptyMessage !== null && this.emptyMessage.innerHTML === 'There is no tag.';
+    return this.emptyMessage !== null && this.emptyMessage.innerHTML === 'There is no tag, click here to add one';
   }
 
   /**
@@ -65,6 +65,6 @@ export default class EditResourceTagsItemViewerPageObject {
    * @param index The display rank of name's tag
    */
   name(index) {
-    return this._container.querySelectorAll('.tag-list-item')[index - 1].querySelector('.tag').textContent;
+    return this._container.querySelectorAll('.tag-list-item')[index - 1].querySelector('.tag.ellipsis').textContent;
   }
 }

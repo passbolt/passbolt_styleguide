@@ -37,7 +37,6 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
           <AdministrationPasswordExpiryContextProvider {...props}>
             <DisplayAdministrationPasswordExpiryActions {...props}/>
             <DisplayAdministrationPasswordExpiry {...props}/>
-            <div id="administration-help-panel"></div>
           </AdministrationPasswordExpiryContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>
@@ -82,7 +81,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get helpPageLink() {
-    return this.select('#administration-help-panel a.button');
+    return this.select('.sidebar-help a.button');
   }
 
   /**
@@ -98,7 +97,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {HTMLElement}
    */
   get saveSettingsButton() {
-    return this.select("#save-settings");
+    return this.select(".actions #save-settings");
   }
 
   /**

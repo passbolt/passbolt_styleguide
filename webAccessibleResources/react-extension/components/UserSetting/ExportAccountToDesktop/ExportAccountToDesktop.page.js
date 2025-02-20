@@ -17,7 +17,6 @@ import {render, fireEvent, waitFor} from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import ExportAccountToDesktop from "./ExportAccountToDesktop";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import ExportAccountToDesktopHelp from "./ExportAccountToDesktopHelp";
 
 /**
  * The ExportAccountToDesktop component represented as a page
@@ -33,7 +32,6 @@ export default class ExportAccountToDesktopPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <ExportAccountToDesktop {...props}/>
-          <ExportAccountToDesktopHelp/>
         </AppContext.Provider>
       </MockTranslationProvider>
     );
@@ -92,35 +90,35 @@ export default class ExportAccountToDesktopPage {
    * Returns the download account kit button
    */
   get downloadAccountKitButton() {
-    return this._page.container.querySelector('#download-account-kit');
+    return this._page.container.querySelector('.profile-desktop-export .desktop-section #download-account-kit');
   }
 
   /**
    * Returns the help box
    */
   get helpBox() {
-    return this._page.container.querySelector('.sidebar-help-section');
+    return this._page.container.querySelector('.sidebar-help');
   }
 
   /**
    * Returns the help box title
    */
   get helpBoxTitle() {
-    return this._page.container.querySelector('.sidebar-help-section h3');
+    return this._page.container.querySelector('.sidebar-help h3');
   }
 
   /**
    * Returns the help box description
    */
   get helpBoxDescription() {
-    return this._page.container.querySelectorAll('.sidebar-help-section p');
+    return this._page.container.querySelectorAll('.sidebar-help p');
   }
 
   /**
    * Returns the help box button
    */
   get helpBoxButton() {
-    return this._page.container.querySelector('.sidebar-help-section .button');
+    return this._page.container.querySelector('.sidebar-help .button');
   }
 
   /**

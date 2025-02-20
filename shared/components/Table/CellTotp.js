@@ -13,9 +13,8 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import Icon from "../Icons/Icon";
 import Totp from "../Totp/Totp";
-import EyeCloseSVG from "../../../img/svg/eye_close.svg";
-import EyeOpenSVG from "../../../img/svg/eye_open.svg";
 
 /**
  * This component represents a table cell totp
@@ -91,14 +90,14 @@ class CellTotp extends Component {
                   onClick={this.handleTotpClick}/>
               }
               {!this.previewedTotp &&
-                <button type="button" className="no-border" onClick={this.handleTotpClick} disabled={!this.props.canCopy}>
+                <button type="button" className="link no-border" onClick={this.handleTotpClick} disabled={!this.props.canCopy}>
                   <span>Copy TOTP to clipboard</span>
                 </button>
               }
             </div>
             {this.props.canPreview &&
-              <button type="button" onClick={this.handlePreviewTotpButtonClick} className="totp-view inline button-transparent">
-                {this.previewedTotp ? <EyeCloseSVG/> : <EyeOpenSVG/>}
+              <button type="button" onClick={this.handlePreviewTotpButtonClick} className="totp-view button-transparent">
+                <Icon name={this.previewedTotp ? 'eye-close' : 'eye-open'}/>
               </button>
             }
           </>

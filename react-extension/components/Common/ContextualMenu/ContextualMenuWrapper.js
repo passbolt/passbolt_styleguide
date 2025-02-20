@@ -53,7 +53,6 @@ class ContextualMenuWrapper extends Component {
     this.handleDocumentContextualMenuEvent = this.handleDocumentContextualMenuEvent.bind(this);
     this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
     this.handleDocumentScrollEvent = this.handleDocumentScrollEvent.bind(this);
-    this.isWindowExceeded = this.isWindowExceeded.bind(this);
   }
 
   /**
@@ -130,21 +129,11 @@ class ContextualMenuWrapper extends Component {
     this.props.hide();
   }
 
-  /**
-   * Returns true if the height of the contextual menu given its position exceeds the window.
-   * @returns {boolean}
-   */
-  isWindowExceeded() {
-    const contextMenuHeight = this.elementRef.current?.offsetHeight;
-    return this.props.top + contextMenuHeight > window.innerHeight;
-  }
-
-  /**
-   * Adjust the vertical position of the contextual menuu if its height at its position execeeds the window.
-   */
   adjustPositionY() {
-    if (this.isWindowExceeded()) {
-      this.setState({positionY: window.innerHeight - this.elementRef.current.offsetHeight});
+    const contextMenuHeight = this.elementRef.current.offsetHeight;
+    const isWindowExceeded = this.props.top + contextMenuHeight > window.innerHeight;
+    if (isWindowExceeded) {
+      this.setState({positionY: window.innerHeight - contextMenuHeight});
       this.elementRef.current.style.zIndex = 1000;
     }
   }
@@ -167,7 +156,7 @@ class ContextualMenuWrapper extends Component {
    */
   render() {
     return (
-      <ul ref={this.elementRef} className={`contextual-menu ${this.props.className} ${this.isWindowExceeded() ? 'floating' : ''}`} style={this.getStyle()}>
+      <ul ref={this.elementRef} className={`contextual-menu ${this.props.className}`} style={this.getStyle()}>
         {this.props.children}
       </ul>
     );

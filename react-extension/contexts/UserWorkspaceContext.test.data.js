@@ -43,13 +43,8 @@ export function defaultProps(data = {}) {
  */
 export function defaultUserWorkspaceContext(data = {}) {
   const _default = {
-    onDetailsLocked: jest.fn(),
     onUserSelected: {
-      single: jest.fn(),
-      none: jest.fn()
-    },
-    scrollTo: {
-      user: null // The user to scroll to
+      single: jest.fn()
     },
     filter: UserWorkspaceFilterTypes.ALL,
     shouldDisplaySuspendedUsersFilter: () => true

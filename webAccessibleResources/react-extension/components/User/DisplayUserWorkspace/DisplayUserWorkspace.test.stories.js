@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import {MemoryRouter} from "react-router-dom";
 import DisplayUserWorkspace from "./DisplayUserWorkspace";
 import ManageContextualMenu from "../../Common/ContextualMenu/ManageContextualMenu";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
@@ -27,6 +27,7 @@ import DialogContextProvider from "../../../contexts/DialogContext";
 import mockPort from "../../../../../test/mocks/mockPort";
 import mockStorage from "../../../../../test/mocks/mockStorage";
 import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
+import DisplayMainMenu from "../../Common/Menu/DisplayMainMenu";
 import RbacContextProvider from "../../../../shared/context/Rbac/RbacContext";
 
 /**
@@ -37,32 +38,27 @@ export default {
   component: DisplayUserWorkspace
 };
 
-const ExtApp = ({...args}) =>
+const Template = ({...args}) =>
   <MemoryRouter initialEntries={['/app/users']}>
     <ExtAppContextProvider storage={args.storage} port={args.port}>
       <RbacContextProvider>
         <DialogContextProvider>
           <NavigationContextProvider>
             <ContextualMenuContextProvider>
-              <Route path={[
-                "/app/account-recovery/requests/review/:accountRecoveryRequestId",
-                "/app/groups/view/:selectedGroupId",
-                "/app/groups/edit/:selectedGroupId",
-                "/app/users/view/:selectedUserId",
-                "/app/users",
-              ]}>
-                <UserWorkspaceContextProvider>
-                  <ManageDialogs/>
-                  <ManageWorkflows/>
-                  <ManageContextualMenu/>
-                  <ManageAnnouncements/>
-                  <div id="container" className="page user">
-                    <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
-                      <DisplayUserWorkspace/>
+              <UserWorkspaceContextProvider>
+                <ManageDialogs/>
+                <ManageWorkflows/>
+                <ManageContextualMenu/>
+                <ManageAnnouncements/>
+                <div id="container" className="page user">
+                  <div id="app" className="app ready" tabIndex="1000">
+                    <div className="header first">
+                      <DisplayMainMenu/>
                     </div>
+                    <DisplayUserWorkspace/>
                   </div>
-                </UserWorkspaceContextProvider>
-              </Route>
+                </div>
+              </UserWorkspaceContextProvider>
             </ContextualMenuContextProvider>
           </NavigationContextProvider>
         </DialogContextProvider>
@@ -73,21 +69,17 @@ const ExtApp = ({...args}) =>
 const storage = mockStorage();
 const port = mockPort(storage);
 
-export const proVersion = {
-  args: {
-    port: port,
-    storage: storage
-  },
-  render: ExtApp
+export const proVersion = Template.bind({});
+proVersion.args = {
+  port: port,
+  storage: storage
 };
 
 const ceStorage = mockStorage();
 const cePort = mockPort(ceStorage);
 cePort.addRequestListener("passbolt.organization-settings.get", () => siteSettingsCe);
-export const ceVersion = {
-  args: {
-    port: cePort,
-    storage: ceStorage
-  },
-  render: ExtApp
+export const ceVersion = Template.bind({});
+ceVersion.args = {
+  port: cePort,
+  storage: ceStorage
 };

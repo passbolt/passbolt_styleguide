@@ -64,7 +64,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get passphrasePolicyTitle() {
-    return this._page.container.querySelector('.password-policies-settings .main-content > form > h4');
+    return this._page.container.querySelector('.password-policies-settings > h4.title');
   }
 
   /**
@@ -72,7 +72,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get helpBox() {
-    return this._page.container.querySelectorAll('.sidebar-help-section')[1];
+    return this._page.container.querySelectorAll('.sidebar-help')[1];
   }
 
   /**

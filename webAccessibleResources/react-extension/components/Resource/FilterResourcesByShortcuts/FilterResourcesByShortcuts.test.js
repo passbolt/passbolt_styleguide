@@ -40,7 +40,12 @@ describe("See Resource FilterResourcesByShortcuts", () => {
   });
 
   each([
-    {filter: ResourceWorkspaceFilterTypes.ALL, itemSelected: "Home", itemIndex: 1},
+    {filter: ResourceWorkspaceFilterTypes.ALL, itemSelected: "All items", itemIndex: 1},
+    {filter: ResourceWorkspaceFilterTypes.FAVORITE, itemSelected: "Favorites", itemIndex: 2},
+    {filter: ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED, itemSelected: "Recently modified", itemIndex: 3},
+    {filter: ResourceWorkspaceFilterTypes.SHARED_WITH_ME, itemSelected: "Shared with me", itemIndex: 4},
+    {filter: ResourceWorkspaceFilterTypes.ITEMS_I_OWN, itemSelected: "Owned by me", itemIndex: 5},
+    {filter: ResourceWorkspaceFilterTypes.EXPIRED, itemSelected: "Expired", pathname: "/app/passwords/filter/expired", itemIndex: 6},
   ]).describe("I should be able to identify the filters", scenario => {
     it(`for: ${scenario.filter}`, async() => {
       const props = defaultProps({

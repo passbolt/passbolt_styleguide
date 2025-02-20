@@ -15,7 +15,6 @@
 /**
  * Unit tests on DisplayUserDirectoryAdministration in regard of specifications
  */
-import "../../../../../test/mocks/mockPortal";
 import {defaultProps, mockResult, mockUsers} from "./DisplayUserDirectoryAdministration.test.data";
 import DisplayUserDirectoryAdministrationPage from "./DisplayUserDirectoryAdministration.test.page";
 import {waitFor} from "@testing-library/react";

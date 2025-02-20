@@ -49,28 +49,28 @@ export default class DisplayUserDetailsPublicKeyPage {
    * Returns the detailed user fingerprint
    */
   get fingerprint() {
-    return this._page.container.querySelector('.fingerprint.value').innerHTML;
+    return this._page.container.querySelector('.fingerprint .value').innerHTML;
   }
 
   /**
    * Returns the detailed user key type
    */
   get type() {
-    return this._page.container.querySelector('.type.value').innerHTML;
+    return this._page.container.querySelector('.type .value').innerHTML;
   }
 
   /**
    * Returns the detailed user creation date of the key
    */
   get created() {
-    return this._page.container.querySelector('.created.value').innerHTML;
+    return this._page.container.querySelector('.created .value').innerHTML;
   }
 
   /**
    * Returns the detailed user expiration date of the kye
    */
   get expires() {
-    return this._page.container.querySelector('.expires.value').innerHTML;
+    return this._page.container.querySelector('.expires .value').innerHTML;
   }
 
   /**
@@ -85,6 +85,16 @@ export default class DisplayUserDetailsPublicKeyPage {
    */
   async toggleCollapse() {
     const element = this._page.container.querySelector('button');
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
+    await waitFor(() => {});
+  }
+
+  /**
+   * Copy the user public key
+   */
+  async copyPublicKey() {
+    const element = this._page.container.querySelector('button.copy-public-key');
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});

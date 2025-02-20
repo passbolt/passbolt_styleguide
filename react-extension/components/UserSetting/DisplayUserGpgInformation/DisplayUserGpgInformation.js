@@ -18,8 +18,6 @@ import PropTypes from "prop-types";
 import {DateTime} from "luxon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import Select from "../../Common/Select/Select";
-import Fingerprint from "../../Common/Fingerprint/Fingerprint";
-import DownloadFileSVG from "../../../../img/svg/download_file.svg";
 
 /**
  * This component displays the user GPG information
@@ -32,15 +30,6 @@ class DisplayUserGpgInformation extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.bindCallbacks();
-  }
-
-  /**
-   * Bind callbacks methods
-   */
-  bindCallbacks() {
-    this.handleDownloadPublicKey = this.handleDownloadPublicKey.bind(this);
-    this.handleDownloadPrivateKey = this.handleDownloadPrivateKey.bind(this);
   }
 
   /**
@@ -116,11 +105,11 @@ class DisplayUserGpgInformation extends React.Component {
     } else {
       expires = this.formatDate(gpgkeyInfo.expires);
     }
-
+    const armoredKey = gpgkeyInfo.armored_key;
     const fingerprint = gpgkeyInfo.fingerprint;
     const length = gpgkeyInfo.length;
 
-    return {keyId, type, uIds, created, expires, fingerprint, length};
+    return {keyId, type, uIds, created, expires, armoredKey, fingerprint, length};
   }
 
   /**
@@ -192,20 +181,6 @@ class DisplayUserGpgInformation extends React.Component {
   }
 
   /**
-   * Whenever the user wants to download his public key
-   */
-  async handleDownloadPublicKey() {
-    await this.props.context.port.request("passbolt.keyring.download-my-public-key");
-  }
-
-  /**
-   * Whenever the user wants to download his private key
-   */
-  async handleDownloadPrivateKey() {
-    await this.props.context.port.request("passbolt.keyring.download-my-private-key");
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -218,9 +193,9 @@ class DisplayUserGpgInformation extends React.Component {
    */
   render() {
     return (
-      <>
-        <div className="main-column key-info">
-          <div className="main-content">
+      <div className="grid grid-responsive-12 profile-key-inspector-information">
+        <div className="row">
+          <div className="col6 main-column key-info">
             <h3><Trans>Information for public and secret key</Trans></h3>
             <table className="table-info" id="privkeyinfo">
               <tbody>
@@ -245,7 +220,7 @@ class DisplayUserGpgInformation extends React.Component {
                 </tr>
                 <tr>
                   <td><Trans>Fingerprint</Trans></td>
-                  <td className="fingerprint"><Fingerprint fingerprint={this.gpgKeyInfo.fingerprint}/></td>
+                  <td className="fingerprint">{this.fingerprint}</td>
                 </tr>
                 <tr>
                   <td><Trans>Created</Trans></td>
@@ -266,26 +241,19 @@ class DisplayUserGpgInformation extends React.Component {
               </tbody>
             </table>
           </div>
-        </div>
-        <div className="actions-wrapper">
-          <div className="left-actions-wrapper">
-            <button
-              type="button"
-              className="button secondary"
-              onClick={this.handleDownloadPublicKey}>
-              <DownloadFileSVG/>
-              <span><Trans>Public</Trans></span>
-            </button>
-            <button
-              type="button"
-              className="button secondary"
-              onClick={this.handleDownloadPrivateKey}>
-              <DownloadFileSVG/>
-              <span><Trans>Private</Trans></span>
-            </button>
+          <div className="col6 secondary-column last key-export">
+            <div className="sidebar">
+              <h3><Trans>Public key block</Trans></h3>
+              <div className="input textarea gpgkey" rel="publicKey">
+                <textarea
+                  defaultValue={this.gpgKeyInfo.armoredKey}
+                  className="fluid code"
+                  readOnly={true}/>
+              </div>
+            </div>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 }
@@ -293,6 +261,7 @@ class DisplayUserGpgInformation extends React.Component {
 DisplayUserGpgInformation.propTypes = {
   context: PropTypes.any, // The application context
   t: PropTypes.func, // The translation function
+  i18n: PropTypes.any // The i18n context translation
 };
 
 export default withAppContext(withTranslation('common')(DisplayUserGpgInformation));

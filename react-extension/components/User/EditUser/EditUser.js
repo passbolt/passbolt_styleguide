@@ -427,7 +427,6 @@ class EditUser extends Component {
    */
   render() {
     const isUserSuspended = this.isUserSuspended();
-    const suspendedDate = this.suspendedDate;
     return (
       <DialogWrapper className='user-edit-dialog' title={this.translate('Edit User')}
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
@@ -519,7 +518,7 @@ class EditUser extends Component {
           </div>
           {!isUserSuspended && this.state.disabled &&
             <div className="message warning">
-              <Trans><b>Warning:</b> Suspension is scheduled for the {{suspendedDate}}</Trans>
+              <Trans><b>Warning:</b> Suspension is scheduled for the {this.suspendedDate}</Trans>
             </div>
           }
           <div className="submit-wrapper clearfix">

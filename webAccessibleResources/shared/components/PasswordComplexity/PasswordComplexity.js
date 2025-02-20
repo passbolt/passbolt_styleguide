@@ -19,7 +19,7 @@ import Tooltip from "../../../react-extension/components/Common/Tooltip/Tooltip"
 import Icon from "../Icons/Icon";
 
 const COLOR_GRADIENT = {
-  COLOR_1: hexToRgb("#BA2809"),
+  COLOR_1: hexToRgb("#A40000"),
   COLOR_2: hexToRgb("#FFA724"),
   COLOR_3: hexToRgb("#0EAA00"),
 };

@@ -14,8 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import CaretDownSVG from "../../../../img/svg/caret_down.svg";
-import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {Trans, withTranslation} from "react-i18next";
@@ -143,61 +142,63 @@ class DisplayUserDetailsInformation extends React.Component {
         <div className="accordion-header">
           <h4>
             <button type="button" className="link no-border" onClick={this.handleTitleClicked}>
-              <span className="accordion-title">
-                <Trans>Information</Trans>
-              </span>
-              {this.state.open && <CaretDownSVG/>}
-              {!this.state.open && <CaretRightSVG/>}
+              <Trans>Information</Trans>
+              {this.state.open && <Icon name="caret-down"/>}
+              {!this.state.open && <Icon name="caret-right"/>}
             </button>
           </h4>
         </div>
-        {this.state.open &&
-
         <div className="accordion-content">
-          <div className="information-label">
-            <span className="role label"><Trans>Role</Trans></span>
-            <span className="modified label"><Trans>Modified</Trans></span>
-            <span className="status label"><Trans>Status</Trans></span>
+          <ul>
+            <li className="role">
+              <span className="label"><Trans>Role</Trans></span>
+              <span className="value capitalize">{role}</span>
+            </li>
+            <li className="modified">
+              <span className="label"><Trans>Modified</Trans></span>
+              <span className="value" title={this.user.modified}>{modified}</span>
+            </li>
+            <li className="status">
+              <span className="label"><Trans>Status</Trans></span>
+              <span className="value">{status}</span>
+            </li>
             {this.hasAccountRecoverySection() &&
-                <span className="account-recovery-status label"><Trans>Account recovery</Trans></span>
-            }
-            {this.hasMfaSection() &&
-                <span className="mfa label"><Trans>MFA</Trans></span>
-            }
-            {this.hasDisableUserSection() &&
-                <span className="suspended label"><Trans>Suspended</Trans></span>
-            }
-          </div>
-          <div className="information-value">
-            <span className="role value capitalize">{role}</span>
-            <span className="modified value" title={this.user.modified}>{modified}</span>
-            <span className="status value">{status}</span>
-            {this.hasAccountRecoverySection() &&
-                <span className="account-recovery-status value">{{
+            <li className="account-recovery-status">
+              <span className="label"><Trans>Account recovery</Trans></span>
+              <span className="value">
+                {{
                   "approved": <Trans>Approved</Trans>,
                   "rejected": <Trans>Rejected</Trans>,
                   [undefined]: <Trans>Pending</Trans>,
                 }[this.user?.account_recovery_user_setting?.status]}
-                </span>
+              </span>
+            </li>
             }
             {this.hasMfaSection() &&
-                <span className="mfa value">{{
+            <li className="mfa">
+              <span className="label"><Trans>MFA</Trans></span>
+              <span className="value">
+                {{
                   [true]: <Trans>Enabled</Trans>,
                   [false]: <Trans>Disabled</Trans>,
                   [undefined]: <Trans>Disabled</Trans>,
-                }[this.user?.is_mfa_enabled]}</span>
+                }[this.user?.is_mfa_enabled]}
+              </span>
+            </li>
             }
             {this.hasDisableUserSection() &&
-                <span className="suspended value">
+              <li className="suspended">
+                <span className="label"><Trans>Suspended</Trans></span>
+                <span className="value">
                   {{
                     [false]: <Trans>No</Trans>,
                     [true]: <Trans>Yes</Trans>,
                   }[isUserSuspended(this.user)]}
                 </span>
+              </li>
             }
-          </div>
+          </ul>
         </div>
-        }
       </div>
     );
   }

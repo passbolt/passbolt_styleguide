@@ -1,0 +1,66 @@
+/* tabel view adjustments for avatar */
+.page.people {
+    .tableview-header {
+        th.cell-icon,
+        th.cell-avatar {
+            width: 45px;
+        }
+    }
+    .tableview-content {
+        th.cell-icon,
+        td.cell-avatar {
+            margin: 0;
+            text-align: left;
+            width: 45px;
+            img {
+                margin-top: 3px;
+                width: 1.7em;
+                height: 1.7em;
+                border-radius: 50%;
+            }
+        }
+    }
+}
+
+/* login history icon column centerign */
+.login-history td:first-child {
+    text-align: center;
+}
+
+/* Empty search feedback */
+.page.user .tableview.empty {
+    .tableview-header {
+        /* No tableview-header */
+        display: none;
+    }
+    .tableview-content {
+        border: 0;
+        top: 0;
+    }
+    .empty-content {
+        text-align: center;
+        margin: auto;
+        width: 50%;
+        padding-top: 2em;
+        color: @tableview-content-text-color;
+        h1 {
+            font-size: 1.5em;
+        }
+        p {
+            font-size: 1em;
+            line-height: 1.5em;
+        }
+
+        @media all and (min-width: 780px) {
+            h1 {
+                font-size: 2.2em;
+            }
+
+            p {
+                font-size: 1.2em;
+                line-height: 1.8em;
+                max-width: inherit;
+            }
+        }
+    }
+}

@@ -208,10 +208,20 @@ export default class DisplayResourcesListPage {
   }
 
   /**
+   * Sort the resources by their uri
+   */
+  async sortByAttentionRequired() {
+    const element = this._page.container.querySelectorAll('thead th button')[1];
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
+    await waitFor(() => {});
+  }
+
+  /**
    * Sort the resources by their name
    */
   async sortByResourceName() {
-    const element = this._page.container.querySelectorAll('thead th button')[1];
+    const element = this._page.container.querySelectorAll('thead th button')[2];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -221,7 +231,7 @@ export default class DisplayResourcesListPage {
    * Sort the resources by their last date of modification
    */
   async sortByExpiry() {
-    const element = this._page.container.querySelectorAll('thead th button')[2];
+    const element = this._page.container.querySelectorAll('thead th button')[3];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -231,7 +241,7 @@ export default class DisplayResourcesListPage {
    * Sort the resources by their username
    */
   async sortByUsername() {
-    const element = this._page.container.querySelectorAll('thead th button')[3];
+    const element = this._page.container.querySelectorAll('thead th button')[4];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -241,7 +251,7 @@ export default class DisplayResourcesListPage {
    * Sort the resources by their uri
    */
   async sortByUri() {
-    const element = this._page.container.querySelectorAll('thead th button')[4];
+    const element = this._page.container.querySelectorAll('thead th button')[5];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -251,7 +261,7 @@ export default class DisplayResourcesListPage {
    * Sort the resources by their last date of modification
    */
   async sortByModified() {
-    const element = this._page.container.querySelectorAll('thead th button')[5];
+    const element = this._page.container.querySelectorAll('thead th button')[6];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});

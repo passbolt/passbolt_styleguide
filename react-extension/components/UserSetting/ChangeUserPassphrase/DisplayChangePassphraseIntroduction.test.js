@@ -18,6 +18,7 @@
 import DisplayChangePassphraseIntroductionPage from "./DisplayChangePassphraseIntroduction.test.page";
 import {defaultProps} from "./DisplayChangePassphraseIntroduction.test.data";
 import {waitFor} from "@testing-library/react";
+import {defaultAppContext} from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetailsPermission.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -25,6 +26,7 @@ beforeEach(() => {
 
 describe("As LU I should see the user introduction passphrase page", () => {
   let page; // The page to test against
+  const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
   describe('As LU I can start to update the passphrase', () => {
@@ -35,7 +37,7 @@ describe("As LU I should see the user introduction passphrase page", () => {
      * I shouldn’t be able to submit the form if there is an invalid field
      */
     beforeEach(() => {
-      page = new DisplayChangePassphraseIntroductionPage(props);
+      page = new DisplayChangePassphraseIntroductionPage(context, props);
     });
 
     it('As LU I should be able to start the update of the passphrase', async() => {

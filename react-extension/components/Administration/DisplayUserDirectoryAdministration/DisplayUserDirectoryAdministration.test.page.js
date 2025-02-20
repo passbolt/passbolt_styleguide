@@ -63,7 +63,7 @@ export default class DisplayUserDirectoryAdministrationPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSaveButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper button")[3];
+    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[0];
   }
 
   /**
@@ -71,7 +71,7 @@ export default class DisplayUserDirectoryAdministrationPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsTestButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper button")[0];
+    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[1];
   }
 
   /**
@@ -79,7 +79,7 @@ export default class DisplayUserDirectoryAdministrationPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSimulateButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper button")[1];
+    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[2];
   }
 
 
@@ -88,7 +88,7 @@ export default class DisplayUserDirectoryAdministrationPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSynchronizeButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper button")[2];
+    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[3];
   }
 
   /**

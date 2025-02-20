@@ -158,7 +158,7 @@ export function withAdminSubscription(WrappedComponent) {
       return (
         <AdminSubscriptionContext.Consumer>
           {
-            adminSubscriptionContext => <WrappedComponent adminSubscriptionContext={adminSubscriptionContext} {...this.props} />
+            adminSubcriptionContext => <WrappedComponent adminSubcriptionContext={adminSubcriptionContext} {...this.props} />
           }
         </AdminSubscriptionContext.Consumer>
       );

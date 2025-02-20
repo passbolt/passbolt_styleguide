@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
-import SpinnerSVG from "../../../../img/svg/spinner.svg";
+import Icon from "../../../../shared/components/Icons/Icon";
 
 class EditResourceTagsItemViewer extends React.Component {
   /**
@@ -65,25 +65,29 @@ class EditResourceTagsItemViewer extends React.Component {
   render() {
     const isLoading = this.isLoading();
     return (
-      <div className="tags-list">
+      <div>
         {isLoading &&
         <div className="processing-wrapper">
-          <SpinnerSVG/>
+          <Icon name="spinner"/>
           <span className="processing-text"><Trans>Retrieving tags</Trans></span>
         </div>
         }
         {!isLoading && this.props.tags.length === 0 &&
-        <span className="empty-content"><Trans>There is no tag.</Trans></span>
+        <span className="empty-content"
+          onClick={this.props.toggleInputTagEditor}><Trans>There is no tag, click here to add one</Trans></span>
         }
         {!isLoading && this.props.tags.length > 0 &&
-          this.getTags().map(tag =>
-            <div key={tag.id} className="tag-list-item">
-              <button type="button" onClick={event => this.handleOnClickTag(event, tag)} className="tag">
-                <span className="tag-content ellipsis">
+        <ul className="tags tags-list" onClick={this.props.toggleInputTagEditor}>
+          {this.getTags().map(tag =>
+            <li key={tag.id} className="tag-list-item">
+              <a onClick={event => this.handleOnClickTag(event, tag)} className="tag ellipsis">
+                <span className="tag-content">
                   {tag.slug}
                 </span>
-              </button>
-            </div>)
+              </a>
+            </li>)
+          }
+        </ul>
         }
       </div>
     );
@@ -92,6 +96,7 @@ class EditResourceTagsItemViewer extends React.Component {
 
 EditResourceTagsItemViewer.propTypes = {
   tags: PropTypes.array,
+  toggleInputTagEditor: PropTypes.func,
   resourceWorkspaceContext: PropTypes.any,
   history: PropTypes.any,
 };

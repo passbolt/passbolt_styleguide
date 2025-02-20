@@ -5,34 +5,33 @@
 @font-face {
     font-family: 'Open Sans';
     font-style: normal;
-    src: local('Open Sans'), local('OpenSans'), url('@{fonts}/opensans-variable-font.ttf') format('truetype');
+    font-weight: 400;
+    src: local('Open Sans'), local('OpenSans'), url('@{fonts}/opensans-regular.woff') format('woff');
 }
 
 @font-face {
-  font-family: 'Open Sans';
-  font-style: italic;
-  src: local('Open Sans'), local('OpenSans'), url('@{fonts}/opensans-italic-variable-font.ttf') format('truetype');
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Open Sans Bold'), local('OpenSans-Bold'), url('@{fonts}/opensans-bold.woff') format('woff');
 }
 
 @font-face {
-  font-family: 'Obfuscation';
+  font-family: 'Passbolt';
   font-style: normal;
   font-weight: 400;
-  src: local('Obfuscation'), local('Obfuscation-Regular'), url('@{fonts}/obfuscation-regular.otf') format('opentype');
+  src: local('Passbolt'), local('Passbolt'), url('@{fonts}/passbolt.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Inconsolata';
     font-style: normal;
     font-weight: 400;
-    src: local('Inconsolata'), local('Inconsolata-Regular'), url('@{fonts}/inconsolata-regular.ttf') format('truetype');
+    src: local('Inconsolata'), local('Inconsolata'), url('@{fonts}/inconsolata-regular.ttf') format('truetype');
 }
 
 body {
     font-family: 'Open Sans', Verdana, sans-serif;
-    color: var(--Text-and-icons-Main-text);
-    font-style: normal;
-    font-weight: 400;
 }
 .code {
     font-family: 'Courier New', Courier, monospace;
@@ -50,8 +49,8 @@ html {
     font-size: 62.5%; /* =10px */
 }
 body {
-    font-size: 1.5rem;
-    line-height: normal;
+    font-size: 1.4rem; /* =14px */
+    line-height: 1.9rem;
 }
 h1 {
     font-size: 2.2rem;
@@ -64,10 +63,11 @@ h2 {
 h3 {
   font-size: 1.6rem;
   line-height: 2.4rem;
+  border-bottom: 1px solid @default-border;
 }
 p {
-    font-size: 1.5rem;
-    line-height: 2rem;
+    font-size: 1.4rem;
+    line-height: 1.9rem;
     max-width: 64rem;
     margin: 0;
 }

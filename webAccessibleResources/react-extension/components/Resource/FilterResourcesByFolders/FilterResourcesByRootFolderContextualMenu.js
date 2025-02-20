@@ -22,8 +22,6 @@ import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext"
 import {Trans, withTranslation} from "react-i18next";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import FolderPlusSVG from "../../../../img/svg/folder_plus.svg";
-import DownloadFileSVG from "../../../../img/svg/download_file.svg";
 
 class FilterResourcesByRootFolderContextualMenu extends React.Component {
   /**
@@ -104,10 +102,7 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button className="link no-border" type="button" onClick={this.handleCreateFolderItemClickEvent}>
-                  <FolderPlusSVG />
-                  <span><Trans>Create folder</Trans></span>
-                </button>
+                <button className="link no-border" type="button" onClick={this.handleCreateFolderItemClickEvent}><span><Trans>Create folder</Trans></span></button>
               </div>
             </div>
           </div>
@@ -118,8 +113,9 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button type="button" className="link no-border" onClick={this.handleExportFolderItemClickEvent}>
-                    <DownloadFileSVG />
-                    <span><Trans>Export all</Trans></span>
+                    <span>
+                      <Trans>Export all</Trans>
+                    </span>
                   </button>
                 </div>
               </div>

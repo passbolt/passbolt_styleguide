@@ -13,51 +13,20 @@
  */
 
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultResourceWorkspaceContext, resourceWorkspaceContextWithSelectedResourceIOwn} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import {resourceWorkspaceContextWithSelectedResourceIOwn} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {TEST_RESOURCE_TYPE_PASSWORD_STRING} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 /**
  * Default props
- * @returns {object}
+ * @returns {{resource: {id: string, name: string}}}
  */
-export function defaultProps(data = {}) {
-  const resourceWorkspaceContext = data.resourceWorkspaceContext || resourceWorkspaceContextWithSelectedResourceIOwn();
-  delete data.resourceWorkspaceContext;
-  return {
-    ...data,
-    context: defaultUserAppContext(data.context),
-    rbacContext: defaultAdministratorRbacContext(data.rbacContext),
-    resourceWorkspaceContext: resourceWorkspaceContext,
-    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
-  };
-}
-
-/**
- * Props with unencrypted resource description
- * @returns {object}
- */
-export function propsWithUnencryptedDescriptionResource(data = {}) {
-  const resourceWorkspaceContext = defaultResourceWorkspaceContext({
-    details: {
-      resource: defaultResourceDto({
-        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING
-      }),
-    },
-    ...data
-  });
-
+export function defaultProps() {
   return {
     context: defaultUserAppContext(),
-    resourceWorkspaceContext: resourceWorkspaceContext,
-    rbacContext: defaultAdministratorRbacContext(),
+    resourceWorkspaceContext: resourceWorkspaceContextWithSelectedResourceIOwn(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
-    initialEntries: `/app/passwords/view/${resourceWorkspaceContext.details.resource.id}`,
-    ...data,
   };
 }

@@ -25,11 +25,6 @@ import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext"
 import {Trans, withTranslation} from "react-i18next";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import FolderPlusSVG from "../../../../img/svg/folder_plus.svg";
-import DownloadFileSVG from "../../../../img/svg/download_file.svg";
-import DeleteSVG from "../../../../img/svg/delete.svg";
-import ShareSVG from "../../../../img/svg/share.svg";
-import RenameSVG from "../../../../img/svg/rename.svg";
 
 class FilterResourcesByFoldersItemContextualMenu extends React.Component {
   /**
@@ -176,7 +171,6 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
                   onClick={this.handleCreateFolderItemClickEvent}
                   disabled={!canUpdate}
                   className="create link no-border">
-                  <FolderPlusSVG />
                   <span><Trans>Create folder</Trans></span>
                 </button>
               </div>
@@ -192,7 +186,6 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
                   onClick={this.handleRenameFolderItemClickEvent}
                   disabled={!canUpdate}
                   className="rename link no-border">
-                  <RenameSVG />
                   <span><Trans>Rename</Trans></span>
                 </button>
               </div>
@@ -208,7 +201,6 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
                   onClick={this.handleShareFolderItemClickEvent}
                   disabled={!canShare}
                   className="share link no-border">
-                  <ShareSVG />
                   <span><Trans>Share</Trans></span>
                 </button>
               </div>
@@ -225,7 +217,6 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
                     type="button"
                     className="export link no-border"
                     onClick={this.handleExportFolderItemClickEvent}>
-                    <DownloadFileSVG />
                     <span><Trans>Export</Trans></span>
                   </button>
                 </div>
@@ -242,7 +233,6 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
                   onClick={this.handleDeleteFolderItemClickEvent}
                   disabled={!canUpdate}
                   className="delete link no-border">
-                  <DeleteSVG />
                   <span><Trans>Delete</Trans></span>
                 </button>
               </div>

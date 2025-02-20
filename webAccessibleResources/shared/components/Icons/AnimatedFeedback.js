@@ -13,22 +13,8 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AnimatedFeedbackSuccessSVG from "../../../img/svg/success.svg";
-import AnimatedFeedbackWarningSVG from "../../../img/svg/warning.svg";
-import AnimatedFeedbackAttentionSVG from "../../../img/svg/error-exclamation.svg";
-import AnimatedFeedbackErrorSVG from "../../../img/svg/fail.svg";
-
-const animatedIconsSVG = {
-  success: <AnimatedFeedbackSuccessSVG/>,
-  warning: <AnimatedFeedbackWarningSVG/>,
-  attention: <AnimatedFeedbackAttentionSVG/>,
-  error: <AnimatedFeedbackErrorSVG/>,
-};
 
 class AnimatedFeedback extends Component {
-  get animatedIconSVG() {
-    return animatedIconsSVG[this.props.name];
-  }
   /**
    * Render the component
    * @return {JSX}
@@ -36,9 +22,7 @@ class AnimatedFeedback extends Component {
   render() {
     return (
       <div className="illustration icon-feedback">
-        <div className={this.props.name}>
-          {this.animatedIconSVG}
-        </div>
+        <div className={this.props.name}></div>
       </div>
     );
   }

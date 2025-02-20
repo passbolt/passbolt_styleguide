@@ -123,7 +123,7 @@ class Row extends Component {
   render() {
     const isSelected = this.isItemSelected;
     return (
-      <tr id={this.item.id} draggable={Boolean(this.props.onDragStart)} className={`${this.props.className} ${isSelected ? "selected" : ""}`}
+      <tr id={this.item.id} draggable="true" className={`${this.props.className} ${isSelected ? "selected" : ""}`}
         onClick={this.handleClick}
         onContextMenu={this.handleContextMenu}
         onDragStart={this.handleDragStart}

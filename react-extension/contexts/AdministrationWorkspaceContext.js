@@ -193,6 +193,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const healthcheck = ADMIN_URL_REGEXP.healthcheck.test(location);
     const contentTypesEncryptedMetadata = ADMIN_URL_REGEXP.contentTypesEncryptedMetadata.test(location);
     const contentTypesMetadataKey = ADMIN_URL_REGEXP.contentTypesMetadataKey.test(location);
+    const migrateMetadata = ADMIN_URL_REGEXP.migrateEncryptedMetadata.test(location);
 
     let selectedAdministration;
     if (isAdminHomePageLocation) {
@@ -231,6 +232,8 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA;
     } else if (contentTypesMetadataKey) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY;
+    } else if (migrateMetadata) {
+      selectedAdministration = AdministrationWorkspaceMenuTypes.MIGRATE_METADATA;
     }
 
     // let's check if the current URL is actually supported
@@ -352,6 +355,7 @@ export const AdministrationWorkspaceMenuTypes = {
   HEALTHCHECK: "HEALTHCHECK", // Healthcheck administration menu selected
   CONTENT_TYPES_ENCRYPTED_METADATA: "CONTENT_TYPES_ENCRYPTED_METADATA", // Content types encrypted metadata administration menu selected
   CONTENT_TYPES_METADATA_KEY: "CONTENT_TYPES_METADATA_KEY", // Content types metadata key administration menu selected
+  MIGRATE_METADATA: "MIGRATE_METADATA",
 };
 
 /**
@@ -374,6 +378,7 @@ export const AdministrationWorkspaceFeatureFlag = {
   [AdministrationWorkspaceMenuTypes.HEALTHCHECK]: "healthcheckUi", // HealthCheck UI administration feature flag
   [AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA]: "metadata", // Content types encrypted metadata settings
   [AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY]: "metadata", // Content types metadata key settings
+  [AdministrationWorkspaceMenuTypes.MIGRATE_METADATA]: "metadata", // Content types metadata key settings
 };
 
 /**
@@ -398,4 +403,5 @@ const ADMIN_URL_REGEXP = {
   healthcheck: /^\/app\/administration\/healthcheck\/?$/,
   contentTypesEncryptedMetadata: /^\/app\/administration\/content-types\/metadata\/?$/,
   contentTypesMetadataKey: /^\/app\/administration\/content-types\/metadata-key\/?$/,
+  migrateEncryptedMetadata: /^\/app\/administration\/migrate-metadata\/?$/,
 };

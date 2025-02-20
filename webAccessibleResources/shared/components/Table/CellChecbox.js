@@ -58,7 +58,7 @@ class CellCheckbox extends Component {
   render() {
     return (
       <div className="input checkbox">
-        <input type="checkbox" className="for-grid" id={`checkbox_multiple_select_checkbox_${this.value.id}`} checked={this.props.checked} readOnly={true} onClick={this.handleClick}/>
+        <input type="checkbox" id={`checkbox_multiple_select_checkbox_${this.value.id}`} checked={this.props.checked} readOnly={true} onClick={this.handleClick}/>
       </div>
     );
   }

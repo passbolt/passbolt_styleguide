@@ -37,6 +37,88 @@ export default class DisplayResourceFolderDetailsActivityPage {
         </Router>
       </MockTranslationProvider>
     );
+    this.setupPageObjects();
+  }
+
+  /**
+   * Set up the objects of the page
+   */
+  setupPageObjects() {
+    this._titleHeader = new TitleHeaderPageObject(this._page.container);
+    this._displayActivityList = new DisplayActivityPageObject(this._page.container);
+  }
+
+  /**
+   * Return the page object of the title header
+   * @returns {{select: select}}
+   */
+  get title() {
+    return this._titleHeader;
+  }
+
+  /**
+   * Returns the page object of display comments
+   */
+  get displayActivityList() {
+    return this._displayActivityList;
+  }
+}
+
+/**
+ * Page object for the TitleHeader element
+ */
+class TitleHeaderPageObject {
+  /**
+   * Default constructor
+   * @param container The container which includes the Activity Component
+   */
+  constructor(container) {
+    this._container = container;
+  }
+
+  /**
+   * Returns the clickable area of the header
+   */
+  get hyperlink() {
+    return this._container.querySelector(".accordion-header h4 button");
+  }
+
+  /** Click on the title */
+  async click()  {
+    const leftClick = {button: 0};
+    fireEvent.click(this.hyperlink, leftClick);
+    await waitFor(() => {});
+  }
+}
+
+class DisplayActivityPageObject {
+  /**
+   * Default constructor
+   * @param container The container which includes the AddComment Component
+   */
+  constructor(container) {
+    this._container = container;
+  }
+
+  /**
+   * Returns the list elements of activities
+   */
+  get list() {
+    return this._container.querySelector('ul');
+  }
+
+  /**
+   * Returns the loading element
+   */
+  get loadingMessage() {
+    return this._container.querySelector('.processing-text');
+  }
+
+  /**
+   * Returns the more button of activities
+   */
+  get moreButton() {
+    return this._container.querySelector('.action-logs-load-more');
   }
 
   /**
@@ -46,9 +128,6 @@ export default class DisplayResourceFolderDetailsActivityPage {
     return this.list !== null;
   }
 
-  /**
-   * Returns true if the more button object exists in the container
-   */
   moreButtonExists() {
     return this.moreButton !== null;
   }
@@ -64,7 +143,7 @@ export default class DisplayResourceFolderDetailsActivityPage {
    * Returns the number of displayed activities
    */
   count() {
-    return this._page.container.querySelectorAll('.content').length;
+    return this.list.querySelectorAll('.content').length;
   }
 
   /**
@@ -72,7 +151,7 @@ export default class DisplayResourceFolderDetailsActivityPage {
    * @param index The display rank of creator's activity
    */
   creator(index) {
-    return this._page.container.querySelectorAll('.content')[index - 1].querySelector('.creator').textContent;
+    return this.list.querySelectorAll('.content')[index - 1].querySelector('.creator').textContent;
   }
 
   /**
@@ -80,28 +159,7 @@ export default class DisplayResourceFolderDetailsActivityPage {
    * @param index The display rank of activity
    */
   creationTime(index) {
-    return this._page.container.querySelectorAll('.content')[index - 1].querySelector('.subinfo').textContent;
-  }
-
-  /**
-   * Returns the list elements of activities
-   */
-  get list() {
-    return this._page.container.querySelector('ul');
-  }
-
-  /**
-   * Returns the loading element
-   */
-  get loadingMessage() {
-    return this._page.container.querySelector('.processing-text');
-  }
-
-  /**
-   * Returns the more button of activities
-   */
-  get moreButton() {
-    return this._page.container.querySelector('.action-logs-load-more');
+    return this.list.querySelectorAll('.content')[index - 1].querySelector('.subinfo').textContent;
   }
 
   /**

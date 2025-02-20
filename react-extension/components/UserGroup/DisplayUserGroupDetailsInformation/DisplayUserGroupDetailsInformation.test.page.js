@@ -50,14 +50,14 @@ export default class DisplayUserGroupDetailsInformationPage {
    * Returns the name of the last modificator on the gorup
    */
   get modifiedBy() {
-    return this._page.container.querySelector('.modified-by.value').textContent;
+    return this._page.container.querySelector('.modified-by .value').textContent;
   }
 
   /**
    * Returns the members count of the group
    */
   get membersCount() {
-    return this._page.container.querySelector('.members.value').textContent;
+    return this._page.container.querySelector('.members .value').textContent;
   }
 
   /**

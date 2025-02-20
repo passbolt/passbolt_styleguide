@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import FileSVG from "../../../../img/svg/file.svg";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import DisplayAdministrationMfaActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationMfaActions/DisplayAdministrationMfaActions";
@@ -21,7 +21,6 @@ import {withAdminMfa} from "../../../contexts/Administration/AdministrationMfa/A
 import MfaFormService from '../../../../shared/services/forms/Mfa/MfaFormService';
 import Password from "../../../../shared/components/Password/Password";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {createSafePortal} from "../../../../shared/utils/portals";
 
 /**
  * This component allows to display the MFA for the administration
@@ -135,49 +134,44 @@ class DisplayMfaAdministration extends React.Component {
 
     return (
       <div className="row">
-        <>
-          <div className="mfa-settings main-column">
-            <div className="main-content">
-              <h3 className="title">Multi Factor Authentication</h3>
-              {!this.isRunningUnderHttps &&
+        <div className="mfa-settings col7 main-column">
+          <h3>Multi Factor Authentication</h3>
+          {!this.isRunningUnderHttps &&
             <p><Trans>Sorry the multi factor authentication feature is only available in a secure context (HTTPS).</Trans></p>
-              }
-              {this.isRunningUnderHttps &&
+          }
+          {this.isRunningUnderHttps &&
           <>
             <p><Trans>In this section you can choose which multi factor authentication will be available.</Trans></p>
-            <div className="provider-section">
-              <h4 className="no-border">
-                <span className="input toggle-switch form-element ready">
-                  <input id="totp-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="totpProviderToggle"
-                    onChange={this.handleInputChange} checked={settings.totpProviderToggle} disabled={this.hasAllInputDisabled()}/>
-                  <label htmlFor="totp-provider-toggle-button"><Trans>Time-based One Time Password</Trans></label>
-                </span>
-              </h4>
-              {!settings.totpProviderToggle &&
+            <h4 className="no-border">
+              <span className="input toggle-switch form-element ready">
+                <input id="totp-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="totpProviderToggle"
+                  onChange={this.handleInputChange} checked={settings.totpProviderToggle} disabled={this.hasAllInputDisabled()}/>
+                <label htmlFor="totp-provider-toggle-button"><Trans>Time-based One Time Password</Trans></label>
+              </span>
+            </h4>
+            {!settings.totpProviderToggle &&
             <p className="description">
               <Trans>The Time-based One Time Password provider is disabled for all users.</Trans>
             </p>
-              }
-              {settings.totpProviderToggle &&
+            }
+            {settings.totpProviderToggle &&
             <p className="description">
               <Trans>The Time-based One Time Password provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
             </p>
-              }
-            </div>
-            <div className="provider-section">
-              <h4>
-                <span className="input toggle-switch form-element">
-                  <input id="yubikey-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="yubikeyToggle"
-                    onChange={this.handleInputChange} checked={settings.yubikeyToggle} disabled={this.hasAllInputDisabled()}/>
-                  <label htmlFor="yubikey-provider-toggle-button">Yubikey</label>
-                </span>
-              </h4>
-              {!settings.yubikeyToggle &&
+            }
+            <h4>
+              <span className="input toggle-switch form-element">
+                <input id="yubikey-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="yubikeyToggle"
+                  onChange={this.handleInputChange} checked={settings.yubikeyToggle} disabled={this.hasAllInputDisabled()}/>
+                <label htmlFor="yubikey-provider-toggle-button">Yubikey</label>
+              </span>
+            </h4>
+            {!settings.yubikeyToggle &&
             <p className="description">
               <Trans>The Yubikey provider is disabled for all users.</Trans>
             </p>
-              }
-              {settings.yubikeyToggle &&
+            }
+            {settings.yubikeyToggle &&
             <>
               <p className="description">
                 <Trans>The Yubikey provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
@@ -206,22 +200,20 @@ class DisplayMfaAdministration extends React.Component {
                 }
               </div>
             </>
-              }
-            </div>
-            <div className="provider-section">
-              <h4>
-                <span className="input toggle-switch form-element ready">
-                  <input id="duo-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="duoToggle"
-                    onChange={this.handleInputChange} checked={settings.duoToggle} disabled={this.hasAllInputDisabled()}/>
-                  <label htmlFor="duo-provider-toggle-button">Duo</label>
-                </span>
-              </h4>
-              {!settings.duoToggle &&
+            }
+            <h4>
+              <span className="input toggle-switch form-element ready">
+                <input id="duo-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="duoToggle"
+                  onChange={this.handleInputChange} checked={settings.duoToggle} disabled={this.hasAllInputDisabled()}/>
+                <label htmlFor="duo-provider-toggle-button">Duo</label>
+              </span>
+            </h4>
+            {!settings.duoToggle &&
             <p className="description">
               <Trans>The Duo provider is disabled for all users.</Trans>
             </p>
-              }
-              {settings.duoToggle &&
+            }
+            {settings.duoToggle &&
             <>
               <p className="description enabled">
                 <Trans>The Duo provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
@@ -260,25 +252,20 @@ class DisplayMfaAdministration extends React.Component {
                 }
               </div>
             </>
-              }
-            </div>
+            }
           </>
-              }
-            </div>
-          </div>
-          <DisplayAdministrationMfaActions />
-        </>
-        {createSafePortal(
-          <div className="sidebar-help-section">
-            <h3><Trans>Need some help?</Trans></h3>
+          }
+        </div>
+        <div className="col4 last">
+          <div className="sidebar-help">
+            <h3><Trans>Need help?</Trans></h3>
             <p><Trans>Check out our Multi Factor Authentication configuration guide.</Trans></p>
             <a className="button" href="https://passbolt.com/docs/admin/authentication/mfa/" target="_blank" rel="noopener noreferrer">
-              <FileSVG />
+              <Icon name="document"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>
-          </div>,
-          document.getElementById("administration-help-panel")
-        )}
+          </div>
+        </div>
       </div>
     );
   }
@@ -287,7 +274,6 @@ class DisplayMfaAdministration extends React.Component {
 DisplayMfaAdministration.propTypes = {
   context: PropTypes.object, // the app context
   adminMfaContext: PropTypes.object, // The administration workspace context
-  createPortal: PropTypes.func, // The mocked create portal react dom primitive if test needed.
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   t: PropTypes.func, // The translation function
 };

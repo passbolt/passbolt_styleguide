@@ -15,15 +15,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
-import SpinnerSVG from "../../../../img/svg/spinner.svg";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
-import CaretDownSVG from "../../../../img/svg/caret_down.svg";
-import CaretRightSVG from "../../../../img/svg/caret_right.svg";
-import EditSVG from "../../../../img/svg/edit.svg";
 
 class DisplayResourceFolderDetailsPermissions extends React.Component {
   /**
@@ -195,56 +192,54 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
    */
   render() {
     return (
-      <div className={`sharedwith accordion detailed-permission sidebar-section ${this.state.open ? "" : "closed"}`}>
+      <div className={`sharedwith accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
-              <span className="accordion-title">
-                <Trans>Shared with</Trans>
-              </span>
-              {this.state.open
-                ? <CaretDownSVG />
-                : <CaretRightSVG />
+              <Trans>Shared with</Trans>
+              {this.state.open &&
+              <Icon name="caret-down"/>
+              }
+              {!this.state.open &&
+              <Icon name="caret-right"/>
               }
             </button>
           </h4>
         </div>
-        {this.state.open &&
-          <div className="accordion-content">
-            {this.canShare() &&
-            <button type="button" onClick={this.handlePermissionsEditClickEvent} id="share-folder" className="section-action button-transparent">
-              <EditSVG />
-              <span className="visuallyhidden"><Trans>modify</Trans></span>
-            </button>
-            }
-            <div>
-              <ul className="shared-with ready">
-                {this.isLoading() &&
-                <div className="processing-wrapper">
-                  <SpinnerSVG/>
-                  <span className="processing-text"><Trans>Retrieving permissions</Trans></span>
-                </div>
-                }
-                {this.state.permissions && this.state.permissions.map(permission => (
-                  <li key={permission.id} className="usercard-col-2">
-                    {permission.user &&
-                    <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
-                    }
-                    {permission.group &&
-                    <GroupAvatar group={permission.group}/>
-                    }
-                    <div className="content-wrapper">
-                      <div className="content">
-                        <div className="name">{this.getPermissionAroName(permission)}</div>
-                        <div className="subinfo">{this.getPermissionLabel(permission)}</div>
-                      </div>
+        <div className="accordion-content">
+          {this.canShare() &&
+          <button type="button" onClick={this.handlePermissionsEditClickEvent} id="share-folder" className="section-action button-transparent">
+            <Icon name="edit"/>
+            <span className="visuallyhidden"><Trans>modify</Trans></span>
+          </button>
+          }
+          <div>
+            <ul className="shared-with ready">
+              {this.isLoading() &&
+              <div className="processing-wrapper">
+                <Icon name="spinner"/>
+                <span className="processing-text"><Trans>Retrieving permissions</Trans></span>
+              </div>
+              }
+              {this.state.permissions && this.state.permissions.map(permission => (
+                <li key={permission.id} className="usercard-col-2">
+                  <div className="content-wrapper">
+                    <div className="content">
+                      <div className="name">{this.getPermissionAroName(permission)}</div>
+                      <div className="subinfo">{this.getPermissionLabel(permission)}</div>
                     </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                  </div>
+                  {permission.user &&
+                  <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+                  }
+                  {permission.group &&
+                  <GroupAvatar group={permission.group}/>
+                  }
+                </li>
+              ))}
+            </ul>
           </div>
-        }
+        </div>
       </div>
     );
   }

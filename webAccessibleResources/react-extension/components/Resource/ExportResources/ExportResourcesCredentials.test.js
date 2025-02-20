@@ -88,7 +88,7 @@ describe("As LU I should see the export resources credentials dialog", () => {
       await waitFor(() => {
         expect(page.importFile.getAttribute("disabled")).not.toBeNull();
         expect(page.password.getAttribute("disabled")).not.toBeNull();
-        expect(page.exportButton.className).toBe("button primary form disabled processing");
+        expect(page.exportButton.className).toBe("button primary disabled processing");
         expect(page.exportButton.hasAttribute("disabled")).toBeTruthy();
         expect(page.cancelButton.className).toBe("link cancel");
         expect(page.cancelButton.hasAttribute("disabled")).toBeTruthy();

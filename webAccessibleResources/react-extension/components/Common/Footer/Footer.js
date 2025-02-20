@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
-import HeartSVG from "../../../../img/svg/heart.svg";
+import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
@@ -86,65 +86,65 @@ class Footer extends Component {
    */
   render() {
     return (
-      <footer className="footer">
-        <ul className="footer-links">
-          {this.isUnsafeMode &&
-          <li className="error-message">
-            <a
-              href={this.unsafeUrl}
-              target="_blank" rel="noopener noreferrer">
-              <Trans>Unsafe mode</Trans>
-            </a>
-          </li>
-          }
-          {this.termsUrl &&
-          <li>
-            <a href={this.termsUrl}
-              target="_blank"
-              rel="noopener noreferrer">
-              <Trans>Terms</Trans>
-            </a>
-          </li>
-          }
-          {this.privacyUrl &&
-          <li>
-            <a href={this.privacyUrl}
-              target="_blank"
-              rel="noopener noreferrer">
-              <Trans>Privacy</Trans>
-            </a>
-          </li>
-          }
-          <li>
-            <a href={this.creditsUrl}
-              target="_blank"
-              rel="noopener noreferrer">
-              <Trans>Credits</Trans>
-            </a>
-          </li>
-          <li>
-            {this.versions &&
-              <Tooltip message={this.versions} direction="left">
+      <footer>
+        <div className="footer">
+          <ul className="footer-links">
+            {this.isUnsafeMode &&
+            <li className="error-message">
+              <a
+                href={this.unsafeUrl}
+                target="_blank" rel="noopener noreferrer">
+                <Trans>Unsafe mode</Trans>
+              </a>
+            </li>
+            }
+            {this.termsUrl &&
+            <li>
+              <a href={this.termsUrl}
+                target="_blank"
+                rel="noopener noreferrer">
+                <Trans>Terms</Trans>
+              </a>
+            </li>
+            }
+            {this.privacyUrl &&
+            <li>
+              <a href={this.privacyUrl}
+                target="_blank"
+                rel="noopener noreferrer">
+                <Trans>Privacy</Trans>
+              </a>
+            </li>
+            }
+            <li>
+              <a href={this.creditsUrl}
+                target="_blank"
+                rel="noopener noreferrer">
+                <Trans>Credits</Trans>
+              </a>
+            </li>
+            <li>
+              {this.versions &&
+                <Tooltip message={this.versions} direction="left">
+                  <a
+                    href={this.creditsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <Icon name="heart-o"/>
+                  </a>
+                </Tooltip>
+              }
+              {!this.versions &&
                 <a
-                  className="button button-transparent inline"
                   href={this.creditsUrl}
                   target="_blank"
                   rel="noopener noreferrer">
-                  <HeartSVG/>
+                  <Icon name="heart-o"/>
                 </a>
-              </Tooltip>
-            }
-            {!this.versions &&
-              <a
-                className="button button-transparent inline"
-                href={this.creditsUrl}
-                target="_blank"
-                rel="noopener noreferrer">
-                <HeartSVG/>
-              </a>
-            }
-          </li>
-        </ul>
+              }
+            </li>
+          </ul>
+        </div>
       </footer>
     );
   }

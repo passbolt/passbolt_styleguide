@@ -205,56 +205,58 @@ class AddResourceComment extends React.Component {
       <form
         className="comment"
         autoComplete="off">
+        <div className="wrap-right-column">
+          <div className="right-column">
+            <div className="form-content">
+
+              <div className="input textarea required">
+                <textarea ref={this.textareaRef}
+                  placeholder={this.translate("Add a comment")}
+                  aria-required={true}
+                  onChange={this.handleContentChanged}
+                  onKeyDown={this.handleEscapeKeyPressed}
+                  disabled={this.state.actions.processing}>
+                </textarea>
+                <div className="error-message">
+                  {this.state.errors.isEmpty && this.translate("A comment is required.")}
+                  {this.state.errors.isTooLong && this.translate("A comment must be less than 256 characters")}
+                  {this.state.errors.technicalError}
+                </div>
+              </div>
+
+              <div className="metadata">
+                <span className="author username">
+                  <Trans>You</Trans>
+                </span>
+                <span className="modified"><Trans>right now</Trans></span>
+              </div>
+              <div className="actions">
+                {
+                  this.props.cancellable &&
+                  <button
+                    type="button"
+                    className="button cancel"
+                    onClick={this.handleCancelEvent}
+                    disabled={this.state.actions.processing}>
+                    <span><Trans>Cancel</Trans></span>
+                  </button>
+                }
+                <button
+                  className="button primary comment-submit"
+                  type="submit"
+                  onClick={this.handleSubmitEvent}
+                  disabled={this.state.actions.processing}>
+                  <Trans>Save</Trans>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="left-column">
           <UserAvatar
             user={this.props.context.loggedInUser}
             baseUrl={this.props.context.siteSettings.settings.app.url}
             className="author profile picture avatar"/>
-        </div>
-
-        <div className="right-column">
-          <div className="form-content">
-            <div className="input textarea required">
-              <textarea ref={this.textareaRef}
-                placeholder={this.translate("Add a comment")}
-                aria-required={true}
-                onChange={this.handleContentChanged}
-                onKeyDown={this.handleEscapeKeyPressed}
-                disabled={this.state.actions.processing}>
-              </textarea>
-              <div className="error-message">
-                {this.state.errors.isEmpty && this.translate("A comment is required.")}
-                {this.state.errors.isTooLong && this.translate("A comment must be less than 256 characters")}
-                {this.state.errors.technicalError}
-              </div>
-            </div>
-
-            <div className="metadata">
-              <span className="author username">
-                <Trans>You</Trans>
-              </span>
-              <span className="modified"><Trans>right now</Trans></span>
-            </div>
-            <div className="actions">
-              {
-                this.props.cancellable &&
-                <button
-                  type="button"
-                  className="link cancel"
-                  onClick={this.handleCancelEvent}
-                  disabled={this.state.actions.processing}>
-                  <span><Trans>Cancel</Trans></span>
-                </button>
-              }
-              <button
-                className="button primary comment-submit"
-                type="submit"
-                onClick={this.handleSubmitEvent}
-                disabled={this.state.actions.processing}>
-                <Trans>Save</Trans>
-              </button>
-            </div>
-          </div>
         </div>
       </form>
     );

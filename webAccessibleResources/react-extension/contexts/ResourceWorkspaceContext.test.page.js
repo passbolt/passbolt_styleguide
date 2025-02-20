@@ -108,7 +108,7 @@ export default class ResourceWorkspaceContextPage {
   }
 
   /**
-   * Go to the home search filter route
+   * Go to the All Items search filter route
    */
   async goToAllItems() {
     this.setup(this.context, this.props);

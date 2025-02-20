@@ -19,8 +19,7 @@
  */
 export function defaultNavigationContext(context = {}) {
   const defaultContext = {
-    onGoToNewTab: jest.fn(),
-    onGoToPasswordsRequested: jest.fn()
+    onGoToNewTab: jest.fn()
   };
   return Object.assign(defaultContext, context);
 }

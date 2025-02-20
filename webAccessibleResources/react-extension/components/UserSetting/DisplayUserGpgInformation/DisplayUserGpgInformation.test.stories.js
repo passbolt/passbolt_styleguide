@@ -1,40 +1,12 @@
+import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
+import PropTypes from "prop-types";
 import DisplayUserGpgInformation from "./DisplayUserGpgInformation";
-import DisplayUserGpgInformationHelp from "./DisplayUserGpgInformationHelp";
 
 export default {
   title: 'Components/UserSetting/DisplayUserGpgInformation',
-  component: DisplayUserGpgInformation,
-  decorators: [(Story, {args}) =>
-    <div id="container" className="page settings">
-      <div id="app" className="app" tabIndex="1000" style={{margin: "-1rem"}}>
-        <div className="panel main">
-          <div className="panel left">
-            <div className="sidebar-content">
-            </div>
-          </div>
-          <div className="panel middle">
-            <div className="header">
-            </div>
-            <div className="middle-right">
-              <div className="breadcrumbs-and-grid">
-                <div className="top-bar">
-                </div>
-                <div className="main-page">
-                  <Story {...args}/>
-                </div>
-              </div>
-              <div className="help-panel">
-                <div className="sidebar-help">
-                  <DisplayUserGpgInformationHelp {...args}/>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  ],
+  component: DisplayUserGpgInformation
 };
 
 const defaultKey = {
@@ -61,6 +33,10 @@ const defaultKey = {
 
 function defaultContext(data = {}) {
   const defaultData = {
+    userSettings: {
+      getSecurityTokenBackgroundColor: () => '#8bc34a',
+      getSecurityTokenCode: () => "ABC",
+    },
     port: {
       request: () => defaultKey
     },
@@ -75,12 +51,19 @@ function defaultContext(data = {}) {
   return Object.assign(defaultData, data);
 }
 
+const Template = ({context, ...args}) =>
+  <AppContext.Provider value={context}>
+    <MemoryRouter initialEntries={['/']}>
+      <Route component={routerProps => <DisplayUserGpgInformation {...args} {...routerProps}/>}></Route>
+    </MemoryRouter>
+  </AppContext.Provider>;
 
-export const Initial = {
-  args: {
-    context: defaultContext()
-  }
+Template.propTypes = {
+  context: PropTypes.object,
 };
+
+export const Initial = Template.bind({});
+Initial.args = {context: defaultContext()};
 
 const invalidKey = Object.assign({}, defaultKey, {
   expires: null,
@@ -89,12 +72,11 @@ const invalidKey = Object.assign({}, defaultKey, {
     email: "",
   }]
 });
-export const InvalidKey = {
-  args: {
-    context: defaultContext({
-      port: {
-        request: () => invalidKey
-      }
-    })
-  }
+export const InvalidKey = Template.bind({});
+InvalidKey.args =  {
+  context: defaultContext({
+    port: {
+      request: () => invalidKey
+    }
+  })
 };

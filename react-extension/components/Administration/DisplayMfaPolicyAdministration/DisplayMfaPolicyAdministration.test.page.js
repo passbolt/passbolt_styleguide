@@ -108,28 +108,28 @@ export default class DisplayMfaPolicyAdministrationPage {
    * Returns the help box
    */
   get helpBox() {
-    return this._page.container.querySelectorAll('.sidebar-help-section')[0];
+    return this._page.container.querySelector('.sidebar-help');
   }
 
   /**
    * Returns the help box title
    */
   get helpBoxTitle() {
-    return this.helpBox.querySelector('h3');
+    return this._page.container.querySelector('.sidebar-help h3');
   }
 
   /**
    * Returns the help box description
    */
   get helpBoxDescription() {
-    return this.helpBox.querySelector('p');
+    return this._page.container.querySelector('.sidebar-help p');
   }
 
   /**
    * Returns the help box button
    */
   get helpBoxButton() {
-    return this.helpBox.querySelector('.button');
+    return this._page.container.querySelector('.sidebar-help .button');
   }
 
   /**

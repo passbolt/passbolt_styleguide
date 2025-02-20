@@ -151,7 +151,7 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
                 checked={isDefaultExpiryPeriodToggleChecked}
                 disabled={this.hasAllInputDisabled()}
                 id="default-expiry-period-toggle"/>
-              <label htmlFor="default-expiry-period-toggle">
+              <label htmlFor="defaultExpiryPeriodToggle">
                 <span className="name"><Trans>Default password expiry period</Trans></span>
                 <span className="info-input">
                   <Trans>
@@ -188,7 +188,7 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
               <input type="checkbox" className="toggle-switch-checkbox checkbox" name="policy_override"
                 onChange={this.handleInputChange} checked={this.settings.policy_override} disabled={this.hasAllInputDisabled()}
                 id="policy-override-toggle"/>
-              <label htmlFor="policy-override-toggle">
+              <label htmlFor="policy_override">
                 <span className="name"><Trans>Policy Override</Trans></span>
                 <span className="info">
                   <Trans>Allow users to override the default policy.</Trans>
@@ -205,7 +205,7 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
               <input type="checkbox" className="toggle-switch-checkbox checkbox" name="automatic_expiry"
                 onChange={this.handleInputChange} checked={this.settings.automatic_expiry} disabled={this.hasAllInputDisabled()}
                 id="automatic-expiry-toggle"/>
-              <label htmlFor="automatic-expiry-toggle">
+              <label htmlFor="automatic_expiry">
                 <span className="name"><Trans>Automatic Expiry</Trans></span>
                 <span className="info">
                   <Trans>Password automatically expires when a user or group with a user who has accessed the password is removed from the permission list.</Trans>
@@ -218,7 +218,7 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
               <input type="checkbox" className="toggle-switch-checkbox checkbox" name="automatic_update"
                 onChange={this.handleInputChange} checked={this.settings.automatic_update} disabled={this.hasAllInputDisabled()}
                 id="automatic-update-toggle"/>
-              <label htmlFor="automatic-update-toggle">
+              <label htmlFor="automatic_update">
                 <span className="name"><Trans>Automatic Update</Trans></span>
                 <span className="info">
                   {isDefaultExpiryPeriodToggleChecked ? (

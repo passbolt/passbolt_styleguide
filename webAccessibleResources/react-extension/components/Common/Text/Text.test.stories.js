@@ -18,6 +18,9 @@ export default {
   component: "Text"
 };
 
-export const DefaultText =  {
-  render: () =>  <div>Text</div>
-};
+
+const Template = () =>
+  <>txt</>
+  ;
+
+export const Default = Template.bind({});
