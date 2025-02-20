@@ -15,7 +15,9 @@
 import EntitySchema from "../abstract/entitySchema";
 import SecretDataV4DefaultTotpEntity from "./secretDataV4DefaultTotpEntity";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {defaultSecretDataV4DefaultTotpEntityDto, defaultTotpDto, minimalSecretDataV4DefaultTotpEntityDto} from "./secretDataV4DefaultTotpEntity.test.data";
+import {defaultSecretDataV4DefaultTotpEntityDto, minimalSecretDataV4DefaultTotpEntityDto} from "./secretDataV4DefaultTotpEntity.test.data";
+import TotpEntity from "../totp/totpEntity";
+import {defaultTotpDto} from "../totp/totpDto.test.data";
 
 describe("SecretDataV4DefaultTotpEntity", () => {
   describe("::getSchema", () => {
@@ -50,6 +52,13 @@ describe("SecretDataV4DefaultTotpEntity", () => {
       assertEntityProperty.string(SecretDataV4DefaultTotpEntity, "description");
       assertEntityProperty.nullable(SecretDataV4DefaultTotpEntity, "description");
       assertEntityProperty.maxLength(SecretDataV4DefaultTotpEntity, "description", 10000);
+    });
+  });
+
+  describe("::associations", () => {
+    it("associations should have totp in associations", () => {
+      expect.assertions(1);
+      expect(SecretDataV4DefaultTotpEntity.associations).toStrictEqual({totp: TotpEntity});
     });
   });
 

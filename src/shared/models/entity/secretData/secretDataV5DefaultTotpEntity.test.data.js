@@ -12,8 +12,7 @@
  * @since         5.0.0
  */
 
-import {defaultTotpDto} from "./secretDataV4DefaultTotpEntity.test.data";
-
+import {defaultTotpDto} from "../totp/totpDto.test.data";
 
 /**
  * The minimal default secret v5 default totp entity

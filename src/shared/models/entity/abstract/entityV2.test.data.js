@@ -60,6 +60,13 @@ export class TestEntityV2 extends EntityV2 {
       }
     };
   }
+
+  static get associations() {
+    return {
+      "associated_entity": TestAssociatedEntityV2
+    };
+  }
+
   marshall() {
     if (this._props?.name === "K4r3n") {
       this._props.name = "Karen";

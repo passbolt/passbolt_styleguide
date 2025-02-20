@@ -15,7 +15,7 @@
 import TotpEntity from "../totp/totpEntity";
 import SecretDataEntity from "./secretDataEntity";
 
-class SecretDataV4StandaloneEntity extends SecretDataEntity {
+class SecretDataV5StandaloneTotpEntity extends SecretDataEntity {
   /**
    * @inheritDoc
    */
@@ -28,19 +28,31 @@ class SecretDataV4StandaloneEntity extends SecretDataEntity {
       delete this._props.totp;
     }
   }
+
   /**
-   * Get the secret data v4 standalone schema
+   * Get the secret data default totp schema
    * @returns {object}
    */
   static getSchema() {
     return {
       "type": "object",
       "required": [
+        "object_type",
         "totp"
       ],
       "properties": {
+        ...SecretDataEntity.getSchema().properties,
         "totp": TotpEntity.getSchema(),
       }
+    };
+  }
+
+  /**
+   * @inheritDoc
+   */
+  static get associations() {
+    return {
+      totp: TotpEntity
     };
   }
 
@@ -64,4 +76,4 @@ class SecretDataV4StandaloneEntity extends SecretDataEntity {
   }
 }
 
-export default SecretDataV4StandaloneEntity;
+export default SecretDataV5StandaloneTotpEntity;

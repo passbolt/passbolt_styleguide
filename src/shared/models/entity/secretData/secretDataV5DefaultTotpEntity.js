@@ -49,6 +49,15 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
   }
 
   /**
+   * @inheritDoc
+   */
+  static get associations() {
+    return {
+      totp: TotpEntity
+    };
+  }
+
+  /**
    * Get the DTO of properties managed by the form.
    * @returns {object}
    */
