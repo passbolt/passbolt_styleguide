@@ -17,6 +17,7 @@ import * as assertEntityProperty from "../../../../../test/assert/assertEntityPr
 import {defaultTotpDto} from "./secretDataV4DefaultTotpEntity.test.data";
 import SecretDataV5DefaultTotpEntity from "./secretDataV5DefaultTotpEntity";
 import {defaultSecretDataV5DefaultTotpEntityDto, minimalSecretDataV5DefaultTotpEntityDto} from "./secretDataV5DefaultTotpEntity.test.data";
+import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
 
 describe("SecretDataV5DefaultTotpEntity", () => {
   describe("::getSchema", () => {
@@ -24,8 +25,15 @@ describe("SecretDataV5DefaultTotpEntity", () => {
       EntitySchema.validateSchema(SecretDataV5DefaultTotpEntity.name, SecretDataV5DefaultTotpEntity.getSchema());
     });
 
+    it("validates object_type property", () => {
+      assertEntityProperty.string(SecretDataV5DefaultEntity, "object_type");
+      assertEntityProperty.required(SecretDataV5DefaultEntity, "object_type");
+      assertEntityProperty.enumeration(SecretDataV5DefaultEntity, "object_type", ["PASSBOLT_SECRET_DATA"], ["any other values"]);
+    });
+
     it("validates password property", () => {
       assertEntityProperty.string(SecretDataV5DefaultTotpEntity, "password");
+      assertEntityProperty.required(SecretDataV5DefaultTotpEntity, "password");
       assertEntityProperty.nullable(SecretDataV5DefaultTotpEntity, "password");
       assertEntityProperty.maxLength(SecretDataV5DefaultTotpEntity, "password", 4096);
     });
