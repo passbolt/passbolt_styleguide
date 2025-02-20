@@ -16,11 +16,18 @@ import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import {defaultTotpDto} from "./secretDataV4DefaultTotpEntity.test.data";
 import SecretDataV5StandaloneEntity from "./secretDataV5StandaloneEntity";
+import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
 
 describe("SecretDataV5StandaloneEntity", () => {
   describe("::getSchema", () => {
     it("schema must validate", () => {
       EntitySchema.validateSchema(SecretDataV5StandaloneEntity.name, SecretDataV5StandaloneEntity.getSchema());
+    });
+
+    it("validates object_type property", () => {
+      assertEntityProperty.string(SecretDataV5DefaultEntity, "object_type");
+      assertEntityProperty.required(SecretDataV5DefaultEntity, "object_type");
+      assertEntityProperty.enumeration(SecretDataV5DefaultEntity, "object_type", ["PASSBOLT_SECRET_DATA"], ["any other values"]);
     });
 
     it("validates totp property", () => {

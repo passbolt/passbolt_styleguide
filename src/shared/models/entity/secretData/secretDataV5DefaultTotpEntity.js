@@ -38,6 +38,7 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
       "type": "object",
       "required": [
         "object_type",
+        "password",
         "totp"
       ],
       "properties": {

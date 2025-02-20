@@ -17,7 +17,7 @@ import * as assertEntityProperty from "../../../../../test/assert/assertEntityPr
 import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
 import {defaultSecretDataV5DefaultDto, minimalDefaultSecretDataV5DefaultDto} from "./secretDataV5DefaultEntity.test.data";
 
-describe("SecretDataV5DefaultEntity", () => {
+describe("secretDataV5PasswordStringEntity", () => {
   describe("::getSchema", () => {
     it("schema must validate", () => {
       EntitySchema.validateSchema(SecretDataV5DefaultEntity.name, SecretDataV5DefaultEntity.getSchema());
@@ -31,37 +31,28 @@ describe("SecretDataV5DefaultEntity", () => {
 
     it("validates password property", () => {
       assertEntityProperty.string(SecretDataV5DefaultEntity, "password");
-      assertEntityProperty.required(SecretDataV5DefaultEntity, "password");
       assertEntityProperty.nullable(SecretDataV5DefaultEntity, "password");
       assertEntityProperty.maxLength(SecretDataV5DefaultEntity, "password", 4096);
-    });
-
-    it("validates description property", () => {
-      assertEntityProperty.string(SecretDataV5DefaultEntity, "description");
-      assertEntityProperty.nullable(SecretDataV5DefaultEntity, "description");
-      assertEntityProperty.maxLength(SecretDataV5DefaultEntity, "description", 10000);
     });
   });
 
   describe("::constructor", () => {
     it("constructor works if minimal valid DTO is provided", () => {
-      expect.assertions(3);
+      expect.assertions(2);
       const dto = minimalDefaultSecretDataV5DefaultDto();
       const entity = new SecretDataV5DefaultEntity(dto);
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
       expect(entity.password).toBeNull();
-      expect(entity.description).toBeUndefined();
     });
     it("constructor works if valid DTO is provided", () => {
-      expect.assertions(3);
+      expect.assertions(2);
 
       const dto = defaultSecretDataV5DefaultDto();
       const entity = new SecretDataV5DefaultEntity(dto);
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
       expect(entity.password).toStrictEqual(dto.password);
-      expect(entity.description).toStrictEqual(dto.description);
     });
   });
 });

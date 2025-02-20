@@ -30,6 +30,5 @@ export const minimalDefaultSecretDataV5DefaultDto = (data = {}) => ({
  */
 export const defaultSecretDataV5DefaultDto = (data = {}) => ({
   ...minimalDefaultSecretDataV5DefaultDto(data),
-  password: "this-is-a-secret-password",
-  description: "this is a secret description",
+  password: "this-is-a-secret-password"
 });

@@ -11,7 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-``;
 
 /**
  * Returns a minimum DTO object suitable for the SecretDataV4DefaultEntity
