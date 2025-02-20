@@ -14,20 +14,14 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {defaultTotpDto} from "./secretDataV4DefaultTotpEntity.test.data";
-import SecretDataV5StandaloneEntity from "./secretDataV5StandaloneEntity";
-import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
+import SecretDataV4StandaloneTotpEntity from "./secretDataV4StandaloneTotpEntity";
+import TotpEntity from "../totp/totpEntity";
+import {defaultTotpDto} from "../totp/totpDto.test.data";
 
-describe("SecretDataV5StandaloneEntity", () => {
+describe("SecretDataV4StandaloneEntity", () => {
   describe("::getSchema", () => {
     it("schema must validate", () => {
-      EntitySchema.validateSchema(SecretDataV5StandaloneEntity.name, SecretDataV5StandaloneEntity.getSchema());
-    });
-
-    it("validates object_type property", () => {
-      assertEntityProperty.string(SecretDataV5DefaultEntity, "object_type");
-      assertEntityProperty.required(SecretDataV5DefaultEntity, "object_type");
-      assertEntityProperty.enumeration(SecretDataV5DefaultEntity, "object_type", ["PASSBOLT_SECRET_DATA"], ["any other values"]);
+      EntitySchema.validateSchema(SecretDataV4StandaloneTotpEntity.name, SecretDataV4StandaloneTotpEntity.getSchema());
     });
 
     it("validates totp property", () => {
@@ -41,20 +35,27 @@ describe("SecretDataV5StandaloneEntity", () => {
           algorithm: "not an algorithm"
         })},
       ];
-      assertEntityProperty.assertAssociation(SecretDataV5StandaloneEntity, "totp", {object_type: "PASSBOLT_SECRET_DATA"}, successScenario, failScenario);
-      assertEntityProperty.required(SecretDataV5StandaloneEntity, "totp");
+      assertEntityProperty.assertAssociation(SecretDataV4StandaloneTotpEntity, "totp", {}, successScenario, failScenario);
+      assertEntityProperty.required(SecretDataV4StandaloneTotpEntity, "totp");
+    });
+  });
+
+  describe("::associations", () => {
+    it("associations should have totp in associations", () => {
+      expect.assertions(1);
+      expect(SecretDataV4StandaloneTotpEntity.associations).toStrictEqual({totp: TotpEntity});
     });
   });
 
   describe("::constructor", () => {
     it("constructor works if valid DTO is provided", () => {
-      expect.assertions(1);
+      expect.assertions(2);
       const dto = {
-        object_type: "PASSBOLT_SECRET_DATA",
-        totp: defaultTotpDto()
+        totp: defaultTotpDto(),
       };
-      const entity = new SecretDataV5StandaloneEntity(dto);
+      const entity = new SecretDataV4StandaloneTotpEntity(dto);
 
+      expect(entity._props.password).toStrictEqual(dto.password);
       expect(entity.totp.toDto()).toStrictEqual(dto.totp);
     });
   });

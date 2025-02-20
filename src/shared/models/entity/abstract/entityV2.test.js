@@ -14,12 +14,14 @@
 
 import EntityV2 from "./entityV2";
 import {
+  defaultAssociatedTestEntityV2Dto,
   defaultTestEntityV2Dto,
   minimalTestEntityV2Dto,
   TestAssociatedEntityV2,
   TestEntityV2
 } from "./entityV2.test.data";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
+import {v4 as uuid} from "uuid";
 
 beforeEach(() => {
   TestEntityV2._cachedSchema = {};
@@ -193,6 +195,18 @@ describe("EntityV2", () => {
     });
   });
 
+  describe("::associations", () => {
+    it("retrieves empty associations.", () => {
+      expect.assertions(1);
+      expect(EntityV2.associations).toStrictEqual({});
+    });
+
+    it("retrieves associations of an entity.", () => {
+      expect.assertions(1);
+      expect(TestEntityV2.associations).toStrictEqual({"associated_entity": TestAssociatedEntityV2});
+    });
+  });
+
   describe("::get", () => {
     it("returns a property value.", () => {
       expect.assertions(1);
@@ -282,10 +296,61 @@ describe("EntityV2", () => {
       expect(() => entity.set("array")).toThrow(new Error("The property \"associated_entity\" should reference scalar properties only."));
     });
 
-    it("throws if property is relative to an association.", () => {
+    it("set an association property value with dto.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.set("associated_entity")).toThrow(new Error("The property \"associated_entity\" should reference scalar properties only."));
+      const associatedTestEntityV2Dto = defaultAssociatedTestEntityV2Dto();
+      entity.set("associated_entity", associatedTestEntityV2Dto);
+      expect(entity.associatedEntity.toDto()).toStrictEqual(associatedTestEntityV2Dto);
+    });
+
+    it("set an association property value with entity.", () => {
+      expect.assertions(1);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      const associatedTestEntityV2 = new TestAssociatedEntityV2(defaultAssociatedTestEntityV2Dto());
+      entity.set("associated_entity", associatedTestEntityV2);
+      expect(entity.associatedEntity).toStrictEqual(associatedTestEntityV2);
+    });
+
+    it("set an association property value with property in the association.", () => {
+      expect.assertions(1);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      const id = uuid();
+      entity.set("associated_entity.id", id);
+      expect(entity.associatedEntity.id).toStrictEqual(id);
+    });
+
+    it("create and set an association property value with property in the association.", () => {
+      expect.assertions(2);
+      const entity = new TestEntityV2(minimalTestEntityV2Dto());
+      const id = uuid();
+      expect(entity.associatedEntity).toBeUndefined();
+      entity.set("associated_entity.id", id);
+      expect(entity.associatedEntity.id).toStrictEqual(id);
+    });
+
+    it("throws if association property value is not valid object.", () => {
+      expect.assertions(1);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      expect(() => entity.set("associated_entity", {id: "no uuid"})).toThrow(new Error("Could not validate entity TestAssociatedEntityV2."));
+    });
+
+    it("throws if association property value is not valid entity.", () => {
+      expect.assertions(1);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      expect(() => entity.set("associated_entity", new EntityV2({id: "no uuid"}, {validate: false}))).toThrow(new Error("Could not validate entity TestAssociatedEntityV2."));
+    });
+
+    it("throws if association property value with property in the association is not valid.", () => {
+      expect.assertions(1);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      expect(() => entity.set("associated_entity.id", "no uuid")).toThrow(new Error("Could not validate property id."));
+    });
+
+    it("throws if association property value with property in an new association is not valid.", () => {
+      expect.assertions(1);
+      const entity = new TestEntityV2(minimalTestEntityV2Dto());
+      expect(() => entity.set("associated_entity.id", "no uuid")).toThrow(new Error("Could not validate property id."));
     });
   });
 

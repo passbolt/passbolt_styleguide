@@ -11,21 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-/**
- * The default TOTP DTO
- * @param {Object} data The data to override
- * @returns {Object}
- */
-export const defaultTotpDto = (data = {}) => {
-  const defaultData = {
-    secret_key: "DAV3DS4ERAAF5QGH",
-    period: 30,
-    digits: 6,
-    algorithm: "SHA1"
-  };
-
-  return Object.assign(defaultData, data);
-};
+import {defaultTotpDto} from "../totp/totpDto.test.data";
 
 /**
  * The minimal default secret v4 default totp entity

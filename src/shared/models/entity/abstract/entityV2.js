@@ -143,6 +143,15 @@ class EntityV2 extends Entity {
   }
 
   /**
+   * Return the associations contained in the entity.
+   * Override this method to define the associations.
+   * @return {object}
+   */
+  static get associations() {
+    return {};
+  }
+
+  /**
    * Return a property value.
    *
    * Note: This function returns only scalar properties. Not supported:
@@ -174,9 +183,7 @@ class EntityV2 extends Entity {
    * explicitly disabled in the options.
    *
    * Note: the build rules are not enforced by this assignment and should be handled by the caller.
-   * Note: This function sets only scalar properties. Not supported:
-   *   - associated entities;
-   *   - associated collections;
+   * Note: This function sets scalar and association properties. Not supported:
    *   - nested object;
    *   - nested array;
    *
@@ -191,17 +198,62 @@ class EntityV2 extends Entity {
   set(propName, value, options = {}) {
     assertString(propName);
     const validate = options?.validate ?? true;
-    const schemaProperties = this.constructor.getSchema().properties[propName];
-    if (!schemaProperties) {
-      throw new Error(`The property "${propName}" has no schema definition.`);
+    if (this.isAssociation(propName)) {
+      this.setAssociation(propName, value, options);
+    } else {
+      const schemaProperties = this.constructor.getSchema().properties[propName];
+      if (!schemaProperties) {
+        throw new Error(`The property "${propName}" has no schema definition.`);
+      }
+      if (!SCALAR_PROPERTY_TYPES.includes(schemaProperties?.type)) {
+        throw new Error("The property \"associated_entity\" should reference scalar properties only.");
+      }
+      if (validate) {
+        EntitySchema.validateProp(propName, value, schemaProperties);
+      }
+      this._props[propName] = value;
     }
-    if (!SCALAR_PROPERTY_TYPES.includes(schemaProperties?.type)) {
-      throw new Error("The property \"associated_entity\" should reference scalar properties only.");
+  }
+
+  /**
+   * Set an association or an association property value. The new association value will be validated against the entity schema unless validation is
+   * explicitly disabled in the options.
+   *
+   * Note: the build rules are not enforced by this assignment and should be handled by the caller.
+   * Note: This function sets association and association properties. Not supported:
+   *   - nested object;
+   *   - nested array;
+   *
+   * @param {string} propName The property name.
+   * @param {*} value The value to set.
+   * @param {object} [options] Options.
+   * @throws {Error} If the property has no schema definition.
+   * @throws {Error} If the property does not validate the entity schema.
+   * @throws {EntityValidationError} If the property does not validate the entity schema.
+   * @private
+   */
+  setAssociation(propName, value, options = {}) {
+    assertString(propName);
+    // Get the prop name split in case of association prop name (example: associationPropName.propName)
+    const propNameSplit = propName.split(".");
+    // Get the association name and replace '_[a-z]' into [A-Z]  (example: associated_entity_v2 become associatedEntityV2)
+    const associationPropName = propNameSplit[0].replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
+    if (propNameSplit.length > 1) {
+      if (!this[`_${associationPropName}`]) {
+        // Instantiate a new empty association entity with no validation to set the value after
+        this[`_${associationPropName}`] = new this.constructor.associations[propNameSplit[0]]({validate: false});
+      }
+      // loop to set the association prop name
+      this[`_${associationPropName}`].set(propNameSplit[1], value, options);
+    } else {
+      if (value instanceof this.constructor.associations[propName]) {
+        // Set the association
+        this[`_${associationPropName}`] = value;
+      } else {
+        // Instantiate a new association entity with the value
+        this[`_${associationPropName}`] = new this.constructor.associations[propName](value, options);
+      }
     }
-    if (validate) {
-      EntitySchema.validateProp(propName, value, schemaProperties);
-    }
-    this._props[propName] = value;
   }
 
   /**
@@ -247,6 +299,17 @@ class EntityV2 extends Entity {
   hasDiffProps(compareEntity) {
     const diff = this.diffProps(compareEntity);
     return Object.keys(diff).length > 0;
+  }
+
+  /**
+   * Determine if the prop name is part of an association
+   * @param {string} propName The property name.
+   * @returns {boolean}
+   */
+  isAssociation(propName) {
+    // Get the main prop name split in case of association prop name (example: associationPropName.propName)
+    const mainPropName = propName.split(".")[0];
+    return Boolean(this.constructor.associations?.[mainPropName]);
   }
 }
 
