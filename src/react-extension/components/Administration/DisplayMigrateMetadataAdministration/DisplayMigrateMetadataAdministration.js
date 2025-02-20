@@ -30,6 +30,7 @@ import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedba
 import MetadataKeysServiceWorkerService from "../../../../shared/services/serviceWorker/metadata/metadataKeysServiceWorkerService";
 import MigrateMetadataFormEntity from "../../../../shared/models/entity/metadata/migrateMetadataFormEntity";
 import MetadataMigrateContentServiceWorkerService from "../../../../shared/services/serviceWorker/metadata/metadataMigrateContentServiceWorkerService";
+import ConfirmMigrateMetadataDialog from "./ConfirmMigrateMetadataDialog";
 
 class DisplayMigrateMetadataAdministration extends Component {
   /** @type {MigrateMetadataFormEntity} */
@@ -40,6 +41,8 @@ class DisplayMigrateMetadataAdministration extends Component {
   metadataKeys = undefined;
   /** @type {PassboltResponsePaginationHeaderEntity} */
   migrationCountDetails = undefined;
+  /** @type {PassboltResponsePaginationHeaderEntity} */
+  migrationCountDetailsShared = undefined;
 
   constructor(props) {
     super(props);
@@ -78,6 +81,7 @@ class DisplayMigrateMetadataAdministration extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleMigrateScopeInputChange = this.handleMigrateScopeInputChange.bind(this);
     this.runMigration = this.runMigration.bind(this);
+    this.askForMigrationConfirmation = this.askForMigrationConfirmation.bind(this);
   }
 
   /**
@@ -86,8 +90,14 @@ class DisplayMigrateMetadataAdministration extends Component {
    * @return {void}
    */
   async componentDidMount() {
+    await this.initData();
+  }
+
+  async initData() {
     this.metadataTypesSettings = await this.metadataSettingsServiceWorkerService.findTypesSettings();
     this.metadataKeys = await this.metadataKeysServiceWorkerService.findAll();
+
+    this.migrationCountDetailsShared = await this.metadataMigrateContentServiceWorkerService.findCountMetadataMigrateResources(true);
     this.migrationCountDetails = await this.metadataMigrateContentServiceWorkerService.findCountMetadataMigrateResources();
 
     this.setState({
@@ -165,7 +175,7 @@ class DisplayMigrateMetadataAdministration extends Component {
   handleFormSubmit(event) {
     // Avoid the form to be submitted natively by the browser and avoid a redirect to a broken page.
     event.preventDefault();
-    this.runMigration();
+    this.askForMigrationConfirmation();
   }
 
   /**
@@ -179,12 +189,39 @@ class DisplayMigrateMetadataAdministration extends Component {
       || this.hasPendingTagsMigration;
   }
 
-  get totalResourcesMigrated() {
-    return 0;
+  /**
+   * Returns the total of resources to be migrated (shared + personal)
+   * @returns {integer}
+   */
+  get totalResources() {
+    return this.totalSharedResources + this.totalPersonalResources;
   }
 
-  get totalResources() {
-    return this.migrationCountDetails?.limit || this.migrationCountDetails?.count;
+  /**
+   * Returns the total of shared resources to be migrated
+   * @returns {integer}
+   */
+  get totalSharedResources() {
+    return this.migrationCountDetailsShared?.count;
+  }
+
+  /**
+   * Returns the total of personal resources to be migrated
+   * @returns {integer}
+   */
+  get totalPersonalResources() {
+    return this.migrationCountDetailsPersonal?.count;
+  }
+
+  /**
+   * Returns the migration details computed based on the admin choice
+   * @returns {object}
+   */
+  get migrationCountDetailsPersonal() {
+    return {
+      ...this.migrationCountDetails,
+      count: this.migrationCountDetails?.count - this.migrationCountDetailsShared?.count,
+    };
   }
 
   /**
@@ -247,6 +284,16 @@ class DisplayMigrateMetadataAdministration extends Component {
   }
 
   /**
+   * Asks the current user for confirmation before running the metadata migration process.
+   */
+  askForMigrationConfirmation() {
+    this.props.dialogContext.open(ConfirmMigrateMetadataDialog, {
+      confirm: this.runMigration,
+      cancel: () => {},
+    });
+  }
+
+  /**
    * Triggers the migration of the content
    * @returns {Promise<void>}
    */
@@ -265,7 +312,8 @@ class DisplayMigrateMetadataAdministration extends Component {
     this.setState({isProcessing: true});
 
     try {
-      //@todo: add the process call for running the migration
+      const migrationDetails = this.formSettings.sharedContentOnly ? this.migrationCountDetailsShared : this.migrationCountDetails;
+      await this.metadataMigrateContentServiceWorkerService.migrate(this.formSettings.toDto(), migrationDetails);
       await this.props.actionFeedbackContext.displaySuccess(this.props.t("The encrypted metadata settings were updated."));
     } catch (error) {
       this.props.dialogContext.open(NotifyError, {error});
@@ -273,8 +321,9 @@ class DisplayMigrateMetadataAdministration extends Component {
 
     this.setState({
       hasAlreadyBeenValidated: true,
-      isProcessing: false,
     });
+
+    await this.initData();
   }
 
   /**
@@ -334,7 +383,7 @@ class DisplayMigrateMetadataAdministration extends Component {
                     <span className="label"><Trans>Resources</Trans></span>
                     <span className="value">
                       {this.hasPendingResourcesMigration
-                        ? <>{this.props.t("{{count}} to be migrated", {count: this.totalResources})}</>
+                        ? <>{this.props.t("{{count}} to be migrated", {count: this.totalResources})} ({this.props.t("{{count}} shared resources", {count: this.totalSharedResources})}, {this.props.t("{{count}} personal resources", {count: this.totalPersonalResources})})</>
                         : <Trans>All migrated</Trans>
                       }
                     </span>
@@ -510,4 +559,4 @@ DisplayMigrateMetadataAdministration.propTypes = {
   t: PropTypes.func, // translation function
 };
 
-export default withAppContext(withActionFeedback(withDialog(withResourceTypesLocalStorage(withTranslation('common')(DisplayMigrateMetadataAdministration)))));
+export default withAppContext(withActionFeedback(withDialog(withResourceTypesLocalStorage(withDialog(withTranslation('common')(DisplayMigrateMetadataAdministration))))));
