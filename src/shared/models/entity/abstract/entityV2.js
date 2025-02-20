@@ -15,6 +15,7 @@ import EntitySchema from "./entitySchema";
 import Entity from "./entity";
 import assertString from "validator/es/lib/util/assertString";
 import EntityValidationError from "./entityValidationError";
+import {snakeCaseToCamelCase} from "../../../utils/stringUtils";
 
 const SCALAR_PROPERTY_TYPES = ["string", "number", "integer", "boolean"];
 
@@ -80,6 +81,7 @@ class EntityV2 extends Entity {
   validate(options = {}) {
     try {
       this.validateSchema(options?.schema);
+      this.createAssociations(options);
       this.validateBuildRules(options?.validateBuildRules);
     } catch (error) {
       if (!(error instanceof EntityValidationError)) {
@@ -140,6 +142,35 @@ class EntityV2 extends Entity {
   // eslint-disable-next-line no-unused-vars
   validateBuildRules(options = {}) {
     // Override this method to add entity validation build rules.
+  }
+
+  /**
+   * create the association entity: its schema and its build rules.
+   * @param {object} [options] Options
+   */
+  createAssociations(options = {}) {
+    const validationErrors = new EntityValidationError();
+    for (const [key, value] of Object.entries(this.constructor.associations)) {
+      try {
+        if (this._props[key]) {
+          // Get the association name and replace '_[a-z]' into [A-Z]  (example: associated_entity_v2 become associatedEntityV2)
+          const associationPropName = snakeCaseToCamelCase(key);
+          this[`_${associationPropName}`] = new value(this._props[key], options);
+          delete this._props[key];
+        }
+      } catch (error) {
+        if (error instanceof EntityValidationError) {
+          validationErrors.addAssociationError(key, error);
+        } else {
+          throw error;
+        }
+      }
+    }
+
+    // Throw error if some issues were gathered
+    if (validationErrors.hasErrors()) {
+      throw validationErrors;
+    }
   }
 
   /**
@@ -219,6 +250,7 @@ class EntityV2 extends Entity {
    * Set an association or an association property value. The new association value will be validated against the entity schema unless validation is
    * explicitly disabled in the options.
    *
+   * Note: If the value is an instance of entity type, no clone or validation is applied.
    * Note: the build rules are not enforced by this assignment and should be handled by the caller.
    * Note: This function sets association and association properties. Not supported:
    *   - nested object;
@@ -233,25 +265,30 @@ class EntityV2 extends Entity {
    * @private
    */
   setAssociation(propName, value, options = {}) {
-    assertString(propName);
-    // Get the prop name split in case of association prop name (example: associationPropName.propName)
-    const propNameSplit = propName.split(".");
-    // Get the association name and replace '_[a-z]' into [A-Z]  (example: associated_entity_v2 become associatedEntityV2)
-    const associationPropName = propNameSplit[0].replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
-    if (propNameSplit.length > 1) {
-      if (!this[`_${associationPropName}`]) {
-        // Instantiate a new empty association entity with no validation to set the value after
-        this[`_${associationPropName}`] = new this.constructor.associations[propNameSplit[0]]({validate: false});
-      }
-      // loop to set the association prop name
-      this[`_${associationPropName}`].set(propNameSplit[1], value, options);
-    } else {
-      if (value instanceof this.constructor.associations[propName]) {
-        // Set the association
-        this[`_${associationPropName}`] = value;
+    assertString(propName); // Assert propName is a string
+    // Assert is association
+    if (this.isAssociation(propName)) {
+      // Get the prop name split in case of association prop name (example: associationPropName.propName)
+      const propNameSplit = propName.split(".");
+      // Get the association name and replace '_[a-z]' into [A-Z]  (example: associated_entity_v2 become associatedEntityV2)
+      const associationPropName = snakeCaseToCamelCase(propNameSplit[0]);
+      // Check if the propName  is a property of the association
+      const isPropertyAssociation = propNameSplit.length > 1;
+      if (isPropertyAssociation) {
+        if (!this[`_${associationPropName}`]) {
+          // Instantiate a new empty association entity with no validation to set the value after
+          this[`_${associationPropName}`] = new this.constructor.associations[propNameSplit[0]]({}, {validate: false});
+        }
+        // loop to set the association prop name
+        this[`_${associationPropName}`].set(propNameSplit[1], value, options);
       } else {
-        // Instantiate a new association entity with the value
-        this[`_${associationPropName}`] = new this.constructor.associations[propName](value, options);
+        if (value instanceof this.constructor.associations[propName]) {
+          // Set the association
+          this[`_${associationPropName}`] = value;
+        } else {
+          // Instantiate a new association entity with the value
+          this[`_${associationPropName}`] = new this.constructor.associations[propName](value, options);
+        }
       }
     }
   }
