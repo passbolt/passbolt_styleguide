@@ -64,4 +64,13 @@ describe("PassboltResponseEntity", () => {
       expect(entity.header.toDto()).toStrictEqual(dto.header);
     });
   });
+
+  describe("::body", () => {
+    it("should return the body part of the Passbolt Api Response", () => {
+      expect.assertions(1);
+      const dto = defaultPassboltResponseDto();
+      const entity = new PassboltResponseEntity(dto);
+      expect(entity.body).toStrictEqual(dto.body);
+    });
+  });
 });

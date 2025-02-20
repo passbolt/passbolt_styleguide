@@ -15,6 +15,7 @@
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import PassboltResponseHeaderEntity from "./PassboltResponseHeaderEntity";
 import {defaultPassboltResponseHeaderDto} from "./PassboltResponseHeaderEntity.test.data";
+import PassboltResponsePaginationHeaderEntity from "./PassboltResponsePaginationHeaderEntity";
 import {defaultPassboltResponsePaginationHeaderDto} from "./PassboltResponsePaginationHeaderEntity.test.data";
 
 describe("PassboltResponseHeaderEntity", () => {
@@ -40,6 +41,25 @@ describe("PassboltResponseHeaderEntity", () => {
       const dto = defaultPassboltResponseHeaderDto();
       const entity = new PassboltResponseHeaderEntity(dto);
       expect(entity).toBeInstanceOf(PassboltResponseHeaderEntity);
+    });
+  });
+
+  describe("::pagination", () => {
+    it("should return the pagination part of the Passbolt Api Response Header", () => {
+      expect.assertions(2);
+      const dto = defaultPassboltResponseHeaderDto();
+      const entity = new PassboltResponseHeaderEntity(dto);
+      expect(entity.pagination).toBeInstanceOf(PassboltResponsePaginationHeaderEntity);
+      expect(entity.pagination.toDto()).toStrictEqual(dto.pagination);
+    });
+  });
+
+  describe("::toDto", () => {
+    it("should return a dto with the pagination if any", () => {
+      expect.assertions(1);
+      const dto = defaultPassboltResponseHeaderDto();
+      const entity = new PassboltResponseHeaderEntity(dto);
+      expect(entity.toDto()).toStrictEqual(dto);
     });
   });
 });
