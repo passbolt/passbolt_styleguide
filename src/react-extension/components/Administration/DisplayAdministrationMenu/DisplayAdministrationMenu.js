@@ -186,6 +186,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleContentTypesEncryptedMetadataClick = this.handleContentTypesEncryptedMetadataClick.bind(this);
     this.handleContentTypesMetadataKeyClick = this.handleContentTypesMetadataKeyClick.bind(this);
     this.handleMigrateMetadataClick = this.handleMigrateMetadataClick.bind(this);
+    this.handleAllowedContentTypesClick = this.handleAllowedContentTypesClick.bind(this);
   }
 
   /**
@@ -312,6 +313,13 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleMigrateMetadataClick() {
     this.props.navigationContext.onGoToAdministrationMigrateMetadataRequested();
+  }
+
+  /**
+   * Handle when the user click on the Allow content type menu
+   */
+  handleAllowedContentTypesClick() {
+    this.props.navigationContext.onGoToAdministrationAllowContentTypesRequested();
   }
 
   /**
@@ -456,6 +464,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isMigrateMetadataSelected() {
     return AdministrationWorkspaceMenuTypes.MIGRATE_METADATA === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If Allow content types menu is selected
+   * @returns {boolean}
+   */
+  isAllowedContentTypesSelected() {
+    return AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -646,47 +662,57 @@ class DisplayAdministrationMenu extends React.Component {
           </li>
           }
           {this.canIUseMetadata &&
-          <li id="encrypted_metadata_menu">
-            <div className={`row  ${this.isContentTypesEncryptedMetadataSelected() ? "selected" : ""}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button className="link no-border" type="button"
-                    onClick={this.handleContentTypesEncryptedMetadataClick}>
-                    <span><Trans>Encrypted metadata</Trans></span>
-                    <span className="chips beta">beta</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </li>
-          }
-          {this.canIUseMetadata &&
-            <li id="metadata_key_menu">
-              <div className={`row  ${this.isContentTypesMetadataKeySelected() ? "selected" : ""}`}>
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={this.handleContentTypesMetadataKeyClick}>
-                      <span><Trans>Metadata key</Trans></span>
-                      <span className="chips beta">beta</span>
-                    </button>
+            <>
+              <li id="encrypted_metadata_menu">
+                <div className={`row  ${this.isContentTypesEncryptedMetadataSelected() ? "selected" : ""}`}>
+                  <div className="main-cell-wrapper">
+                    <div className="main-cell">
+                      <button className="link no-border" type="button"
+                        onClick={this.handleContentTypesEncryptedMetadataClick}>
+                        <span><Trans>Encrypted metadata</Trans></span>
+                        <span className="chips beta">beta</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </li>
-          }
-          {this.canIUseMetadata &&
-            <li id="migrate_metadata_menu">
-              <div className={`row  ${this.isMigrateMetadataSelected() ? "selected" : ""}`}>
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={this.handleMigrateMetadataClick}>
-                      <span><Trans>Migrate metadata</Trans></span>
-                      <span className="chips beta">beta</span>
-                    </button>
+              </li>
+              <li id="metadata_key_menu">
+                <div className={`row  ${this.isContentTypesMetadataKeySelected() ? "selected" : ""}`}>
+                  <div className="main-cell-wrapper">
+                    <div className="main-cell">
+                      <button className="link no-border" type="button" onClick={this.handleContentTypesMetadataKeyClick}>
+                        <span><Trans>Metadata key</Trans></span>
+                        <span className="chips beta">beta</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </li>
+              </li>
+              <li id="migrate_metadata_menu">
+                <div className={`row  ${this.isMigrateMetadataSelected() ? "selected" : ""}`}>
+                  <div className="main-cell-wrapper">
+                    <div className="main-cell">
+                      <button className="link no-border" type="button" onClick={this.handleMigrateMetadataClick}>
+                        <span><Trans>Migrate metadata</Trans></span>
+                        <span className="chips beta">beta</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li id="allowed_content_type_menu">
+                <div className={`row  ${this.isAllowedContentTypesSelected() ? "selected" : ""}`}>
+                  <div className="main-cell-wrapper">
+                    <div className="main-cell">
+                      <button className="link no-border" type="button" onClick={this.handleAllowedContentTypesClick}>
+                        <span><Trans>Allow content types</Trans></span>
+                        <span className="chips beta">beta</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </>
           }
         </ul>
       </div>
