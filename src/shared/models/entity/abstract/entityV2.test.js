@@ -61,9 +61,9 @@ describe("EntityV2", () => {
       const dto = minimalTestEntityV2Dto({associated_entity: associatedEntityDto});
       // Ideally the thrown error should indicate the path of the error.
       expect(() => new TestEntityV2(dto))
-        .not.toThrowEntityValidationError("associated_entity", "id.type");
+        .toThrowEntityValidationError("associated_entity.details.id", "type");
       expect(() => new TestEntityV2(dto))
-        .toThrowEntityValidationError("id", "type");
+        .not.toThrowEntityValidationError("id", "type");
     });
 
     it("should throw if the dto does not validate against the entity build rules.", () => {

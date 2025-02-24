@@ -16,18 +16,10 @@ import EntityV2 from "./entityV2";
 import EntityValidationError from "./entityValidationError";
 
 export class TestEntityV2 extends EntityV2 {
-  constructor(dto, options) {
-    super(dto, options);
-    if (this._props.associated_entity) {
-      this._associatedEntity = new TestAssociatedEntityV2(this._props.associated_entity, options);
-      delete this._props.associated_entity;
-    }
-  }
-
   static getSchema() {
     return {
       "type": "object",
-      "required": [],
+      "required": ['name'],
       "properties": {
         "id": {
           "type": "string",
@@ -103,11 +95,11 @@ export class TestEntityV2 extends EntityV2 {
   }
 }
 
-export class TestAssociatedEntityV2 extends TestEntityV2 {
+export class TestAssociatedEntityV2 extends EntityV2 {
   static getSchema() {
     return {
       "type": "object",
-      "required": [],
+      "required": ["id"],
       "properties": {
         "id": {
           "type": "string",

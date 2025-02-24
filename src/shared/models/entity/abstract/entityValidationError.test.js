@@ -64,6 +64,40 @@ describe("EntityValidationError", () => {
     });
   });
 
+  describe("::addAssociationError", () => {
+    it("throws exception if associationName is not a string", () => {
+      const t = () => {
+        const e = new EntityValidationError('placeholder message');
+        e.addAssociationError(null, null);
+      };
+      expect(t).toThrow(TypeError);
+    });
+
+    it("throws exception if error is not an instance of EntityValidationError", () => {
+      const t = () => {
+        const e = new EntityValidationError('placeholder message');
+        e.addAssociationError('associationName', null);
+      };
+      expect(t).toThrow(TypeError);
+    });
+
+    it("addAssociationError add exception details", () => {
+      const e = new EntityValidationError('placeholder message');
+      const e2 = new EntityValidationError('placeholder message');
+      e2.addError('prop1', 'rule1', 'message1');
+      e.addAssociationError('association', e2);
+      expect(e.details.association.details).toEqual({
+        'prop1': {
+          'rule1': 'message1'
+        }
+      });
+
+      expect(e.hasError('association')).toBe(true);
+      expect(e.hasError('prop1', 'rule1')).toBe(false);
+      expect(e.details.association.hasError('prop1', 'rule1')).toBe(true);
+    });
+  });
+
   describe("::getError", () => {
     it("should return a map of errors of the given field", () => {
       expect.assertions(2);
