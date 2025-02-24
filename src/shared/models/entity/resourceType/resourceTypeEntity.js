@@ -169,6 +169,14 @@ class ResourceTypeEntity extends EntityV2 {
   }
 
   /**
+   * Get the resources count
+   * @returns {integer|null}
+   */
+  get resourcesCount() {
+    return this._props.resources_count || null;
+  }
+
+  /**
    * Has totp
    * @returns {boolean}
    */
@@ -238,6 +246,15 @@ class ResourceTypeEntity extends EntityV2 {
    */
   isV4() {
     return this.version === RESOURCE_TYPE_VERSION_4;
+  }
+
+  /**
+   * Is resource type deleted
+   * @returns {boolean}
+   */
+  isDeleted() {
+    return typeof(this._props.deleted) !== "undefined"
+      && this._props.deleted !== null;
   }
 }
 

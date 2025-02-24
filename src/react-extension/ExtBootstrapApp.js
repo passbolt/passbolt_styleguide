@@ -114,6 +114,7 @@ class ExtBootstrapApp extends Component {
               "/app/administration/content-types/metadata",
               "/app/administration/content-types/metadata-key",
               "/app/administration/migrate-metadata",
+              "/app/administration/allow-content-types",
               "/app/folders/view/:filterByFolderId",
               "/app/groups/view/:selectedGroupId",
               "/app/groups/edit/:selectedGroupId",
