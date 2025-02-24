@@ -16,6 +16,7 @@ import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
 import {defaultSecretDataV5DefaultDto, minimalDefaultSecretDataV5DefaultDto} from "./secretDataV5DefaultEntity.test.data";
+import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
 
 describe("SecretDataV5DefaultEntity", () => {
   describe("::getSchema", () => {
@@ -26,7 +27,7 @@ describe("SecretDataV5DefaultEntity", () => {
     it("validates object_type property", () => {
       assertEntityProperty.string(SecretDataV5DefaultEntity, "object_type");
       assertEntityProperty.required(SecretDataV5DefaultEntity, "object_type");
-      assertEntityProperty.enumeration(SecretDataV5DefaultEntity, "object_type", ["PASSBOLT_SECRET_DATA"], ["any other values"]);
+      assertEntityProperty.enumeration(SecretDataV5DefaultEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
     });
 
     it("validates password property", () => {

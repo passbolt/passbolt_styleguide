@@ -16,7 +16,7 @@ import {defaultUserAppContext} from "./ExtAppContext.test.data";
 import {defaultPasswordExpirySettingsContext} from "./PasswordExpirySettingsContext.test.data";
 import {defaultUserRbacContext} from "../../shared/context/Rbac/RbacContext.test.data";
 import {readPermissionDto, updatePermissionDto} from "../../shared/models/entity/permission/permissionEntity.test.data";
-import {defaultResourceMetadataDto} from "../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
+import {defaultResourceMetadataDto} from "../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import {defaultTagDto} from "../../shared/models/entity/tag/tagEntity.test.data";
 import {resourceAllTypesDtosCollection, resourceAllTypesDtosCollectionAndVariousPermission} from "../../shared/models/entity/resource/resourcesCollection.test.data";
 

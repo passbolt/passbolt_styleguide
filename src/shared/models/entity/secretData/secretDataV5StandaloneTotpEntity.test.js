@@ -17,6 +17,7 @@ import * as assertEntityProperty from "../../../../../test/assert/assertEntityPr
 import SecretDataV5StandaloneTotpEntity from "./secretDataV5StandaloneTotpEntity";
 import TotpEntity from "../totp/totpEntity";
 import {defaultTotpDto} from "../totp/totpDto.test.data";
+import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
 
 describe("SecretDataV5StandaloneEntity", () => {
   describe("::getSchema", () => {
@@ -27,7 +28,7 @@ describe("SecretDataV5StandaloneEntity", () => {
     it("validates object_type property", () => {
       assertEntityProperty.string(SecretDataV5StandaloneTotpEntity, "object_type");
       assertEntityProperty.required(SecretDataV5StandaloneTotpEntity, "object_type");
-      assertEntityProperty.enumeration(SecretDataV5StandaloneTotpEntity, "object_type", ["PASSBOLT_SECRET_DATA"], ["any other values"]);
+      assertEntityProperty.enumeration(SecretDataV5StandaloneTotpEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
     });
 
     it("validates totp property", () => {
@@ -41,7 +42,7 @@ describe("SecretDataV5StandaloneEntity", () => {
           algorithm: "not an algorithm"
         })},
       ];
-      assertEntityProperty.assertAssociation(SecretDataV5StandaloneTotpEntity, "totp", {object_type: "PASSBOLT_SECRET_DATA"}, successScenario, failScenario);
+      assertEntityProperty.assertAssociation(SecretDataV5StandaloneTotpEntity, "totp", {object_type: SECRET_DATA_OBJECT_TYPE}, successScenario, failScenario);
       assertEntityProperty.required(SecretDataV5StandaloneTotpEntity, "totp");
     });
   });
@@ -57,7 +58,7 @@ describe("SecretDataV5StandaloneEntity", () => {
     it("constructor works if valid DTO is provided", () => {
       expect.assertions(1);
       const dto = {
-        object_type: "PASSBOLT_SECRET_DATA",
+        object_type: SECRET_DATA_OBJECT_TYPE,
         totp: defaultTotpDto()
       };
       const entity = new SecretDataV5StandaloneTotpEntity(dto);

@@ -13,7 +13,7 @@
  */
 import {
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
-} from "../resourceType/resourceTypeEntity.test.data";
+} from "../../resourceType/resourceTypeEntity.test.data";
 
 /**
  * Build minimal resource metadata dto.

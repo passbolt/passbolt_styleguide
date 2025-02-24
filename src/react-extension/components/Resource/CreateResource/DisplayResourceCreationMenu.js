@@ -25,12 +25,28 @@ class ResourceCreationMenu extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.bindCallbacks();
   }
 
   get defaultState() {
     return {
       processing: false,
     };
+  }
+
+  /**
+   * Bind callbacks methods
+   * @return {void}
+   */
+  bindCallbacks() {
+    this.handleClose = this.handleClose.bind(this);
+  }
+
+  /**
+   * Handle close
+   */
+  handleClose() {
+    this.props.onClose();
   }
 
   /**

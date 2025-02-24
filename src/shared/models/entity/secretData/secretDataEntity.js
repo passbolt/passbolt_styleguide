@@ -14,6 +14,8 @@
 
 import EntityV2 from "../abstract/entityV2";
 
+export const SECRET_DATA_OBJECT_TYPE = "PASSBOLT_SECRET_DATA";
+
 class SecretDataEntity extends EntityV2 {
   /**
    * Get the secret data schema
@@ -26,7 +28,7 @@ class SecretDataEntity extends EntityV2 {
       "properties": {
         "object_type": {
           "type": "string",
-          "enum": ["PASSBOLT_SECRET_DATA"],
+          "enum": [SECRET_DATA_OBJECT_TYPE],
         },
       }
     };

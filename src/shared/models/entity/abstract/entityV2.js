@@ -51,15 +51,13 @@ class EntityV2 extends Entity {
     // Note: Entity V1 will clone the dtos into the instance _props property.
     super(dtos, options);
     this.marshall();
+
     if (validate) {
-      const error = this.validate({
-        schema: options?.schema,
-        validateBuildRules: options?.validateBuildRules
-      });
-      // Entity constructor always throws validation error.
-      if (error) {
-        throw error;
-      }
+      this.validateSchema(options?.schema);
+    }
+    this.createAssociations(options);
+    if (validate) {
+      this.validateBuildRules(options?.validateBuildRules);
     }
   }
 
@@ -81,7 +79,6 @@ class EntityV2 extends Entity {
   validate(options = {}) {
     try {
       this.validateSchema(options?.schema);
-      this.createAssociations(options);
       this.validateBuildRules(options?.validateBuildRules);
     } catch (error) {
       if (!(error instanceof EntityValidationError)) {
@@ -150,17 +147,17 @@ class EntityV2 extends Entity {
    */
   createAssociations(options = {}) {
     const validationErrors = new EntityValidationError();
-    for (const [key, value] of Object.entries(this.constructor.associations)) {
+    for (const [associationProp, associationEntityClass] of Object.entries(this.constructor.associations)) {
       try {
-        if (this._props[key]) {
+        if (this._props[associationProp]) {
           // Get the association name and replace '_[a-z]' into [A-Z]  (example: associated_entity_v2 become associatedEntityV2)
-          const associationPropName = snakeCaseToCamelCase(key);
-          this[`_${associationPropName}`] = new value(this._props[key], options);
-          delete this._props[key];
+          const associationPropName = snakeCaseToCamelCase(associationProp);
+          this[`_${associationPropName}`] = new associationEntityClass(this._props[associationProp], {...options, clone: false});
+          delete this._props[associationProp];
         }
       } catch (error) {
         if (error instanceof EntityValidationError) {
-          validationErrors.addAssociationError(key, error);
+          validationErrors.addAssociationError(associationProp, error);
         } else {
           throw error;
         }

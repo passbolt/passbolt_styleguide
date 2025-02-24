@@ -12,9 +12,9 @@
  * @since         5.0.0
  */
 
-import EntityV2 from "../abstract/entityV2";
+import SecretDataEntity from "./secretDataEntity";
 
-class secretDataV4PasswordStringEntity extends EntityV2 {
+class secretDataV4PasswordStringEntity extends SecretDataEntity {
   /**
    * Get session keys bundle data entity schema
    * @returns {Object} schema
@@ -32,6 +32,19 @@ class secretDataV4PasswordStringEntity extends EntityV2 {
         },
       }
     };
+  }
+
+  /*
+   * ==================================================
+   * Dynamic properties getters
+   * ==================================================
+   */
+  /**
+   * Get password
+   * @returns {string} password
+   */
+  get password() {
+    return this._props.password;
   }
 }
 

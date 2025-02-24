@@ -13,6 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
@@ -23,6 +24,7 @@ import {withRouter} from "react-router-dom";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+
 import {Trans, withTranslation} from "react-i18next";
 import GenerateResourcePassword from "../../ResourcePassword/GenerateResourcePassword/GenerateResourcePassword";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
@@ -62,9 +64,6 @@ import DiceSVG from "../../../../img/svg/dice.svg";
 import SettingSVG from "../../../../img/svg/settings.svg";
 import LockSVG from "../../../../img/svg/lock.svg";
 import UnlockSVG from "../../../../img/svg/unlock.svg";
-import AttentionSVG from "../../../../img/svg/attention.svg";
-import SelectResourceForm from "../ResourceForm/SelectResourceForm";
-import KeySVG from "../../../../img/svg/key.svg";
 
 class CreateResource extends Component {
   constructor(props) {
@@ -107,6 +106,7 @@ class CreateResource extends Component {
    * Create DOM nodes or React elements references in order to be able to access them programmatically.
    */
   createInputRef() {
+    this.nameInputRef = React.createRef();
     this.passwordInputRef = React.createRef();
   }
 
@@ -433,7 +433,9 @@ class CreateResource extends Component {
    * @param {EntityValidationError} validationErrors
    */
   focusFirstFieldError(validationErrors) {
-    if (validationErrors.hasError("password")) {
+    if (validationErrors.hasError("name")) {
+      this.nameInputRef.current.focus();
+    } else if (validationErrors.hasError("password")) {
       this.passwordInputRef.current.focus();
     }
   }
@@ -632,6 +634,7 @@ class CreateResource extends Component {
       return null;
     }
 
+    const isNameError = this.state.errors.hasError("name", "required");
     const isPasswordError = this.state.errors.hasError("password", "required");
 
     const isMaxLengthNameWarning = this.isFieldMaxSizeReached("name");
@@ -644,134 +647,130 @@ class CreateResource extends Component {
 
     const passwordEntropy = this.state.passwordInDictionary ? 0 : this.state.passwordEntropy;
     return (
-      <DialogWrapper title={this.translate("Create a resource")} className="create-resource"
+      <DialogWrapper title={this.translate("Create a password")} className="create-password-dialog"
         disabled={this.state.processing} onClose={this.handleClose}>
-        <SelectResourceForm/>
-        <form className="grid-and-footer" onSubmit={this.handleFormSubmit} noValidate>
-          <div className="grid">
-            <div className="resource-info">
-              <div className="resource-icon">
-                <KeySVG/>
-              </div>
-              <div className="information">
-                <div className="input text">
-                  <input id="resource-name" name="name" type="text" value={this.state.resourceViewModel.name || ""} onChange={this.handleInputChange} disabled={this.state.processing} maxLength="255" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
-                  {isMaxLengthNameWarning &&
-                    <div className="name warning-message">
-                      <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
-                    </div>
-                  }
+        <form onSubmit={this.handleFormSubmit} noValidate>
+          <div className="form-content">
+            <div className={`input text required ${isNameError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
+              <label htmlFor="create-password-form-name"><Trans>Name</Trans>{isMaxLengthNameWarning && <Icon name="exclamation" />}</label>
+              <input id="create-password-form-name" name="name" type="text" value={resourceViewModel.name || ""} onChange={this.handleInputChange}
+                disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="255"
+                required="required" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
+              {isNameError &&
+                <div className="name error-message"><Trans>A name is required.</Trans></div>
+              }
+              {isMaxLengthNameWarning &&
+                <div className="name warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
                 </div>
-              </div>
+              }
             </div>
-            <div className="create-workspace">
-              <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
-                <label htmlFor="create-password-form-uri"><Trans>URI</Trans>{isMaxLengthUriWarning && <AttentionSVG className="attention-required"/>}</label>
-                <input id="create-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
-                  autoComplete="off" value={resourceViewModel.uri || ""} onChange={this.handleInputChange} placeholder={this.translate("URI")}
-                  disabled={this.state.processing}/>
-                {isMaxLengthUriWarning &&
-                  <div className="uri warning-message">
-                    <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
-                  </div>
-                }
-              </div>
-              <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
-                <label htmlFor="create-password-form-username"><Trans>Username</Trans>{isMaxLengthUsernameWarning && <AttentionSVG className="attention-required"/>}</label>
-                <input id="create-password-form-username" name="username" type="text" className="fluid" maxLength="255"
-                  autoComplete="off" value={resourceViewModel.username || ""} onChange={this.handleInputChange} placeholder={this.translate("Username")}
-                  disabled={this.state.processing}/>
-                {isMaxLengthUsernameWarning &&
-                  <div className="username warning-message">
-                    <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
-                  </div>
-                }
-              </div>
-              <div className={`input-password-wrapper input required ${isPasswordError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-                <label htmlFor="create-password-form-password">
-                  <Trans>Password</Trans>{isMaxLengthPasswordWarning && <AttentionSVG className="attention-required"/>}
-                </label>
-                <div className="password-button-inline">
-                  <Password id="create-password-form-password"
-                    name="password"
-                    autoComplete="new-password"
-                    placeholder={this.translate("Password")}
-                    preview={true}
-                    value={resourceViewModel.password || ""}
-                    onChange={this.handleInputChange}
-                    disabled={this.state.processing}
-                    inputRef={this.passwordInputRef}/>
-                  <button type="button" onClick={this.handleGeneratePasswordButtonClick}
-                    className={`password-generate button-icon ${this.state.processing ? "disabled" : ""}`}>
-                    <DiceSVG/>
-                    <span className="visually-hidden"><Trans>Generate</Trans></span>
-                  </button>
-                  {this.canUsePasswordGenerator &&
-                    <button type="button" onClick={this.handleOpenGenerator}
-                      className={`password-generator button-icon ${this.state.processing ? "disabled" : ""}`}>
-                      <SettingSVG/>
-                      <span className="visually-hidden"><Trans>Open generator</Trans></span>
-                    </button>
-                  }
+            <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
+              <label htmlFor="create-password-form-uri"><Trans>URI</Trans>{isMaxLengthUriWarning && <Icon name="exclamation" />}</label>
+              <input id="create-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
+                autoComplete="off" value={resourceViewModel.uri || ""} onChange={this.handleInputChange} placeholder={this.translate("URI")}
+                disabled={this.state.processing}/>
+              {isMaxLengthUriWarning &&
+                <div className="uri warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
                 </div>
-                <PasswordComplexity entropy={passwordEntropy} error={isPasswordError}/>
-                {isPasswordError &&
-                  <div className="password error-message"><Trans>A password is required.</Trans></div>
-                }
-                {isMaxLengthPasswordWarning &&
-                  <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans></div>
+              }
+            </div>
+            <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
+              <label htmlFor="create-password-form-username"><Trans>Username</Trans>{isMaxLengthUsernameWarning && <Icon name="exclamation" />}</label>
+              <input id="create-password-form-username" name="username" type="text" className="fluid" maxLength="255"
+                autoComplete="off" value={resourceViewModel.username || ""} onChange={this.handleInputChange} placeholder={this.translate("Username")}
+                disabled={this.state.processing}/>
+              {isMaxLengthUsernameWarning &&
+                <div className="username warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
+                </div>
+              }
+            </div>
+            <div className={`input-password-wrapper input required ${isPasswordError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
+              <label htmlFor="create-password-form-password">
+                <Trans>Password</Trans>{isMaxLengthPasswordWarning && <Icon name="exclamation"/>}
+              </label>
+              <div className="password-button-inline">
+                <Password id="create-password-form-password"
+                  name="password"
+                  autoComplete="new-password"
+                  placeholder={this.translate("Password")}
+                  preview={true}
+                  value={resourceViewModel.password || ""}
+                  onChange={this.handleInputChange}
+                  disabled={this.state.processing}
+                  inputRef={this.passwordInputRef}/>
+                <button type="button" onClick={this.handleGeneratePasswordButtonClick}
+                  className={`password-generate button-icon ${this.state.processing ? "disabled" : ""}`}>
+                  <DiceSVG/>
+                  <span className="visually-hidden"><Trans>Generate</Trans></span>
+                </button>
+                {this.canUsePasswordGenerator &&
+                  <button type="button" onClick={this.handleOpenGenerator}
+                    className={`password-generator button-icon ${this.state.processing ? "disabled" : ""}`}>
+                    <SettingSVG/>
+                    <span className="visually-hidden"><Trans>Open generator</Trans></span>
+                  </button>
                 }
               </div>
-              <div className={`input textarea ${this.state.processing ? 'disabled' : ''}`}>
-                <label htmlFor="create-password-form-description"><Trans>Description</Trans>
-                  {isMaxLengthDescriptionWarning &&
-                    <AttentionSVG className="attention-required"/>
-                  }
-                  <button type="button" onClick={this.handleDescriptionToggle} className="button-transparent inline lock-toggle">
-                    {resourceViewModel.isDescriptionUnencrypted() ? (
-                      <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
-                        <UnlockSVG/>
-                      </Tooltip>
-                    ) : (
-                      <Tooltip message={this.translate("The description content will be encrypted.")}>
-                        <LockSVG/>
-                      </Tooltip>
-                    )}
-                  </button>
-                </label>
-                <textarea id="create-password-form-description" name="description" maxLength="10000"
-                  placeholder={this.translate("Add a description")} value={resourceViewModel.description || ""}
-                  disabled={this.state.processing} onChange={this.handleInputChange}>
-                </textarea>
+              <PasswordComplexity entropy={passwordEntropy} error={isPasswordError}/>
+              {isPasswordError &&
+                <div className="password error-message"><Trans>A password is required.</Trans></div>
+              }
+              {isMaxLengthPasswordWarning &&
+                <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans></div>
+              }
+            </div>
+            <div className={`input textarea ${this.state.processing ? 'disabled' : ''}`}>
+              <label htmlFor="create-password-form-description"><Trans>Description</Trans>
                 {isMaxLengthDescriptionWarning &&
-                  <div className="description warning-message"><strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans></div>
+                  <Icon name="exclamation"/>
                 }
-              </div>
-              {this.canUseTotp && !this.hasTotp &&
-                <div className="input input-totp-wrapper">
-                  <button type="button" className="add-totp link no-border link-icon" onClick={this.handleTotpClick} disabled={this.state.processing}>
-                    <Icon name="plus-circle"/>
-                    <span className="link-label"><Trans>Add TOTP</Trans></span>
-                  </button>
-                </div>
-              }
-              {this.canUseTotp && this.hasTotp &&
-                <div className={`input input-totp-wrapper ${this.state.processing ? 'disabled' : ''}`}>
-                  <label htmlFor="create-password-form-totp"><Trans>TOTP</Trans></label>
-                  <div className="input-wrapper-inline totp">
-                    <Totp totp={resourceViewModel.totp}/>
-                    <button type="button" className="edit-totp button-icon" onClick={this.handleTotpClick} disabled={this.state.processing}>
-                      <EditSVG/>
-                    </button>
-                    <button type="button" className="delete-totp button-icon" onClick={this.handleDeleteTotpClick} disabled={this.state.processing}>
-                      <DeleteSVG/>
-                    </button>
-                  </div>
-                </div>
+                <button type="button" onClick={this.handleDescriptionToggle} className="button-transparent inline lock-toggle">
+                  {resourceViewModel.isDescriptionUnencrypted() ? (
+                    <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
+                      <UnlockSVG/>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip message={this.translate("The description content will be encrypted.")}>
+                      <LockSVG/>
+                    </Tooltip>
+                  )}
+                </button>
+              </label>
+              <textarea id="create-password-form-description" name="description" maxLength="10000"
+                placeholder={this.translate("Add a description")} value={resourceViewModel.description || ""}
+                disabled={this.state.processing} onChange={this.handleInputChange}>
+              </textarea>
+              {isMaxLengthDescriptionWarning &&
+                <div className="description warning-message"><strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans></div>
               }
             </div>
+            {this.canUseTotp && !this.hasTotp &&
+              <div className="input input-totp-wrapper">
+                <button type="button" className="add-totp link no-border link-icon" onClick={this.handleTotpClick} disabled={this.state.processing}>
+                  <Icon name="plus-circle"/>
+                  <span className="link-label"><Trans>Add TOTP</Trans></span>
+                </button>
+              </div>
+            }
+            {this.canUseTotp && this.hasTotp &&
+              <div className={`input input-totp-wrapper ${this.state.processing ? 'disabled' : ''}`}>
+                <label htmlFor="create-password-form-totp"><Trans>TOTP</Trans></label>
+                <div className="input-wrapper-inline totp">
+                  <Totp totp={resourceViewModel.totp}/>
+                  <button type="button" className="edit-totp button-icon" onClick={this.handleTotpClick} disabled={this.state.processing}>
+                    <EditSVG/>
+                  </button>
+                  <button type="button" className="delete-totp button-icon" onClick={this.handleDeleteTotpClick} disabled={this.state.processing}>
+                    <DeleteSVG/>
+                  </button>
+                </div>
+              </div>
+            }
           </div>
-          <div className="submit-wrapper">
+          <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
             <FormSubmitButton value={this.translate("Create")} disabled={this.state.processing} processing={this.state.processing}/>
           </div>

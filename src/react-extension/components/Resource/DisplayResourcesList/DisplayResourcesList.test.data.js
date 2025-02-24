@@ -26,7 +26,7 @@ import ColumnsResourceSettingCollection
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import {
   defaultResourceMetadataDto
-} from "../../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
+} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import {
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_TOTP

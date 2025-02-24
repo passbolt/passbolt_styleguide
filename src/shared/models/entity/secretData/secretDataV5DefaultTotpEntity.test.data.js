@@ -13,6 +13,7 @@
  */
 
 import {defaultTotpDto} from "../totp/totpDto.test.data";
+import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
 
 /**
  * The minimal default secret v5 default totp entity
@@ -20,7 +21,7 @@ import {defaultTotpDto} from "../totp/totpDto.test.data";
  * @returns {Object}
  */
 export const minimalSecretDataV5DefaultTotpEntityDto = (data = {}) => ({
-  object_type: "PASSBOLT_SECRET_DATA",
+  object_type: SECRET_DATA_OBJECT_TYPE,
   password: null,
   totp: defaultTotpDto(),
   ...data,

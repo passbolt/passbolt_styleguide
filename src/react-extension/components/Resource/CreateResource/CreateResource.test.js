@@ -45,7 +45,7 @@ import ConfirmCreateEdit, {
 } from "../ConfirmCreateEdit/ConfirmCreateEdit";
 import {
   defaultResourceMetadataDto
-} from "../../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
+} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 
 describe("See the Create Resource", () => {
@@ -70,7 +70,7 @@ describe("See the Create Resource", () => {
         await waitFor(() => {});
         // Dialog title exists and correct
         expect(page.passwordCreate.exists()).toBeTruthy();
-        expect(page.title.header.textContent).toBe("Create a resource");
+        expect(page.title.header.textContent).toBe("Create a password");
 
         // Close button exists
         expect(page.passwordCreate.dialogClose).not.toBeNull();

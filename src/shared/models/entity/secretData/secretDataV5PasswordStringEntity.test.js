@@ -15,7 +15,11 @@
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
-import {defaultSecretDataV5DefaultDto, minimalDefaultSecretDataV5DefaultDto} from "./secretDataV5DefaultEntity.test.data";
+import {
+  defaultSecretDataV5PasswordStringDto,
+  minimalDefaultSecretDataV5PasswordStringDto
+} from "./secretDataV5PasswordStringEntity.test.data";
+import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
 
 describe("secretDataV5PasswordStringEntity", () => {
   describe("::getSchema", () => {
@@ -26,7 +30,7 @@ describe("secretDataV5PasswordStringEntity", () => {
     it("validates object_type property", () => {
       assertEntityProperty.string(SecretDataV5DefaultEntity, "object_type");
       assertEntityProperty.required(SecretDataV5DefaultEntity, "object_type");
-      assertEntityProperty.enumeration(SecretDataV5DefaultEntity, "object_type", ["PASSBOLT_SECRET_DATA"], ["any other values"]);
+      assertEntityProperty.enumeration(SecretDataV5DefaultEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
     });
 
     it("validates password property", () => {
@@ -39,7 +43,7 @@ describe("secretDataV5PasswordStringEntity", () => {
   describe("::constructor", () => {
     it("constructor works if minimal valid DTO is provided", () => {
       expect.assertions(2);
-      const dto = minimalDefaultSecretDataV5DefaultDto();
+      const dto = minimalDefaultSecretDataV5PasswordStringDto();
       const entity = new SecretDataV5DefaultEntity(dto);
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
@@ -48,7 +52,7 @@ describe("secretDataV5PasswordStringEntity", () => {
     it("constructor works if valid DTO is provided", () => {
       expect.assertions(2);
 
-      const dto = defaultSecretDataV5DefaultDto();
+      const dto = defaultSecretDataV5PasswordStringDto();
       const entity = new SecretDataV5DefaultEntity(dto);
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
