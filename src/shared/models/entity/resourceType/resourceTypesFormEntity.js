@@ -69,14 +69,12 @@ class ResourceTypesFormEntity extends EntityV2 {
   /**
    * @constructor
    * @param {object} resourceTypeFormDto
-   * @private
    */
-  constructor(resourceTypeFormDto) {
-    super(resourceTypeFormDto);
+  constructor(resourceTypeFormDto, options) {
+    super(resourceTypeFormDto, options);
 
     if (this._props.resource_types) {
       this._resource_types = new ResourceTypesCollection(this._props.resource_types);
-      delete this._props.resource_types;
     }
   }
 
@@ -283,6 +281,24 @@ class ResourceTypesFormEntity extends EntityV2 {
     }
 
     return result;
+  }
+
+  /**
+   * Get the DTO of properties managed by the form.
+   * @returns {object}
+   */
+  toFormDto() {
+    return {
+      password_v4: this._props.password_v4,
+      password_v5: this._props.password_v5,
+      totp_v4: this._props.totp_v4,
+      totp_v5: this._props.totp_v5,
+      password_v4_count: this._props.password_v4_count,
+      password_v5_count: this._props.password_v5_count,
+      totp_v4_count: this._props.totp_v4_count,
+      totp_v5_count: this._props.totp_v5_count,
+      resource_types: this._resource_types,
+    };
   }
 }
 

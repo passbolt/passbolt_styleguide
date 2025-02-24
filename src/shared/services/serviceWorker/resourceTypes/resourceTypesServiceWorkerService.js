@@ -13,7 +13,7 @@
  */
 import ResourceTypesCollection from "../../../models/entity/resourceType/resourceTypesCollection";
 
-export const RESOURCE_TYPE_FIND_DELETED_AND_NON_DELETED_EVENT = "passbolt.metadata.find-metadata-migrate-resources-details";
+export const RESOURCE_TYPE_FIND_DELETED_AND_NON_DELETED_EVENT = "passbolt.resource-type.find-all-by-deleted-and-non-deleted";
 
 class ResourceTypesServiceWorkerService {
   /**
@@ -29,8 +29,8 @@ class ResourceTypesServiceWorkerService {
    * @returns {Promise<ResourceTypesCollection>}
    */
   async findAllByDeletedAndNonDeleted() {
-    const metadataCountDetails = await this.port.request(RESOURCE_TYPE_FIND_DELETED_AND_NON_DELETED_EVENT);
-    return new ResourceTypesCollection(metadataCountDetails);
+    const resourceTypes = await this.port.request(RESOURCE_TYPE_FIND_DELETED_AND_NON_DELETED_EVENT);
+    return new ResourceTypesCollection(resourceTypes);
   }
 }
 
