@@ -71,6 +71,7 @@ describe("Totp entity", () => {
       });
     });
   });
+
   describe("::marshal", () => {
     it("should sanitize the secret_key", () => {
       expect.assertions(1);
@@ -89,6 +90,20 @@ describe("Totp entity", () => {
       expect.assertions(1);
       const entity = new TotpEntity(defaultTotpDto());
       expect(entity.secretKey).toStrictEqual(defaultTotpDto().secret_key);
+    });
+  });
+
+  describe("::hasSecretKey", () => {
+    it("should have a secret key", () => {
+      expect.assertions(1);
+      const entity = new TotpEntity(defaultTotpDto({secret_key: " 572H +KBKéàùêB=_%$ "}));
+      expect(entity.hasSecretKey).toBeTruthy();
+    });
+
+    it("should not have a secret key", () => {
+      expect.assertions(1);
+      const entity = new TotpEntity(defaultTotpDto({secret_key: "    "}), {validate: false});
+      expect(entity.secretKey).toBeFalsy();
     });
   });
 });
