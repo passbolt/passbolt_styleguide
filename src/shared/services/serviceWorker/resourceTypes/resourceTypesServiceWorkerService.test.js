@@ -15,7 +15,7 @@
 import MockPort from "../../../../react-extension/test/mock/MockPort";
 import ResourceTypesCollection from "../../../models/entity/resourceType/resourceTypesCollection";
 import {resourceTypesCollectionDto} from "../../../models/entity/resourceType/resourceTypesCollection.test.data";
-import ResourceTypesServiceWorkerService, {RESOURCE_TYPE_FIND_DELETED_AND_NON_DELETED_EVENT} from "./resourceTypesServiceWorkerService";
+import ResourceTypesServiceWorkerService, {RESOURCE_TYPE_FIND_DELETED_AND_NON_DELETED_EVENT, RESOURCE_TYPE_UPDATE_ALL_DELETED_STATUS_EVENT} from "./resourceTypesServiceWorkerService";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -38,6 +38,23 @@ describe("ResourceTypesServiceWorkerService", () => {
       expect(port.request).toHaveBeenCalledWith(RESOURCE_TYPE_FIND_DELETED_AND_NON_DELETED_EVENT);
       expect(resourceTypesCollection).toBeInstanceOf(ResourceTypesCollection);
       expect(resourceTypesCollection.toDto()).toEqual(dto);
+    });
+  });
+
+  describe("::updateAllDeletedStatus", () => {
+    it("requests the service worker with the expected event and collection for updating the resource types deletion status.", async() => {
+      expect.assertions(2);
+
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypesCollectionDto());
+
+      const port = new MockPort();
+      jest.spyOn(port, "request").mockReturnValue();
+
+      const service = new ResourceTypesServiceWorkerService(port);
+      await service.updateAllDeletedStatus(resourceTypesCollection);
+
+      expect(port.request).toHaveBeenCalledTimes(1);
+      expect(port.request).toHaveBeenCalledWith(RESOURCE_TYPE_UPDATE_ALL_DELETED_STATUS_EVENT, resourceTypesCollection);
     });
   });
 });
