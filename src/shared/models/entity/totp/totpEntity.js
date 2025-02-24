@@ -117,6 +117,14 @@ class TotpEntity extends EntityV2 {
   get algorithm() {
     return this._props.algorithm;
   }
+
+  /**
+   * Has secret key value
+   * @returns {boolean}
+   */
+  get hasSecretKey() {
+    return this.secretKey?.length > 0;
+  }
 }
 
 export default TotpEntity;
