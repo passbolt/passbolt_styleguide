@@ -32,6 +32,8 @@ export const defaultResourceTypesFormDto = (data = {}) => ({
   password_v5_count: 14,
   totp_v4_count: 2,
   totp_v5_count: 4,
+  has_v4_resource_types: true,
+  has_v5_resource_types: true,
   resource_types: resourceTypesCollectionDto(),
   ...data,
 });
