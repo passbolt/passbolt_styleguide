@@ -14,6 +14,7 @@
 import ResourceTypesCollection from "../../../models/entity/resourceType/resourceTypesCollection";
 
 export const RESOURCE_TYPE_FIND_DELETED_AND_NON_DELETED_EVENT = "passbolt.resource-type.find-all-by-deleted-and-non-deleted";
+export const RESOURCE_TYPE_UPDATE_ALL_DELETED_STATUS_EVENT = "passbolt.resource-types.update-all-deleted-status";
 
 class ResourceTypesServiceWorkerService {
   /**
@@ -31,6 +32,14 @@ class ResourceTypesServiceWorkerService {
   async findAllByDeletedAndNonDeleted() {
     const resourceTypes = await this.port.request(RESOURCE_TYPE_FIND_DELETED_AND_NON_DELETED_EVENT);
     return new ResourceTypesCollection(resourceTypes);
+  }
+
+  /**
+   * Calls the service worker for updating the given resource types collection.
+   * @param {Promise<ResourceTypesCollection>} resourceTypesCollection
+   */
+  async updateAllDeletedStatus(resourceTypesCollection) {
+    await this.port.request(RESOURCE_TYPE_UPDATE_ALL_DELETED_STATUS_EVENT, resourceTypesCollection);
   }
 }
 
