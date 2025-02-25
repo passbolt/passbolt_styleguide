@@ -78,6 +78,16 @@ describe("ResourceTypesFormEntity", () => {
       assertEntityProperty.required(ResourceTypesFormEntity, "totp_v5_count");
     });
 
+    it("validates has_v4_resource_types property", () => {
+      assertEntityProperty.boolean(ResourceTypesFormEntity, "has_v4_resource_types");
+      assertEntityProperty.required(ResourceTypesFormEntity, "has_v4_resource_types");
+    });
+
+    it("validates has_v5_resource_types property", () => {
+      assertEntityProperty.boolean(ResourceTypesFormEntity, "has_v5_resource_types");
+      assertEntityProperty.required(ResourceTypesFormEntity, "has_v5_resource_types");
+    });
+
     it("validates resource_types property", () => {
       const dto = defaultResourceTypesFormDto();
       const successScenarios = [

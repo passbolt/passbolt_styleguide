@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.12.0
  */
+import {DateTime} from "luxon";
 import EntityV2 from "../abstract/entityV2";
 import EntityValidationError from "../abstract/entityValidationError";
 import MetadataKeysCollection from "../metadata/metadataKeysCollection";
@@ -95,6 +96,8 @@ class ResourceTypesFormEntity extends EntityV2 {
         "totp_v4_count",
         "totp_v5_count",
         "resource_types",
+        "has_v4_resource_types",
+        "has_v5_resource_types",
       ],
       "properties": {
         "password_v4": {
@@ -120,6 +123,12 @@ class ResourceTypesFormEntity extends EntityV2 {
         },
         "totp_v5_count": {
           "type": "integer",
+        },
+        "has_v4_resource_types": {
+          "type": "boolean",
+        },
+        "has_v5_resource_types": {
+          "type": "boolean",
         },
         "resource_types": ResourceTypesCollection.getSchema(), // all resource types collection (available and deleted)
       }
@@ -149,6 +158,9 @@ class ResourceTypesFormEntity extends EntityV2 {
     const totp_v4_count = this._getResourcesCountForResourceTypeFamily(fullResourceTypesMapping.totpV4, resource_types);
     const totp_v5_count = this._getResourcesCountForResourceTypeFamily(fullResourceTypesMapping.totpV5, resource_types);
 
+    const has_v4_resource_types = resource_types.hasSomeOfVersion("v4");
+    const has_v5_resource_types = resource_types.hasSomeOfVersion("v5");
+
     return new ResourceTypesFormEntity({
       password_v4,
       password_v5,
@@ -158,6 +170,8 @@ class ResourceTypesFormEntity extends EntityV2 {
       password_v5_count,
       totp_v4_count,
       totp_v5_count,
+      has_v4_resource_types,
+      has_v5_resource_types,
       resource_types
     });
   }
@@ -172,7 +186,7 @@ class ResourceTypesFormEntity extends EntityV2 {
   static _getResourcesCountForResourceTypeFamily(requiredResourceSlugs, resourceTypesCollection) {
     let count = 0;
     for (let i = 0; i < requiredResourceSlugs.length; i++) {
-      count += resourceTypesCollection.getFirstBySlug(requiredResourceSlugs[i]).resourcesCount;
+      count += resourceTypesCollection.getFirstBySlug(requiredResourceSlugs[i])?.resourcesCount || 0;
     }
     return count;
   }
@@ -297,8 +311,47 @@ class ResourceTypesFormEntity extends EntityV2 {
       password_v5_count: this._props.password_v5_count,
       totp_v4_count: this._props.totp_v4_count,
       totp_v5_count: this._props.totp_v5_count,
+      has_v4_resource_types: this._props.has_v4_resource_types,
+      has_v5_resource_types: this._props.has_v5_resource_types,
       resource_types: this._resource_types,
     };
+  }
+
+  /**
+   * Get the resource types collection DTO based on the properties of the form.
+   * @returns {ResourceTypesCollection}
+   */
+  toResourceTypesCollection() {
+    //computes the new resource types collection state based on the form
+    const availableResourceTypes = this._resource_types.items.filter(rt =>
+      (this._props.password_v4 && rt.isV4() && rt.hasPassword() && !rt.hasTotp()) // password v4 only resource types
+      || (this._props.totp_v4 && rt.isV4() && !rt.hasPassword() && rt.hasTotp()) // standalone totp v4 resource types
+      || (this._props.totp_v4 && this._props.password_v4 && rt.isV4() && rt.hasPassword() && rt.hasTotp())  // password + totp v4 resource types
+      || (this._props.password_v5 && rt.isV5() && rt.hasPassword() && !rt.hasTotp())  // password v5 only resource types
+      || (this._props.totp_v5 && rt.isV5() && !rt.hasPassword() && rt.hasTotp())  // standalone v5 only resource types
+      || (this._props.totp_v5 && this._props.password_v5 && rt.isV5() && rt.hasPassword() && rt.hasTotp())  // password + totp v5 resource types
+    );
+    const deletedResourceTypes = this._resource_types.items.filter(rt => !availableResourceTypes.some(art => rt.id === art.id));
+
+    //keep only the diff changes
+    const resourceTypesToEnable = availableResourceTypes.filter(art => art.isDeleted());
+    const resourceTypesToDelete = deletedResourceTypes.filter(drt => !drt.isDeleted());
+
+    //mark resource types as deleted
+    const now = DateTime.now().toISO();
+    for (let i = 0; i < resourceTypesToDelete.length; i++) {
+      resourceTypesToDelete[i].deleted = now;
+    }
+
+    //mark resource types as undeleted
+    for (let i = 0; i < resourceTypesToEnable.length; i++) {
+      resourceTypesToEnable[i].deleted = null;
+    }
+
+    return new ResourceTypesCollection([
+      ...resourceTypesToEnable,
+      ...resourceTypesToDelete
+    ]);
   }
 }
 
