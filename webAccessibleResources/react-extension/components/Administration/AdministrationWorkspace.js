@@ -49,7 +49,8 @@ import DisplayContentTypesEncryptedMetadataAdministration
   from "./DisplayContentTypesEncryptedMetadataAdministration/DisplayContentTypesEncryptedMetadataAdministration";
 import DisplayContentTypesMetadataKeyAdministration
   from "./DisplayContentTypesMetadataKeyAdministration/DisplayContentTypesMetadataKeyAdministration";
-import DisplayMigrateMetadataAdministration from "./DisplayMigrateMetadataAdministration/DisplayMigrateMetadataAdministration.js";
+import DisplayMigrateMetadataAdministration from "./DisplayMigrateMetadataAdministration/DisplayMigrateMetadataAdministration";
+import DisplayContentTypesAllowedContentTypesAdministration from "./DisplayContentTypesAllowedContentTypesAdministration/DisplayContentTypesAllowedContentTypesAdministration";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -189,6 +190,14 @@ class AdministrationWorkspace extends Component {
   }
 
   /**
+   * If allow content types is selected
+   * @returns {boolean}
+   */
+  isAllowContentTypesSelected() {
+    return AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
    * If the page access is denied
    * @returns {boolean}
    */
@@ -298,6 +307,9 @@ class AdministrationWorkspace extends Component {
                   }
                   {this.isMigrateMetadataSelected() &&
                     <DisplayMigrateMetadataAdministration/>
+                  }
+                  {this.isAllowContentTypesSelected() &&
+                    <DisplayContentTypesAllowedContentTypesAdministration/>
                   }
                 </div>
               </div>

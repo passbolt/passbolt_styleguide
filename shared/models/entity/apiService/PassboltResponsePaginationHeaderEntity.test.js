@@ -68,5 +68,15 @@ describe("PassboltResponsePaginationHeaderEntity", () => {
       const entity = new PassboltResponsePaginationHeaderEntity(dto);
       expect(entity.page).toStrictEqual(dto.page);
     });
+
+    it("::pageCount", () => {
+      expect.assertions(1);
+      const dto = defaultPassboltResponsePaginationHeaderDto({
+        count: 75,
+        limit: 20,
+      });
+      const entity = new PassboltResponsePaginationHeaderEntity(dto);
+      expect(entity.pageCount).toStrictEqual(4);
+    });
   });
 });

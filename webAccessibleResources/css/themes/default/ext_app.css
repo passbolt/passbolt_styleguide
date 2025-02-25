@@ -8924,6 +8924,25 @@ table.table-info.horizontal tbody tr:hover {
 #migrate-metadata-settings .warning-message {
   margin-bottom: 0;
 }
+#allow-content-types .checkboxlist .form-element {
+  margin: 0 -1.6rem;
+  padding: 1.2rem 1.6rem;
+  border-top: 0.1rem solid #E0E0E0;
+}
+#allow-content-types .checkboxlist .form-element .warning-message,
+#allow-content-types .checkboxlist .form-element .error-message {
+  margin-bottom: 0;
+}
+#allow-content-types .checkbox input[type=checkbox] {
+  margin-bottom: 0;
+}
+#allow-content-types .checkbox input[type=checkbox] + label {
+  font-weight: 700;
+}
+#allow-content-types .checkbox input[type=checkbox] + label .info {
+  color: #666666;
+  font-weight: normal;
+}
 #setup-mfa {
   width: 100%;
   height: calc(100% - 3.9rem);
