@@ -15,6 +15,7 @@
 import React from "react";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import SelectResourceForm from "./SelectResourceForm";
+import {defaultProps} from "./SelectResourceForm.test.data";
 
 export default {
   title: 'Components/Resource/SelectResourceForm',
@@ -40,4 +41,6 @@ export default {
   ],
 };
 
-export const Default = {};
+export const Default = {
+  args: defaultProps()
+};

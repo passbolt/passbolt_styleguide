@@ -31,6 +31,7 @@ import {
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import SelectResourceForm from "../ResourceForm/SelectResourceForm";
+import OrchestrateResourceForm from "../ResourceForm/OrchestrateResourceForm";
 import {SECRET_DATA_OBJECT_TYPE} from "../../../../shared/models/entity/secretData/secretDataEntity";
 import ResourceFormEntity from "../../../../shared/models/entity/resource/resourceFormEntity";
 import AddResourceName from "../ResourceForm/AddResourceName";
@@ -51,6 +52,7 @@ class CreateResource extends Component {
 
   initEventHandlers() {
     this.handleClose = this.handleClose.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   /**
@@ -72,6 +74,23 @@ class CreateResource extends Component {
     const resourceFormSelected = this.props.resourceFormType;
     const resourceFormEntity = new ResourceFormEntity({resource_type_id: this.props.resourceType.id, secret}, {validate: false, resourceTypes: this.props.resourceTypes});
     this.setState({resourceFormEntity, resourceFormSelected});
+  }
+
+  /*
+   * =============================================================
+   *  Dialog actions event handlers
+   * =============================================================
+   */
+  /**
+   * Handle form input change.
+   * @params {ReactEvent} The react event.
+   */
+  handleInputChange(event) {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value || null;
+
+    this.state.resourceFormEntity.set(name, value, {validate: false});
   }
 
   /**
@@ -99,11 +118,12 @@ class CreateResource extends Component {
     return (
       <DialogWrapper title={this.translate("Create a resource")} className="create-resource"
         disabled={this.state.processing} onClose={this.handleClose}>
-        <SelectResourceForm/>
+        <SelectResourceForm resourceFormSelected={this.state.resourceFormSelected} resource={this.state.resourceFormEntity?.toDto()}/>
         <form className="grid-and-footer" noValidate>
           <div className="grid">
-            <AddResourceName folderParentId={this.props.folderParentId}/>
+            <AddResourceName resource={this.state.resourceFormEntity?.toDto()} folderParentId={this.props.folderParentId} onChange={this.handleInputChange}/>
             <div className="create-workspace">
+              <OrchestrateResourceForm resourceFormSelected={this.state.resourceFormSelected} resource={this.state.resourceFormEntity?.toDto()}/>
             </div>
           </div>
           <div className="submit-wrapper">

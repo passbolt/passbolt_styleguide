@@ -54,6 +54,7 @@ class AddResourceDescription extends Component {
 }
 
 AddResourceDescription.propTypes = {
+  resource: PropTypes.object, // The resource to edit or create
   t: PropTypes.func, // The translation function
 };
 

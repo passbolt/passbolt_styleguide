@@ -26,6 +26,7 @@ import ConfigurePasswordGenerator from "../../../../shared/components/GeneratePa
 import ConfigurePassphraseGenerator from "../../../../shared/components/GeneratePassword/ConfigurePassphraseGenerator";
 import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 
 class AddResourcePassword extends Component {
   constructor(props) {
@@ -130,6 +131,14 @@ class AddResourcePassword extends Component {
   }
 
   /**
+   * Returns true if the logged in user can use the password generator capability.
+   * @returns {boolean}
+   */
+  get canUsePasswordGenerator() {
+    return this.props.context.siteSettings.canIUse("passwordGenerator");
+  }
+
+  /**
    * Get the translation function
    * @returns {function(...[*]=)}
    */
@@ -171,15 +180,16 @@ class AddResourcePassword extends Component {
               <PasswordComplexity entropy={this.state.passwordEntropy}/>
             </div>
           </div>
-          <div className="additional-information">
-            <button type="button" className="section-header no-border" onClick={this.handleDisplayPasswordGeneratorClick}>
-              <h4><Trans>Advanced password generation</Trans></h4>
-              {this.state.displayPasswordGenerator
-                ? <CaretDownSVG/>
-                : <CaretRightSVG/>
-              }
-            </button>
-            {this.state.displayPasswordGenerator && this.state.generatorSettings?.default_generator &&
+          {this.canUsePasswordGenerator &&
+            <div className="additional-information">
+              <button type="button" className="section-header no-border" onClick={this.handleDisplayPasswordGeneratorClick}>
+                <h4><Trans>Advanced password generation</Trans></h4>
+                {this.state.displayPasswordGenerator
+                  ? <CaretDownSVG/>
+                  : <CaretRightSVG/>
+                }
+              </button>
+              {this.state.displayPasswordGenerator && this.state.generatorSettings?.default_generator &&
                 <Tabs activeTabName={this.state.generatorSettings.default_generator}>
                   <Tab
                     key={"password"}
@@ -187,9 +197,9 @@ class AddResourcePassword extends Component {
                     type={"password"}
                     onClick={() => this.handleGeneratorTypeChanged("password")}>
                     {this.state.generatorSettings.default_generator === "password" &&
-                        <ConfigurePasswordGenerator
-                          configuration={this.state.generatorSettings.password_generator_settings}
-                          onConfigurationChanged={this.handlePasswordGeneratorConfigurationChanged}/>
+                      <ConfigurePasswordGenerator
+                        configuration={this.state.generatorSettings.password_generator_settings}
+                        onConfigurationChanged={this.handlePasswordGeneratorConfigurationChanged}/>
                     }
                   </Tab>
                   <Tab
@@ -198,14 +208,15 @@ class AddResourcePassword extends Component {
                     type={"passphrase"}
                     onClick={() => this.handleGeneratorTypeChanged("passphrase")}>
                     {this.state.generatorSettings.default_generator === "passphrase" &&
-                        <ConfigurePassphraseGenerator
-                          configuration={this.state.generatorSettings.passphrase_generator_settings}
-                          onConfigurationChanged={this.handlePassphraseGeneratorConfigurationChanged}/>
+                      <ConfigurePassphraseGenerator
+                        configuration={this.state.generatorSettings.passphrase_generator_settings}
+                        onConfigurationChanged={this.handlePassphraseGeneratorConfigurationChanged}/>
                     }
                   </Tab>
                 </Tabs>
-            }
-          </div>
+              }
+            </div>
+          }
         </div>
 
       </>
@@ -214,9 +225,11 @@ class AddResourcePassword extends Component {
 }
 
 AddResourcePassword.propTypes = {
+  context: PropTypes.any, // The app context
   resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
+  resource: PropTypes.object, // The resource to edit or create
   t: PropTypes.func, // The translation function
 };
 
-export default  withResourcePasswordGeneratorContext(withTranslation('common')(AddResourcePassword));
+export default  withAppContext(withResourcePasswordGeneratorContext(withTranslation('common')(AddResourcePassword)));
 

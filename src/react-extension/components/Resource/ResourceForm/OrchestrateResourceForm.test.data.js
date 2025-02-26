@@ -12,18 +12,17 @@
  * @since         5.0.0
  */
 
-
-import {defaultResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {
+  ResourceEditCreateFormEnumerationTypes
+} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 
 /**
  * Default props
- * @returns {{resource: {id: string, name: string}}}
+ * @returns {*}
  */
 export function defaultProps(data = {}) {
   const defaultData = {
-    context: defaultAppContext(),
-    resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
+    resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PASSWORD
   };
   return Object.assign(defaultData, data);
 }

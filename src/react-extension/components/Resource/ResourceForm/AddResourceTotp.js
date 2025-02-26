@@ -178,6 +178,7 @@ class AddResourceTotp extends Component {
 }
 
 AddResourceTotp.propTypes = {
+  resource: PropTypes.object, // The resource to edit or create
   t: PropTypes.func, // The translation function
 };
 

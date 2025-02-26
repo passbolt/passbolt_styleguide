@@ -27,6 +27,9 @@ import NotesSVG from "../../../../img/svg/notes.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import AlignLeftSVG from "../../../../img/svg/align_left.svg";
 import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
+import {
+  ResourceEditCreateFormEnumerationTypes
+} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 
 class SelectResourceForm extends Component {
   constructor(props) {
@@ -75,6 +78,45 @@ class SelectResourceForm extends Component {
    */
   handleDisplayUpgradeClick() {
     this.setState({displayUpgrade: !this.state.displayUpgrade});
+  }
+
+  /**
+   * Get selected resource form
+   * @returns {string|null|*}
+   */
+  get selectedForm() {
+    return this.props.resourceFormSelected;
+  }
+
+  /**
+   * Get the resource
+   */
+  get resource() {
+    return this.props.resource;
+  }
+
+  /**
+   * Is resource has password
+   * @returns {boolean}
+   */
+  get isResourceHasPassword() {
+    return this.resource?.secret?.password != null;
+  }
+
+  /**
+   * Is resource has totp
+   * @returns {boolean}
+   */
+  get isResourceHasTotp() {
+    return this.resource?.secret?.totp != null;
+  }
+
+  /**
+   * Is resource has note
+   * @returns {boolean}
+   */
+  get isResourceHasNote() {
+    return this.resource?.secret?.description != null;
   }
 
   /**
@@ -132,18 +174,24 @@ class SelectResourceForm extends Component {
           </button>
           {this.state.displaySecrets &&
             <>
-              <button type="button" className="section-content no-border selected">
-                <KeySVG/>
-                <span className="ellipsis"><Trans>Passwords</Trans></span>
-              </button>
-              <button type="button" className="section-content no-border">
-                <TotpSVG/>
-                <span className="ellipsis"><Trans>TOTP</Trans></span>
-              </button>
-              <button type="button" className="section-content no-border">
-                <NotesSVG/>
-                <span className="ellipsis"><Trans>Note</Trans></span>
-              </button>
+              {this.isResourceHasPassword &&
+                <button type="button" className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.PASSWORD === this.selectedForm ? "selected" : ""}`}>
+                  <KeySVG/>
+                  <span className="ellipsis"><Trans>Passwords</Trans></span>
+                </button>
+              }
+              {this.isResourceHasTotp &&
+                <button type="button" className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.TOTP === this.selectedForm ? "selected" : ""}`}>
+                  <TotpSVG/>
+                  <span className="ellipsis"><Trans>TOTP</Trans></span>
+                </button>
+              }
+              {this.isResourceHasNote &&
+                <button type="button" className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.NOTE === this.selectedForm ? "selected" : ""}`}>
+                  <NotesSVG/>
+                  <span className="ellipsis"><Trans>Note</Trans></span>
+                </button>
+              }
             </>
           }
           <button type="button" className="section-header no-border" onClick={this.handleDisplayMetadataClick}>
@@ -155,7 +203,7 @@ class SelectResourceForm extends Component {
           </button>
           {this.state.displayMetadata &&
             <>
-              <button type="button" className="section-content no-border">
+              <button type="button" className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.DESCRIPTION === this.selectedForm ? "selected" : ""}`}>
                 <AlignLeftSVG/>
                 <span className="ellipsis"><Trans>Description</Trans></span>
               </button>
@@ -193,6 +241,8 @@ class SelectResourceForm extends Component {
 }
 
 SelectResourceForm.propTypes = {
+  resourceFormSelected: PropTypes.string, // The resource form selected
+  resource: PropTypes.object, // The resource to edit or create
   t: PropTypes.func, // The translation function
 };
 
