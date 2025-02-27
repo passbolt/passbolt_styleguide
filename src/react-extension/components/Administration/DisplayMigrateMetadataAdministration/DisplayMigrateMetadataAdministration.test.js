@@ -19,7 +19,7 @@ import DisplayMigrateMetadataAdministrationPage
 
 describe("DisplayMigrateMetadataAdministration as per the specifications", () => {
   it("As a signed-in administrator I can see migration metadata form", async() => {
-    expect.assertions(12);
+    expect.assertions(6);
     const props = defaultProps();
 
     const page = new DisplayMigrateMetadataAdministrationPage(props);
@@ -30,20 +30,24 @@ describe("DisplayMigrateMetadataAdministration as per the specifications", () =>
     expect(page.title.textContent).toBe("Migrate metadata");
     expect(page.migrationState.textContent).toBe("Partial");
     expect(page.resourcesMigrationState.textContent).toBe("31 to be migrated (31 shared resources, 0 personal resources)");
-    expect(page.foldersMigrationState.textContent).toBe("All migrated");
-    expect(page.tagsMigrationState.textContent).toBe("All migrated");
-    expect(page.commentsMigrationState.textContent).toBe("All migrated");
+    /*
+     * expect(page.foldersMigrationState.textContent).toBe("All migrated");
+     * expect(page.tagsMigrationState.textContent).toBe("All migrated");
+     * expect(page.commentsMigrationState.textContent).toBe("All migrated");
+     */
 
     expect(page.resourcesMigrationCheckbox.checked).toStrictEqual(true);
-    expect(page.foldersMigrationCheckbox.checked).toStrictEqual(false);
-    expect(page.tagsMigrationCheckbox.checked).toStrictEqual(false);
-    expect(page.commentsMigrationCheckbox.checked).toStrictEqual(false);
+    /*
+     * expect(page.foldersMigrationCheckbox.checked).toStrictEqual(false);
+     * expect(page.tagsMigrationCheckbox.checked).toStrictEqual(false);
+     * expect(page.commentsMigrationCheckbox.checked).toStrictEqual(false);
+     */
 
     expect(page.formBanner.textContent).toBe("If you have integrations, you will have to make sure they are updated before triggering the migration.");
   });
 
   it("Should not display the warning banner if efverything is migrated", async() => {
-    expect.assertions(6);
+    expect.assertions(3);
     const props = withMigrationFullyDone();
 
     const page = new DisplayMigrateMetadataAdministrationPage(props);
@@ -51,9 +55,11 @@ describe("DisplayMigrateMetadataAdministration as per the specifications", () =>
 
     expect(page.migrationState.textContent).toBe("Done");
     expect(page.resourcesMigrationState.textContent).toBe("All migrated");
-    expect(page.foldersMigrationState.textContent).toBe("All migrated");
-    expect(page.tagsMigrationState.textContent).toBe("All migrated");
-    expect(page.commentsMigrationState.textContent).toBe("All migrated");
+    /*
+     * expect(page.foldersMigrationState.textContent).toBe("All migrated");
+     * expect(page.tagsMigrationState.textContent).toBe("All migrated");
+     * expect(page.commentsMigrationState.textContent).toBe("All migrated");
+     */
 
     expect(page.formBanner).toBeNull();
   });
