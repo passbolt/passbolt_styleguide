@@ -442,7 +442,7 @@ class DisplayMigrateMetadataAdministration extends Component {
                         <div className="warning-message"><Trans>Resources will not be migrated as all content types v5 are deleted.</Trans></div>
                       }
                       {warnings?.hasError("migrate_resources_to_v5", "resource_types_v5_partially_deleted") &&
-                        <div className="warning-message"><Trans> Not all resources will be migrated, some corresponding content types are not active.</Trans></div>
+                        <div className="warning-message"><Trans>Not all resources will be migrated, some corresponding content types are not active.</Trans></div>
                       }
                     </div>
                   }
