@@ -261,6 +261,11 @@ export class HandleTotpWorkflow extends React.Component {
     resourceDto.resource_type_id = this.props.resourceType.id;
     resourceDto.metadata.resource_type_id = resourceDto.resource_type_id;
 
+    const isResourceTypeV5 = this.props.resourceTypes.getFirstById(this.props.resourceType.id)?.isV5();
+    if (isResourceTypeV5) {
+      resourceDto.metadata.object_type = "PASSBOLT_RESOURCE_METADATA";
+    }
+
     return this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
   }
 
@@ -291,6 +296,10 @@ export class HandleTotpWorkflow extends React.Component {
 
     resourceDto.resource_type_id = resourceType.id;
     resourceDto.metadata.resource_type_id = resourceType.id;
+
+    if (resourceType.isV5()) {
+      resourceDto.metadata.object_type = "PASSBOLT_RESOURCE_METADATA";
+    }
 
     return this.props.context.port.request("passbolt.resources.update", resourceDto, secretDto);
   }
