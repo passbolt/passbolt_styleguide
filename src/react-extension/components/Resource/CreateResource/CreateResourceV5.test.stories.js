@@ -1,9 +1,14 @@
 import {MemoryRouter} from "react-router-dom";
 import React from "react";
 import MockPort from "../../../test/mock/MockPort";
-import {defaultAppContext, defaultProps} from "./CreateResource.test.data";
+import {defaultProps} from "./CreateResourceV5.test.data";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
 import CreateResourceV5 from "./CreateResourceV5";
+import {
+  ResourceTypesLocalStorageContext
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import {ResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
 
 export default {
   title: 'Components/Resource/CreateResourceV5',
@@ -11,9 +16,15 @@ export default {
   decorators: [(Story, {args}) =>
     <MemoryRouter initialEntries={['/app/passwords']}>
       <div style={{margin: "-1rem"}}>
-        <ResourceWorkspaceContext.Provider value={args.resourceWorkspaceContext}>
-          <Story {...args}/>
-        </ResourceWorkspaceContext.Provider>
+        <AppContext.Provider value={args.context}>
+          <ResourceTypesLocalStorageContext.Provider value={{get: () => args.resourceTypes, resourceTypes: args.resourceTypes}}>
+            <ResourceWorkspaceContext.Provider value={args.resourceWorkspaceContext}>
+              <ResourcePasswordGeneratorContext.Provider value={args.resourcePasswordGeneratorContext}>
+                <Story {...args}/>
+              </ResourcePasswordGeneratorContext.Provider>
+            </ResourceWorkspaceContext.Provider>
+          </ResourceTypesLocalStorageContext.Provider>
+        </AppContext.Provider>
       </div>
     </MemoryRouter>
   ],
@@ -23,8 +34,5 @@ const mockedPort = new MockPort();
 mockedPort.addRequestListener("passbolt.resources.create", data => data);
 
 export const Default = {
-  args: {
-    context: defaultAppContext({port: mockedPort}),
-    ...defaultProps()
-  }
+  args: defaultProps()
 };

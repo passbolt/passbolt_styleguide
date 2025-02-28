@@ -60,7 +60,7 @@ export default class SelectResourceFormPage {
   }
 
   /**
-   * Returns the secret section
+   * Returns the section item
    * @param index the secret section index
    * @returns {Element}
    */

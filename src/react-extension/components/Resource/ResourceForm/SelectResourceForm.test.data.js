@@ -16,6 +16,10 @@ import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/
 import {
   ResourceEditCreateFormEnumerationTypes
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  resourceTypesCollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Default props
@@ -24,7 +28,9 @@ import {
 export function defaultProps(data = {}) {
   const defaultData = {
     resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PASSWORD,
-    resource: defaultResourceFormDto({secret: {password: ""}})
+    resource: defaultResourceFormDto({secret: {password: ""}}),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    onSelectForm: jest.fn()
   };
   return Object.assign(defaultData, data);
 }

@@ -13,18 +13,10 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withRouter} from "react-router-dom";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withTranslation} from "react-i18next";
-import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
-import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
-import {withWorkflow} from "../../../contexts/WorkflowContext";
-import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
@@ -43,34 +35,36 @@ import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
 class CreateResource extends Component {
   constructor(props) {
     super(props);
+    this.resourceFormEntity = this.createResourceFromProps;
     this.state = this.defaultState;
-    this.initEventHandlers();
+    this.bindCallbacks();
   }
 
+  /**
+   * Ge the default state
+   * @returns {*}
+   */
   get defaultState() {
     return {
-      resourceFormEntity: null, // The resource to create
-      resourceFormSelected: null,
+      resource: this.resourceFormEntity.toDto(), // The resource to create
+      resourceFormSelected: this.selectResourceFormByResourceType, // The selected form to display
     };
   }
 
-  initEventHandlers() {
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
     this.handleClose = this.handleClose.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.onSelectForm = this.onSelectForm.bind(this);
   }
 
   /**
-   * Whenever the component has been mounted
+   * Initialize the resource form entity and return the DTO
+   * @returns {*}
    */
-  async componentDidMount() {
-    this.initResourceFormEntity();
-    this.initSelectedResourceForm();
-  }
-
-  /**
-   * Initialize the resource form entity
-   */
-  initResourceFormEntity() {
+  get createResourceFromProps() {
     // @Todo update this part to have the resource according to the props and secret initialisation should be in the entity
     const secret = {};
     if (this.props.resourceType.hasPassword()) {
@@ -82,19 +76,19 @@ class CreateResource extends Component {
       secret.object_type = SECRET_DATA_OBJECT_TYPE;
     }
 
-    const resourceFormEntity = new ResourceFormEntity({resource_type_id: this.props.resourceType.id, secret}, {validate: false, resourceTypes: this.props.resourceTypes});
-    this.setState({resourceFormEntity});
+    return new ResourceFormEntity({resource_type_id: this.props.resourceType.id, secret}, {validate: false, resourceTypes: this.props.resourceTypes});
   }
 
   /**
    * Initialize the selected resource form
    */
-  initSelectedResourceForm() {
+  get selectResourceFormByResourceType() {
     if (this.props.resourceType.hasPassword()) {
-      this.setState({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PASSWORD});
+      return ResourceEditCreateFormEnumerationTypes.PASSWORD;
     } else if (this.props.resourceType.hasTotp()) {
-      this.setState({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP});
+      return ResourceEditCreateFormEnumerationTypes.TOTP;
     }
+    return null;
   }
 
   /*
@@ -111,7 +105,9 @@ class CreateResource extends Component {
     const name = target.name;
     const value = target.value || null;
 
-    this.state.resourceFormEntity.set(name, value, {validate: false});
+    this.resourceFormEntity.set(name, value, {validate: false});
+
+    this.setState({resource: this.resourceFormEntity.toDto()});
   }
 
   /**
@@ -120,6 +116,15 @@ class CreateResource extends Component {
    */
   async handleClose() {
     this.props.onClose();
+  }
+
+  /**
+   * Set the state for the resource form selected
+   * @param event
+   * @param resourceFormSelected
+   */
+  onSelectForm(event, resourceFormSelected) {
+    this.setState({resourceFormSelected});
   }
 
   /**
@@ -139,12 +144,13 @@ class CreateResource extends Component {
     return (
       <DialogWrapper title={this.translate("Create a resource")} className="create-resource"
         disabled={this.state.processing} onClose={this.handleClose}>
-        <SelectResourceForm resourceFormSelected={this.state.resourceFormSelected} resource={this.state.resourceFormEntity?.toDto()}/>
+        <SelectResourceForm resourceFormSelected={this.state.resourceFormSelected}
+          resource={this.state.resource} onSelectForm={this.onSelectForm}/>
         <form className="grid-and-footer" noValidate>
           <div className="grid">
-            <AddResourceName resource={this.state.resourceFormEntity?.toDto()} folderParentId={this.props.folderParentId} onChange={this.handleInputChange}/>
+            <AddResourceName resource={this.state.resource} folderParentId={this.props.folderParentId} onChange={this.handleInputChange}/>
             <div className="create-workspace">
-              <OrchestrateResourceForm resourceFormSelected={this.state.resourceFormSelected} resource={this.state.resourceFormEntity?.toDto()}/>
+              <OrchestrateResourceForm resourceFormSelected={this.state.resourceFormSelected} resource={this.state.resource}/>
             </div>
           </div>
           <div className="submit-wrapper">
@@ -158,20 +164,12 @@ class CreateResource extends Component {
 }
 
 CreateResource.propTypes = {
-  context: PropTypes.any, // The application context
-  history: PropTypes.object, // Router history
   folderParentId: PropTypes.string, // The folder parent id
   onClose: PropTypes.func, // Whenever the component must be closed
-  resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
-  passwordExpiryContext: PropTypes.object, // The password expiry context
-  actionFeedbackContext: PropTypes.any, // The action feedback context
-  dialogContext: PropTypes.any, // The dialog context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
-  resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource types entity
+  resourceType: PropTypes.instanceOf(ResourceTypeEntity).isRequired, // The resource types entity
   t: PropTypes.func, // The translation function
-  passwordPoliciesContext: PropTypes.object, // The password policy context
-  workflowContext: PropTypes.any, // The workflow context
 };
 
-export default  withRouter(withAppContext(withPasswordPolicies(withResourceTypesLocalStorage(withPasswordExpiry(withActionFeedback(withResourcePasswordGeneratorContext(withDialog(withWorkflow(withTranslation('common')(CreateResource))))))))));
+export default  withResourceTypesLocalStorage(withTranslation('common')(CreateResource));
 

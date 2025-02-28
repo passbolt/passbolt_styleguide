@@ -30,6 +30,10 @@ import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
 import {
   ResourceEditCreateFormEnumerationTypes
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 class SelectResourceForm extends Component {
   constructor(props) {
@@ -57,6 +61,7 @@ class SelectResourceForm extends Component {
     this.handleDisplaySecretsClick = this.handleDisplaySecretsClick.bind(this);
     this.handleDisplayMetadataClick = this.handleDisplayMetadataClick.bind(this);
     this.handleDisplayUpgradeClick = this.handleDisplayUpgradeClick.bind(this);
+    this.handleSelectForm = this.handleSelectForm.bind(this);
   }
 
   /**
@@ -78,6 +83,17 @@ class SelectResourceForm extends Component {
    */
   handleDisplayUpgradeClick() {
     this.setState({displayUpgrade: !this.state.displayUpgrade});
+  }
+
+  /**
+   * Handle form input change.
+   * @params {ReactEvent} event The react event.
+   * @params {string} resourceFormSelected The resource form selected.
+   */
+  handleSelectForm(event, resourceFormSelected) {
+    if (this.props.onSelectForm) {
+      this.props.onSelectForm(event, resourceFormSelected);
+    }
   }
 
   /**
@@ -117,6 +133,15 @@ class SelectResourceForm extends Component {
    */
   get isResourceHasNote() {
     return this.resource?.secret?.description != null;
+  }
+
+  /**
+   * Is resource type has description metadata
+   * @returns {boolean}
+   */
+  get isResourceTypeHasDescriptionMetadata() {
+    const resourceTypeId = this.resource?.resource_type_id;
+    return Boolean(resourceTypeId) && this.props.resourceTypes.getFirstById(resourceTypeId).hasMetadataDescription();
   }
 
   /**
@@ -175,19 +200,25 @@ class SelectResourceForm extends Component {
           {this.state.displaySecrets &&
             <>
               {this.isResourceHasPassword &&
-                <button type="button" className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.PASSWORD === this.selectedForm ? "selected" : ""}`}>
+                <button type="button"
+                  className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.PASSWORD === this.selectedForm ? "selected" : ""}`}
+                  onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.PASSWORD)}>
                   <KeySVG/>
                   <span className="ellipsis"><Trans>Passwords</Trans></span>
                 </button>
               }
               {this.isResourceHasTotp &&
-                <button type="button" className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.TOTP === this.selectedForm ? "selected" : ""}`}>
+                <button type="button"
+                  className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.TOTP === this.selectedForm ? "selected" : ""}`}
+                  onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.TOTP)}>
                   <TotpSVG/>
                   <span className="ellipsis"><Trans>TOTP</Trans></span>
                 </button>
               }
               {this.isResourceHasNote &&
-                <button type="button" className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.NOTE === this.selectedForm ? "selected" : ""}`}>
+                <button type="button"
+                  className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.NOTE === this.selectedForm ? "selected" : ""}`}
+                  onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.NOTE)}>
                   <NotesSVG/>
                   <span className="ellipsis"><Trans>Note</Trans></span>
                 </button>
@@ -203,7 +234,10 @@ class SelectResourceForm extends Component {
           </button>
           {this.state.displayMetadata &&
             <>
-              <button type="button" className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.DESCRIPTION === this.selectedForm ? "selected" : ""}`}>
+              <button type="button"
+                className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.DESCRIPTION === this.selectedForm ? "selected" : ""}`}
+                disabled={!this.isResourceTypeHasDescriptionMetadata}
+                onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.DESCRIPTION)}>
                 <AlignLeftSVG/>
                 <span className="ellipsis"><Trans>Description</Trans></span>
               </button>
@@ -242,9 +276,11 @@ class SelectResourceForm extends Component {
 
 SelectResourceForm.propTypes = {
   resourceFormSelected: PropTypes.string, // The resource form selected
+  onSelectForm: PropTypes.func, // The on select form function
   resource: PropTypes.object, // The resource to edit or create
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   t: PropTypes.func, // The translation function
 };
 
-export default  withTranslation('common')(SelectResourceForm);
+export default  withResourceTypesLocalStorage(withTranslation('common')(SelectResourceForm));
 

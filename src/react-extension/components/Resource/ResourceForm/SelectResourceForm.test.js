@@ -23,6 +23,9 @@ import {
   ResourceEditCreateFormEnumerationTypes
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
+import {
+  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -44,6 +47,16 @@ describe("SelectResourceForm", () => {
       await page.click(page.sidebarSectionMetadata);
 
       expect(page.getSectionItem(1)).toBeUndefined();
+    });
+
+    it('As LU I can see the resource description disabled for v4 default.', async() => {
+      expect.assertions(2);
+      const props = defaultProps({resource: defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: {password: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.getSectionItem(2).textContent).toStrictEqual("Description");
+      expect(page.getSectionItem(2).hasAttribute("disabled")).toBeTruthy();
     });
 
     it('As LU the resource secret section password should be selected.', async() => {
@@ -80,6 +93,34 @@ describe("SelectResourceForm", () => {
       await waitFor(() => {});
 
       expect(page.sectionItemSelected.textContent).toStrictEqual("Description");
+    });
+  });
+
+  describe('As LU I can select another resource form.', () => {
+    it('As LU I can select the resource description sections from a password lead.', async() => {
+      expect.assertions(2);
+      const props = defaultProps();
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
+
+      await page.click(page.getSectionItem(2));
+
+      expect(props.onSelectForm).toHaveBeenCalledWith(expect.any(Object), ResourceEditCreateFormEnumerationTypes.DESCRIPTION);
+    });
+
+    it('As LU I can select the resource description sections from a totp lead.', async() => {
+      expect.assertions(2);
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resource: defaultResourceFormDto({secret: {totp: {}}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
+
+      await page.click(page.getSectionItem(2));
+
+      expect(props.onSelectForm).toHaveBeenCalledWith(expect.any(Object), ResourceEditCreateFormEnumerationTypes.DESCRIPTION);
     });
   });
 });
