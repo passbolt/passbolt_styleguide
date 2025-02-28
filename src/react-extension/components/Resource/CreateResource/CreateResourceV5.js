@@ -35,6 +35,10 @@ import OrchestrateResourceForm from "../ResourceForm/OrchestrateResourceForm";
 import {SECRET_DATA_OBJECT_TYPE} from "../../../../shared/models/entity/secretData/secretDataEntity";
 import ResourceFormEntity from "../../../../shared/models/entity/resource/resourceFormEntity";
 import AddResourceName from "../ResourceForm/AddResourceName";
+import {
+  ResourceEditCreateFormEnumerationTypes
+} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
 
 class CreateResource extends Component {
   constructor(props) {
@@ -60,20 +64,37 @@ class CreateResource extends Component {
    */
   async componentDidMount() {
     this.initResourceFormEntity();
+    this.initSelectedResourceForm();
   }
 
   /**
-   * Initialize the resource view model
+   * Initialize the resource form entity
    */
   initResourceFormEntity() {
     // @Todo update this part to have the resource according to the props and secret initialisation should be in the entity
-    const secret = {password: ""};
+    const secret = {};
+    if (this.props.resourceType.hasPassword()) {
+      secret.password = "";
+    } else if (this.props.resourceType.hasTotp()) {
+      secret.totp = new TotpViewModel();
+    }
     if (this.props.resourceType.isV5()) {
       secret.object_type = SECRET_DATA_OBJECT_TYPE;
     }
-    const resourceFormSelected = this.props.resourceFormType;
+
     const resourceFormEntity = new ResourceFormEntity({resource_type_id: this.props.resourceType.id, secret}, {validate: false, resourceTypes: this.props.resourceTypes});
-    this.setState({resourceFormEntity, resourceFormSelected});
+    this.setState({resourceFormEntity});
+  }
+
+  /**
+   * Initialize the selected resource form
+   */
+  initSelectedResourceForm() {
+    if (this.props.resourceType.hasPassword()) {
+      this.setState({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PASSWORD});
+    } else if (this.props.resourceType.hasTotp()) {
+      this.setState({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP});
+    }
   }
 
   /*
@@ -140,7 +161,6 @@ CreateResource.propTypes = {
   context: PropTypes.any, // The application context
   history: PropTypes.object, // Router history
   folderParentId: PropTypes.string, // The folder parent id
-  resourceFormType: PropTypes.string, // The selected form to start the creation
   onClose: PropTypes.func, // Whenever the component must be closed
   resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
   passwordExpiryContext: PropTypes.object, // The password expiry context

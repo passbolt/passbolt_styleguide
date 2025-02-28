@@ -112,7 +112,7 @@ class ResourceFormEntity extends EntityV2 {
         if (!secretEntityClass) {
           throw new Error(`No secret association class has been found in resource types.`);
         }
-        this._secret = new secretEntityClass(this._props.secret);
+        this._secret = new secretEntityClass(this._props.secret, options);
         delete this._props.secret;
       }
     }

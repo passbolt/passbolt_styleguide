@@ -35,9 +35,6 @@ import {
   defaultMetadataTypesSettingsV50FreshDto, defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto
 } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import DisplayResourceCreationMenu from "../CreateResource/DisplayResourceCreationMenu";
-import {
-  ResourceEditCreateFormEnumerationTypes
-} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 
 beforeEach(() => {
   jest.resetModules();
@@ -98,7 +95,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newPasswordMenu).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.newPasswordMenu);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {folderParentId: null, resourceFormType: ResourceEditCreateFormEnumerationTypes.PASSWORD, resourceType: resourceTypeExpected});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {folderParentId: null, resourceType: resourceTypeExpected});
     });
 
     it('As LU I can create a resource v5', async() => {
@@ -113,7 +110,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newPasswordMenu).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.newPasswordMenu);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {folderParentId: null, resourceFormType: ResourceEditCreateFormEnumerationTypes.PASSWORD, resourceType: resourceTypeExpected});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {folderParentId: null, resourceType: resourceTypeExpected});
     });
 
     it('As LU I can create resource if I have selected a folder I am allowed to create in', async() => {
@@ -128,7 +125,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newPasswordMenu).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.newPasswordMenu);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id, resourceFormType: ResourceEditCreateFormEnumerationTypes.PASSWORD, resourceType: resourceTypeExpected});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id, resourceType: resourceTypeExpected});
     });
 
     it('As LU I cannot create a resource with password if metadata type settings default is V4 and resource types is only v5', async() => {
@@ -230,7 +227,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(page.displayMenu.newTotpMenu).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.newTotpMenu);
       const resourceTypeExpected = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {folderParentId: null, resourceFormType: ResourceEditCreateFormEnumerationTypes.TOTP, resourceType: resourceTypeExpected});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {folderParentId: null, resourceType: resourceTypeExpected});
     });
 
     it('As LU I can create a standalone totp v5', async() => {
@@ -245,7 +242,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(page.displayMenu.newTotpMenu).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.newTotpMenu);
       const resourceTypeExpected = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {folderParentId: null, resourceFormType: ResourceEditCreateFormEnumerationTypes.TOTP, resourceType: resourceTypeExpected});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {folderParentId: null, resourceType: resourceTypeExpected});
     });
 
     it('As LU I can create standalone totp if I have selected a folder I am allowed to create in', async() => {
@@ -260,7 +257,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(page.displayMenu.newTotpMenu).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.newTotpMenu);
       const resourceTypeExpected = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id, resourceFormType: ResourceEditCreateFormEnumerationTypes.TOTP, resourceType: resourceTypeExpected});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id, resourceType: resourceTypeExpected});
     });
 
     it('As LU I cannot create a standalone totp if metadata type settings default is V4 and resource types is only v5', async() => {

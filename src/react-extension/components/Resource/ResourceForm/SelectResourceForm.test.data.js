@@ -13,6 +13,9 @@
  */
 
 import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
+import {
+  ResourceEditCreateFormEnumerationTypes
+} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 
 /**
  * Default props
@@ -20,7 +23,8 @@ import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/
  */
 export function defaultProps(data = {}) {
   const defaultData = {
-    resource: defaultResourceFormDto()
+    resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PASSWORD,
+    resource: defaultResourceFormDto({secret: {password: ""}})
   };
   return Object.assign(defaultData, data);
 }
