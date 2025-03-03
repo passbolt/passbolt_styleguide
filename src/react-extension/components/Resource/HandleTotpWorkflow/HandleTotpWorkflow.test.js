@@ -94,6 +94,7 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
         ...totp.toResourceDto()
       };
       resourceDto.metadata.resource_type_id = props.resourceType.id;
+      resourceDto.metadata.object_type = "PASSBOLT_RESOURCE_METADATA";
 
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDto, totp.toSecretDto());
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The TOTP has been added successfully");
@@ -326,6 +327,7 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
         ...totp.toResourceDto()
       };
       resourceDto.metadata.resource_type_id = expectedResourceType.id;
+      resourceDto.metadata.object_type = "PASSBOLT_RESOURCE_METADATA";
 
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDto, totp.toSecretDto());
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The TOTP has been updated successfully");
@@ -353,6 +355,7 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
         ...totp.toResourceDto()
       };
       resourceDto.metadata.resource_type_id = expectedResourceType.id;
+      resourceDto.metadata.object_type = "PASSBOLT_RESOURCE_METADATA";
 
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDto, totp.toSecretDto());
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
