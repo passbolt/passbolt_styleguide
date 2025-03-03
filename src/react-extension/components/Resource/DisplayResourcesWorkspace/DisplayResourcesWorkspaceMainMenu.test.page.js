@@ -111,6 +111,13 @@ class DisplayMainMenuPageObject {
   }
 
   /**
+   * Returns the new other menu elements of password workspace menu
+   */
+  get newOtherMenu() {
+    return this._container.querySelector('#other_action');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {

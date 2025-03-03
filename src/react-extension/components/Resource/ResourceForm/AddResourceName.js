@@ -31,7 +31,6 @@ class AddResourceName extends Component {
    */
   get defaultState() {
     return {
-      resourceViewModel: null,
       processing: false,
     };
   }
@@ -48,29 +47,9 @@ class AddResourceName extends Component {
    * @params {ReactEvent} The react event.
    */
   handleInputChange(event) {
-    const target = event.target;
-    const name = target.name;
-    const value = target.value || null;
-
-    const newState = {
-      resourceViewModel: this.state.resourceViewModel.cloneWithMutation(name, value),
-    };
-
-    this.setState(newState);
-  }
-
-  /**
-   * Returns true if the `maxLength` property of the given field has been reached.
-   * @param {string} fieldName
-   * @returns {boolean}
-   */
-  isFieldMaxSizeReached(fieldName) {
-    const schema = this.state.resourceViewModel?.constructor.getSchema();
-    if (typeof(schema?.properties[fieldName]?.maxLength) === "undefined") {
-      return false;
+    if (this.props.onChange) {
+      this.props.onChange(event);
     }
-
-    return this.state.resourceViewModel[fieldName]?.length >= schema.properties[fieldName].maxLength;
   }
 
   /**
@@ -82,9 +61,7 @@ class AddResourceName extends Component {
       <div className="folder-name"><Trans>My workspace</Trans></div>
       {foldersHierarchy?.map(folder =>
         <Fragment key={folder.id}>
-          {folder.folder_parent_id !== null &&
-            <span className="caret">›</span>
-          }
+          <span className="caret">›</span>
           <div className="folder-name">{folder.name}</div>
         </Fragment>
       )}
@@ -112,10 +89,10 @@ class AddResourceName extends Component {
         </div>
         <div className="information">
           <div className="input text">
-            <input id="resource-name" name="name" type="text" value={this.state.resourceViewModel?.name || ""}
+            <input id="resource-name" name="metadata.name" type="text" value={this.props.resource?.metadata?.name || ""}
               onChange={this.handleInputChange} disabled={this.state.processing} maxLength="255"
               autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
-            {this.isFieldMaxSizeReached("name") &&
+            {this.props.isFieldMaxSizeReached &&
               <div className="name warning-message">
                 <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
               </div>
@@ -131,6 +108,9 @@ class AddResourceName extends Component {
 AddResourceName.propTypes = {
   folderParentId: PropTypes.string, // The folder parent id
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
+  resource: PropTypes.object, // The resource to update
+  isFieldMaxSizeReached: PropTypes.bool, // is field max size reached
+  onChange: PropTypes.func, // The on change function
   t: PropTypes.func, // The translation function
 };
 

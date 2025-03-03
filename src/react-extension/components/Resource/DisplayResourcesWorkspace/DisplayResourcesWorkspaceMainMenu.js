@@ -20,12 +20,8 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
 import ImportResources from "../ImportResources/ImportResources";
 import {Trans, withTranslation} from "react-i18next";
-import CreateResource from "../CreateResource/CreateResource";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import {withWorkflow} from "../../../contexts/WorkflowContext";
-import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
-import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
@@ -49,8 +45,14 @@ import KeySVG from "../../../../img/svg/key.svg";
 import TotpSVG from "../../../../img/svg/totp.svg";
 import FolderPlusSVG from "../../../../img/svg/folder_plus.svg";
 import UploadFileSVG from "../../../../img/svg/upload_file.svg";
+import CircleEllipsisSVG from "../../../../img/svg/circle_ellipsis.svg";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
+import DisplayResourceCreationMenu from "../CreateResource/DisplayResourceCreationMenu";
+import {
+  ResourceEditCreateFormEnumerationTypes
+} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import CreateResourceV5 from "../CreateResource/CreateResourceV5";
 
 /**
  * This component allows the current user to create a new resource
@@ -73,12 +75,19 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     this.handleMenuCreateTotpClickEvent = this.handleMenuCreateTotpClickEvent.bind(this);
     this.handleMenuCreateFolderClickEvent = this.handleMenuCreateFolderClickEvent.bind(this);
     this.handleImportClickEvent = this.handleImportClickEvent.bind(this);
+    this.handleMenuCreateOtherClickEvent = this.handleMenuCreateOtherClickEvent.bind(this);
   }
   /**
    * Handle password click event
    */
   handleCreateMenuPasswordClickEvent() {
-    this.openPasswordCreateDialog();
+    let resourceType;
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+    } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
+    }
+    this.openCreateDialog(ResourceEditCreateFormEnumerationTypes.PASSWORD, resourceType);
   }
 
   /**
@@ -89,36 +98,32 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   }
 
   /**
-   * Open create password dialog
+   * Open create resource dialog
+   * @param {string} resourceFormType The resource form type (ex: password, totp, ...)
+   * @param {ResourceTypeEntity} resourceType The resource type
    */
-  openPasswordCreateDialog() {
-    let resourceType;
-    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
-      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
-    } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
-      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
-    }
-    this.props.dialogContext.open(CreateResource, {folderParentId: this.folderIdSelected, resourceType: resourceType});
+  openCreateDialog(resourceFormType, resourceType) {
+    this.props.dialogContext.open(CreateResourceV5, {folderParentId: this.folderIdSelected, resourceFormType: resourceFormType, resourceType});
   }
 
   /**
-   * Handle folder click event
+   * Handle totp click event
    */
   handleMenuCreateTotpClickEvent() {
-    this.openStandaloneTotpCreateDialog();
-  }
-
-  /**
-   * Open create password dialog
-   */
-  openStandaloneTotpCreateDialog() {
     let resourceType;
     if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
       resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
       resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
     }
-    this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.CREATE_STANDALONE_TOTP, folderParentId: this.folderIdSelected, resourceType: resourceType});
+    this.openCreateDialog(ResourceEditCreateFormEnumerationTypes.TOTP, resourceType);
+  }
+
+  /**
+   * Handle other click event
+   */
+  handleMenuCreateOtherClickEvent() {
+    this.props.dialogContext.open(DisplayResourceCreationMenu, {folderParentId: this.folderIdSelected});
   }
 
   /**
@@ -170,6 +175,15 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    */
   hasMetadataTypesSettings() {
     return Boolean(this.props.metadataTypeSettings);
+  }
+
+  /**
+   * Has metadata types settings v4 and v5
+   * @returns {boolean}
+   */
+  hasMetadataTypesV4AndV5() {
+    return this.props.metadataTypeSettings.allowCreationOfV5Resources
+      && this.props.metadataTypeSettings.allowCreationOfV4Resources;
   }
 
   /**
@@ -252,10 +266,18 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
                 </DropdownItem>
               }
               {canUseTotp && this.canCreateStandaloneTotp() &&
-                <DropdownItem separator={true}>
+                <DropdownItem separator={!this.hasMetadataTypesV4AndV5()}>
                   <button id="totp_action" type="button" className="no-border" onClick={this.handleMenuCreateTotpClickEvent}>
                     <TotpSVG/>
                     <span><Trans>TOTP</Trans></span>
+                  </button>
+                </DropdownItem>
+              }
+              {this.hasMetadataTypesV4AndV5() &&
+                <DropdownItem separator={true}>
+                  <button id="other_action" type="button" className="no-border" onClick={this.handleMenuCreateOtherClickEvent}>
+                    <CircleEllipsisSVG/>
+                    <span><Trans>Other</Trans></span>
                   </button>
                 </DropdownItem>
               }
@@ -290,8 +312,7 @@ DisplayResourcesWorkspaceMainMenu.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
-  workflowContext: PropTypes.any, // The workflow context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withDialog(withWorkflow(withMetadataTypesSettingsLocalStorage(withResourceTypesLocalStorage(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu))))))));
+export default withAppContext(withRbac(withDialog(withMetadataTypesSettingsLocalStorage(withResourceTypesLocalStorage(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu)))))));
