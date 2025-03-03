@@ -20,7 +20,7 @@ import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.te
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 import {resourceTypesCollectionDto} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import {defaultMetadataKeysDtos} from "../../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
-import {defaultMetadataTypesSettingsV4Dto} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import {defaultMetadataTypesSettingsV4Dto, defaultMetadataTypesSettingsV50FreshDto} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import {
   resourceTypePasswordAndDescriptionDto,
   resourceTypePasswordDescriptionTotpDto,
@@ -75,6 +75,25 @@ export const withOnlyTotpV5Enabled = (props = {}) => defaultProps({
       resourceTypeV5DefaultTotpDto(deleted),
       resourceTypeV5TotpDto(),
     ]),
+  },
+  ...props,
+});
+
+export const withOnlyTotpV4Enabled = (props = {}) => defaultProps({
+  resourceTypesServiceWorkerService: {
+    findAllByDeletedAndNonDeleted: () => new ResourceTypesCollection([
+      resourceTypePasswordStringDto(deleted),
+      resourceTypePasswordAndDescriptionDto(deleted),
+      resourceTypePasswordDescriptionTotpDto(deleted),
+      resourceTypeTotpDto(),
+      resourceTypeV5DefaultDto(deleted),
+      resourceTypeV5PasswordStringDto(deleted),
+      resourceTypeV5DefaultTotpDto(deleted),
+      resourceTypeV5TotpDto(deleted),
+    ]),
+  },
+  metadataSettingsServiceWorkerService: {
+    findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
   },
   ...props,
 });

@@ -226,7 +226,7 @@ class ResourceTypesFormEntity extends EntityV2 {
       error.addError("totp_v5", "has_content", "One (or more) resource type v5 having a totp is deleted but its resources_count is not 0.");
     }
     if (!this._props.password_v4 && !this._props.totp_v4 && !this._props.password_v5 && !this._props.totp_v5) {
-      const message = "At least one family of resource types should be selected";
+      const message = "At least one content type should be allowed";
       const rule = "minimum_requirement";
 
       error = error || new EntityValidationError();
@@ -263,24 +263,36 @@ class ResourceTypesFormEntity extends EntityV2 {
     }
 
     let result = null;
-    if (metadataTypesSettings.allowCreationOfV4Resources && !this._props.password_v4) {
+    if (metadataTypesSettings.allowCreationOfV4Resources && !this._props.password_v4 && !this._props.totp_v4) {
       result = new EntityValidationError();
       result.addError("password_v4", "is_creation_alowed", "Creation of resource type v4 is allowed but all resource types having passwords are deleted.");
-    }
-
-    if (metadataTypesSettings.allowCreationOfV4Resources && !this._props.totp_v4) {
-      result = result || new EntityValidationError();
       result.addError("totp_v4", "is_creation_alowed", "Creation of resource type v4 is allowed but all resource types having totps are deleted.");
     }
 
-    if (metadataTypesSettings.allowCreationOfV4Resources && !this._props.password_v5) {
+    if (!metadataTypesSettings.allowCreationOfV4Resources && this._props.password_v4) {
       result = result || new EntityValidationError();
-      result.addError("password_v5", "is_creation_alowed", "Creation of resource type v5 is allowed but all resource types having passwords are deleted.");
+      result.addError("password_v4", "is_creation_not_alowed", "Creation of resource type v4 is not allowed.");
     }
 
-    if (metadataTypesSettings.allowCreationOfV4Resources && !this._props.totp_v5) {
+    if (!metadataTypesSettings.allowCreationOfV4Resources && this._props.totp_v4) {
       result = result || new EntityValidationError();
+      result.addError("totp_v4", "is_creation_not_alowed", "Creation of resource type v4 is not allowed.");
+    }
+
+    if (metadataTypesSettings.allowCreationOfV5Resources && !this._props.password_v5 && !this._props.totp_v5) {
+      result = result || new EntityValidationError();
+      result.addError("password_v5", "is_creation_alowed", "Creation of resource type v5 is allowed but all resource types having passwords are deleted.");
       result.addError("totp_v5", "is_creation_alowed", "Creation of resource type v5 is allowed but all resource types having totps are deleted.");
+    }
+
+    if (!metadataTypesSettings.allowCreationOfV5Resources && this._props.password_v5) {
+      result = result || new EntityValidationError();
+      result.addError("password_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
+    }
+
+    if (!metadataTypesSettings.allowCreationOfV5Resources && this._props.totp_v5) {
+      result = result || new EntityValidationError();
+      result.addError("totp_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
     }
 
     const activeMetadataKeysCollection = metadataKeysCollection.items.filter(metadataKey => !metadataKey.expired);

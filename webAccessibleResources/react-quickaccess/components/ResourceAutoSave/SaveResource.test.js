@@ -112,6 +112,7 @@ describe("See the Create Resource - save resource", () => {
     const resourceTypeId = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG).id;
     const resourceDto = {
       metadata: {
+        object_type: "PASSBOLT_RESOURCE_METADATA",
         name: resourceMetaFromTab.name,
         username: resourceMetaFromTab.username,
         uris: [resourceMetaFromTab.uri],

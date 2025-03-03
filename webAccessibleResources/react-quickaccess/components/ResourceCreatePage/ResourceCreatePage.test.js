@@ -174,6 +174,7 @@ describe("ResourceCreatePage", () => {
         resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
         folder_parent_id: null,
         metadata: {
+          object_type: "PASSBOLT_RESOURCE_METADATA",
           resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
           name: "Passbolt Browser Extension Test",
           uris: ["https://passbolt-browser-extension/test"],

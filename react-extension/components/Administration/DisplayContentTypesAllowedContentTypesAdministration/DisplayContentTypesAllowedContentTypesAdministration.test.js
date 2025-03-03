@@ -16,6 +16,7 @@ import {waitForTrue} from '../../../../../test/utils/waitFor';
 import DisplayContentTypesAllowedContentTypesAdministration from "./DisplayContentTypesAllowedContentTypesAdministration.test.page";
 import {
   defaultProps,
+  withOnlyTotpV4Enabled,
   withOnlyTotpV5Enabled,
   withoutMetadataKeys,
 } from "./DisplayContentTypesAllowedContentTypesAdministration.test.data";
@@ -51,25 +52,42 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
       expect(page.formBanner.textContent).toStrictEqual("Don't forget to save your settings to apply your modification.");
     });
 
-    it("displays warning on fields if creation is allowed but there is not content types available", async() => {
-      expect.assertions(8);
+    it("displays warning on v4 fields if creation is allowed but there is not content types available", async() => {
+      expect.assertions(6);
 
       const page = new DisplayContentTypesAllowedContentTypesAdministration(withOnlyTotpV5Enabled());
       await waitForTrue(() => page.exists());
 
       expect(page.passwordV4Warning).not.toBeNull();
-      expect(page.totpV4Warning).not.toBeNull();
-      expect(page.passwordV5Warning).not.toBeNull();
+      expect(page.passwordV4Warning.textContent).toStrictEqual("Creation of content type v4 is allowed but all content types having passwords are deleted.");
 
-      expect(page.passwordV4Warning.textContent).toStrictEqual("Creation of resource type v4 is allowed but all resource types having passwords are deleted.");
-      expect(page.totpV4Warning.textContent).toStrictEqual("Creation of resource type v4 is allowed but all resource types having totp are deleted.");
-      expect(page.passwordV5Warning.textContent).toStrictEqual("Creation of resource type v5 is allowed but all resource types having passwords are deleted.");
+      expect(page.totpV4Warning).not.toBeNull();
+      expect(page.totpV4Warning.textContent).toStrictEqual("Creation of content type v4 is allowed but all content types having totp are deleted.");
 
       await page.clickOnPasswordV4();
       await page.clickOnTotpV5();
 
+      expect(page.totpV5Warning).toBeNull();
+      expect(page.passwordV5Warning).toBeNull();
+    });
+
+    it("displays warning on v5 fields if creation is allowed but there is not content types available", async() => {
+      expect.assertions(6);
+
+      const page = new DisplayContentTypesAllowedContentTypesAdministration(withOnlyTotpV4Enabled());
+      await waitForTrue(() => page.exists());
+
+      expect(page.passwordV5Warning).not.toBeNull();
+      expect(page.passwordV5Warning.textContent).toStrictEqual("Creation of content type v5 is allowed but all content types having passwords are deleted.");
+
       expect(page.totpV5Warning).not.toBeNull();
-      expect(page.totpV5Warning.textContent).toStrictEqual("Creation of resource type v5 is allowed but all resource types having totp are deleted.");
+      expect(page.totpV5Warning.textContent).toStrictEqual("Creation of content type v5 is allowed but all content types having totp are deleted.");
+
+      await page.clickOnPasswordV5();
+      await page.clickOnTotpV4();
+
+      expect(page.totpV4Warning).toBeNull();
+      expect(page.passwordV4Warning).toBeNull();
     });
 
     it("displays error on fields if v5 is enabled but there is no metadata key set", async() => {
@@ -103,10 +121,10 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
       expect(page.totpV4Error).not.toBeNull();
       expect(page.passwordV5Error).not.toBeNull();
       expect(page.totpV5Error).not.toBeNull();
-      expect(page.passwordV4Error.textContent).toStrictEqual("At least one family of resource types should be selected");
-      expect(page.totpV4Error.textContent).toStrictEqual("At least one family of resource types should be selected");
-      expect(page.passwordV5Error.textContent).toStrictEqual("At least one family of resource types should be selected");
-      expect(page.totpV5Error.textContent).toStrictEqual("At least one family of resource types should be selected");
+      expect(page.passwordV4Error.textContent).toStrictEqual("At least one content type should be allowed");
+      expect(page.totpV4Error.textContent).toStrictEqual("At least one content type should be allowed");
+      expect(page.passwordV5Error.textContent).toStrictEqual("At least one content type should be allowed");
+      expect(page.totpV5Error.textContent).toStrictEqual("At least one content type should be allowed");
     });
   });
 });

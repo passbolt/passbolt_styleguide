@@ -15,6 +15,7 @@
 import MetadataTypesSettingsEntity, {RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5} from "./metadataTypesSettingsEntity";
 import EntityValidationError from "../abstract/entityValidationError";
 import ResourceTypesCollection from "../resourceType/resourceTypesCollection";
+import MetadataKeysCollection from "./metadataKeysCollection";
 
 const formProperties = [
   "default_resource_types",
@@ -41,15 +42,23 @@ class MetadataTypesSettingsFormEntity extends MetadataTypesSettingsEntity {
   /**
    * Verify the data health. This intends for administrators, helping them adjust settings to prevent unusual or
    * problematic situations. By instance enabling a metadata types without active related content types.
+   * @param {ResourceTypesCollection} resourceTypes
+   * @param {MetadataKeysCollection} metadataKeysCollection
    * @returns {EntityValidationError|null}
    */
-  verifyHealth(resourceTypes) {
+  verifyHealth(resourceTypes, metadataKeysCollection) {
     let result = null;
     if (typeof resourceTypes === "undefined") {
       return result;
     }
+    if (typeof metadataKeysCollection === "undefined") {
+      return result;
+    }
     if (!(resourceTypes instanceof ResourceTypesCollection)) {
       throw new TypeError("The parameter 'resourceTypes' is not a valid 'ResourceTypesCollection' type.");
+    }
+    if (!(metadataKeysCollection instanceof MetadataKeysCollection)) {
+      throw new TypeError("The parameter 'metadataKeysCollection' is not a valid 'MetadataKeysCollection' type.");
     }
 
     const hasV4ResourceTypes = resourceTypes.hasSomeOfVersion(RESOURCE_TYPE_VERSION_4);
@@ -86,6 +95,12 @@ class MetadataTypesSettingsFormEntity extends MetadataTypesSettingsEntity {
     if (this.allowV4V5Upgrade && !this.allowCreationOfV5Resources) {
       result = result || new EntityValidationError();
       result.addError("allow_v4_v5_upgrade", "allow_creation", "Resource types v5 creation is not allowed.");
+    }
+
+    const activeMetadataKeysCollection = metadataKeysCollection.items.filter(metadataKey => !metadataKey.expired);
+    if (activeMetadataKeysCollection.length === 0 && this.allowCreationOfV5Resources) {
+      result = result || new EntityValidationError();
+      result.addError("allow_creation_of_v5_resources", "active_metadata_key", "No active metadata key defined.");
     }
 
     return result;

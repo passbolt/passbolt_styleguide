@@ -80,11 +80,6 @@ class MigrateMetadataFormEntity extends MigrateMetadataEntity {
    * @returns {EntityValidationError|null}
    */
   _verifyMigrateResourcesToV5Health(result, resourceTypesCollection, metadataTypesSettings) {
-    if (this._props.migrate_resources_to_v5 && !metadataTypesSettings.allowV4V5Upgrade) {
-      result = result || new EntityValidationError();
-      result.addError("migrate_resources_to_v5", "allow_v4_v5_upgrade", "Resource types v5 creation is not allowed.");
-    }
-
     if (this._props.migrate_resources_to_v5 && !metadataTypesSettings.allowCreationOfV5Resources) {
       result = result || new EntityValidationError();
       result.addError("migrate_resources_to_v5", "allow_creation_of_v5_resources", "Resource types v5 creation is not allowed.");

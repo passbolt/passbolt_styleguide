@@ -8914,11 +8914,6 @@ table.table-info.horizontal tbody tr:hover {
 #migrate-metadata-settings .togglelist label .info {
   color: hsl(194, 14%, 56%);
 }
-#migrate-metadata-settings .togglelist .warning-message {
-  display: list-item;
-  list-style: disc;
-  list-style-position: inside;
-}
 #migrate-metadata-settings .radiolist-alt .name {
   font-weight: bold;
 }
@@ -8943,6 +8938,12 @@ table.table-info.horizontal tbody tr:hover {
 #allow-content-types .checkbox input[type=checkbox] + label .info {
   color: hsl(194, 14%, 56%);
   font-weight: normal;
+}
+#allow-content-types .checkbox input[type=checkbox]:disabled {
+  background: none;
+}
+#allow-content-types .tooltip-text {
+  max-width: none;
 }
 #setup-mfa {
   width: 100%;

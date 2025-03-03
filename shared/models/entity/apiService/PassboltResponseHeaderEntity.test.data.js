@@ -23,5 +23,6 @@ export const paginatedPassboltResponseDto = (collection, data = {}) => ({
   ...data,
   pagination: defaultPassboltResponsePaginationHeaderDto({
     count: collection.length,
+    ...data?.pagination,
   }),
 });

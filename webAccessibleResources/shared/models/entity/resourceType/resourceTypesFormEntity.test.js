@@ -119,10 +119,10 @@ describe("ResourceTypesFormEntity", () => {
       expectedError.addError("totp_v4", "has_content", "One (or more) resource type v5 having a password is deleted but its resources_count is not 0.");
       expectedError.addError("totp_v5", "has_content", "One (or more) resource type v5 having a totp is deleted but its resources_count is not 0.");
 
-      expectedError.addError("password_v4", "minimum_requirement", "At least one family of resource types should be selected");
-      expectedError.addError("password_v5", "minimum_requirement", "At least one family of resource types should be selected");
-      expectedError.addError("totp_v4", "minimum_requirement", "At least one family of resource types should be selected");
-      expectedError.addError("totp_v5", "has_cominimum_requirementntent", "At least one family of resource types should be selected");
+      expectedError.addError("password_v4", "minimum_requirement", "At least one content type should be allowed");
+      expectedError.addError("password_v5", "minimum_requirement", "At least one content type should be allowed");
+      expectedError.addError("totp_v4", "minimum_requirement", "At least one content type should be allowed");
+      expectedError.addError("totp_v5", "has_cominimum_requirementntent", "At least one content type should be allowed");
 
       const dto = withDeletedResourceTypesHavingResources();
       expect(() => new ResourceTypesFormEntity(dto)).toThrow(expectedError);
@@ -199,6 +199,36 @@ describe("ResourceTypesFormEntity", () => {
         password_v4: false,
         password_v4_count: 0,
       }));
+
+      const healthIssues = settings.verifyHealth(metadataTypesSettings, metadataKeysCollection);
+      expect(healthIssues).toStrictEqual(expectedError);
+    });
+
+    it("return is_creation_not_allowed v5 health issues if any", () => {
+      expect.assertions(1);
+
+      const expectedError = new EntityValidationError();
+      expectedError.addError("totp_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
+      expectedError.addError("password_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
+
+      const metadataTypesSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto({allow_creation_of_v5_resources: false, default_resource_types: "v4", allow_creation_of_v4_resources: true}));
+      const metadataKeysCollection = new MetadataKeysCollection([]);
+      const settings = new ResourceTypesFormEntity(defaultResourceTypesFormDto());
+
+      const healthIssues = settings.verifyHealth(metadataTypesSettings, metadataKeysCollection);
+      expect(healthIssues).toStrictEqual(expectedError);
+    });
+
+    it("return is_creation_not_allowed v5 health issues if any", () => {
+      expect.assertions(1);
+
+      const expectedError = new EntityValidationError();
+      expectedError.addError("totp_v4", "is_creation_not_alowed", "Creation of resource type v4 is not allowed.");
+      expectedError.addError("password_v4", "is_creation_not_alowed", "Creation of resource type v4 is not allowed.");
+
+      const metadataTypesSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto());
+      const metadataKeysCollection = new MetadataKeysCollection([]);
+      const settings = new ResourceTypesFormEntity(defaultResourceTypesFormDto());
 
       const healthIssues = settings.verifyHealth(metadataTypesSettings, metadataKeysCollection);
       expect(healthIssues).toStrictEqual(expectedError);

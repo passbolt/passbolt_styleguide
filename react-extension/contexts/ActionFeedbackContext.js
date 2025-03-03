@@ -22,6 +22,7 @@ import {v4 as uuidv4} from "uuid";
 export const ActionFeedbackContext = React.createContext({
   feedbacks: [], // Current displayed feedbacks
   displaySuccess: () => {}, // Inform a user about an successful action feedback
+  displayWarning: () => {}, // Inform a user with a warning action feedback
   displayError: () => {}, // Inform a user about an action failure's feedback
   remove: () => {} // Remove a particular feedback
 });
@@ -46,6 +47,7 @@ export default class ActionFeedbackContextProvider extends React.Component {
     return {
       feedbacks: [],
       displaySuccess: this.displaySuccess.bind(this),
+      displayWarning: this.displayWarning.bind(this),
       displayError: this.displayError.bind(this),
       remove: this.remove.bind(this)
     };
@@ -56,8 +58,8 @@ export default class ActionFeedbackContextProvider extends React.Component {
    * Display the feedback in a success mode
    * @param feedbackToAdd A feedback
    */
-  async displaySuccess(feedbackToAdd) {
-    await this.setState({
+  displaySuccess(feedbackToAdd) {
+    this.setState({
       feedbacks: [
         ...this.state.feedbacks,
         {
@@ -70,11 +72,28 @@ export default class ActionFeedbackContextProvider extends React.Component {
   }
 
   /**
+   * Display the feedback in a warning mode
+   * @param feedbackToAdd A feedback
+   */
+  displayWarning(feedbackToAdd) {
+    this.setState({
+      feedbacks: [
+        ...this.state.feedbacks,
+        {
+          id: uuidv4(),
+          type: 'warning',
+          message: feedbackToAdd
+        },
+      ]
+    });
+  }
+
+  /**
    * Display the feedback in a error mode
    * @param feedbackToAdd A feedback
    */
-  async displayError(feedbackToAdd) {
-    await this.setState({
+  displayError(feedbackToAdd) {
+    this.setState({
       feedbacks: [
         ...this.state.feedbacks,
         {
@@ -90,9 +109,9 @@ export default class ActionFeedbackContextProvider extends React.Component {
    * Remove the feedback
    * @param feedbackToRemove A feedback
    */
-  async remove(feedbackToRemove) {
+  remove(feedbackToRemove) {
     const hasSameId = feedback => feedbackToRemove.id !== feedback.id;
-    await this.setState({feedbacks: this.state.feedbacks.filter(hasSameId)});
+    this.setState({feedbacks: this.state.feedbacks.filter(hasSameId)});
   }
 
   /**

@@ -67,8 +67,10 @@ class DisplayMigrateMetadataAdministration extends Component {
    */
   get defaultState() {
     return {
+      isReady: false,
       isProcessing: false, // Is the form processing (loading, submitting).
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once.
+      hasMigrationRunOnce: false, // True if the migration has been started at least once.
       settings: this.formSettings.toDto(),
     };
   }
@@ -102,7 +104,8 @@ class DisplayMigrateMetadataAdministration extends Component {
 
     this.setState({
       settings: this.formSettings.toDto(),
-      isProcessing: false
+      isProcessing: false,
+      isReady: true,
     });
   }
 
@@ -261,17 +264,22 @@ class DisplayMigrateMetadataAdministration extends Component {
    * @returns {string}
    */
   get migrationStatus() {
-    return this.hasPendingMigration
-      ? this.props.t("Partial")
-      : this.props.t("Done");
+    if (!this.hasPendingMigration) {
+      return this.props.t("Done");
+    }
+
+    return this.state.hasMigrationRunOnce
+      ? this.props.t("Pending")
+      : this.props.t("Required");
   }
 
   /**
-   * Returns the date at when the migration ended.
-   * @returns {string}
+   * Returns true if there are still elements to migrate.
+   * @todo: when other content to migrate, the total count should be adapted.
+   * @returns {boolean}
    */
-  get migrationDate() {
-    return this.props.t("N/A");
+  hasElementsToMigrate() {
+    return this.totalResources > 0;
   }
 
   /**
@@ -314,16 +322,21 @@ class DisplayMigrateMetadataAdministration extends Component {
     try {
       const migrationDetails = this.formSettings.sharedContentOnly ? this.migrationCountDetailsShared : this.migrationCountDetails;
       await this.metadataMigrateContentServiceWorkerService.migrate(this.formSettings.toDto(), migrationDetails);
-      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The encrypted metadata settings were updated."));
+      await this.initData();
+
+      if (this.hasElementsToMigrate()) {
+        this.props.actionFeedbackContext.displayWarning(this.props.t("Encrypted metadata were partially migrated."));
+      } else {
+        this.props.actionFeedbackContext.displaySuccess(this.props.t("The encrypted metadata were migrated."));
+      }
     } catch (error) {
       this.props.dialogContext.open(NotifyError, {error});
     }
 
     this.setState({
       hasAlreadyBeenValidated: true,
+      hasMigrationRunOnce: true,
     });
-
-    await this.initData();
   }
 
   /**
@@ -352,7 +365,7 @@ class DisplayMigrateMetadataAdministration extends Component {
         <div id="migrate-metadata-settings" className="col8 main-column">
           <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
             <h3><label><Trans>Migrate metadata</Trans></label></h3>
-            {hasGlobalError &&
+            {hasGlobalError && this.hasPendingMigration &&
               <div className="error message form-banner">
                 <Trans>No active metadata keys available.</Trans>
               </div>
@@ -367,10 +380,10 @@ class DisplayMigrateMetadataAdministration extends Component {
             </p>
             <h4><Trans>Summary</Trans></h4>
             <div className="feedback-card">
-              {this.hasPendingMigration &&
+              {this.state.isReady && this.hasPendingMigration &&
               <AnimatedFeedback name="warning" />
               }
-              {!this.hasPendingMigration &&
+              {this.state.isReady && !this.hasPendingMigration &&
               <AnimatedFeedback name="success" />
               }
               <div className="migration-status-information">
@@ -388,33 +401,35 @@ class DisplayMigrateMetadataAdministration extends Component {
                       }
                     </span>
                   </li>
-                  <li className="migration-folders-count">
-                    <span className="label"><Trans>Folders</Trans></span>
-                    <span className="value">
-                      {this.hasPendingFoldersMigration
-                        ? <>{this.props.t("{{count}} to be migrated", {count: this.totalFolders})}</>
-                        : <Trans>All migrated</Trans>
-                      }
-                    </span>
-                  </li>
-                  <li className="migration-tags-count">
-                    <span className="label"><Trans>Tags</Trans></span>
-                    <span className="value">
-                      {this.hasPendingCommentsMigration
-                        ? <>{this.props.t("{{count}} to be migrated", {count: this.totalTags})}</>
-                        : <Trans>All migrated</Trans>
-                      }
-                    </span>
-                  </li>
-                  <li className="migration-comments-count">
-                    <span className="label"><Trans>Comments</Trans></span>
-                    <span className="value">
-                      {this.hasPendingTagsMigration
-                        ? <>{this.props.t("{{count}} to be migrated", {count: this.totalComments})}</>
-                        : <Trans>All migrated</Trans>
-                      }
-                    </span>
-                  </li>
+                  {/*
+                    <li className="migration-folders-count">
+                      <span className="label"><Trans>Folders</Trans></span>
+                      <span className="value">
+                        {this.hasPendingFoldersMigration
+                          ? <>{this.props.t("{{count}} to be migrated", {count: this.totalFolders})}</>
+                          : <Trans>All migrated</Trans>
+                        }
+                      </span>
+                    </li>
+                    <li className="migration-tags-count">
+                      <span className="label"><Trans>Tags</Trans></span>
+                      <span className="value">
+                        {this.hasPendingCommentsMigration
+                          ? <>{this.props.t("{{count}} to be migrated", {count: this.totalTags})}</>
+                          : <Trans>All migrated</Trans>
+                        }
+                      </span>
+                    </li>
+                    <li className="migration-comments-count">
+                      <span className="label"><Trans>Comments</Trans></span>
+                      <span className="value">
+                        {this.hasPendingTagsMigration
+                          ? <>{this.props.t("{{count}} to be migrated", {count: this.totalComments})}</>
+                          : <Trans>All migrated</Trans>
+                        }
+                      </span>
+                    </li>
+                  */}
                 </ul>
               </div>
             </div>
@@ -431,84 +446,83 @@ class DisplayMigrateMetadataAdministration extends Component {
                   <span className="info"><Trans>Name, Username, URI, Cleartext description.</Trans></span>
                   {!hasGlobalError && warnings?.hasError("migrate_resources_to_v5") &&
                     <div className="warning">
-                      {warnings?.hasError("migrate_resources_to_v5", "allow_v4_v5_upgrade") &&
-                        <div className="warning-message"><Trans>Resource upgrade from v4 to v5 is not allowed</Trans></div>
-                      }
                       {warnings?.hasError("migrate_resources_to_v5", "allow_creation_of_v5_resources") &&
                         <div className="warning-message"><Trans>Resource types v5 creation is not allowed.</Trans></div>
                       }
                       {warnings?.hasError("migrate_resources_to_v5", "resource_types_v5_deleted") &&
-                        <div className="warning-message"><Trans>Resource types v5 are deleted.</Trans></div>
+                        <div className="warning-message"><Trans>Resources will not be migrated as no content types with encrypted metadata is allowed.</Trans></div>
                       }
                       {warnings?.hasError("migrate_resources_to_v5", "resource_types_v5_partially_deleted") &&
-                        <div className="warning-message"><Trans>Some resource types v5 are missing.</Trans></div>
+                        <div className="warning-message"><Trans>Not all resources will be migrated, some corresponding content types are not active.</Trans></div>
                       }
                     </div>
                   }
                 </label>
               </span>
-              <span className={`input toggle-switch form-element ${!hasGlobalError && warnings?.hasError("migrate_folders_to_v5") && "warning"}`}>
-                <input id="migrateFoldersInput" type="checkbox" name="migrate_folders_to_v5"
-                  className={`toggle-switch-checkbox checkbox ${!hasGlobalError && warnings?.hasError("migrate_folders_to_v5") && "warning"}`}
-                  onChange={this.handleInputChange}
-                  checked={this.state.settings.migrate_folders_to_v5}
-                  disabled={this.hasAllInputDisabled()}/>
-                <label htmlFor="migrateFoldersInput">
-                  <span className="name"><Trans>Folders:</Trans></span>
-                  <span className="info"><Trans>Name.</Trans></span>
-                  {!hasGlobalError && warnings?.hasError("migrate_folders_to_v5") &&
-                    <div className="warning">
-                      {warnings?.hasError("migrate_folders_to_v5", "allow_v4_v5_upgrade") &&
-                        <div className="warning-message"><Trans>Folder upgrade from v4 to v5 is not allowed</Trans></div>
-                      }
-                      {warnings?.hasError("migrate_folders_to_v5", "allow_creation_of_v5_folders") &&
-                        <div className="warning-message"><Trans>Folder v5 creation is not allowed.</Trans></div>
-                      }
-                    </div>
-                  }
-                </label>
-              </span>
-              <span className={`input toggle-switch form-element ${!hasGlobalError && warnings?.hasError("migrate_tags_to_v5") && "warning"}`}>
-                <input id="migrateTagsInput" type="checkbox" name="migrate_tags_to_v5"
-                  className={`toggle-switch-checkbox checkbox ${!hasGlobalError && warnings?.hasError("migrate_tags_to_v5") && "warning"}`}
-                  onChange={this.handleInputChange}
-                  checked={this.state.settings.migrate_tags_to_v5}
-                  disabled={this.hasAllInputDisabled()}/>
-                <label htmlFor="migrateTagsInput">
-                  <span className="name"><Trans>Tags:</Trans></span>
-                  <span className="info"><Trans>Slug.</Trans></span>
-                  {!hasGlobalError && warnings?.hasError("migrate_tags_to_v5") &&
-                    <div className="warning">
-                      {warnings?.hasError("migrate_tags_to_v5", "allow_v4_v5_upgrade") &&
-                        <div className="warning-message"><Trans>Tag upgrade from v4 to v5 is not allowed</Trans></div>
-                      }
-                      {warnings?.hasError("migrate_tags_to_v5", "allow_creation_of_v5_tags") &&
-                        <div className="warning-message"><Trans>Tag v5 creation is not allowed.</Trans></div>
-                      }
-                    </div>
-                  }
-                </label>
-              </span>
-              <span className={`input toggle-switch form-element ${!hasGlobalError && warnings?.hasError("migrate_comments_to_v5") && "warning"}`}>
-                <input id="migrateCommentsInput" type="checkbox" name="migrate_comments_to_v5"
-                  className={`toggle-switch-checkbox checkbox ${!hasGlobalError && warnings?.hasError("migrate_comments_to_v5") && "warning"}`}
-                  onChange={this.handleInputChange}
-                  checked={this.state.settings.migrate_comments_to_v5}
-                  disabled={this.hasAllInputDisabled()}/>
-                <label htmlFor="migrateCommentsInput">
-                  <span className="name"><Trans>Comments</Trans></span>
-                  {!hasGlobalError && warnings?.hasError("migrate_comments_to_v5") &&
-                    <div className="warning">
-                      {warnings?.hasError("migrate_comments_to_v5", "allow_v4_v5_upgrade") &&
-                        <div className="warning-message"><Trans>Comment upgrade from v4 to v5 is not allowed</Trans></div>
-                      }
-                      {warnings?.hasError("migrate_comments_to_v5", "allow_creation_of_v5_comments") &&
-                        <div className="warning-message"><Trans>Comment v5 creation is not allowed.</Trans></div>
-                      }
-                    </div>
-                  }
-                </label>
-              </span>
+              {/*
+                <span className={`input toggle-switch form-element ${!hasGlobalError && warnings?.hasError("migrate_folders_to_v5") && "warning"}`}>
+                  <input id="migrateFoldersInput" type="checkbox" name="migrate_folders_to_v5"
+                    className={`toggle-switch-checkbox checkbox ${!hasGlobalError && warnings?.hasError("migrate_folders_to_v5") && "warning"}`}
+                    onChange={this.handleInputChange}
+                    checked={this.state.settings.migrate_folders_to_v5}
+                    disabled={this.hasAllInputDisabled()}/>
+                  <label htmlFor="migrateFoldersInput">
+                    <span className="name"><Trans>Folders:</Trans></span>
+                    <span className="info"><Trans>Name.</Trans></span>
+                    {!hasGlobalError && warnings?.hasError("migrate_folders_to_v5") &&
+                      <div className="warning">
+                        {warnings?.hasError("migrate_folders_to_v5", "allow_v4_v5_upgrade") &&
+                          <div className="warning-message"><Trans>Folder upgrade from v4 to v5 is not allowed</Trans></div>
+                        }
+                        {warnings?.hasError("migrate_folders_to_v5", "allow_creation_of_v5_folders") &&
+                          <div className="warning-message"><Trans>Folder v5 creation is not allowed.</Trans></div>
+                        }
+                      </div>
+                    }
+                  </label>
+                </span>
+                <span className={`input toggle-switch form-element ${!hasGlobalError && warnings?.hasError("migrate_tags_to_v5") && "warning"}`}>
+                  <input id="migrateTagsInput" type="checkbox" name="migrate_tags_to_v5"
+                    className={`toggle-switch-checkbox checkbox ${!hasGlobalError && warnings?.hasError("migrate_tags_to_v5") && "warning"}`}
+                    onChange={this.handleInputChange}
+                    checked={this.state.settings.migrate_tags_to_v5}
+                    disabled={this.hasAllInputDisabled()}/>
+                  <label htmlFor="migrateTagsInput">
+                    <span className="name"><Trans>Tags:</Trans></span>
+                    <span className="info"><Trans>Slug.</Trans></span>
+                    {!hasGlobalError && warnings?.hasError("migrate_tags_to_v5") &&
+                      <div className="warning">
+                        {warnings?.hasError("migrate_tags_to_v5", "allow_v4_v5_upgrade") &&
+                          <div className="warning-message"><Trans>Tag upgrade from v4 to v5 is not allowed</Trans></div>
+                        }
+                        {warnings?.hasError("migrate_tags_to_v5", "allow_creation_of_v5_tags") &&
+                          <div className="warning-message"><Trans>Tag v5 creation is not allowed.</Trans></div>
+                        }
+                      </div>
+                    }
+                  </label>
+                </span>
+                <span className={`input toggle-switch form-element ${!hasGlobalError && warnings?.hasError("migrate_comments_to_v5") && "warning"}`}>
+                  <input id="migrateCommentsInput" type="checkbox" name="migrate_comments_to_v5"
+                    className={`toggle-switch-checkbox checkbox ${!hasGlobalError && warnings?.hasError("migrate_comments_to_v5") && "warning"}`}
+                    onChange={this.handleInputChange}
+                    checked={this.state.settings.migrate_comments_to_v5}
+                    disabled={this.hasAllInputDisabled()}/>
+                  <label htmlFor="migrateCommentsInput">
+                    <span className="name"><Trans>Comments</Trans></span>
+                    {!hasGlobalError && warnings?.hasError("migrate_comments_to_v5") &&
+                      <div className="warning">
+                        {warnings?.hasError("migrate_comments_to_v5", "allow_v4_v5_upgrade") &&
+                          <div className="warning-message"><Trans>Comment upgrade from v4 to v5 is not allowed</Trans></div>
+                        }
+                        {warnings?.hasError("migrate_comments_to_v5", "allow_creation_of_v5_comments") &&
+                          <div className="warning-message"><Trans>Comment v5 creation is not allowed.</Trans></div>
+                        }
+                      </div>
+                    }
+                  </label>
+                </span>
+              */}
             </div>
 
             <h4><Trans>Migrate scope</Trans></h4>
@@ -523,7 +537,7 @@ class DisplayMigrateMetadataAdministration extends Component {
                   disabled={this.hasAllInputDisabled()}/>
                 <label htmlFor="migrateScopeAllContentInput">
                   <span className="name"><Trans>All content</Trans></span>
-                  <span className="info"><Trans>All resources, folders and tags are migrated, including the private ones.</Trans></span>
+                  <span className="info"><Trans>All resources including the private ones.</Trans></span>
                 </label>
               </div>
               <div className={`input radio ${!this.state.settings.migrate_personal_content && 'checked'}`}>
@@ -536,7 +550,7 @@ class DisplayMigrateMetadataAdministration extends Component {
                   disabled={this.hasAllInputDisabled()}/>
                 <label htmlFor="migrateScopeSharedContentInput">
                   <span className="name"><Trans>Shared content only</Trans></span>
-                  <span className="info"><Trans>Only shared resources, folders and tags are migrated.</Trans></span>
+                  <span className="info"><Trans>Only shared resources are migrated.</Trans></span>
                 </label>
               </div>
             </div>
