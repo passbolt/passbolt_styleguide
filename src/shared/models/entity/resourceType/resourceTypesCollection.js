@@ -164,6 +164,15 @@ class ResourceTypesCollection extends EntityV2Collection {
   }
 
   /**
+   * Has some note resource types
+   * @param {string} [version] The version @todo adapt when v5 will be the default
+   * @returns {boolean}
+   */
+  hasSomeNoteResourceTypes(version = RESOURCE_TYPE_VERSION_4) {
+    return this.items.some(resourceType => resourceType.hasSecretDescription() && resourceType.version === version);
+  }
+
+  /**
    * Has some of the given version
    * @param {string} [version] The version
    * @returns {boolean}

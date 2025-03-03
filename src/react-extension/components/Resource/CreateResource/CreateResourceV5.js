@@ -48,6 +48,7 @@ class CreateResource extends Component {
     return {
       resource: this.resourceFormEntity.toDto(), // The resource to create
       resourceFormSelected: this.selectResourceFormByResourceType, // The selected form to display
+      resourceType: this.props.resourceType // The resource type
     };
   }
 
@@ -128,6 +129,15 @@ class CreateResource extends Component {
   }
 
   /**
+   * Get the resource types available
+   * @returns {ResourceTypesCollection|*}
+   */
+  get resourceTypesAvailable() {
+    // TODO get only resource types available for creation
+    return this.props.resourceTypes;
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -144,7 +154,7 @@ class CreateResource extends Component {
     return (
       <DialogWrapper title={this.translate("Create a resource")} className="create-resource"
         disabled={this.state.processing} onClose={this.handleClose}>
-        <SelectResourceForm resourceFormSelected={this.state.resourceFormSelected}
+        <SelectResourceForm resourceType={this.state.resourceType} resourceTypes={this.resourceTypesAvailable} resourceFormSelected={this.state.resourceFormSelected}
           resource={this.state.resource} onSelectForm={this.onSelectForm}/>
         <form className="grid-and-footer" noValidate>
           <div className="grid">

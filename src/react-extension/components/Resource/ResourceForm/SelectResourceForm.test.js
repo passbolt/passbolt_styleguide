@@ -24,8 +24,11 @@ import {
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
 import {
-  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
+  resourceTypePasswordAndDescriptionDto, resourceTypePasswordDescriptionTotpDto,
+  resourceTypeV5TotpDto, TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 beforeEach(() => {
   jest.resetModules();
@@ -51,7 +54,7 @@ describe("SelectResourceForm", () => {
 
     it('As LU I can see the resource description disabled for v4 default.', async() => {
       expect.assertions(2);
-      const props = defaultProps({resource: defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: {password: ""}})});
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()), resource: defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: {password: ""}})});
       page = new SelectResourceFormPage(props);
       await waitFor(() => {});
 
@@ -70,7 +73,7 @@ describe("SelectResourceForm", () => {
 
     it('As LU the resource secret section totp should be selected.', async() => {
       expect.assertions(1);
-      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resource: defaultResourceFormDto({secret: {totp: {}}})});
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resourceType: new ResourceTypeEntity(resourceTypeV5TotpDto()), resource: defaultResourceFormDto({secret: {totp: {}}})});
       page = new SelectResourceFormPage(props);
       await waitFor(() => {});
 
@@ -112,7 +115,7 @@ describe("SelectResourceForm", () => {
 
     it('As LU I can select the resource description sections from a totp lead.', async() => {
       expect.assertions(2);
-      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resource: defaultResourceFormDto({secret: {totp: {}}})});
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resourceType: new ResourceTypeEntity(resourceTypeV5TotpDto()), resource: defaultResourceFormDto({secret: {totp: {}}})});
       page = new SelectResourceFormPage(props);
       await waitFor(() => {});
 
@@ -121,6 +124,82 @@ describe("SelectResourceForm", () => {
       await page.click(page.getSectionItem(2));
 
       expect(props.onSelectForm).toHaveBeenCalledWith(expect.any(Object), ResourceEditCreateFormEnumerationTypes.DESCRIPTION);
+    });
+  });
+
+  describe('As LU I can see secret that could be added.', () => {
+    it('As LU I can see secrets that can be added for a resource v5 from a password lead.', async() => {
+      expect.assertions(3);
+      const props = defaultProps();
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.addSecret);
+
+      expect(page.addSecretPassword).toBeNull();
+      expect(page.addSecretTotp).toBeDefined();
+      expect(page.addSecretNote).toBeDefined();
+    });
+
+    it('As LU I can see secrets that can be added for a resource v5 from a totp lead.', async() => {
+      expect.assertions(3);
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resourceType: new ResourceTypeEntity(resourceTypeV5TotpDto()), resource: defaultResourceFormDto({secret: {totp: {}}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.addSecret);
+
+      expect(page.addSecretPassword).toBeDefined();
+      expect(page.addSecretTotp).toBeNull();
+      expect(page.addSecretNote).toBeDefined();
+    });
+
+    it('As LU I can see secrets that can be added for a resource V5 from a note.', async() => {
+      expect.assertions(3);
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.NOTE, resource: defaultResourceFormDto({secret: {description: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.addSecret);
+
+      expect(page.addSecretPassword).toBeDefined();
+      expect(page.addSecretTotp).toBeDefined();
+      expect(page.addSecretNote).toBeNull();
+    });
+
+    it('As LU I can see secrets that can be added for a resource V4 from a password lead.', async() => {
+      expect.assertions(3);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto())});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.addSecret);
+
+      expect(page.addSecretPassword).toBeNull();
+      expect(page.addSecretTotp).toBeDefined();
+      expect(page.addSecretNote).toBeDefined();
+    });
+
+    it('As LU I can see secrets that can be added for a resource V4 from a totp lead.', async() => {
+      expect.assertions(3);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordDescriptionTotpDto()), resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resource: defaultResourceFormDto({secret: {totp: {}}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.addSecret);
+
+      expect(page.addSecretPassword).toBeDefined();
+      expect(page.addSecretTotp).toBeNull();
+      expect(page.addSecretNote).toBeDefined();
+    });
+
+    it('As LU I can see add secrets disabled if no resource types is available.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resourceTypes: new ResourceTypesCollection([])});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.addSecret.hasAttribute("disabled")).toBeTruthy();
     });
   });
 });

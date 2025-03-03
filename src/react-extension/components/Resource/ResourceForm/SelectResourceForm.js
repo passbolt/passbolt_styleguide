@@ -30,9 +30,7 @@ import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
 import {
   ResourceEditCreateFormEnumerationTypes
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
-import {
-  withResourceTypesLocalStorage
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 class SelectResourceForm extends Component {
@@ -140,8 +138,41 @@ class SelectResourceForm extends Component {
    * @returns {boolean}
    */
   get isResourceTypeHasDescriptionMetadata() {
-    const resourceTypeId = this.resource?.resource_type_id;
-    return Boolean(resourceTypeId) && this.props.resourceTypes.getFirstById(resourceTypeId).hasMetadataDescription();
+    return this.props.resourceType?.hasMetadataDescription();
+  }
+
+  /**
+   * Can add secret
+   * @returns {boolean}
+   */
+  get canAddSecret() {
+    return this.canAddSecretPassword
+      || this.canAddSecretTotp
+      || this.canAddSecretNote;
+  }
+
+  /**
+   * Can add secret password
+   * @returns {boolean}
+   */
+  get canAddSecretPassword() {
+    return !this.isResourceHasPassword && this.props.resourceTypes?.hasSomePasswordResourceTypes(this.props.resourceType?.version);
+  }
+
+  /**
+   * Can add secret totp
+   * @returns {boolean}
+   */
+  get canAddSecretTotp() {
+    return !this.isResourceHasTotp && this.props.resourceTypes?.hasSomeTotpResourceTypes(this.props.resourceType?.version);
+  }
+
+  /**
+   * Can add secret totp
+   * @returns {boolean}
+   */
+  get canAddSecretNote() {
+    return !this.isResourceHasNote && this.props.resourceTypes?.hasSomeNoteResourceTypes(this.props.resourceType?.version);
   }
 
   /**
@@ -162,30 +193,36 @@ class SelectResourceForm extends Component {
       <div className="left-sidebar">
         <div className="main-action-wrapper">
           <Dropdown>
-            <DropdownButton className="add-secret">
+            <DropdownButton className="add-secret" disabled={!this.canAddSecret}>
               <AddSVG/>
               <span><Trans>Add secret</Trans></span>
               <CaretDownSVG/>
             </DropdownButton>
             <DropdownMenu className="menu-create-primary">
-              <DropdownItem>
-                <button id="password_action" type="button" className="no-border">
-                  <KeySVG/>
-                  <span><Trans>Password</Trans></span>
-                </button>
-              </DropdownItem>
-              <DropdownItem>
-                <button id="totp_action" type="button" className="no-border">
-                  <TotpSVG/>
-                  <span><Trans>TOTP</Trans></span>
-                </button>
-              </DropdownItem>
-              <DropdownItem>
-                <button id="note_action" type="button" className="no-border">
-                  <NotesSVG/>
-                  <span><Trans>Note</Trans></span>
-                </button>
-              </DropdownItem>
+              {this.canAddSecretPassword &&
+                <DropdownItem>
+                  <button id="password_action" type="button" className="no-border">
+                    <KeySVG/>
+                    <span><Trans>Password</Trans></span>
+                  </button>
+                </DropdownItem>
+              }
+              {this.canAddSecretTotp &&
+                <DropdownItem>
+                  <button id="totp_action" type="button" className="no-border">
+                    <TotpSVG/>
+                    <span><Trans>TOTP</Trans></span>
+                  </button>
+                </DropdownItem>
+              }
+              {this.canAddSecretNote &&
+                <DropdownItem>
+                  <button id="note_action" type="button" className="no-border">
+                    <NotesSVG/>
+                    <span><Trans>Note</Trans></span>
+                  </button>
+                </DropdownItem>
+              }
             </DropdownMenu>
           </Dropdown>
         </div>
@@ -278,9 +315,10 @@ SelectResourceForm.propTypes = {
   resourceFormSelected: PropTypes.string, // The resource form selected
   onSelectForm: PropTypes.func, // The on select form function
   resource: PropTypes.object, // The resource to edit or create
-  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource type entity
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection),
   t: PropTypes.func, // The translation function
 };
 
-export default  withResourceTypesLocalStorage(withTranslation('common')(SelectResourceForm));
+export default  withTranslation('common')(SelectResourceForm);
 

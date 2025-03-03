@@ -44,6 +44,38 @@ export default class SelectResourceFormPage {
   }
 
   /**
+   * Returns the add secret
+   * @returns {Element}
+   */
+  get addSecret() {
+    return this.selectResourceForm.querySelector("button.add-secret");
+  }
+
+  /**
+   * Returns the add secret password
+   * @returns {Element}
+   */
+  get addSecretPassword() {
+    return this.selectResourceForm.querySelector("#password_action");
+  }
+
+  /**
+   * Returns the add secret totp
+   * @returns {Element}
+   */
+  get addSecretTotp() {
+    return this.selectResourceForm.querySelector("#totp_action");
+  }
+
+  /**
+   * Returns the add secret note
+   * @returns {Element}
+   */
+  get addSecretNote() {
+    return this.selectResourceForm.querySelector("#note_action");
+  }
+
+  /**
    * Returns the sidebar sections secret
    * @returns {Element}
    */
@@ -61,7 +93,7 @@ export default class SelectResourceFormPage {
 
   /**
    * Returns the section item
-   * @param index the secret section index
+   * @param index the section index
    * @returns {Element}
    */
   getSectionItem(index) {
