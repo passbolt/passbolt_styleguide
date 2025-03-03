@@ -28,7 +28,7 @@ describe("DisplayMigrateMetadataAdministration as per the specifications", () =>
     expect(page.exists()).toStrictEqual(true);
 
     expect(page.title.textContent).toBe("Migrate metadata");
-    expect(page.migrationState.textContent).toBe("Partial");
+    expect(page.migrationState.textContent).toBe("Required");
     expect(page.resourcesMigrationState.textContent).toBe("31 to be migrated (31 shared resources, 0 personal resources)");
     /*
      * expect(page.foldersMigrationState.textContent).toBe("All migrated");

@@ -70,6 +70,7 @@ class DisplayMigrateMetadataAdministration extends Component {
       isReady: false,
       isProcessing: false, // Is the form processing (loading, submitting).
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once.
+      hasMigrationRunOnce: false, // True if the migration has been started at least once.
       settings: this.formSettings.toDto(),
     };
   }
@@ -263,17 +264,22 @@ class DisplayMigrateMetadataAdministration extends Component {
    * @returns {string}
    */
   get migrationStatus() {
-    return this.hasPendingMigration
-      ? this.props.t("Partial")
-      : this.props.t("Done");
+    if (!this.hasPendingMigration) {
+      return this.props.t("Done");
+    }
+
+    return this.state.hasMigrationRunOnce
+      ? this.props.t("Pending")
+      : this.props.t("Required");
   }
 
   /**
-   * Returns the date at when the migration ended.
-   * @returns {string}
+   * Returns true if there are still elements to migrate.
+   * @todo: when other content to migrate, the total count should be adapted.
+   * @returns {boolean}
    */
-  get migrationDate() {
-    return this.props.t("N/A");
+  hasElementsToMigrate() {
+    return this.totalResources > 0;
   }
 
   /**
@@ -316,16 +322,21 @@ class DisplayMigrateMetadataAdministration extends Component {
     try {
       const migrationDetails = this.formSettings.sharedContentOnly ? this.migrationCountDetailsShared : this.migrationCountDetails;
       await this.metadataMigrateContentServiceWorkerService.migrate(this.formSettings.toDto(), migrationDetails);
-      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The encrypted metadata settings were updated."));
+      await this.initData();
+
+      if (this.hasElementsToMigrate()) {
+        this.props.actionFeedbackContext.displayWarning(this.props.t("Encrypted metadata were partially migrated."));
+      } else {
+        this.props.actionFeedbackContext.displaySuccess(this.props.t("The encrypted metadata were migrated."));
+      }
     } catch (error) {
       this.props.dialogContext.open(NotifyError, {error});
     }
 
     this.setState({
       hasAlreadyBeenValidated: true,
+      hasMigrationRunOnce: true,
     });
-
-    await this.initData();
   }
 
   /**
@@ -354,7 +365,7 @@ class DisplayMigrateMetadataAdministration extends Component {
         <div id="migrate-metadata-settings" className="col8 main-column">
           <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
             <h3><label><Trans>Migrate metadata</Trans></label></h3>
-            {hasGlobalError &&
+            {hasGlobalError && this.hasPendingMigration &&
               <div className="error message form-banner">
                 <Trans>No active metadata keys available.</Trans>
               </div>
@@ -439,10 +450,10 @@ class DisplayMigrateMetadataAdministration extends Component {
                         <div className="warning-message"><Trans>Resource types v5 creation is not allowed.</Trans></div>
                       }
                       {warnings?.hasError("migrate_resources_to_v5", "resource_types_v5_deleted") &&
-                        <div className="warning-message"><Trans>Resources will not be migrated as all content types v5 are deleted.</Trans></div>
+                        <div className="warning-message"><Trans>Resources will not be migrated as no content types with encrypted metadata is allowed.</Trans></div>
                       }
                       {warnings?.hasError("migrate_resources_to_v5", "resource_types_v5_partially_deleted") &&
-                        <div className="warning-message"><Trans> Not all resources will be migrated, some corresponding content types are not active.</Trans></div>
+                        <div className="warning-message"><Trans>Not all resources will be migrated, some corresponding content types are not active.</Trans></div>
                       }
                     </div>
                   }
