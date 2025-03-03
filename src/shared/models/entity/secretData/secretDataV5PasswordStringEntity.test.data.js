@@ -12,23 +12,25 @@
  * @since         5.0.0
  */
 
+import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+
 /**
- * Returns a minimum DTO object suitable for the SecretDataV5DefaultEntity
+ * Returns a minimum DTO object suitable for the SecretDataV5PasswordStringEntity
  * @param {object} data
  * @returns {object}
  */
-export const minimalDefaultSecretDataV5DefaultDto = (data = {}) => ({
-  object_type: "PASSBOLT_SECRET_DATA",
+export const minimalDefaultSecretDataV5PasswordStringDto = (data = {}) => ({
+  object_type: SECRET_DATA_OBJECT_TYPE,
   password: null,
   ...data,
 });
 
 /**
- * Returns a default DTO object suitable for the SecretDataV5DefaultEntity
+ * Returns a default DTO object suitable for the SecretDataV5PasswordStringEntity
  * @param {object} data
  * @returns {object}
  */
-export const defaultSecretDataV5DefaultDto = (data = {}) => ({
-  ...minimalDefaultSecretDataV5DefaultDto(data),
+export const defaultSecretDataV5PasswordStringDto = (data = {}) => ({
+  ...minimalDefaultSecretDataV5PasswordStringDto(data),
   password: "this-is-a-secret-password"
 });

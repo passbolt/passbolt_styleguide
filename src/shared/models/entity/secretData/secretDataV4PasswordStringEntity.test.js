@@ -14,19 +14,30 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import secretDataV4PasswordStringEntity from "./secretDataV4PasswordStringEntity";
+import SecretDataV4PasswordStringEntity from "./secretDataV4PasswordStringEntity";
+
 
 
 describe("secretDataV4PasswordStringEntity", () => {
   describe("::getSchema", () => {
     it("schema must validate", () => {
-      EntitySchema.validateSchema(secretDataV4PasswordStringEntity.name, secretDataV4PasswordStringEntity.getSchema());
+      EntitySchema.validateSchema(SecretDataV4PasswordStringEntity.name, SecretDataV4PasswordStringEntity.getSchema());
     });
 
     it("validates object_type property", () => {
-      assertEntityProperty.string(secretDataV4PasswordStringEntity, "password");
-      assertEntityProperty.required(secretDataV4PasswordStringEntity, "password");
-      assertEntityProperty.maxLength(secretDataV4PasswordStringEntity, "password", 4096);
+      assertEntityProperty.string(SecretDataV4PasswordStringEntity, "password");
+      assertEntityProperty.required(SecretDataV4PasswordStringEntity, "password");
+      assertEntityProperty.maxLength(SecretDataV4PasswordStringEntity, "password", 4096);
+    });
+  });
+
+  describe("::constructor", () => {
+    it("constructor works if minimal valid DTO is provided", () => {
+      expect.assertions(1);
+      const dto = {password: "password"};
+      const entity = new SecretDataV4PasswordStringEntity(dto);
+
+      expect(entity.password).toStrictEqual("password");
     });
   });
 });

@@ -1,7 +1,7 @@
 import MockPort from "../../../test/mock/MockPort";
 import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultResourceMetadataDto} from "../../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
+import {defaultResourceMetadataDto} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import {ownerFolderPermissionDto, ownerPermissionDto, readFolderPermissionDto, readGroupPermissionDto, readPermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
 import {defaultFolderDto} from "../../../../shared/models/entity/folder/folderEntity.test.data";
 import {defaultGroupDto} from "../../../../shared/models/entity/group/groupEntity.test.data";

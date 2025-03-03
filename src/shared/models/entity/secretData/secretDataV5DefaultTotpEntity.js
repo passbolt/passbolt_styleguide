@@ -17,19 +17,6 @@ import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
 
 class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
   /**
-   * @inheritDoc
-   */
-  constructor(dto, options = {}) {
-    super(dto, options);
-
-    // Associations
-    if (this._props.totp) {
-      this._totp = new TotpEntity(this._props.totp, {...options, clone: false});
-      delete this._props.totp;
-    }
-  }
-
-  /**
    * Get the secret data default totp schema
    * @returns {object}
    */

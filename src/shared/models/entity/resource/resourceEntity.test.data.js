@@ -22,7 +22,7 @@ import {
 import {defaultUserDto} from "../user/userEntity.test.data";
 import {defaultPermissionsDtos} from "../permission/permissionCollection.test.data";
 import {defaultTagsDtos} from "../tag/tagCollection.test.data";
-import {defaultResourceMetadataDto} from "../resourceMetadata/resourceMetadataEntity.test.data";
+import {defaultResourceMetadataDto} from "./metadata/resourceMetadataEntity.test.data";
 
 /**
  * Build default resource dto.

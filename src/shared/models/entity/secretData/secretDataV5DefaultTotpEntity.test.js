@@ -19,6 +19,7 @@ import {defaultSecretDataV5DefaultTotpEntityDto, minimalSecretDataV5DefaultTotpE
 import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
 import TotpEntity from "../totp/totpEntity";
 import {defaultTotpDto} from "../totp/totpDto.test.data";
+import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
 
 describe("SecretDataV5DefaultTotpEntity", () => {
   describe("::getSchema", () => {
@@ -29,7 +30,7 @@ describe("SecretDataV5DefaultTotpEntity", () => {
     it("validates object_type property", () => {
       assertEntityProperty.string(SecretDataV5DefaultEntity, "object_type");
       assertEntityProperty.required(SecretDataV5DefaultEntity, "object_type");
-      assertEntityProperty.enumeration(SecretDataV5DefaultEntity, "object_type", ["PASSBOLT_SECRET_DATA"], ["any other values"]);
+      assertEntityProperty.enumeration(SecretDataV5DefaultEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
     });
 
     it("validates password property", () => {
