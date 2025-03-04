@@ -95,6 +95,38 @@ describe("See the Create Resource", () => {
         expect(page.password).toBeNull();
       });
     });
+
+    describe("should add a secret to a resource", () => {
+      it('As a signed-in user I should be able to add secret without a resource type mutation', async() => {
+        expect.assertions(2);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        await page.click(page.addSecret);
+        await page.click(page.addSecretNote);
+
+        // expectations
+        expect(page.sectionItemSelected.textContent).toStrictEqual("Note");
+        expect(page.note).toBeDefined();
+      });
+
+      it('As a signed-in user I should be able to add secret with a resource type mutation', async() => {
+        expect.assertions(2);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        await page.click(page.addSecret);
+        await page.click(page.addSecretTotp);
+
+        // expectations
+        expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
+        expect(page.note).toBeDefined();
+      });
+    });
   });
 });
 

@@ -102,6 +102,20 @@ export default class CreateResourcePage {
   }
 
   /**
+   * Returns the password input element
+   */
+  get totp() {
+    return this._page.container.querySelector('#resource-totp');
+  }
+
+  /**
+   * Returns the password input element
+   */
+  get note() {
+    return this._page.container.querySelector('#resource-note');
+  }
+
+  /**
    * Returns the complexity text input element
    */
   get complexityText() {
@@ -151,6 +165,38 @@ export default class CreateResourcePage {
    */
   get sectionItemSelected() {
     return this._page.container.querySelector('.left-sidebar .sidebar-content-sections .section-content.selected');
+  }
+
+  /**
+   * Returns the add secret
+   * @returns {Element}
+   */
+  get addSecret() {
+    return this._page.container.querySelector(".left-sidebar button.add-secret");
+  }
+
+  /**
+   * Returns the add secret password
+   * @returns {Element}
+   */
+  get addSecretPassword() {
+    return this._page.container.querySelector(".left-sidebar #password_action");
+  }
+
+  /**
+   * Returns the add secret totp
+   * @returns {Element}
+   */
+  get addSecretTotp() {
+    return this._page.container.querySelector(".left-sidebar #totp_action");
+  }
+
+  /**
+   * Returns the add secret note
+   * @returns {Element}
+   */
+  get addSecretNote() {
+    return this._page.container.querySelector(".left-sidebar #note_action");
   }
 
   /**

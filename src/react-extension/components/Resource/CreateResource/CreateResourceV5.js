@@ -30,7 +30,7 @@ import AddResourceName from "../ResourceForm/AddResourceName";
 import {
   ResourceEditCreateFormEnumerationTypes
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
-import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
+import TotpEntity from "../../../../shared/models/entity/totp/totpEntity";
 
 class CreateResource extends Component {
   constructor(props) {
@@ -59,6 +59,7 @@ class CreateResource extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onSelectForm = this.onSelectForm.bind(this);
+    this.onAddSecret = this.onAddSecret.bind(this);
   }
 
   /**
@@ -71,7 +72,7 @@ class CreateResource extends Component {
     if (this.props.resourceType.hasPassword()) {
       secret.password = "";
     } else if (this.props.resourceType.hasTotp()) {
-      secret.totp = new TotpViewModel();
+      secret.totp = TotpEntity.createFromDefault({}, {validate: false});
     }
     if (this.props.resourceType.isV5()) {
       secret.object_type = SECRET_DATA_OBJECT_TYPE;
@@ -129,12 +130,14 @@ class CreateResource extends Component {
   }
 
   /**
-   * Get the resource types available
-   * @returns {ResourceTypesCollection|*}
+   * Add secret to the resourceFormEntity
+   * @param {string} secret The secret to add
+   * @param {*} value The secret value to add
    */
-  get resourceTypesAvailable() {
-    // TODO get only resource types available for creation
-    return this.props.resourceTypes;
+  onAddSecret(secret, value) {
+    this.resourceFormEntity.addSecret(secret, value, {validate: false});
+    const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
+    this.setState({resource: this.resourceFormEntity.toDto(), resourceFormSelected: secret, resourceType});
   }
 
   /**
@@ -154,8 +157,8 @@ class CreateResource extends Component {
     return (
       <DialogWrapper title={this.translate("Create a resource")} className="create-resource"
         disabled={this.state.processing} onClose={this.handleClose}>
-        <SelectResourceForm resourceType={this.state.resourceType} resourceTypes={this.resourceTypesAvailable} resourceFormSelected={this.state.resourceFormSelected}
-          resource={this.state.resource} onSelectForm={this.onSelectForm}/>
+        <SelectResourceForm resourceType={this.state.resourceType} resourceFormSelected={this.state.resourceFormSelected}
+          resource={this.state.resource} onAddSecret={this.onAddSecret} onSelectForm={this.onSelectForm}/>
         <form className="grid-and-footer" noValidate>
           <div className="grid">
             <AddResourceName resource={this.state.resource} folderParentId={this.props.folderParentId} onChange={this.handleInputChange}/>

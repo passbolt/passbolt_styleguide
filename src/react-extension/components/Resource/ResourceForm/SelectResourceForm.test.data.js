@@ -33,7 +33,8 @@ export function defaultProps(data = {}) {
     resource: defaultResourceFormDto({secret: {password: ""}}),
     resourceType: new ResourceTypeEntity(resourceTypeV5DefaultDto()),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
-    onSelectForm: jest.fn()
+    onSelectForm: jest.fn(),
+    onAddSecret: jest.fn()
   };
   return Object.assign(defaultData, data);
 }

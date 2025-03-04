@@ -13,8 +13,8 @@
  */
 
 export const ResourceEditCreateFormEnumerationTypes = {
-  PASSWORD: "password",
-  TOTP: "totp",
-  NOTE: "note",
-  DESCRIPTION: "description"
+  PASSWORD: "secret.password",
+  TOTP: "secret.totp",
+  NOTE: "secret.description",
+  DESCRIPTION: "metadata.description"
 };

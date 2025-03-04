@@ -32,6 +32,10 @@ import {
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import TotpEntity from "../../../../shared/models/entity/totp/totpEntity";
 
 class SelectResourceForm extends Component {
   constructor(props) {
@@ -60,6 +64,7 @@ class SelectResourceForm extends Component {
     this.handleDisplayMetadataClick = this.handleDisplayMetadataClick.bind(this);
     this.handleDisplayUpgradeClick = this.handleDisplayUpgradeClick.bind(this);
     this.handleSelectForm = this.handleSelectForm.bind(this);
+    this.handleAddSecret = this.handleAddSecret.bind(this);
   }
 
   /**
@@ -84,13 +89,24 @@ class SelectResourceForm extends Component {
   }
 
   /**
-   * Handle form input change.
-   * @params {ReactEvent} event The react event.
-   * @params {string} resourceFormSelected The resource form selected.
+   * Handle select form.
+   * @param {ReactEvent} event The react event.
+   * @param {string} resourceFormSelected The resource form selected.
    */
   handleSelectForm(event, resourceFormSelected) {
     if (this.props.onSelectForm) {
       this.props.onSelectForm(event, resourceFormSelected);
+    }
+  }
+
+  /**
+   * Handle add secret
+   * @param {string} secret The secret to add
+   * @param {*} value The value to add
+   */
+  handleAddSecret(secret, value) {
+    if (this.props.onAddSecret) {
+      this.props.onAddSecret(secret, value);
     }
   }
 
@@ -147,8 +163,8 @@ class SelectResourceForm extends Component {
    */
   get canAddSecret() {
     return this.canAddSecretPassword
-      || this.canAddSecretTotp
-      || this.canAddSecretNote;
+        || this.canAddSecretTotp
+        || this.canAddSecretNote;
   }
 
   /**
@@ -201,7 +217,8 @@ class SelectResourceForm extends Component {
             <DropdownMenu className="menu-create-primary">
               {this.canAddSecretPassword &&
                 <DropdownItem>
-                  <button id="password_action" type="button" className="no-border">
+                  <button id="password_action" type="button" className="no-border"
+                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD, "")}>
                     <KeySVG/>
                     <span><Trans>Password</Trans></span>
                   </button>
@@ -209,7 +226,8 @@ class SelectResourceForm extends Component {
               }
               {this.canAddSecretTotp &&
                 <DropdownItem>
-                  <button id="totp_action" type="button" className="no-border">
+                  <button id="totp_action" type="button" className="no-border"
+                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.TOTP, TotpEntity.createFromDefault({}, {validate: false}))}>
                     <TotpSVG/>
                     <span><Trans>TOTP</Trans></span>
                   </button>
@@ -217,7 +235,8 @@ class SelectResourceForm extends Component {
               }
               {this.canAddSecretNote &&
                 <DropdownItem>
-                  <button id="note_action" type="button" className="no-border">
+                  <button id="note_action" type="button" className="no-border"
+                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.NOTE, "")}>
                     <NotesSVG/>
                     <span><Trans>Note</Trans></span>
                   </button>
@@ -314,11 +333,12 @@ class SelectResourceForm extends Component {
 SelectResourceForm.propTypes = {
   resourceFormSelected: PropTypes.string, // The resource form selected
   onSelectForm: PropTypes.func, // The on select form function
+  onAddSecret: PropTypes.func, // The on add secret function
   resource: PropTypes.object, // The resource to edit or create
   resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource type entity
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection),
   t: PropTypes.func, // The translation function
 };
 
-export default  withTranslation('common')(SelectResourceForm);
+export default  withResourceTypesLocalStorage(withTranslation('common')(SelectResourceForm));
 

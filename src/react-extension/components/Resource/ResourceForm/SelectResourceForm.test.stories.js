@@ -16,6 +16,12 @@ import React from "react";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import SelectResourceForm from "./SelectResourceForm";
 import {defaultProps} from "./SelectResourceForm.test.data";
+import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
+import {
+  ResourceEditCreateFormEnumerationTypes
+} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import {resourceTypeV5TotpDto} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 export default {
   title: 'Components/Resource/SelectResourceForm',
@@ -41,6 +47,18 @@ export default {
   ],
 };
 
-export const Default = {
+export const Password = {
   args: defaultProps()
+};
+
+export const Totp = {
+  args: defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resourceType: new ResourceTypeEntity(resourceTypeV5TotpDto()), resource: defaultResourceFormDto({secret: {totp: {}}})})
+};
+
+export const Note = {
+  args: defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.NOTE, resource: defaultResourceFormDto({secret: {description: ""}})})
+};
+
+export const Description = {
+  args: defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.DESCRIPTION})
 };

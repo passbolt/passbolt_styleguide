@@ -23,7 +23,7 @@ import {
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_PASSWORD_STRING,
-  TEST_RESOURCE_TYPE_TOTP,
+  TEST_RESOURCE_TYPE_TOTP, TEST_RESOURCE_TYPE_V5_DEFAULT,
   TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
   TEST_RESOURCE_TYPE_V5_PASSWORD_STRING,
   TEST_RESOURCE_TYPE_V5_TOTP
@@ -46,6 +46,8 @@ import {
   minimalSecretDataV4DefaultTotpEntityDto
 } from "../secretData/secretDataV4DefaultTotpEntity.test.data";
 import {SECRET_DATA_OBJECT_TYPE} from "../secretData/secretDataEntity";
+import {ResourceEditCreateFormEnumerationTypes} from "../../resource/ResourceEditCreateFormEnumerationTypes";
+import TotpEntity from "../totp/totpEntity";
 
 describe("Resource Form entity", () => {
   describe("ResourceFormEntity::getSchema", () => {
@@ -197,6 +199,185 @@ describe("Resource Form entity", () => {
       const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
       const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
       expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+  });
+
+  describe("ResourceEntity::addSecret", () => {
+    it("add secret password on v5 totp", () => {
+      expect.assertions(2);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_TOTP, secret: {object_type: SECRET_DATA_OBJECT_TYPE, totp: defaultTotpDto()}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD, "");
+      resourceDto.secret.password = "";
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP;
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("add secret note on v5 totp", () => {
+      expect.assertions(2);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_TOTP, secret: {object_type: SECRET_DATA_OBJECT_TYPE, totp: defaultTotpDto()}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.NOTE, "");
+      resourceDto.secret.description = "";
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP;
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("add secret note on v5 default", () => {
+      expect.assertions(2);
+      const resourceDto = defaultResourceFormDto();
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.NOTE, "");
+      resourceDto.secret.description = "";
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("add secret totp on v5 default", () => {
+      expect.assertions(2);
+      const resourceDto = defaultResourceFormDto();
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+      const totpEntity = TotpEntity.createFromDefault({}, {validate: false});
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.TOTP, totpEntity, {validate: false});
+      resourceDto.secret.totp = totpEntity.toDto();
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP;
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("add secret note on a resource v5 password string", () => {
+      expect.assertions(2);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_PASSWORD_STRING, secret: minimalDefaultSecretDataV5PasswordStringDto()});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.NOTE, "");
+      resourceDto.secret.description = "";
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT;
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("add secret totp on a resource v5 password string", () => {
+      expect.assertions(2);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_PASSWORD_STRING, secret: minimalDefaultSecretDataV5PasswordStringDto()});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+      const totpEntity = TotpEntity.createFromDefault({}, {validate: false});
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.TOTP, totpEntity, {validate: false});
+      resourceDto.secret.totp = totpEntity.toDto();
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP;
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("add secret note on resource v4 default", () => {
+      expect.assertions(2);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: minimalDefaultSecretDataV4DefaultData()});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.NOTE, "");
+      resourceDto.secret.description = "";
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("add secret totp on resource v4 default", () => {
+      expect.assertions(2);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: minimalDefaultSecretDataV4DefaultData()});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+      const totpEntity = TotpEntity.createFromDefault({}, {validate: false});
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.TOTP, totpEntity, {validate: false});
+      resourceDto.secret.totp = totpEntity.toDto();
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP;
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("add secret note on a resource v4 totp", () => {
+      expect.assertions(2);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_TOTP, secret: {totp: defaultTotpDto()}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.NOTE, "");
+      resourceDto.secret.description = "";
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP;
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("add secret password on a resource v4 totp", () => {
+      expect.assertions(2);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_TOTP, secret: {totp: defaultTotpDto()}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD, "");
+      resourceDto.secret.password = "";
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP;
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("add secret totp on a resource v4 password string", () => {
+      expect.assertions(2);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING, secret: {password: "password"}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+      const totpEntity = TotpEntity.createFromDefault({}, {validate: false});
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.TOTP, totpEntity, {validate: false});
+      resourceDto.secret.totp = totpEntity.toDto();
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP;
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("add secret unknown should do nothing", () => {
+      expect.assertions(1);
+      const resourceDto = defaultResourceFormDto();
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret("unknown", "");
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("throw an error if add secret is not a string", () => {
+      expect.assertions(1);
+      const resourceDto = defaultResourceFormDto();
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      expect(() => resourceFormEntity.addSecret({}, "")).toThrow(TypeError);
     });
   });
 });

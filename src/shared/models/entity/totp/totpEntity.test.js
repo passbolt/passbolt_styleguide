@@ -93,6 +93,32 @@ describe("Totp entity", () => {
     });
   });
 
+  describe("::createFromDefault", () => {
+    it("empty data", () => {
+      expect.assertions(1);
+      const dto = {
+        secret_key: "",
+        period: 30,
+        digits: 6,
+        algorithm: "SHA1"
+      };
+      const entity = TotpEntity.createFromDefault({}, {validate: false});
+      expect(entity.toDto()).toStrictEqual(dto);
+    });
+
+    it("with data", () => {
+      expect.assertions(1);
+      const dto = {
+        secret_key: "",
+        period: 30,
+        digits: 8,
+        algorithm: "SHA256"
+      };
+      const entity = TotpEntity.createFromDefault(dto, {validate: false});
+      expect(entity.toDto()).toStrictEqual(dto);
+    });
+  });
+
   describe("::hasSecretKey", () => {
     it("should have a secret key", () => {
       expect.assertions(1);
