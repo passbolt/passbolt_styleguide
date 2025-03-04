@@ -1,0 +1,31 @@
+#allow-content-types {
+    .checkboxlist .form-element{
+        margin: 0 -1.6rem;
+        padding: 1.2rem 1.6rem;
+        border-top: .1rem solid @workspace-title-border;
+
+        .warning-message, .error-message {
+            margin-bottom: 0;
+        }
+    }
+
+    .checkbox input[type=checkbox] {
+        margin-bottom: 0;
+
+        & + label {
+            font-weight: 700;
+            .info {
+                color: @text-info-color;
+                font-weight: normal;
+            }
+        }
+
+        &:disabled {
+            background: none;
+        }
+    }
+
+    .tooltip-text {
+        max-width: none;
+    }
+}

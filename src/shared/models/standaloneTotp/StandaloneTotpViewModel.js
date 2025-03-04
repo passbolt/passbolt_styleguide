@@ -34,6 +34,10 @@ class StandaloneTotpViewModel extends TotpViewModel {
     if (totpViewModelDto.resource_type_id) {
       this.resource_type_id = totpViewModelDto.resource_type_id;
     }
+
+    if (totpViewModelDto.object_type) {
+      this.object_type = totpViewModelDto.object_type;
+    }
   }
 
   /**
@@ -64,6 +68,10 @@ class StandaloneTotpViewModel extends TotpViewModel {
           type: "string",
           format: "uuid",
         },
+        object_type: {
+          type: "string",
+          enum: ["PASSBOLT_RESOURCE_METADATA"],
+        },
         secret_key: super.getSchema().properties.secret_key,
         period: super.getSchema().properties.period,
         digits: super.getSchema().properties.digits,
@@ -88,6 +96,11 @@ class StandaloneTotpViewModel extends TotpViewModel {
       dto.resource_type_id = this.resource_type_id;
       dto.metadata.resource_type_id = this.resource_type_id;
     }
+
+    if (this.object_type) {
+      dto.metadata.object_type = this.object_type;
+    }
+
     return dto;
   }
 

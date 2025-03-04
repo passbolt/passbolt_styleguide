@@ -24,6 +24,8 @@ import {
   resourceTypesV4CollectionDto,
   resourceTypesV5CollectionDto
 } from "../resourceType/resourceTypesCollection.test.data";
+import MetadataKeysCollection from "./metadataKeysCollection";
+import {defaultMetadataKeysDtos} from "./metadataKeysCollection.test.data";
 
 describe("MetadataTypesSettingsFormEntity", () => {
   describe("::toFormDto", () => {
@@ -74,7 +76,15 @@ describe("MetadataTypesSettingsFormEntity", () => {
 
         const dto = defaultMetadataTypesSettingsV4Dto();
         const settings = new MetadataTypesSettingsFormEntity(dto);
-        expect(() => settings.verifyHealth(42)).toThrow(TypeError);
+        expect(() => settings.verifyHealth(42, new MetadataKeysCollection([]))).toThrow(TypeError);
+      });
+
+      it("throws if metadata key collection parameter is not of the expected type", () => {
+        expect.assertions(1);
+
+        const dto = defaultMetadataTypesSettingsV4Dto();
+        const settings = new MetadataTypesSettingsFormEntity(dto);
+        expect(() => settings.verifyHealth(new ResourceTypesCollection([]), 42)).toThrow(TypeError);
       });
 
       it("does not identify issues if all allowed resource types are not deleted.", () => {
@@ -89,10 +99,11 @@ describe("MetadataTypesSettingsFormEntity", () => {
       it("identifies issues if default resource type is v4 and all resource types v4 have been deleted", () => {
         expect.assertions(4);
 
+        const metadataKeys = new MetadataKeysCollection(defaultMetadataKeysDtos());
         const dto = defaultMetadataTypesSettingsV4Dto();
         const settings = new MetadataTypesSettingsFormEntity(dto);
         const resourceTypes = new ResourceTypesCollection();
-        const issues = settings.verifyHealth(resourceTypes);
+        const issues = settings.verifyHealth(resourceTypes, metadataKeys);
         expect(issues).toBeInstanceOf(EntityValidationError);
         expect(Object.keys(issues.details)).toHaveLength(2);
         expect(issues.hasError("allow_creation_of_v4_resources", "resource_types_deleted")).toBeTruthy();
@@ -102,10 +113,11 @@ describe("MetadataTypesSettingsFormEntity", () => {
       it("identifies issues if default resource type is v5 and all resource types v5 have been deleted", () => {
         expect.assertions(4);
 
+        const metadataKeys = new MetadataKeysCollection(defaultMetadataKeysDtos());
         const dto = defaultMetadataTypesSettingsV50FreshDto();
         const settings = new MetadataTypesSettingsFormEntity(dto);
         const resourceTypes = new ResourceTypesCollection();
-        const issues = settings.verifyHealth(resourceTypes);
+        const issues = settings.verifyHealth(resourceTypes, metadataKeys);
         expect(issues).toBeInstanceOf(EntityValidationError);
         expect(Object.keys(issues.details)).toHaveLength(2);
         expect(issues.hasError("allow_creation_of_v5_resources", "resource_types_deleted")).toBeTruthy();
@@ -115,10 +127,11 @@ describe("MetadataTypesSettingsFormEntity", () => {
       it("identifies issues if default resource type is v5, resource types v4 are allowed but all resources types v4 are deleted", () => {
         expect.assertions(3);
 
+        const metadataKeys = new MetadataKeysCollection(defaultMetadataKeysDtos());
         const dto = defaultMetadataTypesSettingsV50FreshDto({allow_creation_of_v4_resources: true});
         const settings = new MetadataTypesSettingsFormEntity(dto);
         const resourceTypes = new ResourceTypesCollection(resourceTypesV5CollectionDto());
-        const issues = settings.verifyHealth(resourceTypes);
+        const issues = settings.verifyHealth(resourceTypes, metadataKeys);
         expect(issues).toBeInstanceOf(EntityValidationError);
         expect(Object.keys(issues.details)).toHaveLength(1);
         expect(issues.hasError("allow_creation_of_v4_resources", "resource_types_deleted")).toBeTruthy();
@@ -127,13 +140,27 @@ describe("MetadataTypesSettingsFormEntity", () => {
       it("identifies issues if default resource type is v4, resource types v5 are allowed but all resources types v5 are deleted", () => {
         expect.assertions(3);
 
+        const metadataKeys = new MetadataKeysCollection(defaultMetadataKeysDtos());
         const dto = defaultMetadataTypesSettingsV4Dto({allow_creation_of_v5_resources: true});
         const settings = new MetadataTypesSettingsFormEntity(dto);
         const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
-        const issues = settings.verifyHealth(resourceTypes);
+        const issues = settings.verifyHealth(resourceTypes, metadataKeys);
         expect(issues).toBeInstanceOf(EntityValidationError);
         expect(Object.keys(issues.details)).toHaveLength(1);
         expect(issues.hasError("allow_creation_of_v5_resources", "resource_types_deleted")).toBeTruthy();
+      });
+
+      it("identifies issues if there is no active metadata key but all resources types v5 are enabled", () => {
+        expect.assertions(3);
+
+        const metadataKeys = new MetadataKeysCollection([]);
+        const dto = defaultMetadataTypesSettingsV4Dto({allow_creation_of_v5_resources: true});
+        const settings = new MetadataTypesSettingsFormEntity(dto);
+        const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
+        const issues = settings.verifyHealth(resourceTypes, metadataKeys);
+        expect(issues).toBeInstanceOf(EntityValidationError);
+        expect(Object.keys(issues.details)).toHaveLength(1);
+        expect(issues.hasError("allow_creation_of_v5_resources", "active_metadata_key")).toBeTruthy();
       });
     });
   });
