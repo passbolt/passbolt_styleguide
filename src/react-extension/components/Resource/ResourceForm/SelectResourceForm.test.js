@@ -24,8 +24,12 @@ import {
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
 import {
-  resourceTypePasswordAndDescriptionDto, resourceTypePasswordDescriptionTotpDto, resourceTypeV5DefaultTotpDto,
-  resourceTypeV5TotpDto, TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
+  resourceTypePasswordAndDescriptionDto,
+  resourceTypePasswordDescriptionTotpDto,
+  resourceTypePasswordStringDto,
+  resourceTypeV5DefaultTotpDto,
+  resourceTypeV5TotpDto,
+  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
@@ -192,6 +196,17 @@ describe("SelectResourceForm", () => {
       expect(page.addSecretPassword).toBeDefined();
       expect(page.addSecretTotp).toBeNull();
       expect(page.addSecretNote).toBeDefined();
+    });
+
+    it('As LU I can see add secrets with only totp for a resource v4 password string.', async() => {
+      expect.assertions(3);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto()), resource: defaultResourceFormDto({secret: {password: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.addSecretPassword).toBeNull();
+      expect(page.addSecretTotp).toBeDefined();
+      expect(page.addSecretNote).toBeNull();
     });
 
     it('As LU I can see add secrets disabled if no resource types is available.', async() => {

@@ -355,6 +355,8 @@ describe("Resource Form entity", () => {
       resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.TOTP, totpEntity, {validate: false});
       resourceDto.secret.totp = totpEntity.toDto();
       resourceDto.resource_type_id = TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP;
+      resourceDto.secret.description = resourceDto.metadata.description;
+      resourceDto.metadata.description = "";
       expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP);
       expect(resourceFormEntity.toDto()).toEqual(resourceDto);
     });

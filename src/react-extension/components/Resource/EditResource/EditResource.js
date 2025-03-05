@@ -84,7 +84,7 @@ class EditResource extends Component {
       resourceViewModel: null,
       originalResourceType: null, // The original resource type of the resource
       originalSecret: null, // The original secret of the resource
-      ResourceType: null, // The actual resource type of the resource when editing
+      resourceType: null, // The actual resource type of the resource when editing
       errors: new EntityValidationError(), //the validation errors set
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once
       isPasswordDictionaryCheckRequested: true, // Is the password check against a dictionary request.
@@ -769,7 +769,7 @@ class EditResource extends Component {
     return (
       <DialogWrapper title={this.translate("Edit resource")} className="edit-resource"
         disabled={this.hasAllInputDisabled()} onClose={this.handleClose}>
-        <SelectResourceForm/>
+        <SelectResourceForm resourceType={this.state.resourceType}/>
         <form className="grid-and-footer" onSubmit={this.handleFormSubmit} noValidate>
           <div className="grid">
             <div className="resource-info">

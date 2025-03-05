@@ -173,17 +173,31 @@ class ResourceFormEntity extends EntityV2 {
     if (!Object.values(ResourceEditCreateFormEnumerationTypes).includes(secret)) {
       return;
     }
+    // Get the current resource type
     const currentResourceType = this.resourceTypes.getFirstById(this.resourceTypeId);
+    // Get the resource type slug to mutate when adding secret
     const mutateResourceTypeSlug = RESOURCE_TYPE_MAPPING_ADD_SECRET[currentResourceType?.slug]?.[secret];
     if (mutateResourceTypeSlug) {
+      // Get the resource type to mutate
       const resourceType = this.resourceTypes.getFirstBySlug(mutateResourceTypeSlug);
+      // Get the secret entity class associate
       const secretEntityClass = this.getSecretEntityClassByResourceType(resourceType.id);
       if (!secretEntityClass) {
         throw new Error(`No secret association class has been found in resource types.`);
       }
+      // Set the secret with the actual secret data
       this.set("secret", new secretEntityClass(this.secret.toDto(), {validate: false}));
+      // If current resource type is V4 and password string
+      if (currentResourceType.isV4() && currentResourceType.isPasswordString()) {
+        // Set the secret description with the metadata description
+        this.set("secret.description", this.metadata?.description || "", options);
+        // Set the metadata description with empty value
+        this.set("metadata.description", "", options);
+      }
+      // Set the resource type id
       this.set("resource_type_id", resourceType.id);
     }
+    // Set the secret to add
     this.set(secret, value, options);
   }
 
