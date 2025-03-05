@@ -18,6 +18,7 @@
 import {waitFor} from "@testing-library/react";
 import CreateResourcePage from "./CreateResourceV5.test.page";
 import {defaultProps} from "./CreateResourceV5.test.data";
+import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 
 describe("See the Create Resource", () => {
   beforeEach(() => {
@@ -125,6 +126,68 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
         expect(page.note).toBeDefined();
+      });
+    });
+
+    describe("should init password form", () => {
+      it('As a signed-in user I should be able to add an URI', async() => {
+        expect.assertions(2);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        await page.fillInput(page.uri, "https://passbolt.com");
+        // expectations
+        expect(page.uri.value).toBe("https://passbolt.com");
+      });
+
+      it('As a signed-in user I should be able to add an username', async() => {
+        expect.assertions(2);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        await page.fillInput(page.username, "username");
+        // expectations
+        expect(page.username.value).toBe("username");
+      });
+
+      it('As a signed-in user I should be able to add a password', async() => {
+        expect.assertions(2);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        await page.fillInput(page.password, "secret");
+        // expectations
+        expect(page.password.value).toBe("secret");
+      });
+
+      it('As a signed-in user I should be able to generate a password', async() => {
+        expect.assertions(5);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        jest.spyOn(SecretGenerator, "generate").mockImplementation(() => "generate-password");
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+        expect(page.password.value).toBe("");
+
+        await page.click(page.passwordGenerateButton);
+        // expectations
+        expect(page.password.value).toBe("generate-password");
+        expect(page.complexityText.textContent).not.toBe("Quality Entropy: 0.0 bits");
+        expect(page.progressBar.classList.contains("error")).toBe(false);
       });
     });
   });

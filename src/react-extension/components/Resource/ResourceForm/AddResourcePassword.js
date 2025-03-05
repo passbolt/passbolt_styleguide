@@ -37,7 +37,6 @@ class AddResourcePassword extends Component {
 
   get defaultState() {
     return {
-      password: "",
       passwordEntropy: null,
       displayPasswordGenerator: false,
       generatorSettings: null,
@@ -63,6 +62,7 @@ class AddResourcePassword extends Component {
     this.handleGeneratorTypeChanged = this.handleGeneratorTypeChanged.bind(this);
     this.handlePasswordGeneratorConfigurationChanged = this.handlePasswordGeneratorConfigurationChanged.bind(this);
     this.handleGeneratePasswordClick = this.handleGeneratePasswordClick.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   /**
@@ -70,8 +70,14 @@ class AddResourcePassword extends Component {
    * @param {Object} generatorSettings The generator configuration
    */
   handleGeneratorConfigurationChanged(generatorSettings) {
-    const password = this.generatePassword(generatorSettings);
-    this.setState({generatorSettings, password});
+    const generatedPassword = this.generatePassword(generatorSettings);
+    this.setState({generatorSettings});
+    this.handleInputChange({
+      target: {
+        name: "secret.password",
+        value: generatedPassword
+      }
+    });
   }
 
   /**
@@ -126,8 +132,13 @@ class AddResourcePassword extends Component {
    * Handle when the generate password has been clicked
    */
   handleGeneratePasswordClick() {
-    const password = this.generatePassword(this.state.generatorSettings);
-    this.setState({password});
+    const generatedPassword = this.generatePassword(this.state.generatorSettings);
+    this.handleInputChange({
+      target: {
+        name: "secret.password",
+        value: generatedPassword
+      }
+    });
   }
 
   /**
@@ -146,6 +157,16 @@ class AddResourcePassword extends Component {
     return this.props.t;
   }
 
+  /**
+   * Handle form input change.
+   * @params {ReactEvent} The react event.
+   */
+  handleInputChange(event) {
+    if (this.props.onChange) {
+      this.props.onChange(event);
+    }
+  }
+
   /*
    * =============================================================
    *  Render view
@@ -161,18 +182,18 @@ class AddResourcePassword extends Component {
           <div className="password-fields">
             <div className="input text">
               <label htmlFor="resource-uri"><Trans>URI</Trans></label>
-              <input id="resource-uri" name="uri" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")}/>
+              <input id="resource-uri" name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange}/>
             </div>
             <div className="input text">
               <label htmlFor="resource-username"><Trans>Username</Trans></label>
-              <input id="resource-username" name="username" type="text" className="fluid" maxLength="255" autoComplete="off" placeholder={this.translate("Username")}/>
+              <input id="resource-username" name="metadata.username" type="text" className="fluid" maxLength="255" autoComplete="off" placeholder={this.translate("Username")} value={this.props.resource?.metadata?.username} onChange={this.handleInputChange}/>
             </div>
             <div className="input-password-wrapper input">
               <label htmlFor="resource-password">
                 <Trans>Password</Trans>
               </label>
               <div className="password-button-inline">
-                <Password id="resource-password" name="password" autoComplete="new-password" placeholder={this.translate("Password")} preview={true} value={this.state.password || ""}/>
+                <Password id="resource-password" name="secret.password" autoComplete="new-password" placeholder={this.translate("Password")} preview={true} value={this.props.resource?.secret?.password} onChange={this.handleInputChange} />
                 <button type="button" className="password-generate button-icon" onClick={this.handleGeneratePasswordClick}>
                   <DiceSVG/>
                 </button>
@@ -228,6 +249,7 @@ AddResourcePassword.propTypes = {
   context: PropTypes.any, // The app context
   resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
   resource: PropTypes.object, // The resource to edit or create
+  onChange: PropTypes.func, // The on change function
   t: PropTypes.func, // The translation function
 };
 

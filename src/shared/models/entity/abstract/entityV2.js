@@ -18,6 +18,7 @@ import EntityValidationError from "./entityValidationError";
 import {snakeCaseToCamelCase} from "../../../utils/stringUtils";
 
 const SCALAR_PROPERTY_TYPES = ["string", "number", "integer", "boolean"];
+const ARRAY_PROPERTY_TYPE = "array";
 
 class EntityV2 extends Entity {
   /**
@@ -213,7 +214,6 @@ class EntityV2 extends Entity {
    * Note: the build rules are not enforced by this assignment and should be handled by the caller.
    * Note: This function sets scalar and association properties. Not supported:
    *   - nested object;
-   *   - nested array;
    *
    * @param {string} propName The property name.
    * @param {*} value The value to set.
@@ -225,22 +225,74 @@ class EntityV2 extends Entity {
    */
   set(propName, value, options = {}) {
     assertString(propName);
+
     const validate = options?.validate ?? true;
     if (this.isAssociation(propName)) {
       this.setAssociation(propName, value, options);
     } else {
-      const schemaProperties = this.constructor.getSchema().properties[propName];
+      const propNameSplit = propName.split(".");
+      const basePropName = propNameSplit[0];
+
+      const schemaProperties = this.constructor.getSchema().properties[basePropName];
       if (!schemaProperties) {
-        throw new Error(`The property "${propName}" has no schema definition.`);
+        throw new Error(`The property "${basePropName}" has no schema definition.`);
       }
-      if (!SCALAR_PROPERTY_TYPES.includes(schemaProperties?.type)) {
-        throw new Error("The property \"associated_entity\" should reference scalar properties only.");
+
+      if (schemaProperties?.type === ARRAY_PROPERTY_TYPE) {
+        this.setArrayProp(propName, value, options);
+      } else {
+        if (!SCALAR_PROPERTY_TYPES.includes(schemaProperties?.type)) {
+          throw new Error("The property \"associated_entity\" should reference scalar properties only.");
+        }
+        if (validate) {
+          EntitySchema.validateProp(basePropName, value, schemaProperties);
+        }
+        this._props[basePropName] = value;
       }
-      if (validate) {
-        EntitySchema.validateProp(propName, value, schemaProperties);
-      }
-      this._props[propName] = value;
     }
+  }
+  /**
+   * Set an array property value. The new array value will be validated against the entity schema unless validation is
+   * explicitly disabled in the options.
+   *
+   * @param {string} propName The property name.
+   * @param {*} value The value to set.
+   * @param {object} [options] Options.
+   * @throws {Error} If the property does not respect the index format.
+   * @throws {Error} If the property does not include an index.
+   * @throws {Error} If the property does not validate the entity schema.
+   * @throws {EntityValidationError} If the property does not validate the entity schema.
+   * @private
+   */
+  setArrayProp(propName, value, options) {
+    assertString(propName); // Assert propName is a string
+    const propNameSplit = propName.split(".");
+    const basePropName = propNameSplit[0];
+    let index = null;
+    const schemaProperties = this.constructor.getSchema().properties[basePropName];
+    const validate = options?.validate ?? true;
+
+    if (propNameSplit.length === 2) {
+      //Validate array index format
+      const arrayIndexMatch = propNameSplit[1].match(/^(\d+)$/);
+      if (!arrayIndexMatch) {
+        throw new Error(`The property "${propNameSplit[0]}" has an invalid index format. Expected format: digits.`);
+      }
+      index = parseInt(arrayIndexMatch[1], 10);
+    } else {
+      throw new Error(`The property "${propNameSplit[0]}" has no index passed.`);
+    }
+
+    if (!SCALAR_PROPERTY_TYPES.includes(schemaProperties.items.type)) {
+      throw new Error("The property \"associated_entity\" with array type should reference scalar properties only.");
+    }
+    if (validate) {
+      EntitySchema.validateProp(basePropName, value, schemaProperties.items);
+    }
+    if (!this._props[basePropName]) {
+      this._props[basePropName] = [];
+    }
+    this._props[basePropName][index] = value;
   }
 
   /**
@@ -276,8 +328,9 @@ class EntityV2 extends Entity {
           // Instantiate a new empty association entity with no validation to set the value after
           this[`_${associationPropName}`] = new this.constructor.associations[propNameSplit[0]]({}, {validate: false});
         }
+        const concatenatedPropName = propNameSplit.slice(1).join('.');
         // loop to set the association prop name
-        this[`_${associationPropName}`].set(propNameSplit[1], value, options);
+        this[`_${associationPropName}`].set(concatenatedPropName, value, options);
       } else {
         if (value instanceof this.constructor.associations[propName]) {
           // Set the association

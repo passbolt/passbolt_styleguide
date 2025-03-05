@@ -163,7 +163,7 @@ class CreateResource extends Component {
           <div className="grid">
             <AddResourceName resource={this.state.resource} folderParentId={this.props.folderParentId} onChange={this.handleInputChange}/>
             <div className="create-workspace">
-              <OrchestrateResourceForm resourceFormSelected={this.state.resourceFormSelected} resource={this.state.resource}/>
+              <OrchestrateResourceForm resourceFormSelected={this.state.resourceFormSelected} resource={this.state.resource} onChange={this.handleInputChange}/>
             </div>
           </div>
           <div className="submit-wrapper">

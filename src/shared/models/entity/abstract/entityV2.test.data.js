@@ -46,7 +46,10 @@ export class TestEntityV2 extends EntityV2 {
           "type": "object"
         },
         "array": {
-          "type": "array"
+          "type": "array",
+          "items": {
+            "type": "string",
+          }
         },
         "associated_entity": TestAssociatedEntityV2.getSchema()
       }

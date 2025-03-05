@@ -114,14 +114,6 @@ export default class CreateResourcePage {
   get note() {
     return this._page.container.querySelector('#resource-note');
   }
-
-  /**
-   * Returns the complexity text input element
-   */
-  get complexityText() {
-    return this._page.container.querySelector('.complexity-text');
-  }
-
   /**
    * Returns the password view button element
    */
@@ -200,6 +192,20 @@ export default class CreateResourcePage {
   }
 
   /**
+   * Returns the complexity text input element
+   */
+  get complexityText() {
+    return this._page.container.querySelector('.complexity-text');
+  }
+
+  /**
+   * Returns the progress bar element
+   */
+  get progressBar() {
+    return this._page.container.querySelector('.progress-bar');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -218,5 +224,11 @@ export default class CreateResourcePage {
     // Escape key down event
     const escapeKeyDown = {keyCode: 27};
     fireEvent.keyDown(this.dialog, escapeKeyDown);
+  }
+
+  /** fill the input element with data */
+  fillInput(element, data)  {
+    const dataInputEvent = {target: {value: data}};
+    fireEvent.change(element, dataInputEvent);
   }
 }
