@@ -106,7 +106,6 @@ class CreateResource extends Component {
     const target = event.target;
     const name = target.name;
     const value = target.value || null;
-
     this.resourceFormEntity.set(name, value, {validate: false});
 
     this.setState({resource: this.resourceFormEntity.toDto()});

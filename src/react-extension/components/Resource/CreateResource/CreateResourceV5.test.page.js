@@ -101,6 +101,7 @@ export default class CreateResourcePage {
     return this._page.container.querySelector('#resource-description');
   }
 
+
   /**
    * Returns the left sidebar description input element
    */
@@ -205,13 +206,6 @@ export default class CreateResourcePage {
     return this._page.container.querySelector('.left-sidebar .sidebar-content-sections').querySelectorAll('.section-content')[index - 1];
   }
 
-  /**
-   * Returns the section selected
-   * @returns {Element}
-   */
-  get sectionItemSelected() {
-    return this._page.container.querySelector('.left-sidebar .sidebar-content-sections .section-content.selected');
-  }
 
   /**
    * Returns the add secret
@@ -243,6 +237,14 @@ export default class CreateResourcePage {
    */
   get addSecretNote() {
     return this._page.container.querySelector(".left-sidebar #note_action");
+  }
+
+  /**
+   * Returns the section selected
+   * @returns {Element}
+   */
+  get sectionItemSelected() {
+    return this._page.container.querySelector('.left-sidebar .sidebar-content-sections .section-content.selected');
   }
 
   /**

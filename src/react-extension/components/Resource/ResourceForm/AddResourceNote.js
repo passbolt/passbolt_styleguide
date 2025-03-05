@@ -17,12 +17,34 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 
 class AddResourceNote extends Component {
+  constructor(props) {
+    super(props);
+    this.bindCallbacks();
+  }
+
   /**
    * Get the translation function
    * @returns {function(...[*]=)}
    */
   get translate() {
     return this.props.t;
+  }
+
+  /**
+   * Bind callbacks
+   */
+  bindCallbacks() {
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  /**
+   * Handle form input change.
+   * @params {ReactEvent} The react event.
+   */
+  handleInputChange(event) {
+    if (this.props.onChange) {
+      this.props.onChange(event);
+    }
   }
 
   /*
@@ -42,12 +64,11 @@ class AddResourceNote extends Component {
               <label htmlFor="resource-note">
                 <Trans>Content</Trans>
               </label>
-              <textarea id="resource-note" name="note" maxLength="10000" placeholder={this.translate("Add a note")}>
+              <textarea id="resource-note" name="secret.description" maxLength="10000" placeholder={this.translate("Add a note")} onChange={this.handleInputChange} value={this.props.resource?.secret?.description}>
               </textarea>
             </div>
           </div>
         </div>
-
       </>
     );
   }
@@ -55,6 +76,7 @@ class AddResourceNote extends Component {
 
 AddResourceNote.propTypes = {
   resource: PropTypes.object, // The resource to edit or create
+  onChange: PropTypes.func, //The resource setter
   t: PropTypes.func, // The translation function
 };
 

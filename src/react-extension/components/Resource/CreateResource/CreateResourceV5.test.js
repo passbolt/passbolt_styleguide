@@ -319,6 +319,24 @@ describe("See the Create Resource", () => {
         expect(page.algorithm.textContent).toBe("SHA256");
       });
     });
+    describe("should fill note form", () => {
+      it('As a signed-in user I should be able to add a note', async() => {
+        expect.assertions(2);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        await page.click(page.addSecret);
+        await page.click(page.addSecretNote);
+
+        expect(page.exists()).toBeTruthy();
+
+        await page.fillInput(page.note, "note");
+        // expectations
+        expect(page.note.value).toBe("note");
+      });
+    });
   });
 });
 
