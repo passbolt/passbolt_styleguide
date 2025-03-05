@@ -82,4 +82,27 @@ describe("SecretDataV4DefaultTotpEntity", () => {
       expect(entity.totp.toDto()).toStrictEqual(dto.totp);
     });
   });
+
+  describe("::createFromDefault", () => {
+    it("create with no data provided", () => {
+      expect.assertions(3);
+      const dto = minimalSecretDataV4DefaultTotpEntityDto();
+      dto.totp.secret_key = "";
+      const entity = SecretDataV4DefaultTotpEntity.createFromDefault({}, {validate: false});
+
+      expect(entity.password).toStrictEqual("");
+      expect(entity.totp.toDto()).toStrictEqual(dto.totp);
+      expect(entity.description).toBeUndefined();
+    });
+
+    it("create with data provided", () => {
+      expect.assertions(3);
+      const dto = defaultSecretDataV4DefaultTotpEntityDto();
+      const entity = SecretDataV4DefaultTotpEntity.createFromDefault(dto);
+
+      expect(entity.password).toStrictEqual(dto.password);
+      expect(entity.totp.toDto()).toStrictEqual(dto.totp);
+      expect(entity.description).toStrictEqual(dto.description);
+    });
+  });
 });

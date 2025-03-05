@@ -12,9 +12,9 @@
  * @since         5.0.0
  */
 
-import SecretDataEntity from "./secretDataEntity";
+import SecretDataEntity, {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
 
-class secretDataV5PasswordStringEntity extends SecretDataEntity {
+class SecretDataV5PasswordStringEntity extends SecretDataEntity {
   /**
    * Get the secret data v5 default schema
    * @returns {object}
@@ -37,6 +37,21 @@ class secretDataV5PasswordStringEntity extends SecretDataEntity {
     };
   }
 
+  /**
+   * Return the default secret data v5 password string.
+   * @param {object} data the data to override the default with
+   * @param {object} [options] Options.
+   * @returns {SecretDataV5PasswordStringEntity}
+   */
+  static createFromDefault(data = {}, options) {
+    const defaultData = {
+      object_type: SECRET_DATA_OBJECT_TYPE,
+      password: "",
+    };
+
+    return new SecretDataV5PasswordStringEntity({...defaultData, ...data}, options);
+  }
+
   /*
    * ==================================================
    * Dynamic properties getters
@@ -51,4 +66,4 @@ class secretDataV5PasswordStringEntity extends SecretDataEntity {
   }
 }
 
-export default secretDataV5PasswordStringEntity;
+export default SecretDataV5PasswordStringEntity;

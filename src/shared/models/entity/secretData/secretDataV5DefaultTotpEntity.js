@@ -14,6 +14,7 @@
 
 import TotpEntity from "../totp/totpEntity";
 import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
+import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
 
 class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
   /**
@@ -42,6 +43,22 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
     return {
       totp: TotpEntity
     };
+  }
+
+  /**
+   * Return the default secret data v5 default totp.
+   * @param {object} data the data to override the default with
+   * @param {object} [options] Options.
+   * @returns {SecretDataV5DefaultTotpEntity}
+   */
+  static createFromDefault(data = {}, options) {
+    const defaultData = {
+      object_type: SECRET_DATA_OBJECT_TYPE,
+      password: "",
+      totp: TotpEntity.createFromDefault({}, {validate: false}).toDto()
+    };
+
+    return new SecretDataV5DefaultTotpEntity({...defaultData, ...data}, options);
   }
 
   /**

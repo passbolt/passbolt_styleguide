@@ -14,29 +14,29 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
 import {
   defaultSecretDataV5PasswordStringDto,
   minimalDefaultSecretDataV5PasswordStringDto
 } from "./secretDataV5PasswordStringEntity.test.data";
 import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import SecretDataV5PasswordStringEntity from "./secretDataV5PasswordStringEntity";
 
 describe("secretDataV5PasswordStringEntity", () => {
   describe("::getSchema", () => {
     it("schema must validate", () => {
-      EntitySchema.validateSchema(SecretDataV5DefaultEntity.name, SecretDataV5DefaultEntity.getSchema());
+      EntitySchema.validateSchema(SecretDataV5PasswordStringEntity.name, SecretDataV5PasswordStringEntity.getSchema());
     });
 
     it("validates object_type property", () => {
-      assertEntityProperty.string(SecretDataV5DefaultEntity, "object_type");
-      assertEntityProperty.required(SecretDataV5DefaultEntity, "object_type");
-      assertEntityProperty.enumeration(SecretDataV5DefaultEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
+      assertEntityProperty.string(SecretDataV5PasswordStringEntity, "object_type");
+      assertEntityProperty.required(SecretDataV5PasswordStringEntity, "object_type");
+      assertEntityProperty.enumeration(SecretDataV5PasswordStringEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
     });
 
     it("validates password property", () => {
-      assertEntityProperty.string(SecretDataV5DefaultEntity, "password");
-      assertEntityProperty.nullable(SecretDataV5DefaultEntity, "password");
-      assertEntityProperty.maxLength(SecretDataV5DefaultEntity, "password", 4096);
+      assertEntityProperty.string(SecretDataV5PasswordStringEntity, "password");
+      assertEntityProperty.nullable(SecretDataV5PasswordStringEntity, "password");
+      assertEntityProperty.maxLength(SecretDataV5PasswordStringEntity, "password", 4096);
     });
   });
 
@@ -44,7 +44,7 @@ describe("secretDataV5PasswordStringEntity", () => {
     it("constructor works if minimal valid DTO is provided", () => {
       expect.assertions(2);
       const dto = minimalDefaultSecretDataV5PasswordStringDto();
-      const entity = new SecretDataV5DefaultEntity(dto);
+      const entity = new SecretDataV5PasswordStringEntity(dto);
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
       expect(entity.password).toBeNull();
@@ -53,7 +53,27 @@ describe("secretDataV5PasswordStringEntity", () => {
       expect.assertions(2);
 
       const dto = defaultSecretDataV5PasswordStringDto();
-      const entity = new SecretDataV5DefaultEntity(dto);
+      const entity = new SecretDataV5PasswordStringEntity(dto);
+
+      expect(entity.objectType).toStrictEqual(dto.object_type);
+      expect(entity.password).toStrictEqual(dto.password);
+    });
+  });
+
+  describe("::createFromDefault", () => {
+    it("create with no data provided", () => {
+      expect.assertions(2);
+      const dto = minimalDefaultSecretDataV5PasswordStringDto();
+      const entity = SecretDataV5PasswordStringEntity.createFromDefault({});
+
+      expect(entity.objectType).toStrictEqual(dto.object_type);
+      expect(entity.password).toStrictEqual("");
+    });
+
+    it("create with data provided", () => {
+      expect.assertions(2);
+      const dto = defaultSecretDataV5PasswordStringDto();
+      const entity = SecretDataV5PasswordStringEntity.createFromDefault(dto);
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
       expect(entity.password).toStrictEqual(dto.password);

@@ -66,4 +66,30 @@ describe("SecretDataV5StandaloneEntity", () => {
       expect(entity.totp.toDto()).toStrictEqual(dto.totp);
     });
   });
+
+  describe("::createFromDefault", () => {
+    it("create with no data provided", () => {
+      expect.assertions(2);
+      const dto = {
+        object_type: SECRET_DATA_OBJECT_TYPE,
+        totp: defaultTotpDto({secret_key: ""})
+      };
+      const entity = SecretDataV5StandaloneTotpEntity.createFromDefault({}, {validate: false});
+
+      expect(entity.objectType).toStrictEqual(dto.object_type);
+      expect(entity.totp.toDto()).toStrictEqual(dto.totp);
+    });
+
+    it("create with data provided", () => {
+      expect.assertions(2);
+      const dto = {
+        object_type: SECRET_DATA_OBJECT_TYPE,
+        totp: defaultTotpDto()
+      };
+      const entity = SecretDataV5StandaloneTotpEntity.createFromDefault(dto);
+
+      expect(entity.objectType).toStrictEqual(dto.object_type);
+      expect(entity.totp.toDto()).toStrictEqual(dto.totp);
+    });
+  });
 });

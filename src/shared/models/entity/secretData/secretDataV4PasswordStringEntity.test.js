@@ -40,4 +40,21 @@ describe("secretDataV4PasswordStringEntity", () => {
       expect(entity.password).toStrictEqual("password");
     });
   });
+
+  describe("::createFromDefault", () => {
+    it("create with no data provided", () => {
+      expect.assertions(1);
+      const entity = SecretDataV4PasswordStringEntity.createFromDefault({});
+
+      expect(entity.password).toStrictEqual("");
+    });
+
+    it("create with data provided", () => {
+      expect.assertions(1);
+      const dto = {password: "password"};
+      const entity = SecretDataV4PasswordStringEntity.createFromDefault(dto);
+
+      expect(entity.password).toStrictEqual(dto.password);
+    });
+  });
 });

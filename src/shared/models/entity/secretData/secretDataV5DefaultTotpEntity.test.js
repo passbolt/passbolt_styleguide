@@ -16,7 +16,6 @@ import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import SecretDataV5DefaultTotpEntity from "./secretDataV5DefaultTotpEntity";
 import {defaultSecretDataV5DefaultTotpEntityDto, minimalSecretDataV5DefaultTotpEntityDto} from "./secretDataV5DefaultTotpEntity.test.data";
-import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
 import TotpEntity from "../totp/totpEntity";
 import {defaultTotpDto} from "../totp/totpDto.test.data";
 import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
@@ -28,9 +27,9 @@ describe("SecretDataV5DefaultTotpEntity", () => {
     });
 
     it("validates object_type property", () => {
-      assertEntityProperty.string(SecretDataV5DefaultEntity, "object_type");
-      assertEntityProperty.required(SecretDataV5DefaultEntity, "object_type");
-      assertEntityProperty.enumeration(SecretDataV5DefaultEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
+      assertEntityProperty.string(SecretDataV5DefaultTotpEntity, "object_type");
+      assertEntityProperty.required(SecretDataV5DefaultTotpEntity, "object_type");
+      assertEntityProperty.enumeration(SecretDataV5DefaultTotpEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
     });
 
     it("validates password property", () => {
@@ -89,6 +88,31 @@ describe("SecretDataV5DefaultTotpEntity", () => {
       expect(entity._props.password).toStrictEqual(dto.password);
       expect(entity._props.description).toStrictEqual(dto.description);
       expect(entity.totp.toDto()).toStrictEqual(dto.totp);
+    });
+  });
+
+  describe("::createFromDefault", () => {
+    it("create with no data provided", () => {
+      expect.assertions(4);
+      const dto = minimalSecretDataV5DefaultTotpEntityDto();
+      dto.totp.secret_key = "";
+      const entity = SecretDataV5DefaultTotpEntity.createFromDefault({}, {validate: false});
+
+      expect(entity.objectType).toStrictEqual(dto.object_type);
+      expect(entity.password).toStrictEqual("");
+      expect(entity.totp.toDto()).toStrictEqual(dto.totp);
+      expect(entity.description).toBeUndefined();
+    });
+
+    it("create with data provided", () => {
+      expect.assertions(4);
+      const dto = defaultSecretDataV5DefaultTotpEntityDto();
+      const entity = SecretDataV5DefaultTotpEntity.createFromDefault(dto);
+
+      expect(entity.objectType).toStrictEqual(dto.object_type);
+      expect(entity.password).toStrictEqual(dto.password);
+      expect(entity.totp.toDto()).toStrictEqual(dto.totp);
+      expect(entity.description).toStrictEqual(dto.description);
     });
   });
 });
