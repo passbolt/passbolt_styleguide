@@ -81,6 +81,23 @@ class TotpEntity extends EntityV2 {
     super.marshall();
   }
 
+  /**
+   * Return the default totp.
+   * @param {object} data the data to override the default with
+   * @param {object} [options] Options.
+   * @returns {TotpEntity}
+   */
+  static createFromDefault(data = {}, options) {
+    const defaultData = {
+      secret_key: "",
+      period: 30,
+      digits: 6,
+      algorithm: SUPPORTED_ALGORITHMS[0]
+    };
+
+    return new TotpEntity({...defaultData, ...data}, options);
+  }
+
   /*
    * ==================================================
    * Dynamic properties getters

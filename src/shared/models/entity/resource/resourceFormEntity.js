@@ -24,6 +24,7 @@ import SecretDataV4PasswordStringEntity from "../secretData/secretDataV4Password
 import SecretDataEntity from "../secretData/secretDataEntity";
 import ResourceTypesCollection from "../resourceType/resourceTypesCollection";
 import {
+  RESOURCE_TYPE_MAPPING_ADD_SECRET,
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
   RESOURCE_TYPE_PASSWORD_STRING_SLUG,
@@ -33,6 +34,8 @@ import {
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG
 } from "../resourceType/resourceTypeSchemasDefinition";
+import assertString from "validator/es/lib/util/assertString";
+import {ResourceEditCreateFormEnumerationTypes} from "../../resource/ResourceEditCreateFormEnumerationTypes";
 
 class ResourceFormEntity extends EntityV2 {
   /**
@@ -107,12 +110,13 @@ class ResourceFormEntity extends EntityV2 {
   createAssociations(options = {}) {
     if (this._props.resource_type_id && options.resourceTypes instanceof ResourceTypesCollection) {
       this.resourceTypes = options.resourceTypes;
+      // TODO create secret from default
       if (this._props.secret) {
         const secretEntityClass = this.getSecretEntityClassByResourceType(this._props.resource_type_id);
         if (!secretEntityClass) {
           throw new Error(`No secret association class has been found in resource types.`);
         }
-        this._secret = new secretEntityClass(this._props.secret);
+        this._secret = new secretEntityClass(this._props.secret, options);
         delete this._props.secret;
       }
     }
@@ -148,11 +152,54 @@ class ResourceFormEntity extends EntityV2 {
     }
   }
 
+  /**
+   * Add secret property to the entity.
+   * If secret should mutate get the entity class according the resource type
+   *  - Set the new secret association
+   *  - Set the resource type id
+   * Finally
+   *  - Set the property in the secret association
+   *
+   * Note: This function set secret property.
+   * @param {string} secret The secret to add
+   * @param {*} value The secret value
+   * @param {object} [options] Options
+   *
+   * @throws {Error} If no secret entity class has been found.
+   */
+  addSecret(secret, value, options) {
+    assertString(secret);
+    // If unknown secret do nothing
+    if (!Object.values(ResourceEditCreateFormEnumerationTypes).includes(secret)) {
+      return;
+    }
+    const currentResourceType = this.resourceTypes.getFirstById(this.resourceTypeId);
+    const mutateResourceTypeSlug = RESOURCE_TYPE_MAPPING_ADD_SECRET[currentResourceType?.slug]?.[secret];
+    if (mutateResourceTypeSlug) {
+      const resourceType = this.resourceTypes.getFirstBySlug(mutateResourceTypeSlug);
+      const secretEntityClass = this.getSecretEntityClassByResourceType(resourceType.id);
+      if (!secretEntityClass) {
+        throw new Error(`No secret association class has been found in resource types.`);
+      }
+      this.set("secret", new secretEntityClass(this.secret.toDto(), {validate: false}));
+      this.set("resource_type_id", resourceType.id);
+    }
+    this.set(secret, value, options);
+  }
+
   /*
    * ==================================================
    * Dynamic properties getters
    * ==================================================
    */
+  /**
+   * Get resource type id
+   * @returns {string} resource type id
+   */
+  get resourceTypeId() {
+    return this._props.resource_type_id;
+  }
+
   /**
    * Get resource form metadata
    * @returns {ResourceMetadataEntity} metadata

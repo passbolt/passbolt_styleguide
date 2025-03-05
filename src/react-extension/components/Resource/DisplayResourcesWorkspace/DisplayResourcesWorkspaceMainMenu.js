@@ -49,9 +49,6 @@ import CircleEllipsisSVG from "../../../../img/svg/circle_ellipsis.svg";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 import DisplayResourceCreationMenu from "../CreateResource/DisplayResourceCreationMenu";
-import {
-  ResourceEditCreateFormEnumerationTypes
-} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 import CreateResourceV5 from "../CreateResource/CreateResourceV5";
 
 /**
@@ -87,7 +84,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
       resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
     }
-    this.openCreateDialog(ResourceEditCreateFormEnumerationTypes.PASSWORD, resourceType);
+    this.openCreateDialog(resourceType);
   }
 
   /**
@@ -99,11 +96,10 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
 
   /**
    * Open create resource dialog
-   * @param {string} resourceFormType The resource form type (ex: password, totp, ...)
    * @param {ResourceTypeEntity} resourceType The resource type
    */
-  openCreateDialog(resourceFormType, resourceType) {
-    this.props.dialogContext.open(CreateResourceV5, {folderParentId: this.folderIdSelected, resourceFormType: resourceFormType, resourceType});
+  openCreateDialog(resourceType) {
+    this.props.dialogContext.open(CreateResourceV5, {folderParentId: this.folderIdSelected, resourceType});
   }
 
   /**
@@ -116,7 +112,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
       resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
     }
-    this.openCreateDialog(ResourceEditCreateFormEnumerationTypes.TOTP, resourceType);
+    this.openCreateDialog(resourceType);
   }
 
   /**
