@@ -102,6 +102,13 @@ export default class CreateResourcePage {
   }
 
   /**
+   * Returns the left sidebar description input element
+   */
+  get menuDescription() {
+    return this._page.container.querySelector('#menu-description');
+  }
+
+  /**
    * Returns the password input element
    */
   get totp() {

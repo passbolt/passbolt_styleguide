@@ -17,6 +17,10 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 
 class AddResourceDescription extends Component {
+  constructor(props) {
+    super(props);
+    this.bindCallbacks();
+  }
   /**
    * Get the translation function
    * @returns {function(...[*]=)}
@@ -24,6 +28,24 @@ class AddResourceDescription extends Component {
   get translate() {
     return this.props.t;
   }
+
+  /**
+   * Bind callbacks
+   */
+  bindCallbacks() {
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  /**
+   * Handle form input change.
+   * @params {ReactEvent} The react event.
+   */
+  handleInputChange(event) {
+    if (this.props.onChange) {
+      this.props.onChange(event);
+    }
+  }
+
 
   /*
    * =============================================================
@@ -42,7 +64,7 @@ class AddResourceDescription extends Component {
               <label htmlFor="resource-description">
                 <Trans>Content</Trans>
               </label>
-              <textarea id="resource-description" name="description" maxLength="10000" placeholder={this.translate("Add a description")}>
+              <textarea id="resource-description" name="metadata.description" maxLength="10000" placeholder={this.translate("Add a description")} onChange={this.handleInputChange} value={this.resource?.metadata?.description}>
               </textarea>
             </div>
           </div>
@@ -55,6 +77,7 @@ class AddResourceDescription extends Component {
 
 AddResourceDescription.propTypes = {
   resource: PropTypes.object, // The resource to edit or create
+  onChange: PropTypes.func, //The resource setter
   t: PropTypes.func, // The translation function
 };
 

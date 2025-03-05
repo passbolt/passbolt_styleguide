@@ -19,6 +19,7 @@ import {waitFor} from "@testing-library/react";
 import CreateResourcePage from "./CreateResourceV5.test.page";
 import {defaultProps} from "./CreateResourceV5.test.data";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import {ResourceEditCreateFormEnumerationTypes} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 
 describe("See the Create Resource", () => {
   beforeEach(() => {
@@ -203,6 +204,23 @@ describe("See the Create Resource", () => {
 
         // expectations
         expect(page.name.value).toEqual("name");
+      });
+    });
+
+    describe("should init description field", () => {
+      it('As a signed-in user I should be able to add a description', async() => {
+        expect.assertions(2);
+
+        const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.DESCRIPTION});
+
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+        await page.click(page.menuDescription);
+        await page.fillInput(page.description, "description");
+        // expectations
+        expect(page.description.value).toBe("description");
       });
     });
   });

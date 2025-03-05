@@ -291,6 +291,7 @@ class SelectResourceForm extends Component {
           {this.state.displayMetadata &&
             <>
               <button type="button"
+                id="menu-description"
                 className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.DESCRIPTION === this.selectedForm ? "selected" : ""}`}
                 disabled={!this.isResourceTypeHasDescriptionMetadata}
                 onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.DESCRIPTION)}>
