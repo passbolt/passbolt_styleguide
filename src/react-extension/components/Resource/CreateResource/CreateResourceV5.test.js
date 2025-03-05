@@ -190,6 +190,21 @@ describe("See the Create Resource", () => {
         expect(page.progressBar.classList.contains("error")).toBe(false);
       });
     });
+
+    describe("should add a name to resource", () => {
+      it('As a signed-in user I should be able to add name to a resource', async() => {
+        expect.assertions(1);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        await page.fillInput(page.name, "name");
+
+        // expectations
+        expect(page.name.value).toEqual("name");
+      });
+    });
   });
 });
 
