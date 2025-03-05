@@ -37,7 +37,7 @@ class OrchestrateResourceForm extends Component {
       case ResourceEditCreateFormEnumerationTypes.TOTP:
         return <AddResourceTotp resource={this.props.resource} onChange={this.props.onChange}/>;
       case ResourceEditCreateFormEnumerationTypes.NOTE:
-        return <AddResourceNote resource={this.props.resource}/>;
+        return <AddResourceNote resource={this.props.resource} onChange={this.props.onChange}/>;
       case ResourceEditCreateFormEnumerationTypes.DESCRIPTION:
         return <AddResourceDescription resource={this.props.resource} onChange={this.props.onChange}/>;
       default:
