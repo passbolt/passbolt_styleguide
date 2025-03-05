@@ -13,6 +13,7 @@
  */
 
 import SecretDataEntity from "./secretDataEntity";
+import assertString from "validator/es/lib/util/assertString";
 
 class secretDataV4PasswordStringEntity extends SecretDataEntity {
   /**
@@ -46,6 +47,21 @@ class secretDataV4PasswordStringEntity extends SecretDataEntity {
     };
 
     return new secretDataV4PasswordStringEntity({...defaultData, ...data}, options);
+  }
+
+  /**
+   * Return the default secret property.
+   * @param {string} propName the property
+   * @returns {string | undefined}
+   */
+  static getDefaultProp(propName) {
+    assertString(propName);
+    switch (propName) {
+      case "password":
+        return "";
+      default:
+        return;
+    }
   }
 
   /*

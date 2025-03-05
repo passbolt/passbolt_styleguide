@@ -73,4 +73,26 @@ describe("SecretDataV4DefaultEntity", () => {
       expect(entity.description).toStrictEqual(dto.description);
     });
   });
+
+  describe("::getDefaultProp", () => {
+    it("get default password", () => {
+      expect.assertions(1);
+      expect(SecretDataV4DefaultEntity.getDefaultProp("password")).toStrictEqual("");
+    });
+
+    it("get default description", () => {
+      expect.assertions(1);
+      expect(SecretDataV4DefaultEntity.getDefaultProp("description")).toStrictEqual("");
+    });
+
+    it("get default unknown", () => {
+      expect.assertions(1);
+      expect(SecretDataV4DefaultEntity.getDefaultProp("unknown")).toBeUndefined();
+    });
+
+    it("throw error if prop name is not a string", () => {
+      expect.assertions(1);
+      expect(() => SecretDataV4DefaultEntity.getDefaultProp({})).toThrow(TypeError);
+    });
+  });
 });

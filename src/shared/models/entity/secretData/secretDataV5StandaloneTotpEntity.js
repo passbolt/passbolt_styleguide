@@ -14,6 +14,7 @@
 
 import TotpEntity from "../totp/totpEntity";
 import SecretDataEntity, {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import assertString from "validator/es/lib/util/assertString";
 
 class SecretDataV5StandaloneTotpEntity extends SecretDataEntity {
   /**
@@ -69,6 +70,21 @@ class SecretDataV5StandaloneTotpEntity extends SecretDataEntity {
     };
 
     return new SecretDataV5StandaloneTotpEntity({...defaultData, ...data}, options);
+  }
+
+  /**
+   * Return the default secret property.
+   * @param {string} propName the property
+   * @returns {object | undefined}
+   */
+  static getDefaultProp(propName) {
+    assertString(propName);
+    switch (propName) {
+      case "totp":
+        return TotpEntity.createFromDefault({}, {validate: false}).toDto();
+      default:
+        return;
+    }
   }
 
   /**

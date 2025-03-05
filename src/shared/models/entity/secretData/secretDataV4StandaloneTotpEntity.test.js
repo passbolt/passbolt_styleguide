@@ -81,4 +81,21 @@ describe("SecretDataV4StandaloneEntity", () => {
       expect(entity.totp.toDto()).toStrictEqual(dto.totp);
     });
   });
+
+  describe("::getDefaultProp", () => {
+    it("get default totp", () => {
+      expect.assertions(1);
+      expect(SecretDataV4StandaloneTotpEntity.getDefaultProp("totp")).toStrictEqual(TotpEntity.createFromDefault({}, {validate: false}).toDto());
+    });
+
+    it("get default unknown", () => {
+      expect.assertions(1);
+      expect(SecretDataV4StandaloneTotpEntity.getDefaultProp("unknown")).toBeUndefined();
+    });
+
+    it("throw error if prop name is not a string", () => {
+      expect.assertions(1);
+      expect(() => SecretDataV4StandaloneTotpEntity.getDefaultProp({})).toThrow(TypeError);
+    });
+  });
 });
