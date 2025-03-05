@@ -290,12 +290,6 @@ describe("EntityV2", () => {
       expect(() => entity.set("object")).toThrow(new Error("The property \"associated_entity\" should reference scalar properties only."));
     });
 
-    it("throws if property is relative to an array.", () => {
-      expect.assertions(1);
-      const entity = new TestEntityV2(defaultTestEntityV2Dto());
-      expect(() => entity.set("array")).toThrow(new Error("The property \"associated_entity\" should reference scalar properties only."));
-    });
-
     it("set an association property value with dto.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
@@ -351,6 +345,30 @@ describe("EntityV2", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(minimalTestEntityV2Dto());
       expect(() => entity.set("associated_entity.id", "no uuid")).toThrow(new Error("Could not validate property id."));
+    });
+
+    it("throws if array prop index is not defined.", () => {
+      expect.assertions(1);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      expect(() => entity.set("array")).toThrow(new Error("The property \"array\" has no index passed."));
+    });
+
+    it("throws if array prop index has an incorrect format.", () => {
+      expect.assertions(1);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      expect(() => entity.set("array.[0]")).toThrow(new Error("The property \"array\" has an invalid index format. Expected format: digits."));
+    });
+    it("throws if array prop items does not respect items type.", () => {
+      expect.assertions(1);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      expect(() => entity.set("array.0", [])).toThrow(new Error("Could not validate property array."));
+    });
+
+    it("should set the array properties.", () => {
+      expect.assertions(1);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      entity.set("array.0", "test");
+      expect(entity.toDto().array[0]).toEqual("test");
     });
   });
 

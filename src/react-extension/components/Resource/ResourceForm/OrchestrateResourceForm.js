@@ -33,7 +33,7 @@ class OrchestrateResourceForm extends Component {
   render() {
     switch (this.props.resourceFormSelected) {
       case ResourceEditCreateFormEnumerationTypes.PASSWORD:
-        return <AddResourcePassword resource={this.props.resource}/>;
+        return <AddResourcePassword resource={this.props.resource} onChange={this.props.onChange}/>;
       case ResourceEditCreateFormEnumerationTypes.TOTP:
         return <AddResourceTotp resource={this.props.resource}/>;
       case ResourceEditCreateFormEnumerationTypes.NOTE:
@@ -48,6 +48,7 @@ class OrchestrateResourceForm extends Component {
 OrchestrateResourceForm.propTypes = {
   resourceFormSelected: PropTypes.string, // The resource form selected to display
   resource: PropTypes.object, // The resource to edit or create
+  onChange: PropTypes.func, //The resource setter
   t: PropTypes.func, // The translation function
 };
 
