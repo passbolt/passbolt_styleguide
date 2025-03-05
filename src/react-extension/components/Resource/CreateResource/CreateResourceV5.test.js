@@ -20,6 +20,10 @@ import CreateResourcePage from "./CreateResourceV5.test.page";
 import {defaultProps, defaultTotpProps} from "./CreateResourceV5.test.data";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import {ResourceEditCreateFormEnumerationTypes} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import {
+  resourceTypePasswordStringDto,
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 describe("See the Create Resource", () => {
   beforeEach(() => {
@@ -127,6 +131,22 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
         expect(page.note).toBeDefined();
+      });
+
+      it('As a signed-in user I should be able to add secret totp for a resource v4 password string', async() => {
+        expect.assertions(3);
+
+        const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto()),});
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        await page.click(page.addSecret);
+        await page.click(page.addSecretTotp);
+
+        // expectations
+        expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
+        expect(page.note).toBeDefined();
+        expect(page.getSectionItem(4).hasAttribute("disabled")).toBeTruthy();
       });
     });
 

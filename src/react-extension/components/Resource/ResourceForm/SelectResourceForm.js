@@ -158,6 +158,14 @@ class SelectResourceForm extends Component {
   }
 
   /**
+   * Is resource type v4 password string
+   * @returns {boolean}
+   */
+  get isResourceTypeV4PasswordString() {
+    return this.props.resourceType?.isV4() && this.props.resourceType?.isPasswordString();
+  }
+
+  /**
    * Can add secret
    * @returns {boolean}
    */
@@ -188,7 +196,8 @@ class SelectResourceForm extends Component {
    * @returns {boolean}
    */
   get canAddSecretNote() {
-    return !this.isResourceHasNote && this.props.resourceTypes?.hasSomeNoteResourceTypes(this.props.resourceType?.version);
+    return !this.isResourceHasNote && !this.isResourceTypeV4PasswordString
+      && this.props.resourceTypes?.hasSomeNoteResourceTypes(this.props.resourceType?.version);
   }
 
   /**
