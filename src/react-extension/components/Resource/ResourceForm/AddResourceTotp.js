@@ -12,20 +12,20 @@
  * @since         5.0.0
  */
 
-import React, {Component} from "react";
 import PropTypes from "prop-types";
+import React, {Component} from "react";
 import {Trans, withTranslation} from "react-i18next";
-import Password from "../../../../shared/components/Password/Password";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
-import Tabs from "../../Common/Tab/Tabs";
-import Tab from "../../Common/Tab/Tab";
-import Select from "../../Common/Select/Select";
-import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
-import Totp from "../../../../shared/components/Totp/Totp";
 import CopySVG from "../../../../img/svg/copy.svg";
-import TimerSVG from "../../../../img/svg/timer.svg";
 import QrCodeSVG from "../../../../img/svg/qr_code.svg";
+import TimerSVG from "../../../../img/svg/timer.svg";
+import Password from "../../../../shared/components/Password/Password";
+import Totp from "../../../../shared/components/Totp/Totp";
+import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
+import Select from "../../Common/Select/Select";
+import Tab from "../../Common/Tab/Tab";
+import Tabs from "../../Common/Tab/Tabs";
 
 class AddResourceTotp extends Component {
   constructor(props) {
@@ -46,6 +46,7 @@ class AddResourceTotp extends Component {
    */
   bindCallbacks() {
     this.handleDisplayAdvancedSettingsClick = this.handleDisplayAdvancedSettingsClick.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   /**
@@ -69,6 +70,16 @@ class AddResourceTotp extends Component {
    */
   get translate() {
     return this.props.t;
+  }
+
+  /**
+   * Handle form input change.
+   * @params {ReactEvent} The react event.
+   */
+  handleInputChange(event) {
+    if (this.props.onChange) {
+      this.props.onChange(event);
+    }
   }
 
   /*
@@ -113,11 +124,11 @@ class AddResourceTotp extends Component {
               <div className="totp-fields">
                 <div className="input text">
                   <label htmlFor="resource-uri"><Trans>URI</Trans></label>
-                  <input id="resource-uri" name="uri" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")}/>
+                  <input id="resource-uri" name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange} />
                 </div>
                 <div className="input text">
                   <label htmlFor="resource-totp-key"><Trans>Key</Trans> (<Trans>secret</Trans>)</label>
-                  <Password id="resource-totp-key" name="secret_key" autoComplete="new-password" placeholder={this.translate("Key")} preview={true}/>
+                  <Password id="resource-totp-key" name="secret.totp.secret_key" autoComplete="new-password" placeholder={this.translate("Key")} preview={true} value={this.props.resource?.secret?.totp?.secret_key} onChange={this.handleInputChange}/>
                 </div>
               </div>
               <div className="additional-information">
@@ -133,20 +144,20 @@ class AddResourceTotp extends Component {
                     <div className="input text">
                       <label htmlFor="resource-totp-period"><Trans>TOTP expiry</Trans></label>
                       <div className="input-wrapper-inline">
-                        <input id="resource-totp-period" name="period" type="number" min="1" max="120"/>
+                        <input id="resource-totp-period" name="secret.totp.period" type="number" min="1" max="120" value={this.props.resource?.secret?.totp?.period} onChange={this.handleInputChange}/>
                         <span><Trans>seconds until the TOTP expires</Trans></span>
                       </div>
                     </div>
                     <div className="input text">
                       <label htmlFor="resource-totp-digits"><Trans>TOTP length</Trans></label>
                       <div className="input-wrapper-inline">
-                        <input id="resource-totp-digits" name="digits" type="number" min="6" max="8"/>
+                        <input id="resource-totp-digits" name="secret.totp.digits" type="number" min="6" max="8" value={this.props.resource?.secret?.totp?.digits} onChange={this.handleInputChange}/>
                         <span><Trans>digits</Trans></span>
                       </div>
                     </div>
                     <div className="select-wrapper input">
                       <label htmlFor="resource-totp-algorithm"><Trans>Algorithm</Trans></label>
-                      <Select id="resource-totp-algorithm" name="algorithm" items={this.supportedAlgorithms}/>
+                      <Select id="resource-totp-algorithm" name="secret.totp.algorithm" items={this.supportedAlgorithms} value={this.props.resource?.secret?.totp?.algorithm} onChange={this.handleInputChange}/>
                     </div>
                   </div>
                 }
@@ -179,6 +190,7 @@ class AddResourceTotp extends Component {
 
 AddResourceTotp.propTypes = {
   resource: PropTypes.object, // The resource to edit or create
+  onChange: PropTypes.func, //The resource setter
   t: PropTypes.func, // The translation function
 };
 

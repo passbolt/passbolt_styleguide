@@ -17,7 +17,7 @@ import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import {
-  resourceTypeV5DefaultDto,
+  resourceTypeV5DefaultDto, resourceTypeV5TotpDto,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
@@ -41,6 +41,18 @@ export function defaultProps(data = {}) {
     resourceType: new ResourceTypeEntity(resourceTypeV5DefaultDto()),
     onClose: jest.fn(),
   };
+
+  return Object.assign(defaultData, data);
+}
+
+/**
+ * Default totp props
+ * @returns {{resource: {id: string, name: string}}}
+ */
+export function defaultTotpProps(data = {}) {
+  const defaultData = defaultProps({
+    resourceType: new ResourceTypeEntity(resourceTypeV5TotpDto()),
+  });
 
   return Object.assign(defaultData, data);
 }

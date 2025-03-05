@@ -17,7 +17,7 @@
  */
 import {waitFor} from "@testing-library/react";
 import CreateResourcePage from "./CreateResourceV5.test.page";
-import {defaultProps} from "./CreateResourceV5.test.data";
+import {defaultProps, defaultTotpProps} from "./CreateResourceV5.test.data";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import {ResourceEditCreateFormEnumerationTypes} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 
@@ -221,6 +221,82 @@ describe("See the Create Resource", () => {
         await page.fillInput(page.description, "description");
         // expectations
         expect(page.description.value).toBe("description");
+      });
+    });
+    describe("should init totp form", () => {
+      it('As a signed-in user I should be able to add an URI', async() => {
+        expect.assertions(2);
+
+        const props = defaultTotpProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        await page.fillInput(page.uri, "https://passbolt.com");
+        // expectations
+        expect(page.uri.value).toBe("https://passbolt.com");
+      });
+
+      it('As a signed-in user I should be able to add a resource totp key', async() => {
+        expect.assertions(2);
+
+        const props = defaultTotpProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        await page.fillInput(page.resourceTotpKey, "key");
+        // expectations
+        expect(page.resourceTotpKey.value).toBe("key");
+      });
+
+      it('As a signed-in user I should be able to add a totp expiry', async() => {
+        expect.assertions(2);
+
+        const props = defaultTotpProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        await page.click(page.advancedSettings);
+        await page.fillInput(page.period, "60");
+
+        // expectations
+        expect(page.period.value).toBe("60");
+      });
+
+      it('As a signed-in user I should be able to add a totp length', async() => {
+        expect.assertions(2);
+
+        const props = defaultTotpProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        await page.click(page.advancedSettings);
+        await page.fillInput(page.digits, "8");
+
+        // expectations
+        expect(page.digits.value).toBe("8");
+      });
+      it('As a signed-in user I should be able to select an algorithm', async() => {
+        expect.assertions(2);
+
+        const props = defaultTotpProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        await page.click(page.advancedSettings);
+        await page.click(page.algorithm);
+        await page.click(page.firstItemOption);
+        // expectations
+        expect(page.algorithm.textContent).toBe("SHA256");
       });
     });
   });

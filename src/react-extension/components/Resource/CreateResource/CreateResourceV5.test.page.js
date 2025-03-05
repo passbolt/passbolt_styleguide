@@ -136,6 +136,53 @@ export default class CreateResourcePage {
   }
 
   /**
+   * Returns the resource totp key input element
+   */
+  get resourceTotpKey() {
+    return this._page.container.querySelector('#resource-totp-key');
+  }
+
+  /**
+   * Return the advanced settings button element
+   * @return {Element}
+   */
+  get advancedSettings() {
+    return this._page.container.querySelector('.additional-information button');
+  }
+
+  /**
+   * Return the period input element
+   * @return {Element}
+   */
+  get period() {
+    return this._page.container.querySelector('#resource-totp-period');
+  }
+
+  /**
+   * Return the digits input element
+   * @return {Element}
+   */
+  get digits() {
+    return this._page.container.querySelector('#resource-totp-digits');
+  }
+
+  /**
+   * Return the algorithm input element
+   * @return {Element}
+   */
+  get algorithm() {
+    return this._page.container.querySelector('#resource-totp-algorithm .selected-value .value');
+  }
+
+  /**
+   * Return the algorithm input element
+   * @return {Element}
+   */
+  get firstItemOption() {
+    return this._page.container.querySelector('#resource-totp-algorithm .select-items .option');
+  }
+
+  /**
    * Returns the save button element
    */
   get saveButton() {
