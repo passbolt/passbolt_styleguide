@@ -24,18 +24,16 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import SelectResourceForm from "../ResourceForm/SelectResourceForm";
 import OrchestrateResourceForm from "../ResourceForm/OrchestrateResourceForm";
-import {SECRET_DATA_OBJECT_TYPE} from "../../../../shared/models/entity/secretData/secretDataEntity";
 import ResourceFormEntity from "../../../../shared/models/entity/resource/resourceFormEntity";
 import AddResourceName from "../ResourceForm/AddResourceName";
 import {
   ResourceEditCreateFormEnumerationTypes
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
-import TotpEntity from "../../../../shared/models/entity/totp/totpEntity";
 
 class CreateResource extends Component {
   constructor(props) {
     super(props);
-    this.resourceFormEntity = this.createResourceFromProps;
+    this.resourceFormEntity = new ResourceFormEntity({resource_type_id: this.props.resourceType.id}, {validate: false, resourceTypes: this.props.resourceTypes});
     this.state = this.defaultState;
     this.bindCallbacks();
   }
@@ -60,25 +58,6 @@ class CreateResource extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onSelectForm = this.onSelectForm.bind(this);
     this.onAddSecret = this.onAddSecret.bind(this);
-  }
-
-  /**
-   * Initialize the resource form entity and return the DTO
-   * @returns {*}
-   */
-  get createResourceFromProps() {
-    // @Todo update this part to have the resource according to the props and secret initialisation should be in the entity
-    const secret = {};
-    if (this.props.resourceType.hasPassword()) {
-      secret.password = "";
-    } else if (this.props.resourceType.hasTotp()) {
-      secret.totp = TotpEntity.createFromDefault({}, {validate: false});
-    }
-    if (this.props.resourceType.isV5()) {
-      secret.object_type = SECRET_DATA_OBJECT_TYPE;
-    }
-
-    return new ResourceFormEntity({resource_type_id: this.props.resourceType.id, secret}, {validate: false, resourceTypes: this.props.resourceTypes});
   }
 
   /**

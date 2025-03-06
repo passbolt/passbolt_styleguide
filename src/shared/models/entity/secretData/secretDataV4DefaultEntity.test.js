@@ -54,4 +54,23 @@ describe("SecretDataV4DefaultEntity", () => {
       expect(entity.description).toStrictEqual(dto.description);
     });
   });
+
+  describe("::createFromDefault", () => {
+    it("create with no data provided", () => {
+      expect.assertions(2);
+      const entity = SecretDataV4DefaultEntity.createFromDefault({});
+
+      expect(entity.password).toStrictEqual("");
+      expect(entity.description).toBeUndefined();
+    });
+
+    it("create with data provided", () => {
+      expect.assertions(2);
+      const dto = defaultSecretDataV4DefaultData();
+      const entity = SecretDataV4DefaultEntity.createFromDefault(dto);
+
+      expect(entity.password).toStrictEqual(dto.password);
+      expect(entity.description).toStrictEqual(dto.description);
+    });
+  });
 });

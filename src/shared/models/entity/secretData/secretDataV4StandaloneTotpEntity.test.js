@@ -59,4 +59,26 @@ describe("SecretDataV4StandaloneEntity", () => {
       expect(entity.totp.toDto()).toStrictEqual(dto.totp);
     });
   });
+
+  describe("::createFromDefault", () => {
+    it("create with no data provided", () => {
+      expect.assertions(1);
+      const dto = {
+        totp: defaultTotpDto({secret_key: ""})
+      };
+      const entity = SecretDataV4StandaloneTotpEntity.createFromDefault({}, {validate: false});
+
+      expect(entity.totp.toDto()).toStrictEqual(dto.totp);
+    });
+
+    it("create with data provided", () => {
+      expect.assertions(1);
+      const dto = {
+        totp: defaultTotpDto()
+      };
+      const entity = SecretDataV4StandaloneTotpEntity.createFromDefault(dto);
+
+      expect(entity.totp.toDto()).toStrictEqual(dto.totp);
+    });
+  });
 });

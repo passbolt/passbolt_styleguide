@@ -46,6 +46,20 @@ class SecretDataV4DefaultEntity extends secretDataEntity {
     };
   }
 
+  /**
+   * Return the default secret data v4 default.
+   * @param {object} data the data to override the default with
+   * @param {object} [options] Options.
+   * @returns {SecretDataV4DefaultEntity}
+   */
+  static createFromDefault(data = {}, options) {
+    const defaultData = {
+      password: "",
+    };
+
+    return new SecretDataV4DefaultEntity({...defaultData, ...data}, options);
+  }
+
   /*
    * ==================================================
    * Dynamic properties getters

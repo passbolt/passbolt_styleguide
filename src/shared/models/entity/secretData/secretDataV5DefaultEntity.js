@@ -12,7 +12,7 @@
  * @since         5.0.0
  */
 
-import SecretDataEntity from "./secretDataEntity";
+import SecretDataEntity, {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
 
 class SecretDataV5DefaultEntity extends SecretDataEntity {
   /**
@@ -40,6 +40,21 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
         },
       }
     };
+  }
+
+  /**
+   * Return the default secret data v5 default.
+   * @param {object} data the data to override the default with
+   * @param {object} [options] Options.
+   * @returns {SecretDataV5DefaultEntity}
+   */
+  static createFromDefault(data = {}, options) {
+    const defaultData = {
+      object_type: SECRET_DATA_OBJECT_TYPE,
+      password: "",
+    };
+
+    return new SecretDataV5DefaultEntity({...defaultData, ...data}, options);
   }
 
   /*

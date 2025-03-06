@@ -56,6 +56,21 @@ class SecretDataV4DefaultTotpEntity extends SecretDataV4DefaultEntity {
   }
 
   /**
+   * Return the default secret data v4 default totp.
+   * @param {object} data the data to override the default with
+   * @param {object} [options] Options.
+   * @returns {SecretDataV4DefaultTotpEntity}
+   */
+  static createFromDefault(data = {}, options) {
+    const defaultData = {
+      password: "",
+      totp: TotpEntity.createFromDefault({}, {validate: false}).toDto()
+    };
+
+    return new SecretDataV4DefaultTotpEntity({...defaultData, ...data}, options);
+  }
+
+  /**
    * Get the DTO of properties managed by the form.
    * @returns {object}
    */

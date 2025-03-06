@@ -110,15 +110,12 @@ class ResourceFormEntity extends EntityV2 {
   createAssociations(options = {}) {
     if (this._props.resource_type_id && options.resourceTypes instanceof ResourceTypesCollection) {
       this.resourceTypes = options.resourceTypes;
-      // TODO create secret from default
-      if (this._props.secret) {
-        const secretEntityClass = this.getSecretEntityClassByResourceType(this._props.resource_type_id);
-        if (!secretEntityClass) {
-          throw new Error(`No secret association class has been found in resource types.`);
-        }
-        this._secret = new secretEntityClass(this._props.secret, options);
-        delete this._props.secret;
+      const secretEntityClass = this.getSecretEntityClassByResourceType(this._props.resource_type_id);
+      if (!secretEntityClass) {
+        throw new Error(`No secret association class has been found in resource types.`);
       }
+      this._secret = secretEntityClass.createFromDefault(this._props.secret, options);
+      delete this._props.secret;
     }
     super.createAssociations(options);
   }
