@@ -211,6 +211,55 @@ class MetadataTypesSettingsEntity extends EntityV2 {
   }
 
   /**
+   * Is folder v5 creation allowed
+   * @returns {boolean}
+   */
+  get allowCreationOfV5Folders() {
+    return this._props.allow_creation_of_v5_folders;
+  }
+
+  /**
+   * Is folder v4 creation allowed
+   * @returns {boolean}
+   */
+  get allowCreationOfV4Folders() {
+    return this._props.allow_creation_of_v4_folders;
+  }
+
+  /**
+   * Is tag v5 creation allowed
+   * @returns {boolean}
+   */
+  get allowCreationOfV5Tags() {
+    return this._props.allow_creation_of_v5_tags;
+  }
+
+  /**
+   * Is tag v4 creation allowed
+   * @returns {boolean}
+   */
+  get allowCreationOfV4Tags() {
+    return this._props.allow_creation_of_v4_tags;
+  }
+
+  /**
+   * Is comment v5 creation allowed
+   * @returns {boolean}
+   */
+  get allowCreationOfV5Comments() {
+    return this._props.allow_creation_of_v5_comments;
+  }
+
+  /**
+   * Is comment v4 creation allowed
+   * @returns {boolean}
+   */
+  get allowCreationOfV4Comments() {
+    return this._props.allow_creation_of_v4_comments;
+  }
+
+
+  /**
    * Is default resource types version 5
    * @returns {boolean}
    */

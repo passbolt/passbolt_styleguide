@@ -26,6 +26,7 @@ import {
 } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import {waitFor} from "@testing-library/react";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
 
 describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
   beforeEach(() => {
@@ -145,6 +146,24 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect(page.errorMessagesCount).toBe(0);
       expect(page.allowV5V4DowngradeWarning).not.toBeNull();
       expect(page.allowV5V4DowngradeWarning.textContent).toContain("Legacy cleartext metadata should be enabled to allow users to downgrade their resources.");
+    });
+
+    it("displays warning when there are no active metadatakeys", async() => {
+      expect.assertions(4);
+      const props = defaultProps({
+        metadataKeysServiceWorkerService: {
+          findAll: () => new MetadataKeysCollection([]),
+        },
+        metadataSettingsServiceWorkerService: {
+          findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
+        },
+      });
+      const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
+      await waitForTrue(() => page.exists());
+      expect(page.warningMessagesCount).toBe(1);
+      expect(page.errorMessagesCount).toBe(0);
+      expect(page.allowCreationOfV5ResourcesWarning).not.toBeNull();
+      expect(page.allowCreationOfV5ResourcesWarning.textContent).toContain("A metadata key should be enabled to allow users to create resources of this type.");
     });
   });
 

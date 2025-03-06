@@ -78,6 +78,10 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user want to navigate to a new url.
   onGoToAdministrationRbacsRequested: () => {
   }, // Whenever the user wants to navigate to the administration workspace rbacs section.
+  onGoToAdministrationMigrateMetadataRequested: () => {
+  }, // Whenever the user wants to navigate to the administration workspace migrate metadata section.
+  onGoToAdministrationAllowContentTypesRequested: () => {
+  }, // Whenever the user wants to navigate to the administration workspace allow content types section.
 });
 
 /**
@@ -118,6 +122,8 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationHealthcheckRequested: this.onGoToAdministrationHealthcheckRequested.bind(this),
       onGoToAdministrationContentTypesEncryptedMetadataRequested: this.onGoToAdministrationContentTypesEncryptedMetadataRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types encrypted metadata settings.
       onGoToAdministrationContentTypesMetadataKeyRequested: this.onGoToAdministrationContentTypesMetadataKeyRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types metadata key settings.
+      onGoToAdministrationMigrateMetadataRequested: this.onGoToAdministrationMigrateMetadataRequested.bind(this), // Whenever the user wants to navigate to the administration workspace content types metadata key settings.
+      onGoToAdministrationAllowContentTypesRequested: this.onGoToAdministrationAllowContentTypesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace allow content types.
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -325,6 +331,22 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationContentTypesMetadataKeyRequested() {
     await this.goTo("browser-extension", "/app/administration/content-types/metadata-key");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace migrate metadata.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationMigrateMetadataRequested() {
+    await this.goTo("browser-extension", "/app/administration/migrate-metadata");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace allow content types.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationAllowContentTypesRequested() {
+    await this.goTo("browser-extension", "/app/administration/allow-content-types");
   }
 
   /**

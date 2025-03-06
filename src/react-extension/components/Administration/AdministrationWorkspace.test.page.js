@@ -138,5 +138,33 @@ export default class AdministrationWorkspacePage {
   get isPasswordExpirySelected() {
     return Boolean(this._page.container.querySelector('.password-expiry-details'));
   }
+
+  /**
+   * Returns true if the password expiry area is visible
+   */
+  get isContentTypesEncryptedMetadataSelected() {
+    return Boolean(this._page.container.querySelector('.content-types-encrypted-metadata'));
+  }
+
+  /**
+   * Returns true if the password expiry area is visible
+   */
+  get isContentTypesMetadataSelected() {
+    return Boolean(this._page.container.querySelector('.content-types-metadata-key'));
+  }
+
+  /**
+   * Returns true if the password expiry area is visible
+   */
+  get isMigrateMetadataSelected() {
+    return Boolean(this._page.container.querySelector('.migrate-metadata'));
+  }
+
+  /**
+   * Returns true if the password expiry area is visible
+   */
+  get isAllowedContentTypesSelected() {
+    return Boolean(this._page.container.querySelector('.allow-content-types'));
+  }
 }
 

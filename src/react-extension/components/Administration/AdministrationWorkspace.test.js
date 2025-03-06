@@ -40,6 +40,10 @@ jest.mock("./ManageSsoSettings/ManageSsoSettings", () => () => <span className="
 jest.mock("./DisplayRbacAdministration/DisplayRbacAdministration", () => () => <span className="rbacs-settings-details"></span>);
 jest.mock("./DisplayAdministrationUserPassphrasePolicies/DisplayAdministrationUserPassphrasePolicies", () => () => <span className="user-passphrase-policies-details"></span>);
 jest.mock("./DisplayAdministrationPasswordExpiry/DisplayAdministrationPasswordExpiry", () => () => <span className="password-expiry-details"></span>);
+jest.mock("./DisplayContentTypesEncryptedMetadataAdministration/DisplayContentTypesEncryptedMetadataAdministration", () => () => <span className="content-types-encrypted-metadata"></span>);
+jest.mock("./DisplayContentTypesMetadataKeyAdministration/DisplayContentTypesMetadataKeyAdministration", () => () => <span className="content-types-metadata-key"></span>);
+jest.mock("./DisplayMigrateMetadataAdministration/DisplayMigrateMetadataAdministration", () => () => <span className="migrate-metadata"></span>);
+jest.mock("./DisplayContentTypesAllowedContentTypesAdministration/DisplayContentTypesAllowedContentTypesAdministration", () => () => <span className="allow-content-types"></span>);
 
 beforeEach(() => {
   jest.resetModules();
@@ -60,6 +64,10 @@ const scenarios = [
   {selectedMenu: AdministrationWorkspaceMenuTypes.RBAC, field: 'isRbacSelected'},
   {selectedMenu: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES, field: 'isUserPasphrasePoliciesSelected'},
   {selectedMenu: AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY, field: 'isPasswordExpirySelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA, field: "isContentTypesEncryptedMetadataSelected"},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY, field: "isContentTypesMetadataSelected"},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA, field: "isMigrateMetadataSelected"},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES, field: "isAllowedContentTypesSelected"},
 ];
 
 each(

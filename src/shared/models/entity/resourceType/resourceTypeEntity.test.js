@@ -76,6 +76,11 @@ describe("ResourceTypeEntity", () => {
       assertEntityProperty.notRequired(ResourceTypeEntity, "description");
     });
 
+    it("validates resources_count property", () => {
+      assertEntityProperty.integer(ResourceTypeEntity, "resources_count");
+      assertEntityProperty.notRequired(ResourceTypeEntity, "resources_count");
+    });
+
     it("validates created property", () => {
       assertEntityProperty.string(ResourceTypeEntity, "created");
       assertEntityProperty.dateTime(ResourceTypeEntity, "created");
@@ -86,6 +91,13 @@ describe("ResourceTypeEntity", () => {
       assertEntityProperty.string(ResourceTypeEntity, "modified");
       assertEntityProperty.dateTime(ResourceTypeEntity, "modified");
       assertEntityProperty.notRequired(ResourceTypeEntity, "modified");
+    });
+
+    it("validates deleted property", () => {
+      assertEntityProperty.string(ResourceTypeEntity, "deleted");
+      assertEntityProperty.dateTime(ResourceTypeEntity, "deleted");
+      assertEntityProperty.notRequired(ResourceTypeEntity, "deleted");
+      assertEntityProperty.nullable(ResourceTypeEntity, "deleted");
     });
   });
 

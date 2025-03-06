@@ -78,7 +78,7 @@ class HandleAccountRecoveryUserSettingsRoute extends React.Component {
 }
 
 HandleAccountRecoveryUserSettingsRoute.propTypes = {
-  dialogContext: PropTypes.any, // The application context
+  dialogContext: PropTypes.object, // The dialog context
   accountRecoveryContext: PropTypes.object, // The user account recovery context
   history: PropTypes.object, // The router history helper
   actionFeedbackContext: PropTypes.any, // The action feedback context

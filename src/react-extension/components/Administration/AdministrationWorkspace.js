@@ -49,6 +49,8 @@ import DisplayContentTypesEncryptedMetadataAdministration
   from "./DisplayContentTypesEncryptedMetadataAdministration/DisplayContentTypesEncryptedMetadataAdministration";
 import DisplayContentTypesMetadataKeyAdministration
   from "./DisplayContentTypesMetadataKeyAdministration/DisplayContentTypesMetadataKeyAdministration";
+import DisplayMigrateMetadataAdministration from "./DisplayMigrateMetadataAdministration/DisplayMigrateMetadataAdministration";
+import DisplayContentTypesAllowedContentTypesAdministration from "./DisplayContentTypesAllowedContentTypesAdministration/DisplayContentTypesAllowedContentTypesAdministration";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -180,6 +182,22 @@ class AdministrationWorkspace extends Component {
   }
 
   /**
+   * If content types metadata key is selected
+   * @returns {boolean}
+   */
+  isMigrateMetadataSelected() {
+    return AdministrationWorkspaceMenuTypes.MIGRATE_METADATA === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If allow content types is selected
+   * @returns {boolean}
+   */
+  isAllowContentTypesSelected() {
+    return AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
    * If the page access is denied
    * @returns {boolean}
    */
@@ -286,6 +304,12 @@ class AdministrationWorkspace extends Component {
                   }
                   {this.isContentTypesMetadataKeySelected() &&
                     <DisplayContentTypesMetadataKeyAdministration/>
+                  }
+                  {this.isMigrateMetadataSelected() &&
+                    <DisplayMigrateMetadataAdministration/>
+                  }
+                  {this.isAllowContentTypesSelected() &&
+                    <DisplayContentTypesAllowedContentTypesAdministration/>
                   }
                 </div>
               </div>

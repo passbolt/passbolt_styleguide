@@ -552,6 +552,7 @@ describe("See the Edit Resource", () => {
           folder_parent_id: null,
           expired: null,
           metadata: {
+            object_type: "PASSBOLT_RESOURCE_METADATA",
             resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
             name: resourceMeta.name,
             uris: resource.metadata.uris,
@@ -599,6 +600,7 @@ describe("See the Edit Resource", () => {
           folder_parent_id: null,
           expired: null,
           metadata: {
+            object_type: "PASSBOLT_RESOURCE_METADATA",
             resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
             name: resourceMeta.name,
             uris: resource.metadata.uris,
@@ -644,6 +646,7 @@ describe("See the Edit Resource", () => {
           folder_parent_id: null,
           expired: null,
           metadata: {
+            object_type: "PASSBOLT_RESOURCE_METADATA",
             name: resourceMeta.name,
             uris: resource.metadata.uris,
             username: resource.metadata.username,
@@ -687,6 +690,7 @@ describe("See the Edit Resource", () => {
           folder_parent_id: null,
           expired: null,
           metadata: {
+            object_type: "PASSBOLT_RESOURCE_METADATA",
             name: resourceMeta.name,
             uris: resource.metadata.uris,
             username: resource.metadata.username,

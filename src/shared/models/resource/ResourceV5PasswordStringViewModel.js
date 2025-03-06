@@ -170,6 +170,7 @@ class ResourceV5PasswordStringViewModel extends ResourceViewModel {
       resource_type_id: this.resource_type_id,
       folder_parent_id: this.folder_parent_id,
       metadata: {
+        object_type: "PASSBOLT_RESOURCE_METADATA",
         resource_type_id: this.resource_type_id,
         name: this.name,
         uris: this.uri ? [this.uri] : [],
