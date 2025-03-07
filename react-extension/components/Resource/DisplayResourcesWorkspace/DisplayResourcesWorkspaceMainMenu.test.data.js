@@ -19,7 +19,6 @@ import {
   resourceWorkspaceContextWithSelectedFolderIOwn
 } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {
   resourceTypesCollectionDto
@@ -40,7 +39,6 @@ export function defaultProps(data = {}) {
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     dialogContext: defaultDialogContext(),
-    workflowContext: defaultWorkflowContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     ...data
@@ -58,7 +56,6 @@ export function defaultPropsFolderOwned(data = {}) {
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: resourceWorkspaceContextWithSelectedFolderIOwn(),
     dialogContext: defaultDialogContext(),
-    workflowContext: defaultWorkflowContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     ...data
@@ -76,7 +73,6 @@ export function defaultPropsFolderNotOwned(data = {}) {
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: resourceWorkspaceContextWithSelectedFolderICanRead(),
     dialogContext: defaultDialogContext(),
-    workflowContext: defaultWorkflowContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     ...data

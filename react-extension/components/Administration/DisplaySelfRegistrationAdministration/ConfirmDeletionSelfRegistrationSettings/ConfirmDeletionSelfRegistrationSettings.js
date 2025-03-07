@@ -69,12 +69,14 @@ class ConfirmDeletionSelfRegistrationSettings extends Component {
         className="delete-self-registration-settings-dialog">
         <form onSubmit={this.handleSubmit}>
           <div className="form-content">
-            <p>
-              <Trans>Are you sure to disable the self registration for the organization ?</Trans>
-            </p>
-            <p>
-              <Trans>Users will not be able to self register anymore.</Trans> <Trans>Only administrators would be able to invite users to register. </Trans>
-            </p>
+            <div>
+              <p>
+                <Trans>Are you sure to disable the self registration for the organization ?</Trans>
+              </p>
+              <p>
+                <Trans>Users will not be able to self register anymore.</Trans> <Trans>Only administrators would be able to invite users to register. </Trans>
+              </p>
+            </div>
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton

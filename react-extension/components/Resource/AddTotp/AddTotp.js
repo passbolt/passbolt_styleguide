@@ -22,6 +22,8 @@ import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelBut
 import {Trans, withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
 import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 class AddTotp extends Component {
   /**
@@ -336,53 +338,52 @@ class AddTotp extends Component {
                 <div className="key warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.warnings.secret_key}</div>
               }
             </div>
-          </div>
-          <div className="form-content no-padding">
-            <div className={`accordion accordion-section ${this.state.openAdvancedSettings ? "" : "closed"}`}>
+            <div className="accordion accordion-section no-padding-bottom no-margin-divider">
               <div className="accordion-header">
                 <h4>
                   <button className="link no-border" type="button" onClick={this.handleAdvancedSettingClickEvent}>
-                    <Trans>Advanced settings</Trans>
-                    {this.state.openAdvancedSettings &&
-                      <Icon name="caret-down"/>
-                    }
-                    {!this.state.openAdvancedSettings &&
-                      <Icon name="caret-right"/>
+                    <span><Trans>Advanced settings</Trans></span>
+                    {this.state.openAdvancedSettings
+                      ? <CaretDownSVG />
+                      : <CaretRightSVG />
                     }
                   </button>
                 </h4>
               </div>
-              <div className="accordion-content">
-                <div className={`input text required ${this.isFieldError("period") ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-                  <label htmlFor="add-totp-form-period"><Trans>TOTP expiry</Trans></label>
-                  <div className="input-wrapper-inline">
-                    <input id="add-totp-form-period" name="period" type="number" value={this.state.totp.period} onChange={this.handleInputChange}
-                      disabled={this.state.processing} ref={this.periodInputRef} onKeyUp={this.handleInputKeyUp} className="required" min="1" max="120"/>
-                    <span><Trans>seconds until the TOTP expires</Trans></span>
+              {this.state.openAdvancedSettings &&
+                <div className="accordion-content">
+                  <div className={`input text required ${this.isFieldError("period") ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
+                    <label htmlFor="add-totp-form-period"><Trans>TOTP expiry</Trans></label>
+                    <div className="input-wrapper-inline">
+                      <input id="add-totp-form-period" name="period" type="number" value={this.state.totp.period} onChange={this.handleInputChange}
+                        disabled={this.state.processing} ref={this.periodInputRef} onKeyUp={this.handleInputKeyUp} className="required" min="1" max="120"/>
+                      <span><Trans>seconds until the TOTP expires</Trans></span>
+                    </div>
+                    {this.isFieldError("period") &&
+                      <div className="period error-message">{this.periodErrorMessage}</div>
+                    }
                   </div>
-                  {this.isFieldError("period") &&
-                    <div className="period error-message">{this.periodErrorMessage}</div>
-                  }
-                </div>
-                <div className={`input text required ${this.isFieldError("digits") ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-                  <label htmlFor="add-totp-form-digits"><Trans>TOTP length</Trans></label>
-                  <div className="input-wrapper-inline">
-                    <input id="add-totp-form-digits" name="digits" type="number" value={this.state.totp.digits} onChange={this.handleInputChange}
-                      disabled={this.state.processing} className="required" min="6" max="8" onKeyUp={this.handleInputKeyUp} ref={this.digitsInputRef}/>
-                    <span><Trans>digits</Trans></span>
+                  <div className={`input text required ${this.isFieldError("digits") ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
+                    <label htmlFor="add-totp-form-digits"><Trans>TOTP length</Trans></label>
+                    <div className="input-wrapper-inline">
+                      <input id="add-totp-form-digits" name="digits" type="number" value={this.state.totp.digits} onChange={this.handleInputChange}
+                        disabled={this.state.processing} className="required" min="6" max="8" onKeyUp={this.handleInputKeyUp} ref={this.digitsInputRef}/>
+                      <span><Trans>digits</Trans></span>
+                    </div>
+                    {this.isFieldError("digits") &&
+                      <div className="digits error-message">{this.digitsErrorMessage}</div>
+                    }
                   </div>
-                  {this.isFieldError("digits") &&
-                    <div className="digits error-message">{this.digitsErrorMessage}</div>
-                  }
+                  <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
+                    <label htmlFor="add-totp-form-algorithm"><Trans>Algorithm</Trans></label>
+                    <Select id="add-totp-form-algorithm" name="algorithm" value={this.state.totp.algorithm}
+                      items={this.supportedAlgorithms} disabled={this.state.processing} onChange={this.handleInputChange}/>
+                  </div>
                 </div>
-                <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
-                  <label htmlFor="add-totp-form-algorithm"><Trans>Algorithm</Trans></label>
-                  <Select id="add-totp-form-algorithm" name="algorithm" value={this.state.totp.algorithm}
-                    items={this.supportedAlgorithms} disabled={this.state.processing} onChange={this.handleInputChange}/>
-                </div>
-              </div>
+              }
             </div>
           </div>
+
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
             <FormSubmitButton value={this.translate("Apply")} disabled={this.state.processing} processing={this.state.processing}/>

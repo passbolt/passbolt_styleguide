@@ -2,60 +2,63 @@
  * Footer
  */
 .footer {
-  margin-top: 0;
-  position: fixed;
-  bottom: 0;
-  text-align: right;
-  width: 100%;
-  background: @footer-background;
-  border-top: 1px solid @default-border;
+  grid-area: footer;
+  display: flex;
+  height: 3.6rem;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
   box-sizing: border-box;
-  z-index: 2;
+  border-top: .1rem solid var(--Workspace-Dividers);
+  min-width: 0;
 
   .footer-links {
     display: flex;
-    align-items: center;
+    padding: 0 1.6rem;
     justify-content: flex-end;
-    column-gap: 2.4rem;
-    padding: .8rem 0;
-    width: 100%;
+    align-items: center;
+    gap: 1.6rem;
+    flex: 1 0 0;
+    min-width: 0;
+
     li {
       display: flex;
-      line-height: 1.6rem;
-
-      &:last-child {
-        margin-right: 3.2rem;
-      }
 
       &.error-message a {
-        background-color:@footer-background;
-        color: @text-error-color;
+        color: var(--Field-Error);
       }
 
       a {
+        display: flex;
         font-size: 1.2rem; /* 12px */
         line-height: 1.6rem; /* 16px */
+        border: 0;
 
-        .svg-icon svg {
-          width: 1.4rem;
-          height: 1.2rem;
+        &:hover {
+          color: var(--Palette-Contrast-1);
+        }
+
+        &::after {
+          content: none;
+        }
+
+        svg {
+          width: 1.6rem;
+          height: 1.6rem;
         }
       }
-    }
-  }
 
-  // Github stars
-  .footer-links {
-    li {
-      .github-star {
-        display: inline;
-        position: absolute;
-        margin-left: -8em;
-        margin-top: -1px;
+      // Fix the height to not have scrolling with tooltip
+      .tooltip {
+        .tooltip-text {
+          display: none;
+        }
+        &:hover {
+          .tooltip-text {
+            display: flex;
+          }
+        }
       }
-    }
-    a:not(.gh-btn):not(.gh-count) {
-      border: 0;
     }
   }
 }

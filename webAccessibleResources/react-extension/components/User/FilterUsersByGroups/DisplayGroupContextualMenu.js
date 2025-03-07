@@ -22,6 +22,8 @@ import DeleteUserGroup from "../../UserGroup/DeleteUserGroup/DeleteUserGroup";
 import EditUserGroup from "../../UserGroup/EditUserGroup/EditUserGroup";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
+import EditSVG from "../../../../img/svg/edit.svg";
+import DeleteSVG from "../../../../img/svg/delete.svg";
 
 class DisplayGroupContextualMenu extends React.Component {
   /**
@@ -149,7 +151,8 @@ class DisplayGroupContextualMenu extends React.Component {
                   className="link no-border"
                   id="edit-group"
                   onClick={this.handleEditGroup}>
-                  <span><Trans>Edit group</Trans></span>
+                  <EditSVG />
+                  <span><Trans>Edit</Trans></span>
                 </button>
               </div>
             </div>
@@ -165,7 +168,8 @@ class DisplayGroupContextualMenu extends React.Component {
                     className="link no-border"
                     id="delete-group"
                     onClick={this.handleDeleteClickEvent}>
-                    <span><Trans>Delete Group</Trans></span>
+                    <DeleteSVG />
+                    <span><Trans>Delete</Trans></span>
                   </button>
                 </div>
               </div>

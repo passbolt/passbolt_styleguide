@@ -1,151 +1,209 @@
 .radiolist, .radiolist-alt {
-    margin-bottom: 1.2rem;
+  .input.radio {
+    display: flex;
+    align-items: center;
 
-    & > label {
-      margin-bottom: 1.2rem;
-    }
+    input[type=radio] {
+      -webkit-appearance: none;
+      appearance: none;
+      display: grid;
+      place-content: center;
+      cursor: pointer;
+      width: 1.6rem;
+      height: 1.6rem;
+      background: var(--Checkbox-Checkbox-background);
+      border-radius: 100%;
+      border: none;
+      box-shadow: inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
+      box-sizing: border-box;
+      margin: 0;
 
-    .input.radio {
-      display: flex;
-      align-items: center;
-      margin-right: 1.6rem;
-
-      input[type=radio] {
-        -webkit-appearance: none;
-        appearance: none;
-        display: grid;
-        place-content: center;
-        cursor: pointer;
-        width: 1.4rem;
-        height: 1.4rem;
-        background: @input-radio-background;
-        border: 1px solid @input-radio-border;
+      // Radio dot
+      &:before {
+        content: "";
+        width: 1.2rem;
+        height: 1.2rem;
         border-radius: 1rem;
-        box-sizing: border-box;
-        margin: 0;
+        background: var(--Palette-Contrast-1);
+        transform: scale(0);
+        transition: 120ms transform ease-in-out;
+      }
+
+      // Dot animation
+      &:checked {
+        &:before {
+          transform: scale(1);
+          box-shadow: none;
+        }
+
+        &:hover, &:active {
+          box-shadow: inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
+
+          &:before {
+            box-shadow: none;
+          }
+        }
+
+        cursor: default;
+        box-shadow: inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
 
         & + label {
-          flex: 1;
-          font-weight: normal;
-          display: inline-block;
-          cursor: pointer;
-          font-size: 1.5rem;
-          line-height: 2rem;
-          margin: 0 0 0 1.2rem;
-          .ellipsis();
+          cursor: default;
         }
+      }
 
-        // Radio hover
-        &:hover {
-          box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-radio-border;
-          border: none;
-          background: @input-hover-background;
-        }
+      // Radio hover
+      &:hover {
+        box-shadow:
+          inset .1rem .1rem 0 var(--States-Hover-Highlight),
+          .1rem .1rem 0 var(--States-Hover-Shadow),
+          inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
 
         // Radio dot hover
-        &:hover:before {
-          box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black);
-          border: none;
+        &:before {
+          box-shadow:
+            inset .1rem .1rem 0 var(--States-Hover-Highlight),
+            .1rem .1rem 0 var(--States-Hover-Shadow);
         }
+      }
 
-        // Radio focus-visible
-        &:focus-visible {
-          box-shadow: 0 0 .4rem @shadow-focus-color;
-          border: 1px solid @input-radio-focus-border;
-          outline: @outline-default-border;
+      // Radio focus-visible
+      &:focus-visible {
+        box-shadow:
+          0 0 .4rem var(--States-Focus),
+          inset 0 0 0 .1rem var(--States-Focus);
+        border: none;
+        outline: inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
 
-          + label {
-            background: @input-focus-background;
-            color: @input-focus-text-color;
-          }
+        &+label {
+          color: var(--Text-and-icons-Main-text);
         }
+      }
 
-        // Radio pressed
-        &:active {
-          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-radio-border;
-          border: none;
-
-          + label {
-            background: @label-active-background;
-            color: @label-active-text-color;
-          }
-        }
+      // Radio pressed
+      &:active {
+        box-shadow:
+          inset -.1rem -.1rem 0 var(--States-Active-Highlight),
+          inset .1rem .1rem 0 var(--States-Active-Shadow),
+          inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
+        border: none;
 
         // Radio dot pressed
-        &:active:before {
-          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
+        &:before {
+          box-shadow:
+            inset -.1rem -.1rem 0 var(--States-Active-Highlight),
+            inset .1rem .1rem 0 var(--States-Active-Shadow);
           border: none;
         }
 
-        // Disabled state label.
-        &:disabled + label {
+        &+label {
+          color: var(--Text-and-icons-Main-text);
+        }
+      }
+
+      // Disabled radio.
+      &:disabled {
+        opacity: .5;
+        cursor: auto;
+        background: var(--Checkbox-Checkbox-background);
+        border: none;
+        box-shadow: inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
+
+        &:before {
+          box-shadow: none;
+          background: var(--Checkbox-Checkbox-border);
+        }
+
+        & + label {
           opacity: .5;
           cursor: auto;
         }
+      }
 
-        // Disabled radio.
-        &:disabled {
-          cursor: auto;
-          background: @input-radio-disabled-background;
-          border: 1px solid @input-radio-disabled-border;
-          box-shadow: none;
-          outline: 0;
-
-          &:before{
-            box-shadow: none;
-            background: @input-radio-dot-disabled-background;
-          }
-        }
-
-        // Radio dot
-        &:before {
-          content: "";
-          width: .8rem;
-          height: .8rem;
-          border-radius: 1rem;
-          background: @input-radio-dot-background;
-          transform: scale(0);
-          transition: 120ms transform ease-in-out;
-        }
-
-        // Dot animation
-        &:checked:before {
-          transform: scale(1);
-        }
+      & + label {
+        flex: 1;
+        font-weight: 400;
+        margin: 0 0 0 1.2rem;
+        display: inline-block;
+        cursor: pointer;
+        line-height: 2rem;
+        .ellipsis();
       }
     }
+  }
 }
 
+/** Premimum Radio button */
 .radiolist-alt {
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
 
   .input.radio {
-    border: 1px solid @input-radio-list-border;
-    border-radius: 3px;
-    background-color: @input-radio-list-background;
-    padding: 1.6rem;
-    margin-top: 1.6rem;
+    ._field-borders(var(--Action-button-Action-button-border));
+    position: relative;
+    border-radius: var(--Button-border-radius);
+    background-color: var(--Workspace-Panels-background);
     margin-right: 0;
 
     &.checked {
-      border: 1px solid @input-radio-list-focus-border;
-      &:hover {
-        border:1px solid @input-radio-list-focus-border;
+      box-shadow:
+        inset -.1rem -.1rem 0 0 var(--States-Active-Highlight),
+        inset .1rem .1rem 0 0 var(--States-Active-Shadow);
+      background: var(--Action-button-Active-action-button-background);
+
+      input[type="radio"]:hover, input[type="radio"]:active {
+        box-shadow: inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
+
+        &:before {
+          box-shadow: none;
+        }
       }
     }
-    &:hover {
-      border:1px solid @input-radio-list-hover-border;
+
+    input[type="radio"]:hover, input[type="radio"]:active {
+      box-shadow: inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
+    }
+
+    &.disabled {
+      ._field-border-disabled();
+      opacity: .5;
+
+      input[type="radio"] + label {
+        opacity: 1;
+      }
+
+      &.checked {
+        background-color: var(--Workspace-Panels-background);
+      }
+    }
+
+    input[type="radio"] {
+      position: absolute;
+      left: 1.6rem;
+
+      &:active + label {
+        background: transparent;
+      }
+
+      + label {
+        margin: 0;
+      }
     }
 
     label {
-      margin-left: 1.6rem;
+      border-radius: var(--Button-border-radius);
+      padding: 1.6rem 1.6rem 1.6rem 4.8rem;
 
       .name {
         &.bold {
           font-weight: 700;
         }
         margin: 0;
-        display:block;
-        font-size: 1.6rem;
+        margin-bottom: 0.4rem;
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
       }
 
       .error-message, .warning-message {
@@ -156,7 +214,7 @@
         margin: 0;
         font-weight: normal;
         font-size: 1.3rem;
-        display:block;
+        display: block;
         white-space: pre-wrap;
 
         span {

@@ -20,8 +20,9 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withAdminSmtpSettings} from "../../../contexts/AdminSmtpSettingsContext";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import Icon from "../../../../shared/components/Icons/Icon";
 import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 const uiStateEnum = {
   FORM: "form",
@@ -202,9 +203,9 @@ class SendTestMailDialog extends React.Component {
                 <div className="recipient error-message">{this.state.recipientError}</div>
                 }
               </div>
-            </div>
-            <div className="message notice">
-              <strong><Trans>Pro tip</Trans>:</strong> <Trans>after clicking on send, a test email will be sent to the recipient email in order to check that your configuration is correct.</Trans>
+              <div className="message notice no-margin">
+                <strong><Trans>Pro tip</Trans>:</strong> <Trans>after clicking on send, a test email will be sent to the recipient email in order to check that your configuration is correct.</Trans>
+              </div>
             </div>
             <div className="submit-wrapper clearfix">
               <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.props.handleClose} />
@@ -220,7 +221,11 @@ class SendTestMailDialog extends React.Component {
               </p>
               <div className="accordion-header">
                 <button type="button" className="link no-border" onClick={this.handleDisplayLogsClick}>
-                  <Icon name={this.state.displayLogs ? "caret-down" : "caret-right"}/> <Trans>Logs</Trans>
+                  <span><Trans>Logs</Trans></span>
+                  {this.state.displayLogs
+                    ? <CaretDownSVG className="baseline svg-icon"/>
+                    : <CaretRightSVG className="baseline svg-icon"/>
+                  }
                 </button>
               </div>
               {this.state.displayLogs &&
@@ -247,7 +252,11 @@ class SendTestMailDialog extends React.Component {
               <p><Trans>The test email has been sent. Check your email box, you should receive it in a minute.</Trans></p>
               <div className="accordion-header">
                 <button type="button" className="link no-border" onClick={this.handleDisplayLogsClick}>
-                  <Icon name={this.state.displayLogs ? "caret-down" : "caret-right"}/> <Trans>Logs</Trans>
+                  <span><Trans>Logs</Trans></span>
+                  {this.state.displayLogs
+                    ? <CaretDownSVG className="baseline svg-icon"/>
+                    : <CaretRightSVG className="baseline svg-icon"/>
+                  }
                 </button>
               </div>
               {this.state.displayLogs &&
@@ -255,9 +264,9 @@ class SendTestMailDialog extends React.Component {
                   <textarea className="full_report" readOnly={true} value={this.state.debugDetails}/>
                 </div>
               }
-            </div>
-            <div className="message notice">
-              <strong><Trans>Pro tip</Trans>:</strong> <Trans>Check your spam folder if you do not hear from us after a while.</Trans>
+              <div className="message notice no-margin">
+                <strong><Trans>Pro tip</Trans>:</strong> <Trans>Check your spam folder if you do not hear from us after a while.</Trans>
+              </div>
             </div>
             <div className="dialog-footer clearfix">
               <button type="button" className="cancel" disabled={this.hasAllInputDisabled()} onClick={this.handleRetryClick}><Trans>Retry</Trans></button>

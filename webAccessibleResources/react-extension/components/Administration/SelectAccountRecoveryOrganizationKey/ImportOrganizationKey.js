@@ -262,13 +262,13 @@ class ImportOrganizationKey extends React.Component {
               <div className="key error-message">{this.state.keyError}</div>
             }
           </div>
+          {!this.state.hasAlreadyBeenValidated &&
+            <div className="message notice no-margin">
+              <Icon baseline={true} name="info-circle" />
+              <strong><Trans>Pro tip</Trans>:</strong> <Trans>Learn how to <a href="https://help.passbolt.com/configure/account-recovery" target="_blank" rel="noopener noreferrer">generate a key separately.</a></Trans>
+            </div>
+          }
         </div>
-        {!this.state.hasAlreadyBeenValidated &&
-          <div className="message notice">
-            <Icon baseline={true} name="info-circle" />
-            <strong><Trans>Pro tip</Trans>:</strong> <Trans>Learn how to <a href="https://help.passbolt.com/configure/account-recovery" target="_blank" rel="noopener noreferrer">generate a key separately.</a></Trans>
-          </div>
-        }
         <div className="submit-wrapper clearfix">
           <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.props.onClose} />
           <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Apply")} />

@@ -103,15 +103,5 @@ describe("ScanTotpCode", () => {
       expect(props.mfaContext.navigate).toHaveBeenCalled();
       expect(props.mfaContext.findMfaSettings).toHaveBeenCalled();
     });
-
-    it('I should see an help box in the scan totp screen ', async() => {
-      expect.assertions(5);
-
-      expect(page.helpBox).not.toBeNull();
-      expect(page.helpBoxTitle.textContent).toBe("Requirements");
-      expect(page.helpBoxDescription.textContent).toBe("To proceed you need to install an application that supports Time Based One Time Passwords (TOTP) on your phone or tablet such as:Google Authenticator or FreeOTP.");
-      expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/start');
-    });
   });
 });

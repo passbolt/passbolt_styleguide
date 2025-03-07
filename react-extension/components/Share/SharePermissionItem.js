@@ -20,13 +20,13 @@ import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import UserAvatar from "../Common/Avatar/UserAvatar";
 import GroupAvatar from "../Common/Avatar/GroupAvatar";
 import {withTranslation} from "react-i18next";
-import Icon from "../../../shared/components/Icons/Icon";
-import Tooltip from "../Common/Tooltip/Tooltip";
 import Select from "../Common/Select/Select";
 import {isUserSuspended} from "../../../shared/utils/userUtils";
 import TooltipPortal from "../Common/Tooltip/TooltipPortal";
 import TooltipMessageFingerprintLoading from "../Common/Tooltip/TooltipMessageFingerprintLoading";
 import Fingerprint from "../Common/Fingerprint/Fingerprint";
+import AttentionSVG from "../../../img/svg/attention.svg";
+import FingerprintSVG from "../../../img/svg/fingerprint.svg";
 
 class SharePermissionItem extends Component {
   /**
@@ -199,9 +199,8 @@ class SharePermissionItem extends Component {
             {this.isUser() &&
               <TooltipPortal
                 message={this.state.tooltipFingerprintMessage || <TooltipMessageFingerprintLoading />}
-                direction="auto"
                 onMouseHover={this.onTooltipFingerprintMouseHover}>
-                <Icon name="info-circle" baseline={true}/>
+                <FingerprintSVG/>
               </TooltipPortal>
             }
           </div>
@@ -211,9 +210,10 @@ class SharePermissionItem extends Component {
         </div>
 
         {(this.props.variesDetails) &&
-          <Tooltip message={<ShareVariesDetails variesDetails={this.props.variesDetails} />} direction="left">
-            <Icon name="info-circle"/>
-          </Tooltip>
+          <TooltipPortal
+            message={<ShareVariesDetails variesDetails={this.props.variesDetails} />}>
+            <AttentionSVG className="attention-required"/>
+          </TooltipPortal>
         }
 
         <div className="rights">

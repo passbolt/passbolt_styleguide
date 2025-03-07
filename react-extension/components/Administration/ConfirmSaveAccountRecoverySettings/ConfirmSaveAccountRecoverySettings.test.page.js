@@ -58,14 +58,14 @@ export default class ConfirmSaveAccountRecoverySettingsPage {
    * Returns the account recovery policy name element
    */
   get accountRecoveryPolicy() {
-    return this._page.container.querySelector('.save-recovery-account-settings-dialog .form-content .input.radio label .name').textContent;
+    return this._page.container.querySelector('.save-recovery-account-settings-dialog .form-content .account-recovery-setting-save .name').textContent;
   }
 
   /**
    * Returns the account recovery policy name element
    */
   get accountRecoveryPolicyInfo() {
-    return this._page.container.querySelector('.save-recovery-account-settings-dialog .form-content .input.radio label .info').textContent;
+    return this._page.container.querySelector('.save-recovery-account-settings-dialog .form-content .account-recovery-setting-save .info').textContent;
   }
 
   /**

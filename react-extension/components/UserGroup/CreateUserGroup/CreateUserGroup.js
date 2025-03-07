@@ -533,55 +533,56 @@ class CreateUserGroup extends Component {
             <div className="input required">
               <label htmlFor="group_permission"><Trans>Group members</Trans></label>
             </div>
-          </div>
-          <div className="group_members">
-            <div className="form-content scroll permission-edit">
-              {this.hasMembers() &&
-                <ReactList
-                  ref={this.groupUsersListRef}
-                  itemRenderer={this.renderItem}
-                  itemsRenderer={this.renderContainer}
-                  length={this.state.groups_users.length}
-                  minSize={4}
-                  type={this.state.groups_users.length < 3 ? "simple" : "uniform"}
-                  threshold={30}>
-                </ReactList>
-              }
-            </div>
-            {!this.hasMembers() &&
-            <div className="message warning">
-              <span><Trans>The group is empty, please add a group manager.</Trans></span>
-            </div>
-            }
-            {this.hasMembers() && !this.hasManager() &&
-            <div className="message error">
-              <span><Trans>Please make sure there is at least one group manager.</Trans></span>
-            </div>
-            }
-            {this.hasManager() &&
-            <div className="message warning">
-              <span><Trans>You need to click save for the changes to take place.</Trans></span>
-            </div>
-            }
-            {this.state.nameWarning && (
-              <div className="message warning">
-                <strong><Trans>Warning:</Trans></strong> {this.state.nameWarning}
+
+            <div className="group_members">
+              <div className="scroll permission-edit">
+                {this.hasMembers() &&
+                  <ReactList
+                    ref={this.groupUsersListRef}
+                    itemRenderer={this.renderItem}
+                    itemsRenderer={this.renderContainer}
+                    length={this.state.groups_users.length}
+                    minSize={4}
+                    type={this.state.groups_users.length < 4 ? "simple" : "uniform"}
+                    threshold={30}>
+                  </ReactList>
+                }
               </div>
-            )}
-            <div className="form-content permission-add">
-              <Autocomplete
-                id="user-name-input"
-                name="name"
-                label={this.translate("Add people")}
-                placeholder={this.translate("Start typing a person name")}
-                searchCallback={this.fetchAutocompleteItems}
-                onSelect={this.handleAutocompleteSelect}
-                onOpen={this.handleAutocompleteOpen}
-                onClose={this.handleAutocompleteClose}
-                disabled={this.hasAllInputDisabled()}
-                baseUrl={this.props.context.userSettings.getTrustedDomain()}
-                canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
-              />
+              <div className="permission-add">
+                <Autocomplete
+                  id="user-name-input"
+                  name="name"
+                  label={this.translate("Add people")}
+                  placeholder={this.translate("Start typing a person name")}
+                  searchCallback={this.fetchAutocompleteItems}
+                  onSelect={this.handleAutocompleteSelect}
+                  onOpen={this.handleAutocompleteOpen}
+                  onClose={this.handleAutocompleteClose}
+                  disabled={this.hasAllInputDisabled()}
+                  baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                  canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
+                />
+              </div>
+              {!this.hasMembers() &&
+                <div className="message warning">
+                  <span><Trans>The group is empty, please add a group manager.</Trans></span>
+                </div>
+              }
+              {this.hasMembers() && !this.hasManager() &&
+                <div className="message error">
+                  <span><Trans>Please make sure there is at least one group manager.</Trans></span>
+                </div>
+              }
+              {this.hasManager() &&
+                <div className="message warning">
+                  <span><Trans>You need to click save for the changes to take place.</Trans></span>
+                </div>
+              }
+              {this.state.nameWarning && (
+                <div className="message warning">
+                  <strong><Trans>Warning:</Trans></strong> {this.state.nameWarning}
+                </div>
+              )}
             </div>
           </div>
           <div className="submit-wrapper clearfix">

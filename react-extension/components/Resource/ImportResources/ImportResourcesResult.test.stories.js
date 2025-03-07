@@ -1,55 +1,37 @@
-import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
-import ImportResourcesResult from "./ImportResourcesResult";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         2.14.0
+ */
 
+import React from "react";
+import {MemoryRouter} from "react-router-dom";
+import ImportResourcesResult from "./ImportResourcesResult";
+import {defaultProps, defaultPropsWithNoError} from "./ImportResourcesResult.test.data";
 
 export default {
   title: 'Components/Resource/ImportResources/ImportResourcesResult',
-  component: ImportResourcesResult
+  component: ImportResourcesResult,
+  decorators: [
+    (Story, {args}) =>
+      <MemoryRouter initialEntries={['/']}>
+        <Story {...args}/>
+      </MemoryRouter>
+  ]
 };
 
-const context = {
-  siteSettings: {
-    canIUse: () => true
-  }
+export const Initial = {
+  args: defaultPropsWithNoError(),
 };
 
-
-const Template = args =>
-  <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <ImportResourcesResult {...args} {...routerProps}/>}></Route>
-    </MemoryRouter>
-  </AppContext.Provider>;
-
-
-export const Initial = Template.bind({});
-Initial.args = {
-  resourceWorkspaceContext: {
-    resourceFileImportResult: {
-      created: {
-        foldersCount: 10,
-        resourcesCount: 15
-      }
-    }
-  },
-  onClose: () => {}
-};
-
-export const ImportWithErrors = Template.bind({});
-ImportWithErrors.args = {
-  resourceWorkspaceContext: {
-    resourceFileImportResult: {
-      created: {
-        foldersCount: 10,
-        resourcesCount: 15
-      },
-      errors: {
-        resources: ["Example of resource import error", "Example of resource import error"],
-        folders: ["Example of folder import error", "Example of folder import error"]
-      }
-    }
-  },
-  onClose: () => {}
+export const ImportWithErrors = {
+  args: defaultProps(),
 };

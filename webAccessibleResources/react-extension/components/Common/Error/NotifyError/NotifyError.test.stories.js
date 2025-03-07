@@ -11,8 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-
-import React from "react";
 import NotifyError from "./NotifyError";
 
 export default {
@@ -20,12 +18,19 @@ export default {
   component: NotifyError
 };
 
-const Template = args =>
-  <NotifyError {...args}/>;
-
-export const Default = Template.bind({});
-Default.args = {
-  error: {
-    message: "The error message"
+export const Default = {
+  args: {
+    error: {
+      message: "The error message"
+    }
   }
+};
+
+const error = new Error("The error message");
+error.details = {
+  some: "other details",
+};
+
+export const WithDetails = {
+  args: {error}
 };

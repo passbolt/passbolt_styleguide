@@ -1,0 +1,209 @@
+/* Create and edit resource dialog workspace */
+.create-resource, .edit-resource {
+  .create-workspace, .edit-workspace {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: var(--Section-border-radius);
+    background: var(--Workspace-Panels-background);
+
+    /* HEADER TITLE */
+    .title {
+      display: flex;
+      padding: 1.6rem;
+      align-items: center;
+      align-self: stretch;
+      border-bottom: 1px solid var(--Workspace-Dividers);
+
+      h2 {
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        margin: 0;
+      }
+    }
+
+    /* CONTENT */
+    .content {
+      display: flex;
+      padding-bottom: 2.4rem;
+      flex-direction: column;
+      align-items: flex-start;
+      flex: 1 0 0;
+      align-self: stretch;
+
+      /* PASSWORD FIELDS LAYOUT*/
+      .password-fields, .totp-fields, .note-fields, .description-fields {
+        display: flex;
+        padding: 1.6rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.6rem;
+        align-self: stretch;
+      }
+
+      /* INPUT FIELDS */
+      .input {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+        align-self: stretch;
+
+        label, input, textarea {
+          max-width: inherit;
+          margin-bottom: 0;
+        }
+
+        textarea {
+          height: 14rem;
+          max-height: 40rem;
+        }
+
+        &.input-password-wrapper {
+          margin-bottom: 0;
+
+          .password-button-inline {
+            align-self: stretch;
+          }
+
+          .password-complexity {
+            margin-bottom: 0;
+            align-self: stretch;
+          }
+        }
+
+        &.password {
+          gap: .2rem;
+        }
+
+        &.password, &.checkbox {
+          flex-direction: row;
+          align-items: center;
+          flex: 1 0 0;
+          align-self: stretch;
+          margin-bottom: 0;
+
+          label, input {
+            margin: 0;
+          }
+        }
+
+        &.select-wrapper {
+          .select-container {
+            align-self: stretch;
+          }
+        }
+      }
+
+      .totp-view {
+        display: flex;
+        align-self: stretch;
+        padding: 1.6rem;
+
+        .totp-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          align-self: stretch;
+          flex: 1 0 0;
+          padding: .8rem 1.6rem;
+          border-radius: var(--Contextual-bar-radius, 8px);
+
+          .secret-totp {
+            display: flex;
+            gap: 1.6rem;
+
+            button {
+              gap: 1.6rem;
+
+              .totp-code {
+                display: flex;
+
+                span {
+                  font-size: 24px;
+                  font-weight: 600;
+                  line-height: 2.4rem;
+                }
+              }
+            }
+
+            svg {
+              width: 1.8rem;
+              height: 1.8rem;
+              margin: 0;
+            }
+          }
+
+          &.disabled {
+            background-color: var(--Workspace-Dividers-lighter);
+          }
+        }
+      }
+
+      .upload-qr-code {
+        display: flex;
+        align-items: center;
+        padding: 3.2rem 0 1.6rem 0;
+      }
+
+      /* ADDITIONAL INFORMATIONS */
+      .additional-information {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        align-self: stretch;
+        border-top: 1px solid var(--Workspace-Dividers);
+
+        .section-header {
+          display: flex;
+          padding: 1.2rem 1.6rem;
+          align-items: center;
+          gap: 1.6rem;
+          align-self: stretch;
+
+          h4 {
+            display: flex;
+            align-items: center;
+            flex: 1 0 0;
+            margin: 0;
+            font-size: 15px;
+            font-weight: 700;
+            line-height: normal;
+          }
+
+          // Hover and Focus visible state
+          &:hover, &:focus-visible {
+            color: var(--States-Focus);
+          }
+        }
+
+        .advanced-settings {
+          align-self: stretch;
+          padding: 1.6rem 1.6rem 0 1.6rem;
+        }
+
+        /* TABS */
+        .tabs {
+          gap: 1.6rem;
+
+          .tabs-nav {
+            padding: 0 1.6rem;
+          }
+
+          .tabs-active-content {
+            display: flex;
+            padding: 0 1.6rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.6rem;
+            align-self: stretch;
+          }
+        }
+      }
+    }
+  }
+}

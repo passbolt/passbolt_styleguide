@@ -86,28 +86,35 @@ class DisplayMainMenuPageObject {
    * Returns the import menu elements of password workspace menu
    */
   get importMenu() {
-    return this._container.querySelector('button.import.button-action-icon');
+    return this._container.querySelector('#import_action');
   }
 
   /**
    * Returns the new password menu elements of password workspace menu
    */
   get newPasswordMenu() {
-    return this._container.querySelector('#password_action button');
+    return this._container.querySelector('#password_action');
   }
 
   /**
    * Returns the new folder menu elements of password workspace menu
    */
   get newFolderMenu() {
-    return this._container.querySelector('#folder_action button');
+    return this._container.querySelector('#folder_action');
   }
 
   /**
    * Returns the new totp menu elements of password workspace menu
    */
   get newTotpMenu() {
-    return this._container.querySelector('#totp_action button');
+    return this._container.querySelector('#totp_action');
+  }
+
+  /**
+   * Returns the new other menu elements of password workspace menu
+   */
+  get newOtherMenu() {
+    return this._container.querySelector('#other_action');
   }
 
   /**

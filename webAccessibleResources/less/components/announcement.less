@@ -1,47 +1,35 @@
 .announcement {
-  margin: 0;
-  top: 0;
   position: absolute;
-  height: 3.8rem;
-  font-size: 1.4rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  font-size: 1.5rem;
   text-align: center;
-  background: @announcement-background;
-  color: @announcement-text-color;
-  width: 100%;
+  background: var(--Workspace-Announcement-bar-background);
+  color: var(--Text-and-icons-Main-text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .6rem .4rem;
+
+  .announcement-content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row-reverse;
+  }
 
   p {
     padding:0;
-    margin:.8rem;
     max-width: inherit;
-  }
-
-  button {
-    border-bottom: 1px solid @link-border;
-    display: inline-block;
-    padding-bottom: 0;
-    line-height: 1.6rem;
-    margin-left: .8rem;
-    color: @announcement-text-color;
-
-    &:hover {
-      text-decoration: none;
-      cursor: pointer;
-      color: @text-focus-color;
-      border-bottom: 1px solid @link-hover-border;
-    }
-    &:active, &:focus {
-      outline: @outline-default-border;
-      color: @text-focus-color;
-      border: 0;
-    }
-  }
-
-  button.announcement-close {
-    --icon-color: @announcement-text-color;
-    float: right;
-    border: 0;
-    margin-top: -.2rem;
-    margin-right: 1.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: .8rem;
+    min-height: 1.6rem;
   }
 }
 

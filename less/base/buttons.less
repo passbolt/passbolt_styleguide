@@ -9,43 +9,58 @@ button,
     position: relative;
     display: flex;
     flex-direction: row;
+    gap: .8rem;
     justify-content: center;
     align-items: center;
     vertical-align: middle;
     outline: 0;
     cursor: pointer;
     text-align: center;
-    text-decoration: none;
+    text-decoration: none; // Needed when apply button style on <a>
     border: none;
-    box-shadow: inset 0 0 0 1px @button-border;
-    color: @default-text-color;
-    background: @button-background;
-    border-radius: .4rem;
+    box-shadow: inset 0 0 0 1px var(--Action-button-Action-button-border); // use box shadow to have correct size instead of border (border is not inside the element)
+    color: var(--Text-and-icons-Main-text);
+    background: var(--Action-button-Action-button-background);
+    border-radius: var(--Button-border-radius);
     box-sizing: border-box;
     min-width: 7rem;
 
+    svg {
+      flex-shrink: 0;
+      &:first-child {
+        width: 1.6rem;
+        height: 1.6rem;
+      }
+    }
+
     /* hover */
     &:hover {
-        box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-border;
-        color: @default-text-color;
+        box-shadow: inset .1rem .1rem 0 0 var(--States-Hover-Highlight), inset -.1rem -.1rem 0 0 var(--States-Hover-Shadow), inset 0 0 0 1px var(--Action-button-Action-button-border);
+        color: var(--Text-and-icons-Main-text);
         text-decoration: none;
         border: none;
     }
 
     /* focus */
-    &:focus, &:focus-visible {
-        box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
-        color: @default-text-color;
+    &:focus {
+        box-shadow: inset 0 0 0 1px var(--Action-button-Action-button-border);
+        color: var(--Text-and-icons-Main-text);
         text-decoration: none;
         border: none;
-        outline: @outline-default-border;
+    }
+
+    /* focus visible (display with keyboard navigation) */
+    &:focus-visible {
+      box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
+      color: var(--Text-and-icons-Main-text);
+      text-decoration: none;
+      border: none;
     }
 
     /* active */
     &:active {
-        box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-border;
-        background: @button-active-background;
-        color: @default-text-color;
+        box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1px var(--Action-button-Action-button-border);
+        color: var(--Text-and-icons-Main-text);
         text-decoration: none;
         border: none;
     }
@@ -53,17 +68,89 @@ button,
     /* disabled */
     &.disabled, &:disabled {
         cursor: default;
-        background: @button-background;
-        box-shadow: inset 0 0 0 1px @button-border;
+        background: var(--Action-button-Action-button-background);
+        box-shadow: inset 0 0 0 1px var(--Action-button-Action-button-border);
         opacity: .5;
         outline: 0;
     }
 
-    /* button-action-icon */
-    &-action-icon {
-      min-width: inherit;
-      width: 4.8rem;
-      height: 3.6rem;
+    /* button-action */
+    &-action {
+      /* button-action-contextual */
+      &-contextual {
+        box-shadow: inset 0 0 0 1px var(--Context-buttons-Context-button-border); // use box shadow to have correct size instead of border (border is not inside the element)
+        background: var(--Context-buttons-Context-button-background);
+
+        /* hover */
+        &:hover {
+          box-shadow: inset .1rem .1rem 0 0 var(--States-Hover-Highlight), inset -.1rem -.1rem 0 0 var(--States-Hover-Shadow), inset 0 0 0 1px var(--Context-buttons-Context-button-border);
+        }
+
+        /* focus */
+        &:focus {
+          box-shadow: inset 0 0 0 1px var(--Context-buttons-Context-button-border);
+        }
+
+        /* focus visible (display with keyboard navigation) */
+        &:focus-visible {
+          box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
+        }
+
+        /* active */
+        &:active {
+          box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1px var(--Context-buttons-Context-button-border);
+        }
+
+        /* disabled */
+        &.disabled, &:disabled {
+          box-shadow: inset 0 0 0 1px var(--Context-buttons-Context-button-border); // use box shadow to have correct size instead of border (border is not inside the element)
+          background: var(--Context-buttons-Context-button-background);
+        }
+      }
+
+      /* button-action-icon */
+      &-icon {
+        min-width: inherit;
+        width: 4.8rem;
+        height: 3.6rem;
+        padding: .8rem var(--Icon-action-button-padding);
+        // info button
+        &.info {
+          &:active, &.active {
+            box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1px var(--Action-button-Active-action-button-border);
+            background: var(--Action-button-Active-action-button-background);
+          }
+
+          /* focus visible (display with keyboard navigation) */
+          &:focus-visible {
+            box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
+          }
+        }
+      }
+
+      /* button-action-filtered */
+      &-filtered.button {
+        background: var(--Action-button-Active-action-button-background);
+        box-shadow: inset 0 0 0 .1rem var(--Action-button-Active-action-button-border);
+        padding: .8rem .8rem .8rem 1.6rem;
+        cursor: inherit;
+
+        .divider {
+          display: flex;
+          height: 2rem;
+          box-shadow: inset .1rem 0 0 var(--Action-button-Active-action-button-border), -.1rem 0 0 var(--Action-button-Active-action-button-border);
+
+          button {
+            margin-left: .8rem;
+            padding: 0;
+
+            svg {
+              width: 1.8rem;
+              height: 1.8rem;
+            }
+          }
+        }
+      }
     }
 
     /* button-icon */
@@ -71,35 +158,73 @@ button,
         min-width: inherit;
         width: 4.8rem;
         height: 3.6rem;
-        padding: 0;
-        background: @button-icon-background;
-        box-shadow: inset 0 0 0 1px @button-icon-border;
+        padding: .8rem var(--Icon-field-button-padding);
+        background: var(--Field-Field-button-background);
+        box-shadow: inset 0 0 0 1px var(--Field-Field-button-border);
 
         /* hover */
         &:hover {
-          box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-icon-border;
-          color: @default-text-color;
-          text-decoration: none;
-          border: none;
+          box-shadow: inset .1rem .1rem 0 0 var(--States-Hover-Highlight), inset -.1rem -.1rem 0 0 var(--States-Hover-Shadow), inset 0 0 0 1px var(--Field-Field-button-border);
+        }
+
+        /* focus visible (display with keyboard navigation) */
+        &:focus-visible {
+          box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
         }
 
         /* active */
         &:active {
-          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-icon-border;
-          background: @button-icon-active-background;
+          box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1px var(--Field-Field-button-border);
         }
 
-      svg {
-        width: 2rem;
-        height: 2rem;
-      }
+        /* disabled */
+        &.disabled, &:disabled {
+          background: var(--Field-Field-button-background);
+          box-shadow: inset 0 0 0 1px var(--Field-Field-button-border);
+        }
+
+        svg:first-child {
+          width: 2rem;
+          height: 2rem;
+        }
     }
 
     &-transparent {
         min-width: inherit;
         background: transparent;
         box-shadow: none;
-        border-radius: .3rem;
+
+        &.back {
+          padding: .8rem var(--Icon-field-button-padding);
+          svg {
+            width: 2rem;
+            height: 2rem;
+          }
+        }
+
+        &.inline {
+          display: inline-flex;
+          padding: .2rem;
+
+          &-menu {
+            &-horizontal {
+              padding: .2rem .4rem;
+            }
+
+            &-vertical {
+              padding: .4rem;
+            }
+          }
+        }
+
+        &.infield {
+          padding: .5rem var(--Infield-boxless-padding);
+          border-radius: var(--Token-radius);
+          svg {
+            width: 2rem;
+            height: 2rem;
+          }
+        }
 
         /* focus */
         &:focus {
@@ -108,146 +233,193 @@ button,
 
         /* hover */
         &:hover {
-            background: @button-transparent-background;
-            box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-transparent-border;
+            box-shadow: inset .1rem .1rem 0 0 var(--States-Hover-Highlight), inset -.1rem -.1rem 0 0 var(--States-Hover-Shadow);
         }
 
-        /* focus visible */
+
+        /* focus visible (display with keyboard navigation) */
         &:focus-visible {
-            background: @button-transparent-background;
-            box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
+          box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
         }
 
         /* active */
         &:active {
-            background: @button-transparent-background;
-            box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-transparent-border;
+            box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow);
         }
 
         /* disabled */
         &:disabled, &.disabled {
-            background: @button-transparent-background;
+            background: transparent;
             box-shadow: none;
         }
     }
 
     /* processing state */
     &.processing {
-        background: @button-background;
-        box-shadow: inset 0 0 0 1px @button-border;
         color: transparent;
+        min-height: 3rem; //1.4rem (svg default height) + 1.6rem (total default vertical padding)
 
         /* hover */
         &:hover {
-            box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-border;
+          box-shadow: inset .1rem .1rem 0 0 var(--States-Hover-Highlight), inset -.1rem -.1rem 0 0 var(--States-Hover-Shadow), inset 0 0 0 1px var(--Action-button-Action-button-border);
         }
 
         /* focus */
         &:focus {
-            box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
+          box-shadow: inset 0 0 0 1px var(--Action-button-Action-button-border);
+        }
+
+        /* focus visible (display with keyboard navigation) */
+        &:focus-visible {
+          box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
         }
 
         /* active */
         &:active {
-            box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-border;
+          box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1px var(--Action-button-Action-button-border);
         }
+
 
         /* disabled */
         &.disabled, &:disabled {
             opacity: 1;
-            background: rgba(@button-icon-background, 0.5);
-            box-shadow: inset 0 0 0 .1rem rgba(@button-border, 0.5);
+            box-shadow: inset 0 0 0 1px var(--Action-button-Action-button-border); // use box shadow to have correct size instead of border (border is not inside the element)
         }
 
         .svg-icon.spinner {
             position: absolute;
+            --spinner-color: var(--Spinner-Spinner-foreground);
+            --spinner-background: var(--Spinner-Spinner-background);
+
+            // Add opacity to the SVG
+            #background {
+              opacity: 1;
+            }
+        }
+
+        &.large-spinner {
+          background: var(--Workspace-Workspace-button-background);
+
+          .svg-icon.spinner {
+            width: 2.4rem;
+            height: 2.4rem;
+          }
         }
     }
 
     /* primary */
     &.primary {
-        background: @button-primary-background;
-        box-shadow: inset 0 0 0 .1rem @button-primary-border;
-        color: @button-primary-color;
+        background: var(--Login-Login-button-background);
+        color: var(--Primary-button-Primary-button-text);
+        box-shadow: none;
+
+        &.create {
+          background: var(--Primary-button-Primary-button-background);
+          color: var(--Primary-button-Primary-button-text);
+        }
+
+        &.form {
+          border-radius: var(--Login-button-radius);
+          padding: .8rem 2.4rem;
+          font-size: 1.8rem;
+          font-weight: 700;
+        }
+
+        &.login {
+          border-radius: var(--Login-button-radius);
+          padding: 1rem 2.4rem;
+          font-size: 1.7rem;
+          font-weight: 700;
+        }
 
         svg {
-            --icon-color: @icon-primary-color;
-            --icon-background-color: @icon-primary-background-color;
+          --icon-color: var(--Primary-button-Primary-button-text);
+          --icon-background: var(--Primary-button-Primary-button-text);
+
+          &.spinner.svg-icon #background {
+            opacity: .25;
+          }
         }
 
         &.processing {
             color: transparent;
-            background: @button-primary-background;
-            box-shadow: inset 0 0 0 1px @button-primary-border;
-
-            &.disabled, &:disabled {
-              background: rgba(@button-primary-background, 0.5);
-            }
 
             .svg-icon.spinner {
-                --spinner-color: @icon-spinner-primary-color;
-                --spinner-background: rgba(@icon-spinner-primary-background, 0.25);
+              --spinner-color: var(--Spinner-Button-spinner-foreground);
+              --spinner-background: var(--Spinner-Button-spinner-background);
             }
         }
 
         &:hover {
-            box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-primary-border;
+          box-shadow: inset .1rem .1rem 0 0 var(--States-Hover-Highlight), inset -.1rem -.1rem 0 0 var(--States-Hover-Shadow);
         }
 
-        &:focus, &:focus-visible {
-            box-shadow: 0 0 .4rem @shadow-focus-color;
-            outline: @outline-primary-border;
+        /* focus visible (display with keyboard navigation) */
+        &:focus-visible {
+          box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
         }
 
         &:active {
-            background: @button-primary-background;
-            box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-primary-border;
+          box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow);
         }
 
         /* disabled */
         &.disabled, &:disabled {
           box-shadow: none;
-          outline: 0;
         }
+    }
+
+    /* secondary */
+    &.secondary {
+      background: var(--Action-button-Secondary-button-background);
+    }
+
+    /* add secret */
+    &.add-secret {
+      background: var(--Primary-button-Primary-button-menu-background);
     }
 
     /* warning */
     &.warning {
-        background: @button-warning-background;
-        box-shadow: inset 0 0 0 .1rem @button-warning-border;
-        color: @button-warning-color;
+        background: var(--Palette-Contrast-3);
+        border-radius: var(--Login-button-radius);
+        color: var(--Primary-button-Primary-button-text);
+        padding: .8rem 2.4rem;
+        font-size: 1.8rem;
+        font-weight: 700;
+        box-shadow: none;
 
         svg {
-            --icon-color: @icon-warning-color;
-            --icon-background-color: @icon-warning-background-color;
+          --icon-color: var(--Primary-button-Primary-button-text);
+          --icon-background: var(--Primary-button-Primary-button-text);
+          --spinner-color: var(--Spinner-Button-spinner-foreground);
+          --spinner-background: var(--Spinner-Button-spinner-background);
+
+          &.spinner.svg-icon #background {
+            opacity: .25;
+          }
         }
 
         &.processing {
             color: transparent;
-            background: @button-warning-background;
-            box-shadow: inset 0 0 0 1px @button-warning-border;
-
-            &.disabled, &:disabled {
-                background: rgba(@button-warning-background, 0.5);
-            }
 
             .svg-icon.spinner {
-                --spinner-color: @icon-spinner-warning-color;
-                --spinner-background: rgba(@icon-spinner-warning-background, 0.25);
+              --spinner-color: var(--Spinner-Button-spinner-foreground);
+              --spinner-background: var(--Spinner-Button-spinner-background);
             }
         }
 
         &:hover {
-            box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-warning-border;
+          box-shadow: inset .1rem .1rem 0 0 var(--States-Hover-Highlight), inset -.1rem -.1rem 0 0 var(--States-Hover-Shadow);
         }
 
-        &:focus {
-            box-shadow: 0 0 .4rem @shadow-focus-color;
+        /* focus visible (display with keyboard navigation) */
+        &:focus-visible {
+          box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
         }
 
         &:active {
-            background: @button-warning-background;
-            box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-warning-border;
+          box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow);
         }
 
         /* disabled */
@@ -258,47 +430,59 @@ button,
 
   /* attention */
   &.attention {
-    background: @button-attention-background;
-    box-shadow: inset 0 0 0 .1rem @button-attention-border;
-    color: @button-attention-color;
-
-    svg {
-      --icon-color: @icon-warning-color;
-      --icon-background-color: @icon-warning-background-color;
-    }
-
-    &.processing {
-      color: transparent;
-      background: @button-attention-background;
-      box-shadow: inset 0 0 0 1px @button-attention-border;
-
-      &.disabled, &:disabled {
-        background: rgba(@button-attention-background, 0.5);
-      }
-
-      .svg-icon.spinner {
-        --spinner-color: @icon-spinner-warning-color;
-        --spinner-background: rgba(@icon-spinner-warning-background, 0.25);
-      }
-    }
-
-    &:hover {
-      box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-attention-border;
-    }
-
-    &:focus {
-      box-shadow: 0 0 .4rem @shadow-focus-color;
-    }
-
-    &:active {
-      background: @button-attention-background;
-      box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-attention-border;
-    }
-
-    /* disabled */
-    &.disabled, &:disabled {
+      background: var(--Palette-Contrast-2);
+      border-radius: var(--Login-button-radius);
+      color: var(--Primary-button-Primary-button-text);
+      padding: .8rem 2.4rem;
+      font-size: 1.8rem;
+      font-weight: 700;
       box-shadow: none;
-    }
+
+      svg {
+        --icon-color: var(--Primary-button-Primary-button-text);
+        --icon-background: var(--Primary-button-Primary-button-text);
+        --spinner-color: var(--Spinner-Button-spinner-foreground);
+        --spinner-background: var(--Spinner-Button-spinner-background);
+
+        &.spinner.svg-icon #background {
+          opacity: .25;
+        }
+      }
+
+      &.processing {
+        color: transparent;
+
+        .svg-icon.spinner {
+          --spinner-color: var(--Spinner-Button-spinner-foreground);
+          --spinner-background: var(--Spinner-Button-spinner-background);
+        }
+      }
+
+      &:hover {
+        box-shadow: inset .1rem .1rem 0 0 var(--States-Hover-Highlight), inset -.1rem -.1rem 0 0 var(--States-Hover-Shadow);
+      }
+
+      /* focus visible (display with keyboard navigation) */
+      &:focus-visible {
+        box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
+      }
+
+      &:active {
+        box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow);
+      }
+
+      /* disabled */
+      &.disabled, &:disabled {
+        box-shadow: none;
+      }
+  }
+
+  &.no-border {
+    background: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    min-width: inherit;
   }
 }
 
@@ -319,9 +503,8 @@ button,
 
 /* toggle selected */
 .button-toggle.selected {
-    box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-border;
-    background: @button-active-background;
-    color: @default-text-color;
+    box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1px var(--Action-button-Active-action-button-border);
+    background: var(--Action-button-Active-action-button-background);
     text-decoration: none;
     border: none;
 }
@@ -331,7 +514,7 @@ button,
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    gap: .6rem;
+    gap: .8rem;
 
     &--nowrap {
       & > .button {
@@ -341,8 +524,6 @@ button,
 
     & > * {
       min-width: inherit;
-      max-width: 50%;
-      flex-grow: 1;
       &:last-child {
         flex: 0;
       }

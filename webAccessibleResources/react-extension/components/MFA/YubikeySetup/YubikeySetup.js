@@ -141,9 +141,9 @@ class YubikeySetup extends Component {
    */
   render() {
     return (
-      <div className="grid grid-responsive-12">
-        <div className="row mfa-setup">
-          <div className="col8 main-column yubikey-setup">
+      <>
+        <div className="main-column mfa-setup">
+          <div className="main-content yubikey-setup">
             <h3>Yubikey One Time Password</h3>
             <form onSubmit={this.handleSubmit}>
               <div className="input required">
@@ -166,26 +166,25 @@ class YubikeySetup extends Component {
                     Plug in the yubikey and put your finger on it.
               </div>
             </form>
-
-            <div className="actions-wrapper">
-              <button
-                className="button cancel"
-                type='button'
-                disabled={this.hasAllInputDisabled()}
-                onClick={this.handleCancelClick}>
-                <span><Trans>Cancel</Trans></span>
-              </button>
-              <button
-                className="button primary"
-                type='button'
-                disabled={this.hasAllInputDisabled()}
-                onClick={this.handleSubmit}>
-                <span><Trans>Validate</Trans></span>
-              </button>
-            </div>
           </div>
         </div>
-      </div>
+        <div className="actions-wrapper">
+          <button
+            className="button cancel secondary"
+            type='button'
+            disabled={this.hasAllInputDisabled()}
+            onClick={this.handleCancelClick}>
+            <span><Trans>Cancel</Trans></span>
+          </button>
+          <button
+            className="button primary form"
+            type='button'
+            disabled={this.hasAllInputDisabled()}
+            onClick={this.handleSubmit}>
+            <span><Trans>Validate</Trans></span>
+          </button>
+        </div>
+      </>
     );
   }
 }

@@ -7,19 +7,8 @@ import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 class Search extends React.Component {
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
     this.bindCallbacks();
     this.createReferences();
-  }
-
-  /**
-   * Get default state
-   * @returns {*}
-   */
-  get defaultState() {
-    return {
-      hasSubmitButtonFocus: false, // true if the form button has focus
-    };
   }
 
   /**
@@ -36,8 +25,6 @@ class Search extends React.Component {
    */
   bindCallbacks() {
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmitButtonFocus = this.handleSubmitButtonFocus.bind(this);
-    this.handleSubmitButtonBlur = this.handleSubmitButtonBlur.bind(this);
   }
 
   /**
@@ -62,20 +49,6 @@ class Search extends React.Component {
     }
   }
 
-  /**
-   * Handle submit button focus
-   */
-  handleSubmitButtonFocus() {
-    this.setState({hasSubmitButtonFocus: true});
-  }
-
-  /**
-   * Handle submit button blur
-   */
-  handleSubmitButtonBlur() {
-    this.setState({hasSubmitButtonFocus: false});
-  }
-
   handleInputChange(event) {
     this.props.context.updateSearch(event.target.value);
   }
@@ -83,12 +56,12 @@ class Search extends React.Component {
   render() {
     return (
       <div className="search-wrapper">
-        <div className={`input search required ${this.state.hasSubmitButtonFocus ? "no-focus" : ""}`}>
+        <div className="input search required">
           <label className="visually-hidden"><Trans>Search</Trans></label>
           <input name="search" maxLength="50" type="search" placeholder={this.translate("Search")} autoComplete="off"
             ref={this.searchInputRef} onChange={this.handleInputChange} value={this.props.context.search} />
           <div className="search-button-wrapper">
-            <button className="button button-transparent" value={this.translate("Search")} onBlur={this.handleSubmitButtonBlur} onFocus={this.handleSubmitButtonFocus} type="submit">
+            <button className="button button-transparent" value={this.translate("Search")} type="submit">
               <Icon name="search"/>
               <span className="visuallyhidden"><Trans>Search</Trans></span>
             </button>

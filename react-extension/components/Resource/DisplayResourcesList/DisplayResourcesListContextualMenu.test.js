@@ -58,7 +58,7 @@ describe("DisplayResourcesListContextualMenu", () => {
      * Then I should see the 11 menu
      */
     it('As LU I should see all menu name', () => {
-      expect.assertions(22);
+      expect.assertions(21);
       expect(page.copyUsernameItem).not.toBeNull();
       expect(page.copyUsernameItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPasswordItem).not.toBeNull();
@@ -67,8 +67,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.copyUriItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPermalinkItem).not.toBeNull();
       expect(page.copyPermalinkItem.hasAttribute("disabled")).toBeFalsy();
-      expect(page.copyTotpItem).not.toBeNull();
-      expect(page.copyTotpItem.hasAttribute("disabled")).toBeTruthy();
+      expect(page.copyTotpItem).toBeNull();
       expect(page.openUriItem).not.toBeNull();
       expect(page.openUriItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.editItem).not.toBeNull();
@@ -237,11 +236,10 @@ describe("DisplayResourcesListContextualMenu", () => {
      * Given an organization with 1 resource
      * Then I should see the 9 menu
      */
-    it('As LU I should see all menu name', () => {
-      expect(page.copyUsernameItem).not.toBeNull();
-      expect(page.copyUsernameItem.hasAttribute("disabled")).toBeTruthy();
-      expect(page.copyPasswordItem).not.toBeNull();
-      expect(page.copyPasswordItem.hasAttribute("disabled")).toBeTruthy();
+    it('As LU I should see only totp options', () => {
+      expect.assertions(16);
+      expect(page.copyUsernameItem).toBeNull();
+      expect(page.copyPasswordItem).toBeNull();
       expect(page.copyUriItem).not.toBeNull();
       expect(page.copyUriItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPermalinkItem).not.toBeNull();
@@ -284,7 +282,7 @@ describe("DisplayResourcesListContextualMenu", () => {
     });
 
     it('As LU I should not be able to edit/share/delete/expire a password I have read only access', async() => {
-      expect.assertions(20);
+      expect.assertions(15);
       expect(page.copyUsernameItem).not.toBeNull();
       expect(page.copyUsernameItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPasswordItem).not.toBeNull();
@@ -295,16 +293,11 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.copyPermalinkItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.openUriItem).not.toBeNull();
       expect(page.openUriItem.hasAttribute("disabled")).toBeFalsy();
-      expect(page.editItem).not.toBeNull();
-      expect(page.editItem.hasAttribute("disabled")).toBeTruthy();
-      expect(page.shareItem).not.toBeNull();
-      expect(page.shareItem.hasAttribute("disabled")).toBeTruthy();
-      expect(page.deleteItem).not.toBeNull();
-      expect(page.deleteItem.hasAttribute("disabled")).toBeTruthy();
-      expect(page.markAsExpiredItem).not.toBeNull();
-      expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeTruthy();
-      expect(page.setExpiryDateItem).not.toBeNull();
-      expect(page.setExpiryDateItem.hasAttribute("disabled")).toBeTruthy();
+      expect(page.editItem).toBeNull();
+      expect(page.shareItem).toBeNull();
+      expect(page.deleteItem).toBeNull();
+      expect(page.markAsExpiredItem).toBeNull();
+      expect(page.setExpiryDateItem).toBeNull();
     });
   });
 
@@ -316,6 +309,7 @@ describe("DisplayResourcesListContextualMenu", () => {
     });
 
     it('As LU I should not be able to share a password I have update access', async() => {
+      expect.assertions(18);
       expect(page.copyUsernameItem).not.toBeNull();
       expect(page.copyUsernameItem.hasAttribute('disabled')).toBeFalsy();
       expect(page.copyPasswordItem).not.toBeNull();
@@ -328,10 +322,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.openUriItem.hasAttribute('disabled')).toBeFalsy();
       expect(page.editItem).not.toBeNull();
       expect(page.editItem.hasAttribute('disabled')).toBeFalsy();
-      expect(page.shareItem).not.toBeNull();
-      expect(page.shareItem.hasAttribute('disabled')).toBeTruthy();
-      expect(page.deleteItem).not.toBeNull();
-      expect(page.deleteItem.hasAttribute('disabled')).toBeFalsy();
+      expect(page.shareItem).toBeNull();
+      expect(page.deleteItem).toBeNull();
       expect(page.markAsExpiredItem).not.toBeNull();
       expect(page.markAsExpiredItem.hasAttribute('disabled')).toBeFalsy();
       expect(page.setExpiryDateItem).not.toBeNull();

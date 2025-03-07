@@ -45,7 +45,7 @@ import ConfirmCreateEdit, {
 } from "../ConfirmCreateEdit/ConfirmCreateEdit";
 import {
   defaultResourceMetadataDto
-} from "../../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
+} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 
 describe("See the Create Resource", () => {
@@ -804,7 +804,7 @@ describe("See the Create Resource", () => {
 
     describe("Display error message", () => {
       it("As LU I shouldn't be able to submit the form if there is an invalid field", async() => {
-        expect.assertions(3);
+        expect.assertions(2);
         const context = defaultAppContext(); // The applicative context
         const props = defaultProps({context}); // The props to pass
         const page = new CreateResourcePage(context, props);
@@ -813,7 +813,6 @@ describe("See the Create Resource", () => {
         await page.passwordCreate.click(page.passwordCreate.saveButton);
 
         // Throw error message
-        expect(page.passwordCreate.nameErrorMessage.textContent).toBe("A name is required.");
         expect(page.passwordCreate.passwordErrorMessage.textContent).toBe("A password is required.");
       });
 
@@ -906,7 +905,7 @@ describe("See the Create Resource", () => {
           expect(page.passwordCreate.username.getAttribute("disabled")).not.toBeNull();
           expect(page.passwordCreate.password.getAttribute("disabled")).not.toBeNull();
           expect(page.passwordCreate.saveButton.getAttribute("disabled")).not.toBeNull();
-          expect(page.passwordCreate.saveButton.className).toBe("button primary disabled processing");
+          expect(page.passwordCreate.saveButton.className).toBe("button primary form disabled processing");
           expect(page.passwordCreate.cancelButton.className).toBe("link cancel");
           updateResolve();
         });

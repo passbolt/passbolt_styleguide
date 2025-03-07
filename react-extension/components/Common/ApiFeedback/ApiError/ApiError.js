@@ -15,7 +15,9 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import AnimatedFeedback from "../../../../../shared/components/Icons/AnimatedFeedback";
-import Icon from "../../../../../shared/components/Icons/Icon";
+import CarretDownSVG from "../../../../../img/svg/caret_down.svg";
+import CarretRightSVG from "../../../../../img/svg/caret_right.svg";
+import LogoSVG from "../../../../../img/svg/logo.svg";
 
 class ApiError extends Component {
   /**
@@ -58,17 +60,20 @@ class ApiError extends Component {
       <div id="container" className="container api-feedback page">
         <div className="content">
           <div className="header">
-            <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+            <div className="logo-svg">
+              <LogoSVG role="img" width="20rem" height="3.5rem"/>
+            </div>
           </div>
           <div className="api-feedback-card">
             <AnimatedFeedback name="attention"/>
-            <p>
-              <Trans>Something went wrong!</Trans><br/>
-              <Trans>Please try again later or contact your administrator.</Trans>
-            </p>
+            <h1><Trans>Something went wrong!</Trans></h1>
+            <p><Trans>Please try again later or contact your administrator.</Trans></p>
             <div className="accordion-header">
               <button type="button" className="link no-border" onClick={this.handleDisplayLogsClick}>
-                <Icon name={this.state.displayLogs ? "caret-down" : "caret-right"}/> <Trans>Logs</Trans>
+                <Trans>Logs</Trans> {this.state.displayLogs
+                  ? <CarretDownSVG />
+                  : <CarretRightSVG />
+                }
               </button>
             </div>
             {this.state.displayLogs &&

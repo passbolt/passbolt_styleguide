@@ -18,10 +18,10 @@ import GroupAvatar from "../../Avatar/GroupAvatar";
 import {isUserSuspended} from "../../../../../shared/utils/userUtils";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
-import Icon from "../../../../../shared/components/Icons/Icon";
 import TooltipPortal from "../../Tooltip/TooltipPortal";
 import TooltipMessageFingerprintLoading from "../../Tooltip/TooltipMessageFingerprintLoading";
 import Fingerprint from "../../Fingerprint/Fingerprint";
+import FingerprintSVG from "../../../../../img/svg/fingerprint.svg";
 
 class AutocompleteItem extends Component {
   /**
@@ -139,9 +139,8 @@ class AutocompleteItem extends Component {
                     {this.props.user &&
                       <TooltipPortal
                         message={this.state.tooltipFingerprintMessage || <TooltipMessageFingerprintLoading />}
-                        direction="auto"
                         onMouseHover={this.onTooltipFingerprintMouseHover}>
-                        <Icon name="info-circle" baseline={true}/>
+                        <FingerprintSVG/>
                       </TooltipPortal>
                     }
                   </span>

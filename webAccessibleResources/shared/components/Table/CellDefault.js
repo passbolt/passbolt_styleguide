@@ -33,7 +33,7 @@ class CellDefault extends Component {
   render() {
     return (
       <div title={this.value}>
-        {this.value}
+        <span>{this.value}</span>
       </div>
     );
   }

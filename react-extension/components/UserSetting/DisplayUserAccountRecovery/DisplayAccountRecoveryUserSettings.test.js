@@ -43,7 +43,6 @@ describe("DisplayAccountRecoveryUserSettings", () => {
     expect(page.status.textContent).toBe("pending");
     expect(page.requestorName.textContent).toBe("Ada Lovelace (ada@passbolt.com)");
     expect(page.requestDate.textContent).toBe(formatDateTimeAgo(accountRecoveryPolicyDto.modified, props.context.locale));
-    expect(page.fingerprint).toBe("848E 95CC 7493 129A D862 5831 29B8 1CA8 9360 23DD");
   });
 
   /**

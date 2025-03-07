@@ -26,7 +26,7 @@ import ColumnsResourceSettingCollection
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import {
   defaultResourceMetadataDto
-} from "../../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
+} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import {
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_TOTP
@@ -105,15 +105,14 @@ export function propsWithFilteredResourcesAndColumnsHidden(data = {}) {
       filteredResources: resources,
       columnsResourceSetting: new ColumnsResourceSettingCollection([
         {id: "favorite", label: "Favorite", position: 1, show: true},
-        {id: "attentionRequired", label: "Attention", position: 2, show: true},
-        {id: "name", label: "Name", position: 3, show: true},
-        {id: "expires", label: "Expires", position: 4, show: true},
-        {id: "username", label: "Username", position: 5, show: false},
-        {id: "password", label: "Password", position: 6, show: true},
-        {id: "totp", label: "TOTP", position: 7, show: false},
-        {id: "uri", label: "URI", position: 8, show: true},
-        {id: "modified", label: "Modified", position: 9, show: false},
-        {id: "location", label: "Location", position: 10, show: true}]),
+        {id: "name", label: "Name", position: 2, show: true},
+        {id: "expires", label: "Expires", position: 3, show: true},
+        {id: "username", label: "Username", position: 4, show: false},
+        {id: "password", label: "Password", position: 5, show: true},
+        {id: "totp", label: "TOTP", position: 6, show: false},
+        {id: "uri", label: "URI", position: 7, show: true},
+        {id: "modified", label: "Modified", position: 8, show: false},
+        {id: "location", label: "Location", position: 9, show: true}]),
       getHierarchyFolderCache: () => [{
         "id": "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
         "name": "Accounting",

@@ -11,8 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-
-import React from "react";
 import EditSubscriptionKey from "./EditSubscriptionKey";
 import {defaultProps} from "./EditSubscriptionKey.test.data";
 
@@ -21,8 +19,6 @@ export default {
   component: EditSubscriptionKey
 };
 
-const Template = args =>
-  <EditSubscriptionKey {...args}/>;
-
-export const Default = Template.bind({});
-Default.args = defaultProps();
+export const Default = {
+  args: defaultProps(),
+};

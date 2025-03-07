@@ -289,7 +289,7 @@ class EditResourceTag extends Component {
               )}
             </div>
           </div>
-          <div className="submit-wrapper clearfix">
+          <div className="submit-wrapper">
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
             <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
           </div>

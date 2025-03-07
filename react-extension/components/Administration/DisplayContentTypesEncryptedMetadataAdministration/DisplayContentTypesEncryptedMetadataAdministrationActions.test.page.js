@@ -37,7 +37,7 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationActionsPa
    * Returns the workspace action
    */
   get workspaceAction() {
-    return this._page.container.querySelector('.actions');
+    return this._page.container.querySelector('.actions-wrapper');
   }
 
   /**
@@ -51,7 +51,7 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationActionsPa
    * Returns the save button
    */
   get saveButton() {
-    return this._page.container.querySelectorAll('li button')[0];
+    return this._page.container.querySelector('button');
   }
 
   /** Click on the save element */

@@ -4,28 +4,25 @@
   width: 100%;
   height: 100%;
   z-index: 100;
-  background: @dialog-overlay-background;
+  background: hsl(from var(--Dialog-Dialog-background) h s l / 0.7);
   overflow: auto;
 }
 
 .dialog {
   position: relative;
   max-width: 48rem;
-  margin: auto;
-  margin-top: 1%;
   /* some space for the footer / notification area in case it is really tall */
-  margin-bottom: 4.8rem;
-  background: @dialog-background;
-  border: 1px solid @dialog-border;
-  border-radius: .3rem;
+  margin: 6.4rem auto;
+  background: var(--Dialog-Dialog-header-and-footer);
+  border-radius: var(--Section-border-radius);
   box-sizing: border-box;
-  box-shadow: 0 1rem 1rem @dialog-box-shadow-color;
+  padding: 0 1.6rem;
 
   /* header */
   .dialog-header {
     display: flex;
     align-items: center;
-    padding: 1.6rem;
+    padding: 1.2rem 0 1.2rem 1.6rem;
 
     .dialog-title-wrapper {
       flex: 1;
@@ -34,8 +31,10 @@
       width: 90%;
       h2 {
         margin: 0;
-        font-size: 1.9rem;
-        line-height: 2.6rem;
+        font-size: 1.8rem;
+        color: var(--Text-and-icons-Main-text);
+        line-height:normal;
+        font-weight: 400;
         .ellipsis();
       }
 
@@ -43,7 +42,9 @@
         padding-top: .4rem;
         padding-left: .8rem;
         font-size: 1.4rem;
-        line-height: 2rem;
+        line-height: normal;
+        font-weight: 400;
+        color: var(--Text-and-icons-Secondary-text);
       }
 
       .tooltip {
@@ -57,21 +58,42 @@
     .dialog-variable{
       overflow-wrap: break-word;
     }
+
+    .error.message, .warning.message, .notice.message {
+      padding: .8rem 1.6rem;
+      border-bottom-left-radius: var(--Section-border-radius);
+      border-bottom-right-radius: var(--Section-border-radius);
+    }
   }
 
   /* inputs */
   .form-content,
   .dialog-body {
-    background: @default-background;
     padding: 1.6rem;
+    align-items: flex-start;
+    align-self: stretch;
+    border-radius: var(--Section-border-radius);
+    background: var(--Dialog-Dialog-fill);
     // Remove padding
     &.no-padding {
       padding: 0;
     }
 
+    .no-margin {
+      margin: 1.6rem -1.6rem -1.6rem;
+    }
+
     // all direct child element
     & > * {
       margin-bottom: 1.6rem;
+
+      &:last-child {
+        margin-bottom: 0;
+
+        > *:last-child {
+          margin-bottom: 0;
+        }
+      }
     }
   }
 
@@ -79,7 +101,6 @@
   textarea {
     width: 100%;
     box-sizing: border-box;
-    .clearfix();
   }
 
   /* Error display */
@@ -111,9 +132,10 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 1.6rem;
+    padding: 1.6rem 0;
 
     .button-left {
+      background: var(--Workspace-Workspace-button-background);
       margin-right: auto;
     }
 
@@ -133,15 +155,15 @@
 
 /* can also be used outside a dialog, like the sidebar */
 .dialog-close {
-  margin-left: 1rem;
-  padding: 0;
+  display: flex;
+  padding: 4px;
+  align-items: center;
   &, &:hover {
-    display: block;
     border: none;
   }
 
-  .svg-icon {
-    padding: .65rem;
+  .svg-icon svg {
+    padding: .4rem;
     width: 2.4rem;
     height: 2.4rem;
     text-align: center;

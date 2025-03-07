@@ -17,8 +17,6 @@ import {MfaContextProvider, MfaSettingsWorkflowStates} from './MFAContext';
 import {MfaPolicyEnumerationTypes} from '../../shared/models/mfaPolicy/MfaPolicyEnumeration';
 import {MfaMandatoryPolicy, mockMfaSettings, noMfaUserDefinedWithoutTotp, noMfaUserDefinedWithTotp, setupTotpData} from './MFAContext.test.data';
 import {enableFetchMocks} from 'jest-fetch-mock';
-import {defaultAppContext} from './ApiAppContext.test.data';
-import {mockApiResponse} from '../../../test/mocks/mockApiResponse';
 import {MfaOptInPolicy} from './MFAContext.test.data';
 
 describe("MFAContext", () => {
@@ -35,21 +33,6 @@ describe("MFAContext", () => {
 
   describe("MFAContext::findPolicy", () => {
     it("should get the current policy and store it in its state, using Browser extension", async() => {
-      expect.assertions(2);
-
-      await mfaContextProvider.findPolicy();
-      expect(mfaContextProvider.getPolicy()).toEqual(MfaPolicyEnumerationTypes.MANDATORY);
-      expect(mfaContextProvider.isProcessing()).toBeFalsy();
-    });
-
-    it("should get the current policy and store it in its state, using API", async() => {
-      fetch.doMockOnceIf(/mfa-policies\/settings*/, () => mockApiResponse(MfaMandatoryPolicy));
-
-      mfaContextProvider = new MfaContextProvider(defaultProps({
-        context: defaultAppContext()
-      }));
-      mockState(mfaContextProvider);
-
       expect.assertions(2);
 
       await mfaContextProvider.findPolicy();
@@ -150,22 +133,6 @@ describe("MFAContext", () => {
       expect(mfaContextProvider.hasMfaSettings()).toBeTruthy();
 
       jest.spyOn(props.context.port, "request").mockImplementation(() => mockMfaSettings(noMfaUserDefinedWithTotp));
-      await mfaContextProvider.findMfaSettings();
-
-      expect(mfaContextProvider.hasMfaSettings()).toBeTruthy();
-      expect(mfaContextProvider.isProcessing()).toBeFalsy();
-    });
-
-    it("should retrieve data for current mfa settings, using API", async() => {
-      expect.assertions(2);
-
-      fetch.doMockOnceIf(/mfa\/setup*/, () => mockApiResponse(mockMfaSettings(noMfaUserDefinedWithTotp)));
-
-      mfaContextProvider = new MfaContextProvider(defaultProps({
-        context: defaultAppContext()
-      }));
-      mockState(mfaContextProvider);
-
       await mfaContextProvider.findMfaSettings();
 
       expect(mfaContextProvider.hasMfaSettings()).toBeTruthy();

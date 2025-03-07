@@ -332,6 +332,14 @@ class Autocomplete extends Component {
   }
 
   /**
+   * Should show autocomplete content
+   * @returns {boolean}
+   */
+  get shouldShowAutocompleteContent() {
+    return Boolean(this.state.name && (this.state.processing || this.state.autocompleteItems));
+  }
+
+  /**
    * Returns the maximum count of element the autocomplete list should display.
    * @returns {integer}
    */
@@ -347,7 +355,7 @@ class Autocomplete extends Component {
     return (
       <div>
         <div>
-          <div className={`input text autocomplete ${this.isInputDisabled() ? 'disabled' : ''}`}>
+          <div className={`input text autocomplete ${this.isInputDisabled() ? 'disabled' : ''} ${this.shouldShowAutocompleteContent ? 'no-focus' : ''}`}>
             <label htmlFor={this.props.id}>{this.props.label}</label>
             <input id={this.props.id}
               name={this.props.name}
@@ -360,7 +368,7 @@ class Autocomplete extends Component {
               onChange={this.handleInputChange}
             />
           </div>
-          {(this.state.processing || this.state.autocompleteItems) &&
+          {this.shouldShowAutocompleteContent &&
           <div className="autocomplete-wrapper">
             <div className="autocomplete-content scroll" ref={this.listRef}>
               <ul>

@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../img/svg/spinner.svg";
 import Password from "../../../shared/components/Password/Password";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 
@@ -161,7 +162,7 @@ class PassphraseDialog extends React.Component {
                 disabled={this.state.processing}>
                 <Trans>Submit</Trans>
                 {this.state.processing &&
-                  <Icon name="spinner"/>
+                  <SpinnerSVG/>
                 }
               </button>
             </div>

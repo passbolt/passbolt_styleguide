@@ -6,13 +6,16 @@
                 display: flex;
                 align-items: center;
                 padding: 1.6rem;
-                box-shadow: inset 0 -.1rem 0 @quickaccess-border;
 
                 &:last-child {
                   box-shadow: none;
                 }
                 a {
                   border: 0;
+                }
+
+                button:hover {
+                  color: var(--Palette-Contrast-1);
                 }
             }
             .information {
@@ -25,15 +28,7 @@
                 align-items: center;
 
                 .password-view, .totp-view {
-                  width: 2.2rem;
-                  height: 2.1rem;
                   margin: 0 0 0 .8rem;
-                  padding: 0;
-
-                  .svg-icon svg {
-                    width: 1.4rem;
-                    height: 100%;
-                  }
                 }
 
                 .totp-code + .svg-icon.timer {
@@ -46,13 +41,13 @@
                 .ellipsis();
                 &.empty {
                   font-style: italic;
-                  color: @text-lightest-color
+                  color: var(--Text-and-icons-Secondary-text);
                 }
             }
             .property-name {
                 font-size: 1.3rem;
                 line-height: 1.8rem;
-                color: @text-light-color;
+                color: var(--Text-and-icons-Secondary-text);
                 margin-bottom: .4rem;
             }
             .secret {
@@ -62,7 +57,7 @@
                   > button {
 
                     &:hover {
-                      color: @text-secret-hover-color;
+                      color: var(--Palette-Contrast-1);
                     }
 
                     > span {
@@ -70,7 +65,7 @@
                     }
 
                     &:before, &:after {
-                      font-family: 'Passbolt', sans-serif;
+                      font-family: 'Obfuscation', sans-serif;
                       font-style: normal;
                       font-weight: 400;
                       font-size: 1.8rem;
@@ -80,18 +75,18 @@
 
                   &.secret-password {
                     > button:before {
-                      content: 'BBBBBBBBB';
+                      content: '00000000';
                     }
                   }
 
                   &.secret-totp {
                     > button {
                       &:before {
-                        content: 'BBB';
+                        content: '000';
                       }
                       &:after {
                         margin-left: .5rem;
-                        content: 'BBB';
+                        content: '000';
                       }
                     }
                   }

@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withTranslation} from "react-i18next";
 import AnimatedFeedback from "../../../../../shared/components/Icons/AnimatedFeedback";
+import LogoSVG from "../../../../../img/svg/logo.svg";
 
 class ApiSuccess extends Component {
   /**
@@ -26,7 +27,9 @@ class ApiSuccess extends Component {
       <div id="container" className="container api-feedback page">
         <div className="content">
           <div className="header">
-            <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+            <div className="logo-svg">
+              <LogoSVG role="img" width="20rem" height="3.5rem"/>
+            </div>
           </div>
           <div className="api-feedback-card">
             <AnimatedFeedback name="success"/>

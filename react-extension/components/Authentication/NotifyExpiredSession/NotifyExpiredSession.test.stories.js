@@ -13,24 +13,21 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import {MemoryRouter} from "react-router-dom/cjs/react-router-dom.min";
 import NotifyExpiredSession from "./NotifyExpiredSession";
 import {defaultProps} from "./NotifyExpiredSession.test.data";
 
 export default {
   title: 'Components/Authentication/NotifyExpiredSession',
-  component: NotifyExpiredSession
+  component: NotifyExpiredSession,
+  decorators: [
+    (Story, {args}) =>
+      <MemoryRouter initialEntries={['/']}>
+        <Story {...args}/>
+      </MemoryRouter>
+  ],
 };
 
-const Template = args =>
-  <MemoryRouter initialEntries={['/']}>
-    <Route component={routerProps => <NotifyExpiredSession {...args} {...routerProps}/>}/>
-  </MemoryRouter>;
-
-const defaultParameters =  {
-  css: "ext_authentication"
+export const Initial = {
+  args: defaultProps()
 };
-
-export const Initial = Template.bind({});
-Initial.args = defaultProps();
-Initial.parameters = defaultParameters;

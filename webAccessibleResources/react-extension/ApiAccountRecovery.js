@@ -23,6 +23,7 @@ import TranslationProvider from "./components/Common/Internationalisation/Transl
 import ChangeApiRecoverLocale from "./components/Internationalisation/ChangeLocale/ChangeApiRecoverLocale";
 import OrchestrateApiAccountRecovery
   from "./components/AuthenticationAccountRecovery/OrchestrateApiAccountRecovery/OrchestrateApiAccountRecovery";
+import LogoSVG from "../img/svg/logo.svg";
 
 /**
  * The recover application served by the API.
@@ -213,15 +214,17 @@ class ApiAccountRecovery extends Component {
             <div id="container" className="container page login">
               <div className="content">
                 <div className="header">
-                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                  <div className="logo-svg">
+                    <LogoSVG role="img" width="20rem" height="3.5rem"/>
+                  </div>
                 </div>
                 <div className="login-form">
                   <OrchestrateApiAccountRecovery/>
                 </div>
                 <ChangeApiRecoverLocale/>
               </div>
+              <Footer/>
             </div>
-            <Footer/>
           </ApiAccountRecoveryContextProvider>
         </TranslationProvider>
         }

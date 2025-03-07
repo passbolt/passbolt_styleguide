@@ -1,12 +1,13 @@
 // Css variable declaration as root to enable the possibility of override it
 :root {
   // default icon color, background color and stroke width
-  --icon-color: @icon-color;
-  --icon-background-color: @icon-background-color;
+  --icon-color: var(--Text-and-icons-Icons);
+  --icon-background-color: var(--Workspace-Panels-background);
   --icon-stroke-width: .15rem;
   // default icon exclamation color and background color
-  --icon-exclamation-color: @icon-exclamation-color;
-  --icon-exclamation-background-color: @icon-exclamation-default-color;
+  --icon-exclamation-color: var(--icon-color);
+  --icon-exclamation-background-color: none;
+  --icon-exclamation-border-color: var(--icon-color);
   // default icon star color
   --icon-favorites-color: @icon-unfavorite-color;
   // default icon failed color
@@ -14,12 +15,12 @@
   // default icon success color
   --icon-success-color: @icon-success-color;
   // default icon spinner color, background color and stroke width
-  --spinner-color: @icon-spinner-color;
-  --spinner-background: @icon-spinner-background;
+  --spinner-color: var(--Spinner-Spinner-foreground);
+  --spinner-background: var(--Spinner-Spinner-background);
   --spinner-stroke-width: .15rem;
   // default icon timer color, background color and stroke width
-  --timer-color: @icon-timer-color;
-  --timer-background: @icon-timer-background;
+  --timer-color: var(--Spinner-Spinner-foreground);
+  --timer-background: var(--Spinner-Spinner-background);
   --timer-stroke-width: .3rem;
   --timer-duration: 30s;
   --timer-delay: 0s;
@@ -30,11 +31,25 @@
     position: relative;
 }
 
+svg {
+  display: inline-flex;
+  align-self: center;
+  * {
+    vector-effect: non-scaling-stroke;
+  }
+  &.star {
+    --icon-background-color: none;
+  }
+}
+
 .svg-icon {
     display: inline-flex;
     align-self: center;
 
     &.spinner {
+      * {
+        vector-effect: none;
+      }
       #loading {
         animation: spin 2s cubic-bezier(0.77, 0, 0.175, 1) forwards infinite;
         stroke-dashoffset: 50.25;
@@ -55,6 +70,9 @@
     }
 
     &.timer {
+      * {
+        vector-effect: none;
+      }
       #timer-progress {
         animation: timer-progress linear forwards infinite;
         animation-duration: var(--timer-duration);
@@ -65,17 +83,17 @@
       @keyframes timer-progress {
         0% {
           stroke-dashoffset: -100.54;
-          stroke: @icon-timer-color;
+          stroke: var(--Spinner-Spinner-foreground);
         }
         65% {
-          stroke: @icon-timer-color;
+          stroke: var(--Spinner-Spinner-foreground);
         }
         75% {
-          stroke: @icon-timer-alert-color;
+          stroke: var(--Palette-Contrast-3);
         }
         100% {
           stroke-dashoffset: -50.27;
-          stroke: @icon-timer-alert-color;
+          stroke: var(--Palette-Contrast-3);
         }
       }
     }
@@ -92,5 +110,4 @@
 }
 
 @import "icons-svg-links.less";
-@import "icons-svg-buttons.less";
 @import "icons-feedback.less";

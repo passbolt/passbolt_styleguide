@@ -11,50 +11,74 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import React from "react";
+import {denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import {overridenPasswordExpirySettingsEntityDto} from "../../../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
+import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import DisplayResourcesWorkspaceMenu from "./DisplayResourcesWorkspaceMenu";
 import {
-  defaultAppContext,
+  defaultPropsMultipleResource,
   defaultPropsMultipleResourceUpdateRights,
-  defaultPropsNoResource,
   defaultPropsOneResourceNotOwned,
-  defaultPropsOneResourceOwned
+  defaultPropsOneResourceOwned,
+  defaultPropsOneStandaloneTotpResourceOwned,
+  defaultPropsOneTotpResourceOwned,
 } from "./DisplayResourcesWorkspaceMenu.test.data";
+import React from "react";
 
 /**
  * DisplayResourcesWorkspaceMenu stories
  */
 export default {
   title: 'Components/Resource/DisplayResourcesWorkspaceMenu',
+  decorators: [
+    Story => (
+      <div className="top-bar">
+        <div className="action-bar">
+          <div className="actions-wrapper">
+            <Story/>
+          </div>
+        </div>
+      </div>
+    ),
+  ],
   component: DisplayResourcesWorkspaceMenu
 };
 
-const Template = ({...args}) =>
-  <div className="page">
-    <div className="header third">
-      <div className="col1 main-action-wrapper">
-      </div>
-      <DisplayResourcesWorkspaceMenu {...args}/>
-    </div>
-  </div>;
+export const OneResourceOwned = {
+  args: defaultPropsOneResourceOwned(),
+};
 
-const props = defaultPropsOneResourceOwned();
-props.context = defaultAppContext();
+export const ResourceWithTotpOwned = {
+  args: defaultPropsOneTotpResourceOwned(),
+};
 
-export const OneResourceOwned = Template.bind({});
-OneResourceOwned.args = {...props};
+export const ResourceStandaloneTotpOwned = {
+  args: defaultPropsOneStandaloneTotpResourceOwned(),
+};
 
-const propsResourcesNotOwned = defaultPropsOneResourceNotOwned();
-propsResourcesNotOwned.context = defaultAppContext();
-export const ResourceNotOwned = Template.bind({});
-ResourceNotOwned.args = {...propsResourcesNotOwned};
+export const ResourceNotOwned = {
+  args: defaultPropsOneResourceNotOwned(),
+};
 
-const propsNoResource = defaultPropsNoResource();
-propsNoResource.context = defaultAppContext();
-export const NoResource = Template.bind({});
-NoResource.args = {...propsNoResource};
+export const MultipleResourcesNotOwnedWithAllDenyOnRBAC = {
+  args: defaultPropsMultipleResource({
+    rbacContext: denyRbacContext(),
+  }),
+};
 
-const propsMultipleResource = defaultPropsMultipleResourceUpdateRights();
-propsMultipleResource.context = defaultAppContext();
-export const MultipleResource = Template.bind({});
-MultipleResource.args = {...propsMultipleResource};
+export const MultipleResource = {
+  args:  defaultPropsMultipleResourceUpdateRights(),
+};
+
+export const MultipleResourceNotOwned = {
+  args:  defaultPropsMultipleResource(),
+};
+
+const propsResourcesWithAllFeatures = defaultPropsOneTotpResourceOwned({
+  passwordExpiryContext: defaultPasswordExpirySettingsContext({
+    getSettings: overridenPasswordExpirySettingsEntityDto,
+  })
+});
+export const WithAllFeatureDisplayed = {
+  args: propsResourcesWithAllFeatures
+};

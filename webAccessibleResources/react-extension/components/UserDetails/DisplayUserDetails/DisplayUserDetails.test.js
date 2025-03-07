@@ -44,14 +44,6 @@ describe("Display User Details", () => {
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith("http://localhost/app/users/view/54c6278e-f824-5fda-91ff-3e946b18d994");
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
   });
-
-
-  it('As LU I should close the details area', async() => {
-    jest.spyOn(props.userWorkspaceContext, "onDetailsLocked").mockImplementationOnce(() => {});
-    await page.close();
-    expect(props.userWorkspaceContext.onDetailsLocked).toHaveBeenCalled();
-  });
-
   it('As LU I should see groups of an active user', async() => {
     // Set the context in order the detailed user to be inactive
     const propsWithInactiveUser = defaultProps();

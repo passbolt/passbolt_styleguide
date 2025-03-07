@@ -1,26 +1,9 @@
 /*
-	form to add new permissions
-	basically this form is embedded in a dedicated iframe released by the plugin
-*/
-.form-content.permission-add {
-    label {
-        margin-top: .4rem;
-    }
-    .autocomplete.input {
-        margin-bottom: 0;
-    }
-    .message {
-        padding-left: 0;
-    }
-}
-
-/*
 	autocomplete users results
 	basically this list of users is embedded in a dedicated iframe released by the plugin
 */
 .autocomplete-wrapper {
     position: relative;
-    margin-top: -.7rem;
 
     .autocomplete-content {
         position: absolute;
@@ -30,17 +13,17 @@
         z-index: 99;
         padding: 0;
         margin: 0;
-        background: @autocomplete-background;
-        color: @autocomplete-text-color;
-        border: 1px solid @autocomplete-border;
-        border-radius: .3rem;
+        background: var(--Field-Field-background);
+        border-right: 1px solid var(--Field-Field-border);
+        border-left: 1px solid var(--Field-Field-border);
+        border-bottom: 1px solid var(--Field-Field-border);
+        border-radius: 0 0 var(--Menu-radius) var(--Menu-radius);
         max-height: 19.8rem;
         overflow: auto;
         box-sizing: border-box;
-        filter: drop-shadow(0 1rem 1rem rgba(0, 0, 0, @shadow-opacity-dropdown));
+        box-shadow: var(--Menu-drop-shadow-Menu-drop-shadow-X) var(--Menu-drop-shadow-Menu-drop-shadow-Y) var(--Menu-drop-shadow-Menu-drop-shadow-blur) 0 var(--Menu-drop-shadow-Menu-drop-shadow); // filter: drop-shadow;
 
         .row {
-            .clearfix();
             font-size: 1.5rem;
             padding: .8rem 1.6rem;
             margin: .8rem 0;
@@ -50,30 +33,14 @@
             }
 
             &:hover, &.selected {
-                background: @autocomplete-hover-background;
-                box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black);
-
-                button {
-                    color: @autocomplete-hover-text-color;
-
-                    .details {
-                      color: @autocomplete-hover-details-text-color;
-                    }
-                }
+                background: var(--Grid-Grid-selected-row);
+                box-shadow: inset .1rem .1rem 0 0 var(--States-Hover-Highlight), inset -.1rem -.1rem 0 0 var(--States-Hover-Shadow);
             }
 
             /* active */
             &:active {
-              box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
-              background: @autocomplete-active-background;
-
-              button {
-                  color: @autocomplete-active-text-color;
-
-                  .details {
-                    color: @autocomplete-active-details-text-color;
-                  }
-              }
+              box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow);
+              background: var(--Grid-Grid-selected-row);
             }
             /* user summary */
             .avatar {
@@ -81,10 +48,9 @@
             }
             .user,
             .group {
-                width: calc(100% - 5.6rem);
+                width: calc(100% - 4.8rem);
                 float: left;
-                padding-left: 1em;
-                padding-right: 1em;
+                padding-left: .8rem;
             }
             .name {
                 display: inline-block;
@@ -92,7 +58,7 @@
                 .ellipsis();
             }
             .details {
-                color: @autocomplete-details-text-color;
+                color: var(--Text-and-icons-Secondary-text);
                 .ellipsis();
                 display: block;
             }
@@ -118,7 +84,12 @@
                 width: 100%;
 
                 & > span {
-                  max-with:100;
+                  max-width: 100%;
+                }
+
+                .avatar svg {
+                  width: 4.2rem;
+                  height: 4.2rem;
                 }
             }
 
@@ -127,6 +98,12 @@
 
               .tooltip-portal {
                 margin-left: 1rem;
+                line-height: 1.6rem;
+
+                svg {
+                  width: 1.6rem;
+                  height: 1.6rem;
+                }
               }
             }
         }
@@ -139,4 +116,14 @@
             max-height: none;
         }
     }
+}
+
+.input.autocomplete.no-focus {
+  z-index: 100;
+  position: relative;
+
+  input {
+    border-radius: var(--Button-border-radius) var(--Button-border-radius) 0 0;
+    box-shadow: inset 0 0 0 .1rem var(--Field-Field-border);
+  }
 }

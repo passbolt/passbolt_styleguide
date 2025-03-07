@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../img/svg/spinner.svg";
 
 class DisplayInFormMenuItem extends React.Component {
   /**
@@ -63,7 +63,10 @@ class DisplayInFormMenuItem extends React.Component {
     return (
       <a className={this.getClassName()} onClick={this.handleClick} disabled={this.props.disabled}>
         <div className="in-form-menu-item-icon">
-          <Icon name={this.props.processing ? "spinner" : this.props.icon} big={true} dim={true}/>
+          {this.props.processing
+            ? <SpinnerSVG className="svg-icon icon-only dim"/>
+            : this.props.icon
+          }
         </div>
         <div className="in-form-menu-item-content">
           <div className="in-form-menu-item-content-header">

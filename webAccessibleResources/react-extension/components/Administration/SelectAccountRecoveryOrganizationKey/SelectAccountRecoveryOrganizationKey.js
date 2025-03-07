@@ -82,7 +82,7 @@ class SelectAccountRecoveryOrganizationKey extends React.Component {
         <Tabs activeTabName='Import'>
           <Tab
             key='Import'
-            name='Import'
+            name={this.props.t('Import')}
             type='Import'>
             <ImportOrganizationKey
               {...this.props}
@@ -91,7 +91,7 @@ class SelectAccountRecoveryOrganizationKey extends React.Component {
           </Tab>
           <Tab
             key='Generate'
-            name='Generate'
+            name={this.props.t('Generate')}
             type='Generate'>
             <GenerateOrganizationKey
               {...this.props}

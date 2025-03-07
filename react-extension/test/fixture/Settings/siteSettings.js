@@ -198,6 +198,18 @@ const siteSettings = (isProEdition = true) => ({
       },
       "sso": {
         "enabled": isProEdition,
+      },
+      "mfaPolicies": {
+        "enabled": isProEdition,
+      },
+      "passwordPoliciesUpdate": {
+        "enabled": isProEdition,
+      },
+      "userPassphrasePolicies": {
+        "enabled": isProEdition,
+      },
+      "metadata": {
+        "enabled": true,
       }
     }
   }

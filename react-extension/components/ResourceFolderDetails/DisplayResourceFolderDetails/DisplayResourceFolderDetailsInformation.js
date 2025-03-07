@@ -12,13 +12,16 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withRouter} from "react-router-dom";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import FolderSVG from "../../../../img/svg/folder.svg";
+import ShareFolderSVG from "../../../../img/svg/share_folder.svg";
 
 class DisplayResourceFolderDetailsInformation extends React.Component {
   /**
@@ -169,49 +172,41 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
-              <Trans>Information</Trans>
-              {this.state.open &&
-              <Icon name="caret-down"/>
-              }
-              {!this.state.open &&
-              <Icon name="caret-right"/>
+              <span className="accordion-title">
+                <Trans>Information</Trans>
+              </span>
+              {this.state.open
+                ? <CaretDownSVG />
+                : <CaretRightSVG />
               }
             </button>
           </h4>
         </div>
-        <div className="accordion-content">
-          <ul>
-            <li className="username">
-              <span className="label"><Trans>Name</Trans></span>
-              <span className="value">{this.folder.name}</span>
-            </li>
-            <li className="modified">
-              <span className="label"><Trans>Modified</Trans></span>
-              <span className="value" title={this.folder.modified}>{modifiedDateTimeAgo}</span>
-            </li>
-            <li className="modified-by">
-              <span className="label"><Trans>Modified by</Trans></span>
-              <span className="value">{modifierUsername}</span>
-            </li>
-            <li className="modified">
-              <span className="label"><Trans>Created</Trans></span>
-              <span className="value" title={this.folder.created}>{createdDateTimeAgo}</span>
-            </li>
-            <li className="modified-by">
-              <span className="label"><Trans>Created by</Trans></span>
-              <span className="value">{creatorUsername}</span>
-            </li>
-            <li className="location">
-              <span className="label"><Trans>Location</Trans></span>
-              <span className="value">
-                <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="link no-border folder-link">
-                  { !this.isFolderParentShared() ? <Icon name="folder"/> : <Icon name="folder-shared"/> }
+        {this.state.open &&
+          <div className="accordion-content">
+            <div className="information-label">
+              <span className="username label"><Trans>Name</Trans></span>
+              <span className="created label"><Trans>Created</Trans></span>
+              <span className="created-by label"><Trans>Created by</Trans></span>
+              <span className="modified label"><Trans>Modified</Trans></span>
+              <span className="modified-by label"><Trans>Modified by</Trans></span>
+              <span className="location label"><Trans>Location</Trans></span>
+            </div>
+            <div className="information-value">
+              <span className="username value">{this.folder.name}</span>
+              <span className="created value" title={this.folder.created}>{createdDateTimeAgo}</span>
+              <span className="created-by value">{creatorUsername}</span>
+              <span className="modified value" title={this.folder.modified}>{modifiedDateTimeAgo}</span>
+              <span className="modified-by value">{modifierUsername}</span>
+              <span className="location value">
+                <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="no-border folder-link">
+                  {this.isFolderParentShared() ? <ShareFolderSVG/> : <FolderSVG/>}
                   <span>{folderParentName}</span>
                 </button>
               </span>
-            </li>
-          </ul>
-        </div>
+            </div>
+          </div>
+        }
       </div>
     );
   }

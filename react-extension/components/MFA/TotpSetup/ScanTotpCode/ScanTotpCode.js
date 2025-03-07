@@ -19,7 +19,6 @@ import {Trans} from 'react-i18next';
 import QRCode from 'qrcode';
 import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
 import {MfaSettingsWorkflowStates, withMfa} from "../../../../contexts/MFAContext";
-import Icon from "../../../../../shared/components/Icons/Icon";
 
 /**
  * This component will display scan for the totp setup
@@ -185,67 +184,59 @@ class ScanTotpCode extends Component {
    */
   render() {
     return (
-      <div className="grid grid-responsive-12">
-        <div className="row mfa-setup totp-scan-code">
-          <div className="col8 main-column totp-setup">
+      <>
+        <div className="main-column mfa-setup totp-scan-code">
+          <div className="main-content totp-setup">
             <h3><Trans>Time based One Time Password (TOTP)</Trans></h3>
             <h4 className="no-border"><Trans>Scan this bar code</Trans></h4>
-            <div className="qrcode">
-              <img id="qr-canvas" src={this.state.qrCode} />
-            </div>
-            <div className="input-verify">
-              <form onSubmit={this.handleSubmit}>
-                <div className="input text required">
-                  <label htmlFor="totp"><Trans>One Time Password (OTP)</Trans></label>
-                  <input
-                    type="text"
-                    name="totp"
-                    placeholder="123456"
-                    autoComplete="off"
-                    onChange={this.handleInputChange}
-                    disabled={this.hasAllInputDisabled()}
-                    ref={this.otpInputRef}/>
-                  {(this.state.error.isRequired && this.state.isSubmitted) &&
+            <div className="totp-setup-form">
+              <div className="qrcode">
+                <img id="qr-canvas" src={this.state.qrCode} />
+              </div>
+              <div className="input-verify">
+                <form onSubmit={this.handleSubmit}>
+                  <div className="input text required">
+                    <label htmlFor="totp"><Trans>One Time Password (OTP)</Trans></label>
+                    <input
+                      type="text"
+                      name="totp"
+                      placeholder="123456"
+                      autoComplete="off"
+                      onChange={this.handleInputChange}
+                      disabled={this.hasAllInputDisabled()}
+                      ref={this.otpInputRef}/>
+                    {(this.state.error.isRequired && this.state.isSubmitted) &&
                 <div className="code-required error-message"><Trans>A OTP code is required.</Trans></div>
-                  }
-                  {(this.state.error.invalidCode && this.state.isSubmitted) &&
+                    }
+                    {(this.state.error.invalidCode && this.state.isSubmitted) &&
                 <div className="invalid-code error-message"><Trans>This OTP is not valid.</Trans></div>
-                  }
-                </div>
-                <div className="helptext">
-                  <Trans>Enter the six digit number as presented on your phone or tablet.</Trans>
-                </div>
-              </form>
-            </div>
-            <div className="actions-wrapper">
-              <button
-                className="button cancel"
-                type='button'
-                disabled={this.hasAllInputDisabled()}
-                onClick={this.handleCancelClick}>
-                <span><Trans>Cancel</Trans></span>
-              </button>
-              <button
-                className="button primary"
-                type='button'
-                disabled={this.hasAllInputDisabled()}
-                onClick={this.handleSubmit}>
-                <span><Trans>Validate</Trans></span>
-              </button>
-            </div>
-          </div>
-          <div className="col4 last">
-            <div className="sidebar-help">
-              <h3><Trans>Requirements</Trans></h3>
-              <p><Trans>To proceed you need to install an application that supports Time Based One Time Passwords (TOTP) on your phone or tablet such as:</Trans><a href="https://support.google.com/accounts/answer/1066447" target="_blank" rel="noopener noreferrer">Google Authenticator</a> <Trans>or</Trans> <a href="https://freeotp.github.io/" target="_blank" rel="noopener noreferrer">FreeOTP</a>.</p>
-              <a className="button" href="https://help.passbolt.com/start" target="_blank" rel="noopener noreferrer">
-                <Icon name="document" />
-                <span><Trans>Read the documentation</Trans></span>
-              </a>
+                    }
+                  </div>
+                  <div className="helptext">
+                    <Trans>Enter the six digit number as presented on your phone or tablet.</Trans>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        <div className="actions-wrapper">
+          <button
+            className="button cancel secondary"
+            type='button'
+            disabled={this.hasAllInputDisabled()}
+            onClick={this.handleCancelClick}>
+            <span><Trans>Cancel</Trans></span>
+          </button>
+          <button
+            className="button primary form"
+            type='button'
+            disabled={this.hasAllInputDisabled()}
+            onClick={this.handleSubmit}>
+            <span><Trans>Validate</Trans></span>
+          </button>
+        </div>
+      </>
     );
   }
 }

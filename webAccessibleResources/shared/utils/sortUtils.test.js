@@ -14,7 +14,7 @@
 
 import {defaultResourceDto} from "../models/entity/resource/resourceEntity.test.data";
 import {sortResourcesAlphabetically} from "./sortUtils";
-import {defaultResourceMetadataDto} from "../models/entity/resourceMetadata/resourceMetadataEntity.test.data";
+import {defaultResourceMetadataDto} from "../models/entity/resource/metadata/resourceMetadataEntity.test.data";
 
 describe("sortUtils", () => {
   describe('::sortResourceAlphabetically', () => {

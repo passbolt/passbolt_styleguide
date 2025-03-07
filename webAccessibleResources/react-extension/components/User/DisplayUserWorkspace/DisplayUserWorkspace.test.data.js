@@ -12,30 +12,45 @@
  * @since         2.11.0
  */
 
+import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-
-/**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
- */
-export function defaultContext(data = {}) {
-  const defaultData = defaultAppContext();
-  return Object.assign(defaultData, data);
-}
+import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContext.test.data";
+import {defaultNavigationContext} from "../../../contexts/NavigationContext.test.data";
 
 /**
  * Props with user details
  */
 export function propsWithUserDetails() {
   return {
-    userWorkspaceContext: {
+    context: defaultAppContext(),
+    userWorkspaceContext: defaultUserWorkspaceContext({
       details: {
         user: 'some user',
         locked: true
       },
       isAccessAllowed: () => true,
-    }
+    }),
+    navigationContext: defaultNavigationContext(),
+  };
+}
+
+/**
+ * Props with user details
+ */
+export function propsWithSelecteUser() {
+  const user = defaultUserDto();
+  return {
+    context: defaultAppContext(),
+    userWorkspaceContext: defaultUserWorkspaceContext({
+      details: {
+        user: 'some user',
+        locked: true
+      },
+      selectedUsers: [user],
+      filteredUsers: [user],
+      isAccessAllowed: () => true,
+    }),
+    navigationContext: defaultNavigationContext(),
   };
 }
 
@@ -44,13 +59,14 @@ export function propsWithUserDetails() {
  */
 export function propsWithGroupDetails() {
   return {
-    userWorkspaceContext: {
+    context: defaultAppContext(),
+    userWorkspaceContext: defaultUserWorkspaceContext({
       details: {
         group: 'some group',
         locked: true
       },
       isAccessAllowed: () => true,
-    }
+    })
   };
 }
 
@@ -60,12 +76,13 @@ export function propsWithGroupDetails() {
  */
 export function propsWithoutLock() {
   return {
-    userWorkspaceContext: {
+    context: defaultAppContext(),
+    userWorkspaceContext: defaultUserWorkspaceContext({
       details: {
         locked: false
       },
       isAccessAllowed: () => true,
-    }
+    })
   };
 }
 

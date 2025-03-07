@@ -20,11 +20,6 @@ import {defaultProps} from "./SendTestMailDialog.test.data";
 import AdminSmtpSettingsContextProvider from "../../../contexts/AdminSmtpSettingsContext";
 import {defaultDebugResponse} from "./SendTestMailDialog.test.data";
 
-export default {
-  title: 'Components/Administration/SendTestMailDialog',
-  component: SendTestMailDialog
-};
-
 let currentStory = null;
 const mockFetch = new MockFetch();
 mockFetch.addPostFetchRequest(/smtp\/email\.json/, async() => {
@@ -45,23 +40,23 @@ mockFetch.addPostFetchRequest(/smtp\/email\.json/, async() => {
   throw new Error("Unsupported story");
 });
 
+export default {
+  title: 'Components/Administration/SendTestMailDialog',
+  component: SendTestMailDialog,
+  decorators: [
+    (Story, storyArgs) => {
+      currentStory = storyArgs.id;
+      return <AdminSmtpSettingsContextProvider {...storyArgs.args}>
+        <Story {...storyArgs.args}/>;
+      </AdminSmtpSettingsContextProvider>;
+    }
+  ]
+};
 
-const Template = args =>
-  <AdminSmtpSettingsContextProvider {...args}>
-    <SendTestMailDialog {...args}/>;
-  </AdminSmtpSettingsContextProvider>;
+export const EmailSendSuccess = {
+  args: defaultProps(),
+};
 
-const decorators = [
-  (Story, context) => {
-    currentStory = context.id;
-    return <Story/>;
-  }
-];
-
-export const EmailSendSuccess = Template.bind({});
-EmailSendSuccess.args = defaultProps();
-EmailSendSuccess.decorators = decorators;
-
-export const EmailSendError = Template.bind({});
-EmailSendError.args = defaultProps();
-EmailSendError.decorators = decorators;
+export const EmailSendError = {
+  args: defaultProps(),
+};

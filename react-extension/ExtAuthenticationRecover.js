@@ -20,6 +20,7 @@ import RecoverAuthentication from "./components/AuthenticationRecover/RecoverAut
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import Footer from "./components/Common/Footer/Footer";
 import ChangeLocale from "./components/Internationalisation/ChangeLocale/ChangeLocale";
+import LogoSVG from "../img/svg/logo.svg";
 
 /**
  * The recover application served by the browser extension.
@@ -135,15 +136,17 @@ class ExtAuthenticationRecover extends Component {
             <div id="container" className="container page login">
               <div className="content">
                 <div className="header">
-                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                  <div className="logo-svg">
+                    <LogoSVG role="img" width="20rem" height="3.5rem"/>
+                  </div>
                 </div>
                 <div className="login-form">
                   <RecoverAuthentication/>
                 </div>
                 <ChangeLocale/>
               </div>
+              <Footer/>
             </div>
-            <Footer/>
           </AuthenticationRecoverContextProvider>
         </TranslationProvider>
         }

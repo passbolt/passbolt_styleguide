@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 import {defaultResourceDto} from "./resourceEntity.test.data";
-import {ownerPermissionDto} from "../permission/permissionEntity.test.data.js";
+import {ownerPermissionDto, readPermissionDto, updatePermissionDto} from "../permission/permissionEntity.test.data.js";
 import {readSecret} from "../secret/secretEntity.test.data";
 import {
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
@@ -63,6 +63,22 @@ export const resourceAllTypesDtosCollection = () => {
   resource5.permission = ownerPermissionDto({aco_foreign_key: resource5.id});
   resource5.permissions = [resource5.permission];
   return [resource1, resource2, resource3, resource4, resource5];
+};
+
+export const resourceAllTypesDtosCollectionAndVariousPermission = () => {
+  const resource1 = defaultResourceDto({name: "Resource password string", resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING});
+  resource1.secrets = [readSecret({resource_id: resource1.id})];
+  resource1.permission = ownerPermissionDto({aco_foreign_key: resource1.id});
+  resource1.permissions = [resource1.permission];
+  const resource2 = defaultResourceDto({name: "Resource password with encrypted description", resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION});
+  resource2.secrets = [readSecret({resource_id: resource2.id})];
+  resource2.permission = updatePermissionDto({aco_foreign_key: resource2.id});
+  resource2.permissions = [resource2.permission];
+  const resource3 = defaultResourceDto({name: "Resource password with encrypted description and totp", resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP});
+  resource3.secrets = [readSecret({resource_id: resource3.id})];
+  resource3.permission = readPermissionDto({aco_foreign_key: resource3.id});
+  resource3.permissions = [resource3.permission];
+  return [resource1, resource2, resource3];
 };
 
 /**

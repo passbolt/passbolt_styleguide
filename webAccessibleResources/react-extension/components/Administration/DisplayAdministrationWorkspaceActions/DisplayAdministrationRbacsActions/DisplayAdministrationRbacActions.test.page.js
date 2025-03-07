@@ -37,21 +37,14 @@ export default class  DisplayAdministrationRbacActionsPage {
    * Returns the workspace action
    */
   get workspaceAction() {
-    return this._page.container.querySelector('.actions');
-  }
-
-  /**
-   * Returns the number of actions
-   */
-  get uiActionCount() {
-    return this._page.container.querySelectorAll('li').length;
+    return this._page.container.querySelector('.actions-wrapper');
   }
 
   /**
    * Returns the save button
    */
   get saveButton() {
-    return this._page.container.querySelectorAll('li button')[0];
+    return this._page.container.querySelector('button');
   }
 
   /**

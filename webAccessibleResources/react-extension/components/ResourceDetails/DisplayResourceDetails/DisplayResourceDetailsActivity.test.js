@@ -13,9 +13,8 @@
  */
 
 /**
- * Unit tests on PasswordSidebarActivitySection in regard of specifications
+ * Unit tests on DisplayResourceDetailsActivity in regard of specifications
  */
-
 
 import {
   activitiesMock,
@@ -24,6 +23,7 @@ import {
   lastActivityMock
 } from "./DisplayResourceDetailsActivity.test.data";
 import DisplayResourceDetailsActivityPage from "./DisplayResourceDetailsActivity.test.page";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -56,14 +56,18 @@ describe("See activities", () => {
     });
 
     it('I should see the 4 activities made on the resource', async() => {
-      await page.title.click();
+      expect.assertions(2);
+      const page = new DisplayResourceDetailsActivityPage(context, props);
+      mockContextRequest(activitiesFoundRequestMockImpl);
+
+      await waitForTrue(() => Boolean(page.displayActivityList.creator(1)));
 
       expect(page.displayActivityList.exists()).toBeTruthy();
       expect(page.displayActivityList.count()).toBe(4);
     });
 
     it('I should be able to identify each activity creators', async() => {
-      await page.title.click();
+      expect.assertions(4);
 
       expect(page.displayActivityList.creator(1)).toBe('Admin User');
       expect(page.displayActivityList.creator(2)).toBe('Ada User');
@@ -72,7 +76,7 @@ describe("See activities", () => {
     });
 
     it('I should be able to see each activity timestamps', async() => {
-      await page.title.click();
+      expect.assertions(4);
 
       expect(page.displayActivityList.creationTime(1)).toBeDefined();
       expect(page.displayActivityList.creationTime(2)).toBeDefined();
@@ -81,10 +85,11 @@ describe("See activities", () => {
     });
 
     it('I should be able to see each other activities with more button ', async() => {
-      await page.title.click();
-
+      expect.assertions(4);
       mockContextRequest(activitiesMoreFoundRequestMockImpl);
+
       expect(page.displayActivityList.moreButtonExists()).toBeTruthy();
+
       await page.displayActivityList.moreButtonClick();
       expect(page.displayActivityList.count()).toBe(5);
       expect(page.displayActivityList.creator(5)).toBe('Admin User');
@@ -111,7 +116,7 @@ describe("See activities", () => {
     });
 
     it('I should see the loading message “Retrieving activities”', async() => {
-      await page.title.click();
+      expect.assertions(2);
 
       const inProgressFn = () => {
         expect(page.displayActivityList.isLoading()).toBeTruthy();

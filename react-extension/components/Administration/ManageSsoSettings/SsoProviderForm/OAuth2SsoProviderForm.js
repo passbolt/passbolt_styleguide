@@ -169,7 +169,6 @@ class OAuth2SsoProviderForm extends React.Component {
             <Trans>The OAuth2 authentication endpoint.</Trans>
           </p>
         </div>
-        <hr/>
         <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>Redirect URL</Trans></label>
           <div className="button-inline">
@@ -183,7 +182,6 @@ class OAuth2SsoProviderForm extends React.Component {
             <Trans>The URL to provide to the OAuth2 platform when registering the application.</Trans>
           </p>
         </div>
-        <hr/>
         <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>OpenId Configuration Path</Trans></label>
           <input id="sso-oauth2-openid-configuration-path-input" type="text" className="fluid form-element" name="openid_configuration_path" ref={this.openIdConfigurationPathInputRef}
@@ -196,7 +194,6 @@ class OAuth2SsoProviderForm extends React.Component {
             <Trans>The OpenId configuration relative path from the given login url.</Trans>
           </p>
         </div>
-        <hr/>
         <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>Scope</Trans></label>
           <input id="sso-oauth2-scope-input" type="text" className="fluid form-element" name="scope" ref={this.scopeInputRef}
@@ -209,7 +206,6 @@ class OAuth2SsoProviderForm extends React.Component {
             <Trans>The OpenId scope.</Trans>
           </p>
         </div>
-        <hr/>
         <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>Application (client) ID</Trans></label>
           <input id="sso-oauth2-client-id-input" type="text" className="fluid form-element" name="client_id" ref={this.clientIdInputRef}

@@ -121,14 +121,14 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
    * Returns the help element
    */
   get help() {
-    return this._page.container.querySelector('.col4.last') !== null;
+    return this._page.container.querySelector('.sidebar-help-section') !== null;
   }
 
   /**
    * Returns the help read documentation element
    */
   get helpReadDocumentation() {
-    return this._page.container.querySelector('.col4.last a');
+    return this._page.container.querySelector('.sidebar-help-section a');
   }
 
   /**

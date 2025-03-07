@@ -37,7 +37,6 @@ class EnterNewPassphrase extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.isPwndProcessingPromise = null;
     this.bindEventHandlers();
     this.createReferences();
   }
@@ -117,7 +116,7 @@ class EnterNewPassphrase extends React.Component {
    * Put the focus on the passphrase input
    */
   focusOnPassphrase() {
-    this.passphraseInput.current.focus();
+    this.passphraseInput.current?.focus();
   }
 
   /**
@@ -254,47 +253,36 @@ class EnterNewPassphrase extends React.Component {
 
     const passphraseEntropy = this.state.passphraseInDictionnary ? 0 : this.state.passphraseEntropy;
     return (
-      <div className="grid grid-responsive-12 profile-passphrase">
-        <div className="row">
-          <div className="col7 main-column">
-            <form className="enter-passphrase" onSubmit={this.handleSubmit}>
-              <h3><Trans>Please enter a new passphrase</Trans></h3>
-              <div className="form-content">
-                <div className="input-password-wrapper input required">
-                  <Password
-                    id="passphrase-input"
-                    autoComplete="off"
-                    inputRef={this.passphraseInput}
-                    value={this.state.passphrase}
-                    preview={true}
-                    securityToken={this.props.context.userSettings.getSecurityToken()}
-                    onChange={this.handlePassphraseChange}
-                    disabled={!this.areActionsAllowed}/>
-                  <PasswordComplexityWithGoal entropy={passphraseEntropy} targetEntropy={userPassphrasePolicies.entropy_minimum}/>
-                  <>
-                    {this.state.passphraseInDictionnary &&
-                      <div className="invalid-passphrase error-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
-                    }
-                  </>
-                </div>
+      <form className="profile-passphrase" onSubmit={this.handleSubmit}>
+        <div className="main-column">
+          <div className="main-content">
+            <h3><Trans>Please enter a new passphrase</Trans></h3>
+            <div className="enter-passphrase">
+              <div className="input-password-wrapper input required">
+                <Password
+                  id="passphrase-input"
+                  autoComplete="off"
+                  inputRef={this.passphraseInput}
+                  value={this.state.passphrase}
+                  preview={true}
+                  securityToken={this.props.context.userSettings.getSecurityToken()}
+                  onChange={this.handlePassphraseChange}
+                  disabled={!this.areActionsAllowed}/>
+                <PasswordComplexityWithGoal entropy={passphraseEntropy} targetEntropy={userPassphrasePolicies.entropy_minimum}/>
+                {this.state.passphraseInDictionnary &&
+                  <div className="invalid-passphrase error-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
+                }
               </div>
-              <div className="submit-wrapper">
-                <button className="button cancel" type="button" disabled={!this.areActionsAllowed} onClick={this.handleCancel}>
-                  <Trans>Cancel</Trans>
-                </button>
-                <FormSubmitButton primary={true} disabled={this.mustBeDisabled} processing={this.isProcessing} value={this.props.t('Update')}/>
-              </div>
-            </form>
-          </div>
-          <div className="col4 last">
-            <div className="sidebar-help">
-              <h3><Trans>Tips for choosing a good passphrase</Trans></h3>
-              <p><Trans>Make sure your passphrase is hard to guess but also that is long enough. For example you can use your favorite lyric from a song,
-                grab the first couple of characters from the words in your favorite line.</Trans></p>
             </div>
           </div>
         </div>
-      </div>
+        <div className="actions-wrapper">
+          <button className="button cancel secondary" type="button" disabled={!this.areActionsAllowed} onClick={this.handleCancel}>
+            <Trans>Cancel</Trans>
+          </button>
+          <FormSubmitButton disabled={this.mustBeDisabled} processing={this.isProcessing} value={this.props.t('Update')}/>
+        </div>
+      </form>
     );
   }
 }

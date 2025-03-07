@@ -1,36 +1,31 @@
-import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import PropTypes from "prop-types";
 import DeleteUser from "./DeleteUser";
 import {defaultAppContext, mockUser} from "./DeleteUser.test.data";
 
 export default {
   title: 'Components/User/DeleteUser',
-  component: DeleteUser
+  component: DeleteUser,
+  decorators: [
+    (Story, {args}) =>
+      <AppContext.Provider value={args.context}>
+        <Story {...args} />
+      </AppContext.Provider>
+  ],
 };
 
-const Template = ({context, ...args}) =>
-  <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <DeleteUser {...args} {...routerProps}/>}></Route>
-    </MemoryRouter>
-  </AppContext.Provider>;
-
-Template.propTypes = {
-  context: PropTypes.object,
+export const Initial = {
+  args: {
+    context: defaultAppContext(),
+    onClose: () => {}
+  }
 };
 
-export const Initial = Template.bind({});
-Initial.args = {
-  context: defaultAppContext(),
-  onClose: () => {}
-};
-
-export const LongUsername = Template.bind({});
-LongUsername.args = {
-  context: defaultAppContext({deleteUserDialogProps: {
-    user: mockUser({username: "repeat".repeat(10)})
-  }}),
-  onClose: () => {}
+export const LongUsername = {
+  args: {
+    context: defaultAppContext({deleteUserDialogProps: {
+      user: mockUser({username: "repeat".repeat(10)})
+    }}),
+    onClose: () => {}
+  }
 };

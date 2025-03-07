@@ -1,15 +1,33 @@
-import {MemoryRouter, Route} from "react-router-dom";
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         2.14.0
+ */
+
+import {MemoryRouter} from "react-router-dom";
 import React from "react";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
-import PropTypes from "prop-types";
 import DeleteUserGroupWithConflicts from "./DeleteUserGroupWithConflicts";
-import {mockGroups, mockResources, mockUsers} from "./DeleteUserGroupWithConflicts.test.data";
+import {mockFolders, mockGroups, mockResources, mockUsers} from "./DeleteUserGroupWithConflicts.test.data";
 import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
   title: 'Components/UserGroup/DeleteUserGroupWithConflicts',
-  component: DeleteUserGroupWithConflicts
+  component: DeleteUserGroupWithConflicts,
+  decorators: [
+    (Story, {args}) =>
+      <MemoryRouter initialEntries={['/']}>
+        <Story {...args}/>
+      </MemoryRouter>
+  ],
 };
 
 const context = {
@@ -21,7 +39,10 @@ const context = {
     },
     errors: {
       resources: {
-        sole_owner: mockResources
+        sole_owner: mockResources,
+      },
+      folders: {
+        sole_owner: mockFolders,
       }
     }
   },
@@ -29,20 +50,9 @@ const context = {
   port: new MockPort()
 };
 
-
-const Template = ({context, ...args}) =>
-  <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <DeleteUserGroupWithConflicts {...args} {...routerProps}/>}></Route>
-    </MemoryRouter>
-  </AppContext.Provider>;
-
-Template.propTypes = {
-  context: PropTypes.object,
-};
-
-export const Initial = Template.bind({});
-Initial.args = {
-  context: context,
-  onClose: () => {}
+export const Initial = {
+  args: {
+    context: context,
+    onClose: () => {}
+  },
 };

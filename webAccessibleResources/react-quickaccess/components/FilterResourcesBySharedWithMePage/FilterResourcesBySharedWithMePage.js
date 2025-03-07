@@ -17,6 +17,7 @@ import React from "react";
 import {Link, withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../img/svg/spinner.svg";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
 import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
@@ -167,7 +168,7 @@ class FilterResourcesBySharedWithMePage extends React.Component {
           <ul className="list-items">
             {!isReady &&
               <li className="empty-entry">
-                <Icon name="spinner"/>
+                <SpinnerSVG/>
                 <p className="processing-text">
                   <Trans>Retrieving your passwords</Trans>
                 </p>

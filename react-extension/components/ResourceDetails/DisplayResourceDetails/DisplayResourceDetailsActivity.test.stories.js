@@ -49,7 +49,9 @@ Initial.args = {
   resourceWorkspaceContext: {
     details: {
       resource: {
-        name: "resource"
+        metadata: {
+          name: "resource"
+        }
       }
     }
   }

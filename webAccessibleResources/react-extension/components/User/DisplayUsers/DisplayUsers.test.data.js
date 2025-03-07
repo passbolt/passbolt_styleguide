@@ -18,32 +18,17 @@ import {
   defaultAccountRecoveryUserContext,
 } from "../../../contexts/AccountRecoveryUserContext.test.data";
 import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
-
-/**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
- */
-export function defaultContext(data = {}) {
-  const defaultData = defaultAppContext({
-    loggedInUser: {
-      role: {
-        name: 'admin'
-      }
-    }
-  });
-  return Object.assign(defaultData, data);
-}
-
+import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContext.test.data";
 
 /**
  * Default props
  * @returns {any}
  */
-export function defaultProps() {
+export function defaultProps(props) {
   return {
+    context: defaultAppContext(),
     accountRecoveryContext: defaultAccountRecoveryUserContext(),
-    userWorkspaceContext: {
+    userWorkspaceContext: defaultUserWorkspaceContext({
       onUserScrolled: () => {},
       scrollTo: {
         user: {
@@ -197,7 +182,8 @@ export function defaultProps() {
         type: UserWorkspaceFilterTypes.ALL
       },
       getTranslatedRoleName: name => name,
-    }
+    }),
+    ...props
   };
 }
 
@@ -206,14 +192,14 @@ export function defaultProps() {
  * @returns {any}
  */
 export function propsWithNullUsers() {
-  return {
-    userWorkspaceContext: {
+  return defaultProps({
+    userWorkspaceContext: defaultUserWorkspaceContext({
       filteredUsers: null,
       filter: {
         type: UserWorkspaceFilterTypes.ALL
       }
-    }
-  };
+    })
+  });
 }
 
 /**
@@ -221,14 +207,14 @@ export function propsWithNullUsers() {
  * @returns {any}
  */
 export function propsWithNoUsersWithTextSearch() {
-  return {
-    userWorkspaceContext: {
+  return defaultProps({
+    userWorkspaceContext: defaultUserWorkspaceContext({
       filteredUsers: [],
       filter: {
         type: UserWorkspaceFilterTypes.TEXT
       }
-    }
-  };
+    })
+  });
 }
 
 /**

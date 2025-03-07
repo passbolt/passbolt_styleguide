@@ -15,37 +15,50 @@ import React from "react";
 import FormSubmitButton from "../../Inputs/FormSubmitButton/FormSubmitButton";
 import {Trans} from "react-i18next";
 
-export default {
-  title: 'Components/Common/DialogFooter',
-  component: "DialogFooter"
-};
-
-
-const Template = args =>
+const DialogFooter = args =>
   <div className="dialog-wrapper">
     <div className="dialog">
       <div className="dialog-content">
-        <div className="dialog-footer">
-          <button className="button button-left" disabled={args.disabled} type="button"><Trans>Learn more</Trans></button>
-          <button disabled={args.disabled} className="link cancel">
-            <Trans>Cancel</Trans>
-          </button>
-          <FormSubmitButton
-            disabled={args.disabled}
-            processing={args.processing}/>
-        </div>
+
+      </div>
+      <div className="dialog-footer">
+        <button className="button button-left" disabled={args.disabled} type="button"><Trans>Learn more</Trans></button>
+        <button disabled={args.disabled} className="link cancel">
+          <Trans>Cancel</Trans>
+        </button>
+        <FormSubmitButton
+          disabled={args.disabled}
+          processing={args.processing}
+          warning={args.warning}/>
       </div>
     </div>
   </div>;
 
-export const Default = Template.bind({});
-Default.args = {
-  disabled: false,
-  processing: false
+export default {
+  title: 'Components/Common/DialogFooter',
+  component: DialogFooter
 };
 
-export const Disabled = Template.bind({});
-Disabled.args = {
-  disabled: true,
-  processing: true
+export const Default = {
+  args: {
+    disabled: false,
+    processing: false,
+    warning: false
+  }
+};
+
+export const Disabled = {
+  args: {
+    disabled: true,
+    processing: true,
+    warning: false
+  }
+};
+
+export const Warning = {
+  args: {
+    disabled: false,
+    processing: false,
+    warning: true
+  }
 };

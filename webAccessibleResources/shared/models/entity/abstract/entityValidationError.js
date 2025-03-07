@@ -47,6 +47,22 @@ class EntityValidationError extends Error {
   }
 
   /**
+   * Add an association error for a given error details
+   *
+   * @param {string} associationName example: name
+   * @param {EntityValidationError} error
+   */
+  addAssociationError(associationName, error) {
+    if (typeof associationName !== 'string') {
+      throw new TypeError('EntityValidationError addAssociationError associationName should be a string.');
+    }
+    if (!(error instanceof EntityValidationError)) {
+      throw new TypeError('EntityValidationError addAssociationError errorDetails should be an object.');
+    }
+    this.details[associationName] = error;
+  }
+
+  /**
    * Get the errors associated to the given field if any
    * @param {string} property the field name to get the error from
    * @param {string} [rule] optional example: required

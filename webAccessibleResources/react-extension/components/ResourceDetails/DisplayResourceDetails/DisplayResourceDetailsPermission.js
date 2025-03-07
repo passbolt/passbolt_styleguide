@@ -14,14 +14,14 @@
 import React from "react";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
-import Icon from "../../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withDialog} from "../../../contexts/DialogContext";
-import ShareDialog from "../../Share/ShareDialog";
 import {Trans, withTranslation} from "react-i18next";
 import {isUserSuspended} from "../../../../shared/utils/userUtils";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 const PERMISSIONS_LABEL = {
   1: 'can read',
@@ -59,7 +59,6 @@ class DisplayResourceDetailsPermission extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handlePermissionsEditClickEvent = this.handlePermissionsEditClickEvent.bind(this);
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
   }
 
@@ -148,15 +147,6 @@ class DisplayResourceDetailsPermission extends React.Component {
   }
 
   /**
-   * Handle when the user edits the permissions.
-   */
-  handlePermissionsEditClickEvent() {
-    const resourcesIds = [this.resource.id];
-    this.props.context.setContext({shareDialogProps: {resourcesIds}});
-    this.props.dialogContext.open(ShareDialog);
-  }
-
-  /**
    * Get a permission aro name
    * @param {object} permission The permission
    */
@@ -178,14 +168,6 @@ class DisplayResourceDetailsPermission extends React.Component {
   }
 
   /**
-   * Check if the user can share the folder.
-   * @returns {boolean}
-   */
-  canShare() {
-    return this.resource.permission && this.resource.permission.type === 15;
-  }
-
-  /**
    * Returns true if the feature flag disableUser is enabled and the given user is suspended.
    * @param {object} user
    * @returns {boolean}
@@ -200,54 +182,55 @@ class DisplayResourceDetailsPermission extends React.Component {
    */
   render() {
     return (
-      <div className={`sharedwith accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
+      <div className="detailed-permission accordion sidebar-section">
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
-              <Trans>Shared with</Trans>
+              <span className="accordion-title">
+                <Trans>Shared with</Trans>
+              </span>
               {this.state.open &&
-              <Icon name="caret-down"/>
+                <CaretDownSVG/>
               }
               {!this.state.open &&
-              <Icon name="caret-right"/>
+                <CaretRightSVG/>
               }
             </button>
           </h4>
         </div>
-        <div className="accordion-content">
-          {this.canShare() &&
-          <button type="button" onClick={this.handlePermissionsEditClickEvent} className="section-action button-transparent">
-            <Icon name="edit"/>
-            <span className="visuallyhidden"><Trans>modify</Trans></span>
-          </button>
-          }
-          {this.isLoading() &&
-          <div className="processing-wrapper">
-            <Icon name="spinner"/>
-            <span className="processing-text"><Trans>Retrieving permissions</Trans></span>
-          </div>
-          }
-          {!this.isLoading() &&
-          <ul className="shared-with ready">
-            {this.state.permissions && this.state.permissions.map(permission =>
-              <li key={permission.id} className={`usercard-col-2 ${this.isUserSuspended(permission.user) ? "suspended" : ""}`}>
-                <div className="content-wrapper">
-                  <div className="content">
-                    <div className="name">{this.getPermissionAroName(permission)}{this.isUserSuspended(permission.user) && <span className="suspended"> <Trans>(suspended)</Trans></span>}</div>
-                    <div className="subinfo">{this.props.t(PERMISSIONS_LABEL[permission.type])}</div>
+        {this.state.open &&
+          <div className="accordion-content">
+            {this.isLoading() &&
+              <div className="processing-wrapper">
+                <SpinnerSVG/>
+                <span className="processing-text"><Trans>Retrieving permissions</Trans></span>
+              </div>
+            }
+            {!this.isLoading() &&
+              <>
+                {this.state.permissions && this.state.permissions.map(permission =>
+                  <div key={permission.id}
+                    className={`usercard-col-2 ${this.isUserSuspended(permission.user) ? "suspended" : ""}`}>
+                    {permission.user &&
+                      <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+                    }
+                    {permission.group &&
+                      <GroupAvatar group={permission.group}/>
+                    }
+                    <div className="content-wrapper">
+                      <div className="content">
+                        <div
+                          className="name">{this.getPermissionAroName(permission)}{this.isUserSuspended(permission.user) &&
+                          <span className="suspended"> <Trans>(suspended)</Trans></span>}</div>
+                        <div className="subinfo">{this.props.t(PERMISSIONS_LABEL[permission.type])}</div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                {permission.user &&
-                <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
-                }
-                {permission.group &&
-                <GroupAvatar group={permission.group}/>
-                }
-              </li>
-            )}
-          </ul>
-          }
-        </div>
+                )}
+              </>
+            }
+          </div>
+        }
       </div>
     );
   }
@@ -256,8 +239,7 @@ class DisplayResourceDetailsPermission extends React.Component {
 DisplayResourceDetailsPermission.propTypes = {
   context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.object,
-  dialogContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsPermission))));
+export default withAppContext(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsPermission)));

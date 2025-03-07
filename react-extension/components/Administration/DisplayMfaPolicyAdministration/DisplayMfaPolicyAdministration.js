@@ -14,12 +14,13 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../shared/components/Icons/Icon";
+import FileTextSVG from "../../../../img/svg/file_text.svg";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {withAdminMfaPolicy} from "../../../contexts/Administration/AdministrationMfaPolicy/AdministrationMfaPolicyContext";
 import DisplayAdministrationMfaPolicyActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationMfaPolicyActions/DisplayAdministrationMfaPolicyActions";
+import {createSafePortal} from "../../../../shared/utils/portals";
 
 class DisplayMfaPolicyAdministration extends React.Component {
   /**
@@ -36,7 +37,6 @@ class DisplayMfaPolicyAdministration extends React.Component {
    *
    */
   async componentDidMount() {
-    this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationMfaPolicyActions);
     await this.findSettings();
   }
 
@@ -44,7 +44,6 @@ class DisplayMfaPolicyAdministration extends React.Component {
    * On the component will unmount.
    */
   componentWillUnmount() {
-    this.props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction();
     this.props.adminMfaPolicyContext.clearContext();
   }
 
@@ -94,71 +93,77 @@ class DisplayMfaPolicyAdministration extends React.Component {
     const settings = this.props.adminMfaPolicyContext.getSettings();
     return (
       <div className="row">
-        <div className="mfa-policy-settings col8 main-column">
-          <h3 id="mfa-policy-settings-title"><Trans>MFA Policy</Trans></h3>
+        <div className="mfa-policy-settings main-column">
+          <div className="main-content">
+            <h3 className="title" id="mfa-policy-settings-title"><Trans>MFA Policy</Trans></h3>
+            <form className="form">
+              <h4 className="no-border" id="mfa-policy-subtitle"><Trans>Default users multi factor authentication policy</Trans></h4>
+              <p id="mfa-policy-description">
+                <Trans>You can choose the default behaviour of multi factor authentication for all users.</Trans>
+              </p>
+              <div className="radiolist-alt">
+                <div className={`input radio ${settings?.policy === "mandatory" ? 'checked' : ''}`} id="mfa-policy-mandatory">
+                  <input type="radio"
+                    value="mandatory"
+                    onChange={this.handleInputChange}
+                    name="policy"
+                    checked={settings?.policy === "mandatory"}
+                    id="mfa-policy-mandatory-radio"
+                    disabled={this.hasAllInputDisabled()}/>
+                  <label htmlFor="mfa-policy-mandatory-radio">
+                    <span className="name"><Trans>Prompt</Trans></span>
+                    <span className="info">
+                      <Trans>Users have to enable multi factor authentication. If they don&apos;t, they will be reminded every time they log in.</Trans>
+                    </span>
+                  </label>
+                </div>
+                <div className={`input radio ${settings?.policy === "opt-in" ? 'checked' : ''}`} id="mfa-policy-opt-in">
+                  <input type="radio"
+                    value="opt-in"
+                    onChange={this.handleInputChange}
+                    name="policy"
+                    checked={settings?.policy === "opt-in"}
+                    id="mfa-policy-opt-in-radio"
+                    disabled={this.hasAllInputDisabled()}/>
+                  <label htmlFor="mfa-policy-opt-in-radio">
+                    <span className="name"><Trans>Opt-in (default)</Trans></span>
+                    <span className="info">
+                      <Trans>Users have the choice to enable multi factor authentication in their profile workspace.</Trans>
+                    </span>
+                  </label>
+                </div>
+              </div>
+              <h4 id="mfa-policy-remember-subtitle">
+              Remember a device for a month
+              </h4>
+              <span className="input toggle-switch form-element ">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="rememberMeForAMonth" onChange={this.handleInputChange}  disabled={this.hasAllInputDisabled()} checked={settings?.rememberMeForAMonth} id="remember-toggle-button" />
+                <label htmlFor="remember-toggle-button"><Trans>Allow &ldquo;Remember this device for a month.&ldquo; option during MFA.</Trans></label>
+              </span>
+            </form>
+          </div>
           {this.props.adminMfaPolicyContext.hasSettingsChanges() &&
-            <div className="warning message" id="mfa-policy-setting-banner">
+          <div className="warning message" id="mfa-policy-setting-banner">
+            <div>
               <p>
                 <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
               </p>
             </div>
+          </div>
           }
-          <form className="form">
-            <h4 className="no-border" id="mfa-policy-subtitle"><Trans>Default users multi factor authentication policy</Trans></h4>
-            <p id="mfa-policy-description">
-              <Trans>You can choose the default behaviour of multi factor authentication for all users.</Trans>
-            </p>
-            <div className="radiolist-alt">
-              <div className={`input radio ${settings?.policy === "mandatory" ? 'checked' : ''}`} id="mfa-policy-mandatory">
-                <input type="radio"
-                  value="mandatory"
-                  onChange={this.handleInputChange}
-                  name="policy"
-                  checked={settings?.policy === "mandatory"}
-                  id="mfa-policy-mandatory-radio"
-                  disabled={this.hasAllInputDisabled()}/>
-                <label htmlFor="mfa-policy-mandatory-radio">
-                  <span className="name"><Trans>Prompt</Trans></span>
-                  <span className="info">
-                    <Trans>Users have to enable multi factor authentication. If they don&apos;t, they will be reminded every time they log in.</Trans>
-                  </span>
-                </label>
-              </div>
-              <div className={`input radio ${settings?.policy === "opt-in" ? 'checked' : ''}`} id="mfa-policy-opt-in">
-                <input type="radio"
-                  value="opt-in"
-                  onChange={this.handleInputChange}
-                  name="policy"
-                  checked={settings?.policy === "opt-in"}
-                  id="mfa-policy-opt-in-radio"
-                  disabled={this.hasAllInputDisabled()}/>
-                <label htmlFor="mfa-policy-opt-in-radio">
-                  <span className="name"><Trans>Opt-in (default)</Trans></span>
-                  <span className="info">
-                    <Trans>Users have the choice to enable multi factor authentication in their profile workspace.</Trans>
-                  </span>
-                </label>
-              </div>
-            </div>
-            <h4 id="mfa-policy-remember-subtitle">
-                Remember a device for a month
-            </h4>
-            <span className="input toggle-switch form-element ">
-              <input type="checkbox" className="toggle-switch-checkbox checkbox" name="rememberMeForAMonth" onChange={this.handleInputChange}  disabled={this.hasAllInputDisabled()} checked={settings?.rememberMeForAMonth} id="remember-toggle-button" />
-              <label htmlFor="remember-toggle-button"><Trans>Allow &ldquo;Remember this device for a month.&ldquo; option during MFA.</Trans></label>
-            </span>
-          </form>
         </div>
-        <div className="col4 last">
-          <div className="sidebar-help">
+        <DisplayAdministrationMfaPolicyActions />
+        {createSafePortal(
+          <div className="sidebar-help-section">
             <h3><Trans>Need some help?</Trans></h3>
             <p><Trans>For more information about MFA policy settings, checkout the dedicated page on the help website.</Trans></p>
             <a className="button" href="https://passbolt.com/docs/admin/authentication/mfa-policy" target="_blank" rel="noopener noreferrer">
-              <Icon name="life-ring"/>
+              <FileTextSVG />
               <span><Trans>Read the documentation</Trans></span>
             </a>
-          </div>
-        </div>
+          </div>,
+          document.getElementById("administration-help-panel")
+        )}
       </div>
     );
   }

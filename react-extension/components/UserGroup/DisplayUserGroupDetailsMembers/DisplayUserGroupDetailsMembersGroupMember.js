@@ -53,19 +53,19 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
   render() {
     const isSuspended = this.props.context.siteSettings.canIUse('siteSettings') && isUserSuspended(this.user);
     return (
-      <li
+      <div
         key={this.user.id}
         className={`permission usercard-col-2 ${isSuspended ? "suspended" : ""}`}>
+        <UserAvatar
+          user={this.user}
+          baseUrl={this.baseUrl}/>
         <div className="content-wrapper">
           <div className="content">
             <div className="name">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}{isSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</div>
             <div className="subinfo">{this.props.t(this.roleName)}</div>
           </div>
         </div>
-        <UserAvatar
-          user={this.user}
-          baseUrl={this.baseUrl}/>
-      </li>
+      </div>
     );
   }
 }

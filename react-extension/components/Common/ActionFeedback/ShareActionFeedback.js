@@ -141,24 +141,22 @@ class ShareActionFeedback extends React.Component {
    */
   render() {
     return (
-      <>
-        <div
-          className="notification"
-          onMouseOver={this.persist}
-          onMouseLeave={this.displayWithTimer}
-          onClick={this.close}>
-          <div className={`message animated ${this.state.shouldRender ? 'fadeInUp' : 'fadeOutUp'} ${this.props.feedback.type}`}>
-            <span className="content">
-              <strong>
-                {this.props.feedback.type === "success" && <><Trans>Success</Trans>: </>}
-                {this.props.feedback.type === "error" && <><Trans>Error</Trans>: </>}
-              </strong>
-              {this.props.feedback.message}
-            </span>
-          </div>
-
+      <div
+        className="notification"
+        onMouseOver={this.persist}
+        onMouseLeave={this.displayWithTimer}
+        onClick={this.close}>
+        <div className={`message animated ${this.state.shouldRender ? 'fadeInUp' : 'fadeOutUp'} ${this.props.feedback.type}`}>
+          <span className="content">
+            <strong>
+              {this.props.feedback.type === "success" && <><Trans>Success</Trans>: </>}
+              {this.props.feedback.type === "error" && <><Trans>Error</Trans>: </>}
+              {this.props.feedback.type === "warning" && <><Trans>Warning</Trans>: </>}
+            </strong>
+            {this.props.feedback.message}
+          </span>
         </div>
-      </>
+      </div>
     );
   }
 }

@@ -14,11 +14,12 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import Icon from "../../../../shared/components/Icons/Icon";
 import DisplayLoadingDialog from "../DisplayLoadingDialog/DisplayLoadingDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withAdminUserDirectory} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 class DisplaySynchronizeUserDirectoryAdministration extends Component {
   /**
@@ -345,7 +346,6 @@ class DisplaySynchronizeUserDirectoryAdministration extends Component {
             <p>
               <strong><Trans>The operation was successful.</Trans></strong>
             </p>
-            <p></p>
             {this.hasSuccessResource() &&
               <p id="resources-synchronize">
                 {this.hasSuccessUserResource() &&
@@ -360,17 +360,14 @@ class DisplaySynchronizeUserDirectoryAdministration extends Component {
             {!this.hasSuccessResource() &&
             <p id="no-resources"> <Trans>No resources have been synchronized.</Trans> </p>
             }
-            {this.hasErrorOrIgnoreResource() &&
-            <p className="error inline-error">
-              <Trans>Some resources will not be synchronized and will require your attention, see the full report.</Trans>
-            </p>
-            }
             <div className={`accordion operation-details ${this.state.openFullReport ? "" : "closed"}`}>
               <div className="accordion-header" onClick={this.handleFullReportClicked}>
                 <button type="button" className="link no-border">
-                  <Trans>Full report</Trans>
-                  {this.state.openFullReport && <Icon name="caret-down"/>}
-                  {!this.state.openFullReport && <Icon name="caret-right"/>}
+                  <span><Trans>Full report</Trans></span>
+                  {this.state.openFullReport
+                    ? <CaretDownSVG className="baeline svg-icon"/>
+                    : <CaretRightSVG className="baeline svg-icon"/>
+                  }
                 </button>
               </div>
               <div className="accordion-content">
@@ -379,10 +376,16 @@ class DisplaySynchronizeUserDirectoryAdministration extends Component {
                 </div>
               </div>
             </div>
-            <p></p>
+            {this.hasErrorOrIgnoreResource() &&
+              <div className="warning message no-margin">
+                <p>
+                  <Trans>Some resources will not be synchronized and will require your attention, see the full report.</Trans>
+                </p>
+              </div>
+            }
           </div>
           <div className="submit-wrapper clearfix">
-            <button disabled={this.isLoading()} className="primary" type="button" onClick={this.handleClose}><Trans>Ok</Trans></button>
+            <button disabled={this.isLoading()} className="primary button form" type="button" onClick={this.handleClose}><Trans>Ok</Trans></button>
           </div>
         </DialogWrapper>
         }

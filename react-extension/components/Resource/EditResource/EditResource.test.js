@@ -68,7 +68,7 @@ describe("See the Edit Resource", () => {
     });
     describe('Styleguide', () => {
       it('matches the styleguide', async() => {
-        expect.assertions(20);
+        expect.assertions(19);
         const props = defaultProps(); // The props to pass
         props.resource.resource_type_id = TEST_RESOURCE_TYPE_PASSWORD_STRING;
         mockContextRequest(props.context, () => "");
@@ -79,8 +79,6 @@ describe("See the Edit Resource", () => {
 
         // Dialog title exists and correct
         expect(page.title.header.textContent).toBe("Edit resource");
-        expect(page.title.subtitle.textContent).toBe(resource.metadata.name);
-
         // Close button exists
         expect(page.passwordEdit.dialogClose).not.toBeNull();
 
@@ -711,7 +709,7 @@ describe("See the Edit Resource", () => {
 
     describe("Display error message", () => {
       it("As LU I shouldn't be able to submit the form if there is an invalid field", async() => {
-        expect.assertions(3);
+        expect.assertions(2);
         const props = defaultProps(); // The props to pass
         mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description"}));
         const page = new EditResourcePage(props);
@@ -728,7 +726,6 @@ describe("See the Edit Resource", () => {
         await page.passwordEdit.click(page.passwordEdit.saveButton);
 
         // Throw error message
-        expect(page.passwordEdit.nameErrorMessage.textContent).toBe("A name is required.");
         expect(page.passwordEdit.passwordErrorMessage.textContent).toBe("A password is required.");
       });
 
@@ -823,7 +820,7 @@ describe("See the Edit Resource", () => {
         expect(page.passwordEdit.password.getAttribute("disabled")).not.toBeNull();
         expect(page.passwordEdit.saveButton.getAttribute("disabled")).not.toBeNull();
         expect(page.passwordEdit.cancelButton.getAttribute("disabled")).not.toBeNull();
-        expect(page.passwordEdit.saveButton.className).toBe("button primary disabled processing");
+        expect(page.passwordEdit.saveButton.className).toBe("button primary form disabled processing");
 
         await waitFor(() => {});
         updateResolve();

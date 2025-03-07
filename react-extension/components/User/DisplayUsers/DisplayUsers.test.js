@@ -17,7 +17,6 @@
  */
 
 import {
-  defaultContext,
   defaultProps, propsWithFirstUserAttentionRequired,
   propsWithNoUsersWithTextSearch,
   propsWithNullUsers
@@ -31,24 +30,23 @@ beforeEach(() => {
 
 describe("Display Users", () => {
   let page; // The page to test against
-  const context = defaultContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
   describe("As LU, I should see the appropriate list of users", () => {
     it('As LU, I should see initially an empty content when there are no users', async() => {
-      page = new DisplayUsersPage(context, propsWithNullUsers());
+      page = new DisplayUsersPage(propsWithNullUsers());
       await waitFor(() => {});
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
     it('As LU, I should see an empty content when there are no users matching the text search', async() => {
-      page = new DisplayUsersPage(context, propsWithNoUsersWithTextSearch());
+      page = new DisplayUsersPage(propsWithNoUsersWithTextSearch());
       await waitFor(() => {});
       expect(page.hasEmptyContentWithTextSearch).toBeTruthy();
     });
 
     it('AS LU, I should see the appropriate filtered list of users', async() => {
-      page = new DisplayUsersPage(context, props);
+      page = new DisplayUsersPage(props);
       await waitFor(() => {});
       expect(page.usersCount).toBe(2);
       expect(page.user(1).username).toBe('carol@passbolt.com');
@@ -56,7 +54,7 @@ describe("Display Users", () => {
     });
 
     it('AS LU, I should see the appropriate filtered list of users with a user attention required', async() => {
-      page = new DisplayUsersPage(context, propsWithFirstUserAttentionRequired());
+      page = new DisplayUsersPage(propsWithFirstUserAttentionRequired());
       await waitFor(() => {});
       expect(page.usersCount).toBe(2);
       expect(page.user(1).attentionRequired).toBeTruthy();
@@ -65,7 +63,7 @@ describe("Display Users", () => {
 
   describe('As LU, I should select users', () => {
     beforeEach(() => {
-      page = new DisplayUsersPage(context, props);
+      page = new DisplayUsersPage(props);
     });
 
     it('As LU, I should select one user', async() => {
@@ -85,19 +83,13 @@ describe("Display Users", () => {
 
   describe('As LU, I should sort the user by property column', () => {
     beforeEach(() => {
-      page = new DisplayUsersPage(context, props);
-    });
-
-    it('As AD, I should sort the users by attention required', async() => {
-      jest.spyOn(props.userWorkspaceContext, 'onSorterChanged').mockImplementationOnce(() => {});
-      await page.sortByAttentionRequired();
-      expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('attentionRequired');
+      page = new DisplayUsersPage(props);
     });
 
     it('As LU, I should sort the users by fullname', async() => {
       jest.spyOn(props.userWorkspaceContext, 'onSorterChanged').mockImplementationOnce(() => {});
       await page.sortByFullname();
-      expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('name');
+      expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('profile');
     });
 
     it('As LU, I should sort the users by username', async() => {
@@ -109,7 +101,7 @@ describe("Display Users", () => {
     it('As LU, I should sort the users by role', async() => {
       jest.spyOn(props.userWorkspaceContext, 'onSorterChanged').mockImplementationOnce(() => {});
       await page.sortByRole();
-      expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('role.name');
+      expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('role_id');
     });
 
     it('As LU, I should sort the users by suspended', async() => {

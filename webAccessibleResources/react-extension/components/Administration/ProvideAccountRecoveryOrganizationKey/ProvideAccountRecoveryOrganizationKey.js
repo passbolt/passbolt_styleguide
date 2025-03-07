@@ -22,7 +22,7 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import Password from "../../../../shared/components/Password/Password";
-import Icon from "../../../../shared/components/Icons/Icon";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -404,7 +404,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
               <label htmlFor="generate-organization-key-form-password">
                 <Trans>Organization key passphrase</Trans>
                 {this.state.passwordWarning &&
-                  <Icon name="exclamation"/>
+                  <AttentionSVG />
                 }
               </label>
               <Password id="generate-organization-key-form-password"
