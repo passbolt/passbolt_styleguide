@@ -24,6 +24,8 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
+import {defaultMetadataKeysDtos} from "../../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
 
 /**
  * Default props.
@@ -39,6 +41,9 @@ export function defaultProps(props = {}) {
     metadataSettingsServiceWorkerService: {
       findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
       saveTypesSettings: jest.fn(settings => new MetadataTypesSettingsEntity(settings.toDto())),
+    },
+    metadataKeysServiceWorkerService: {
+      findAll: () => new MetadataKeysCollection(defaultMetadataKeysDtos()),
     },
     createPortal: jest.fn,
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),

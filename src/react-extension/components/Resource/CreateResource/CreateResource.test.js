@@ -435,6 +435,7 @@ describe("See the Create Resource", () => {
           expired: null,
           metadata: {
             ...resourceMeta,
+            object_type: "PASSBOLT_RESOURCE_METADATA",
             resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
           }
         };
@@ -508,6 +509,7 @@ describe("See the Create Resource", () => {
           expired: null,
           metadata: {
             ...resourceMeta,
+            object_type: "PASSBOLT_RESOURCE_METADATA",
             resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
           }
         };

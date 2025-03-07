@@ -29,6 +29,7 @@ import {
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {createSafePortal} from "../../../../shared/utils/portals";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
+import MetadataKeysServiceWorkerService from "../../../../shared/services/serviceWorker/metadata/metadataKeysServiceWorkerService";
 
 class DisplayContentTypesEncryptedMetadataAdministration extends Component {
   /**
@@ -44,12 +45,22 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
   formSettings = null;
 
   /**
+   * the metadata keys collections
+   * @type {MetadataKeysCollection}
+   */
+  metadataKeys = undefined;
+
+  /**
    * Default constructor
    */
   constructor(props) {
     super(props);
     this.metadataSettingsServiceWorkerService = props.metadataSettingsServiceWorkerService
       ?? new MetadataSettingsServiceWorkerService(props.context.port);
+
+    this.metadataKeysServiceWorkerService = props.metadataKeysServiceWorkerService
+      ?? new MetadataKeysServiceWorkerService(props.context.port);
+
     this.state = this.defaultState;
     this.bindCallbacks();
   }
@@ -89,6 +100,7 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
   async componentDidMount() {
     this.originalSettings = await this.metadataSettingsServiceWorkerService.findTypesSettings();
     this.formSettings = new MetadataTypesSettingsFormEntity(this.originalSettings.toDto(), {validate: false});
+    this.metadataKeys = await this.metadataKeysServiceWorkerService.findAll();
     const isProcessing = false;
     this.setState({settings: this.formSettings.toFormDto(), isProcessing});
   }
@@ -109,9 +121,10 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
    * @param {object} formSetingsDto The form settings dto store in state, not used but required to ensure the memoized
    *   function is only triggered when the form is updated.
    * @param {ResourceTypesCollection} resourceTypes The resource types.
+   * @param {MetadataKeysCollection} metadataKeysCollection The metadata keys collection.
    * @return {EntityValidationError}
    */
-  verifyDataHealth = memoize((formSettingsDto, resourceTypes) => this.formSettings?.verifyHealth(resourceTypes));
+  verifyDataHealth = memoize((formSettingsDto, resourceTypes, metadataKeysCollection) => this.formSettings?.verifyHealth(resourceTypes, metadataKeysCollection));
 
   /**
    * Check if the data have been changed.
@@ -208,7 +221,7 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
    */
   render() {
     const errors = this.state.hasAlreadyBeenValidated ? this.validateForm(this.state.settings) : null;
-    const warnings = this.verifyDataHealth(this.state.settings, this.props.resourceTypes);
+    const warnings = this.verifyDataHealth(this.state.settings, this.props.resourceTypes, this.metadataKeys);
     const hasSettingsChanges = this.hasSettingsChanges(this.originalSettings, this.formSettings, this.state.settings);
 
     return (
@@ -218,8 +231,7 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
             <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
               <h3 className="title"><label><Trans>Encrypted metadata</Trans></label></h3>
               <p className="description">
-                <Trans>Encrypted metadata for resources is available.</Trans> <Trans>Define the strategy to manage and
-                migrate the legacy items.</Trans>
+                <Trans>Encrypted metadata for resources is available.</Trans> <Trans>Define the strategy to manage and migrate the legacy items.</Trans>
               </p>
               <h4><Trans>Supported metadata types</Trans></h4>
 
@@ -237,13 +249,17 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
                     <Trans>Enable encrypted metadata for resources.</Trans>
                   </span>
                   {errors?.hasError("allow_creation_of_v5_resources", "is_default") &&
-                    <div className="name error-message"><Trans>Encrypted metadata must be enabled to set it as the default
-                      type.</Trans></div>
+                    <div className="name error-message"><Trans>Encrypted metadata must be enabled to set it as the default type.</Trans></div>
                   }
-                  {!errors?.hasError("allow_creation_of_v5_resources") && warnings?.hasError("allow_creation_of_v5_resources", "resource_types_deleted") &&
-                    <div className="name warning-message"><Trans>All encrypted metadata resource types were previously
-                      disabled. Re-enable them if you want users to create resources of this type.
-                    </Trans></div>
+                  {!errors?.hasError("allow_creation_of_v5_resources") &&
+                    <>
+                      {warnings?.hasError("allow_creation_of_v5_resources", "resource_types_deleted") &&
+                        <div className="name warning-message"><Trans>All encrypted metadata resource types were previously disabled. Re-enable them if you want users to create resources of this type.</Trans></div>
+                      }
+                      {warnings?.hasError("allow_creation_of_v5_resources", "active_metadata_key") &&
+                        <div className="name warning-message"><Trans>A metadata key should be enabled to allow users to create resources of this type.</Trans></div>
+                      }
+                    </>
                   }
                 </label>
               </div>
@@ -262,12 +278,10 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
                     <Trans>Enable legacy cleartext metadata for resources.</Trans>
                   </span>
                   {errors?.hasError("allow_creation_of_v4_resources", "is_default") &&
-                    <div className="name error-message"><Trans>Legacy cleartext metadata must be enabled to set it as the
-                      default type.</Trans></div>
+                    <div className="name error-message"><Trans>Legacy cleartext metadata must be enabled to set it as the default type.</Trans></div>
                   }
                   {!errors?.hasError("allow_creation_of_v4_resources") && warnings?.hasError("allow_creation_of_v4_resources", "resource_types_deleted") &&
-                    <div className="name warning-message"><Trans>All legacy cleartext resource types were previously
-                      disabled. Re-enable them if you want users to create resources of this type.</Trans></div>
+                    <div className="name warning-message"><Trans>All legacy cleartext resource types were previously disabled. Re-enable them if you want users to create resources of this type.</Trans></div>
                   }
                 </label>
               </div>
@@ -290,16 +304,14 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
                       <Trans>Users can create resources with encrypted metadata by default.</Trans><br/>
                     </span>
                     {errors?.hasError("default_resource_types", "allow_create_v5") &&
-                    <div className="name error-message"><Trans>Encrypted metadata must be enabled to set it as the default
-                      type.</Trans></div>
+                      <div className="name error-message"><Trans>Encrypted metadata must be enabled to set it as the default type.</Trans></div>
                     }
                     {!errors?.hasError("default_resource_types", "allow_create_v5") && warnings?.hasError("default_resource_types", "resource_types_v5_deleted") &&
-                    <div className="name warning-message"><Trans>All encrypted metadata resource types were previously
-                      disabled. Re-enable them if you want users to create resources of this type.
-                    </Trans></div>
+                      <div className="name warning-message"><Trans>All encrypted metadata resource types were previously disabled. Re-enable them if you want users to create resources of this type.</Trans></div>
                     }
                   </label>
                 </div>
+
                 <div className={`input radio ${this.state.settings.default_resource_types === "v4" ? 'checked' : ''}
                   ${errors?.hasError("default_resource_types", "allow_create_v4") ? "error" : ""}
                   ${!errors?.hasError("default_resource_types", "allow_create_v4") && warnings?.hasError("default_resource_types", "resource_types_v4_deleted") ? "warning" : ""}`}>
@@ -316,12 +328,10 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
                       <Trans>Users can create legacy resources with cleartext metadata by default.</Trans>
                     </span>
                     {errors?.hasError("default_resource_types", "allow_create_v4") &&
-                    <div className="name error-message"><Trans>Legacy cleartext metadata must be enabled to set it as the
-                      default type.</Trans></div>
+                      <div className="name error-message"><Trans>Legacy cleartext metadata must be enabled to set it as the default type.</Trans></div>
                     }
                     {!errors?.hasError("default_resource_types", "allow_create_v4") && warnings?.hasError("default_resource_types", "resource_types_v4_deleted") &&
-                    <div className="name warning-message"><Trans>All legacy cleartext resource types were previously
-                      disabled. Re-enable them if you want users to create resources of this type.</Trans></div>
+                      <div className="name warning-message"><Trans>All legacy cleartext resource types were previously disabled. Re-enable them if you want users to create resources of this type.</Trans></div>
                     }
                   </label>
                 </div>
@@ -335,13 +345,10 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
                 <label htmlFor="allowV4V5UpgradeInput" className="text">
                   <Trans>Allow users to upgrade their content from cleartext to encrypted metadata type.</Trans>
                   {warnings?.hasError("allow_v4_v5_upgrade", "resource_types_deleted") &&
-                    <div className="name warning-message"><Trans>All encrypted metadata resource types were previously
-                      disabled. Re-enable them if you want users to upgrade their resources.
-                    </Trans></div>
+                    <div className="name warning-message"><Trans>All encrypted metadata resource types were previously disabled. Re-enable them if you want users to upgrade their resources.</Trans></div>
                   }
                   {warnings?.hasError("allow_v4_v5_upgrade", "allow_creation") &&
-                      <div className="name warning-message"><Trans>Encrypted metadata should be enabled to allow users to
-                        upgrade their resources.</Trans></div>
+                    <div className="name warning-message"><Trans>Encrypted metadata should be enabled to allow users to upgrade their resources.</Trans></div>
                   }
                 </label>
               </div>
@@ -354,13 +361,10 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
                 <label htmlFor="allowV5V4DowngradeInput" className="text">
                   <Trans>Allow users to downgrade their content from encrypted to cleartext metadata type.</Trans>
                   {warnings?.hasError("allow_v5_v4_downgrade", "resource_types_deleted") &&
-                      <div className="name warning-message"><Trans>All legacy cleartext resource types were previously
-                        disabled. Re-enable them if you want users to downgrade their resources.
-                      </Trans></div>
+                    <div className="name warning-message"><Trans>All legacy cleartext resource types were previously disabled. Re-enable them if you want users to downgrade their resources.</Trans></div>
                   }
                   {warnings?.hasError("allow_v5_v4_downgrade", "allow_creation") &&
-                      <div className="name warning-message"><Trans>Legacy cleartext metadata should be enabled to allow
-                        users to downgrade their resources.</Trans></div>
+                    <div className="name warning-message"><Trans>Legacy cleartext metadata should be enabled to allow users to downgrade their resources.</Trans></div>
                   }
                 </label>
               </div>
@@ -402,6 +406,7 @@ DisplayContentTypesEncryptedMetadataAdministration.propTypes = {
   dialogContext: PropTypes.object, // The dialog context
   createPortal: PropTypes.func, // The mocked create portal react dom primitive if test needed.
   metadataSettingsServiceWorkerService: PropTypes.object, // The bext service that handle metadata settings.
+  metadataKeysServiceWorkerService: PropTypes.object, // The bext service that handle metadata keys
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   t: PropTypes.func, // translation function
 };

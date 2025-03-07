@@ -12,6 +12,7 @@
  * @since         3.0.0
  */
 import EntityV2 from "../../entity/abstract/entityV2";
+import EntitySchema from "../abstract/entitySchema";
 import {RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5} from "../metadata/metadataTypesSettingsEntity";
 import ResourceTypeSchemasDefinition, {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
@@ -119,6 +120,9 @@ class ResourceTypeEntity extends EntityV2 {
           "maxLength": RESOURCE_TYPE_DESCRIPTION_MAX_LENGTH,
           "nullable": true,
         },
+        "resources_count": {
+          "type": "integer",
+        },
         "created": {
           "type": "string",
           "format": "date-time"
@@ -127,6 +131,11 @@ class ResourceTypeEntity extends EntityV2 {
           "type": "string",
           "format": "date-time"
         },
+        "deleted": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true,
+        }
       }
     };
   }
@@ -158,6 +167,29 @@ class ResourceTypeEntity extends EntityV2 {
    */
   get definition() {
     return this._props.definition;
+  }
+
+  /**
+   * Get the resources count
+   * @returns {integer|null}
+   */
+  get resourcesCount() {
+    return this._props.resources_count || null;
+  }
+
+  /**
+   * Set the deleted property
+   * @param {string|null} deleted
+   */
+  set deleted(deleted) {
+    const propSchema = ResourceTypeEntity.getSchema().properties.deleted;
+    if (propSchema?.nullable && deleted === null) {
+      this._props.deleted = deleted;
+      return;
+    }
+
+    EntitySchema.validateProp("deleted", deleted, propSchema);
+    this._props.deleted = deleted;
   }
 
   /**
@@ -230,6 +262,15 @@ class ResourceTypeEntity extends EntityV2 {
    */
   isV4() {
     return this.version === RESOURCE_TYPE_VERSION_4;
+  }
+
+  /**
+   * Is resource type deleted
+   * @returns {boolean}
+   */
+  isDeleted() {
+    return typeof(this._props.deleted) !== "undefined"
+      && this._props.deleted !== null;
   }
 }
 

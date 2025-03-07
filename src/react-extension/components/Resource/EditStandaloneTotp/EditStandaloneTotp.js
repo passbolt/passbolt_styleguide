@@ -47,12 +47,20 @@ class EditStandaloneTotp extends Component {
   get defaultState() {
     const resource = this.props.resource || {};
     const name = resource.metadata.name || "";
-    const uri = resource.metadata.uris?.[0] || "";
+
+    const totpDto = {
+      name: resource.metadata.name || "",
+      uri: resource.metadata.uris?.[0] || "",
+    };
+
+    if (resource.metadata.object_type) {
+      totpDto.object_type = resource.metadata.object_type;
+    }
 
     return {
       nameOriginal: name,
       originalTotp: null,
-      standaloneTotp: new StandaloneTotpViewModel({name, uri}),
+      standaloneTotp: new StandaloneTotpViewModel(totpDto),
       errors: null, // The errors
       warnings: {}, // The warnings
       processing: false, //The processing flag

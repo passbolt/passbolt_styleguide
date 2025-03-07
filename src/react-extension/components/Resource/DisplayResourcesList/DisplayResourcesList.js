@@ -652,7 +652,7 @@ class DisplayResourcesList extends React.Component {
    * @param event
    */
   async selectResource(resource, event) {
-    const isMultipleSelection = event && event.metaKey;
+    const isMultipleSelection = event && this.isMacOS ? event.metaKey : event.ctrlKey;
     const isRangeSelection = event && event.shiftKey;
     const hasNoEvent = !event;
 
@@ -663,6 +663,16 @@ class DisplayResourcesList extends React.Component {
     } else {
       await this.props.resourceWorkspaceContext.onResourceSelected.single(resource);
     }
+  }
+
+  /**
+   * Is mac os system
+   * @returns {boolean}
+   */
+  get isMacOS() {
+    // userAgentData only available on chromium
+    const platform = navigator.userAgentData ? navigator.userAgentData.platform : navigator.userAgent;
+    return /mac/i.test(platform);
   }
 
   async favoriteResource(resource) {
