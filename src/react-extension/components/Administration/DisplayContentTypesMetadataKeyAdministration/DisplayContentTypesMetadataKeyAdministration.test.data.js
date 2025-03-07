@@ -35,6 +35,8 @@ import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
 import ExternalGpgKeyPairEntity from "../../../../shared/models/entity/gpgkey/external/externalGpgKeyPairEntity";
 import MetadataKeyEntity from "../../../../shared/models/entity/metadata/metadataKeyEntity";
 import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
+import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
 
 const metadataKeysInfoDto = [
   adaExternalPrivateGpgKeyEntityDto(),
@@ -55,6 +57,9 @@ export function defaultProps(props = {}) {
     context: defaultAdministratorAppContext(),
     dialogContext: defaultDialogContext(),
     actionFeedbackContext: defaultActionFeedbackContext(),
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY
+    }),
     metadataSettingsServiceWorkerService: {
       findKeysSettings: () => new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
       saveKeysSettings: settings => settings

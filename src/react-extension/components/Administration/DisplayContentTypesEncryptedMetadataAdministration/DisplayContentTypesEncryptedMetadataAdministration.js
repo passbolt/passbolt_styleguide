@@ -233,8 +233,9 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
               <p className="description">
                 <Trans>Encrypted metadata for resources is available.</Trans> <Trans>Define the strategy to manage and migrate the legacy items.</Trans>
               </p>
-              <h4><Trans>Supported metadata types</Trans></h4>
 
+              <h4><Trans>Supported metadata types</Trans></h4>
+              <p className="description"><Trans>Define which metadata types are enabled for this instance.</Trans></p>
               <div
                 className={`input toggle-switch form-element
               ${errors?.hasError("allow_creation_of_v5_resources") ? "error" : ""}
@@ -285,7 +286,9 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
                   }
                 </label>
               </div>
+
               <h4><Trans>Default metadata type</Trans></h4>
+              <p className="description"><Trans>Define which metadata type is used by default.</Trans></p>
               <div className="radiolist-alt">
                 <div className={`input radio
                   ${this.state.settings.default_resource_types === "v5" ? "checked" : ""}

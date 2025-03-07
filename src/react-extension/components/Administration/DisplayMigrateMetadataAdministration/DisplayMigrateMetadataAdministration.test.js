@@ -43,7 +43,7 @@ describe("DisplayMigrateMetadataAdministration as per the specifications", () =>
      * expect(page.commentsMigrationCheckbox.checked).toStrictEqual(false);
      */
 
-    expect(page.formBanner.textContent).toBe("If you have integrations, you will have to make sure they are updated before triggering the migration.");
+    expect(page.formBanner.textContent).toBe("Warning: If you have integrations, you will have to make sure they are updated before triggering the migration.");
   });
 
   it("Should not display the warning banner if efverything is migrated", async() => {
