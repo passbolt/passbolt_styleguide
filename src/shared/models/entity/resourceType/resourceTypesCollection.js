@@ -22,6 +22,7 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG, RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG, RESOURCE_TYPE_V5_TOTP_SLUG
 } from "./resourceTypeSchemasDefinition";
 import ResourceTypeEntity, {PASSWORD_RESOURCE_TYPES} from "./resourceTypeEntity";
+import assertString from "validator/es/lib/util/assertString";
 
 const SUPPORTED_RESOURCE_TYPES = [
   RESOURCE_TYPE_PASSWORD_STRING_SLUG,
@@ -179,6 +180,73 @@ class ResourceTypesCollection extends EntityV2Collection {
    */
   hasSomeOfVersion(version = RESOURCE_TYPE_VERSION_4) {
     return this.items.some(resourceType => resourceType.version === version);
+  }
+
+  /**
+   * Get the resource type matching the resource DTO in a specific version
+   *
+   * Note: This function returns only resource type that match in a specific version. Not supported:
+   *   - password string v4;
+   *   - password string v5;
+   *   - several resource type having the same number of properties that match the resource DTO
+   *
+   * @param {object} resourceDto
+   * @param {string} version
+   *
+   * @returns {ResourceTypeEntity} The resource type that match the resource DTO
+   * @throws {Error} If the version is not a string.
+   * @throws {Error} If the resource DTO is not an object with secret object.
+   */
+  getResourceTypeMatchingResource(resourceDto, version = RESOURCE_TYPE_VERSION_4) {
+    assertString(version);
+    // Check if the DTO is not null and a secret object
+    if (resourceDto?.secret == null || typeof resourceDto.secret !== "object") {
+      throw new TypeError("The resource DTO is not an expected object");
+    }
+
+    // The resource type that matched the most
+    let resourceTypeMatch = null;
+    // Score that should be closest to 0 if no resource type match perfectly
+    let score = null;
+
+    // The secret fields of the resource DTO
+    const resourceSecretFields = Object.keys(resourceDto.secret);
+
+    // Loop on all resource types
+    for (const resourceType of this.items) {
+      // Do not check for resource type that not match version or password string
+      if (resourceType.version !== version || resourceType.isPasswordString()) {
+        continue;
+      }
+
+      // Get all secret property fields
+      const secretsFields = Object.keys(resourceType.definition.secret.properties);
+
+      // Check if all secret fields from the DTO are in the resource type secret property fields
+      const hasAllPropertyFields = resourceSecretFields.every(secretField => secretsFields.includes(secretField) || secretField === "object_type");
+
+      if (hasAllPropertyFields) {
+        // Get the number of properties that is not set to match the resource type
+        const unsetPropertyCount = secretsFields.filter(field => !resourceSecretFields.includes(field)).length;
+
+        // If all properties are set, that is a perfect match
+        if (unsetPropertyCount === 0) {
+          return resourceType;
+        }
+        // If all secret fields are unset continue (Avoid to have a default resource type that has no similarity between the resource DTO)
+        const allUnsetSecretFields = unsetPropertyCount === secretsFields.length;
+        if (allUnsetSecretFields) {
+          continue;
+        }
+        // Else set the score and the resource type that matched the most
+        if (!score && score < unsetPropertyCount) {
+          score = unsetPropertyCount;
+          resourceTypeMatch = resourceType;
+        }
+      }
+    }
+    // If no perfect match, return the resource type that matched the most
+    return resourceTypeMatch;
   }
 
   /*

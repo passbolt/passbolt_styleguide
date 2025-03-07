@@ -203,7 +203,7 @@ export default class CreateResourcePage {
    * @returns {Element}
    */
   getSectionItem(index) {
-    return this._page.container.querySelector('.left-sidebar .sidebar-content-sections').querySelectorAll('.section-content')[index - 1];
+    return this._page.container.querySelector('.left-sidebar .sidebar-content-sections').querySelectorAll('.section-content')[index - 1].querySelector("button.no-border");
   }
 
 
@@ -224,6 +224,14 @@ export default class CreateResourcePage {
   }
 
   /**
+   * Returns the delete secret password
+   * @returns {Element}
+   */
+  get deleteSecretPassword() {
+    return this._page.container.querySelector(".left-sidebar #delete-password");
+  }
+
+  /**
    * Returns the add secret totp
    * @returns {Element}
    */
@@ -232,11 +240,27 @@ export default class CreateResourcePage {
   }
 
   /**
+   * Returns the delete secret totp
+   * @returns {Element}
+   */
+  get deleteSecretTotp() {
+    return this._page.container.querySelector(".left-sidebar #delete-totp");
+  }
+
+  /**
    * Returns the add secret note
    * @returns {Element}
    */
   get addSecretNote() {
     return this._page.container.querySelector(".left-sidebar #note_action");
+  }
+
+  /**
+   * Returns the delete secret note
+   * @returns {Element}
+   */
+  get deleteSecretNote() {
+    return this._page.container.querySelector(".left-sidebar #delete-note");
   }
 
   /**

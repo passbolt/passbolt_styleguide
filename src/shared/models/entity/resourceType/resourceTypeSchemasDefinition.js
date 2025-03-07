@@ -1,5 +1,3 @@
-import {ResourceEditCreateFormEnumerationTypes} from "../../resource/ResourceEditCreateFormEnumerationTypes";
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -339,30 +337,6 @@ const RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA = {
     }
   },
   secret: RESOURCE_TYPE_TOTP_DEFINITION_SCHEMA.secret
-};
-
-export const RESOURCE_TYPE_MAPPING_ADD_SECRET = {
-  [RESOURCE_TYPE_PASSWORD_STRING_SLUG]: {
-    [ResourceEditCreateFormEnumerationTypes.TOTP]: RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG
-  },
-  [RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG]: {
-    [ResourceEditCreateFormEnumerationTypes.TOTP]: RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG
-  },
-  [RESOURCE_TYPE_TOTP_SLUG]: {
-    [ResourceEditCreateFormEnumerationTypes.NOTE]: RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
-    [ResourceEditCreateFormEnumerationTypes.PASSWORD]: RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG
-  },
-  [RESOURCE_TYPE_V5_DEFAULT_SLUG]: {
-    [ResourceEditCreateFormEnumerationTypes.TOTP]: RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG
-  },
-  [RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG]: {
-    [ResourceEditCreateFormEnumerationTypes.NOTE]: RESOURCE_TYPE_V5_DEFAULT_SLUG,
-    [ResourceEditCreateFormEnumerationTypes.TOTP]: RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG
-  },
-  [RESOURCE_TYPE_V5_TOTP_SLUG]: {
-    [ResourceEditCreateFormEnumerationTypes.NOTE]: RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
-    [ResourceEditCreateFormEnumerationTypes.PASSWORD]: RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG
-  }
 };
 
 export const V4_TO_V5_RESOURCE_TYPE_MAPPING = {

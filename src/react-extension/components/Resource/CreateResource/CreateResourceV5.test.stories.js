@@ -9,6 +9,10 @@ import {
   ResourceTypesLocalStorageContext
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import {ResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import {
+  resourceTypePasswordAndDescriptionDto, resourceTypePasswordStringDto, resourceTypeTotpDto,
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 export default {
   title: 'Components/Resource/CreateResourceV5',
@@ -39,4 +43,16 @@ export const Default = {
 
 export const Totp = {
   args: defaultTotpProps()
+};
+
+export const DefaultLegacy = {
+  args: defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto())})
+};
+
+export const TotpLegacy = {
+  args: defaultTotpProps({resourceType: new ResourceTypeEntity(resourceTypeTotpDto())})
+};
+
+export const StringLegacy = {
+  args: defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto())})
 };
