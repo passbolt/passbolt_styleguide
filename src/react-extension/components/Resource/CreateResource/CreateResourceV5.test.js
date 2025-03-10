@@ -21,7 +21,8 @@ import {defaultProps, defaultTotpProps} from "./CreateResourceV5.test.data";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import {
-  resourceTypePasswordStringDto,
+  resourceTypePasswordAndDescriptionDto,
+  resourceTypePasswordStringDto
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 describe("See the Create Resource", () => {
@@ -486,7 +487,24 @@ describe("See the Create Resource", () => {
         expect(page.descriptionWarningMessage).toBeNull();
         expect(page.descriptionErrorMessage.textContent).toEqual("This is the maximum size for this field, make sure your data was not truncated.");
       });
+
+      it('As a signed-in user I should be able to convert a description to a note for a v4 password string', async() => {
+        expect.assertions(2);
+
+        const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto())});
+
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        await page.click(page.menuDescription);
+        await page.fillInput(page.description, "description");
+        await page.click(page.convertToNote);
+        // expectations
+        expect(page.sectionItemSelected.textContent).toBe("Note");
+        expect(page.note.value).toBe("description");
+      });
     });
+
     describe("should init totp form", () => {
       let props, page;
       beforeEach(() => {
@@ -686,6 +704,24 @@ describe("See the Create Resource", () => {
 
         expect(page.noteWarningMessage).toBeNull();
         expect(page.noteErrorMessage.textContent).toEqual("This is the maximum size for this field, make sure your data was not truncated.");
+      });
+
+      it('As a signed-in user I should be able to convert a note to a description for a v4 default', async() => {
+        expect.assertions(2);
+
+        const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto())});
+
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        await page.click(page.getSectionItem(2));
+        await page.fillInput(page.note, "note");
+
+        await page.click(page.convertToDescription);
+
+        // expectations
+        expect(page.sectionItemSelected.textContent).toBe("Description");
+        expect(page.description.value).toBe("note");
       });
     });
   });

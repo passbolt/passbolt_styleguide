@@ -15,12 +15,6 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
-import {
-  ResourceTypesLocalStorageContext
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import {ResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
 import AddResourceDescription from "./AddResourceDescription";
 /**
  * The Add resource description component represented as a page
@@ -33,15 +27,7 @@ export default class AddResourceDescriptionPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={props.context}>
-          <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
-            <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
-              <ResourcePasswordGeneratorContext.Provider value={props.resourcePasswordGeneratorContext}>
-                <AddResourceDescription {...props} />
-              </ResourcePasswordGeneratorContext.Provider>
-            </ResourceWorkspaceContext.Provider>
-          </ResourceTypesLocalStorageContext.Provider>
-        </AppContext.Provider>
+        <AddResourceDescription {...props} />
       </MockTranslationProvider>
     );
   }
@@ -56,6 +42,13 @@ export default class AddResourceDescriptionPage {
    */
   get description() {
     return this._page.container.querySelector('#resource-description');
+  }
+
+  /**
+   * Returns the convert to note button element
+   */
+  get convertToNote() {
+    return this._page.container.querySelector('.message.notice button');
   }
 
   /**
@@ -74,5 +67,15 @@ export default class AddResourceDescriptionPage {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
     await waitFor(() => { element.value === data; });
+  }
+
+  /**
+   * Click on the element
+   * @param {Element} element
+   */
+  async click(element) {
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
+    await waitFor(() => {});
   }
 }

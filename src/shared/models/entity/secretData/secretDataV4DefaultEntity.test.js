@@ -61,7 +61,7 @@ describe("SecretDataV4DefaultEntity", () => {
       const entity = SecretDataV4DefaultEntity.createFromDefault({});
 
       expect(entity.password).toStrictEqual("");
-      expect(entity.description).toBeUndefined();
+      expect(entity.description).toStrictEqual("");
     });
 
     it("create with data provided", () => {

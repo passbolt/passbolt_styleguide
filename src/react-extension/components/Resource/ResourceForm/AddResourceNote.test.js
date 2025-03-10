@@ -17,7 +17,12 @@
  */
 
 import AddResourceNotePage from './AddResourceNote.test.page';
-import {defaultProps} from './AddResourcePassword.test.data';
+import {defaultProps} from './AddResourceNote.test.data';
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import {
+  resourceTypePasswordAndDescriptionDto, resourceTypePasswordDescriptionTotpDto,
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 beforeEach(() => {
   jest.resetModules();
@@ -56,6 +61,35 @@ describe("AddResourceNote", () => {
       expect(props.onChange).toHaveBeenCalledTimes(1);
       expect(name).toEqual("secret.description");
       expect(value).toEqual("note");
+    });
+  });
+
+  describe('As LU I can convert the note to description.', () => {
+    it('As LU I can convert the note form.', async() => {
+      expect.assertions(1);
+
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto())});
+      page = new AddResourceNotePage(props);
+
+      await page.click(page.convertToDescription);
+      expect(props.onConvertToDescription).toHaveBeenCalled();
+    });
+
+    it('As LU I cannot convert the description form if there is no resource type v4 default.', async() => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection([resourceTypePasswordAndDescriptionDto()]);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()), resourceTypes});
+      page = new AddResourceNotePage(props);
+
+      expect(page.convertToDescription).toBeNull();
+    });
+
+    it('As LU I should not see convert the description form if the resource type is not v4 default.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordDescriptionTotpDto())});
+      page = new AddResourceNotePage(props);
+
+      expect(page.convertToDescription).toBeNull();
     });
   });
 });

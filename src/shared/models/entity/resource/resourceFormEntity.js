@@ -213,6 +213,7 @@ class ResourceFormEntity extends EntityV2 {
       }
       // Set the resource type id
       this.set("resource_type_id", mutateResourceType.id);
+      this.set("metadata.resource_type_id", mutateResourceType.id);
     }
     // Set the secret to add
     this.set(secret, value, options);
@@ -257,10 +258,57 @@ class ResourceFormEntity extends EntityV2 {
       this.set("secret", new secretEntityClass(resourceDto.secret, options));
       // Set the resource type id
       this.set("resource_type_id", mutateResourceType.id);
+      this.set("metadata.resource_type_id", mutateResourceType.id);
     } else {
       // Set the secret with the new secret data
       this.set("secret", new this._secret.constructor(resourceDto.secret, options));
     }
+  }
+
+  /**
+   * Convert metadata description to note and resource type to V4 password and description encrypted
+   * @param {object} [options] Options
+   *
+   * @throws {Error} If no secret entity class has been found.
+   */
+  convertToNote(options) {
+    const resourceType = this.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
+    const secretEntityClass = this.getSecretEntityClassByResourceType(resourceType?.slug);
+    if (!secretEntityClass) {
+      throw new Error(`No secret association class has been found in resource types.`);
+    }
+    // Set the secret with the new secret data
+    this.set("secret", new secretEntityClass(this.secret.toDto(), options));
+    // Set the secret description with the metadata description
+    this.set("secret.description", this.metadata?.description || "", options);
+    // Set the metadata description with empty value
+    this.set("metadata.description", null, options);
+    // Set the resource type id
+    this.set("resource_type_id", resourceType.id);
+    this.set("metadata.resource_type_id", resourceType.id);
+  }
+
+  /**
+   * Convert note to metadata description and resource type to V4 password string
+   * @param {object} [options] Options
+   *
+   * @throws {Error} If no secret entity class has been found.
+   */
+  convertToMetadataDescription(options) {
+    const resourceType = this.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_STRING_SLUG);
+    const secretEntityClass = this.getSecretEntityClassByResourceType(resourceType?.slug);
+    if (!secretEntityClass) {
+      throw new Error(`No secret association class has been found in resource types.`);
+    }
+    // Set the metadata description with the secret description
+    this.set("metadata.description", this.secret?.description || "", options);
+    // Set the secret description with empty value
+    this.set("secret.description", null, options);
+    // Set the secret with the new secret data
+    this.set("secret", new secretEntityClass(this.secret.toDto(), options));
+    // Set the resource type id
+    this.set("resource_type_id", resourceType.id);
+    this.set("metadata.resource_type_id", resourceType.id);
   }
 
   /**

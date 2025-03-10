@@ -55,6 +55,7 @@ class SecretDataV4DefaultEntity extends secretDataEntity {
   static createFromDefault(data = {}, options) {
     const defaultData = {
       password: "",
+      description: ""
     };
 
     return new SecretDataV4DefaultEntity({...defaultData, ...data}, options);
