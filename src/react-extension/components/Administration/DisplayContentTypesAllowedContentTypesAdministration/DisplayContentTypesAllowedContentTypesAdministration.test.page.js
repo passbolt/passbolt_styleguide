@@ -60,7 +60,7 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
    * @returns {HTMLElement}
    */
   get formBanner() {
-    return this.select(".form-banner");
+    return this.select(".warning.message");
   }
 
   /**

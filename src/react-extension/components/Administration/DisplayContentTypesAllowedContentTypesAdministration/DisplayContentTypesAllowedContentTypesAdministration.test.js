@@ -49,7 +49,7 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
       await page.clickOnPasswordV4();
 
       expect(page.formBanner).not.toBeNull();
-      expect(page.formBanner.textContent).toStrictEqual("Don't forget to save your settings to apply your modification.");
+      expect(page.formBanner.textContent).toStrictEqual("Warning: Don't forget to save your settings to apply your modification.");
     });
 
     it("displays warning on v4 fields if creation is allowed but there is not content types available", async() => {
