@@ -337,4 +337,107 @@ describe("SelectResourceForm", () => {
       expect(page.addSecret.hasAttribute("disabled")).toBeTruthy();
     });
   });
+
+  describe('As LU I can delete secret.', () => {
+    it('As LU I can delete secret note for a resource v5 from a password lead.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resource: defaultResourceFormDto({secret: {password: "", description: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.deleteSecretNote);
+
+      expect(props.onDeleteSecret).toHaveBeenCalledWith(ResourceEditCreateFormEnumerationTypes.NOTE);
+    });
+
+    it('As LU I can delete secret password for a resource v5 from a password lead.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resource: defaultResourceFormDto({secret: {password: "", description: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.deleteSecretPassword);
+
+      expect(props.onDeleteSecret).toHaveBeenCalledWith(ResourceEditCreateFormEnumerationTypes.PASSWORD);
+    });
+
+    it('As LU I can delete secret password and note for a resource v5 default totp.', async() => {
+      expect.assertions(2);
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resourceType: new ResourceTypeEntity(resourceTypeV5DefaultTotpDto()), resource: defaultResourceFormDto({secret: {password: "", totp: {}, description: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.deleteSecretPassword);
+      await page.click(page.deleteSecretNote);
+
+      expect(props.onDeleteSecret).toHaveBeenCalledWith(ResourceEditCreateFormEnumerationTypes.PASSWORD);
+      expect(props.onDeleteSecret).toHaveBeenCalledWith(ResourceEditCreateFormEnumerationTypes.NOTE);
+    });
+
+    it('As LU I can delete secret totp for a resource v5 default totp.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resourceType: new ResourceTypeEntity(resourceTypeV5DefaultTotpDto()), resource: defaultResourceFormDto({secret: {password: "", totp: {}, description: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.deleteSecretTotp);
+
+      expect(props.onDeleteSecret).toHaveBeenCalledWith(ResourceEditCreateFormEnumerationTypes.TOTP);
+    });
+
+    it('As LU I can delete secret password and note for a resource v5 default totp.', async() => {
+      expect.assertions(2);
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resourceType: new ResourceTypeEntity(resourceTypeV5DefaultTotpDto()), resource: defaultResourceFormDto({secret: {password: "", totp: {}, description: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.deleteSecretNote);
+      await page.click(page.deleteSecretPassword);
+
+      expect(props.onDeleteSecret).toHaveBeenCalledWith(ResourceEditCreateFormEnumerationTypes.NOTE);
+      expect(props.onDeleteSecret).toHaveBeenCalledWith(ResourceEditCreateFormEnumerationTypes.PASSWORD);
+    });
+
+    it('As LU I can delete secret totp for a resource V4 default totp.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordDescriptionTotpDto()), resource: defaultResourceFormDto({secret: {password: "", totp: {}, description: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.deleteSecretTotp);
+
+      expect(props.onDeleteSecret).toHaveBeenCalledWith(ResourceEditCreateFormEnumerationTypes.TOTP);
+    });
+
+    it('As LU I can delete secret note for a resource V4 default.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resource: defaultResourceFormDto({secret: {password: "", description: ""}}), resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto())});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.deleteSecretNote);
+
+      expect(props.onDeleteSecret).toHaveBeenCalledWith(ResourceEditCreateFormEnumerationTypes.NOTE);
+    });
+
+    it('As LU I can delete secret password for a resource V4 default.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()), resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resource: defaultResourceFormDto({secret: {password: "", description: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.deleteSecretPassword);
+
+      expect(props.onDeleteSecret).toHaveBeenCalledWith(ResourceEditCreateFormEnumerationTypes.PASSWORD);
+    });
+
+    it('As LU I cannot see delete secrets if resource has only one secret.', async() => {
+      expect.assertions(1);
+      const props = defaultProps();
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.deleteSecretPassword).toBeNull();
+    });
+  });
 });

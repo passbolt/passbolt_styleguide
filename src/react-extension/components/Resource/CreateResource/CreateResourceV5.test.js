@@ -133,6 +133,21 @@ describe("See the Create Resource", () => {
         expect(page.note).toBeDefined();
       });
 
+      it('As a signed-in user I should be able to add secret with a resource type mutation with a standalone totp', async() => {
+        expect.assertions(2);
+
+        const props = defaultTotpProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        await page.click(page.addSecret);
+        await page.click(page.addSecretPassword);
+
+        // expectations
+        expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
+        expect(page.password).toBeDefined();
+      });
+
       it('As a signed-in user I should be able to add secret totp for a resource v4 password string', async() => {
         expect.assertions(3);
 
@@ -147,6 +162,68 @@ describe("See the Create Resource", () => {
         expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
         expect(page.note).toBeDefined();
         expect(page.getSectionItem(4).hasAttribute("disabled")).toBeTruthy();
+      });
+    });
+
+    describe("should delete a secret to a resource", () => {
+      it('As a signed-in user I should be able to delete secret without a resource type mutation', async() => {
+        expect.assertions(3);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        await page.click(page.addSecret);
+        await page.click(page.addSecretNote);
+
+        expect(page.sectionItemSelected.textContent).toStrictEqual("Note");
+
+        await page.click(page.deleteSecretNote);
+
+        // expectations
+        expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
+        expect(page.password).toBeDefined();
+      });
+
+      it('As a signed-in user I should be able to delete secret with a resource type mutation', async() => {
+        expect.assertions(3);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        await page.click(page.addSecret);
+        await page.click(page.addSecretTotp);
+
+        expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
+
+        await page.click(page.deleteSecretPassword);
+
+        await page.click(page.getSectionItem(2));
+
+        // expectations
+        expect(page.sectionItemSelected.textContent).toStrictEqual("Description");
+        expect(page.description).toBeDefined();
+      });
+
+      it('As a signed-in user I should be able to delete secret totp for a resource v4 password string', async() => {
+        expect.assertions(4);
+
+        const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto()),});
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        await page.click(page.addSecret);
+        await page.click(page.addSecretTotp);
+
+        expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
+
+        await page.click(page.deleteSecretTotp);
+
+        // expectations
+        expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
+        expect(page.password).toBeDefined();
+        expect(page.getSectionItem(3).hasAttribute("disabled")).toBeTruthy();
       });
     });
 

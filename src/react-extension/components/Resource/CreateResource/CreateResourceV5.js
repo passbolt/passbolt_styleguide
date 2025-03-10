@@ -45,7 +45,7 @@ class CreateResource extends Component {
   get defaultState() {
     return {
       resource: this.resourceFormEntity.toDto(), // The resource to create
-      resourceFormSelected: this.selectResourceFormByResourceType, // The selected form to display
+      resourceFormSelected: this.selectResourceFormByResourceSecretData(), // The selected form to display
       resourceType: this.props.resourceType // The resource type
     };
   }
@@ -58,16 +58,20 @@ class CreateResource extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onSelectForm = this.onSelectForm.bind(this);
     this.onAddSecret = this.onAddSecret.bind(this);
+    this.onDeleteSecret = this.onDeleteSecret.bind(this);
   }
 
   /**
-   * Initialize the selected resource form
+   * Selected the resource form by resource type
+   * @return {string | null} The selected form
    */
-  get selectResourceFormByResourceType() {
-    if (this.props.resourceType.hasPassword()) {
+  selectResourceFormByResourceSecretData() {
+    if (this.resourceFormEntity?.secret?.password != null) {
       return ResourceEditCreateFormEnumerationTypes.PASSWORD;
-    } else if (this.props.resourceType.hasTotp()) {
+    } else if (this.resourceFormEntity?.secret?.totp != null) {
       return ResourceEditCreateFormEnumerationTypes.TOTP;
+    } else if (this.resourceFormEntity?.secret?.description != null) {
+      return ResourceEditCreateFormEnumerationTypes.NOTE;
     }
     return null;
   }
@@ -119,6 +123,20 @@ class CreateResource extends Component {
   }
 
   /**
+   * Delete secret to the resourceFormEntity
+   * @param {string} secret The secret to delete
+   */
+  onDeleteSecret(secret) {
+    this.resourceFormEntity.deleteSecret(secret, {validate: false});
+    const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
+    if (this.state.resourceFormSelected === secret) {
+      this.setState({resource: this.resourceFormEntity.toDto(), resourceFormSelected: this.selectResourceFormByResourceSecretData(), resourceType});
+    } else {
+      this.setState({resource: this.resourceFormEntity.toDto(), resourceType});
+    }
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -136,7 +154,7 @@ class CreateResource extends Component {
       <DialogWrapper title={this.translate("Create a resource")} className="create-resource"
         disabled={this.state.processing} onClose={this.handleClose}>
         <SelectResourceForm resourceType={this.state.resourceType} resourceFormSelected={this.state.resourceFormSelected}
-          resource={this.state.resource} onAddSecret={this.onAddSecret} onSelectForm={this.onSelectForm}/>
+          resource={this.state.resource} onAddSecret={this.onAddSecret} onDeleteSecret={this.onDeleteSecret} onSelectForm={this.onSelectForm}/>
         <form className="grid-and-footer" noValidate>
           <div className="grid">
             <AddResourceName resource={this.state.resource} folderParentId={this.props.folderParentId} onChange={this.handleInputChange}/>

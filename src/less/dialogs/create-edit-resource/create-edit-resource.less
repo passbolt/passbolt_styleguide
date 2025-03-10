@@ -77,12 +77,28 @@
 
         .section-content {
           display: flex;
-          padding: .8rem 1.6rem .8rem 3.2rem;
+          padding-right: 1.6rem;
           justify-content: flex-start;
           align-items: center;
           gap: 8px;
           align-self: stretch;
           border-radius: var(--Button-border-radius);
+
+          > button.no-border {
+            flex: 1 0 auto;
+            padding: .8rem 0 .8rem 3.2rem;
+            justify-content: flex-start;
+          }
+
+          > button.button-transparent {
+            display: none;
+          }
+
+          &:hover {
+            > button.button-transparent {
+              display: flex;
+            }
+          }
 
           // Selected
           &:hover, &:focus-visible, &:focus, &.selected {
@@ -91,6 +107,10 @@
 
           &.selected {
             font-weight: 700;
+          }
+
+          &.disabled {
+            background: none;
           }
         }
       }
