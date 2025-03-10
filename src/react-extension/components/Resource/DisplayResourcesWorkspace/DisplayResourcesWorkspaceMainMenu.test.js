@@ -311,6 +311,20 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newOtherMenu).toBeNull();
     });
+
+    it('As LU I cannot see other menu if I have only resource type v5 and no more than password, totp or note', async() => {
+      expect.assertions(4);
+      const props = defaultProps({
+        resourceTypes: new ResourceTypesCollection(resourceTypesV5CollectionDto()),
+      }); // The props to pass
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      expect(page.displayMenu.newOtherMenu).toBeNull();
+    });
   });
 
   describe('As LU I can import resources', () => {
