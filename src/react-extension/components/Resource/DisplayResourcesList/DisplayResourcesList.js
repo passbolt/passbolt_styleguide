@@ -13,19 +13,19 @@
  */
 import PropTypes from "prop-types";
 import React from "react";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import debounce from "debounce-promise";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withRouter} from "react-router-dom";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withRouter } from "react-router-dom";
 import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextualMenu";
-import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withDrag} from "../../../contexts/DragContext";
+import { withContextualMenu } from "../../../contexts/ContextualMenuContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withDrag } from "../../../contexts/DragContext";
 import DisplayDragResource from "./DisplayDragResource";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import GridTable from "../../../../shared/components/Table/GridTable";
 import CellFavorite from "../../../../shared/components/Table/CellFavorite";
 import CellHeaderIcon from "../../../../shared/components/Table/CellHeaderIcon";
@@ -42,14 +42,14 @@ import ColumnPasswordModel from "../../../../shared/models/column/ColumnPassword
 import ColumnUriModel from "../../../../shared/models/column/ColumnUriModel";
 import ColumnModifiedModel from "../../../../shared/models/column/ColumnModifiedModel";
 import ColumnModel from "../../../../shared/models/column/ColumnModel";
-import {withProgress} from "../../../contexts/ProgressContext";
+import { withProgress } from "../../../contexts/ProgressContext";
 import CellTotp from "../../../../shared/components/Table/CellTotp";
 import ColumnTotpModel from "../../../../shared/models/column/ColumnTotpModel";
-import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import ColumnAttentionRequiredModel from "../../../../shared/models/column/ColumnAttentionRequiredModel";
 import CellAttentionRequired from "../../../../shared/components/Table/CellAttentionRequired";
 import ColumnExpiredModel from "../../../../shared/models/column/ColumnExpiredModel";
-import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
 import CellDate from "../../../../shared/components/Table/CellDate";
 import CellExpiryDate from "../../../../shared/components/Table/CellExpiryDate";
 import CellHeaderDefault from "../../../../shared/components/Table/CellHeaderDefault";
@@ -126,25 +126,21 @@ class DisplayResourcesList extends React.Component {
    * Init the grid columns.
    */
   initColumns() {
-    this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}));
-    this.defaultColumns.push(new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "star"}}}));
+    this.defaultColumns.push(new ColumnCheckboxModel({ cellRenderer: { component: CellCheckbox, props: { onClick: this.handleCheckboxWrapperClick } }, headerCellRenderer: { component: CellHeaderCheckbox, props: { onChange: this.handleSelectAllChange } } }));
+    this.defaultColumns.push(new ColumnFavoriteModel({ cellRenderer: { component: CellFavorite, props: { onClick: this.handleFavoriteClick } }, headerCellRenderer: { component: CellHeaderIcon, props: { name: "star" } } }));
     if (this.hasAttentionRequiredFeature) {
-      this.defaultColumns.push(new ColumnAttentionRequiredModel({cellRenderer: {component: CellAttentionRequired}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "exclamation"}}}));
+      this.defaultColumns.push(new ColumnAttentionRequiredModel({ cellRenderer: { component: CellAttentionRequired }, headerCellRenderer: { component: CellHeaderIcon, props: { name: "exclamation" } } }));
     }
 
-    this.defaultColumns.push(new ColumnNameModel({headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
+    this.defaultColumns.push(new ColumnNameModel({ headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Name") } } }));
     if (this.props.passwordExpiryContext.isFeatureEnabled()) {
-      this.defaultColumns.push(new ColumnExpiredModel({cellRenderer: {component: CellExpiryDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Expiry")}}}));
+      this.defaultColumns.push(new ColumnExpiredModel({ cellRenderer: { component: CellExpiryDate, props: { locale: this.props.context.locale, t: this.props.t } }, headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Expiry") } } }));
     }
-    this.defaultColumns.push(new ColumnUsernameModel({cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Username")}}}));
-    this.defaultColumns.push(new ColumnPasswordModel({cellRenderer: {component: CellPassword, props: {title: this.translate("secret"), getPreviewPassword: this.getPreviewPassword, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick, hasPassword: this.isPasswordResources}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Password")}}}));
-    if (this.props.context.siteSettings.canIUse('totpResourceTypes')) {
-      this.defaultColumns.push(new ColumnTotpModel({cellRenderer: {component: CellTotp, props: {title: this.translate("secret"), getPreviewTotp: this.getPreviewTotp, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onTotpClick: this.handleCopyTotpClick, onPreviewTotpClick: this.handlePreviewTotpButtonClick, hasTotp: this.isTotpResources}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("TOTP")}}}));
-    }
-    this.defaultColumns.push(new ColumnUriModel({cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("URI")}}}));
-    this.defaultColumns.push(new ColumnModifiedModel({cellRenderer: {component: CellDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Modified")}}}));
+    this.defaultColumns.push(new ColumnUsernameModel({ cellRenderer: { component: CellButton, props: { onClick: this.handleCopyUsernameClick } }, headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Username") } } }));
+    this.defaultColumns.push(new ColumnUriModel({ cellRenderer: { component: CellLink, props: { onClick: this.handleGoToResourceUriClick } }, headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("URI") } } }));
+    this.defaultColumns.push(new ColumnModifiedModel({ cellRenderer: { component: CellDate, props: { locale: this.props.context.locale, t: this.props.t } }, headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Modified") } } }));
     if (this.canUseFolders) {
-      this.defaultColumns.push(new ColumnLocationModel({getValue: resource => this.props.resourceWorkspaceContext.getHierarchyFolderCache(resource.folder_parent_id), cellRenderer: {component: CellLocation, props: {onClick: this.handleLocationClick, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Location")}}}));
+      this.defaultColumns.push(new ColumnLocationModel({ getValue: resource => this.props.resourceWorkspaceContext.getHierarchyFolderCache(resource.folder_parent_id), cellRenderer: { component: CellLocation, props: { onClick: this.handleLocationClick, t: this.props.t } }, headerCellRenderer: { component: CellHeaderDefault, props: { label: this.translate("Location") } } }));
     }
   }
 
@@ -170,7 +166,7 @@ class DisplayResourcesList extends React.Component {
     const columns = this.defaultColumns.map(column => Object.assign(new ColumnModel(column), columnsResourceSetting[column.id]));
     // Sort the position of the column, the column with no position will be at the beginning
     columns.sort((columnA, columnB) => (columnA.position || 0) < (columnB.position || 0) ? -1 : 1);
-    this.setState({columns});
+    this.setState({ columns });
   }
 
   /**
@@ -191,7 +187,7 @@ class DisplayResourcesList extends React.Component {
    * Returns true if the component should be re-rendered
    */
   shouldComponentUpdate(nextProps, nextState) {
-    const {filteredResources, selectedResources, sorter, scrollTo, columnsResourceSetting} = nextProps.resourceWorkspaceContext;
+    const { filteredResources, selectedResources, sorter, scrollTo, columnsResourceSetting } = nextProps.resourceWorkspaceContext;
     const hasFilteredResourcesChanged = this.props.resourceWorkspaceContext.filteredResources !== filteredResources;
     const hasBothSingleSelection = selectedResources.length === 1 && this.props.resourceWorkspaceContext.selectedResources.length === 1;
     const hasSingleSelectedResourceChanged = hasBothSingleSelection && selectedResources[0].id !== this.props.resourceWorkspaceContext.selectedResources[0].id;
@@ -258,7 +254,7 @@ class DisplayResourcesList extends React.Component {
   handleSelectResources(resources) {
     const selectedFolders = [];
     const selectedResources = resources;
-    this.setState({selectedFolders, selectedResources}, () => {
+    this.setState({ selectedFolders, selectedResources }, () => {
       if (resources.length === 1) {
         this.props.history.push(`/app/passwords/view/${resources[0].id}`);
       }
@@ -274,7 +270,7 @@ class DisplayResourcesList extends React.Component {
     this.handleSelectResources([resource]);
     const left = event.pageX;
     const top = event.pageY;
-    const contextualMenuProps = {left, top, resource};
+    const contextualMenuProps = { left, top, resource };
     this.props.contextualMenuContext.show(DisplayResourcesListContextualMenu, contextualMenuProps);
   }
 
@@ -503,7 +499,7 @@ class DisplayResourcesList extends React.Component {
   hidePreviewedCellule() {
     const previewedCellule = null;
     const plaintextSecretDto = null;
-    this.setState({previewedCellule, plaintextSecretDto});
+    this.setState({ previewedCellule, plaintextSecretDto });
   }
 
   /**
@@ -536,8 +532,8 @@ class DisplayResourcesList extends React.Component {
     }
 
     const columnId = "password";
-    const previewedCellule = {resourceId, columnId};
-    this.setState({previewedCellule, plaintextSecretDto});
+    const previewedCellule = { resourceId, columnId };
+    this.setState({ previewedCellule, plaintextSecretDto });
   }
 
   /**
@@ -583,8 +579,8 @@ class DisplayResourcesList extends React.Component {
     }
 
     const columnId = "totp";
-    const previewedCellule = {resourceId, columnId};
-    this.setState({previewedCellule, plaintextSecretDto});
+    const previewedCellule = { resourceId, columnId };
+    this.setState({ previewedCellule, plaintextSecretDto });
   }
 
   /**
@@ -638,7 +634,7 @@ class DisplayResourcesList extends React.Component {
     if (!isSelected) {
       await this.props.resourceWorkspaceContext.onResourceSelected.single(resource);
     }
-    const draggedItems = {resources:  this.props.resourceWorkspaceContext.selectedResources, folders: []};
+    const draggedItems = { resources: this.props.resourceWorkspaceContext.selectedResources, folders: [] };
     this.props.dragContext.onDragStart(event, DisplayDragResource, draggedItems);
   }
 
@@ -704,8 +700,8 @@ class DisplayResourcesList extends React.Component {
     if (folderId) {
       this.props.history.push(`/app/folders/view/${folderId}`);
     } else { // Case of root folder
-      const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
-      this.props.history.push(`/app/passwords`, {filter});
+      const filter = { type: ResourceWorkspaceFilterTypes.ROOT_FOLDER };
+      this.props.history.push(`/app/passwords`, { filter });
     }
   }
 
@@ -791,7 +787,7 @@ class DisplayResourcesList extends React.Component {
    */
   get canPreviewSecret() {
     return this.props.context.siteSettings.canIUse('previewPassword')
-    && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
+      && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
   }
 
   /**
@@ -877,7 +873,7 @@ class DisplayResourcesList extends React.Component {
               </div>
             }
             {(filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN || filterType === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED ||
-                filterType === ResourceWorkspaceFilterTypes.ALL) &&
+              filterType === ResourceWorkspaceFilterTypes.ALL) &&
               <React.Fragment>
                 <div className="empty-content">
                   <h1><Trans>Welcome to passbolt!</Trans></h1>

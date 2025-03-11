@@ -14,18 +14,16 @@
 import React from "react";
 import Transition from 'react-transition-group/Transition';
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withRouter} from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
+import { withRouter } from "react-router-dom";
 import Icon from "../../../shared/components/Icons/Icon";
 import ClipBoard from '../../../shared/lib/Browser/clipBoard';
-import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
-import {withRbac} from "../../../shared/context/Rbac/RbacContext";
-import HiddenPassword from "../../../shared/components/Password/HiddenPassword";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import Totp from "../../../shared/components/Totp/Totp";
-import {TotpCodeGeneratorService} from "../../../shared/services/otp/TotpCodeGeneratorService";
-import sanitizeUrl, {urlProtocols} from "../../../react-extension/lib/Sanitize/sanitizeUrl";
-import {resourceLinkAuthorizedProtocols} from "../../../react-extension/contexts/ResourceWorkspaceContext";
+import { uiActions } from "../../../shared/services/rbacs/uiActionEnumeration";
+import { withRbac } from "../../../shared/context/Rbac/RbacContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
+import sanitizeUrl, { urlProtocols } from "../../../react-extension/lib/Sanitize/sanitizeUrl";
+import { resourceLinkAuthorizedProtocols } from "../../../react-extension/contexts/ResourceWorkspaceContext";
 import {
   withResourceTypesLocalStorage
 } from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
@@ -102,11 +100,11 @@ class ResourceViewPage extends React.Component {
   async loadResource() {
     const storageData = await this.props.context.storage.local.get(["resources"]);
     const resource = storageData.resources.find(item => item.id === this.props.match.params.id);
-    this.setState({resource});
+    this.setState({ resource });
   }
 
   resetError() {
-    this.setState({error: ""});
+    this.setState({ error: "" });
   }
 
   async handleCopyLoginClick(event) {
@@ -118,11 +116,11 @@ class ResourceViewPage extends React.Component {
     }
 
     try {
-      this.setState({copyLoginState: 'processing'});
+      this.setState({ copyLoginState: 'processing' });
       await ClipBoard.copy(this.state.resource.metadata?.username, this.props.context.port);
-      this.setState({copyLoginState: 'done'});
+      this.setState({ copyLoginState: 'done' });
       setTimeout(() => {
-        this.setState({copyLoginState: 'default'});
+        this.setState({ copyLoginState: 'default' });
       }, 15000);
     } catch (error) {
       console.error('An unexpected error occured', error);
@@ -152,7 +150,7 @@ class ResourceViewPage extends React.Component {
     let plaintextSecretDto;
 
     this.resetError();
-    this.setState({copyPasswordState: 'processing'});
+    this.setState({ copyPasswordState: 'processing' });
 
     if (isPasswordPreviewed) {
       plaintextSecretDto = this.state.plaintextSecretDto;
@@ -164,25 +162,25 @@ class ResourceViewPage extends React.Component {
           return;
         }
       } finally {
-        this.setState({copyPasswordState: 'default'});
+        this.setState({ copyPasswordState: 'default' });
       }
     }
 
     if (!plaintextSecretDto) {
-      this.setState({copyPasswordState: 'default'});
+      this.setState({ copyPasswordState: 'default' });
       return;
     }
 
     if (!plaintextSecretDto.password?.length) {
       this.displayTemporarilyError(this.translate("The password is empty and cannot be copied to clipboard."));
-      this.setState({copyPasswordState: 'default'});
+      this.setState({ copyPasswordState: 'default' });
       return;
     }
 
     await ClipBoard.copy(plaintextSecretDto.password, this.props.context.port);
-    this.setState({copyPasswordState: 'done'});
+    this.setState({ copyPasswordState: 'done' });
     setTimeout(() => {
-      this.setState({copyPasswordState: 'default'});
+      this.setState({ copyPasswordState: 'default' });
     }, 15000);
   }
 
@@ -202,7 +200,7 @@ class ResourceViewPage extends React.Component {
    * Hide the previewed resource secret.
    */
   hidePreviewedSecret() {
-    this.setState({plaintextSecretDto: null, previewedSecret: null});
+    this.setState({ plaintextSecretDto: null, previewedSecret: null });
   }
 
   /**
@@ -212,7 +210,7 @@ class ResourceViewPage extends React.Component {
   async previewPassword() {
     const previewedSecret = "password";
     let plaintextSecretDto;
-    await this.setState({error: "", isPasswordDecrypting: true});
+    await this.setState({ error: "", isPasswordDecrypting: true });
 
     try {
       plaintextSecretDto = await this.decryptResourceSecret(this.state.resource.id);
@@ -221,7 +219,7 @@ class ResourceViewPage extends React.Component {
         return;
       }
     } finally {
-      this.setState({isPasswordDecrypting: false});
+      this.setState({ isPasswordDecrypting: false });
     }
 
     if (!plaintextSecretDto) {
@@ -233,7 +231,7 @@ class ResourceViewPage extends React.Component {
       return;
     }
 
-    await this.setState({plaintextSecretDto, previewedSecret});
+    await this.setState({ plaintextSecretDto, previewedSecret });
   }
 
   /**
@@ -243,8 +241,8 @@ class ResourceViewPage extends React.Component {
    */
   displayTemporarilyError(error, time = DEFAULT_ERROR_DISPLAY_TIME_IN_MS) {
     clearTimeout(this.state.errorTimeout);
-    const errorTimeout = setTimeout(() => this.setState({error: ""}), time);
-    this.setState({errorTimeout, error});
+    const errorTimeout = setTimeout(() => this.setState({ error: "" }), time);
+    this.setState({ errorTimeout, error });
   }
 
   /**
@@ -266,7 +264,7 @@ class ResourceViewPage extends React.Component {
     const isTotpPreviewed = this.isTotpPreviewed();
 
     this.resetError();
-    this.setState({copyTotpState: 'processing'});
+    this.setState({ copyTotpState: 'processing' });
 
     if (isTotpPreviewed) {
       plaintextSecretDto = this.state.plaintextSecretDto;
@@ -278,26 +276,26 @@ class ResourceViewPage extends React.Component {
           return;
         }
       } finally {
-        this.setState({copyTotpState: 'default'});
+        this.setState({ copyTotpState: 'default' });
       }
     }
 
     if (!plaintextSecretDto) {
-      this.setState({copyTotpState: 'default'});
+      this.setState({ copyTotpState: 'default' });
       return;
     }
 
     if (!plaintextSecretDto.totp) {
       this.displayTemporarilyError(this.translate("The TOTP is empty and cannot be copied to clipboard."));
-      this.setState({copyTotpState: 'default'});
+      this.setState({ copyTotpState: 'default' });
       return;
     }
 
     const code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
     await ClipBoard.copy(code, this.props.context.port);
-    this.setState({copyTotpState: 'done'});
+    this.setState({ copyTotpState: 'done' });
     setTimeout(() => {
-      this.setState({copyTotpState: 'default'});
+      this.setState({ copyTotpState: 'default' });
     }, 15000);
   }
 
@@ -320,7 +318,7 @@ class ResourceViewPage extends React.Component {
     const previewedSecret = "totp";
     let plaintextSecretDto;
 
-    await this.setState({error: "", isTotpDecrypting: true});
+    await this.setState({ error: "", isTotpDecrypting: true });
 
     try {
       plaintextSecretDto = await this.decryptResourceSecret(this.state.resource.id);
@@ -329,7 +327,7 @@ class ResourceViewPage extends React.Component {
         return;
       }
     } finally {
-      this.setState({isTotpDecrypting: false});
+      this.setState({ isTotpDecrypting: false });
     }
 
     if (!plaintextSecretDto) {
@@ -341,7 +339,7 @@ class ResourceViewPage extends React.Component {
       return;
     }
 
-    this.setState({plaintextSecretDto, previewedSecret});
+    this.setState({ plaintextSecretDto, previewedSecret });
   }
 
   handleGoToUrlClick(event) {
@@ -353,13 +351,13 @@ class ResourceViewPage extends React.Component {
 
   async handleUseOnThisTabClick(event) {
     event.preventDefault();
-    this.setState({usingOnThisTab: true});
+    this.setState({ usingOnThisTab: true });
     try {
       await this.props.context.port.request('passbolt.quickaccess.use-resource-on-current-tab', this.state.resource.id, this.props.context.getOpenerTabId());
       window.close();
     } catch (error) {
       if (error && error.name === "UserAbortsOperationError") {
-        this.setState({usingOnThisTab: false});
+        this.setState({ usingOnThisTab: false });
       } else {
         console.error('An error occured', error);
         this.setState({
@@ -428,11 +426,11 @@ class ResourceViewPage extends React.Component {
       <div className="resource item-browse">
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick}>
-            <Icon name="chevron-left"/>
+            <Icon name="chevron-left" />
             <span className="primary-action-title">{this.state.resource.metadata?.name}</span>
           </a>
           <a href={`${this.props.context.userSettings.getTrustedDomain()}/app/passwords/view/${this.props.match.params.id}`} className="secondary-action button-transparent button" target="_blank" rel="noopener noreferrer" title={this.translate("View it in passbolt")}>
-            <Icon name="internal-link"/>
+            <Icon name="internal-link" />
             <span className="visually-hidden"><Trans>Edit in passbolt</Trans></span>
           </a>
         </div>
@@ -457,156 +455,28 @@ class ResourceViewPage extends React.Component {
                   <Transition in={this.state.copyLoginState === "default"} appear={false} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copyLoginState !== "default" ? "visually-hidden" : ""}`}>
-                        <Icon name="copy-to-clipboard"/>
+                        <Icon name="copy-to-clipboard" />
                       </span>
                     )}
                   </Transition>
                   <Transition in={this.state.copyLoginState === "processing"} appear={true} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copyLoginState !== "processing" ? "visually-hidden" : ""}`}>
-                        <Icon name="spinner"/>
+                        <Icon name="spinner" />
                       </span>
                     )}
                   </Transition>
                   <Transition in={this.state.copyLoginState === "done"} appear={true} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copyLoginState !== "done" ? "visually-hidden" : ""}`}>
-                        <Icon name="check"/>
+                        <Icon name="check" />
                       </span>
                     )}
                   </Transition>
                   <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
                 </a>
-              </li>
-              <li className="property">
-                <div className="information">
-                  <span className="property-name"><Trans>Password</Trans></span>
-                  <div className="password-wrapper">
-                    <div className={`property-value secret secret-password ${isPasswordPreviewed ? "" : "secret-copy"}`}
-                      title={isPasswordPreviewed ? this.state.plaintextSecretDto?.password : "secret"}>
-                      <HiddenPassword
-                        canClick={canCopySecret}
-                        preview={this.state.plaintextSecretDto?.password}
-                        onClick={this.handleCopyPasswordClick} />
-                    </div>
-                    {this.canPreviewSecret &&
-                      <a onClick={this.handleViewPasswordButtonClick}
-                        className={`password-view button button-transparent ${this.state.isPasswordDecrypting ? "disabled" : ""}`}>
-                        <Transition in={!this.state.isPasswordDecrypting} appear={false} timeout={500}>
-                          {status => (
-                            <span className={`transition fade-${status} ${this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}>
-                              <Icon name={isPasswordPreviewed ? "eye-close" : "eye-open"}/>
-                            </span>
-                          )}
-                        </Transition>
-                        <Transition in={this.state.isPasswordDecrypting} appear={true} timeout={500}>
-                          {status => (
-                            <span className={`transition fade-${status} ${!this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}>
-                              <Icon name="spinner"/>
-                            </span>
-                          )}
-                        </Transition>
-                        <span className="visually-hidden"><Trans>View</Trans></span>
-                      </a>
-                    }
-                  </div>
-                </div>
-                {canCopySecret &&
-                  <a role="button" className="button button-transparent property-action copy-password" onClick={this.handleCopyPasswordClick} title={this.translate("Copy to clipboard")}>
-                    <Transition in={this.state.copyPasswordState === "default"} appear={false} timeout={500}>
-                      {status => (
-                        <span className={`transition fade-${status} ${this.state.copyPasswordState !== "default" ? "visually-hidden" : ""}`}>
-                          <Icon name="copy-to-clipboard"/>
-                        </span>
-                      )}
-                    </Transition>
-                    <Transition in={this.state.copyPasswordState === "processing"} appear={true} timeout={500}>
-                      {status => (
-                        <span className={`transition fade-${status} ${this.state.copyPasswordState !== "processing" ? "visually-hidden" : ""}`}>
-                          <Icon name="spinner"/>
-                        </span>
-                      )}
-                    </Transition>
-                    <Transition in={this.state.copyPasswordState === "done"} appear={true} timeout={500}>
-                      {status => (
-                        <span className={`transition fade-${status} ${this.state.copyPasswordState !== "done" ? "visually-hidden" : ""}`}>
-                          <Icon name="check"/>
-                        </span>
-                      )}
-                    </Transition>
-                    <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
-                  </a>
-                }
               </li>
             </>
-          }
-          {this.isTotpResources &&
-            <li className="property">
-              <div className="information">
-                <span className="property-name"><Trans>TOTP</Trans></span>
-                <div className="totp-wrapper">
-                  <div className={`property-value secret secret-totp ${isTotpPreviewed ? "" : "secret-copy"}`}>
-                    {isTotpPreviewed &&
-                      <Totp
-                        totp={this.state.plaintextSecretDto?.totp}
-                        canClick={canCopySecret}
-                        onClick={this.handleCopyTotpClick}/>
-                    }
-                    {!isTotpPreviewed &&
-                      <button type="button" className="link no-border" onClick={this.handleCopyTotpClick} disabled={!canCopySecret}>
-                        <span>Copy TOTP to clipboard</span>
-                      </button>
-                    }
-                  </div>
-                  {this.canPreviewSecret &&
-                    <a onClick={this.handlePreviewTotpButtonClick}
-                      className={`totp-view button button-transparent ${this.state.isTotpDecrypting ? "disabled" : ""}`}>
-                      <Transition in={!this.state.isTotpDecrypting} appear={false} timeout={500}>
-                        {status => (
-                          <span className={`transition fade-${status} ${this.state.isTotpDecrypting ? "visually-hidden" : ""}`}>
-                            <Icon name={isTotpPreviewed ? "eye-close" : "eye-open"}/>
-                          </span>
-                        )}
-                      </Transition>
-                      <Transition in={this.state.isTotpDecrypting} appear={true} timeout={500}>
-                        {status => (
-                          <span className={`transition fade-${status} ${!this.state.isTotpDecrypting ? "visually-hidden" : ""}`}>
-                            <Icon name="spinner"/>
-                          </span>
-                        )}
-                      </Transition>
-                      <span className="visually-hidden"><Trans>View</Trans></span>
-                    </a>
-                  }
-                </div>
-              </div>
-              {canCopySecret &&
-                <a role="button" className="button button-transparent property-action copy-totp" onClick={this.handleCopyTotpClick} title={this.translate("Copy to clipboard")}>
-                  <Transition in={this.state.copyTotpState === "default"} appear={false} timeout={500}>
-                    {status => (
-                      <span className={`transition fade-${status} ${this.state.copyTotpState !== "default" ? "visually-hidden" : ""}`}>
-                        <Icon name="copy-to-clipboard"/>
-                      </span>
-                    )}
-                  </Transition>
-                  <Transition in={this.state.copyTotpState === "processing"} appear={true} timeout={500}>
-                    {status => (
-                      <span className={`transition fade-${status} ${this.state.copyTotpState !== "processing" ? "visually-hidden" : ""}`}>
-                        <Icon name="spinner"/>
-                      </span>
-                    )}
-                  </Transition>
-                  <Transition in={this.state.copyTotpState === "done"} appear={true} timeout={500}>
-                    {status => (
-                      <span className={`transition fade-${status} ${this.state.copyTotpState !== "done" ? "visually-hidden" : ""}`}>
-                        <Icon name="check"/>
-                      </span>
-                    )}
-                  </Transition>
-                  <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
-                </a>
-              }
-            </li>
           }
           <li className="property">
             <div className="information">
@@ -629,7 +499,7 @@ class ResourceViewPage extends React.Component {
             </div>
             <a href={`${sanitizeResourceUrl ? sanitizeResourceUrl : "#"}`} role="button" className={`button button-transparent property-action ${!sanitizeResourceUrl ? "disabled" : ""}`}
               onClick={this.handleGoToUrlClick} target="_blank" rel="noopener noreferrer" title={this.translate("open in a new tab")}>
-              <Icon name="external-link"/>
+              <Icon name="external-link" />
               <span className="visually-hidden"><Trans>Open in new window</Trans></span>
             </a>
           </li>
@@ -637,7 +507,7 @@ class ResourceViewPage extends React.Component {
         <div className="submit-wrapper input">
           <a href="#" id="popupAction" className={`button primary big full-width ${this.state.usingOnThisTab ? "disabled" : ""}`} role="button" onClick={this.handleUseOnThisTabClick}>
             {this.state.usingOnThisTab &&
-              <Icon name="spinner"/>
+              <Icon name="spinner" />
             }
             {!this.state.usingOnThisTab &&
               <Trans>use on this page</Trans>

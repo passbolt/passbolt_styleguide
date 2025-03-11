@@ -14,13 +14,13 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withRouter } from "react-router-dom";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withNavigationContext } from "../../../contexts/NavigationContext";
+import { Trans, withTranslation } from "react-i18next";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 /**
  * This component allows to navigate throught the differents sections of the user settings workspace
@@ -125,30 +125,13 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
             </div>
           </li>
           {this.canIUseThemeCapability &&
-          <li>
-            <div
-              className={`row ${isSelected('theme') ? 'selected' : ''}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsThemeRequested}>
-                    <span><Trans>Theme</Trans></span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </li>
-          }
-          {this.isMfaEnabled &&
             <li>
               <div
-                className={`row ${isSelected('mfa') ? 'selected' : ''}`}>
+                className={`row ${isSelected('theme') ? 'selected' : ''}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsMfaRequested}>
-                      <span><Trans>Multi Factor Authentication</Trans></span>
-                      {this.props.hasPendingMfaChoice &&
-                      <Icon name="exclamation" baseline={true}/>
-                      }
+                    <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsThemeRequested}>
+                      <span><Trans>Theme</Trans></span>
                     </button>
                   </div>
                 </div>
@@ -156,51 +139,23 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
             </li>
           }
           {this.canIUseAccountRecoveryCapability &&
-          <li>
-            <div
-              className={`row ${isSelected('account-recovery') ? 'selected' : ''}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsAccountRecoveryRequested}>
-                    <span>
-                      <Trans>Account Recovery</Trans>
-                    </span>
-                    {this.props.hasPendingAccountRecoveryChoice &&
-                      <Icon name="exclamation" baseline={true}/>
-                    }
-                  </button>
+            <li>
+              <div
+                className={`row ${isSelected('account-recovery') ? 'selected' : ''}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsAccountRecoveryRequested}>
+                      <span>
+                        <Trans>Account Recovery</Trans>
+                      </span>
+                      {this.props.hasPendingAccountRecoveryChoice &&
+                        <Icon name="exclamation" baseline={true} />
+                      }
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-          }
-          {this.canIUseMobileCapability &&
-          <li id="navigation-item-mobile-setup">
-            <div
-              className={`row ${isSelected('mobile') ? 'selected' : ''}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsMobileRequested}>
-                    <span><Trans>Mobile setup</Trans></span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </li>
-          }
-          {this.canIUseDesktopCapability &&
-          <li id="navigation-item-desktop-setup">
-            <div
-              className={`row ${isSelected('desktop') ? 'selected' : ''}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsDesktopRequested}>
-                    <span><Trans>Desktop app setup</Trans></span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </li>
+            </li>
           }
         </ul>
       </div>

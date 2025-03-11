@@ -13,29 +13,28 @@
  */
 
 import React from "react";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Icon from "../../../../shared/components/Icons/Icon";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
 import EditResource from "../EditResource/EditResource";
 import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
-import {Trans, withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import {withProgress} from "../../../contexts/ProgressContext";
-import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
-import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withProgress } from "../../../contexts/ProgressContext";
+import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import { TotpWorkflowMode } from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
-import {withWorkflow} from "../../../contexts/WorkflowContext";
+import { withWorkflow } from "../../../contexts/WorkflowContext";
 import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
-import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
-import {formatDateForApi} from "../../../../shared/utils/dateUtils";
-import {DateTime} from "luxon";
+import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
+import { formatDateForApi } from "../../../../shared/utils/dateUtils";
+import { DateTime } from "luxon";
 import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
@@ -100,14 +99,14 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
 
   componentDidMount() {
     document.addEventListener('click', this.handleDocumentClickEvent);
-    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
+    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, { capture: true });
+    document.addEventListener('dragstart', this.handleDocumentDragStartEvent, { capture: true });
   }
 
   componentWillUnmount() {
     document.removeEventListener('click', this.handleDocumentClickEvent);
-    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
+    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent, { capture: true });
+    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent, { capture: true });
   }
 
   /**
@@ -157,14 +156,14 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   handleMoreClickEvent() {
     const moreMenuOpen = !this.state.moreMenuOpen;
-    this.setState({moreMenuOpen});
+    this.setState({ moreMenuOpen });
   }
 
   /**
    * handle delete one or more resources
    */
   handleDeleteClickEvent() {
-    this.props.dialogContext.open(DeleteResource, {resources: this.selectedResources});
+    this.props.dialogContext.open(DeleteResource, { resources: this.selectedResources });
     this.handleCloseMoreMenu();
   }
 
@@ -174,12 +173,12 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   async handleMarkAsExpiredClick() {
     this.handleCloseMoreMenu();
-    const resourcesExpiryDateToUpdate = this.selectedResources.map(resource => ({id: resource.id, expired: formatDateForApi(DateTime.utc())}));
+    const resourcesExpiryDateToUpdate = this.selectedResources.map(resource => ({ id: resource.id, expired: formatDateForApi(DateTime.utc()) }));
     try {
       await this.props.context.port.request("passbolt.resources.set-expiration-date", resourcesExpiryDateToUpdate);
-      await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been marked as expired.", {count: resourcesExpiryDateToUpdate.length}));
+      await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been marked as expired.", { count: resourcesExpiryDateToUpdate.length }));
     } catch (error) {
-      await this.props.actionFeedbackContext.displayError(this.translate("Unable to mark the resource as expired.", {count: resourcesExpiryDateToUpdate.length}));
+      await this.props.actionFeedbackContext.displayError(this.translate("Unable to mark the resource as expired.", { count: resourcesExpiryDateToUpdate.length }));
     } finally {
       this.handleCloseMoreMenu();
     }
@@ -190,9 +189,9 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   handleEditClickEvent() {
     if (this.isStandaloneTotpResource) {
-      this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_STANDALONE_TOTP});
+      this.props.workflowContext.start(HandleTotpWorkflow, { mode: TotpWorkflowMode.EDIT_STANDALONE_TOTP });
     } else {
-      this.props.dialogContext.open(EditResource, {resource: this.selectedResources[0]});
+      this.props.dialogContext.open(EditResource, { resource: this.selectedResources[0] });
     }
   }
 
@@ -201,7 +200,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   async handleShareClickEvent() {
     const resourcesIds = this.selectedResources.map(resource => resource.id);
-    await this.props.context.setContext({shareDialogProps: {resourcesIds}});
+    await this.props.context.setContext({ shareDialogProps: { resourcesIds } });
     this.props.dialogContext.open(ShareDialog);
   }
 
@@ -336,7 +335,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   handleViewColumnsClickEvent() {
     const viewColumnsMenuOpen = !this.state.viewColumnsMenuOpen;
-    this.setState({viewColumnsMenuOpen});
+    this.setState({ viewColumnsMenuOpen });
   }
 
   handleOnChangeColumnView(event) {
@@ -356,14 +355,14 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * Close the more menu
    */
   handleCloseMoreMenu() {
-    this.setState({moreMenuOpen: false});
+    this.setState({ moreMenuOpen: false });
   }
 
   /**
    * Close the more menu
    */
   handleCloseViewColumnsMenu() {
-    this.setState({viewColumnsMenuOpen: false});
+    this.setState({ viewColumnsMenuOpen: false });
   }
 
   /**
@@ -517,7 +516,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   async export() {
     const resourcesIds = this.selectedResources.map(resource => resource.id);
-    await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds});
+    await this.props.resourceWorkspaceContext.onResourcesToExport({ resourcesIds });
     await this.props.dialogContext.open(ExportResources);
   }
 
@@ -559,195 +558,10 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
-    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
-
     return (
-      <div className="col2_3 actions-wrapper">
-        <div className="actions">
-          <ul>
-            {canCopySecret &&
-              <li id="password_action">
-                <button type="button" disabled={!this.hasOneResourceSelected()}
-                  onClick={this.handleCopySecretClickEvent}>
-                  <Icon name="copy-to-clipboard"/>
-                  <span><Trans>Copy</Trans></span>
-                </button>
-              </li>
-            }
-            <li id="edit_action">
-              <button type="button" disabled={!this.hasOneResourceSelected() || !this.canUpdate()}
-                onClick={this.handleEditClickEvent}>
-                <Icon name="edit"/>
-                <span><Trans>Edit</Trans></span>
-              </button>
-            </li>
-            {canViewShare &&
-              <li id="share_action">
-                <button type="button" disabled={!this.hasResourceSelected() || !this.canShare()}
-                  onClick={this.handleShareClickEvent}>
-                  <Icon name="share"/>
-                  <span><Trans>Share</Trans></span>
-                </button>
-              </li>
-            }
-            {this.canExport() &&
-              <li id="export_action">
-                <button
-                  type="button"
-                  disabled={!this.hasResourceSelected()}
-                  onClick={this.handleExportClickEvent}>
-                  <Icon name="download"/>
-                  <span><Trans>Export</Trans></span>
-                </button>
-              </li>
-            }
-            <li>
-              <div className="dropdown" ref={this.moreMenuRef}>
-                <button type="button" className={`more ${this.state.moreMenuOpen ? "open" : ""}`}
-                  disabled={!this.hasMoreActionAllowed()}
-                  onClick={this.handleMoreClickEvent}>
-                  <span><Trans>More</Trans></span>
-                  <Icon name="caret-down"/>
-                </button>
-                <ul className={`dropdown-content menu right ${this.state.moreMenuOpen ? "visible" : ""}`}>
-                  <li id="username_action">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button
-                            type="button"
-                            disabled={!this.canCopyUsername()}
-                            className="link no-border"
-                            onClick={this.handleCopyUsernameClickEvent}>
-                            <span><Trans>Copy username to clipboard</Trans></span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  {canCopySecret &&
-                    <li id="secret_action">
-                      <div className="row">
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <button type="button" disabled={!this.canCopyPassword()} className="link no-border"
-                              onClick={this.handleCopySecretClickEvent}>
-                              <span><Trans>Copy password to clipboard</Trans></span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  }
-                  {this.canUseTotp &&
-                    <li id="totp_action">
-                      <div className="row">
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <button type="button" disabled={!this.canCopyTotp()} className="link no-border"
-                              onClick={this.handleCopyTotpClickEvent}>
-                              <span><Trans>Copy TOTP to clipboard</Trans></span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  }
-                  <li id="permalink_action" className="separator-after">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button type="button" disabled={!this.hasOneResourceSelected()} className="link no-border"
-                            onClick={this.handleCopyPermalinkClickEvent}>
-                            <span><Trans>Copy permalink to clipboard</Trans></span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  {this.canOverridePasswordExpiry &&
-                    <>
-                      <li id="set_expiry_date_action">
-                        <div className="row">
-                          <div className="main-cell-wrapper">
-                            <div className="main-cell">
-                              <button type="button" disabled={!this.canUpdate()} className="link no-border"
-                                onClick={this.handleSetExpiryDateClickEvent}>
-                                <span><Trans>Set expiry date</Trans></span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li id="mark_as_expired_action" className="ready separator-after">
-                        <div className="row">
-                          <div className="main-cell-wrapper">
-                            <div className="main-cell">
-                              <button
-                                type="button"
-                                disabled={!this.canUpdate()}
-                                className="link no-border"
-                                onClick={this.handleMarkAsExpiredClick}><span><Trans>Mark as expired</Trans></span></button>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    </>
-                  }
-                  <li id="delete_action">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button type="button" disabled={!this.canUpdate()} className="link no-border"
-                            onClick={this.handleDeleteClickEvent}>
-                            <span><Trans>Delete</Trans></span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div className="actions secondary">
-          <ul>
-            <li>
-              <div className="dropdown" ref={this.viewColumnsMenuRef}>
-                <button type="button" className={`button-action-icon ${this.state.viewColumnsMenuOpen ? "open" : ""}`} onClick={this.handleViewColumnsClickEvent}>
-                  <Icon name="columns"/>
-                  <Icon name="caret-down"/>
-                </button>
-                <ul className={`dropdown-content menu left ${this.state.viewColumnsMenuOpen ? "visible" : ""}`}>
-                  {this.columnsResourceSetting?.map(column =>
-                    <li key={column.id} className={`${column.id === 'uri' ? "separator-after" : ""}`}>
-                      <div className="row">
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <div className="input checkbox">
-                              <input type="checkbox" checked={column.show} id={column.id} name={column.id} onChange={this.handleOnChangeColumnView}/>
-                              <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  )}
-                </ul>
-              </div>
-            </li>
-            <li>
-              <button type="button" className={`button-toggle button-action-icon info ${this.hasLockDetail() ? "selected" : ""}`}
-                onClick={this.handleViewDetailClickEvent}>
-                <Icon name="info-circle" big={true}/>
-                <span className="visuallyhidden"><Trans>View detail</Trans></span>
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <>
+        {/** 表示禁止のため削除 */}
+      </>
     );
   }
 }

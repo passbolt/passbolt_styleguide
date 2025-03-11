@@ -13,16 +13,16 @@
  */
 
 import React from "react";
-import {Link, withRouter} from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import canSuggestUrl from "./canSuggestUrl";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
-import {withRbac} from "../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
-import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
+import { withRbac } from "../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../shared/services/rbacs/uiActionEnumeration";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { filterResourcesBySearch } from "../../../shared/utils/filterUtils";
+import { withResourcesLocalStorage } from "../../contexts/ResourceLocalStorageContext";
 import memoize from "memoize-one";
 import {
   withResourceTypesLocalStorage
@@ -106,7 +106,7 @@ class HomePage extends React.Component {
   async loadActiveTabUrl() {
     try {
       const activeTabUrl = await this.props.context.port.request("passbolt.active-tab.get-url", this.props.context.getOpenerTabId());
-      this.setState({activeTabUrl});
+      this.setState({ activeTabUrl });
     } catch (error) {
       console.error(error);
     }
@@ -118,7 +118,7 @@ class HomePage extends React.Component {
    * @param {string} activeTabUrl the active tab url
    * @return {Array<Object>} The list of filtered resources.
    */
-  filterSuggestedResources =  memoize((resources, activeTabUrl) => {
+  filterSuggestedResources = memoize((resources, activeTabUrl) => {
     if (!activeTabUrl) {
       return [];
     }
@@ -149,7 +149,7 @@ class HomePage extends React.Component {
    * @param {string} search the current search to apply
    * @returns {Array<Object>} The list of resources.
    */
-  filterSearchedResources =  memoize((resources, search) => {
+  filterSearchedResources = memoize((resources, search) => {
     if (search && resources) {
       return filterResourcesBySearch(resources, search, BROWSED_RESOURCES_LIMIT);
     }
@@ -161,13 +161,13 @@ class HomePage extends React.Component {
    * @returns {Promise<void>}
    */
   async handleUseOnThisTabClick(resource) {
-    this.setState({usingOnThisTab: true});
+    this.setState({ usingOnThisTab: true });
     try {
       await this.props.context.port.request('passbolt.quickaccess.use-resource-on-current-tab', resource.id, this.props.context.getOpenerTabId());
       window.close();
     } catch (error) {
       if (error && error.name === "UserAbortsOperationError") {
-        this.setState({usingOnThisTab: false});
+        this.setState({ usingOnThisTab: false });
       } else {
         console.error('An error occured', error);
         this.setState({
@@ -237,7 +237,7 @@ class HomePage extends React.Component {
               <ul className="list-items">
                 {!isReady &&
                   <li className="empty-entry">
-                    <Icon name="spinner"/>
+                    <Icon name="spinner" />
                     <p className="processing-text"><Trans>Retrieving your passwords</Trans></p>
                   </li>
                 }
@@ -257,7 +257,7 @@ class HomePage extends React.Component {
                         <span className="url">{resource.metadata.uris?.[0]}</span>
                       </button>
                       <Link className="chevron-right-wrapper" to={`/webAccessibleResources/quickaccess/resources/view/${resource.id}`}>
-                        <Icon name="chevron-right"/>
+                        <Icon name="chevron-right" />
                       </Link>
                     </li>
                   ))}
@@ -273,7 +273,7 @@ class HomePage extends React.Component {
                 <React.Fragment>
                   {!isReady &&
                     <li className="empty-entry">
-                      <Icon name="spinner"/>
+                      <Icon name="spinner" />
                       <p className="processing-text"><Trans>Retrieving your passwords</Trans></p>
                     </li>
                   }
@@ -293,7 +293,7 @@ class HomePage extends React.Component {
                             </div>
                             <span className="url">{resource.metadata.uris?.[0]}</span>
                           </div>
-                          <Icon name="chevron-right"/>
+                          <Icon name="chevron-right" />
                         </Link>
                       </li>
                     ))}
@@ -308,42 +308,16 @@ class HomePage extends React.Component {
               </div>
               <ul className="list-items">
                 <li className="filter-entry">
-                  <Link to={"/webAccessibleResources/quickaccess/more-filters"}>
-                    <Icon name="filter"/>
-                    <span className="filter-title"><Trans>Filters</Trans></span>
-                    <Icon name="chevron-right"/>
+                  <Link to={"/webAccessibleResources/quickaccess/resources/shared-with-me"}>
+                    <Icon name="share" />
+                    <span className="filter-title"><Trans>Shared with me</Trans></span>
+                    <Icon name="chevron-right" />
                   </Link>
                 </li>
-                <li className="filter-entry">
-                  <Link to={"/webAccessibleResources/quickaccess/resources/group"}>
-                    <Icon name="users"/>
-                    <span className="filter-title"><Trans>Groups</Trans></span>
-                    <Icon name="chevron-right"/>
-                  </Link>
-                </li>
-                {canUseTag &&
-                  <li className="filter-entry">
-                    <Link to={"/webAccessibleResources/quickaccess/resources/tag"}>
-                      <Icon name="tag"/>
-                      <span className="filter-title"><Trans>Tags</Trans></span>
-                      <Icon name="chevron-right"/>
-                    </Link>
-                  </li>
-                }
               </ul>
             </div>
           }
         </div>
-        {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
-        <div className="submit-wrapper button-after-list input">
-          <Link to={`/webAccessibleResources/quickaccess/resources/create`} id="popupAction" className="button primary big full-width" role="button">
-            <Trans>Create new</Trans>
-          </Link>
-          {this.state.useOnThisTabError &&
-          <div className="error-message">{this.state.useOnThisTabError}</div>
-          }
-        </div>
-        }
       </div>
     );
   }

@@ -13,15 +13,14 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import ExportResources from "../ExportResources/ExportResources";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withTranslation } from "react-i18next";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 class FilterResourcesByRootFolderContextualMenu extends React.Component {
   /**
@@ -56,7 +55,7 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
    * Handle click on the create a folder menu option.
    */
   handleCreateFolderItemClickEvent() {
-    this.props.dialogContext.open(CreateResourceFolder, {folderParentId: null});
+    this.props.dialogContext.open(CreateResourceFolder, { folderParentId: null });
     this.handleHide();
   }
 
@@ -83,7 +82,7 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
   async export() {
     const foldersIds = this.props.context.folders.filter(folder => folder.folder_parent_id === null).map(folder => folder.id);
     const resourcesIds = this.props.context.resources.filter(resource => resource.folder_parent_id === null).map(resource => resource.id);
-    await this.props.resourceWorkspaceContext.onResourcesToExport({foldersIds, resourcesIds});
+    await this.props.resourceWorkspaceContext.onResourcesToExport({ foldersIds, resourcesIds });
     await this.props.dialogContext.open(ExportResources);
   }
 
@@ -93,36 +92,9 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
    */
   render() {
     return (
-      <ContextualMenuWrapper
-        hide={this.handleHide}
-        left={this.props.left}
-        top={this.props.top}
-        className={this.props.className}>
-        <li key="option-create-folder" className="ready closed">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <button className="link no-border" type="button" onClick={this.handleCreateFolderItemClickEvent}><span><Trans>Create folder</Trans></span></button>
-              </div>
-            </div>
-          </div>
-        </li>
-        {this.canExport() &&
-          <li key="option-export-folder" className="ready closed">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button type="button" className="link no-border" onClick={this.handleExportFolderItemClickEvent}>
-                    <span>
-                      <Trans>Export all</Trans>
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </li>
-        }
-      </ContextualMenuWrapper>
+      <>
+        {/** 表示禁止のため削除 */}
+      </>
     );
   }
 }

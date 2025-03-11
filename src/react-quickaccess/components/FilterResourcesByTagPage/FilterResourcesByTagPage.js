@@ -14,12 +14,12 @@
 
 import PropTypes from "prop-types";
 import React from "react";
-import {Link, withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
+import { Link, withRouter } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {escapeRegExp, filterResourcesBySearch} from "../../../shared/utils/filterUtils";
-import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { escapeRegExp, filterResourcesBySearch } from "../../../shared/utils/filterUtils";
+import { withResourcesLocalStorage } from "../../contexts/ResourceLocalStorageContext";
 import memoize from "memoize-one";
 import {
   withMetadataTypesSettingsLocalStorage
@@ -98,7 +98,7 @@ class FilterResourcesByTagPage extends React.Component {
     this.props.context.updateSearch("");
 
     // Push the tag as state of the component.
-    this.props.history.push(`/webAccessibleResources/quickaccess/resources/tag/${tag.id}`, {selectedTag: tag});
+    this.props.history.push(`/webAccessibleResources/quickaccess/resources/tag/${tag.id}`, { selectedTag: tag });
   }
 
   /**
@@ -239,13 +239,13 @@ class FilterResourcesByTagPage extends React.Component {
       <div className="index-list">
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.props.t("Go back")}>
-            <Icon name="chevron-left"/>
+            <Icon name="chevron-left" />
             <span className="primary-action-title">
               {selectedTag?.slug || <Trans>Tags</Trans>}
             </span>
           </a>
           <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button" title={this.props.t("Cancel")}>
-            <Icon name="close"/>
+            <Icon name="close" />
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>
         </div>
@@ -253,7 +253,7 @@ class FilterResourcesByTagPage extends React.Component {
           <ul className="list-items">
             {!isReady &&
               <li className="empty-entry">
-                <Icon name="spinner"/>
+                <Icon name="spinner" />
                 <p className="processing-text">
                   <Trans>Retrieving your tags</Trans>
                 </p>
@@ -311,13 +311,6 @@ class FilterResourcesByTagPage extends React.Component {
             }
           </ul>
         </div>
-        {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
-        <div className="submit-wrapper">
-          <Link to="/webAccessibleResources/quickaccess/resources/create" id="popupAction" className="button primary big full-width" role="button">
-            <Trans>Create new</Trans>
-          </Link>
-        </div>
-        }
       </div>
     );
   }
