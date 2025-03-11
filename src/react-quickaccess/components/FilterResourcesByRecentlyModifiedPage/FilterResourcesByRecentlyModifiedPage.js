@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 import React from "react";
-import {Link, withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
+import { Link, withRouter } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { filterResourcesBySearch } from "../../../shared/utils/filterUtils";
 import {
   withMetadataTypesSettingsLocalStorage
 } from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
@@ -17,7 +17,7 @@ import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
-import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
+import { withResourcesLocalStorage } from "../../contexts/ResourceLocalStorageContext";
 
 const BROWSED_RESOURCES_LIMIT = 500;
 
@@ -72,7 +72,7 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
     if (storageData.resources) {
       const resources = storageData.resources;
       this.sortResourcesByModifiedDesc(resources);
-      this.setState({resources});
+      this.setState({ resources });
     }
   }
 
@@ -141,13 +141,13 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
       <div className="index-list">
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.translate("Go back")}>
-            <Icon name="chevron-left"/>
+            <Icon name="chevron-left" />
             <span className="primary-action-title">
               <Trans>Recently modified</Trans>
             </span>
           </a>
           <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
-            <Icon name="close"/>
+            <Icon name="close" />
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>
         </div>
@@ -155,7 +155,7 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
           <ul className="list-items">
             {!isReady &&
               <li className="empty-entry">
-                <Icon name="spinner"/>
+                <Icon name="spinner" />
                 <p className="processing-text">
                   <Trans>Retrieving your passwords</Trans>
                 </p>
@@ -192,13 +192,6 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
             }
           </ul>
         </div>
-        {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
-        <div className="submit-wrapper">
-          <Link to="/webAccessibleResources/quickaccess/resources/create" id="popupAction" className="button primary big full-width" role="button">
-            <Trans>Create new</Trans>
-          </Link>
-        </div>
-        }
       </div>
     );
   }

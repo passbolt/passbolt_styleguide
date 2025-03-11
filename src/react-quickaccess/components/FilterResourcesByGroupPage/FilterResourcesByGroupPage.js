@@ -1,14 +1,14 @@
 import PropTypes from "prop-types";
 import React from "react";
-import {withRouter} from "react-router-dom";
-import {Link} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
+import { withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {sortResourcesAlphabetically} from "../../../shared/utils/sortUtils";
-import {escapeRegExp, filterResourcesBySearch} from "../../../shared/utils/filterUtils";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { sortResourcesAlphabetically } from "../../../shared/utils/sortUtils";
+import { escapeRegExp, filterResourcesBySearch } from "../../../shared/utils/filterUtils";
 import memoize from "memoize-one";
-import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
+import { withResourcesLocalStorage } from "../../contexts/ResourceLocalStorageContext";
 import {
   withMetadataTypesSettingsLocalStorage
 } from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
@@ -100,7 +100,7 @@ class FilterResourcesByGroupPage extends React.Component {
     ev.preventDefault();
     this.props.context.searchHistory[this.props.location.pathname] = this.props.context.search;
     this.props.context.updateSearch("");
-    this.props.history.push(`/webAccessibleResources/quickaccess/resources/group/${selectedGroup.id}`, {selectedGroup});
+    this.props.history.push(`/webAccessibleResources/quickaccess/resources/group/${selectedGroup.id}`, { selectedGroup });
   }
 
   /**
@@ -125,10 +125,10 @@ class FilterResourcesByGroupPage extends React.Component {
    * @returns {Promise<void>}
    */
   async findAndLoadGroups() {
-    const filters = {'has-users': [this.props.context.userSettings.id]};
-    const groups = await this.props.context.port.request("passbolt.groups.find-all", {filters});
+    const filters = { 'has-users': [this.props.context.userSettings.id] };
+    const groups = await this.props.context.port.request("passbolt.groups.find-all", { filters });
     this.sortGroupsAlphabetically(groups);
-    this.setState({groups});
+    this.setState({ groups });
   }
 
   /**
@@ -137,7 +137,7 @@ class FilterResourcesByGroupPage extends React.Component {
    */
   async findAndLoadGroupResourceIds() {
     const groupResourceIds = await this.props.context.port.request('passbolt.resources.find-all-ids-by-is-shared-with-group', this.props.location.state.selectedGroup.id);
-    this.setState({groupResourceIds});
+    this.setState({ groupResourceIds });
   }
 
   /**
@@ -159,7 +159,7 @@ class FilterResourcesByGroupPage extends React.Component {
    */
   sortGroupsAlphabetically(groups) {
     groups.sort((group1, group2) =>
-      group1.name.localeCompare(group2.name, undefined, {sensitivity: 'base'})
+      group1.name.localeCompare(group2.name, undefined, { sensitivity: 'base' })
     );
   }
 
@@ -200,7 +200,7 @@ class FilterResourcesByGroupPage extends React.Component {
    * @param {string} search the keyword to search for in the list if any
    * @return {Array<Object>} The list of resources.
    */
-  filterSearchedResources = memoize((resources, groupResourceIds, search) =>  {
+  filterSearchedResources = memoize((resources, groupResourceIds, search) => {
     const groupResources = this.filterResourcesByIds(resources, groupResourceIds);
 
     return search
@@ -261,13 +261,13 @@ class FilterResourcesByGroupPage extends React.Component {
       <div className="index-list">
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.translate("Go back")}>
-            <Icon name="chevron-left"/>
+            <Icon name="chevron-left" />
             <span className="primary-action-title">
               {this.state.selectedGroup && this.state.selectedGroup.name || <Trans>Groups</Trans>}
             </span>
           </a>
           <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
-            <Icon name="close"/>
+            <Icon name="close" />
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>
         </div>
@@ -275,7 +275,7 @@ class FilterResourcesByGroupPage extends React.Component {
           <ul className="list-items">
             {!isReady &&
               <li className="empty-entry">
-                <Icon name="spinner"/>
+                <Icon name="spinner" />
                 <p className="processing-text">
                   {listGroupsOnly ? <Trans>Retrieving your groups</Trans> : <Trans>Retrieving your passwords</Trans>}
                 </p>
@@ -335,13 +335,6 @@ class FilterResourcesByGroupPage extends React.Component {
             }
           </ul>
         </div>
-        {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
-        <div className="submit-wrapper">
-          <Link to="/webAccessibleResources/quickaccess/resources/create" id="popupAction" className="button primary big full-width" role="button">
-            <Trans>Create new</Trans>
-          </Link>
-        </div>
-        }
       </div>
     );
   }

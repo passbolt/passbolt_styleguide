@@ -14,13 +14,13 @@
 
 import PropTypes from "prop-types";
 import React from "react";
-import {withRouter} from "react-router-dom";
-import {Link} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
+import { withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
-import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { filterResourcesBySearch } from "../../../shared/utils/filterUtils";
+import { withResourcesLocalStorage } from "../../contexts/ResourceLocalStorageContext";
 import memoize from "memoize-one";
 import {
   withResourceTypesLocalStorage
@@ -154,13 +154,13 @@ class FilterResourcesByFavoritePage extends React.Component {
       <div className="index-list">
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.props.t("Go back")}>
-            <Icon name="chevron-left"/>
+            <Icon name="chevron-left" />
             <span className="primary-action-title">
               <Trans>Favorite</Trans>
             </span>
           </a>
           <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button" title={this.props.t("Cancel")}>
-            <Icon name="close"/>
+            <Icon name="close" />
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>
         </div>
@@ -168,7 +168,7 @@ class FilterResourcesByFavoritePage extends React.Component {
           <ul className="list-items">
             {!isReady &&
               <li className="empty-entry">
-                <Icon name="spinner"/>
+                <Icon name="spinner" />
                 <p className="processing-text">
                   <Trans>Retrieving your passwords</Trans>
                 </p>
@@ -203,13 +203,6 @@ class FilterResourcesByFavoritePage extends React.Component {
             }
           </ul>
         </div>
-        {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
-        <div className="submit-wrapper">
-          <Link to="/webAccessibleResources/quickaccess/resources/create" id="popupAction" className="button primary big full-width" role="button">
-            <Trans>Create new</Trans>
-          </Link>
-        </div>
-        }
       </div>
     );
   }
