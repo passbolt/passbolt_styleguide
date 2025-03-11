@@ -24,6 +24,11 @@ import Password from "../../../../shared/components/Password/Password";
 import Totp from "../../../../shared/components/Totp/Totp";
 import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
 import Select from "../../Common/Select/Select";
+import TotpEntity from "../../../../shared/models/entity/totp/totpEntity";
+import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import ClipBoard from "../../../../shared/lib/Browser/clipBoard";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class AddResourceTotp extends Component {
   constructor(props) {
@@ -45,6 +50,8 @@ class AddResourceTotp extends Component {
   bindCallbacks() {
     this.handleDisplayAdvancedSettingsClick = this.handleDisplayAdvancedSettingsClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.hasValidTotp = this.hasValidTotp.bind(this);
+    this.handleTotpClick = this.handleTotpClick.bind(this);
     this.isFieldUriError = this.isFieldUriError.bind(this);
   }
 
@@ -87,6 +94,26 @@ class AddResourceTotp extends Component {
     if (this.props.onChange) {
       this.props.onChange(event);
     }
+  }
+
+  /**
+   * Has valid totp
+   * @returns {boolean}
+   */
+  hasValidTotp() {
+    const totpEntity = new TotpEntity(this.props.resource?.secret?.totp, {validate: false});
+    const errors = totpEntity.validate();
+    return errors === null;
+  }
+
+  /**
+   * Handle Totp click
+   * @returns {Promise<void>}
+   */
+  async handleTotpClick() {
+    const code = TotpCodeGeneratorService.generate(this.props.resource.secret.totp);
+    await ClipBoard.copy(code, this.props.context.port);
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The TOTP has been copied to clipboard"));
   }
 
   /**
@@ -172,6 +199,8 @@ class AddResourceTotp extends Component {
    * =============================================================
    */
   render() {
+    const hasValidTotp = this.hasValidTotp();
+
     return (
       <div className="totp-workspace">
         <div className="totp-form">
@@ -258,11 +287,11 @@ class AddResourceTotp extends Component {
           <div className="title">
             <h2 className="preview"><Trans>Preview</Trans></h2>
           </div>
-          <div className={`totp-wrapper ${this.state.totp ? "" : "disabled"}`}>
-            {this.state.totp
-              ? <div className="secret-totp"><Totp totp={this.state.totp}/></div>
+          <div className="totp-wrapper">
+            {hasValidTotp
+              ? <div className="secret-totp"><Totp totp={this.props.resource.secret.totp} canClick={true} onClick={this.handleTotpClick}/></div>
               : <div className="secret-totp secret-copy">
-                <button type="button" className="no-border" disabled={!this.state.totp}>
+                <button type="button" className="no-border" disabled={true}>
                   <span>Copy TOTP to clipboard</span>
                 </button>
                 <TimerSVG style={{
@@ -272,12 +301,10 @@ class AddResourceTotp extends Component {
                 }}/>
               </div>
             }
-            <div className="button-wrapper">
-              <button type="button" disabled={!this.state.totp}>
-                <CopySVG/>
-                <span>Copy TOTP</span>
-              </button>
-            </div>
+            <button id="copy-totp" type="button" onClick={this.handleTotpClick} disabled={!hasValidTotp}>
+              <CopySVG/>
+              <span>Copy TOTP</span>
+            </button>
           </div>
         </div>
       </div>
@@ -286,6 +313,8 @@ class AddResourceTotp extends Component {
 }
 
 AddResourceTotp.propTypes = {
+  context: PropTypes.any, // The application context
+  actionFeedbackContext: PropTypes.object, // the action feedback context
   resource: PropTypes.object, // The resource to edit or create
   onChange: PropTypes.func, //The resource setter
   t: PropTypes.func, // The translation function
@@ -293,5 +322,5 @@ AddResourceTotp.propTypes = {
   errors: PropTypes.object // The errors entity error validation
 };
 
-export default  withTranslation('common')(AddResourceTotp);
+export default  withAppContext(withActionFeedback(withTranslation('common')(AddResourceTotp)));
 

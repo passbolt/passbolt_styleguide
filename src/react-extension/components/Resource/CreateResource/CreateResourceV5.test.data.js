@@ -23,16 +23,18 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 
 
 /**
  * Default props
- * @returns {{resource: {id: string, name: string}}}
+ * @returns {*}
  */
 export function defaultProps(data = {}) {
   const defaultData = {
     folderParentId: null,
     context: defaultAppContext(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
     resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       getHierarchyFolderCache: () => [{name: "Folder", id: "1"}, {name: "subfolder", id: "2"}]
@@ -47,7 +49,7 @@ export function defaultProps(data = {}) {
 
 /**
  * Default totp props
- * @returns {{resource: {id: string, name: string}}}
+ * @returns {*}
  */
 export function defaultTotpProps(data = {}) {
   const defaultData = defaultProps({

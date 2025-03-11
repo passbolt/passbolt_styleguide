@@ -22,6 +22,7 @@ import {
   ResourceTypesLocalStorageContext
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import {ResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
+import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 /**
  * The Create Resource component represented as a page
  */
@@ -34,13 +35,15 @@ export default class CreateResourcePage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={props.context}>
-          <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
-            <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
-              <ResourcePasswordGeneratorContext.Provider value={props.resourcePasswordGeneratorContext}>
-                <CreateResourceV5 {...props}/>
-              </ResourcePasswordGeneratorContext.Provider>
-            </ResourceWorkspaceContext.Provider>
-          </ResourceTypesLocalStorageContext.Provider>
+          <ActionFeedbackContext.Provider value={props.actionFeedbackContext}>
+            <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
+              <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
+                <ResourcePasswordGeneratorContext.Provider value={props.resourcePasswordGeneratorContext}>
+                  <CreateResourceV5 {...props}/>
+                </ResourcePasswordGeneratorContext.Provider>
+              </ResourceWorkspaceContext.Provider>
+            </ResourceTypesLocalStorageContext.Provider>
+          </ActionFeedbackContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>
     );
@@ -286,6 +289,20 @@ export default class CreateResourcePage {
    */
   get firstItemOption() {
     return this._page.container.querySelector('#resource-totp-algorithm .select-items .option');
+  }
+
+  /**
+   * Returns the resource totp code element
+   */
+  get resourceTotpCode() {
+    return this._page.container.querySelector('.totp-workspace .totp-wrapper .secret-totp button');
+  }
+
+  /**
+   * Returns the resource totp code element
+   */
+  get copyTotpButton() {
+    return this._page.container.querySelector('.totp-workspace #copy-totp');
   }
 
   /**

@@ -104,6 +104,21 @@ export default class AddResourceTotpPage {
   get digits() {
     return this._page.container.querySelector('#resource-totp-digits');
   }
+
+  /**
+   * Returns the resource totp code element
+   */
+  get resourceTotpCode() {
+    return this._page.container.querySelector('.totp-wrapper .secret-totp button');
+  }
+
+  /**
+   * Returns the resource totp code element
+   */
+  get copyTotpButton() {
+    return this._page.container.querySelector('#copy-totp');
+  }
+
   /**
    * Returns true if the page object exists in the container
    */

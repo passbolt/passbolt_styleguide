@@ -13,15 +13,17 @@
  */
 
 /**
- * Unit tests on OrchestrateResourceForm in regard of specifications
+ * Unit tests on AddResourceTotp in regard of specifications
  */
-
+import "../../../../../test/mocks/mockClipboard";
 import {defaultProps} from './AddResourceTotp.test.data';
 import AddResourceTotpPage from './AddResourceTotp.test.page';
 import {
   defaultSecretDataV5DefaultTotpEntityDto
 } from "../../../../shared/models/entity/secretData/secretDataV5DefaultTotpEntity.test.data";
 import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
+import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import {defaultTotpDto} from "../../../../shared/models/entity/totp/totpDto.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -140,7 +142,7 @@ describe("AddResourceTotp", () => {
 
       expect(props.onChange).toHaveBeenCalledTimes(1);
       expect(name).toEqual("secret.totp.algorithm");
-      expect(value).toEqual("SHA1");
+      expect(value).toEqual("SHA256");
     });
   });
 
@@ -154,6 +156,49 @@ describe("AddResourceTotp", () => {
       expect(page.exists).toBeTruthy();
       expect(page.title.textContent).toEqual("TOTP");
       expect(page.uri).toBeNull();
+    });
+  });
+
+  describe('As LU I can copy a valid totp', () => {
+    it('As LU I can copy the totp from the code.', async() => {
+      expect.assertions(4);
+
+      const props = defaultProps(defaultResourceFormDto({resource: {secret: {totp: defaultTotpDto()}}}));
+      page = new AddResourceTotpPage(props);
+
+      expect(page.exists).toBeTruthy();
+      await page.click(page.resourceTotpCode);
+      const code = TotpCodeGeneratorService.generate(props.resource.secret.totp);
+
+      expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(code);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The TOTP has been copied to clipboard");
+    });
+
+    it('As LU I can copy the totp from the button.', async() => {
+      expect.assertions(4);
+
+      const props = defaultProps(defaultResourceFormDto({resource: {secret: {totp: defaultTotpDto()}}}));
+      page = new AddResourceTotpPage(props);
+
+      expect(page.exists).toBeTruthy();
+      await page.click(page.copyTotpButton);
+      const code = TotpCodeGeneratorService.generate(props.resource.secret.totp);
+
+      expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(code);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The TOTP has been copied to clipboard");
+    });
+
+    it('As LU I cannot copy an invalid totp', async() => {
+      expect.assertions(3);
+
+      const props = defaultProps();
+      page = new AddResourceTotpPage(props);
+
+      expect(page.exists).toBeTruthy();
+      expect(page.resourceTotpCode.hasAttribute("disabled")).toBeTruthy();
+      expect(page.copyTotpButton.hasAttribute("disabled")).toBeTruthy();
     });
   });
 });
