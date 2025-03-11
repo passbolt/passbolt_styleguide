@@ -64,6 +64,14 @@ class AddResourceTotp extends Component {
   }
 
   /**
+   * Is resource has password
+   * @returns {boolean}
+   */
+  get isResourceHasPassword() {
+    return this.props.resource?.secret?.password != null;
+  }
+
+  /**
    * Get the translation function
    * @returns {function(...[*]=)}
    */
@@ -164,7 +172,7 @@ class AddResourceTotp extends Component {
    * =============================================================
    */
   render() {
-    return     (
+    return (
       <div className="totp-workspace">
         <div className="totp-form">
           <div className="title">
@@ -172,18 +180,20 @@ class AddResourceTotp extends Component {
           </div>
           <div className="content">
             <div className="totp-fields">
-              <div className="input text">
-                <label htmlFor="resource-uri"><Trans>URI</Trans></label>
-                <input id="resource-uri" name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange} />
-                {this.isMaxLengthWarnings("uris.0") && !this.isFieldUriError("uris.0") &&
-                <div className="uri warning-message">
-                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+              {!this.isResourceHasPassword &&
+                <div className="input text">
+                  <label htmlFor="resource-uri"><Trans>URI</Trans></label>
+                  <input id="resource-uri" name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange} />
+                  {this.isMaxLengthWarnings("uris.0") && !this.isFieldUriError("uris.0") &&
+                    <div className="uri warning-message">
+                      <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                    </div>
+                  }
+                  {this.isFieldUriError("uris.0") &&
+                    <div className="uri error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
+                  }
                 </div>
-                }
-                {this.isFieldUriError("uris.0") &&
-                  <div className="uri error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
-                }
-              </div>
+              }
               <div className="input text">
                 <label htmlFor="resource-totp-key"><Trans>Key</Trans> (<Trans>secret</Trans>)</label>
                 <div className="secret-key-wrapper">
