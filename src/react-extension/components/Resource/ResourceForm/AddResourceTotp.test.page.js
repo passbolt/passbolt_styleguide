@@ -106,6 +106,28 @@ export default class AddResourceTotpPage {
   }
 
   /**
+   * Returns the import Qr code button element
+   */
+  get uploadQrCode() {
+    return this._page.container.querySelector('#import-qr-code');
+  }
+
+  /**
+   * Returns the input file element
+   */
+  get inputFile() {
+    return this._page.container.querySelector('input[type=\"file\"]');
+  }
+
+  /**
+   * Return the warning import message
+   * @returns {Element}
+   */
+  get warningImportMessage() {
+    return this._page.container.querySelector('.totp-form .message.warning');
+  }
+
+  /**
    * Returns the resource totp code element
    */
   get resourceTotpCode() {
@@ -142,5 +164,13 @@ export default class AddResourceTotpPage {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
     await waitFor(() => { element.value === data; });
+  }
+
+  /** Click to import file */
+  async selectImportFile(file) {
+    await this.click(this.uploadQrCode);
+    const data = {target: {files: [file]}};
+    fireEvent.change(this.inputFile, data);
+    await waitFor(() => {});
   }
 }

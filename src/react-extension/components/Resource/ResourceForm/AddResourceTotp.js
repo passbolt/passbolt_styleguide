@@ -29,17 +29,20 @@ import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCode
 import ClipBoard from "../../../../shared/lib/Browser/clipBoard";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {Html5Qrcode, Html5QrcodeSupportedFormats} from "html5-qrcode";
 
 class AddResourceTotp extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
     this.bindCallbacks();
+    this.createReferences();
   }
 
   get defaultState() {
     return {
       displayAdvancedSettings: false,
+      warningImportFile: null,
     };
   }
 
@@ -52,7 +55,16 @@ class AddResourceTotp extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.hasValidTotp = this.hasValidTotp.bind(this);
     this.handleTotpClick = this.handleTotpClick.bind(this);
+    this.handleSelectFile = this.handleSelectFile.bind(this);
+    this.handleInputFileChange = this.handleInputFileChange.bind(this);
     this.isFieldUriError = this.isFieldUriError.bind(this);
+  }
+
+  /**
+   * Create elements references
+   */
+  createReferences() {
+    this.fileUploaderRef = React.createRef();
   }
 
   /**
@@ -60,6 +72,29 @@ class AddResourceTotp extends Component {
    */
   handleDisplayAdvancedSettingsClick() {
     this.setState({displayAdvancedSettings: !this.state.displayAdvancedSettings});
+  }
+
+  /**
+   * Handle the selection of a file by file explorer
+   */
+  handleSelectFile() {
+    this.fileUploaderRef.current.click();
+  }
+
+  async handleInputFileChange(event) {
+    try {
+      const [file] = event.target.files;
+      const value = await this.getTotpFromFile(file);
+      const eventTotp = {
+        target: {
+          name: "secret.totp",
+          value: value
+        }
+      };
+      this.props.onChange?.(eventTotp);
+    } catch (error) {
+      this.handleImportError(error);
+    }
   }
 
   /**
@@ -91,6 +126,7 @@ class AddResourceTotp extends Component {
    * @params {ReactEvent} The react event.
    */
   handleInputChange(event) {
+    this.setState({warningImportFile: null});
     if (this.props.onChange) {
       this.props.onChange(event);
     }
@@ -114,6 +150,54 @@ class AddResourceTotp extends Component {
     const code = TotpCodeGeneratorService.generate(this.props.resource.secret.totp);
     await ClipBoard.copy(code, this.props.context.port);
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The TOTP has been copied to clipboard"));
+  }
+
+  /**
+   * Get the totp from qr code
+   * @param {File} file The file
+   * @returns {Promise<TotpEntity>}
+   */
+  async getTotpFromFile(file) {
+    const url = await this.getDataFromQrCode(file);
+    return TotpEntity.createTotpFromUrl(url);
+  }
+
+  /**
+   * Get data from QR code
+   * @param {File} file The file
+   * @return {Promise<module:url.URL>}
+   */
+  async getDataFromQrCode(file) {
+    const html5QrCode = new Html5Qrcode("upload-qr-code", {formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]});
+    const result = await html5QrCode.scanFileV2(file, false);
+    // Decode uri for special characters
+    return new URL(decodeURIComponent(result.decodedText));
+  }
+
+  /**
+   * Handle import error.
+   * @param {Object} error The error returned by the qr code file and entity
+   */
+  handleImportError(error) {
+    const isNoQrCodeFound = error.name === "NotFoundException";
+    let warningImportFile = null;
+
+    if (isNoQrCodeFound) {
+      warningImportFile = this.translate("No QR code found.");
+    } else {
+      console.error(error);
+      warningImportFile = this.translate("The QR code is incomplete.");
+    }
+
+    this.setState({warningImportFile: warningImportFile});
+  }
+
+  /**
+   * Has errors import file
+   * @returns {boolean}
+   */
+  get hasWarningImportFile() {
+    return Boolean(this.state.warningImportFile);
   }
 
   /**
@@ -232,11 +316,16 @@ class AddResourceTotp extends Component {
                   }
                   <input
                     type="file"
-                    id="dialog-upload-qr-code"
+                    name="secret.totp"
+                    id="upload-qr-code"
+                    ref={this.fileUploaderRef}
+                    onChange={this.handleInputFileChange}
                     accept=".png, .jpg, .jpeg"/>
                   <button
                     className="button"
-                    type="button">
+                    type="button"
+                    id="import-qr-code"
+                    onClick={this.handleSelectFile}>
                     <QrCodeSVG/>
                     <span><Trans>Upload a QR code</Trans></span>
                   </button>
@@ -281,6 +370,13 @@ class AddResourceTotp extends Component {
               }
             </div>
           </div>
+          {this.hasWarningImportFile &&
+            <div className="message warning">
+              <p>
+                {this.state.warningImportFile}
+              </p>
+            </div>
+          }
         </div>
 
         <div className="totp-view">

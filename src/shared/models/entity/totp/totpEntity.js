@@ -16,6 +16,8 @@ import EntityV2 from "../abstract/entityV2";
 
 const RESOURCE_TOTP_KEY_MAX_LENGTH = 1024;
 const SUPPORTED_ALGORITHMS = ["SHA1", "SHA256", "SHA512"];
+const DEFAULT_ALGORITHM = SUPPORTED_ALGORITHMS[0];
+
 /**
  * Entity related to the TOTP
  */
@@ -92,10 +94,26 @@ class TotpEntity extends EntityV2 {
       secret_key: "",
       period: 30,
       digits: 6,
-      algorithm: SUPPORTED_ALGORITHMS[0]
+      algorithm: DEFAULT_ALGORITHM
     };
 
     return new TotpEntity({...defaultData, ...data}, options);
+  }
+
+  /**
+   * Create TOTP from URL
+   * @param url {URL}
+   * @param {object} [options] Options.
+   * @return {TotpEntity}
+   */
+  static createTotpFromUrl(url, options) {
+    const totp = {
+      secret_key: url.searchParams.get('secret'),
+      algorithm: url.searchParams.get('algorithm') || DEFAULT_ALGORITHM,
+      digits: parseInt(url.searchParams.get('digits'), 10) || 6,
+      period: parseInt(url.searchParams.get('period'), 10) || 30,
+    };
+    return new TotpEntity(totp, options);
   }
 
   /*

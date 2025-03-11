@@ -32,3 +32,7 @@ export function defaultProps(data = {}) {
   };
   return Object.assign(defaultData, data);
 }
+
+export function qrCode() {
+  return {decodedText: 'otpauth://totp/pro.passbolt.local%3Aadmin%40passbolt.com?issuer=pro.passbolt.local&secret=OFL3VF3OU4BZP45D4ZME6KTF654JRSSO4Q2EO6FJFGPKHRHYSVJA'};
+}
