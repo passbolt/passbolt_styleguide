@@ -14,19 +14,17 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import Icon from "../../../../shared/components/Icons/Icon";
-import {withDialog} from "../../../contexts/DialogContext";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
 import ImportResources from "../ImportResources/ImportResources";
-import {Trans, withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 import CreateResource from "../CreateResource/CreateResource";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import {withWorkflow} from "../../../contexts/WorkflowContext";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { withWorkflow } from "../../../contexts/WorkflowContext";
 import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
-import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
+import { TotpWorkflowMode } from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
@@ -34,7 +32,6 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {
   withMetadataTypesSettingsLocalStorage
 } from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
-import Tooltip from "../../Common/Tooltip/Tooltip";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_TOTP_SLUG,
@@ -90,15 +87,15 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
-    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
+    document.addEventListener('click', this.handleDocumentClickEvent, { capture: true });
+    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, { capture: true });
+    document.addEventListener('dragstart', this.handleDocumentDragStartEvent, { capture: true });
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent, {capture: true});
-    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
+    document.removeEventListener('click', this.handleDocumentClickEvent, { capture: true });
+    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent, { capture: true });
+    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent, { capture: true });
   }
 
   /**
@@ -139,7 +136,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     const canUseFolders = this.props.context.siteSettings.canIUse('folders');
     if (canUseFolders) {
       const createMenuOpen = !this.state.createMenuOpen;
-      this.setState({createMenuOpen});
+      this.setState({ createMenuOpen });
     } else {
       this.openPasswordCreateDialog();
     }
@@ -170,7 +167,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
       resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
     }
-    this.props.dialogContext.open(CreateResource, {folderParentId: this.folderIdSelected, resourceType: resourceType});
+    this.props.dialogContext.open(CreateResource, { folderParentId: this.folderIdSelected, resourceType: resourceType });
   }
 
   /**
@@ -191,7 +188,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
       resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
     }
-    this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.CREATE_STANDALONE_TOTP, folderParentId: this.folderIdSelected, resourceType: resourceType});
+    this.props.workflowContext.start(HandleTotpWorkflow, { mode: TotpWorkflowMode.CREATE_STANDALONE_TOTP, folderParentId: this.folderIdSelected, resourceType: resourceType });
   }
 
   /**
@@ -206,14 +203,14 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Open create password dialog
    */
   openFolderCreateDialog() {
-    this.props.dialogContext.open(CreateResourceFolder, {folderParentId: this.folderIdSelected});
+    this.props.dialogContext.open(CreateResourceFolder, { folderParentId: this.folderIdSelected });
   }
 
   /**
    * Close the create menu
    */
   handleCloseCreateMenu() {
-    this.setState({createMenuOpen: false});
+    this.setState({ createMenuOpen: false });
   }
 
   /**
@@ -286,105 +283,9 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canImport = this.props.context.siteSettings.canIUse("import")
-      && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_IMPORT);
-    const canUseFolders = this.props.context.siteSettings.canIUse("folders")
-      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
-    const canUseTotp = this.props.context.siteSettings.canIUse('totpResourceTypes');
-
     return (
       <>
-        <div className="dropdown" ref={this.createMenuRef}>
-          <button type="button" className={`create primary ${this.state.createMenuOpen ? "open" : ""}`} disabled={!this.canCreate()} onClick={this.handleCreateClickEvent}>
-            <Icon name="add"/>
-            <span><Trans>Create</Trans></span>
-          </button>
-          <ul className={`dropdown-content menu right ${this.state.createMenuOpen ? "visible" : ""}`}>
-            {!this.hasMetadataTypesSettings() &&
-              <>
-                <li id="password_action">
-                  <div className="row">
-                    <div className="main-cell-wrapper">
-                      <div className="main-cell">
-                        <Tooltip message={this.props.t("Loading metadata types settings")}>
-                          <button type="button" className="link no-border" disabled={true}>
-                            <span><Trans>New password</Trans></span>
-                          </button>
-                        </Tooltip>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                {canUseTotp &&
-                  <li id="totp_action">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <Tooltip message={this.props.t("Loading metadata types settings")}>
-                            <button type="button" className="link no-border" disabled={true}>
-                              <span><Trans>New TOTP</Trans></span>
-                            </button>
-                          </Tooltip>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                }
-              </>
-            }
-            {this.hasMetadataTypesSettings() &&
-              <>
-                {this.canCreatePassword() &&
-                  <li id="password_action">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button type="button" className="link no-border" onClick={this.handleCreateMenuPasswordClickEvent}>
-                            <span><Trans>New password</Trans></span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                }
-                {canUseTotp && this.canCreateStandaloneTotp() &&
-                  <li id="totp_action">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button type="button" className="link no-border" onClick={this.handleMenuCreateTotpClickEvent}>
-                            <span><Trans>New TOTP</Trans></span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                }
-              </>
-            }
-            {canUseFolders &&
-              <li id="folder_action">
-                <div className="row">
-                  <div className="main-cell-wrapper">
-                    <div className="main-cell">
-                      <button type="button" className="link no-border" onClick={this.handleMenuCreateFolderClickEvent}>
-                        <span><Trans>New folder</Trans></span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            }
-          </ul>
-        </div>
-        {canImport &&
-          <button
-            type="button"
-            className="import button-action-icon" onClick={this.handleImportClickEvent}>
-            <Icon name="upload" />
-            <span className="visuallyhidden"><Trans>upload</Trans></span>
-          </button>
-        }
+        {/** 表示禁止のため削除 */}
       </>
     );
   }

@@ -13,18 +13,17 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withDialog} from "../../../contexts/DialogContext";
-import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
+import { withDialog } from "../../../contexts/DialogContext";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import RenameResourceFolder from "../../ResourceFolder/RenameResourceFolder/RenameResourceFolder";
 import DeleteResourceFolder from "../../ResourceFolder/DeleteResourceFolder/DeleteResourceFolder";
 import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withTranslation } from "react-i18next";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 class FilterResourcesByFoldersItemContextualMenu extends React.Component {
   /**
@@ -63,7 +62,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   handleCreateFolderItemClickEvent() {
     if (this.canUpdate()) {
-      this.props.dialogContext.open(CreateResourceFolder, {folderParentId: this.props.folder.id});
+      this.props.dialogContext.open(CreateResourceFolder, { folderParentId: this.props.folder.id });
       this.handleHide();
     }
   }
@@ -73,7 +72,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   handleRenameFolderItemClickEvent() {
     if (this.canUpdate()) {
-      this.props.context.setContext({folder: this.props.folder});
+      this.props.context.setContext({ folder: this.props.folder });
       this.props.dialogContext.open(RenameResourceFolder);
       this.handleHide();
     }
@@ -85,7 +84,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
   handleShareFolderItemClickEvent() {
     if (this.canShare()) {
       const foldersIds = [this.props.folder.id];
-      this.props.context.setContext({shareDialogProps: {foldersIds}});
+      this.props.context.setContext({ shareDialogProps: { foldersIds } });
       this.props.dialogContext.open(ShareDialog);
       this.handleHide();
     }
@@ -106,7 +105,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   handleDeleteFolderItemClickEvent() {
     if (this.canUpdate()) {
-      this.props.context.setContext({folder: this.props.folder});
+      this.props.context.setContext({ folder: this.props.folder });
       this.props.dialogContext.open(DeleteResourceFolder);
       this.handleHide();
     }
@@ -142,7 +141,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   async export() {
     const foldersIds = [this.props.folder.id];
-    await this.props.resourceWorkspaceContext.onResourcesToExport({foldersIds});
+    await this.props.resourceWorkspaceContext.onResourcesToExport({ foldersIds });
     await this.props.dialogContext.open(ExportResources);
   }
 
@@ -151,95 +150,10 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canUpdate = this.canUpdate();
-    const canShare = this.canShare();
-    const canExport = this.canExport();
-    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_FOLDER);
-
     return (
-      <ContextualMenuWrapper
-        hide={this.handleHide}
-        left={this.props.left}
-        top={this.props.top}
-        className={this.props.className}>
-        <li key="option-create-folder" className="ready closed">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <button
-                  type="button"
-                  onClick={this.handleCreateFolderItemClickEvent}
-                  disabled={!canUpdate}
-                  className="create link no-border">
-                  <span><Trans>Create folder</Trans></span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li key="option-rename-folder" className="separator-after ready closed">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <button
-                  type="button"
-                  onClick={this.handleRenameFolderItemClickEvent}
-                  disabled={!canUpdate}
-                  className="rename link no-border">
-                  <span><Trans>Rename</Trans></span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </li>
-        {canViewShare && <li key="option-share-folder" className="ready closed">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <button
-                  type="button"
-                  onClick={this.handleShareFolderItemClickEvent}
-                  disabled={!canShare}
-                  className="share link no-border">
-                  <span><Trans>Share</Trans></span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </li>
-        }
-        {canExport &&
-          <li key="option-export-folder" className="ready closed">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button
-                    type="button"
-                    className="export link no-border"
-                    onClick={this.handleExportFolderItemClickEvent}>
-                    <span><Trans>Export</Trans></span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </li>
-        }
-        <li key="option-delete-folder" className="ready closed">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <button
-                  type="button"
-                  onClick={this.handleDeleteFolderItemClickEvent}
-                  disabled={!canUpdate}
-                  className="delete link no-border">
-                  <span><Trans>Delete</Trans></span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </li>
-      </ContextualMenuWrapper>
+      <>
+        {/** 表示禁止のため削除 */}
+      </>
     );
   }
 }
