@@ -74,10 +74,38 @@ export default class CreateResourcePage {
   }
 
   /**
+   * Returns the name error mesage input element
+   */
+  get nameErrorMessage() {
+    return this._page.container.querySelector('.name.error-message');
+  }
+
+  /**
+   * Returns the name warning mesage input element
+   */
+  get nameWarningMessage() {
+    return this._page.container.querySelector('.name.warning-message');
+  }
+
+  /**
    * Returns the uri input element
    */
   get uri() {
     return this._page.container.querySelector('#resource-uri');
+  }
+
+  /**
+   * Returns the uri warning mesage input element
+   */
+  get uriErrorMessage() {
+    return this._page.container.querySelector('.uri.error-message');
+  }
+
+  /**
+   * Returns the uri warning mesage input element
+   */
+  get uriWarningMessage() {
+    return this._page.container.querySelector('.uri.warning-message');
   }
 
   /**
@@ -88,10 +116,38 @@ export default class CreateResourcePage {
   }
 
   /**
+   * Returns the username warning mesage input element
+   */
+  get usernameErrorMessage() {
+    return this._page.container.querySelector('.username.error-message');
+  }
+
+  /**
+   * Returns the username warning mesage input element
+   */
+  get usernameWarningMessage() {
+    return this._page.container.querySelector('.username.warning-message');
+  }
+
+  /**
    * Returns the password input element
    */
   get password() {
     return this._page.container.querySelector('#resource-password');
+  }
+
+  /**
+   * Returns the password error mesage input element
+   */
+  get passwordErrorMessage() {
+    return this._page.container.querySelector('.password.error-message');
+  }
+
+  /**
+   * Returns the password warning mesage input element
+   */
+  get passwordWarningMessage() {
+    return this._page.container.querySelector('.password.warning-message');
   }
 
   /**
@@ -101,6 +157,19 @@ export default class CreateResourcePage {
     return this._page.container.querySelector('#resource-description');
   }
 
+  /**
+   * Returns the description error mesage input element
+   */
+  get descriptionErrorMessage() {
+    return this._page.container.querySelector('.description.error-message');
+  }
+
+  /**
+   * Returns the description warning mesage input element
+   */
+  get descriptionWarningMessage() {
+    return this._page.container.querySelector('.description.warning-message');
+  }
 
   /**
    * Returns the left sidebar description input element
@@ -122,6 +191,21 @@ export default class CreateResourcePage {
   get note() {
     return this._page.container.querySelector('#resource-note');
   }
+
+  /**
+   * Returns the note error mesage input element
+   */
+  get noteErrorMessage() {
+    return this._page.container.querySelector('.note.error-message');
+  }
+
+  /**
+   * Returns the note warning mesage input element
+   */
+  get noteWarningMessage() {
+    return this._page.container.querySelector('.note.warning-message');
+  }
+
   /**
    * Returns the password view button element
    */
@@ -141,6 +225,27 @@ export default class CreateResourcePage {
    */
   get resourceTotpKey() {
     return this._page.container.querySelector('#resource-totp-key');
+  }
+
+  /**
+   * Returns the resource totp key error message input element
+   */
+  get resourceTotpKeyErrorMessage() {
+    return this._page.container.querySelector('.totp-key.error-message');
+  }
+
+  /**
+   * Returns the resource totp period error message input element
+   */
+  get resourceTotpPeriodErrorMessage() {
+    return this._page.container.querySelector('.period.error-message');
+  }
+
+  /**
+   * Returns the resource totp digits error message input element
+   */
+  get resourceTotpDigitsErrorMessage() {
+    return this._page.container.querySelector('.digits.error-message');
   }
 
   /**

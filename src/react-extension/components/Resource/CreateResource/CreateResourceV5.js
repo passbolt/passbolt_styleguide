@@ -29,6 +29,7 @@ import AddResourceName from "../ResourceForm/AddResourceName";
 import {
   ResourceEditCreateFormEnumerationTypes
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import memoize from "memoize-one";
 
 class CreateResource extends Component {
   constructor(props) {
@@ -46,7 +47,9 @@ class CreateResource extends Component {
     return {
       resource: this.resourceFormEntity.toDto(), // The resource to create
       resourceFormSelected: this.selectResourceFormByResourceSecretData(), // The selected form to display
-      resourceType: this.props.resourceType // The resource type
+      resourceType: this.props.resourceType, // The resource type
+      isProcessing: false, // Is the form processing (loading, submitting).
+      hasAlreadyBeenValidated: false // True if the form has already been submitted once.
     };
   }
 
@@ -59,7 +62,27 @@ class CreateResource extends Component {
     this.onSelectForm = this.onSelectForm.bind(this);
     this.onAddSecret = this.onAddSecret.bind(this);
     this.onDeleteSecret = this.onDeleteSecret.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.save = this.save.bind(this);
   }
+
+  /**
+   * Validate form.
+   * @param {object} resourceFormEntityDto The form resource entity dto store in state, not used but required to ensure the memoized
+   *   function is only triggered when the form is updated.
+   * @return {EntityValidationError}
+   */
+  // eslint-disable-next-line no-unused-vars
+  validateForm = memoize(resourceFormDto => this.resourceFormEntity?.validate());
+
+  /**
+   * Verify the data health. This intends for user, to inform if data form has invalid size
+   * @param {object} resourceFormEntityDto The form resource entity dto settings dto store in state, not used but required to ensure the memoized
+   *   function is only triggered when the form is updated.
+   * @return {EntityValidationError}
+   */
+  // eslint-disable-next-line no-unused-vars
+  verifyDataHealth = memoize(resourceFormDto => this.resourceFormEntity?.verifyHealth());
 
   /**
    * Selected the resource form by resource type
@@ -88,10 +111,44 @@ class CreateResource extends Component {
   handleInputChange(event) {
     const target = event.target;
     const name = target.name;
-    const value = target.value || null;
+    const value = event.target.type === 'number' ? Number(event.target.value) : event.target.value || null;
     this.resourceFormEntity.set(name, value, {validate: false});
 
     this.setState({resource: this.resourceFormEntity.toDto()});
+  }
+
+  /**
+   * Handle form submission that can be trigger when hitting `enter`
+   * @param {Event} event The html event triggering the form submit.
+   */
+  handleFormSubmit(event) {
+    event.preventDefault();
+    if (this.state.isProcessing) {
+      return;
+    }
+
+    this.save();
+  }
+
+  /**
+   * Save the resource
+   * @returns {Promise<void>}
+   */
+  async save() {
+    const validationError = this.validateForm(this.state.resource);
+
+    if (validationError?.hasErrors()) {
+      const hasAlreadyBeenValidated = true;
+      this.setState({hasAlreadyBeenValidated});
+      return;
+    }
+
+    this.setState({isProcessing: true});
+
+    this.setState({
+      hasAlreadyBeenValidated: true,
+      isProcessing: false,
+    });
   }
 
   /**
@@ -150,16 +207,26 @@ class CreateResource extends Component {
    * =============================================================
    */
   render() {
+    const warnings = this.verifyDataHealth(this.state.resource);
+    const errors = this.state.hasAlreadyBeenValidated ? this.validateForm(this.state.resource) : null;
+
     return (
       <DialogWrapper title={this.translate("Create a resource")} className="create-resource"
         disabled={this.state.processing} onClose={this.handleClose}>
         <SelectResourceForm resourceType={this.state.resourceType} resourceFormSelected={this.state.resourceFormSelected}
           resource={this.state.resource} onAddSecret={this.onAddSecret} onDeleteSecret={this.onDeleteSecret} onSelectForm={this.onSelectForm}/>
-        <form className="grid-and-footer" noValidate>
+        <form onSubmit={this.handleFormSubmit} className="grid-and-footer" noValidate>
           <div className="grid">
-            <AddResourceName resource={this.state.resource} folderParentId={this.props.folderParentId} onChange={this.handleInputChange}/>
+            <AddResourceName resource={this.state.resource} folderParentId={this.props.folderParentId} onChange={this.handleInputChange} warnings={warnings}
+              errors={errors}/>
             <div className="create-workspace">
-              <OrchestrateResourceForm resourceFormSelected={this.state.resourceFormSelected} resource={this.state.resource} onChange={this.handleInputChange}/>
+              <OrchestrateResourceForm
+                resourceFormSelected={this.state.resourceFormSelected}
+                resource={this.state.resource}
+                onChange={this.handleInputChange}
+                warnings={warnings}
+                errors={errors}
+              />
             </div>
           </div>
           <div className="submit-wrapper">

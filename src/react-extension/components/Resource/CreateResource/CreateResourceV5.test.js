@@ -19,7 +19,6 @@ import {waitFor} from "@testing-library/react";
 import CreateResourcePage from "./CreateResourceV5.test.page";
 import {defaultProps, defaultTotpProps} from "./CreateResourceV5.test.data";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import {ResourceEditCreateFormEnumerationTypes} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import {
   resourceTypePasswordStringDto,
@@ -242,6 +241,42 @@ describe("See the Create Resource", () => {
         expect(page.uri.value).toBe("https://passbolt.com");
       });
 
+      it('As a signed-in user I should be aware about the URI maxLength', async() => {
+        expect.assertions(3);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        page.fillInput(page.uri, "a".repeat(1024));
+
+        // expectations
+        expect(page.uri.value).toEqual("a".repeat(1024));
+        expect(page.uriWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.uriErrorMessage).toBeNull();
+      });
+
+      it('As a signed-in user I should be blocked if I exceed the URI maxLength', async() => {
+        expect.assertions(5);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        page.uri.setAttribute("maxLength", 1025);
+        page.fillInput(page.uri, "a".repeat(1025));
+
+        // expectations
+        expect(page.uri.value).toEqual("a".repeat(1025));
+        expect(page.uriWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.uriErrorMessage).toBeNull();
+
+        await page.click(page.saveButton);
+
+        expect(page.uriWarningMessage).toBeNull();
+        expect(page.uriErrorMessage.textContent).toEqual("This is the maximum size for this field, make sure your data was not truncated.");
+      });
+
       it('As a signed-in user I should be able to add an username', async() => {
         expect.assertions(2);
 
@@ -256,6 +291,41 @@ describe("See the Create Resource", () => {
         expect(page.username.value).toBe("username");
       });
 
+      it('As a signed-in user I should be aware about the username maxLength', async() => {
+        expect.assertions(3);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        page.fillInput(page.username, "a".repeat(255));
+
+        // expectations
+        expect(page.username.value).toEqual("a".repeat(255));
+        expect(page.usernameWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.usernameErrorMessage).toBeNull();
+      });
+
+      it('As a signed-in user I should be blocked if I exceed the username maxLength', async() => {
+        expect.assertions(5);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        page.username.setAttribute("maxLength", 256);
+        page.fillInput(page.username, "a".repeat(256));
+
+        // expectations
+        expect(page.username.value).toEqual("a".repeat(256));
+        expect(page.usernameWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.usernameErrorMessage).toBeNull();
+
+        await page.click(page.saveButton);
+
+        expect(page.usernameWarningMessage).toBeNull();
+        expect(page.usernameErrorMessage.textContent).toEqual("This is the maximum size for this field, make sure your data was not truncated.");
+      });
       it('As a signed-in user I should be able to add a password', async() => {
         expect.assertions(2);
 
@@ -270,6 +340,41 @@ describe("See the Create Resource", () => {
         expect(page.password.value).toBe("secret");
       });
 
+      it('As a signed-in user I should be aware about the password maxLength', async() => {
+        expect.assertions(3);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        page.fillInput(page.password, "a".repeat(4096));
+
+        // expectations
+        expect(page.password.value).toEqual("a".repeat(4096));
+        expect(page.passwordWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.passwordErrorMessage).toBeNull();
+      });
+
+      it('As a signed-in user I should be blocked if I exceed the password maxLength', async() => {
+        expect.assertions(5);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        page.password.setAttribute("maxLength", 4097);
+        page.fillInput(page.password, "a".repeat(4097));
+
+        // expectations
+        expect(page.password.value).toEqual("a".repeat(4097));
+        expect(page.passwordWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.passwordErrorMessage).toBeNull();
+
+        await page.click(page.saveButton);
+
+        expect(page.passwordWarningMessage).toBeNull();
+        expect(page.passwordErrorMessage.textContent).toEqual("This is the maximum size for this field, make sure your data was not truncated.");
+      });
       it('As a signed-in user I should be able to generate a password', async() => {
         expect.assertions(5);
 
@@ -290,44 +395,107 @@ describe("See the Create Resource", () => {
     });
 
     describe("should add a name to resource", () => {
+      let props, page;
+      beforeEach(async() => {
+        props = defaultProps();
+        page = new CreateResourcePage(props);
+
+        await waitFor(() => page.exists);
+      });
+
       it('As a signed-in user I should be able to add name to a resource', async() => {
         expect.assertions(1);
-
-        const props = defaultProps();
-        const page = new CreateResourcePage(props);
-        await waitFor(() => {});
 
         await page.fillInput(page.name, "name");
 
         // expectations
         expect(page.name.value).toEqual("name");
       });
+
+      it('As a signed-in user I should be aware about the name maxLength', async() => {
+        expect.assertions(3);
+        page.fillInput(page.name, "a".repeat(255));
+
+        // expectations
+        expect(page.name.value).toEqual("a".repeat(255));
+        expect(page.nameWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.nameErrorMessage).toBeNull();
+      });
+
+      it('As a signed-in user I should be blocked if I exceed the name maxLength', async() => {
+        expect.assertions(5);
+
+        page.name.setAttribute("maxLength", 256);
+        page.fillInput(page.name, "a".repeat(256));
+
+        // expectations
+        expect(page.name.value).toEqual("a".repeat(256));
+        expect(page.nameWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.nameErrorMessage).toBeNull();
+
+        await page.click(page.saveButton);
+
+        expect(page.nameWarningMessage).toBeNull();
+        expect(page.nameErrorMessage.textContent).toEqual("This is the maximum size for this field, make sure your data was not truncated.");
+      });
     });
 
     describe("should init description field", () => {
-      it('As a signed-in user I should be able to add a description', async() => {
-        expect.assertions(2);
+      let props, page;
+      beforeEach(async() => {
+        props = defaultProps();
+        page = new CreateResourcePage(props);
 
-        const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.DESCRIPTION});
-
-        const page = new CreateResourcePage(props);
-        await waitFor(() => {});
-
-        expect(page.exists()).toBeTruthy();
+        await waitFor(() => page.exists);
         await page.click(page.menuDescription);
+      });
+
+
+      it('As a signed-in user I should be able to add a description', async() => {
+        expect.assertions(1);
+
         await page.fillInput(page.description, "description");
         // expectations
         expect(page.description.value).toBe("description");
       });
+
+      it('As a signed-in user I should be aware about the description maxLength', async() => {
+        expect.assertions(3);
+
+        page.fillInput(page.description, "a".repeat(10000));
+
+        // expectations
+        expect(page.description.value).toEqual("a".repeat(10000));
+        expect(page.descriptionWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.descriptionErrorMessage).toBeNull();
+      });
+
+      it('As a signed-in user I should be blocked if I exceed the description maxLength', async() => {
+        expect.assertions(5);
+
+        page.description.setAttribute("maxLength", 10001);
+        page.fillInput(page.description, "a".repeat(10001));
+
+        // expectations
+        expect(page.description.value).toEqual("a".repeat(10001));
+        expect(page.descriptionWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.descriptionErrorMessage).toBeNull();
+
+        await page.click(page.saveButton);
+
+        expect(page.descriptionWarningMessage).toBeNull();
+        expect(page.descriptionErrorMessage.textContent).toEqual("This is the maximum size for this field, make sure your data was not truncated.");
+      });
     });
     describe("should init totp form", () => {
+      let props, page;
+      beforeEach(() => {
+        props = defaultTotpProps();
+        page = new CreateResourcePage(props);
+      });
+
       it('As a signed-in user I should be able to add an URI', async() => {
         expect.assertions(2);
-
-        const props = defaultTotpProps();
-        const page = new CreateResourcePage(props);
-        await waitFor(() => {});
-
         expect(page.exists()).toBeTruthy();
 
         await page.fillInput(page.uri, "https://passbolt.com");
@@ -335,28 +503,61 @@ describe("See the Create Resource", () => {
         expect(page.uri.value).toBe("https://passbolt.com");
       });
 
+      it('As a signed-in user I should be aware about the URI maxLength', async() => {
+        expect.assertions(3);
+
+        page.fillInput(page.uri, "a".repeat(1024));
+
+        // expectations
+        expect(page.uri.value).toEqual("a".repeat(1024));
+        expect(page.uriWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.uriErrorMessage).toBeNull();
+      });
+
+      it('As a signed-in user I should be blocked if I exceed the URI maxLength', async() => {
+        expect.assertions(5);
+
+        page.fillInput(page.uri, "a".repeat(1025));
+
+        // expectations
+        expect(page.uri.value).toEqual("a".repeat(1025));
+        expect(page.uriWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.uriErrorMessage).toBeNull();
+
+        await page.click(page.saveButton);
+
+        expect(page.uriWarningMessage).toBeNull();
+        expect(page.uriErrorMessage.textContent).toEqual("This is the maximum size for this field, make sure your data was not truncated.");
+      });
+
       it('As a signed-in user I should be able to add a resource totp key', async() => {
-        expect.assertions(2);
+        expect.assertions(1);
 
-        const props = defaultTotpProps();
-        const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+        await page.fillInput(page.resourceTotpKey, "JBSWY3DPEHPK3PXP");
+        // expectations
+        expect(page.resourceTotpKey.value).toBe("JBSWY3DPEHPK3PXP");
+      });
 
-        expect(page.exists()).toBeTruthy();
+      it('As a signed-in user I should see an error message when totp key is empty', async() => {
+        expect.assertions(1);
+
+        await page.click(page.saveButton);
+        // expectations
+        expect(page.resourceTotpKeyErrorMessage.textContent).toBe("The key is required.");
+      });
+
+      it('As a signed-in user I should see an error message when totp key does not respect pattern', async() => {
+        expect.assertions(1);
 
         await page.fillInput(page.resourceTotpKey, "key");
+
+        await page.click(page.saveButton);
         // expectations
-        expect(page.resourceTotpKey.value).toBe("key");
+        expect(page.resourceTotpKeyErrorMessage.textContent).toBe("The key is not valid.");
       });
 
       it('As a signed-in user I should be able to add a totp expiry', async() => {
-        expect.assertions(2);
-
-        const props = defaultTotpProps();
-        const page = new CreateResourcePage(props);
-        await waitFor(() => {});
-
-        expect(page.exists()).toBeTruthy();
+        expect.assertions(1);
 
         await page.click(page.advancedSettings);
         await page.fillInput(page.period, "60");
@@ -365,14 +566,32 @@ describe("See the Create Resource", () => {
         expect(page.period.value).toBe("60");
       });
 
+      it('As a signed-in user I should see an error message when period is empty', async() => {
+        expect.assertions(1);
+
+        await page.click(page.advancedSettings);
+        page.period.setAttribute("type", "string");
+        await page.fillInput(page.period, "");
+        await page.click(page.saveButton);
+
+        // expectations
+        expect(page.resourceTotpPeriodErrorMessage.textContent).toBe("TOTP expiry is required.");
+      });
+
+      it('As a signed-in user I should see an error message when period is less than 0', async() => {
+        expect.assertions(1);
+
+        await page.click(page.advancedSettings);
+        await page.fillInput(page.period, "-1");
+
+        await page.click(page.saveButton);
+
+        // expectations
+        expect(page.resourceTotpPeriodErrorMessage.textContent).toBe("TOTP expiry must be greater than 0.");
+      });
+
       it('As a signed-in user I should be able to add a totp length', async() => {
-        expect.assertions(2);
-
-        const props = defaultTotpProps();
-        const page = new CreateResourcePage(props);
-        await waitFor(() => {});
-
-        expect(page.exists()).toBeTruthy();
+        expect.assertions(1);
 
         await page.click(page.advancedSettings);
         await page.fillInput(page.digits, "8");
@@ -380,14 +599,40 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.digits.value).toBe("8");
       });
+      it('As a signed-in user I should see an error message when length is empty', async() => {
+        expect.assertions(1);
+
+        await page.click(page.advancedSettings);
+        page.digits.setAttribute("type", "string");
+        await page.fillInput(page.digits, "");
+        await page.click(page.saveButton);
+
+        // expectations
+        expect(page.resourceTotpDigitsErrorMessage.textContent).toBe("TOTP length is required.");
+      });
+      it('As a signed-in user I should see an error message when length is less than 6', async() => {
+        expect.assertions(1);
+
+        await page.click(page.advancedSettings);
+        await page.fillInput(page.digits, "5");
+        await page.click(page.saveButton);
+
+        // expectations
+        expect(page.resourceTotpDigitsErrorMessage.textContent).toBe("TOTP length must be between 6 and 8.");
+      });
+
+      it('As a signed-in user I should see an error message when length is more than 8', async() => {
+        expect.assertions(1);
+
+        await page.click(page.advancedSettings);
+        await page.fillInput(page.digits, "9");
+        await page.click(page.saveButton);
+
+        // expectations
+        expect(page.resourceTotpDigitsErrorMessage.textContent).toBe("TOTP length must be between 6 and 8.");
+      });
       it('As a signed-in user I should be able to select an algorithm', async() => {
-        expect.assertions(2);
-
-        const props = defaultTotpProps();
-        const page = new CreateResourcePage(props);
-        await waitFor(() => {});
-
-        expect(page.exists()).toBeTruthy();
+        expect.assertions(1);
 
         await page.click(page.advancedSettings);
         await page.click(page.algorithm);
@@ -397,21 +642,50 @@ describe("See the Create Resource", () => {
       });
     });
     describe("should fill note form", () => {
-      it('As a signed-in user I should be able to add a note', async() => {
-        expect.assertions(2);
+      let props, page;
+      beforeEach(async() => {
+        props = defaultProps();
+        page = new CreateResourcePage(props);
 
-        const props = defaultProps();
-        const page = new CreateResourcePage(props);
-        await waitFor(() => {});
-
+        await waitFor(() => page.exists);
         await page.click(page.addSecret);
         await page.click(page.addSecretNote);
+      });
 
-        expect(page.exists()).toBeTruthy();
+      it('As a signed-in user I should be able to add a note', async() => {
+        expect.assertions(1);
 
         await page.fillInput(page.note, "note");
         // expectations
         expect(page.note.value).toBe("note");
+      });
+
+
+      it('As a signed-in user I should be aware about the note maxLength', async() => {
+        expect.assertions(3);
+
+        await page.fillInput(page.note, "a".repeat(10000));
+
+        // expectations
+        expect(page.note.value).toEqual("a".repeat(10000));
+        expect(page.noteWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.noteErrorMessage).toBeNull();
+      });
+
+      it('As a signed-in user I should be blocked if I exceed the note maxLength', async() => {
+        expect.assertions(5);
+
+        await page.fillInput(page.note, "a".repeat(10001));
+
+        // expectations
+        expect(page.note.value).toEqual("a".repeat(10001));
+        expect(page.noteWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.noteErrorMessage).toBeNull();
+
+        await page.click(page.saveButton);
+
+        expect(page.noteWarningMessage).toBeNull();
+        expect(page.noteErrorMessage.textContent).toEqual("This is the maximum size for this field, make sure your data was not truncated.");
       });
     });
   });
