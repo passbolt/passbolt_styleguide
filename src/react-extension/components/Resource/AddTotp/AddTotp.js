@@ -369,10 +369,10 @@ class AddTotp extends Component {
                       <input id="add-totp-form-digits" name="digits" type="number" value={this.state.totp.digits} onChange={this.handleInputChange}
                         disabled={this.state.processing} className="required" min="6" max="8" onKeyUp={this.handleInputKeyUp} ref={this.digitsInputRef}/>
                       <span><Trans>digits</Trans></span>
-                    </div>
-                    {this.isFieldError("digits") &&
+                      {this.isFieldError("digits") &&
                       <div className="digits error-message">{this.digitsErrorMessage}</div>
-                    }
+                      }
+                    </div>
                   </div>
                   <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
                     <label htmlFor="add-totp-form-algorithm"><Trans>Algorithm</Trans></label>

@@ -45,6 +45,7 @@ class AddResourceTotp extends Component {
   bindCallbacks() {
     this.handleDisplayAdvancedSettingsClick = this.handleDisplayAdvancedSettingsClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.isFieldUriError = this.isFieldUriError.bind(this);
   }
 
   /**
@@ -80,13 +81,90 @@ class AddResourceTotp extends Component {
     }
   }
 
+  /**
+   * Checks if there is a max length warning for a specific property.
+   *
+   * @param {string} propName - The name of the property to check for max length warnings.
+   * @returns {boolean} - Returns true if there is a max length warning for the property, false otherwise.
+   */
+  isMaxLengthWarnings(propName) {
+    return this.props.warnings?.hasError(propName, "maxLength");
+  }
+
+  /**
+   * Is field totp has error
+   * @param {string} name
+   * @return {boolean}
+   */
+  isFieldTotpError(name) {
+    return this.props.errors?.details?.secret?.details.totp?.hasError(name);
+  }
+
+  /**
+   * Is field uri has error
+   * @param {string} propName
+   * @return {boolean}
+   */
+  isFieldUriError(propName) {
+    const uris = propName.split('.');
+    const propArrayName = uris[0];
+    const propsArrayIndex = uris[1];
+    return this.props.errors?.details?.metadata?.details?.[propArrayName]?.[propsArrayIndex].maxLength;
+  }
+
+  /**
+   * Get the secret key error message
+   * @return {*|null}
+   */
+  get secretKeyErrorMessage() {
+    const secretError = this.props.errors?.details.secret;
+    const error = secretError?.details.totp.getError('secret_key');
+    if (error?.minLength) {
+      return this.translate("The key is required.");
+    } else if (error?.pattern) {
+      return this.translate("The key is not valid.");
+    }
+    return null;
+  }
+
+  /**
+   * Get the period error message
+   * @return {*|null}
+   */
+  get periodErrorMessage() {
+    const secretError = this.props.errors?.details.secret;
+    const error = secretError?.details.totp.getError('period');
+    if (error?.type) {
+      return this.translate("TOTP expiry is required.");
+    } else if (error?.minimum) {
+      return this.translate("TOTP expiry must be greater than 0.");
+    }
+    return null;
+  }
+
+
+  /**
+   * Get the digits error message
+   * @return {*|null}
+   */
+  get digitsErrorMessage() {
+    const secretError = this.props.errors?.details.secret;
+    const error = secretError?.details.totp.getError('digits');
+
+    if (error?.type) {
+      return this.translate("TOTP length is required.");
+    } else if (error?.minimum || error?.maximum) {
+      return this.translate("TOTP length must be between 6 and 8.");
+    }
+    return null;
+  }
   /*
    * =============================================================
    *  Render view
    * =============================================================
    */
   render() {
-    return (
+    return     (
       <div className="totp-workspace">
         <div className="totp-form">
           <div className="title">
@@ -97,11 +175,22 @@ class AddResourceTotp extends Component {
               <div className="input text">
                 <label htmlFor="resource-uri"><Trans>URI</Trans></label>
                 <input id="resource-uri" name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange} />
+                {this.isMaxLengthWarnings("uris.0") && !this.isFieldUriError("uris.0") &&
+                <div className="uri warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                </div>
+                }
+                {this.isFieldUriError("uris.0") &&
+                  <div className="uri error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
+                }
               </div>
               <div className="input text">
                 <label htmlFor="resource-totp-key"><Trans>Key</Trans> (<Trans>secret</Trans>)</label>
                 <div className="secret-key-wrapper">
                   <Password id="resource-totp-key" name="secret.totp.secret_key" autoComplete="new-password" placeholder={this.translate("Key")} preview={true} value={this.props.resource?.secret?.totp?.secret_key} onChange={this.handleInputChange}/>
+                  {this.isFieldTotpError("secret_key") &&
+                      <div className="totp-key error-message">{this.secretKeyErrorMessage}</div>
+                  }
                   <input
                     type="file"
                     id="dialog-upload-qr-code"
@@ -132,12 +221,18 @@ class AddResourceTotp extends Component {
                       <span><Trans>seconds until the TOTP expires</Trans></span>
                     </div>
                   </div>
+                  {this.isFieldTotpError("period") &&
+                      <div className="period error-message">{this.periodErrorMessage}</div>
+                  }
                   <div className="input text">
                     <label htmlFor="resource-totp-digits"><Trans>TOTP length</Trans></label>
                     <div className="input-wrapper-inline">
                       <input id="resource-totp-digits" name="secret.totp.digits" type="number" min="6" max="8" value={this.props.resource?.secret?.totp?.digits} onChange={this.handleInputChange}/>
                       <span><Trans>digits</Trans></span>
                     </div>
+                    {this.isFieldTotpError("digits") &&
+                      <div className="digits error-message">{this.digitsErrorMessage}</div>
+                    }
                   </div>
                   <div className="select-wrapper input">
                     <label htmlFor="resource-totp-algorithm"><Trans>Algorithm</Trans></label>
@@ -184,6 +279,8 @@ AddResourceTotp.propTypes = {
   resource: PropTypes.object, // The resource to edit or create
   onChange: PropTypes.func, //The resource setter
   t: PropTypes.func, // The translation function
+  warnings: PropTypes.object, //The warnings validation
+  errors: PropTypes.object // The errors entity error validation
 };
 
 export default  withTranslation('common')(AddResourceTotp);

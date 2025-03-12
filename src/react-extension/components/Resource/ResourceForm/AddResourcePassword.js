@@ -167,6 +167,35 @@ class AddResourcePassword extends Component {
     }
   }
 
+  /**
+   * Checks if there is a max length warning for a specific property.
+   *
+   * @param {string} propName - The name of the property to check for max length warnings.
+   * @param {string} association - The association name.
+   * @returns {boolean} - Returns true if there is a max length warning for the property, false otherwise.
+   */
+  isMaxLengthWarnings(propName, association) {
+    return !this.isMaxLengthError(propName, association) && this.props.warnings?.hasError(propName, "maxLength");
+  }
+
+  /**
+   * Checks if there is a max length error for a specific property.
+   *
+   * @param {string} propName - The name of the property to check for max length errors.
+   * @param {string} association - The association name.
+   * @returns {boolean} - Returns true if there is a max length error for the property, false otherwise.
+   */
+  isMaxLengthError(propName, association) {
+    if (propName.includes('.')) {
+      const segments = propName.split('.');
+      const propArrayName = segments[0];
+      const propsArrayIndex = segments[1];
+      return this.props.errors?.details?.[association]?.details?.[propArrayName]?.[propsArrayIndex]?.maxLength;
+    } else {
+      return this.props.errors?.details?.[association]?.hasError(propName, "maxLength");
+    }
+  }
+
   /*
    * =============================================================
    *  Render view
@@ -183,10 +212,26 @@ class AddResourcePassword extends Component {
             <div className="input text">
               <label htmlFor="resource-uri"><Trans>URI</Trans></label>
               <input id="resource-uri" name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange}/>
+              {this.isMaxLengthError("uris.0", "metadata") &&
+                <div className="uri error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
+              }
+              {this.isMaxLengthWarnings("uris.0", "metadata") &&
+                <div className="uri warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                </div>
+              }
             </div>
             <div className="input text">
               <label htmlFor="resource-username"><Trans>Username</Trans></label>
               <input id="resource-username" name="metadata.username" type="text" className="fluid" maxLength="255" autoComplete="off" placeholder={this.translate("Username")} value={this.props.resource?.metadata?.username} onChange={this.handleInputChange}/>
+              {this.isMaxLengthError("username", "metadata") &&
+                <div className="username error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
+              }
+              {this.isMaxLengthWarnings("username",  "metadata") &&
+                <div className="username warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                </div>
+              }
             </div>
             <div className="input-password-wrapper input">
               <label htmlFor="resource-password">
@@ -198,6 +243,14 @@ class AddResourcePassword extends Component {
                   <DiceSVG/>
                 </button>
               </div>
+              {this.isMaxLengthError("password", "secret") &&
+                <div className="password error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
+              }
+              {this.isMaxLengthWarnings("password", "secret") &&
+                <div className="password warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                </div>
+              }
               <PasswordComplexity entropy={this.state.passwordEntropy}/>
             </div>
           </div>
@@ -251,6 +304,8 @@ AddResourcePassword.propTypes = {
   resource: PropTypes.object, // The resource to edit or create
   onChange: PropTypes.func, // The on change function
   t: PropTypes.func, // The translation function
+  warnings: PropTypes.object, //The warnings validation
+  errors: PropTypes.object // The errors entity error validation
 };
 
 export default  withAppContext(withResourcePasswordGeneratorContext(withTranslation('common')(AddResourcePassword)));

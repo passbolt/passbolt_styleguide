@@ -52,7 +52,6 @@ class EntityV2 extends Entity {
     // Note: Entity V1 will clone the dtos into the instance _props property.
     super(dtos, options);
     this.marshall();
-
     if (validate) {
       this.validateSchema(options?.schema);
     }
@@ -75,12 +74,16 @@ class EntityV2 extends Entity {
    * Validate the entity: its schema and its build rules.
    * @param {object} [options] Options
    * @param {object} [options.schema] dynamic schema to be used for data validation.
+   * @param {object} [options.skipSchemaAssociationValidation] skip association validation schema
    * @param {object} [options.validateBuildRules] Options to pass to validate build rules function
    */
   validate(options = {}) {
     try {
-      this.validateSchema(options?.schema);
+      this.validateSchema(
+        {schema: options?.schema, skipSchemaAssociationValidation: options?.skipSchemaAssociationValidation}
+      );
       this.validateBuildRules(options?.validateBuildRules);
+      this.validateAssociations(options);
     } catch (error) {
       if (!(error instanceof EntityValidationError)) {
         throw error;
@@ -95,14 +98,22 @@ class EntityV2 extends Entity {
    * Validate the entity schema.
    * Note: the entity schema will be created on first call and cached into a class static property.
    * Note: it does not validate the schema of associated entities or collections, it remains the responsibility of the constructor.
-   * @param {object} [schema] dynamic schema to be used for data validation instead of the cachedSchema.
-   * @throws {EntityValidationError} If the dto does not validate the entity schema.
+   * @param {object} [options.schema] dynamic schema to be used for data validation.
+   * @param {object} [options.skipSchemaAssociationValidation] skip association validation schema
+   * @throws {EntityValidationError} If the dto does not validate the entity schema.1
    */
-  validateSchema(schema = null) {
+  validateSchema(option = null) {
+    let schema = option?.schema ?? this.cachedSchema;
+    if (option?.skipSchemaAssociationValidation) {
+      schema = {...schema};
+      const requiredAssociations = Object.keys(this.constructor.associations);
+      const required = schema.required.filter(requiredSchema => !requiredAssociations.includes(requiredSchema));
+      schema.required = required;
+    }
     this._props = EntitySchema.validate(
       this.constructor.name,
       this._props,
-      schema ?? this.cachedSchema
+      schema
     );
   }
 
@@ -164,7 +175,6 @@ class EntityV2 extends Entity {
         }
       }
     }
-
     // Throw error if some issues were gathered
     if (validationErrors.hasErrors()) {
       throw validationErrors;
@@ -340,6 +350,32 @@ class EntityV2 extends Entity {
           this[`_${associationPropName}`] = new this.constructor.associations[propName](value, options);
         }
       }
+    }
+  }
+
+  /**
+   * Validate the entity associations
+   * @param {object} [options] Options
+   */
+  validateAssociations(options = {}) {
+    const validationErrors = new EntityValidationError();
+
+    if (Object.keys(this.constructor.associations).length > 0) {
+      Object.keys(this.constructor.associations).forEach(propsName => {
+        const propsNameToCamelCase = snakeCaseToCamelCase(propsName);
+        if (this[`_${propsNameToCamelCase}`]) {
+          const association = this[propsNameToCamelCase];
+          const errors = association.validate(options);
+          if (errors) {
+            validationErrors.addAssociationError(propsName, errors);
+          }
+        }
+      });
+    }
+
+    // Throw error if some issues were gathered
+    if (validationErrors.hasErrors()) {
+      throw validationErrors;
     }
   }
 

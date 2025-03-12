@@ -35,6 +35,7 @@ import {
 } from "../resourceType/resourceTypeSchemasDefinition";
 import assertString from "validator/es/lib/util/assertString";
 import {ResourceEditCreateFormEnumerationTypes} from "../../resource/ResourceEditCreateFormEnumerationTypes";
+import EntityValidationError from "../abstract/entityValidationError";
 
 class ResourceFormEntity extends EntityV2 {
   /**
@@ -107,6 +108,8 @@ class ResourceFormEntity extends EntityV2 {
    * @throws {Error} If no secret entity class has been found.
    */
   createAssociations(options = {}) {
+    const validationErrors = new EntityValidationError();
+
     if (this._props.resource_type_id && options.resourceTypes instanceof ResourceTypesCollection) {
       this.resourceTypes = options.resourceTypes;
       const resourceType = this.resourceTypes.getFirstById(this._props.resource_type_id);
@@ -114,10 +117,23 @@ class ResourceFormEntity extends EntityV2 {
       if (!secretEntityClass) {
         throw new Error(`No secret association class has been found in resource types.`);
       }
-      this._secret = secretEntityClass.createFromDefault(this._props.secret, options);
+      try {
+        this._secret = secretEntityClass.createFromDefault(this._props.secret, options);
+      } catch (error) {
+        validationErrors.addAssociationError("secret", error);
+      }
+
       delete this._props.secret;
     }
-    super.createAssociations(options);
+    try {
+      super.createAssociations(options);
+    } catch (error) {
+      Object.assign(validationErrors.details, error.details);
+    }
+    // Throw error if some issues were gathered
+    if (validationErrors.hasErrors()) {
+      throw validationErrors;
+    }
   }
 
   /**
@@ -315,6 +331,110 @@ class ResourceFormEntity extends EntityV2 {
     }
 
     return result;
+  }
+  /**
+   * Verifies data integrity to inform users if fields exceed their maximum allowed size
+   * @return {EntityValidationError|null} Validation errors or null if no errors are detected
+   */
+  verifyHealth() {
+    let validationError = null;
+
+    // Verify secret data
+    if (this.secret) {
+      validationError = this.validateMaxLengthAgainstSchema(
+        this.secret.toDto(),
+        this.secret,
+        validationError
+      );
+      // Verify secret totp association
+      if (this.secret.totp) {
+        validationError = this.validateMaxLengthAgainstSchema(
+          this.secret.totp.toDto(),
+          this.secret.totp,
+          validationError
+        );
+      }
+    }
+    // Verify metadata
+    if (this.metadata) {
+      validationError = this.validateMaxLengthAgainstSchema(
+        this.metadata.toDto(),
+        this.metadata,
+        validationError
+      );
+    }
+
+    return validationError;
+  }
+
+  /**
+   * Validates maxLength fields against a given schema
+   * @param {Object} dataObject - The association or properties to validate
+   * @param {Object} schema - The validation schema
+   * @param {EntityValidationError|null} currentError - The existing error object or null
+   * @return {EntityValidationError|null} The updated or unchanged error object
+   * @private
+   */
+  validateMaxLengthAgainstSchema(dataObject, entity, currentError) {
+    let error = currentError;
+    Object.entries(dataObject).forEach(([fieldName, fieldValue]) => {
+      const fieldSchema = entity.constructor.getSchema().properties[fieldName];
+
+      if (!fieldSchema) { return; }
+      if (fieldSchema.type === "array" && Array.isArray(fieldValue)) {
+      // Validate array elements
+        const maxItemLength = fieldSchema.items?.maxLength;
+        if (typeof maxItemLength !== "undefined") {
+          fieldValue.forEach((value, index) => {
+            if (value?.length >= maxItemLength) {
+              error = error || new EntityValidationError();
+              error.addError(
+                `${fieldName}.${index}`,
+                "maxLength",
+                `${fieldName} at index ${index} exceeds maximum length limit`
+              );
+            }
+          });
+        }
+      } else {
+      // Validate simple fields
+        const maxLength = fieldSchema.maxLength;
+        if (typeof maxLength !== "undefined" && fieldValue?.length >= maxLength) {
+          error = error || new EntityValidationError();
+          error.addError(
+            fieldName,
+            "maxLength",
+            `${fieldName} exceeds maximum length limit`
+          );
+        }
+      }
+    });
+    return error;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  validate(options = {}) {
+    const validationErrors = super.validate(Object.assign(
+      options,
+      {
+        skipSchemaAssociationValidation: true
+      }
+    ));
+    return validationErrors;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  marshall() {
+    if (!this._props.metadata) {
+      this._props.metadata = {
+        resource_type_id: this._props.resource_type_id,
+        name: ""
+      };
+    }
   }
 }
 

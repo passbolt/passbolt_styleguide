@@ -33,13 +33,29 @@ class OrchestrateResourceForm extends Component {
   render() {
     switch (this.props.resourceFormSelected) {
       case ResourceEditCreateFormEnumerationTypes.PASSWORD:
-        return <AddResourcePassword resource={this.props.resource} onChange={this.props.onChange}/>;
+        return <AddResourcePassword
+          resource={this.props.resource}
+          onChange={this.props.onChange}
+          warnings={this.props.warnings}
+          errors={this.props.errors}/>;
       case ResourceEditCreateFormEnumerationTypes.TOTP:
-        return <AddResourceTotp resource={this.props.resource} onChange={this.props.onChange}/>;
+        return <AddResourceTotp
+          resource={this.props.resource}
+          onChange={this.props.onChange}
+          warnings={this.props.warnings}
+          errors={this.props.errors}/>;
       case ResourceEditCreateFormEnumerationTypes.NOTE:
-        return <AddResourceNote resource={this.props.resource} onChange={this.props.onChange}/>;
+        return <AddResourceNote
+          resource={this.props.resource}
+          onChange={this.props.onChange}
+          warnings={this.props.warnings}
+          errors={this.props.errors}/>;
       case ResourceEditCreateFormEnumerationTypes.DESCRIPTION:
-        return <AddResourceDescription resource={this.props.resource} onChange={this.props.onChange}/>;
+        return <AddResourceDescription
+          resource={this.props.resource}
+          onChange={this.props.onChange}
+          warnings={this.props.warnings}
+          errors={this.props.errors}/>;
       default:
         return <></>;
     }
@@ -50,6 +66,8 @@ OrchestrateResourceForm.propTypes = {
   resource: PropTypes.object, // The resource to edit or create
   onChange: PropTypes.func, //The resource setter
   t: PropTypes.func, // The translation function
+  warnings: PropTypes.object, //The warnings validation
+  errors: PropTypes.object // The errors entity error validation
 };
 
 export default withTranslation("common")(OrchestrateResourceForm);

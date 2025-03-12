@@ -47,6 +47,27 @@ class AddResourceNote extends Component {
     }
   }
 
+  /**
+   * Checks if there is a max length warning for a specific property.
+   *
+   * @param {string} propName - The name of the property to check for max length warnings.
+   * @returns {boolean} - Returns true if there is a max length warning for the property, false otherwise.
+   */
+  isMaxLengthWarnings(propName) {
+    return !this.isMaxLengthError(propName) && this.props.warnings?.hasError(propName, "maxLength");
+  }
+
+
+  /**
+   * Checks if there is a max length error for a specific property.
+   *
+   * @param {string} propName - The name of the property to check for max length errors.
+   * @returns {boolean} - Returns true if there is a max length error for the property, false otherwise.
+   */
+  isMaxLengthError(propName) {
+    return this.props.errors?.details.secret?.hasError(propName, "maxLength");
+  }
+
   /*
    * =============================================================
    *  Render view
@@ -66,6 +87,14 @@ class AddResourceNote extends Component {
               </label>
               <textarea id="resource-note" name="secret.description" maxLength="10000" placeholder={this.translate("Add a note")} onChange={this.handleInputChange} value={this.props.resource?.secret?.description}>
               </textarea>
+              {this.isMaxLengthError("description") &&
+                <div className="note error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
+              }
+              {this.isMaxLengthWarnings("description") &&
+                <div className="note warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                </div>
+              }
             </div>
           </div>
         </div>
@@ -78,6 +107,8 @@ AddResourceNote.propTypes = {
   resource: PropTypes.object, // The resource to edit or create
   onChange: PropTypes.func, //The resource setter
   t: PropTypes.func, // The translation function
+  warnings: PropTypes.object, //The warnings validation
+  errors: PropTypes.object // The errors entity error validation
 };
 
 export default  withTranslation('common')(AddResourceNote);

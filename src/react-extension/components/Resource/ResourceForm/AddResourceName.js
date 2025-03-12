@@ -76,6 +76,23 @@ class AddResourceName extends Component {
     return this.props.t;
   }
 
+  /**
+   * Checks if there is a max length warning for a specific property.
+   *
+   * @returns {boolean} - Returns true if there is a max length warning for the property, false otherwise.
+   */
+  isMaxLengthWarnings(propName) {
+    return !this.isMaxLengthError("name") && this.props.warnings?.hasError(propName, "maxLength");
+  }
+
+  /**
+   * Checks if there is a max length error for a specific property.
+   *
+   * @returns {boolean} - Returns true if there is a max length error for the property, false otherwise.
+   */
+  isMaxLengthError() {
+    return this.props.errors?.details?.metadata?.hasError("name", "maxLength");
+  }
   /*
    * =============================================================
    *  Render view
@@ -92,10 +109,13 @@ class AddResourceName extends Component {
             <input id="resource-name" name="metadata.name" type="text" value={this.props.resource?.metadata?.name || ""}
               onChange={this.handleInputChange} disabled={this.state.processing} maxLength="255"
               autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
-            {this.props.isFieldMaxSizeReached &&
-              <div className="name warning-message">
-                <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
-              </div>
+            {this.isMaxLengthError("name") &&
+                <div className="name error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
+            }
+            {this.isMaxLengthWarnings("name") &&
+                <div className="name warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                </div>
             }
           </div>
           {this.breadcrumbItems}
@@ -109,7 +129,8 @@ AddResourceName.propTypes = {
   folderParentId: PropTypes.string, // The folder parent id
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   resource: PropTypes.object, // The resource to update
-  isFieldMaxSizeReached: PropTypes.bool, // is field max size reached
+  warnings: PropTypes.object, //The warnings validation
+  errors: PropTypes.object, // The errors entity error validation
   onChange: PropTypes.func, // The on change function
   t: PropTypes.func, // The translation function
 };

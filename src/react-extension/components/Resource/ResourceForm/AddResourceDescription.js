@@ -46,7 +46,25 @@ class AddResourceDescription extends Component {
     }
   }
 
+  /**
+   * Checks if there is a max length warning for a specific property.
+   *
+   * @param {string} propName - The name of the property to check for max length warnings.
+   * @returns {boolean} - Returns true if there is a max length warning for the property, false otherwise.
+   */
+  isMaxLengthWarnings(propName) {
+    return !this.isMaxLengthError(propName) && this.props.warnings?.hasError(propName, "maxLength");
+  }
 
+  /**
+   * Checks if there is a max length error for a specific property.
+   *
+   * @param {string} propName - The name of the property to check for max length errors.
+   * @returns {boolean} - Returns true if there is a max length error for the property, false otherwise.
+   */
+  isMaxLengthError(propName) {
+    return this.props.errors?.details.metadata.hasError(propName, "maxLength");
+  }
   /*
    * =============================================================
    *  Render view
@@ -66,6 +84,14 @@ class AddResourceDescription extends Component {
               </label>
               <textarea id="resource-description" name="metadata.description" maxLength="10000" placeholder={this.translate("Add a description")} onChange={this.handleInputChange} value={this.resource?.metadata?.description}>
               </textarea>
+              {this.isMaxLengthError("description") &&
+                <div className="description error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
+              }
+              {this.isMaxLengthWarnings("description") &&
+                <div className="description warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                </div>
+              }
             </div>
           </div>
         </div>
@@ -79,6 +105,8 @@ AddResourceDescription.propTypes = {
   resource: PropTypes.object, // The resource to edit or create
   onChange: PropTypes.func, //The resource setter
   t: PropTypes.func, // The translation function
+  warnings: PropTypes.object, //The warnings validation
+  errors: PropTypes.object // The errors entity error validation
 };
 
 export default  withTranslation('common')(AddResourceDescription);

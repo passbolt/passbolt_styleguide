@@ -70,7 +70,6 @@ describe("Resource Form entity", () => {
       } catch (error) {
         expect(error instanceof EntityValidationError).toBe(true);
         expect(error.details).toStrictEqual({
-          metadata: {required: "The metadata is required."},
           secret: {required: "The secret is required."},
           resource_type_id: {required: "The resource_type_id is required."},
         });

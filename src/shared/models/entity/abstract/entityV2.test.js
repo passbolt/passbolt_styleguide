@@ -18,10 +18,13 @@ import {
   defaultTestEntityV2Dto,
   minimalTestEntityV2Dto,
   TestAssociatedEntityV2,
-  TestEntityV2
+  TestEntityV2,
+  TestWithAssociationEntityV2
 } from "./entityV2.test.data";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import {v4 as uuid} from "uuid";
+import EntitySchema from "./entitySchema";
+import EntityValidationError from "./entityValidationError";
 
 beforeEach(() => {
   TestEntityV2._cachedSchema = {};
@@ -155,6 +158,57 @@ describe("EntityV2", () => {
       expect(TestEntityV2.getSchema).toHaveBeenCalledTimes(2);
       expect(TestAssociatedEntityV2.getSchema).toHaveBeenCalledTimes(3);
     });
+
+    it("validates should remove association required if skipSchemaAssociationValidation option.", () => {
+      expect.assertions(1);
+
+      jest.spyOn(EntitySchema, "validate");
+
+      const entity = new TestWithAssociationEntityV2({
+        "name": "test name",
+        associated_entity: defaultAssociatedTestEntityV2Dto(),
+      }, {
+        validate: false
+      }); // ensure the cache is used even when validating entity from constructor.
+
+      entity.validate({
+        skipSchemaAssociationValidation: true
+      });
+
+      const expectedSchema = TestWithAssociationEntityV2.getSchema();
+      expectedSchema.required = ["name"];
+
+      expect(EntitySchema.validate).toHaveBeenCalledWith(
+        entity.constructor.name,
+        entity._props,
+        expectedSchema
+      );
+    });
+
+
+    it("validates should not association required if skipSchemaAssociationValidation option not exist.", () => {
+      expect.assertions(1);
+
+      jest.spyOn(EntitySchema, "validate");
+
+      const entity = new TestWithAssociationEntityV2({
+        "name": "test name",
+        associated_entity: defaultAssociatedTestEntityV2Dto(),
+      }, {
+        validate: false
+      }); // ensure the cache is used even when validating entity from constructor.
+
+      entity.validate({
+        skipSchemaAssociationValidation: false
+      });
+
+
+      expect(EntitySchema.validate).toHaveBeenCalledWith(
+        entity.constructor.name,
+        entity._props,
+        TestWithAssociationEntityV2.getSchema()
+      );
+    });
   });
 
   describe("::validate", () => {
@@ -186,6 +240,30 @@ describe("EntityV2", () => {
       expect(TestEntityV2.prototype.validateSchema).toHaveBeenCalled();
     });
 
+    it("should skip required association from schema when option skipSchemaAssociationValidation exist.", () => {
+      expect.assertions(1);
+      const entity = new TestWithAssociationEntityV2(defaultTestEntityV2Dto(), {
+        validate: false
+      });
+      const result = entity.validate({
+        skipSchemaAssociationValidation: true,
+      });
+
+      expect(result).toBeNull();
+    });
+
+    it("should not validate required association from schema when option skipSchemaAssociationValidation is false.", () => {
+      expect.assertions(2);
+      const entity = new TestWithAssociationEntityV2(defaultTestEntityV2Dto(), {
+        skipSchemaAssociationValidation: true,
+        validate: false
+      });
+      const result = entity.validate();
+
+      expect(result.hasErrors()).toBeTruthy();
+      expect(result.hasError("associated_entity", "required")).toBeTruthy();
+    });
+
     it("throws an error if the getSchema function is not overridden.", () => {
       expect.assertions(1);
       const expectedError = new Error("The entity class should declare its schema.");
@@ -195,6 +273,28 @@ describe("EntityV2", () => {
     });
   });
 
+  describe("::validateAssociations", () => {
+    it("does not return error if validation association respect schema.", () => {
+      expect.assertions(1);
+
+      const entity = new TestWithAssociationEntityV2(defaultTestEntityV2Dto());
+
+      expect(() => entity.validateAssociations()).not.toThrowEntityValidationError();
+    });
+
+    it("throws a validation error if the association validation failed.", () => {
+      expect.assertions(1);
+
+      const entity = new TestWithAssociationEntityV2(defaultTestEntityV2Dto({
+        associated_entity: {},
+      }), {
+        validate: false
+      });
+      const validationErrors = new EntityValidationError();
+      validationErrors.addAssociationError("associated_entity", new EntityValidationError("id", "required", "Could not validate entity TestAssociatedEntityV2."));
+      expect(() => entity.validateAssociations()).toThrow(validationErrors);
+    });
+  });
   describe("::associations", () => {
     it("retrieves empty associations.", () => {
       expect.assertions(1);
