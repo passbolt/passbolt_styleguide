@@ -307,6 +307,32 @@ describe("ResourceTypesCollection", () => {
     });
   });
 
+  describe("::hasSomeMetadataDescriptionResourceTypes", () => {
+    it("should have some metadata description resource types.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
+      expect(resourceTypes.hasSomeMetadataDescriptionResourceTypes()).toBeTruthy();
+    });
+
+    it("should have some metadata description resource types v5.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
+      expect(resourceTypes.hasSomeMetadataDescriptionResourceTypes(RESOURCE_TYPE_VERSION_5)).toBeTruthy();
+    });
+
+    it("should not have some metadata description resource types.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesV5CollectionDto());
+      expect(resourceTypes.hasSomeMetadataDescriptionResourceTypes(RESOURCE_TYPE_VERSION_4)).toBeFalsy();
+    });
+
+    it("should not have some metadata description resource types v5.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
+      expect(resourceTypes.hasSomeMetadataDescriptionResourceTypes(RESOURCE_TYPE_VERSION_5)).toBeFalsy();
+    });
+  });
+
   describe("::hasSomeOfVersion", () => {
     it("should have some v4 resource types.", () => {
       expect.assertions(1);

@@ -114,20 +114,24 @@
     /* CONTENT */
     .content {
       display: flex;
-      padding-bottom: 2.4rem;
       flex-direction: column;
       align-items: flex-start;
       flex: 1 0 0;
       align-self: stretch;
+      padding: 1.6rem 0;
 
       /* PASSWORD FIELDS LAYOUT*/
       .password-fields, .totp-fields, .note-fields, .description-fields {
         display: flex;
-        padding: 1.6rem;
+        padding: 0 1.6rem;
         flex-direction: column;
         align-items: flex-start;
         gap: 1.6rem;
         align-self: stretch;
+      }
+
+      .password-fields {
+        padding-bottom: 1.6rem;
       }
 
       /* INPUT FIELDS */
@@ -195,6 +199,8 @@
         flex-direction: column;
         align-items: flex-start;
         align-self: stretch;
+        margin-top: 1.6rem;
+        padding-bottom: .8rem;
         border-top: 1px solid var(--Workspace-Dividers);
 
         .section-header {
@@ -249,6 +255,19 @@
             align-self: stretch;
           }
         }
+      }
+    }
+
+    .message {
+      display: flex;
+      padding: .8rem 1.6rem 1.2rem 1.6rem;
+      align-items: center;
+      gap: 1rem;
+      align-self: stretch;
+
+      .text {
+        flex: 1 0 0;
+        align-self: stretch;
       }
     }
   }

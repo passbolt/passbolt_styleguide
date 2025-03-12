@@ -22,6 +22,7 @@ import AddResourceDescription from "./AddResourceDescription";
 import {
   ResourceEditCreateFormEnumerationTypes
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 
 /**
  * The component orchestrates the resource form edition and creation.
@@ -48,12 +49,16 @@ class OrchestrateResourceForm extends Component {
         return <AddResourceNote
           resource={this.props.resource}
           onChange={this.props.onChange}
+          resourceType={this.props.resourceType}
+          onConvertToDescription={this.props.onConvertToDescription}
           warnings={this.props.warnings}
           errors={this.props.errors}/>;
       case ResourceEditCreateFormEnumerationTypes.DESCRIPTION:
         return <AddResourceDescription
           resource={this.props.resource}
           onChange={this.props.onChange}
+          resourceType={this.props.resourceType}
+          onConvertToNote={this.props.onConvertToNote}
           warnings={this.props.warnings}
           errors={this.props.errors}/>;
       default:
@@ -64,7 +69,10 @@ class OrchestrateResourceForm extends Component {
 OrchestrateResourceForm.propTypes = {
   resourceFormSelected: PropTypes.string, // The resource form selected to display
   resource: PropTypes.object, // The resource to edit or create
+  resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource type entity
   onChange: PropTypes.func, //The resource setter
+  onConvertToNote: PropTypes.func, //The resource note to convert
+  onConvertToDescription: PropTypes.func, //The resource description to convert
   t: PropTypes.func, // The translation function
   warnings: PropTypes.object, //The warnings validation
   errors: PropTypes.object // The errors entity error validation

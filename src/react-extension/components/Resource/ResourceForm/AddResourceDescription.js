@@ -15,6 +15,15 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
+import LockSVG from "../../../../img/svg/lock.svg";
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  RESOURCE_TYPE_PASSWORD_STRING_SLUG
+} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 class AddResourceDescription extends Component {
   constructor(props) {
@@ -46,6 +55,21 @@ class AddResourceDescription extends Component {
     }
   }
 
+  /**
+   * Is resource type v4 password string
+   * @returns {boolean}
+   */
+  get isResourceTypeV4PasswordString() {
+    return RESOURCE_TYPE_PASSWORD_STRING_SLUG === this.props.resourceType?.slug;
+  }
+
+  /**
+   * Can have secret totp
+   * @returns {boolean}
+   */
+  get canHaveSecretNote() {
+    return this.props.resourceTypes?.hasSomeNoteResourceTypes(this.props.resourceType?.version);
+  }
   /**
    * Checks if there is a max length warning for a specific property.
    *
@@ -82,7 +106,7 @@ class AddResourceDescription extends Component {
               <label htmlFor="resource-description">
                 <Trans>Content</Trans>
               </label>
-              <textarea id="resource-description" name="metadata.description" maxLength="10000" placeholder={this.translate("Add a description")} onChange={this.handleInputChange} value={this.resource?.metadata?.description}>
+              <textarea id="resource-description" name="metadata.description" maxLength="10000" placeholder={this.translate("Add a description")} onChange={this.handleInputChange} value={this.props.resource?.metadata?.description}>
               </textarea>
               {this.isMaxLengthError("description") &&
                 <div className="description error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
@@ -95,7 +119,17 @@ class AddResourceDescription extends Component {
             </div>
           </div>
         </div>
-
+        {this.isResourceTypeV4PasswordString && this.canHaveSecretNote &&
+          <div className="message notice">
+            <p className="text">
+              <strong><Trans>Information</Trans>:</strong> <Trans>Description is a searchable metadata.</Trans> <Trans>If you want it to be a secret, you can convert it into a note.</Trans>
+            </p>
+            <button id="convert-to-note" type="button" className="button" onClick={this.props.onConvertToNote}>
+              <LockSVG/>
+              <Trans>Convert to note</Trans>
+            </button>
+          </div>
+        }
       </>
     );
   }
@@ -104,10 +138,13 @@ class AddResourceDescription extends Component {
 AddResourceDescription.propTypes = {
   resource: PropTypes.object, // The resource to edit or create
   onChange: PropTypes.func, //The resource setter
+  onConvertToNote: PropTypes.func, //The resource description to convert
+  resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource type entity
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection),
   t: PropTypes.func, // The translation function
   warnings: PropTypes.object, //The warnings validation
   errors: PropTypes.object // The errors entity error validation
 };
 
-export default  withTranslation('common')(AddResourceDescription);
+export default  withResourceTypesLocalStorage(withTranslation('common')(AddResourceDescription));
 

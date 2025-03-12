@@ -62,6 +62,8 @@ class CreateResource extends Component {
     this.onSelectForm = this.onSelectForm.bind(this);
     this.onAddSecret = this.onAddSecret.bind(this);
     this.onDeleteSecret = this.onDeleteSecret.bind(this);
+    this.handleConvertToDescription = this.handleConvertToDescription.bind(this);
+    this.handleConvertToNote = this.handleConvertToNote.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.save = this.save.bind(this);
   }
@@ -193,6 +195,32 @@ class CreateResource extends Component {
   }
 
   /**
+   * Handle convert note to metadata description
+   */
+  handleConvertToDescription() {
+    this.resourceFormEntity.convertToMetadataDescription({validate: false});
+    const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
+    this.setState({
+      resource: this.resourceFormEntity.toDto(),
+      resourceFormSelected: ResourceEditCreateFormEnumerationTypes.DESCRIPTION,
+      resourceType
+    });
+  }
+
+  /**
+   * Handle convert description to secret note
+   */
+  handleConvertToNote() {
+    this.resourceFormEntity.convertToNote({validate: false});
+    const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
+    this.setState({
+      resource: this.resourceFormEntity.toDto(),
+      resourceFormSelected: ResourceEditCreateFormEnumerationTypes.NOTE,
+      resourceType
+    });
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -222,10 +250,12 @@ class CreateResource extends Component {
               <OrchestrateResourceForm
                 resourceFormSelected={this.state.resourceFormSelected}
                 resource={this.state.resource}
+                resourceType={this.state.resourceType}
                 onChange={this.handleInputChange}
+                onConvertToDescription={this.handleConvertToDescription}
+                onConvertToNote={this.handleConvertToNote}
                 warnings={warnings}
-                errors={errors}
-              />
+                errors={errors}/>
             </div>
           </div>
           <div className="submit-wrapper">

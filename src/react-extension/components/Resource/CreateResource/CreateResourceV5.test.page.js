@@ -391,6 +391,20 @@ export default class CreateResourcePage {
   }
 
   /**
+   * Returns the convert to description button element
+   */
+  get convertToDescription() {
+    return this._page.container.querySelector('#convert-to-description');
+  }
+
+  /**
+   * Returns the convert to note button element
+   */
+  get convertToNote() {
+    return this._page.container.querySelector('#convert-to-note');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {

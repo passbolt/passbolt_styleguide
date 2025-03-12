@@ -15,6 +15,15 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
+import UnlockSVG from "../../../../img/svg/unlock.svg";
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG
+} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 class AddResourceNote extends Component {
   constructor(props) {
@@ -45,6 +54,22 @@ class AddResourceNote extends Component {
     if (this.props.onChange) {
       this.props.onChange(event);
     }
+  }
+
+  /**
+   * Is resource type v4 default
+   * @returns {boolean}
+   */
+  get isResourceTypeV4Default() {
+    return RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG === this.props.resourceType?.slug;
+  }
+
+  /**
+   * Can have secret totp
+   * @returns {boolean}
+   */
+  get canHaveMetadataDescription() {
+    return this.props.resourceTypes?.hasSomeMetadataDescriptionResourceTypes(this.props.resourceType?.version);
   }
 
   /**
@@ -98,6 +123,17 @@ class AddResourceNote extends Component {
             </div>
           </div>
         </div>
+        {this.isResourceTypeV4Default && this.canHaveMetadataDescription &&
+          <div className="message notice">
+            <p className="text">
+              <strong><Trans>Information</Trans>:</strong> <Trans>Note is a secret and it is not searchable.</Trans> <Trans>If you want it to be a searchable, you can convert it into a description.</Trans> <Trans>This is not recommended.</Trans>
+            </p>
+            <button id="convert-to-description" type="button" className="button" onClick={this.props.onConvertToDescription}>
+              <UnlockSVG/>
+              <Trans>Convert to description</Trans>
+            </button>
+          </div>
+        }
       </>
     );
   }
@@ -106,10 +142,13 @@ class AddResourceNote extends Component {
 AddResourceNote.propTypes = {
   resource: PropTypes.object, // The resource to edit or create
   onChange: PropTypes.func, //The resource setter
+  onConvertToDescription: PropTypes.func, //The resource note to convert
+  resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource type entity
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection),
   t: PropTypes.func, // The translation function
   warnings: PropTypes.object, //The warnings validation
   errors: PropTypes.object // The errors entity error validation
 };
 
-export default  withTranslation('common')(AddResourceNote);
+export default  withResourceTypesLocalStorage(withTranslation('common')(AddResourceNote));
 

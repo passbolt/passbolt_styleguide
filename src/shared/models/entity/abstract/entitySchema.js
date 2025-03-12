@@ -208,6 +208,11 @@ class EntitySchema {
       return prop;
     }
 
+    // check if prop is null
+    if (propSchema.nullable === true && prop === null) {
+      return prop;
+    }
+
     // Check if prop validates based on type
     EntitySchema.validatePropType(propName, prop, propSchema);
 
