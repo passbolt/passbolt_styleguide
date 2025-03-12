@@ -30,6 +30,7 @@ import ClipBoard from "../../../../shared/lib/Browser/clipBoard";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Html5Qrcode, Html5QrcodeSupportedFormats} from "html5-qrcode";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class AddResourceTotp extends Component {
   constructor(props) {
@@ -65,6 +66,39 @@ class AddResourceTotp extends Component {
    */
   createReferences() {
     this.fileUploaderRef = React.createRef();
+    this.keyInputRef = React.createRef();
+    this.periodInputRef = React.createRef();
+    this.digitsInputRef = React.createRef();
+  }
+
+
+  /**
+   * Component did mount
+   */
+  componentDidMount() {
+    const hasError = Boolean(this.props.errors);
+    if (hasError) {
+      this.focusFirstFieldError();
+    }
+  }
+
+  /**
+   * Component did update
+   * @param prevProps
+   * @param prevState
+   */
+  componentDidUpdate(prevProps, prevState) {
+    const hasSameError = prevProps.errors === this.props.errors;
+    const isFirstError = prevProps.errors === null;
+    // Avoid focus when the user change the form
+    const hasNotResourceChanged = prevProps.resource === this.props.resource;
+    // Avoid a call and a loop when state displayAdvancedSettings changed
+    const hasChangedDisplayAdvancedSettings = prevState.displayAdvancedSettings !== this.state.displayAdvancedSettings;
+    // Should focus on the first error field
+    const shouldFocusFirstErrorField = hasSameError && hasNotResourceChanged && !hasChangedDisplayAdvancedSettings || isFirstError;
+    if (shouldFocusFirstErrorField) {
+      this.focusFirstFieldError();
+    }
   }
 
   /**
@@ -277,6 +311,29 @@ class AddResourceTotp extends Component {
     }
     return null;
   }
+
+  /**
+   * Focus the first field of the form which is in error state.
+   */
+  focusFirstFieldError() {
+    if (this.isFieldTotpError("secret_key")) {
+      this.keyInputRef.current.focus();
+    } else if (this.isFieldTotpError("period")) {
+      // Avoid a loop on the did update
+      if (this.state.displayAdvancedSettings) {
+        this.periodInputRef.current.focus();
+      } else {
+        this.setState({displayAdvancedSettings: true}, () => this.periodInputRef.current.focus());
+      }
+    } else if (this.isFieldTotpError("digits")) {
+      // Avoid a loop on the did update
+      if (this.state.displayAdvancedSettings) {
+        this.digitsInputRef.current.focus();
+      } else {
+        this.setState({displayAdvancedSettings: true}, () => this.digitsInputRef.current.focus());
+      }
+    }
+  }
   /*
    * =============================================================
    *  Render view
@@ -295,7 +352,7 @@ class AddResourceTotp extends Component {
             <div className="totp-fields">
               {!this.isResourceHasPassword &&
                 <div className="input text">
-                  <label htmlFor="resource-uri"><Trans>URI</Trans></label>
+                  <label htmlFor="resource-uri"><Trans>URI</Trans>{this.isMaxLengthWarnings("uris.0") && <AttentionSVG className="attention-required"/>}</label>
                   <input id="resource-uri" name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange} />
                   {this.isMaxLengthWarnings("uris.0") && !this.isFieldUriError("uris.0") &&
                     <div className="uri warning-message">
@@ -307,13 +364,10 @@ class AddResourceTotp extends Component {
                   }
                 </div>
               }
-              <div className="input text">
+              <div className={`input text ${this.isFieldTotpError("secret_key") ? "error" : ""}`}>
                 <label htmlFor="resource-totp-key"><Trans>Key</Trans> (<Trans>secret</Trans>)</label>
                 <div className="secret-key-wrapper">
-                  <Password id="resource-totp-key" name="secret.totp.secret_key" autoComplete="new-password" placeholder={this.translate("Key")} preview={true} value={this.props.resource?.secret?.totp?.secret_key} onChange={this.handleInputChange}/>
-                  {this.isFieldTotpError("secret_key") &&
-                      <div className="totp-key error-message">{this.secretKeyErrorMessage}</div>
-                  }
+                  <Password id="resource-totp-key" name="secret.totp.secret_key" inputRef={this.keyInputRef} autoComplete="new-password" placeholder={this.translate("Key")} preview={true} value={this.props.resource?.secret?.totp?.secret_key} onChange={this.handleInputChange}/>
                   <input
                     type="file"
                     name="secret.totp"
@@ -330,6 +384,9 @@ class AddResourceTotp extends Component {
                     <span><Trans>Upload a QR code</Trans></span>
                   </button>
                 </div>
+                {this.isFieldTotpError("secret_key") &&
+                  <div className="totp-key error-message">{this.secretKeyErrorMessage}</div>
+                }
               </div>
             </div>
             <div className="additional-information">
@@ -342,20 +399,20 @@ class AddResourceTotp extends Component {
               </button>
               {this.state.displayAdvancedSettings &&
                 <div className="advanced-settings">
-                  <div className="input text">
+                  <div className={`input text ${this.isFieldTotpError("period") ? "error" : ""}`}>
                     <label htmlFor="resource-totp-period"><Trans>TOTP expiry</Trans></label>
                     <div className="input-wrapper-inline">
-                      <input id="resource-totp-period" name="secret.totp.period" type="number" min="1" max="120" value={this.props.resource?.secret?.totp?.period} onChange={this.handleInputChange}/>
+                      <input id="resource-totp-period" ref={this.periodInputRef} name="secret.totp.period" type="number" min="1" max="120" value={this.props.resource?.secret?.totp?.period} onChange={this.handleInputChange}/>
                       <span><Trans>seconds until the TOTP expires</Trans></span>
                     </div>
-                  </div>
-                  {this.isFieldTotpError("period") &&
+                    {this.isFieldTotpError("period") &&
                       <div className="period error-message">{this.periodErrorMessage}</div>
-                  }
-                  <div className="input text">
+                    }
+                  </div>
+                  <div className={`input text ${this.isFieldTotpError("digits") ? "error" : ""}`}>
                     <label htmlFor="resource-totp-digits"><Trans>TOTP length</Trans></label>
                     <div className="input-wrapper-inline">
-                      <input id="resource-totp-digits" name="secret.totp.digits" type="number" min="6" max="8" value={this.props.resource?.secret?.totp?.digits} onChange={this.handleInputChange}/>
+                      <input id="resource-totp-digits" ref={this.digitsInputRef} name="secret.totp.digits" type="number" min="6" max="8" value={this.props.resource?.secret?.totp?.digits} onChange={this.handleInputChange}/>
                       <span><Trans>digits</Trans></span>
                     </div>
                     {this.isFieldTotpError("digits") &&

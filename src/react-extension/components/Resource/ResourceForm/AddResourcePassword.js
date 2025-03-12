@@ -27,6 +27,7 @@ import ConfigurePassphraseGenerator from "../../../../shared/components/Generate
 import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class AddResourcePassword extends Component {
   constructor(props) {
@@ -210,7 +211,7 @@ class AddResourcePassword extends Component {
         <div className="content">
           <div className="password-fields">
             <div className="input text">
-              <label htmlFor="resource-uri"><Trans>URI</Trans></label>
+              <label htmlFor="resource-uri"><Trans>URI</Trans>{this.isMaxLengthWarnings("uris.0", "metadata") && <AttentionSVG className="attention-required"/>}</label>
               <input id="resource-uri" name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange}/>
               {this.isMaxLengthError("uris.0", "metadata") &&
                 <div className="uri error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
@@ -222,7 +223,7 @@ class AddResourcePassword extends Component {
               }
             </div>
             <div className="input text">
-              <label htmlFor="resource-username"><Trans>Username</Trans></label>
+              <label htmlFor="resource-username"><Trans>Username</Trans>{this.isMaxLengthWarnings("username", "metadata") && <AttentionSVG className="attention-required"/>}</label>
               <input id="resource-username" name="metadata.username" type="text" className="fluid" maxLength="255" autoComplete="off" placeholder={this.translate("Username")} value={this.props.resource?.metadata?.username} onChange={this.handleInputChange}/>
               {this.isMaxLengthError("username", "metadata") &&
                 <div className="username error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
@@ -236,6 +237,7 @@ class AddResourcePassword extends Component {
             <div className="input-password-wrapper input">
               <label htmlFor="resource-password">
                 <Trans>Password</Trans>
+                {this.isMaxLengthWarnings("password", "secret") && <AttentionSVG className="attention-required"/>}
               </label>
               <div className="password-button-inline">
                 <Password id="resource-password" name="secret.password" autoComplete="new-password" placeholder={this.translate("Password")} preview={true} value={this.props.resource?.secret?.password} onChange={this.handleInputChange} />

@@ -49,7 +49,7 @@ class CreateResource extends Component {
       resourceFormSelected: this.selectResourceFormByResourceSecretData(), // The selected form to display
       resourceType: this.props.resourceType, // The resource type
       isProcessing: false, // Is the form processing (loading, submitting).
-      hasAlreadyBeenValidated: false // True if the form has already been submitted once.
+      hasAlreadyBeenValidated: false, // True if the form has already been submitted once.
     };
   }
 
@@ -101,6 +101,18 @@ class CreateResource extends Component {
     return null;
   }
 
+  /**
+   * Select resource form by first error
+   * @param {EntityValidationError} errors
+   */
+  selectResourceFormByFirstError(errors) {
+    if (errors.hasError("secret")) {
+      if (errors.details.secret.hasError("totp")) {
+        this.setState({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP});
+      }
+    }
+  }
+
   /*
    * =============================================================
    *  Dialog actions event handlers
@@ -147,6 +159,7 @@ class CreateResource extends Component {
     if (validationError?.hasErrors()) {
       const hasAlreadyBeenValidated = true;
       this.setState({hasAlreadyBeenValidated});
+      this.selectResourceFormByFirstError(validationError);
       return;
     }
 
@@ -245,8 +258,14 @@ class CreateResource extends Component {
     return (
       <DialogWrapper title={this.translate("Create a resource")} className="create-resource"
         disabled={this.state.processing} onClose={this.handleClose}>
-        <SelectResourceForm resourceType={this.state.resourceType} resourceFormSelected={this.state.resourceFormSelected}
-          resource={this.state.resource} onAddSecret={this.onAddSecret} onDeleteSecret={this.onDeleteSecret} onSelectForm={this.onSelectForm}/>
+        <SelectResourceForm
+          resourceType={this.state.resourceType}
+          resourceFormSelected={this.state.resourceFormSelected}
+          resource={this.state.resource}
+          onAddSecret={this.onAddSecret}
+          onDeleteSecret={this.onDeleteSecret}
+          onSelectForm={this.onSelectForm}
+        />
         <form onSubmit={this.handleFormSubmit} className="grid-and-footer" noValidate>
           <div className="grid">
             <AddResourceName resource={this.state.resource} folderParentId={this.props.folderParentId} onChange={this.handleInputChange} warnings={warnings}

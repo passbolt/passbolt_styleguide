@@ -612,6 +612,18 @@ describe("See the Create Resource", () => {
         expect(page.resourceTotpPeriodErrorMessage.textContent).toBe("TOTP expiry must be greater than 0.");
       });
 
+      it('As a signed-in user I should be redirected to the totp form if there is an error', async() => {
+        expect.assertions(3);
+
+        await page.click(page.getSectionItem(2));
+        expect(page.sectionItemSelected.textContent).toBe("Description");
+
+        await page.click(page.saveButton);
+        // expectations
+        expect(page.sectionItemSelected.textContent).toBe("TOTP");
+        expect(page.resourceTotpKeyErrorMessage.textContent).toBe("The key is required.");
+      });
+
       it('As a signed-in user I should be able to add a totp length', async() => {
         expect.assertions(1);
 

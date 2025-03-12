@@ -24,6 +24,7 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class AddResourceNote extends Component {
   constructor(props) {
@@ -109,6 +110,7 @@ class AddResourceNote extends Component {
             <div className="input textarea">
               <label htmlFor="resource-note">
                 <Trans>Content</Trans>
+                {this.isMaxLengthWarnings("description") && <AttentionSVG className="attention-required"/>}
               </label>
               <textarea id="resource-note" name="secret.description" maxLength="10000" placeholder={this.translate("Add a note")} onChange={this.handleInputChange} value={this.props.resource?.secret?.description}>
               </textarea>

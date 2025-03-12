@@ -24,6 +24,7 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {
   RESOURCE_TYPE_PASSWORD_STRING_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class AddResourceDescription extends Component {
   constructor(props) {
@@ -87,7 +88,7 @@ class AddResourceDescription extends Component {
    * @returns {boolean} - Returns true if there is a max length error for the property, false otherwise.
    */
   isMaxLengthError(propName) {
-    return this.props.errors?.details.metadata.hasError(propName, "maxLength");
+    return this.props.errors?.details.metadata?.hasError(propName, "maxLength");
   }
   /*
    * =============================================================
@@ -105,6 +106,7 @@ class AddResourceDescription extends Component {
             <div className="input textarea">
               <label htmlFor="resource-description">
                 <Trans>Content</Trans>
+                {this.isMaxLengthWarnings("description") && <AttentionSVG className="attention-required"/>}
               </label>
               <textarea id="resource-description" name="metadata.description" maxLength="10000" placeholder={this.translate("Add a description")} onChange={this.handleInputChange} value={this.props.resource?.metadata?.description}>
               </textarea>

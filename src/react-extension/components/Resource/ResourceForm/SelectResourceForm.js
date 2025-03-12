@@ -384,7 +384,8 @@ SelectResourceForm.propTypes = {
   onDeleteSecret: PropTypes.func, // The on delete secret function
   resource: PropTypes.object, // The resource to edit or create
   resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource type entity
-  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection),
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection entity
+  errors: PropTypes.object, // The errors entity error validation
   t: PropTypes.func, // The translation function
 };
 
