@@ -86,7 +86,7 @@ export default class AddResourceTotpPage {
    * @return {Element}
    */
   get algorithm() {
-    return this._page.container.querySelector('#resource-totp-algorithm .selected-value .value');
+    return this._page.container.querySelector('#resource-totp-algorithm .selected-value');
   }
 
   /**

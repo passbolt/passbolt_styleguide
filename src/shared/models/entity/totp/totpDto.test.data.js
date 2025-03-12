@@ -28,6 +28,16 @@ export const defaultTotpDto = (data = {}) => {
   return Object.assign(defaultData, data);
 };
 
+export const defaultEmptyTotpDto = (data = {}) => {
+  const defaultData = {
+    secret_key: "",
+    period: 30,
+    digits: 6,
+    algorithm: "SHA1"
+  };
+
+  return Object.assign(defaultData, data);
+};
 
 export const lowerCaseAlgorithmSetupTotpData = (props = {}) => {
   const data = {

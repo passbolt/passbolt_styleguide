@@ -81,6 +81,11 @@ class ResourceFormEntity extends EntityV2 {
           "format": "uuid",
           "nullable": true,
         },
+        "expired": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true,
+        },
         // Associated models
         "metadata": ResourceMetadataEntity.getSchema(),
         "secret": {"anyOf": [
@@ -118,7 +123,12 @@ class ResourceFormEntity extends EntityV2 {
         throw new Error(`No secret association class has been found in resource types.`);
       }
       try {
-        this._secret = secretEntityClass.createFromDefault(this._props.secret, options);
+        // Important to keep null or undefined value
+        if (this._props.secret) {
+          this._secret = new secretEntityClass(this._props.secret, options);
+        } else {
+          this._secret = secretEntityClass.createFromDefault(this._props.secret, options);
+        }
       } catch (error) {
         validationErrors.addAssociationError("secret", error);
       }
@@ -380,6 +390,32 @@ class ResourceFormEntity extends EntityV2 {
 
     return result;
   }
+
+  /**
+   * To resource DTO
+   * @returns {*}
+   */
+  toResourceDto() {
+    const result = Object.assign({}, this._props);
+
+    if (this._metadata) {
+      result.metadata = this.metadata.toDto();
+    }
+
+    return result;
+  }
+
+  /**
+   * To secret DTO
+   * @returns {*|null}
+   */
+  toSecretDto() {
+    if (this._secret) {
+      return this.secret.toDto();
+    }
+    return null;
+  }
+
   /**
    * Verifies data integrity to inform users if fields exceed their maximum allowed size
    * @return {EntityValidationError|null} Validation errors or null if no errors are detected
@@ -418,7 +454,7 @@ class ResourceFormEntity extends EntityV2 {
   /**
    * Validates maxLength fields against a given schema
    * @param {Object} dataObject - The association or properties to validate
-   * @param {Object} schema - The validation schema
+   * @param {Entity} entity - The entity
    * @param {EntityValidationError|null} currentError - The existing error object or null
    * @return {EntityValidationError|null} The updated or unchanged error object
    * @private
@@ -474,13 +510,60 @@ class ResourceFormEntity extends EntityV2 {
   }
 
   /**
+   * Remove empty secret
+   * @param {object} [options] Options
+   *
+   * Note: This function remove only empty Totp on:
+   * V4:
+   *  - password, description and Totp
+   * V5:
+   *  - DefaultTotp
+   *
+   * Not supported:
+   *   - Other resource type
+   */
+  removeEmptySecret(options) {
+    //If totp has no value then remove it
+    if (this.secret instanceof SecretDataV4DefaultTotpEntity || this.secret instanceof SecretDataV5DefaultTotpEntity) {
+      if (!this.secret.totp.hasSecretKey) {
+        this.deleteSecret(ResourceEditCreateFormEnumerationTypes.TOTP, options);
+      }
+    }
+  }
+
+  /**
+   * Add required secret
+   * @param {object} [options] Options
+   *
+   * Note: This function add password on:
+   * V4:
+   *  - password and description if not set add empty password
+   * V5:
+   *  - Default if password is not set add null password
+   *
+   * Not supported:
+   *   - Other resource type
+   */
+  addRequiredSecret(options) {
+    const resourceType = this.resourceTypes.getFirstById(this._props.resource_type_id);
+    if (resourceType.hasPassword() && this.secret.password == null) {
+      if (resourceType.isV5()) {
+        this.secret.set("password", null, options);
+      } else if (resourceType.isV4()) {
+        this.secret.set("password", "", options);
+      }
+    }
+  }
+
+  /**
    * @inheritdoc
    */
   marshall() {
     if (!this._props.metadata) {
       this._props.metadata = {
         resource_type_id: this._props.resource_type_id,
-        name: ""
+        name: "",
+        uris: [],
       };
     }
   }

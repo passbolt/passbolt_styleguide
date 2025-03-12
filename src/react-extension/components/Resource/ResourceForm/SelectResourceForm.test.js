@@ -439,4 +439,22 @@ describe("SelectResourceForm", () => {
       expect(page.deleteSecretPassword).toBeNull();
     });
   });
+
+  describe('As LU I should see the select disabled.', () => {
+    it('As LU I can see the select form disabled.', async() => {
+      expect.assertions(8);
+
+      const props = defaultProps({disabled: true, resource: defaultResourceFormDto({secret: {password: "", description: "", totp: {}}})});
+      page = new SelectResourceFormPage(props);
+
+      expect(page.addSecret.hasAttribute("disabled")).toBeTruthy();
+      expect(page.deleteSecretPassword.hasAttribute("disabled")).toBeTruthy();
+      expect(page.deleteSecretTotp.hasAttribute("disabled")).toBeTruthy();
+      expect(page.deleteSecretNote.hasAttribute("disabled")).toBeTruthy();
+      expect(page.getSectionItem(1).hasAttribute("disabled")).toBeTruthy();
+      expect(page.getSectionItem(2).hasAttribute("disabled")).toBeTruthy();
+      expect(page.getSectionItem(3).hasAttribute("disabled")).toBeTruthy();
+      expect(page.getSectionItem(4).hasAttribute("disabled")).toBeTruthy();
+    });
+  });
 });

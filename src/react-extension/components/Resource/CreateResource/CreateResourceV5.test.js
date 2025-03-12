@@ -22,12 +22,28 @@ import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGene
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import {
   resourceTypePasswordAndDescriptionDto,
-  resourceTypePasswordStringDto
+  resourceTypePasswordStringDto,
+  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+  TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
+  TEST_RESOURCE_TYPE_PASSWORD_STRING,
+  TEST_RESOURCE_TYPE_TOTP,
+  TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
+  TEST_RESOURCE_TYPE_V5_TOTP
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import "../../../../../test/mocks/mockClipboard";
 import ConfirmCreateEdit, {ConfirmEditCreateOperationVariations, ConfirmEditCreateRuleVariations} from "../ConfirmCreateEdit/ConfirmCreateEdit";
 import {defaultPasswordPoliciesContext} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
+import {SECRET_DATA_OBJECT_TYPE} from "../../../../shared/models/entity/secretData/secretDataEntity";
+import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import {
+  overridenPasswordExpirySettingsEntityDto
+} from "../../../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
+import {DateTime} from "luxon";
+import {formatDateForApi} from "../../../../shared/utils/dateUtils";
+import {defaultTotpDto} from "../../../../shared/models/entity/totp/totpDto.test.data";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 describe("See the Create Resource", () => {
   beforeEach(() => {
@@ -40,7 +56,7 @@ describe("See the Create Resource", () => {
     jest.clearAllTimers();
   });
 
-  describe('As LU I can start adding a password', () => {
+  describe('As LU I can start adding a resource', () => {
     describe('Styleguide', () => {
       it('matches the styleguide', async() => {
         expect.assertions(18);
@@ -574,7 +590,7 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should see an error message when totp key does not respect pattern', async() => {
         expect.assertions(1);
 
-        await page.fillInput(page.resourceTotpKey, "key");
+        await page.fillInput(page.resourceTotpKey, "????");
 
         await page.click(page.saveButton);
         // expectations
@@ -862,6 +878,487 @@ describe("See the Create Resource", () => {
       expect(page.exists()).toBeTruthy();
       await page.escapeKey(page.dialogClose);
       expect(props.onClose).toHaveBeenCalled();
+    });
+  });
+
+  describe("should save a secret to a resource", () => {
+    it('As a signed-in user I should be able to save a resource v5 default', async() => {
+      expect.assertions(3);
+      const expirationPeriod = 15;
+      const passwordExpirySettings = overridenPasswordExpirySettingsEntityDto({
+        default_expiry_period: expirationPeriod
+      });
+
+      const fakeNow = new Date('2023-01-01T00:00:00.000Z');
+
+      jest.useFakeTimers().setSystemTime(fakeNow);
+
+      const expectedExpiryDate = DateTime.utc().plus({days: expirationPeriod});
+
+      const props = defaultProps({
+        passwordExpiryContext: defaultPasswordExpirySettingsContext({
+          getSettings: () => passwordExpirySettings,
+        })
+      });
+      const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
+      const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
+      jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
+      const page = new CreateResourcePage(props);
+      await waitFor(() => {});
+
+      await page.click(page.saveButton);
+
+      const expirationDate = formatDateForApi(expectedExpiryDate);
+
+      const resourceDtoExpected = {
+        expired: expirationDate,
+        folder_parent_id: null,
+        resource_type_id: props.resourceType.id,
+        metadata: {
+          name: "no name",
+          resource_type_id: props.resourceType.id,
+          uris: []
+        }
+      };
+
+      const secretDtoExpected = {
+        object_type: SECRET_DATA_OBJECT_TYPE,
+        password: "",
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been added successfully");
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As a signed-in user I should be able to save a resource v5 default with totp empty', async() => {
+      expect.assertions(3);
+      const props = defaultProps();
+      const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
+      const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
+      jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
+      const page = new CreateResourcePage(props);
+      await waitFor(() => {});
+
+      await page.fillInput(page.password, "RN9n8XuECN3");
+
+      await page.click(page.addSecret);
+      await page.click(page.addSecretTotp);
+
+      await page.fillInput(page.name, "v5 default");
+
+      await page.click(page.saveButton);
+
+      const resourceDtoExpected = {
+        expired: null,
+        folder_parent_id: null,
+        resource_type_id: props.resourceType.id,
+        metadata: {
+          name: "v5 default",
+          resource_type_id: props.resourceType.id,
+          uris: []
+        }
+      };
+
+      const secretDtoExpected = {
+        object_type: SECRET_DATA_OBJECT_TYPE,
+        password: "RN9n8XuECN3",
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been added successfully");
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As a signed-in user I should be able to save a resource v5 default with totp', async() => {
+      expect.assertions(3);
+      const props = defaultProps();
+      const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
+      const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
+      jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
+      const page = new CreateResourcePage(props);
+      await waitFor(() => {});
+
+      await page.fillInput(page.password, "RN9n8XuECN3");
+
+      await page.click(page.addSecret);
+      await page.click(page.addSecretTotp);
+
+      await page.fillInput(page.resourceTotpKey, "   jbsWY3dpeHPK3PXP   ");
+
+      await page.click(page.addSecret);
+      await page.click(page.addSecretNote);
+
+      await page.fillInput(page.note, "note");
+
+      await page.fillInput(page.name, "v5 default");
+
+      await page.click(page.saveButton);
+
+      const resourceDtoExpected = {
+        expired: null,
+        folder_parent_id: null,
+        resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
+        metadata: {
+          name: "v5 default",
+          resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
+          uris: []
+        }
+      };
+
+      const secretDtoExpected = {
+        object_type: SECRET_DATA_OBJECT_TYPE,
+        password: "RN9n8XuECN3",
+        description: "note",
+        totp: defaultTotpDto({secret_key: "JBSWY3DPEHPK3PXP"})
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been added successfully");
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As a signed-in user I should be able to save a resource v5 default with totp with password null', async() => {
+      expect.assertions(3);
+      const props = defaultProps();
+      const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
+      const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
+      jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
+      const page = new CreateResourcePage(props);
+      await waitFor(() => {});
+
+      await page.fillInput(page.password, "RN9n8XuECN3");
+
+      await page.click(page.addSecret);
+      await page.click(page.addSecretTotp);
+
+      await page.fillInput(page.resourceTotpKey, "   jbsWY3dpeHPK3PXP   ");
+
+      await page.click(page.addSecret);
+      await page.click(page.addSecretNote);
+
+      await page.fillInput(page.note, "note");
+
+      await page.fillInput(page.name, "v5 default");
+
+      await page.click(page.deleteSecretPassword);
+
+      await page.click(page.saveButton);
+
+      const resourceDtoExpected = {
+        expired: null,
+        folder_parent_id: null,
+        resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
+        metadata: {
+          name: "v5 default",
+          resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
+          uris: []
+        }
+      };
+
+      const secretDtoExpected = {
+        object_type: SECRET_DATA_OBJECT_TYPE,
+        password: null,
+        description: "note",
+        totp: defaultTotpDto({secret_key: "JBSWY3DPEHPK3PXP"})
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been added successfully");
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As a signed-in user I should be able to save a resource v5 totp after password and note deleted', async() => {
+      expect.assertions(3);
+      const props = defaultProps();
+      const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
+      const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
+      jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
+      const page = new CreateResourcePage(props);
+      await waitFor(() => {});
+
+      await page.fillInput(page.password, "RN9n8XuECN3");
+
+      await page.click(page.addSecret);
+      await page.click(page.addSecretTotp);
+
+      await page.fillInput(page.resourceTotpKey, "   jbsWY3dpeHPK3PXP   ");
+
+      await page.click(page.addSecret);
+      await page.click(page.addSecretNote);
+
+      await page.fillInput(page.note, "note");
+
+      await page.fillInput(page.name, "v5 default");
+
+      await page.click(page.deleteSecretPassword);
+      await page.click(page.deleteSecretNote);
+
+      await page.click(page.saveButton);
+
+      const resourceDtoExpected = {
+        expired: null,
+        folder_parent_id: null,
+        resource_type_id: TEST_RESOURCE_TYPE_V5_TOTP,
+        metadata: {
+          name: "v5 default",
+          resource_type_id: TEST_RESOURCE_TYPE_V5_TOTP,
+          uris: []
+        }
+      };
+
+      const secretDtoExpected = {
+        object_type: SECRET_DATA_OBJECT_TYPE,
+        totp: defaultTotpDto({secret_key: "JBSWY3DPEHPK3PXP"})
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been added successfully");
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As a signed-in user I should be able to save a resource v4 default with password deleted', async() => {
+      expect.assertions(3);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto())});
+      const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
+      const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
+      jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
+      const page = new CreateResourcePage(props);
+      await waitFor(() => {});
+
+      await page.fillInput(page.password, "RN9n8XuECN3");
+
+      await page.click(page.getSectionItem(2));
+
+      await page.fillInput(page.note, "note");
+
+      await page.fillInput(page.name, "v4 default");
+
+      await page.click(page.deleteSecretPassword);
+
+      await page.click(page.saveButton);
+
+      const resourceDtoExpected = {
+        expired: null,
+        folder_parent_id: null,
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+        metadata: {
+          name: "v4 default",
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+          uris: []
+        }
+      };
+
+      const secretDtoExpected = {
+        password: "",
+        description: "note"
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been added successfully");
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As a signed-in user I should be able to save a resource v4 default totp with password deleted', async() => {
+      expect.assertions(3);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto())});
+      const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
+      const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
+      jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
+      const page = new CreateResourcePage(props);
+      await waitFor(() => {});
+
+      await page.fillInput(page.password, "RN9n8XuECN3");
+
+      await page.click(page.addSecret);
+      await page.click(page.addSecretTotp);
+
+      await page.fillInput(page.resourceTotpKey, "   jbsWY3dpeHPK3PXP   ");
+
+      await page.click(page.getSectionItem(3));
+
+      await page.fillInput(page.note, "note");
+
+      await page.fillInput(page.name, "v4 default totp");
+
+      await page.click(page.deleteSecretPassword);
+
+      await page.click(page.saveButton);
+
+      const resourceDtoExpected = {
+        expired: null,
+        folder_parent_id: null,
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
+        metadata: {
+          name: "v4 default totp",
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
+          uris: []
+        }
+      };
+
+      const secretDtoExpected = {
+        password: "",
+        description: "note",
+        totp: defaultTotpDto({secret_key: "JBSWY3DPEHPK3PXP"})
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been added successfully");
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As a signed-in user I should be able to save a resource v4 default totp', async() => {
+      expect.assertions(3);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto())});
+      const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
+      const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
+      jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
+      const page = new CreateResourcePage(props);
+      await waitFor(() => {});
+
+      await page.fillInput(page.password, "RN9n8XuECN3");
+
+      await page.click(page.addSecret);
+      await page.click(page.addSecretTotp);
+
+      await page.fillInput(page.resourceTotpKey, "   jbsWY3dpeHPK3PXP   ");
+
+      await page.click(page.getSectionItem(3));
+
+      await page.fillInput(page.note, "note");
+
+      await page.fillInput(page.name, "v4 default totp");
+
+      await page.click(page.saveButton);
+
+      const resourceDtoExpected = {
+        expired: null,
+        folder_parent_id: null,
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
+        metadata: {
+          name: "v4 default totp",
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
+          uris: []
+        }
+      };
+
+      const secretDtoExpected = {
+        password: "RN9n8XuECN3",
+        description: "note",
+        totp: defaultTotpDto({secret_key: "JBSWY3DPEHPK3PXP"})
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been added successfully");
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As a signed-in user I should be able to save a resource v4 totp after password and note deleted', async() => {
+      expect.assertions(3);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto())});
+      const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
+      const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
+      jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
+      const page = new CreateResourcePage(props);
+      await waitFor(() => {});
+
+      await page.click(page.addSecret);
+      await page.click(page.addSecretTotp);
+
+      await page.fillInput(page.resourceTotpKey, "   jbsWY3dpeHPK3PXP   ");
+
+      await page.fillInput(page.name, "v4 default");
+
+      await page.click(page.deleteSecretPassword);
+      await page.click(page.deleteSecretNote);
+
+      await page.click(page.saveButton);
+
+      const resourceDtoExpected = {
+        expired: null,
+        folder_parent_id: null,
+        resource_type_id: TEST_RESOURCE_TYPE_TOTP,
+        metadata: {
+          name: "v4 default",
+          resource_type_id: TEST_RESOURCE_TYPE_TOTP,
+          uris: []
+        }
+      };
+
+      const secretDtoExpected = {
+        totp: defaultTotpDto({secret_key: "JBSWY3DPEHPK3PXP"})
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been added successfully");
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As a signed-in user I should be able to save a resource v4 password string', async() => {
+      expect.assertions(3);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto())});
+      const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
+      const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
+      jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
+      const page = new CreateResourcePage(props);
+      await waitFor(() => {});
+
+      await page.fillInput(page.password, "RN9n8XuECN3");
+
+      await page.click(page.getSectionItem(2));
+
+      await page.fillInput(page.note, "note converted");
+
+      await page.click(page.convertToDescription);
+
+      await page.fillInput(page.name, "v4 password string");
+
+      await page.click(page.saveButton);
+
+      const resourceDtoExpected = {
+        expired: null,
+        folder_parent_id: null,
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
+        metadata: {
+          name: "v4 password string",
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
+          description: "note converted",
+          uris: []
+        }
+      };
+
+      const secretDtoExpected = "RN9n8XuECN3";
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been added successfully");
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
+      expect.assertions(1);
+      const props = defaultProps(); // The props to pass
+      const page = new CreateResourcePage(props);
+      await waitFor(() => {});
+
+      const error = new PassboltApiFetchError("Jest simulate API error.");
+      jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
+      jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn);
+
+
+      await page.click(page.saveButton);
+
+      // Throw general error message
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
   });
 });

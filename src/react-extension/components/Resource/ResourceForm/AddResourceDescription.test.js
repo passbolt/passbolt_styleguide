@@ -90,4 +90,15 @@ describe("AddResourceDescription", () => {
       expect(page.convertToNote).toBeNull();
     });
   });
+
+  describe('As LU I should see the description disabled.', () => {
+    it('As LU I can see the description form disabled.', async() => {
+      expect.assertions(1);
+
+      const props = defaultProps({disabled: true});
+      page = new AddResourceDescriptionPage(props);
+
+      expect(page.description.hasAttribute("disabled")).toBeTruthy();
+    });
+  });
 });

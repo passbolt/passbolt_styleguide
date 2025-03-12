@@ -105,9 +105,9 @@ class AddResourceName extends Component {
           <KeySVG/>
         </div>
         <div className="information">
-          <div className="input text">
+          <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
             <input id="resource-name" name="metadata.name" type="text" value={this.props.resource?.metadata?.name || ""}
-              onChange={this.handleInputChange} disabled={this.state.processing} maxLength="255"
+              onChange={this.handleInputChange} disabled={this.props.disabled} maxLength="255"
               autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
             {this.isMaxLengthError("name") &&
                 <div className="name error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
@@ -132,6 +132,7 @@ AddResourceName.propTypes = {
   warnings: PropTypes.object, //The warnings validation
   errors: PropTypes.object, // The errors entity error validation
   onChange: PropTypes.func, // The on change function
+  disabled: PropTypes.bool, // The disabled property
   t: PropTypes.func, // The translation function
 };
 

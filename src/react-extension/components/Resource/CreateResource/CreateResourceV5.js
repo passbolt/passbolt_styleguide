@@ -35,11 +35,17 @@ import {ENTROPY_THRESHOLDS} from "../../../../shared/lib/SecretGenerator/SecretG
 import ConfirmCreateEdit, {ConfirmEditCreateOperationVariations, ConfirmEditCreateRuleVariations} from "../ConfirmCreateEdit/ConfirmCreateEdit";
 import {withDialog} from "../../../contexts/DialogContext";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import {withRouter} from "react-router-dom";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import {
+  RESOURCE_TYPE_PASSWORD_STRING_SLUG
+} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 class CreateResource extends Component {
   constructor(props) {
     super(props);
-    this.resourceFormEntity = new ResourceFormEntity({resource_type_id: this.props.resourceType.id}, {validate: false, resourceTypes: this.props.resourceTypes});
+    this.resourceFormEntity = new ResourceFormEntity({resource_type_id: this.props.resourceType.id, folder_parent_id: props.folderParentId}, {validate: false, resourceTypes: this.props.resourceTypes});
     this.state = this.defaultState;
     this.passwordEntropyError = false;
     this.bindCallbacks();
@@ -112,7 +118,7 @@ class CreateResource extends Component {
    * @return {EntityValidationError}
    */
   // eslint-disable-next-line no-unused-vars
-  validateForm = memoize(resourceFormDto => this.resourceFormEntity?.validate());
+  validateForm = memoize(resourceFormDto => new ResourceFormEntity(resourceFormDto, {validate: false, resourceTypes: this.props.resourceTypes}).validate());
 
   /**
    * Verify the data health. This intends for user, to inform if data form has invalid size
@@ -192,49 +198,31 @@ class CreateResource extends Component {
       return;
     }
 
-    const validationError = this.validateForm(this.state.resource);
+    this.setState({hasAlreadyBeenValidated: true});
+    await this.toggleProcessing();
+
+    // Create a clone entity from DTO and remove empty secret and add required secret
+    const resourceFormEntity = this.createAndSanitizeResourceFormEntity();
+
+    // Validate the entity
+    const validationError = resourceFormEntity.validate();
 
     if (validationError?.hasErrors()) {
-      const hasAlreadyBeenValidated = true;
-      this.setState({hasAlreadyBeenValidated});
       this.selectResourceFormByFirstError(validationError);
+      await this.toggleProcessing();
       return;
     }
-
-    this.setState({isProcessing: true});
 
     if (!this.isMinimumRequiredEntropyReached()) {
-      this.handlePasswordMinimumEntropyNotReached();
+      this.handlePasswordMinimumEntropyNotReached(resourceFormEntity);
       return;
     } else if (await this.isPasswordInDictionary()) {
-      this.handlePasswordInDictionary();
+      this.handlePasswordInDictionary(resourceFormEntity);
       return;
     }
 
-    this.setState({
-      hasAlreadyBeenValidated: true,
-      isProcessing: false,
-    });
 
-    this.save();
-  }
-
-  /**
-   * Save the resource
-   * @returns {Promise<void>}
-   */
-  async save() {
-    const dto = this.resourceFormEntity.toDto();
-    const expiryDate = this.getResourceExpirationDate();
-    if (typeof(expiryDate) !== "undefined") {
-      dto.expired = expiryDate;
-    }
-
-    this.setState({
-      hasAlreadyBeenValidated: true,
-      isProcessing: false,
-    });
-    //@todo: implement call to port to create the resource.
+    this.save(resourceFormEntity);
   }
 
   /**
@@ -291,13 +279,14 @@ class CreateResource extends Component {
 
   /**
    * Request password not reaching minimum entropy creation confirmation.
+   * @param {ResourceFormEntity} resourceFormEntity The resource form entity
    */
-  handlePasswordMinimumEntropyNotReached() {
+  handlePasswordMinimumEntropyNotReached(resourceFormEntity) {
     const confirmCreationDialog = {
       operation: ConfirmEditCreateOperationVariations.CREATE,
       rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
       resourceName: this.state.resource?.metadata?.name,
-      onConfirm: this.save,
+      onConfirm: () => this.save(resourceFormEntity),
       onReject: this.rejectCreationConfirmation
     };
     this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
@@ -305,8 +294,9 @@ class CreateResource extends Component {
 
   /**
    * Request password in dictionary creation confirmation.
+   * @param {ResourceFormEntity} resourceFormEntity The resource form entity
    */
-  handlePasswordInDictionary() {
+  handlePasswordInDictionary(resourceFormEntity) {
     this.setState({
       passwordInDictionary: true,
     });
@@ -315,7 +305,7 @@ class CreateResource extends Component {
       operation: ConfirmEditCreateOperationVariations.CREATE,
       rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
       resourceName: this.state.resource?.metadata?.name,
-      onConfirm: this.save,
+      onConfirm: () => this.save(resourceFormEntity),
       onReject: this.rejectCreationConfirmation
     };
     this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
@@ -344,10 +334,112 @@ class CreateResource extends Component {
   }
 
   /**
-   * Handle close
+   * Create and sanitize resource form entity
+   *
+   * Sanitize:
+   *  - remove empty secret
+   *  - add required secret
+   *
+   * @returns {ResourceFormEntity}
+   */
+  createAndSanitizeResourceFormEntity() {
+    const resourceFormEntity = new ResourceFormEntity(this.state.resource, {validate: false, resourceTypes: this.props.resourceTypes});
+    const expiryDate = this.getResourceExpirationDate();
+    if (typeof(expiryDate) !== "undefined") {
+      resourceFormEntity.set("expired", expiryDate, {validate: false});
+    }
+    if (resourceFormEntity.metadata.name.length === 0) {
+      resourceFormEntity.set("metadata.name", "no name", {validate: false});
+    }
+    resourceFormEntity.removeEmptySecret();
+    resourceFormEntity.addRequiredSecret();
+    return resourceFormEntity;
+  }
+
+  /**
+   * Save the resource
+   * @param {ResourceFormEntity} resource
    * @returns {Promise<void>}
    */
-  async handleClose() {
+  async save(resource) {
+    try {
+      const createdResource = await this.createResource(resource);
+      await this.handleSaveSuccess(createdResource);
+    } catch (error) {
+      await this.toggleProcessing();
+      this.handleSaveError(error);
+    }
+  }
+
+  /**
+   * Create the resource
+   * @param {ResourceFormEntity} resource
+   * @returns {Promise<Object>} returns the newly created resource
+   */
+  createResource(resource) {
+    const resourceDto = resource.toResourceDto();
+    const expiryDate = this.getResourceExpirationDate();
+    if (typeof(expiryDate) !== "undefined") {
+      resourceDto.expired = expiryDate;
+    }
+    const resourceType = this.props.resourceTypes.getFirstById(resource.resourceTypeId);
+    const isV4PasswordString = resourceType.slug === RESOURCE_TYPE_PASSWORD_STRING_SLUG;
+    const secretDto = isV4PasswordString ? resource.toSecretDto().password : resource.toSecretDto();
+    return this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
+  }
+
+  /**
+   * Handle save operation success.
+   * @param {object} createdResource
+   * @returns {Promise<void>}
+   */
+  async handleSaveSuccess(createdResource) {
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been added successfully"));
+    this.props.history.push(`/app/passwords/view/${createdResource.id}`);
+    this.handleClose();
+  }
+
+  /*
+   * =============================================================
+   *  Error handling
+   * =============================================================
+   */
+  /**
+   * Handle save operation error.
+   * @param {object} error The returned error
+   */
+  handleSaveError(error) {
+    // It can happen when the user has closed the passphrase entry dialog by instance.
+    if (error.name !== "UserAbortsOperationError") {
+      // Unexpected error occurred.
+      console.error(error);
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Handle any unexpected errors.
+   * @param error
+   */
+  handleError(error) {
+    this.props.dialogContext.open(NotifyError, {error});
+  }
+
+  /**
+   * Toggle processing state when validating / saving
+   * @returns {Promise<void>}
+   */
+  async toggleProcessing() {
+    const prev = this.state.processing;
+    return new Promise(resolve => {
+      this.setState({processing: !prev}, () => resolve());
+    });
+  }
+
+  /**
+   * Handle close
+   */
+  handleClose() {
     this.props.onClose();
   }
 
@@ -461,6 +553,7 @@ class CreateResource extends Component {
           onAddSecret={this.onAddSecret}
           onDeleteSecret={this.onDeleteSecret}
           onSelectForm={this.onSelectForm}
+          disabled={this.state.processing}
         />
         <form onSubmit={this.handleFormSubmit} className="grid-and-footer" noValidate>
           <div className="grid">
@@ -478,7 +571,8 @@ class CreateResource extends Component {
                 passwordEntropy={this.state.passwordEntropy}
                 warnings={warnings}
                 errors={errors}
-                consumePasswordEntropyError={this.consumePasswordEntropyError}/>
+                consumePasswordEntropyError={this.consumePasswordEntropyError}
+                disabled={this.state.processing}/>
             </div>
           </div>
           <div className="submit-wrapper">
@@ -492,16 +586,18 @@ class CreateResource extends Component {
 }
 
 CreateResource.propTypes = {
+  context: PropTypes.any, // The application context
+  history: PropTypes.object, // Router history
   folderParentId: PropTypes.string, // The folder parent id
   onClose: PropTypes.func, // Whenever the component must be closed
-  context: PropTypes.object, // The application context
   dialogContext: PropTypes.object, // The dialog context
   passwordExpiryContext: PropTypes.object, // The password expiry context
   passwordPoliciesContext: PropTypes.object, // The password policy context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   resourceType: PropTypes.instanceOf(ResourceTypeEntity).isRequired, // The resource types entity
   t: PropTypes.func, // The translation function
 };
 
-export default  withAppContext(withPasswordPolicies(withPasswordExpiry(withDialog(withResourceTypesLocalStorage(withTranslation('common')(CreateResource))))));
+export default  withRouter(withAppContext(withPasswordPolicies(withPasswordExpiry(withResourceTypesLocalStorage(withActionFeedback(withDialog(withTranslation('common')(CreateResource))))))));
 

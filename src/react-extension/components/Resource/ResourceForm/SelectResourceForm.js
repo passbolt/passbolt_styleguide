@@ -240,7 +240,7 @@ class SelectResourceForm extends Component {
       <div className="left-sidebar">
         <div className="main-action-wrapper">
           <Dropdown>
-            <DropdownButton className="add-secret" disabled={!this.canAddSecret}>
+            <DropdownButton className="add-secret" disabled={!this.canAddSecret || this.props.disabled}>
               <AddSVG/>
               <span><Trans>Add secret</Trans></span>
               <CaretDownSVG/>
@@ -289,12 +289,13 @@ class SelectResourceForm extends Component {
               {this.isResourceHasPassword &&
                 <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.PASSWORD === this.selectedForm ? "selected" : ""}`}>
                   <button type="button" className="no-border"
+                    disabled={this.props.disabled}
                     onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.PASSWORD)}>
                     <KeySVG/>
                     <span className="ellipsis"><Trans>Passwords</Trans></span>
                   </button>
                   {this.isResourceHasMultipleSecret &&
-                    <button id="delete-password" className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD)}>
+                    <button id="delete-password" disabled={this.props.disabled} className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD)}>
                       <DeleteSVG/>
                     </button>
                   }
@@ -303,12 +304,13 @@ class SelectResourceForm extends Component {
               {this.isResourceHasTotp &&
                 <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.TOTP === this.selectedForm ? "selected" : ""}`}>
                   <button type="button" className="no-border"
+                    disabled={this.props.disabled}
                     onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.TOTP)}>
                     <TotpSVG/>
                     <span className="ellipsis"><Trans>TOTP</Trans></span>
                   </button>
                   {this.isResourceHasMultipleSecret &&
-                    <button id="delete-totp" className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.TOTP)}>
+                    <button id="delete-totp" disabled={this.props.disabled} className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.TOTP)}>
                       <DeleteSVG/>
                     </button>
                   }
@@ -317,12 +319,13 @@ class SelectResourceForm extends Component {
               {this.isResourceHasNote &&
                 <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.NOTE === this.selectedForm ? "selected" : ""}`}>
                   <button type="button" className="no-border"
+                    disabled={this.props.disabled}
                     onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.NOTE)}>
                     <NotesSVG/>
                     <span className="ellipsis"><Trans>Note</Trans></span>
                   </button>
                   {this.isResourceHasMultipleSecret &&
-                    <button id="delete-note" className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.NOTE)}>
+                    <button id="delete-note" disabled={this.props.disabled} className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.NOTE)}>
                       <DeleteSVG/>
                     </button>
                   }
@@ -339,7 +342,7 @@ class SelectResourceForm extends Component {
           </button>
           {this.state.displayMetadata &&
             <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.DESCRIPTION === this.selectedForm ? "selected" : ""} ${!this.isResourceTypeHasDescriptionMetadata ? "disabled" : ""}`}>
-              <button type="button" id="menu-description" className="no-border" disabled={!this.isResourceTypeHasDescriptionMetadata}
+              <button type="button" id="menu-description" className="no-border" disabled={!this.isResourceTypeHasDescriptionMetadata || this.props.disabled}
                 onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.DESCRIPTION)}>
                 <AlignLeftSVG/>
                 <span className="ellipsis"><Trans>Description</Trans></span>
@@ -384,8 +387,8 @@ SelectResourceForm.propTypes = {
   onDeleteSecret: PropTypes.func, // The on delete secret function
   resource: PropTypes.object, // The resource to edit or create
   resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource type entity
-  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection entity
-  errors: PropTypes.object, // The errors entity error validation
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection),
+  disabled: PropTypes.bool, // The disabled property
   t: PropTypes.func, // The translation function
 };
 

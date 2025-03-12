@@ -151,4 +151,17 @@ describe("AddResourcePassword", () => {
       expect(document.activeElement).toBe(page.password);
     });
   });
+
+  describe('As LU I should see the password disabled.', () => {
+    it('As LU I can see the password form disabled.', async() => {
+      expect.assertions(3);
+
+      const props = defaultProps({disabled: true});
+      page = new AddResourcePasswordPage(props);
+
+      expect(page.password.hasAttribute("disabled")).toBeTruthy();
+      expect(page.uri.hasAttribute("disabled")).toBeTruthy();
+      expect(page.username.hasAttribute("disabled")).toBeTruthy();
+    });
+  });
 });

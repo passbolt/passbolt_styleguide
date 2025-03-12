@@ -13,6 +13,9 @@ import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/re
 import {
   resourceTypePasswordAndDescriptionDto, resourceTypePasswordStringDto, resourceTypeTotpDto,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import DialogContextProvider from "../../../contexts/DialogContext";
+import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 
 export default {
   title: 'Components/Resource/CreateResourceV5',
@@ -21,13 +24,18 @@ export default {
     <MemoryRouter initialEntries={['/app/passwords']}>
       <div style={{margin: "-1rem"}}>
         <AppContext.Provider value={args.context}>
-          <ResourceTypesLocalStorageContext.Provider value={{get: () => args.resourceTypes, resourceTypes: args.resourceTypes}}>
-            <ResourceWorkspaceContext.Provider value={args.resourceWorkspaceContext}>
-              <ResourcePasswordGeneratorContext.Provider value={args.resourcePasswordGeneratorContext}>
-                <Story {...args}/>
-              </ResourcePasswordGeneratorContext.Provider>
-            </ResourceWorkspaceContext.Provider>
-          </ResourceTypesLocalStorageContext.Provider>
+          <DialogContextProvider>
+            <ActionFeedbackContext.Provider value={args.actionFeedbackContext}>
+              <ResourceTypesLocalStorageContext.Provider value={{get: () => args.resourceTypes, resourceTypes: args.resourceTypes}}>
+                <ResourceWorkspaceContext.Provider value={args.resourceWorkspaceContext}>
+                  <ResourcePasswordGeneratorContext.Provider value={args.resourcePasswordGeneratorContext}>
+                    <ManageDialogs/>
+                    <Story {...args}/>
+                  </ResourcePasswordGeneratorContext.Provider>
+                </ResourceWorkspaceContext.Provider>
+              </ResourceTypesLocalStorageContext.Provider>
+            </ActionFeedbackContext.Provider>
+          </DialogContextProvider>
         </AppContext.Provider>
       </div>
     </MemoryRouter>

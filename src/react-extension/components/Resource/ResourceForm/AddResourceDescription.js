@@ -103,12 +103,19 @@ class AddResourceDescription extends Component {
         </div>
         <div className="content">
           <div className="description-fields">
-            <div className="input textarea">
+            <div className={`input textarea ${this.props.disabled ? 'disabled' : ''}`}>
               <label htmlFor="resource-description">
                 <Trans>Content</Trans>
                 {this.isMaxLengthWarnings("description") && <AttentionSVG className="attention-required"/>}
               </label>
-              <textarea id="resource-description" name="metadata.description" maxLength="10000" placeholder={this.translate("Add a description")} onChange={this.handleInputChange} value={this.props.resource?.metadata?.description}>
+              <textarea
+                id="resource-description"
+                name="metadata.description"
+                maxLength="10000"
+                placeholder={this.translate("Add a description")}
+                onChange={this.handleInputChange}
+                disabled={this.props.disabled}
+                value={this.props.resource?.metadata?.description}>
               </textarea>
               {this.isMaxLengthError("description") &&
                 <div className="description error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
@@ -143,6 +150,7 @@ AddResourceDescription.propTypes = {
   onConvertToNote: PropTypes.func, //The resource description to convert
   resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource type entity
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection),
+  disabled: PropTypes.bool, // The disabled property
   t: PropTypes.func, // The translation function
   warnings: PropTypes.object, //The warnings validation
   errors: PropTypes.object // The errors entity error validation
