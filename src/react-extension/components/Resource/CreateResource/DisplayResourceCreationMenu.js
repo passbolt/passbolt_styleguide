@@ -13,23 +13,26 @@
  */
 
 import React, {Component} from "react";
+import {withResourceTypesLocalStorage} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import {withMetadataTypesSettingsLocalStorage} from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import {withDialog} from "../../../contexts/DialogContext";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {Trans, withTranslation} from "react-i18next";
 import Tab from "../../Common/Tab/Tab";
 import Tabs from "../../Common/Tab/Tabs";
 import KeySVG from "../../../../img/svg/key.svg";
 import TotpSVG from "../../../../img/svg/totp.svg";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import MetadataTypesSettingsEntity, {RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
-import {withResourceTypesLocalStorage} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import {withMetadataTypesSettingsLocalStorage} from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_TOTP_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import CreateResourceV5 from "./CreateResourceV5";
 
 class DisplayResourceCreationMenu extends Component {
   constructor(props) {
@@ -65,9 +68,29 @@ class DisplayResourceCreationMenu extends Component {
    * @param {React.Event} event
    * @param {string} resourceTypeSlug
    */
-  handleContentTypeClick(event) {
+  async handleContentTypeClick(event, resourceTypeSlug) {
     event.preventDefault();
-    //@todo: implement call to resource create dialog
+
+    await this.props.onClose();
+
+    const resourceType = this.props.resourceTypes.getFirstBySlug(resourceTypeSlug);
+    const folderParentId = this.folderSelectedId;
+
+    this.props.dialogContext.open(CreateResourceV5, {resourceType, folderParentId});
+  }
+
+
+  /**
+   * Get the currently selected folder id if any, null otherwise.
+   * @returns {string|null}
+   */
+  get folderSelectedId() {
+    const filter = this.props.resourceWorkspaceContext.filter;
+    const isFilterByFolder = filter && filter.type === ResourceWorkspaceFilterTypes.FOLDER;
+    if (isFilterByFolder) {
+      return filter.payload.folder.id;
+    }
+    return null;
   }
 
   /**
@@ -159,7 +182,6 @@ class DisplayResourceCreationMenu extends Component {
             <KeySVG/>
             <div className="card-information">
               <span className="title"><Trans>Password</Trans></span>
-              <span className="info"><Trans>Resource description</Trans></span>
             </div>
           </button>
         }
@@ -168,7 +190,6 @@ class DisplayResourceCreationMenu extends Component {
             <TotpSVG/>
             <div className="card-information">
               <span className="title"><Trans>TOTP</Trans></span>
-              <span className="info"><Trans>Resource description</Trans></span>
             </div>
           </button>
         }
@@ -187,8 +208,8 @@ class DisplayResourceCreationMenu extends Component {
           <button id="password_action" type="button" className="button-transparent card" onClick={e => this.handleContentTypeClick(e, RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG)}>
             <KeySVG/>
             <div className="card-information">
-              <span className="title"><Trans>Password</Trans></span>
-              <span className="info"><Trans>Resource description</Trans></span>
+              <span className="title"><Trans>Password (legacy)</Trans></span>
+              <span className="info"><Trans>with cleartext metadata</Trans></span>
             </div>
           </button>
         }
@@ -196,8 +217,8 @@ class DisplayResourceCreationMenu extends Component {
           <button id="totp_action" type="button" className="button-transparent card" onClick={e => this.handleContentTypeClick(e, RESOURCE_TYPE_TOTP_SLUG)}>
             <TotpSVG/>
             <div className="card-information">
-              <span className="title"><Trans>TOTP</Trans></span>
-              <span className="info"><Trans>Resource description</Trans></span>
+              <span className="title"><Trans>TOTP (legacy)</Trans></span>
+              <span className="info"><Trans>with cleartext metadata</Trans></span>
             </div>
           </button>
         }
@@ -235,6 +256,8 @@ class DisplayResourceCreationMenu extends Component {
 }
 
 DisplayResourceCreationMenu.propTypes = {
+  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
+  dialogContext: PropTypes.object, // The dialog context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   folderParentId: PropTypes.string, // The folder parent id
@@ -242,5 +265,5 @@ DisplayResourceCreationMenu.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default  withMetadataTypesSettingsLocalStorage(withResourceTypesLocalStorage(withTranslation('common')(DisplayResourceCreationMenu)));
+export default  withResourceWorkspace(withMetadataTypesSettingsLocalStorage(withResourceTypesLocalStorage(withDialog(withTranslation('common')(DisplayResourceCreationMenu)))));
 

@@ -36,7 +36,7 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
-import MetadataTypesSettingsEntity, {RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import MetadataTypesSettingsEntity, {RESOURCE_TYPE_VERSION_5} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import AddSVG from "../../../../img/svg/add.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
@@ -220,11 +220,9 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
       return false;
     }
 
-    const canCreateBothV4AndV5 = this.hasMetadataTypesV4AndV5()
-      && this.props.resourceTypes?.hasSomeOfVersion(RESOURCE_TYPE_VERSION_4)
-      && this.props.resourceTypes?.hasSomeOfVersion(RESOURCE_TYPE_VERSION_5);
+    const canCreateBothV4AndV5 = this.hasMetadataTypesV4AndV5();
 
-    //both version are active and at least 1 resource type is available in each version
+    //both version are active, other needs to be shown anyway
     if (canCreateBothV4AndV5) {
       return true;
     }
@@ -236,7 +234,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
       && !rt.hasSecretDescription()
     );
 
-    return otherV5ContentTypes.length > 0;
+    return otherV5ContentTypes?.length > 0;
   }
 
   /**

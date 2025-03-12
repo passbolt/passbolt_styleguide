@@ -54,6 +54,9 @@ export const defaultProps = (data = {}) => ({
     default_resource_types: "v5",
     ...data?.metadataTypeSettings
   })),
+  dialogContext: {
+    open: jest.fn(),
+  },
 });
 
 /**
