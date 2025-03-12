@@ -27,7 +27,7 @@ import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props
- * @returns {{resource: {id: string, name: string}}}
+ * @returns {*}
  */
 export function defaultProps(data = {}) {
   const defaultData = {
@@ -47,7 +47,7 @@ export function defaultProps(data = {}) {
 
 /**
  * Default totp props
- * @returns {{resource: {id: string, name: string}}}
+ * @returns {*}
  */
 export function defaultTotpProps(data = {}) {
   const defaultData = defaultProps({

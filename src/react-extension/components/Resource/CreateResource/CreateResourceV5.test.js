@@ -689,5 +689,37 @@ describe("See the Create Resource", () => {
       });
     });
   });
+
+  describe("Close dialog", () => {
+    it('As LU I can stop creating a password by clicking on the cancel button', async() => {
+      expect.assertions(2);
+      const props = defaultProps(); // The props to pass
+      const page = new CreateResourcePage(props);
+      await waitFor(() => {});
+      expect(page.exists()).toBeTruthy();
+      await page.click(page.cancelButton);
+      expect(props.onClose).toHaveBeenCalled();
+    });
+
+    it('As LU I can stop creating a password by closing the dialog', async() => {
+      expect.assertions(2);
+      const props = defaultProps(); // The props to pass
+      const page = new CreateResourcePage(props);
+      await waitFor(() => {});
+      expect(page.exists()).toBeTruthy();
+      await page.click(page.dialogClose);
+      expect(props.onClose).toHaveBeenCalled();
+    });
+
+    it('As LU I can stop adding a password with the keyboard (escape)', async() => {
+      expect.assertions(2);
+      const props = defaultProps(); // The props to pass
+      const page = new CreateResourcePage(props);
+      await waitFor(() => {});
+      expect(page.exists()).toBeTruthy();
+      await page.escapeKey(page.dialogClose);
+      expect(props.onClose).toHaveBeenCalled();
+    });
+  });
 });
 
