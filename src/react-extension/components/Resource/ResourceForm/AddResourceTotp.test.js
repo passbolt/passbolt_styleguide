@@ -16,8 +16,12 @@
  * Unit tests on OrchestrateResourceForm in regard of specifications
  */
 
-import {defaultProps} from './AddResourcePassword.test.data';
+import {defaultProps} from './AddResourceTotp.test.data';
 import AddResourceTotpPage from './AddResourceTotp.test.page';
+import {
+  defaultSecretDataV5DefaultTotpEntityDto
+} from "../../../../shared/models/entity/secretData/secretDataV5DefaultTotpEntity.test.data";
+import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -137,6 +141,19 @@ describe("AddResourceTotp", () => {
       expect(props.onChange).toHaveBeenCalledTimes(1);
       expect(name).toEqual("secret.totp.algorithm");
       expect(value).toEqual("SHA1");
+    });
+  });
+
+  describe('As LU I cannot see the totp uri input form.', () => {
+    it('As LU I cannot see the uri if the resource has a secret password.', () => {
+      expect.assertions(3);
+
+      const props = defaultProps({resource: defaultResourceFormDto({secret: defaultSecretDataV5DefaultTotpEntityDto()})});
+      page = new AddResourceTotpPage(props);
+
+      expect(page.exists).toBeTruthy();
+      expect(page.title.textContent).toEqual("TOTP");
+      expect(page.uri).toBeNull();
     });
   });
 });
