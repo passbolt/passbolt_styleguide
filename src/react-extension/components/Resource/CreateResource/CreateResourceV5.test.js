@@ -554,9 +554,9 @@ describe("See the Create Resource", () => {
 
         expect(page.resourceTotpCode.hasAttribute("disabled")).toBeTruthy();
 
-        await page.fillInput(page.resourceTotpKey, "key");
+        await page.fillInput(page.resourceTotpKey, "JBSWY3DPEHPK3PXP");
         // expectations
-        expect(page.resourceTotpKey.value).toBe("key");
+        expect(page.resourceTotpKey.value).toBe("JBSWY3DPEHPK3PXP");
         expect(page.resourceTotpCode.hasAttribute("disabled")).toBeFalsy();
       });
 
@@ -566,6 +566,16 @@ describe("See the Create Resource", () => {
         await page.click(page.saveButton);
         // expectations
         expect(page.resourceTotpKeyErrorMessage.textContent).toBe("The key is required.");
+      });
+
+      it('As a signed-in user I should see an error message when totp key does not respect pattern', async() => {
+        expect.assertions(1);
+
+        await page.fillInput(page.resourceTotpKey, "key");
+
+        await page.click(page.saveButton);
+        // expectations
+        expect(page.resourceTotpKeyErrorMessage.textContent).toBe("The key is not valid.");
       });
 
       it('As a signed-in user I should be able to add a totp expiry', async() => {

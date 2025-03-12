@@ -161,14 +161,14 @@ export default class CreateResourcePage {
   }
 
   /**
-   * Returns the description error mesage input element
+   * Returns the description error message input element
    */
   get descriptionErrorMessage() {
     return this._page.container.querySelector('.description.error-message');
   }
 
   /**
-   * Returns the description warning mesage input element
+   * Returns the description warning message input element
    */
   get descriptionWarningMessage() {
     return this._page.container.querySelector('.description.warning-message');
@@ -196,14 +196,14 @@ export default class CreateResourcePage {
   }
 
   /**
-   * Returns the note error mesage input element
+   * Returns the note error message input element
    */
   get noteErrorMessage() {
     return this._page.container.querySelector('.note.error-message');
   }
 
   /**
-   * Returns the note warning mesage input element
+   * Returns the note warning message input element
    */
   get noteWarningMessage() {
     return this._page.container.querySelector('.note.warning-message');

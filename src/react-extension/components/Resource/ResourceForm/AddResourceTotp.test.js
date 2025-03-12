@@ -16,7 +16,7 @@
  * Unit tests on AddResourceTotp in regard of specifications
  */
 import "../../../../../test/mocks/mockClipboard";
-import {defaultProps} from './AddResourceTotp.test.data';
+import {defaultProps, qrCode} from './AddResourceTotp.test.data';
 import AddResourceTotpPage from './AddResourceTotp.test.page';
 import {
   defaultSecretDataV5DefaultTotpEntityDto
@@ -24,6 +24,8 @@ import {
 import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import {defaultTotpDto} from "../../../../shared/models/entity/totp/totpDto.test.data";
+import {Html5Qrcode} from "html5-qrcode";
+import TotpEntity from "../../../../shared/models/entity/totp/totpEntity";
 
 beforeEach(() => {
   jest.resetModules();
@@ -199,6 +201,73 @@ describe("AddResourceTotp", () => {
       expect(page.exists).toBeTruthy();
       expect(page.resourceTotpCode.hasAttribute("disabled")).toBeTruthy();
       expect(page.copyTotpButton.hasAttribute("disabled")).toBeTruthy();
+    });
+  });
+
+  describe('As LU I can import a qr code', () => {
+    it('As LU I can import a valid totp from a file.', async() => {
+      expect.assertions(2);
+      const qrCodeResult = qrCode();
+      jest.spyOn(Html5Qrcode.prototype, "scanFileV2").mockImplementation(() => qrCodeResult);
+
+      const props = defaultProps();
+      page = new AddResourceTotpPage(props);
+
+      expect(page.exists).toBeTruthy();
+      const file = new File(["mock"], 'qrCode.png', {type: 'image/png'});
+      // select file in the form
+      await page.selectImportFile(file);
+      const url = new URL(decodeURIComponent(qrCodeResult.decodedText));
+      // expected Totp
+      const totp = {
+        secret_key: url.searchParams.get('secret'),
+        algorithm: "SHA1",
+        digits: 6,
+        period: 30
+      };
+      // Expected event
+      const event = {
+        target: {
+          name: "secret.totp",
+          value: new TotpEntity(totp)
+        }
+      };
+
+      expect(props.onChange).toHaveBeenCalledWith(event);
+    });
+
+    it('As LU I should see a warning message if there is no QR code in the file', async() => {
+      expect.assertions(2);
+      const error = {name: "NotFoundException", message: "No QR code found."};
+      jest.spyOn(Html5Qrcode.prototype, "scanFileV2").mockImplementation(() => { throw error; });
+
+      const props = defaultProps();
+      page = new AddResourceTotpPage(props);
+
+      expect(page.exists).toBeTruthy();
+      const file = new File(["mock"], 'qrCode.png', {type: 'image/png'});
+      // check fields in the form
+      await page.selectImportFile(file);
+
+      // Throw error message
+      expect(page.warningImportMessage.textContent).toBe(error.message);
+    });
+
+    it('As LU I should see a warning message if there is an error in PNG file', async() => {
+      expect.assertions(2);
+      const error = {name: "Error", message: "Error"};
+      jest.spyOn(Html5Qrcode.prototype, "scanFileV2").mockImplementation(() => { throw error; });
+
+      const props = defaultProps();
+      page = new AddResourceTotpPage(props);
+
+      expect(page.exists).toBeTruthy();
+      const file = new File(["mock"], 'qrCode.png', {type: 'image/png'});
+      // check fields in the form
+      await page.selectImportFile(file);
+
+      // Throw error message
+      expect(page.warningImportMessage.textContent).toBe("The QR code is incomplete.");
     });
   });
 });
