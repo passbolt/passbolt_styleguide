@@ -113,7 +113,12 @@ class CreateResource extends Component {
   handleInputChange(event) {
     const target = event.target;
     const name = target.name;
-    const value = event.target.type === 'number' ? Number(event.target.value) : event.target.value || null;
+    let value;
+    if (target.type === "number") {
+      value = Number.isNaN(target.valueAsNumber) ? "" : target.valueAsNumber;
+    } else {
+      value = target.value;
+    }
     this.resourceFormEntity.set(name, value, {validate: false});
 
     this.setState({resource: this.resourceFormEntity.toDto()});

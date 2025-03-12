@@ -23,6 +23,7 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 
 
 /**
@@ -33,6 +34,7 @@ export function defaultProps(data = {}) {
   const defaultData = {
     folderParentId: null,
     context: defaultAppContext(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
     resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       getHierarchyFolderCache: () => [{name: "Folder", id: "1"}, {name: "subfolder", id: "2"}]

@@ -15,6 +15,7 @@
 import React from "react";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import AddResourceTotp from "./AddResourceTotp";
+import {defaultProps} from "./AddResourceTotp.test.data";
 
 export default {
   title: 'Components/Resource/AddResourceTotp',
@@ -46,4 +47,6 @@ export default {
   ],
 };
 
-export const Default = {};
+export const Default = {
+  args: defaultProps()
+};

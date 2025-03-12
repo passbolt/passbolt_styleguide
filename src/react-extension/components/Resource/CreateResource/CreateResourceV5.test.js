@@ -24,6 +24,7 @@ import {
   resourceTypePasswordAndDescriptionDto,
   resourceTypePasswordStringDto
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import "../../../../../test/mocks/mockClipboard";
 
 describe("See the Create Resource", () => {
   beforeEach(() => {
@@ -549,11 +550,14 @@ describe("See the Create Resource", () => {
       });
 
       it('As a signed-in user I should be able to add a resource totp key', async() => {
-        expect.assertions(1);
+        expect.assertions(3);
 
-        await page.fillInput(page.resourceTotpKey, "JBSWY3DPEHPK3PXP");
+        expect(page.resourceTotpCode.hasAttribute("disabled")).toBeTruthy();
+
+        await page.fillInput(page.resourceTotpKey, "key");
         // expectations
-        expect(page.resourceTotpKey.value).toBe("JBSWY3DPEHPK3PXP");
+        expect(page.resourceTotpKey.value).toBe("key");
+        expect(page.resourceTotpCode.hasAttribute("disabled")).toBeFalsy();
       });
 
       it('As a signed-in user I should see an error message when totp key is empty', async() => {
@@ -562,16 +566,6 @@ describe("See the Create Resource", () => {
         await page.click(page.saveButton);
         // expectations
         expect(page.resourceTotpKeyErrorMessage.textContent).toBe("The key is required.");
-      });
-
-      it('As a signed-in user I should see an error message when totp key does not respect pattern', async() => {
-        expect.assertions(1);
-
-        await page.fillInput(page.resourceTotpKey, "key");
-
-        await page.click(page.saveButton);
-        // expectations
-        expect(page.resourceTotpKeyErrorMessage.textContent).toBe("The key is not valid.");
       });
 
       it('As a signed-in user I should be able to add a totp expiry', async() => {
@@ -657,6 +651,33 @@ describe("See the Create Resource", () => {
         await page.click(page.firstItemOption);
         // expectations
         expect(page.algorithm.textContent).toBe("SHA256");
+      });
+
+      it('As a signed-in user I should be able to copy a resource totp from totp code', async() => {
+        expect.assertions(2);
+
+        await page.fillInput(page.resourceTotpKey, "key");
+        await page.click(page.resourceTotpCode);
+        // expectations
+        expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
+        expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
+      });
+
+      it('As a signed-in user I should be able to copy a resource totp from totp button', async() => {
+        expect.assertions(3);
+
+        const props = defaultTotpProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        await page.fillInput(page.resourceTotpKey, "key");
+        await page.click(page.copyTotpButton);
+
+        // expectations
+        expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
+        expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
       });
     });
     describe("should fill note form", () => {

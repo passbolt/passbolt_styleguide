@@ -17,16 +17,18 @@ import {defaultTotpDto} from "../../../../shared/models/entity/totp/totpDto.test
 import {
   minimalResourceMetadataDto
 } from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 
 /**
  * Default props
- * @returns {{resource: {id: string, name: string}}}
+ * @returns {*}
  */
 export function defaultProps(data = {}) {
   const defaultData = {
     context: defaultAppContext(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
     onChange: jest.fn(),
-    resource: defaultResourceFormDto({metadata: minimalResourceMetadataDto(), secret: defaultTotpDto({secret_key: ""})}),
+    resource: defaultResourceFormDto({metadata: minimalResourceMetadataDto(), secret: {totp: defaultTotpDto({secret_key: ""})}}),
   };
   return Object.assign(defaultData, data);
 }
