@@ -175,13 +175,12 @@ class ResourceFormEntity extends EntityV2 {
    *
    * Note: This function set secret property.
    * @param {string} secret The secret to add
-   * @param {*} value The secret value
    * @param {object} [options] Options
    *
    * @throws {Error} If no secret entity class has been found.
    * @throws {Error} If secret is not a string.
    */
-  addSecret(secret, value, options) {
+  addSecret(secret, options) {
     assertString(secret);
     // If unknown secret do nothing
     if (!Object.values(ResourceEditCreateFormEnumerationTypes).includes(secret)) {
@@ -189,12 +188,13 @@ class ResourceFormEntity extends EntityV2 {
     }
     // Get the current resource type
     const currentResourceType = this.resourceTypes.getFirstById(this.resourceTypeId);
-
+    // Get the string behind "secret." (secret.password.test => password.test)
+    const secretPropName = secret.match(/secret\.(.+)$/)?.[1];
+    // Verify if the current resource type has the secret property
     if (!this.isResourceTypeHasSecretProperty(currentResourceType, secret)) {
       const resourceDto = this.toDto();
-      // Get the string behind a "secret." (secret.password => password and secret.password.test => password.test)
-      const secretPropName = secret.match(/secret\.(.*)$/)?.[1];
-      resourceDto.secret[secretPropName] = value;
+      // Set an empty value to have the property defined
+      resourceDto.secret[secretPropName] = "";
       // Get the resource type slug to mutate when adding secret
       const mutateResourceType = this.resourceTypes.getResourceTypeMatchingResource(resourceDto, currentResourceType.version);
       // Get the secret entity class associate
@@ -215,7 +215,7 @@ class ResourceFormEntity extends EntityV2 {
       this.set("resource_type_id", mutateResourceType.id);
     }
     // Set the secret to add
-    this.set(secret, value, options);
+    this.set(secret, this.secret.constructor.getDefaultProp(secretPropName), options);
   }
 
   /**
@@ -239,7 +239,7 @@ class ResourceFormEntity extends EntityV2 {
       return;
     }
     // Get the string behind a "secret." (secret.password => password and secret.password.test => password.test)
-    const secretPropName = secret.match(/secret\.(.*)$/)?.[1];
+    const secretPropName = secret.match(/secret\.(.+)$/)?.[1];
     // Delete the secret property
     const resourceDto = this.toDto();
     delete resourceDto.secret[secretPropName];

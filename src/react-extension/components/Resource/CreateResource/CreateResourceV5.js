@@ -171,10 +171,9 @@ class CreateResource extends Component {
   /**
    * Add secret to the resourceFormEntity
    * @param {string} secret The secret to add
-   * @param {*} value The secret value to add
    */
-  onAddSecret(secret, value) {
-    this.resourceFormEntity.addSecret(secret, value, {validate: false});
+  onAddSecret(secret) {
+    this.resourceFormEntity.addSecret(secret, {validate: false});
     const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
     this.setState({resource: this.resourceFormEntity.toDto(), resourceFormSelected: secret, resourceType});
   }

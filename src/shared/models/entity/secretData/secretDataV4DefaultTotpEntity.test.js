@@ -105,4 +105,31 @@ describe("SecretDataV4DefaultTotpEntity", () => {
       expect(entity.description).toStrictEqual(dto.description);
     });
   });
+
+  describe("::getDefaultProp", () => {
+    it("get default password", () => {
+      expect.assertions(1);
+      expect(SecretDataV4DefaultTotpEntity.getDefaultProp("password")).toStrictEqual("");
+    });
+
+    it("get default description", () => {
+      expect.assertions(1);
+      expect(SecretDataV4DefaultTotpEntity.getDefaultProp("description")).toStrictEqual("");
+    });
+
+    it("get default totp", () => {
+      expect.assertions(1);
+      expect(SecretDataV4DefaultTotpEntity.getDefaultProp("totp")).toStrictEqual(TotpEntity.createFromDefault({}, {validate: false}).toDto());
+    });
+
+    it("get default unknown", () => {
+      expect.assertions(1);
+      expect(SecretDataV4DefaultTotpEntity.getDefaultProp("unknown")).toBeUndefined();
+    });
+
+    it("throw error if prop name is not a string", () => {
+      expect.assertions(1);
+      expect(() => SecretDataV4DefaultTotpEntity.getDefaultProp({})).toThrow(TypeError);
+    });
+  });
 });

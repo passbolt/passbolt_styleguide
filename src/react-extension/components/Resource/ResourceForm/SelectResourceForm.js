@@ -36,7 +36,6 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import TotpEntity from "../../../../shared/models/entity/totp/totpEntity";
 
 class SelectResourceForm extends Component {
   constructor(props) {
@@ -104,11 +103,10 @@ class SelectResourceForm extends Component {
   /**
    * Handle add secret
    * @param {string} secret The secret to add
-   * @param {*} value The value to add
    */
-  handleAddSecret(secret, value) {
+  handleAddSecret(secret) {
     if (this.props.onAddSecret) {
-      this.props.onAddSecret(secret, value);
+      this.props.onAddSecret(secret);
     }
   }
 
@@ -251,7 +249,7 @@ class SelectResourceForm extends Component {
               {this.canAddSecretPassword &&
                 <DropdownItem>
                   <button id="password_action" type="button" className="no-border"
-                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD, "")}>
+                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD)}>
                     <KeySVG/>
                     <span><Trans>Password</Trans></span>
                   </button>
@@ -260,7 +258,7 @@ class SelectResourceForm extends Component {
               {this.canAddSecretTotp &&
                 <DropdownItem>
                   <button id="totp_action" type="button" className="no-border"
-                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.TOTP, TotpEntity.createFromDefault({}, {validate: false}))}>
+                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.TOTP)}>
                     <TotpSVG/>
                     <span><Trans>TOTP</Trans></span>
                   </button>
@@ -269,7 +267,7 @@ class SelectResourceForm extends Component {
               {this.canAddSecretNote &&
                 <DropdownItem>
                   <button id="note_action" type="button" className="no-border"
-                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.NOTE, "")}>
+                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.NOTE)}>
                     <NotesSVG/>
                     <span><Trans>Note</Trans></span>
                   </button>
