@@ -30,6 +30,8 @@ import {
   ResourceEditCreateFormEnumerationTypes
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 import memoize from "memoize-one";
+import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import {DateTime} from "luxon";
 
 class CreateResource extends Component {
   constructor(props) {
@@ -66,6 +68,13 @@ class CreateResource extends Component {
     this.handleConvertToNote = this.handleConvertToNote.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.save = this.save.bind(this);
+  }
+
+  /**
+   * Whenever the component has been mounted
+   */
+  componentDidMount() {
+    this.props.passwordExpiryContext.findSettings();
   }
 
   /**
@@ -156,6 +165,15 @@ class CreateResource extends Component {
       hasAlreadyBeenValidated: true,
       isProcessing: false,
     });
+
+    const dto = this.resourceFormEntity.toDto();
+    const expiryDate = this.getResourceExpirationDate();
+    if (typeof(expiryDate) !== "undefined") {
+      dto.expired = expiryDate;
+    }
+
+    //@todo: implement call to port to create the resource.
+    console.log(dto);
   }
 
   /**
@@ -226,6 +244,30 @@ class CreateResource extends Component {
   }
 
   /**
+   * Get the expiration date on the given resource according to the password expiry settings.
+   * The value is set to `undefined` if the feature is not activated,
+   * otherwise it is set to `null` if the expiration date must be unset
+   * or else a `DateTime` at when the expiration should occur.
+   * @returns {DateTime|null|undefined}
+   */
+  getResourceExpirationDate() {
+    if (!this.props.passwordExpiryContext.isFeatureEnabled()) {
+      return undefined;
+    }
+
+    const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
+    if (!(passwordExpirySettings?.automatic_update)) {
+      return undefined;
+    }
+
+    if (passwordExpirySettings.default_expiry_period == null) {
+      return null;
+    }
+
+    return DateTime.utc().plus({days: passwordExpirySettings.default_expiry_period}).toISO();
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -276,10 +318,11 @@ class CreateResource extends Component {
 CreateResource.propTypes = {
   folderParentId: PropTypes.string, // The folder parent id
   onClose: PropTypes.func, // Whenever the component must be closed
+  passwordExpiryContext: PropTypes.object, // The password expiry context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   resourceType: PropTypes.instanceOf(ResourceTypeEntity).isRequired, // The resource types entity
   t: PropTypes.func, // The translation function
 };
 
-export default  withResourceTypesLocalStorage(withTranslation('common')(CreateResource));
+export default  withPasswordExpiry(withResourceTypesLocalStorage(withTranslation('common')(CreateResource)));
 
