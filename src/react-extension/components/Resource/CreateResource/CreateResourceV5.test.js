@@ -25,6 +25,9 @@ import {
   resourceTypePasswordStringDto
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import "../../../../../test/mocks/mockClipboard";
+import ConfirmCreateEdit, {ConfirmEditCreateOperationVariations, ConfirmEditCreateRuleVariations} from "../ConfirmCreateEdit/ConfirmCreateEdit";
+import {defaultPasswordPoliciesContext} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
+import PownedService from "../../../../shared/services/api/secrets/pownedService";
 
 describe("See the Create Resource", () => {
   beforeEach(() => {
@@ -702,6 +705,7 @@ describe("See the Create Resource", () => {
         expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
       });
     });
+
     describe("should fill note form", () => {
       let props, page;
       beforeEach(async() => {
@@ -765,6 +769,66 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.sectionItemSelected.textContent).toBe("Description");
         expect(page.description.value).toBe("note");
+      });
+    });
+
+    describe("should send the form", () => {
+      it('should open the creation confirmation dialog if the entropy of the password is too low', async() => {
+        expect.assertions(3);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        page.fillInput(page.password, "test");
+        await waitFor(() => {});
+
+        page.click(page.saveButton);
+        await waitFor(() => {});
+
+        const confirmDialogProps = {
+          resourceName: "",
+          operation: ConfirmEditCreateOperationVariations.CREATE,
+          rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+          onConfirm: expect.any(Function),
+          onReject: expect.any(Function),
+        };
+
+        expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
+        expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+      });
+
+      it('should open the creation confirmation dialog if the password is found in a data breach', async() => {
+        expect.assertions(3);
+
+        jest.spyOn(PownedService.prototype, "checkIfPasswordPowned").mockImplementation(async() => true);
+
+        const props = defaultProps({
+          passwordPoliciesContext: defaultPasswordPoliciesContext(),
+        });
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        page.fillInput(page.password, "Az12./RTY2346");
+        await waitFor(() => {});
+
+        page.click(page.saveButton);
+        await waitFor(() => {});
+
+        const confirmDialogProps = {
+          resourceName: "",
+          operation: ConfirmEditCreateOperationVariations.CREATE,
+          rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+          onConfirm: expect.any(Function),
+          onReject: expect.any(Function),
+        };
+
+        expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
+        expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
       });
     });
   });

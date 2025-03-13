@@ -12,32 +12,36 @@
  * @since         5.0.0
  */
 import React, {Component} from "react";
+import {withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
+import memoize from "memoize-one";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withTranslation} from "react-i18next";
-import {
-  withResourceTypesLocalStorage
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import SelectResourceForm from "../ResourceForm/SelectResourceForm";
 import OrchestrateResourceForm from "../ResourceForm/OrchestrateResourceForm";
 import ResourceFormEntity from "../../../../shared/models/entity/resource/resourceFormEntity";
 import AddResourceName from "../ResourceForm/AddResourceName";
-import {
-  ResourceEditCreateFormEnumerationTypes
-} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
-import memoize from "memoize-one";
-import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import PownedService from "../../../../shared/services/api/secrets/pownedService";
 import {DateTime} from "luxon";
+import {ResourceEditCreateFormEnumerationTypes} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import {withResourceTypesLocalStorage} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {ENTROPY_THRESHOLDS} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
+import ConfirmCreateEdit, {ConfirmEditCreateOperationVariations, ConfirmEditCreateRuleVariations} from "../ConfirmCreateEdit/ConfirmCreateEdit";
+import {withDialog} from "../../../contexts/DialogContext";
+import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 
 class CreateResource extends Component {
   constructor(props) {
     super(props);
     this.resourceFormEntity = new ResourceFormEntity({resource_type_id: this.props.resourceType.id}, {validate: false, resourceTypes: this.props.resourceTypes});
     this.state = this.defaultState;
+    this.passwordEntropyError = false;
     this.bindCallbacks();
   }
 
@@ -52,6 +56,10 @@ class CreateResource extends Component {
       resourceType: this.props.resourceType, // The resource type
       isProcessing: false, // Is the form processing (loading, submitting).
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once.
+      isPasswordDictionaryCheckRequested: true, // Is the password check against a dictionary request.
+      passwordEntropy: null, // the current password entropy
+      passwordInDictionary: false,
+      isPasswordDictionaryCheckServiceAvailable: true,
     };
   }
 
@@ -67,14 +75,34 @@ class CreateResource extends Component {
     this.handleConvertToDescription = this.handleConvertToDescription.bind(this);
     this.handleConvertToNote = this.handleConvertToNote.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.rejectCreationConfirmation = this.rejectCreationConfirmation.bind(this);
+    this.consumePasswordEntropyError = this.consumePasswordEntropyError.bind(this);
     this.save = this.save.bind(this);
   }
 
   /**
    * Whenever the component has been mounted
    */
-  componentDidMount() {
-    this.props.passwordExpiryContext.findSettings();
+  async componentDidMount() {
+    await Promise.all([
+      this.props.passwordExpiryContext.findSettings(),
+      this.props.passwordPoliciesContext.findPolicies(),
+    ]);
+
+    this.initPwnedPasswordService();
+  }
+
+  /**
+   * Initialize the pwned password service
+   */
+  initPwnedPasswordService() {
+    const isPasswordDictionaryCheckRequested = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+
+    if (isPasswordDictionaryCheckRequested) {
+      this.pownedService = new PownedService(this.props.context.port);
+    }
+
+    this.setState({isPasswordDictionaryCheckRequested});
   }
 
   /**
@@ -140,29 +168,30 @@ class CreateResource extends Component {
     } else {
       value = target.value;
     }
-    this.resourceFormEntity.set(name, value, {validate: false});
 
-    this.setState({resource: this.resourceFormEntity.toDto()});
+    this.resourceFormEntity.set(name, value, {validate: false});
+    const newState = {resource: this.resourceFormEntity.toDto()};
+
+    if (name === "secret.password") {
+      newState.passwordInDictionary = false;
+      newState.passwordEntropy = value?.length
+        ? SecretGenerator.entropy(value)
+        : null;
+    }
+
+    this.setState(newState);
   }
 
   /**
    * Handle form submission that can be trigger when hitting `enter`
    * @param {Event} event The html event triggering the form submit.
    */
-  handleFormSubmit(event) {
+  async handleFormSubmit(event) {
     event.preventDefault();
     if (this.state.isProcessing) {
       return;
     }
 
-    this.save();
-  }
-
-  /**
-   * Save the resource
-   * @returns {Promise<void>}
-   */
-  async save() {
     const validationError = this.validateForm(this.state.resource);
 
     if (validationError?.hasErrors()) {
@@ -174,19 +203,144 @@ class CreateResource extends Component {
 
     this.setState({isProcessing: true});
 
+    if (!this.isMinimumRequiredEntropyReached()) {
+      this.handlePasswordMinimumEntropyNotReached();
+      return;
+    } else if (await this.isPasswordInDictionary()) {
+      this.handlePasswordInDictionary();
+      return;
+    }
+
     this.setState({
       hasAlreadyBeenValidated: true,
       isProcessing: false,
     });
 
+    this.save();
+  }
+
+  /**
+   * Save the resource
+   * @returns {Promise<void>}
+   */
+  async save() {
     const dto = this.resourceFormEntity.toDto();
     const expiryDate = this.getResourceExpirationDate();
     if (typeof(expiryDate) !== "undefined") {
       dto.expired = expiryDate;
     }
 
+    this.setState({
+      hasAlreadyBeenValidated: true,
+      isProcessing: false,
+    });
     //@todo: implement call to port to create the resource.
-    console.log(dto);
+  }
+
+  /**
+   * Returns true if the given entropy is greater or equal to the minimum required entropy.
+   * @returns {boolean}
+   */
+  isMinimumRequiredEntropyReached() {
+    const hasResourceTypePassword = this.state.resourceType.hasPassword();
+    if (!hasResourceTypePassword) {
+      return true;
+    }
+
+    // we accept empty password in the case of v4 resource type
+    const isPasswordEmpty = this.state.resource.secret.password === "";
+    if (isPasswordEmpty) {
+      return true;
+    }
+
+    return this.state.passwordEntropy
+      && this.state.passwordEntropy >= ENTROPY_THRESHOLDS.WEAK;
+  }
+
+  /**
+   * Check if the password is part of a dictionary.
+   * @returns {Promise<boolean>}
+   */
+  async isPasswordInDictionary() {
+    // does the current resource actually has a password
+    const hasResourceTypePassword = this.state.resourceType.hasPassword();
+    if (!hasResourceTypePassword) {
+      return false;
+    }
+
+    // we accept empty password in the case of v4 resource type
+    const isPasswordEmpty = this.state.resource.secret.password === "";
+    if (isPasswordEmpty) {
+      return false;
+    }
+
+    const password = this.state.resource.secret.password;
+    if (!this.state.isPasswordDictionaryCheckRequested || !this.state.isPasswordDictionaryCheckServiceAvailable) {
+      return false;
+    }
+
+    const {isPwnedServiceAvailable, inDictionary} = await this.pownedService.evaluateSecret(password);
+
+    if (!isPwnedServiceAvailable) {
+      this.setState({isPasswordDictionaryCheckServiceAvailable: false});
+      return false;
+    }
+
+    return inDictionary;
+  }
+
+  /**
+   * Request password not reaching minimum entropy creation confirmation.
+   */
+  handlePasswordMinimumEntropyNotReached() {
+    const confirmCreationDialog = {
+      operation: ConfirmEditCreateOperationVariations.CREATE,
+      rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+      resourceName: this.state.resource?.metadata?.name,
+      onConfirm: this.save,
+      onReject: this.rejectCreationConfirmation
+    };
+    this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
+  }
+
+  /**
+   * Request password in dictionary creation confirmation.
+   */
+  handlePasswordInDictionary() {
+    this.setState({
+      passwordInDictionary: true,
+    });
+
+    const confirmCreationDialog = {
+      operation: ConfirmEditCreateOperationVariations.CREATE,
+      rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+      resourceName: this.state.resource?.metadata?.name,
+      onConfirm: this.save,
+      onReject: this.rejectCreationConfirmation
+    };
+    this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
+  }
+
+  /**
+   * Reject the creation confirmation.
+   */
+  rejectCreationConfirmation() {
+    this.passwordEntropyError = true;
+    this.setState({
+      resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PASSWORD,
+      isProcessing: false,
+    });
+  }
+
+  /**
+   * Returns true if the password entropy has been marked as erroneous.
+   * The value is then "consumed";
+   * @returns {boolean}
+   */
+  consumePasswordEntropyError() {
+    const hasPasswordEntropyError = this.passwordEntropyError;
+    this.passwordEntropyError = false;
+    return hasPasswordEntropyError;
   }
 
   /**
@@ -310,7 +464,8 @@ class CreateResource extends Component {
         />
         <form onSubmit={this.handleFormSubmit} className="grid-and-footer" noValidate>
           <div className="grid">
-            <AddResourceName resource={this.state.resource} folderParentId={this.props.folderParentId} onChange={this.handleInputChange} warnings={warnings}
+            <AddResourceName
+              resource={this.state.resource} folderParentId={this.props.folderParentId} onChange={this.handleInputChange} warnings={warnings}
               errors={errors}/>
             <div className="create-workspace">
               <OrchestrateResourceForm
@@ -320,8 +475,10 @@ class CreateResource extends Component {
                 onChange={this.handleInputChange}
                 onConvertToDescription={this.handleConvertToDescription}
                 onConvertToNote={this.handleConvertToNote}
+                passwordEntropy={this.state.passwordEntropy}
                 warnings={warnings}
-                errors={errors}/>
+                errors={errors}
+                consumePasswordEntropyError={this.consumePasswordEntropyError}/>
             </div>
           </div>
           <div className="submit-wrapper">
@@ -337,11 +494,14 @@ class CreateResource extends Component {
 CreateResource.propTypes = {
   folderParentId: PropTypes.string, // The folder parent id
   onClose: PropTypes.func, // Whenever the component must be closed
+  context: PropTypes.object, // The application context
+  dialogContext: PropTypes.object, // The dialog context
   passwordExpiryContext: PropTypes.object, // The password expiry context
+  passwordPoliciesContext: PropTypes.object, // The password policy context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   resourceType: PropTypes.instanceOf(ResourceTypeEntity).isRequired, // The resource types entity
   t: PropTypes.func, // The translation function
 };
 
-export default  withPasswordExpiry(withResourceTypesLocalStorage(withTranslation('common')(CreateResource)));
+export default  withAppContext(withPasswordPolicies(withPasswordExpiry(withDialog(withResourceTypesLocalStorage(withTranslation('common')(CreateResource))))));
 

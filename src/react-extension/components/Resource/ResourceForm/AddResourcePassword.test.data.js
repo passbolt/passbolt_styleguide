@@ -37,7 +37,8 @@ export function defaultProps(data = {}) {
     context: defaultAppContext(),
     onChange: jest.fn(),
     resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
-    resource: resourceFormEntity.toDto()
+    resource: resourceFormEntity.toDto(),
+    consumePasswordEntropyError: jest.fn(() => false),
   };
   return Object.assign(defaultData, data);
 }
