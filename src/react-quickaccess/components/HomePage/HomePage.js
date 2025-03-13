@@ -317,6 +317,13 @@ class HomePage extends React.Component {
               </ul>
             </div>
           }
+          {
+            <div className="submit-wrapper button-after-list input">
+              {this.state.useOnThisTabError &&
+                <div className="error-message">{this.state.useOnThisTabError}</div>
+              }
+            </div>
+          }
         </div>
       </div>
     );
