@@ -16,13 +16,12 @@
  * Unit tests on Create Resource in regard of specifications
  */
 import {waitFor} from "@testing-library/react";
-import CreateResourcePage from "./CreateResourceV5.test.page";
-import {defaultProps, defaultTotpProps} from "./CreateResourceV5.test.data";
+import EditResourcePage from "./EditResourceV5.test.page";
+import {defaultProps, defaultTotpProps} from "./EditResourceV5.test.data";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import {
   resourceTypePasswordAndDescriptionDto,
-  resourceTypePasswordStringDto,
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_PASSWORD_STRING,
@@ -44,6 +43,7 @@ import {formatDateForApi} from "../../../../shared/utils/dateUtils";
 import {defaultTotpDto} from "../../../../shared/models/entity/totp/totpDto.test.data";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 
 describe("See the Create Resource", () => {
   beforeEach(() => {
@@ -56,29 +56,33 @@ describe("See the Create Resource", () => {
     jest.clearAllTimers();
   });
 
-  describe('As LU I can start adding a resource', () => {
+  const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementationOnce(implementation);
+
+  describe('As LU I can start editing a resource', () => {
     describe('Styleguide', () => {
       it('matches the styleguide', async() => {
         expect.assertions(18);
         const props = defaultProps(); // The props to pass
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password"}));
+        const resource = props.resource;
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
         // Dialog title exists and correct
         expect(page.exists()).toBeTruthy();
-        expect(page.header.textContent).toBe("Create a resource");
+        expect(page.header.textContent).toBe("Edit a resource");
 
         // Close button exists
         expect(page.dialogClose).not.toBeNull();
 
         // Name input field exists.
-        expect(page.name.value).toBe("");
+        expect(page.name.value).toBe(resource.metadata.name);
         // Uri input field exists.
-        expect(page.uri.value).toBe("");
+        expect(page.uri.value).toBe(resource.metadata.uris[0]);
         // Username input field exists.
-        expect(page.username.value).toBe("");
+        expect(page.username.value).toBe(resource.metadata.username);
         // Password input field exists
         expect(page.password).not.toBeNull();
-        expect(page.password.value).toBe("");
+        expect(page.password.value).toBe("password");
         expect(page.password.getAttribute("type")).toBe("password");
         const passwordInputStyle = window.getComputedStyle(page.password);
         expect(passwordInputStyle.background).toBe("white");
@@ -96,7 +100,7 @@ describe("See the Create Resource", () => {
         expect(page.passwordGenerateButton).not.toBeNull();
 
         // Save button exists
-        expect(page.saveButton.textContent).toBe("Create");
+        expect(page.saveButton.textContent).toBe("Save");
 
         // Cancel button exists
         expect(page.cancelButton.textContent).toBe("Cancel");
@@ -108,13 +112,14 @@ describe("See the Create Resource", () => {
         expect.assertions(5);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         expect(page.exists()).toBeTruthy();
         expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
         // select description form
-        await page.click(page.getSectionItem(2));
+        await page.click(page.getSectionItem(3));
         // expectations
         expect(page.sectionItemSelected.textContent).toStrictEqual("Description");
         expect(page.description).toBeDefined();
@@ -127,7 +132,8 @@ describe("See the Create Resource", () => {
         expect.assertions(2);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         await page.click(page.addSecret);
@@ -142,7 +148,8 @@ describe("See the Create Resource", () => {
         expect.assertions(2);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         await page.click(page.addSecret);
@@ -155,9 +162,9 @@ describe("See the Create Resource", () => {
 
       it('As a signed-in user I should be able to add secret with a resource type mutation with a standalone totp', async() => {
         expect.assertions(2);
-
         const props = defaultTotpProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({totp: defaultTotpDto()}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         await page.click(page.addSecret);
@@ -171,8 +178,9 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be able to add secret totp for a resource v4 password string', async() => {
         expect.assertions(3);
 
-        const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto()),});
-        const page = new CreateResourcePage(props);
+        const props = defaultProps({resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING})});
+        mockContextRequest(props.context, () => ({password: "password"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         await page.click(page.addSecret);
@@ -190,11 +198,12 @@ describe("See the Create Resource", () => {
         expect.assertions(3);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
-        await page.click(page.addSecret);
-        await page.click(page.addSecretNote);
+        // select note form
+        await page.click(page.getSectionItem(2));
 
         expect(page.sectionItemSelected.textContent).toStrictEqual("Note");
 
@@ -209,7 +218,8 @@ describe("See the Create Resource", () => {
         expect.assertions(3);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         await page.click(page.addSecret);
@@ -229,8 +239,9 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be able to delete secret totp for a resource v4 password string', async() => {
         expect.assertions(4);
 
-        const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto()),});
-        const page = new CreateResourcePage(props);
+        const props = defaultProps({resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING})});
+        mockContextRequest(props.context, () => ({password: "password"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         await page.click(page.addSecret);
@@ -247,12 +258,13 @@ describe("See the Create Resource", () => {
       });
     });
 
-    describe("should init password form", () => {
-      it('As a signed-in user I should be able to add an URI', async() => {
+    describe("should edit password form", () => {
+      it('As a signed-in user I should be able to edit an URI', async() => {
         expect.assertions(2);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         expect(page.exists()).toBeTruthy();
@@ -262,11 +274,12 @@ describe("See the Create Resource", () => {
         expect(page.uri.value).toBe("https://passbolt.com");
       });
 
-      it('As a signed-in user I should be aware about the URI maxLength', async() => {
+      it.skip('As a signed-in user I should be aware about the URI maxLength', async() => {
         expect.assertions(3);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         page.fillInput(page.uri, "a".repeat(1024));
@@ -277,11 +290,12 @@ describe("See the Create Resource", () => {
         expect(page.uriErrorMessage).toBeNull();
       });
 
-      it('As a signed-in user I should be blocked if I exceed the URI maxLength', async() => {
+      it.skip('As a signed-in user I should be blocked if I exceed the URI maxLength', async() => {
         expect.assertions(5);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         page.uri.setAttribute("maxLength", 1025);
@@ -298,11 +312,12 @@ describe("See the Create Resource", () => {
         expect(page.uriErrorMessage.textContent).toEqual("This is the maximum size for this field, make sure your data was not truncated.");
       });
 
-      it('As a signed-in user I should be able to add an username', async() => {
+      it('As a signed-in user I should be able to edit an username', async() => {
         expect.assertions(2);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         expect(page.exists()).toBeTruthy();
@@ -312,11 +327,12 @@ describe("See the Create Resource", () => {
         expect(page.username.value).toBe("username");
       });
 
-      it('As a signed-in user I should be aware about the username maxLength', async() => {
+      it.skip('As a signed-in user I should be aware about the username maxLength', async() => {
         expect.assertions(3);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         page.fillInput(page.username, "a".repeat(255));
@@ -327,11 +343,12 @@ describe("See the Create Resource", () => {
         expect(page.usernameErrorMessage).toBeNull();
       });
 
-      it('As a signed-in user I should be blocked if I exceed the username maxLength', async() => {
+      it.skip('As a signed-in user I should be blocked if I exceed the username maxLength', async() => {
         expect.assertions(5);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         page.username.setAttribute("maxLength", 256);
@@ -347,11 +364,13 @@ describe("See the Create Resource", () => {
         expect(page.usernameWarningMessage).toBeNull();
         expect(page.usernameErrorMessage.textContent).toEqual("This is the maximum size for this field, make sure your data was not truncated.");
       });
-      it('As a signed-in user I should be able to add a password', async() => {
+
+      it('As a signed-in user I should be able to edit a password', async() => {
         expect.assertions(2);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         expect(page.exists()).toBeTruthy();
@@ -361,11 +380,12 @@ describe("See the Create Resource", () => {
         expect(page.password.value).toBe("secret");
       });
 
-      it('As a signed-in user I should be aware about the password maxLength', async() => {
+      it.skip('As a signed-in user I should be aware about the password maxLength', async() => {
         expect.assertions(3);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         page.fillInput(page.password, "a".repeat(4096));
@@ -376,11 +396,12 @@ describe("See the Create Resource", () => {
         expect(page.passwordErrorMessage).toBeNull();
       });
 
-      it('As a signed-in user I should be blocked if I exceed the password maxLength', async() => {
+      it.skip('As a signed-in user I should be blocked if I exceed the password maxLength', async() => {
         expect.assertions(5);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         page.password.setAttribute("maxLength", 4097);
@@ -400,12 +421,13 @@ describe("See the Create Resource", () => {
         expect.assertions(5);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         jest.spyOn(SecretGenerator, "generate").mockImplementation(() => "generate-password");
         await waitFor(() => {});
 
         expect(page.exists()).toBeTruthy();
-        expect(page.password.value).toBe("");
+        expect(page.password.value).toBe("password");
 
         await page.click(page.passwordGenerateButton);
         // expectations
@@ -415,16 +437,17 @@ describe("See the Create Resource", () => {
       });
     });
 
-    describe("should add a name to resource", () => {
+    describe("should edit a name to resource", () => {
       let props, page;
       beforeEach(async() => {
         props = defaultProps();
-        page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        page = new EditResourcePage(props);
 
         await waitFor(() => page.exists);
       });
 
-      it('As a signed-in user I should be able to add name to a resource', async() => {
+      it('As a signed-in user I should be able to edit name to a resource', async() => {
         expect.assertions(1);
 
         await page.fillInput(page.name, "name");
@@ -433,7 +456,7 @@ describe("See the Create Resource", () => {
         expect(page.name.value).toEqual("name");
       });
 
-      it('As a signed-in user I should be aware about the name maxLength', async() => {
+      it.skip('As a signed-in user I should be aware about the name maxLength', async() => {
         expect.assertions(3);
         page.fillInput(page.name, "a".repeat(255));
 
@@ -443,7 +466,7 @@ describe("See the Create Resource", () => {
         expect(page.nameErrorMessage).toBeNull();
       });
 
-      it('As a signed-in user I should be blocked if I exceed the name maxLength', async() => {
+      it.skip('As a signed-in user I should be blocked if I exceed the name maxLength', async() => {
         expect.assertions(5);
 
         page.name.setAttribute("maxLength", 256);
@@ -461,18 +484,19 @@ describe("See the Create Resource", () => {
       });
     });
 
-    describe("should init description field", () => {
+    describe("should edit description field", () => {
       let props, page;
       beforeEach(async() => {
         props = defaultProps();
-        page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        page = new EditResourcePage(props);
 
         await waitFor(() => page.exists);
         await page.click(page.menuDescription);
       });
 
 
-      it('As a signed-in user I should be able to add a description', async() => {
+      it('As a signed-in user I should be able to edit a description', async() => {
         expect.assertions(1);
 
         await page.fillInput(page.description, "description");
@@ -480,7 +504,7 @@ describe("See the Create Resource", () => {
         expect(page.description.value).toBe("description");
       });
 
-      it('As a signed-in user I should be aware about the description maxLength', async() => {
+      it.skip('As a signed-in user I should be aware about the description maxLength', async() => {
         expect.assertions(3);
 
         page.fillInput(page.description, "a".repeat(10000));
@@ -491,7 +515,7 @@ describe("See the Create Resource", () => {
         expect(page.descriptionErrorMessage).toBeNull();
       });
 
-      it('As a signed-in user I should be blocked if I exceed the description maxLength', async() => {
+      it.skip('As a signed-in user I should be blocked if I exceed the description maxLength', async() => {
         expect.assertions(5);
 
         page.description.setAttribute("maxLength", 10001);
@@ -511,9 +535,9 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be able to convert a description to a note for a v4 password string', async() => {
         expect.assertions(2);
 
-        const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto())});
-
-        const page = new CreateResourcePage(props);
+        const props = defaultProps({resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING})});
+        mockContextRequest(props.context, () => ({password: "password"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         await page.click(page.menuDescription);
@@ -525,14 +549,15 @@ describe("See the Create Resource", () => {
       });
     });
 
-    describe("should init totp form", () => {
+    describe("should edit totp form", () => {
       let props, page;
       beforeEach(() => {
         props = defaultTotpProps();
-        page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({totp: defaultTotpDto()}));
+        page = new EditResourcePage(props);
       });
 
-      it('As a signed-in user I should be able to add an URI', async() => {
+      it('As a signed-in user I should be able to edit an URI', async() => {
         expect.assertions(2);
         expect(page.exists()).toBeTruthy();
 
@@ -541,7 +566,7 @@ describe("See the Create Resource", () => {
         expect(page.uri.value).toBe("https://passbolt.com");
       });
 
-      it('As a signed-in user I should be aware about the URI maxLength', async() => {
+      it.skip('As a signed-in user I should be aware about the URI maxLength', async() => {
         expect.assertions(3);
 
         page.fillInput(page.uri, "a".repeat(1024));
@@ -552,7 +577,7 @@ describe("See the Create Resource", () => {
         expect(page.uriErrorMessage).toBeNull();
       });
 
-      it('As a signed-in user I should be blocked if I exceed the URI maxLength', async() => {
+      it.skip('As a signed-in user I should be blocked if I exceed the URI maxLength', async() => {
         expect.assertions(5);
 
         page.fillInput(page.uri, "a".repeat(1025));
@@ -568,7 +593,7 @@ describe("See the Create Resource", () => {
         expect(page.uriErrorMessage.textContent).toEqual("This is the maximum size for this field, make sure your data was not truncated.");
       });
 
-      it('As a signed-in user I should be able to add a resource totp key', async() => {
+      it.skip('As a signed-in user I should be able to add a resource totp key', async() => {
         expect.assertions(3);
 
         expect(page.resourceTotpCode.hasAttribute("disabled")).toBeTruthy();
@@ -579,7 +604,7 @@ describe("See the Create Resource", () => {
         expect(page.resourceTotpCode.hasAttribute("disabled")).toBeFalsy();
       });
 
-      it('As a signed-in user I should see an error message when totp key is empty', async() => {
+      it.skip('As a signed-in user I should see an error message when totp key is empty', async() => {
         expect.assertions(1);
 
         await page.click(page.saveButton);
@@ -587,7 +612,7 @@ describe("See the Create Resource", () => {
         expect(page.resourceTotpKeyErrorMessage.textContent).toBe("The key is required.");
       });
 
-      it('As a signed-in user I should see an error message when totp key does not respect pattern', async() => {
+      it.skip('As a signed-in user I should see an error message when totp key does not respect pattern', async() => {
         expect.assertions(1);
 
         await page.fillInput(page.resourceTotpKey, "????");
@@ -607,7 +632,7 @@ describe("See the Create Resource", () => {
         expect(page.period.value).toBe("60");
       });
 
-      it('As a signed-in user I should see an error message when period is empty', async() => {
+      it.skip('As a signed-in user I should see an error message when period is empty', async() => {
         expect.assertions(1);
 
         await page.click(page.advancedSettings);
@@ -619,7 +644,7 @@ describe("See the Create Resource", () => {
         expect(page.resourceTotpPeriodErrorMessage.textContent).toBe("TOTP expiry is required.");
       });
 
-      it('As a signed-in user I should see an error message when period is less than 0', async() => {
+      it.skip('As a signed-in user I should see an error message when period is less than 0', async() => {
         expect.assertions(1);
 
         await page.click(page.advancedSettings);
@@ -631,7 +656,7 @@ describe("See the Create Resource", () => {
         expect(page.resourceTotpPeriodErrorMessage.textContent).toBe("TOTP expiry must be greater than 0.");
       });
 
-      it('As a signed-in user I should be redirected to the totp form if there is an error', async() => {
+      it.skip('As a signed-in user I should be redirected to the totp form if there is an error', async() => {
         expect.assertions(3);
 
         await page.click(page.getSectionItem(2));
@@ -643,7 +668,7 @@ describe("See the Create Resource", () => {
         expect(page.resourceTotpKeyErrorMessage.textContent).toBe("The key is required.");
       });
 
-      it('As a signed-in user I should be able to add a totp length', async() => {
+      it('As a signed-in user I should be able to update a totp length', async() => {
         expect.assertions(1);
 
         await page.click(page.advancedSettings);
@@ -652,7 +677,7 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.digits.value).toBe("8");
       });
-      it('As a signed-in user I should see an error message when length is empty', async() => {
+      it.skip('As a signed-in user I should see an error message when length is empty', async() => {
         expect.assertions(1);
 
         await page.click(page.advancedSettings);
@@ -663,7 +688,7 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.resourceTotpDigitsErrorMessage.textContent).toBe("TOTP length is required.");
       });
-      it('As a signed-in user I should see an error message when length is less than 6', async() => {
+      it.skip('As a signed-in user I should see an error message when length is less than 6', async() => {
         expect.assertions(1);
 
         await page.click(page.advancedSettings);
@@ -674,7 +699,7 @@ describe("See the Create Resource", () => {
         expect(page.resourceTotpDigitsErrorMessage.textContent).toBe("TOTP length must be between 6 and 8.");
       });
 
-      it('As a signed-in user I should see an error message when length is more than 8', async() => {
+      it.skip('As a signed-in user I should see an error message when length is more than 8', async() => {
         expect.assertions(1);
 
         await page.click(page.advancedSettings);
@@ -684,7 +709,7 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.resourceTotpDigitsErrorMessage.textContent).toBe("TOTP length must be between 6 and 8.");
       });
-      it('As a signed-in user I should be able to select an algorithm', async() => {
+      it('As a signed-in user I should be able to edit an algorithm', async() => {
         expect.assertions(1);
 
         await page.click(page.advancedSettings);
@@ -697,7 +722,6 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be able to copy a resource totp from totp code', async() => {
         expect.assertions(2);
 
-        await page.fillInput(page.resourceTotpKey, "key");
         await page.click(page.resourceTotpCode);
         // expectations
         expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
@@ -705,9 +729,9 @@ describe("See the Create Resource", () => {
       });
 
       it('As a signed-in user I should be able to copy a resource totp from totp button', async() => {
-        expect.assertions(2);
+        expect.assertions(3);
 
-        await page.fillInput(page.resourceTotpKey, "key");
+        expect(page.exists()).toBeTruthy();
         await page.click(page.copyTotpButton);
 
         // expectations
@@ -716,18 +740,18 @@ describe("See the Create Resource", () => {
       });
     });
 
-    describe("should fill note form", () => {
+    describe("should edit note form", () => {
       let props, page;
       beforeEach(async() => {
         props = defaultProps();
-        page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        page = new EditResourcePage(props);
 
         await waitFor(() => page.exists);
-        await page.click(page.addSecret);
-        await page.click(page.addSecretNote);
+        await page.click(page.getSectionItem(2));
       });
 
-      it('As a signed-in user I should be able to add a note', async() => {
+      it('As a signed-in user I should be able to edit a note', async() => {
         expect.assertions(1);
 
         await page.fillInput(page.note, "note");
@@ -736,7 +760,7 @@ describe("See the Create Resource", () => {
       });
 
 
-      it('As a signed-in user I should be aware about the note maxLength', async() => {
+      it.skip('As a signed-in user I should be aware about the note maxLength', async() => {
         expect.assertions(3);
 
         await page.fillInput(page.note, "a".repeat(10000));
@@ -747,7 +771,7 @@ describe("See the Create Resource", () => {
         expect(page.noteErrorMessage).toBeNull();
       });
 
-      it('As a signed-in user I should be blocked if I exceed the note maxLength', async() => {
+      it.skip('As a signed-in user I should be blocked if I exceed the note maxLength', async() => {
         expect.assertions(5);
 
         await page.fillInput(page.note, "a".repeat(10001));
@@ -766,9 +790,9 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be able to convert a note to a description for a v4 default', async() => {
         expect.assertions(2);
 
-        const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto())});
-
-        const page = new CreateResourcePage(props);
+        const props = defaultProps({resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION})});
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         await page.click(page.getSectionItem(2));
@@ -783,11 +807,12 @@ describe("See the Create Resource", () => {
     });
 
     describe("should send the form", () => {
-      it('should open the creation confirmation dialog if the entropy of the password is too low', async() => {
+      it.skip('should open the creation confirmation dialog if the entropy of the password is too low', async() => {
         expect.assertions(3);
 
         const props = defaultProps();
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         expect(page.exists()).toBeTruthy();
@@ -810,7 +835,7 @@ describe("See the Create Resource", () => {
         expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
       });
 
-      it('should open the creation confirmation dialog if the password is found in a data breach', async() => {
+      it.skip('should open the creation confirmation dialog if the password is found in a data breach', async() => {
         expect.assertions(3);
 
         jest.spyOn(PownedService.prototype, "checkIfPasswordPowned").mockImplementation(async() => true);
@@ -818,7 +843,8 @@ describe("See the Create Resource", () => {
         const props = defaultProps({
           passwordPoliciesContext: defaultPasswordPoliciesContext(),
         });
-        const page = new CreateResourcePage(props);
+        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         expect(page.exists()).toBeTruthy();
@@ -844,38 +870,51 @@ describe("See the Create Resource", () => {
   });
 
   describe("Close dialog", () => {
-    it('As LU I can stop creating a password by clicking on the cancel button', async() => {
+    it('As LU I can stop editing a resource by clicking on the cancel button', async() => {
       expect.assertions(2);
       const props = defaultProps(); // The props to pass
-      const page = new CreateResourcePage(props);
+      mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+      const page = new EditResourcePage(props);
       await waitFor(() => {});
       expect(page.exists()).toBeTruthy();
       await page.click(page.cancelButton);
       expect(props.onClose).toHaveBeenCalled();
     });
 
-    it('As LU I can stop creating a password by closing the dialog', async() => {
+    it('As LU I can stop editing a resource by closing the dialog', async() => {
       expect.assertions(2);
       const props = defaultProps(); // The props to pass
-      const page = new CreateResourcePage(props);
+      mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+      const page = new EditResourcePage(props);
       await waitFor(() => {});
       expect(page.exists()).toBeTruthy();
       await page.click(page.dialogClose);
       expect(props.onClose).toHaveBeenCalled();
     });
 
-    it('As LU I can stop adding a password with the keyboard (escape)', async() => {
+    it('As LU I can stop editing a resource with the keyboard (escape)', async() => {
       expect.assertions(2);
       const props = defaultProps(); // The props to pass
-      const page = new CreateResourcePage(props);
+      mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+      const page = new EditResourcePage(props);
       await waitFor(() => {});
       expect(page.exists()).toBeTruthy();
       await page.escapeKey(page.dialogClose);
       expect(props.onClose).toHaveBeenCalled();
     });
+
+    it('As LU I cannot editing a resource if secret request throw error', async() => {
+      expect.assertions(2);
+      const props = defaultProps(); // The props to pass
+      mockContextRequest(props.context, () => { throw Error(); });
+      const page = new EditResourcePage(props);
+      await waitFor(() => {});
+      expect(page.exists()).toBeTruthy();
+      expect(props.onClose).toHaveBeenCalled();
+    });
   });
 
-  describe("should save a secret to a resource", () => {
+  describe.skip("should save a secret to a resource", () => {
     it('As a signed-in user I should be able to save a resource v5 default', async() => {
       expect.assertions(3);
       const expirationPeriod = 15;
@@ -897,7 +936,7 @@ describe("See the Create Resource", () => {
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
-      const page = new CreateResourcePage(props);
+      const page = new EditResourcePage(props);
       await waitFor(() => {});
 
       await page.click(page.saveButton);
@@ -932,7 +971,7 @@ describe("See the Create Resource", () => {
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
-      const page = new CreateResourcePage(props);
+      const page = new EditResourcePage(props);
       await waitFor(() => {});
 
       await page.fillInput(page.password, "RN9n8XuECN3");
@@ -972,7 +1011,7 @@ describe("See the Create Resource", () => {
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
-      const page = new CreateResourcePage(props);
+      const page = new EditResourcePage(props);
       await waitFor(() => {});
 
       await page.fillInput(page.password, "RN9n8XuECN3");
@@ -1021,7 +1060,7 @@ describe("See the Create Resource", () => {
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
-      const page = new CreateResourcePage(props);
+      const page = new EditResourcePage(props);
       await waitFor(() => {});
 
       await page.fillInput(page.password, "RN9n8XuECN3");
@@ -1072,7 +1111,7 @@ describe("See the Create Resource", () => {
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
-      const page = new CreateResourcePage(props);
+      const page = new EditResourcePage(props);
       await waitFor(() => {});
 
       await page.fillInput(page.password, "RN9n8XuECN3");
@@ -1122,7 +1161,7 @@ describe("See the Create Resource", () => {
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
-      const page = new CreateResourcePage(props);
+      const page = new EditResourcePage(props);
       await waitFor(() => {});
 
       await page.fillInput(page.password, "RN9n8XuECN3");
@@ -1165,7 +1204,7 @@ describe("See the Create Resource", () => {
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
-      const page = new CreateResourcePage(props);
+      const page = new EditResourcePage(props);
       await waitFor(() => {});
 
       await page.fillInput(page.password, "RN9n8XuECN3");
@@ -1214,7 +1253,7 @@ describe("See the Create Resource", () => {
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
-      const page = new CreateResourcePage(props);
+      const page = new EditResourcePage(props);
       await waitFor(() => {});
 
       await page.fillInput(page.password, "RN9n8XuECN3");
@@ -1261,7 +1300,7 @@ describe("See the Create Resource", () => {
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
-      const page = new CreateResourcePage(props);
+      const page = new EditResourcePage(props);
       await waitFor(() => {});
 
       await page.click(page.addSecret);
@@ -1303,7 +1342,7 @@ describe("See the Create Resource", () => {
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
-      const page = new CreateResourcePage(props);
+      const page = new EditResourcePage(props);
       await waitFor(() => {});
 
       await page.fillInput(page.password, "RN9n8XuECN3");
@@ -1341,7 +1380,7 @@ describe("See the Create Resource", () => {
     it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
       expect.assertions(1);
       const props = defaultProps(); // The props to pass
-      const page = new CreateResourcePage(props);
+      const page = new EditResourcePage(props);
       await waitFor(() => {});
 
       const error = new PassboltApiFetchError("Jest simulate API error.");

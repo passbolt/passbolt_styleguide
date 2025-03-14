@@ -25,7 +25,7 @@ import {
 } from "./DisplayResourcesListContextualMenu.test.data";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
-import EditResource from "../EditResource/EditResource";
+import EditResource from "../EditResource/EditResourceV5";
 import ShareDialog from "../../Share/ShareDialog";
 import DisplayResourcesListContextualMenuPage from "./DisplayResourcesListContextualMenu.test.page";
 import {

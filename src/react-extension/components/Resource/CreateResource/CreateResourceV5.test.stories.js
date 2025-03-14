@@ -1,6 +1,5 @@
 import {MemoryRouter} from "react-router-dom";
 import React from "react";
-import MockPort from "../../../test/mock/MockPort";
 import {defaultProps, defaultTotpProps} from "./CreateResourceV5.test.data";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
@@ -41,9 +40,6 @@ export default {
     </MemoryRouter>
   ],
 };
-
-const mockedPort = new MockPort();
-mockedPort.addRequestListener("passbolt.resources.create", data => data);
 
 export const Default = {
   args: defaultProps()
