@@ -34,11 +34,11 @@ class AddResourcePassword extends Component {
     super(props);
     this.state = this.defaultState;
     this.bindCallbacks();
+    this.createReferences();
   }
 
   get defaultState() {
     return {
-      passwordEntropy: null,
       displayPasswordGenerator: false,
       generatorSettings: null,
     };
@@ -82,14 +82,30 @@ class AddResourcePassword extends Component {
   }
 
   /**
+   * Create elements references
+   */
+  createReferences() {
+    this.passwordInputRef = React.createRef();
+  }
+
+  /**
    * Generate the password
    * @param {object} generatorConfiguration the configuration to be sued to generate a new password
    */
   generatePassword(generatorConfiguration) {
-    const password = SecretGenerator.generate(generatorConfiguration);
-    const passwordEntropy = password.length > 0 ? SecretGenerator.entropy(password) : null;
-    this.setState({passwordEntropy});
-    return password;
+    return SecretGenerator.generate(generatorConfiguration);
+  }
+
+  /**
+   * Component did update
+   * @param prevProps
+   * @param prevState
+   */
+  async componentDidUpdate() {
+    const hasEntropyError = this.props.consumePasswordEntropyError();
+    if (hasEntropyError) {
+      this.passwordInputRef.current.focus();
+    }
   }
 
   /**
@@ -240,7 +256,16 @@ class AddResourcePassword extends Component {
                 {this.isMaxLengthWarnings("password", "secret") && <AttentionSVG className="attention-required"/>}
               </label>
               <div className="password-button-inline">
-                <Password id="resource-password" name="secret.password" autoComplete="new-password" placeholder={this.translate("Password")} preview={true} value={this.props.resource?.secret?.password} onChange={this.handleInputChange} />
+                <Password
+                  id="resource-password"
+                  name="secret.password"
+                  autoComplete="new-password"
+                  placeholder={this.translate("Password")}
+                  preview={true}
+                  value={this.props.resource?.secret?.password}
+                  onChange={this.handleInputChange}
+                  inputRef={this.passwordInputRef}
+                />
                 <button type="button" className="password-generate button-icon" onClick={this.handleGeneratePasswordClick}>
                   <DiceSVG/>
                 </button>
@@ -253,7 +278,7 @@ class AddResourcePassword extends Component {
                   <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
                 </div>
               }
-              <PasswordComplexity entropy={this.state.passwordEntropy}/>
+              <PasswordComplexity entropy={this.props.passwordEntropy}/>
             </div>
           </div>
           {this.canUsePasswordGenerator &&
@@ -302,6 +327,8 @@ class AddResourcePassword extends Component {
 
 AddResourcePassword.propTypes = {
   context: PropTypes.any, // The app context
+  passwordEntropy: PropTypes.number, // a callback for when the entropy of the current password changed
+  consumePasswordEntropyError: PropTypes.func, // the password entropy error state consumer to know if the password field must be focused or nto
   resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
   resource: PropTypes.object, // The resource to edit or create
   onChange: PropTypes.func, // The on change function

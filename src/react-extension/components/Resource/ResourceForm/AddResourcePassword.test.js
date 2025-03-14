@@ -44,7 +44,6 @@ describe("AddResourcePassword", () => {
 
   describe('Fill form password', () => {
     it('generates password when clicking on the generate button should call callback function.', async() => {
-      expect.assertions(5);
       expect.assertions(2);
 
       const props = defaultProps();
@@ -137,6 +136,19 @@ describe("AddResourcePassword", () => {
       expect(passwordInputType).toBe("password");
       expect(page.passwordViewButton.classList.contains("eye-open")).toBe(true);
       expect(page.passwordViewButton.classList.contains("eye-close")).toBe(false);
+    });
+  });
+
+  describe('should focus on password field', () => {
+    it('should focus on password field if the entropy is too low.', async() => {
+      expect.assertions(1);
+
+      const props = defaultProps({
+        consumePasswordEntropyError: jest.fn(() => true),
+      });
+      page = new AddResourcePasswordPage(props);
+
+      expect(document.activeElement).toBe(page.password);
     });
   });
 });

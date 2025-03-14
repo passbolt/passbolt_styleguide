@@ -334,6 +334,7 @@ class AddResourceTotp extends Component {
       }
     }
   }
+
   /*
    * =============================================================
    *  Render view

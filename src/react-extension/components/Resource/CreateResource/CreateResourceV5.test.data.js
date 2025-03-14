@@ -24,6 +24,9 @@ import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/re
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import {defaultPasswordPoliciesContext} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
+import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
 
 
 /**
@@ -41,7 +44,13 @@ export function defaultProps(data = {}) {
     }),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     resourceType: new ResourceTypeEntity(resourceTypeV5DefaultDto()),
+    passwordPoliciesContext: defaultPasswordPoliciesContext({
+      policies: defaultPasswordPoliciesDto({
+        external_dictionary_check: false,
+      })
+    }),
     onClose: jest.fn(),
+    dialogContext: defaultDialogContext(),
   };
 
   return Object.assign(defaultData, data);

@@ -38,7 +38,9 @@ class OrchestrateResourceForm extends Component {
           resource={this.props.resource}
           onChange={this.props.onChange}
           warnings={this.props.warnings}
-          errors={this.props.errors}/>;
+          errors={this.props.errors}
+          passwordEntropy={this.props.passwordEntropy}
+          consumePasswordEntropyError={this.props.consumePasswordEntropyError}/>;
       case ResourceEditCreateFormEnumerationTypes.TOTP:
         return <AddResourceTotp
           resource={this.props.resource}
@@ -73,6 +75,8 @@ OrchestrateResourceForm.propTypes = {
   onChange: PropTypes.func, //The resource setter
   onConvertToNote: PropTypes.func, //The resource note to convert
   onConvertToDescription: PropTypes.func, //The resource description to convert
+  passwordEntropy: PropTypes.number, // the current password entropy if any
+  consumePasswordEntropyError: PropTypes.func, // a password entropy state consumer callback
   t: PropTypes.func, // The translation function
   warnings: PropTypes.object, //The warnings validation
   errors: PropTypes.object // The errors entity error validation
