@@ -1,7 +1,7 @@
 styleguide-tests:
   extends: .rules
   stage: test
-  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/node:18
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/node:22
   coverage: /Lines\s* [:] ([\d\.]+)%/
   script:
     - npm ci
@@ -17,7 +17,7 @@ styleguide-tests:
 
 linter:
   stage: test
-  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/node:18
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/node:22
   extends: .rules
   script:
     - npm install
@@ -26,7 +26,7 @@ linter:
 storybook:
   stage: test
   extends: .rules
-  image: mcr.microsoft.com/playwright:v1.50.0
+  image: mcr.microsoft.com/playwright:v1.51.0
   script:
     - npm install
     - npm run dev:storybook:install
@@ -40,6 +40,6 @@ audit:
   allow_failure: true
   extends: .rules
   stage: test
-  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/node:18
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/node:22
   script:
     - npm audit
