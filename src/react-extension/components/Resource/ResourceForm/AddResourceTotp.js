@@ -392,7 +392,7 @@ class AddResourceTotp extends Component {
             </div>
             <div className="additional-information">
               <button type="button" className="section-header no-border" onClick={this.handleDisplayAdvancedSettingsClick}>
-                <h4><Trans>Advanced password generation</Trans></h4>
+                <h4><Trans>Advanced settings</Trans></h4>
                 {this.state.displayAdvancedSettings
                   ? <CaretDownSVG/>
                   : <CaretRightSVG/>
