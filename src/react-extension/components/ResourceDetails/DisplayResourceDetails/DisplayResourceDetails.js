@@ -159,21 +159,21 @@ class DisplayResourceDetails extends React.Component {
 
     return (
       <>
-        <DisplayResourceDetailsInformation />
         {this.isPasswordResources &&
           <DisplayResourceDetailsPassword/>
         }
         {this.isTotpResources &&
           <DisplayResourceDetailsTotp isStandaloneTotp={this.isStandaloneTotpResource}/>
         }
-        {this.hasDescription &&
-          <DisplayResourceDetailsDescription />
-        }
         {this.hasSecureNote &&
           <DisplayResourceDetailsNote />
         }
         {canViewShare &&
           <DisplayResourceDetailsPermission />
+        }
+        <DisplayResourceDetailsInformation />
+        {this.hasDescription &&
+          <DisplayResourceDetailsDescription />
         }
         {canUseTags &&
         <DisplayResourceDetailsTag />
