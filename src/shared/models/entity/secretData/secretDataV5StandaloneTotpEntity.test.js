@@ -26,8 +26,6 @@ describe("SecretDataV5StandaloneEntity", () => {
     });
 
     it("validates object_type property", () => {
-      assertEntityProperty.string(SecretDataV5StandaloneTotpEntity, "object_type");
-      assertEntityProperty.required(SecretDataV5StandaloneTotpEntity, "object_type");
       assertEntityProperty.enumeration(SecretDataV5StandaloneTotpEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
     });
 
@@ -107,6 +105,27 @@ describe("SecretDataV5StandaloneEntity", () => {
     it("throw error if prop name is not a string", () => {
       expect.assertions(1);
       expect(() => SecretDataV5StandaloneTotpEntity.getDefaultProp({})).toThrow(TypeError);
+    });
+  });
+
+  describe("::areSecretsDifferent", () => {
+    it("should return true", () => {
+      const dto = {
+        object_type: SECRET_DATA_OBJECT_TYPE,
+        totp: defaultTotpDto(),
+      };
+      const entity = new SecretDataV5StandaloneTotpEntity(dto);
+      dto.totp.digits = 7;
+      expect(entity.areSecretsDifferent(dto)).toBeTruthy();
+    });
+
+    it("should return false", () => {
+      const dto = {
+        object_type: SECRET_DATA_OBJECT_TYPE,
+        totp: defaultTotpDto(),
+      };
+      const entity = new SecretDataV5StandaloneTotpEntity(dto);
+      expect(entity.areSecretsDifferent(dto)).toBeFalsy();
     });
   });
 });

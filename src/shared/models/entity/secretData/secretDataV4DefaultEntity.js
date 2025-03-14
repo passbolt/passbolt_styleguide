@@ -79,6 +79,15 @@ class SecretDataV4DefaultEntity extends secretDataEntity {
     }
   }
 
+  /**
+   * Are secret different
+   * @param secretDto
+   * @returns {boolean}
+   */
+  areSecretsDifferent(secretDto) {
+    return this.password !== secretDto.password || this.description !== secretDto.description;
+  }
+
   /*
    * ==================================================
    * Dynamic properties getters

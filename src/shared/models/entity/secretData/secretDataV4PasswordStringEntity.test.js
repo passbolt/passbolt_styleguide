@@ -74,4 +74,18 @@ describe("secretDataV4PasswordStringEntity", () => {
       expect(() => SecretDataV4PasswordStringEntity.getDefaultProp({})).toThrow(TypeError);
     });
   });
+
+  describe("::areSecretsDifferent", () => {
+    it("should return true", () => {
+      const dto = {password: "password"};
+      const entity = new SecretDataV4PasswordStringEntity(dto);
+      expect(entity.areSecretsDifferent({password: "this-is-a-secret-password"})).toBeTruthy();
+    });
+
+    it("should return false", () => {
+      const dto = {password: "password"};
+      const entity = new SecretDataV4PasswordStringEntity(dto);
+      expect(entity.areSecretsDifferent(dto)).toBeFalsy();
+    });
+  });
 });
