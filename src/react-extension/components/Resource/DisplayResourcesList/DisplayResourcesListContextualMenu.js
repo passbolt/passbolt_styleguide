@@ -27,7 +27,6 @@ import {
 import sanitizeUrl, { urlProtocols } from "../../../lib/Sanitize/sanitizeUrl";
 import { Trans, withTranslation } from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
-import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
 import { withProgress } from "../../../contexts/ProgressContext";
 import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCodeGeneratorService";
