@@ -107,12 +107,19 @@ class AddResourceNote extends Component {
         </div>
         <div className="content">
           <div className="note-fields">
-            <div className="input textarea">
+            <div className={`input textarea ${this.props.disabled ? 'disabled' : ''}`}>
               <label htmlFor="resource-note">
                 <Trans>Content</Trans>
                 {this.isMaxLengthWarnings("description") && <AttentionSVG className="attention-required"/>}
               </label>
-              <textarea id="resource-note" name="secret.description" maxLength="10000" placeholder={this.translate("Add a note")} onChange={this.handleInputChange} value={this.props.resource?.secret?.description}>
+              <textarea
+                id="resource-note"
+                name="secret.description"
+                maxLength="10000"
+                placeholder={this.translate("Add a note")}
+                onChange={this.handleInputChange}
+                disabled={this.props.disabled}
+                value={this.props.resource?.secret?.description}>
               </textarea>
               {this.isMaxLengthError("description") &&
                 <div className="note error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
@@ -149,7 +156,8 @@ AddResourceNote.propTypes = {
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection),
   t: PropTypes.func, // The translation function
   warnings: PropTypes.object, //The warnings validation
-  errors: PropTypes.object // The errors entity error validation
+  errors: PropTypes.object, // The errors entity error validation
+  disabled: PropTypes.bool // The disabled property
 };
 
 export default  withResourceTypesLocalStorage(withTranslation('common')(AddResourceNote));

@@ -415,7 +415,7 @@ describe("Resource Form entity", () => {
       const resourceTypeDtos = resourceTypesCollectionDto();
       const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
 
-      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection, validate: false});
       resourceFormEntity.deleteSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD, {validate: false});
       resourceFormEntity.deleteSecret(ResourceEditCreateFormEnumerationTypes.NOTE);
       delete resourceDto.secret.description;
@@ -502,7 +502,7 @@ describe("Resource Form entity", () => {
       const resourceTypeDtos = resourceTypesCollectionDto();
       const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
 
-      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection, validate: false});
       resourceFormEntity.deleteSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD, {validate: false});
       resourceFormEntity.deleteSecret(ResourceEditCreateFormEnumerationTypes.NOTE);
       delete resourceDto.secret.description;
@@ -643,6 +643,194 @@ describe("Resource Form entity", () => {
 
       const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
       expect(() => resourceFormEntity.convertToNote({})).toThrow(TypeError);
+    });
+  });
+
+  describe("ResourceEntity::removeEmptySecret", () => {
+    it("remove totp secret and add require password secret from v4 password, description and totp resource", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP, secret: {totp: defaultTotpDto({secret_key: ""}), description: ""}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection, validate: false});
+      resourceFormEntity.removeEmptySecret({validate: false});
+      resourceFormEntity.addRequiredSecret();
+      resourceDto.secret.password = "";
+      delete resourceDto.secret.totp;
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION;
+      resourceDto.metadata.resource_type_id = TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION;
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
+    });
+
+    it("remove totp secret and add require password secret from v5 default totp resource", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP, secret: {object_type: SECRET_DATA_OBJECT_TYPE, totp: defaultTotpDto({secret_key: ""}), description: ""}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection, validate: false});
+      resourceFormEntity.removeEmptySecret({validate: false});
+      resourceFormEntity.addRequiredSecret();
+      resourceDto.secret.password = null;
+      delete resourceDto.secret.totp;
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT;
+      resourceDto.metadata.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT;
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
+    });
+
+    it("Do nothing if the resource type is a v4 password, description", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: {password: "", description: ""}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.removeEmptySecret();
+      resourceFormEntity.addRequiredSecret();
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
+    });
+
+    it("Do nothing if the resource type is a v5 default", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto();
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.removeEmptySecret();
+      resourceFormEntity.addRequiredSecret();
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
+    });
+
+    it("Do nothing if the resource type is a v4 totp", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_TOTP, secret: {totp: defaultTotpDto()}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.removeEmptySecret();
+      resourceFormEntity.addRequiredSecret();
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
+    });
+
+    it("Do nothing if the resource type is a v5 totp", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_TOTP, secret: {object_type: SECRET_DATA_OBJECT_TYPE, totp: defaultTotpDto()}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.removeEmptySecret();
+      resourceFormEntity.addRequiredSecret();
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
+    });
+  });
+
+  describe("ResourceEntity::addRequiredSecret", () => {
+    it("add require password secret from v4 password, description and totp resource", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP, secret: {totp: defaultTotpDto(), description: ""}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection, validate: false});
+      resourceFormEntity.addRequiredSecret();
+      resourceDto.secret.password = "";
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
+    });
+
+    it("add require password secret from v5 default totp resource", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP, secret: {object_type: SECRET_DATA_OBJECT_TYPE, totp: defaultTotpDto(), description: ""}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection, validate: false});
+      resourceFormEntity.addRequiredSecret();
+      resourceDto.secret.password = null;
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
+    });
+
+    it("Do nothing if the resource has password for password and description", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: {password: "", description: ""}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addRequiredSecret();
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
+    });
+
+    it("Do not add password if the resource has password for a v5 default", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto();
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addRequiredSecret();
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
+    });
+
+    it("Do nothing if the resource type has no password for a v4 totp", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_TOTP, secret: {totp: defaultTotpDto()}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addRequiredSecret();
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
+    });
+
+    it("Do nothing if the resource type has no password for a v5 totp", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_TOTP, secret: {object_type: SECRET_DATA_OBJECT_TYPE, totp: defaultTotpDto()}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addRequiredSecret();
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
     });
   });
 });

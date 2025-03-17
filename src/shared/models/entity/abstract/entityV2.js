@@ -53,7 +53,7 @@ class EntityV2 extends Entity {
     super(dtos, options);
     this.marshall();
     if (validate) {
-      this.validateSchema(options?.schema);
+      this.validateSchema({schema: options?.schema, skipSchemaAssociationValidation: options?.skipSchemaAssociationValidation});
     }
     this.createAssociations(options);
     if (validate) {

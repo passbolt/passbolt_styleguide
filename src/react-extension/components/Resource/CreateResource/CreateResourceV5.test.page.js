@@ -23,6 +23,9 @@ import {
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import {ResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
+import {MemoryRouter} from "react-router-dom";
+import DialogContextProvider from "../../../contexts/DialogContext";
 /**
  * The Create Resource component represented as a page
  */
@@ -34,17 +37,26 @@ export default class CreateResourcePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={props.context}>
-          <ActionFeedbackContext.Provider value={props.actionFeedbackContext}>
-            <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
-              <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
-                <ResourcePasswordGeneratorContext.Provider value={props.resourcePasswordGeneratorContext}>
-                  <CreateResourceV5 {...props}/>
-                </ResourcePasswordGeneratorContext.Provider>
-              </ResourceWorkspaceContext.Provider>
-            </ResourceTypesLocalStorageContext.Provider>
-          </ActionFeedbackContext.Provider>
-        </AppContext.Provider>
+        <MemoryRouter initialEntries={[
+          "/app/folders/view/:filterByFolderId",
+          "/app/passwords/view/:selectedResourceId",
+          "/app/passwords",
+        ]}>
+          <AppContext.Provider value={props.context}>
+            <DialogContextProvider>
+              <ActionFeedbackContext.Provider value={props.actionFeedbackContext}>
+                <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
+                  <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
+                    <ResourcePasswordGeneratorContext.Provider value={props.resourcePasswordGeneratorContext}>
+                      <ManageDialogs/>
+                      <CreateResourceV5 {...props}/>
+                    </ResourcePasswordGeneratorContext.Provider>
+                  </ResourceWorkspaceContext.Provider>
+                </ResourceTypesLocalStorageContext.Provider>
+              </ActionFeedbackContext.Provider>
+            </DialogContextProvider>
+          </AppContext.Provider>
+        </MemoryRouter>
       </MockTranslationProvider>
     );
   }

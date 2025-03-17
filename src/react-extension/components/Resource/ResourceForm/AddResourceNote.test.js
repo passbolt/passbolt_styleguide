@@ -92,4 +92,15 @@ describe("AddResourceNote", () => {
       expect(page.convertToDescription).toBeNull();
     });
   });
+
+  describe('As LU I should see the note disabled.', () => {
+    it('As LU I can see the note form disabled.', async() => {
+      expect.assertions(1);
+
+      const props = defaultProps({disabled: true});
+      page = new AddResourceNotePage(props);
+
+      expect(page.note.hasAttribute("disabled")).toBeTruthy();
+    });
+  });
 });

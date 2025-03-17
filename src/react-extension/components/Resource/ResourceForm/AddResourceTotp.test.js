@@ -270,4 +270,20 @@ describe("AddResourceTotp", () => {
       expect(page.warningImportMessage.textContent).toBe("The QR code is incomplete.");
     });
   });
+
+  describe('As LU I should see the totp disabled.', () => {
+    it('As LU I can see the totp form disabled.', async() => {
+      expect.assertions(5);
+
+      const props = defaultProps({disabled: true});
+      page = new AddResourceTotpPage(props);
+      await page.click(page.advancedSettings);
+
+      expect(page.resourceTotpKey.hasAttribute("disabled")).toBeTruthy();
+      expect(page.uri.hasAttribute("disabled")).toBeTruthy();
+      expect(page.period.hasAttribute("disabled")).toBeTruthy();
+      expect(page.digits.hasAttribute("disabled")).toBeTruthy();
+      expect(page.algorithm.className).toBe("selected-value disabled");
+    });
+  });
 });

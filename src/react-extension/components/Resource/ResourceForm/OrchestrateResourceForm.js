@@ -40,13 +40,17 @@ class OrchestrateResourceForm extends Component {
           warnings={this.props.warnings}
           errors={this.props.errors}
           passwordEntropy={this.props.passwordEntropy}
-          consumePasswordEntropyError={this.props.consumePasswordEntropyError}/>;
+          consumePasswordEntropyError={this.props.consumePasswordEntropyError}
+          disabled={this.props.disabled}
+        />;
       case ResourceEditCreateFormEnumerationTypes.TOTP:
         return <AddResourceTotp
           resource={this.props.resource}
           onChange={this.props.onChange}
           warnings={this.props.warnings}
-          errors={this.props.errors}/>;
+          errors={this.props.errors}
+          disabled={this.props.disabled}
+        />;
       case ResourceEditCreateFormEnumerationTypes.NOTE:
         return <AddResourceNote
           resource={this.props.resource}
@@ -54,7 +58,9 @@ class OrchestrateResourceForm extends Component {
           resourceType={this.props.resourceType}
           onConvertToDescription={this.props.onConvertToDescription}
           warnings={this.props.warnings}
-          errors={this.props.errors}/>;
+          errors={this.props.errors}
+          disabled={this.props.disabled}
+        />;
       case ResourceEditCreateFormEnumerationTypes.DESCRIPTION:
         return <AddResourceDescription
           resource={this.props.resource}
@@ -62,7 +68,9 @@ class OrchestrateResourceForm extends Component {
           resourceType={this.props.resourceType}
           onConvertToNote={this.props.onConvertToNote}
           warnings={this.props.warnings}
-          errors={this.props.errors}/>;
+          errors={this.props.errors}
+          disabled={this.props.disabled}
+        />;
       default:
         return <></>;
     }
@@ -79,7 +87,8 @@ OrchestrateResourceForm.propTypes = {
   consumePasswordEntropyError: PropTypes.func, // a password entropy state consumer callback
   t: PropTypes.func, // The translation function
   warnings: PropTypes.object, //The warnings validation
-  errors: PropTypes.object // The errors entity error validation
+  errors: PropTypes.object, // The errors entity error validation
+  disabled: PropTypes.bool // The disabled property
 };
 
 export default withTranslation("common")(OrchestrateResourceForm);

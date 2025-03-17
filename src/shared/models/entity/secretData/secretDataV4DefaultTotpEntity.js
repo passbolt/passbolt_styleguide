@@ -18,18 +18,6 @@ import assertString from "validator/es/lib/util/assertString";
 
 class SecretDataV4DefaultTotpEntity extends SecretDataV4DefaultEntity {
   /**
-   * @inheritDoc
-   */
-  constructor(dto, options = {}) {
-    super(dto, options);
-
-    // Associations
-    if (this._props.totp) {
-      this._totp = new TotpEntity(this._props.totp, {...options, clone: false});
-      delete this._props.totp;
-    }
-  }
-  /**
    * Get session keys bundle data entity schema
    * @returns {Object} schema
    */

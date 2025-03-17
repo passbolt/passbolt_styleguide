@@ -272,7 +272,7 @@ class AddResourceTotp extends Component {
   get secretKeyErrorMessage() {
     const secretError = this.props.errors?.details.secret;
     const error = secretError?.details.totp.getError('secret_key');
-    if (error?.minLength) {
+    if (error?.minLength && this.props.resource.secret.totp.secret_key.length === 0) {
       return this.translate("The key is required.");
     } else if (error?.pattern) {
       return this.translate("The key is not valid.");
@@ -352,9 +352,9 @@ class AddResourceTotp extends Component {
           <div className="content">
             <div className="totp-fields">
               {!this.isResourceHasPassword &&
-                <div className="input text">
+                <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
                   <label htmlFor="resource-uri"><Trans>URI</Trans>{this.isMaxLengthWarnings("uris.0") && <AttentionSVG className="attention-required"/>}</label>
-                  <input id="resource-uri" name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange} />
+                  <input id="resource-uri" disabled={this.props.disabled} name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange} />
                   {this.isMaxLengthWarnings("uris.0") && !this.isFieldUriError("uris.0") &&
                     <div className="uri warning-message">
                       <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
@@ -365,10 +365,10 @@ class AddResourceTotp extends Component {
                   }
                 </div>
               }
-              <div className={`input text ${this.isFieldTotpError("secret_key") ? "error" : ""}`}>
+              <div className={`input text ${this.isFieldTotpError("secret_key") ? "error" : ""} ${this.props.disabled ? 'disabled' : ''}`}>
                 <label htmlFor="resource-totp-key"><Trans>Key</Trans> (<Trans>secret</Trans>)</label>
                 <div className="secret-key-wrapper">
-                  <Password id="resource-totp-key" name="secret.totp.secret_key" inputRef={this.keyInputRef} autoComplete="new-password" placeholder={this.translate("Key")} preview={true} value={this.props.resource?.secret?.totp?.secret_key} onChange={this.handleInputChange}/>
+                  <Password id="resource-totp-key" disabled={this.props.disabled} name="secret.totp.secret_key" inputRef={this.keyInputRef} autoComplete="new-password" placeholder={this.translate("Key")} preview={true} value={this.props.resource?.secret?.totp?.secret_key} onChange={this.handleInputChange}/>
                   <input
                     type="file"
                     name="secret.totp"
@@ -400,29 +400,29 @@ class AddResourceTotp extends Component {
               </button>
               {this.state.displayAdvancedSettings &&
                 <div className="advanced-settings">
-                  <div className={`input text ${this.isFieldTotpError("period") ? "error" : ""}`}>
+                  <div className={`input text ${this.isFieldTotpError("period") ? "error" : ""} ${this.props.disabled ? 'disabled' : ''}`}>
                     <label htmlFor="resource-totp-period"><Trans>TOTP expiry</Trans></label>
                     <div className="input-wrapper-inline">
-                      <input id="resource-totp-period" ref={this.periodInputRef} name="secret.totp.period" type="number" min="1" max="120" value={this.props.resource?.secret?.totp?.period} onChange={this.handleInputChange}/>
+                      <input id="resource-totp-period" ref={this.periodInputRef} disabled={this.props.disabled} name="secret.totp.period" type="number" min="1" max="120" value={this.props.resource?.secret?.totp?.period} onChange={this.handleInputChange}/>
                       <span><Trans>seconds until the TOTP expires</Trans></span>
                     </div>
                     {this.isFieldTotpError("period") &&
                       <div className="period error-message">{this.periodErrorMessage}</div>
                     }
                   </div>
-                  <div className={`input text ${this.isFieldTotpError("digits") ? "error" : ""}`}>
+                  <div className={`input text ${this.isFieldTotpError("digits") ? "error" : ""} ${this.props.disabled ? 'disabled' : ''}`}>
                     <label htmlFor="resource-totp-digits"><Trans>TOTP length</Trans></label>
                     <div className="input-wrapper-inline">
-                      <input id="resource-totp-digits" ref={this.digitsInputRef} name="secret.totp.digits" type="number" min="6" max="8" value={this.props.resource?.secret?.totp?.digits} onChange={this.handleInputChange}/>
+                      <input id="resource-totp-digits" ref={this.digitsInputRef} disabled={this.props.disabled} name="secret.totp.digits" type="number" min="6" max="8" value={this.props.resource?.secret?.totp?.digits} onChange={this.handleInputChange}/>
                       <span><Trans>digits</Trans></span>
                     </div>
                     {this.isFieldTotpError("digits") &&
                       <div className="digits error-message">{this.digitsErrorMessage}</div>
                     }
                   </div>
-                  <div className="select-wrapper input">
+                  <div className={`select-wrapper input ${this.props.disabled ? 'disabled' : ''}`}>
                     <label htmlFor="resource-totp-algorithm"><Trans>Algorithm</Trans></label>
-                    <Select id="resource-totp-algorithm" name="secret.totp.algorithm" items={this.supportedAlgorithms} value={this.props.resource?.secret?.totp?.algorithm} onChange={this.handleInputChange}/>
+                    <Select id="resource-totp-algorithm" disabled={this.props.disabled} name="secret.totp.algorithm" items={this.supportedAlgorithms} value={this.props.resource?.secret?.totp?.algorithm} onChange={this.handleInputChange}/>
                   </div>
                 </div>
               }
@@ -473,7 +473,8 @@ AddResourceTotp.propTypes = {
   onChange: PropTypes.func, //The resource setter
   t: PropTypes.func, // The translation function
   warnings: PropTypes.object, //The warnings validation
-  errors: PropTypes.object // The errors entity error validation
+  errors: PropTypes.object, // The errors entity error validation
+  disabled: PropTypes.bool // The disabled property
 };
 
 export default  withAppContext(withActionFeedback(withTranslation('common')(AddResourceTotp)));
