@@ -44,6 +44,7 @@ import {withDialog} from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {DateTime} from "luxon";
+import EditResourceSkeleton from "./EditResourceV5Skeleton";
 
 class EditResource extends Component {
   constructor(props) {
@@ -607,46 +608,53 @@ class EditResource extends Component {
 
     return (
       <DialogWrapper title={this.translate("Edit a resource")} className="edit-resource"
-        disabled={this.hasAllInputDisabled || this.hasSecretDecrypting} onClose={this.handleClose}>
-        <SelectResourceForm
-          resourceType={this.state.resourceType}
-          resourceFormSelected={this.state.resourceFormSelected}
-          resource={this.state.resource}
-          onAddSecret={this.onAddSecret}
-          onDeleteSecret={this.onDeleteSecret}
-          onSelectForm={this.onSelectForm}
-          disabled={this.hasAllInputDisabled || this.hasSecretDecrypting}
-        />
-        <form className="grid-and-footer" onSubmit={this.handleFormSubmit} noValidate>
-          <div className="grid">
-            <AddResourceName
+        disabled={this.hasAllInputDisabled} onClose={this.handleClose}>
+        {this.hasSecretDecrypting &&
+          <EditResourceSkeleton/>
+        }
+        {!this.hasSecretDecrypting &&
+          <>
+            <SelectResourceForm
+              resourceType={this.state.resourceType}
+              resourceFormSelected={this.state.resourceFormSelected}
               resource={this.state.resource}
-              onChange={this.handleInputChange}
-              disabled={this.hasAllInputDisabled || this.hasSecretDecrypting}
-              warnings={warnings}
-              errors={errors}
+              onAddSecret={this.onAddSecret}
+              onDeleteSecret={this.onDeleteSecret}
+              onSelectForm={this.onSelectForm}
+              disabled={this.hasAllInputDisabled}
             />
-            <div className="edit-workspace">
-              <OrchestrateResourceForm
-                resourceFormSelected={this.state.resourceFormSelected}
-                resource={this.state.resource}
-                resourceType={this.state.resourceType}
-                onChange={this.handleInputChange}
-                onConvertToDescription={this.handleConvertToDescription}
-                onConvertToNote={this.handleConvertToNote}
-                passwordEntropy={this.state.passwordEntropy}
-                consumePasswordEntropyError={this.consumePasswordEntropyError}
-                disabled={this.hasAllInputDisabled || this.hasSecretDecrypting}
-                warnings={warnings}
-                errors={errors}
-              />
-            </div>
-          </div>
-          <div className="submit-wrapper">
-            <FormCancelButton disabled={this.hasAllInputDisabled || this.hasSecretDecrypting} onClick={this.handleClose}/>
-            <FormSubmitButton value={this.translate("Save")} disabled={this.hasAllInputDisabled || this.hasSecretDecrypting} processing={this.hasAllInputDisabled}/>
-          </div>
-        </form>
+            <form className="grid-and-footer" onSubmit={this.handleFormSubmit} noValidate>
+              <div className="grid">
+                <AddResourceName
+                  resource={this.state.resource}
+                  onChange={this.handleInputChange}
+                  disabled={this.hasAllInputDisabled}
+                  warnings={warnings}
+                  errors={errors}
+                />
+                <div className="edit-workspace">
+                  <OrchestrateResourceForm
+                    resourceFormSelected={this.state.resourceFormSelected}
+                    resource={this.state.resource}
+                    resourceType={this.state.resourceType}
+                    onChange={this.handleInputChange}
+                    onConvertToDescription={this.handleConvertToDescription}
+                    onConvertToNote={this.handleConvertToNote}
+                    passwordEntropy={this.state.passwordEntropy}
+                    consumePasswordEntropyError={this.consumePasswordEntropyError}
+                    disabled={this.hasAllInputDisabled}
+                    warnings={warnings}
+                    errors={errors}
+                  />
+                </div>
+              </div>
+              <div className="submit-wrapper">
+                <FormCancelButton disabled={this.hasAllInputDisabled} onClick={this.handleClose}/>
+                <FormSubmitButton value={this.translate("Save")} disabled={this.hasAllInputDisabled} processing={this.state.isProcessing}/>
+              </div>
+            </form>
+          </>
+        }
       </DialogWrapper>
     );
   }

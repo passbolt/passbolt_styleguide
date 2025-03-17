@@ -106,6 +106,34 @@ describe("See the Create Resource", () => {
         // Cancel button exists
         expect(page.cancelButton.textContent).toBe("Cancel");
       });
+
+      it('should display skeleton if secrets is not decrypted', async() => {
+        expect.assertions(9);
+        const props = defaultProps(); // The props to pass
+        const page = new EditResourcePage(props);
+        await waitFor(() => {});
+        // Dialog title exists and correct
+        expect(page.exists()).toBeTruthy();
+        expect(page.header.textContent).toBe("Edit a resource");
+
+        // Close button exists
+        expect(page.dialogClose).not.toBeNull();
+
+        // resource info skeleton exists.
+        expect(page.resourceInfoSkeleton).toBeDefined();
+        // edit workspace skeleton exists.
+        expect(page.editWorkspaceSkeleton).toBeDefined();
+
+        // Save button exists
+        expect(page.saveButton.textContent).toBe("Save");
+        // Save button is disabled
+        expect(page.saveButton.hasAttribute("disabled")).toBeTruthy();
+
+        // Cancel button exists
+        expect(page.cancelButton.textContent).toBe("Cancel");
+        // Cancel button is disabled
+        expect(page.cancelButton.hasAttribute("disabled")).toBeTruthy();
+      });
     });
 
     describe("should select a resource form", () => {

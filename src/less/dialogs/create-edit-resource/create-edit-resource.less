@@ -21,6 +21,7 @@
     align-items: center;
     flex: 1 0 0;
     align-self: stretch;
+    height: 71rem;
 
     .left-sidebar {
       display: flex;
@@ -216,6 +217,10 @@
           align-self: stretch;
           border-radius: var(--Section-border-radius);
           background: var(--Workspace-Panels-background);
+
+          &.skeleton {
+            height: 9.2rem;
+          }
 
           .resource-icon {
             display: flex;

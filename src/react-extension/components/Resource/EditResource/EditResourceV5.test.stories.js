@@ -105,3 +105,13 @@ legacyStringProps.context.port = mockedPasswordStringPort;
 export const StringLegacy = {
   args: legacyStringProps
 };
+
+
+const mockedLoadingPort = new MockPort();
+
+mockedLoadingPort.addRequestListener("passbolt.secret.find-by-resource-id", () => new Promise(resolve => resolve));
+const loadingProps = defaultProps();
+loadingProps.context.port = mockedLoadingPort;
+export const Loading = {
+  args: loadingProps
+};
