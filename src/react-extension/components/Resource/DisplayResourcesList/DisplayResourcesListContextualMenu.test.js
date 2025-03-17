@@ -58,22 +58,29 @@ describe("DisplayResourcesListContextualMenu", () => {
      * Then I should see the 11 menu
      */
     it('As LU I should see all menu name', () => {
-      expect.assertions(15);
+      expect.assertions(22);
       expect(page.copyUsernameItem).not.toBeNull();
       expect(page.copyUsernameItem.hasAttribute("disabled")).toBeFalsy();
-      expect(page.copyPasswordItem).toBeNull();
+      expect(page.copyPasswordItem).not.toBeNull();
+      expect(page.copyPasswordItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyUriItem).not.toBeNull();
       expect(page.copyUriItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPermalinkItem).not.toBeNull();
       expect(page.copyPermalinkItem.hasAttribute("disabled")).toBeFalsy();
-      expect(page.copyTotpItem).toBeNull();
+      expect(page.copyTotpItem).not.toBeNull();
+      expect(page.copyTotpItem.hasAttribute("disabled")).toBeTruthy();
       expect(page.openUriItem).not.toBeNull();
       expect(page.openUriItem.hasAttribute("disabled")).toBeFalsy();
-      expect(page.editItem).toBeNull();
-      expect(page.shareItem).toBeNull();
-      expect(page.deleteItem).toBeNull();
-      expect(page.markAsExpiredItem).toBeNull();
-      expect(page.setExpiryDateItem).toBeNull();
+      expect(page.editItem).not.toBeNull();
+      expect(page.editItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.shareItem).not.toBeNull();
+      expect(page.shareItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.deleteItem).not.toBeNull();
+      expect(page.deleteItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.markAsExpiredItem).not.toBeNull();
+      expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.setExpiryDateItem).not.toBeNull();
+      expect(page.setExpiryDateItem.hasAttribute("disabled")).toBeFalsy();
     });
 
     it('As LU I can start to copy the username of a resource', async() => {
@@ -84,7 +91,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(props.hide).toHaveBeenCalled();
     });
 
-    it.skip('As LU I can start to copy the password of a resource', async() => {
+    it('As LU I can start to copy the password of a resource', async() => {
       expect.assertions(4);
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordStringDto());
       await page.copyPassword();
@@ -116,25 +123,25 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(props.resourceWorkspaceContext.onGoToResourceUriRequested).toHaveBeenCalled();
     });
 
-    it.skip('As LU I can start to edit a resource', async() => {
+    it('As LU I can start to edit a resource', async() => {
       await page.edit();
       expect(props.dialogContext.open).toHaveBeenCalledWith(EditResource, {resource: props.resource});
       expect(props.hide).toHaveBeenCalled();
     });
 
-    it.skip('As LU I can start to share a resource', async() => {
+    it('As LU I can start to share a resource', async() => {
       await page.share();
       expect(props.dialogContext.open).toHaveBeenCalledWith(ShareDialog);
       expect(props.hide).toHaveBeenCalled();
     });
 
-    it.skip('As LU I can start to delete a resource', async() => {
+    it('As LU I can start to delete a resource', async() => {
       await page.delete();
       expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteResource, {resources: [props.resource]});
       expect(props.hide).toHaveBeenCalled();
     });
 
-    it.skip('As LU I can start to mark a resource as expired', async() => {
+    it('As LU I can start to mark a resource as expired', async() => {
       expect.assertions(3);
       jest.spyOn(props.context.port, "request");
       await page.markAsExpired();
@@ -143,7 +150,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(props.hide).toHaveBeenCalled();
     });
 
-    it.skip('As LU I cannot start to mark a resource as expired if there is an error', async() => {
+    it('As LU I cannot start to mark a resource as expired if there is an error', async() => {
       expect.assertions(3);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => { throw new Error('error'); });
       await page.markAsExpired();
@@ -152,7 +159,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(props.hide).toHaveBeenCalled();
     });
 
-    it.skip('As LU I can mark a resource as expired', async() => {
+    it('As LU I can mark a resource as expired', async() => {
       expect.assertions(3);
       jest.spyOn(props.context.port, "request");
       await page.markAsExpired();
@@ -161,7 +168,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(props.hide).toHaveBeenCalled();
     });
 
-    it.skip('As LU I can start to set expiry expiry date of a resource', async() => {
+    it('As LU I can start to set expiry expiry date of a resource', async() => {
       await page.setExpiryDate();
       expect(props.dialogContext.open).toHaveBeenCalledWith(PasswordExpiryDialog, {
         resources: [props.resource]
@@ -170,8 +177,7 @@ describe("DisplayResourcesListContextualMenu", () => {
     });
   });
 
-  // 仕様上totpでのログイン機能は存在しないためテストをスキップ
-  describe.skip('As LU I should be able to access all the offered capabilities on totp resources I have owner access', () => {
+  describe('As LU I should be able to access all the offered capabilities on totp resources I have owner access', () => {
     const props = propsResourceTotp(); // The props to pass
     jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
 
@@ -219,8 +225,7 @@ describe("DisplayResourcesListContextualMenu", () => {
     });
   });
 
-  // 仕様上totpでのログイン機能は存在しないためテストをスキップ
-  describe.skip('As LU I should be able to access all the offered capabilities on a standalone totp resources I have owner access', () => {
+  describe('As LU I should be able to access all the offered capabilities on a standalone totp resources I have owner access', () => {
     const props = propsResourceStandaloneTotp(); // The props to pass
     jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
 
@@ -279,21 +284,27 @@ describe("DisplayResourcesListContextualMenu", () => {
     });
 
     it('As LU I should not be able to edit/share/delete/expire a password I have read only access', async() => {
-      expect.assertions(14);
+      expect.assertions(20);
       expect(page.copyUsernameItem).not.toBeNull();
       expect(page.copyUsernameItem.hasAttribute("disabled")).toBeFalsy();
-      expect(page.copyPasswordItem).toBeNull();
+      expect(page.copyPasswordItem).not.toBeNull();
+      expect(page.copyPasswordItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyUriItem).not.toBeNull();
       expect(page.copyUriItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPermalinkItem).not.toBeNull();
       expect(page.copyPermalinkItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.openUriItem).not.toBeNull();
       expect(page.openUriItem.hasAttribute("disabled")).toBeFalsy();
-      expect(page.editItem).toBeNull();
-      expect(page.shareItem).toBeNull();
-      expect(page.deleteItem).toBeNull();
-      expect(page.markAsExpiredItem).toBeNull();
-      expect(page.setExpiryDateItem).toBeNull();
+      expect(page.editItem).not.toBeNull();
+      expect(page.editItem.hasAttribute("disabled")).toBeTruthy();
+      expect(page.shareItem).not.toBeNull();
+      expect(page.shareItem.hasAttribute("disabled")).toBeTruthy();
+      expect(page.deleteItem).not.toBeNull();
+      expect(page.deleteItem.hasAttribute("disabled")).toBeTruthy();
+      expect(page.markAsExpiredItem).not.toBeNull();
+      expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeTruthy();
+      expect(page.setExpiryDateItem).not.toBeNull();
+      expect(page.setExpiryDateItem.hasAttribute("disabled")).toBeTruthy();
     });
   });
 
@@ -307,18 +318,24 @@ describe("DisplayResourcesListContextualMenu", () => {
     it('As LU I should not be able to share a password I have update access', async() => {
       expect(page.copyUsernameItem).not.toBeNull();
       expect(page.copyUsernameItem.hasAttribute('disabled')).toBeFalsy();
-      expect(page.copyPasswordItem).toBeNull();
+      expect(page.copyPasswordItem).not.toBeNull();
+      expect(page.copyPasswordItem.hasAttribute('disabled')).toBeFalsy();
       expect(page.copyUriItem).not.toBeNull();
       expect(page.copyUriItem.hasAttribute('disabled')).toBeFalsy();
       expect(page.copyPermalinkItem).not.toBeNull();
       expect(page.copyPermalinkItem.hasAttribute('disabled')).toBeFalsy();
       expect(page.openUriItem).not.toBeNull();
       expect(page.openUriItem.hasAttribute('disabled')).toBeFalsy();
-      expect(page.editItem).toBeNull();
-      expect(page.shareItem).toBeNull();
-      expect(page.deleteItem).toBeNull();
-      expect(page.markAsExpiredItem).toBeNull();
-      expect(page.setExpiryDateItem).toBeNull();
+      expect(page.editItem).not.toBeNull();
+      expect(page.editItem.hasAttribute('disabled')).toBeFalsy();
+      expect(page.shareItem).not.toBeNull();
+      expect(page.shareItem.hasAttribute('disabled')).toBeTruthy();
+      expect(page.deleteItem).not.toBeNull();
+      expect(page.deleteItem.hasAttribute('disabled')).toBeFalsy();
+      expect(page.markAsExpiredItem).not.toBeNull();
+      expect(page.markAsExpiredItem.hasAttribute('disabled')).toBeFalsy();
+      expect(page.setExpiryDateItem).not.toBeNull();
+      expect(page.setExpiryDateItem.hasAttribute("disabled")).toBeFalsy();
     });
   });
 
@@ -339,9 +356,11 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.copyPermalinkItem.hasAttribute('disabled')).toBeFalsy();
       expect(page.openUriItem).not.toBeNull();
       expect(page.openUriItem.hasAttribute('disabled')).toBeFalsy();
-      expect(page.editItem).toBeNull();
+      expect(page.editItem).not.toBeNull();
+      expect(page.editItem.hasAttribute('disabled')).toBeFalsy();
       expect(page.shareItem).toBeNull();
-      expect(page.deleteItem).toBeNull();
+      expect(page.deleteItem).not.toBeNull();
+      expect(page.deleteItem.hasAttribute('disabled')).toBeFalsy();
     });
   });
 
