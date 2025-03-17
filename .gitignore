@@ -27,3 +27,7 @@ storybook-static/*
 
 ### dev scripts
 /scripts
+
+# UT logs            #
+######################
+ut_logs
