@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
-import EditResource from "../EditResource/EditResource";
+import EditResource from "../EditResource/EditResourceV5";
 import ShareDialog from "../../Share/ShareDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import DeleteResource from "../DeleteResource/DeleteResource";

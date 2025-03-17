@@ -39,7 +39,8 @@ export const defaultResourceDto = (data = {}, options = {}) => {
   const id = data?.id || uuidv4();
   const defaultData = {
     id: id,
-    resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+    resource_type_id: data?.metadata?.resource_type_id
+      || data?.resource_type_id || TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
     expired: null,
     deleted: false,
     created: "2022-03-04T13:59:11+00:00",

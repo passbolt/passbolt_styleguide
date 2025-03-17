@@ -56,7 +56,7 @@ class AddResourceName extends Component {
    * Returns the current list of breadcrumb items
    */
   get breadcrumbItems() {
-    const foldersHierarchy = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.props.folderParentId);
+    const foldersHierarchy = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.props.resource?.folder_parent_id);
     return <div className="breadcrumbs">
       <div className="folder-name"><Trans>My workspace</Trans></div>
       {foldersHierarchy?.map(folder =>
@@ -126,7 +126,6 @@ class AddResourceName extends Component {
 }
 
 AddResourceName.propTypes = {
-  folderParentId: PropTypes.string, // The folder parent id
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   resource: PropTypes.object, // The resource to update
   warnings: PropTypes.object, //The warnings validation

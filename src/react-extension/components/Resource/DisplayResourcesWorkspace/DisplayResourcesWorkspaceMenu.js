@@ -19,7 +19,7 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
-import EditResource from "../EditResource/EditResource";
+import EditResource from "../EditResource/EditResourceV5";
 import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
 import {Trans, withTranslation} from "react-i18next";
