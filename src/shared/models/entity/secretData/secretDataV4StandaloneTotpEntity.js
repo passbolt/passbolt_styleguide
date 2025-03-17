@@ -84,14 +84,27 @@ class SecretDataV4StandaloneTotpEntity extends SecretDataEntity {
   }
 
   /**
+   * Are secret different
+   * @param secretDto
+   * @returns {boolean}
+   */
+  areSecretsDifferent(secretDto) {
+    const totp = this.totp.toDto();
+    return Object.keys(totp).some(key => totp[key] !== secretDto.totp?.[key]);
+  }
+
+  /**
    * Get the DTO of properties managed by the form.
    * @returns {object}
    */
   toDto() {
-    return {
-      ...this._props,
-      totp: this.totp.toDto(),
-    };
+    const result = Object.assign({}, this._props);
+
+    if (this.totp) {
+      result.totp = this.totp.toDto();
+    }
+
+    return result;
   }
 
   /**

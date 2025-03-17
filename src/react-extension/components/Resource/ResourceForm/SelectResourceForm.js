@@ -26,7 +26,7 @@ import TotpSVG from "../../../../img/svg/totp.svg";
 import NotesSVG from "../../../../img/svg/notes.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import AlignLeftSVG from "../../../../img/svg/align_left.svg";
-import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
+//import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
 import DeleteSVG from "../../../../img/svg/delete.svg";
 import {
   ResourceEditCreateFormEnumerationTypes
@@ -350,6 +350,8 @@ class SelectResourceForm extends Component {
             </div>
           }
         </div>
+        {/* Upgrade v4 to v5
+
         <div className="section-card">
           <div className="card">
             <button type="button" className="title no-border" onClick={this.handleDisplayUpgradeClick}>
@@ -375,6 +377,8 @@ class SelectResourceForm extends Component {
             }
           </div>
         </div>
+
+        */}
       </div>
     );
   }

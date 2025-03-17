@@ -95,4 +95,18 @@ describe("SecretDataV4DefaultEntity", () => {
       expect(() => SecretDataV4DefaultEntity.getDefaultProp({})).toThrow(TypeError);
     });
   });
+
+  describe("::areSecretsDifferent", () => {
+    it("should return true", () => {
+      const dto = defaultSecretDataV4DefaultData();
+      const entity = new SecretDataV4DefaultEntity(dto);
+      expect(entity.areSecretsDifferent({password: "this-is-a-secret-password"})).toBeTruthy();
+    });
+
+    it("should return false", () => {
+      const dto = defaultSecretDataV4DefaultData();
+      const entity = new SecretDataV4DefaultEntity(dto);
+      expect(entity.areSecretsDifferent(dto)).toBeFalsy();
+    });
+  });
 });

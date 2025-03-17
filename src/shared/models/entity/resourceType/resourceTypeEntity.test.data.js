@@ -326,7 +326,8 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
       properties: {
         password: {
           type: "string",
-          maxLength: 4096
+          maxLength: 4096,
+          nullable: true,
         },
         description: {
           type: "string",
@@ -429,7 +430,8 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
       properties: {
         password: {
           type: "string",
-          maxLength: 4096
+          maxLength: 4096,
+          nullable: true,
         },
         description: {
           type: "string",

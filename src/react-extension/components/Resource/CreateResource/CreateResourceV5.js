@@ -201,28 +201,32 @@ class CreateResource extends Component {
     this.setState({hasAlreadyBeenValidated: true});
     await this.toggleProcessing();
 
-    // Create a clone entity from DTO and remove empty secret and add required secret
-    const resourceFormEntity = this.createAndSanitizeResourceFormEntity();
+    try {
+      // Create a clone entity from DTO and remove empty secret and add required secret
+      const resourceFormEntity = this.createAndSanitizeResourceFormEntity();
 
-    // Validate the entity
-    const validationError = resourceFormEntity.validate();
+      // Validate the entity
+      const validationError = resourceFormEntity.validate();
 
-    if (validationError?.hasErrors()) {
-      this.selectResourceFormByFirstError(validationError);
+      if (validationError?.hasErrors()) {
+        this.selectResourceFormByFirstError(validationError);
+        await this.toggleProcessing();
+        return;
+      }
+
+      if (!this.isMinimumRequiredEntropyReached()) {
+        this.handlePasswordMinimumEntropyNotReached(resourceFormEntity);
+        return;
+      } else if (await this.isPasswordInDictionary()) {
+        this.handlePasswordInDictionary(resourceFormEntity);
+        return;
+      }
+
+      await this.save(resourceFormEntity);
+    } catch (error) {
       await this.toggleProcessing();
-      return;
+      this.handleSaveError(error);
     }
-
-    if (!this.isMinimumRequiredEntropyReached()) {
-      this.handlePasswordMinimumEntropyNotReached(resourceFormEntity);
-      return;
-    } else if (await this.isPasswordInDictionary()) {
-      this.handlePasswordInDictionary(resourceFormEntity);
-      return;
-    }
-
-
-    this.save(resourceFormEntity);
   }
 
   /**
@@ -235,9 +239,9 @@ class CreateResource extends Component {
       return true;
     }
 
-    // we accept empty password in the case of v4 resource type
-    const isPasswordEmpty = this.state.resource.secret.password === "";
-    if (isPasswordEmpty) {
+    // we accept empty password in the case of v4 resource type, or we accept null password in the case of v5 resource type
+    const isPasswordNotEmpty = Boolean(this.state.resource.secret.password);
+    if (!isPasswordNotEmpty) {
       return true;
     }
 
@@ -256,9 +260,9 @@ class CreateResource extends Component {
       return false;
     }
 
-    // we accept empty password in the case of v4 resource type
-    const isPasswordEmpty = this.state.resource.secret.password === "";
-    if (isPasswordEmpty) {
+    // we accept empty password in the case of v4 resource type, or we accept null password in the case of v5 resource type
+    const isPasswordNotEmpty = Boolean(this.state.resource.secret.password);
+    if (!isPasswordNotEmpty) {
       return false;
     }
 
@@ -351,8 +355,8 @@ class CreateResource extends Component {
     if (resourceFormEntity.metadata.name.length === 0) {
       resourceFormEntity.set("metadata.name", "no name", {validate: false});
     }
-    resourceFormEntity.removeEmptySecret();
-    resourceFormEntity.addRequiredSecret();
+    resourceFormEntity.removeEmptySecret({validate: false});
+    resourceFormEntity.addRequiredSecret({validate: false});
     return resourceFormEntity;
   }
 
@@ -362,13 +366,8 @@ class CreateResource extends Component {
    * @returns {Promise<void>}
    */
   async save(resource) {
-    try {
-      const createdResource = await this.createResource(resource);
-      await this.handleSaveSuccess(createdResource);
-    } catch (error) {
-      await this.toggleProcessing();
-      this.handleSaveError(error);
-    }
+    const createdResource = await this.createResource(resource);
+    await this.handleSaveSuccess(createdResource);
   }
 
   /**
@@ -430,9 +429,9 @@ class CreateResource extends Component {
    * @returns {Promise<void>}
    */
   async toggleProcessing() {
-    const prev = this.state.processing;
+    const prev = this.state.isProcessing;
     return new Promise(resolve => {
-      this.setState({processing: !prev}, () => resolve());
+      this.setState({isProcessing: !prev}, () => resolve());
     });
   }
 
@@ -545,7 +544,7 @@ class CreateResource extends Component {
 
     return (
       <DialogWrapper title={this.translate("Create a resource")} className="create-resource"
-        disabled={this.state.processing} onClose={this.handleClose}>
+        disabled={this.state.isProcessing} onClose={this.handleClose}>
         <SelectResourceForm
           resourceType={this.state.resourceType}
           resourceFormSelected={this.state.resourceFormSelected}
@@ -553,13 +552,13 @@ class CreateResource extends Component {
           onAddSecret={this.onAddSecret}
           onDeleteSecret={this.onDeleteSecret}
           onSelectForm={this.onSelectForm}
-          disabled={this.state.processing}
+          disabled={this.state.isProcessing}
         />
         <form onSubmit={this.handleFormSubmit} className="grid-and-footer" noValidate>
           <div className="grid">
             <AddResourceName
               resource={this.state.resource} folderParentId={this.props.folderParentId} onChange={this.handleInputChange} warnings={warnings}
-              errors={errors}/>
+              errors={errors} disabled={this.state.isProcessing}/>
             <div className="create-workspace">
               <OrchestrateResourceForm
                 resourceFormSelected={this.state.resourceFormSelected}
@@ -572,12 +571,12 @@ class CreateResource extends Component {
                 warnings={warnings}
                 errors={errors}
                 consumePasswordEntropyError={this.consumePasswordEntropyError}
-                disabled={this.state.processing}/>
+                disabled={this.state.isProcessing}/>
             </div>
           </div>
           <div className="submit-wrapper">
-            <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
-            <FormSubmitButton value={this.translate("Create")} disabled={this.state.processing} processing={this.state.processing}/>
+            <FormCancelButton disabled={this.state.isProcessing} onClick={this.handleClose}/>
+            <FormSubmitButton value={this.translate("Create")} disabled={this.state.isProcessing} processing={this.state.isProcessing}/>
           </div>
         </form>
       </DialogWrapper>

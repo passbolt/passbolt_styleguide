@@ -47,6 +47,16 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
   }
 
   /**
+   * @inheritdoc
+   */
+  marshall() {
+    // Set object type in case of secret has not object_type (example: after a migration v4 to v5)
+    if (!this._props.object_type) {
+      this._props.object_type = SECRET_DATA_OBJECT_TYPE;
+    }
+  }
+
+  /**
    * Return the default secret data v5 default totp.
    * @param {object} data the data to override the default with
    * @param {object} [options] Options.
@@ -82,14 +92,28 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
   }
 
   /**
+   * Are secret different
+   * @param secretDto
+   * @returns {boolean}
+   */
+  areSecretsDifferent(secretDto) {
+    const totp = this.totp.toDto();
+    const isTotpDifferent = Object.keys(totp).some(key => totp[key] !== secretDto.totp?.[key]);
+    return this.password !== secretDto.password || isTotpDifferent || this.description !== secretDto.description;
+  }
+
+  /**
    * Get the DTO of properties managed by the form.
    * @returns {object}
    */
   toDto() {
-    return {
-      ...this._props,
-      totp: this.totp.toDto(),
-    };
+    const result = Object.assign({}, this._props);
+
+    if (this.totp) {
+      result.totp = this.totp.toDto();
+    }
+
+    return result;
   }
 
   /**

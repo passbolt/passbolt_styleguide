@@ -216,7 +216,8 @@ const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
     properties: {
       password: {
         type: "string",
-        maxLength: 4096
+        maxLength: 4096,
+        nullable: true
       },
       description: {
         type: "string",
@@ -299,7 +300,8 @@ const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
     properties: {
       password: {
         type: "string",
-        maxLength: 4096
+        maxLength: 4096,
+        nullable: true
       },
       description: {
         type: "string",

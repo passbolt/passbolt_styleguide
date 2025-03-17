@@ -158,26 +158,28 @@ class EntityV2 extends Entity {
    * @param {object} [options] Options
    */
   createAssociations(options = {}) {
-    const validationErrors = new EntityValidationError();
-    for (const [associationProp, associationEntityClass] of Object.entries(this.constructor.associations)) {
-      try {
-        if (this._props[associationProp]) {
-          // Get the association name and replace '_[a-z]' into [A-Z]  (example: associated_entity_v2 become associatedEntityV2)
-          const associationPropName = snakeCaseToCamelCase(associationProp);
-          this[`_${associationPropName}`] = new associationEntityClass(this._props[associationProp], {...options, clone: false});
-          delete this._props[associationProp];
-        }
-      } catch (error) {
-        if (error instanceof EntityValidationError) {
-          validationErrors.addAssociationError(associationProp, error);
-        } else {
-          throw error;
+    if (Object.keys(this.constructor.associations).length > 0) {
+      const validationErrors = new EntityValidationError();
+      for (const [associationProp, associationEntityClass] of Object.entries(this.constructor.associations)) {
+        try {
+          if (this._props[associationProp]) {
+            // Get the association name and replace '_[a-z]' into [A-Z]  (example: associated_entity_v2 become associatedEntityV2)
+            const associationPropName = snakeCaseToCamelCase(associationProp);
+            this[`_${associationPropName}`] = new associationEntityClass(this._props[associationProp], {...options, clone: false});
+            delete this._props[associationProp];
+          }
+        } catch (error) {
+          if (error instanceof EntityValidationError) {
+            validationErrors.addAssociationError(associationProp, error);
+          } else {
+            throw error;
+          }
         }
       }
-    }
-    // Throw error if some issues were gathered
-    if (validationErrors.hasErrors()) {
-      throw validationErrors;
+      // Throw error if some issues were gathered
+      if (validationErrors.hasErrors()) {
+        throw validationErrors;
+      }
     }
   }
 

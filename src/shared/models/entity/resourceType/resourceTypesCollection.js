@@ -248,7 +248,7 @@ class ResourceTypesCollection extends EntityV2Collection {
           continue;
         }
         // Else set the score and the resource type that matched the most
-        if (!score && score < unsetPropertyCount) {
+        if (!score || score > unsetPropertyCount) {
           score = unsetPropertyCount;
           resourceTypeMatch = resourceType;
         }

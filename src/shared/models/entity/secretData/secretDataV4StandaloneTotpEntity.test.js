@@ -98,4 +98,23 @@ describe("SecretDataV4StandaloneEntity", () => {
       expect(() => SecretDataV4StandaloneTotpEntity.getDefaultProp({})).toThrow(TypeError);
     });
   });
+
+  describe("::areSecretsDifferent", () => {
+    it("should return true", () => {
+      const dto = {
+        totp: defaultTotpDto(),
+      };
+      const entity = new SecretDataV4StandaloneTotpEntity(dto);
+      dto.totp.digits = 7;
+      expect(entity.areSecretsDifferent(dto)).toBeTruthy();
+    });
+
+    it("should return false", () => {
+      const dto = {
+        totp: defaultTotpDto(),
+      };
+      const entity = new SecretDataV4StandaloneTotpEntity(dto);
+      expect(entity.areSecretsDifferent(dto)).toBeFalsy();
+    });
+  });
 });

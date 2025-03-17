@@ -30,6 +30,20 @@ import AddResourceName from "../ResourceForm/AddResourceName";
 import OrchestrateResourceForm from "../ResourceForm/OrchestrateResourceForm";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import ConfirmCreateEdit, {
+  ConfirmEditCreateOperationVariations,
+  ConfirmEditCreateRuleVariations
+} from "../ConfirmCreateEdit/ConfirmCreateEdit";
+import {ENTROPY_THRESHOLDS} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
+import memoize from "memoize-one";
+import PownedService from "../../../../shared/services/api/secrets/pownedService";
+import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withDialog} from "../../../contexts/DialogContext";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {DateTime} from "luxon";
 
 class EditResource extends Component {
   constructor(props) {
@@ -70,7 +84,10 @@ class EditResource extends Component {
     this.onDeleteSecret = this.onDeleteSecret.bind(this);
     this.handleConvertToDescription = this.handleConvertToDescription.bind(this);
     this.handleConvertToNote = this.handleConvertToNote.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.rejectEditionConfirmation = this.rejectEditionConfirmation.bind(this);
     this.consumePasswordEntropyError = this.consumePasswordEntropyError.bind(this);
+    this.save = this.save.bind(this);
   }
 
   /**
@@ -82,15 +99,61 @@ class EditResource extends Component {
     const secret = await this.getDecryptedSecret();
     resourceDto.secret = secret;
     this.resourceFormEntity = new ResourceFormEntity(resourceDto, {validate: false, resourceTypes: this.props.resourceTypes});
+    const passwordEntropy = secret?.password?.length
+      ? SecretGenerator.entropy(secret.password)
+      : null;
 
     this.setState({
       isSecretDecrypting: false,
       originalSecret: secret,
       resource: this.resourceFormEntity.toDto(),
       resourceType: this.props.resourceTypes.getFirstById(this.props.resource.resource_type_id),
-      resourceFormSelected: this.selectResourceFormByResourceSecretData()
+      resourceFormSelected: this.selectResourceFormByResourceSecretData(),
+      passwordEntropy
     });
   }
+
+  /**
+   * Whenever the component has been mounted
+   */
+  async componentDidMount() {
+    await Promise.all([
+      this.props.passwordExpiryContext.findSettings(),
+      this.props.passwordPoliciesContext.findPolicies(),
+    ]);
+
+    this.initPwnedPasswordService();
+  }
+
+  /**
+   * Initialize the pwned password service
+   */
+  initPwnedPasswordService() {
+    const isPasswordDictionaryCheckRequested = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+
+    if (isPasswordDictionaryCheckRequested) {
+      this.pownedService = new PownedService(this.props.context.port);
+    }
+
+    this.setState({isPasswordDictionaryCheckRequested});
+  }
+
+  /**
+   * Validate form.
+   * @param {object} resourceFormEntityDto The form resource entity dto store in state, not used but required to ensure the memoized
+   *   function is only triggered when the form is updated.
+   * @return {EntityValidationError}
+   */
+  validateForm = memoize(resourceFormDto => new ResourceFormEntity(resourceFormDto, {validate: false, resourceTypes: this.props.resourceTypes}).validate());
+
+  /**
+   * Verify the data health. This intends for user, to inform if data form has invalid size
+   * @param {object} resourceFormEntityDto The form resource entity dto settings dto store in state, not used but required to ensure the memoized
+   *   function is only triggered when the form is updated.
+   * @return {EntityValidationError}
+   */
+  // eslint-disable-next-line no-unused-vars
+  verifyDataHealth = memoize(resourceFormDto => this.resourceFormEntity?.verifyHealth());
 
   /**
    * Get the decrypted secret associated to the resource
@@ -117,6 +180,18 @@ class EditResource extends Component {
       return ResourceEditCreateFormEnumerationTypes.NOTE;
     }
     return null;
+  }
+
+  /**
+   * Select resource form by first error
+   * @param {EntityValidationError} errors
+   */
+  selectResourceFormByFirstError(errors) {
+    if (errors.hasError("secret")) {
+      if (errors.details.secret.hasError("totp")) {
+        this.setState({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP});
+      }
+    }
   }
 
   /*
@@ -152,6 +227,144 @@ class EditResource extends Component {
   }
 
   /**
+   * Handle form submission that can be trigger when hitting `enter`
+   * @param {Event} event The html event triggering the form submit.
+   */
+  async handleFormSubmit(event) {
+    event.preventDefault();
+    if (this.state.isProcessing) {
+      return;
+    }
+
+    this.setState({hasAlreadyBeenValidated: true});
+    await this.toggleProcessing();
+
+    try {
+      // Create a clone entity from DTO and remove empty secret and add required secret
+      const resourceFormEntity = this.createAndSanitizeResourceFormEntity();
+
+      // Validate the entity
+      const validationError = resourceFormEntity.validate();
+
+      if (validationError?.hasErrors()) {
+        this.selectResourceFormByFirstError(validationError);
+        await this.toggleProcessing();
+        return;
+      }
+
+      if (!this.isMinimumRequiredEntropyReached()) {
+        this.handlePasswordMinimumEntropyNotReached(resourceFormEntity);
+        return;
+      } else if (await this.isPasswordInDictionary()) {
+        this.handlePasswordInDictionary(resourceFormEntity);
+        return;
+      }
+
+      await this.save(resourceFormEntity);
+    } catch (error) {
+      await this.toggleProcessing();
+      this.handleSaveError(error);
+    }
+  }
+
+  /**
+   * Returns true if the given entropy is greater or equal to the minimum required entropy.
+   * @returns {boolean}
+   */
+  isMinimumRequiredEntropyReached() {
+    const hasResourceTypePassword = this.state.resourceType.hasPassword();
+    if (!hasResourceTypePassword) {
+      return true;
+    }
+
+    // we accept empty password in the case of v4 resource type, or we accept null password in the case of v5 resource type
+    const isPasswordNotEmpty = Boolean(this.state.resource.secret.password);
+    if (!isPasswordNotEmpty) {
+      return true;
+    }
+
+    return this.state.passwordEntropy
+      && this.state.passwordEntropy >= ENTROPY_THRESHOLDS.WEAK;
+  }
+
+  /**
+   * Check if the password is part of a dictionary.
+   * @returns {Promise<boolean>}
+   */
+  async isPasswordInDictionary() {
+    // does the current resource actually has a password
+    const hasResourceTypePassword = this.state.resourceType.hasPassword();
+    if (!hasResourceTypePassword) {
+      return false;
+    }
+
+    // we accept empty password in the case of v4 resource type, or we accept null password in the case of v5 resource type
+    const isPasswordNotEmpty = Boolean(this.state.resource.secret.password);
+    if (!isPasswordNotEmpty) {
+      return false;
+    }
+
+    const password = this.state.resource.secret.password;
+    if (!this.state.isPasswordDictionaryCheckRequested || !this.state.isPasswordDictionaryCheckServiceAvailable) {
+      return false;
+    }
+
+    const {isPwnedServiceAvailable, inDictionary} = await this.pownedService.evaluateSecret(password);
+
+    if (!isPwnedServiceAvailable) {
+      this.setState({isPasswordDictionaryCheckServiceAvailable: false});
+      return false;
+    }
+
+    return inDictionary;
+  }
+
+  /**
+   * Request password not reaching minimum entropy creation confirmation.
+   * @param {ResourceFormEntity} resourceFormEntity The resource form entity
+   */
+  handlePasswordMinimumEntropyNotReached(resourceFormEntity) {
+    const confirmCreationDialog = {
+      operation: ConfirmEditCreateOperationVariations.CREATE,
+      rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+      resourceName: this.state.resource?.metadata?.name,
+      onConfirm: () => this.save(resourceFormEntity),
+      onReject: this.rejectEditionConfirmation
+    };
+    this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
+  }
+
+  /**
+   * Request password in dictionary creation confirmation.
+   * @param {ResourceFormEntity} resourceFormEntity The resource form entity
+   */
+  handlePasswordInDictionary(resourceFormEntity) {
+    this.setState({
+      passwordInDictionary: true,
+    });
+
+    const confirmCreationDialog = {
+      operation: ConfirmEditCreateOperationVariations.CREATE,
+      rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+      resourceName: this.state.resource?.metadata?.name,
+      onConfirm: () => this.save(resourceFormEntity),
+      onReject: this.rejectEditionConfirmation
+    };
+    this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
+  }
+
+  /**
+   * Reject the edition confirmation.
+   */
+  rejectEditionConfirmation() {
+    this.passwordEntropyError = true;
+    this.setState({
+      resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PASSWORD,
+      isProcessing: false,
+    });
+  }
+
+  /**
    * Returns true if the password entropy has been marked as erroneous.
    * The value is then "consumed";
    * @returns {boolean}
@@ -160,6 +373,109 @@ class EditResource extends Component {
     const hasPasswordEntropyError = this.passwordEntropyError;
     this.passwordEntropyError = false;
     return hasPasswordEntropyError;
+  }
+
+  /**
+   * Create and sanitize resource form entity
+   *
+   * Sanitize:
+   *  - remove empty secret
+   *  - add required secret
+   *
+   * @returns {ResourceFormEntity}
+   */
+  createAndSanitizeResourceFormEntity() {
+    const resourceFormEntity = new ResourceFormEntity(this.state.resource, {validate: false, resourceTypes: this.props.resourceTypes});
+    if (resourceFormEntity.metadata.name.length === 0) {
+      resourceFormEntity.set("metadata.name", "no name", {validate: false});
+    }
+    resourceFormEntity.removeEmptySecret({validate: false});
+    resourceFormEntity.addRequiredSecret({validate: false});
+    return resourceFormEntity;
+  }
+
+  /**
+   * Save the resource
+   * @param {ResourceFormEntity} resource
+   * @returns {Promise<void>}
+   */
+  async save(resource) {
+    await this.updateResource(resource);
+    await this.handleSaveSuccess();
+  }
+
+  /*
+   * =============================================================
+   *  Update resource
+   * =============================================================
+   */
+  /**
+   * Update the resource
+   * @param {ResourceFormEntity} resource
+   * @returns {Promise<void>}
+   */
+  async updateResource(resource) {
+    const isSecretChanged = resource.secret.areSecretsDifferent(this.state.originalSecret);
+    if (!isSecretChanged) {
+      await this.props.context.port.request("passbolt.resources.update", resource.toResourceDto(), null);
+      return;
+    }
+
+    if (this.shouldUpdateExpirationDate()) {
+      resource.set("expired", this.getResourceExpirationDate());
+    }
+
+    const resourceDto = resource.toResourceDto();
+    const resourceType = this.props.resourceTypes.getFirstById(resource.resourceTypeId);
+    const secretDto = resourceType.isPasswordString() ? resource.toSecretDto().password : resource.toSecretDto();
+    await this.props.context.port.request("passbolt.resources.update", resourceDto, secretDto);
+  }
+
+  /**
+   * Handle save operation success.
+   * @returns {Promise<void>}
+   */
+  async handleSaveSuccess() {
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been updated successfully"));
+    this.props.resourceWorkspaceContext.onResourceEdited();
+    this.handleClose();
+  }
+
+  /*
+   * =============================================================
+   *  Error handling
+   * =============================================================
+   */
+  /**
+   * Handle save operation error.
+   * @param {object} error The returned error
+   */
+  handleSaveError(error) {
+    // It can happen when the user has closed the passphrase entry dialog by instance.
+    if (error.name !== "UserAbortsOperationError") {
+      // Unexpected error occurred.
+      console.error(error);
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * Handle any unexpected errors.
+   * @param error
+   */
+  handleError(error) {
+    this.props.dialogContext.open(NotifyError, {error});
+  }
+
+  /**
+   * Toggle processing state when validating / saving
+   * @returns {Promise<void>}
+   */
+  async toggleProcessing() {
+    const prev = this.state.isProcessing;
+    return new Promise(resolve => {
+      this.setState({isProcessing: !prev}, () => resolve());
+    });
   }
 
   /**
@@ -233,7 +549,7 @@ class EditResource extends Component {
    * @returns {boolean}
    */
   get hasAllInputDisabled() {
-    return this.state.processing;
+    return this.state.isProcessing;
   }
 
   /**
@@ -242,6 +558,34 @@ class EditResource extends Component {
    */
   get hasSecretDecrypting() {
     return this.state.isSecretDecrypting;
+  }
+
+  /**
+   * Returns true if the expiration date of the resource should be updated.
+   * @returns {boolean}
+   */
+  shouldUpdateExpirationDate() {
+    const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
+    if (!passwordExpirySettings?.automatic_update) {
+      return false;
+    }
+
+    return this.state.resource.password !==  this.state.originalSecret.password;
+  }
+
+  /**
+   * Get the expiration date on the given resource according to the password expiry settings
+   * @returns {DateTime|null}
+   */
+  getResourceExpirationDate() {
+    const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
+    if (passwordExpirySettings.default_expiry_period == null) {
+      // settings say we need to update the expiration date but the default_expiry_period is null so, we mark the resource as "not expired".
+      return null;
+    }
+
+    // we have to update the expiration date in future based on the configuration.
+    return DateTime.utc().plus({days: passwordExpirySettings.default_expiry_period}).toISO();
   }
 
   /**
@@ -258,6 +602,9 @@ class EditResource extends Component {
    * =============================================================
    */
   render() {
+    const warnings = this.verifyDataHealth(this.state.resource);
+    const errors = this.state.hasAlreadyBeenValidated ? this.validateForm(this.state.resource) : null;
+
     return (
       <DialogWrapper title={this.translate("Edit a resource")} className="edit-resource"
         disabled={this.hasAllInputDisabled || this.hasSecretDecrypting} onClose={this.handleClose}>
@@ -270,10 +617,15 @@ class EditResource extends Component {
           onSelectForm={this.onSelectForm}
           disabled={this.hasAllInputDisabled || this.hasSecretDecrypting}
         />
-        <form className="grid-and-footer" noValidate>
+        <form className="grid-and-footer" onSubmit={this.handleFormSubmit} noValidate>
           <div className="grid">
             <AddResourceName
-              resource={this.state.resource} onChange={this.handleInputChange}/>
+              resource={this.state.resource}
+              onChange={this.handleInputChange}
+              disabled={this.hasAllInputDisabled || this.hasSecretDecrypting}
+              warnings={warnings}
+              errors={errors}
+            />
             <div className="edit-workspace">
               <OrchestrateResourceForm
                 resourceFormSelected={this.state.resourceFormSelected}
@@ -284,7 +636,10 @@ class EditResource extends Component {
                 onConvertToNote={this.handleConvertToNote}
                 passwordEntropy={this.state.passwordEntropy}
                 consumePasswordEntropyError={this.consumePasswordEntropyError}
-                disabled={this.hasAllInputDisabled || this.hasSecretDecrypting}/>
+                disabled={this.hasAllInputDisabled || this.hasSecretDecrypting}
+                warnings={warnings}
+                errors={errors}
+              />
             </div>
           </div>
           <div className="submit-wrapper">
@@ -301,8 +656,13 @@ EditResource.propTypes = {
   context: PropTypes.any, // The application context
   resource: PropTypes.object, // The resource to edit
   onClose: PropTypes.func,
+  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
+  dialogContext: PropTypes.object, // The dialog context
+  passwordExpiryContext: PropTypes.object, // The password expiry context
+  passwordPoliciesContext: PropTypes.object, // The password policy context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceTypesLocalStorage(withTranslation('common')(EditResource)));
+export default withAppContext(withPasswordPolicies(withPasswordExpiry(withResourceTypesLocalStorage(withActionFeedback(withDialog(withResourceWorkspace(withTranslation('common')(EditResource))))))));
