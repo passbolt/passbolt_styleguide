@@ -194,6 +194,7 @@ describe("FilterResourcesByRecentlyModifiedPage", () => {
       const props = defaultProps();
       const page = new FilterResourcesByRecentlyModifiedPagePage(props);
       expect(page.createButton).toBeDefined();
+      expect(page.createButton).toBeFalsy();
     });
 
     it("should display the button if metadata type settings and resource types are loaded for v5", () => {
@@ -201,6 +202,7 @@ describe("FilterResourcesByRecentlyModifiedPage", () => {
       const props = defaultProps({metadataTypeSettings: metadataTypeSettingEntity});
       const page = new FilterResourcesByRecentlyModifiedPagePage(props);
       expect(page.createButton).toBeDefined();
+      expect(page.createButton).toBeFalsy();
     });
 
     it("should not display the button if metadata type settings are not loaded", () => {
