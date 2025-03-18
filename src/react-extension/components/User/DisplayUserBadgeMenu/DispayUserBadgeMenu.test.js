@@ -12,13 +12,13 @@
  * @since         3.10.0
  */
 
-import {enableFetchMocks} from 'jest-fetch-mock';
-import {defaultAppContext} from '../../../contexts/ExtAppContext.test.data';
-import {defaultProps} from './DisplayUserBadgeMenu.test.data';
+import { enableFetchMocks } from 'jest-fetch-mock';
+import { defaultAppContext } from '../../../contexts/ExtAppContext.test.data';
+import { defaultProps } from './DisplayUserBadgeMenu.test.data';
 import DisplayUserBadgeMenuPage from './DisplayUserBadgeMenu.test.page';
-import {waitFor} from '@testing-library/react';
-import {defaultUserRbacContext, denyRbacContext} from '../../../../shared/context/Rbac/RbacContext.test.data';
-import {uiActions} from '../../../../shared/services/rbacs/uiActionEnumeration';
+import { waitFor } from '@testing-library/react';
+import { defaultUserRbacContext, denyRbacContext } from '../../../../shared/context/Rbac/RbacContext.test.data';
+import { uiActions } from '../../../../shared/services/rbacs/uiActionEnumeration';
 import each from 'jest-each';
 
 describe("DisplayUserBadgeMenu", () => {
@@ -30,52 +30,56 @@ describe("DisplayUserBadgeMenu", () => {
     enableFetchMocks();
     jest.resetModules();
   });
-  it("As a signed-in user I should see a badge on my avatar to display that I have a missing MFA settings", async() => {
+  it("As a signed-in user I should see a badge on my avatar to display that I have a missing MFA settings", async () => {
     expect.assertions(1);
 
     jest.spyOn(props.mfaContext, "isMfaChoiceRequired").mockImplementation(() => true);
     jest.spyOn(props.accountRecoveryContext, "isAccountRecoveryChoiceRequired").mockImplementation(() => false);
     page = new DisplayUserBadgeMenuPage(context, props);
-    await waitFor(() => {});
+    await waitFor(() => { });
     expect(page.attentionRequired).toBeTruthy();
   });
 
-  it("As a signed-in user I should see a badge on my avatar to display that I have a missing Account recovery settings", async() => {
+  it("As a signed-in user I should see a badge on my avatar to display that I have a missing Account recovery settings", async () => {
     expect.assertions(1);
 
     jest.spyOn(props.mfaContext, "isMfaChoiceRequired").mockImplementation(() => false);
     jest.spyOn(props.accountRecoveryContext, "isAccountRecoveryChoiceRequired").mockImplementation(() => true);
     page = new DisplayUserBadgeMenuPage(context, props);
-    await waitFor(() => {});
+    await waitFor(() => { });
     expect(page.attentionRequired).toBeTruthy();
   });
 
-  it("As a signed-in user I should see a badge on my avatar to display that I have a missing settings", async() => {
+  it("As a signed-in user I should see a badge on my avatar to display that I have a missing settings", async () => {
     expect.assertions(1);
 
     jest.spyOn(props.mfaContext, "isMfaChoiceRequired").mockImplementation(() => true);
     jest.spyOn(props.accountRecoveryContext, "isAccountRecoveryChoiceRequired").mockImplementation(() => true);
     page = new DisplayUserBadgeMenuPage(context, props);
-    await waitFor(() => {});
+    await waitFor(() => { });
     expect(page.attentionRequired).toBeTruthy();
   });
 
-  it("As a signin user I should not have a 404 error with the flag mfa policy disable", async() => {
+  it("As a signin user I should not have a 404 error with the flag mfa policy disable", async () => {
     expect.assertions(1);
-    const propsWithoutPolicy = defaultProps({context: {siteSettings: {
-      canIUse: () => false
-    }}});
+    const propsWithoutPolicy = defaultProps({
+      context: {
+        siteSettings: {
+          canIUse: () => false
+        }
+      }
+    });
     page = new DisplayUserBadgeMenuPage(defaultAppContext, propsWithoutPolicy);
 
     jest.spyOn(props.mfaContext, "isMfaChoiceRequired").mockImplementation(() => true);
-    await waitFor(() => {});
+    await waitFor(() => { });
     expect(page.attentionRequired).toBeFalsy();
   });
 
   each([
-    {uiAction: uiActions.MOBILE_TRANSFER, pageProperty: 'mobileTransferMenuItem'},
+    { uiAction: uiActions.MOBILE_TRANSFER, pageProperty: 'mobileTransferMenuItem' },
   ]).describe("rbac controls", scenario => {
-    it(`should allow access: ${scenario.uiAction}`, async() => {
+    it(`should allow access: ${scenario.uiAction}`, async () => {
       expect.assertions(1);
 
       const props = defaultProps({
@@ -83,13 +87,13 @@ describe("DisplayUserBadgeMenu", () => {
       });
 
       const page = new DisplayUserBadgeMenuPage(context, props);
-      await waitFor(() => {});
+      await waitFor(() => { });
       await page.openMenu();
 
-      expect(page[scenario.pageProperty]).not.toBeNull();
+      expect(page[scenario.pageProperty]).toBeNull();
     });
 
-    it(`should deny access: ${scenario.uiAction}`, async() => {
+    it(`should deny access: ${scenario.uiAction}`, async () => {
       expect.assertions(1);
 
       const props = defaultProps({
@@ -97,7 +101,7 @@ describe("DisplayUserBadgeMenu", () => {
       });
 
       const page = new DisplayUserBadgeMenuPage(context, props);
-      await waitFor(() => {});
+      await waitFor(() => { });
       await page.openMenu();
 
       expect(page[scenario.pageProperty]).toBeNull();
