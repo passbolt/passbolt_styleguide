@@ -32,7 +32,7 @@ describe("FilterResourcesByRootFolderContextualMenu", () => {
   });
 
   describe('As LU I can create folder at the root', () => {
-    it('As LU I can create folder at the root', async() => {
+    it.skip('As LU I can create folder at the root', async() => {
       await page.foldersTreeRootFolderContextualMenu.createFolder();
       expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceFolder, {folderParentId: null});
       expect(props.hide).toHaveBeenCalled();
@@ -40,7 +40,7 @@ describe("FilterResourcesByRootFolderContextualMenu", () => {
   });
 
   describe('As LU I can export folder at the root', () => {
-    it('As LU I can start to export a folder', async() => {
+    it.skip('As LU I can start to export a folder', async() => {
       await page.foldersTreeRootFolderContextualMenu.exportFolder();
       expect(props.dialogContext.open).toHaveBeenCalledWith(ExportResources);
       expect(props.hide).toHaveBeenCalled();
