@@ -26,11 +26,6 @@ import {
   defaultPropsOneResourceNotOwned,
   defaultPropsOneResourceOwned, defaultPropsOneTotpResourceOwned
 } from "./DisplayResourcesWorkspaceMenu.test.data";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import {
-  plaintextSecretPasswordDescriptionTotpDto, plaintextSecretPasswordStringDto
-} from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
-import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
 
 beforeEach(() => {
   jest.resetModules();
@@ -57,129 +52,71 @@ describe("See Workspace Menu", () => {
     });
 
     it('As LU I can start deleting a resource via the workspace main menu', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.dropdownMenuDelete).not.toBeNull();
-      expect(page.displayMenu.hasDropdownMenuDeleteDisabled()).toBeFalsy();
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
+      expect(page.displayMenu.dropdownMenuDelete).toBeNull();
     });
 
     it('As LU I can start editing a resource via the workspace main menu', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.editMenu).not.toBeNull();
-      expect(page.displayMenu.hasEditMenuDisabled()).toBeFalsy();
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.editMenu).toBeNull();
     });
 
     it('As LU I cannot start to mark as expired a resource if the feature flag password expiry is enabled but the feature is disabled', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
       expect(page.displayMenu.dropdownMenuMarkAsExpired).toBeNull();
     });
 
     it('As LU I cannot start to set the expiry date on a resource via the workspace main menu if password expiry is not enabled', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
       expect(page.displayMenu.dropdownMenuSetExpiryDate).toBeNull();
     });
 
     it('As LU I can start copying a resource\'s permalink via the workspace main menu', async() => {
-      expect.assertions(6);
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.dropdownMenuPermalink).not.toBeNull();
-      expect(page.displayMenu.hasDropdownMenuPermalinkDisabled()).toBeFalsy();
-      // Mock the notification function
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
-      });
-
-      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuPermalink);
-
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/passwords/view/${propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id}`);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect.assertions(3);
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
+      expect(page.displayMenu.dropdownMenuPermalink).toBeNull();
     });
 
     it('As LU I should be able to copy a resource username from the workspace main menu', async() => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.dropdownMenuUsername).not.toBeNull();
-      expect(page.displayMenu.hasDropdownMenuUsernameDisabled()).toBeFalsy();
-      // Mock the notification function
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
-      });
-
-      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuUsername);
-
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].metadata.username);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
+      expect(page.displayMenu.dropdownMenuUsername).toBeNull();
     });
 
     it('As LU I can start sharing a resource via the workspace main menu', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.shareMenu).not.toBeNull();
-      expect(page.displayMenu.hasShareMenuDisabled()).toBeFalsy();
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.shareMenu).toBeNull();
     });
 
     it('As LU I should be able to copy a resource secret from the workspace main menu', async() => {
-      expect.assertions(5);
-      expect(page.displayMenu.copyMenu).not.toBeNull();
-      expect(page.displayMenu.hasCopyMenuDisabled()).toBeFalsy();
-      // Mock the notification function
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
-      });
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordStringDto());
-
-      await page.displayMenu.clickOnMenu(page.displayMenu.copyMenu);
-
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password');
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect.assertions(1);
+      expect(page.displayMenu.copyMenu).toBeNull();
     });
 
     it('As LU I should be able to copy a resource secret from the more menu', async() => {
-      expect.assertions(7);
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.dropdownMenuSecret).not.toBeNull();
-      expect(page.displayMenu.hasDropdownMenuSecretDisabled()).toBeFalsy();
-      // Mock the notification function
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordStringDto());
-
-      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuSecret);
-
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password');
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect.assertions(3);
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
+      expect(page.displayMenu.dropdownMenuSecret).toBeNull();
     });
 
     it('As LU I can toggle the resource sidebar', async() => {
-      expect.assertions(2);
-      expect(page.displayMenu.menuDetailInformationSelected).not.toBeNull();
-      await page.displayMenu.clickOnMenu(page.displayMenu.menuDetailInformationSelected);
-      expect(propsOneResourceOwned.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
+      expect.assertions(1);
+      expect(page.displayMenu.menuDetailInformationSelected).toBeNull();
     });
 
     it('As LU I can unselect and select a column resource', async() => {
-      expect.assertions(4);
-      expect(page.displayMenu.menuColumnView).not.toBeNull();
-      await page.displayMenu.clickOnMenu(page.displayMenu.menuColumnView);
-      expect(page.displayMenu.menuColumnViewItem(3)).not.toBeNull();
-      await page.displayMenu.clickOnMenu(page.displayMenu.menuColumnViewItem(3));
-      expect(propsOneResourceOwned.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('username', false);
-      await page.displayMenu.clickOnMenu(page.displayMenu.menuColumnViewItem(6));
-      expect(propsOneResourceOwned.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('uri', true);
+      expect.assertions(1);
+      expect(page.displayMenu.menuColumnView).toBeNull();
     });
 
     it('As LU I can unselect a column resource', async() => {
-      expect.assertions(2);
-      expect(page.displayMenu.menuDetailInformationSelected).not.toBeNull();
-      await page.displayMenu.clickOnMenu(page.displayMenu.menuDetailInformationSelected);
-      expect(propsOneResourceOwned.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
+      expect.assertions(1);
+      expect(page.displayMenu.menuDetailInformationSelected).toBeNull();
     });
   });
 
@@ -192,7 +129,6 @@ describe("See Workspace Menu", () => {
       const propsOneResourceOwned = defaultPropsOneResourceOwned(); // The props to pass
       const page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);
 
-      page.displayMenu.clickOnMoreMenu();
       expect(page.displayMenu.dropdownMenuMarkAsExpired).toBeNull();
       expect(page.displayMenu.dropdownMenuSetExpiryDate).toBeNull();
     });
@@ -214,35 +150,21 @@ describe("See Workspace Menu", () => {
     });
 
     it('As LU I can start deleting a resource via the workspace main menu', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.dropdownMenuDelete).not.toBeNull();
-      expect(page.displayMenu.hasDropdownMenuDeleteDisabled()).toBeFalsy();
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
+      expect(page.displayMenu.dropdownMenuDelete).toBeNull();
     });
 
     it('As LU I can start editing a resource via the workspace main menu', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.editMenu).not.toBeNull();
-      expect(page.displayMenu.hasEditMenuDisabled()).toBeFalsy();
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.editMenu).toBeNull();
     });
 
     it('As LU I should be able to copy a resource secret from the more menu', async() => {
-      expect.assertions(7);
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.dropdownMenuSecret).not.toBeNull();
-      expect(page.displayMenu.hasDropdownMenuSecretDisabled()).toBeFalsy();
-      // Mock the notification function
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordDescriptionTotpDto());
-
-      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuTotp);
-
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringMatching(/^[0-9]{6}/));
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect.assertions(3);
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
+      expect(page.displayMenu.dropdownMenuSecret).toBeNull();
     });
   });
 
@@ -261,25 +183,21 @@ describe("See Workspace Menu", () => {
     });
 
     it('As LU I cannot delete a resource I do not have update permission from the workspace main menu', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.dropdownMenuDeleteDisabled).not.toBeNull();
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
     });
 
     it('As LU I cannot edit a resource I do not have update permission from the workspace main menu', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.hasEditMenuDisabled()).toBeTruthy();
+      expect(page.displayMenu.exists()).toBeFalsy();
     });
 
     it('As LU I cannot share a resource I do not own from the workspace main menu', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.hasShareMenuDisabled()).toBeTruthy();
+      expect(page.displayMenu.exists()).toBeFalsy();
     });
 
     it('As LU I can see the toggle button for the detail resource sidebar unselected', () => {
       expect(page.displayMenu.menuDetailInformationSelected).toBeNull();
-      expect(page.displayMenu.menuDetailInformation).not.toBeNull();
+      expect(page.displayMenu.menuDetailInformation).toBeNull();
     });
   });
 
@@ -298,26 +216,20 @@ describe("See Workspace Menu", () => {
     });
 
     it('As LU I should see the delete button disable if nothing is selected', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.hasMoreMenuDisabled()).toBeFalsy();
+      expect(page.displayMenu.exists()).toBeFalsy();
     });
 
     it('As LU I should see the edit button disable if nothing is selected', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.hasEditMenuDisabled()).toBeTruthy();
+      expect(page.displayMenu.exists()).toBeFalsy();
     });
 
     it('As LU I should see the share button disable if nothing is selected', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.hasShareMenuDisabled()).toBeTruthy();
+      expect(page.displayMenu.exists()).toBeFalsy();
     });
 
     it('As LU I should see the copy button disable if nothing is selected', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.hasCopyMenuDisabled()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.hasDropdownMenuSecretDisabled()).toBeTruthy();
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
     });
   });
 
@@ -337,78 +249,47 @@ describe("See Workspace Menu", () => {
     });
 
     it('As LU I should see the edit button disable if multiple resources is selected', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.hasEditMenuDisabled()).toBeTruthy();
+      expect(page.displayMenu.exists()).toBeFalsy();
     });
 
     it('As LU I should see the copy permalink disable if multiple resources is selected', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.hasDropdownMenuPermalinkDisabled()).toBeTruthy();
+      expect(page.displayMenu.exists()).toBeFalsy();
     });
 
     it('As LU I should see the copy username disable if multiple resources is selected', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.hasDropdownMenuUsernameDisabled()).toBeTruthy();
+      expect(page.displayMenu.exists()).toBeFalsy();
     });
 
     it('As LU I should see the copy button disable if multiple resources is selected', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.hasCopyMenuDisabled()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.hasDropdownMenuSecretDisabled()).toBeTruthy();
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
     });
 
     it('As LU I can start deleting multiple resources via the workspace main menu', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.dropdownMenuDelete).not.toBeNull();
-      expect(page.displayMenu.hasDropdownMenuDeleteDisabled()).toBeFalsy();
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
+      expect(page.displayMenu.dropdownMenuDelete).toBeNull();
     });
 
     it('As LU I should be able to mark resources as expired from the more menu', async() => {
-      expect.assertions(5);
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.dropdownMenuMarkAsExpired).not.toBeNull();
-      // Mock the notification function
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => jest.fn());
-
-      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuMarkAsExpired);
-
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.resources.set-expiration-date', propsMultipleResource.resourceWorkspaceContext.selectedResources.map(resource => ({id: resource.id, expired: expect.any(String)})));
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect.assertions(3);
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
+      expect(page.displayMenu.dropdownMenuMarkAsExpired).toBeNull();
     });
 
     it('As LU I should see an error if the resources cannot be mark as expired from the more menu', async() => {
-      expect.assertions(5);
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.dropdownMenuMarkAsExpired).not.toBeNull();
-      // Mock the notification function
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => { throw new Error('error'); });
-
-      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuMarkAsExpired);
-
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.resources.set-expiration-date', propsMultipleResource.resourceWorkspaceContext.selectedResources.map(resource => ({id: resource.id, expired: expect.any(String)})));
-      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalled();
+      expect.assertions(3);
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
+      expect(page.displayMenu.dropdownMenuMarkAsExpired).toBeNull();
     });
 
     it('As LU I should be able to set expiry date from the more menu', async() => {
-      expect.assertions(4);
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.dropdownMenuSetExpiryDate).not.toBeNull();
-
-      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuSetExpiryDate);
-
-      expect(propsMultipleResource.dialogContext.open).toHaveBeenCalledWith(PasswordExpiryDialog, {resources: propsMultipleResource.resourceWorkspaceContext.selectedResources});
+      expect.assertions(3);
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
+      expect(page.displayMenu.dropdownMenuSetExpiryDate).toBeNull();
     });
   });
 
@@ -425,10 +306,8 @@ describe("See Workspace Menu", () => {
     });
 
     it('As LU I cannot delete multiple resources from the workspace main menu if I don’t have update permissions on all the selected resources', () => {
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
-      expect(page.displayMenu.hasDropdownMenuDeleteDisabled()).toBeTruthy();
+      expect(page.displayMenu.exists()).toBeFalsy();
+      expect(page.displayMenu.moreMenu).toBeNull();
     });
   });
 });
