@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
-import EditResource from "../EditResource/EditResourceV5";
+import EditResource from "../EditResource/EditResource";
 import ShareDialog from "../../Share/ShareDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
@@ -31,9 +31,6 @@ import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {withProgress} from "../../../contexts/ProgressContext";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
-import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
-import {withWorkflow} from "../../../contexts/WorkflowContext";
-import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import {formatDateForApi} from "../../../../shared/utils/dateUtils";
 import {DateTime} from "luxon";
@@ -85,11 +82,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle edit resource
    */
   handleEditClickEvent() {
-    if (this.isStandaloneTotpResource) {
-      this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_STANDALONE_TOTP});
-    } else {
-      this.props.dialogContext.open(EditResource, {resource: this.resource});
-    }
+    this.props.dialogContext.open(EditResource, {resource: this.resource});
     this.props.hide();
   }
 
@@ -552,9 +545,8 @@ DisplayResourcesListContextualMenu.propTypes = {
   progressContext: PropTypes.any, // The progress context
   resource: PropTypes.object, // resource selected
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  workflowContext: PropTypes.any, // The workflow context
   passwordExpiryContext: PropTypes.object, // The password expiry context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withDialog(withWorkflow(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu))))))))));
+export default withAppContext(withRbac(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withDialog(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu)))))))));
