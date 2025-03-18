@@ -22,9 +22,8 @@ import QrCodeSVG from "../../../../img/svg/qr_code.svg";
 import TimerSVG from "../../../../img/svg/timer.svg";
 import Password from "../../../../shared/components/Password/Password";
 import Totp from "../../../../shared/components/Totp/Totp";
-import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
 import Select from "../../Common/Select/Select";
-import TotpEntity from "../../../../shared/models/entity/totp/totpEntity";
+import TotpEntity, {SUPPORTED_TOTP_ALGORITHMS} from "../../../../shared/models/entity/totp/totpEntity";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import ClipBoard from "../../../../shared/lib/Browser/clipBoard";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
@@ -136,7 +135,7 @@ class AddResourceTotp extends Component {
    * @returns {array}
    */
   get supportedAlgorithms() {
-    return TotpViewModel.SUPPORTED_ALGORITHMS.map(algorithm => ({value: algorithm, label: algorithm}));
+    return SUPPORTED_TOTP_ALGORITHMS.map(algorithm => ({value: algorithm, label: algorithm}));
   }
 
   /**

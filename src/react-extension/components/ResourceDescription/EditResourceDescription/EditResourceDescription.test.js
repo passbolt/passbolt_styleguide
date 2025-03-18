@@ -19,7 +19,7 @@ import {TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, TEST_RESOURCE_TYPE_PASSWORD
 import {defaultProps} from "./EditResourceDescription.test.data";
 import EditResourceDescriptionPage from "./EditResourceDescription.test.page";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
-import {defaultTotpViewModelDto} from "../../../../shared/models/totp/TotpDto.test.data";
+import {defaultTotpViewModelDto} from "../../../../shared/models/entity/totp/totpDto.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();

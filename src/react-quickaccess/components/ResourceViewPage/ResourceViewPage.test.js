@@ -22,9 +22,9 @@ import {
   totpResourceProps
 } from "./ResourceViewPage.test.data";
 import {waitFor} from "@testing-library/react";
-import {defaultTotpViewModelDto} from "../../../shared/models/totp/TotpDto.test.data";
 import {TotpCodeGeneratorService} from "../../../shared/services/otp/TotpCodeGeneratorService";
 import {denyRbacContext} from "../../../shared/context/Rbac/RbacContext.test.data";
+import {defaultTotpViewModelDto} from "../../../shared/models/entity/totp/totpDto.test.data";
 
 beforeEach(() => {
   jest.resetModules();

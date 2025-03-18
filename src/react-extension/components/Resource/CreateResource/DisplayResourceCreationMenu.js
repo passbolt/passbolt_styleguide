@@ -32,7 +32,7 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import CreateResourceV5 from "./CreateResourceV5";
+import CreateResource from "./CreateResource";
 
 class DisplayResourceCreationMenu extends Component {
   constructor(props) {
@@ -76,7 +76,7 @@ class DisplayResourceCreationMenu extends Component {
     const resourceType = this.props.resourceTypes.getFirstBySlug(resourceTypeSlug);
     const folderParentId = this.folderSelectedId;
 
-    this.props.dialogContext.open(CreateResourceV5, {resourceType, folderParentId});
+    this.props.dialogContext.open(CreateResource, {resourceType, folderParentId});
   }
 
 

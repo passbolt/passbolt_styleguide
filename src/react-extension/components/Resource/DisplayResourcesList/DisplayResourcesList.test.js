@@ -26,11 +26,11 @@ import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceC
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextualMenu";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultTotpViewModelDto} from "../../../../shared/models/totp/TotpDto.test.data";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import {ColumnFields} from "../../../../shared/models/column/ColumnModel";
 import ColumnsResourceSettingCollection
   from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
+import {defaultTotpViewModelDto} from "../../../../shared/models/entity/totp/totpDto.test.data";
 
 beforeEach(() => {
   jest.resetModules();

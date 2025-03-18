@@ -13,7 +13,7 @@
  * @since         5.0.0
  */
 import DisplayResourceCreationMenuPage from "./DisplayResourceCreationMenu.test.page";
-import CreateResourceV5 from "./CreateResourceV5";
+import CreateResource from "./CreateResource";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import {waitFor} from "@testing-library/dom";
@@ -231,13 +231,13 @@ describe("See the Display Resource Creation Menu", () => {
       page.clickOn(page.displayedContentTypes[0]);
       await waitFor(() => {});
       let resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {resourceType, folderParentId});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
 
       //click on totp v5
       page.clickOn(page.displayedContentTypes[1]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {resourceType, folderParentId});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
 
       //switch tab
       page.clickOn(page.legacyCleartextMetadataTab);
@@ -247,13 +247,13 @@ describe("See the Display Resource Creation Menu", () => {
       page.clickOn(page.displayedContentTypes[0]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {resourceType, folderParentId});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
 
       //click on totp v4
       page.clickOn(page.displayedContentTypes[1]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {resourceType, folderParentId});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
 
       expect(props.dialogContext.open).toHaveBeenCalledTimes(4);
       expect(props.onClose).toHaveBeenCalledTimes(4);
@@ -277,7 +277,7 @@ describe("See the Display Resource Creation Menu", () => {
       page.clickOn(page.displayedContentTypes[0]);
       await waitFor(() => {});
       const resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceV5, {resourceType: resourceType, folderParentId: folder.id});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType: resourceType, folderParentId: folder.id});
 
       expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
       expect(props.onClose).toHaveBeenCalledTimes(1);

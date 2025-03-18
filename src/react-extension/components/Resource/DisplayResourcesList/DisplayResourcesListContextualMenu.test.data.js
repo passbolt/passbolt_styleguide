@@ -20,7 +20,6 @@ import {
   defaultResourceDto, resourceStandaloneTotpDto, resourceWithReadPermissionDto, resourceWithTotpDto,
   resourceWithUpdatePermissionDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {
@@ -41,7 +40,6 @@ export function defaultProps(data = {}) {
     left: 10,
     top: 10,
     dialogContext: defaultDialogContext(),
-    workflowContext: defaultWorkflowContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     passwordExpiryContext: defaultPasswordExpirySettingsContext({policy_override: true}),

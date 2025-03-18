@@ -49,7 +49,7 @@ import CircleEllipsisSVG from "../../../../img/svg/circle_ellipsis.svg";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 import DisplayResourceCreationMenu from "../CreateResource/DisplayResourceCreationMenu";
-import CreateResourceV5 from "../CreateResource/CreateResourceV5";
+import CreateResource from "../CreateResource/CreateResource";
 
 /**
  * This component allows the current user to create a new resource
@@ -99,7 +99,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * @param {ResourceTypeEntity} resourceType The resource type
    */
   openCreateDialog(resourceType) {
-    this.props.dialogContext.open(CreateResourceV5, {folderParentId: this.folderIdSelected, resourceType});
+    this.props.dialogContext.open(CreateResource, {folderParentId: this.folderIdSelected, resourceType});
   }
 
   /**

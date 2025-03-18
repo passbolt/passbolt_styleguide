@@ -11,13 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.5.0
  */
-
 import EntityV2 from "../abstract/entityV2";
 
 const RESOURCE_TOTP_KEY_MAX_LENGTH = 1024;
-const SUPPORTED_ALGORITHMS = ["SHA1", "SHA256", "SHA512"];
-const DEFAULT_ALGORITHM = SUPPORTED_ALGORITHMS[0];
-
+export const SUPPORTED_TOTP_ALGORITHMS = ["SHA1", "SHA256", "SHA512"];
+const DEFAULT_ALGORITHM = SUPPORTED_TOTP_ALGORITHMS[0];
 /**
  * Entity related to the TOTP
  */
@@ -53,7 +51,7 @@ class TotpEntity extends EntityV2 {
         },
         algorithm: {
           type: "string",
-          enum: SUPPORTED_ALGORITHMS
+          enum: SUPPORTED_TOTP_ALGORITHMS
         }
       }
     };

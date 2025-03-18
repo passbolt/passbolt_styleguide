@@ -24,8 +24,8 @@ import DisplayResourceDetailsTotpPage from "./DisplayResourceDetailsTotp.test.pa
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {waitFor} from "@testing-library/dom";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultTotpViewModelDto} from "../../../../shared/models/totp/TotpDto.test.data";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import {defaultTotpViewModelDto} from "../../../../shared/models/entity/totp/totpDto.test.data";
 
 describe("DisplayResourceDetailsTotp", () => {
   let page;
