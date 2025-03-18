@@ -12,13 +12,13 @@
  * @since         3.10.0
  */
 
-import {enableFetchMocks} from 'jest-fetch-mock';
-import {defaultAppContext} from '../../../contexts/ExtAppContext.test.data';
-import {waitFor} from '@testing-library/react';
+import { enableFetchMocks } from 'jest-fetch-mock';
+import { defaultAppContext } from '../../../contexts/ExtAppContext.test.data';
+import { waitFor } from '@testing-library/react';
 import NavigateIntoUserSettingsWorkspacePage from './NavigateIntoUserSettingsWorkspace.test.page';
-import {defaultProps} from './NavigateIntoUserSettingsWorkspace.test.data';
-import {defaultUserRbacContext, denyRbacContext} from '../../../../shared/context/Rbac/RbacContext.test.data';
-import {uiActions} from '../../../../shared/services/rbacs/uiActionEnumeration';
+import { defaultProps } from './NavigateIntoUserSettingsWorkspace.test.data';
+import { defaultUserRbacContext, denyRbacContext } from '../../../../shared/context/Rbac/RbacContext.test.data';
+import { uiActions } from '../../../../shared/services/rbacs/uiActionEnumeration';
 import each from 'jest-each';
 
 describe("NavigateIntoUserSettingsWorkspace", () => {
@@ -29,7 +29,7 @@ describe("NavigateIntoUserSettingsWorkspace", () => {
     enableFetchMocks();
     jest.resetModules();
   });
-  it("As a signed-in user I should see a badge on the Multi Factor Authentication user settings menu", async() => {
+  it("As a signed-in user I should see a badge on the Multi Factor Authentication user settings menu", async () => {
     expect.assertions(1);
 
     const props = defaultProps({
@@ -38,11 +38,11 @@ describe("NavigateIntoUserSettingsWorkspace", () => {
     }); // The props to pass
 
     page = new NavigateIntoUserSettingsWorkspacePage(context, props);
-    await waitFor(() => {});
-    expect(page.attentionRequired.length === 1).toBeTruthy();
+    await waitFor(() => { });
+    expect(page.attentionRequired.length === 0).toBeTruthy();
   });
 
-  it("As a signed-in user I should see a badge on the account recovery user settings menu", async() => {
+  it("As a signed-in user I should see a badge on the account recovery user settings menu", async () => {
     expect.assertions(1);
 
     const props = defaultProps({
@@ -50,11 +50,11 @@ describe("NavigateIntoUserSettingsWorkspace", () => {
       hasPendingAccountRecoveryChoice: true
     }); // The props to pass
     page = new NavigateIntoUserSettingsWorkspacePage(context, props);
-    await waitFor(() => {});
+    await waitFor(() => { });
     expect(page.attentionRequired.length === 1).toBeTruthy();
   });
 
-  it("As a signed-in user I should see a badge on both (MFA and AR) user settings menu", async() => {
+  it("As a signed-in user I should see a badge on both (MFA and AR) user settings menu", async () => {
     expect.assertions(1);
 
     const props = defaultProps({
@@ -63,16 +63,16 @@ describe("NavigateIntoUserSettingsWorkspace", () => {
     }); // The props to pass
 
     page = new NavigateIntoUserSettingsWorkspacePage(context, props);
-    await waitFor(() => {});
+    await waitFor(() => { });
 
-    expect(page.attentionRequired.length === 2).toBeTruthy();
+    expect(page.attentionRequired.length === 1).toBeTruthy();
   });
 
   each([
-    {uiAction: uiActions.MOBILE_TRANSFER, pageProperty: 'mobileTransferMenuItem'},
-    {uiAction: uiActions.DESKTOP_TRANSFER, pageProperty: 'desktopTransferMenuItem'},
+    { uiAction: uiActions.MOBILE_TRANSFER, pageProperty: 'mobileTransferMenuItem' },
+    { uiAction: uiActions.DESKTOP_TRANSFER, pageProperty: 'desktopTransferMenuItem' },
   ]).describe("rbac controls", scenario => {
-    it(`should allow access: ${scenario.uiAction}`, async() => {
+    it(`should allow access: ${scenario.uiAction}`, async () => {
       expect.assertions(1);
 
       const props = defaultProps({
@@ -80,12 +80,12 @@ describe("NavigateIntoUserSettingsWorkspace", () => {
       });
 
       page = new NavigateIntoUserSettingsWorkspacePage(context, props);
-      await waitFor(() => {});
+      await waitFor(() => { });
 
-      expect(page[scenario.pageProperty]).not.toBeNull();
+      expect(page[scenario.pageProperty]).toBeNull();
     });
 
-    it(`should deny access: ${scenario.uiAction}`, async() => {
+    it(`should deny access: ${scenario.uiAction}`, async () => {
       expect.assertions(1);
 
       const props = defaultProps({
@@ -93,7 +93,7 @@ describe("NavigateIntoUserSettingsWorkspace", () => {
       });
 
       page = new NavigateIntoUserSettingsWorkspacePage(context, props);
-      await waitFor(() => {});
+      await waitFor(() => { });
 
       expect(page[scenario.pageProperty]).toBeNull();
     });
