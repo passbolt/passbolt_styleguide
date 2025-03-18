@@ -199,6 +199,17 @@ class ResourceTypesCollection extends EntityV2Collection {
    *   - password string v5;
    *   - several resource type having the same number of properties that match the resource DTO
    *
+   * How the match is done:
+   *  - First do not check resource type that is not matching the version
+   *  - Second check all secret properties from resourceDto are include in the properties of a resource type (exclude some resource types)
+   *  - Third count the number of secrets that is not set in the resource type vby the resourceDto
+   *  - If all is set then it's a perfect match and return directly the resource type
+   *  - Else count the number of property unset and keep the lowest
+   *
+   * Example: For a secret description only
+   * There is no perfect match, so there is one unset property for v5 default and 2 for v5 default and TOTP
+   * The best match is v5 default
+   *
    * @param {object} resourceDto
    * @param {string} version
    *
@@ -241,11 +252,6 @@ class ResourceTypesCollection extends EntityV2Collection {
         // If all properties are set, that is a perfect match
         if (unsetPropertyCount === 0) {
           return resourceType;
-        }
-        // If all secret fields are unset continue (Avoid to have a default resource type that has no similarity between the resource DTO)
-        const allUnsetSecretFields = unsetPropertyCount === secretsFields.length;
-        if (allUnsetSecretFields) {
-          continue;
         }
         // Else set the score and the resource type that matched the most
         if (!score || score > unsetPropertyCount) {

@@ -82,6 +82,20 @@ export default class EditResourcePage {
   }
 
   /**
+   * Returns the resource info skeleton input element
+   */
+  get resourceInfoSkeleton() {
+    return this._page.container.querySelector('.resource-info.skeleton');
+  }
+
+  /**
+   * Returns the edit workspace skeleton input element
+   */
+  get editWorkspaceSkeleton() {
+    return this._page.container.querySelector('.edit-workspace.skeleton');
+  }
+
+  /**
    * Returns the name input element
    */
   get name() {

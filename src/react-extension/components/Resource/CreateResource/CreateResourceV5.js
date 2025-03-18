@@ -115,6 +115,7 @@ class CreateResource extends Component {
    * Validate form.
    * @param {object} resourceFormEntityDto The form resource entity dto store in state, not used but required to ensure the memoized
    *   function is only triggered when the form is updated.
+   *   A clone need to be created before validation to use marshall function from TotpEntity that modify the content but the form should not be modified for the user
    * @return {EntityValidationError}
    */
   // eslint-disable-next-line no-unused-vars
@@ -340,6 +341,9 @@ class CreateResource extends Component {
   /**
    * Create and sanitize resource form entity
    *
+   * The user should not be blocked during the creation so the goal is to find the best match between resource type available
+   * - Remove empty secret that is required like Totp (this will find the best match for resource type)
+   * - Add minimum required secret like password to match resource type
    * Sanitize:
    *  - remove empty secret
    *  - add required secret
@@ -377,10 +381,6 @@ class CreateResource extends Component {
    */
   createResource(resource) {
     const resourceDto = resource.toResourceDto();
-    const expiryDate = this.getResourceExpirationDate();
-    if (typeof(expiryDate) !== "undefined") {
-      resourceDto.expired = expiryDate;
-    }
     const resourceType = this.props.resourceTypes.getFirstById(resource.resourceTypeId);
     const isV4PasswordString = resourceType.slug === RESOURCE_TYPE_PASSWORD_STRING_SLUG;
     const secretDto = isV4PasswordString ? resource.toSecretDto().password : resource.toSecretDto();

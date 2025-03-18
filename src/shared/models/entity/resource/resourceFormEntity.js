@@ -106,8 +106,10 @@ class ResourceFormEntity extends EntityV2 {
    * Create the association entity: its schema and its build rules.
    * Only for secret association get the entity class according the resource type
    *
-   * Note: This function sets secret association properties if a secret dto is present. Not supported:
-   *   - create empty secret according to the resource type
+   * Note:
+   *  - This function sets secret association properties if a secret dto is present. (In that case it's possible to have null or undefined property. This is useful for edition and validation)
+   *  - This function will create default secret if there is no secret (This is useful for the creation)
+   *
    * @param {object} [options] Options
    *
    * @throws {Error} If no secret entity class has been found.
@@ -123,7 +125,7 @@ class ResourceFormEntity extends EntityV2 {
         throw new Error(`No secret association class has been found in resource types.`);
       }
       try {
-        // Important to keep null or undefined value
+        // For editing and validation, it's important to keep null or undefined property and not set with default value
         if (this._props.secret) {
           this._secret = new secretEntityClass(this._props.secret, options);
         } else {
@@ -203,7 +205,7 @@ class ResourceFormEntity extends EntityV2 {
     // Verify if the current resource type has the secret property
     if (!this.isResourceTypeHasSecretProperty(currentResourceType, secret)) {
       const resourceDto = this.toDto();
-      // Set an empty value to have the property defined
+      // Set an empty value to have the property defined and find the matching resource type (Will be set with a default value later)
       resourceDto.secret[secretPropName] = "";
       // Get the resource type slug to mutate when adding secret
       const mutateResourceType = this.resourceTypes.getResourceTypeMatchingResource(resourceDto, currentResourceType.version);
