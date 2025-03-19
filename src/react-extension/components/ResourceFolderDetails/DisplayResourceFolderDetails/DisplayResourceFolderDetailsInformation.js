@@ -125,14 +125,16 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
    * @param {string} folderId The folder id
    * @returns {string}
    */
-  getFolderName(folderId) {
-    if (folderId === null) {
-      return '/';
+  getFolderName(folderParentId) {
+    if (folderParentId === null) {
+      return this.props.t("My workspace");
     }
 
     if (this.props.context.folders) {
-      const folder = this.props.context.folders.find(item => item.id === folderId);
-      return folder?.name;
+      const folder = this.props.context.folders.find(item => item.id === folderParentId);
+      if (folder) {
+        return folder.name;
+      }
     }
 
     return "";
