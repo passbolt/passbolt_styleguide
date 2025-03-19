@@ -214,6 +214,10 @@ const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
     type: "object",
     required: ["password"],
     properties: {
+      object_type: {
+        type: "string",
+        enum: ['PASSBOLT_SECRET_DATA'],
+      },
       password: {
         type: "string",
         maxLength: 4096,
@@ -298,6 +302,10 @@ const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
     type: "object",
     required: ["password", "totp"],
     properties: {
+      object_type: {
+        type: "string",
+        enum: ['PASSBOLT_SECRET_DATA'],
+      },
       password: {
         type: "string",
         maxLength: 4096,
@@ -338,7 +346,39 @@ const RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA = {
       },
     }
   },
-  secret: RESOURCE_TYPE_TOTP_DEFINITION_SCHEMA.secret
+  secret: {
+    type: "object",
+    required: ["totp"],
+    properties: {
+      object_type: {
+        type: "string",
+        enum: ['PASSBOLT_SECRET_DATA'],
+      },
+      totp: {
+        type: "object",
+        required: ["secret_key", "digits", "algorithm"],
+        properties: {
+          algorithm: {
+            type: "string",
+            minLength: 4,
+            maxLength: 6,
+          },
+          secret_key: {
+            type: "string",
+            maxLength: 1024
+          },
+          digits: {
+            type: "number",
+            minimum: 6,
+            maximum: 8
+          },
+          period: {
+            type: "number"
+          }
+        }
+      }
+    }
+  },
 };
 
 export const V4_TO_V5_RESOURCE_TYPE_MAPPING = {
