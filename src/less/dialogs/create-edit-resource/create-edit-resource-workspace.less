@@ -117,6 +117,10 @@
       flex: 1 0 0;
       align-self: stretch;
       padding: 1.6rem 0;
+      isolation: isolate;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--Workspace-Elevator) transparent;
 
       /* PASSWORD FIELDS LAYOUT*/
       .password-fields, .totp-fields, .note-fields, .description-fields {
@@ -168,6 +172,8 @@
           .password-complexity {
             margin-bottom: 0;
             align-self: stretch;
+            // Fix: tooltip with position relative make the scrollbar invisible
+            isolation: isolate;
           }
         }
 
