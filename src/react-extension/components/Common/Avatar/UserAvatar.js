@@ -36,7 +36,8 @@ class UserAvatar extends Component {
    */
   getDefaultState() {
     return {
-      error: false
+      error: false,
+      isLoading: true,
     };
   }
 
@@ -46,6 +47,7 @@ class UserAvatar extends Component {
    */
   bindCallbacks() {
     this.handleError = this.handleError.bind(this);
+    this.handleLoaded = this.handleLoaded.bind(this);
   }
 
   /**
@@ -116,6 +118,14 @@ class UserAvatar extends Component {
   }
 
   /**
+   * Handle loaded image event.
+   * @return {void}
+   */
+  handleLoaded() {
+    this.setState({isLoading: false});
+  }
+
+  /**
    * Get the user avatar image alternative text.
    * @returns {string}
    */
@@ -137,17 +147,10 @@ class UserAvatar extends Component {
 
     return (
       <div className={`${this.props.className}`}>
-        {shouldDisplayDefaultAvatar &&
-          <div className="default-avatar">
-            <UserAvatarSVG/>
-          </div>
-        }
-        {!shouldDisplayDefaultAvatar &&
-          <div className="default-avatar">
-            <img src={srcAvatar} onError={this.handleError} alt={this.getAltText()} />
-          </div>
-
-        }
+        <div className="default-avatar">
+          {(shouldDisplayDefaultAvatar || this.state.isLoading) && <UserAvatarSVG/>}
+          {!shouldDisplayDefaultAvatar && <img src={srcAvatar} className={this.state.isLoading && "is-loading"} onError={this.handleError} onLoad={this.handleLoaded} alt={this.getAltText()} />}
+        </div>
         {this.props.attentionRequired &&
           <AttentionSVG className="attention-required"/>
         }
