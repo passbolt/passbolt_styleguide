@@ -201,6 +201,7 @@ describe("FilterResourcesBySharedWithMePage", () => {
       const props = defaultProps();
       const page = new FilterResourcesBySharedWithMePagePage(props);
       expect(page.createButton).toBeDefined();
+      expect(page.createButton).toBeFalsy();
     });
 
     it("should display the button if metadata type settings and resource types are loaded for v5", () => {
@@ -208,6 +209,7 @@ describe("FilterResourcesBySharedWithMePage", () => {
       const props = defaultProps({metadataTypeSettings: metadataTypeSettingEntity});
       const page = new FilterResourcesBySharedWithMePagePage(props);
       expect(page.createButton).toBeDefined();
+      expect(page.createButton).toBeFalsy();
     });
 
     it("should not display the button if metadata type settings are not loaded", () => {
