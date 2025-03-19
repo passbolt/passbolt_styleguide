@@ -308,6 +308,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
 
     // Known folder
     await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});
+
+    // Multiple resource selected, do not show details folder
+    const hasMultipleResourceSelected = this.state.selectedResources.length > 1;
+    if (hasMultipleResourceSelected) {
+      return;
+    }
+
     await this.detailFolder(folder);
   }
 
@@ -507,6 +514,12 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleNoneResourcesSelected() {
     await this.unselectAll();
+    const {filter} = this.state;
+    const isFolderFilter = filter.type === ResourceWorkspaceFilterTypes.FOLDER;
+    if (isFolderFilter) { // Case of folder filter after unselect, should display folder details
+      await this.handleFolderRouteChange();
+      return;
+    }
     await this.detailNothing();
   }
 
