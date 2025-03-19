@@ -68,14 +68,18 @@ class DisplayResourceDetails extends React.Component {
     }
 
     const resourceType = this.props.resourceTypes.getFirstById(resource.resource_type_id);
-    switch (resourceType.slug) {
+    switch (resourceType?.slug) {
       case "password-string":
+      case "v5-password-string":
         return this.translate("Password");
       case "password-and-description":
-        return this.translate("Password and Encrypted description");
+      case "v5-default":
+        return this.translate("Password and Note");
       case "password-description-totp":
-        return this.translate("Password, Encrypted description and TOTP");
+      case "v5-default-with-totp":
+        return this.translate("Password, Note and TOTP");
       case "totp":
+      case "v5-totp-standalone":
         return this.translate("TOTP");
       default:
         return this.translate("Resource");
