@@ -295,7 +295,7 @@ class SelectResourceForm extends Component {
                     <span className="ellipsis"><Trans>Passwords</Trans></span>
                   </button>
                   {this.isResourceHasMultipleSecret &&
-                    <button id="delete-password" disabled={this.props.disabled} className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD)}>
+                    <button type="button" id="delete-password" disabled={this.props.disabled} className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD)}>
                       <DeleteSVG/>
                     </button>
                   }
@@ -310,7 +310,7 @@ class SelectResourceForm extends Component {
                     <span className="ellipsis"><Trans>TOTP</Trans></span>
                   </button>
                   {this.isResourceHasMultipleSecret &&
-                    <button id="delete-totp" disabled={this.props.disabled} className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.TOTP)}>
+                    <button type="button" id="delete-totp" disabled={this.props.disabled} className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.TOTP)}>
                       <DeleteSVG/>
                     </button>
                   }
@@ -325,7 +325,7 @@ class SelectResourceForm extends Component {
                     <span className="ellipsis"><Trans>Note</Trans></span>
                   </button>
                   {this.isResourceHasMultipleSecret &&
-                    <button id="delete-note" disabled={this.props.disabled} className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.NOTE)}>
+                    <button type="button" id="delete-note" disabled={this.props.disabled} className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.NOTE)}>
                       <DeleteSVG/>
                     </button>
                   }
