@@ -198,7 +198,7 @@ class Workspace extends Component {
 
     return (
       <div className="panel main">
-        <div className="panel left">
+        <div className="panel left resource-filter">
           <div className="sidebar-content">
             <Logo/>
             <div className="main-action-wrapper">
