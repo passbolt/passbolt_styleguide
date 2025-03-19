@@ -1,10 +1,26 @@
 /* Create and edit resource dialog */
 .create-resource, .edit-resource {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 6.4rem 19rem;
+  min-width: 128rem;
+  min-height: 76.8rem;
   /* dialog wrapper */
   .dialog {
     padding: 0;
-    max-width: 96rem;
-    min-width: 38rem;
+    max-width: 100rem;
+    min-width: 90rem;
+    max-height: 80rem;
+    min-height: 64rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 0;
+    width: 100%;
+    align-self: center;
   }
   /* header */
   .dialog-header {
@@ -21,7 +37,6 @@
     align-items: center;
     flex: 1 0 0;
     align-self: stretch;
-    height: 71rem;
 
     .left-sidebar {
       display: flex;
@@ -44,7 +59,7 @@
         align-items: flex-start;
         gap: .8rem;
         align-self: stretch;
-        flex: 1 0 auto;
+        flex: 1 0 0;
         padding: 0 1.6rem;
         overflow-y: auto;
         scrollbar-width: thin;
@@ -258,6 +273,7 @@
 
               input {
                 margin-bottom: 0;
+                max-width: inherit;
               }
 
               .warning-message, .error-message {
