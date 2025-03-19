@@ -324,6 +324,10 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
       type: "object",
       required: ["password"],
       properties: {
+        object_type: {
+          type: "string",
+          enum: ['PASSBOLT_SECRET_DATA'],
+        },
         password: {
           type: "string",
           maxLength: 4096,
@@ -428,6 +432,10 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
       type: "object",
       required: ["password", "totp"],
       properties: {
+        object_type: {
+          type: "string",
+          enum: ['PASSBOLT_SECRET_DATA'],
+        },
         password: {
           type: "string",
           maxLength: 4096,
@@ -508,6 +516,10 @@ export const resourceTypeV5TotpDto = (data = {}) => ({
       type: "object",
       required: ["totp"],
       properties: {
+        object_type: {
+          type: "string",
+          enum: ['PASSBOLT_SECRET_DATA'],
+        },
         totp: {
           type: "object",
           required: [

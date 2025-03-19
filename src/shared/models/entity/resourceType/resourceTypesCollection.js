@@ -243,7 +243,7 @@ class ResourceTypesCollection extends EntityV2Collection {
       const secretsFields = Object.keys(resourceType.definition.secret.properties);
 
       // Check if all secret fields from the DTO are in the resource type secret property fields
-      const hasAllPropertyFields = resourceSecretFields.every(secretField => secretsFields.includes(secretField) || secretField === "object_type");
+      const hasAllPropertyFields = resourceSecretFields.every(secretField => secretsFields.includes(secretField));
 
       if (hasAllPropertyFields) {
         // Get the number of properties that is not set to match the resource type
