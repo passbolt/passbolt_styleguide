@@ -42,7 +42,7 @@ describe("See the confirm disable self registration settings dialog", () => {
       expect(page.closeButton).not.toBeNull();
 
       // domains list
-      expect(page.formContent.innerHTML).toBe('<p>Are you sure to disable the self registration for the organization ?</p><p>Users will not be able to self register anymore. Only administrators would be able to invite users to register. </p>');
+      expect(page.formContent.textContent).toBe('Are you sure to disable the self registration for the organization ?Users will not be able to self register anymore. Only administrators would be able to invite users to register. ');
       // Save button exists
       expect(page.saveButton.textContent).toBe("Save");
       // Cancel button exists

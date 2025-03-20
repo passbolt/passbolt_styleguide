@@ -15,26 +15,42 @@
 import DisplayHealthcheckAdministration from "./DisplayHealthcheckAdministration";
 import React from "react";
 import {defaultProps} from "./DisplayHealthcheckAdministration.test.data";
+import {defaultAdministrationHealthcheckContext, mockHealthcheckDataAllChecksFail} from "../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext.test.data";
+import HealthcheckEntity from "../../../../shared/models/entity/healthcheck/healthcheckEntity";
 
 export default {
   title: 'Components/Administration/DisplayHealthcheckAdministration',
-  component: DisplayHealthcheckAdministration
-};
-
-const Template = args =>
-  <div className="panel main">
-    <div>
-      <div className="panel middle">
-        <div className="grid grid-responsive-12">
-          <DisplayHealthcheckAdministration {...args}/>
+  component: DisplayHealthcheckAdministration,
+  decorators: [(Story, {args}) =>
+    <div id="container" className="page administration">
+      <div id="app" className="app" tabIndex="1000">
+        <div className="panel main">
+          <div className="panel middle">
+            <div className="middle-right">
+              <div className="breadcrumbs-and-grid">
+                <div className="main-page">
+                  <Story {...args}/>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>;
-
-export const Initial = Template.bind({});
-Initial.args = defaultProps();
-Initial.parameters = {
-  css: "api_main"
+  ],
+  parameters: {
+    css: "api_main"
+  },
 };
 
+export const Initial = {
+  args: defaultProps(),
+};
+
+export const FailingTest = {
+  args: defaultProps({
+    adminHealthcheckContext: defaultAdministrationHealthcheckContext({
+      healthcheckData: new HealthcheckEntity(mockHealthcheckDataAllChecksFail),
+    }),
+  }),
+};

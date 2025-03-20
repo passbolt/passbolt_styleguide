@@ -28,8 +28,8 @@ import {Trans, withTranslation} from "react-i18next";
 import SharePermissionItemSkeleton from "../../Share/SharePermissionItemSkeleton";
 import EditUserGroupItem from "./EditUserGroupItem";
 import {maxSizeValidation} from '../../../lib/Error/InputValidator';
-import Icon from "../../../../shared/components/Icons/Icon";
 import {RESOURCE_GROUP_NAME_MAX_LENGTH} from "../../../../shared/constants/inputs.const";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 /**
  * This component allows to edit an user group
@@ -751,71 +751,72 @@ class EditUserGroup extends Component {
 
             <div className="input required">
               <label><Trans>Group members</Trans>{this.state.nameWarning &&
-                  <Icon name="exclamation"/>
+                <AttentionSVG className="attention-required"/>
               }</label>
             </div>
-          </div>
 
-          <div className="group_members">
-            <div className="form-content scroll permission-edit">
-              {this.isLoading &&
-                <ul className="permissions groups_users">
-                  <SharePermissionItemSkeleton/>
-                  <SharePermissionItemSkeleton/>
-                  <SharePermissionItemSkeleton/>
-                </ul>
-              }
-              {!this.isLoading &&
-                <ReactList
-                  ref={this.listRef}
-                  itemRenderer={this.renderItem}
-                  itemsRenderer={this.renderContainer}
-                  length={this.groupsUsers.length}
-                  minSize={4}
-                  type={this.groupsUsers.length < 3 ? "simple" : "uniform"}
-                  threshold={30}>
-                </ReactList>
-              }
-            </div>
-            {!this.isLoading && !this.hasMembers &&
-            <div className="message warning">
-              <span><Trans>The group is empty, please add a group manager.</Trans></span>
-            </div>
-            }
-            {this.hasMembers && !this.hasManager &&
-            <div className="message error at-least-one-manager">
-              <span><Trans>Please make sure there is at least one group manager.</Trans></span>
-            </div>
-            }
-            {!this.isLoading && !this.isManager &&
-            <div className="message warning feedback cannot-add-user">
-              <span><Trans>Only the group manager can add new people to a group.</Trans></span>
-            </div>
-            }
-            {this.hasMembersChanges && this.hasManager &&
-            <div className="message warning feedback">
-              <span><Trans>You need to click save for the changes to take place.</Trans></span>
-            </div>
-            }
-          </div>
+            <div className="group_members">
+              <div className="scroll permission-edit">
+                {this.isLoading &&
+                  <ul className="permissions groups_users">
+                    <SharePermissionItemSkeleton/>
+                    <SharePermissionItemSkeleton/>
+                    <SharePermissionItemSkeleton/>
+                  </ul>
+                }
+                {!this.isLoading &&
+                  <ReactList
+                    ref={this.listRef}
+                    itemRenderer={this.renderItem}
+                    itemsRenderer={this.renderContainer}
+                    length={this.groupsUsers.length}
+                    minSize={4}
+                    type={this.groupsUsers.length < 4 ? "simple" : "uniform"}
+                    threshold={30}>
+                  </ReactList>
+                }
+              </div>
 
-          {this.isManager &&
-          <div className="form-content permission-add">
-            <Autocomplete
-              id="user-name-input"
-              name="name"
-              label={this.translate("Add people")}
-              placeholder={this.translate("Start typing a person name")}
-              searchCallback={this.fetchAutocompleteItems}
-              onSelect={this.handleAutocompleteSelect}
-              onOpen={this.handleAutocompleteOpen}
-              onClose={this.handleAutocompleteClose}
-              disabled={!this.areActionsAllowed}
-              baseUrl={this.props.context.userSettings.getTrustedDomain()}
-              canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
-            />
+              {this.isManager &&
+                <div className="permission-add">
+                  <Autocomplete
+                    id="user-name-input"
+                    name="name"
+                    label={this.translate("Add people")}
+                    placeholder={this.translate("Start typing a person name")}
+                    searchCallback={this.fetchAutocompleteItems}
+                    onSelect={this.handleAutocompleteSelect}
+                    onOpen={this.handleAutocompleteOpen}
+                    onClose={this.handleAutocompleteClose}
+                    disabled={!this.areActionsAllowed}
+                    baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                    canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
+                  />
+                </div>
+              }
+
+              {!this.isLoading && !this.hasMembers &&
+                <div className="message warning">
+                  <span><Trans>The group is empty, please add a group manager.</Trans></span>
+                </div>
+              }
+              {this.hasMembers && !this.hasManager &&
+                <div className="message error at-least-one-manager">
+                  <span><Trans>Please make sure there is at least one group manager.</Trans></span>
+                </div>
+              }
+              {!this.isLoading && !this.isManager &&
+                <div className="message warning feedback cannot-add-user">
+                  <span><Trans>Only the group manager can add new people to a group.</Trans></span>
+                </div>
+              }
+              {this.hasMembersChanges && this.hasManager &&
+                <div className="message warning feedback">
+                  <span><Trans>You need to click save for the changes to take place.</Trans></span>
+                </div>
+              }
+            </div>
           </div>
-          }
 
           <div className="submit-wrapper clearfix">
             <FormCancelButton

@@ -2,45 +2,72 @@
  * Breadcrumbs
  */
 .breadcrumbs {
-    height: 3.9rem;
-    padding: 0;
-    margin-bottom: 0;
-    background: @breadcrumb-background;
+    display: flex;
+    min-width: 0;
+    padding: 1.2rem 1.6rem 0 1.6rem;
+    align-items: flex-start;
+    align-self: stretch;
 
     ul {
-        padding-top: 1rem;
-        margin-left: 1rem;
+        display: flex;
+        min-width: 0;
         li {
             display: flex;
-            margin-left: .5rem;
-            max-width: 25%;
-            float: left;
+            justify-content: center;
+            align-items: center;
+            flex: 0 1 auto;
+            min-width: 0;
+
             &:before {
                 content: "\203A"; /* unicode character › */
-                margin-right: 0.5rem;
-                font-size: 1.4rem;
+                padding: 0rem .4rem;
+                font-size: 1.8rem;
+                font-weight: 400;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                color: var(--Text-and-icons-Main-text);
+                align-items: center;
+                font-style: normal;
             }
             &:first-child {
                 margin-left: 0;
                 padding-left: 0;
             }
             &:first-child:before {
-                content: "";
+                content: none;
             }
         }
         button {
             border: 0;
-            font-size: 1.4rem;
-            line-height: 1.9rem;
-            max-width: 100%;
+            font-size: 1.8rem;
+            line-height: 2.5rem;
+            padding: .0rem .6rem;
+            border-radius: var(--Button-border-radius);
+
+            &:hover {
+                background: var(--Action-button-Active-action-button-background);
+            }
+
+            /* focus visible (display with keyboard navigation) */
+            &:focus-visible {
+                box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
+                text-decoration: none;
+                border: none;
+            }
         }
     }
-    span.chips {
-      margin-left: .8rem;
-      vertical-align: .1rem;
-      padding: .1rem .55rem .2rem .55rem;
-      border-radius: 2rem;
+    span.counter {
+        padding-left: 0.8rem;
+        color: var(--Text-and-icons-Secondary-text);
+        font-weight: normal;
+        font-size: 1.4rem;
+        line-height: 2.1rem;
+        align-self: flex-end;
+        flex-shrink: 0;
+        display:block
     }
+
     div.main-cell {
         display: inline;
     }

@@ -19,6 +19,8 @@ import DeleteResourceTag from "../../ResourceTag/DeleteResourceTag/DeleteResourc
 import {withDialog} from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {Trans, withTranslation} from "react-i18next";
+import EditSVG from "../../../../img/svg/edit.svg";
+import DeleteSVG from "../../../../img/svg/delete.svg";
 
 class FilterResourcesByTagsListContextualMenu extends React.Component {
   /**
@@ -82,7 +84,10 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button" className="link no-border" id="edit-tag" onClick={this.handleEditClickEvent}><span><Trans>Edit tag</Trans></span></button>
+                <button type="button" className="link no-border" id="edit-tag" onClick={this.handleEditClickEvent}>
+                  <EditSVG />
+                  <span><Trans>Edit tag</Trans></span>
+                </button>
               </div>
             </div>
           </div>
@@ -91,7 +96,10 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button" className="link no-border" id="delete-tag" onClick={this.handleDeleteClickEvent}><span><Trans>Delete Tag</Trans></span></button>
+                <button type="button" className="link no-border" id="delete-tag" onClick={this.handleDeleteClickEvent}>
+                  <DeleteSVG />
+                  <span><Trans>Delete Tag</Trans></span>
+                </button>
               </div>
             </div>
           </div>

@@ -67,7 +67,7 @@ export const mockHealthcheckData = {
     "robotsIndexDisabled": true,
     "sslForce": true,
     "sslFullBaseUrl": true,
-    "configPath": "\/var\/www\/passbolt\/config\/passbolt.php",
+    "configPath": "/var/www/passbolt/config/passbolt.php",
     "seleniumDisabled": true,
     "registrationClosed": {
       "isSelfRegistrationPluginEnabled": true,
@@ -96,8 +96,8 @@ export const mockHealthcheckData = {
     "lib": true,
     "gpgKeyNotDefault": true,
     "info": {
-      "gpgHome": "\/home\/www-data\/.gnupg",
-      "gpgKeyPrivate": "\/var\/www\/passbolt\/config\/gpg\/serverkey_private.asc"
+      "gpgHome": "/home/www-data/.gnupg",
+      "gpgKeyPrivate": "/var/www/passbolt/config/gpg/serverkey_private.asc"
     },
     "gpgHomeWritable": true,
     "gpgKeyPublic": true,
@@ -132,7 +132,7 @@ export const mockHealthcheckData = {
     "fullBaseUrl": true,
     "validFullBaseUrl": true,
     "info": {
-      "fullBaseUrl": "https:\/\/dev.local"
+      "fullBaseUrl": "https://dev.local"
     },
     "fullBaseUrlReachable": true
   },
@@ -286,7 +286,7 @@ export const mockHealthcheckDataAllChecksFail = {
     "robotsIndexDisabled": false,
     "sslForce": false,
     "sslFullBaseUrl": false,
-    "configPath": "\/var\/www\/passbolt\/config\/passbolt.php",
+    "configPath": "/var/www/passbolt/config/passbolt.php",
     "seleniumDisabled": false,
     "registrationClosed": {
       "isSelfRegistrationPluginEnabled": false,
@@ -315,8 +315,8 @@ export const mockHealthcheckDataAllChecksFail = {
     "lib": false,
     "gpgKeyNotDefault": false,
     "info": {
-      "gpgHome": "\/home\/www-data\/.gnupg",
-      "gpgKeyPrivate": "\/var\/www\/passbolt\/config\/gpg\/serverkey_private.asc"
+      "gpgHome": "/home/www-data/.gnupg",
+      "gpgKeyPrivate": "/var/www/passbolt/config/gpg/serverkey_private.asc"
     },
     "gpgHomeWritable": false,
     "gpgKeyPublic": false,
@@ -351,7 +351,7 @@ export const mockHealthcheckDataAllChecksFail = {
     "fullBaseUrl": false,
     "validFullBaseUrl": false,
     "info": {
-      "fullBaseUrl": "https:\/\/dev.local"
+      "fullBaseUrl": "https://dev.local"
     },
     "fullBaseUrlReachable": false
   },
@@ -395,7 +395,7 @@ export const mockHealthcheckAirGappedEnvironment = {
     "robotsIndexDisabled": true,
     "sslForce": true,
     "sslFullBaseUrl": true,
-    "configPath": "\/var\/www\/passbolt\/config\/passbolt.php",
+    "configPath": "/var/www/passbolt/config/passbolt.php",
     "seleniumDisabled": true,
     "registrationClosed": {
       "isSelfRegistrationPluginEnabled": true,
@@ -424,8 +424,8 @@ export const mockHealthcheckAirGappedEnvironment = {
     "lib": true,
     "gpgKeyNotDefault": true,
     "info": {
-      "gpgHome": "\/home\/www-data\/.gnupg",
-      "gpgKeyPrivate": "\/var\/www\/passbolt\/config\/gpg\/serverkey_private.asc"
+      "gpgHome": "/home/www-data/.gnupg",
+      "gpgKeyPrivate": "/var/www/passbolt/config/gpg/serverkey_private.asc"
     },
     "gpgHomeWritable": true,
     "gpgKeyPublic": true,
@@ -460,7 +460,7 @@ export const mockHealthcheckAirGappedEnvironment = {
     "fullBaseUrl": true,
     "validFullBaseUrl": true,
     "info": {
-      "fullBaseUrl": "https:\/\/dev.local"
+      "fullBaseUrl": "https://dev.local"
     },
     "fullBaseUrlReachable": true
   },

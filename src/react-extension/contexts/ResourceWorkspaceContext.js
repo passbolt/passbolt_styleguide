@@ -308,6 +308,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
 
     // Known folder
     await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});
+
+    // Multiple resource selected, do not show details folder
+    const hasMultipleResourceSelected = this.state.selectedResources.length > 1;
+    if (hasMultipleResourceSelected) {
+      return;
+    }
+
     await this.detailFolder(folder);
   }
 
@@ -507,6 +514,12 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleNoneResourcesSelected() {
     await this.unselectAll();
+    const {filter} = this.state;
+    const isFolderFilter = filter.type === ResourceWorkspaceFilterTypes.FOLDER;
+    if (isFolderFilter) { // Case of folder filter after unselect, should display folder details
+      await this.handleFolderRouteChange();
+      return;
+    }
     await this.detailNothing();
   }
 
@@ -1132,7 +1145,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async loadGridResourceSetting() {
     const gridUserSettingEntity = await this.gridResourceUserSetting.getSetting();
     // Merge the columns setting collection by ID
-    const columnsResourceSetting = ColumnsResourceSettingCollection.createFromDefault(gridUserSettingEntity?.columnsSetting);
+    const columnsResourceSetting = ColumnsResourceSettingCollection.createFromDefault(gridUserSettingEntity?.columnsSetting, {keepUnknownValue: false});
     if (!this.props.context.siteSettings.canIUse('totpResourceTypes')) {
       columnsResourceSetting.removeById(ColumnModelTypes.TOTP);
     }
@@ -1185,7 +1198,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleChangeColumnsSettings(columns) {
     // Merge the columns setting
-    const columnsResourceSetting = this.state.columnsResourceSetting.deepMerge(new ColumnsResourceSettingCollection(columns));
+    const columnsResourceSetting = this.state.columnsResourceSetting.deepMerge(new ColumnsResourceSettingCollection(columns), {keepUnknownValue: false});
     this.setState({columnsResourceSetting}, () => this.updateGridSetting());
   }
 

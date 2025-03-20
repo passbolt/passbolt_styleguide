@@ -14,19 +14,55 @@
 import React from 'react';
 import DisplayMigrateMetadataAdministration from './DisplayMigrateMetadataAdministration';
 import {defaultProps, withMigrationFullyDone, withMissingMetadataKeys, withMissingResourceTypes} from "./DisplayMigrateMetadataAdministration.test.data";
+import {MemoryRouter} from 'react-router-dom/cjs/react-router-dom.min';
+import TranslationProvider from '../../Common/Internationalisation/TranslationProvider';
+import DisplayAdministrationWorkspaceBreadcrumb from '../DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb';
 
 export default {
   title: 'Components/Administration/DisplayMigrateMetadataAdministration',
   component: DisplayMigrateMetadataAdministration,
   decorators: [
     (Story, {args}) =>
-      <div className="page administration">
-        <div className="panel middle">
-          <div className="grid grid-responsive-12">
-            <Story {...args}/>
+      <MemoryRouter initialEntries={['/app/administration/migrate-metadata']}>
+        <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
+          <div id="container" className="page administration">
+            <div id="app" className="app" style={{margin: "-1rem"}}>
+              <div className="panel main">
+                <div className="panel left">
+                  <div className="sidebar-content">
+                    <div className="top-bar-left-navigation">
+                      <div className="navigation">
+                      </div>
+                    </div>
+                    <div className="sidebar-content-left">
+                    </div>
+                  </div>
+                </div>
+                <div className="panel middle">
+                  <div className="header">
+                  </div>
+                  <div className="middle-right">
+                    <div className="breadcrumbs-and-grid">
+                      <div className="top-bar">
+                        <DisplayAdministrationWorkspaceBreadcrumb administrationWorkspaceContext={args.administrationWorkspaceContext}/>
+                      </div>
+                      <div className="main-page">
+                        <Story {...args}/>
+                      </div>
+                    </div>
+                    <div className="help-panel">
+                      <div className="sidebar-help">
+                        <div id="administration-help-panel">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </TranslationProvider>
+      </MemoryRouter>
   ]
 };
 

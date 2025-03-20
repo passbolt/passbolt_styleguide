@@ -38,7 +38,6 @@ class ColumnModel {
 export default ColumnModel;
 
 export const ColumnModelTypes = {
-  ATTENTION_REQUIRED: 'attentionRequired',
   CHECKBOX: 'checkbox',
   EXPIRED: 'expired',
   FAVORITE: 'favorite',
@@ -49,11 +48,15 @@ export const ColumnModelTypes = {
   TOTP: 'totp',
   URI: 'uri',
   USERNAME: 'username',
+  ROLE: 'role',
+  SUSPENDED: 'suspended',
+  LAST_LOGGED_IN: 'last_logged_in',
+  MFA: 'mfa',
+  ACCOUNT_RECOVERY: 'account_recovery',
 };
 
 
 export const ColumnFields = {
-  ATTENTION_REQUIRED: 'attentionRequired',
   CHECKBOX: 'checkbox',
   EXPIRED: 'expired',
   FAVORITE: 'favorite',
@@ -64,4 +67,11 @@ export const ColumnFields = {
   METADATA_NAME: 'metadata.name',
   METADATA_USERNAME: 'metadata.username',
   METADATA_URIS: 'metadata.uris.0',
+  USER_PROFILE: "profile",
+  USER_USERNAME: "username",
+  USER_ROLE: "role_id",
+  USER_SUSPENDED: "disabled",
+  USER_LAST_LOGGED_IN: "last_logged_in",
+  USER_MFA: "is_mfa_enabled",
+  USER_ACCOUNT_RECOVERY: "account_recovery_user_setting.status"
 };

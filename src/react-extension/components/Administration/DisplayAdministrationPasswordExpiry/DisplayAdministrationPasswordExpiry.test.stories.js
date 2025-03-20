@@ -13,32 +13,37 @@
  */
 
 import React from "react";
-import PropTypes from "prop-types";
 import {defaultPropsCE, defaultPropsPro} from "./DisplayAdministrationPasswordExpiry.test.data";
 import AdministrationPasswordExpiryContextProvider from "../../../contexts/Administration/AdministrationPaswordExpiryContext/AdministrationPaswordExpiryContext";
 import DisplayAdministrationPasswordExpiry from "./DisplayAdministrationPasswordExpiry";
 
 export default {
   title: 'Components/Administration/DisplayAdministrationPasswordExpiry',
-  component: DisplayAdministrationPasswordExpiry
-};
-
-const Template = args =>
-  <div className="panel middle">
-    <div className="grid grid-responsive-12">
-      <AdministrationPasswordExpiryContextProvider {...args}>
-        <DisplayAdministrationPasswordExpiry {...args}/>
-      </AdministrationPasswordExpiryContextProvider>
+  component: DisplayAdministrationPasswordExpiry,
+  decorators: [(Story, {args}) =>
+    <div className="page administration">
+      <div className="app" >
+        <div className="panel main">
+          <div className="panel middle">
+            <div className="middle-right">
+              <div className="main-page">
+                <AdministrationPasswordExpiryContextProvider {...args}>
+                  <Story {...args}/>
+                </AdministrationPasswordExpiryContextProvider>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>;
-
-Template.propTypes = {
-  context: PropTypes.object,
-  adminPasswordExpirySettingsContext: PropTypes.object,
+  ]
 };
 
-export const ProVersion = Template.bind({});
-ProVersion.args = defaultPropsPro();
+export const ProVersion = {
+  args: defaultPropsPro(),
+};
 
-export const CeVersion = Template.bind({});
-CeVersion.args = defaultPropsCE();
+
+export const CeVersion = {
+  args: defaultPropsCE(),
+};

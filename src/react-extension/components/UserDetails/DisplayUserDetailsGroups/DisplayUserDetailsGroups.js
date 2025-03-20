@@ -14,8 +14,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../shared/components/Icons/Icon";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg"; import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import {Trans, withTranslation} from "react-i18next";
@@ -106,28 +106,32 @@ class DisplayUserDetailsGroups extends React.Component {
       <div className={`detailed-user-groups accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
-            <button type="button" className="link no-border" onClick={this.handleTitleClicked}>
+            <button type="button" className="link no-border section-opener" onClick={this.handleTitleClicked}>
+              <span className="accordion-title">
               Groups
-              {this.state.open && <Icon name="caret-down"/>}
-              {!this.state.open && <Icon name="caret-right"/>}
+              </span>
+
+              {this.state.open && <CaretDownSVG/>}
+              {!this.state.open && <CaretRightSVG/>}
             </button>
           </h4>
         </div>
+        {this.state.open &&
         <div className="accordion-content">
           <ul>
-            {this.state.open && hasGroups &&
+            { hasGroups &&
               groups.map(group => (
-                <li
+                <div
                   key={group.id}
                   className="permission usercard-col-2">
+                  <GroupAvatar group={group}/>
                   <div className="content-wrapper">
                     <div className="content">
                       <div className="name">{group.name}</div>
                       <div className="subinfo">{group.role}</div>
                     </div>
                   </div>
-                  <GroupAvatar group={group}/>
-                </li>
+                </div>
               ))
             }
             {!hasGroups &&
@@ -135,6 +139,7 @@ class DisplayUserDetailsGroups extends React.Component {
             }
           </ul>
         </div>
+        }
       </div>
     );
   }

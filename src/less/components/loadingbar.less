@@ -1,17 +1,17 @@
 /* Small Progress bar */
 .progress-bar {
-    background: @progress-bar-default-background;
+    background: var(--Loading-bar-Loading-bar-background);
     width: 100%;
-    height: .3rem;
+    height: .2rem;
     display: block;
-    border-radius: .2rem;
+    border-radius: var(--Progress-Bar-radius);
 
     .progress {
-        background: @progress-bar-background;
+        background: var(--Loading-bar-Loading-bar-foreground);
         width: 0;
-        height: .3rem;
+        height: .2rem;
         display: block;
-        border-radius: .2rem;
+        border-radius: var(--Progress-Bar-radius);
         transition: width 500ms linear;
 
         &.completed {
@@ -41,7 +41,7 @@
     position: fixed;
     display: block;
     width: 100%;
-    bottom: 3.4rem;
+    bottom: 0;
     z-index: 3;
 
     .progress-bar span {

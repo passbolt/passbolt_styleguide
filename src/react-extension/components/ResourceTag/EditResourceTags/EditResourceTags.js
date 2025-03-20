@@ -13,12 +13,12 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Autocomplete from "../../Common/Autocomplete/Autocomplete";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withLoading} from "../../../contexts/LoadingContext";
 import {Trans, withTranslation} from "react-i18next";
+import CloseSVG from "../../../../img/svg/close.svg";
 
 const TAG_MAX_LENGTH = 128;
 
@@ -169,8 +169,8 @@ class EditResourceTags extends React.Component {
    * set the position of the autocomplete
    */
   getPositionOfInputTag() {
-    const top = this.inputTagRef.current.offsetTop + 30;
-    const left = this.inputTagRef.current.offsetLeft;
+    const top = this.inputTagRef.current.offsetTop + 28;
+    const left = this.inputTagRef.current.offsetLeft - 2;
     const width = this.elementRef.current.getBoundingClientRect().width;
     const autocompletePosition = {left, top, width};
     this.setState({autocompletePosition});
@@ -503,9 +503,12 @@ class EditResourceTags extends React.Component {
                   <span
                     className={`tag-content ellipsis ${this.state.tagAlreadyPresent === tag.slug ? "blink-fast" : ""}`}>{tag.slug}</span>
                   {this.isTagDeletable(tag) &&
-                  <span className={`tag-delete`} onClick={event => this.deleteTag(event, index)}>
-                    <Icon name="close"/>
-                  </span>
+                    <>
+                      <div className="separator"></div>
+                      <button type="button" onClick={event => this.deleteTag(event, index)} className="tag-delete button-transparent inline">
+                        <CloseSVG/>
+                      </button>
+                    </>
                   }
                 </div>
               )
@@ -533,7 +536,7 @@ class EditResourceTags extends React.Component {
           }
         </div>
         <div className="actions">
-          <button type="button" disabled={this.hasAllInputDisabled()} className="cancel tag-editor-cancel"
+          <button type="button" disabled={this.hasAllInputDisabled()} className="link cancel tag-editor-cancel"
             onClick={this.props.toggleInputTagEditor}><span><Trans>Cancel</Trans></span></button>
           <button type="button" disabled={this.hasAllInputDisabled()} className={`primary tag-editor-submit ${this.hasAllInputDisabled() ? "processing" : ""}`}
             onClick={this.handleOnSubmit}>

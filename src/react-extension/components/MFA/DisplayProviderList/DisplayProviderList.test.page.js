@@ -154,34 +154,6 @@ export default class DisplayProviderListPage {
   }
 
   /**
-   * Returns the help box
-   */
-  get helpBox() {
-    return this._page.container.querySelector('.sidebar-help');
-  }
-
-  /**
-   * Returns the help box title
-   */
-  get helpBoxTitle() {
-    return this._page.container.querySelector('.sidebar-help h3');
-  }
-
-  /**
-   * Returns the help box description
-   */
-  get helpBoxDescription() {
-    return this._page.container.querySelector('.sidebar-help p');
-  }
-
-  /**
-   * Returns the help box button
-   */
-  get helpBoxButton() {
-    return this._page.container.querySelector('.sidebar-help .button');
-  }
-
-  /**
    * Returns true if the page object exists in the container
    */
   exists() {

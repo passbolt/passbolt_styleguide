@@ -20,10 +20,6 @@ import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWor
 import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
 import ManageContextualMenu from "./components/Common/ContextualMenu/ManageContextualMenu";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
-import Footer from "./components/Common/Footer/Footer";
-import DisplayApiUserSettingsWorkspace
-  from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
-import DisplayMainMenu from "./components/Common/Menu/DisplayMainMenu";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import HandleSessionExpired from "./components/Authentication/HandleSessionExpired/HandleSessionExpired";
 import AnnouncementContextProvider from "./contexts/AnnouncementContext";
@@ -120,23 +116,9 @@ class ApiApp extends Component {
                                       </AdminSmtpSettingsContextProvider>
                                     </AdministrationWorkspaceContextProvider>
                                   </Route>
-                                  <Route path={["/app/settings/mfa"]}>
-                                    <ManageDialogs/>
-                                    <ManageContextualMenu/>
-                                    <ManageAnnouncements/>
-                                    <div id="container" className="page settings">
-                                      <div id="app" className="app" tabIndex="1000">
-                                        <div className="header first">
-                                          <DisplayMainMenu/>
-                                        </div>
-                                        <DisplayApiUserSettingsWorkspace/>
-                                      </div>
-                                    </div>
-                                  </Route>
                                 </Switch>
                               </NavigationContextProvider>
                             </Router>
-                            <Footer/>
                           </ContextualMenuContextProvider>
                         </AnnouncementContextProvider>
                       </DialogContextProvider>

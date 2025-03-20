@@ -13,7 +13,8 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../Icons/Icon";
+import EyeOpenSVG from "../../../img/svg/eye_open.svg";
+import EyeCloseSVG from "../../../img/svg/eye_close.svg";
 import {Trans, withTranslation} from "react-i18next";
 
 /**
@@ -34,6 +35,7 @@ class Password extends Component {
     return {
       viewPassword: false, // view password
       hasPassphraseFocus: false, // password input has focus
+      isPassphraseActive: false, // password input is active
     };
   }
 
@@ -46,6 +48,8 @@ class Password extends Component {
     this.handlePasswordInputFocus = this.handlePasswordInputFocus.bind(this);
     this.handlePasswordInputBlur = this.handlePasswordInputBlur.bind(this);
     this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
+    this.handleMouseDown = this.handleMouseDown.bind(this); // Bind here
+    this.handleMouseUp = this.handleMouseUp.bind(this);
   }
 
   /**
@@ -86,8 +90,8 @@ class Password extends Component {
    * Returns the style of the security token (color and text color)
    */
   get securityTokenStyle() {
-    const inverseStyle =  {background: this.props.securityToken.textColor, color: this.props.securityToken.backgroundColor};
-    const fullStyle =  {background: this.props.securityToken.backgroundColor, color: this.props.securityToken.textColor};
+    const inverseStyle = {background: this.props.securityToken.textColor, color: this.props.securityToken.backgroundColor};
+    const fullStyle = {background: this.props.securityToken.backgroundColor, color: this.props.securityToken.textColor};
     return this.state.hasPassphraseFocus ? inverseStyle : fullStyle;
   }
 
@@ -96,20 +100,68 @@ class Password extends Component {
    * @return {Object}
    */
   get passphraseInputStyle() {
-    const emptyStyle =  undefined;
-    const fullStyle =  {background: this.props.securityToken.backgroundColor, color: this.props.securityToken.textColor, "--passphrase-placeholder-color": this.props.securityToken.textColor};
-    return this.state.hasPassphraseFocus ? fullStyle : emptyStyle;
+    if (!this.state.hasPassphraseFocus) { return undefined; }
+
+    const {backgroundColor} = this.props.securityToken;
+    const textColor = this.getContrastTextColor(backgroundColor);
+
+    return {
+      background: backgroundColor,
+      color: textColor,
+      '--passphrase-placeholder-color': textColor,
+    };
   }
 
   /**
    * Returns the style of preview (icon color and icon background color)
    */
   get previewStyle() {
-    const fullStyle = {
-      '--icon-color': this.props.securityToken.textColor,
-      '--icon-background-color': this.props.securityToken.backgroundColor
+    if (!this.state.hasPassphraseFocus) { return undefined; }
+
+    const {backgroundColor} = this.props.securityToken;
+    const textColor = this.getContrastTextColor(backgroundColor);
+    return {
+      '--icon-color': textColor,
+      '--icon-background-color': backgroundColor,
     };
-    return this.state.hasPassphraseFocus ? fullStyle : undefined;
+  }
+
+
+  /**
+   * Calculate the luminance of a color and return the appropriate text color variable.
+   * @param {string} backgroundColor - The background color in hex format.
+   * @returns {string} - The CSS variable for text color.
+   */
+  getContrastTextColor(backgroundColor) {
+    // Convert hex color to RGB
+    const hex = backgroundColor.replace('#', '');
+    const bigint = parseInt(hex, 16);
+    const red = (bigint >> 16) & 255;
+    const green = (bigint >> 8) & 255;
+    const blue = bigint & 255;
+
+    // Calculate luminance
+    const luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
+
+    // Return the appropriate CSS variable based on luminance
+
+    return luminance > 0.5
+      ? 'var(--Token-Token-text-and-icon)'
+      : 'var(--Token-Token-text-and-icon-reversed)';
+  }
+
+  /**
+   * Handle the mouse down to set active item
+   */
+  handleMouseDown() {
+    this.setState({isPassphraseActive: true});
+  }
+
+  /**
+   * Handle the mouse down to set active item to false
+   */
+  handleMouseUp() {
+    this.setState({isPassphraseActive: false});
   }
 
   /**
@@ -118,7 +170,7 @@ class Password extends Component {
    */
   render() {
     return (
-      <div className={`input password ${this.props.disabled ? "disabled" : ""} ${this.state.hasPassphraseFocus ? "" : "no-focus"} ${this.props.securityToken ? "security" : ""}`} style={this.props.securityToken ? this.passphraseInputStyle : undefined}>
+      <div className={`input password ${this.props.disabled ? "disabled" : ""} ${this.state.hasPassphraseFocus ? "" : "no-focus"} ${this.state.isPassphraseActive ? "active" : ""} ${this.props.securityToken ? "security" : ""}`} style={this.props.securityToken ? this.passphraseInputStyle : undefined}>
         <input id={this.props.id} name={this.props.name}
           maxLength="4096"
           placeholder={this.props.placeholder}
@@ -127,16 +179,18 @@ class Password extends Component {
           onFocus={this.handlePasswordInputFocus} onBlur={this.handlePasswordInputBlur}
           onChange={this.handleInputChange} disabled={this.props.disabled}
           readOnly={this.props.readOnly} autoComplete={this.props.autoComplete}
-          aria-required={true} ref={this.props.inputRef}/>
+          onMouseDown={this.handleMouseDown}
+          onMouseUp={this.handleMouseUp}
+          aria-required={true} ref={this.props.inputRef} />
         {this.props.preview &&
           <div className="password-view-wrapper">
             <button type="button" onClick={this.handleViewPasswordButtonClick} style={this.props.securityToken ? this.previewStyle : undefined}
               className={`password-view infield button-transparent ${this.props.disabled ? "disabled" : ""}`}>
               {!this.state.viewPassword &&
-                <Icon name='eye-open'/>
+                <EyeOpenSVG className='svg-icon eye-open'/>
               }
               {this.state.viewPassword &&
-                <Icon name='eye-close'/>
+                <EyeCloseSVG className='svg-icon eye-close'/>
               }
               <span className="visually-hidden"><Trans>View</Trans></span>
             </button>

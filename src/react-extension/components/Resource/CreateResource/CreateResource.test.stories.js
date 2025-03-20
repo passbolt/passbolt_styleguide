@@ -1,40 +1,62 @@
-import {MemoryRouter, Route} from "react-router-dom";
+import {MemoryRouter} from "react-router-dom";
 import React from "react";
+import {defaultProps, defaultTotpProps} from "./CreateResource.test.data";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import PropTypes from "prop-types";
+import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
 import CreateResource from "./CreateResource";
-import MockPort from "../../../test/mock/MockPort";
-import {defaultAppContext, defaultProps} from "./CreateResource.test.data";
+import {
+  ResourceTypesLocalStorageContext
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import {ResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import {
+  resourceTypePasswordAndDescriptionDto, resourceTypePasswordStringDto, resourceTypeTotpDto,
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import DialogContextProvider from "../../../contexts/DialogContext";
+import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 
 export default {
   title: 'Components/Resource/CreateResource',
   component: CreateResource,
-  argTypes: {
-    language: {
-      control: {
-        type: 'select',
-        options: ['en-US', 'fr']
-      }
-    }
-  }
-};
-
-const mockedPort = new MockPort();
-mockedPort.addRequestListener("passbolt.resources.create", data => data);
-
-const Template = ({context, ...args})  =>
-  <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <CreateResource {...args} {...routerProps}/>}></Route>
+  decorators: [(Story, {args}) =>
+    <MemoryRouter initialEntries={['/app/passwords']}>
+      <div style={{margin: "-1rem"}}>
+        <AppContext.Provider value={args.context}>
+          <DialogContextProvider>
+            <ActionFeedbackContext.Provider value={args.actionFeedbackContext}>
+              <ResourceTypesLocalStorageContext.Provider value={{get: () => args.resourceTypes, resourceTypes: args.resourceTypes}}>
+                <ResourceWorkspaceContext.Provider value={args.resourceWorkspaceContext}>
+                  <ResourcePasswordGeneratorContext.Provider value={args.resourcePasswordGeneratorContext}>
+                    <ManageDialogs/>
+                    <Story {...args}/>
+                  </ResourcePasswordGeneratorContext.Provider>
+                </ResourceWorkspaceContext.Provider>
+              </ResourceTypesLocalStorageContext.Provider>
+            </ActionFeedbackContext.Provider>
+          </DialogContextProvider>
+        </AppContext.Provider>
+      </div>
     </MemoryRouter>
-  </AppContext.Provider>;
-
-Template.propTypes = {
-  context: PropTypes.object
+  ],
 };
 
-export const PasswordInDictionary = Template.bind({});
-PasswordInDictionary.args = {
-  context: defaultAppContext({port: mockedPort}),
-  ...defaultProps()
+export const Default = {
+  args: defaultProps()
+};
+
+export const Totp = {
+  args: defaultTotpProps()
+};
+
+export const DefaultLegacy = {
+  args: defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto())})
+};
+
+export const TotpLegacy = {
+  args: defaultTotpProps({resourceType: new ResourceTypeEntity(resourceTypeTotpDto())})
+};
+
+export const StringLegacy = {
+  args: defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto())})
 };

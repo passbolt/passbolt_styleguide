@@ -55,21 +55,17 @@ export const themes = [
   {
     id:  'default',
     name: 'default',
-    preview: 'img/themes/default.png'
   },
   {
     id:  'midgar',
     name: 'midgar',
-    preview: 'img/themes/midgar.png'
   },
   {
     id:  'solarized_dark',
     name: 'solarized_dark',
-    preview: 'img/themes/solarized_dark.png'
   },
   {
     id:  'solarized_light',
     name: 'solarized_light',
-    preview: 'img/themes/solarized_light.png'
   },
 ];

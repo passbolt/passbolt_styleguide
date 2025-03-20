@@ -22,7 +22,8 @@ import {
   contextWithoutDisableMFA,
   contextWithoutEdit,
   defaultAppContext,
-  defaultProps
+  defaultProps,
+  propsWithUserTemporaryHasPendingAccountRecovery
 } from "./DisplayUsersContextualMenu.test.data";
 import DisplayUsersContextualMenuPage from "./DisplayUsersContextualMenu.test.page";
 import {waitFor} from "@testing-library/dom";
@@ -40,6 +41,7 @@ describe("Display Users Contextual Menu", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
+  const contextualUserId = props.user.id;
   props.hide = jest.fn();
 
   it("As LU I should copy an user permalink", async() => {
@@ -50,7 +52,7 @@ describe("Display Users Contextual Menu", () => {
     jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(() => {});
     jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
     await page.copyPermalink();
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/users/view/640ebc06-5ec1-5322-a1ae-6120ed2f3a74`);
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/users/view/${contextualUserId}`);
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
     expect(props.hide).toHaveBeenCalled();
   });
@@ -78,7 +80,7 @@ describe("Display Users Contextual Menu", () => {
     jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(() => {});
     jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
     await page.copyEmail();
-    expect(navigator.clipboard.writeText).toHaveBeenLastCalledWith("carol@passbolt.com");
+    expect(navigator.clipboard.writeText).toHaveBeenLastCalledWith("ada@passbolt.com");
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
     expect(props.hide).toHaveBeenCalled();
   });
@@ -104,7 +106,7 @@ describe("Display Users Contextual Menu", () => {
 
     await page.edit();
 
-    expect(context.setContext).toHaveBeenLastCalledWith({"editUserDialogProps": {"id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74"}});
+    expect(context.setContext).toHaveBeenLastCalledWith({editUserDialogProps: {id: contextualUserId}});
     expect(props.dialogContext.open).toHaveBeenCalledWith(EditUser);
     expect(props.hide).toHaveBeenCalled();
   });
@@ -129,7 +131,7 @@ describe("Display Users Contextual Menu", () => {
 
     await page.resendInvite();
 
-    expect(context.port.request).toHaveBeenLastCalledWith("passbolt.users.resend-invite", "carol@passbolt.com");
+    expect(context.port.request).toHaveBeenLastCalledWith("passbolt.users.resend-invite", "ada@passbolt.com");
   });
 
   it("As LU I should not disable an user MFA if I don't have the capability to do it", async() => {
@@ -179,8 +181,8 @@ describe("Display Users Contextual Menu", () => {
 
     await page.delete();
 
-    expect(context.port.request).toHaveBeenLastCalledWith("passbolt.users.delete-dry-run", "640ebc06-5ec1-5322-a1ae-6120ed2f3a74");
-    expect(context.setContext).toHaveBeenLastCalledWith({"deleteUserDialogProps": {user: props.user}});
+    expect(context.port.request).toHaveBeenLastCalledWith("passbolt.users.delete-dry-run", contextualUserId);
+    expect(context.setContext).toHaveBeenLastCalledWith({deleteUserDialogProps: {user: props.user}});
     expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteUser);
     expect(props.hide).toHaveBeenCalled();
   });
@@ -196,7 +198,7 @@ describe("Display Users Contextual Menu", () => {
 
     await page.delete();
 
-    expect(context.port.request).toHaveBeenLastCalledWith("passbolt.users.delete-dry-run", "640ebc06-5ec1-5322-a1ae-6120ed2f3a74");
+    expect(context.port.request).toHaveBeenLastCalledWith("passbolt.users.delete-dry-run", contextualUserId);
     expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, errorDialogProps);
   });
 
@@ -210,12 +212,13 @@ describe("Display Users Contextual Menu", () => {
 
     await page.delete();
 
-    expect(context.port.request).toHaveBeenLastCalledWith("passbolt.users.delete-dry-run", "640ebc06-5ec1-5322-a1ae-6120ed2f3a74");
+    expect(context.port.request).toHaveBeenLastCalledWith("passbolt.users.delete-dry-run", contextualUserId);
     expect(props.dialogContext.open).toHaveBeenCalled();
   });
 
   it("As LU I should review an account recovery of a user if I have the capability to do it", async() => {
     expect.assertions(3);
+    const props = propsWithUserTemporaryHasPendingAccountRecovery();
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 

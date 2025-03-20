@@ -21,8 +21,6 @@ import DisplayResourcesWorkspaceMainMenuPage from "./DisplayResourcesWorkspaceMa
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
 import CreateResource from "../CreateResource/CreateResource";
-import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
-import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_V5_DEFAULT_SLUG, RESOURCE_TYPE_V5_TOTP_SLUG
@@ -34,8 +32,9 @@ import {
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
-  defaultMetadataTypesSettingsV50FreshDto
+  defaultMetadataTypesSettingsV50FreshDto, defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto
 } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import DisplayResourceCreationMenu from "../CreateResource/DisplayResourceCreationMenu";
 
 beforeEach(() => {
   jest.resetModules();
@@ -228,7 +227,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(page.displayMenu.newTotpMenu).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.newTotpMenu);
       const resourceTypeExpected = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
-      expect(props.workflowContext.start).toHaveBeenCalledWith(HandleTotpWorkflow, {mode: TotpWorkflowMode.CREATE_STANDALONE_TOTP, folderParentId: null, resourceType: resourceTypeExpected});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {folderParentId: null, resourceType: resourceTypeExpected});
     });
 
     it('As LU I can create a standalone totp v5', async() => {
@@ -243,7 +242,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(page.displayMenu.newTotpMenu).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.newTotpMenu);
       const resourceTypeExpected = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
-      expect(props.workflowContext.start).toHaveBeenCalledWith(HandleTotpWorkflow, {mode: TotpWorkflowMode.CREATE_STANDALONE_TOTP, folderParentId: null, resourceType: resourceTypeExpected});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {folderParentId: null, resourceType: resourceTypeExpected});
     });
 
     it('As LU I can create standalone totp if I have selected a folder I am allowed to create in', async() => {
@@ -258,7 +257,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(page.displayMenu.newTotpMenu).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.newTotpMenu);
       const resourceTypeExpected = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
-      expect(props.workflowContext.start).toHaveBeenCalledWith(HandleTotpWorkflow, {mode: TotpWorkflowMode.CREATE_STANDALONE_TOTP, folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id, resourceType: resourceTypeExpected});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id, resourceType: resourceTypeExpected});
     });
 
     it('As LU I cannot create a standalone totp if metadata type settings default is V4 and resource types is only v5', async() => {
@@ -286,6 +285,48 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
     });
   });
 
+  describe('As LU I can open the creation menu', () => {
+    it('As LU I can open the creation menu', async() => {
+      expect.assertions(5);
+      const props = defaultProps({metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto())}); // The props to pass
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      expect(page.displayMenu.newOtherMenu).not.toBeNull();
+      await page.displayMenu.clickOnMenu(page.displayMenu.newOtherMenu);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(DisplayResourceCreationMenu, {folderParentId: null});
+    });
+
+    it('As LU I cannot see other menu if I have not resource type v5 and v4 allowed', async() => {
+      expect.assertions(4);
+      const props = defaultProps(); // The props to pass
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      expect(page.displayMenu.newOtherMenu).toBeNull();
+    });
+
+    it('As LU I cannot see other menu if I have only resource type v5 and no more than password, totp or note', async() => {
+      expect.assertions(4);
+      const props = defaultProps({
+        resourceTypes: new ResourceTypesCollection(resourceTypesV5CollectionDto()),
+      }); // The props to pass
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      expect(page.displayMenu.newOtherMenu).toBeNull();
+    });
+  });
+
   describe('As LU I can import resources', () => {
     it('As LU I can import resources', async() => {
       expect.assertions(2);
@@ -293,6 +334,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       const page = new DisplayResourcesWorkspaceMainMenuPage(props);
 
       expect(page.displayMenu.exists()).toBeTruthy();
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.importMenu).not.toBeNull();
     });
 

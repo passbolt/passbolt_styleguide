@@ -28,7 +28,7 @@ class SubscriptionActionService {
   constructor(props) {
     this.context = props.context;
     this.dialogContext = props.dialogContext;
-    this.subscriptionContext = props.adminSubcriptionContext;
+    this.subscriptionContext = props.adminSubscriptionContext;
   }
 
   /**
@@ -54,9 +54,9 @@ class SubscriptionActionService {
 
   /**
    * Open the subscription key dialog
-   * @returns {Promise<boolean>}
+   * @returns {void}
    */
-  async editSubscription() {
+  editSubscription() {
     const editSubscriptionKey = {
       key: this.subscriptionContext.getSubscription().data
     };

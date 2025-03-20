@@ -124,7 +124,7 @@ class DisplaySynchronizeUserDirectoryAdministrationDialogPageObject {
    * Returns the error element
    */
   get error() {
-    return this._container.querySelector('.error.inline-error').textContent;
+    return this._container.querySelector('.warning.message').textContent;
   }
 
   /**

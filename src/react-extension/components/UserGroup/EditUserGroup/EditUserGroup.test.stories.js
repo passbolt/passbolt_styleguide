@@ -12,39 +12,40 @@
  * @since         2.11.0
  */
 
-import {MemoryRouter, Route} from "react-router-dom";
-import React from "react";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
-import PropTypes from "prop-types";
-import {defaultAppContext, defaultProps, mockGpgKey} from "./EditUserGroup.test.data";
+import {defaultAppContext, defaultProps} from "./EditUserGroup.test.data";
 import EditUserGroup from "./EditUserGroup";
+import {MemoryRouter} from "react-router-dom";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
+import React from "react";
+import {mockGpgKey} from "../CreateUserGroup/CreateUserGroup.test.data";
 
 export default {
   title: 'Components/UserGroup/EditUserGroup',
-  component: EditUserGroup
-};
-
-const Template = ({context, ...args}) =>
-  <AppContext.Provider value={context}>
+  component: EditUserGroup,
+  decorators: [(Story, {args}) => (
     <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <EditUserGroup {...args} {...routerProps}/>}></Route>
+      <AppContext.Provider value={args.context}>
+        <Story/>
+      </AppContext.Provider>
     </MemoryRouter>
-  </AppContext.Provider>;
-
-Template.propTypes = {
-  context: PropTypes.object,
+  )],
 };
 
-const initialContext = defaultAppContext();
-initialContext.port.addRequestListener('passbolt.keyring.get-public-key-info-by-user', async() => mockGpgKey);
-export const Initial = Template.bind({});
-Initial.args = {
-  context: initialContext,
-  ...defaultProps(),
+const context = defaultAppContext();
+context.port.addRequestListener('passbolt.keyring.get-public-key-info-by-user', async() => mockGpgKey);
+const propsWithGroupManager = defaultProps();
+propsWithGroupManager.userWorkspaceContext.groupToEdit.groups_users[0].user_id = context.loggedInUser.id;
+
+export const Initial = {
+  args: {
+    context,
+    ...propsWithGroupManager,
+  }
 };
 
-export const Loading = Template.bind({});
-Loading.args = {
-  context: defaultAppContext(),
-  ...defaultProps(),
+export const Loading = {
+  args: {
+    context: defaultAppContext({port: {}}),
+    ...defaultProps(),
+  }
 };

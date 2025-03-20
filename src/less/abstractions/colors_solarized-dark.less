@@ -23,10 +23,12 @@
 @alert-2: hsl(1,71%,62%);
 @alert-3: hsl(1,71%,72%);
 
+@bright-yellow: #FFA724;
 @satin-sheen-gold: #cea332;
 @fire-opal: #ef6157;
 @dark-red: #8A0000;
 @rosso-corsa: #D40101;
+@dark-candy-apple-red: #A40000;
 @cultured-2: #F8F8F8;
 @chinese-white: #E0E0E0;
 @black: #000000;
@@ -128,14 +130,6 @@
 
 /* logos */
 @logourl: url('@{images}/logo/logo_white.svg');
-@passbolt-icon-without-badge: url('@{images}/logo/icon-without-badge.svg');
-@passbolt-icon-badge-1: url('@{images}/logo/icon-badge-1.svg');
-@passbolt-icon-badge-2: url('@{images}/logo/icon-badge-2.svg');
-@passbolt-icon-badge-3: url('@{images}/logo/icon-badge-3.svg');
-@passbolt-icon-badge-4: url('@{images}/logo/icon-badge-4.svg');
-@passbolt-icon-badge-5: url('@{images}/logo/icon-badge-5.svg');
-@passbolt-icon-badge-5-plus: url('@{images}/logo/icon-badge-5+.svg');
-@passbolt-icon-inactive: url('@{images}/logo/icon-inactive.svg');
 
 /* healthcheck */
 @healthcheck-fail: @dark-red;
@@ -229,7 +223,7 @@
 @input-checkbox-focus-border: @primary-color-3;
 
 /* controls */
-@controls-check: url('@{images}/controls/check_white.svg');
+@controls-check: url('@{images}/controls/check_tick.svg');
 
 /* radio */
 @input-radio-background: @main-color-gradient-8;
@@ -273,9 +267,9 @@
 /* complexity */
 @complexity-text-color: @text-icon-main-color;
 @complexity-bar-default-background: @main-color-gradient-15;
-@complexity-bar-gradient-background: linear-gradient(to right,#A40000, #FFA724, #0EAA00);
-@complexity-bar-low-color: #a40000;
-@complexity-bar-high-color: #0eaa00;
+@complexity-bar-gradient-background: linear-gradient(to right, @dark-candy-apple-red, @bright-yellow, @islamic-green);
+@complexity-bar-low-color: @dark-candy-apple-red;
+@complexity-bar-high-color: @complexity-bar-low-color;
 
 /* hints */
 @hint-success-color: @success-2;

@@ -31,6 +31,10 @@ import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import DiceSVG from "../../../img/svg/dice.svg";
+import AddSVG from "../../../img/svg/add.svg";
+import KeySVG from "../../../img/svg/key.svg";
+import SearchSVG from "../../../img/svg/search.svg";
 
 /** The maximum length of visibility of a generated password */
 const TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH = 15;
@@ -237,7 +241,7 @@ class DisplayInFormMenu extends React.Component {
       title={this.props.t("Generate a new password securely")}
       subtitle={<span className="in-form-menu-item-content-subheader-password">{this.truncatedGeneratedPassword}</span>}
       description={this.props.t("You will be able to save it after submitting")}
-      icon="dice"
+      icon={<DiceSVG />}
       disabled={disabled}/>;
   }
 
@@ -251,7 +255,8 @@ class DisplayInFormMenu extends React.Component {
       onClick={this.handleSaveCredentialsRequestedEvent}
       title={this.props.t("Save as new credential")}
       description={this.props.t("Save the data entered as a new credential")}
-      icon="add"/>;
+      icon={<AddSVG />}
+    />;
   }
 
   /**
@@ -264,7 +269,8 @@ class DisplayInFormMenu extends React.Component {
       onClick={this.handleCreateNewCredentialsRequestedEvent}
       title={this.props.t("Create a new credential")}
       description={this.props.t("Create and customize it yourself")}
-      icon="add"/>;
+      icon={<AddSVG />}
+    />;
   }
 
   /**
@@ -277,7 +283,8 @@ class DisplayInFormMenu extends React.Component {
       onClick={this.handleBrowseCredentialsRequestedEvent}
       title={this.props.t("Browse credentials")}
       description={this.props.t("Search among available credentials")}
-      icon="search"/>;
+      icon={<SearchSVG />}
+    />;
   }
 
   /**
@@ -293,7 +300,8 @@ class DisplayInFormMenu extends React.Component {
         disabled={this.state.resourceIdProcessing === resource.id}
         title={resource.metadata.name}
         description={resource.metadata?.username}
-        icon="key"/>
+        icon={<KeySVG />}
+      />
     ]), []);
   }
 
@@ -387,15 +395,15 @@ class DisplayInFormMenu extends React.Component {
    * Render the component
    */
   render() {
+    if (!this.hasConfiguration) {
+      return null;
+    }
+
     const items = this.items;
     return (
-      <>
-        {this.hasConfiguration &&
-        <div className={`in-form-menu ${items.length > 3 ? 'in-form-menu--scrollable' : ''}`} ref={this.inFormMenuRef}>
-          {items}
-        </div>
-        }
-      </>
+      <div className={`in-form-menu ${items.length > 3 && 'in-form-menu--scrollable'}`} ref={this.inFormMenuRef}>
+        {items}
+      </div>
     );
   }
 }

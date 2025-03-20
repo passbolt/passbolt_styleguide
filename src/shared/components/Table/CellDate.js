@@ -33,7 +33,7 @@ class CellDate extends Component {
     const displayedDate = formatDateTimeAgo(this.props.value, this.props.t, this.props.locale);
     return (
       <div title={this.props.value}>
-        {displayedDate}
+        <span>{displayedDate}</span>
       </div>
     );
   }

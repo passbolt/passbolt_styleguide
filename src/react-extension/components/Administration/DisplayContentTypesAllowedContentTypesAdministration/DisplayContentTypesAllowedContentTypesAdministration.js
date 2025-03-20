@@ -16,7 +16,6 @@ import PropTypes from "prop-types";
 import React, {Component} from 'react';
 import {Trans, withTranslation} from "react-i18next";
 import memoize from "memoize-one";
-import {createPortal} from "react-dom";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import MetadataSettingsServiceWorkerService from "../../../../shared/services/serviceWorker/metadata/metadataSettingsServiceWorkerService";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -26,6 +25,10 @@ import ResourceTypesFormEntity from "../../../../shared/models/entity/resourceTy
 import ResourceTypesServiceWorkerService from "../../../../shared/services/serviceWorker/resourceTypes/resourceTypesServiceWorkerService";
 import MetadataKeysServiceWorkerService from "../../../../shared/services/serviceWorker/metadata/metadataKeysServiceWorkerService";
 import Tooltip from "../../Common/Tooltip/Tooltip";
+import {createSafePortal} from "../../../../shared/utils/portals";
+import InfoSVG from "../../../../img/svg/info.svg";
+import KeySVG from "../../../../img/svg/key.svg";
+import TotpSVG from "../../../../img/svg/totp.svg";
 
 class DisplayContentTypesAllowedContentTypesAdministration extends Component {
   /** @type {ResourceTypesFormEntity}*/
@@ -265,104 +268,168 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
 
     return (
       <div className="row">
-        {(this.props.createPortal || createPortal)(
-          <div className="col2_3 actions-wrapper">
-            <div className="actions">
-              <ul>
-                <li>
-                  <button type="button" disabled={this.state.isProcessing} onClick={this.handleFormSubmit}>
-                    <span><Trans>Save</Trans></span>
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>,
-          document.getElementById("administration-actions-content-action")
-        )}
-        <div id="allow-content-types" className="col8 main-column">
-          <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
-            <h3><label><Trans>Allow content types</Trans></label></h3>
-            {hasSettingsChanges &&
-              <div className="warning message form-banner">
-                <p><Trans>Don&apos;t forget to save your settings to apply your modification.</Trans></p>
-              </div>
-            }
-            {this.state.settings.has_v5_resource_types &&
-              <>
-                <h4 className="no-border"><Trans>Encrypted metadata</Trans></h4>
-                <p className="description"><Trans>Select which content type with encrypted metadata is available for your whole organisation.</Trans></p>
+        <div id="allow-content-types" className="main-column">
+          <div className="main-content">
+            <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
+              <h3 className="title"><label><Trans>Allow content types</Trans></label></h3>
+              {this.state.settings.has_v5_resource_types &&
+                <>
+                  <h4 className="no-border"><Trans>Encrypted metadata</Trans></h4>
+                  <p className="description"><Trans>Select which content type with encrypted metadata is available for your whole organisation.</Trans></p>
 
+                  <div className="checkboxlist">
+                    <span className={`input checkbox form-element ${errors?.hasError("password_v5") && "error"} ${!errors?.hasError("password_v5") && warnings?.hasError("password_v5") && "warning"}`}>
+                      <input type="checkbox"
+                        id="passwordV5Input"
+                        className="checkbox"
+                        name="password_v5"
+                        onChange={this.handleInputChange}
+                        checked={this.state.settings.password_v5}
+                        disabled={this.isInputDisabled(this.state.settings.password_v5_count, this.state.settings.password_v5)}/>
+                      <label htmlFor="passwordV5Input">
+                        {this.addTooltipOnDisabledElement(
+                          <div className="allow-content-type-item">
+                            <KeySVG/>
+                            <span className="name"><Trans>Password</Trans></span>
+                            <span className="info">{this.props.t(`({{count}} resources)`, {count: this.state.settings.password_v5_count})}</span>
+                          </div>,
+                          this.isInputDisabled(this.state.settings.password_v5_count, this.state.settings.password_v5)
+                        )}
+                        {errors?.hasError("password_v5", "has_content") &&
+                          <div className="error-message"><Trans>One (or more) content type v5 having a password is deleted but its resources count is not 0.</Trans></div>
+                        }
+                        {errors?.hasError("password_v5", "minimum_requirement") &&
+                          <div className="error-message"><Trans>At least one content type should be allowed</Trans></div>
+                        }
+                        {!errors?.hasError("password_v5") &&
+                          <>
+                            {warnings?.hasError("password_v5", "is_creation_alowed") &&
+                              <div className="warning-message"><Trans>Creation of content type v5 is allowed but all content types having passwords are deleted.</Trans></div>
+                            }
+                            {warnings?.hasError("password_v5", "active_metadata_key") &&
+                              <div className="warning-message"><Trans>No active metadata key defined.</Trans></div>
+                            }
+                            {warnings?.hasError("password_v5", "is_creation_not_alowed") &&
+                              <div className="warning-message"><Trans>Creation of content type v5 is not allowed.</Trans></div>
+                            }
+                          </>
+                        }
+                      </label>
+                    </span>
+
+                    <span className={`input checkbox form-element ${errors?.hasError("totp_v5") && "error"} ${!errors?.hasError("totp_v5") && warnings?.hasError("totp_v5") && "warning"}`}>
+                      <input type="checkbox"
+                        id="totpV5Input"
+                        className="checkbox"
+                        name="totp_v5"
+                        onChange={this.handleInputChange}
+                        checked={this.state.settings.totp_v5}
+                        disabled={this.isInputDisabled(this.state.settings.totp_v5_count, this.state.settings.totp_v5)}/>
+                      <label htmlFor="totpV5Input">
+                        {this.addTooltipOnDisabledElement(
+                          <div className="allow-content-type-item">
+                            <TotpSVG/>
+                            <span className="name"><Trans>TOTP</Trans></span>
+                            <span className="info">{this.props.t(`({{count}} resources)`, {count: this.state.settings.totp_v5_count})}</span>
+                          </div>,
+                          this.isInputDisabled(this.state.settings.totp_v5_count, this.state.settings.totp_v5)
+                        )}
+                        {errors?.hasError("totp_v5", "has_content") &&
+                          <div className="error-message"><Trans>One (or more) content type v5 having a totp is deleted but its resources count is not 0.</Trans></div>
+                        }
+                        {errors?.hasError("totp_v5", "minimum_requirement") &&
+                          <div className="error-message"><Trans>At least one content type should be allowed</Trans></div>
+                        }
+                        {!errors?.hasError("totp_v5") &&
+                          <>
+                            {warnings?.hasError("totp_v5", "is_creation_alowed") &&
+                              <div className="warning-message"><Trans>Creation of content type v5 is allowed but all content types having totp are deleted.</Trans></div>
+                            }
+                            {warnings?.hasError("totp_v5", "active_metadata_key") &&
+                              <div className="warning-message"><Trans>No active metadata key defined.</Trans></div>
+                            }
+                            {warnings?.hasError("totp_v5", "is_creation_not_alowed") &&
+                              <div className="warning-message"><Trans>Creation of content type v5 is not allowed.</Trans></div>
+                            }
+                          </>
+                        }
+                      </label>
+                    </span>
+                  </div>
+                </>
+              }
+
+              {this.state.settings.has_v4_resource_types &&
+              <>
+                <h4 className={`${!this.state.settings.has_password_v5 && "no-border"}`}><Trans>Legacy cleartext metadata</Trans></h4>
+                <p className="description"><Trans>Select which content type with cleartext metadata is available for your whole organisation.</Trans></p>
                 <div className="checkboxlist">
-                  <span className={`input checkbox form-element ${errors?.hasError("password_v5") && "error"} ${!errors?.hasError("password_v5") && warnings?.hasError("password_v5") && "warning"}`}>
+                  <span className={`input checkbox form-element ${errors?.hasError("password_v4") && "error"} ${!errors?.hasError("password_v4") && warnings?.hasError("password_v4") && "warning"}`}>
                     <input type="checkbox"
-                      id="passwordV5Input"
+                      id="passwordV4Input"
                       className="checkbox"
-                      name="password_v5"
+                      name="password_v4"
                       onChange={this.handleInputChange}
-                      checked={this.state.settings.password_v5}
-                      disabled={this.isInputDisabled(this.state.settings.password_v5_count, this.state.settings.password_v5)}/>
-                    <label htmlFor="passwordV5Input">
+                      checked={this.state.settings.password_v4}
+                      disabled={this.isInputDisabled(this.state.settings.password_v4_count, this.state.settings.password_v4)}/>
+                    <label htmlFor="passwordV4Input">
                       {this.addTooltipOnDisabledElement(
-                        <>
-                          <span className="name"><Trans>Password</Trans></span>&nbsp;
-                          <span className="info">{this.props.t(`({{count}} resources)`, {count: this.state.settings.password_v5_count})}</span>
-                        </>,
-                        this.isInputDisabled(this.state.settings.password_v5_count, this.state.settings.password_v5)
+                        <div className="allow-content-type-item">
+                          <KeySVG/>
+                          <span className="name"><Trans>Password</Trans></span>
+                          <span className="info">{this.props.t(`({{count}} resources)`, {count: this.state.settings.password_v4_count})}</span>
+                        </div>,
+                        this.isInputDisabled(this.state.settings.password_v4_count, this.state.settings.password_v4)
                       )}
-                      {errors?.hasError("password_v5", "has_content") &&
-                        <div className="error-message"><Trans>One (or more) content type v5 having a password is deleted but its resources count is not 0.</Trans></div>
+                      {errors?.hasError("password_v4", "has_content") &&
+                        <div className="error-message"><Trans>One (or more) content type v4 having a password is deleted but its resources count is not 0.</Trans></div>
                       }
-                      {errors?.hasError("password_v5", "minimum_requirement") &&
+                      {errors?.hasError("password_v4", "minimum_requirement") &&
                         <div className="error-message"><Trans>At least one content type should be allowed</Trans></div>
                       }
-                      {!errors?.hasError("password_v5") &&
+                      {!errors?.hasError("password_v4") &&
                         <>
-                          {warnings?.hasError("password_v5", "is_creation_alowed") &&
-                            <div className="warning-message"><Trans>Creation of content type v5 is allowed but all content types having passwords are deleted.</Trans></div>
+                          {warnings?.hasError("password_v4", "is_creation_alowed") &&
+                            <div className="warning-message"><Trans>Creation of content type v4 is allowed but all content types having passwords are deleted.</Trans></div>
                           }
-                          {warnings?.hasError("password_v5", "active_metadata_key") &&
-                            <div className="warning-message"><Trans>No active metadata key defined.</Trans></div>
-                          }
-                          {warnings?.hasError("password_v5", "is_creation_not_alowed") &&
-                            <div className="warning-message"><Trans>Creation of content type v5 is not allowed.</Trans></div>
+                          {warnings?.hasError("password_v4", "is_creation_not_alowed") &&
+                            <div className="warning-message"><Trans>Creation of content type v4 is not allowed.</Trans></div>
                           }
                         </>
                       }
                     </label>
                   </span>
 
-                  <span className={`input checkbox form-element ${errors?.hasError("totp_v5") && "error"} ${!errors?.hasError("totp_v5") && warnings?.hasError("totp_v5") && "warning"}`}>
+                  <span className={`input checkbox form-element ${errors?.hasError("totp_v4") && "error"} ${!errors?.hasError("totp_v4") && warnings?.hasError("totp_v4") && "warning"}`}>
                     <input type="checkbox"
-                      id="totpV5Input"
+                      id="totpV4Input"
                       className="checkbox"
-                      name="totp_v5"
+                      name="totp_v4"
                       onChange={this.handleInputChange}
-                      checked={this.state.settings.totp_v5}
-                      disabled={this.isInputDisabled(this.state.settings.totp_v5_count, this.state.settings.totp_v5)}/>
-                    <label htmlFor="totpV5Input">
+                      checked={this.state.settings.totp_v4}
+                      disabled={this.isInputDisabled(this.state.settings.totp_v4_count, this.state.settings.totp_v4)}/>
+                    <label htmlFor="totpV4Input">
                       {this.addTooltipOnDisabledElement(
-                        <>
-                          <span className="name"><Trans>TOTP</Trans></span>&nbsp;
-                          <span className="info">{this.props.t(`({{count}} resources)`, {count: this.state.settings.totp_v5_count})}</span>
-                        </>,
-                        this.isInputDisabled(this.state.settings.totp_v5_count, this.state.settings.totp_v5)
+                        <div className="allow-content-type-item">
+                          <TotpSVG/>
+                          <span className="name"><Trans>TOTP</Trans></span>
+                          <span className="info">{this.props.t(`({{count}} resources)`, {count: this.state.settings.totp_v4_count})}</span>
+                        </div>,
+                        this.isInputDisabled(this.state.settings.totp_v4_count, this.state.settings.totp_v4)
                       )}
-                      {errors?.hasError("totp_v5", "has_content") &&
-                        <div className="error-message"><Trans>One (or more) content type v5 having a totp is deleted but its resources count is not 0.</Trans></div>
+                      {errors?.hasError("totp_v4", "has_content") &&
+                        <div className="error-message"><Trans>One (or more) content type v4 having a totp is deleted but its resources count is not 0.</Trans></div>
                       }
-                      {errors?.hasError("totp_v5", "minimum_requirement") &&
+                      {errors?.hasError("totp_v4", "minimum_requirement") &&
                         <div className="error-message"><Trans>At least one content type should be allowed</Trans></div>
                       }
-                      {!errors?.hasError("totp_v5") &&
+                      {!errors?.hasError("totp_v4") &&
                         <>
-                          {warnings?.hasError("totp_v5", "is_creation_alowed") &&
-                            <div className="warning-message"><Trans>Creation of content type v5 is allowed but all content types having totp are deleted.</Trans></div>
+                          {warnings?.hasError("totp_v4", "is_creation_alowed") &&
+                            <div className="warning-message"><Trans>Creation of content type v4 is allowed but all content types having totp are deleted.</Trans></div>
                           }
-                          {warnings?.hasError("totp_v5", "active_metadata_key") &&
-                            <div className="warning-message"><Trans>No active metadata key defined.</Trans></div>
-                          }
-                          {warnings?.hasError("totp_v5", "is_creation_not_alowed") &&
-                            <div className="warning-message"><Trans>Creation of content type v5 is not allowed.</Trans></div>
+                          {warnings?.hasError("totp_v4", "is_creation_not_alowed") &&
+                            <div className="warning-message"><Trans>Creation of content type v4 is not allowed.</Trans></div>
                           }
                         </>
                       }
@@ -370,87 +437,33 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                   </span>
                 </div>
               </>
-            }
-
-            {this.state.settings.has_v4_resource_types &&
-            <>
-              <h4 className={`${!this.state.settings.has_password_v5 && "no-border"}`}><Trans>Legacy cleartext metadata</Trans></h4>
-              <p className="description"><Trans>Select which content type with cleartext metadata is available for your whole organisation.</Trans></p>
-              <div className="checkboxlist">
-                <span className={`input checkbox form-element ${errors?.hasError("password_v4") && "error"} ${!errors?.hasError("password_v4") && warnings?.hasError("password_v4") && "warning"}`}>
-                  <input type="checkbox"
-                    id="passwordV4Input"
-                    className="checkbox"
-                    name="password_v4"
-                    onChange={this.handleInputChange}
-                    checked={this.state.settings.password_v4}
-                    disabled={this.isInputDisabled(this.state.settings.password_v4_count, this.state.settings.password_v4)}/>
-                  <label htmlFor="passwordV4Input">
-                    {this.addTooltipOnDisabledElement(
-                      <>
-                        <span className="name"><Trans>Password</Trans></span>&nbsp;
-                        <span className="info">{this.props.t(`({{count}} resources)`, {count: this.state.settings.password_v4_count})}</span>
-                      </>,
-                      this.isInputDisabled(this.state.settings.password_v4_count, this.state.settings.password_v4)
-                    )}
-                    {errors?.hasError("password_v4", "has_content") &&
-                      <div className="error-message"><Trans>One (or more) content type v4 having a password is deleted but its resources count is not 0.</Trans></div>
-                    }
-                    {errors?.hasError("password_v4", "minimum_requirement") &&
-                      <div className="error-message"><Trans>At least one content type should be allowed</Trans></div>
-                    }
-                    {!errors?.hasError("password_v4") &&
-                      <>
-                        {warnings?.hasError("password_v4", "is_creation_alowed") &&
-                          <div className="warning-message"><Trans>Creation of content type v4 is allowed but all content types having passwords are deleted.</Trans></div>
-                        }
-                        {warnings?.hasError("password_v4", "is_creation_not_alowed") &&
-                          <div className="warning-message"><Trans>Creation of content type v4 is not allowed.</Trans></div>
-                        }
-                      </>
-                    }
-                  </label>
-                </span>
-
-                <span className={`input checkbox form-element ${errors?.hasError("totp_v4") && "error"} ${!errors?.hasError("totp_v4") && warnings?.hasError("totp_v4") && "warning"}`}>
-                  <input type="checkbox"
-                    id="totpV4Input"
-                    className="checkbox"
-                    name="totp_v4"
-                    onChange={this.handleInputChange}
-                    checked={this.state.settings.totp_v4}
-                    disabled={this.isInputDisabled(this.state.settings.totp_v4_count, this.state.settings.totp_v4)}/>
-                  <label htmlFor="totpV4Input">
-                    {this.addTooltipOnDisabledElement(
-                      <>
-                        <span className="name"><Trans>TOTP</Trans></span>&nbsp;
-                        <span className="info">{this.props.t(`({{count}} resources)`, {count: this.state.settings.totp_v4_count})}</span>
-                      </>,
-                      this.isInputDisabled(this.state.settings.totp_v4_count, this.state.settings.totp_v4)
-                    )}
-                    {errors?.hasError("totp_v4", "has_content") &&
-                      <div className="error-message"><Trans>One (or more) content type v4 having a totp is deleted but its resources count is not 0.</Trans></div>
-                    }
-                    {errors?.hasError("totp_v4", "minimum_requirement") &&
-                      <div className="error-message"><Trans>At least one content type should be allowed</Trans></div>
-                    }
-                    {!errors?.hasError("totp_v4") &&
-                      <>
-                        {warnings?.hasError("totp_v4", "is_creation_alowed") &&
-                          <div className="warning-message"><Trans>Creation of content type v4 is allowed but all content types having totp are deleted.</Trans></div>
-                        }
-                        {warnings?.hasError("totp_v4", "is_creation_not_alowed") &&
-                          <div className="warning-message"><Trans>Creation of content type v4 is not allowed.</Trans></div>
-                        }
-                      </>
-                    }
-                  </label>
-                </span>
+              }
+            </form>
+          </div>
+          {hasSettingsChanges &&
+            <div className="warning message">
+              <div>
+                <p><Trans><b>Warning:</b> Don&apos;t forget to save your settings to apply your modification.</Trans></p>
               </div>
-            </>
-            }
-          </form>
+            </div>
+          }
         </div>
+        <div className="actions-wrapper">
+          <button type="button" className="button primary" disabled={this.state.isProcessing} onClick={this.handleFormSubmit}>
+            <span><Trans>Save</Trans></span>
+          </button>
+        </div>
+        {createSafePortal(
+          <div className="sidebar-help-section">
+            <h3><Trans>Need help?</Trans></h3>
+            <p><Trans>For more information about the content type support and migration, checkout the dedicated page on the official website.</Trans></p>
+            <a className="button" target="_blank" rel="noopener noreferrer" href="https://passbolt.com/docs" >
+              <InfoSVG/>
+              <span><Trans>Read the documentation</Trans></span>
+            </a>
+          </div>,
+          document.getElementById("administration-help-panel")
+        )}
       </div>
     );
   }

@@ -230,7 +230,6 @@ class AzureSsoProviderForm extends React.Component {
             <Trans>The URL to provide to Azure when registering the application.</Trans>
           </p>
         </div>
-        <hr/>
         <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>Application (client) ID</Trans></label>
           <input id="sso-azure-client-id-input" type="text" className="fluid form-element" name="client_id" ref={this.clientIdInputRef}
@@ -287,7 +286,9 @@ class AzureSsoProviderForm extends React.Component {
           }
         </div>
         <div className="warning message">
-          <Trans><b>Warning</b>: This secret will expire after some time (typically a few months). Make sure you save the expiry date and rotate it on time.</Trans>
+          <div>
+            <Trans><b>Warning</b>: This secret will expire after some time (typically a few months). Make sure you save the expiry date and rotate it on time.</Trans>
+          </div>
         </div>
         <div>
           <div className={`accordion operation-details ${this.state.advancedSettingsOpened ? "" : "closed"}`}>
@@ -307,7 +308,9 @@ class AzureSsoProviderForm extends React.Component {
             </div>
             {ssoConfig.email_claim === "upn" &&
               <div className="warning message">
-                <Trans><b>Warning</b>: UPN is not active by default on Azure and requires a specific option set on Azure to be working.</Trans>
+                <div>
+                  <Trans><b>Warning</b>: UPN is not active by default on Azure and requires a specific option set on Azure to be working.</Trans>
+                </div>
               </div>
             }
             <div className={`select-wrapper input required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>

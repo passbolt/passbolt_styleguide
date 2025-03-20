@@ -4,30 +4,67 @@ a {
     text-decoration: none;
     cursor: pointer;
     font-size: 1.5rem;
+    font-weight: 400;
+    text-overflow: ellipsis;
     line-height: 2rem;
-    border-bottom: 1px solid @link-border;
+    border: none;
+    color: var(--Text-and-icons-Main-text);
+    gap: 1.6rem;
+    display: inline-flex;
+    overflow: hidden;
+    position: relative;
+
+    &.button {
+      &::after {
+        content: none;
+      }
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: .1rem;
+      background-color: var(--Palette-Gradient-7);
+    }
 
     &:link, &:visited {
-        color: @default-text-color;
+        color: var(--Text-and-icons-Main-text);
     }
-    &:hover {
-        text-decoration: none;
-        cursor: pointer;
-        color: @text-focus-color;
-        border-bottom: 1px solid @link-hover-border;
+
+    &:active, &:hover {
+      box-shadow: none;
+      border: none;
+      cursor: pointer;
+      &::after {
+        background-color: var(--Palette-Contrast-1);
+      }
     }
-    &:active, &:focus, &:focus-visible {
-        outline: @outline-default-border;
-        color: @text-focus-color;
+
+    &:focus, &:focus-visible {
+        box-shadow: none;
         border: none;
+        cursor: pointer;
+        &::after {
+            background-color: var(--Palette-Contrast-1);
+            box-shadow: 0 0 .4rem 0 var(--States-Focus);
+        }
     }
+
+
     &.disabled {
         outline: 0;
         text-decoration: none;
         cursor: default;
-        color: @default-text-color;
         opacity: .5;
         pointer-events: none;
+
+        &::after {
+          background-color: var(--Palette-Gradient-7);
+          box-shadow: none;
+        }
     }
 }
 
@@ -38,7 +75,7 @@ button.link {
     cursor: pointer;
     font-size: 1.5rem;
     line-height: 2rem;
-    border-bottom: 1px solid @link-border;
+    border: none;
     border-radius: 0;
     padding: 0;
     text-align: inherit;
@@ -47,39 +84,48 @@ button.link {
     vertical-align: inherit;
     box-shadow: none;
     min-width: inherit;
+    position: relative;
 
-    &:focus {
-        border-bottom: 1px solid @link-border;
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: .1rem;
+      background-color: var(--Palette-Gradient-7);
+    }
+
+    &:active, &:hover {
         box-shadow: none;
-    }
-    &:focus-visible {
-        box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
-        outline: @outline-default-border;
-    }
-    &:hover {
-        text-decoration: none;
-        cursor: pointer;
-        color: @text-focus-color;
-        border-bottom: 1px solid @link-hover-border;
-        box-shadow: none;
-    }
-    &:active {
-        background: transparent;
-        outline: @outline-default-border;
-        color: @text-focus-color;
         border: none;
-        box-shadow: none;
+        &::after {
+          background-color: var(--Palette-Contrast-1);
+        }
     }
-    &:disabled {
+
+    &:focus, &:focus-visible {
+        box-shadow: none;
+        border: none;
+        &::after {
+          background-color: var(--Palette-Contrast-1);
+          box-shadow: 0 0 .4rem 0 var(--States-Focus);
+        }
+    }
+
+    &:disabled, &.disabled {
         background: transparent;
         outline: 0;
         text-decoration: none;
-        color: @default-text-color;
         cursor: default;
         opacity: .5;
         pointer-events: none;
-        border-bottom: 1px solid @link-border;
         box-shadow: none;
+
+        &::after {
+          background-color: var(--Palette-Gradient-7);
+          box-shadow: none;
+        }
     }
 
     &.inline {
@@ -87,7 +133,9 @@ button.link {
     }
 
     &.no-border {
-        border: none;
+        &::after {
+            content: none;
+        }
     }
 }
 
@@ -112,19 +160,18 @@ button.link-icon {
         height: 1.6rem;
     }
     .link-label {
-        border-bottom: 1px solid @link-border;
+        border-bottom: .1rem solid var(--Palette-Gradient-7);
     }
 
     &:focus {
         box-shadow: none;
         .link-label {
-            border-bottom: 1px solid @link-border;
+            border-bottom: .1rem solid var(--Palette-Gradient-7);
         }
     }
 
     &:focus-visible {
-        box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
-        outline: @outline-default-border;
+        box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
         .link-label {
             border: none;
         }
@@ -133,20 +180,19 @@ button.link-icon {
     &:hover  {
         text-decoration: none;
         cursor: pointer;
-        color: @text-focus-color;
-        --icon-color: @text-focus-color;
+        color: var(--States-Focus);
+        --icon-color: var(--States-Focus);
         .link-label {
-            border-bottom: 1px solid @link-hover-border;
+            border-bottom: 1px solid var(--Palette-Contrast-1);
             box-shadow: none;
         }
     }
 
     &:active {
-        --icon-color: @text-focus-color;
+        --icon-color: var(--States-Focus);
         .link-label {
             background: transparent;
-            outline: @outline-default-border;
-            color: @text-focus-color;
+            color: var(--States-Focus);
             margin-bottom: .1rem; // Prevent a difference of 1px due to the border none
             border: none;
             box-shadow: none;
@@ -161,12 +207,10 @@ button.link-icon {
         outline: 0;
         text-decoration: none;
         box-shadow: none;
-        color: @default-text-color;
-        --icon-color: @icon-color;
         opacity: .5;
 
         .link-label {
-            border-bottom: 1px solid @link-border;
+            border-bottom: 1px solid var(--Palette-Gradient-7);
         }
     }
 }

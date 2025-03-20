@@ -21,6 +21,10 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
+import DefaultThemeSVG from "../../../../img/themes/default.svg";
+import MidgarThemeSVG from "../../../../img/themes/midgar.svg";
+import SolarizedLightThemeSVG from "../../../../img/themes/solarized_light.svg";
+import SolarizedDarkThemeSVG from "../../../../img/themes/solarized_dark.svg";
 
 
 /**
@@ -54,7 +58,6 @@ class DisplayUserTheme extends React.Component {
   async componentDidMount() {
     await this.populate();
   }
-
 
   /**
    * Binds the component handlers
@@ -128,14 +131,31 @@ class DisplayUserTheme extends React.Component {
   }
 
   /**
-   * Converts the given image theme preview URL to pick it from the browser extension.
-   * @param {string} url
+   * Returns the theme preview SVG component.
+   * @param {object} theme
+   * @returns {ReactDOM}
+   */
+  getThemePreview(theme) {
+    return {
+      default: <DefaultThemeSVG />,
+      midgar: <MidgarThemeSVG />,
+      solarized_light: <SolarizedLightThemeSVG />,
+      solarized_dark: <SolarizedDarkThemeSVG />,
+    }[theme.name];
+  }
+
+  /**
+   * Returns the name of the given theme.
+   * @param {object} theme
    * @returns {string}
    */
-  convertUrlToWebAccessibleResources(url) {
-    const regExp = /\/([a-zA-Z-_]*\.png)$/;
-    const fileName = regExp.exec(url);
-    return `/webAccessibleResources/img/themes/${fileName[1]}`;
+  getThemeName(theme) {
+    return {
+      default: "Default",
+      midgar: "Midgar",
+      solarized_light: "Solarized Light",
+      solarized_dark: "Solarized Dark",
+    }[theme.name];
   }
 
   /**
@@ -144,30 +164,18 @@ class DisplayUserTheme extends React.Component {
   render() {
     const selectedClass = theme => this.state.selectedTheme === theme.name ? 'selected' : '';
     return (
-      <div className="grid grid-responsive-12">
-        <div className="row">
-          <div className="main-column">
-            <h3><Trans>Theme</Trans></h3>
-            <div className="themes">
-              <div className="col12">
-                <ul>
-                  {
-                    this.state.themes.map(theme => (
-                      <li key={theme.id}>
-                        <div className={`main-cell theme ${selectedClass(theme)}`}>
-                          <button type="button" onClick={() => this.handleThemeSelected(theme)}>
-                            <img src={this.convertUrlToWebAccessibleResources(theme.preview)}/>
-                            <div className="theme-desc">
-                              {theme.name}
-                            </div>
-                          </button>
-                        </div>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </div>
-            </div>
+      <div className="main-column profile-theme">
+        <div className="main-content">
+          <h3><Trans>Theme</Trans></h3>
+          <div className="themes">
+            {this.state.themes.map(theme => (
+              <button key={theme.id} className={`main-cell theme ${selectedClass(theme)}`} type="button" onClick={() => this.handleThemeSelected(theme)}>
+                {this.getThemePreview(theme)}
+                <div className="theme-desc">
+                  {this.getThemeName(theme)}
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       </div>

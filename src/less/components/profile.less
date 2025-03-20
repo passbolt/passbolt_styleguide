@@ -1,29 +1,17 @@
 .profile {
-
-    .section.detailed-information {
-        h4 {
-            margin-bottom: .626em;
-            padding-bottom: .313em;
-            border-bottom: 1px dotted @default-border;
-        }
-        li .label {
-            float: left;
-            width: 6em;
-            color: @text-lighter-color;
-        }
-        li .value {
-            display: inline-block;
-        }
-        .avatar img {
-            width: 2.875em;
-            padding: 0.1250em;
-        }
+  &.sidebar-help-section {
+    .avatar {
+      align-self: center;
+      img, svg {
+        width: 15rem;
+        height: 15rem;
+        margin-bottom: 1.6rem;
+      }
     }
 
-    .section .section-action {
-        padding-left: 1em;
+    .upload-avatar {
+      display: flex;
+      justify-content: center;
     }
-    .edit-avatar-action .fa {
-        margin-top: .25em;
-    }
+  }
 }

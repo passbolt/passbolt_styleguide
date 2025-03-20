@@ -15,13 +15,14 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
 import {isUserSuspended} from "../../../../shared/utils/userUtils";
 import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
 import TooltipMessageGroupUserDetailsLoading from "../../Common/Tooltip/TooltipMessageGroupUserDetailsLoading";
+import CloseSVG from "../../../../img/svg/close.svg";
+import FingerprintSVG from "../../../../img/svg/fingerprint.svg";
 
 /**
  * This component allows to edit an user group
@@ -118,7 +119,7 @@ class EditUserGroupItem extends Component {
               message={this.state.tooltipFingerprintMessage || <TooltipMessageGroupUserDetailsLoading />}
               direction="auto"
               onMouseHover={this.onTooltipFingerprintMouseHover}>
-              <Icon name="info-circle" baseline={true}/>
+              <FingerprintSVG/>
             </TooltipPortal>
           </div>
           <div className="permission_changes">
@@ -144,11 +145,11 @@ class EditUserGroupItem extends Component {
           <button
             type="button"
             title={this.props.t("Remove")}
-            className="remove-item button-transparent"
+            className="remove-item button inline button-transparent"
             disabled={!this.props.areActionsAllowed}
             onClick={event => this.props.onMemberRemoved(event, this.props.groupUser)}>
-            <Icon name="close"/>
-            <span className="visuallyhidden"><Trans>Remove</Trans></span>
+            <CloseSVG/>
+            <span className="visually-hidden"><Trans>Remove</Trans></span>
           </button>
         </div>
       </li>

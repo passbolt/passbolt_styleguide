@@ -75,7 +75,7 @@ class NotifyExpiredSession extends Component {
         <div className="submit-wrapper clearfix">
           <a ref={this.loginLinkRef}
             href={this.loginUrl}
-            className="primary button"
+            className="primary button form"
             target="_parent"
             role="button"
             rel="noopener noreferrer"><Trans>Sign in</Trans></a>

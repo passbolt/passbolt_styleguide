@@ -13,8 +13,9 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {withTranslation} from "react-i18next";
+import UserAvatarSVG from "../../../../img/avatar/user_default.svg";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 const DEFAULT_AVATAR_URL_REGEXP = /img\/avatar\/user(_medium)?\.png$/;
 
@@ -35,7 +36,8 @@ class UserAvatar extends Component {
    */
   getDefaultState() {
     return {
-      error: false
+      error: false,
+      isLoading: true,
     };
   }
 
@@ -45,6 +47,7 @@ class UserAvatar extends Component {
    */
   bindCallbacks() {
     this.handleError = this.handleError.bind(this);
+    this.handleLoaded = this.handleLoaded.bind(this);
   }
 
   /**
@@ -115,6 +118,14 @@ class UserAvatar extends Component {
   }
 
   /**
+   * Handle loaded image event.
+   * @return {void}
+   */
+  handleLoaded() {
+    this.setState({isLoading: false});
+  }
+
+  /**
    * Get the user avatar image alternative text.
    * @returns {string}
    */
@@ -133,21 +144,15 @@ class UserAvatar extends Component {
   render() {
     const srcAvatar = this.getAvatarSrc();
     const shouldDisplayDefaultAvatar = this.state.error || this.isDefaultAvatarUrlFromApi() || !srcAvatar;
+
     return (
-      <div className={`${this.props.className} ${this.props.attentionRequired ? 'attention-required' : ''}`}>
-        {shouldDisplayDefaultAvatar &&
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42" aria-labelledby="svg-title">
-            <title id="svg-title">{this.getAltText()}</title>
-            <circle fill="#939598" cx="21" cy="21" r="21"/>
-            <path fill="#ffffff" d="m21,23.04c-4.14,0-7.51-3.37-7.51-7.51s3.37-7.51,7.51-7.51,7.51,3.37,7.51,7.51-3.37,7.51-7.51,7.51Z"/>
-            <path fill="#ffffff" d="m27.17,26.53h-12.33c-2.01,0-3.89.78-5.31,2.2-1.42,1.42-2.2,3.3-2.2,5.31v1.15c3.55,3.42,8.36,5.53,13.67,5.53s10.13-2.11,13.67-5.53v-1.15c0-2.01-.78-3.89-2.2-5.31-1.42-1.42-3.3-2.2-5.31-2.2Z"/>
-          </svg>
-        }
-        {!shouldDisplayDefaultAvatar &&
-          <img src={srcAvatar} onError={this.handleError} alt={this.getAltText()}/>
-        }
+      <div className={`${this.props.className}`}>
+        <div className="default-avatar">
+          {(shouldDisplayDefaultAvatar || this.state.isLoading) && <UserAvatarSVG/>}
+          {!shouldDisplayDefaultAvatar && <img src={srcAvatar} className={this.state.isLoading && "is-loading"} onError={this.handleError} onLoad={this.handleLoaded} alt={this.getAltText()} />}
+        </div>
         {this.props.attentionRequired &&
-        <Icon name="exclamation"/>
+          <AttentionSVG className="attention-required"/>
         }
       </div>
     );

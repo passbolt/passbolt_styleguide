@@ -22,6 +22,7 @@ import ChangeLocale from "./components/Internationalisation/ChangeLocale/ChangeL
 import AuthenticationAccountRecoveryContextProvider from "./contexts/Authentication/AuthenticationAccountRecoveryContext";
 import OrchestrateAccountRecovery
   from "./components/AuthenticationAccountRecovery/OrchestrateAccountRecovery/OrchestrateAccountRecovery";
+import LogoSVG from "../img/svg/logo.svg";
 
 /**
  * The account recovery application served by the browser extension.
@@ -149,15 +150,17 @@ class ExtAuthenticationAccountRecovery extends Component {
             <div id="container" className="container page login">
               <div className="content">
                 <div className="header">
-                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                  <div className="logo-svg">
+                    <LogoSVG role="img" width="20rem" height="3.5rem"/>
+                  </div>
                 </div>
                 <div className="login-form">
                   <OrchestrateAccountRecovery/>
                 </div>
                 <ChangeLocale/>
               </div>
+              <Footer/>
             </div>
-            <Footer/>
           </AuthenticationAccountRecoveryContextProvider>
         </TranslationProvider>
         }

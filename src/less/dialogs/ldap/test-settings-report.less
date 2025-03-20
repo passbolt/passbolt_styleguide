@@ -1,11 +1,14 @@
 .ldap-test-settings-report {
+  .accordion, & > p {
+    margin-bottom: 1.2rem;
+  }
+
   div.directory-structure {
-    background: @input-background;
-    color: @default-text-color;
-    box-shadow: inset 0 0 0 .1rem @input-border;
+    background: var(--Field-Field-background);
+    color: var(--Text-and-icons-Main-text);
+    box-shadow: inset 0 0 0 .1rem var(--Field-Field-border);
     border-radius: .4rem;
     padding: .7rem 1.1rem .7rem .8rem;
-    margin-bottom: 1.2rem;
     ul {
       font-size: 1.1rem;
       list-style-type: square;
@@ -13,7 +16,7 @@
       li {
         margin-left: 1rem;
         em {
-          color: @text-info-color;
+          color: var(--Text-and-icons-Secondary-text);
           font-size: 0.8em;
         }
         &.user {
@@ -25,5 +28,9 @@
         }
       }
     }
+  }
+
+  .directory-list {
+    overflow: scroll;
   }
 }

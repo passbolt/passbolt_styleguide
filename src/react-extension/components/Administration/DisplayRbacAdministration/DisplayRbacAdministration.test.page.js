@@ -89,14 +89,14 @@ export default class DisplayRbacAdministrationPage {
    * Returns the help box
    */
   get helpBox() {
-    return this._page.container.querySelector('.sidebar-help');
+    return this._page.container.querySelector('.sidebar-help-section');
   }
 
   /**
    * Returns the help box button
    */
   get helpBoxButton() {
-    return this._page.container.querySelector('.sidebar-help .button');
+    return this._page.container.querySelector('.sidebar-help-section .button');
   }
 
   /**

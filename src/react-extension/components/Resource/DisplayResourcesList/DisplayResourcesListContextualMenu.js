@@ -31,9 +31,6 @@ import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {withProgress} from "../../../contexts/ProgressContext";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
-import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
-import {withWorkflow} from "../../../contexts/WorkflowContext";
-import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import {formatDateForApi} from "../../../../shared/utils/dateUtils";
 import {DateTime} from "luxon";
@@ -42,6 +39,17 @@ import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import OwnedByMeIcon from "../../../../img/svg/owned_by_me.svg";
+import KeyIcon from "../../../../img/svg/key.svg";
+import GlobeIcon from "../../../../img/svg/globe.svg";
+import LinkIcon from "../../../../img/svg/link.svg";
+import ShareIcon from "../../../../img/svg/share.svg";
+import EditIcon from "../../../../img/svg/edit.svg";
+import DeleteIcon from "../../../../img/svg/delete.svg";
+import ClockIcon from "../../../../img/svg/clock.svg";
+import CalendarIcon from "../../../../img/svg/calendar.svg";
+import TotpIcon from "../../../../img/svg/totp.svg";
+import GoIcon from "../../../../img/svg/go.svg";
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -74,11 +82,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle edit resource
    */
   handleEditClickEvent() {
-    if (this.isStandaloneTotpResource) {
-      this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_STANDALONE_TOTP});
-    } else {
-      this.props.dialogContext.open(EditResource, {resource: this.resource});
-    }
+    this.props.dialogContext.open(EditResource, {resource: this.resource});
     this.props.hide();
   }
 
@@ -380,24 +384,29 @@ class DisplayResourcesListContextualMenu extends React.Component {
       <ContextualMenuWrapper
         hide={this.props.hide}
         left={this.props.left}
-        top={this.props.top}>
-        <li key="option-username-resource" className="ready">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <button type="button" id="username" className="link no-border"
-                  disabled={!this.canCopyUsername()}
-                  onClick={this.handleUsernameClickEvent}><span><Trans>Copy username</Trans></span></button>
+        top={this.props.top}
+        className="floating">
+
+        {
+          !this.isStandaloneTotpResource &&  <li key="option-username-resource" className="ready">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button type="button" id="username" className="link no-border"
+                    disabled={!this.canCopyUsername()}
+                    onClick={this.handleUsernameClickEvent}><OwnedByMeIcon/><span><Trans>Copy username</Trans></span></button>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
-        {canCopySecret &&
+          </li>
+        }
+
+        {canCopySecret && this.canCopyPassword() &&
           <li key="option-copy-password-resource" className="ready">
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <button type="button" className="link no-border" id="password" disabled={!this.canCopyPassword()} onClick={this.handlePasswordClickEvent}><span><Trans>Copy password</Trans></span></button>
+                  <button type="button" className="link no-border" id="password" onClick={this.handlePasswordClickEvent}><KeyIcon/><span><Trans>Copy password</Trans></span></button>
                 </div>
               </div>
             </div>
@@ -408,7 +417,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <button type="button" id="uri" className="link no-border" disabled={!this.canCopyUri()}
-                  onClick={this.handleUriClickEvent}><span><Trans>Copy URI</Trans></span></button>
+                  onClick={this.handleUriClickEvent}><GlobeIcon/><span><Trans>Copy URI</Trans></span></button>
               </div>
             </div>
           </div>
@@ -417,18 +426,18 @@ class DisplayResourcesListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button className="link no-border" type="button" id="permalink" onClick={this.handlePermalinkClickEvent}><span><Trans>Copy permalink</Trans></span></button>
+                <button className="link no-border" type="button" id="permalink" onClick={this.handlePermalinkClickEvent}><LinkIcon/><span><Trans>Copy permalink</Trans></span></button>
               </div>
             </div>
           </div>
         </li>
-        {canCopySecret && this.canUseTotp &&
+        {canCopySecret && this.canUseTotp && this.canCopyTotp() &&
           <li key="option-copy-totp-resource" className="ready">
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <button type="button" className="link no-border" id="totp" disabled={!this.canCopyTotp()}
-                    onClick={this.handleTotpClickEvent}><span><Trans>Copy TOTP</Trans></span></button>
+                  <button type="button" className="link no-border" id="totp"
+                    onClick={this.handleTotpClickEvent}><TotpIcon/><span><Trans>Copy TOTP</Trans></span></button>
                 </div>
               </div>
             </div>
@@ -443,12 +452,12 @@ class DisplayResourcesListContextualMenu extends React.Component {
                   id="open-uri"
                   className="link no-border"
                   disabled={!this.safeUri}
-                  onClick={this.handleGoToResourceUriClick}><span><Trans>Open URI in a new Tab</Trans></span></button>
+                  onClick={this.handleGoToResourceUriClick}><GoIcon/><span><Trans>Open URI in a new Tab</Trans></span></button>
               </div>
             </div>
           </div>
         </li>
-        {this.canUsePasswordExpiry &&
+        {this.canUsePasswordExpiry && this.canUpdate() &&
           <>
             <li key="option-set-expiry-date" className="ready">
               <div className="row">
@@ -458,8 +467,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
                       type="button"
                       id="set-expiry-date"
                       className="link no-border"
-                      disabled={!this.canUpdate()}
-                      onClick={this.handleSetExpiryDateClick}><span><Trans>Set expiry date</Trans></span></button>
+                      onClick={this.handleSetExpiryDateClick}><CalendarIcon/><span><Trans>Set expiry date</Trans></span></button>
                   </div>
                 </div>
               </div>
@@ -472,25 +480,26 @@ class DisplayResourcesListContextualMenu extends React.Component {
                       type="button"
                       id="mark-as-expired"
                       className="link no-border"
-                      disabled={!this.canUpdate()}
-                      onClick={this.handleMarkAsExpiredClick}><span><Trans>Mark as expired</Trans></span></button>
+                      onClick={this.handleMarkAsExpiredClick}><ClockIcon/><span><Trans>Mark as expired</Trans></span></button>
                   </div>
                 </div>
               </div>
             </li>
           </>
         }
-        <li key="option-edit-resource" className="ready">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <button type="button" id="edit" className="link no-border" disabled={!this.canUpdate()}
-                  onClick={this.handleEditClickEvent}><span><Trans>Edit</Trans></span></button>
+        {
+          this.canUpdate() && <li key="option-edit-resource" className="ready">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button type="button" id="edit" className="link no-border"
+                    onClick={this.handleEditClickEvent}><EditIcon/><span><Trans>Edit</Trans></span></button>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
-        {canViewShare &&
+          </li>
+        }
+        {canViewShare && this.canShare() &&
           <li key="option-share-resource" className="ready">
             <div className="row">
               <div className="main-cell-wrapper">
@@ -498,26 +507,27 @@ class DisplayResourcesListContextualMenu extends React.Component {
                   <button
                     type="button"
                     id="share" className="link no-border"
-                    disabled={!this.canShare()}
-                    onClick={this.handleShareClickEvent}><span><Trans>Share</Trans></span></button>
+                    onClick={this.handleShareClickEvent}><ShareIcon/><span><Trans>Share</Trans></span></button>
                 </div>
               </div>
             </div>
           </li>
         }
-        <li key="option-delete-resource" className="ready">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <button
-                  type="button"
-                  id="delete" className="link no-border"
-                  disabled={!this.canUpdate()}
-                  onClick={this.handleDeleteClickEvent}><span><Trans>Delete</Trans></span></button>
+        {
+          this.canShare() && <li key="option-delete-resource" className="ready">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button
+                    type="button"
+                    id="delete" className="link no-border"
+                    onClick={this.handleDeleteClickEvent}><DeleteIcon/><span><Trans>Delete</Trans></span></button>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
+          </li>
+        }
+
       </ContextualMenuWrapper>
     );
   }
@@ -535,9 +545,8 @@ DisplayResourcesListContextualMenu.propTypes = {
   progressContext: PropTypes.any, // The progress context
   resource: PropTypes.object, // resource selected
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  workflowContext: PropTypes.any, // The workflow context
   passwordExpiryContext: PropTypes.object, // The password expiry context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withDialog(withWorkflow(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu))))))))));
+export default withAppContext(withRbac(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withDialog(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu)))))))));

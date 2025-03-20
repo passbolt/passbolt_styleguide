@@ -29,10 +29,12 @@ export default class AdministrationWorkspacePage {
    * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
+    const context = props.context;
+    delete props.context;
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
+        <AppContext.Provider value={context}>
           <Router>
             <AdministrationWorkspace {...props}/>
           </Router>
