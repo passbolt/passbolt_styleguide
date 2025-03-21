@@ -1,18 +1,18 @@
 .chips {
-  color: @chips-text-color;
+  color: var(--Text-and-icons-Main-text-reversed);
   padding: 0 .8rem;
   margin-top: .2rem;
-  border-radius: 0.7rem;
-  font-weight: 700;
-  font-size: 1rem;
-  line-height: 1.4rem;
-  background-color: @chips-background;
+  border-radius: var(--Button-border-radius);
+  font-weight: 400;
+  font-size: 1.1rem;
+  line-height: normal;
+  background-color: var(--Action-button-Menu-action-button-background);
 
   &.beta {
-    background-color: @chips-beta-background;
+    background: var(--Palette-Contrast-2);
   }
 
   &.new {
-    background-color: @chips-new-background;
+    background-color: var(--Palette-Contrast-4);
   }
 }

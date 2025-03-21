@@ -149,7 +149,7 @@ class UserAvatar extends Component {
       <div className={`${this.props.className}`}>
         <div className="default-avatar">
           {(shouldDisplayDefaultAvatar || this.state.isLoading) && <UserAvatarSVG/>}
-          {!shouldDisplayDefaultAvatar && <img src={srcAvatar} className={this.state.isLoading && "is-loading"} onError={this.handleError} onLoad={this.handleLoaded} alt={this.getAltText()} />}
+          {!shouldDisplayDefaultAvatar && <img src={srcAvatar} className={this.state.isLoading ? "is-loading" : ""} onError={this.handleError} onLoad={this.handleLoaded} alt={this.getAltText()} />}
         </div>
         {this.props.attentionRequired &&
           <AttentionSVG className="attention-required"/>

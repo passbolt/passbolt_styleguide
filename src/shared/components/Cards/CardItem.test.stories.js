@@ -36,3 +36,13 @@ export const WithoutDescription = {
     onClick: () => console.log("It clicked!"),
   }
 };
+
+export const isBeta = {
+  args: {
+    icon: <KeySVG/>,
+    title: "Beta card item",
+    description: "This is an example of a beta card item",
+    isBeta: true,
+    onClick: () => console.log("It clicked!"),
+  }
+};

@@ -27,9 +27,9 @@ class CardItem extends React.PureComponent {
       <button type="button" className="button-transparent card" onClick={this.props.onClick}>
         {this.props.icon}
         <div className="card-information">
-          <span className="title">{this.props.title}</span>
+          <span className={`title ${this.props.isBeta && "is-beta"}`} title={this.props.title}>{this.props.title}{this.props.isBeta && <span className="chips beta">beta</span>}</span>
           {this.props.description &&
-            <span className="info">{this.props.description}</span>
+            <span className="info" title={this.props.description}>{this.props.description}</span>
           }
         </div>
       </button>
@@ -37,10 +37,15 @@ class CardItem extends React.PureComponent {
   }
 }
 
+CardItem.defaultProps = {
+  isBeta: false,
+};
+
 CardItem.propTypes = {
   icon: PropTypes.object.isRequired, // the icon to be displayed
   title: PropTypes.string.isRequired, // the main title of the card
   description: PropTypes.string, // the description or subtitle of the card
+  isBeta: PropTypes.bool.isRequired, // should the card display a beta pill
   onClick: PropTypes.func, // the callback to run when clicking the card
 };
 

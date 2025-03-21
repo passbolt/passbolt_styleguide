@@ -8,6 +8,8 @@ button.card {
     gap: 1.6rem;
     flex: 1 0 0;
     border-radius: var(--Button-border-radius);
+    justify-content: flex-start;
+    text-align: left;
 
     svg {
       display: flex;
@@ -25,18 +27,54 @@ button.card {
       align-items: flex-start;
       gap: .2rem;
       flex: 1 0 0;
+      max-width: 100%;
 
       .title {
         font-size: 1.4rem;
         font-weight: 700;
+        max-width: 100%;
         .ellipsis();
+
+
+        &.is-beta {
+          position: relative;
+          max-width: 18.1rem; // 22rem - 3.9rem for the beta pill
+          padding-right: 4.7rem;
+
+            .chips {
+                position: absolute;
+                right: 0;
+                margin-top: .3rem;
+            }
+        }
       }
+
+
+      .title.is-beta {
+        position: relative;
+        max-width: 18.1rem; // 22rem - 3.9rem for the beta pill
+        padding-right: 4.7rem;
+
+        .chips {
+            position: absolute;
+            right: 0;
+            margin-top: .3rem;
+        }
+    }
 
       .info {
         font-size: 1.2rem;
         line-height: normal;
         color: var(--Text-and-icons-Secondary-text);
+        max-width: 100%;
         .ellipsis();
+
+        // only works for chrome, makes the ellipsis after the second line
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        white-space: normal;
+
       }
     }
   }

@@ -34,11 +34,14 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
     switch (this.props.administrationWorkspaceContext.selectedAdministration) {
       case AdministrationWorkspaceMenuTypes.NONE:
         return [];
+      case AdministrationWorkspaceMenuTypes.HOME:
+        return [
+          <Breadcrumb key="bread-2" name={this.translate("Home")} onClick={this.onLastBreadcrumbClick.bind(this)}/>,
+        ];
       default:
         return [
-          <Breadcrumb key="bread-1" name={this.translate("Administration")} onClick={this.props.navigationContext.onGoToAdministrationRequested}/>,
+          <Breadcrumb key="bread-3" name={this.translate("Home")} onClick={this.props.navigationContext.onGoToAdministrationRequested}/>,
           <Breadcrumb key="bread-2" name={this.getLastBreadcrumbItemName()} onClick={this.onLastBreadcrumbClick.bind(this)}/>,
-          <Breadcrumb key="bread-3" name={this.translate("Settings")} onClick={this.onLastBreadcrumbClick.bind(this)}/>
         ];
     }
   }

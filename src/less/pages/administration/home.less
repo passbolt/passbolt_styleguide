@@ -1,0 +1,49 @@
+#administration-home-page {
+    .main-content {
+        position: relative;
+
+        .grid {
+            display: flex;
+            padding: 1.6rem 1.6rem 0.8rem 1.6rem;
+            align-items: flex-start;
+            align-content: flex-start;
+            gap: 1.6rem 3.2rem;
+            align-self: stretch;
+            flex-wrap: wrap;
+            position: absolute;
+            margin: 0 0 0 -1.6rem;
+
+            &:before {
+                content: "";
+                display: flex;
+                position: absolute;
+                background: repeating-linear-gradient(transparent, transparent 7.9rem, var(--Workspace-Dividers), var(--Workspace-Dividers) 8rem);
+                width: 100%;
+                height: calc(100% - 1rem);
+                top: 0.8rem;
+                left: 0;
+            }
+
+            .card {
+                max-width: 30rem;
+                min-width: 30rem;
+
+                .title, .info {
+                    max-width: 22rem;
+                }
+
+                .title.is-beta {
+                    position: relative;
+                    max-width: 18.1rem; // 22rem - 3.9rem for the beta pill
+                    padding-right: 4.7rem;
+
+                    .chips {
+                        position: absolute;
+                        right: 0;
+                        margin-top: .3rem;
+                    }
+                }
+            }
+        }
+    }
+}
