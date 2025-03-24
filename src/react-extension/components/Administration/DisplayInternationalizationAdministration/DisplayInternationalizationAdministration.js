@@ -32,7 +32,6 @@ class DisplayInternationalizationAdministration extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
     this.bindCallbacks();
   }
 
@@ -41,7 +40,7 @@ class DisplayInternationalizationAdministration extends React.Component {
    * Invoked immediately after component is inserted into the tree
    * @return {void}
    */
-  async componentDidMount() {
+  componentDidMount() {
     this.props.adminInternationalizationContext.findLocale();
   }
 
@@ -86,24 +85,32 @@ class DisplayInternationalizationAdministration extends React.Component {
    */
   render() {
     const lang = this.props.adminInternationalizationContext.getLocale();
+    const hasWarnings = this.props.adminInternationalizationContext.getCurrentLocale() !== null && this.props.adminInternationalizationContext.hasLocaleChanges();
 
     return (
       <div className="row">
-        <>
-          <div className="internationalisation-settings main-column">
-            <div className="main-content">
-              <h3 className="title"><Trans>Internationalisation</Trans></h3>
-              <form className="form">
-                <div className="select-wrapper input">
-                  <label htmlFor="app-locale-input"><Trans>Language</Trans></label>
-                  <Select className="medium" id="locale-input" name="locale" items={this.supportedLocales} value={lang} onChange={this.handleInputChange}/>
-                  <p><Trans>The default language of the organisation.</Trans></p>
-                </div>
-              </form>
-            </div>
+        <div className="internationalisation-settings main-column">
+          <div className="main-content">
+            <h3 className="title"><Trans>Internationalisation</Trans></h3>
+            <form className="form">
+              <div className="select-wrapper input">
+                <label htmlFor="app-locale-input"><Trans>Language</Trans></label>
+                <Select className="medium" id="locale-input" name="locale" items={this.supportedLocales} value={lang} onChange={this.handleInputChange}/>
+                <p><Trans>The default language of the organisation.</Trans></p>
+              </div>
+            </form>
           </div>
-          <DisplayAdministrationInternationalisationActions />
-        </>
+          {hasWarnings &&
+            <div className="warning message">
+              <div>
+                <p>
+                  <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                </p>
+              </div>
+            </div>
+          }
+        </div>
+        <DisplayAdministrationInternationalisationActions />
         {createSafePortal(
           <div className="sidebar-help-section">
             <h3><Trans>Want to contribute?</Trans></h3>
