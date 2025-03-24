@@ -91,9 +91,7 @@ class AdministrationHomePage extends React.PureComponent {
       redirectTo: this.props.navigationContext.onGoToAdministrationMigrateMetadataRequested,
       flag: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA,
       isBeta: true,
-    },
-
-    {
+    }, {
       icon: <ShapesSVG/>,
       title: this.props.t("Allow content types"),
       description: this.props.t("Control the content types availability for all users."),
@@ -113,9 +111,7 @@ class AdministrationHomePage extends React.PureComponent {
       description: this.props.t("Control the default behaviour of password expiry policy for all users."),
       redirectTo: this.props.navigationContext.onGoToAdministrationPasswordExpirySettingsRequested,
       flag: AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY,
-    },
-
-    {
+    }, {
       icon: <PasswordPolicySVG/>,
       title: this.props.t("Password policy"),
       description: this.props.t("Modify the default settings of the passwords generator."),
@@ -133,9 +129,7 @@ class AdministrationHomePage extends React.PureComponent {
       description: this.props.t("Control the behavior for account recovery for all users."),
       redirectTo: this.props.navigationContext.onGoToAdministrationAccountRecoveryRequested,
       flag: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY,
-    },
-
-    {
+    }, {
       icon: <SSOSVG/>,
       title: this.props.t("Single Sign-On"),
       description: this.props.t("Select which Single Sign-on provider can be use to login."),
@@ -153,14 +147,6 @@ class AdministrationHomePage extends React.PureComponent {
       description: this.props.t("Control the default behaviour of multi factor authentication."),
       redirectTo: this.props.navigationContext.onGoToAdministrationMfaPolicyRequested,
       flag: AdministrationWorkspaceMenuTypes.MFA_POLICY,
-    },
-
-    {
-      icon: <SelfRegisterSVG/>,
-      title: this.props.t("Self registration"),
-      description: this.props.t("Enable users  to enrol without prior admin invitation."),
-      redirectTo: this.props.navigationContext.onGoToAdministrationSelfRegistrationRequested,
-      flag: AdministrationWorkspaceMenuTypes.SELF_REGISTRATION,
     }, {
       icon: <LDAPSVG/>,
       title: this.props.t("Users directory"),
@@ -168,14 +154,18 @@ class AdministrationHomePage extends React.PureComponent {
       redirectTo: this.props.navigationContext.onGoToAdministrationUsersDirectoryRequested,
       flag: AdministrationWorkspaceMenuTypes.USER_DIRECTORY,
     }, {
+      icon: <SelfRegisterSVG/>,
+      title: this.props.t("Self registration"),
+      description: this.props.t("Enable users  to enrol without prior admin invitation."),
+      redirectTo: this.props.navigationContext.onGoToAdministrationSelfRegistrationRequested,
+      flag: AdministrationWorkspaceMenuTypes.SELF_REGISTRATION,
+    }, {
       icon: <EmailServerSVG/>,
       title: this.props.t("Email server"),
       description: this.props.t("Control the SMTP server configuration used to send emails."),
       redirectTo: this.props.navigationContext.onGoToAdministrationSmtpSettingsRequested,
       flag: AdministrationWorkspaceMenuTypes.SMTP_SETTINGS,
-    },
-
-    {
+    }, {
       icon: <EmailNotificationsSVG/>,
       title: this.props.t("Email notifications"),
       description: this.props.t("Define which email notifications will be sent."),
@@ -193,9 +183,7 @@ class AdministrationHomePage extends React.PureComponent {
       description: this.props.t("Define the default language of the organisation."),
       redirectTo: this.props.navigationContext.onGoToAdministrationInternationalizationRequested,
       flag: AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION,
-    },
-
-    {
+    }, {
       icon: <HeartPulseSVG/>,
       title: this.props.t("API Status"),
       description: this.props.t("Monitor the passbolt API's health and responsiveness."),
