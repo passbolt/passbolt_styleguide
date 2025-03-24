@@ -482,7 +482,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {string|undefined}
    */
   get settingsFromFileWarningMessage() {
-    return this.select(".smtp-settings .warning.message")?.textContent;
+    return this.select(".smtp-settings #smtp-settings-source-warning")?.textContent;
   }
 
   /**
