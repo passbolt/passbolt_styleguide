@@ -194,6 +194,7 @@ class DisplayRbacAdministration extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const hasSaveWarning = this.props.adminRbacContext.hasSettingsChanges();
     return (
       <div className="row">
         <div className="rbac-settings main-column">
@@ -335,6 +336,15 @@ class DisplayRbacAdministration extends React.Component {
               </div>
             </form>
           </div>
+          {hasSaveWarning &&
+            <div className="warning message">
+              <div>
+                <p>
+                  <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                </p>
+              </div>
+            </div>
+          }
         </div>
         <DisplayAdministrationRbacActions/>
         {createSafePortal(
