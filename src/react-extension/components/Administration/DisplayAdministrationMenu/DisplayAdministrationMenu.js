@@ -516,11 +516,19 @@ class DisplayAdministrationMenu extends React.Component {
     return AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
+  /**
+   * Should display password configuration section.
+   * @returns {boolean}
+   */
   canSeePasswordConfiguration() {
     return this.canIUsePasswordExpiry
       || this.canIUsePasswordPolicies;
   }
 
+  /**
+   * Should display autentication section.
+   * @returns {boolean}
+   */
   canSeeAuthentication() {
     return this.canIUseUserPassphrasePolicies
       || this.canIUseAccountRecovery
@@ -529,6 +537,10 @@ class DisplayAdministrationMenu extends React.Component {
       || this.isMfaEnabled;
   }
 
+  /**
+   * Should display user provisioning section.
+   * @returns {boolean}
+   */
   canSeeUserProvisionning() {
     return this.isUserDirectoryEnabled || this.canIUseSelfRegistrationSettings;
   }
