@@ -125,7 +125,6 @@ class ExtApp extends Component {
                                           <Route path="/webAccessibleResources/passbolt-iframe-app.html" component={HandleApplicationFirstLoadRoute} />
                                           { /* The following routes are not handled by the browser extension application. */}
                                           <Route exact path={[
-                                            "/app/administration",
                                             "/app/administration/mfa",
                                             "/app/administration/users-directory",
                                             "/app/administration/email-notification",
@@ -197,6 +196,7 @@ class ExtApp extends Component {
                                           </Route>
                                           {/* SSO, Subscription and Account Recovery settings */}
                                           <Route exact path={[
+                                            "/app/administration",
                                             "/app/administration/subscription",
                                             "/app/administration/account-recovery",
                                             "/app/administration/sso",
