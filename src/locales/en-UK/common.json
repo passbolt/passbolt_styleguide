@@ -1425,6 +1425,7 @@
   "There was an issue while importing folders:": "There was an issue while importing folders:",
   "There was an issue while importing passwords:": "There was an issue while importing passwords:",
   "There was an unexpected error...": "There was an unexpected error...",
+  "These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.": "These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.",
   "They will be able to help you in case you lose it.": "They will be able to help you in case you lose it.",
   "This action cannot be undone. All the data associated with SSO will be permanently deleted.": "This action cannot be undone. All the data associated with SSO will be permanently deleted.",
   "This action cannot be undone. All the data associated with this user will be permanently deleted.": "This action cannot be undone. All the data associated with this user will be permanently deleted.",

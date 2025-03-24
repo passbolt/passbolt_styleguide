@@ -301,8 +301,11 @@ class DisplayUserDirectoryAdministration extends React.Component {
     const errors = this.props.adminUserDirectoryContext.getErrors();
     const isSubmitted = this.props.adminUserDirectoryContext.isSubmitted();
     const hadDisabledSettings = this.props.adminUserDirectoryContext.hadDisabledSettings();
+    const hasSaveWarning = this.props.adminUserDirectoryContext.getCurrentSettings() !== null && this.props.adminUserDirectoryContext.hasSettingsChanges();
     const hasWarnings = this.shouldShowSourceWarningMessage()
-      || !this.isUserDirectoryChecked();
+      || !this.isUserDirectoryChecked()
+      || hasSaveWarning;
+
     return (
       <div className="row">
         <div className="ldap-settings main-column">
@@ -702,7 +705,12 @@ class DisplayUserDirectoryAdministration extends React.Component {
             <div className="warning message">
               {this.shouldShowSourceWarningMessage() &&
                 <div>
-                  <Trans><b>Warning:</b> These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.</Trans>
+                  <Trans>These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.</Trans>
+                </div>
+              }
+              {hasSaveWarning &&
+                <div>
+                  <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
                 </div>
               }
               {!this.isUserDirectoryChecked() &&
