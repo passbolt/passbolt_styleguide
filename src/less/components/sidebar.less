@@ -190,7 +190,6 @@
         }
       }
 
-
       .accordion-content {
         display: flex;
         padding: 1.6rem 1.6rem 2.4rem 1.6rem;
@@ -225,6 +224,12 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+
+          .location.value {
+            button {
+              width: 100%;
+            }
+          }
         }
 
         .information-label, .information-value {
@@ -237,23 +242,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
             height: 2rem; // set height for empty value
-
-            button {
-              display: block;
-              width: 100%;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              text-align: left;
-
-              &.folder-link {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 8px;
-                align-self: stretch;
-              }
-            }
           }
 
           .password-value, .totp-value {

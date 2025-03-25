@@ -28,3 +28,25 @@ export const defaultFoldersCollectionDto = (foldersCount = 10, data = {}) => {
   return dtos;
 };
 
+/**
+ * Build a nested folder dtos.
+ * @param {object} [data]
+ * @param {object} options
+ * @param {integer} [options.depth=3] The depth of folders
+ * @returns {object}
+ */
+export const nestedFoldersCollectionDto = (data = {}, options = {}) => {
+  const depth = options?.depth || 3;
+  const dtos = [];
+  let dto;
+  for (let i = 0; i < depth; i++) {
+    dto = defaultFolderDto({
+      name: `folder ${i}`,
+      folder_parent_id: i === 0 ? null : dto.id,
+      ...data
+    });
+    dtos.push(dto);
+  }
+
+  return dtos;
+};
