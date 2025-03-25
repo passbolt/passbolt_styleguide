@@ -153,6 +153,10 @@
     margin: 0;
     position: relative;
 
+    &:hover:not(:disabled), &:active:not(:disabled) {
+      background: var(--Workspace-Dividers-lighter);
+    }
+
     &.checked {
       box-shadow:
                 inset -.1rem -.1rem 0 0 var(--States-Active-Highlight),
