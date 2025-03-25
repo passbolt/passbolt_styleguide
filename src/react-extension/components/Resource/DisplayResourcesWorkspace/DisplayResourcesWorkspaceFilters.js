@@ -27,6 +27,7 @@ import FilterSVG from "../../../../img/svg/filter.svg";
 import VenetianMaskSVG from "../../../../img/svg/venetian_mask.svg";
 import CalendarClockSVG from "../../../../img/svg/calendar_clock.svg";
 import FavoriteSVG from "../../../../img/svg/favorite.svg";
+import OwnedByMeSVG from "../../../../img/svg/owned_by_me.svg";
 import {withRouter} from "react-router-dom";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 
@@ -49,6 +50,7 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
   bindCallbacks() {
     this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
     this.handleItemsIOwnClick = this.handleItemsIOwnClick.bind(this);
+    this.handlePrivateClick = this.handlePrivateClick.bind(this);
     this.handleSharedWithMeClick = this.handleSharedWithMeClick.bind(this);
     this.handleResourcesExpiredClick = this.handleResourcesExpiredClick.bind(this);
     this.handleRemoveFilterClick = this.handleRemoveFilterClick.bind(this);
@@ -93,8 +95,13 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
         </>;
       case ResourceWorkspaceFilterTypes.ITEMS_I_OWN:
         return <>
-          <VenetianMaskSVG/>
+          <OwnedByMeSVG/>
           <span><Trans>Items I own</Trans></span>
+        </>;
+      case ResourceWorkspaceFilterTypes.PRIVATE:
+        return <>
+          <VenetianMaskSVG/>
+          <span><Trans>Private</Trans></span>
         </>;
       default:
         return <>
@@ -115,6 +122,14 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
    */
   handleItemsIOwnClick() {
     const filter = {type: ResourceWorkspaceFilterTypes.ITEMS_I_OWN};
+    this.props.history.push({pathname: '/app/passwords', state: {filter}});
+  }
+
+  /**
+   * Whenever the filter "Private" has been selected
+   */
+  handlePrivateClick() {
+    const filter = {type: ResourceWorkspaceFilterTypes.PRIVATE};
     this.props.history.push({pathname: '/app/passwords', state: {filter}});
   }
 
@@ -171,8 +186,14 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <button type="button" className="no-border" onClick={this.handleItemsIOwnClick}>
-                  <VenetianMaskSVG/>
+                  <OwnedByMeSVG/>
                   <span><Trans>Items I own</Trans></span>
+                </button>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <button type="button" className="no-border" onClick={this.handlePrivateClick}>
+                  <VenetianMaskSVG/>
+                  <span><Trans>Private</Trans></span>
                 </button>
               </DropdownMenuItem>
               {this.props.passwordExpiryContext.isFeatureEnabled() &&

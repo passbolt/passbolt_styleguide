@@ -116,6 +116,16 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
 
+  it('As LU I should see a breadcrumb for prvaite resources', () => {
+    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.PRIVATE); // The props to pass
+    page = new FilterResourcesByBreadcrumbPage(context, props);
+    expect(page.displayBreadcrumb.exists()).toBeTruthy();
+    expect(page.displayBreadcrumb.count).toBe(2);
+    expect(page.displayBreadcrumb.item(1)).toBe("Home");
+    expect(page.displayBreadcrumb.item(2)).toBe("Private");
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
+  });
+
   it('As LU I should see a breadcrumb for a folder', () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.FOLDER, {folder: {name: "folder"}}, 1); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);

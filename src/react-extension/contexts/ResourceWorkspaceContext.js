@@ -645,6 +645,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       [ResourceWorkspaceFilterTypes.GROUP]: this.searchByGroup.bind(this),
       [ResourceWorkspaceFilterTypes.TEXT]: this.searchByText.bind(this),
       [ResourceWorkspaceFilterTypes.ITEMS_I_OWN]: this.searchByItemsIOwn.bind(this),
+      [ResourceWorkspaceFilterTypes.PRIVATE]: this.searchByPrivate.bind(this),
       [ResourceWorkspaceFilterTypes.FAVORITE]: this.searchByFavorite.bind(this),
       [ResourceWorkspaceFilterTypes.SHARED_WITH_ME]: this.seachBySharedWithMe.bind(this),
       [ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED]: this.searchByRecentlyModified.bind(this),
@@ -761,13 +762,23 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Search for current user personal resources
+   * Search for resources the current user owned
    * @param filter The filter
    */
   async searchByItemsIOwn(filter) {
     const filteredResources = this.resources.filter(resource => resource.permission.type === 15);
     await this.setState({filter, filteredResources});
   }
+
+  /**
+   * Search for user private resources
+   * @param filter The filter
+   */
+  async searchByPrivate(filter) {
+    const filteredResources = this.resources.filter(resource => Boolean(resource.personal));
+    this.setState({filter, filteredResources});
+  }
+
   /**
    * Filter the resources which are the current user favorites one
    */
@@ -1306,6 +1317,7 @@ export const ResourceWorkspaceFilterTypes = {
   GROUP: 'FILTER-BY-GROUP', // Resources shared with a given group
   TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
   ITEMS_I_OWN: 'FILTER-BY-ITEMS-I-OWN', // Resources the users is owner of
+  PRIVATE: 'PRIVATE', // User's private resources
   FAVORITE: 'FILTER-BY-FAVORITE', // Favorite resources
   SHARED_WITH_ME: 'FILTER-BY-SHARED-WITH-ME', // Resources shared with the current user (who is not the owner)
   RECENTLY_MODIFIED: 'FILTER-BY-RECENTLY-MODIFIED', // Resources recently modified
