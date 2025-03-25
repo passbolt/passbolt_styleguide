@@ -72,7 +72,6 @@
   "<0>Warning:</0> Don't forget to save your settings to apply your modification.": "<0>Warning:</0> Don't forget to save your settings to apply your modification.",
   "<0>Warning:</0> If you have integrations, you will have to make sure they are updated before triggering the migration.": "<0>Warning:</0> If you have integrations, you will have to make sure they are updated before triggering the migration.",
   "<0>Warning:</0> Suspension is scheduled for the {{suspendedDate}}": "<0>Warning:</0> Suspension is scheduled for the {{suspendedDate}}",
-  "<0>Warning:</0> These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.": "<0>Warning:</0> These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.",
   "<0>Warning</0>: This recovery kit replace the old one.": "<0>Warning</0>: This recovery kit replace the old one.",
   "<0>Warning</0>: This secret will expire after some time (typically a few months). Make sure you save the expiry date and rotate it on time.": "<0>Warning</0>: This secret will expire after some time (typically a few months). Make sure you save the expiry date and rotate it on time.",
   "<0>Warning</0>: UPN is not active by default on Azure and requires a specific option set on Azure to be working.": "<0>Warning</0>: UPN is not active by default on Azure and requires a specific option set on Azure to be working.",

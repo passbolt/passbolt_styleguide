@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React from "react";
+import React, {Fragment} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {
@@ -31,6 +31,8 @@ import ShareFolderSVG from "../../../../img/svg/share_folder.svg";
 import FolderSVG from "../../../../img/svg/folder.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
+import CabinetSVG from "../../../../img/svg/cabinet.svg";
 
 class DisplayResourceDetailsInformation extends React.Component {
   /**
@@ -251,6 +253,22 @@ class DisplayResourceDetailsInformation extends React.Component {
   }
 
   /**
+   * Render the tooltip folders structure.
+   * @param {array<FolderEntity>} folderStructure The folders structure.
+   * @render {JSX}
+   */
+  renderTooltipFolderStructure(folderStructure) {
+    return folderStructure?.map((folder, index) =>
+      <div key={folder.id} className="folder-level" style={{marginLeft: `${5 * index}px`}}>
+        {folder.folder_parent_id !== null &&
+          <span className="caret">›</span>
+        }
+        <span>{folder.name}</span>
+      </div>
+    );
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -263,6 +281,7 @@ class DisplayResourceDetailsInformation extends React.Component {
     const modifierUsername = this.state.modifier?.username || "";
     const createdDateTimeAgo = formatDateTimeAgo(this.resource.created, this.props.t, this.props.context.locale);
     const modifiedDateTimeAgo = formatDateTimeAgo(this.resource.modified, this.props.t, this.props.context.locale);
+    const folderStructure = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.resource.folder_parent_id);
 
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
@@ -308,10 +327,29 @@ class DisplayResourceDetailsInformation extends React.Component {
               <span className="modified-by value">{modifierUsername}</span>
               {canUseFolders &&
                 <span className="location value">
-                  <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="no-border folder-link">
-                    {this.isFolderParentShared() ? <ShareFolderSVG/> : <FolderSVG/>}
-                    <span>{this.getFolderName(this.resource.folder_parent_id)}</span>
-                  </button>
+                  <TooltipPortal message={this.renderTooltipFolderStructure(folderStructure)} direction="auto">
+                    <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="no-border">
+                      {this.resource.folder_parent_id === null &&
+                        <>
+                          <CabinetSVG />
+                          <Trans>My workspace</Trans>
+                        </>
+                      }
+                      {this.resource.folder_parent_id !== null &&
+                        <>
+                          {this.isFolderParentShared() ? <ShareFolderSVG/> : <FolderSVG/>}
+                          {folderStructure.map(folder =>
+                            <Fragment key={folder.id}>
+                              {folder.folder_parent_id !== null &&
+                                <span className="caret">›</span>
+                              }
+                              <span>{folder.name}</span>
+                            </Fragment>
+                          )}
+                        </>
+                      }
+                    </button>
+                  </TooltipPortal>
                 </span>
               }
               {canUsePasswordExpiry &&
