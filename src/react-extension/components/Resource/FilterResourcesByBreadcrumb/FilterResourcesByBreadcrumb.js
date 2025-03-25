@@ -50,6 +50,8 @@ class FilterResourcesByBreadcrumb extends Component {
         return [...items, this.getLastBreadcrumb(this.translate("Expired"))];
       case ResourceWorkspaceFilterTypes.ITEMS_I_OWN:
         return [...items, this.getLastBreadcrumb(this.translate("Items I own"))];
+      case ResourceWorkspaceFilterTypes.PRIVATE:
+        return [...items, this.getLastBreadcrumb(this.translate("Private"))];
       case ResourceWorkspaceFilterTypes.TAG: {
         const filteredTagName = this.props.resourceWorkspaceContext.filter.payload.tag.slug;
         return [...items, this.getLastBreadcrumb(`${filteredTagName} ${this.translate("(tag)")}`)];

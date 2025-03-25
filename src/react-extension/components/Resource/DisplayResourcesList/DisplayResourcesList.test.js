@@ -85,6 +85,12 @@ describe("Display Resources", () => {
       expect(page.hasEmptyContent).toBeTruthy();
     });
 
+    it('As LU, I should see an empty content when there are no private resources matching the private resource search', async() => {
+      const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.PRIVATE));
+      await waitFor(() => {});
+      expect(page.hasEmptyContent).toBeTruthy();
+    });
+
 
     it('AS LU, I should see the appropriate filtered list of resources', async() => {
       const props = propsWithFilteredResources();

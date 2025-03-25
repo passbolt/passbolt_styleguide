@@ -36,7 +36,7 @@ describe("As a signed-in users I can see filters", () => {
     expect(page.exists()).toBeTruthy();
     expect(page.dropdownFilterButton.textContent).toBe("All items");
     expect(page.filterSelected).toBeUndefined();
-    expect(page.filterItemsLength).toBe(4);
+    expect(page.filterItemsLength).toBe(5);
   });
 
   it('As LU I should be able to remove filter', async() => {
@@ -62,7 +62,8 @@ describe("As a signed-in users I can see filters", () => {
     {filter: ResourceWorkspaceFilterTypes.FAVORITE, itemSelected: "Starred", itemIndex: 1},
     {filter: ResourceWorkspaceFilterTypes.SHARED_WITH_ME, itemSelected: "Shared with me", itemIndex: 2},
     {filter: ResourceWorkspaceFilterTypes.ITEMS_I_OWN, itemSelected: "Items I own", itemIndex: 3},
-    {filter: ResourceWorkspaceFilterTypes.EXPIRED, itemSelected: "Expired", pathname: "/app/passwords/filter/expired", itemIndex: 4},
+    {filter: ResourceWorkspaceFilterTypes.PRIVATE, itemSelected: "Private", itemIndex: 4},
+    {filter: ResourceWorkspaceFilterTypes.EXPIRED, itemSelected: "Expired", pathname: "/app/passwords/filter/expired", itemIndex: 5},
   ]).describe("I should be able to filter", scenario => {
     it(`for: ${scenario.filter}`, async() => {
       expect.assertions(1);
@@ -87,6 +88,7 @@ describe("As a signed-in users I can see filters", () => {
     {filter: ResourceWorkspaceFilterTypes.FAVORITE, itemSelected: "Starred"},
     {filter: ResourceWorkspaceFilterTypes.SHARED_WITH_ME, itemSelected: "Shared with me"},
     {filter: ResourceWorkspaceFilterTypes.ITEMS_I_OWN, itemSelected: "Items I own"},
+    {filter: ResourceWorkspaceFilterTypes.PRIVATE, itemSelected: "Private"},
     {filter: ResourceWorkspaceFilterTypes.EXPIRED, itemSelected: "Expired"},
   ]).describe("I should be able to identify the filters", scenario => {
     it(`for: ${scenario.filter}`, async() => {

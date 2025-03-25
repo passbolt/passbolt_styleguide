@@ -40,6 +40,8 @@ export function defaultAppContext(appContext) {
     defaultResourceDto({permission: readPermissionDto({aco_foreign_key: resourceWithEncryptedDescriptionToReadId})}),
     resourceWithTotpDto({permission: readPermissionDto({aco_foreign_key: resourceWithTotpToReadId})}),
     resourceStandaloneTotpDto({permission: readPermissionDto({aco_foreign_key: resourceTotpToReadId})}),
+    defaultResourceDto({personal: true}),
+    defaultResourceDto({personal: true}),
   ];
 
   const defaultAppContext = defaultUserAppContext({
