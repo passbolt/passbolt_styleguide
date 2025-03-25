@@ -54,6 +54,7 @@ import DisplayContentTypesMetadataKeyAdministration
 import DisplayMigrateMetadataAdministration from "./DisplayMigrateMetadataAdministration/DisplayMigrateMetadataAdministration";
 import DisplayContentTypesAllowedContentTypesAdministration from "./DisplayContentTypesAllowedContentTypesAdministration/DisplayContentTypesAllowedContentTypesAdministration";
 import AdministrationHomePage from "./HomePage/AdministrationHomePage.js";
+import WorkspaceSwitcher, {WORKSPACE_ENUM} from "../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher.js";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -282,6 +283,7 @@ class AdministrationWorkspace extends Component {
                   <>
                     <div className="header-left"></div>
                     <div className="header-right">
+                      <WorkspaceSwitcher isUserAdmin={true} isUserWorkspaceVisible={true} currentWorkspace={WORKSPACE_ENUM.ORGANISATION_SETTINGS}/>
                       <DisplayUserBadgeMenu baseUrl={this.props.context.trustedDomain || this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
                     </div>
                   </>

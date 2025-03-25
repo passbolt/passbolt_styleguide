@@ -24,6 +24,13 @@ import DropdownMenu from "../../Dropdown/DropdownMenu";
 import DropdownMenuItem from "../../Dropdown/DropdownMenuItem";
 import {withNavigationContext} from "../../../../contexts/NavigationContext";
 
+export const WORKSPACE_ENUM = {
+  RESOURCE: "RESOURCE",
+  ORGANISATION_SETTINGS: "ORGANISATION_SETTINGS",
+  USER_AND_GROUPS: "USER_AND_GROUPS",
+  USER_PROFILE: "USER_PROFILE",
+};
+
 class WorkspaceSwitcher extends React.PureComponent {
   render() {
     if (!this.props.isUserAdmin && !this.props.isUserWorkspaceVisible) {
@@ -39,13 +46,13 @@ class WorkspaceSwitcher extends React.PureComponent {
             </DropdownButton>
             <DropdownMenu direction="over">
               <DropdownMenuItem>
-                <button type="button" className="no-border" onClick={this.props.navigationContext.onGoToAdministrationRequested}>
+                <button type="button" className={`no-border ${this.props.currentWorkspace === WORKSPACE_ENUM.ORGANISATION_SETTINGS ? "active" : ""}`} onClick={this.props.navigationContext.onGoToAdministrationRequested}>
                   <span><Trans>Organisation Settings</Trans></span>
                   <SettingsSVG/>
                 </button>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <button type="button" className="no-border" onClick={this.props.navigationContext.onGoToUsersRequested}>
+                <button type="button" className={`no-border ${this.props.currentWorkspace === WORKSPACE_ENUM.USER_AND_GROUPS ? "active" : ""}`} onClick={this.props.navigationContext.onGoToUsersRequested}>
                   <span><Trans>Manage Users & Groups</Trans></span>
                   <UsersSVG/>
                 </button>
@@ -66,6 +73,7 @@ class WorkspaceSwitcher extends React.PureComponent {
 WorkspaceSwitcher.propTypes = {
   isUserAdmin: PropTypes.bool, // true if the current user is an admin
   isUserWorkspaceVisible: PropTypes.bool, // true if the user is not admin but access to the user workspace
+  currentWorkspace: PropTypes.string, // the current visible workspace
   navigationContext: PropTypes.object, // the navigation context
 };
 
