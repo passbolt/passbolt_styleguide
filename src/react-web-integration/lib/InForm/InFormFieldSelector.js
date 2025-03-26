@@ -43,6 +43,7 @@ export default {
   input[type='text' i][placeholder*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][placeholder*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][placeholder*='e-mail' i]:not([hidden]):not([disabled]),
+  input[type='text'][aria-label*='Username']:not([hidden]):not([disabled]),
   input[type='email' i]:not([hidden]):not([disabled]),
   input[name*='user' i]:not([type]):not([hidden]):not([disabled]),
   input[name*='email' i]:not([type]):not([hidden]):not([disabled]),
