@@ -283,6 +283,13 @@ export default class ResourceWorkspaceContextPage {
   }
 
   /**
+   * On reset the column settings.
+   */
+  async resetColumnsSettings() {
+    await this.resourceWorkspaceContext.resetGridColumnsSettings();
+  }
+
+  /**
    * get the folder hierarchy
    * @param {string} id The id of the folder
    */

@@ -176,9 +176,10 @@ class DisplayResourcesList extends React.Component {
    */
   componentDidUpdate(prevProps) {
     this.handleResourceScroll();
-    // Has a column view change with the previous props
+    // Column resource settings have changed
     const hasColumnsResourceViewChange = this.columnsResourceSetting?.hasDifferentShowValue(prevProps.resourceWorkspaceContext.columnsResourceSetting);
-    if (hasColumnsResourceViewChange) {
+    const hasColumnsSettingsChanged = prevProps.resourceWorkspaceContext.columnsResourceSetting !== this.props.resourceWorkspaceContext.columnsResourceSetting;
+    if (hasColumnsSettingsChanged || hasColumnsResourceViewChange) {
       this.mergeAndSortColumns();
     }
   }

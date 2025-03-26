@@ -22,8 +22,8 @@ import sanitizeUrl, {urlProtocols} from "../lib/Sanitize/sanitizeUrl";
 import {DateTime} from "luxon";
 import SorterEntity from "../../shared/models/entity/sorter/sorterEntity";
 import GridUserSettingEntity from "../../shared/models/entity/gridUserSetting/gridUserSettingEntity";
-import GridResourceUserSettingService
-  from "../../shared/services/gridResourceUserSetting/GridResourceUserSettingService";
+import GridResourceUserSettingServiceWorkerService
+  from "../../shared/services/serviceWorker/gridResourceUserSetting/GridResourceUserSettingServiceWorkerService";
 import ColumnsResourceSettingCollection from "../../shared/models/entity/resource/columnsResourceSettingCollection";
 import {withPasswordExpiry} from "./PasswordExpirySettingsContext";
 import {withRbac} from "../../shared/context/Rbac/RbacContext";
@@ -87,6 +87,7 @@ export const ResourceWorkspaceContext = React.createContext({
   onGoToResourceUriRequested: () => {}, // Whenever the users wants to follow a resource uri
   onChangeColumnView: () => {}, // Whenever the users wants to show or hide a column
   onChangeColumnsSettings: () => {}, // Whenever the user change the columns configuration
+  resetGridColumnsSettings: () => {}, // Whenever the user resets the columns configuration
   getHierarchyFolderCache: () => {}, // Whenever the need to get folder hierarchy
 });
 
@@ -102,7 +103,18 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.initializeProperties();
-    this.gridResourceUserSetting = new GridResourceUserSettingService(props.context.port);
+    this.gridResourceUserSetting = new GridResourceUserSettingServiceWorkerService(props.context.port);
+  }
+
+  /**
+   * Get default sorter
+   * @return {object}
+   */
+  get defaultSorter() {
+    return new SorterEntity({
+      propertyName: 'modified', // The name of the property to sort on
+      asc: false // True if the sort must be descendant
+    });
   }
 
   /**
@@ -111,10 +123,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   get defaultState() {
     return {
       filter: {type: ResourceWorkspaceFilterTypes.NONE}, // The current resource search filter
-      sorter: new SorterEntity({
-        propertyName: 'modified', // The name of the property to sort on
-        asc: false // True if the sort must be descendant
-      }),
+      sorter: this.defaultSorter, // The default sorter
       filteredResources: null, // The current list of filtered resources
       selectedResources: [], // The current list of selected resources
       columnsResourceSetting: null, // The settings of columns for resources
@@ -157,6 +166,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       onGoToResourceUriRequested: this.onGoToResourceUriRequested.bind(this), // Whenever the users wants to follow a resource uri
       onChangeColumnView: this.handleChangeColumnView.bind(this), // Whenever the users wants to show or hide a column
       onChangeColumnsSettings: this.handleChangeColumnsSettings.bind(this), // Whenever the user change the columns configuration
+      resetGridColumnsSettings: this.resetGridColumnsSettings.bind(this), // Whenever the user resets the columns configuration
       getHierarchyFolderCache: this.getHierarchyFolderCache.bind(this) // Whenever the need to get folder hierarchy
     };
   }
@@ -1163,13 +1173,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     if (!this.props.passwordExpiryContext.isFeatureEnabled()) {
       columnsResourceSetting.removeById(ColumnModelTypes.EXPIRED);
     }
-    if (!this.hasAttentionRequiredColumn()) {
-      columnsResourceSetting.removeById(ColumnModelTypes.ATTENTION_REQUIRED);
-    }
     if (!this.canUseFolders) {
       columnsResourceSetting.removeById(ColumnModelTypes.LOCATION);
     }
-    const sorter = gridUserSettingEntity?.sorter || this.state.sorter;
+    const sorter = gridUserSettingEntity?.sorter || this.defaultSorter;
     // process the search after the grid setting is loaded
     this.setState({columnsResourceSetting, sorter}, async() => {
       await this.search(this.state.filter);
@@ -1185,11 +1192,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Returns true if the "attention required" column is available
-   * @returns {boolean}
+   * Reset the columns settings
+   *
+   * @return {Promise<void>}
    */
-  hasAttentionRequiredColumn() {
-    return this.props.passwordExpiryContext.isFeatureEnabled();
+  async resetGridColumnsSettings() {
+    await this.gridResourceUserSetting.resetSettings();
+    await this.loadGridResourceSetting();
   }
 
   /**

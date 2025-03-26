@@ -165,6 +165,23 @@ describe("DisplayResourcesWorkspace", () => {
       await page.displayResourceWorkspacePageObject.clickOn(page.displayResourceWorkspacePageObject.menuColumnViewItem(6));
       expect(props.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('password', false);
     });
+
+    it('As LU I can reset custom column settings', async() => {
+      expect.assertions(5);
+
+      const props = defaultProps(); // The resourceWorkspaceContext to pass
+      page = new DisplayResourceWorkspacePage(props);
+
+      expect(page.displayResourceWorkspacePageObject.menuColumnView).not.toBeNull();
+      await page.displayResourceWorkspacePageObject.clickOn(page.displayResourceWorkspacePageObject.menuColumnView);
+      expect(page.displayResourceWorkspacePageObject.menuColumnViewItem(3)).not.toBeNull();
+      await page.displayResourceWorkspacePageObject.clickOn(page.displayResourceWorkspacePageObject.menuColumnViewItem(3));
+      expect(props.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('name', false);
+      await page.displayResourceWorkspacePageObject.clickOn(page.displayResourceWorkspacePageObject.menuColumnViewItem(6));
+      expect(props.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('password', false);
+      await page.displayResourceWorkspacePageObject.clickOn(page.displayResourceWorkspacePageObject.menuColumnViewResetButton);
+      expect(props.resourceWorkspaceContext.resetGridColumnsSettings).toHaveBeenCalled();
+    });
   });
 
   describe("As LU I can see the empty sidebar", () => {
