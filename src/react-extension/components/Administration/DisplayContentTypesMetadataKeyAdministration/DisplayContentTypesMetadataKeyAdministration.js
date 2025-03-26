@@ -389,7 +389,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
 
               <div className="radiolist-alt">
                 <div
-                  className={`input radio ${this.state.settings.zero_knowledge_key_share === false ? "checked" : ""}`}>
+                  className={`input radio no-hover ${this.state.settings.zero_knowledge_key_share === false ? "checked" : ""}`}>
                   <input type="radio"
                     value="true"
                     name="zero_knowledge_key_share"
@@ -405,7 +405,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                   </label>
                 </div>
                 <div
-                  className={`input radio ${this.state.settings.zero_knowledge_key_share === true ? "checked" : ""}`}>
+                  className={`input radio no-hover ${this.state.settings.zero_knowledge_key_share === true ? "checked" : ""}`}>
                   <input type="radio"
                     value="true"
                     name="zero_knowledge_key_share"
