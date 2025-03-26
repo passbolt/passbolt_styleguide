@@ -56,14 +56,13 @@ describe("SelectResourceForm", () => {
       expect(page.getSectionItem(1)).toBeUndefined();
     });
 
-    it('As LU I can see the resource description disabled for v4 default.', async() => {
-      expect.assertions(2);
+    it('As LU I do not see the resource description for v4 default.', async() => {
+      expect.assertions(1);
       const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()), resource: defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: {password: ""}})});
       page = new SelectResourceFormPage(props);
       await waitFor(() => {});
 
-      expect(page.getSectionItem(2).textContent).toStrictEqual("Description");
-      expect(page.getSectionItem(2).hasAttribute("disabled")).toBeTruthy();
+      expect(page.getSectionItem(2)).toBeUndefined();
     });
 
     it('As LU the resource secret section password should be selected.', async() => {
