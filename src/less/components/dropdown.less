@@ -148,8 +148,12 @@
             box-shadow: none;
 
             // Dropdown menu item hover and focus
-            &:hover, &:focus, &:focus-visible {
+            &:hover, &:focus, &:focus-visible, &.active {
                 background: var(--Sections-Filter-selected);
+            }
+
+            &.active {
+              cursor: default;
             }
 
             // Dropdown menu item pressed

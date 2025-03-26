@@ -38,7 +38,7 @@ import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
 import ColumnsSVG from "../../../../img/svg/columns.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import InfoSVG from "../../../../img/svg/info.svg";
-import WorkspaceSwitcher from "../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher";
+import WorkspaceSwitcher, {WORKSPACE_ENUM} from "../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 import DisplayResourcesWorkspaceFilters from "./DisplayResourcesWorkspaceFilters";
 import Footer from "../../Common/Footer/Footer";
@@ -157,7 +157,7 @@ class Workspace extends Component {
    */
   get isUserAdmin() {
     const loggedInUser = this.props.context.loggedInUser;
-    return loggedInUser.role.name === RoleEntity.ROLE_ADMIN;
+    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN;
   }
 
   /**
@@ -223,7 +223,7 @@ class Workspace extends Component {
                 placeholder={this.props.t("Search resource")}/>
             </div>
             <div className="header-right">
-              <WorkspaceSwitcher isUserAdmin={this.isUserAdmin} isUserWorkspaceVisible={this.isUserWorkspaceVisible}/>
+              <WorkspaceSwitcher isUserAdmin={this.isUserAdmin} isUserWorkspaceVisible={this.isUserWorkspaceVisible} currentWorkspace={WORKSPACE_ENUM.RESOURCE}/>
               <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
             </div>
           </div>

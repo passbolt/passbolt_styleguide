@@ -46,6 +46,8 @@ import DisplayAccountRecoveryUserSettingsHelp
 import DisplayUserSecurityTokenHelp from "../ChangeUserSecurityToken/DisplayUserSecurityTokenHelp";
 import ExportAccountToDesktopHelp from '../ExportAccountToDesktop/ExportAccountToDesktopHelp';
 import DisplayMfaSettingsHelp from '../../MFA/DisplayMfaSettingsHelp/DisplayMfaSettingsHelp';
+import WorkspaceSwitcher, {WORKSPACE_ENUM} from '../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher';
+import RoleEntity from '../../../../shared/models/entity/role/roleEntity';
 
 /**
  * This component is a container for all the user settings workspace features
@@ -112,6 +114,23 @@ class DisplayUserSettingsWorkspace extends React.Component {
   }
 
   /**
+   * Returns true if the current user is an admin.
+   * @returns {boolean}
+   */
+  get isUserAdmin() {
+    const loggedInUser = this.props.context.loggedInUser;
+    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN;
+  }
+
+  /**
+   * Returns true if the current user is an admin.
+   * @returns {boolean}
+   */
+  get isUserWorkspaceVisible() {
+    return this.props.rbacContext.canIUseUiAction(uiActions.USERS_VIEW_WORKSPACE);
+  }
+
+  /**
    * Handle go back to resource workspace
    */
   handleGoBack() {
@@ -145,7 +164,10 @@ class DisplayUserSettingsWorkspace extends React.Component {
         </div>
         <div className="panel middle">
           <div className="header">
-            <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+            <div className="header-right">
+              <WorkspaceSwitcher isUserAdmin={this.isUserAdmin} isUserWorkspaceVisible={this.isUserWorkspaceVisible} currentWorkspace={WORKSPACE_ENUM.USER_PROFILE}/>
+              <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+            </div>
           </div>
           <div className="middle-right">
             <div className="breadcrumbs-and-grid">
