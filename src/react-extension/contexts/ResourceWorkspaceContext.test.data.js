@@ -109,7 +109,8 @@ export function defaultResourceWorkspaceContext(data = {}) {
     onResourceFileToImport: jest.fn(),
     onLockDetail: jest.fn(),
     onChangeColumnView:  jest.fn(),
-    onChangeColumnsSettings:  jest.fn(),
+    onChangeColumnsSettings: jest.fn(),
+    resetGridColumnsSettings: jest.fn(),
     getHierarchyFolderCache: jest.fn(() => []),
     onResourceDescriptionDecrypted: jest.fn(),
     ...data

@@ -91,9 +91,22 @@ export default class TableContextProvider extends Component {
     this.tableviewRef = React.createRef();
   }
 
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
   componentDidMount() {
     this.prepareTableColumns();
     window.addEventListener('resize', this.handleWindowResizeEvent);
+  }
+
+  /**
+   * componentWillUnmount
+   * This method is called when a component is being removed from the DOM
+   */
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleWindowResizeEvent);
   }
 
   /**
@@ -134,11 +147,12 @@ export default class TableContextProvider extends Component {
       this.removeColumn();
     } else if (prevProps.columns.length < this.props.columns.length) {
       this.addColumn();
+    } else if (prevProps.columns !== this.props.columns) {
+      const tableWidth = this.getTableWidth(this.props.columns);
+      const tableviewWidth = this.tableviewRef.current.clientWidth;
+      const columns = this.props.columns;
+      this.setState({columns, tableWidth, tableviewWidth});
     }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleWindowResizeEvent);
   }
 
   /**

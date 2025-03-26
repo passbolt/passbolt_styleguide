@@ -401,6 +401,42 @@ describe("Resource Workspace Context", () => {
     });
   });
 
+  describe("As LU I should be able to reset the resource columns setting", () => {
+    it("As LU I should be able to reset the resource column settings", async() => {
+      expect.assertions(18);
+
+      await page.goToAllItems();
+      await page.onChangeColumnView("favorite", false);
+      await page.onChangeColumnView("name", false);
+      await page.onChangeColumnView("username", false);
+      await page.onChangeColumnView("password", false);
+      await page.onChangeColumnView("totp", false);
+      await page.onChangeColumnView("uri", false);
+      await page.onChangeColumnView("modified", false);
+      await page.onChangeColumnView("expired", false);
+      await page.onChangeColumnView("location", false);
+      expect(page.columnsResourceSetting.items[0].show).toBeFalsy();
+      expect(page.columnsResourceSetting.items[1].show).toBeFalsy();
+      expect(page.columnsResourceSetting.items[2].show).toBeFalsy();
+      expect(page.columnsResourceSetting.items[3].show).toBeFalsy();
+      expect(page.columnsResourceSetting.items[4].show).toBeFalsy();
+      expect(page.columnsResourceSetting.items[5].show).toBeFalsy();
+      expect(page.columnsResourceSetting.items[6].show).toBeFalsy();
+      expect(page.columnsResourceSetting.items[7].show).toBeFalsy();
+      expect(page.columnsResourceSetting.items[8].show).toBeFalsy();
+      await page.resetColumnsSettings();
+      expect(page.columnsResourceSetting.items[0].show).toBeTruthy();
+      expect(page.columnsResourceSetting.items[1].show).toBeTruthy();
+      expect(page.columnsResourceSetting.items[2].show).toBeTruthy();
+      expect(page.columnsResourceSetting.items[3].show).toBeTruthy();
+      expect(page.columnsResourceSetting.items[4].show).toBeTruthy();
+      expect(page.columnsResourceSetting.items[5].show).toBeTruthy();
+      expect(page.columnsResourceSetting.items[6].show).toBeTruthy();
+      expect(page.columnsResourceSetting.items[7].show).toBeTruthy();
+      expect(page.columnsResourceSetting.items[8].show).toBeTruthy();
+    });
+  });
+
   describe("As LU I should be able to get the folder hierarchy", () => {
     it("As LU I should be able to show a resource column", async() => {
       expect.assertions(1);

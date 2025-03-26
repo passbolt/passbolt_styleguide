@@ -45,6 +45,7 @@ import Footer from "../../Common/Footer/Footer";
 import DisplayEmptyDetails from "../../ResourceFolderDetails/DisplayResourceFolderDetails/DisplayEmptyDetails";
 import DisplayResourcesListDetails from "../../ResourceDetails/DisplayResourceDetails/DisplayResourcesListDetails";
 import debounce from "debounce-promise";
+import RevertSVG from "../../../../img/svg/revert.svg";
 
 const GAP_AND_PADDING_BUTTONS = 22;
 
@@ -67,6 +68,7 @@ class Workspace extends Component {
     this.handleOnChangeColumnView = this.handleOnChangeColumnView.bind(this);
     this.handleViewDetailClickEvent = this.handleViewDetailClickEvent.bind(this);
     this.handleWindowResizeEventDebounced = debounce(this.handleWindowResizeEvent.bind(this), 50);
+    this.handleOnResetColumnsSettings = this.handleOnResetColumnsSettings.bind(this);
   }
 
   /**
@@ -141,6 +143,14 @@ class Workspace extends Component {
   handleOnChangeColumnView(event) {
     const target = event.target;
     this.props.resourceWorkspaceContext.onChangeColumnView(target.id, target.checked);
+  }
+
+  /**
+   * Handle the event when users resets the columns settings.
+   * @return {Promise}
+   */
+  async handleOnResetColumnsSettings() {
+    await this.props.resourceWorkspaceContext.resetGridColumnsSettings();
   }
 
   /**
@@ -244,14 +254,22 @@ class Workspace extends Component {
                         <CaretDownSVG/>
                       </DropdownButton>
                       <DropdownMenu direction="left">
-                        {this.columnsResourceSetting?.map(column =>
-                          <DropdownMenuItem keepOpenOnClick={true} key={column.id} separator={column.id === 'uri'}>
+                        {this.columnsResourceSetting?.map((column, index) =>
+                          <DropdownMenuItem keepOpenOnClick={true} key={column.id} separator={index === this.columnsResourceSetting.length - 1}>
                             <div className="input checkbox">
                               <input type="checkbox" checked={column.show} id={column.id} name={column.id} onChange={this.handleOnChangeColumnView}/>
                               <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
                             </div>
                           </DropdownMenuItem>
                         )}
+                        <DropdownMenuItem>
+                          <div className="action-button">
+                            <button id="reset-columns-settings" type="button" onClick={this.handleOnResetColumnsSettings}>
+                              <RevertSVG/>
+                              <span><Trans>Reset columns</Trans></span>
+                            </button>
+                          </div>
+                        </DropdownMenuItem>
                       </DropdownMenu>
                     </Dropdown>
                     <button type="button" className={`button-toggle button-action button-action-icon info ${this.hasLockDetail() ? "active" : ""}`}
