@@ -989,7 +989,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async updateSorter(propertyName) {
     const hasSortPropertyChanged = this.state.sorter.propertyName !== propertyName;
-    const asc = hasSortPropertyChanged  || !this.state.sorter.asc;
+    const asc = hasSortPropertyChanged || !this.state.sorter.asc;
     const sorter = new SorterEntity({propertyName, asc});
     this.setState({sorter}, () => this.updateGridSetting());
   }
