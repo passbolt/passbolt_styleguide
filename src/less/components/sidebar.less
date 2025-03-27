@@ -221,9 +221,15 @@
         }
 
         .information-value {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          .ellipsis();
+
+          button {
+            max-width: 100%;
+            span {
+              .ellipsis();
+              max-width: 100%;
+            }
+          }
 
           .location.value {
             button {
