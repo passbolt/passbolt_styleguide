@@ -11,9 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import {resourceTypesCollectionDto} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Default props
@@ -24,7 +26,8 @@ export function defaultProps(data = {}) {
     context: defaultAppContext(),
     onChange: jest.fn(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
-    resource: defaultResourceFormDto()
+    resource: defaultResourceFormDto(),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto())
   };
   return Object.assign(defaultData, data);
 }

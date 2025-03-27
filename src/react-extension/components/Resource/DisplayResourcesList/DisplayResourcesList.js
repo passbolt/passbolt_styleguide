@@ -40,7 +40,7 @@ import ColumnUsernameModel from "../../../../shared/models/column/ColumnUsername
 import ColumnPasswordModel from "../../../../shared/models/column/ColumnPasswordModel";
 import ColumnUriModel from "../../../../shared/models/column/ColumnUriModel";
 import ColumnModifiedModel from "../../../../shared/models/column/ColumnModifiedModel";
-import ColumnModel from "../../../../shared/models/column/ColumnModel";
+import ColumnModel, {ColumnModelTypes} from "../../../../shared/models/column/ColumnModel";
 import {withProgress} from "../../../contexts/ProgressContext";
 import CellTotp from "../../../../shared/components/Table/CellTotp";
 import ColumnTotpModel from "../../../../shared/models/column/ColumnTotpModel";
@@ -59,6 +59,7 @@ import {
 import FavoriteSVG from "../../../../img/svg/favorite.svg";
 import CellName from "../../../../shared/components/Table/CellName";
 import CircleOffSVG from "../../../../img/svg/circle_off.svg";
+import memoize from "memoize-one";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -108,6 +109,7 @@ class DisplayResourcesList extends React.Component {
     this.handleCheckboxWrapperClick = this.handleCheckboxWrapperClick.bind(this);
     this.handleCopyPasswordClick = this.handleCopyPasswordClick.bind(this);
     this.handleCopyUsernameClick = this.handleCopyUsernameClick.bind(this);
+    this.hasIconVisible = this.hasIconVisible.bind(this);
     this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
     this.handleSortByColumnClick = this.handleSortByColumnClick.bind(this);
     this.handleChangeColumnsSettings = this.handleChangeColumnsSettings.bind(this);
@@ -128,7 +130,7 @@ class DisplayResourcesList extends React.Component {
   initColumns() {
     this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}));
     this.defaultColumns.push(new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: FavoriteSVG}}));
-    this.defaultColumns.push(new ColumnNameModel({cellRenderer: {component: CellName, props: {hasAttentionRequiredFeature: this.hasAttentionRequiredFeature}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
+    this.defaultColumns.push(new ColumnNameModel({cellRenderer: {component: CellName, props: {hasAttentionRequiredFeature: this.hasAttentionRequiredFeature, hasIconVisibleCallback: this.hasIconVisible}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
     if (this.props.passwordExpiryContext.isFeatureEnabled()) {
       this.defaultColumns.push(new ColumnExpiredModel({cellRenderer: {component: CellExpiryDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Expiry")}}}));
     }
@@ -164,10 +166,25 @@ class DisplayResourcesList extends React.Component {
     const columnsResourceSetting = this.columnsResourceSetting.toHashTable();
     // Merge the column values
     const columns = this.defaultColumns.map(column => Object.assign(new ColumnModel(column), columnsResourceSetting[column.id]));
+
     // Sort the position of the column, the column with no position will be at the beginning
     columns.sort((columnA, columnB) => (columnA.position || 0) < (columnB.position || 0) ? -1 : 1);
     this.setState({columns});
   }
+
+  /**
+   * Returns true if the icon should be visible
+   */
+  hasIconVisible() {
+    return this.memoizedHasIconVisible(this.columnsResourceSetting);
+  }
+
+  /**
+   * Memoized hasIconVisible function.
+   * @param {array} columnsResourceSetting
+   * @returns {boolean}
+   */
+  memoizedHasIconVisible = memoize(columns => columns.getFirst("id", ColumnModelTypes.ICON).show);
 
   /**
    * Whenever the component has been updated

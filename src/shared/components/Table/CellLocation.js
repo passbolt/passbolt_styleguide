@@ -105,7 +105,7 @@ class CellLocation extends Component {
 }
 
 CellLocation.propTypes = {
-  value: PropTypes.array.isRequired, // The value to display
+  value: PropTypes.array, // The value to display
   onClick: PropTypes.func, // The onClick event function
   t: PropTypes.func, // the translation function
 };

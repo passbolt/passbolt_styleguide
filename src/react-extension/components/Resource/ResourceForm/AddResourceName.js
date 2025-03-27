@@ -15,8 +15,8 @@
 import React, {Component, Fragment} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import KeySVG from "../../../../img/svg/key.svg";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import ResourceIcon from "../../../../shared/components/Icons/ResourceIcon";
 
 class AddResourceName extends Component {
   constructor(props) {
@@ -102,7 +102,7 @@ class AddResourceName extends Component {
     return (
       <div className="resource-info">
         <div className="resource-icon">
-          <KeySVG/>
+          <ResourceIcon resource={this.props.resource}/>
         </div>
         <div className="information">
           <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>

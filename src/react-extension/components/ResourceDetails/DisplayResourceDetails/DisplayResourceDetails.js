@@ -32,11 +32,11 @@ import {
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import DisplayResourceDetailsPassword from "./DisplayResourceDetailsPassword";
 import DisplayResourceDetailsTotp from "./DisplayResourceDetailsTotp";
-import KeySVG from "../../../../img/svg/key.svg";
 import LinkSVG from "../../../../img/svg/link.svg";
 import Tabs from "../../Common/Tab/Tabs";
 import Tab from "../../Common/Tab/Tab";
 import DisplayResourceDetailsNote from "./DisplayResourceDetailsNote";
+import ResourceIcon from "../../../../shared/components/Icons/ResourceIcon";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -201,9 +201,7 @@ class DisplayResourceDetails extends React.Component {
     return (
       <div className="sidebar resource">
         <div className={`sidebar-header ${canUseAuditLog ? "" : "with-separator"}`}>
-          <div className="teaser-image">
-            <KeySVG/>
-          </div>
+          <ResourceIcon resource={this.props.resourceWorkspaceContext.details.resource}/>
           <div className="title-area">
             <h3>
               <div className="title-wrapper">
