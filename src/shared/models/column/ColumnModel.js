@@ -43,6 +43,7 @@ export const ColumnModelTypes = {
   FAVORITE: 'favorite',
   LOCATION: 'location',
   MODIFIED: 'modified',
+  ICON: 'icon',
   NAME: 'name',
   PASSWORD: 'password',
   TOTP: 'totp',

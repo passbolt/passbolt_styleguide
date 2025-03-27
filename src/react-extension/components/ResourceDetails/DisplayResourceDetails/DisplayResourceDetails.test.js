@@ -17,6 +17,7 @@
  */
 
 import "../../../../../test/mocks/mockClipboard";
+import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import React from 'react';
 import {defaultProps} from "./DisplayResourceDetails.test.data";
 import DisplayResourceDetailsPage from "./DisplayResourceDetails.test.page";
