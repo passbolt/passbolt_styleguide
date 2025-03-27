@@ -17,9 +17,8 @@
  */
 
 import "../../../../../test/mocks/mockClipboard";
-import {
-  defaultProps, propsWithDenyUiAction, withNestedFoldersProps,
-} from "./DisplayResourceDetailsInformation.test.data";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
+import {defaultProps, propsWithDenyUiAction, withNestedFoldersProps} from "./DisplayResourceDetailsInformation.test.data";
 import DisplayResourceDetailsInformationPage from "./DisplayResourceDetailsInformation.test.page";
 import {waitFor} from "@testing-library/dom";
 import {DateTime} from "luxon";
@@ -63,7 +62,7 @@ describe("DisplayResourceDetailsInformation", () => {
       const absoluteCreationDate = props.resourceWorkspaceContext.details.resource.created;
       const creationDate = DateTime.fromISO(absoluteCreationDate).toRelative();
       expect.assertions(12);
-      await waitFor(() => {});
+      await waitForTrue(() => page.displayInformationList.modifiedBy.textContent !== "");
       expect(page.displayInformationList.modifiedLabel).toBe('Modified');
       expect(page.displayInformationList.modified.textContent).toBe(modificationDate);
       expect(page.displayInformationList.modifiedByLabel).toBe('Modified by');
