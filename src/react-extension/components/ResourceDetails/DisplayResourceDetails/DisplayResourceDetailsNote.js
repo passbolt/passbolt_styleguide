@@ -51,7 +51,7 @@ class DisplayResourceDetailsNote extends React.Component {
       error: false,
       isSecretDecrypting: false,
       isSecretDecrypted: false,
-      description: null,
+      note: null,
     };
   }
 
@@ -66,21 +66,21 @@ class DisplayResourceDetailsNote extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.resource?.id !== prevProps.resourceWorkspaceContext.details.resource?.id
       || this.resource?.modified !== prevProps.resourceWorkspaceContext.details.resource?.modified) {
-      this.setState({description: null, isSecretDecrypted: false});
+      this.setState({note: null, isSecretDecrypted: false});
     }
   }
 
   /**
-   * Decrypt the resource secret and load its description in the component.
+   * Decrypt the resource secret and load its note in the component.
    * @return {Promise<void>}
    */
-  async decryptAndLoadEncryptedDescription() {
+  async decryptAndLoadEncryptedNote() {
     this.setState({isSecretDecrypting: true});
 
     try {
       const plaintextSecretDto = await this.props.context.port.request("passbolt.secret.find-by-resource-id", this.resource.id);
       this.setState({
-        description: plaintextSecretDto.description,
+        note: plaintextSecretDto.description,
         isSecretDecrypting: false,
         isSecretDecrypted: true,
         error: false
@@ -89,7 +89,7 @@ class DisplayResourceDetailsNote extends React.Component {
     } catch (error) {
       console.error(error);
       this.setState({
-        description: null,
+        note: null,
         isSecretDecrypting: false,
         isSecretDecrypted: false,
         error: true,
@@ -120,14 +120,14 @@ class DisplayResourceDetailsNote extends React.Component {
    * Handle when the user selects the folder parent.
    */
   handleTitleClickEvent() {
-    this.setState({open: !this.state.open, description: null, isSecretDecrypted: false});
+    this.setState({open: !this.state.open, note: null, isSecretDecrypted: false});
   }
 
   /**
-   * Retry to decrypted description
+   * Retry to decrypted note
    */
   handleRetryDecryptClickEvent() {
-    this.decryptAndLoadEncryptedDescription();
+    this.decryptAndLoadEncryptedNote();
   }
 
   /*
@@ -138,29 +138,30 @@ class DisplayResourceDetailsNote extends React.Component {
   /**
    * @returns {boolean}
    */
-  hasNoDescription() {
-    return this.state.description === null
-      || this.state.description?.length === 0;
+  hasNoNote() {
+    return typeof(this.state.note) === "undefined"
+      || this.state.note === null
+      || this.state.note?.length === 0;
   }
 
   /**
    * @returns {boolean}
    */
-  mustShowEmptyDescription() {
-    return !this.state.error && this.hasNoDescription() && this.state.isSecretDecrypted;
+  mustShowEmptyNote() {
+    return !this.state.error && this.hasNoNote() && this.state.isSecretDecrypted;
   }
 
   /**
    * @returns {boolean}
    */
-  mustShowDescription() {
-    return !this.state.error && !this.hasNoDescription() && this.state.isSecretDecrypted;
+  mustShowNote() {
+    return !this.state.error && !this.hasNoNote() && this.state.isSecretDecrypted;
   }
 
   /**
    * @returns {boolean}
    */
-  mustShowEncryptedDescription() {
+  mustShowEncryptedNote() {
     return !this.state.isSecretDecrypted && !this.state.error;
   }
 
@@ -197,17 +198,17 @@ class DisplayResourceDetailsNote extends React.Component {
                 </button>
               </>
             }
-            {this.mustShowEmptyDescription() &&
+            {this.mustShowEmptyNote() &&
               <p className="description-content">
-                <span className="empty-content"><Trans>There is no description.</Trans></span>
+                <span className="empty-content"><Trans>There is no note.</Trans></span>
               </p>
             }
-            {this.mustShowDescription() &&
+            {this.mustShowNote() &&
               <p className="description-content">
-                {this.state.description}
+                {this.state.note}
               </p>
             }
-            {this.mustShowEncryptedDescription() &&
+            {this.mustShowEncryptedNote() &&
               <>
                 <p className="encrypted-description">
                   Never gonna give you up. Never gonna let you down. Never gonna run around and desert you. Never gonna make you cry. Never gonna say goodbye. Never gonna tell a lie and hurt you.
