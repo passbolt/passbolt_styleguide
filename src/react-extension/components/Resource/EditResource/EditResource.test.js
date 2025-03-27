@@ -205,7 +205,7 @@ describe("See the Create Resource", () => {
       });
 
       it('As a signed-in user I should be able to add secret totp for a resource v4 password string', async() => {
-        expect.assertions(3);
+        expect.assertions(2);
 
         const props = defaultProps({resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING})});
         mockContextRequest(props.context, () => ({password: "password"}));
@@ -218,7 +218,6 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
         expect(page.note).toBeDefined();
-        expect(page.getSectionItem(4).hasAttribute("disabled")).toBeTruthy();
       });
     });
 
@@ -266,7 +265,7 @@ describe("See the Create Resource", () => {
       });
 
       it('As a signed-in user I should be able to delete secret totp for a resource v4 password string', async() => {
-        expect.assertions(4);
+        expect.assertions(3);
 
         const props = defaultProps({resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING})});
         mockContextRequest(props.context, () => ({password: "password"}));
@@ -283,7 +282,6 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
         expect(page.password).toBeDefined();
-        expect(page.getSectionItem(3).hasAttribute("disabled")).toBeTruthy();
       });
     });
 

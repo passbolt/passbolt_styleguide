@@ -333,21 +333,25 @@ class SelectResourceForm extends Component {
               }
             </>
           }
-          <button type="button" className="section-header no-border" onClick={this.handleDisplayMetadataClick}>
-            {this.state.displayMetadata
-              ? <CaretDownSVG className="caret-down"/>
-              : <CaretRightSVG className="caret-right"/>
-            }
-            <span className="ellipsis"><Trans>Metadata</Trans></span>
-          </button>
-          {this.state.displayMetadata &&
-            <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.DESCRIPTION === this.selectedForm ? "selected" : ""} ${!this.isResourceTypeHasDescriptionMetadata ? "disabled" : ""}`}>
-              <button type="button" id="menu-description" className="no-border" disabled={!this.isResourceTypeHasDescriptionMetadata || this.props.disabled}
-                onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.DESCRIPTION)}>
-                <AlignLeftSVG/>
-                <span className="ellipsis"><Trans>Description</Trans></span>
+          {this.isResourceTypeHasDescriptionMetadata &&
+            <>
+              <button type="button" className="section-header no-border" onClick={this.handleDisplayMetadataClick}>
+                {this.state.displayMetadata
+                  ? <CaretDownSVG className="caret-down"/>
+                  : <CaretRightSVG className="caret-right"/>
+                }
+                <span className="ellipsis"><Trans>Metadata</Trans></span>
               </button>
-            </div>
+              {this.state.displayMetadata &&
+                <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.DESCRIPTION === this.selectedForm ? "selected" : ""} ${!this.isResourceTypeHasDescriptionMetadata ? "disabled" : ""}`}>
+                  <button type="button" id="menu-description" className="no-border" disabled={this.props.disabled}
+                    onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.DESCRIPTION)}>
+                    <AlignLeftSVG/>
+                    <span className="ellipsis"><Trans>Description</Trans></span>
+                  </button>
+                </div>
+              }
+            </>
           }
         </div>
         {/* Upgrade v4 to v5
