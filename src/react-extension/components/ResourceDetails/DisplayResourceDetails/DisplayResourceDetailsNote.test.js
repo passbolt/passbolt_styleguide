@@ -111,7 +111,7 @@ describe("See secure note", () => {
     await waitForTrue(() => !page.isLoading());
 
     expect(page.emptyMessage).not.toBeNull();
-    expect(page.emptyMessage.textContent).toBe("There is no description.");
+    expect(page.emptyMessage.textContent).toBe("There is no note.");
   });
 
   it('As LU I should see an error message in the description section when the decryption fails', async() => {
