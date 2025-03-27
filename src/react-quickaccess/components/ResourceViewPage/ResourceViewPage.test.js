@@ -131,7 +131,7 @@ describe("ResourceViewPage", () => {
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
 
-      expect(page.passwordText).toStrictEqual("Copy password to clipboard");
+      expect(page.passwordText).toStrictEqual("Copy to clipboard");
       expect(page.password.hasAttribute("disabled")).toBeFalsy();
 
       await page.click(page.password);
@@ -159,7 +159,7 @@ describe("ResourceViewPage", () => {
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
 
-      expect(page.passwordText).toStrictEqual("Copy password to clipboard");
+      expect(page.passwordText).toStrictEqual("Copy to clipboard");
       expect(page.password.hasAttribute("disabled")).toBeTruthy();
       expect(page.copyPasswordButton).toBeNull();
     });

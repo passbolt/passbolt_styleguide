@@ -303,7 +303,7 @@ describe("Display Resources", () => {
       expect(page.resource(1).password).toBe('secret-password');
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.filteredResources[0].id);
       await page.resource(1).selectViewPassword();
-      expect(page.resource(1).password).toBe('Copy password to clipboard');
+      expect(page.resource(1).password).toBe('Copy to clipboard');
 
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
       await page.resource(4).selectViewTotp();

@@ -68,12 +68,13 @@ class CellPassword extends Component {
    */
   render() {
     const previewedPassword = this.props.getPreviewPassword(this.value);
+    const showPassword = typeof(previewedPassword) === "string";
     const hasPassword = this.props.hasPassword(this.value);
     return (
       <>
         {hasPassword &&
          <>
-           <div className={`secret secret-password ${previewedPassword ? "" : "secret-copy"}`}
+           <div className={`secret secret-password ${showPassword ? "" : "secret-copy"}`}
              title={previewedPassword || this.props.title}>
              <HiddenPassword
                canClick={this.props.canCopy}
