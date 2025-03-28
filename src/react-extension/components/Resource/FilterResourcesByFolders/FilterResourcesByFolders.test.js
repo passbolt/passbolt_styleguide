@@ -187,4 +187,18 @@ describe("See Folders", () => {
       expect(page.filterResourcesByFolders.isEmpty()).toBeTruthy();
     });
   });
+
+  describe('As LU I see a loading feedback in the section when the folders are not yet fetched', () => {
+    const context = defaultAppContext(); // The applicative context
+    const props = defaultProps();
+    context.folders = null;
+
+    beforeEach(() => {
+      page = new FilterResourcesByFoldersPage(context, props);
+    });
+
+    it('I should see the loading message “Retrieving folders', async() => {
+      expect(page.filterResourcesByFolders.isLoading()).toBeTruthy();
+    });
+  });
 });
