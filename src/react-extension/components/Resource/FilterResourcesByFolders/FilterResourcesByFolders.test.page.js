@@ -196,6 +196,20 @@ class FilterResourcesByFoldersPageObject {
     return this.rightClick(this.rootFolder);
   }
 
+  /**
+   * Returns the loading element
+   */
+  get loadingMessage() {
+    return this._container.querySelector('.processing-text');
+  }
+
+  /**
+   * Returns true
+   */
+  isLoading() {
+    return this.loadingMessage !== null && this.loadingMessage.innerHTML === 'Retrieving folders';
+  }
+
   /** Click on the component */
   async click(component)  {
     const leftClick = {button: 0};
