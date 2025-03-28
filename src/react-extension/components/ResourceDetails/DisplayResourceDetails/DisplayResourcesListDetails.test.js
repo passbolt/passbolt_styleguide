@@ -15,7 +15,7 @@
 /**
  * Unit tests on PasswordSidebar in regard of specifications
  */
-
+import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import {waitFor} from "@testing-library/dom";
 import {defaultProps} from "./DisplayResourcesListDetails.test.data";
 import DisplayResourcesListDetailsPage from "./DisplayResourcesListDetails.test.page";

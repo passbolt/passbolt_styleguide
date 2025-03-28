@@ -323,7 +323,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @returns {boolean}
    */
   canCopyUri() {
-    return this.selectedResources[0].metadata?.uris[0];
+    return Boolean(this.selectedResources[0].metadata?.uris?.[0]);
   }
 
   /**
