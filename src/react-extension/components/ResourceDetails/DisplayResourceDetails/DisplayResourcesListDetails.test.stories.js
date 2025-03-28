@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-
+import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import mockPort from "../../../../../test/mocks/mockPort";
 import mockStorage from "../../../../../test/mocks/mockStorage";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
