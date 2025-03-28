@@ -167,7 +167,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     this.props.progressContext.close();
 
     if (!plaintextSecretDto?.password?.length) {
-      await this.props.actionFeedbackContext.displayError(this.translate("The password is empty and cannot be copied to clipboard."));
+      await this.props.actionFeedbackContext.displayWarning(this.translate("The password is empty and cannot be copied to clipboard."));
       return;
     }
 
