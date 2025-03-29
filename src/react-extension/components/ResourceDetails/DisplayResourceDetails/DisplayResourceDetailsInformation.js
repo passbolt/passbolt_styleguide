@@ -258,6 +258,10 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @render {JSX}
    */
   renderTooltipFolderStructure(folderStructure) {
+    if (folderStructure.length === 0) {
+      return <span><Trans>My workspace</Trans></span>;
+    }
+
     return folderStructure?.map((folder, index) =>
       <div key={folder.id} className="folder-level" style={{marginLeft: `${5 * index}px`}}>
         {folder.folder_parent_id !== null &&
@@ -327,7 +331,7 @@ class DisplayResourceDetailsInformation extends React.Component {
               <span className="modified-by value">{modifierUsername}</span>
               {canUseFolders &&
                 <span className="location value">
-                  <TooltipPortal message={this.renderTooltipFolderStructure(folderStructure)} direction="auto">
+                  <TooltipPortal message={this.renderTooltipFolderStructure(folderStructure)}>
                     <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="no-border">
                       {this.resource.folder_parent_id === null &&
                         <>

@@ -22,6 +22,8 @@ import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import FolderSVG from "../../../../img/svg/folder.svg";
 import ShareFolderSVG from "../../../../img/svg/share_folder.svg";
+import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
+import CabinetSVG from "../../../../img/svg/cabinet.svg";
 
 class DisplayResourceFolderDetailsInformation extends React.Component {
   /**
@@ -159,6 +161,26 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
   }
 
   /**
+   * Render the tooltip folders structure.
+   * @param {array<FolderEntity>} folderStructure The folders structure.
+   * @render {JSX}
+   */
+  renderTooltipFolderStructure(folderStructure) {
+    if (folderStructure.length === 0) {
+      return <span><Trans>My workspace</Trans></span>;
+    }
+
+    return folderStructure?.map((folder, index) =>
+      <div key={folder.id} className="folder-level" style={{marginLeft: `${5 * index}px`}}>
+        {folder.folder_parent_id !== null &&
+          <span className="caret">›</span>
+        }
+        <span>{folder.name}</span>
+      </div>
+    );
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -167,7 +189,7 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
     const modifierUsername = this.state.modifier?.username || "";
     const createdDateTimeAgo = formatDateTimeAgo(this.folder.created, this.props.t, this.props.context.locale);
     const modifiedDateTimeAgo = formatDateTimeAgo(this.folder.modified, this.props.t, this.props.context.locale);
-    const folderParentName = this.getFolderName(this.folder.folder_parent_id);
+    const folderStructure = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.folder.folder_parent_id);
 
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
@@ -201,10 +223,29 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
               <span className="modified value" title={this.folder.modified}>{modifiedDateTimeAgo}</span>
               <span className="modified-by value">{modifierUsername}</span>
               <span className="location value">
-                <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="no-border folder-link">
-                  {this.isFolderParentShared() ? <ShareFolderSVG/> : <FolderSVG/>}
-                  <span>{folderParentName}</span>
-                </button>
+                <TooltipPortal message={this.renderTooltipFolderStructure(folderStructure)}>
+                  <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="no-border">
+                    {this.folder.folder_parent_id === null &&
+                      <>
+                        <CabinetSVG />
+                        <Trans>My workspace</Trans>
+                      </>
+                    }
+                    {this.folder.folder_parent_id !== null &&
+                      <>
+                        {this.isFolderParentShared() ? <ShareFolderSVG/> : <FolderSVG/>}
+                        {folderStructure.map(folder =>
+                          <React.Fragment key={folder.id}>
+                            {folder.folder_parent_id !== null &&
+                              <span className="caret">›</span>
+                            }
+                            <span>{folder.name}</span>
+                          </React.Fragment>
+                        )}
+                      </>
+                    }
+                  </button>
+                </TooltipPortal>
               </span>
             </div>
           </div>
