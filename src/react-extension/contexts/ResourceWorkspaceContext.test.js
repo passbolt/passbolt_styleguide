@@ -323,11 +323,11 @@ describe("Resource Workspace Context", () => {
         {id: "favorite", label: "Favorite", position: 1, show: true},
         {id: "icon", label: "Icon", position: 2, show: true},
         {id: "name", label: "Name", position: 3, show: true},
-        {id: "expired", label: "Expiry", position: 4, show: true},
-        {id: "username", label: "Username", position: 5, show: true},
-        {id: "password", label: "Password", position: 6, show: true},
-        {id: "totp", label: "TOTP", position: 7, show: true},
-        {id: "uri", label: "URI", position: 8, show: true},
+        {id: "username", label: "Username", position: 4, show: true},
+        {id: "password", label: "Password", position: 5, show: true},
+        {id: "totp", label: "TOTP", position: 6, show: true},
+        {id: "uri", label: "URI", position: 7, show: true},
+        {id: "expired", label: "Expiry", position: 8, show: true},
         {id: "modified", label: "Modified", position: 9, show: true},
         {id: "location", label: "Location", position: 10, show: true}
       ];
@@ -340,13 +340,13 @@ describe("Resource Workspace Context", () => {
       const columnsSetting = [
         {id: "favorite", label: "Favorite", position: 1, show: true},
         {id: "icon", label: "Icon", position: 2, show: true},
-        {id: "name", label: "Name", width: 200, position: 3, show: true},
-        {id: "expired", label: "Expiry", width: 200, position: 4, show: true},
-        {id: "username", label: "Username", position: 5, show: false},
-        {id: "password", label: "Password", width: 300, position: 6, show: true},
-        {id: "totp", label: "TOTP", position: 7, width: 190, show: true},
-        {id: "uri", label: "URI", position: 8, show: false},
-        {id: "modified", label: "Modified", width: 250, position: 9, show: true},
+        {id: "name", label: "Name", position: 3, show: true},
+        {id: "username", label: "Username", position: 4, show: true},
+        {id: "password", label: "Password", position: 5, show: true},
+        {id: "totp", label: "TOTP", position: 6, show: true},
+        {id: "uri", label: "URI", position: 7, show: true},
+        {id: "expired", label: "Expiry", position: 8, show: true},
+        {id: "modified", label: "Modified", position: 9, show: true},
         {id: "location", label: "Location", position: 10, show: true}
       ];
       const sorter = {
@@ -400,11 +400,11 @@ describe("Resource Workspace Context", () => {
         {id: "favorite", label: "Favorite", position: 1, width: 20, show: true},
         {id: "icon", label: "Icon", position: 2, show: true},
         {id: "name", label: "Name", position: 3, show: false},
-        {id: "expired", label: "Expiry", position: 4, show: true},
         {id: "username", label: "Username", position: 2, width: 200, show: true},
         {id: "password", label: "Password", position: 3, width: 100, show: true},
         {id: "totp", label: "TOTP", position: 5, width: 190, show: true},
         {id: "uri", label: "URI", position: 4, width: 300, show: true},
+        {id: "expired", label: "Expiry", position: 8, show: true},
         {id: "modified", label: "Modified", position: 5, width: 250, show: true},
         {id: "location", label: "Location", position: 10, show: true}
       ];

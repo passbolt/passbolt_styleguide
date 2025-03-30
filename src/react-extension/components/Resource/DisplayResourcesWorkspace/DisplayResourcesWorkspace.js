@@ -46,6 +46,7 @@ import DisplayEmptyDetails from "../../ResourceFolderDetails/DisplayResourceFold
 import DisplayResourcesListDetails from "../../ResourceDetails/DisplayResourceDetails/DisplayResourcesListDetails";
 import debounce from "debounce-promise";
 import RevertSVG from "../../../../img/svg/revert.svg";
+import {ColumnModelTypes} from "../../../../shared/models/column/ColumnModel";
 
 const GAP_AND_PADDING_BUTTONS = 22;
 
@@ -197,6 +198,22 @@ class Workspace extends Component {
   }
 
   /**
+   * Returns true if a separator should be displayed:
+   * - last item of the list
+   * - URI item if there is no expired item
+   * - expired item
+   * @param {columnsResourceSetting} column
+   * @param {number} index
+   * @returns {boolean}
+   */
+  hasSeparator(column, index) {
+    const nextColumn = this.props.resourceWorkspaceContext.columnsResourceSetting.items[index + 1];
+    return index === this.columnsResourceSetting.length - 1
+      || (column.id === ColumnModelTypes.URI && nextColumn?.id !== ColumnModelTypes.EXPIRED)
+      || column.id === ColumnModelTypes.EXPIRED;
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -255,7 +272,7 @@ class Workspace extends Component {
                       </DropdownButton>
                       <DropdownMenu direction="left">
                         {this.columnsResourceSetting?.map((column, index) =>
-                          <DropdownMenuItem keepOpenOnClick={true} key={column.id} separator={index === this.columnsResourceSetting.length - 1}>
+                          <DropdownMenuItem keepOpenOnClick={true} key={column.id} separator={this.hasSeparator(column, index)}>
                             <div className="input checkbox">
                               <input type="checkbox" checked={column.show} id={column.id} name={column.id} onChange={this.handleOnChangeColumnView}/>
                               <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
