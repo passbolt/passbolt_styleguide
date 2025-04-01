@@ -15,7 +15,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../../../shared/components/Icons/Icon";
 import {withActionFeedback} from '../../../../contexts/ActionFeedbackContext';
 import {withAdminPasswordPolicies} from "../../../../contexts/Administration/AdministrationPasswordPoliciesContext/AdministrationPasswordPoliciesContext";
 
@@ -90,17 +89,10 @@ class DisplayAdministrationPasswordPoliciesActions extends React.Component {
   render() {
     const isDisabled = !this.isActionEnabled;
     return (
-      <div className="col2_3 actions-wrapper">
-        <div className="actions">
-          <ul>
-            <li>
-              <button type="button" disabled={isDisabled} id="save-settings" onClick={this.handleSave}>
-                <Icon name="save"/>
-                <span><Trans>Save settings</Trans></span>
-              </button>
-            </li>
-          </ul>
-        </div>
+      <div className="actions-wrapper">
+        <button type="button" className="button primary form" disabled={isDisabled} id="save-settings" onClick={this.handleSave}>
+          <span><Trans>Save</Trans></span>
+        </button>
       </div>
     );
   }

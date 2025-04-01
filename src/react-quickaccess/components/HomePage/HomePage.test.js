@@ -19,7 +19,7 @@ import HomePagePage from "./HomePage.test.page";
 import {createMemoryHistory} from "history";
 import {
   defaultResourceMetadataDto
-} from "../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
+} from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import expect from "expect";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {

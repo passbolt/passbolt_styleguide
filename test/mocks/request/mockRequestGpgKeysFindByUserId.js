@@ -7,12 +7,12 @@
  */
 export default () => {
   return {
-    algorithm: "rsa_encrypt_sign",
+    algorithm: "rsa",
     created: "Sat Oct 31 2015 21:51:43 GMT+0530 (India Standard Time)",
     curve: undefined,
-    expires: "Never",
+    expires: "Infinity",
     fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-    key: `-----BEGIN PGP PUBLIC KEY BLOCK-----
+    armored_key: `-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: OpenPGP.js v4.10.9
 Comment: https://openpgpjs.org
 
@@ -71,8 +71,14 @@ byQ1rZo4HxWDQhbVdX8=
 =3ogW
 -----END PGP PUBLIC KEY BLOCK-----
 `,
-    keyId: "d06426d3",
+    key_id: "d06426d3",
     length: 4096,
-    private: false
-  }
+    private: false,
+    user_ids: [
+      {
+        name: "Ada Lovelace",
+        email: "ada@passbolt.com"
+      }
+    ]
+  };
 };

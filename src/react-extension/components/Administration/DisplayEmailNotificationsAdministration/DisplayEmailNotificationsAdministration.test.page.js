@@ -53,7 +53,7 @@ export default class DisplayEmailNotificationsAdministrationPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSaveButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[0];
+    return this._page.container.querySelector("#save-settings");
   }
   /**
    * Returns the password create input element
@@ -298,6 +298,14 @@ export default class DisplayEmailNotificationsAdministrationPage {
    */
   get settingsSource() {
     return this._page.container.querySelector('#email-notifications-source p');
+  }
+
+  /**
+   * Returns the save warning banner element
+   * @returns {HTMLElement}
+   */
+  get saveWarningBanner() {
+    return this._page.container.querySelector("#email-notification-save-banner");
   }
 
   /**

@@ -20,8 +20,9 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 /**
  * This component displays the success of a resource file import
@@ -318,8 +319,11 @@ class ImportResourcesResult extends Component {
             <div className="accordion error-details">
               <div className="accordion-header">
                 <button type="button" className="link no-border" onClick={this.handleErrorDetailsToggle}>
-                  <Trans>Error details</Trans>
-                  <Icon name={this.state.showErrorDetails ? "caret-up" : "caret-down"}/>
+                  <span><Trans>Error details</Trans></span>
+                  {this.state.showErrorDetails
+                    ? <CaretDownSVG className="baseline svg-icon"/>
+                    : <CaretRightSVG className="baseline svg-icon"/>
+                  }
                 </button>
               </div>
               {this.state.showErrorDetails &&

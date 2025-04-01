@@ -12,7 +12,6 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../../../shared/components/Icons/Icon";
 import FilterResourcesByFoldersItem from "./FilterResourcesByFoldersItem";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
@@ -24,6 +23,11 @@ import {withDialog} from "../../../contexts/DialogContext";
 import ReactList from "react-list";
 import {Trans, withTranslation} from "react-i18next";
 import {withDrag} from "../../../contexts/DragContext";
+import CarretDownSVG from "../../../../img/svg/caret_down.svg";
+import CarretRightSVG from "../../../../img/svg/caret_right.svg";
+import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
+import CabinetSVG from "../../../../img/svg/cabinet.svg";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 
 // Root virtual folder identifier.
 const ROOT = null;
@@ -120,7 +124,7 @@ class FilterResourcesByFolders extends React.Component {
     if (moreMenuOpen) {
       const {left, top} = event.currentTarget.getBoundingClientRect();
       const onBeforeHide = this.handleCloseMoreMenu;
-      const contextualMenuProps = {left, top: top + 18, className: "right", onBeforeHide};
+      const contextualMenuProps = {left, top: top + 19, className: "right", onBeforeHide};
       this.props.contextualMenuContext.show(FilterResourcesByRootFolderContextualMenu, contextualMenuProps);
     }
   }
@@ -336,30 +340,35 @@ class FilterResourcesByFolders extends React.Component {
                         onClick={this.handleClickOnTitle}
                         onContextMenu={this.handleTitleContextualMenuEvent}>
                         {!isLoading &&
-                          <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()}>
-                            {isOpen &&
-                              <Icon name="caret-down"/>
-                            }
-                            {!isOpen &&
-                              <Icon name="caret-right"/>
+                          <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()} tabIndex={1}>
+                            {isOpen
+                              ? <CarretDownSVG />
+                              : <CarretRightSVG />
                             }
                           </div>
                         }
-                        <Trans>Folders</Trans>
+                        <CabinetSVG />
+                        <Trans>My workspace</Trans>
                       </button>
                     </span>
                   </h3>
                 </div>
               </div>
               <div className="dropdown right-cell more-ctrl">
-                <button type="button" className={`${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}>
-                  <Icon name="3-dots-h"/>
+                <button type="button" className={`button-transparent inline-menu-horizontal ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}>
+                  <MoreHorizontalSVG />
                 </button>
               </div>
             </div>
           </div>
         </div>
         <div className="accordion-content">
+          {isLoading &&
+            <div className="processing-wrapper">
+              <SpinnerSVG/>
+              <span className="processing-text"><Trans>Retrieving folders</Trans></span>
+            </div>
+          }
           {!isLoading && isOpen && rootFolders.length === 0 &&
           <em className="empty-content"><Trans>empty</Trans></em>
           }

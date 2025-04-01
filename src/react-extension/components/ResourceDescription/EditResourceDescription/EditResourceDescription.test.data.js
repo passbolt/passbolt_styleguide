@@ -17,7 +17,7 @@ import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackCont
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultLoadingContext} from "../../../contexts/LoadingContext.test.data";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {defaultSecretDto} from "../../Resource/CreateResource/CreateResource.test.data";
+import {plaintextSecretPasswordAndDescriptionDto} from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {
   resourceTypesCollectionDto
@@ -32,6 +32,6 @@ export const defaultProps = (data = {}) => ({
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   actionFeedbackContext: defaultActionFeedbackContext(),
   loadingContext: defaultLoadingContext(),
-  plaintextSecretDto: defaultSecretDto(),
+  plaintextSecretDto: plaintextSecretPasswordAndDescriptionDto(),
   ...data,
 });

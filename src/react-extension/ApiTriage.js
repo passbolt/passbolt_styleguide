@@ -21,6 +21,7 @@ import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import Footer from "./components/Common/Footer/Footer";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import ChangeApiTriageLocale from "./components/Internationalisation/ChangeLocale/ChangeApiTriageLocale";
+import LogoSVG from "../img/svg/logo.svg";
 
 /**
  * The triage application served by the API.
@@ -188,15 +189,17 @@ class ApiTriage extends Component {
             <div id="container" className="container page login">
               <div className="content">
                 <div className="header">
-                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                  <div className="logo-svg">
+                    <LogoSVG role="img" width="20rem" height="3.5rem"/>
+                  </div>
                 </div>
                 <div className="login-form">
                   <OrchestrateApiTriage/>
                 </div>
                 <ChangeApiTriageLocale/>
               </div>
+              <Footer/>
             </div>
-            <Footer/>
           </ApiTriageContextProvider>
         </TranslationProvider>
         }

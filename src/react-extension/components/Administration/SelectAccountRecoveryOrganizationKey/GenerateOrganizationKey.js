@@ -548,11 +548,11 @@ class GenerateOrganizationKey extends React.Component {
                 </div>
             }
           </div>
-        </div>
-        <div className="warning message" id="generate-organization-key-setting-overridden-banner">
-          <p>
-            <Trans>Warning, we encourage you to generate your OpenPGP Organization Recovery Key separately. Make sure you keep a backup in a safe place.</Trans>
-          </p>
+          <div className="warning message no-margin" id="generate-organization-key-setting-overridden-banner">
+            <p>
+              <Trans>Warning, we encourage you to generate your OpenPGP Organization Recovery Key separately. Make sure you keep a backup in a safe place.</Trans>
+            </p>
+          </div>
         </div>
         <div className="submit-wrapper clearfix">
           <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.props.onClose} />

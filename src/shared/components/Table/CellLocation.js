@@ -11,10 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.9.0
  */
-import React, {Component} from "react";
+import React, {Component, Fragment} from "react";
 import PropTypes from "prop-types";
-import Icon from "../Icons/Icon";
+import FolderSVG from "../../../img/svg/folder.svg";
+import ShareFolderSVG from "../../../img/svg/share_folder.svg";
 import TooltipPortal from "../../../react-extension/components/Common/Tooltip/TooltipPortal";
+import CabinetSVG from "../../../img/svg/cabinet.svg";
 
 /**
  * This component represents a table cell location
@@ -71,35 +73,31 @@ class CellLocation extends Component {
     // return empty array if a resource have no folder parent
     if (this.value.length === 0) {
       return (
-        <TooltipPortal message={<span>{this.props.t("root")}</span>} direction="auto">
-          <button className="link no-border" type="button" onClick={event => this.handleClick(event, null)}>
-            <span>
-              <Icon name="folder"/>
-              <span>{this.props.t("root")}</span>
-            </span>
+        <TooltipPortal message={<span>{this.props.t("My workspace")}</span>} direction="auto">
+          <button className="no-border" type="button" onClick={event => this.handleClick(event, null)}>
+            <CabinetSVG />
+            <span>{this.props.t("My workspace")}</span>
           </button>
         </TooltipPortal>
       );
     }
     return (
       <TooltipPortal message={this.tooltipHierarchyFolder} direction="auto">
-        <button className="link no-border" type="button" onClick={event => this.handleClick(event, this.lastFolder.id)}>
-          <span>
-            {!this.lastFolder.personal &&
-              <Icon name="folder-shared"/>
-            }
-            {this.lastFolder.personal &&
-              <Icon name="folder"/>
-            }
-            {this.value.map(folder =>
-              <span key={folder.id}>
-                {folder.folder_parent_id !== null &&
-                  <span className="caret">›</span>
-                }
-                <span>{folder.name}</span>
-              </span>
-            )}
-          </span>
+        <button className="no-border" type="button" onClick={event => this.handleClick(event, this.lastFolder.id)}>
+          {!this.lastFolder.personal &&
+            <ShareFolderSVG/>
+          }
+          {this.lastFolder.personal &&
+            <FolderSVG/>
+          }
+          {this.value.map(folder =>
+            <Fragment key={folder.id}>
+              {folder.folder_parent_id !== null &&
+                <span className="caret">›</span>
+              }
+              <span>{folder.name}</span>
+            </Fragment>
+          )}
         </button>
       </TooltipPortal>
     );
@@ -107,7 +105,7 @@ class CellLocation extends Component {
 }
 
 CellLocation.propTypes = {
-  value: PropTypes.array.isRequired, // The value to display
+  value: PropTypes.array, // The value to display
   onClick: PropTypes.func, // The onClick event function
   t: PropTypes.func, // the translation function
 };

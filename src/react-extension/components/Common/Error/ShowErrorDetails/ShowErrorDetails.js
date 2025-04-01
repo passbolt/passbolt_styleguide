@@ -48,11 +48,11 @@ class ShowErrorDetails extends Component {
    * @returns {string}
    */
   get errorData() {
-    let msg = 'No data available.';
     if (!this.props.error) {
-      return msg;
+      return 'No data available.';
     }
 
+    let msg = "";
     msg += "Message \n----------------------\n";
     msg += this.props.error.message;
     msg += "\n\n";

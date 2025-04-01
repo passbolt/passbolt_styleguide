@@ -17,11 +17,15 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {withMfa} from "../../../contexts/MFAContext";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import ProfileIcon from "../../../../img/svg/profile.svg";
+import LogoutIcon from "../../../../img/svg/logout.svg";
+import CloseSVG from "../../../../img/svg/close.svg";
+import AttentionSVG from "../../../../img/svg/attention.svg";
+import {withDialog} from "../../../contexts/DialogContext";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 class DisplayUserBadgeMenu extends Component {
   /**
@@ -42,7 +46,6 @@ class DisplayUserBadgeMenu extends Component {
   getDefaultState() {
     return {
       open: false,
-      loading: true,
     };
   }
 
@@ -56,8 +59,7 @@ class DisplayUserBadgeMenu extends Component {
     this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
     this.handleToggleMenuClick = this.handleToggleMenuClick.bind(this);
     this.handleProfileClick = this.handleProfileClick.bind(this);
-    this.handleThemeClick = this.handleThemeClick.bind(this);
-    this.handleMobileAppsClick = this.handleMobileAppsClick.bind(this);
+    this.handleSignOutClick = this.handleSignOutClick.bind(this);
   }
 
   componentDidMount() {
@@ -80,23 +82,6 @@ class DisplayUserBadgeMenu extends Component {
    */
   createRefs() {
     this.userBadgeMenuRef = React.createRef();
-  }
-
-  /**
-   * Can the user access the theme capability.
-   * @returns {bool}
-   */
-  get canIUseThemeCapability() {
-    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountSettings');
-  }
-
-  /**
-   * Can the user access the mobile capability.
-   * @returns {bool}
-   */
-  get canIUseMobileCapability() {
-    const canViewMobileTransfer = this.props.rbacContext.canIUseUiAction(uiActions.MOBILE_TRANSFER);
-    return canViewMobileTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
   }
 
   /**
@@ -179,25 +164,22 @@ class DisplayUserBadgeMenu extends Component {
   }
 
   /**
-   * Whenever the user wants to navigate to the users settings workspace theme section.
+   * Handles the click on Sign out button
+   * @returns {Promise<void>}
    */
-  handleThemeClick() {
-    this.props.navigationContext.onGoToUserSettingsThemeRequested();
-    this.closeUserBadgeMenu();
-  }
-
-  /**
-   * Handle mobile apps click
-   * @return {void}
-   */
-  handleMobileAppsClick() {
-    this.props.navigationContext.onGoToUserSettingsMobileRequested();
-    this.closeUserBadgeMenu();
+  async handleSignOutClick() {
+    try {
+      await this.props.context.onLogoutRequested();
+    } catch (error) {
+      this.props.dialogContext.open(NotifyError, {error});
+    } finally {
+      this.closeUserBadgeMenu();
+    }
   }
 
   /**
    * Returns true if the account recovery needs to be configured.
-   * @return {bool}
+   * @return {boolean}
    */
   get attentionRequired() {
     return this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()
@@ -211,49 +193,37 @@ class DisplayUserBadgeMenu extends Component {
    */
   render() {
     return (
-      <div className="col3 profile-wrapper">
+      <div className="profile-wrapper">
         <div className="user profile dropdown" ref={this.userBadgeMenuRef}>
-          <div className={`avatar-with-name button ${this.state.open ? "open" : ""}`} onClick={this.handleToggleMenuClick}>
-            <UserAvatar user={this.props.user} className="avatar picture left-cell" baseUrl={this.props.baseUrl} attentionRequired={this.attentionRequired}/>
-            <div className="details center-cell">
-              <span className="name">{this.getUserFullName()}</span>
-              <span className="email">{this.getUserUsername()}</span>
-            </div>
-            <div className="more right-cell">
-              <button type="button" className="link no-border">
-                <Icon name="caret-down"/>
+          <button type="button" className={`avatar-with-name button avatar-button ${this.state.open ? "open" : ""}`} onClick={this.handleToggleMenuClick}>
+            <UserAvatar user={this.props.user} baseUrl={this.props.baseUrl} attentionRequired={this.attentionRequired} />
+          </button>
+          {this.state.open &&
+            <div className="dropdown-content left visible">
+              <button className="button button-transparent user-profile-close" role="button" onClick={this.handleToggleMenuClick}>
+                <CloseSVG className="svg-icon close" />
+                <span className="visually-hidden">Close</span>
+              </button>
+              <UserAvatar user={this.props.user} baseUrl={this.props.baseUrl} />
+              <div className="informations">
+                <div className="name">{this.getUserFullName()}</div>
+                <div className="email">{this.getUserUsername()}</div>
+              </div>
+              <div className="manage-account">
+                <button className="button primary" onClick={this.handleProfileClick}>
+                  <ProfileIcon /> Manage account
+                  {this.attentionRequired &&
+                    <AttentionSVG className="attention-required"/>
+                  }
+                </button>
+              </div>
+              <button type="button" className="no-border sign-out" onClick={this.handleSignOutClick}>
+                <LogoutIcon/>
+                <Trans>
+                  Sign out
+                </Trans>
               </button>
             </div>
-          </div>
-          {this.state.open &&
-          <ul className="dropdown-content right visible">
-            <li key="profile">
-              <div className="row">
-                <button type="button" className="link no-border" onClick={this.handleProfileClick}>
-                  <span><Trans>Profile</Trans></span>{this.attentionRequired && <Icon name="exclamation" baseline={true}/>}
-                </button>
-              </div>
-            </li>
-            {this.canIUseThemeCapability &&
-            <li key="theme">
-              <div className="row">
-                <button type="button" className="link no-border" onClick={this.handleThemeClick}>
-                  <span><Trans>Theme</Trans></span>
-                </button>
-              </div>
-            </li>
-            }
-            {this.canIUseMobileCapability &&
-            <li id="user-badge-menu-mobile" key="mobile">
-              <div className="row">
-                <button type="button" className="link no-border" onClick={this.handleMobileAppsClick}>
-                  <span><Trans>Mobile Apps</Trans></span>
-                  <span className="chips new">new</span>
-                </button>
-              </div>
-            </li>
-            }
-          </ul>
           }
         </div>
       </div>
@@ -269,6 +239,7 @@ DisplayUserBadgeMenu.propTypes = {
   baseUrl: PropTypes.string,
   user: PropTypes.object,
   rbacContext: PropTypes.any, // The role based access control context
+  dialogContext: PropTypes.object, // the dialog context prop
 };
 
-export default withAppContext(withRbac(withNavigationContext(withAccountRecovery(withMfa(withTranslation("common")(DisplayUserBadgeMenu))))));
+export default withAppContext(withRbac(withNavigationContext(withDialog(withAccountRecovery(withMfa(withTranslation("common")(DisplayUserBadgeMenu)))))));

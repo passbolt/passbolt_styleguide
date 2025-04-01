@@ -11,14 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import React, {Component} from "react";
+import {Route, Switch} from "react-router-dom";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../contexts/AdministrationWorkspaceContext";
-import DisplayMainMenu from "../Common/Menu/DisplayMainMenu";
-import Logo from "../Common/Navigation/Header/Logo";
 import DisplayUserBadgeMenu from "../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu";
 import DisplayAdministrationMenu from "./DisplayAdministrationMenu/DisplayAdministrationMenu";
 import DisplayMfaAdministration from "./DisplayMfaAdministration/DisplayMfaAdministration";
@@ -28,7 +27,6 @@ import DisplayUserDirectoryAdministration
   from "./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration";
 import DisplayEmailNotificationsAdministration
   from "./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration";
-import SearchBar from "../Common/Navigation/Search/SearchBar";
 import DisplaySubscriptionKey from "./DisplaySubscriptionKey/DisplaySubscriptionKey";
 import DisplayInternationalizationAdministration
   from "./DisplayInternationalizationAdministration/DisplayInternationalizationAdministration";
@@ -47,12 +45,44 @@ import DisplayHttpError from "../Common/Error/DisplayHttpError/DisplayHttpError"
 import DisplayHealthcheckAdministration from "./DisplayHealthcheckAdministration/DisplayHealthcheckAdministration";
 import DisplayContentTypesEncryptedMetadataAdministration
   from "./DisplayContentTypesEncryptedMetadataAdministration/DisplayContentTypesEncryptedMetadataAdministration";
+import {Trans} from "react-i18next";
+import ArrowLeftSVG from "../../../img/svg/arrow_left.svg";
+import {withNavigationContext} from "../../contexts/NavigationContext";
+import Footer from "../Common/Footer/Footer.js";
 import DisplayContentTypesMetadataKeyAdministration
   from "./DisplayContentTypesMetadataKeyAdministration/DisplayContentTypesMetadataKeyAdministration";
 import DisplayMigrateMetadataAdministration from "./DisplayMigrateMetadataAdministration/DisplayMigrateMetadataAdministration";
 import DisplayContentTypesAllowedContentTypesAdministration from "./DisplayContentTypesAllowedContentTypesAdministration/DisplayContentTypesAllowedContentTypesAdministration";
+import AdministrationHomePage from "./HomePage/AdministrationHomePage.js";
+import WorkspaceSwitcher, {WORKSPACE_ENUM} from "../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher.js";
 
 class AdministrationWorkspace extends Component {
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
+    this.bindCallbacks();
+  }
+
+  /**
+   * Bind callbacks methods
+   * @return {void}
+   */
+  bindCallbacks() {
+    this.handleGoBack = this.handleGoBack.bind(this);
+  }
+
+  /**
+   * If the administration Home page selected
+   * @returns {boolean}
+   */
+  isHomePageSelected() {
+    return AdministrationWorkspaceMenuTypes.HOME === this.props.administrationWorkspaceContext.selectedAdministration
+      || AdministrationWorkspaceMenuTypes.NONE === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
   /**
    * If MFA menu is selected
    * @returns {boolean}
@@ -198,6 +228,13 @@ class AdministrationWorkspace extends Component {
   }
 
   /**
+   * Handle go back to resource workspace
+   */
+  handleGoBack() {
+    this.props.navigationContext.onGoToPasswordsRequested();
+  }
+
+  /**
    * If the page access is denied
    * @returns {boolean}
    */
@@ -218,100 +255,126 @@ class AdministrationWorkspace extends Component {
   }
 
   render() {
-    const AdministrationWorkspaceAction = this.props.administrationWorkspaceContext.administrationWorkspaceAction;
+    // const AdministrationWorkspaceAction = this.props.administrationWorkspaceContext.administrationWorkspaceAction;
     return (
       <div id="container" className="page administration">
-        <div id="app" tabIndex="1000">
-          <div className="header first">
-            <DisplayMainMenu/>
-          </div>
-          <div className="header second">
-            <Logo/>
-            <SearchBar disabled={true}/>
-            <DisplayUserBadgeMenu baseUrl={this.props.context.trustedDomain || this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
-          </div>
-          <div className="header third">
-            <div className="col1 main-action-wrapper">
-            </div>{/* Deprecated */}
-            <AdministrationWorkspaceAction/>{/* Deprecated */}
-            <div id="administration-actions-content-action"></div>
-          </div>
+        <div id="app" className="app" tabIndex="1000">
           <div className="panel main">
-            <div>
-              <div className="panel left">
+            <div className="panel left">
+              {!this.isHttpError403 &&
+                <div className="sidebar-content">
+                  <div className="top-bar-left-navigation">
+                    <div className="navigation">
+                      <button type="button" className="button-transparent back" onClick={this.handleGoBack}>
+                        <ArrowLeftSVG/>
+                      </button>
+                      <span className="title administration"><Trans>Organisation settings</Trans></span>
+                    </div>
+                  </div>
+                  <div className="sidebar-content-left">
+                    <DisplayAdministrationMenu/>
+                  </div>
+                </div>
+              }
+            </div>
+            <div className="panel middle">
+              <div className="header">
                 {!this.isHttpError403 &&
-                <DisplayAdministrationMenu/>
+                  <>
+                    <div className="header-left"></div>
+                    <div className="header-right">
+                      <WorkspaceSwitcher isUserAdmin={true} isUserWorkspaceVisible={true} currentWorkspace={WORKSPACE_ENUM.ORGANISATION_SETTINGS}/>
+                      <DisplayUserBadgeMenu baseUrl={this.props.context.trustedDomain || this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+                    </div>
+                  </>
                 }
               </div>
-              <div className="panel middle">
-                {!this.isHttpError403 &&
-                <DisplayAdministrationWorkspaceBreadcrumb/>
-                }
-                <div className="grid grid-responsive-12">
-                  {this.isHttpError403 &&
-                  <DisplayHttpError errorCode={403}/>
-                  }
-                  {this.isHttpError404 &&
-                  <DisplayHttpError errorCode={404}/>
-                  }
-                  {this.isMfaSelected() &&
-                  <DisplayMfaAdministration/>
-                  }
-                  {this.isMfaPolicySelected() &&
-                  <DisplayMfaPolicyAdministration/>
-                  }
-                  {this.isPasswordPoliciesSelected() &&
-                  <DisplayPasswordPoliciesAdministration/>
-                  }
-                  {this.isUserDirectorySelected() &&
-                  <DisplayUserDirectoryAdministration/>
-                  }
-                  {this.isEmailNotificationsSelected() &&
-                  <DisplayEmailNotificationsAdministration/>
-                  }
-                  {this.isSubscriptionSelected() &&
-                  <DisplaySubscriptionKey/>
-                  }
-                  {this.isInternationalizationSelected() &&
-                  <DisplayInternationalizationAdministration/>
-                  }
-                  {this.isAccountRecoverySelected() &&
-                  <ManageAccountRecoveryAdministrationSettings/>
-                  }
-                  {this.isSmtpSettingsSelected() &&
-                  <ManageSmtpAdministrationSettings/>
-                  }
-                  {this.isSelfRegistrationSelected() &&
-                  <DisplaySelfRegistrationAdministration/>
-                  }
-                  {this.isSsoSelected() &&
-                  <ManageSsoSettings/>
-                  }
-                  {this.isRbacSelected() &&
-                  <DisplayRbacAdministration/>
-                  }
-                  {this.isUserPassphrasePoliciesSelected() &&
-                  <DisplayAdministrationUserPassphrasePolicies/>
-                  }
-                  {this.isPasswordExpirySelected() &&
-                  <DisplayAdministrationPasswordExpiry/>
-                  }
-                  {this.isHealthcheckSelected() &&
-                    <DisplayHealthcheckAdministration/>
-                  }
-                  {this.isContentTypesEncryptedMetadataSelected() &&
-                    <DisplayContentTypesEncryptedMetadataAdministration/>
-                  }
-                  {this.isContentTypesMetadataKeySelected() &&
-                    <DisplayContentTypesMetadataKeyAdministration/>
-                  }
-                  {this.isMigrateMetadataSelected() &&
-                    <DisplayMigrateMetadataAdministration/>
-                  }
-                  {this.isAllowContentTypesSelected() &&
-                    <DisplayContentTypesAllowedContentTypesAdministration/>
-                  }
+              <div className="middle-right">
+                <div className="breadcrumbs-and-grid">
+                  <div className="top-bar">
+                    <DisplayAdministrationWorkspaceBreadcrumb/>
+                  </div>
+                  <div className="main-page">
+                    {this.isHttpError403 &&
+                      <DisplayHttpError errorCode={403}/>
+                    }
+                    {this.isHttpError404 &&
+                      <DisplayHttpError errorCode={404}/>
+                    }
+                    {this.isHomePageSelected() &&
+                      <AdministrationHomePage/>
+                    }
+                    {this.isMfaSelected() &&
+                      <DisplayMfaAdministration/>
+                    }
+                    {this.isMfaPolicySelected() &&
+                      <DisplayMfaPolicyAdministration/>
+                    }
+                    {this.isPasswordPoliciesSelected() &&
+                      <DisplayPasswordPoliciesAdministration/>
+                    }
+                    {this.isUserDirectorySelected() &&
+                      <DisplayUserDirectoryAdministration/>
+                    }
+                    {this.isEmailNotificationsSelected() &&
+                      <DisplayEmailNotificationsAdministration/>
+                    }
+                    {this.isSubscriptionSelected() &&
+                      <DisplaySubscriptionKey/>
+                    }
+                    {this.isInternationalizationSelected() &&
+                      <DisplayInternationalizationAdministration/>
+                    }
+                    {this.isAccountRecoverySelected() &&
+                      <ManageAccountRecoveryAdministrationSettings/>
+                    }
+                    {this.isSmtpSettingsSelected() &&
+                      <ManageSmtpAdministrationSettings/>
+                    }
+                    {this.isSelfRegistrationSelected() &&
+                      <DisplaySelfRegistrationAdministration/>
+                    }
+                    {this.isSsoSelected() &&
+                      <ManageSsoSettings/>
+                    }
+                    {this.isRbacSelected() &&
+                      <DisplayRbacAdministration/>
+                    }
+                    {this.isUserPassphrasePoliciesSelected() &&
+                      <DisplayAdministrationUserPassphrasePolicies/>
+                    }
+                    {this.isPasswordExpirySelected() &&
+                      <DisplayAdministrationPasswordExpiry/>
+                    }
+                    {this.isHealthcheckSelected() &&
+                      <DisplayHealthcheckAdministration/>
+                    }
+                    {this.isContentTypesEncryptedMetadataSelected() &&
+                      <DisplayContentTypesEncryptedMetadataAdministration/>
+                    }
+                    {this.isContentTypesMetadataKeySelected() &&
+                      <DisplayContentTypesMetadataKeyAdministration/>
+                    }
+                    {this.isMigrateMetadataSelected() &&
+                      <DisplayMigrateMetadataAdministration/>
+                    }
+                    {this.isAllowContentTypesSelected() &&
+                      <DisplayContentTypesAllowedContentTypesAdministration/>
+                    }
+                  </div>
                 </div>
+                <Switch>
+                  <Route exact path={[
+                    "/app/administration"
+                  ]}/>
+                  <Route>
+                    <div className="help-panel">
+                      <div className="sidebar-help" id="administration-help-panel">
+                      </div>
+                      <Footer/>
+                    </div>
+                  </Route>
+                </Switch>
               </div>
             </div>
           </div>
@@ -324,6 +387,7 @@ class AdministrationWorkspace extends Component {
 AdministrationWorkspace.propTypes = {
   context: PropTypes.any, // The application context provider
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
+  navigationContext: PropTypes.any, // The application navigation context
 };
 
-export default withAppContext(withAdministrationWorkspace(AdministrationWorkspace));
+export default withAppContext(withNavigationContext(withAdministrationWorkspace(AdministrationWorkspace)));

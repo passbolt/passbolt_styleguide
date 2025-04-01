@@ -52,7 +52,7 @@ export default class AddResourceCommentPageObject {
    * Returns the button to cancel
    */
   get cancelButton() {
-    return this.form.querySelector('.button.cancel');
+    return this.form.querySelector('.cancel');
   }
 
   /**

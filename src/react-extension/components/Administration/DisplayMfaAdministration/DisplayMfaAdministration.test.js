@@ -15,6 +15,7 @@
 /**
  * Unit tests on DisplayMfaAdministration in regard of specifications
  */
+import "../../../../../test/mocks/mockPortal.js";
 import {defaultProps, mockMfaSettings} from "./DisplayMfaAdministration.test.data";
 import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
 import DisplayMfaAdministrationPage from "./DisplayMfaAdministration.test.page";
@@ -59,6 +60,17 @@ describe("See the MFA settings", () => {
       expect(page.duoHostname).toBe(null);
       expect(page.duoClientId).toBe(null);
       expect(page.duoClientSecret).toBe(null);
+    });
+
+    it('As a logged in administrator I can see an help box in the MFA policy administration screen ', async() => {
+      expect.assertions(6);
+
+      expect(page.exists()).toBeTruthy();
+      expect(page.helpBox).not.toBeNull();
+      expect(page.helpBoxTitle.textContent).toBe("Need some help?");
+      expect(page.helpBoxDescription.textContent).toBe("Check out our Multi Factor Authentication configuration guide.");
+      expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
+      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://passbolt.com/docs/admin/authentication/mfa/');
     });
 
     it('As AD I should save mfa on the administration settings page', async() => {

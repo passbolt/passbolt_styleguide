@@ -22,13 +22,15 @@ import DisplayAdministrationRbacActions
 import {withAdminRbac} from "../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
 import DisplayRbacSection from "./DisplayRbacSection";
 import DisplayRbacItem from "./DisplayRbacItem";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 import RoleService from "../../../../shared/services/api/role/roleService";
 import RbacService from "../../../../shared/services/api/rbac/rbacService";
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
 import RbacEntity from "../../../../shared/models/entity/rbac/rbacEntity";
+import FileTextSVG from "../../../../img/svg/file_text.svg";
+import {createSafePortal} from "../../../../shared/utils/portals";
+
 
 /**
  * This component allows to display the internationalisation for the administration
@@ -65,7 +67,6 @@ class DisplayRbacAdministration extends React.Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationRbacActions);
     this.findAndLoadRoles(this.props.RoleService);
     this.findAndLoadRbacSettings(this.props.RbacService);
   }
@@ -75,7 +76,6 @@ class DisplayRbacAdministration extends React.Component {
    * Use to clear the data from the form in case the user put something that needs to be cleared.
    */
   componentWillUnmount() {
-    this.props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction();
     this.props.adminRbacContext.clearContext();
   }
 
@@ -194,156 +194,171 @@ class DisplayRbacAdministration extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const hasSaveWarning = this.props.adminRbacContext.hasSettingsChanges();
     return (
       <div className="row">
-        <div className="rbac-settings col8 main-column">
-          <h3><Trans>Role-Based Access Control</Trans></h3>
-          <p><Trans>In this section you can define access controls for each user role.</Trans></p>
-          <form className="form">
-            <div className="flex-container outer">
-              <div className="flex-container inner header">
-                <div className="flex-item first border-right">
-                  <label><Trans>UI Permissions</Trans></label>
+        <div className="rbac-settings main-column">
+          <div className="main-content">
+            <h3><Trans>Role-Based Access Control</Trans></h3>
+            <p><Trans>In this section you can define access controls for each user role.</Trans></p>
+            <form className="form">
+              <div className="flex-container outer">
+                <div className="flex-container inner header-flex">
+                  <div className="flex-item first">
+                    <label><Trans>UI Permissions</Trans></label>
+                  </div>
+                  <div className="flex-item centered">
+                    <label><Trans>Admin</Trans></label>
+                  </div>
+                  <div className="flex-item centered">
+                    <label><Trans>User</Trans></label>
+                  </div>
                 </div>
-                <div className="flex-item border-right centered">
-                  <label><Trans>Admin</Trans></label>
-                </div>
-                <div className="flex-item centered">
-                  <label><Trans>User</Trans></label>
-                </div>
+                {this.isReady &&
+                  <>
+                    <DisplayRbacSection label={this.props.t('Resources')} level={1}>
+                      {(this.canIUseImport || this.canIUseExport) &&
+                        <DisplayRbacSection label={this.props.t('Import/Export')} level={2}>
+                          {this.canIUseImport &&
+                            <DisplayRbacItem label={this.props.t('Can import')}
+                              actionName={uiActions.RESOURCES_IMPORT} level={3}
+                              rbacs={this.props.adminRbacContext.rbacs}
+                              rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                              roles={this.state.roles} onChange={this.updateRbacControlFunction}/>
+                          }
+                          {this.canIUseExport &&
+                            <DisplayRbacItem label={this.props.t('Can export')}
+                              actionName={uiActions.RESOURCES_EXPORT} level={3}
+                              rbacs={this.props.adminRbacContext.rbacs}
+                              rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                              roles={this.state.roles}
+                              onChange={this.updateRbacControlFunction}/>
+                          }
+                        </DisplayRbacSection>
+                      }
+                      <DisplayRbacSection label={this.props.t('Password')} level={2}>
+                        {this.canIUsePreviewPassword &&
+                          <DisplayRbacItem label={this.props.t('Can preview')}
+                            actionName={uiActions.SECRETS_PREVIEW} level={3}
+                            rbacs={this.props.adminRbacContext.rbacs}
+                            rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                            roles={this.state.roles}
+                            onChange={this.updateRbacControlFunction}/>
+                        }
+                        <DisplayRbacItem label={this.props.t('Can copy')}
+                          actionName={uiActions.SECRETS_COPY} level={3}
+                          rbacs={this.props.adminRbacContext.rbacs}
+                          rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                          roles={this.state.roles}
+                          onChange={this.updateRbacControlFunction}/>
+                      </DisplayRbacSection>
+                      <DisplayRbacSection label={this.props.t('Metadata')} level={2}>
+                        <DisplayRbacItem label={this.props.t('Can see password activities')}
+                          actionName={uiActions.RESOURCES_SEE_ACTIVITIES} level={3}
+                          rbacs={this.props.adminRbacContext.rbacs}
+                          rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                          roles={this.state.roles}
+                          onChange={this.updateRbacControlFunction}/>
+                        <DisplayRbacItem label={this.props.t('Can see password comments')}
+                          actionName={uiActions.RESOURCES_SEE_COMMENTS} level={3}
+                          rbacs={this.props.adminRbacContext.rbacs}
+                          rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                          roles={this.state.roles}
+                          onChange={this.updateRbacControlFunction}/>
+                      </DisplayRbacSection>
+                      {(this.canIUseFolders || this.canIUseTags) &&
+                        <DisplayRbacSection label={this.props.t('Organization')} level={2}>
+                          {this.canIUseFolders &&
+                            <DisplayRbacItem label={this.props.t('Can use folders')}
+                              actionName={uiActions.FOLDERS_USE} level={3}
+                              rbacs={this.props.adminRbacContext.rbacs}
+                              rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                              roles={this.state.roles}
+                              onChange={this.updateRbacControlFunction}/>
+                          }
+                          {this.canIUseTags &&
+                            <DisplayRbacItem label={this.props.t('Can use tags')}
+                              actionName={uiActions.TAGS_USE} level={3}
+                              rbacs={this.props.adminRbacContext.rbacs}
+                              rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                              roles={this.state.roles}
+                              onChange={this.updateRbacControlFunction}/>
+                          }
+                        </DisplayRbacSection>
+                      }
+                      <DisplayRbacSection label={this.props.t('Sharing')} level={2}>
+                        <DisplayRbacItem label={this.props.t('Can see with whom passwords are shared with')}
+                          actionName={uiActions.SHARE_VIEW_LIST} level={3}
+                          rbacs={this.props.adminRbacContext.rbacs}
+                          rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                          roles={this.state.roles}
+                          onChange={this.updateRbacControlFunction}/>
+                        <DisplayRbacItem label={this.props.t('Can share folders')}
+                          actionName={uiActions.SHARE_FOLDER} level={3}
+                          rbacs={this.props.adminRbacContext.rbacs}
+                          rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                          roles={this.state.roles}
+                          onChange={this.updateRbacControlFunction}/>
+                      </DisplayRbacSection>
+                    </DisplayRbacSection>
+                    <DisplayRbacSection label={this.props.t('Users')} level={1}>
+                      <DisplayRbacItem label={this.props.t('Can see users workspace')}
+                        actionName={uiActions.USERS_VIEW_WORKSPACE} level={3}
+                        rbacs={this.props.adminRbacContext.rbacs}
+                        rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                        roles={this.state.roles}
+                        onChange={this.updateRbacControlFunction}/>
+                    </DisplayRbacSection>
+                    {
+                      (this.canIUseMobile || this.canIUseDesktop) &&
+                      <DisplayRbacSection label={this.props.t('User settings')} level={1}>
+                        {
+                          this.canIUseMobile && <DisplayRbacItem label={this.props.t('Can see mobile setup')}
+                            actionName={uiActions.MOBILE_TRANSFER} level={3}
+                            rbacs={this.props.adminRbacContext.rbacs}
+                            rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                            roles={this.state.roles}
+                            onChange={this.updateRbacControlFunction}/>
+                        }
+                        {
+                          this.canIUseDesktop &&
+                          <DisplayRbacItem label={this.props.t('Can see desktop application setup')}
+                            actionName={uiActions.DESKTOP_TRANSFER} level={3}
+                            rbacs={this.props.adminRbacContext.rbacs}
+                            rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                            roles={this.state.roles}
+                            onChange={this.updateRbacControlFunction}/>
+                        }
+                      </DisplayRbacSection>
+                    }
+                  </>
+                }
               </div>
-              {this.isReady &&
-                <>
-                  <DisplayRbacSection label={this.props.t('Resources')} level={1}>
-                    {(this.canIUseImport || this.canIUseExport) &&
-                      <DisplayRbacSection label={this.props.t('Import/Export')} level={2}>
-                        {this.canIUseImport &&
-                          <DisplayRbacItem label={this.props.t('Can import')}
-                            actionName={uiActions.RESOURCES_IMPORT} level={3}
-                            rbacs={this.props.adminRbacContext.rbacs}
-                            rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                            roles={this.state.roles}
-                            onChange={this.updateRbacControlFunction}/>
-                        }
-                        {this.canIUseExport &&
-                          <DisplayRbacItem label={this.props.t('Can export')}
-                            actionName={uiActions.RESOURCES_EXPORT} level={3}
-                            rbacs={this.props.adminRbacContext.rbacs}
-                            rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                            roles={this.state.roles}
-                            onChange={this.updateRbacControlFunction}/>
-                        }
-                      </DisplayRbacSection>
-                    }
-                    <DisplayRbacSection label={this.props.t('Password')} level={2}>
-                      {this.canIUsePreviewPassword &&
-                        <DisplayRbacItem label={this.props.t('Can preview')}
-                          actionName={uiActions.SECRETS_PREVIEW} level={3}
-                          rbacs={this.props.adminRbacContext.rbacs}
-                          rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                          roles={this.state.roles}
-                          onChange={this.updateRbacControlFunction}/>
-                      }
-                      <DisplayRbacItem label={this.props.t('Can copy')}
-                        actionName={uiActions.SECRETS_COPY} level={3}
-                        rbacs={this.props.adminRbacContext.rbacs}
-                        rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                        roles={this.state.roles}
-                        onChange={this.updateRbacControlFunction}/>
-                    </DisplayRbacSection>
-                    <DisplayRbacSection label={this.props.t('Metadata')} level={2}>
-                      <DisplayRbacItem label={this.props.t('Can see password activities')}
-                        actionName={uiActions.RESOURCES_SEE_ACTIVITIES} level={3}
-                        rbacs={this.props.adminRbacContext.rbacs}
-                        rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                        roles={this.state.roles}
-                        onChange={this.updateRbacControlFunction}/>
-                      <DisplayRbacItem label={this.props.t('Can see password comments')}
-                        actionName={uiActions.RESOURCES_SEE_COMMENTS} level={3}
-                        rbacs={this.props.adminRbacContext.rbacs}
-                        rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                        roles={this.state.roles}
-                        onChange={this.updateRbacControlFunction}/>
-                    </DisplayRbacSection>
-                    {(this.canIUseFolders || this.canIUseTags) &&
-                      <DisplayRbacSection label={this.props.t('Organization')} level={2}>
-                        {this.canIUseFolders &&
-                        <DisplayRbacItem label={this.props.t('Can use folders')}
-                          actionName={uiActions.FOLDERS_USE} level={3}
-                          rbacs={this.props.adminRbacContext.rbacs}
-                          rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                          roles={this.state.roles}
-                          onChange={this.updateRbacControlFunction}/>
-                        }
-                        {this.canIUseTags &&
-                        <DisplayRbacItem label={this.props.t('Can use tags')}
-                          actionName={uiActions.TAGS_USE} level={3}
-                          rbacs={this.props.adminRbacContext.rbacs}
-                          rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                          roles={this.state.roles}
-                          onChange={this.updateRbacControlFunction}/>
-                        }
-                      </DisplayRbacSection>
-                    }
-                    <DisplayRbacSection label={this.props.t('Sharing')} level={2}>
-                      <DisplayRbacItem label={this.props.t('Can see with whom passwords are shared with')}
-                        actionName={uiActions.SHARE_VIEW_LIST} level={3}
-                        rbacs={this.props.adminRbacContext.rbacs}
-                        rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                        roles={this.state.roles}
-                        onChange={this.updateRbacControlFunction}/>
-                      <DisplayRbacItem label={this.props.t('Can share folders')}
-                        actionName={uiActions.SHARE_FOLDER} level={3}
-                        rbacs={this.props.adminRbacContext.rbacs}
-                        rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                        roles={this.state.roles}
-                        onChange={this.updateRbacControlFunction}/>
-                    </DisplayRbacSection>
-                  </DisplayRbacSection>
-                  <DisplayRbacSection label={this.props.t('Users')} level={1}>
-                    <DisplayRbacItem label={this.props.t('Can see users workspace')}
-                      actionName={uiActions.USERS_VIEW_WORKSPACE} level={3}
-                      rbacs={this.props.adminRbacContext.rbacs}
-                      rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                      roles={this.state.roles}
-                      onChange={this.updateRbacControlFunction}/>
-                  </DisplayRbacSection>
-                  {
-                    (this.canIUseMobile || this.canIUseDesktop) && <DisplayRbacSection label={this.props.t('User settings')} level={1}>
-                      {
-                        this.canIUseMobile && <DisplayRbacItem label={this.props.t('Can see mobile setup')}
-                          actionName={uiActions.MOBILE_TRANSFER} level={3}
-                          rbacs={this.props.adminRbacContext.rbacs}
-                          rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                          roles={this.state.roles}
-                          onChange={this.updateRbacControlFunction}/>
-                      }
-                      {
-                        this.canIUseDesktop && <DisplayRbacItem label={this.props.t('Can see desktop application setup')}
-                          actionName={uiActions.DESKTOP_TRANSFER} level={3}
-                          rbacs={this.props.adminRbacContext.rbacs}
-                          rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                          roles={this.state.roles}
-                          onChange={this.updateRbacControlFunction}/>
-                      }
-
-                    </DisplayRbacSection>
-                  }
-                </>
-              }
+            </form>
+          </div>
+          {hasSaveWarning &&
+            <div className="warning message">
+              <div>
+                <p>
+                  <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                </p>
+              </div>
             </div>
-          </form>
+          }
         </div>
-        <div className="col4 last">
-          <div className="sidebar-help">
+        <DisplayAdministrationRbacActions/>
+        {createSafePortal(
+          <div className="sidebar-help-section">
             <h3><Trans>Need help?</Trans></h3>
             <p><Trans>Check out the Role Based Access Control documentation.</Trans></p>
-            <a className="button" href="https://passbolt.com/docs/admin/role-based-access-control/" target="_blank" rel="noopener noreferrer">
-              <Icon name="document"/>
+            <a className="button" href="https://passbolt.com/docs/admin/role-based-access-control/" target="_blank"
+              rel="noopener noreferrer">
+              <FileTextSVG/>
               <span><Trans>Read RBAC doc</Trans></span>
             </a>
-          </div>
-        </div>
+          </div>,
+          document.getElementById("administration-help-panel")
+        )}
       </div>
     );
   }

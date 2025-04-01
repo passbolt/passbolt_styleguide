@@ -1,10 +1,6 @@
 import fetchMock from "fetch-mock";
 
 class MockFetch {
-  constructor() {
-    this.requestListeners = {};
-  }
-
   async addGetFetchRequest(name, callback) {
     await fetchMock.get(name, callback);
   }

@@ -19,7 +19,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import DeleteComment from "../DeleteResourceComment/DeleteComment";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
-import Icon from "../../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {isUserSuspended} from "../../../../shared/utils/userUtils";
 
@@ -128,58 +128,51 @@ class DisplayResourceCommentList extends React.Component {
     return (
       <>
         {!this.state.actions.loading &&
-        <ul>
+        <>
           {
             this.state.comments.map((comment, index) => (
-              <li
+              <div
                 key={index}
                 className={`comment ${this.isUserSuspended(comment.creator) ? "from-suspended-user" : ""}`}>
-
-                <div className="wrap-right-column">
-                  <div className="right-column">
-                    <p> {comment.content} </p>
-                    <div className="metadata">
-                      {this.isOwner(comment) &&
-                      <span className="author username">
-                        <Trans>You</Trans>
-                      </span>
-                      }
-                      {!this.isOwner(comment) &&
-                        <span className="author username">{comment.creator.profile.first_name} {comment.creator.profile.last_name}{this.isUserSuspended(comment.creator) && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
-                      }
-                      <span
-                        className="modified">{formatDateTimeAgo(comment.created, this.props.t, this.props.context.locale)}
-                      </span>
-                    </div>
-                    <div className="actions">
-                      <ul>
-                        <li>
-                          {this.canDeleteComment(comment) &&
-                          <DeleteComment commentId={comment.id}/>
-                          }
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
                 <div className="left-column">
                   <UserAvatar
                     user={comment.creator}
                     baseUrl={this.props.context.siteSettings.settings.app.url}
                     className="author profile picture avatar"/>
                 </div>
-
-              </li>
+                <div className="right-column">
+                  <p> {comment.content} </p>
+                  <div className="metadata">
+                    {this.isOwner(comment) &&
+                      <span className="author username">
+                        <Trans>You</Trans>
+                      </span>
+                    }
+                    {!this.isOwner(comment) &&
+                      <span
+                        className="author username">{comment.creator.profile.first_name} {comment.creator.profile.last_name}{this.isUserSuspended(comment.creator) &&
+                        <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
+                    }
+                    <span
+                      className="modified">{formatDateTimeAgo(comment.created, this.props.t, this.props.context.locale)}
+                    </span>
+                    {this.canDeleteComment(comment) &&
+                      <div className="actions">
+                        <DeleteComment commentId={comment.id}/>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
             ))
           }
-        </ul>
+        </>
         }
         {this.state.actions.loading &&
-        <div className="processing-wrapper">
-          <Icon name="spinner"/>
-          <span className="processing-text"><Trans>Retrieving comments</Trans></span>
-        </div>
+          <div className="processing-wrapper">
+            <SpinnerSVG/>
+            <span className="processing-text"><Trans>Retrieving comments</Trans></span>
+          </div>
         }
       </>
     );

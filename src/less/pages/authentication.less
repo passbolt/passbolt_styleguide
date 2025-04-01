@@ -2,11 +2,29 @@ html, body {
   height: 100%;
 }
 .login.page {
+  height: 100vh;
+
+  .content {
+    flex: 1 0 0;
+    align-self: stretch;
+    padding: 3.2rem;
+
+    .logo-svg {
+      margin: auto auto 1.6rem auto;
+      width: 20rem;
+    }
+
+    .login-box-footer .login-box-footer-actions {
+      button.link {
+        margin: auto;
+      }
+    }
+  }
 
   h1 {
     margin-top:0;
     font-size: 2.4rem;
-    color: @authentication-title-text-color;
+    color: var(--Text-and-icons-Secondary-text);
   }
   p {
     font-size: 1.6rem;
@@ -278,39 +296,42 @@ html, body {
       }
     }
   }
+
+  .footer {
+    border: none;
+  }
 }
 
 @media only screen and (min-width: 42rem) {
   body {
-    background:@authentication-background;
+      background: var(--Workspace-Workspace-background);
   }
   .login.page {
     display: grid;
-    height: calc(100% - 4rem); // footer space
     grid-template-columns: 1fr 1.5fr 1fr;
-    grid-template-rows: 0 1fr 0.05fr;
-    grid-gap: 1px;
-    grid-template-areas: ". . ." ". login-form ." "footer footer footer";
+    grid-template-rows: 0 1fr 0.01fr;
+    grid-template-areas: ". . ." ". login-form ." ". . footer";
 
     .content {
+      flex: inherit;
+      align-self: inherit;
+      padding: 0;
       grid-area: login-form;
 
       .loading-bar {
         display:block;
       }
-      .logo {
-        margin:1.6em auto;
-        width: 20rem;
-        background-size: 20rem auto;
+
+      .logo-svg {
+        margin: 6.4rem auto 1.6rem auto;
       }
 
       .login-form {
-        box-shadow: 0 0 1rem @dialog-box-shadow-color;
-        border-radius: .3rem;
+        border-radius: var(--Section-border-radius);
         max-width:37.2rem;
         margin:auto;
         padding:4.8rem 4rem;
-        background:@default-background;
+        background: var(--Dialog-Dialog-fill);
       }
 
       .select-wrapper {

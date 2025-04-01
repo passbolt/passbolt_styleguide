@@ -181,7 +181,7 @@ class EditSubscriptionKey extends Component {
     try {
       await this.props.administrationWorkspaceContext.onUpdateSubscriptionKeyRequested(keyDto);
       await this.handleSaveSuccess();
-      await this.props.adminSubcriptionContext.findSubscriptionKey();
+      await this.props.adminSubscriptionContext.findSubscriptionKey();
     } catch (error) {
       await this.toggleProcessing();
       this.handleSaveError(error);
@@ -336,7 +336,7 @@ EditSubscriptionKey.propTypes = {
   context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  adminSubcriptionContext: PropTypes.object, // The email notification context
+  adminSubscriptionContext: PropTypes.object, // The email notification context
   dialogContext: PropTypes.any, // The dialog congtext
   administrationWorkspaceContext: PropTypes.any, // The administration workspace context
   t: PropTypes.func

@@ -294,7 +294,37 @@ export default (type, id, options) => {
         "type": "Permissions.updated",
         "data": {
           "permissions": {
-            "added": [],
+            "added": [{
+              "id": "fa5f5d7a-32cc-4c5b-9478-f58584ca4223",
+              "type": 1,
+              "permissions_history_folder": null,
+              "resource": {
+                "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
+                "metadata": {
+                  "name": "test_autocomplete_tag"
+                }
+              },
+              "user": {
+                "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+                "username": "carol@passbolt.com",
+                "profile": {
+                  "id": "92ccfd1b-6eb8-5e1c-a022-cf22463e8361",
+                  "user_id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+                  "first_name": "Carol",
+                  "last_name": "Shaw",
+                  "created": "2020-08-17T16:37:12+00:00",
+                  "modified": "2020-08-17T16:37:12+00:00",
+                  "avatar": {
+                    "url": {
+                      "medium": "img\/avatar\/user_medium.png",
+                      "small": "img\/avatar\/user.png"
+                    }
+                  }
+                },
+                "last_logged_in": ""
+              },
+              "group": null
+            }],
             "updated": [
               {
                 "id": "fa5f5d7a-32cc-4c5b-9478-f58584ca4222",
@@ -302,7 +332,9 @@ export default (type, id, options) => {
                 "permissions_history_folder": null,
                 "resource": {
                   "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-                  "name": "test_autocomplete_tag"
+                  "metadata": {
+                    "name": "test_autocomplete_tag"
+                  }
                 },
                 "user": {
                   "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
@@ -331,7 +363,9 @@ export default (type, id, options) => {
                 "permissions_history_folder": null,
                 "resource": {
                   "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-                  "name": "test_autocomplete_tag"
+                  "metadata": {
+                    "name": "test_autocomplete_tag"
+                  }
                 },
                 "user": {
                   "id": "f848277c-5398-58f8-a82a-72397af2d450",
@@ -368,11 +402,56 @@ export default (type, id, options) => {
                 "group": null
               }
             ],
-            "removed": []
+            "removed": [{
+              "id": "79dc7e17-0d98-4cab-964e-c47422b709cc",
+              "type": 15,
+              "permissions_history_folder": null,
+              "resource": {
+                "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
+                "metadata": {
+                  "name": "test_autocomplete_tag"
+                }
+              },
+              "user": {
+                "id": "f848277c-5398-58f8-a82a-72397af2d450",
+                "username": "betty@passbolt.com",
+                "profile": {
+                  "id": "99522cc9-0acc-5ae2-b996-d03bded3c0a6",
+                  "user_id": "f848277c-5398-58f8-a82a-72397af2d450",
+                  "first_name": "Betty",
+                  "last_name": "Holberton",
+                  "created": "2020-08-17T16:37:12+00:00",
+                  "modified": "2020-08-17T16:37:12+00:00",
+                  "avatar": {
+                    "id": "50adf80e-3534-413a-bdd8-e34c9be6d1b6",
+                    "user_id": "f848277c-5398-58f8-a82a-72397af2d450",
+                    "foreign_key": "99522cc9-0acc-5ae2-b996-d03bded3c0a6",
+                    "model": "Avatar",
+                    "filename": "ada.png",
+                    "filesize": 170049,
+                    "mime_type": "image\/png",
+                    "extension": "png",
+                    "hash": "97e36ab6528e26e3b9f988444ef490f125f49a39",
+                    "path": "Avatar\/22\/47\/85\/50adf80e3534413abdd8e34c9be6d1b6\/50adf80e3534413abdd8e34c9be6d1b6.png",
+                    "adapter": "Local",
+                    "created": "2020-08-17T16:37:13+00:00",
+                    "modified": "2020-08-17T16:37:13+00:00",
+                    "url": {
+                      "medium": "img\/public\/Avatar\/22\/47\/85\/50adf80e3534413abdd8e34c9be6d1b6\/50adf80e3534413abdd8e34c9be6d1b6.a99472d5.png",
+                      "small": "img\/public\/Avatar\/22\/47\/85\/50adf80e3534413abdd8e34c9be6d1b6\/50adf80e3534413abdd8e34c9be6d1b6.65a0ba70.png"
+                    }
+                  }
+                },
+                "last_logged_in": ""
+              },
+              "group": null
+            }]
           },
           "resource": {
             "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-            "name": "test_autocomplete_tag"
+            "metadata": {
+              "name": "test_autocomplete_tag"
+            }
           },
           "folder": null
         },
@@ -400,7 +479,9 @@ export default (type, id, options) => {
         "data": {
           "resource": {
             "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-            "name": "test_autocomplete_tag"
+            "metadata": {
+              "name": "test_autocomplete_tag"
+            }
           }
         },
         "creator": {
@@ -427,7 +508,9 @@ export default (type, id, options) => {
         "data": {
           "resource": {
             "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-            "name": "test_autocomplete_tag"
+            "metadata": {
+              "name": "test_autocomplete_tag"
+            }
           }
         },
         "creator": {
@@ -454,7 +537,9 @@ export default (type, id, options) => {
         "data": {
           "resource": {
             "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-            "name": "test_autocomplete_tag"
+            "metadata": {
+              "name": "test_autocomplete_tag"
+            }
           }
         },
         "creator": {
@@ -481,7 +566,9 @@ export default (type, id, options) => {
         "data": {
           "resource": {
             "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-            "name": "test_autocomplete_tag"
+            "metadata": {
+              "name": "test_autocomplete_tag"
+            }
           }
         },
         "creator": {
@@ -511,7 +598,9 @@ export default (type, id, options) => {
         "data": {
           "resource": {
             "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-            "name": "test_autocomplete_tag"
+            "metadata": {
+              "name": "test_autocomplete_tag"
+            }
           }
         },
         "creator": {
@@ -538,7 +627,9 @@ export default (type, id, options) => {
         "data": {
           "resource": {
             "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-            "name": "test_autocomplete_tag"
+            "metadata": {
+              "name": "test_autocomplete_tag"
+            }
           }
         },
         "creator": {
@@ -571,7 +662,9 @@ export default (type, id, options) => {
                 "permissions_history_folder": null,
                 "resource": {
                   "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-                  "name": "test_autocomplete_tag"
+                  "metadata": {
+                    "name": "test_autocomplete_tag"
+                  }
                 },
                 "user": {
                   "id": "f848277c-5398-58f8-a82a-72397af2d450",
@@ -613,7 +706,9 @@ export default (type, id, options) => {
           },
           "resource": {
             "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-            "name": "test_autocomplete_tag"
+            "metadata": {
+              "name": "test_autocomplete_tag"
+            }
           },
           "folder": null
         },
@@ -641,7 +736,9 @@ export default (type, id, options) => {
         "data": {
           "resource": {
             "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-            "name": "test_autocomplete_tag"
+            "metadata": {
+              "name": "test_autocomplete_tag"
+            }
           }
         },
         "creator": {

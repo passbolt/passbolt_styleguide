@@ -13,17 +13,16 @@
  * @since         3.0.0
  */
 
-export default () => {
-  return [
-    {
-      "id": "9a5ecc88-f4df-5cc2-b152-6ca310127a67",
-      "name": "default",
-      "preview": "http:\/\/localhost:3000\/img\/themes\/default.png"
-    },
-    {
-      "id": "2e6d06eb-e417-5573-80ed-27b2182dc55b",
-      "name": "midgar",
-      "preview": "http:\/\/localhost:3000\/img\/themes\/midgar.png"
-    }
-  ]
-}
+export default () => ([{
+  id: "default",
+  name: "default",
+}, {
+  id: "midgar",
+  name: "midgar",
+}, {
+  id: "solarized_light",
+  name: "solarized_light",
+}, {
+  id: "solarized_dark",
+  name: "solarized_dark",
+}]);

@@ -2,7 +2,6 @@
  * Notification
  */
 .notification-container {
-    font-size:.85em;
     top: 0;
     position: absolute;
     z-index: 200;
@@ -20,27 +19,23 @@
 
         .message {
             &.warning {
-              color:@message-warning-text-color;
-              background: @message-warning-background;
+              background: var(--Palette-Warning);
             }
 
             &.success {
-              color:@message-success-text-color;
-              background: @message-success-background;
+              background: var(--Palette-Success);
             }
 
             &.error {
-              color:@message-error-text-color;
-              background: @message-error-background;
+              background: var(--Palette-Error);
             }
 
             padding: .8rem 1.6rem;
             position: relative;
             left: -50%;
             float: left;
-            box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.1);
-            border-radius: .3rem;
-            color: @text-notification-color;
+            border-radius: var(--Button-border-radius);
+            color: var(--Text-and-icons-Main-text);
             font-size: 1.5rem;
             font-weight: 400;
             line-height: 2rem;

@@ -12,34 +12,30 @@
  * @since         2.11.0
  */
 
-import {MemoryRouter, Route} from "react-router-dom";
+import {MemoryRouter} from "react-router-dom";
 import React from "react";
-import PropTypes from "prop-types";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import CreateUserGroup from "./CreateUserGroup";
 import {defaultAppContext, defaultProps, mockGpgKey} from "./CreateUserGroup.test.data";
 
 export default {
   title: 'Components/UserGroup/CreateUserGroup',
-  component: CreateUserGroup
-};
-
-const Template = ({context, ...args}) =>
-  <AppContext.Provider value={context}>
+  component: CreateUserGroup,
+  decorators: [(Story, {args}) => (
     <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <CreateUserGroup {...args} {...routerProps}/>}></Route>
+      <AppContext.Provider value={args.context}>
+        <Story/>
+      </AppContext.Provider>
     </MemoryRouter>
-  </AppContext.Provider>;
-
-Template.propTypes = {
-  context: PropTypes.object,
+  )],
 };
 
 const context = defaultAppContext();
 context.port.addRequestListener('passbolt.keyring.get-public-key-info-by-user', async() => mockGpgKey);
 
-export const Initial = Template.bind({});
-Initial.args = {
-  context,
-  ...defaultProps(),
+export const Initial = {
+  args: {
+    context,
+    ...defaultProps(),
+  }
 };

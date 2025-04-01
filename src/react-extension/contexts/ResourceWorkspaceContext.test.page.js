@@ -108,7 +108,7 @@ export default class ResourceWorkspaceContextPage {
   }
 
   /**
-   * Go to the All Items search filter route
+   * Go to the home search filter route
    */
   async goToAllItems() {
     this.setup(this.context, this.props);
@@ -134,6 +134,13 @@ export default class ResourceWorkspaceContextPage {
    */
   async goToItemsIOwn() {
     await this.goToLink('.items-i-own');
+  }
+
+  /**
+   * Go to the Private search filter route
+   */
+  async goToPrivate() {
+    await this.goToLink('.private');
   }
 
   /**
@@ -276,6 +283,13 @@ export default class ResourceWorkspaceContextPage {
   }
 
   /**
+   * On reset the column settings.
+   */
+  async resetColumnsSettings() {
+    await this.resourceWorkspaceContext.resetGridColumnsSettings();
+  }
+
+  /**
    * get the folder hierarchy
    * @param {string} id The id of the folder
    */
@@ -335,6 +349,10 @@ export default class ResourceWorkspaceContextPage {
           <NavLink
             to={{pathname: "/app/passwords", state: {filter: {type: ResourceWorkspaceFilterTypes.ITEMS_I_OWN}}}}>
             <a className="items-i-own"></a>
+          </NavLink>
+          <NavLink
+            to={{pathname: "/app/passwords", state: {filter: {type: ResourceWorkspaceFilterTypes.PRIVATE}}}}>
+            <a className="private"></a>
           </NavLink>
           <NavLink
             to={{pathname: "/app/passwords", state: {filter: {type: ResourceWorkspaceFilterTypes.FAVORITE}}}}>

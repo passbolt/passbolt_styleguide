@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Fragment} from "react";
-import Icon from "../../../../shared/components/Icons/Icon";
+import React from "react";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
@@ -21,6 +21,10 @@ import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import FilterUsersByGroupContextualMenu from "./FilterUsersByGroupContextualMenu";
 import DisplayGroupContextualMenu from "./DisplayGroupContextualMenu";
 import {Trans, withTranslation} from "react-i18next";
+import CarretDownSVG from "../../../../img/svg/caret_down.svg";
+import CarretRightSVG from "../../../../img/svg/caret_right.svg";
+import UsersSVG from "../../../../img/svg/users.svg";
+import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
 
 /**
  * This component display groups to filter the users
@@ -308,25 +312,26 @@ class FilterUsersByGroup extends React.Component {
             <div className="row title">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <h3>
+                  <h3 className="section-title">
                     <span className="folders-label" onClick={this.handleTitleClickEvent}>
-                      <button type="button" className="link no-border" onContextMenu={this.handleTitleContextualMenuEvent}>
-                        <>
-                          {this.state.open &&
-                            <Icon name="caret-down"/>
+                      <button type="button" className="link no-border">
+                        <UsersSVG />
+                        <span>{this.state.title}</span>
+                        <div className="toggle-folder">
+                          {this.state.open
+                            ? <CarretDownSVG />
+                            : <CarretRightSVG />
                           }
-                          {!this.state.open &&
-                            <Icon name="caret-right"/>
-                          }
-                        </>
-                        {this.state.title}
+                        </div>
                       </button>
                     </span>
                   </h3>
                 </div>
               </div>
               <div className="dropdown right-cell more-ctrl">
-                <button type="button" className={`${this.state.moreTitleMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}><Icon name="3-dots-h"/></button>
+                <button type="button" className={`button-transparent inline-menu-horizontal ${this.state.moreTitleMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}>
+                  <MoreHorizontalSVG />
+                </button>
               </div>
             </div>
           </li>
@@ -335,7 +340,7 @@ class FilterUsersByGroup extends React.Component {
         <div className="accordion-content">
           {this.isLoading() &&
           <div className="processing-wrapper">
-            <Icon name="spinner"/>
+            <SpinnerSVG/>
             <span className="processing-text"><Trans>Retrieving groups</Trans></span>
           </div>
           }
@@ -343,9 +348,9 @@ class FilterUsersByGroup extends React.Component {
           <em className="empty-content"><Trans>empty</Trans></em>
           }
           {!this.isLoading() && this.hasGroup() &&
-          <ul className="tree ready">
+          <ul className="navigation-secondary-tree ready">
             {this.filteredGroups.map(group =>
-              <li className="node root group-item" key={group.id}>
+              <li className="open node root group-item" key={group.id}>
                 <div className={`row  ${this.isSelected(group) ? "selected" : ""}`}>
                   <div className="main-cell-wrapper"
                     onClick={event => this.handleGroupSelected(event, group)}
@@ -355,8 +360,7 @@ class FilterUsersByGroup extends React.Component {
                         type="button"
                         className="link no-border"
                         title={group.name}>
-                        <Icon name="users"/>
-                        <span className="ellipsis">{group.name}</span>
+                        <span className="ellipsis group-name">{group.name}</span>
                       </button>
                     </div>
                   </div>
@@ -365,8 +369,8 @@ class FilterUsersByGroup extends React.Component {
                       <button
                         type="button"
                         onClick={event => this.handleMoreClickEvent(event, group)}
-                        className={`${this.state.moreMenuOpenGroupId === group.id ? "open" : ""}`}>
-                        <Icon name="3-dots-h"/>
+                        className={`button-transparent inline-menu-horizontal ${this.state.moreMenuOpenGroupId === group.id ? "open" : ""}`}>
+                        <MoreHorizontalSVG/>
                       </button>
                     </div>
                   }

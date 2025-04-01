@@ -1,41 +1,33 @@
+
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         2.11.0
+ * @since         5.0.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
-import DialogContextProvider from "../../../contexts/DialogContext";
-import {MemoryRouter} from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
+import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
 import EditResource from "./EditResource";
+import {
+  ResourceTypesLocalStorageContext
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import {ResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
+import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
-
-
+import {MemoryRouter} from "react-router-dom";
+import DialogContextProvider from "../../../contexts/DialogContext";
 /**
- * Page template for the EditResource component
- */
-export const EditResourcePageTemplate = props =>
-  <MockTranslationProvider>
-    <DialogContextProvider>
-      <MemoryRouter initialEntries={['/']}>
-        <ManageDialogs/>
-        <EditResource {...props}/>
-      </MemoryRouter>
-      <ManageDialogs/>
-    </DialogContextProvider>
-  </MockTranslationProvider>;
-
-/**
- * The PasswordEditDialog component represented as a page
+ * The Edit Resource component represented as a page
  */
 export default class EditResourcePage {
   /**
@@ -43,257 +35,416 @@ export default class EditResourcePage {
    * @param props Props to attach
    */
   constructor(props) {
-    this._page = render(EditResourcePageTemplate(props));
-    this.setupPageObjects();
-  }
-
-  /**
-   * Set up the objects of the page
-   */
-  setupPageObjects() {
-    this._titleHeader = new TitleHeaderPageObject(this._page.container);
-    this._passwordEdit = new PasswordEditPageObject(this._page.container);
-  }
-
-  /**
-   * Return the page object of the title header
-   */
-  get title() {
-    return this._titleHeader;
-  }
-
-  /**
-   * Returns the page object of create password
-   */
-  get passwordEdit() {
-    return this._passwordEdit;
-  }
-
-  /**
-   * REturns the password generator dialog element
-   */
-  get passwordGeneratorDialog() {
-    return this._page.container.querySelector('.password-generator-dialog');
-  }
-}
-
-/**
- * Page object for the TitleHeader element
- */
-class TitleHeaderPageObject {
-  /**
-   * Default constructor
-   * @param container The container which includes the AddActivity Component
-   */
-  constructor(container) {
-    this._container = container;
-  }
-
-  /**
-   * Returns the clickable area of the header
-   */
-  get header() {
-    return this._container.querySelector(".dialog-header-title");
-  }
-
-  /**
-   * Returns the clickable area of the header
-   */
-  get subtitle() {
-    return this._container.querySelector(".dialog-header-subtitle");
-  }
-}
-
-class PasswordEditPageObject {
-  /**
-   * Default constructor
-   * @param container The container which includes the AddComment Component
-   */
-  constructor(container) {
-    this._container = container;
+    this._page = render(
+      <MockTranslationProvider>
+        <MemoryRouter initialEntries={[
+          "/app/folders/view/:filterByFolderId",
+          "/app/passwords/view/:selectedResourceId",
+          "/app/passwords",
+        ]}>
+          <AppContext.Provider value={props.context}>
+            <DialogContextProvider>
+              <ActionFeedbackContext.Provider value={props.actionFeedbackContext}>
+                <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
+                  <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
+                    <ResourcePasswordGeneratorContext.Provider value={props.resourcePasswordGeneratorContext}>
+                      <ManageDialogs/>
+                      <EditResource {...props}/>
+                    </ResourcePasswordGeneratorContext.Provider>
+                  </ResourceWorkspaceContext.Provider>
+                </ResourceTypesLocalStorageContext.Provider>
+              </ActionFeedbackContext.Provider>
+            </DialogContextProvider>
+          </AppContext.Provider>
+        </MemoryRouter>
+      </MockTranslationProvider>
+    );
   }
 
   /**
    * Returns the dialog element
    */
   get dialog() {
-    return this._container.querySelector('.edit-password-dialog');
+    return this._page.container.querySelector('.edit-resource');
   }
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._container.querySelector('.dialog-close');
+    return this._page.container.querySelector('.dialog-close');
   }
 
   /**
-   * Returns the pwned warning message
+   * Returns the clickable area of the header
    */
-  get pwnedWarningMessage() {
-    return this._container.querySelector('.pwned-password.warning-message');
+  get header() {
+    return this._page.container.querySelector(".dialog-header-title");
+  }
+
+  /**
+   * Returns the resource info skeleton input element
+   */
+  get resourceInfoSkeleton() {
+    return this._page.container.querySelector('.resource-info.skeleton');
+  }
+
+  /**
+   * Returns the edit workspace skeleton input element
+   */
+  get editWorkspaceSkeleton() {
+    return this._page.container.querySelector('.edit-workspace.skeleton');
   }
 
   /**
    * Returns the name input element
    */
   get name() {
-    return this._container.querySelector('#edit-password-form-name');
+    return this._page.container.querySelector('#resource-name');
   }
 
   /**
    * Returns the name error mesage input element
    */
   get nameErrorMessage() {
-    return this._container.querySelector('.name.error-message');
+    return this._page.container.querySelector('.name.error-message');
   }
 
   /**
    * Returns the name warning mesage input element
    */
   get nameWarningMessage() {
-    return this._container.querySelector('.name.warning-message');
+    return this._page.container.querySelector('.name.warning-message');
   }
 
   /**
    * Returns the uri input element
    */
   get uri() {
-    return this._container.querySelector('#edit-password-form-uri');
+    return this._page.container.querySelector('#resource-uri');
+  }
+
+  /**
+   * Returns the uri warning mesage input element
+   */
+  get uriErrorMessage() {
+    return this._page.container.querySelector('.uri.error-message');
   }
 
   /**
    * Returns the uri warning mesage input element
    */
   get uriWarningMessage() {
-    return this._container.querySelector('.uri.warning-message');
+    return this._page.container.querySelector('.uri.warning-message');
   }
 
   /**
    * Returns the username / email input element
    */
   get username() {
-    return this._container.querySelector('#edit-password-form-username');
+    return this._page.container.querySelector('#resource-username');
   }
 
   /**
-   * Returns the password input element
+   * Returns the username warning mesage input element
    */
-  get password() {
-    return this._container.querySelector('#edit-password-form-password');
+  get usernameErrorMessage() {
+    return this._page.container.querySelector('.username.error-message');
   }
 
   /**
    * Returns the username warning mesage input element
    */
   get usernameWarningMessage() {
-    return this._container.querySelector('.username.warning-message');
+    return this._page.container.querySelector('.username.warning-message');
+  }
+
+  /**
+   * Returns the password input element
+   */
+  get password() {
+    return this._page.container.querySelector('#resource-password');
   }
 
   /**
    * Returns the password error mesage input element
    */
   get passwordErrorMessage() {
-    return this._container.querySelector('.password.error-message');
+    return this._page.container.querySelector('.password.error-message');
   }
 
   /**
    * Returns the password warning mesage input element
    */
   get passwordWarningMessage() {
-    return this._container.querySelector('.password.warning-message');
-  }
-
-
-  /**
-   * Returns the complexity text input element
-   */
-  get complexityText() {
-    return this._container.querySelector('.complexity-text');
+    return this._page.container.querySelector('.password.warning-message');
   }
 
   /**
    * Returns the description input element
    */
   get description() {
-    return this._container.querySelector('#edit-password-form-description');
+    return this._page.container.querySelector('#resource-description');
   }
 
   /**
-   * Returns the description encrypted lock input element
+   * Returns the description error message input element
    */
-  get descriptionEncryptedLock() {
-    return this._container.querySelector('.lock-toggle');
+  get descriptionErrorMessage() {
+    return this._page.container.querySelector('.description.error-message');
   }
 
   /**
-   * Returns the description warning mesage input element
+   * Returns the description warning message input element
    */
   get descriptionWarningMessage() {
-    return this._container.querySelector('.description.warning-message');
+    return this._page.container.querySelector('.description.warning-message');
   }
 
+  /**
+   * Returns the left sidebar description input element
+   */
+  get menuDescription() {
+    return this._page.container.querySelector('#menu-description');
+  }
 
   /**
-   * Returns the progress bar element
+   * Returns the password input element
    */
-  get progressBar() {
-    return this._container.querySelector('.progress-bar');
+  get totp() {
+    return this._page.container.querySelector('#resource-totp');
+  }
+
+  /**
+   * Returns the password input element
+   */
+  get note() {
+    return this._page.container.querySelector('#resource-note');
+  }
+
+  /**
+   * Returns the note error message input element
+   */
+  get noteErrorMessage() {
+    return this._page.container.querySelector('.note.error-message');
+  }
+
+  /**
+   * Returns the note warning message input element
+   */
+  get noteWarningMessage() {
+    return this._page.container.querySelector('.note.warning-message');
   }
 
   /**
    * Returns the password view button element
    */
   get passwordViewButton() {
-    return this._container.querySelector('.password-view .svg-icon');
+    return this._page.container.querySelector('.password-view .svg-icon');
   }
 
   /**
    * Returns the password generate button element
    */
   get passwordGenerateButton() {
-    return this._container.querySelector('.password-generate');
+    return this._page.container.querySelector('.password-generate');
   }
 
   /**
-   * Returns the password generator button element
+   * Returns the resource totp key input element
    */
-  get passwordGeneratorButton() {
-    return this._container.querySelector('.password-generator');
+  get resourceTotpKey() {
+    return this._page.container.querySelector('#resource-totp-key');
   }
 
   /**
-   * Returns the add totp button element
+   * Returns the resource totp key error message input element
    */
-  get addTotpButton() {
-    return this._container.querySelector('.input.input-totp-wrapper button.add-totp');
+  get resourceTotpKeyErrorMessage() {
+    return this._page.container.querySelector('.totp-key.error-message');
   }
 
   /**
-   * Returns the edit totp button element
+   * Returns the resource totp period error message input element
    */
-  get editTotpButton() {
-    return this._container.querySelector('.input-wrapper-inline.totp .edit-totp');
+  get resourceTotpPeriodErrorMessage() {
+    return this._page.container.querySelector('.period.error-message');
   }
 
   /**
-   * Returns the delete totp button element
+   * Returns the resource totp digits error message input element
    */
-  get deleteTotpButton() {
-    return this._container.querySelector('.input-wrapper-inline.totp .delete-totp');
+  get resourceTotpDigitsErrorMessage() {
+    return this._page.container.querySelector('.digits.error-message');
+  }
+
+  /**
+   * Return the advanced settings button element
+   * @return {Element}
+   */
+  get advancedSettings() {
+    return this._page.container.querySelector('.additional-information button');
+  }
+
+  /**
+   * Return the period input element
+   * @return {Element}
+   */
+  get period() {
+    return this._page.container.querySelector('#resource-totp-period');
+  }
+
+  /**
+   * Return the digits input element
+   * @return {Element}
+   */
+  get digits() {
+    return this._page.container.querySelector('#resource-totp-digits');
+  }
+
+  /**
+   * Return the algorithm input element
+   * @return {Element}
+   */
+  get algorithm() {
+    return this._page.container.querySelector('#resource-totp-algorithm .selected-value .value');
+  }
+
+  /**
+   * Return the algorithm input element
+   * @return {Element}
+   */
+  get firstItemOption() {
+    return this._page.container.querySelector('#resource-totp-algorithm .select-items .option');
+  }
+
+  /**
+   * Returns the resource totp code element
+   */
+  get resourceTotpCode() {
+    return this._page.container.querySelector('.totp-workspace .totp-wrapper .secret-totp button');
+  }
+
+  /**
+   * Returns the resource totp code element
+   */
+  get copyTotpButton() {
+    return this._page.container.querySelector('.totp-workspace #copy-totp');
   }
 
   /**
    * Returns the save button element
    */
   get saveButton() {
-    return this._container.querySelector('.submit-wrapper button[type=\"submit\"]');
+    return this._page.container.querySelector('.submit-wrapper button[type=\"submit\"]');
   }
 
   /**
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector('.submit-wrapper .cancel');
+  }
+
+  /**
+   * Returns the section item
+   * @param index the section section index
+   * @returns {Element}
+   */
+  getSectionItem(index) {
+    return this._page.container.querySelector('.left-sidebar .sidebar-content-sections').querySelectorAll('.section-content')[index - 1].querySelector("button.no-border");
+  }
+
+
+  /**
+   * Returns the add secret
+   * @returns {Element}
+   */
+  get addSecret() {
+    return this._page.container.querySelector(".left-sidebar button.add-secret");
+  }
+
+  /**
+   * Returns the add secret password
+   * @returns {Element}
+   */
+  get addSecretPassword() {
+    return this._page.container.querySelector(".left-sidebar #password_action");
+  }
+
+  /**
+   * Returns the delete secret password
+   * @returns {Element}
+   */
+  get deleteSecretPassword() {
+    return this._page.container.querySelector(".left-sidebar #delete-password");
+  }
+
+  /**
+   * Returns the add secret totp
+   * @returns {Element}
+   */
+  get addSecretTotp() {
+    return this._page.container.querySelector(".left-sidebar #totp_action");
+  }
+
+  /**
+   * Returns the delete secret totp
+   * @returns {Element}
+   */
+  get deleteSecretTotp() {
+    return this._page.container.querySelector(".left-sidebar #delete-totp");
+  }
+
+  /**
+   * Returns the add secret note
+   * @returns {Element}
+   */
+  get addSecretNote() {
+    return this._page.container.querySelector(".left-sidebar #note_action");
+  }
+
+  /**
+   * Returns the delete secret note
+   * @returns {Element}
+   */
+  get deleteSecretNote() {
+    return this._page.container.querySelector(".left-sidebar #delete-note");
+  }
+
+  /**
+   * Returns the section selected
+   * @returns {Element}
+   */
+  get sectionItemSelected() {
+    return this._page.container.querySelector('.left-sidebar .sidebar-content-sections .section-content.selected');
+  }
+
+  /**
+   * Returns the complexity text input element
+   */
+  get complexityText() {
+    return this._page.container.querySelector('.complexity-text');
+  }
+
+  /**
+   * Returns the progress bar element
+   */
+  get progressBar() {
+    return this._page.container.querySelector('.progress-bar');
+  }
+
+  /**
+   * Returns the convert to description button element
+   */
+  get convertToDescription() {
+    return this._page.container.querySelector('#convert-to-description');
+  }
+
+  /**
+   * Returns the convert to note button element
+   */
+  get convertToNote() {
+    return this._page.container.querySelector('#convert-to-note');
   }
 
   /**
@@ -311,12 +462,6 @@ class PasswordEditPageObject {
   }
 
   /** Click without wait for on the element */
-  clickWithoutWaitFor(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-  }
-
-  /** Click without wait for on the element */
   escapeKey()  {
     // Escape key down event
     const escapeKeyDown = {keyCode: 27};
@@ -327,34 +472,5 @@ class PasswordEditPageObject {
   fillInput(element, data)  {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
-  }
-
-  /** fill the input password with data */
-  async fillInputPassword(data)  {
-    const dataInputEvent = {target: {value: data}};
-    fireEvent.change(this.password, dataInputEvent);
-    jest.runAllTimers();
-    await waitFor(() => {});
-  }
-
-  /** focus the input element with data */
-  focusInput(element)  {
-    fireEvent.focus(element);
-  }
-
-  /** blur the input element with data */
-  blurInput(element)  {
-    fireEvent.blur(element);
-  }
-
-  /** on keypup element */
-  async keyUpInput(component)  {
-    fireEvent.keyUp(component, {keyCode: 38});
-    await waitFor(() => {});
-  }
-
-  /** Open the password generator*/
-  openPasswordGenerator() {
-    this.clickWithoutWaitFor(this.passwordGeneratorButton);
   }
 }

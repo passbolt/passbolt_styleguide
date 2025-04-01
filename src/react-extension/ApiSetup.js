@@ -21,6 +21,7 @@ import {ApiClient} from "../shared/lib/apiClient/apiClient";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import ChangeApiSetupLocale from "./components/Internationalisation/ChangeLocale/ChangeApiSetupLocale";
+import LogoSVG from "../img/svg/logo.svg";
 
 /**
  * The setup application served by the API.
@@ -208,15 +209,17 @@ class ApiSetup extends Component {
             <div id="container" className="container page login">
               <div className="content">
                 <div className="header">
-                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                  <div className="logo-svg">
+                    <LogoSVG role="img" width="20rem" height="3.5rem"/>
+                  </div>
                 </div>
                 <div className="login-form">
                   <OrchestrateApiSetup/>
                 </div>
                 <ChangeApiSetupLocale/>
               </div>
+              <Footer/>
             </div>
-            <Footer/>
           </ApiSetupContextProvider>
         </TranslationProvider>
         }

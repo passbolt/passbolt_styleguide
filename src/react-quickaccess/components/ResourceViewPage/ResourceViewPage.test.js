@@ -22,9 +22,9 @@ import {
   totpResourceProps
 } from "./ResourceViewPage.test.data";
 import {waitFor} from "@testing-library/react";
-import {defaultTotpViewModelDto} from "../../../shared/models/totp/TotpDto.test.data";
 import {TotpCodeGeneratorService} from "../../../shared/services/otp/TotpCodeGeneratorService";
 import {denyRbacContext} from "../../../shared/context/Rbac/RbacContext.test.data";
+import {defaultTotpViewModelDto} from "../../../shared/models/entity/totp/totpDto.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -131,7 +131,7 @@ describe("ResourceViewPage", () => {
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
 
-      expect(page.passwordText).toStrictEqual("Copy password to clipboard");
+      expect(page.passwordText).toStrictEqual("Copy to clipboard");
       expect(page.password.hasAttribute("disabled")).toBeFalsy();
 
       await page.click(page.password);
@@ -159,7 +159,7 @@ describe("ResourceViewPage", () => {
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
 
-      expect(page.passwordText).toStrictEqual("Copy password to clipboard");
+      expect(page.passwordText).toStrictEqual("Copy to clipboard");
       expect(page.password.hasAttribute("disabled")).toBeTruthy();
       expect(page.copyPasswordButton).toBeNull();
     });

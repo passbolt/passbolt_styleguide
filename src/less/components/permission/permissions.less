@@ -1,14 +1,26 @@
 .dialog {
-    .form-content {
-        &.permission-edit {
+    .share-form {
+        .form-content {
             padding: 0;
-            max-height: 26.25rem;
-          // remove all margin bottom for direct child element
-          & > * {
-           margin-bottom: 0;
+            .permission-edit {
+              max-height: 26.25rem;
+            }
+
+            .permission-add {
+              padding: 1.6rem;
+            }
+
+            .input.text.autocomplete input  {
+              margin-bottom: 0;
+            }
+
+            // remove all margin bottom for direct child element
+            & > * {
+              margin-bottom: 0;
+            }
           }
-        }
     }
+
 
     .permissions {
         &.scroll {
@@ -21,18 +33,23 @@
         .row {
             .clearfix();
             padding: 1.6rem;
-            border-bottom: 1px solid @dialog-divider-border;
+            border-bottom: 1px solid var(--Workspace-Dividers);
             display: flex;
             align-items: center;
             overflow: hidden;
 
             &.permission-updated {
-                background: @dialog-permission-updated-background;
+                background: var(--Notifications-Alert-background);
             }
 
             /* aro summary */
             .avatar {
                 float: left;
+
+                svg {
+                  width: 4.2rem;
+                  height: 4.2rem;
+                }
             }
             .aro {
                 flex: 1 1 auto;
@@ -50,21 +67,22 @@
                     display: flex;
                     font-size: 1.2rem;
                     line-height: 1.6rem;
-                    color: @text-lighter-color;
+                    color: var(--Text-and-icons-Secondary-text);
                 }
                 .ellipsis {
                     display:inline-block;
                     max-width:90%;
                 }
-                .svg-icon {
-                    svg {
-                        position:relative;
-                    }
-                }
             }
 
             .tooltip-portal {
-              margin-left: 1rem;
+                margin: 0 .8rem;
+                line-height: 1.6rem;
+
+                svg {
+                  width: 1.6rem;
+                  height: 1.6rem;
+                }
             }
 
             .rights {
@@ -74,25 +92,7 @@
 
 
             .remove-item {
-                margin: 0 .5rem 0 .4rem;
-                padding: 0;
-                border: 0;
-
-                &, &:hover {
-                  display: block;
-                  border: none;
-                }
-
-                .svg-icon {
-                  padding: .65rem;
-                  width: 2.4rem;
-                  height: 2.4rem;
-                  text-align: center;
-                  display: block;
-                  line-height: 1.2rem;
-                  border: none;
-                  box-sizing: border-box;
-                }
+              margin-left: .8rem;
             }
         }
 
@@ -104,7 +104,7 @@
                 float: left;
                 width: 4.2rem;
                 height: 4.2rem;
-                background:@input-loading-background;
+                background: var(--Dialog-Dialog-background);
                 border-radius:50%;
                 flex:none
             }
@@ -113,7 +113,7 @@
                     margin-top:.25em;
                     width: 7em;
                     height: 1em;
-                    background:@input-loading-background;
+                    background: var(--Dialog-Dialog-background);
                     .rounded();
                 }
                 .aro-details {
@@ -121,7 +121,7 @@
                     margin-top:.5em;
                     width: 10em;
                     height: 1em;
-                    background:@input-loading-background;
+                    background: var(--Dialog-Dialog-background);
                 }
 
             }
@@ -132,7 +132,7 @@
                 height: 1.116rem;
                 margin-top:.7rem;
                 margin-right:1.62rem;
-                background:@input-loading-background;
+                background: var(--Dialog-Dialog-background);
                 margin-left:0.625rem;
             }
             .shimmer {

@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {withRouter} from "react-router-dom";
 import Icon from "../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../img/svg/spinner.svg";
 import ClipBoard from '../../../shared/lib/Browser/clipBoard';
 import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../shared/context/Rbac/RbacContext";
@@ -464,7 +465,7 @@ class ResourceViewPage extends React.Component {
                   <Transition in={this.state.copyLoginState === "processing"} appear={true} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copyLoginState !== "processing" ? "visually-hidden" : ""}`}>
-                        <Icon name="spinner"/>
+                        <SpinnerSVG/>
                       </span>
                     )}
                   </Transition>
@@ -490,8 +491,8 @@ class ResourceViewPage extends React.Component {
                         onClick={this.handleCopyPasswordClick} />
                     </div>
                     {this.canPreviewSecret &&
-                      <a onClick={this.handleViewPasswordButtonClick}
-                        className={`password-view button button-transparent ${this.state.isPasswordDecrypting ? "disabled" : ""}`}>
+                      <button onClick={this.handleViewPasswordButtonClick}
+                        className="password-view inline button-transparent" disabled={this.state.isPasswordDecrypting}>
                         <Transition in={!this.state.isPasswordDecrypting} appear={false} timeout={500}>
                           {status => (
                             <span className={`transition fade-${status} ${this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}>
@@ -502,12 +503,12 @@ class ResourceViewPage extends React.Component {
                         <Transition in={this.state.isPasswordDecrypting} appear={true} timeout={500}>
                           {status => (
                             <span className={`transition fade-${status} ${!this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}>
-                              <Icon name="spinner"/>
+                              <SpinnerSVG/>
                             </span>
                           )}
                         </Transition>
                         <span className="visually-hidden"><Trans>View</Trans></span>
-                      </a>
+                      </button>
                     }
                   </div>
                 </div>
@@ -523,7 +524,7 @@ class ResourceViewPage extends React.Component {
                     <Transition in={this.state.copyPasswordState === "processing"} appear={true} timeout={500}>
                       {status => (
                         <span className={`transition fade-${status} ${this.state.copyPasswordState !== "processing" ? "visually-hidden" : ""}`}>
-                          <Icon name="spinner"/>
+                          <SpinnerSVG/>
                         </span>
                       )}
                     </Transition>
@@ -553,14 +554,14 @@ class ResourceViewPage extends React.Component {
                         onClick={this.handleCopyTotpClick}/>
                     }
                     {!isTotpPreviewed &&
-                      <button type="button" className="link no-border" onClick={this.handleCopyTotpClick} disabled={!canCopySecret}>
+                      <button type="button" className="no-border" onClick={this.handleCopyTotpClick} disabled={!canCopySecret}>
                         <span>Copy TOTP to clipboard</span>
                       </button>
                     }
                   </div>
                   {this.canPreviewSecret &&
-                    <a onClick={this.handlePreviewTotpButtonClick}
-                      className={`totp-view button button-transparent ${this.state.isTotpDecrypting ? "disabled" : ""}`}>
+                    <button onClick={this.handlePreviewTotpButtonClick}
+                      className="totp-view inline button-transparent" disabled={this.state.isTotpDecrypting}>
                       <Transition in={!this.state.isTotpDecrypting} appear={false} timeout={500}>
                         {status => (
                           <span className={`transition fade-${status} ${this.state.isTotpDecrypting ? "visually-hidden" : ""}`}>
@@ -571,12 +572,12 @@ class ResourceViewPage extends React.Component {
                       <Transition in={this.state.isTotpDecrypting} appear={true} timeout={500}>
                         {status => (
                           <span className={`transition fade-${status} ${!this.state.isTotpDecrypting ? "visually-hidden" : ""}`}>
-                            <Icon name="spinner"/>
+                            <SpinnerSVG/>
                           </span>
                         )}
                       </Transition>
                       <span className="visually-hidden"><Trans>View</Trans></span>
-                    </a>
+                    </button>
                   }
                 </div>
               </div>
@@ -592,7 +593,7 @@ class ResourceViewPage extends React.Component {
                   <Transition in={this.state.copyTotpState === "processing"} appear={true} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copyTotpState !== "processing" ? "visually-hidden" : ""}`}>
-                        <Icon name="spinner"/>
+                        <SpinnerSVG/>
                       </span>
                     )}
                   </Transition>
@@ -637,10 +638,10 @@ class ResourceViewPage extends React.Component {
         <div className="submit-wrapper input">
           <a href="#" id="popupAction" className={`button primary big full-width ${this.state.usingOnThisTab ? "disabled" : ""}`} role="button" onClick={this.handleUseOnThisTabClick}>
             {this.state.usingOnThisTab &&
-              <Icon name="spinner"/>
+              <SpinnerSVG/>
             }
             {!this.state.usingOnThisTab &&
-              <Trans>use on this page</Trans>
+              <Trans>Use on this page</Trans>
             }
           </a>
           {this.state.error &&

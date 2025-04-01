@@ -13,5 +13,5 @@
  */
 
 export default () => {
-  return "en-US";
+  return {locale: "en-UK"};
 };

@@ -14,7 +14,14 @@
 import React from "react";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
-
+import IconBadgeInactiveSVG from "../../../img/logo/icon-inactive.svg";
+import IconWithoutBadgeSVG from "../../../img/logo/icon-without-badge.svg";
+import IconBadge1SVG from "../../../img/logo/icon-badge-1.svg";
+import IconBadge2SVG from "../../../img/logo/icon-badge-2.svg";
+import IconBadge3SVG from "../../../img/logo/icon-badge-3.svg";
+import IconBadge4SVG from "../../../img/logo/icon-badge-4.svg";
+import IconBadge5SVG from "../../../img/logo/icon-badge-5.svg";
+import IconBadge5PlusSVG from "../../../img/logo/icon-badge-5+.svg";
 /**
  * This component is a call-to-action integrated into a target web page which includes
  * an identified authentication form. When some Passbolt actions are available, the performed call-to-action
@@ -79,21 +86,6 @@ class AskInFormMenuDisplay extends React.Component {
   }
 
   /**
-   * Returns the count of suggested resources
-   */
-  get suggestedResourcesCount() {
-    return this.state.status.suggestedResourcesCount;
-  }
-
-  /**
-   * Return the number of suggested resource to display the right logo
-   * @returns {string|null}
-   */
-  get logoNumber() {
-    return this.suggestedResourcesCount > 5 ? '5-plus' : this.suggestedResourcesCount;
-  }
-
-  /**
    * Bind the event handlers
    */
   bindEventHandlers() {
@@ -113,10 +105,11 @@ class AskInFormMenuDisplay extends React.Component {
   async checkAuthenticationStatus() {
     const {isAuthenticated, isMfaRequired} = await this.props.context.port.request("passbolt.in-form-cta.check-status");
     const isActive = isAuthenticated && !isMfaRequired;
-    let suggestedResourcesCount = 0;
-    if (isActive) {
-      suggestedResourcesCount = await this.props.context.port.request("passbolt.in-form-cta.suggested-resources");
-    }
+
+    const suggestedResourcesCount = isActive
+      ? await this.props.context.port.request("passbolt.in-form-cta.suggested-resources")
+      : 0;
+
     this.setState({
       isReady: true,
       status: {
@@ -124,6 +117,30 @@ class AskInFormMenuDisplay extends React.Component {
         suggestedResourcesCount
       },
     });
+  }
+
+  /**
+   * Returns the Inform logo to be displayed based on the user auth status and suggested resources count.
+   * @returns {ReactDOM}
+   */
+  get informLogo() {
+    if (!this.state.status.isActive) {
+      return <IconBadgeInactiveSVG className="in-form-icon-logo inactive"/>;
+    }
+
+    const count = this.state.status.suggestedResourcesCount;
+    if (count > 5) {
+      return <IconBadge5PlusSVG className="in-form-icon-logo"/>;
+    }
+
+    return {
+      0: <IconWithoutBadgeSVG className="in-form-icon-logo"/>,
+      1: <IconBadge1SVG className="in-form-icon-logo"/>,
+      2: <IconBadge2SVG className="in-form-icon-logo"/>,
+      3: <IconBadge3SVG className="in-form-icon-logo"/>,
+      4: <IconBadge4SVG className="in-form-icon-logo"/>,
+      5: <IconBadge5SVG className="in-form-icon-logo"/>,
+    }[count];
   }
 
   /**
@@ -137,18 +154,16 @@ class AskInFormMenuDisplay extends React.Component {
    * Render the component
    */
   render() {
-    const logoClassModifier = this.state.status.isActive ? this.logoNumber : 'inactive';
-    return (
-      <>
-        {this.state.isReady &&
-          <a onClick={this.handleIconClick}>
-            <div className="in-form-icon">
-              <div className={`in-form-icon-logo in-form-icon-logo--${logoClassModifier}`} />
-            </div>
-          </a>
-        }
+    if (!this.state.isReady) {
+      return null;
+    }
 
-      </>
+    return (
+      <a onClick={this.handleIconClick}>
+        <div className="in-form-icon">
+          {this.informLogo}
+        </div>
+      </a>
     );
   }
 }

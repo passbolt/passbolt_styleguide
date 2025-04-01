@@ -1,10 +1,15 @@
 .navigation-secondary-tree {
+    align-self: stretch;
+
     li {
         .row.no-child {
-            padding-left: 1.8rem;
+            padding-left: 2.4rem;
         }
     }
+
     .row {
+        border-radius: var(--Button-border-radius);
+
         .main-cell-wrapper {
             .main-cell {
                 span {
@@ -14,6 +19,12 @@
                 .toggle-folder {
                   display: flex;
                   align-items: center;
+
+                    svg {
+                        min-width: .8rem;
+                        width: .8rem;
+                        height: .8rem;
+                    }
                 }
 
                 .svg-icon {
@@ -26,12 +37,11 @@
                     -o-text-overflow: inherit;
                     -ms-text-overflow: inherit;
 
-                    &.folder-shared, &.folder,
-                    &.folders, &.folder-root {
-                      svg {
-                        width: 1.8rem;
-                        height: 100%;
-                      }
+                    &.folder-shared, &.folder, &.folders, &.folder-root {
+                        svg {
+                            width: 1.8rem;
+                            height: 100%;
+                        }
                     }
                 }
 
@@ -40,12 +50,21 @@
                 }
 
                 button {
-                    padding: 0;
-                    margin: 0 0 0 2.4rem;
-                    width: calc(100% - 3.2rem);
+                    gap: .8rem;
 
-                    .tag-name {
-                        margin-left: 1rem;
+                    .toggle-folder svg {
+                        width: .8rem;
+                        height: .8rem;
+                    }
+
+                    svg {
+                        min-width: 1.8rem;
+                        width: 1.8rem;
+                        height: 1.8rem;
+                    }
+
+                    span {
+                        width: 100%;
                     }
                 }
             }
@@ -55,24 +74,28 @@
         &.title {
             .main-cell {
                 h3 {
-                    padding:0;
-                    border:0;
-                    margin:0;
+                    padding: 0;
+                    border: 0;
+                    margin: 0;
 
                     .folders-label {
                         button {
-                          cursor: pointer;
-                          padding: 0;
-                          margin-left: 1.6rem;
+                            cursor: pointer;
+                            padding: 0;
                         }
+                    }
+
+                    &.section-title button {
+                        font-weight: 700;
                     }
                 }
             }
+
             /* selected */
             &.selected {
-              .main-cell h3 .folders-label a {
-                font-weight: 700;
-              }
+                .main-cell h3 .folders-label a {
+                    font-weight: 700;
+                }
             }
         }
 
@@ -80,27 +103,89 @@
         &.disabled {
             cursor: default;
             pointer-events: none;
+
             .main-cell {
+
                 span.tag-name,
-                span.folder-name{
-                    color: @text-light-color;
+                span.group-name,
+                span.folder-name {
+                    color: var(--Text-and-icons-Main-text);
                     text-shadow: none;
                     font-weight: normal;
                 }
+
                 button:before {
-                    color: @text-light-color;
+                    color: var(--Text-and-icons-Main-text);
                 }
             }
+
             &.is-dragged {
                 pointer-events: auto;
             }
         }
     }
+    &.navigation-folders {
+        .row {
+            padding: .6rem 0 .6rem 1rem;
 
+            .main-cell-wrapper .main-cell {
+                button {
+                    gap: .6rem;
+                    width: calc(100% - .5rem);
 
+                    & > svg {
+                        margin-right: .2rem;
+                    }
+                }
+            }
+        }
+    }
+
+    &.navigation-groups {
+        .root:not(.group-item){
+            position: relative;
+
+            .more-ctrl {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 3.2rem; // 4rem for the desired position in the design - .8rem for the current margin-right
+                z-index: 10;
+            }
+        }
+
+        .group-item {
+            .row {
+                padding: .8rem 0 .8rem 2.6rem;
+            }
+        }
+    }
+
+    &.navigation-tags {
+        .root:not(.tag-item){
+            position: relative;
+
+            .more-ctrl {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 3.2rem; // 4rem for the desired position in the design - .8rem for the current margin-right
+                z-index: 10;
+            }
+        }
+
+        .tag-item {
+            .more-ctrl {
+                button {
+                    margin-right: 0;
+                }
+            }
+        }
+
+    }
 
     /*All other levels*/
     li > ul {
-        padding-left: 1rem;
+        padding-left: 1.5rem;
     }
 }

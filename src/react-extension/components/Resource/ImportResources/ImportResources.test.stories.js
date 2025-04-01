@@ -12,7 +12,6 @@
  * @since         3.6.0
  */
 
-import React from "react";
 import ImportResources from "./ImportResources";
 import {defaultProps} from "./ImportResources.test.data";
 
@@ -21,8 +20,6 @@ export default {
   component: ImportResources
 };
 
-const Template = args =>
-  <ImportResources {...args}/>;
-
-export const Default = Template.bind({});
-Default.args = defaultProps();
+export const Default = {
+  args: defaultProps()
+};

@@ -75,7 +75,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
       await waitFor(() => {
         expect(page.username.getAttribute("disabled")).not.toBeNull();
         expect(page.nextButton.getAttribute("disabled")).not.toBeNull();
-        expect(page.nextButton.className).toBe('button primary disabled processing big full-width');
+        expect(page.nextButton.className).toBe('button primary form disabled processing big full-width');
       });
     });
 

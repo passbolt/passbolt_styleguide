@@ -14,12 +14,12 @@
 
 import {waitFor} from "@testing-library/dom";
 import {defaultResourceDto, resourceWithTotpDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultResourceMetadataDto} from "../../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
+import {defaultResourceMetadataDto} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import {TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, TEST_RESOURCE_TYPE_PASSWORD_STRING} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import {defaultProps} from "./EditResourceDescription.test.data";
 import EditResourceDescriptionPage from "./EditResourceDescription.test.page";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
-import {defaultTotpViewModelDto} from "../../../../shared/models/totp/TotpDto.test.data";
+import {defaultTotpViewModelDto} from "../../../../shared/models/entity/totp/totpDto.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();

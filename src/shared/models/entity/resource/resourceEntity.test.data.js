@@ -22,7 +22,7 @@ import {
 import {defaultUserDto} from "../user/userEntity.test.data";
 import {defaultPermissionsDtos} from "../permission/permissionCollection.test.data";
 import {defaultTagsDtos} from "../tag/tagCollection.test.data";
-import {defaultResourceMetadataDto} from "../resourceMetadata/resourceMetadataEntity.test.data";
+import {defaultResourceMetadataDto} from "./metadata/resourceMetadataEntity.test.data";
 
 /**
  * Build default resource dto.
@@ -39,7 +39,8 @@ export const defaultResourceDto = (data = {}, options = {}) => {
   const id = data?.id || uuidv4();
   const defaultData = {
     id: id,
-    resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+    resource_type_id: data?.metadata?.resource_type_id
+      || data?.resource_type_id || TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
     expired: null,
     deleted: false,
     created: "2022-03-04T13:59:11+00:00",

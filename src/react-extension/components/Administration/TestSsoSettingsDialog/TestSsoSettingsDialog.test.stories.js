@@ -11,10 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
-import React from "react";
 import TestSsoSettingsDialog from "./TestSsoSettingsDialog";
 import {defaultProps} from "./TestSsoSettingsDialog.test.data";
-import AdminSsoContextProvider from "../../../contexts/AdminSsoContext";
 import SsoProviders from "../ManageSsoSettings/SsoProviders.data";
 
 export default {
@@ -22,10 +20,6 @@ export default {
   component: TestSsoSettingsDialog
 };
 
-const Template = args =>
-  <AdminSsoContextProvider {...args}>
-    <TestSsoSettingsDialog {...args}/>;
-  </AdminSsoContextProvider>;
-
-export const Default = Template.bind({});
-Default.args = defaultProps({provider: SsoProviders.at(0)});
+export const Default = {
+  args: defaultProps({provider: SsoProviders.at(0)})
+};

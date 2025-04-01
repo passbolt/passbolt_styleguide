@@ -12,30 +12,17 @@
  * @since         3.10.0
  */
 
-import React from "react";
-import {MemoryRouter} from "react-router-dom";
-import MockTranslationProvider from '../../../test/mock/components/Internationalisation/MockTranslationProvider';
 import MfaInviteUserSettingsPreferenceDialog from "./MfaInviteUserSettingsPreferenceDialog";
-import MockPort from "../../../test/mock/MockPort";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 export default {
   title: 'Components/MFA/MfaInviteUserSettingsPreferenceDialog',
   component: MfaInviteUserSettingsPreferenceDialog
 };
 
-const Template = args =>
-  <MockTranslationProvider>
-    <MemoryRouter initialEntries={['/']}>
-      <MfaInviteUserSettingsPreferenceDialog {...args}/>
-    </MemoryRouter>
-  </MockTranslationProvider>;
-
-export const Default = Template.bind({});
-Default.args = {
-  context: {
-    port: new MockPort(),
-    locale: "en-US",
-  },
-  onClose: () => {}
+export const Default = {
+  args: {
+    context: defaultUserAppContext(),
+    onClose: () => {}
+  }
 };
-

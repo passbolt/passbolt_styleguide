@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
-import Icon from "../../../../shared/components/Icons/Icon";
+import CloseSVG from "../../../../img/svg/close.svg";
 
 class AnnouncementWrapper extends Component {
   /**
@@ -51,7 +51,7 @@ class AnnouncementWrapper extends Component {
         <div className="announcement-content">
           {this.props.canClose &&
           <button type="button" className="announcement-close dialog-close button-transparent" onClick={this.handleClose}>
-            <Icon name='close'/>
+            <CloseSVG className="svg-icon"/>
             <span className="visually-hidden"><Trans>Close</Trans></span>
           </button>
           }

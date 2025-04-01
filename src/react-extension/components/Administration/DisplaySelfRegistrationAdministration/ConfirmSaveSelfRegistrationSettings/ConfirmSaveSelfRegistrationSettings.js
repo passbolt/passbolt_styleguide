@@ -77,26 +77,23 @@ class ConfirmSaveSelfRegistrationSettings extends Component {
         className="save-self-registration-settings-dialog">
         <form onSubmit={this.handleSubmit}>
           <div className="form-content">
-            <>
-              <label><Trans>Allowed domains</Trans></label>
-              <div className="radiolist-alt">
-                <div className="input radio">
-                  <ul id="domains-list">
-                    {this.allowedDomains &&
-                         MapObject.iterators(this.allowedDomains).map(key => (
-                           <li key={key}>
-                             {this.allowedDomains.get(key)}
-                           </li>
-                         ))
-
-                    }
-                  </ul>
-                </div>
+            <label><Trans>Allowed domains</Trans></label>
+            <div className="radiolist-alt">
+              <div className="input radio">
+                <ul id="domains-list">
+                  {this.allowedDomains &&
+                    MapObject.iterators(this.allowedDomains).map(key => (
+                      <li key={key}>
+                        {this.allowedDomains.get(key)}
+                      </li>
+                    ))
+                  }
+                </ul>
               </div>
-            </>
-          </div>
-          <div className="warning message">
-            <Trans>Please review carefully this configuration.</Trans>
+            </div>
+            <div className="warning message no-margin">
+              <Trans>Please review carefully this configuration.</Trans>
+            </div>
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton

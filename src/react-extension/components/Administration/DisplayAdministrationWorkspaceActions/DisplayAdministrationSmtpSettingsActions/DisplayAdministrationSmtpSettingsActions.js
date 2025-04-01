@@ -112,23 +112,16 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    */
   render() {
     return (
-      <div className="col2_3 actions-wrapper">
-        <div className="actions">
-          <ul>
-            <li>
-              <button type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
-                <Icon name="save"/>
-                <span><Trans>Save settings</Trans></span>
-              </button>
-            </li>
-            <li>
-              <button type="button" disabled={!this.isTestEnabled()} onClick={this.handleTestClick}>
-                <Icon name="plug"/>
-                <span><Trans>Send test email</Trans></span>
-              </button>
-            </li>
-          </ul>
+      <div className="actions-wrapper">
+        <div className="left-actions-wrapper">
+          <button type="button" className="button secondary" disabled={!this.isTestEnabled()} id="send-test-email" onClick={this.handleTestClick}>
+            <Icon name="plug"/>
+            <span><Trans>Send test email</Trans></span>
+          </button>
         </div>
+        <button type="button" className="button primary form" id="save-settings" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
+          <span><Trans>Save</Trans></span>
+        </button>
       </div>
     );
   }
@@ -136,7 +129,6 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
 
 DisplayAdministrationWorkspaceActions.propTypes = {
   adminSmtpSettingsContext: PropTypes.object, // The admin account recovery context
-  workflowContext: PropTypes.any, // the workflow context
   dialogContext: PropTypes.object, // The dialog context
 };
 
