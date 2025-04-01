@@ -40,7 +40,7 @@ import ColumnUsernameModel from "../../../../shared/models/column/ColumnUsername
 import ColumnPasswordModel from "../../../../shared/models/column/ColumnPasswordModel";
 import ColumnUriModel from "../../../../shared/models/column/ColumnUriModel";
 import ColumnModifiedModel from "../../../../shared/models/column/ColumnModifiedModel";
-import ColumnModel from "../../../../shared/models/column/ColumnModel";
+import ColumnModel, {ColumnModelTypes} from "../../../../shared/models/column/ColumnModel";
 import {withProgress} from "../../../contexts/ProgressContext";
 import CellTotp from "../../../../shared/components/Table/CellTotp";
 import ColumnTotpModel from "../../../../shared/models/column/ColumnTotpModel";
@@ -59,6 +59,7 @@ import {
 import FavoriteSVG from "../../../../img/svg/favorite.svg";
 import CellName from "../../../../shared/components/Table/CellName";
 import CircleOffSVG from "../../../../img/svg/circle_off.svg";
+import memoize from "memoize-one";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -108,6 +109,7 @@ class DisplayResourcesList extends React.Component {
     this.handleCheckboxWrapperClick = this.handleCheckboxWrapperClick.bind(this);
     this.handleCopyPasswordClick = this.handleCopyPasswordClick.bind(this);
     this.handleCopyUsernameClick = this.handleCopyUsernameClick.bind(this);
+    this.hasIconVisible = this.hasIconVisible.bind(this);
     this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
     this.handleSortByColumnClick = this.handleSortByColumnClick.bind(this);
     this.handleChangeColumnsSettings = this.handleChangeColumnsSettings.bind(this);
@@ -128,7 +130,7 @@ class DisplayResourcesList extends React.Component {
   initColumns() {
     this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}));
     this.defaultColumns.push(new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: FavoriteSVG}}));
-    this.defaultColumns.push(new ColumnNameModel({cellRenderer: {component: CellName, props: {hasAttentionRequiredFeature: this.hasAttentionRequiredFeature}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
+    this.defaultColumns.push(new ColumnNameModel({cellRenderer: {component: CellName, props: {hasAttentionRequiredFeature: this.hasAttentionRequiredFeature, hasIconVisibleCallback: this.hasIconVisible}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
     if (this.props.passwordExpiryContext.isFeatureEnabled()) {
       this.defaultColumns.push(new ColumnExpiredModel({cellRenderer: {component: CellExpiryDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Expiry")}}}));
     }
@@ -164,10 +166,25 @@ class DisplayResourcesList extends React.Component {
     const columnsResourceSetting = this.columnsResourceSetting.toHashTable();
     // Merge the column values
     const columns = this.defaultColumns.map(column => Object.assign(new ColumnModel(column), columnsResourceSetting[column.id]));
+
     // Sort the position of the column, the column with no position will be at the beginning
     columns.sort((columnA, columnB) => (columnA.position || 0) < (columnB.position || 0) ? -1 : 1);
     this.setState({columns});
   }
+
+  /**
+   * Returns true if the icon should be visible
+   */
+  hasIconVisible() {
+    return this.memoizedHasIconVisible(this.columnsResourceSetting);
+  }
+
+  /**
+   * Memoized hasIconVisible function.
+   * @param {array} columnsResourceSetting
+   * @returns {boolean}
+   */
+  memoizedHasIconVisible = memoize(columns => columns.getFirst("id", ColumnModelTypes.ICON).show);
 
   /**
    * Whenever the component has been updated
@@ -176,9 +193,10 @@ class DisplayResourcesList extends React.Component {
    */
   componentDidUpdate(prevProps) {
     this.handleResourceScroll();
-    // Has a column view change with the previous props
+    // Column resource settings have changed
     const hasColumnsResourceViewChange = this.columnsResourceSetting?.hasDifferentShowValue(prevProps.resourceWorkspaceContext.columnsResourceSetting);
-    if (hasColumnsResourceViewChange) {
+    const hasColumnsSettingsChanged = prevProps.resourceWorkspaceContext.columnsResourceSetting !== this.props.resourceWorkspaceContext.columnsResourceSetting;
+    if (hasColumnsSettingsChanged || hasColumnsResourceViewChange) {
       this.mergeAndSortColumns();
     }
   }
@@ -196,6 +214,7 @@ class DisplayResourcesList extends React.Component {
     const hasResourceToScrollChange = Boolean(scrollTo.resource && scrollTo.resource.id);
     const hasResourcePreviewSecretChange = nextState.previewedCellule !== this.state.previewedCellule;
     const hasResourceColumnsChange = nextState.columns !== this.state.columns;
+    const hasColumnOrderChanged = nextProps.resourceWorkspaceContext.columnsResourceSetting !== this.props.resourceWorkspaceContext.columnsResourceSetting;
     const hasColumnsResourceViewChange = columnsResourceSetting?.hasDifferentShowValue(this.props.resourceWorkspaceContext.columnsResourceSetting);
     const mustHidePreviewPassword = hasFilteredResourcesChanged || hasSingleSelectedResourceChanged || hasSelectedResourcesLengthChanged || hasSorterChanged;
     if (mustHidePreviewPassword) {
@@ -208,7 +227,8 @@ class DisplayResourcesList extends React.Component {
       hasResourceToScrollChange ||
       hasResourceColumnsChange ||
       hasColumnsResourceViewChange ||
-      hasResourcePreviewSecretChange;
+      hasResourcePreviewSecretChange ||
+      hasColumnOrderChanged;
   }
 
   /**
@@ -470,7 +490,7 @@ class DisplayResourcesList extends React.Component {
     }
 
     if (!plaintextSecretDto?.password?.length) {
-      await this.props.actionFeedbackContext.displayError(this.translate("The password is empty and cannot be copied to clipboard."));
+      await this.props.actionFeedbackContext.displayWarning(this.translate("The password is empty and cannot be copied to clipboard."));
       return;
     }
 
@@ -527,8 +547,7 @@ class DisplayResourcesList extends React.Component {
     }
 
     if (!plaintextSecretDto?.password?.length) {
-      await this.props.actionFeedbackContext.displayError(this.translate("The password is empty and cannot be previewed."));
-      return;
+      plaintextSecretDto.password = "";
     }
 
     const columnId = "password";
@@ -900,6 +919,18 @@ class DisplayResourcesList extends React.Component {
                   <p>
                     <Trans>It does feel a bit empty here.</Trans>&nbsp;
                     <Trans>Create your first password or wait for a team member to share one with you.</Trans>
+                  </p>
+                </div>
+              </div>
+            }
+            {filterType === ResourceWorkspaceFilterTypes.PRIVATE &&
+              <div className="empty-content">
+                <CircleOffSVG/>
+                <div className="message">
+                  <h1><Trans>Welcome to passbolt!</Trans></h1>
+                  <p>
+                    <Trans>It does feel a bit empty here.</Trans>&nbsp;
+                    <Trans>Create your first password.</Trans>
                   </p>
                 </div>
               </div>

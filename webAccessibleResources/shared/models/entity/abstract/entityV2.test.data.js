@@ -117,6 +117,39 @@ export class TestAssociatedEntityV2 extends EntityV2 {
   }
 }
 
+export class TestWithAssociationEntityV2 extends EntityV2 {
+  static getSchema() {
+    return {
+      "type": "object",
+      "required": ['name', 'associated_entity'],
+      "properties": {
+        "name": {
+          "type": "string",
+        },
+        "associated_entity": TestAssociatedEntityV2.getSchema()
+      }
+    };
+  }
+
+  static get associations() {
+    return {
+      "associated_entity": TestAssociatedEntityV2
+    };
+  }
+
+  get name() {
+    return this._props.name;
+  }
+
+  set name(name) {
+    this._props.name = name;
+  }
+
+  get associatedEntity() {
+    return this._associatedEntity;
+  }
+}
+
 export const minimalTestEntityV2Dto = data => ({
   name: "test name",
   ...data

@@ -33,7 +33,9 @@ class Header extends React.Component {
       <div className="quickaccess-header">
 
         <div className="logo-svg">
-          <LogoSVG role="img" width="10rem" height="1.8rem"/>
+          <a href={this.props.context.userSettings ? this.props.context.userSettings.getTrustedDomain() : "#"} target="_blank" rel="noopener noreferrer" title={this.translate("open passbolt in a new tab")}>
+            <LogoSVG role="img" width="10rem" height="1.8rem"/>
+          </a>
         </div>
         {this.props.context.isAuthenticated &&
           <span>

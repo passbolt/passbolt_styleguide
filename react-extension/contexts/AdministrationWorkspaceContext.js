@@ -247,13 +247,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       return;
     }
 
-    // temporary fallback for the homepage while it's not implemented
-    if (isAdminHomePageLocation) {
-      // @todo remove or udpate this when the admin homepage will be available
-      this.setState(newState);
-      return;
-    }
-
     // the URL is supported, now check if the feature flag is enabled or not (except for email notification which doesn't have flag).
     const currentFeatureFlag = AdministrationWorkspaceFeatureFlag?.[selectedAdministration];
 

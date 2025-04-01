@@ -86,7 +86,7 @@ export default class AddResourceTotpPage {
    * @return {Element}
    */
   get algorithm() {
-    return this._page.container.querySelector('#resource-totp-algorithm .selected-value .value');
+    return this._page.container.querySelector('#resource-totp-algorithm .selected-value');
   }
 
   /**
@@ -104,6 +104,43 @@ export default class AddResourceTotpPage {
   get digits() {
     return this._page.container.querySelector('#resource-totp-digits');
   }
+
+  /**
+   * Returns the import Qr code button element
+   */
+  get uploadQrCode() {
+    return this._page.container.querySelector('#import-qr-code');
+  }
+
+  /**
+   * Returns the input file element
+   */
+  get inputFile() {
+    return this._page.container.querySelector('input[type=\"file\"]');
+  }
+
+  /**
+   * Return the warning import message
+   * @returns {Element}
+   */
+  get warningImportMessage() {
+    return this._page.container.querySelector('.totp-form .message.warning');
+  }
+
+  /**
+   * Returns the resource totp code element
+   */
+  get resourceTotpCode() {
+    return this._page.container.querySelector('.totp-wrapper .secret-totp button');
+  }
+
+  /**
+   * Returns the resource totp code element
+   */
+  get copyTotpButton() {
+    return this._page.container.querySelector('#copy-totp');
+  }
+
   /**
    * Returns true if the page object exists in the container
    */
@@ -127,5 +164,13 @@ export default class AddResourceTotpPage {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
     await waitFor(() => { element.value === data; });
+  }
+
+  /** Click to import file */
+  async selectImportFile(file) {
+    await this.click(this.uploadQrCode);
+    const data = {target: {files: [file]}};
+    fireEvent.change(this.inputFile, data);
+    await waitFor(() => {});
   }
 }

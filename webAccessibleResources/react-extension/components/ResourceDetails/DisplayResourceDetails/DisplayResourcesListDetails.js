@@ -16,12 +16,13 @@ import PropTypes from "prop-types";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {Trans, withTranslation} from "react-i18next";
-import KeySVG from "../../../../img/svg/key.svg";
 import CloseSVG from "../../../../img/svg/close.svg";
 import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import ResourceIcon from "../../../../shared/components/Icons/ResourceIcon";
+import ReactList from "react-list";
 
 /**
  * This component display the note section of a resource
@@ -56,6 +57,7 @@ class DisplayResourcesListDetails extends React.Component {
    */
   bindCallbacks() {
     this.handleUnselectClickEvent = this.handleUnselectClickEvent.bind(this);
+    this.renderItem = this.renderItem.bind(this);
   }
 
   /**
@@ -70,12 +72,16 @@ class DisplayResourcesListDetails extends React.Component {
     const resourceType = this.props.resourceTypes.getFirstById(resource.resource_type_id);
     switch (resourceType?.slug) {
       case "password-string":
+      case "v5-password-string":
         return this.props.t("Password");
       case "password-and-description":
-        return this.props.t("Password and Encrypted description");
+      case "v5-default":
+        return this.props.t("Password and Note");
       case "password-description-totp":
-        return this.props.t("Password, Encrypted description and TOTP");
+      case "v5-default-with-totp":
+        return this.props.t("Password, Note and TOTP");
       case "totp":
+      case "v5-totp-standalone":
         return this.props.t("TOTP");
       default:
         return this.props.t("Resource");
@@ -112,38 +118,54 @@ class DisplayResourcesListDetails extends React.Component {
   }
 
   /**
+   * Use to render a single item of the list
+   * @param {integer} index of the item in the source list
+   * @param {integer} key index of the HTML element in the ReactList
+   * @returns {JSX.Element}
+   */
+  renderItem(index) {
+    const resource = this.props.resourceWorkspaceContext.selectedResources[index];
+    return (
+      <div key={resource.id} className="sidebar-header">
+        <div className="teaser-image">
+          <ResourceIcon resource={resource} />
+        </div>
+        <div className="title-area">
+          <h3>
+            <div className="title-wrapper">
+              <span className="name">{resource.metadata.name}</span>
+            </div>
+            <span className="subtitle">{this.getResourceTypeSubtitle(resource)}</span>
+            <span className="subtitle">{this.getPermissionSubtitle(resource)}</span>
+          </h3>
+          <button type="button" className="title-link button-transparent inline" title={this.props.t("Remove this resource from the selection")} onClick={() => this.handleUnselectClickEvent(resource)}>
+            <CloseSVG />
+            <span className="visuallyhidden"><Trans>Remove this resource from the selection</Trans></span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
-    const resources = this.props.resourceWorkspaceContext.selectedResources;
-    const count = resources.length;
+    const count = this.props.resourceWorkspaceContext.selectedResources.length;
     return (
       <div className="sidebar resource multiple-resources-selected">
         <div className="sidebar-title">
           {this.props.t(`${count} resources selected`)}
         </div>
         <div className="sidebar-content">
-          {resources.map(resource =>
-            <div key={resource.id} className="sidebar-header">
-              <div className="teaser-image">
-                <KeySVG />
-              </div>
-              <div className="title-area">
-                <h3>
-                  <div className="title-wrapper">
-                    <span className="name">{resource.metadata.name}</span>
-                  </div>
-                  <span className="subtitle">{this.getResourceTypeSubtitle(resource)}</span>
-                  <span className="subtitle">{this.getPermissionSubtitle(resource)}</span>
-                </h3>
-                <button type="button" className="title-link button-transparent inline" title={this.props.t("Remove this resource from the selection")} onClick={() => this.handleUnselectClickEvent(resource)}>
-                  <CloseSVG />
-                  <span className="visuallyhidden"><Trans>Remove this resource from the selection</Trans></span>
-                </button>
-              </div>
-            </div>
-          )}
+          <ReactList
+            itemRenderer={this.renderItem}
+            length={count}
+            pageSize={15}
+            minSize={15}
+            type="uniform"
+          />
         </div>
       </div>
     );

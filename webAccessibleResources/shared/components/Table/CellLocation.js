@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import FolderSVG from "../../../img/svg/folder.svg";
 import ShareFolderSVG from "../../../img/svg/share_folder.svg";
 import TooltipPortal from "../../../react-extension/components/Common/Tooltip/TooltipPortal";
+import CabinetSVG from "../../../img/svg/cabinet.svg";
 
 /**
  * This component represents a table cell location
@@ -74,7 +75,7 @@ class CellLocation extends Component {
       return (
         <TooltipPortal message={<span>{this.props.t("My workspace")}</span>} direction="auto">
           <button className="no-border" type="button" onClick={event => this.handleClick(event, null)}>
-            <FolderSVG/>
+            <CabinetSVG />
             <span>{this.props.t("My workspace")}</span>
           </button>
         </TooltipPortal>
@@ -104,7 +105,7 @@ class CellLocation extends Component {
 }
 
 CellLocation.propTypes = {
-  value: PropTypes.array.isRequired, // The value to display
+  value: PropTypes.array, // The value to display
   onClick: PropTypes.func, // The onClick event function
   t: PropTypes.func, // the translation function
 };

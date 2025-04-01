@@ -23,26 +23,117 @@
         font-weight: 700;
         line-height: normal;
         margin: 0;
+
+        &.preview {
+          font-weight: 400;
+        }
+      }
+    }
+
+    /* TOTP WORKSPACE */
+    .totp-workspace {
+      display: flex;
+      flex: 1 0 0;
+      align-items: center;
+      align-self: stretch;
+      gap: 1.6rem;
+      border-radius: var(--Section-border-radius);
+      background: var(--Dialog-Dialog-header-and-footer);
+
+      .totp-form {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex: 1 0 0;
+        align-self: stretch;
+        border-radius: var(--Section-border-radius);
+        background: var(--Workspace-Panels-background);
+
+        .secret-key-wrapper {
+          display: flex;
+          align-items: flex-start;
+          gap: .8rem;
+          align-self: stretch;
+        }
+      }
+
+      .totp-view {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex-shrink: 0;
+        align-self: stretch;
+        min-width: 18rem;
+        border-radius: var(--Section-border-radius);
+        background: var(--Workspace-Panels-background);
+
+
+        .totp-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          align-self: stretch;
+          gap: 1.6rem;
+
+          .secret-totp {
+            display: flex;
+            padding: 1.6rem 1.6rem 0 1.6rem;
+            gap: 1.6rem;
+
+            button {
+              gap: 1.6rem;
+
+              .totp-code {
+                display: flex;
+
+                span {
+                  font-size: 24px;
+                  font-weight: 400;
+                  line-height: 2.4rem;
+                }
+              }
+            }
+
+            svg {
+              width: 1.8rem;
+              height: 1.8rem;
+              margin: 0;
+            }
+          }
+        }
+      }
+
+      .upload-qr-code {
+        display: flex;
+        align-items: center;
       }
     }
 
     /* CONTENT */
     .content {
       display: flex;
-      padding-bottom: 2.4rem;
       flex-direction: column;
       align-items: flex-start;
       flex: 1 0 0;
       align-self: stretch;
+      padding: 1.6rem 0;
+      isolation: isolate;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--Workspace-Elevator) transparent;
 
       /* PASSWORD FIELDS LAYOUT*/
       .password-fields, .totp-fields, .note-fields, .description-fields {
         display: flex;
-        padding: 1.6rem;
+        padding: 0 1.6rem;
         flex-direction: column;
         align-items: flex-start;
         gap: 1.6rem;
         align-self: stretch;
+      }
+
+      .password-fields {
+        padding-bottom: 1.6rem;
       }
 
       /* INPUT FIELDS */
@@ -53,9 +144,17 @@
         gap: 1.2rem;
         align-self: stretch;
 
+        .warning-message, .error-message {
+          margin-bottom: 0rem;
+        }
+
         label, input, textarea {
           max-width: inherit;
           margin-bottom: 0;
+        }
+
+        label {
+          display: flex;
         }
 
         textarea {
@@ -73,6 +172,8 @@
           .password-complexity {
             margin-bottom: 0;
             align-self: stretch;
+            // Fix: tooltip with position relative make the scrollbar invisible
+            isolation: isolate;
           }
         }
 
@@ -99,56 +200,6 @@
         }
       }
 
-      .totp-view {
-        display: flex;
-        align-self: stretch;
-        padding: 1.6rem;
-
-        .totp-wrapper {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          align-self: stretch;
-          flex: 1 0 0;
-          padding: .8rem 1.6rem;
-          border-radius: var(--Contextual-bar-radius, 8px);
-
-          .secret-totp {
-            display: flex;
-            gap: 1.6rem;
-
-            button {
-              gap: 1.6rem;
-
-              .totp-code {
-                display: flex;
-
-                span {
-                  font-size: 24px;
-                  font-weight: 600;
-                  line-height: 2.4rem;
-                }
-              }
-            }
-
-            svg {
-              width: 1.8rem;
-              height: 1.8rem;
-              margin: 0;
-            }
-          }
-
-          &.disabled {
-            background-color: var(--Workspace-Dividers-lighter);
-          }
-        }
-      }
-
-      .upload-qr-code {
-        display: flex;
-        align-items: center;
-        padding: 3.2rem 0 1.6rem 0;
-      }
 
       /* ADDITIONAL INFORMATIONS */
       .additional-information {
@@ -156,6 +207,8 @@
         flex-direction: column;
         align-items: flex-start;
         align-self: stretch;
+        margin-top: 1.6rem;
+        padding-bottom: .8rem;
         border-top: 1px solid var(--Workspace-Dividers);
 
         .section-header {
@@ -184,6 +237,13 @@
         .advanced-settings {
           align-self: stretch;
           padding: 1.6rem 1.6rem 0 1.6rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1.2rem;
+
+          .input-wrapper-inline {
+            margin-bottom: 0;
+          }
         }
 
         /* TABS */
@@ -203,6 +263,19 @@
             align-self: stretch;
           }
         }
+      }
+    }
+
+    .message {
+      display: flex;
+      padding: .8rem 1.6rem 1.2rem 1.6rem;
+      align-items: center;
+      gap: 1rem;
+      align-self: stretch;
+
+      .text {
+        flex: 1 0 0;
+        align-self: stretch;
       }
     }
   }

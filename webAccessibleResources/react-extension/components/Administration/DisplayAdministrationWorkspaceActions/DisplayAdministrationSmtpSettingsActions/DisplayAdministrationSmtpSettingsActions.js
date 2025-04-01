@@ -129,7 +129,6 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
 
 DisplayAdministrationWorkspaceActions.propTypes = {
   adminSmtpSettingsContext: PropTypes.object, // The admin account recovery context
-  workflowContext: PropTypes.any, // the workflow context
   dialogContext: PropTypes.object, // The dialog context
 };
 

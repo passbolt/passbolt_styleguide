@@ -146,6 +146,10 @@
     background-color: var(--Workspace-Panels-background);
     margin-right: 0;
 
+    &:hover:not(.no-hover), &:active:not(.no-hover) {
+      background: var(--Workspace-Dividers-lighter);
+    }
+
     &.checked {
       box-shadow:
         inset -.1rem -.1rem 0 0 var(--States-Active-Highlight),

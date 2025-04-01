@@ -1,72 +1,71 @@
-import MockPort from "../../../test/mock/MockPort";
-import UserSettings from "../../../../shared/lib/Settings/UserSettings";
-import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
-import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
-import {
-  defaultPasswordPoliciesContext
-} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         5.0.0
+ */
+
 import {defaultResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext.test.data";
 import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
-import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import {
-  resourceTypePasswordAndDescriptionDto,
-  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
+  resourceTypeV5DefaultDto, resourceTypeV5TotpDto,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import {defaultPasswordPoliciesContext} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
+import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
 
-/**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any}
- */
-export function defaultAppContext(appContext = {}) {
-  const port = new MockPort();
-  const userSettings = new UserSettings(userSettingsFixture);
-  const siteSettings = new SiteSettings(siteSettingsFixture);
-
-  const defaultAppContext = {
-    userSettings,
-    siteSettings,
-    port,
-    setContext: function(newContext) {
-      // In this scope this reference the object context.
-      Object.assign(this, newContext);
-    },
-  };
-  return Object.assign(defaultAppContext, appContext);
-}
 
 /**
  * Default props
- * @returns {{resource: {id: string, name: string}}}
+ * @returns {*}
  */
 export function defaultProps(data = {}) {
   const defaultData = {
     folderParentId: null,
+    context: defaultAppContext(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
     resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
-    passwordPoliciesContext: defaultPasswordPoliciesContext(),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      getHierarchyFolderCache: () => [{name: "Folder", id: "1"}, {name: "subfolder", id: "2"}]
+    }),
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
-    resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()),
+    resourceType: new ResourceTypeEntity(resourceTypeV5DefaultDto()),
+    passwordPoliciesContext: defaultPasswordPoliciesContext({
+      policies: defaultPasswordPoliciesDto({
+        external_dictionary_check: false,
+      })
+    }),
     onClose: jest.fn(),
-    dialogContext: {
-      open: jest.fn(),
-    },
-    workflowContext: defaultWorkflowContext()
+    dialogContext: defaultDialogContext(),
   };
 
-  delete data.passwordPoliciesContext;
   return Object.assign(defaultData, data);
 }
 
-export const defaultSecretDto = (data = {}) => ({
-  password: "",
-  description: "",
-  resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
-  ...data,
-});
+/**
+ * Default totp props
+ * @returns {*}
+ */
+export function defaultTotpProps(data = {}) {
+  const defaultData = defaultProps({
+    resourceType: new ResourceTypeEntity(resourceTypeV5TotpDto()),
+  });
+
+  return Object.assign(defaultData, data);
+}

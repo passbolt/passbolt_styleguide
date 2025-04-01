@@ -32,8 +32,6 @@ import {
   plaintextSecretPasswordDescriptionTotpDto,
   plaintextSecretPasswordStringDto
 } from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
-import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
-import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 
@@ -263,13 +261,6 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resource.id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringMatching(/^[0-9]{6}/));
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-      expect(props.hide).toHaveBeenCalled();
-    });
-
-    it('As LU I can start to edit the totp of a resource', async() => {
-      expect.assertions(2);
-      await page.edit();
-      expect(props.workflowContext.start).toHaveBeenCalledWith(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_STANDALONE_TOTP});
       expect(props.hide).toHaveBeenCalled();
     });
   });

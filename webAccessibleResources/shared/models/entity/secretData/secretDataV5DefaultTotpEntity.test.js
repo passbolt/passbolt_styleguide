@@ -27,8 +27,6 @@ describe("SecretDataV5DefaultTotpEntity", () => {
     });
 
     it("validates object_type property", () => {
-      assertEntityProperty.string(SecretDataV5DefaultTotpEntity, "object_type");
-      assertEntityProperty.required(SecretDataV5DefaultTotpEntity, "object_type");
       assertEntityProperty.enumeration(SecretDataV5DefaultTotpEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
     });
 
@@ -107,12 +105,53 @@ describe("SecretDataV5DefaultTotpEntity", () => {
     it("create with data provided", () => {
       expect.assertions(4);
       const dto = defaultSecretDataV5DefaultTotpEntityDto();
-      const entity = SecretDataV5DefaultTotpEntity.createFromDefault(dto);
+      const entity = new SecretDataV5DefaultTotpEntity(dto);
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
       expect(entity.password).toStrictEqual(dto.password);
       expect(entity.totp.toDto()).toStrictEqual(dto.totp);
       expect(entity.description).toStrictEqual(dto.description);
+    });
+  });
+
+  describe("::getDefaultProp", () => {
+    it("get default password", () => {
+      expect.assertions(1);
+      expect(SecretDataV5DefaultTotpEntity.getDefaultProp("password")).toStrictEqual("");
+    });
+
+    it("get default description", () => {
+      expect.assertions(1);
+      expect(SecretDataV5DefaultTotpEntity.getDefaultProp("description")).toStrictEqual("");
+    });
+
+    it("get default totp", () => {
+      expect.assertions(1);
+      expect(SecretDataV5DefaultTotpEntity.getDefaultProp("totp")).toStrictEqual(TotpEntity.createFromDefault({}, {validate: false}).toDto());
+    });
+
+    it("get default unknown", () => {
+      expect.assertions(1);
+      expect(SecretDataV5DefaultTotpEntity.getDefaultProp("unknown")).toBeUndefined();
+    });
+
+    it("throw error if prop name is not a string", () => {
+      expect.assertions(1);
+      expect(() => SecretDataV5DefaultTotpEntity.getDefaultProp({})).toThrow(TypeError);
+    });
+  });
+
+  describe("::areSecretsDifferent", () => {
+    it("should return true", () => {
+      const dto = defaultSecretDataV5DefaultTotpEntityDto();
+      const entity = SecretDataV5DefaultTotpEntity.createFromDefault(dto);
+      expect(entity.areSecretsDifferent({password: dto.password, totp: dto.totp})).toBeTruthy();
+    });
+
+    it("should return false", () => {
+      const dto = defaultSecretDataV5DefaultTotpEntityDto();
+      const entity = new SecretDataV5DefaultTotpEntity(dto);
+      expect(entity.areSecretsDifferent(dto)).toBeFalsy();
     });
   });
 });

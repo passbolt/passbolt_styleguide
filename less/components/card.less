@@ -1,0 +1,84 @@
+button.card {
+    display: flex;
+    height: 6.4rem;
+    min-width: 17.6rem;
+    max-width: 36.9rem;
+    padding: .8rem 1.6rem;
+    align-items: center;
+    gap: 1.6rem;
+    flex: 1 0 0;
+    border-radius: var(--Button-border-radius);
+    justify-content: flex-start;
+    text-align: left;
+
+    &:hover, &:active {
+      background: var(--Workspace-Dividers-lighter);
+    }
+
+    svg {
+      display: flex;
+      width: 3.2rem;
+      height: 3.2rem;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .card-information {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: .2rem;
+      flex: 1 0 0;
+      max-width: 100%;
+
+      .title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        max-width: 100%;
+        .ellipsis();
+
+
+        &.is-beta {
+          position: relative;
+          max-width: 18.1rem; // 22rem - 3.9rem for the beta pill
+          padding-right: 4.7rem;
+
+            .chips {
+                position: absolute;
+                right: 0;
+                margin-top: .3rem;
+            }
+        }
+      }
+
+
+      .title.is-beta {
+        position: relative;
+        max-width: 18.1rem; // 22rem - 3.9rem for the beta pill
+        padding-right: 4.7rem;
+
+        .chips {
+            position: absolute;
+            right: 0;
+            margin-top: .3rem;
+        }
+    }
+
+      .info {
+        font-size: 1.2rem;
+        line-height: normal;
+        color: var(--Text-and-icons-Secondary-text);
+        max-width: 100%;
+        .ellipsis();
+
+        // only works for chrome, makes the ellipsis after the second line
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        white-space: normal;
+
+      }
+    }
+  }

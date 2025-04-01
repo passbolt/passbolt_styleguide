@@ -67,7 +67,7 @@ describe("DisplayResourceDetailsPassword", () => {
       expect(page.usernameLabel).toBe('Username');
       expect(page.username.textContent).toBe(props.resourceWorkspaceContext.details.resource.metadata.username);
       expect(page.passwordLabel).toBe('Password');
-      expect(page.password.textContent).toBe("Copy password to clipboard");
+      expect(page.password.textContent).toBe("Copy to clipboard");
       expect(page.uriLabel).toBe('URI');
       expect(page.uri.textContent).toBe(props.resourceWorkspaceContext.details.resource.metadata.uris[0]);
     });
@@ -126,7 +126,7 @@ describe("DisplayResourceDetailsPassword", () => {
       expect(props.resourceWorkspaceContext.onResourcePreviewed).toHaveBeenCalled();
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.details.resource.id);
       await page.click(page.viewPassword);
-      expect(page.password.textContent).toBe('Copy password to clipboard');
+      expect(page.password.textContent).toBe('Copy to clipboard');
     });
 
     it('AS LU, I cannot preview secret of resource if disabled by API flag', async() => {

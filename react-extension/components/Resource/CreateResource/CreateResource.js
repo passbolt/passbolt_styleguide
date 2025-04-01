@@ -1,154 +1,101 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         2.14.0
+ * @since         5.0.0
  */
 import React, {Component} from "react";
+import {withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
-
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import Icon from "../../../../shared/components/Icons/Icon";
-import Tooltip from "../../Common/Tooltip/Tooltip";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withRouter} from "react-router-dom";
+import memoize from "memoize-one";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-
-import {Trans, withTranslation} from "react-i18next";
-import GenerateResourcePassword from "../../ResourcePassword/GenerateResourcePassword/GenerateResourcePassword";
-import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
-import Password from "../../../../shared/components/Password/Password";
-import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
-import PownedService from "../../../../shared/services/api/secrets/pownedService";
-import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
-import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
-import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
-import {withWorkflow} from "../../../contexts/WorkflowContext";
-import Totp from "../../../../shared/components/Totp/Totp";
-import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
-import {DateTime} from "luxon";
-import ConfirmCreateEdit, {
-  ConfirmEditCreateOperationVariations,
-  ConfirmEditCreateRuleVariations
-} from "../ConfirmCreateEdit/ConfirmCreateEdit";
-import {ENTROPY_THRESHOLDS} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
-import ResourcePasswordDescriptionViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionViewModel";
-import ResourcePasswordStringViewModel from "../../../../shared/models/resource/ResourcePasswordStringViewModel";
-import EntityValidationError from "../../../../shared/models/entity/abstract/entityValidationError";
-import ResourceViewModel from "../../../../shared/models/resource/ResourceViewModel";
-import {
-  withResourceTypesLocalStorage
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import SelectResourceForm from "../ResourceForm/SelectResourceForm";
+import OrchestrateResourceForm from "../ResourceForm/OrchestrateResourceForm";
+import ResourceFormEntity from "../../../../shared/models/entity/resource/resourceFormEntity";
+import AddResourceName from "../ResourceForm/AddResourceName";
+import PownedService from "../../../../shared/services/api/secrets/pownedService";
+import {DateTime} from "luxon";
+import {ResourceEditCreateFormEnumerationTypes} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import {withResourceTypesLocalStorage} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {ENTROPY_THRESHOLDS} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
+import ConfirmCreateEdit, {ConfirmEditCreateOperationVariations, ConfirmEditCreateRuleVariations} from "../ConfirmCreateEdit/ConfirmCreateEdit";
+import {withDialog} from "../../../contexts/DialogContext";
+import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import {withRouter} from "react-router-dom";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {
-  RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
-  RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
+  RESOURCE_TYPE_PASSWORD_STRING_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
-import ResourceViewModelFactory from "../../../../shared/models/resource/ResourceViewModelFactory";
-import EditSVG from "../../../../img/svg/edit.svg";
-import DeleteSVG from "../../../../img/svg/delete.svg";
-import DiceSVG from "../../../../img/svg/dice.svg";
-import SettingSVG from "../../../../img/svg/settings.svg";
-import LockSVG from "../../../../img/svg/lock.svg";
-import UnlockSVG from "../../../../img/svg/unlock.svg";
 
 class CreateResource extends Component {
   constructor(props) {
     super(props);
+    this.resourceFormEntity = new ResourceFormEntity({resource_type_id: this.props.resourceType.id, folder_parent_id: props.folderParentId}, {validate: false, resourceTypes: this.props.resourceTypes});
     this.state = this.defaultState;
-    this.initEventHandlers();
-    this.createInputRef();
-  }
-
-  get defaultState() {
-    return {
-      resourceViewModel: null,
-      errors: new EntityValidationError(), //the validation errors set
-      hasAlreadyBeenValidated: false, // True if the form has already been submitted once
-      isPasswordDictionaryCheckRequested: true, // Is the password check against a dictionary request.
-      isPasswordDictionaryCheckServiceAvailable: true, // Is the password dictionary check service available.
-      passwordInDictionary: false,
-      passwordEntropy: null,
-      generatorSettings: null,
-      processing: false,
-    };
-  }
-
-  initEventHandlers() {
-    this.handleClose = this.handleClose.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleGeneratePasswordButtonClick = this.handleGeneratePasswordButtonClick.bind(this);
-    this.handleDescriptionToggle = this.handleDescriptionToggle.bind(this);
-    this.handleOpenGenerator = this.handleOpenGenerator.bind(this);
-    this.handleLastGeneratedPasswordChanged = this.handleLastGeneratedPasswordChanged.bind(this);
-    this.handleTotpClick = this.handleTotpClick.bind(this);
-    this.applyTotp = this.applyTotp.bind(this);
-    this.handleDeleteTotpClick = this.handleDeleteTotpClick.bind(this);
-    this.save = this.save.bind(this);
-    this.rejectCreationConfirmation = this.rejectCreationConfirmation.bind(this);
+    this.passwordEntropyError = false;
+    this.bindCallbacks();
   }
 
   /**
-   * Create DOM nodes or React elements references in order to be able to access them programmatically.
+   * Ge the default state
+   * @returns {*}
    */
-  createInputRef() {
-    this.nameInputRef = React.createRef();
-    this.passwordInputRef = React.createRef();
+  get defaultState() {
+    return {
+      resource: this.resourceFormEntity.toDto(), // The resource to create
+      resourceFormSelected: this.selectResourceFormByResourceSecretData(), // The selected form to display
+      resourceType: this.props.resourceType, // The resource type
+      isProcessing: false, // Is the form processing (loading, submitting).
+      hasAlreadyBeenValidated: false, // True if the form has already been submitted once.
+      isPasswordDictionaryCheckRequested: true, // Is the password check against a dictionary request.
+      passwordEntropy: null, // the current password entropy
+      passwordInDictionary: false,
+      isPasswordDictionaryCheckServiceAvailable: true,
+    };
+  }
+
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handleClose = this.handleClose.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.onSelectForm = this.onSelectForm.bind(this);
+    this.onAddSecret = this.onAddSecret.bind(this);
+    this.onDeleteSecret = this.onDeleteSecret.bind(this);
+    this.handleConvertToDescription = this.handleConvertToDescription.bind(this);
+    this.handleConvertToNote = this.handleConvertToNote.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.rejectCreationConfirmation = this.rejectCreationConfirmation.bind(this);
+    this.consumePasswordEntropyError = this.consumePasswordEntropyError.bind(this);
+    this.save = this.save.bind(this);
   }
 
   /**
    * Whenever the component has been mounted
    */
   async componentDidMount() {
-    this.initResourceViewModel();
     await Promise.all([
-      this.props.passwordPoliciesContext.findPolicies(),
       this.props.passwordExpiryContext.findSettings(),
+      this.props.passwordPoliciesContext.findPolicies(),
     ]);
+
     this.initPwnedPasswordService();
-    this.initPasswordGeneratorConfiguration();
-  }
-
-  /**
-   * Whenever the component has been changed (props)
-   * @param prevProps The previous component props
-   */
-  componentDidUpdate(prevProps) {
-    this.handleLastGeneratedPasswordChanged(
-      prevProps.resourcePasswordGeneratorContext.lastGeneratedPassword
-    );
-  }
-
-  /**
-   * Initialize the resource view model
-   */
-  initResourceViewModel() {
-    const dto = {
-      folder_parent_id: this.props.folderParentId,
-      resource_type_id: this.props.resourceType.id
-    };
-
-    const expiryDate = this.getResourceExpirationDate();
-    if (typeof(expiryDate) !== "undefined") {
-      dto.expired = expiryDate;
-    }
-
-    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(this.props.resourceType, dto);
-    this.setState({resourceViewModel});
   }
 
   /**
@@ -165,133 +112,118 @@ class CreateResource extends Component {
   }
 
   /**
-   * Initialize the password generator configuration
+   * Validate form.
+   * @param {object} resourceFormEntityDto The form resource entity dto store in state, not used but required to ensure the memoized
+   *   function is only triggered when the form is updated.
+   *   A clone need to be created before validation to use marshall function from TotpEntity that modify the content but the form should not be modified for the user
+   * @return {EntityValidationError}
    */
-  initPasswordGeneratorConfiguration() {
-    this.setState({
-      generatorSettings: this.props.resourcePasswordGeneratorContext.getSettings()
-    });
+  // eslint-disable-next-line no-unused-vars
+  validateForm = memoize(resourceFormDto => new ResourceFormEntity(resourceFormDto, {validate: false, resourceTypes: this.props.resourceTypes}).validate());
+
+  /**
+   * Verify the data health. This intends for user, to inform if data form has invalid size
+   * @param {object} resourceFormEntityDto The form resource entity dto settings dto store in state, not used but required to ensure the memoized
+   *   function is only triggered when the form is updated.
+   * @return {EntityValidationError}
+   */
+  // eslint-disable-next-line no-unused-vars
+  verifyDataHealth = memoize(resourceFormDto => this.resourceFormEntity?.verifyHealth());
+
+  /**
+   * Selected the resource form by resource type
+   * @return {string | null} The selected form
+   */
+  selectResourceFormByResourceSecretData() {
+    if (this.resourceFormEntity?.secret?.password != null) {
+      return ResourceEditCreateFormEnumerationTypes.PASSWORD;
+    } else if (this.resourceFormEntity?.secret?.totp != null) {
+      return ResourceEditCreateFormEnumerationTypes.TOTP;
+    } else if (this.resourceFormEntity?.secret?.description != null) {
+      return ResourceEditCreateFormEnumerationTypes.NOTE;
+    }
+    return null;
+  }
+
+  /**
+   * Select resource form by first error
+   * @param {EntityValidationError} errors
+   */
+  selectResourceFormByFirstError(errors) {
+    if (errors.hasError("secret")) {
+      if (errors.details.secret.hasError("totp")) {
+        this.setState({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP});
+      }
+    }
   }
 
   /*
    * =============================================================
-   *  Resource password generator
+   *  Dialog actions event handlers
    * =============================================================
    */
-
   /**
-   * Whenever a new password has been generated through the generator
-   * @param previousLastGeneratedPassword The previous last generated password value
+   * Handle form input change.
+   * @params {ReactEvent} The react event.
    */
-  handleLastGeneratedPasswordChanged(previousLastGeneratedPassword) {
-    const lastGeneratedPassword = this.props.resourcePasswordGeneratorContext.lastGeneratedPassword;
-    if (!lastGeneratedPassword) {
-      return;
+  handleInputChange(event) {
+    const target = event.target;
+    const name = target.name;
+    let value;
+    if (target.type === "number") {
+      value = Number.isNaN(target.valueAsNumber) ? "" : target.valueAsNumber;
+    } else {
+      value = target.value;
     }
 
-    const hasLastGeneratedPasswordChanged = previousLastGeneratedPassword !== this.props.resourcePasswordGeneratorContext.consumeLastGeneratedPassword();
-    if (!hasLastGeneratedPasswordChanged) {
-      return;
+    this.resourceFormEntity.set(name, value, {validate: false});
+    const newState = {resource: this.resourceFormEntity.toDto()};
+
+    if (name === "secret.password") {
+      newState.passwordInDictionary = false;
+      newState.passwordEntropy = value?.length
+        ? SecretGenerator.entropy(value)
+        : null;
     }
 
-    const passwordEntropy = SecretGenerator.entropy(lastGeneratedPassword);
-    const generatorSettings = this.props.resourcePasswordGeneratorContext.getSettings();
-
-    const resourceViewModel = this.state.resourceViewModel.cloneWithMutation("password", lastGeneratedPassword);
-
-    this.setState({
-      resourceViewModel,
-      generatorSettings,
-      passwordEntropy,
-      passwordInDictionary: false,
-    });
+    this.setState(newState);
   }
 
-  /*
-   * =============================================================
-   *  Form submit
-   * =============================================================
-   */
   /**
-   * Handle form submit event.
-   * @params {ReactEvent} The react event
-   * @returns {Promise<void>}
+   * Handle form submission that can be trigger when hitting `enter`
+   * @param {Event} event The html event triggering the form submit.
    */
   async handleFormSubmit(event) {
     event.preventDefault();
-    if (this.state.processing) {
+    if (this.state.isProcessing) {
       return;
     }
 
     this.setState({hasAlreadyBeenValidated: true});
     await this.toggleProcessing();
 
-    const validationErrors = this.validate();
-    if (validationErrors.hasErrors()) {
-      await this.toggleProcessing();
-      this.focusFirstFieldError(validationErrors);
-      return;
-    }
-
-    if (!this.isMinimumRequiredEntropyReached()) {
-      this.handlePasswordMinimumEntropyNotReached();
-      return;
-    } else if (await this.isPasswordInDictionary()) {
-      this.handlePasswordInDictionary();
-      return;
-    }
-
-    await this.save();
-  }
-
-  /**
-   * Request password not reaching minimum entropy creation confirmation.
-   */
-  handlePasswordMinimumEntropyNotReached() {
-    const confirmCreationDialog = {
-      operation: ConfirmEditCreateOperationVariations.CREATE,
-      rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
-      resourceName: this.state.resourceViewModel.name,
-      onConfirm: this.save,
-      onReject: this.rejectCreationConfirmation
-    };
-    this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
-  }
-
-  /**
-   * Request password in dictionary creation confirmation.
-   */
-  handlePasswordInDictionary() {
-    this.setState({
-      passwordInDictionary: true
-    });
-
-    const confirmCreationDialog = {
-      operation: ConfirmEditCreateOperationVariations.CREATE,
-      rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
-      resourceName: this.state.resourceViewModel.name,
-      onConfirm: this.save,
-      onReject: this.rejectCreationConfirmation
-    };
-    this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
-  }
-
-  /**
-   * Reject the creation confirmation.
-   */
-  async rejectCreationConfirmation() {
-    await this.toggleProcessing();
-    this.passwordInputRef.current.focus();
-  }
-
-  /**
-   * Save the resource
-   * @returns {Promise<void>}
-   */
-  async save() {
     try {
-      const createdResource = await this.createResource();
-      await this.handleSaveSuccess(createdResource);
+      // Create a clone entity from DTO and remove empty secret and add required secret
+      const resourceFormEntity = this.createAndSanitizeResourceFormEntity();
+
+      // Validate the entity
+      const validationError = resourceFormEntity.validate();
+
+      if (validationError?.hasErrors()) {
+        this.selectResourceFormByFirstError(validationError);
+        await this.toggleProcessing();
+        return;
+      }
+
+      if (!this.isMinimumRequiredEntropyReached()) {
+        this.handlePasswordMinimumEntropyNotReached(resourceFormEntity);
+        return;
+      } else if (await this.isPasswordInDictionary()) {
+        this.handlePasswordInDictionary(resourceFormEntity);
+        return;
+      }
+
+      await this.save(resourceFormEntity);
     } catch (error) {
       await this.toggleProcessing();
       this.handleSaveError(error);
@@ -299,36 +231,21 @@ class CreateResource extends Component {
   }
 
   /**
-   * Toggle processing state when validating / saving
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return new Promise(resolve => {
-      this.setState({processing: !prev}, resolve());
-    });
-  }
-
-  /*
-   * =============================================================
-   *  Validation
-   * =============================================================
-   */
-  /**
-   * Validate the form.
-   * @returns {EntityValidationError}
-   */
-  validate() {
-    const errors = this.state.resourceViewModel.validate(ResourceViewModel.CREATE_MODE);
-    this.setState({errors});
-    return errors;
-  }
-
-  /**
    * Returns true if the given entropy is greater or equal to the minimum required entropy.
    * @returns {boolean}
    */
   isMinimumRequiredEntropyReached() {
+    const hasResourceTypePassword = this.state.resourceType.hasPassword();
+    if (!hasResourceTypePassword) {
+      return true;
+    }
+
+    // we accept empty password in the case of v4 resource type, or we accept null password in the case of v5 resource type
+    const isPasswordNotEmpty = Boolean(this.state.resource.secret.password);
+    if (!isPasswordNotEmpty) {
+      return true;
+    }
+
     return this.state.passwordEntropy
       && this.state.passwordEntropy >= ENTROPY_THRESHOLDS.WEAK;
   }
@@ -338,11 +255,24 @@ class CreateResource extends Component {
    * @returns {Promise<boolean>}
    */
   async isPasswordInDictionary() {
+    // does the current resource actually has a password
+    const hasResourceTypePassword = this.state.resourceType.hasPassword();
+    if (!hasResourceTypePassword) {
+      return false;
+    }
+
+    // we accept empty password in the case of v4 resource type, or we accept null password in the case of v5 resource type
+    const isPasswordNotEmpty = Boolean(this.state.resource.secret.password);
+    if (!isPasswordNotEmpty) {
+      return false;
+    }
+
+    const password = this.state.resource.secret.password;
     if (!this.state.isPasswordDictionaryCheckRequested || !this.state.isPasswordDictionaryCheckServiceAvailable) {
       return false;
     }
 
-    const {isPwnedServiceAvailable, inDictionary} = await this.pownedService.evaluateSecret(this.state.resourceViewModel.password);
+    const {isPwnedServiceAvailable, inDictionary} = await this.pownedService.evaluateSecret(password);
 
     if (!isPwnedServiceAvailable) {
       this.setState({isPasswordDictionaryCheckServiceAvailable: false});
@@ -352,43 +282,109 @@ class CreateResource extends Component {
     return inDictionary;
   }
 
-  /*
-   * =============================================================
-   *  Create resource
-   * =============================================================
-   */
   /**
-   * Create the resource
-   * @returns {Promise<Object>} returns the newly created resource
+   * Request password not reaching minimum entropy creation confirmation.
+   * @param {ResourceFormEntity} resourceFormEntity The resource form entity
    */
-  createResource() {
-    const resourceDto = this.state.resourceViewModel.toResourceDto();
-    const secretDto = this.state.resourceViewModel.toSecretDto();
-    return this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
+  handlePasswordMinimumEntropyNotReached(resourceFormEntity) {
+    const confirmCreationDialog = {
+      operation: ConfirmEditCreateOperationVariations.CREATE,
+      rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+      resourceName: this.state.resource?.metadata?.name,
+      onConfirm: () => this.save(resourceFormEntity),
+      onReject: this.rejectCreationConfirmation
+    };
+    this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
   }
 
   /**
-   * Get the expiration date on the given resource according to the password expiry settings.
-   * The value is set to `undefined` if the feature is not activated,
-   * otherwise it is set to `null` if the expiration date must be unset
-   * or else a `DateTime` at when the expiration should occur.
-   * @returns {DateTime|null|undefined}
+   * Request password in dictionary creation confirmation.
+   * @param {ResourceFormEntity} resourceFormEntity The resource form entity
    */
-  getResourceExpirationDate() {
-    if (!this.props.passwordExpiryContext.isFeatureEnabled()) {
-      return undefined;
-    }
+  handlePasswordInDictionary(resourceFormEntity) {
+    this.setState({
+      passwordInDictionary: true,
+    });
 
-    const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
-    if (!(passwordExpirySettings?.automatic_update)) {
-      return undefined;
-    }
+    const confirmCreationDialog = {
+      operation: ConfirmEditCreateOperationVariations.CREATE,
+      rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+      resourceName: this.state.resource?.metadata?.name,
+      onConfirm: () => this.save(resourceFormEntity),
+      onReject: this.rejectCreationConfirmation
+    };
+    this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
+  }
 
-    if (passwordExpirySettings.default_expiry_period == null) {
-      return null;
-    }
+  /**
+   * Reject the creation confirmation.
+   */
+  rejectCreationConfirmation() {
+    this.passwordEntropyError = true;
+    this.setState({
+      resourceFormSelected: ResourceEditCreateFormEnumerationTypes.PASSWORD,
+      isProcessing: false,
+    });
+  }
 
-    return DateTime.utc().plus({days: passwordExpirySettings.default_expiry_period}).toISO();
+  /**
+   * Returns true if the password entropy has been marked as erroneous.
+   * The value is then "consumed";
+   * @returns {boolean}
+   */
+  consumePasswordEntropyError() {
+    const hasPasswordEntropyError = this.passwordEntropyError;
+    this.passwordEntropyError = false;
+    return hasPasswordEntropyError;
+  }
+
+  /**
+   * Create and sanitize resource form entity
+   *
+   * The user should not be blocked during the creation so the goal is to find the best match between resource type available
+   * - Remove empty secret that is required like Totp (this will find the best match for resource type)
+   * - Add minimum required secret like password to match resource type
+   * Sanitize:
+   *  - remove empty secret
+   *  - add required secret
+   *
+   * @returns {ResourceFormEntity}
+   */
+  createAndSanitizeResourceFormEntity() {
+    const resourceFormEntity = new ResourceFormEntity(this.state.resource, {validate: false, resourceTypes: this.props.resourceTypes});
+    const expiryDate = this.getResourceExpirationDate();
+    if (typeof(expiryDate) !== "undefined") {
+      resourceFormEntity.set("expired", expiryDate, {validate: false});
+    }
+    if (resourceFormEntity.metadata.name.length === 0) {
+      resourceFormEntity.set("metadata.name", "no name", {validate: false});
+    }
+    resourceFormEntity.removeEmptySecret({validate: false});
+    resourceFormEntity.addRequiredSecret({validate: false});
+    return resourceFormEntity;
+  }
+
+  /**
+   * Save the resource
+   * @param {ResourceFormEntity} resource
+   * @returns {Promise<void>}
+   */
+  async save(resource) {
+    const createdResource = await this.createResource(resource);
+    await this.handleSaveSuccess(createdResource);
+  }
+
+  /**
+   * Create the resource
+   * @param {ResourceFormEntity} resource
+   * @returns {Promise<Object>} returns the newly created resource
+   */
+  createResource(resource) {
+    const resourceDto = resource.toResourceDto();
+    const resourceType = this.props.resourceTypes.getFirstById(resource.resourceTypeId);
+    const isV4PasswordString = resourceType.slug === RESOURCE_TYPE_PASSWORD_STRING_SLUG;
+    const secretDto = isV4PasswordString ? resource.toSecretDto().password : resource.toSecretDto();
+    return this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
   }
 
   /**
@@ -397,7 +393,7 @@ class CreateResource extends Component {
    * @returns {Promise<void>}
    */
   async handleSaveSuccess(createdResource) {
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The password has been added successfully"));
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been added successfully"));
     this.props.history.push(`/app/passwords/view/${createdResource.id}`);
     this.handleClose();
   }
@@ -429,190 +425,104 @@ class CreateResource extends Component {
   }
 
   /**
-   * Focus the first field of the form which is in error state.
-   * @param {EntityValidationError} validationErrors
+   * Toggle processing state when validating / saving
+   * @returns {Promise<void>}
    */
-  focusFirstFieldError(validationErrors) {
-    if (validationErrors.hasError("name")) {
-      this.nameInputRef.current.focus();
-    } else if (validationErrors.hasError("password")) {
-      this.passwordInputRef.current.focus();
-    }
-  }
-
-  /*
-   * =============================================================
-   *  Dialog actions event handlers
-   * =============================================================
-   */
-  /**
-   * Handle form input change.
-   * @params {ReactEvent} The react event.
-   */
-  handleInputChange(event) {
-    const target = event.target;
-    const name = target.name;
-    const value = target.value || null;
-
-    const newState = {
-      resourceViewModel: this.state.resourceViewModel.cloneWithMutation(name, value),
-    };
-
-    if (name === "password") {
-      newState.passwordInDictionary = false;
-      newState.passwordEntropy = value?.length
-        ? SecretGenerator.entropy(value)
-        : null;
-    }
-
-    if (this.state.hasAlreadyBeenValidated) {
-      newState.errors = newState.resourceViewModel.validate();
-    }
-
-    this.setState(newState);
-  }
-
-  /**
-   * Returns true if the `maxLength` property of the given field has been reached.
-   * @param {string} fieldName
-   * @returns {boolean}
-   */
-  isFieldMaxSizeReached(fieldName) {
-    const schema = this.state.resourceViewModel.constructor.getSchema();
-    if (typeof(schema.properties[fieldName]?.maxLength) === "undefined") {
-      return false;
-    }
-
-    return this.state.resourceViewModel[fieldName]?.length >= schema.properties[fieldName].maxLength;
-  }
-
-  /**
-   * Handle generate password button click.
-   */
-  handleGeneratePasswordButtonClick() {
-    if (this.state.processing) {
-      return;
-    }
-
-    const password = SecretGenerator.generate(this.state.generatorSettings);
-    const passwordEntropy = SecretGenerator.entropy(password);
-
-    const resourceViewModel = this.state.resourceViewModel.cloneWithMutation("password", password);
-
-    this.setState({
-      resourceViewModel,
-      passwordError: "",
-      passwordInDictionary: false,
-      passwordEntropy
+  async toggleProcessing() {
+    const prev = this.state.isProcessing;
+    return new Promise(resolve => {
+      this.setState({isProcessing: !prev}, () => resolve());
     });
   }
 
   /**
-   * Whenever the user wants to open the password generator
-   */
-  handleOpenGenerator() {
-    this.props.dialogContext.open(GenerateResourcePassword);
-  }
-
-  /**
-   * Handle click on totp button
-   */
-  handleTotpClick() {
-    const totp = this.state.resourceViewModel.totp;
-    const mode = totp
-      ? TotpWorkflowMode.EDIT_TOTP
-      : TotpWorkflowMode.ADD_TOTP;
-    const onApply = this.applyTotp;
-    this.props.workflowContext.start(HandleTotpWorkflow, {mode, totp, onApply});
-  }
-
-  /**
-   * Handle delete totp
-   */
-  handleDeleteTotpClick() {
-    const dto = {
-      ...this.state.resourceViewModel,
-      resource_type_id: this.props.resourceType.id,
-    };
-    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(this.props.resourceType, dto);
-    this.setState({resourceViewModel});
-  }
-
-  /**
-   * Apply the totp
-   * @param {object} totp
-   */
-  applyTotp(totp) {
-    let resourceType;
-    if (this.props.resourceType.isV5()) {
-      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG);
-    } else if (this.props.resourceType.isV4()) {
-      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG);
-    }
-    const dto = {
-      ...this.state.resourceViewModel,
-      resource_type_id: resourceType.id,
-      totp: totp
-    };
-    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto);
-    this.setState({resourceViewModel});
-  }
-
-  /**
    * Handle close
-   * @returns {Promise<void>}
    */
-  async handleClose() {
-    // ensure the secret generator settings are back to the organisation's default in case a new secret is generated later
-    await this.props.resourcePasswordGeneratorContext.resetSecretGeneratorSettings();
+  handleClose() {
     this.props.onClose();
   }
 
   /**
-   * Switch to toggle description field encryption
+   * Set the state for the resource form selected
+   * @param event
+   * @param resourceFormSelected
    */
-  handleDescriptionToggle() {
-    const resourceViewModel = this.state.resourceViewModel;
-    if (!resourceViewModel.canToggleDescription()) {
-      return;
+  onSelectForm(event, resourceFormSelected) {
+    this.setState({resourceFormSelected});
+  }
+
+  /**
+   * Add secret to the resourceFormEntity
+   * @param {string} secret The secret to add
+   */
+  onAddSecret(secret) {
+    this.resourceFormEntity.addSecret(secret, {validate: false});
+    const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
+    this.setState({resource: this.resourceFormEntity.toDto(), resourceFormSelected: secret, resourceType});
+  }
+
+  /**
+   * Delete secret to the resourceFormEntity
+   * @param {string} secret The secret to delete
+   */
+  onDeleteSecret(secret) {
+    this.resourceFormEntity.deleteSecret(secret, {validate: false});
+    const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
+    if (this.state.resourceFormSelected === secret) {
+      this.setState({resource: this.resourceFormEntity.toDto(), resourceFormSelected: this.selectResourceFormByResourceSecretData(), resourceType});
+    } else {
+      this.setState({resource: this.resourceFormEntity.toDto(), resourceType});
+    }
+  }
+
+  /**
+   * Handle convert note to metadata description
+   */
+  handleConvertToDescription() {
+    this.resourceFormEntity.convertToMetadataDescription({validate: false});
+    const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
+    this.setState({
+      resource: this.resourceFormEntity.toDto(),
+      resourceFormSelected: ResourceEditCreateFormEnumerationTypes.DESCRIPTION,
+      resourceType
+    });
+  }
+
+  /**
+   * Handle convert description to secret note
+   */
+  handleConvertToNote() {
+    this.resourceFormEntity.convertToNote({validate: false});
+    const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
+    this.setState({
+      resource: this.resourceFormEntity.toDto(),
+      resourceFormSelected: ResourceEditCreateFormEnumerationTypes.NOTE,
+      resourceType
+    });
+  }
+
+  /**
+   * Get the expiration date on the given resource according to the password expiry settings.
+   * The value is set to `undefined` if the feature is not activated,
+   * otherwise it is set to `null` if the expiration date must be unset
+   * or else a `DateTime` at when the expiration should occur.
+   * @returns {DateTime|null|undefined}
+   */
+  getResourceExpirationDate() {
+    if (!this.props.passwordExpiryContext.isFeatureEnabled()) {
+      return undefined;
     }
 
-    const newResourceViewModelType = resourceViewModel.isDescriptionUnencrypted()
-      ? ResourcePasswordDescriptionViewModel
-      : ResourcePasswordStringViewModel;
+    const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
+    if (!(passwordExpirySettings?.automatic_update)) {
+      return undefined;
+    }
 
-    const resourceType = this.props.resourceTypes.getFirstBySlug(newResourceViewModelType.resourceTypeSlug);
-    const dto = {
-      ...this.state.resourceViewModel,
-      resource_type_id: resourceType.id
-    };
+    if (passwordExpirySettings.default_expiry_period == null) {
+      return null;
+    }
 
-    const newResourceViewModel = new newResourceViewModelType(dto);
-    this.setState({resourceViewModel: newResourceViewModel});
-  }
-
-  /**
-   * Returns true if the logged in user can use the password generator capability.
-   * @returns {boolean}
-   */
-  get canUsePasswordGenerator() {
-    return this.props.context.siteSettings.canIUse("passwordGenerator");
-  }
-
-  /**
-   * Returns true if the logged in user can use the totp capability.
-   * @returns {boolean}
-   */
-  get canUseTotp() {
-    return this.props.context.siteSettings.canIUse('totpResourceTypes');
-  }
-
-  /**
-   * Has a totp
-   * @returns {boolean}
-   */
-  get hasTotp() {
-    return Boolean(this.state.resourceViewModel.totp);
+    return DateTime.utc().plus({days: passwordExpirySettings.default_expiry_period}).toISO();
   }
 
   /**
@@ -629,150 +539,44 @@ class CreateResource extends Component {
    * =============================================================
    */
   render() {
-    const isReady = this.state.resourceViewModel !== null;
-    if (!isReady) {
-      return null;
-    }
+    const warnings = this.verifyDataHealth(this.state.resource);
+    const errors = this.state.hasAlreadyBeenValidated ? this.validateForm(this.state.resource) : null;
 
-    const isNameError = this.state.errors.hasError("name", "required");
-    const isPasswordError = this.state.errors.hasError("password", "required");
-
-    const isMaxLengthNameWarning = this.isFieldMaxSizeReached("name");
-    const isMaxLengthUriWarning = this.isFieldMaxSizeReached("uri");
-    const isMaxLengthUsernameWarning = this.isFieldMaxSizeReached("username");
-    const isMaxLengthPasswordWarning = this.isFieldMaxSizeReached("password");
-    const isMaxLengthDescriptionWarning = this.isFieldMaxSizeReached("description");
-
-    const resourceViewModel = this.state.resourceViewModel;
-
-    const passwordEntropy = this.state.passwordInDictionary ? 0 : this.state.passwordEntropy;
     return (
-      <DialogWrapper title={this.translate("Create a password")} className="create-password-dialog"
-        disabled={this.state.processing} onClose={this.handleClose}>
-        <form onSubmit={this.handleFormSubmit} noValidate>
-          <div className="form-content">
-            <div className={`input text required ${isNameError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-password-form-name"><Trans>Name</Trans>{isMaxLengthNameWarning && <Icon name="exclamation" />}</label>
-              <input id="create-password-form-name" name="name" type="text" value={resourceViewModel.name || ""} onChange={this.handleInputChange}
-                disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="255"
-                required="required" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
-              {isNameError &&
-                <div className="name error-message"><Trans>A name is required.</Trans></div>
-              }
-              {isMaxLengthNameWarning &&
-                <div className="name warning-message">
-                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
-                </div>
-              }
+      <DialogWrapper title={this.translate("Create a resource")} className="create-resource"
+        disabled={this.state.isProcessing} onClose={this.handleClose}>
+        <SelectResourceForm
+          resourceType={this.state.resourceType}
+          resourceFormSelected={this.state.resourceFormSelected}
+          resource={this.state.resource}
+          onAddSecret={this.onAddSecret}
+          onDeleteSecret={this.onDeleteSecret}
+          onSelectForm={this.onSelectForm}
+          disabled={this.state.isProcessing}
+        />
+        <form onSubmit={this.handleFormSubmit} className="grid-and-footer" noValidate>
+          <div className="grid">
+            <AddResourceName
+              resource={this.state.resource} folderParentId={this.props.folderParentId} onChange={this.handleInputChange} warnings={warnings}
+              errors={errors} disabled={this.state.isProcessing}/>
+            <div className="create-workspace">
+              <OrchestrateResourceForm
+                resourceFormSelected={this.state.resourceFormSelected}
+                resource={this.state.resource}
+                resourceType={this.state.resourceType}
+                onChange={this.handleInputChange}
+                onConvertToDescription={this.handleConvertToDescription}
+                onConvertToNote={this.handleConvertToNote}
+                passwordEntropy={this.state.passwordEntropy}
+                warnings={warnings}
+                errors={errors}
+                consumePasswordEntropyError={this.consumePasswordEntropyError}
+                disabled={this.state.isProcessing}/>
             </div>
-            <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-password-form-uri"><Trans>URI</Trans>{isMaxLengthUriWarning && <Icon name="exclamation" />}</label>
-              <input id="create-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
-                autoComplete="off" value={resourceViewModel.uri || ""} onChange={this.handleInputChange} placeholder={this.translate("URI")}
-                disabled={this.state.processing}/>
-              {isMaxLengthUriWarning &&
-                <div className="uri warning-message">
-                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
-                </div>
-              }
-            </div>
-            <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-password-form-username"><Trans>Username</Trans>{isMaxLengthUsernameWarning && <Icon name="exclamation" />}</label>
-              <input id="create-password-form-username" name="username" type="text" className="fluid" maxLength="255"
-                autoComplete="off" value={resourceViewModel.username || ""} onChange={this.handleInputChange} placeholder={this.translate("Username")}
-                disabled={this.state.processing}/>
-              {isMaxLengthUsernameWarning &&
-                <div className="username warning-message">
-                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
-                </div>
-              }
-            </div>
-            <div className={`input-password-wrapper input required ${isPasswordError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-password-form-password">
-                <Trans>Password</Trans>{isMaxLengthPasswordWarning && <Icon name="exclamation"/>}
-              </label>
-              <div className="password-button-inline">
-                <Password id="create-password-form-password"
-                  name="password"
-                  autoComplete="new-password"
-                  placeholder={this.translate("Password")}
-                  preview={true}
-                  value={resourceViewModel.password || ""}
-                  onChange={this.handleInputChange}
-                  disabled={this.state.processing}
-                  inputRef={this.passwordInputRef}/>
-                <button type="button" onClick={this.handleGeneratePasswordButtonClick}
-                  className={`password-generate button-icon ${this.state.processing ? "disabled" : ""}`}>
-                  <DiceSVG/>
-                  <span className="visually-hidden"><Trans>Generate</Trans></span>
-                </button>
-                {this.canUsePasswordGenerator &&
-                  <button type="button" onClick={this.handleOpenGenerator}
-                    className={`password-generator button-icon ${this.state.processing ? "disabled" : ""}`}>
-                    <SettingSVG/>
-                    <span className="visually-hidden"><Trans>Open generator</Trans></span>
-                  </button>
-                }
-              </div>
-              <PasswordComplexity entropy={passwordEntropy} error={isPasswordError}/>
-              {isPasswordError &&
-                <div className="password error-message"><Trans>A password is required.</Trans></div>
-              }
-              {isMaxLengthPasswordWarning &&
-                <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans></div>
-              }
-            </div>
-            <div className={`input textarea ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-password-form-description"><Trans>Description</Trans>
-                {isMaxLengthDescriptionWarning &&
-                  <Icon name="exclamation"/>
-                }
-                <button type="button" onClick={this.handleDescriptionToggle} className="button-transparent inline lock-toggle">
-                  {resourceViewModel.isDescriptionUnencrypted() ? (
-                    <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
-                      <UnlockSVG/>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip message={this.translate("The description content will be encrypted.")}>
-                      <LockSVG/>
-                    </Tooltip>
-                  )}
-                </button>
-              </label>
-              <textarea id="create-password-form-description" name="description" maxLength="10000"
-                placeholder={this.translate("Add a description")} value={resourceViewModel.description || ""}
-                disabled={this.state.processing} onChange={this.handleInputChange}>
-              </textarea>
-              {isMaxLengthDescriptionWarning &&
-                <div className="description warning-message"><strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans></div>
-              }
-            </div>
-            {this.canUseTotp && !this.hasTotp &&
-              <div className="input input-totp-wrapper">
-                <button type="button" className="add-totp link no-border link-icon" onClick={this.handleTotpClick} disabled={this.state.processing}>
-                  <Icon name="plus-circle"/>
-                  <span className="link-label"><Trans>Add TOTP</Trans></span>
-                </button>
-              </div>
-            }
-            {this.canUseTotp && this.hasTotp &&
-              <div className={`input input-totp-wrapper ${this.state.processing ? 'disabled' : ''}`}>
-                <label htmlFor="create-password-form-totp"><Trans>TOTP</Trans></label>
-                <div className="input-wrapper-inline totp">
-                  <Totp totp={resourceViewModel.totp}/>
-                  <button type="button" className="edit-totp button-icon" onClick={this.handleTotpClick} disabled={this.state.processing}>
-                    <EditSVG/>
-                  </button>
-                  <button type="button" className="delete-totp button-icon" onClick={this.handleDeleteTotpClick} disabled={this.state.processing}>
-                    <DeleteSVG/>
-                  </button>
-                </div>
-              </div>
-            }
           </div>
-          <div className="submit-wrapper clearfix">
-            <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
-            <FormSubmitButton value={this.translate("Create")} disabled={this.state.processing} processing={this.state.processing}/>
+          <div className="submit-wrapper">
+            <FormCancelButton disabled={this.state.isProcessing} onClick={this.handleClose}/>
+            <FormSubmitButton value={this.translate("Create")} disabled={this.state.isProcessing} processing={this.state.isProcessing}/>
           </div>
         </form>
       </DialogWrapper>
@@ -785,16 +589,14 @@ CreateResource.propTypes = {
   history: PropTypes.object, // Router history
   folderParentId: PropTypes.string, // The folder parent id
   onClose: PropTypes.func, // Whenever the component must be closed
-  resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
+  dialogContext: PropTypes.object, // The dialog context
   passwordExpiryContext: PropTypes.object, // The password expiry context
-  actionFeedbackContext: PropTypes.any, // The action feedback context
-  dialogContext: PropTypes.any, // The dialog context
-  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
-  resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource types collection
-  t: PropTypes.func, // The translation function
   passwordPoliciesContext: PropTypes.object, // The password policy context
-  workflowContext: PropTypes.any, // The workflow context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  resourceType: PropTypes.instanceOf(ResourceTypeEntity).isRequired, // The resource types entity
+  t: PropTypes.func, // The translation function
 };
 
-export default  withRouter(withAppContext(withPasswordPolicies(withResourceTypesLocalStorage(withPasswordExpiry(withActionFeedback(withResourcePasswordGeneratorContext(withDialog(withWorkflow(withTranslation('common')(CreateResource))))))))));
+export default  withRouter(withAppContext(withPasswordPolicies(withPasswordExpiry(withResourceTypesLocalStorage(withActionFeedback(withDialog(withTranslation('common')(CreateResource))))))));
 

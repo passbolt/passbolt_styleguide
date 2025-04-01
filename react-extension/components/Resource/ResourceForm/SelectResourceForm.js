@@ -26,7 +26,8 @@ import TotpSVG from "../../../../img/svg/totp.svg";
 import NotesSVG from "../../../../img/svg/notes.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import AlignLeftSVG from "../../../../img/svg/align_left.svg";
-import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
+//import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
+import DeleteSVG from "../../../../img/svg/delete.svg";
 import {
   ResourceEditCreateFormEnumerationTypes
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
@@ -35,7 +36,6 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import TotpEntity from "../../../../shared/models/entity/totp/totpEntity";
 
 class SelectResourceForm extends Component {
   constructor(props) {
@@ -65,6 +65,7 @@ class SelectResourceForm extends Component {
     this.handleDisplayUpgradeClick = this.handleDisplayUpgradeClick.bind(this);
     this.handleSelectForm = this.handleSelectForm.bind(this);
     this.handleAddSecret = this.handleAddSecret.bind(this);
+    this.handleDeleteSecret = this.handleDeleteSecret.bind(this);
   }
 
   /**
@@ -102,11 +103,20 @@ class SelectResourceForm extends Component {
   /**
    * Handle add secret
    * @param {string} secret The secret to add
-   * @param {*} value The value to add
    */
-  handleAddSecret(secret, value) {
+  handleAddSecret(secret) {
     if (this.props.onAddSecret) {
-      this.props.onAddSecret(secret, value);
+      this.props.onAddSecret(secret);
+    }
+  }
+
+  /**
+   * Handle delete secret
+   * @param {string} secret The secret to delete
+   */
+  handleDeleteSecret(secret) {
+    if (this.props.onDeleteSecret) {
+      this.props.onDeleteSecret(secret);
     }
   }
 
@@ -123,6 +133,18 @@ class SelectResourceForm extends Component {
    */
   get resource() {
     return this.props.resource;
+  }
+
+  /**
+   * Is resource has multiple secret
+   * @returns {boolean}
+   */
+  get isResourceHasMultipleSecret() {
+    const isSecretProperty = prop => prop !== "object_type";
+    const isSecretHasValue = value => value != null;
+    const isSecretPropertyAndHasValue = ([prop, value]) => isSecretProperty(prop) && isSecretHasValue(value);
+
+    return this.resource?.secret && Object.entries(this.resource?.secret).filter(isSecretPropertyAndHasValue).length > 1;
   }
 
   /**
@@ -218,7 +240,7 @@ class SelectResourceForm extends Component {
       <div className="left-sidebar">
         <div className="main-action-wrapper">
           <Dropdown>
-            <DropdownButton className="add-secret" disabled={!this.canAddSecret}>
+            <DropdownButton className="add-secret" disabled={!this.canAddSecret || this.props.disabled}>
               <AddSVG/>
               <span><Trans>Add secret</Trans></span>
               <CaretDownSVG/>
@@ -227,7 +249,7 @@ class SelectResourceForm extends Component {
               {this.canAddSecretPassword &&
                 <DropdownItem>
                   <button id="password_action" type="button" className="no-border"
-                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD, "")}>
+                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD)}>
                     <KeySVG/>
                     <span><Trans>Password</Trans></span>
                   </button>
@@ -236,7 +258,7 @@ class SelectResourceForm extends Component {
               {this.canAddSecretTotp &&
                 <DropdownItem>
                   <button id="totp_action" type="button" className="no-border"
-                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.TOTP, TotpEntity.createFromDefault({}, {validate: false}))}>
+                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.TOTP)}>
                     <TotpSVG/>
                     <span><Trans>TOTP</Trans></span>
                   </button>
@@ -245,7 +267,7 @@ class SelectResourceForm extends Component {
               {this.canAddSecretNote &&
                 <DropdownItem>
                   <button id="note_action" type="button" className="no-border"
-                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.NOTE, "")}>
+                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.NOTE)}>
                     <NotesSVG/>
                     <span><Trans>Note</Trans></span>
                   </button>
@@ -265,51 +287,78 @@ class SelectResourceForm extends Component {
           {this.state.displaySecrets &&
             <>
               {this.isResourceHasPassword &&
-                <button type="button"
-                  className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.PASSWORD === this.selectedForm ? "selected" : ""}`}
-                  onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.PASSWORD)}>
-                  <KeySVG/>
-                  <span className="ellipsis"><Trans>Passwords</Trans></span>
-                </button>
+                <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.PASSWORD === this.selectedForm ? "selected" : ""}`}>
+                  <button type="button" className="no-border"
+                    id="secret-password-tab"
+                    disabled={this.props.disabled}
+                    onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.PASSWORD)}>
+                    <KeySVG/>
+                    <span className="ellipsis"><Trans>Passwords</Trans></span>
+                  </button>
+                  {this.isResourceHasMultipleSecret &&
+                    <button type="button" id="delete-password" disabled={this.props.disabled} className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD)}>
+                      <DeleteSVG/>
+                    </button>
+                  }
+                </div>
               }
               {this.isResourceHasTotp &&
-                <button type="button"
-                  className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.TOTP === this.selectedForm ? "selected" : ""}`}
-                  onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.TOTP)}>
-                  <TotpSVG/>
-                  <span className="ellipsis"><Trans>TOTP</Trans></span>
-                </button>
+                <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.TOTP === this.selectedForm ? "selected" : ""}`}>
+                  <button type="button" className="no-border"
+                    id="secret-totp-tab"
+                    disabled={this.props.disabled}
+                    onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.TOTP)}>
+                    <TotpSVG/>
+                    <span className="ellipsis"><Trans>TOTP</Trans></span>
+                  </button>
+                  {this.isResourceHasMultipleSecret &&
+                    <button type="button" id="delete-totp" disabled={this.props.disabled} className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.TOTP)}>
+                      <DeleteSVG/>
+                    </button>
+                  }
+                </div>
               }
               {this.isResourceHasNote &&
-                <button type="button"
-                  className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.NOTE === this.selectedForm ? "selected" : ""}`}
-                  onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.NOTE)}>
-                  <NotesSVG/>
-                  <span className="ellipsis"><Trans>Note</Trans></span>
-                </button>
+                <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.NOTE === this.selectedForm ? "selected" : ""}`}>
+                  <button type="button" className="no-border"
+                    id="secret-note-tab"
+                    disabled={this.props.disabled}
+                    onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.NOTE)}>
+                    <NotesSVG/>
+                    <span className="ellipsis"><Trans>Note</Trans></span>
+                  </button>
+                  {this.isResourceHasMultipleSecret &&
+                    <button type="button" id="delete-note" disabled={this.props.disabled} className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.NOTE)}>
+                      <DeleteSVG/>
+                    </button>
+                  }
+                </div>
               }
             </>
           }
-          <button type="button" className="section-header no-border" onClick={this.handleDisplayMetadataClick}>
-            {this.state.displayMetadata
-              ? <CaretDownSVG className="caret-down"/>
-              : <CaretRightSVG className="caret-right"/>
-            }
-            <span className="ellipsis"><Trans>Metadata</Trans></span>
-          </button>
-          {this.state.displayMetadata &&
+          {this.isResourceTypeHasDescriptionMetadata &&
             <>
-              <button type="button"
-                id="menu-description"
-                className={`section-content no-border ${ResourceEditCreateFormEnumerationTypes.DESCRIPTION === this.selectedForm ? "selected" : ""}`}
-                disabled={!this.isResourceTypeHasDescriptionMetadata}
-                onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.DESCRIPTION)}>
-                <AlignLeftSVG/>
-                <span className="ellipsis"><Trans>Description</Trans></span>
+              <button type="button" className="section-header no-border" onClick={this.handleDisplayMetadataClick}>
+                {this.state.displayMetadata
+                  ? <CaretDownSVG className="caret-down"/>
+                  : <CaretRightSVG className="caret-right"/>
+                }
+                <span className="ellipsis"><Trans>Metadata</Trans></span>
               </button>
+              {this.state.displayMetadata &&
+                <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.DESCRIPTION === this.selectedForm ? "selected" : ""} ${!this.isResourceTypeHasDescriptionMetadata ? "disabled" : ""}`}>
+                  <button type="button" id="menu-description" className="no-border" disabled={this.props.disabled}
+                    onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.DESCRIPTION)}>
+                    <AlignLeftSVG/>
+                    <span className="ellipsis"><Trans>Description</Trans></span>
+                  </button>
+                </div>
+              }
             </>
           }
         </div>
+        {/* Upgrade v4 to v5
+
         <div className="section-card">
           <div className="card">
             <button type="button" className="title no-border" onClick={this.handleDisplayUpgradeClick}>
@@ -335,6 +384,8 @@ class SelectResourceForm extends Component {
             }
           </div>
         </div>
+
+        */}
       </div>
     );
   }
@@ -344,9 +395,11 @@ SelectResourceForm.propTypes = {
   resourceFormSelected: PropTypes.string, // The resource form selected
   onSelectForm: PropTypes.func, // The on select form function
   onAddSecret: PropTypes.func, // The on add secret function
+  onDeleteSecret: PropTypes.func, // The on delete secret function
   resource: PropTypes.object, // The resource to edit or create
   resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource type entity
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection),
+  disabled: PropTypes.bool, // The disabled property
   t: PropTypes.func, // The translation function
 };
 

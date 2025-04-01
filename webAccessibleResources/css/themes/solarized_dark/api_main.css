@@ -94,7 +94,7 @@
   --Workspace-bar-Workspace-bar-background: var(--Palette-Gradient-1);
   --Workspace-bar-Workspace-bar-text: var(--Palette-Gradient-8);
   --Workspace-Panels-background: var(--Palette-Gradient-1);
-  --Primary-button-Primary-button-menu-background: var(--Palette-Gradient-2);
+  --Primary-button-Primary-button-menu-background: var(--Palette-Gradient-1);
   --Action-button-Secondary-button-background: var(--Palette-Gradient-1);
   --Dialog-Dialog-header-and-footer: var(--Palette-Gradient-2);
   --Dialog-Dialog-fill: var(--Palette-Gradient-1);
@@ -2197,6 +2197,10 @@ input[type=file] {
 .radiolist-alt .input.radio:disabled {
   box-shadow: inset 0 0 0 0.1rem var(--Action-button-Action-button-border);
 }
+.radiolist-alt .input.radio:hover:not(.no-hover),
+.radiolist-alt .input.radio:active:not(.no-hover) {
+  background: var(--Workspace-Dividers-lighter);
+}
 .radiolist-alt .input.radio.checked {
   box-shadow: inset -0.1rem -0.1rem 0 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 0 var(--States-Active-Shadow);
   background: var(--Action-button-Active-action-button-background);
@@ -2405,6 +2409,10 @@ input[type=file] {
 .togglelist-alt .input.toggle-switch:disabled {
   box-shadow: inset 0 0 0 0.1rem var(--Action-button-Action-button-border);
 }
+.togglelist-alt .input.toggle-switch:hover:not(:disabled),
+.togglelist-alt .input.toggle-switch:active:not(:disabled) {
+  background: var(--Workspace-Dividers-lighter);
+}
 .togglelist-alt .input.toggle-switch.checked {
   box-shadow: inset -0.1rem -0.1rem 0 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 0 var(--States-Active-Shadow);
   background: var(--Action-button-Active-action-button-background);
@@ -2473,7 +2481,7 @@ input[type=file] {
   height: 3rem;
 }
 .select-container.inline .select .selected-value {
-  background: var(--Field-Field-background);
+  background: var(--Field-Infield-button-background);
   box-shadow: inset 0 0 0 0.1rem var(--Field-Field-border);
   padding: 0.5rem 1.6rem;
 }
@@ -3256,7 +3264,8 @@ html {
   align-self: stretch;
   background: var(--Workspace-Workspace-background);
   min-width: 128rem;
-  min-height: 50rem;
+  min-height: 76.8rem;
+  box-sizing: border-box;
 }
 .page .app .panel.main .panel.left {
   display: flex;
@@ -3267,6 +3276,9 @@ html {
   align-items: flex-start;
   gap: 1.6rem;
   align-self: stretch;
+}
+.page .app .panel.main .panel.left.resource-filter {
+  min-width: 25rem;
 }
 .page .app .panel.main .panel.left .sidebar-content {
   display: flex;
@@ -3331,12 +3343,13 @@ html {
 }
 .page .app .panel.main .panel.middle .header {
   display: flex;
-  padding: 2.4rem 1.6rem 2.4rem 0;
+  padding: 2.4rem 0;
   height: 4rem;
   justify-content: flex-end;
   align-items: center;
   align-self: stretch;
   min-width: 0;
+  gap: 1.6rem;
 }
 .page .app .panel.main .panel.middle .header .header-left {
   display: flex;
@@ -3346,11 +3359,14 @@ html {
 .page .app .panel.main .panel.middle .header .header-right {
   display: flex;
   width: 22%;
-  min-width: 30rem;
+  min-width: 35rem;
   max-width: 50rem;
   justify-content: flex-end;
   align-items: center;
   gap: 1.6rem;
+}
+.page .app .panel.main .panel.middle .header .header-right .profile-wrapper {
+  padding-right: 1.6rem;
 }
 .page .app .panel.main .panel.middle .middle-right {
   display: flex;
@@ -3401,7 +3417,7 @@ html {
 .page .app .panel.main .panel.middle .middle-right .help-panel {
   display: flex;
   width: 22%;
-  min-width: 30rem;
+  min-width: 35rem;
   max-width: 50rem;
   flex-direction: column;
   align-items: stretch;
@@ -3834,6 +3850,9 @@ html {
   display: flex;
   border-radius: 50%;
 }
+.avatar .default-avatar .is-loading {
+  display: none;
+}
 .avatar.big img,
 .avatar.big svg {
   width: 6.4rem;
@@ -3991,7 +4010,9 @@ html {
 }
 .dialog .form-content .no-margin,
 .dialog .dialog-body .no-margin {
-  margin: 1.6rem -1.6rem -1.6rem;
+  position: relative;
+  top: 1.6rem;
+  margin: -1.6rem -1.6rem -1.6rem;
 }
 .dialog .form-content > *,
 .dialog .dialog-body > * {
@@ -4241,10 +4262,6 @@ html {
 }
 .dropdown .dropdown-content .separator-after {
   border-bottom: 1px solid var(--Workspace-Dividers);
-  margin-bottom: 0.4rem;
-}
-.dropdown .dropdown-content .separator-after button {
-  margin-bottom: 0.4rem;
 }
 .dropdown .dropdown-content button.no-border {
   display: flex;
@@ -4262,8 +4279,12 @@ html {
 }
 .dropdown .dropdown-content button.no-border:hover,
 .dropdown .dropdown-content button.no-border:focus,
-.dropdown .dropdown-content button.no-border:focus-visible {
+.dropdown .dropdown-content button.no-border:focus-visible,
+.dropdown .dropdown-content button.no-border.active {
   background: var(--Sections-Filter-selected);
+}
+.dropdown .dropdown-content button.no-border.active {
+  cursor: default;
 }
 .dropdown .dropdown-content button.no-border:active {
   box-shadow: inset 0 -0.1rem 0 0 var(--States-Active-Highlight), inset 0 0.1rem 0 0 var(--States-Active-Shadow);
@@ -4281,6 +4302,13 @@ html {
 }
 .dropdown .dropdown-content .radio:hover {
   background: var(--Sections-Filter-selected);
+}
+.dropdown .dropdown-content .action-button {
+  padding: 0.4rem 1.6rem 0 1.6rem;
+  margin: 0.4rem 0 0;
+}
+.dropdown .dropdown-content .action-button button {
+  background: var(--Primary-button-Primary-button-menu-background);
 }
 /*
  * Footer
@@ -4820,10 +4848,6 @@ html {
 }
 .contextual-menu .separator-after {
   border-bottom: 0.1rem solid var(--Workspace-Dividers);
-  margin-bottom: 0.4rem;
-}
-.contextual-menu .separator-after button {
-  margin-bottom: 0.4rem;
 }
 .contextual-menu .separator-after:last-child {
   border-bottom: none;
@@ -4961,6 +4985,9 @@ html {
   overflow: hidden;
   text-overflow: ellipsis;
   font-style: normal;
+}
+.navigation-secondary .row.highlight .main-cell button,
+.navigation-secondary .row.selected .main-cell button {
   font-weight: 700;
 }
 .navigation-secondary .row .right-cell button {
@@ -5001,7 +5028,6 @@ html {
   display: block;
 }
 .navigation-secondary .row .main-cell .beta {
-  margin-left: 0.8rem;
   flex-shrink: 0;
 }
 .navigation-secondary .row .main-cell .tooltip {
@@ -5112,20 +5138,20 @@ iframe.cachette {
   box-shadow: none;
 }
 .chips {
-  color: hsl(46, 42%, 88%);
+  color: var(--Text-and-icons-Main-text-reversed);
   padding: 0 0.8rem;
   margin-top: 0.2rem;
-  border-radius: 0.7rem;
-  font-weight: 700;
-  font-size: 1rem;
-  line-height: 1.4rem;
-  background-color: hsl(194, 14%, 48%);
+  border-radius: var(--Button-border-radius);
+  font-weight: 400;
+  font-size: 1.1rem;
+  line-height: normal;
+  background-color: var(--Action-button-Menu-action-button-background);
 }
 .chips.beta {
-  background-color: hsl(18, 80%, 44%);
+  background: var(--Palette-Contrast-2);
 }
 .chips.new {
-  background-color: hsl(45, 100%, 45%);
+  background-color: var(--Palette-Contrast-4);
 }
 .third-party-provider-settings .provider-list {
   display: flex;
@@ -5187,6 +5213,85 @@ iframe.cachette {
   margin-right: 0;
   border-top: 0;
   border-color: hsl(194, 14%, 10%);
+}
+button.card {
+  display: flex;
+  height: 6.4rem;
+  min-width: 17.6rem;
+  max-width: 36.9rem;
+  padding: 0.8rem 1.6rem;
+  align-items: center;
+  gap: 1.6rem;
+  flex: 1 0 0;
+  border-radius: var(--Button-border-radius);
+  justify-content: flex-start;
+  text-align: left;
+}
+button.card:hover,
+button.card:active {
+  background: var(--Workspace-Dividers-lighter);
+}
+button.card svg {
+  display: flex;
+  width: 3.2rem;
+  height: 3.2rem;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+button.card .card-information {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.2rem;
+  flex: 1 0 0;
+  max-width: 100%;
+}
+button.card .card-information .title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+button.card .card-information .title.is-beta {
+  position: relative;
+  max-width: 18.1rem;
+  padding-right: 4.7rem;
+}
+button.card .card-information .title.is-beta .chips {
+  position: absolute;
+  right: 0;
+  margin-top: 0.3rem;
+}
+button.card .card-information .title.is-beta {
+  position: relative;
+  max-width: 18.1rem;
+  padding-right: 4.7rem;
+}
+button.card .card-information .title.is-beta .chips {
+  position: absolute;
+  right: 0;
+  margin-top: 0.3rem;
+}
+button.card .card-information .info {
+  font-size: 1.2rem;
+  line-height: normal;
+  color: var(--Text-and-icons-Secondary-text);
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
 }
 .panel.main .panel.middle .main-page .row .http-error.main-column .main-content > * {
   text-align: center;
@@ -5777,48 +5882,8 @@ iframe.cachette {
 .page.settings .app .panel.main .panel.middle .recovery-kit .warning.message p {
   max-width: inherit;
 }
-.page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token {
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token:before,
-.page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token:after {
-  content: "";
-  display: table;
-}
-.page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token:after {
-  clear: both;
-}
-.page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token:before,
-.page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token:after {
-  content: "";
-  display: table;
-}
-.page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token:after {
-  clear: both;
-}
 .page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token .label-required-inline {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.6rem;
 }
 .page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token .input.text {
   -webkit-border-radius: 0.3rem;
@@ -6278,6 +6343,50 @@ html.launching .launching-screen p {
   padding: 0.8rem 0.8rem;
   margin-bottom: 1.2rem;
 }
+#administration-home-page .main-content {
+  position: relative;
+}
+#administration-home-page .main-content .grid {
+  display: flex;
+  padding: 1.6rem 1.6rem 0.8rem 1.6rem;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 1.6rem 3.2rem;
+  align-self: stretch;
+  flex-wrap: wrap;
+  position: absolute;
+  margin: 0 0 0 -1.6rem;
+}
+#administration-home-page .main-content .grid:before {
+  content: "";
+  display: flex;
+  position: absolute;
+  background: repeating-linear-gradient(transparent, transparent 10.3rem, var(--Workspace-Dividers), var(--Workspace-Dividers) 10.4rem);
+  width: 100%;
+  height: calc(100% - 4rem);
+  top: 0.8rem;
+  left: 0;
+}
+#administration-home-page .main-content .grid .card {
+  height: 8.8rem;
+  max-width: 30rem;
+  min-width: 30rem;
+  padding: 1.6rem;
+}
+#administration-home-page .main-content .grid .card .title,
+#administration-home-page .main-content .grid .card .info {
+  max-width: 22rem;
+}
+#administration-home-page .main-content .grid .card .title.is-beta {
+  position: relative;
+  max-width: 18.1rem;
+  padding-right: 4.7rem;
+}
+#administration-home-page .main-content .grid .card .title.is-beta .chips {
+  position: absolute;
+  right: 0;
+  margin-top: 0.3rem;
+}
 .page.administration .app .panel.main .panel.middle .breadcrumbs-and-grid {
   align-items: flex-start;
   background: none;
@@ -6362,14 +6471,18 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form > *:last-child {
   margin-bottom: 0;
 }
-.page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message {
+.page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message,
+.page.administration .app .panel.main .panel.middle .main-page .main-column .error.message {
   align-self: stretch;
   border-radius: 0 0 var(--Section-border-radius) var(--Section-border-radius);
   padding: 0;
 }
-.page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message > div {
+.page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message > div,
+.page.administration .app .panel.main .panel.middle .main-page .main-column .error.message > div {
   margin: 0;
   padding: 0.8rem 1.6rem;
+}
+.page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message > div {
   border-bottom: 0.1rem solid var(--Palette-Contrast-2);
 }
 .page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message > div:last-child {
@@ -6442,6 +6555,13 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .error.message.form-banner {
   border-radius: 0;
   border: none;
+}
+.page.administration .app .panel.main #administration_menu li button svg {
+  height: 0.8rem;
+  width: 0.8rem;
+}
+.page.administration .app .panel.main #administration_menu li ul {
+  margin-left: 1.6rem;
 }
 .ldap-settings.main-column label {
   margin: 1.6rem 0;

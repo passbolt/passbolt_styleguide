@@ -38,13 +38,15 @@ import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
 import ColumnsSVG from "../../../../img/svg/columns.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import InfoSVG from "../../../../img/svg/info.svg";
-import WorkspaceSwitcher from "../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher";
+import WorkspaceSwitcher, {WORKSPACE_ENUM} from "../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 import DisplayResourcesWorkspaceFilters from "./DisplayResourcesWorkspaceFilters";
 import Footer from "../../Common/Footer/Footer";
 import DisplayEmptyDetails from "../../ResourceFolderDetails/DisplayResourceFolderDetails/DisplayEmptyDetails";
 import DisplayResourcesListDetails from "../../ResourceDetails/DisplayResourceDetails/DisplayResourcesListDetails";
 import debounce from "debounce-promise";
+import RevertSVG from "../../../../img/svg/revert.svg";
+import {ColumnModelTypes} from "../../../../shared/models/column/ColumnModel";
 
 const GAP_AND_PADDING_BUTTONS = 22;
 
@@ -67,6 +69,7 @@ class Workspace extends Component {
     this.handleOnChangeColumnView = this.handleOnChangeColumnView.bind(this);
     this.handleViewDetailClickEvent = this.handleViewDetailClickEvent.bind(this);
     this.handleWindowResizeEventDebounced = debounce(this.handleWindowResizeEvent.bind(this), 50);
+    this.handleOnResetColumnsSettings = this.handleOnResetColumnsSettings.bind(this);
   }
 
   /**
@@ -144,6 +147,14 @@ class Workspace extends Component {
   }
 
   /**
+   * Handle the event when users resets the columns settings.
+   * @return {Promise}
+   */
+  async handleOnResetColumnsSettings() {
+    await this.props.resourceWorkspaceContext.resetGridColumnsSettings();
+  }
+
+  /**
    * handle view detail click event
    */
   handleViewDetailClickEvent() {
@@ -157,7 +168,7 @@ class Workspace extends Component {
    */
   get isUserAdmin() {
     const loggedInUser = this.props.context.loggedInUser;
-    return loggedInUser.role.name === RoleEntity.ROLE_ADMIN;
+    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN;
   }
 
   /**
@@ -187,6 +198,22 @@ class Workspace extends Component {
   }
 
   /**
+   * Returns true if a separator should be displayed:
+   * - last item of the list
+   * - URI item if there is no expired item
+   * - expired item
+   * @param {columnsResourceSetting} column
+   * @param {number} index
+   * @returns {boolean}
+   */
+  hasSeparator(column, index) {
+    const nextColumn = this.props.resourceWorkspaceContext.columnsResourceSetting.items[index + 1];
+    return index === this.columnsResourceSetting.length - 1
+      || (column.id === ColumnModelTypes.URI && nextColumn?.id !== ColumnModelTypes.EXPIRED)
+      || column.id === ColumnModelTypes.EXPIRED;
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -198,7 +225,7 @@ class Workspace extends Component {
 
     return (
       <div className="panel main">
-        <div className="panel left">
+        <div className="panel left resource-filter">
           <div className="sidebar-content">
             <Logo/>
             <div className="main-action-wrapper">
@@ -223,7 +250,7 @@ class Workspace extends Component {
                 placeholder={this.props.t("Search resource")}/>
             </div>
             <div className="header-right">
-              <WorkspaceSwitcher isUserAdmin={this.isUserAdmin} isUserWorkspaceVisible={this.isUserWorkspaceVisible}/>
+              <WorkspaceSwitcher isUserAdmin={this.isUserAdmin} isUserWorkspaceVisible={this.isUserWorkspaceVisible} currentWorkspace={WORKSPACE_ENUM.RESOURCE}/>
               <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
             </div>
           </div>
@@ -244,14 +271,22 @@ class Workspace extends Component {
                         <CaretDownSVG/>
                       </DropdownButton>
                       <DropdownMenu direction="left">
-                        {this.columnsResourceSetting?.map(column =>
-                          <DropdownMenuItem keepOpenOnClick={true} key={column.id} separator={column.id === 'uri'}>
+                        {this.columnsResourceSetting?.map((column, index) =>
+                          <DropdownMenuItem keepOpenOnClick={true} key={column.id} separator={this.hasSeparator(column, index)}>
                             <div className="input checkbox">
                               <input type="checkbox" checked={column.show} id={column.id} name={column.id} onChange={this.handleOnChangeColumnView}/>
                               <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
                             </div>
                           </DropdownMenuItem>
                         )}
+                        <DropdownMenuItem>
+                          <div className="action-button">
+                            <button id="reset-columns-settings" type="button" onClick={this.handleOnResetColumnsSettings}>
+                              <RevertSVG/>
+                              <span><Trans>Reset columns</Trans></span>
+                            </button>
+                          </div>
+                        </DropdownMenuItem>
                       </DropdownMenu>
                     </Dropdown>
                     <button type="button" className={`button-toggle button-action button-action-icon info ${this.hasLockDetail() ? "active" : ""}`}

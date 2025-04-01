@@ -71,17 +71,17 @@ export class AdminInternationalizationContextProvider extends React.Component {
 
   /**
    * Find locale from API
-   * @returns {string}
    */
   findLocale() {
     this.setProcessing(true);
     const result = this.props.context.siteSettings.locale;
-    //Init saved locale
-    this.setState({currentLocale: result});
-    //Init locale which will interact with UI
-    this.setState({locale: result});
 
-    this.setProcessing(false);
+    //Init saved locale and currently selected locale
+    this.setState({
+      currentLocale: result,
+      locale: result,
+      processing: false,
+    });
   }
 
   /**

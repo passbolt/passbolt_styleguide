@@ -50,17 +50,19 @@ class FilterResourcesByBreadcrumb extends Component {
         return [...items, this.getLastBreadcrumb(this.translate("Expired"))];
       case ResourceWorkspaceFilterTypes.ITEMS_I_OWN:
         return [...items, this.getLastBreadcrumb(this.translate("Items I own"))];
+      case ResourceWorkspaceFilterTypes.PRIVATE:
+        return [...items, this.getLastBreadcrumb(this.translate("Private"))];
       case ResourceWorkspaceFilterTypes.TAG: {
         const filteredTagName = this.props.resourceWorkspaceContext.filter.payload.tag.slug;
         return [...items, this.getLastBreadcrumb(`${filteredTagName} ${this.translate("(tag)")}`)];
       }
       case ResourceWorkspaceFilterTypes.ROOT_FOLDER: {
-        return [this.getLastBreadcrumb(this.translate("My workspace"))];
+        return [this.myWorkspaceBreadcrumb];
       }
       case ResourceWorkspaceFilterTypes.FOLDER: {
         const folder = this.props.resourceWorkspaceContext.filter.payload.folder;
         const currentFolderName = (folder && folder.name) || this.translate("N/A");
-        return [this.getLastBreadcrumb(this.translate("My workspace")), this.getLastBreadcrumb(`${currentFolderName} ${this.translate("(folder)")}`)];
+        return [this.myWorkspaceBreadcrumb, this.getLastBreadcrumb(`${currentFolderName} ${this.translate("(folder)")}`)];
       }
       case ResourceWorkspaceFilterTypes.GROUP: {
         const group = this.props.resourceWorkspaceContext.filter.payload.group;
@@ -78,6 +80,22 @@ class FilterResourcesByBreadcrumb extends Component {
    */
   get allItemsBreadcrumb() {
     return <Breadcrumb name={this.translate("Home")} onClick={this.props.navigationContext.onGoToPasswordsRequested}/>;
+  }
+
+  /**
+   * Returns the my workspace breadcrumb items
+   * @return {JSX.Element}
+   */
+  get myWorkspaceBreadcrumb() {
+    return <Breadcrumb name={this.translate("My workspace")} onClick={this.handleClickOnMyWorkspace.bind(this)}/>;
+  }
+
+  /**
+   * Handle when the user clicks on the my workspace breadcrumb.
+   */
+  handleClickOnMyWorkspace() {
+    const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
+    this.props.history.push(`/app/passwords`, {filter});
   }
 
   /**

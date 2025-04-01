@@ -43,8 +43,11 @@ class FilterResourcesByShortcuts extends React.Component {
   /**
    * Returns true if the Home shortcut is currently selected
    */
-  get isAllItemsSelected() {
-    return this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.ALL;
+  get isHomeItemSelected() {
+    return this.props.resourceWorkspaceContext.filter.type !== ResourceWorkspaceFilterTypes.FOLDER
+      && this.props.resourceWorkspaceContext.filter.type !== ResourceWorkspaceFilterTypes.ROOT_FOLDER
+      && this.props.resourceWorkspaceContext.filter.type !== ResourceWorkspaceFilterTypes.GROUP
+      && this.props.resourceWorkspaceContext.filter.type !== ResourceWorkspaceFilterTypes.TAG;
   }
   /**
    * Whenever the shortcut "Home" has been selected
@@ -59,7 +62,7 @@ class FilterResourcesByShortcuts extends React.Component {
       <div className="navigation-secondary navigation-shortcuts">
         <ul >
           <li>
-            <div className={`row ${this.isAllItemsSelected ? "selected" : ""}`} onClick={this.handleAllItemsClick}>
+            <div className={`row ${this.isHomeItemSelected ? "selected" : ""}`} onClick={this.handleAllItemsClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button type="button" className="link no-border">

@@ -301,6 +301,14 @@ export default class DisplayEmailNotificationsAdministrationPage {
   }
 
   /**
+   * Returns the save warning banner element
+   * @returns {HTMLElement}
+   */
+  get saveWarningBanner() {
+    return this._page.container.querySelector("#email-notification-save-banner");
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {

@@ -31,6 +31,8 @@ import {
   resourceTypeV5PasswordStringDto,
   resourceTypeV5TotpDto
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
+import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
 
 /**
  * Default props.
@@ -41,6 +43,9 @@ export const defaultProps = (props = {}) => ({
   context: defaultAdministratorAppContext(),
   dialogContext: defaultDialogContext(),
   actionFeedbackContext: defaultActionFeedbackContext(),
+  administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+    selectedAdministration: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES
+  }),
   metadataSettingsServiceWorkerService: {
     findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     saveTypesSettings: jest.fn(settings => new MetadataTypesSettingsEntity(settings.toDto())),

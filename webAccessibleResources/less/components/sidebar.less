@@ -125,6 +125,11 @@
       box-shadow: inset 0 .1rem 0 0 var(--Workspace-Dividers-lighter);
     }
 
+    .sidebar-content {
+      display: block;
+      align-items: stretch;
+    }
+
     .title-area {
       align-items: center;
       flex-shrink: 50;
@@ -155,8 +160,7 @@
 
       .accordion-header {
         display: flex;
-        height: 2.2rem;
-        padding: 1.2rem 1.6rem;
+        padding: 1.6rem;
         align-items: center;
         gap: 1.6rem;
         align-self: stretch;
@@ -191,7 +195,6 @@
         }
       }
 
-
       .accordion-content {
         display: flex;
         padding: 1.6rem 1.6rem 2.4rem 1.6rem;
@@ -223,9 +226,25 @@
         }
 
         .information-value {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          .ellipsis();
+
+          button {
+            max-width: 100%;
+            span {
+              .ellipsis();
+              max-width: 100%;
+
+              &.caret {
+                min-width: .4rem;
+              }
+            }
+          }
+
+          .location.value {
+            button {
+              width: 100%;
+            }
+          }
         }
 
         .information-label, .information-value {
@@ -238,23 +257,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
             height: 2rem; // set height for empty value
-
-            button {
-              display: block;
-              width: 100%;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              text-align: left;
-
-              &.folder-link {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 8px;
-                align-self: stretch;
-              }
-            }
           }
 
           .password-value, .totp-value {
@@ -309,7 +311,7 @@
       .accordion-content {
         flex-direction: column;
         gap: 0;
-        padding: 0;
+        padding: 0 0 1.6rem;
 
         .content-wrapper .content .subinfo{
           opacity: .5;
@@ -356,7 +358,7 @@
 
     .secure-note {
       .accordion-content {
-        padding: .8rem 1.6rem;
+        padding: .8rem 1.6rem 1.6rem;
         display: grid;
         gap: .8rem;
         flex-direction: column;

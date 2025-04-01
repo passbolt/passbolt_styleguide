@@ -56,6 +56,11 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 font-style: normal;
+            }
+        }
+
+        &.highlight, &.selected {
+            .main-cell button {
                 font-weight: 700;
             }
         }
@@ -101,7 +106,6 @@
                 display: block;
             }
             .beta {
-                margin-left: 0.8rem;
                 flex-shrink: 0;
             }
             .tooltip {

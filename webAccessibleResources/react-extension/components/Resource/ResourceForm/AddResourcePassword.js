@@ -27,17 +27,18 @@ import ConfigurePassphraseGenerator from "../../../../shared/components/Generate
 import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class AddResourcePassword extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
     this.bindCallbacks();
+    this.createReferences();
   }
 
   get defaultState() {
     return {
-      passwordEntropy: null,
       displayPasswordGenerator: false,
       generatorSettings: null,
     };
@@ -81,14 +82,30 @@ class AddResourcePassword extends Component {
   }
 
   /**
+   * Create elements references
+   */
+  createReferences() {
+    this.passwordInputRef = React.createRef();
+  }
+
+  /**
    * Generate the password
    * @param {object} generatorConfiguration the configuration to be sued to generate a new password
    */
   generatePassword(generatorConfiguration) {
-    const password = SecretGenerator.generate(generatorConfiguration);
-    const passwordEntropy = password.length > 0 ? SecretGenerator.entropy(password) : null;
-    this.setState({passwordEntropy});
-    return password;
+    return SecretGenerator.generate(generatorConfiguration);
+  }
+
+  /**
+   * Component did update
+   * @param prevProps
+   * @param prevState
+   */
+  async componentDidUpdate() {
+    const hasEntropyError = this.props.consumePasswordEntropyError();
+    if (hasEntropyError) {
+      this.passwordInputRef.current.focus();
+    }
   }
 
   /**
@@ -167,6 +184,35 @@ class AddResourcePassword extends Component {
     }
   }
 
+  /**
+   * Checks if there is a max length warning for a specific property.
+   *
+   * @param {string} propName - The name of the property to check for max length warnings.
+   * @param {string} association - The association name.
+   * @returns {boolean} - Returns true if there is a max length warning for the property, false otherwise.
+   */
+  isMaxLengthWarnings(propName, association) {
+    return !this.isMaxLengthError(propName, association) && this.props.warnings?.hasError(propName, "maxLength");
+  }
+
+  /**
+   * Checks if there is a max length error for a specific property.
+   *
+   * @param {string} propName - The name of the property to check for max length errors.
+   * @param {string} association - The association name.
+   * @returns {boolean} - Returns true if there is a max length error for the property, false otherwise.
+   */
+  isMaxLengthError(propName, association) {
+    if (propName.includes('.')) {
+      const segments = propName.split('.');
+      const propArrayName = segments[0];
+      const propsArrayIndex = segments[1];
+      return this.props.errors?.details?.[association]?.details?.[propArrayName]?.[propsArrayIndex]?.maxLength;
+    } else {
+      return this.props.errors?.details?.[association]?.hasError(propName, "maxLength");
+    }
+  }
+
   /*
    * =============================================================
    *  Render view
@@ -180,25 +226,60 @@ class AddResourcePassword extends Component {
         </div>
         <div className="content">
           <div className="password-fields">
-            <div className="input text">
-              <label htmlFor="resource-uri"><Trans>URI</Trans></label>
-              <input id="resource-uri" name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange}/>
+            <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
+              <label htmlFor="resource-uri"><Trans>URI</Trans>{this.isMaxLengthWarnings("uris.0", "metadata") && <AttentionSVG className="attention-required"/>}</label>
+              <input id="resource-uri" disabled={this.props.disabled} name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange}/>
+              {this.isMaxLengthError("uris.0", "metadata") &&
+                <div className="uri error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
+              }
+              {this.isMaxLengthWarnings("uris.0", "metadata") &&
+                <div className="uri warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                </div>
+              }
             </div>
-            <div className="input text">
-              <label htmlFor="resource-username"><Trans>Username</Trans></label>
-              <input id="resource-username" name="metadata.username" type="text" className="fluid" maxLength="255" autoComplete="off" placeholder={this.translate("Username")} value={this.props.resource?.metadata?.username} onChange={this.handleInputChange}/>
+            <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
+              <label htmlFor="resource-username"><Trans>Username</Trans>{this.isMaxLengthWarnings("username", "metadata") && <AttentionSVG className="attention-required"/>}</label>
+              <input id="resource-username" disabled={this.props.disabled} name="metadata.username" type="text" className="fluid" maxLength="255" autoComplete="off" placeholder={this.translate("Username")} value={this.props.resource?.metadata?.username} onChange={this.handleInputChange}/>
+              {this.isMaxLengthError("username", "metadata") &&
+                <div className="username error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
+              }
+              {this.isMaxLengthWarnings("username",  "metadata") &&
+                <div className="username warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                </div>
+              }
             </div>
-            <div className="input-password-wrapper input">
+            <div className={`input-password-wrapper input ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="resource-password">
                 <Trans>Password</Trans>
+                {this.isMaxLengthWarnings("password", "secret") && <AttentionSVG className="attention-required"/>}
               </label>
               <div className="password-button-inline">
-                <Password id="resource-password" name="secret.password" autoComplete="new-password" placeholder={this.translate("Password")} preview={true} value={this.props.resource?.secret?.password} onChange={this.handleInputChange} />
-                <button type="button" className="password-generate button-icon" onClick={this.handleGeneratePasswordClick}>
+                <Password
+                  id="resource-password"
+                  name="secret.password"
+                  autoComplete="new-password"
+                  placeholder={this.translate("Password")}
+                  preview={true}
+                  value={this.props.resource?.secret?.password}
+                  onChange={this.handleInputChange}
+                  inputRef={this.passwordInputRef}
+                  disabled={this.props.disabled}
+                />
+                <button type="button" disabled={this.props.disabled} className="password-generate button-icon" onClick={this.handleGeneratePasswordClick}>
                   <DiceSVG/>
                 </button>
               </div>
-              <PasswordComplexity entropy={this.state.passwordEntropy}/>
+              {this.isMaxLengthError("password", "secret") &&
+                <div className="password error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
+              }
+              {this.isMaxLengthWarnings("password", "secret") &&
+                <div className="password warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                </div>
+              }
+              <PasswordComplexity entropy={this.props.passwordEntropy}/>
             </div>
           </div>
           {this.canUsePasswordGenerator &&
@@ -219,6 +300,7 @@ class AddResourcePassword extends Component {
                     onClick={() => this.handleGeneratorTypeChanged("password")}>
                     {this.state.generatorSettings.default_generator === "password" &&
                       <ConfigurePasswordGenerator
+                        disabled={this.props.disabled}
                         configuration={this.state.generatorSettings.password_generator_settings}
                         onConfigurationChanged={this.handlePasswordGeneratorConfigurationChanged}/>
                     }
@@ -230,6 +312,7 @@ class AddResourcePassword extends Component {
                     onClick={() => this.handleGeneratorTypeChanged("passphrase")}>
                     {this.state.generatorSettings.default_generator === "passphrase" &&
                       <ConfigurePassphraseGenerator
+                        disabled={this.props.disabled}
                         configuration={this.state.generatorSettings.passphrase_generator_settings}
                         onConfigurationChanged={this.handlePassphraseGeneratorConfigurationChanged}/>
                     }
@@ -247,10 +330,15 @@ class AddResourcePassword extends Component {
 
 AddResourcePassword.propTypes = {
   context: PropTypes.any, // The app context
+  passwordEntropy: PropTypes.number, // a callback for when the entropy of the current password changed
+  consumePasswordEntropyError: PropTypes.func, // the password entropy error state consumer to know if the password field must be focused or nto
   resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
   resource: PropTypes.object, // The resource to edit or create
   onChange: PropTypes.func, // The on change function
   t: PropTypes.func, // The translation function
+  warnings: PropTypes.object, //The warnings validation
+  errors: PropTypes.object, // The errors entity error validation
+  disabled: PropTypes.bool // The disabled property
 };
 
 export default  withAppContext(withResourcePasswordGeneratorContext(withTranslation('common')(AddResourcePassword)));

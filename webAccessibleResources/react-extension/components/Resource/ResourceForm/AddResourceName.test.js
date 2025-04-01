@@ -16,7 +16,7 @@
  * Unit tests on OrchestrateResourceForm in regard of specifications
  */
 
-import {defaultProps} from './AddResourcePassword.test.data';
+import {defaultProps} from './AddResourceName.test.data';
 import AddResourceNamePage from './AddResourceName.test.page';
 import {defaultResourceWorkspaceContext} from '../../../contexts/ResourceWorkspaceContext.test.data';
 
@@ -59,6 +59,17 @@ describe("AddResourceName", () => {
       expect(props.onChange).toHaveBeenCalledTimes(1);
       expect(name).toEqual("metadata.name");
       expect(value).toEqual("name");
+    });
+  });
+
+  describe('As LU I should see the name disabled.', () => {
+    it('As LU I can see the name form disabled.', async() => {
+      expect.assertions(1);
+
+      const props = defaultProps({disabled: true});
+      page = new AddResourceNamePage(props);
+
+      expect(page.name.hasAttribute("disabled")).toBeTruthy();
     });
   });
 });

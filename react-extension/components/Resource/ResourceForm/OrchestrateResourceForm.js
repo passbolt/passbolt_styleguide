@@ -22,6 +22,7 @@ import AddResourceDescription from "./AddResourceDescription";
 import {
   ResourceEditCreateFormEnumerationTypes
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 
 /**
  * The component orchestrates the resource form edition and creation.
@@ -33,13 +34,43 @@ class OrchestrateResourceForm extends Component {
   render() {
     switch (this.props.resourceFormSelected) {
       case ResourceEditCreateFormEnumerationTypes.PASSWORD:
-        return <AddResourcePassword resource={this.props.resource} onChange={this.props.onChange}/>;
+        return <AddResourcePassword
+          resource={this.props.resource}
+          onChange={this.props.onChange}
+          warnings={this.props.warnings}
+          errors={this.props.errors}
+          passwordEntropy={this.props.passwordEntropy}
+          consumePasswordEntropyError={this.props.consumePasswordEntropyError}
+          disabled={this.props.disabled}
+        />;
       case ResourceEditCreateFormEnumerationTypes.TOTP:
-        return <AddResourceTotp resource={this.props.resource} onChange={this.props.onChange}/>;
+        return <AddResourceTotp
+          resource={this.props.resource}
+          onChange={this.props.onChange}
+          warnings={this.props.warnings}
+          errors={this.props.errors}
+          disabled={this.props.disabled}
+        />;
       case ResourceEditCreateFormEnumerationTypes.NOTE:
-        return <AddResourceNote resource={this.props.resource} onChange={this.props.onChange}/>;
+        return <AddResourceNote
+          resource={this.props.resource}
+          onChange={this.props.onChange}
+          resourceType={this.props.resourceType}
+          onConvertToDescription={this.props.onConvertToDescription}
+          warnings={this.props.warnings}
+          errors={this.props.errors}
+          disabled={this.props.disabled}
+        />;
       case ResourceEditCreateFormEnumerationTypes.DESCRIPTION:
-        return <AddResourceDescription resource={this.props.resource} onChange={this.props.onChange}/>;
+        return <AddResourceDescription
+          resource={this.props.resource}
+          onChange={this.props.onChange}
+          resourceType={this.props.resourceType}
+          onConvertToNote={this.props.onConvertToNote}
+          warnings={this.props.warnings}
+          errors={this.props.errors}
+          disabled={this.props.disabled}
+        />;
       default:
         return <></>;
     }
@@ -48,8 +79,16 @@ class OrchestrateResourceForm extends Component {
 OrchestrateResourceForm.propTypes = {
   resourceFormSelected: PropTypes.string, // The resource form selected to display
   resource: PropTypes.object, // The resource to edit or create
+  resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource type entity
   onChange: PropTypes.func, //The resource setter
+  onConvertToNote: PropTypes.func, //The resource note to convert
+  onConvertToDescription: PropTypes.func, //The resource description to convert
+  passwordEntropy: PropTypes.number, // the current password entropy if any
+  consumePasswordEntropyError: PropTypes.func, // a password entropy state consumer callback
   t: PropTypes.func, // The translation function
+  warnings: PropTypes.object, //The warnings validation
+  errors: PropTypes.object, // The errors entity error validation
+  disabled: PropTypes.bool // The disabled property
 };
 
 export default withTranslation("common")(OrchestrateResourceForm);

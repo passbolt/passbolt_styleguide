@@ -13,6 +13,7 @@
  */
 
 import SecretDataEntity, {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import assertString from "validator/es/lib/util/assertString";
 
 class SecretDataV5PasswordStringEntity extends SecretDataEntity {
   /**
@@ -38,6 +39,16 @@ class SecretDataV5PasswordStringEntity extends SecretDataEntity {
   }
 
   /**
+   * @inheritdoc
+   */
+  marshall() {
+    // Set object type in case of secret has not object_type (example: after a migration v4 to v5)
+    if (!this._props.object_type) {
+      this._props.object_type = SECRET_DATA_OBJECT_TYPE;
+    }
+  }
+
+  /**
    * Return the default secret data v5 password string.
    * @param {object} data the data to override the default with
    * @param {object} [options] Options.
@@ -50,6 +61,30 @@ class SecretDataV5PasswordStringEntity extends SecretDataEntity {
     };
 
     return new SecretDataV5PasswordStringEntity({...defaultData, ...data}, options);
+  }
+
+  /**
+   * Return the default secret property.
+   * @param {string} propName the property
+   * @returns {string | undefined}
+   */
+  static getDefaultProp(propName) {
+    assertString(propName);
+    switch (propName) {
+      case "password":
+        return "";
+      default:
+        return;
+    }
+  }
+
+  /**
+   * Are secret different
+   * @param secretDto
+   * @returns {boolean}
+   */
+  areSecretsDifferent(secretDto) {
+    return this.password !== secretDto.password;
   }
 
   /*

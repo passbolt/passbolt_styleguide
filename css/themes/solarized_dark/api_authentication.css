@@ -94,7 +94,7 @@
   --Workspace-bar-Workspace-bar-background: var(--Palette-Gradient-1);
   --Workspace-bar-Workspace-bar-text: var(--Palette-Gradient-8);
   --Workspace-Panels-background: var(--Palette-Gradient-1);
-  --Primary-button-Primary-button-menu-background: var(--Palette-Gradient-2);
+  --Primary-button-Primary-button-menu-background: var(--Palette-Gradient-1);
   --Action-button-Secondary-button-background: var(--Palette-Gradient-1);
   --Dialog-Dialog-header-and-footer: var(--Palette-Gradient-2);
   --Dialog-Dialog-fill: var(--Palette-Gradient-1);
@@ -2197,6 +2197,10 @@ input[type=file] {
 .radiolist-alt .input.radio:disabled {
   box-shadow: inset 0 0 0 0.1rem var(--Action-button-Action-button-border);
 }
+.radiolist-alt .input.radio:hover:not(.no-hover),
+.radiolist-alt .input.radio:active:not(.no-hover) {
+  background: var(--Workspace-Dividers-lighter);
+}
 .radiolist-alt .input.radio.checked {
   box-shadow: inset -0.1rem -0.1rem 0 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 0 var(--States-Active-Shadow);
   background: var(--Action-button-Active-action-button-background);
@@ -2405,6 +2409,10 @@ input[type=file] {
 .togglelist-alt .input.toggle-switch:disabled {
   box-shadow: inset 0 0 0 0.1rem var(--Action-button-Action-button-border);
 }
+.togglelist-alt .input.toggle-switch:hover:not(:disabled),
+.togglelist-alt .input.toggle-switch:active:not(:disabled) {
+  background: var(--Workspace-Dividers-lighter);
+}
 .togglelist-alt .input.toggle-switch.checked {
   box-shadow: inset -0.1rem -0.1rem 0 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 0 var(--States-Active-Shadow);
   background: var(--Action-button-Active-action-button-background);
@@ -2473,7 +2481,7 @@ input[type=file] {
   height: 3rem;
 }
 .select-container.inline .select .selected-value {
-  background: var(--Field-Field-background);
+  background: var(--Field-Infield-button-background);
   box-shadow: inset 0 0 0 0.1rem var(--Field-Field-border);
   padding: 0.5rem 1.6rem;
 }
@@ -3256,7 +3264,8 @@ html {
   align-self: stretch;
   background: var(--Workspace-Workspace-background);
   min-width: 128rem;
-  min-height: 50rem;
+  min-height: 76.8rem;
+  box-sizing: border-box;
 }
 .page .app .panel.main .panel.left {
   display: flex;
@@ -3267,6 +3276,9 @@ html {
   align-items: flex-start;
   gap: 1.6rem;
   align-self: stretch;
+}
+.page .app .panel.main .panel.left.resource-filter {
+  min-width: 25rem;
 }
 .page .app .panel.main .panel.left .sidebar-content {
   display: flex;
@@ -3331,12 +3343,13 @@ html {
 }
 .page .app .panel.main .panel.middle .header {
   display: flex;
-  padding: 2.4rem 1.6rem 2.4rem 0;
+  padding: 2.4rem 0;
   height: 4rem;
   justify-content: flex-end;
   align-items: center;
   align-self: stretch;
   min-width: 0;
+  gap: 1.6rem;
 }
 .page .app .panel.main .panel.middle .header .header-left {
   display: flex;
@@ -3346,11 +3359,14 @@ html {
 .page .app .panel.main .panel.middle .header .header-right {
   display: flex;
   width: 22%;
-  min-width: 30rem;
+  min-width: 35rem;
   max-width: 50rem;
   justify-content: flex-end;
   align-items: center;
   gap: 1.6rem;
+}
+.page .app .panel.main .panel.middle .header .header-right .profile-wrapper {
+  padding-right: 1.6rem;
 }
 .page .app .panel.main .panel.middle .middle-right {
   display: flex;
@@ -3401,7 +3417,7 @@ html {
 .page .app .panel.main .panel.middle .middle-right .help-panel {
   display: flex;
   width: 22%;
-  min-width: 30rem;
+  min-width: 35rem;
   max-width: 50rem;
   flex-direction: column;
   align-items: stretch;
@@ -3917,7 +3933,9 @@ html {
 }
 .dialog .form-content .no-margin,
 .dialog .dialog-body .no-margin {
-  margin: 1.6rem -1.6rem -1.6rem;
+  position: relative;
+  top: 1.6rem;
+  margin: -1.6rem -1.6rem -1.6rem;
 }
 .dialog .form-content > *,
 .dialog .dialog-body > * {
@@ -4235,6 +4253,9 @@ html {
 .avatar .default-avatar {
   display: flex;
   border-radius: 50%;
+}
+.avatar .default-avatar .is-loading {
+  display: none;
 }
 .avatar.big img,
 .avatar.big svg {
@@ -4695,7 +4716,7 @@ body {
 }
 @media only screen and (min-width: 42rem) {
   body {
-    background: var(--Palette-Gradient-3);
+    background: var(--Workspace-Workspace-background);
   }
   .login.page {
     display: grid;

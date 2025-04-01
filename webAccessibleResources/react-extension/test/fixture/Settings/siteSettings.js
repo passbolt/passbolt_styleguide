@@ -210,7 +210,7 @@ const siteSettings = (isProEdition = true) => ({
       },
       "metadata": {
         "enabled": true,
-      }
+      },
     }
   }
 });

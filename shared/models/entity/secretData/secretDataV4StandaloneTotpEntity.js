@@ -14,6 +14,7 @@
 
 import TotpEntity from "../totp/totpEntity";
 import SecretDataEntity from "./secretDataEntity";
+import assertString from "validator/es/lib/util/assertString";
 
 class SecretDataV4StandaloneTotpEntity extends SecretDataEntity {
   /**
@@ -68,14 +69,42 @@ class SecretDataV4StandaloneTotpEntity extends SecretDataEntity {
   }
 
   /**
+   * Return the default secret property.
+   * @param {string} propName the property
+   * @returns {object | undefined}
+   */
+  static getDefaultProp(propName) {
+    assertString(propName);
+    switch (propName) {
+      case "totp":
+        return TotpEntity.createFromDefault({}, {validate: false}).toDto();
+      default:
+        return;
+    }
+  }
+
+  /**
+   * Are secret different
+   * @param secretDto
+   * @returns {boolean}
+   */
+  areSecretsDifferent(secretDto) {
+    const totp = this.totp.toDto();
+    return Object.keys(totp).some(key => totp[key] !== secretDto.totp?.[key]);
+  }
+
+  /**
    * Get the DTO of properties managed by the form.
    * @returns {object}
    */
   toDto() {
-    return {
-      ...this._props,
-      totp: this.totp.toDto(),
-    };
+    const result = Object.assign({}, this._props);
+
+    if (this.totp) {
+      result.totp = this.totp.toDto();
+    }
+
+    return result;
   }
 
   /**

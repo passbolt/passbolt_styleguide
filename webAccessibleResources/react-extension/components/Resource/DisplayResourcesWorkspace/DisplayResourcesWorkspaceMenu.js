@@ -28,9 +28,6 @@ import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withProgress} from "../../../contexts/ProgressContext";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
-import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
-import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
-import {withWorkflow} from "../../../contexts/WorkflowContext";
 import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import {formatDateForApi} from "../../../../shared/utils/dateUtils";
@@ -115,11 +112,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * handle edit one resource
    */
   handleEditClickEvent() {
-    if (this.isStandaloneTotpResource) {
-      this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_STANDALONE_TOTP});
-    } else {
-      this.props.dialogContext.open(EditResource, {resource: this.selectedResources[0]});
-    }
+    this.props.dialogContext.open(EditResource, {resource: this.selectedResources[0]});
   }
 
   /**
@@ -206,7 +199,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     this.props.progressContext.close();
 
     if (!plaintextSecretDto?.password?.length) {
-      await this.props.actionFeedbackContext.displayError(this.translate("The password is empty and cannot be copied to clipboard."));
+      await this.props.actionFeedbackContext.displayWarning(this.translate("The password is empty and cannot be copied to clipboard."));
       return;
     }
 
@@ -330,7 +323,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @returns {boolean}
    */
   canCopyUri() {
-    return this.selectedResources[0].metadata?.uris[0];
+    return Boolean(this.selectedResources[0].metadata?.uris?.[0]);
   }
 
   /**
@@ -576,8 +569,7 @@ DisplayResourcesWorkspaceMenu.propTypes = {
   passwordExpiryContext: PropTypes.object, // the password expiry context
   dialogContext: PropTypes.any, // the dialog context
   progressContext: PropTypes.any, // The progress context
-  workflowContext: PropTypes.any, // The workflow contex
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withDialog(withWorkflow(withProgress(withPasswordExpiry(withResourceWorkspace(withResourceTypesLocalStorage(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu))))))))));
+export default withAppContext(withRbac(withDialog(withProgress(withPasswordExpiry(withResourceWorkspace(withResourceTypesLocalStorage(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu)))))))));

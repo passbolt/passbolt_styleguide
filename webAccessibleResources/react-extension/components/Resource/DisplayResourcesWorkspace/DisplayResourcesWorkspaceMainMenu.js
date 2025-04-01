@@ -36,7 +36,7 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
-import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import MetadataTypesSettingsEntity, {RESOURCE_TYPE_VERSION_5} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import AddSVG from "../../../../img/svg/add.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
@@ -49,7 +49,7 @@ import CircleEllipsisSVG from "../../../../img/svg/circle_ellipsis.svg";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 import DisplayResourceCreationMenu from "../CreateResource/DisplayResourceCreationMenu";
-import CreateResourceV5 from "../CreateResource/CreateResourceV5";
+import CreateResource from "../CreateResource/CreateResource";
 
 /**
  * This component allows the current user to create a new resource
@@ -99,7 +99,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * @param {ResourceTypeEntity} resourceType The resource type
    */
   openCreateDialog(resourceType) {
-    this.props.dialogContext.open(CreateResourceV5, {folderParentId: this.folderIdSelected, resourceType});
+    this.props.dialogContext.open(CreateResource, {folderParentId: this.folderIdSelected, resourceType});
   }
 
   /**
@@ -211,6 +211,33 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   }
 
   /**
+   * Should the "Other" menu items be displayed.
+   * @returns {boolean}
+   */
+  canSeeOther() {
+    // the v5 is not available anyway
+    if (!this.props.metadataTypeSettings?.allowCreationOfV5Resources) {
+      return false;
+    }
+
+    const canCreateBothV4AndV5 = this.hasMetadataTypesV4AndV5();
+
+    //both version are active, other needs to be shown anyway
+    if (canCreateBothV4AndV5) {
+      return true;
+    }
+
+    const otherV5ContentTypes = this.props.resourceTypes?.items.filter(rt =>
+      rt.version === RESOURCE_TYPE_VERSION_5
+      && !rt.hasPassword()
+      && !rt.hasTotp()
+      && !rt.hasSecretDescription()
+    );
+
+    return otherV5ContentTypes?.length > 0;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -220,6 +247,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     const canUseFolders = this.props.context.siteSettings.canIUse("folders")
       && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
     const canUseTotp = this.props.context.siteSettings.canIUse('totpResourceTypes');
+    const canSeeOther = this.canSeeOther();
 
     return (
       <Dropdown>
@@ -269,7 +297,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
                   </button>
                 </DropdownItem>
               }
-              {this.hasMetadataTypesV4AndV5() &&
+              {canSeeOther &&
                 <DropdownItem separator={true}>
                   <button id="other_action" type="button" className="no-border" onClick={this.handleMenuCreateOtherClickEvent}>
                     <CircleEllipsisSVG/>

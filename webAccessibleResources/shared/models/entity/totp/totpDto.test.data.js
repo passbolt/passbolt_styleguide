@@ -12,6 +12,8 @@
  * @since         4.6.0
  */
 
+import {SUPPORTED_TOTP_ALGORITHMS} from "./totpEntity";
+
 /**
  * The default TOTP DTO
  * @param {Object} data The data to override
@@ -28,6 +30,16 @@ export const defaultTotpDto = (data = {}) => {
   return Object.assign(defaultData, data);
 };
 
+export const defaultEmptyTotpDto = (data = {}) => {
+  const defaultData = {
+    secret_key: "",
+    period: 30,
+    digits: 6,
+    algorithm: "SHA1"
+  };
+
+  return Object.assign(defaultData, data);
+};
 
 export const lowerCaseAlgorithmSetupTotpData = (props = {}) => {
   const data = {
@@ -36,3 +48,20 @@ export const lowerCaseAlgorithmSetupTotpData = (props = {}) => {
   };
   return Object.assign(data, props);
 };
+
+/**
+ * The default TOTP ViewModel DTO
+ * @param {Object} data The data to override
+ * @returns {Object}
+ */
+export const defaultTotpViewModelDto = (data = {}) => {
+  const defaultData = {
+    secret_key: "DAV3DS4ERAAF5QGH",
+    period: 30,
+    digits: 6,
+    algorithm: SUPPORTED_TOTP_ALGORITHMS[0]
+  };
+
+  return Object.assign(defaultData, data);
+};
+

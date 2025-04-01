@@ -81,4 +81,40 @@ describe("SecretDataV4StandaloneEntity", () => {
       expect(entity.totp.toDto()).toStrictEqual(dto.totp);
     });
   });
+
+  describe("::getDefaultProp", () => {
+    it("get default totp", () => {
+      expect.assertions(1);
+      expect(SecretDataV4StandaloneTotpEntity.getDefaultProp("totp")).toStrictEqual(TotpEntity.createFromDefault({}, {validate: false}).toDto());
+    });
+
+    it("get default unknown", () => {
+      expect.assertions(1);
+      expect(SecretDataV4StandaloneTotpEntity.getDefaultProp("unknown")).toBeUndefined();
+    });
+
+    it("throw error if prop name is not a string", () => {
+      expect.assertions(1);
+      expect(() => SecretDataV4StandaloneTotpEntity.getDefaultProp({})).toThrow(TypeError);
+    });
+  });
+
+  describe("::areSecretsDifferent", () => {
+    it("should return true", () => {
+      const dto = {
+        totp: defaultTotpDto(),
+      };
+      const entity = new SecretDataV4StandaloneTotpEntity(dto);
+      dto.totp.digits = 7;
+      expect(entity.areSecretsDifferent(dto)).toBeTruthy();
+    });
+
+    it("should return false", () => {
+      const dto = {
+        totp: defaultTotpDto(),
+      };
+      const entity = new SecretDataV4StandaloneTotpEntity(dto);
+      expect(entity.areSecretsDifferent(dto)).toBeFalsy();
+    });
+  });
 });

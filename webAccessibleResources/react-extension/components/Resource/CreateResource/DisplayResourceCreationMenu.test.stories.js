@@ -14,6 +14,13 @@
 
 import React from "react";
 import DisplayResourceCreationMenu from "./DisplayResourceCreationMenu";
+import {
+  defaultProps,
+  fullV4AndPartialV5ContentTypes,
+  fullV5AndPartialV4ContentTypes,
+  onlyV4ContentTypesProps,
+  onlyV5ContentTypesProps
+} from "./DisplayResourceCreationMenu.test.data";
 
 export default {
   title: 'Components/Resource/DisplayCreateResourceMenu',
@@ -25,4 +32,22 @@ export default {
   ],
 };
 
-export const Default = {};
+export const Default = {
+  args: defaultProps(),
+};
+
+export const OnlyV5ContentTypes = {
+  args: onlyV5ContentTypesProps(),
+};
+
+export const OnlyV4ContentTypes = {
+  args: onlyV4ContentTypesProps(),
+};
+
+export const FullV5AndPartialV4ContentTypes = {
+  args: fullV5AndPartialV4ContentTypes(),
+};
+
+export const FullV4AndPartialV5ContentTypes = {
+  args: fullV4AndPartialV5ContentTypes(),
+};

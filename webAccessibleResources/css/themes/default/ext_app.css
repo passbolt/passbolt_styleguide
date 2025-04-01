@@ -2196,6 +2196,10 @@ input[type=file] {
 .radiolist-alt .input.radio:disabled {
   box-shadow: inset 0 0 0 0.1rem var(--Action-button-Action-button-border);
 }
+.radiolist-alt .input.radio:hover:not(.no-hover),
+.radiolist-alt .input.radio:active:not(.no-hover) {
+  background: var(--Workspace-Dividers-lighter);
+}
 .radiolist-alt .input.radio.checked {
   box-shadow: inset -0.1rem -0.1rem 0 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 0 var(--States-Active-Shadow);
   background: var(--Action-button-Active-action-button-background);
@@ -2404,6 +2408,10 @@ input[type=file] {
 .togglelist-alt .input.toggle-switch:disabled {
   box-shadow: inset 0 0 0 0.1rem var(--Action-button-Action-button-border);
 }
+.togglelist-alt .input.toggle-switch:hover:not(:disabled),
+.togglelist-alt .input.toggle-switch:active:not(:disabled) {
+  background: var(--Workspace-Dividers-lighter);
+}
 .togglelist-alt .input.toggle-switch.checked {
   box-shadow: inset -0.1rem -0.1rem 0 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 0 var(--States-Active-Shadow);
   background: var(--Action-button-Active-action-button-background);
@@ -2472,7 +2480,7 @@ input[type=file] {
   height: 3rem;
 }
 .select-container.inline .select .selected-value {
-  background: var(--Field-Field-background);
+  background: var(--Field-Infield-button-background);
   box-shadow: inset 0 0 0 0.1rem var(--Field-Field-border);
   padding: 0.5rem 1.6rem;
 }
@@ -3255,7 +3263,8 @@ html {
   align-self: stretch;
   background: var(--Workspace-Workspace-background);
   min-width: 128rem;
-  min-height: 50rem;
+  min-height: 76.8rem;
+  box-sizing: border-box;
 }
 .page .app .panel.main .panel.left {
   display: flex;
@@ -3266,6 +3275,9 @@ html {
   align-items: flex-start;
   gap: 1.6rem;
   align-self: stretch;
+}
+.page .app .panel.main .panel.left.resource-filter {
+  min-width: 25rem;
 }
 .page .app .panel.main .panel.left .sidebar-content {
   display: flex;
@@ -3330,12 +3342,13 @@ html {
 }
 .page .app .panel.main .panel.middle .header {
   display: flex;
-  padding: 2.4rem 1.6rem 2.4rem 0;
+  padding: 2.4rem 0;
   height: 4rem;
   justify-content: flex-end;
   align-items: center;
   align-self: stretch;
   min-width: 0;
+  gap: 1.6rem;
 }
 .page .app .panel.main .panel.middle .header .header-left {
   display: flex;
@@ -3345,11 +3358,14 @@ html {
 .page .app .panel.main .panel.middle .header .header-right {
   display: flex;
   width: 22%;
-  min-width: 30rem;
+  min-width: 35rem;
   max-width: 50rem;
   justify-content: flex-end;
   align-items: center;
   gap: 1.6rem;
+}
+.page .app .panel.main .panel.middle .header .header-right .profile-wrapper {
+  padding-right: 1.6rem;
 }
 .page .app .panel.main .panel.middle .middle-right {
   display: flex;
@@ -3400,7 +3416,7 @@ html {
 .page .app .panel.main .panel.middle .middle-right .help-panel {
   display: flex;
   width: 22%;
-  min-width: 30rem;
+  min-width: 35rem;
   max-width: 50rem;
   flex-direction: column;
   align-items: stretch;
@@ -3833,6 +3849,9 @@ html {
   display: flex;
   border-radius: 50%;
 }
+.avatar .default-avatar .is-loading {
+  display: none;
+}
 .avatar.big img,
 .avatar.big svg {
   width: 6.4rem;
@@ -3990,7 +4009,9 @@ html {
 }
 .dialog .form-content .no-margin,
 .dialog .dialog-body .no-margin {
-  margin: 1.6rem -1.6rem -1.6rem;
+  position: relative;
+  top: 1.6rem;
+  margin: -1.6rem -1.6rem -1.6rem;
 }
 .dialog .form-content > *,
 .dialog .dialog-body > * {
@@ -4240,10 +4261,6 @@ html {
 }
 .dropdown .dropdown-content .separator-after {
   border-bottom: 1px solid var(--Workspace-Dividers);
-  margin-bottom: 0.4rem;
-}
-.dropdown .dropdown-content .separator-after button {
-  margin-bottom: 0.4rem;
 }
 .dropdown .dropdown-content button.no-border {
   display: flex;
@@ -4261,8 +4278,12 @@ html {
 }
 .dropdown .dropdown-content button.no-border:hover,
 .dropdown .dropdown-content button.no-border:focus,
-.dropdown .dropdown-content button.no-border:focus-visible {
+.dropdown .dropdown-content button.no-border:focus-visible,
+.dropdown .dropdown-content button.no-border.active {
   background: var(--Sections-Filter-selected);
+}
+.dropdown .dropdown-content button.no-border.active {
+  cursor: default;
 }
 .dropdown .dropdown-content button.no-border:active {
   box-shadow: inset 0 -0.1rem 0 0 var(--States-Active-Highlight), inset 0 0.1rem 0 0 var(--States-Active-Shadow);
@@ -4280,6 +4301,13 @@ html {
 }
 .dropdown .dropdown-content .radio:hover {
   background: var(--Sections-Filter-selected);
+}
+.dropdown .dropdown-content .action-button {
+  padding: 0.4rem 1.6rem 0 1.6rem;
+  margin: 0.4rem 0 0;
+}
+.dropdown .dropdown-content .action-button button {
+  background: var(--Primary-button-Primary-button-menu-background);
 }
 .feedback-card {
   display: flex;
@@ -4912,6 +4940,9 @@ html {
   overflow: hidden;
   text-overflow: ellipsis;
   font-style: normal;
+}
+.navigation-secondary .row.highlight .main-cell button,
+.navigation-secondary .row.selected .main-cell button {
   font-weight: 700;
 }
 .navigation-secondary .row .right-cell button {
@@ -4952,7 +4983,6 @@ html {
   display: block;
 }
 .navigation-secondary .row .main-cell .beta {
-  margin-left: 0.8rem;
   flex-shrink: 0;
 }
 .navigation-secondary .row .main-cell .tooltip {
@@ -5178,10 +5208,6 @@ html {
 }
 .contextual-menu .separator-after {
   border-bottom: 0.1rem solid var(--Workspace-Dividers);
-  margin-bottom: 0.4rem;
-}
-.contextual-menu .separator-after button {
-  margin-bottom: 0.4rem;
 }
 .contextual-menu .separator-after:last-child {
   border-bottom: none;
@@ -5273,20 +5299,20 @@ iframe.cachette {
   box-shadow: none;
 }
 .chips {
-  color: #FFFFFF;
+  color: var(--Text-and-icons-Main-text-reversed);
   padding: 0 0.8rem;
   margin-top: 0.2rem;
-  border-radius: 0.7rem;
-  font-weight: 700;
-  font-size: 1rem;
-  line-height: 1.4rem;
-  background-color: #808080;
+  border-radius: var(--Button-border-radius);
+  font-weight: 400;
+  font-size: 1.1rem;
+  line-height: normal;
+  background-color: var(--Action-button-Menu-action-button-background);
 }
 .chips.beta {
-  background-color: #DD6A00;
+  background: var(--Palette-Contrast-2);
 }
 .chips.new {
-  background-color: #2894DF;
+  background-color: var(--Palette-Contrast-4);
 }
 .range-wrapper {
   width: 100%;
@@ -5472,6 +5498,9 @@ iframe.cachette {
 }
 .tooltip-portal-text .folder-level span.caret {
   margin-right: 0.5rem;
+}
+.panel.aside .activity.sidebar-section {
+  border-bottom: none;
 }
 .panel.aside .activity div.actions {
   margin-top: 1.6rem;
@@ -5805,16 +5834,21 @@ iframe.cachette {
 .autocomplete-wrapper .autocomplete-content .autocomplete-item button > span {
   max-width: 100%;
 }
-.autocomplete-wrapper .autocomplete-content .autocomplete-item button .avatar svg {
+.autocomplete-wrapper .autocomplete-content .autocomplete-item button .avatar svg,
+.autocomplete-wrapper .autocomplete-content .autocomplete-item button .avatar img {
   width: 4.2rem;
   height: 4.2rem;
 }
 .autocomplete-wrapper .autocomplete-content .autocomplete-item .user-fullname-container {
   display: flex;
+  align-items: center;
 }
 .autocomplete-wrapper .autocomplete-content .autocomplete-item .user-fullname-container .tooltip-portal {
-  margin-left: 1rem;
+  margin-left: 0.8rem;
   line-height: 1.6rem;
+}
+.autocomplete-wrapper .autocomplete-content .autocomplete-item .user-fullname-container .tooltip-portal span {
+  line-height: 0;
 }
 .autocomplete-wrapper .autocomplete-content .autocomplete-item .user-fullname-container .tooltip-portal svg {
   width: 1.6rem;
@@ -6493,6 +6527,10 @@ iframe.cachette {
 .sidebar.multiple-resources-selected .sidebar-header {
   box-shadow: inset 0 0.1rem 0 0 var(--Workspace-Dividers-lighter);
 }
+.sidebar.multiple-resources-selected .sidebar-content {
+  display: block;
+  align-items: stretch;
+}
 .sidebar.multiple-resources-selected .title-area {
   align-items: center;
   flex-shrink: 50;
@@ -6522,8 +6560,7 @@ iframe.cachette {
 }
 .sidebar .sidebar-content .sidebar-section .accordion-header {
   display: flex;
-  height: 2.2rem;
-  padding: 1.2rem 1.6rem;
+  padding: 1.6rem;
   align-items: center;
   gap: 1.6rem;
   align-self: stretch;
@@ -6582,6 +6619,25 @@ iframe.cachette {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value button {
+  max-width: 100%;
+}
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value button span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  max-width: 100%;
+}
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value button span.caret {
+  min-width: 0.4rem;
+}
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .location.value button {
+  width: 100%;
 }
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value {
@@ -6597,27 +6653,6 @@ iframe.cachette {
   overflow: hidden;
   text-overflow: ellipsis;
   height: 2rem;
-}
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .label button,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .label button,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .value button,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .value button {
-  display: block;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: left;
-}
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .label button.folder-link,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .label button.folder-link,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .value button.folder-link,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .value button.folder-link {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 8px;
-  align-self: stretch;
 }
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value,
@@ -6666,7 +6701,7 @@ iframe.cachette {
 .sidebar .sidebar-content .detailed-user-groups .accordion-content {
   flex-direction: column;
   gap: 0;
-  padding: 0;
+  padding: 0 0 1.6rem;
 }
 .sidebar .sidebar-content .detailed-permission .accordion-content .content-wrapper .content .subinfo,
 .sidebar .sidebar-content .detailed-members .accordion-content .content-wrapper .content .subinfo,
@@ -6699,7 +6734,7 @@ iframe.cachette {
   padding: 0 1.6rem 1.6rem 1.6rem;
 }
 .sidebar .sidebar-content .secure-note .accordion-content {
-  padding: 0.8rem 1.6rem;
+  padding: 0.8rem 1.6rem 1.6rem;
   display: grid;
   gap: 0.8rem;
   flex-direction: column;
@@ -6904,6 +6939,7 @@ iframe.cachette {
   display: flex;
   gap: 0.8rem;
   font-weight: 400;
+  align-items: center;
 }
 .tableview table td div svg {
   width: 1.6rem;
@@ -7023,6 +7059,22 @@ iframe.cachette {
 .tableview table th.cell-favorite button .cell-header .cell-header-icon-sort svg,
 .tableview table td.cell-favorite button .cell-header .cell-header-icon-sort svg {
   margin: 0;
+}
+.tableview table td.cell-name .teaser-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--Resource-icon-Resource-icons-backgound);
+  text-align: center;
+  border-radius: 50%;
+  width: 2.4rem;
+  height: 2.4rem;
+  margin-right: 0.2rem;
+}
+.tableview table td.cell-name .teaser-image svg {
+  --icon-stroke-width: 0.1rem;
+  --icon-color: var(--Resource-icon-Resource-icon-color);
 }
 .tableview table td.cell-password .secret,
 .tableview table td.cell-totp .secret {
@@ -7880,9 +7932,91 @@ table.table-info.horizontal tbody tr:hover {
   text-decoration: none;
   border: none;
 }
-.sso-settings.third-party-provider-settings .provider {
+.page.administration .app .panel.main .sso-settings.third-party-provider-settings .provider {
   width: 13rem;
   justify-content: flex-start;
+}
+.page.administration .app .panel.main .sso-settings.third-party-provider-settings .main-content form.form .warning.message {
+  border-radius: var(--Section-border-radius);
+}
+button.card {
+  display: flex;
+  height: 6.4rem;
+  min-width: 17.6rem;
+  max-width: 36.9rem;
+  padding: 0.8rem 1.6rem;
+  align-items: center;
+  gap: 1.6rem;
+  flex: 1 0 0;
+  border-radius: var(--Button-border-radius);
+  justify-content: flex-start;
+  text-align: left;
+}
+button.card:hover,
+button.card:active {
+  background: var(--Workspace-Dividers-lighter);
+}
+button.card svg {
+  display: flex;
+  width: 3.2rem;
+  height: 3.2rem;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+button.card .card-information {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.2rem;
+  flex: 1 0 0;
+  max-width: 100%;
+}
+button.card .card-information .title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+button.card .card-information .title.is-beta {
+  position: relative;
+  max-width: 18.1rem;
+  padding-right: 4.7rem;
+}
+button.card .card-information .title.is-beta .chips {
+  position: absolute;
+  right: 0;
+  margin-top: 0.3rem;
+}
+button.card .card-information .title.is-beta {
+  position: relative;
+  max-width: 18.1rem;
+  padding-right: 4.7rem;
+}
+button.card .card-information .title.is-beta .chips {
+  position: absolute;
+  right: 0;
+  margin-top: 0.3rem;
+}
+button.card .card-information .info {
+  font-size: 1.2rem;
+  line-height: normal;
+  color: var(--Text-and-icons-Secondary-text);
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
 }
 .edit-group-dialog .form-content {
   padding: 0;
@@ -8086,14 +8220,30 @@ table.table-info.horizontal tbody tr:hover {
 /* Create and edit resource dialog */
 .create-resource,
 .edit-resource {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 6.4rem 19rem;
+  min-width: 128rem;
+  min-height: 76.8rem;
   /* dialog wrapper */
   /* header */
 }
 .create-resource .dialog,
 .edit-resource .dialog {
   padding: 0;
-  max-width: 96rem;
-  min-width: 38rem;
+  max-width: 100rem;
+  min-width: 90rem;
+  max-height: 80rem;
+  min-height: 64rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 0;
+  width: 100%;
+  align-self: center;
 }
 .create-resource .dialog-header,
 .edit-resource .dialog-header {
@@ -8134,7 +8284,7 @@ table.table-info.horizontal tbody tr:hover {
   align-items: flex-start;
   gap: 0.8rem;
   align-self: stretch;
-  flex: 1 0 auto;
+  flex: 1 0 0;
   padding: 0 1.6rem;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -8168,12 +8318,26 @@ table.table-info.horizontal tbody tr:hover {
 .create-resource .dialog-content .left-sidebar .sidebar-content-sections .section-content,
 .edit-resource .dialog-content .left-sidebar .sidebar-content-sections .section-content {
   display: flex;
-  padding: 0.8rem 1.6rem 0.8rem 3.2rem;
+  padding-right: 1.6rem;
   justify-content: flex-start;
   align-items: center;
   gap: 8px;
   align-self: stretch;
   border-radius: var(--Button-border-radius);
+}
+.create-resource .dialog-content .left-sidebar .sidebar-content-sections .section-content > button.no-border,
+.edit-resource .dialog-content .left-sidebar .sidebar-content-sections .section-content > button.no-border {
+  flex: 1 0 auto;
+  padding: 0.8rem 0 0.8rem 3.2rem;
+  justify-content: flex-start;
+}
+.create-resource .dialog-content .left-sidebar .sidebar-content-sections .section-content > button.button-transparent,
+.edit-resource .dialog-content .left-sidebar .sidebar-content-sections .section-content > button.button-transparent {
+  display: none;
+}
+.create-resource .dialog-content .left-sidebar .sidebar-content-sections .section-content:hover > button.button-transparent,
+.edit-resource .dialog-content .left-sidebar .sidebar-content-sections .section-content:hover > button.button-transparent {
+  display: flex;
 }
 .create-resource .dialog-content .left-sidebar .sidebar-content-sections .section-content:hover,
 .edit-resource .dialog-content .left-sidebar .sidebar-content-sections .section-content:hover,
@@ -8188,6 +8352,10 @@ table.table-info.horizontal tbody tr:hover {
 .create-resource .dialog-content .left-sidebar .sidebar-content-sections .section-content.selected,
 .edit-resource .dialog-content .left-sidebar .sidebar-content-sections .section-content.selected {
   font-weight: 700;
+}
+.create-resource .dialog-content .left-sidebar .sidebar-content-sections .section-content.disabled,
+.edit-resource .dialog-content .left-sidebar .sidebar-content-sections .section-content.disabled {
+  background: none;
 }
 .create-resource .dialog-content .left-sidebar .section-card,
 .edit-resource .dialog-content .left-sidebar .section-card {
@@ -8293,6 +8461,10 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
   border-radius: var(--Section-border-radius);
   background: var(--Workspace-Panels-background);
 }
+.create-resource .dialog-content .grid-and-footer .grid .resource-info.skeleton,
+.edit-resource .dialog-content .grid-and-footer .grid .resource-info.skeleton {
+  height: 9.2rem;
+}
 .create-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon,
 .edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon {
   display: flex;
@@ -8309,7 +8481,7 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 .edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon svg {
   width: 3.3rem;
   height: 3.3rem;
-  margin-top: 0.15rem;
+  margin-top: 0.25rem;
   --icon-color: var(--Resource-icon-Resource-icon-color);
   --icon-background-color: none;
 }
@@ -8332,6 +8504,14 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 .create-resource .dialog-content .grid-and-footer .grid .resource-info .information .input.text input,
 .edit-resource .dialog-content .grid-and-footer .grid .resource-info .information .input.text input {
   margin-bottom: 0;
+  max-width: inherit;
+}
+.create-resource .dialog-content .grid-and-footer .grid .resource-info .information .input.text .warning-message,
+.edit-resource .dialog-content .grid-and-footer .grid .resource-info .information .input.text .warning-message,
+.create-resource .dialog-content .grid-and-footer .grid .resource-info .information .input.text .error-message,
+.edit-resource .dialog-content .grid-and-footer .grid .resource-info .information .input.text .error-message {
+  margin-bottom: 0;
+  margin-top: 1.2rem;
 }
 .create-resource .dialog-content .grid-and-footer .grid .resource-info .information .breadcrumbs,
 .edit-resource .dialog-content .grid-and-footer .grid .resource-info .information .breadcrumbs {
@@ -8382,6 +8562,7 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
   border-radius: var(--Section-border-radius);
   background: var(--Workspace-Panels-background);
   /* HEADER TITLE */
+  /* TOTP WORKSPACE */
   /* CONTENT */
 }
 .create-resource .create-workspace .title,
@@ -8403,16 +8584,125 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
   line-height: normal;
   margin: 0;
 }
+.create-resource .create-workspace .title h2.preview,
+.edit-resource .create-workspace .title h2.preview,
+.create-resource .edit-workspace .title h2.preview,
+.edit-resource .edit-workspace .title h2.preview {
+  font-weight: 400;
+}
+.create-resource .create-workspace .totp-workspace,
+.edit-resource .create-workspace .totp-workspace,
+.create-resource .edit-workspace .totp-workspace,
+.edit-resource .edit-workspace .totp-workspace {
+  display: flex;
+  flex: 1 0 0;
+  align-items: center;
+  align-self: stretch;
+  gap: 1.6rem;
+  border-radius: var(--Section-border-radius);
+  background: var(--Dialog-Dialog-header-and-footer);
+}
+.create-resource .create-workspace .totp-workspace .totp-form,
+.edit-resource .create-workspace .totp-workspace .totp-form,
+.create-resource .edit-workspace .totp-workspace .totp-form,
+.edit-resource .edit-workspace .totp-workspace .totp-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+  border-radius: var(--Section-border-radius);
+  background: var(--Workspace-Panels-background);
+}
+.create-resource .create-workspace .totp-workspace .totp-form .secret-key-wrapper,
+.edit-resource .create-workspace .totp-workspace .totp-form .secret-key-wrapper,
+.create-resource .edit-workspace .totp-workspace .totp-form .secret-key-wrapper,
+.edit-resource .edit-workspace .totp-workspace .totp-form .secret-key-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  align-self: stretch;
+}
+.create-resource .create-workspace .totp-workspace .totp-view,
+.edit-resource .create-workspace .totp-workspace .totp-view,
+.create-resource .edit-workspace .totp-workspace .totp-view,
+.edit-resource .edit-workspace .totp-workspace .totp-view {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-shrink: 0;
+  align-self: stretch;
+  min-width: 18rem;
+  border-radius: var(--Section-border-radius);
+  background: var(--Workspace-Panels-background);
+}
+.create-resource .create-workspace .totp-workspace .totp-view .totp-wrapper,
+.edit-resource .create-workspace .totp-workspace .totp-view .totp-wrapper,
+.create-resource .edit-workspace .totp-workspace .totp-view .totp-wrapper,
+.edit-resource .edit-workspace .totp-workspace .totp-view .totp-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  gap: 1.6rem;
+}
+.create-resource .create-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp,
+.edit-resource .create-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp,
+.create-resource .edit-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp,
+.edit-resource .edit-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp {
+  display: flex;
+  padding: 1.6rem 1.6rem 0 1.6rem;
+  gap: 1.6rem;
+}
+.create-resource .create-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp button,
+.edit-resource .create-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp button,
+.create-resource .edit-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp button,
+.edit-resource .edit-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp button {
+  gap: 1.6rem;
+}
+.create-resource .create-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp button .totp-code,
+.edit-resource .create-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp button .totp-code,
+.create-resource .edit-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp button .totp-code,
+.edit-resource .edit-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp button .totp-code {
+  display: flex;
+}
+.create-resource .create-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp button .totp-code span,
+.edit-resource .create-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp button .totp-code span,
+.create-resource .edit-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp button .totp-code span,
+.edit-resource .edit-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp button .totp-code span {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 2.4rem;
+}
+.create-resource .create-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp svg,
+.edit-resource .create-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp svg,
+.create-resource .edit-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp svg,
+.edit-resource .edit-workspace .totp-workspace .totp-view .totp-wrapper .secret-totp svg {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin: 0;
+}
+.create-resource .create-workspace .totp-workspace .upload-qr-code,
+.edit-resource .create-workspace .totp-workspace .upload-qr-code,
+.create-resource .edit-workspace .totp-workspace .upload-qr-code,
+.edit-resource .edit-workspace .totp-workspace .upload-qr-code {
+  display: flex;
+  align-items: center;
+}
 .create-resource .create-workspace .content,
 .edit-resource .create-workspace .content,
 .create-resource .edit-workspace .content,
 .edit-resource .edit-workspace .content {
   display: flex;
-  padding-bottom: 2.4rem;
   flex-direction: column;
   align-items: flex-start;
   flex: 1 0 0;
   align-self: stretch;
+  padding: 1.6rem 0;
+  isolation: isolate;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--Workspace-Elevator) transparent;
   /* PASSWORD FIELDS LAYOUT*/
   /* INPUT FIELDS */
   /* ADDITIONAL INFORMATIONS */
@@ -8434,11 +8724,17 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 .create-resource .edit-workspace .content .description-fields,
 .edit-resource .edit-workspace .content .description-fields {
   display: flex;
-  padding: 1.6rem;
+  padding: 0 1.6rem;
   flex-direction: column;
   align-items: flex-start;
   gap: 1.6rem;
   align-self: stretch;
+}
+.create-resource .create-workspace .content .password-fields,
+.edit-resource .create-workspace .content .password-fields,
+.create-resource .edit-workspace .content .password-fields,
+.edit-resource .edit-workspace .content .password-fields {
+  padding-bottom: 1.6rem;
 }
 .create-resource .create-workspace .content .input,
 .edit-resource .create-workspace .content .input,
@@ -8449,6 +8745,16 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
   align-items: flex-start;
   gap: 1.2rem;
   align-self: stretch;
+}
+.create-resource .create-workspace .content .input .warning-message,
+.edit-resource .create-workspace .content .input .warning-message,
+.create-resource .edit-workspace .content .input .warning-message,
+.edit-resource .edit-workspace .content .input .warning-message,
+.create-resource .create-workspace .content .input .error-message,
+.edit-resource .create-workspace .content .input .error-message,
+.create-resource .edit-workspace .content .input .error-message,
+.edit-resource .edit-workspace .content .input .error-message {
+  margin-bottom: 0rem;
 }
 .create-resource .create-workspace .content .input label,
 .edit-resource .create-workspace .content .input label,
@@ -8464,6 +8770,12 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 .edit-resource .edit-workspace .content .input textarea {
   max-width: inherit;
   margin-bottom: 0;
+}
+.create-resource .create-workspace .content .input label,
+.edit-resource .create-workspace .content .input label,
+.create-resource .edit-workspace .content .input label,
+.edit-resource .edit-workspace .content .input label {
+  display: flex;
 }
 .create-resource .create-workspace .content .input textarea,
 .edit-resource .create-workspace .content .input textarea,
@@ -8490,6 +8802,7 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 .edit-resource .edit-workspace .content .input.input-password-wrapper .password-complexity {
   margin-bottom: 0;
   align-self: stretch;
+  isolation: isolate;
 }
 .create-resource .create-workspace .content .input.password,
 .edit-resource .create-workspace .content .input.password,
@@ -8535,75 +8848,6 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 .edit-resource .edit-workspace .content .input.select-wrapper .select-container {
   align-self: stretch;
 }
-.create-resource .create-workspace .content .totp-view,
-.edit-resource .create-workspace .content .totp-view,
-.create-resource .edit-workspace .content .totp-view,
-.edit-resource .edit-workspace .content .totp-view {
-  display: flex;
-  align-self: stretch;
-  padding: 1.6rem;
-}
-.create-resource .create-workspace .content .totp-view .totp-wrapper,
-.edit-resource .create-workspace .content .totp-view .totp-wrapper,
-.create-resource .edit-workspace .content .totp-view .totp-wrapper,
-.edit-resource .edit-workspace .content .totp-view .totp-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  align-self: stretch;
-  flex: 1 0 0;
-  padding: 0.8rem 1.6rem;
-  border-radius: var(--Contextual-bar-radius, 8px);
-}
-.create-resource .create-workspace .content .totp-view .totp-wrapper .secret-totp,
-.edit-resource .create-workspace .content .totp-view .totp-wrapper .secret-totp,
-.create-resource .edit-workspace .content .totp-view .totp-wrapper .secret-totp,
-.edit-resource .edit-workspace .content .totp-view .totp-wrapper .secret-totp {
-  display: flex;
-  gap: 1.6rem;
-}
-.create-resource .create-workspace .content .totp-view .totp-wrapper .secret-totp button,
-.edit-resource .create-workspace .content .totp-view .totp-wrapper .secret-totp button,
-.create-resource .edit-workspace .content .totp-view .totp-wrapper .secret-totp button,
-.edit-resource .edit-workspace .content .totp-view .totp-wrapper .secret-totp button {
-  gap: 1.6rem;
-}
-.create-resource .create-workspace .content .totp-view .totp-wrapper .secret-totp button .totp-code,
-.edit-resource .create-workspace .content .totp-view .totp-wrapper .secret-totp button .totp-code,
-.create-resource .edit-workspace .content .totp-view .totp-wrapper .secret-totp button .totp-code,
-.edit-resource .edit-workspace .content .totp-view .totp-wrapper .secret-totp button .totp-code {
-  display: flex;
-}
-.create-resource .create-workspace .content .totp-view .totp-wrapper .secret-totp button .totp-code span,
-.edit-resource .create-workspace .content .totp-view .totp-wrapper .secret-totp button .totp-code span,
-.create-resource .edit-workspace .content .totp-view .totp-wrapper .secret-totp button .totp-code span,
-.edit-resource .edit-workspace .content .totp-view .totp-wrapper .secret-totp button .totp-code span {
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 2.4rem;
-}
-.create-resource .create-workspace .content .totp-view .totp-wrapper .secret-totp svg,
-.edit-resource .create-workspace .content .totp-view .totp-wrapper .secret-totp svg,
-.create-resource .edit-workspace .content .totp-view .totp-wrapper .secret-totp svg,
-.edit-resource .edit-workspace .content .totp-view .totp-wrapper .secret-totp svg {
-  width: 1.8rem;
-  height: 1.8rem;
-  margin: 0;
-}
-.create-resource .create-workspace .content .totp-view .totp-wrapper.disabled,
-.edit-resource .create-workspace .content .totp-view .totp-wrapper.disabled,
-.create-resource .edit-workspace .content .totp-view .totp-wrapper.disabled,
-.edit-resource .edit-workspace .content .totp-view .totp-wrapper.disabled {
-  background-color: var(--Workspace-Dividers-lighter);
-}
-.create-resource .create-workspace .content .upload-qr-code,
-.edit-resource .create-workspace .content .upload-qr-code,
-.create-resource .edit-workspace .content .upload-qr-code,
-.edit-resource .edit-workspace .content .upload-qr-code {
-  display: flex;
-  align-items: center;
-  padding: 3.2rem 0 1.6rem 0;
-}
 .create-resource .create-workspace .content .additional-information,
 .edit-resource .create-workspace .content .additional-information,
 .create-resource .edit-workspace .content .additional-information,
@@ -8612,6 +8856,8 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
   flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
+  margin-top: 1.6rem;
+  padding-bottom: 0.8rem;
   border-top: 1px solid var(--Workspace-Dividers);
   /* TABS */
 }
@@ -8653,6 +8899,15 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 .edit-resource .edit-workspace .content .additional-information .advanced-settings {
   align-self: stretch;
   padding: 1.6rem 1.6rem 0 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.create-resource .create-workspace .content .additional-information .advanced-settings .input-wrapper-inline,
+.edit-resource .create-workspace .content .additional-information .advanced-settings .input-wrapper-inline,
+.create-resource .edit-workspace .content .additional-information .advanced-settings .input-wrapper-inline,
+.edit-resource .edit-workspace .content .additional-information .advanced-settings .input-wrapper-inline {
+  margin-bottom: 0;
 }
 .create-resource .create-workspace .content .additional-information .tabs,
 .edit-resource .create-workspace .content .additional-information .tabs,
@@ -8675,6 +8930,23 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
   flex-direction: column;
   align-items: flex-start;
   gap: 1.6rem;
+  align-self: stretch;
+}
+.create-resource .create-workspace .message,
+.edit-resource .create-workspace .message,
+.create-resource .edit-workspace .message,
+.edit-resource .edit-workspace .message {
+  display: flex;
+  padding: 0.8rem 1.6rem 1.2rem 1.6rem;
+  align-items: center;
+  gap: 1rem;
+  align-self: stretch;
+}
+.create-resource .create-workspace .message .text,
+.edit-resource .create-workspace .message .text,
+.create-resource .edit-workspace .message .text,
+.edit-resource .edit-workspace .message .text {
+  flex: 1 0 0;
   align-self: stretch;
 }
 /* Resource creation menu dialog */
@@ -8728,51 +9000,6 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
   bottom: 0;
   left: 0;
 }
-.create-resource-menu .dialog-body .grid .card {
-  display: flex;
-  height: 6.4rem;
-  min-width: 17.6rem;
-  max-width: 22rem;
-  padding: 0.8rem 1.6rem;
-  align-items: center;
-  gap: 3.2rem;
-  flex: 1 0 0;
-  border-radius: var(--Button-border-radius);
-}
-.create-resource-menu .dialog-body .grid .card svg {
-  display: flex;
-  width: 3.2rem;
-  height: 3.2rem;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-}
-.create-resource-menu .dialog-body .grid .card .card-information {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 0.4rem;
-  flex: 1 0 0;
-}
-.create-resource-menu .dialog-body .grid .card .card-information .title {
-  font-size: 1.4rem;
-  font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-.create-resource-menu .dialog-body .grid .card .card-information .info {
-  font-size: 0.8rem;
-  line-height: normal;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
 /*
  * Password workspace
  */
@@ -8802,6 +9029,7 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
   font-size: 1.6rem;
   line-height: normal;
   font-weight: 400;
+  text-align: center;
 }
 .page.settings .app .panel.main .panel.middle .breadcrumbs-and-grid {
   align-items: flex-start;
@@ -8935,48 +9163,8 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 .page.settings .app .panel.main .panel.middle .recovery-kit .warning.message p {
   max-width: inherit;
 }
-.page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token {
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token:before,
-.page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token:after {
-  content: "";
-  display: table;
-}
-.page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token:after {
-  clear: both;
-}
-.page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token:before,
-.page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token:after {
-  content: "";
-  display: table;
-}
-.page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token:after {
-  clear: both;
-}
 .page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token .label-required-inline {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.6rem;
 }
 .page.settings .app .panel.main .panel.middle .profile-choose-security-token .input-security-token .input.text {
   -webkit-border-radius: 0.3rem;
@@ -9187,6 +9375,50 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 .account-recovery-profile .account-recovery-status .usercard-detailed-col-2 .content-wrapper .content .subinfo {
   overflow: inherit;
 }
+#administration-home-page .main-content {
+  position: relative;
+}
+#administration-home-page .main-content .grid {
+  display: flex;
+  padding: 1.6rem 1.6rem 0.8rem 1.6rem;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 1.6rem 3.2rem;
+  align-self: stretch;
+  flex-wrap: wrap;
+  position: absolute;
+  margin: 0 0 0 -1.6rem;
+}
+#administration-home-page .main-content .grid:before {
+  content: "";
+  display: flex;
+  position: absolute;
+  background: repeating-linear-gradient(transparent, transparent 10.3rem, var(--Workspace-Dividers), var(--Workspace-Dividers) 10.4rem);
+  width: 100%;
+  height: calc(100% - 4rem);
+  top: 0.8rem;
+  left: 0;
+}
+#administration-home-page .main-content .grid .card {
+  height: 8.8rem;
+  max-width: 30rem;
+  min-width: 30rem;
+  padding: 1.6rem;
+}
+#administration-home-page .main-content .grid .card .title,
+#administration-home-page .main-content .grid .card .info {
+  max-width: 22rem;
+}
+#administration-home-page .main-content .grid .card .title.is-beta {
+  position: relative;
+  max-width: 18.1rem;
+  padding-right: 4.7rem;
+}
+#administration-home-page .main-content .grid .card .title.is-beta .chips {
+  position: absolute;
+  right: 0;
+  margin-top: 0.3rem;
+}
 .page.administration .app .panel.main .panel.middle .breadcrumbs-and-grid {
   align-items: flex-start;
   background: none;
@@ -9271,14 +9503,18 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 .page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form > *:last-child {
   margin-bottom: 0;
 }
-.page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message {
+.page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message,
+.page.administration .app .panel.main .panel.middle .main-page .main-column .error.message {
   align-self: stretch;
   border-radius: 0 0 var(--Section-border-radius) var(--Section-border-radius);
   padding: 0;
 }
-.page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message > div {
+.page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message > div,
+.page.administration .app .panel.main .panel.middle .main-page .main-column .error.message > div {
   margin: 0;
   padding: 0.8rem 1.6rem;
+}
+.page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message > div {
   border-bottom: 0.1rem solid var(--Palette-Contrast-2);
 }
 .page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message > div:last-child {
@@ -9351,6 +9587,13 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 .page.administration .app .panel.main .panel.middle .error.message.form-banner {
   border-radius: 0;
   border: none;
+}
+.page.administration .app .panel.main #administration_menu li button svg {
+  height: 0.8rem;
+  width: 0.8rem;
+}
+.page.administration .app .panel.main #administration_menu li ul {
+  margin-left: 1.6rem;
 }
 .recover-account-settings .input.radio,
 .save-recovery-account-settings-dialog .input.radio {
@@ -9449,6 +9692,11 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
   position: relative;
   top: 0.6rem;
 }
+.password-policies-settings .accordion-header {
+  margin: 0 -1.6rem !important;
+  padding: 1.6rem;
+  border-top: 0.1rem solid var(--Workspace-Dividers);
+}
 .password-policies-settings .accordion-header button {
   border-bottom: 0;
 }
@@ -9487,6 +9735,9 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 .password-policies-settings #accordion-toggle-passphrase {
   font-weight: bold;
 }
+.password-policies-settings #password-policies-external-services-subtitle {
+  padding-top: 1.6rem;
+}
 .password-policies-settings .warning p {
   margin: 0;
 }
@@ -9496,13 +9747,6 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 }
 .password-policies-settings label {
   margin-bottom: 1.6rem;
-}
-.grid .row .password-policies-settings hr {
-  margin-left: 0;
-  margin-right: 0;
-  height: 0.1rem;
-  background-color: #E0E0E0;
-  border: none;
 }
 #password-expiry-form-advanced,
 #password-expiry-settings-form {
@@ -9518,7 +9762,7 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 }
 #migrate-metadata-settings .feedback-card {
   border: none;
-  gap: 3.2rem;
+  gap: 1.6rem;
 }
 #migrate-metadata-settings .feedback-card .migration-status-information ul {
   display: table;
@@ -9529,7 +9773,7 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
   border-spacing: 1.6rem 0.8rem;
 }
 #migrate-metadata-settings .feedback-card .migration-status-information ul .label {
-  color: #666666;
+  color: var(--Text-and-icons-Secondary-text);
 }
 #migrate-metadata-settings .feedback-card .migration-status-information ul li {
   display: table-row;
@@ -9541,13 +9785,21 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
   font-weight: normal;
 }
 #migrate-metadata-settings .togglelist label .info {
-  color: #666666;
+  color: var(--Text-and-icons-Secondary-text);
+  margin-left: 0.6rem;
+  font-size: inherit;
+}
+#migrate-metadata-settings .togglelist label > * {
+  display: inline;
 }
 #migrate-metadata-settings .radiolist-alt .name {
   font-weight: bold;
 }
 #migrate-metadata-settings .warning-message {
   margin-bottom: 0;
+}
+#migrate-metadata-settings .description {
+  margin-bottom: 3.2rem;
 }
 #allow-content-types .checkboxlist .form-element {
   margin: 0 -1.6rem;
@@ -9557,22 +9809,47 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 #allow-content-types .checkboxlist .form-element .warning-message,
 #allow-content-types .checkboxlist .form-element .error-message {
   margin-bottom: 0;
+  flex-basis: 100%;
+}
+#allow-content-types .checkbox {
+  align-items: flex-start;
 }
 #allow-content-types .checkbox input[type=checkbox] {
   margin-bottom: 0;
+  position: relative;
+  top: 0.5rem;
 }
 #allow-content-types .checkbox input[type=checkbox] + label {
   font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 #allow-content-types .checkbox input[type=checkbox] + label .info {
-  color: #666666;
+  color: var(--Text-and-icons-Secondary-text);
   font-weight: normal;
+  margin-left: 0.8rem;
+}
+#allow-content-types .checkbox input[type=checkbox] + label .allow-content-type-item {
+  display: flex;
+  align-items: center;
 }
 #allow-content-types .checkbox input[type=checkbox]:disabled {
   background: none;
 }
 #allow-content-types .tooltip-text {
   max-width: none;
+}
+#allow-content-types label svg {
+  width: 2.4rem;
+  height: 2.4rem;
+  margin: 0 1rem 0 0;
+}
+#allow-content-types .warning svg {
+  --icon-color: var(--Field-Warning);
+}
+#allow-content-types .error svg {
+  --icon-color: var(--Field-Error);
 }
 @media all and (max-width: 780px) {
   .totp-setup .input-verify {

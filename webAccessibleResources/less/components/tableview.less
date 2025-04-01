@@ -106,6 +106,7 @@
       display: flex;
       gap: .8rem;
       font-weight: 400;
+      align-items: center;
 
       svg {
         width: 1.6rem;
@@ -256,6 +257,23 @@
             }
           }
         }
+      }
+    }
+
+    td.cell-name .teaser-image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: var(--Resource-icon-Resource-icons-backgound);
+      text-align: center;
+      border-radius: 50%;
+      width: 2.4rem;
+      height: 2.4rem;
+      margin-right: .2rem;
+      svg {
+        --icon-stroke-width: .1rem;
+        --icon-color: var(--Resource-icon-Resource-icon-color);
       }
     }
 

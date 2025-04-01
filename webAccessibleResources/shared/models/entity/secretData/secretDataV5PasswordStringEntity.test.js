@@ -20,6 +20,7 @@ import {
 } from "./secretDataV5PasswordStringEntity.test.data";
 import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
 import SecretDataV5PasswordStringEntity from "./secretDataV5PasswordStringEntity";
+import SecretDataV4PasswordStringEntity from "./secretDataV4PasswordStringEntity";
 
 describe("secretDataV5PasswordStringEntity", () => {
   describe("::getSchema", () => {
@@ -28,8 +29,6 @@ describe("secretDataV5PasswordStringEntity", () => {
     });
 
     it("validates object_type property", () => {
-      assertEntityProperty.string(SecretDataV5PasswordStringEntity, "object_type");
-      assertEntityProperty.required(SecretDataV5PasswordStringEntity, "object_type");
       assertEntityProperty.enumeration(SecretDataV5PasswordStringEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
     });
 
@@ -77,6 +76,37 @@ describe("secretDataV5PasswordStringEntity", () => {
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
       expect(entity.password).toStrictEqual(dto.password);
+    });
+  });
+
+  describe("::getDefaultProp", () => {
+    it("get default password", () => {
+      expect.assertions(1);
+      expect(SecretDataV5PasswordStringEntity.getDefaultProp("password")).toStrictEqual("");
+    });
+
+    it("get default unknown", () => {
+      expect.assertions(1);
+      expect(SecretDataV5PasswordStringEntity.getDefaultProp("unknown")).toBeUndefined();
+    });
+
+    it("throw error if prop name is not a string", () => {
+      expect.assertions(1);
+      expect(() => SecretDataV5PasswordStringEntity.getDefaultProp({})).toThrow(TypeError);
+    });
+  });
+
+  describe("::areSecretsDifferent", () => {
+    it("should return true", () => {
+      const dto = defaultSecretDataV5PasswordStringDto();
+      const entity = new SecretDataV5PasswordStringEntity(dto);
+      expect(entity.areSecretsDifferent({password: "different"})).toBeTruthy();
+    });
+
+    it("should return false", () => {
+      const dto = defaultSecretDataV5PasswordStringDto();
+      const entity = new SecretDataV4PasswordStringEntity(dto);
+      expect(entity.areSecretsDifferent(dto)).toBeFalsy();
     });
   });
 });

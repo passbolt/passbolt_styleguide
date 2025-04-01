@@ -179,6 +179,14 @@ class DisplayResourceWorkspacePageObject {
   }
 
   /**
+   * Returns the columns setting reset button elements
+   * @returns {HTMLElement}
+   */
+  get menuColumnViewResetButton() {
+    return this._container.querySelector('.actions-secondary .dropdown-content #reset-columns-settings');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    * @returns {boolean}
    */

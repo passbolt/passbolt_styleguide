@@ -32,11 +32,11 @@ import {
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import DisplayResourceDetailsPassword from "./DisplayResourceDetailsPassword";
 import DisplayResourceDetailsTotp from "./DisplayResourceDetailsTotp";
-import KeySVG from "../../../../img/svg/key.svg";
 import LinkSVG from "../../../../img/svg/link.svg";
 import Tabs from "../../Common/Tab/Tabs";
 import Tab from "../../Common/Tab/Tab";
 import DisplayResourceDetailsNote from "./DisplayResourceDetailsNote";
+import ResourceIcon from "../../../../shared/components/Icons/ResourceIcon";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -68,14 +68,18 @@ class DisplayResourceDetails extends React.Component {
     }
 
     const resourceType = this.props.resourceTypes.getFirstById(resource.resource_type_id);
-    switch (resourceType.slug) {
+    switch (resourceType?.slug) {
       case "password-string":
+      case "v5-password-string":
         return this.translate("Password");
       case "password-and-description":
-        return this.translate("Password and Encrypted description");
+      case "v5-default":
+        return this.translate("Password and Note");
       case "password-description-totp":
-        return this.translate("Password, Encrypted description and TOTP");
+      case "v5-default-with-totp":
+        return this.translate("Password, Note and TOTP");
       case "totp":
+      case "v5-totp-standalone":
         return this.translate("TOTP");
       default:
         return this.translate("Resource");
@@ -159,21 +163,21 @@ class DisplayResourceDetails extends React.Component {
 
     return (
       <>
-        <DisplayResourceDetailsInformation />
         {this.isPasswordResources &&
           <DisplayResourceDetailsPassword/>
         }
         {this.isTotpResources &&
           <DisplayResourceDetailsTotp isStandaloneTotp={this.isStandaloneTotpResource}/>
         }
-        {this.hasDescription &&
-          <DisplayResourceDetailsDescription />
-        }
         {this.hasSecureNote &&
           <DisplayResourceDetailsNote />
         }
         {canViewShare &&
           <DisplayResourceDetailsPermission />
+        }
+        <DisplayResourceDetailsInformation />
+        {this.hasDescription &&
+          <DisplayResourceDetailsDescription />
         }
         {canUseTags &&
         <DisplayResourceDetailsTag />
@@ -197,9 +201,7 @@ class DisplayResourceDetails extends React.Component {
     return (
       <div className="sidebar resource">
         <div className={`sidebar-header ${canUseAuditLog ? "" : "with-separator"}`}>
-          <div className="teaser-image">
-            <KeySVG/>
-          </div>
+          <ResourceIcon resource={this.props.resourceWorkspaceContext.details.resource}/>
           <div className="title-area">
             <h3>
               <div className="title-wrapper">

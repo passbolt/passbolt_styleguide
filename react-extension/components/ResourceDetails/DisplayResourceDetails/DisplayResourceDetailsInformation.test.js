@@ -17,9 +17,8 @@
  */
 
 import "../../../../../test/mocks/mockClipboard";
-import {
-  defaultProps, propsWithDenyUiAction,
-} from "./DisplayResourceDetailsInformation.test.data";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
+import {defaultProps, propsWithDenyUiAction, withNestedFoldersProps} from "./DisplayResourceDetailsInformation.test.data";
 import DisplayResourceDetailsInformationPage from "./DisplayResourceDetailsInformation.test.page";
 import {waitFor} from "@testing-library/dom";
 import {DateTime} from "luxon";
@@ -63,7 +62,7 @@ describe("DisplayResourceDetailsInformation", () => {
       const absoluteCreationDate = props.resourceWorkspaceContext.details.resource.created;
       const creationDate = DateTime.fromISO(absoluteCreationDate).toRelative();
       expect.assertions(12);
-      await waitFor(() => {});
+      await waitForTrue(() => page.displayInformationList.modifiedBy.textContent !== "");
       expect(page.displayInformationList.modifiedLabel).toBe('Modified');
       expect(page.displayInformationList.modified.textContent).toBe(modificationDate);
       expect(page.displayInformationList.modifiedByLabel).toBe('Modified by');
@@ -78,7 +77,7 @@ describe("DisplayResourceDetailsInformation", () => {
       expect(page.displayInformationList.expiry.textContent).toBe("Not set");
     });
 
-    it('I can see the folder a resource is contained in', async() => {
+    it('I can see if a resource is at the root', async() => {
       page = new DisplayResourceDetailsInformationPage(props);
       expect.assertions(2);
       await page.title.click();
@@ -86,7 +85,20 @@ describe("DisplayResourceDetailsInformation", () => {
       expect(page.displayInformationList.location.textContent).toBe("My workspace");
     });
 
-    it('I cannot see the folder a resource is contained in if disbaled by RBAC', async() => {
+    it('I can see a folder a resource is contained in', async() => {
+      expect.assertions(2);
+      props = withNestedFoldersProps();
+      page = new DisplayResourceDetailsInformationPage(props);
+      const user = props.context.users[0];
+      const resourceWithContain = Object.assign({}, props.resourceWorkspaceContext.details.resource, {creator: user, modifier: user});
+      props.context.port.addRequestListener("passbolt.resources.find-details", async() => resourceWithContain);
+
+      await page.title.click();
+      expect(page.displayInformationList.locationLabel).toBe('Location');
+      expect(page.displayInformationList.location.textContent).toBe("folder 0›folder 1›folder 2");
+    });
+
+    it('I cannot see the folder a resource is contained in if disabled by RBAC', async() => {
       const props = propsWithDenyUiAction();
       const user = props.context.users[0];
       const resourceWithContain = Object.assign({}, props.resourceWorkspaceContext.details.resource, {creator: user, modifier: user});

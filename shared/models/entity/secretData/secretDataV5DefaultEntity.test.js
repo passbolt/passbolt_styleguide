@@ -25,8 +25,6 @@ describe("SecretDataV5DefaultEntity", () => {
     });
 
     it("validates object_type property", () => {
-      assertEntityProperty.string(SecretDataV5DefaultEntity, "object_type");
-      assertEntityProperty.required(SecretDataV5DefaultEntity, "object_type");
       assertEntityProperty.enumeration(SecretDataV5DefaultEntity, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
     });
 
@@ -85,6 +83,42 @@ describe("SecretDataV5DefaultEntity", () => {
       expect(entity.objectType).toStrictEqual(dto.object_type);
       expect(entity.password).toStrictEqual(dto.password);
       expect(entity.description).toStrictEqual(dto.description);
+    });
+  });
+
+  describe("::getDefaultProp", () => {
+    it("get default password", () => {
+      expect.assertions(1);
+      expect(SecretDataV5DefaultEntity.getDefaultProp("password")).toStrictEqual("");
+    });
+
+    it("get default description", () => {
+      expect.assertions(1);
+      expect(SecretDataV5DefaultEntity.getDefaultProp("description")).toStrictEqual("");
+    });
+
+    it("get default unknown", () => {
+      expect.assertions(1);
+      expect(SecretDataV5DefaultEntity.getDefaultProp("unknown")).toBeUndefined();
+    });
+
+    it("throw error if prop name is not a string", () => {
+      expect.assertions(1);
+      expect(() => SecretDataV5DefaultEntity.getDefaultProp({})).toThrow(TypeError);
+    });
+  });
+
+  describe("::areSecretsDifferent", () => {
+    it("should return true", () => {
+      const dto = minimalDefaultSecretDataV5DefaultDto();
+      const entity = SecretDataV5DefaultEntity.createFromDefault(dto);
+      expect(entity.areSecretsDifferent({password: ""})).toBeTruthy();
+    });
+
+    it("should return false", () => {
+      const dto = defaultSecretDataV5DefaultDto();
+      const entity = new SecretDataV5DefaultEntity(dto);
+      expect(entity.areSecretsDifferent(dto)).toBeFalsy();
     });
   });
 });

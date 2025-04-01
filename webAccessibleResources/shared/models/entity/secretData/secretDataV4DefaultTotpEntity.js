@@ -14,20 +14,9 @@
 
 import TotpEntity from "../totp/totpEntity";
 import SecretDataV4DefaultEntity from "./secretDataV4DefaultEntity";
+import assertString from "validator/es/lib/util/assertString";
 
 class SecretDataV4DefaultTotpEntity extends SecretDataV4DefaultEntity {
-  /**
-   * @inheritDoc
-   */
-  constructor(dto, options = {}) {
-    super(dto, options);
-
-    // Associations
-    if (this._props.totp) {
-      this._totp = new TotpEntity(this._props.totp, {...options, clone: false});
-      delete this._props.totp;
-    }
-  }
   /**
    * Get session keys bundle data entity schema
    * @returns {Object} schema
@@ -71,14 +60,47 @@ class SecretDataV4DefaultTotpEntity extends SecretDataV4DefaultEntity {
   }
 
   /**
+   * Return the default secret property.
+   * @param {string} propName the property
+   * @returns {string | object | undefined}
+   */
+  static getDefaultProp(propName) {
+    assertString(propName);
+    switch (propName) {
+      case "password":
+        return "";
+      case "description":
+        return "";
+      case "totp":
+        return TotpEntity.createFromDefault({}, {validate: false}).toDto();
+      default:
+        return;
+    }
+  }
+
+  /**
+   * Are secret different
+   * @param secretDto
+   * @returns {boolean}
+   */
+  areSecretsDifferent(secretDto) {
+    const totp = this.totp.toDto();
+    const isTotpDifferent = Object.keys(totp).some(key => totp[key] !== secretDto.totp?.[key]);
+    return this.password !== secretDto.password || isTotpDifferent || this.description !== secretDto.description;
+  }
+
+  /**
    * Get the DTO of properties managed by the form.
    * @returns {object}
    */
   toDto() {
-    return {
-      ...this._props,
-      totp: this.totp.toDto(),
-    };
+    const result = Object.assign({}, this._props);
+
+    if (this.totp) {
+      result.totp = this.totp.toDto();
+    }
+
+    return result;
   }
 
   /**

@@ -54,7 +54,7 @@ class DisplayResourceDetailsActivity extends React.Component {
    * Whenever the component has mounted
    */
   async componentDidMount() {
-    await this.fetch();
+    await this.fetch(this.state.activitiesPage);
     this.setState({loading: false});
   }
 
@@ -90,7 +90,7 @@ class DisplayResourceDetailsActivity extends React.Component {
 
     // Reset the component, and fetch activities for the new resource.
     this.setState(this.defaultState);
-    await this.fetch();
+    await this.fetch(this.state.activitiesPage);
     this.setState({loading: false});
   }
 
@@ -101,7 +101,7 @@ class DisplayResourceDetailsActivity extends React.Component {
   async handleResourceActivitiesRefresh(hasPreviouslyRefreshed) {
     const mustRefresh = !hasPreviouslyRefreshed && this.props.resourceWorkspaceContext.refresh.activities;
     if (mustRefresh) {
-      await this.fetch();
+      await this.fetch(this.state.activitiesPage);
       await this.props.resourceWorkspaceContext.onResourceActivitiesRefreshed();
     }
   }
@@ -113,22 +113,33 @@ class DisplayResourceDetailsActivity extends React.Component {
   async handleMoreClickEvent() {
     const activitiesPage = this.state.activitiesPage + 1;
     this.setState({activitiesPage, loadingMore: true});
-    await this.fetch();
+    await this.fetch(activitiesPage);
     this.setState({loadingMore: false});
   }
 
   /**
-   * Fetch the resource activities
+   * Fetch the resource activitiesPage
+   * @param {number} page the page to load
    * @returns {Promise<void>}
    */
-  async fetch() {
+  async fetch(page) {
     const limit = LIMIT_ACTIVITIES_PER_PAGE;
-    const page = this.state.activitiesPage;
     const options = {limit, page};
     const newActivities = await this.props.context.port.request("passbolt.actionlogs.find-all-for", "Resource", this.resource.id, options) || [];
 
     // For the first page need to reset activities state
+    this.mergeActivities(newActivities);
+  }
+
+  /**
+   * Merge current activities with newly fetched ones.
+   * It avoids to have duplicated activities especially when a refresh is asked.
+   * @param {array} fetchActivities
+   */
+  mergeActivities(fetchActivities) {
+    const newActivities = fetchActivities.filter(activity => !this.state.activities.find(a => a.id === activity.id));
     const activities = [...this.state.activities, ...newActivities];
+    activities.sort((a, b) => new Date(b.created) - new Date(a.created));
     this.setState({activities});
   }
 

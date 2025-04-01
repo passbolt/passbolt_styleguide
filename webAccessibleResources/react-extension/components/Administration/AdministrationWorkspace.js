@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import React, {Component} from "react";
+import {Route, Switch} from "react-router-dom";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {
@@ -52,6 +53,8 @@ import DisplayContentTypesMetadataKeyAdministration
   from "./DisplayContentTypesMetadataKeyAdministration/DisplayContentTypesMetadataKeyAdministration";
 import DisplayMigrateMetadataAdministration from "./DisplayMigrateMetadataAdministration/DisplayMigrateMetadataAdministration";
 import DisplayContentTypesAllowedContentTypesAdministration from "./DisplayContentTypesAllowedContentTypesAdministration/DisplayContentTypesAllowedContentTypesAdministration";
+import AdministrationHomePage from "./HomePage/AdministrationHomePage.js";
+import WorkspaceSwitcher, {WORKSPACE_ENUM} from "../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher.js";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -69,6 +72,15 @@ class AdministrationWorkspace extends Component {
    */
   bindCallbacks() {
     this.handleGoBack = this.handleGoBack.bind(this);
+  }
+
+  /**
+   * If the administration Home page selected
+   * @returns {boolean}
+   */
+  isHomePageSelected() {
+    return AdministrationWorkspaceMenuTypes.HOME === this.props.administrationWorkspaceContext.selectedAdministration
+      || AdministrationWorkspaceMenuTypes.NONE === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -271,6 +283,7 @@ class AdministrationWorkspace extends Component {
                   <>
                     <div className="header-left"></div>
                     <div className="header-right">
+                      <WorkspaceSwitcher isUserAdmin={true} isUserWorkspaceVisible={true} currentWorkspace={WORKSPACE_ENUM.ORGANISATION_SETTINGS}/>
                       <DisplayUserBadgeMenu baseUrl={this.props.context.trustedDomain || this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
                     </div>
                   </>
@@ -287,6 +300,9 @@ class AdministrationWorkspace extends Component {
                     }
                     {this.isHttpError404 &&
                       <DisplayHttpError errorCode={404}/>
+                    }
+                    {this.isHomePageSelected() &&
+                      <AdministrationHomePage/>
                     }
                     {this.isMfaSelected() &&
                       <DisplayMfaAdministration/>
@@ -347,12 +363,18 @@ class AdministrationWorkspace extends Component {
                     }
                   </div>
                 </div>
-                <div className="help-panel">
-                  {/* TODO Should display according help panel information */}
-                  <div className="sidebar-help" id="administration-help-panel">
-                  </div>
-                  <Footer/>
-                </div>
+                <Switch>
+                  <Route exact path={[
+                    "/app/administration"
+                  ]}/>
+                  <Route>
+                    <div className="help-panel">
+                      <div className="sidebar-help" id="administration-help-panel">
+                      </div>
+                      <Footer/>
+                    </div>
+                  </Route>
+                </Switch>
               </div>
             </div>
           </div>

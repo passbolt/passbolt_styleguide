@@ -61,7 +61,7 @@ describe("SecretDataV4DefaultEntity", () => {
       const entity = SecretDataV4DefaultEntity.createFromDefault({});
 
       expect(entity.password).toStrictEqual("");
-      expect(entity.description).toBeUndefined();
+      expect(entity.description).toStrictEqual("");
     });
 
     it("create with data provided", () => {
@@ -71,6 +71,42 @@ describe("SecretDataV4DefaultEntity", () => {
 
       expect(entity.password).toStrictEqual(dto.password);
       expect(entity.description).toStrictEqual(dto.description);
+    });
+  });
+
+  describe("::getDefaultProp", () => {
+    it("get default password", () => {
+      expect.assertions(1);
+      expect(SecretDataV4DefaultEntity.getDefaultProp("password")).toStrictEqual("");
+    });
+
+    it("get default description", () => {
+      expect.assertions(1);
+      expect(SecretDataV4DefaultEntity.getDefaultProp("description")).toStrictEqual("");
+    });
+
+    it("get default unknown", () => {
+      expect.assertions(1);
+      expect(SecretDataV4DefaultEntity.getDefaultProp("unknown")).toBeUndefined();
+    });
+
+    it("throw error if prop name is not a string", () => {
+      expect.assertions(1);
+      expect(() => SecretDataV4DefaultEntity.getDefaultProp({})).toThrow(TypeError);
+    });
+  });
+
+  describe("::areSecretsDifferent", () => {
+    it("should return true", () => {
+      const dto = defaultSecretDataV4DefaultData();
+      const entity = new SecretDataV4DefaultEntity(dto);
+      expect(entity.areSecretsDifferent({password: "this-is-a-secret-password"})).toBeTruthy();
+    });
+
+    it("should return false", () => {
+      const dto = defaultSecretDataV4DefaultData();
+      const entity = new SecretDataV4DefaultEntity(dto);
+      expect(entity.areSecretsDifferent(dto)).toBeFalsy();
     });
   });
 });

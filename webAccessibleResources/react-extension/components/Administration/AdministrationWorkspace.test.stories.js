@@ -241,6 +241,17 @@ export const ContentTypesMetadataKeyPage = {
   },
 };
 
+export const MigrateMetadataPage = {
+  args: {
+    port: port,
+    storage: storage,
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA
+    }),
+    routerInitialEntry: "/app/administration/migrate-metadata"
+  },
+};
+
 export const error403 = {
   args: {
     port: port,

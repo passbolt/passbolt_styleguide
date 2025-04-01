@@ -1,7 +1,7 @@
 #migrate-metadata-settings {
     .feedback-card {
         border: none;
-        gap:3.2rem;
+        gap: 1.6rem;
 
         .migration-status-information ul {
             display: table;
@@ -12,7 +12,7 @@
             border-spacing: 1.6rem .8rem;
 
             .label {
-                color: @text-info-color;
+                color: var(--Text-and-icons-Secondary-text);
             }
 
             li {
@@ -29,7 +29,13 @@
             font-weight: normal;
 
             .info {
-                color: @text-info-color
+                color: var(--Text-and-icons-Secondary-text);
+                margin-left: .6rem;
+                font-size: inherit;
+            }
+
+            & > * {
+                display: inline;
             }
         }
     }
@@ -42,5 +48,9 @@
 
     .warning-message {
         margin-bottom: 0;
+    }
+
+    .description {
+        margin-bottom: 3.2rem;
     }
 }

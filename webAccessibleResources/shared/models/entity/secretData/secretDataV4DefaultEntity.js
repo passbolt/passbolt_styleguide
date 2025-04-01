@@ -13,6 +13,7 @@
  */
 
 import secretDataEntity from "./secretDataEntity";
+import assertString from "validator/es/lib/util/assertString";
 
 class SecretDataV4DefaultEntity extends secretDataEntity {
   /**
@@ -55,9 +56,36 @@ class SecretDataV4DefaultEntity extends secretDataEntity {
   static createFromDefault(data = {}, options) {
     const defaultData = {
       password: "",
+      description: ""
     };
 
     return new SecretDataV4DefaultEntity({...defaultData, ...data}, options);
+  }
+
+  /**
+   * Return the default secret property.
+   * @param {string} propName the property
+   * @returns {string | undefined}
+   */
+  static getDefaultProp(propName) {
+    assertString(propName);
+    switch (propName) {
+      case "password":
+        return "";
+      case "description":
+        return "";
+      default:
+        return;
+    }
+  }
+
+  /**
+   * Are secret different
+   * @param secretDto
+   * @returns {boolean}
+   */
+  areSecretsDifferent(secretDto) {
+    return this.password !== secretDto.password || this.description !== secretDto.description;
   }
 
   /*

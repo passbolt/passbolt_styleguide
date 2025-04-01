@@ -27,6 +27,7 @@ import CarretDownSVG from "../../../../img/svg/caret_down.svg";
 import CarretRightSVG from "../../../../img/svg/caret_right.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
 import CabinetSVG from "../../../../img/svg/cabinet.svg";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 
 // Root virtual folder identifier.
 const ROOT = null;
@@ -362,6 +363,12 @@ class FilterResourcesByFolders extends React.Component {
           </div>
         </div>
         <div className="accordion-content">
+          {isLoading &&
+            <div className="processing-wrapper">
+              <SpinnerSVG/>
+              <span className="processing-text"><Trans>Retrieving folders</Trans></span>
+            </div>
+          }
           {!isLoading && isOpen && rootFolders.length === 0 &&
           <em className="empty-content"><Trans>empty</Trans></em>
           }

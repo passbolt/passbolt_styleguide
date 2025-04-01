@@ -15,8 +15,8 @@
 import React, {Component, Fragment} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import KeySVG from "../../../../img/svg/key.svg";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import ResourceIcon from "../../../../shared/components/Icons/ResourceIcon";
 
 class AddResourceName extends Component {
   constructor(props) {
@@ -56,7 +56,7 @@ class AddResourceName extends Component {
    * Returns the current list of breadcrumb items
    */
   get breadcrumbItems() {
-    const foldersHierarchy = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.props.folderParentId);
+    const foldersHierarchy = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.props.resource?.folder_parent_id);
     return <div className="breadcrumbs">
       <div className="folder-name"><Trans>My workspace</Trans></div>
       {foldersHierarchy?.map(folder =>
@@ -76,6 +76,23 @@ class AddResourceName extends Component {
     return this.props.t;
   }
 
+  /**
+   * Checks if there is a max length warning for a specific property.
+   *
+   * @returns {boolean} - Returns true if there is a max length warning for the property, false otherwise.
+   */
+  isMaxLengthWarnings(propName) {
+    return !this.isMaxLengthError("name") && this.props.warnings?.hasError(propName, "maxLength");
+  }
+
+  /**
+   * Checks if there is a max length error for a specific property.
+   *
+   * @returns {boolean} - Returns true if there is a max length error for the property, false otherwise.
+   */
+  isMaxLengthError() {
+    return this.props.errors?.details?.metadata?.hasError("name", "maxLength");
+  }
   /*
    * =============================================================
    *  Render view
@@ -85,17 +102,20 @@ class AddResourceName extends Component {
     return (
       <div className="resource-info">
         <div className="resource-icon">
-          <KeySVG/>
+          <ResourceIcon resource={this.props.resource}/>
         </div>
         <div className="information">
-          <div className="input text">
+          <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
             <input id="resource-name" name="metadata.name" type="text" value={this.props.resource?.metadata?.name || ""}
-              onChange={this.handleInputChange} disabled={this.state.processing} maxLength="255"
+              onChange={this.handleInputChange} disabled={this.props.disabled} maxLength="255"
               autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
-            {this.props.isFieldMaxSizeReached &&
-              <div className="name warning-message">
-                <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
-              </div>
+            {this.isMaxLengthError("name") &&
+                <div className="name error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
+            }
+            {this.isMaxLengthWarnings("name") &&
+                <div className="name warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                </div>
             }
           </div>
           {this.breadcrumbItems}
@@ -106,11 +126,12 @@ class AddResourceName extends Component {
 }
 
 AddResourceName.propTypes = {
-  folderParentId: PropTypes.string, // The folder parent id
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   resource: PropTypes.object, // The resource to update
-  isFieldMaxSizeReached: PropTypes.bool, // is field max size reached
+  warnings: PropTypes.object, //The warnings validation
+  errors: PropTypes.object, // The errors entity error validation
   onChange: PropTypes.func, // The on change function
+  disabled: PropTypes.bool, // The disabled property
   t: PropTypes.func, // The translation function
 };
 

@@ -12,10 +12,12 @@
  * @since         5.0.0
  */
 
+import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import React from "react";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import AddResourceName from "./AddResourceName";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 
 export default {
   title: 'Components/Resource/AddResourceName',
@@ -45,10 +47,15 @@ export default {
   ],
 };
 
-export const Default = {};
+export const Default = {
+  args: {
+    resource: defaultResourceDto()
+  }
+};
 
 export const SubFolder = {
   args: {
+    resource: defaultResourceDto(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       getHierarchyFolderCache: () => [{name: "Folder"}, {name: "subfolder"}]
     }),

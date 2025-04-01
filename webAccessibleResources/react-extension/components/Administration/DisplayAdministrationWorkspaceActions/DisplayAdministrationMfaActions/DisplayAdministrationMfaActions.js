@@ -120,4 +120,3 @@ DisplayAdministrationMfaActions.propTypes = {
 };
 
 export default withAdminMfa(withActionFeedback(withTranslation("common")(DisplayAdministrationMfaActions)));
-

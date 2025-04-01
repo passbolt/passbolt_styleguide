@@ -15,7 +15,7 @@
 /**
  * Unit tests on PasswordSidebar in regard of specifications
  */
-
+import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import {waitFor} from "@testing-library/dom";
 import {defaultProps} from "./DisplayResourcesListDetails.test.data";
 import DisplayResourcesListDetailsPage from "./DisplayResourcesListDetails.test.page";
@@ -44,11 +44,11 @@ describe("DisplayResourcesListDetails", () => {
     expect(page.resourcePermission(0)).toStrictEqual("Is owner");
 
     expect(page.resourceName(1)).toStrictEqual("Passbolt");
-    expect(page.resourceType(1)).toStrictEqual("Password and Encrypted description");
+    expect(page.resourceType(1)).toStrictEqual("Password and Note");
     expect(page.resourcePermission(1)).toStrictEqual("Can edit");
 
     expect(page.resourceName(2)).toStrictEqual("Passbolt");
-    expect(page.resourceType(2)).toStrictEqual("Password, Encrypted description and TOTP");
+    expect(page.resourceType(2)).toStrictEqual("Password, Note and TOTP");
     expect(page.resourcePermission(2)).toStrictEqual("Can read");
   });
 

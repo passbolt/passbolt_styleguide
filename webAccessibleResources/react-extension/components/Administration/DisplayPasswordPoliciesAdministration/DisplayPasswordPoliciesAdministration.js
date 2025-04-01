@@ -273,6 +273,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
                     {
                       Object.entries(masks).map(([maskName, mask]) => (
                         <button
+                          type="button"
                           key={maskName}
                           className={`button button-toggle ${settings[maskName] ? 'selected' : ''}`}
                           onClick={() => this.handleMaskToggled(maskName)} disabled={this.hasAllInputDisabled()}>

@@ -1215,6 +1215,10 @@ input[type=file] {
 .radiolist-alt .input.radio:disabled {
   box-shadow: inset 0 0 0 0.1rem var(--Action-button-Action-button-border);
 }
+.radiolist-alt .input.radio:hover:not(.no-hover),
+.radiolist-alt .input.radio:active:not(.no-hover) {
+  background: var(--Workspace-Dividers-lighter);
+}
 .radiolist-alt .input.radio.checked {
   box-shadow: inset -0.1rem -0.1rem 0 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 0 var(--States-Active-Shadow);
   background: var(--Action-button-Active-action-button-background);
@@ -1423,6 +1427,10 @@ input[type=file] {
 .togglelist-alt .input.toggle-switch:disabled {
   box-shadow: inset 0 0 0 0.1rem var(--Action-button-Action-button-border);
 }
+.togglelist-alt .input.toggle-switch:hover:not(:disabled),
+.togglelist-alt .input.toggle-switch:active:not(:disabled) {
+  background: var(--Workspace-Dividers-lighter);
+}
 .togglelist-alt .input.toggle-switch.checked {
   box-shadow: inset -0.1rem -0.1rem 0 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 0 var(--States-Active-Shadow);
   background: var(--Action-button-Active-action-button-background);
@@ -1491,7 +1499,7 @@ input[type=file] {
   height: 3rem;
 }
 .select-container.inline .select .selected-value {
-  background: var(--Field-Field-background);
+  background: var(--Field-Infield-button-background);
   box-shadow: inset 0 0 0 0.1rem var(--Field-Field-border);
   padding: 0.5rem 1.6rem;
 }

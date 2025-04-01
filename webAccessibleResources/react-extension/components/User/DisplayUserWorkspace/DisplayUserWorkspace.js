@@ -38,6 +38,8 @@ import Footer from '../../Common/Footer/Footer';
 import DisplayUsersWorkspaceFilterBar from '../DisplayUsersWorkspaceFilterBar/DisplayUsersWorkspaceFilterBar';
 import debounce from "debounce-promise";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
+import WorkspaceSwitcher, {WORKSPACE_ENUM} from '../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher';
+import RoleEntity from '../../../../shared/models/entity/role/roleEntity';
 
 const GAP_AND_PADDING_BUTTONS = 22;
 
@@ -156,6 +158,15 @@ class DisplayUserWorkspace extends React.Component {
   }
 
   /**
+   * Returns true if the current user is an admin.
+   * @returns {boolean}
+   */
+  get isUserAdmin() {
+    const loggedInUser = this.props.context.loggedInUser;
+    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN;
+  }
+
+  /**
    * Has lock for the detail display
    * @returns {boolean}
    */
@@ -208,6 +219,7 @@ class DisplayUserWorkspace extends React.Component {
                     <FilterUsersByText/>
                   </div>
                   <div className="header-right">
+                    <WorkspaceSwitcher isUserAdmin={this.isUserAdmin} isUserWorkspaceVisible={true} currentWorkspace={WORKSPACE_ENUM.USER_AND_GROUPS}/>
                     <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
                   </div>
                 </div>

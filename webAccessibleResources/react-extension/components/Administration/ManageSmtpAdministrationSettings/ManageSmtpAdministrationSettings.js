@@ -293,6 +293,10 @@ export class ManageSmtpAdministrationSettings extends React.Component {
     return this.props.adminSmtpSettingsContext.isDataReady();
   }
 
+  /**
+   * Returns the source of the settings
+   * @returns {string}
+   */
   get settingsSource() {
     return this.props.adminSmtpSettingsContext?.getCurrentSmtpSettings()?.source;
   }
@@ -325,6 +329,8 @@ export class ManageSmtpAdministrationSettings extends React.Component {
     const settings = this.props.adminSmtpSettingsContext.getCurrentSmtpSettings();
     const errors = this.props.adminSmtpSettingsContext.getErrors();
     const smtpProviderName = settings?.provider?.name;
+    const hasChanges = this.props.adminSmtpSettingsContext.isSettingsModified();
+    const hasWarnings = hasChanges || this.shouldShowSourceWarningMessage();
     return (
       <div className="row">
         <>
@@ -461,12 +467,21 @@ export class ManageSmtpAdministrationSettings extends React.Component {
               </>
               }
             </div>
-            {this.shouldShowSourceWarningMessage() &&
-                  <div className="warning message">
-                    <div>
-                      <Trans><b>Warning:</b> These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.</Trans>
-                    </div>
+            {hasWarnings &&
+              <div className="warning message">
+                {this.shouldShowSourceWarningMessage() &&
+                  <div id="smtp-settings-source-warning">
+                    <Trans>These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.</Trans>
                   </div>
+                }
+                {hasChanges &&
+                  <div>
+                    <p>
+                      <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                    </p>
+                  </div>
+                }
+              </div>
             }
           </div>
           <DisplayAdministrationSmtpSettingsActions/>

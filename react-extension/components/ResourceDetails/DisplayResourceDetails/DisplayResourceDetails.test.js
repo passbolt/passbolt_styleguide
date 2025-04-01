@@ -17,6 +17,7 @@
  */
 
 import "../../../../../test/mocks/mockClipboard";
+import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import React from 'react';
 import {defaultProps} from "./DisplayResourceDetails.test.data";
 import DisplayResourceDetailsPage from "./DisplayResourceDetails.test.page";
@@ -56,7 +57,7 @@ describe("DisplayResourceDetails", () => {
     it('I can see the name of the selected resource', async() => {
       expect.assertions(2);
       expect(page.name).toBe(props.resourceWorkspaceContext.details.resource.metadata.name);
-      expect(page.subtitle).toBe('Password and Encrypted description');
+      expect(page.subtitle).toBe('Password and Note');
     });
 
     it('I can copy the resource permalink', async() => {

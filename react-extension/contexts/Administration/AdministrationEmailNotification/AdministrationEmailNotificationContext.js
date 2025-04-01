@@ -135,7 +135,7 @@ export class AdminEmailNotificationContextProvider extends React.Component {
    * @returns {Boolean}
    */
   hasSettingsChanges() {
-    return JSON.stringify(this.state.currentSettings) !== JSON.stringify(this.state.settings);
+    return this.state.currentSettings && JSON.stringify(this.state.currentSettings) !== JSON.stringify(this.state.settings);
   }
   /**
    * Puts the state to its default in order to avoid keeping the data users didn't want to save.

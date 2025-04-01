@@ -14,6 +14,7 @@
 
 import TotpEntity from "../totp/totpEntity";
 import SecretDataEntity, {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import assertString from "validator/es/lib/util/assertString";
 
 class SecretDataV5StandaloneTotpEntity extends SecretDataEntity {
   /**
@@ -57,6 +58,16 @@ class SecretDataV5StandaloneTotpEntity extends SecretDataEntity {
   }
 
   /**
+   * @inheritdoc
+   */
+  marshall() {
+    // Set object type in case of secret has not object_type (example: after a migration v4 to v5)
+    if (!this._props.object_type) {
+      this._props.object_type = SECRET_DATA_OBJECT_TYPE;
+    }
+  }
+
+  /**
    * Return the default secret data v5 totp.
    * @param {object} data the data to override the default with
    * @param {object} [options] Options.
@@ -72,14 +83,42 @@ class SecretDataV5StandaloneTotpEntity extends SecretDataEntity {
   }
 
   /**
+   * Return the default secret property.
+   * @param {string} propName the property
+   * @returns {object | undefined}
+   */
+  static getDefaultProp(propName) {
+    assertString(propName);
+    switch (propName) {
+      case "totp":
+        return TotpEntity.createFromDefault({}, {validate: false}).toDto();
+      default:
+        return;
+    }
+  }
+
+  /**
+   * Are secret different
+   * @param secretDto
+   * @returns {boolean}
+   */
+  areSecretsDifferent(secretDto) {
+    const totp = this.totp.toDto();
+    return Object.keys(totp).some(key => totp[key] !== secretDto.totp?.[key]);
+  }
+
+  /**
    * Get the DTO of properties managed by the form.
    * @returns {object}
    */
   toDto() {
-    return {
-      ...this._props,
-      totp: this.totp.toDto(),
-    };
+    const result = Object.assign({}, this._props);
+
+    if (this.totp) {
+      result.totp = this.totp.toDto();
+    }
+
+    return result;
   }
 
   /**

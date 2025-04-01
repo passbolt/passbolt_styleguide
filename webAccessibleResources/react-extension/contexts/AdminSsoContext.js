@@ -199,7 +199,9 @@ export class AdminSsoContextProvider extends React.Component {
    * @returns {boolean}
    */
   hasFormChanged() {
-    return this.state.isDataModified;
+    return (this.state.originalConfig !== null && this.state.ssoConfig === null)
+      || (this.state.originalConfig === null && this.state.ssoConfig !== null)
+      || this.state.originalConfig?.isDataDifferent(this.state.ssoConfig);
   }
 
   /**
@@ -208,12 +210,9 @@ export class AdminSsoContextProvider extends React.Component {
    * @param {string} value
    */
   setValue(key, value) {
-    const newConfig = this.state.ssoConfig.cloneWithMutation(key, value);
-    const isDataModified = this.state.originalConfig
-      ? this.state.originalConfig.isDataDifferent(newConfig)
-      : false;
+    const ssoConfig = this.state.ssoConfig.cloneWithMutation(key, value);
 
-    this.setState({ssoConfig: newConfig, isDataModified}, () => {
+    this.setState({ssoConfig}, () => {
       if (this.state.hasBeenValidated) {
         this.validateData();
       }

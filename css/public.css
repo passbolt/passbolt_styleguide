@@ -167,7 +167,8 @@ html {
   align-self: stretch;
   background: var(--Workspace-Workspace-background);
   min-width: 128rem;
-  min-height: 50rem;
+  min-height: 76.8rem;
+  box-sizing: border-box;
 }
 .page .app .panel.main .panel.left {
   display: flex;
@@ -178,6 +179,9 @@ html {
   align-items: flex-start;
   gap: 1.6rem;
   align-self: stretch;
+}
+.page .app .panel.main .panel.left.resource-filter {
+  min-width: 25rem;
 }
 .page .app .panel.main .panel.left .sidebar-content {
   display: flex;
@@ -242,12 +246,13 @@ html {
 }
 .page .app .panel.main .panel.middle .header {
   display: flex;
-  padding: 2.4rem 1.6rem 2.4rem 0;
+  padding: 2.4rem 0;
   height: 4rem;
   justify-content: flex-end;
   align-items: center;
   align-self: stretch;
   min-width: 0;
+  gap: 1.6rem;
 }
 .page .app .panel.main .panel.middle .header .header-left {
   display: flex;
@@ -257,11 +262,14 @@ html {
 .page .app .panel.main .panel.middle .header .header-right {
   display: flex;
   width: 22%;
-  min-width: 30rem;
+  min-width: 35rem;
   max-width: 50rem;
   justify-content: flex-end;
   align-items: center;
   gap: 1.6rem;
+}
+.page .app .panel.main .panel.middle .header .header-right .profile-wrapper {
+  padding-right: 1.6rem;
 }
 .page .app .panel.main .panel.middle .middle-right {
   display: flex;
@@ -312,7 +320,7 @@ html {
 .page .app .panel.main .panel.middle .middle-right .help-panel {
   display: flex;
   width: 22%;
-  min-width: 30rem;
+  min-width: 35rem;
   max-width: 50rem;
   flex-direction: column;
   align-items: stretch;

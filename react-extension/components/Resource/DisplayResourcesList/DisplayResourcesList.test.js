@@ -13,6 +13,7 @@
  */
 
 import "../../../../../test/mocks/mockClipboard";
+import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import {
   defaultProps,
   propsWithAllResourcesSelected,
@@ -26,11 +27,11 @@ import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceC
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextualMenu";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultTotpViewModelDto} from "../../../../shared/models/totp/TotpDto.test.data";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import {ColumnFields} from "../../../../shared/models/column/ColumnModel";
 import ColumnsResourceSettingCollection
   from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
+import {defaultTotpViewModelDto} from "../../../../shared/models/entity/totp/totpDto.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -81,6 +82,12 @@ describe("Display Resources", () => {
 
     it('As LU, I should see an empty content when there are no resources matching the expired search', async() => {
       const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.EXPIRED));
+      await waitFor(() => {});
+      expect(page.hasEmptyContent).toBeTruthy();
+    });
+
+    it('As LU, I should see an empty content when there are no private resources matching the private resource search', async() => {
+      const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.PRIVATE));
       await waitFor(() => {});
       expect(page.hasEmptyContent).toBeTruthy();
     });
@@ -296,7 +303,7 @@ describe("Display Resources", () => {
       expect(page.resource(1).password).toBe('secret-password');
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.filteredResources[0].id);
       await page.resource(1).selectViewPassword();
-      expect(page.resource(1).password).toBe('Copy password to clipboard');
+      expect(page.resource(1).password).toBe('Copy to clipboard');
 
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
       await page.resource(4).selectViewTotp();
@@ -473,14 +480,15 @@ describe("Display Resources", () => {
       expect.assertions(9);
       const columnsResourceSetting = new ColumnsResourceSettingCollection([
         {id: "favorite", label: "Favorite", position: 1, show: true},
-        {id: "name", label: "Name", position: 2, show: true},
-        {id: "expired", label: "Expiry", position: 3, show: true},
-        {id: "username", label: "Username", position: 4, show: true, width: -100},
-        {id: "password", label: "Password", position: 5, show: true},
-        {id: "totp", label: "TOTP", position: 6, show: true},
-        {id: "uri", label: "URI", position: 7, show: true, width: 0},
-        {id: "modified", label: "Modified", position: 8, show: true},
-        {id: "location", label: "Location", position: 9, show: true}]);
+        {id: "icon", label: "Icon", position: 2, show: true},
+        {id: "name", label: "Name", position: 3, show: true},
+        {id: "expired", label: "Expiry", position: 4, show: true},
+        {id: "username", label: "Username", position: 5, show: true, width: -100},
+        {id: "password", label: "Password", position: 6, show: true},
+        {id: "totp", label: "TOTP", position: 7, show: true},
+        {id: "uri", label: "URI", position: 8, show: true, width: 0},
+        {id: "modified", label: "Modified", position: 9, show: true},
+        {id: "location", label: "Location", position: 10, show: true}]);
       const props = propsWithFilteredResources();
       props.resourceWorkspaceContext.columnsResourceSetting = columnsResourceSetting;
       const page = new DisplayResourcesListPage(props);
@@ -488,14 +496,14 @@ describe("Display Resources", () => {
 
       // Width should be the default
       expect(page.columns(2).width).toStrictEqual("20px");
-      expect(page.columns(3).width).toStrictEqual("145.2248062015504px");
-      expect(page.columns(4).width).toStrictEqual("145.2248062015504px");
-      expect(page.columns(5).width).toStrictEqual("145.2248062015504px");
-      expect(page.columns(6).width).toStrictEqual("145.2248062015504px");
-      expect(page.columns(7).width).toStrictEqual("145.2248062015504px");
-      expect(page.columns(8).width).toStrictEqual("210.32558139534882px");
-      expect(page.columns(9).width).toStrictEqual("145.2248062015504px");
-      expect(page.columns(10).width).toStrictEqual("210.32558139534882px");
+      expect(page.columns(3).width).toStrictEqual("145px");
+      expect(page.columns(4).width).toStrictEqual("145px");
+      expect(page.columns(5).width).toStrictEqual("145px");
+      expect(page.columns(6).width).toStrictEqual("145px");
+      expect(page.columns(7).width).toStrictEqual("145px");
+      expect(page.columns(8).width).toStrictEqual("210px");
+      expect(page.columns(9).width).toStrictEqual("145px");
+      expect(page.columns(10).width).toStrictEqual("210px");
     });
   });
 

@@ -29,7 +29,7 @@ export default {
   title: 'Components/Administration/DisplayContentTypesMetadataKeyAdministration',
   component: DisplayContentTypesMetadataKeyAdministration,
   decorators: [(Story, {args}) =>
-    <MemoryRouter initialEntries={['/app/administration']}>
+    <MemoryRouter initialEntries={['/app/administration/content-types/metadata']}>
       <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
         <div id="container" className="page administration">
           <div id="app" className="app" style={{margin: "-1rem"}}>
@@ -50,7 +50,7 @@ export default {
                 <div className="middle-right">
                   <div className="breadcrumbs-and-grid">
                     <div className="top-bar">
-                      <DisplayAdministrationWorkspaceBreadcrumb/>
+                      <DisplayAdministrationWorkspaceBreadcrumb administrationWorkspaceContext={args.administrationWorkspaceContext}/>
                     </div>
                     <div className="main-page">
                       <Story {...args}/>
