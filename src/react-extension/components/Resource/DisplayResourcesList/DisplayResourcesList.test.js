@@ -496,14 +496,14 @@ describe("Display Resources", () => {
 
       // Width should be the default
       expect(page.columns(2).width).toStrictEqual("20px");
-      expect(page.columns(3).width).toStrictEqual("145.2248062015504px");
-      expect(page.columns(4).width).toStrictEqual("145.2248062015504px");
-      expect(page.columns(5).width).toStrictEqual("145.2248062015504px");
-      expect(page.columns(6).width).toStrictEqual("145.2248062015504px");
-      expect(page.columns(7).width).toStrictEqual("145.2248062015504px");
-      expect(page.columns(8).width).toStrictEqual("210.32558139534882px");
-      expect(page.columns(9).width).toStrictEqual("145.2248062015504px");
-      expect(page.columns(10).width).toStrictEqual("210.32558139534882px");
+      expect(page.columns(3).width).toStrictEqual("145px");
+      expect(page.columns(4).width).toStrictEqual("145px");
+      expect(page.columns(5).width).toStrictEqual("145px");
+      expect(page.columns(6).width).toStrictEqual("145px");
+      expect(page.columns(7).width).toStrictEqual("145px");
+      expect(page.columns(8).width).toStrictEqual("210px");
+      expect(page.columns(9).width).toStrictEqual("145px");
+      expect(page.columns(10).width).toStrictEqual("210px");
     });
   });
 

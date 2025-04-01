@@ -27,7 +27,7 @@ class ColumnsResourceSettingCollection extends ColumnsSettingCollection {
   static get DEFAULT() {
     return new ColumnsSettingCollection([
       {id: "favorite", label: "Favorite", position: 1, show: true},
-      {id: "icon", label: "Icon", position: 2, show: true},
+      {id: "icon", label: "Icon", position: 2, show: true, excludeFromWidthComputation: true},
       {id: "name", label: "Name", position: 3, show: true},
       {id: "username", label: "Username", position: 4, show: true},
       {id: "password", label: "Password", position: 5, show: true},

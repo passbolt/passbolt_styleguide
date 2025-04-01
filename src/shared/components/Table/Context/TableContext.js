@@ -80,7 +80,6 @@ export default class TableContextProvider extends Component {
    * @return {void}
    */
   bindCallbacks() {
-    this.handleWindowResizeEvent = this.handleWindowResizeEvent.bind(this);
     this.handleChangeColumnsDebounced = debounce(this.handleChangeColumns, 2000);
   }
 
@@ -97,16 +96,17 @@ export default class TableContextProvider extends Component {
    * @return {void}
    */
   componentDidMount() {
-    this.prepareTableColumns();
-    window.addEventListener('resize', this.handleWindowResizeEvent);
+    this.prepareTableColumns(this.state.columns);
   }
 
   /**
-   * componentWillUnmount
-   * This method is called when a component is being removed from the DOM
+   * Returns true if there is at least 1 column width that is not set with the default width.
+   * @param {array} columns
+   * @returns {boolean}
    */
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleWindowResizeEvent);
+  isNotDefaultColumn(columns) {
+    const isNotDefaultWidth = column => column.width !== column.defaultWidth;
+    return columns.some(isNotDefaultWidth);
   }
 
   /**
@@ -129,13 +129,12 @@ export default class TableContextProvider extends Component {
    */
   prepareTableColumns() {
     const tableWidth = this.getTableWidth(this.state.columns);
-    const isNotDefaultWidth = column => column.width !== column.defaultWidth;
-    if (this.state.columns.some(isNotDefaultWidth)) {
+    if (this.isNotDefaultColumn(this.state.columns)) {
       const tableviewWidth = this.tableviewRef.current.clientWidth;
       this.setState({tableWidth, tableviewWidth});
     } else {
       // Set the column
-      this.setColumnsWidthFromActualWidth(tableWidth);
+      this.setColumnsWidthFromActualWidth(this.state.columns);
     }
   }
 
@@ -146,12 +145,12 @@ export default class TableContextProvider extends Component {
     if (prevProps.columns.length > this.props.columns.length) {
       this.removeColumn();
     } else if (prevProps.columns.length < this.props.columns.length) {
-      this.addColumn();
+      this.addColumns();
+    } else if (prevProps.columns !== this.props.columns && !this.isNotDefaultColumn(this.state.columns)) {
+      this.setColumnsWidthFromActualWidth(this.state.columns);
     } else if (prevProps.columns !== this.props.columns) {
-      const tableWidth = this.getTableWidth(this.props.columns);
-      const tableviewWidth = this.tableviewRef.current.clientWidth;
       const columns = this.props.columns;
-      this.setState({columns, tableWidth, tableviewWidth});
+      this.setState({columns}, () => this.recomputeTableWidth(columns));
     }
   }
 
@@ -161,34 +160,38 @@ export default class TableContextProvider extends Component {
   removeColumn() {
     const filterByIdPresent = column => this.props.columns.some(defaultColumn => defaultColumn.id === column.id);
     const columns = this.state.columns.filter(filterByIdPresent);
-    // Get table width
-    const tableWidth = this.getTableWidth(columns) - PADDING_SIZE; // Remove the padding of the column to removed
-    this.setState({columns, tableWidth});
+    this.setState({columns}, () => this.recomputeTableWidth(columns));
   }
 
   /**
-   * Add a column
+   * Recompute the table width and set the state with the computed values.
+   * @param {*} columns
    */
-  addColumn() {
+  recomputeTableWidth(columns) {
+    this.setState({
+      tableviewWidth: this.tableviewRef.current.clientWidth,
+      tableWidth: this.getTableWidth(columns)
+    });
+  }
+
+  /**
+   * Add columns
+   */
+  addColumns() {
     const columns = [...this.state.columns];
-    const indexColumnToAdd = this.props.columns.findIndex(column => this.state.columns.every(item => column.id !== item.id));
-    // Add the column to its default position and width
-    columns.splice(indexColumnToAdd, 0, this.props.columns[indexColumnToAdd]);
-    // Get table width
-    const tableWidth = this.getTableWidth(columns) + PADDING_SIZE; // Add the padding of the new column
-    this.setState({columns, tableWidth});
-  }
+    const columnIndexToAdd = [];
+    this.props.columns.forEach((column, index) => {
+      const isColumnNonExisting = this.state.columns.every(item => column.id !== item.id);
+      if (isColumnNonExisting) {
+        columnIndexToAdd.push(index);
+      }
+    });
 
-  /**
-   * Handle window resize event
-   */
-  handleWindowResizeEvent() {
-    // Prevent wrong calculation if the tableviewWidth is not set (null > 0 or undefined > 0 return false)
-    if (this.state.tableviewWidth > 0) {
-      this.setColumnsWidthFromActualWidth(this.state.tableviewWidth);
-      // Debounce the function to store the new columns width
-      this.handleChangeColumnsDebounced();
-    }
+    columnIndexToAdd.forEach(index => {
+      columns.splice(index, 0, this.props.columns[index]);
+    });
+    // Add the column to its default position and width
+    this.setState({columns}, () => this.recomputeTableWidth(columns));
   }
 
   /**
@@ -237,49 +240,53 @@ export default class TableContextProvider extends Component {
 
   /**
    * Get the total width for the table in order to have only one column resizing
+   * @param {array} columns
    * @return {number}
    */
   getTableWidth(columns) {
     // Starting from 20 to have checkbox column width and add padding for each column displayed
-    return columns.reduce((sum, col) => sum + col.width, 0) + this.columnsPaddingWidth;
+    return columns.filter(c => !c.excludeFromWidthComputation).reduce((sum, col) => sum + col.width, 0) + this.getColumnsPaddingWidth(columns);
   }
 
   /**
    * Get the sum of columns widths no resizable from default
+   * @param {array} columns
    * @return {number}
    */
-  get columnWidthNoResizable() {
-    return this.state.columns.reduce((sum, col) => sum + (col.resizable ? 0 : parseFloat(col.width)), 0);
+  getColumnWidthNoResizable(columns) {
+    return columns.filter(c => !c.excludeFromWidthComputation && !c.resizable).reduce((sum, col) => sum + parseFloat(col.width), 0);
   }
 
   /**
    * Get the columns padding widths
+   * @param {array} columns
    * @return {number}
    */
-  get columnsPaddingWidth() {
+  getColumnsPaddingWidth(columns) {
     // Get the columns padding widths from the displayed columns
-    return PADDING_SIZE * this.state.columns.length + PADDING_LEFT_FIRST_COLUMN_ADDED;
+    return PADDING_SIZE * columns.filter(c => !c.excludeFromWidthComputation).length + PADDING_LEFT_FIRST_COLUMN_ADDED;
   }
 
   /**
    * Set the columns width based on actual width of the tableview width to maintain the same proportionality
    * @param actualWidth
    */
-  setColumnsWidthFromActualWidth(actualWidth) {
+  setColumnsWidthFromActualWidth(columns) {
+    const actualWidth = this.getTableWidth(columns);
     const tableviewWidth = this.tableviewRef.current.clientWidth;
     // Fixed width not to be taken into account
-    const fixedWidth = this.columnWidthNoResizable + this.columnsPaddingWidth;
+    const fixedWidth = this.getColumnWidthNoResizable(columns) + this.getColumnsPaddingWidth(columns);
     // Prevent wrong calculation if actual width or tableview width are null or negative
     if (actualWidth > fixedWidth && tableviewWidth > fixedWidth) {
       // Subtract all constant widths that do not change with screen width
       const columnsResizableWidth = actualWidth - fixedWidth;
       // Calculate the ratio between two widths
       const ratio = (tableviewWidth - fixedWidth) / columnsResizableWidth;
-      const columns = [...this.state.columns];
       // Scale the widths with the ratio
       columns.forEach(column => {
         if (column.resizable) {
-          column.width = column.width * ratio;
+          // rounding avoids a slight shift on the left of the grid that happens sometimes
+          column.width = Math.round(column.width * ratio);
         }
       });
       // Get the table width from all columns
