@@ -87,7 +87,7 @@
                   max-width: 100%;
                 }
 
-                .avatar svg {
+                .avatar svg, .avatar img {
                   width: 4.2rem;
                   height: 4.2rem;
                 }
@@ -95,10 +95,15 @@
 
             .user-fullname-container {
               display: flex;
+              align-items: center;
 
               .tooltip-portal {
-                margin-left: 1rem;
+                margin-left: .8rem;
                 line-height: 1.6rem;
+
+                span {
+                  line-height: 0;
+                }
 
                 svg {
                   width: 1.6rem;
