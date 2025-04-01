@@ -289,6 +289,7 @@ class SelectResourceForm extends Component {
               {this.isResourceHasPassword &&
                 <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.PASSWORD === this.selectedForm ? "selected" : ""}`}>
                   <button type="button" className="no-border"
+                    id="secret-password-tab"
                     disabled={this.props.disabled}
                     onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.PASSWORD)}>
                     <KeySVG/>
@@ -304,6 +305,7 @@ class SelectResourceForm extends Component {
               {this.isResourceHasTotp &&
                 <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.TOTP === this.selectedForm ? "selected" : ""}`}>
                   <button type="button" className="no-border"
+                    id="secret-totp-tab"
                     disabled={this.props.disabled}
                     onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.TOTP)}>
                     <TotpSVG/>
@@ -319,6 +321,7 @@ class SelectResourceForm extends Component {
               {this.isResourceHasNote &&
                 <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.NOTE === this.selectedForm ? "selected" : ""}`}>
                   <button type="button" className="no-border"
+                    id="secret-note-tab"
                     disabled={this.props.disabled}
                     onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.NOTE)}>
                     <NotesSVG/>
