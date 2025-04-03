@@ -142,6 +142,7 @@ html, body {
   .install-extension {
     a.browser-webstore {
       border: 0;
+      width: 100%;
       img {
         display: block;
         margin-left: auto;
@@ -150,6 +151,9 @@ html, body {
       }
       &.firefox img, &.edge img{
         padding: 1.6rem 0;
+      }
+      &:after {
+        content: none;
       }
     }
   }
