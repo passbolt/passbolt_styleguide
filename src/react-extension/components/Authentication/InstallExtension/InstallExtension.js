@@ -112,7 +112,7 @@ class InstallExtension extends Component {
         <p><Trans>Please download the browser extension and refresh this page to continue.</Trans></p>
         {this.state.browserName &&
         <a href={this.storeUrl} className={this.storeClassName} target="_blank" rel="noopener noreferrer">
-          <img src={this.browserStoreThumbnailUrl}/>
+          <img src={this.browserStoreThumbnailUrl} alt="browser store thumbnail"/>
         </a>
         }
         <div className="form-actions">
