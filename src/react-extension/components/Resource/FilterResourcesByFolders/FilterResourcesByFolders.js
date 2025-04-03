@@ -339,14 +339,12 @@ class FilterResourcesByFolders extends React.Component {
                         onDrop={this.handleDropTitle}
                         onClick={this.handleClickOnTitle}
                         onContextMenu={this.handleTitleContextualMenuEvent}>
-                        {!isLoading &&
-                          <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()} tabIndex={1}>
-                            {isOpen
-                              ? <CarretDownSVG />
-                              : <CarretRightSVG />
-                            }
-                          </div>
-                        }
+                        <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()} tabIndex={1}>
+                          {isOpen
+                            ? <CarretDownSVG />
+                            : <CarretRightSVG />
+                          }
+                        </div>
                         <CabinetSVG />
                         <Trans>My workspace</Trans>
                       </button>
