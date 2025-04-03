@@ -94,8 +94,8 @@ class DisplayUsers extends React.Component {
    * Invoked immediately after component is inserted into the tree
    * @return {void}
    */
-  componentDidMount() {
-    this.props.accountRecoveryContext.loadAccountRecoveryPolicy();
+  async componentDidMount() {
+    await this.props.accountRecoveryContext.loadAccountRecoveryPolicy();
     this.initColumns();
     this.mergeAndSortColumns();
   }
