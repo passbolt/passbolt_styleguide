@@ -146,7 +146,12 @@ class EditResource extends Component {
    *   A clone need to be created before validation to use marshall function from TotpEntity that modify the content but the form should not be modified for the user
    * @return {EntityValidationError}
    */
-  validateForm = memoize(resourceFormDto => new ResourceFormEntity(resourceFormDto, {validate: false, resourceTypes: this.props.resourceTypes}).validate());
+  validateForm = memoize(resourceFormDto => {
+    const resourceFormEntity = new ResourceFormEntity(resourceFormDto, {validate: false, resourceTypes: this.props.resourceTypes});
+    resourceFormEntity.removeEmptySecret({validate: false});
+    resourceFormEntity.addRequiredSecret({validate: false});
+    return resourceFormEntity.validate();
+  });
 
   /**
    * Verify the data health. This intends for user, to inform if data form has invalid size
