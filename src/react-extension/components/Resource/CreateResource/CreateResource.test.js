@@ -909,7 +909,8 @@ describe("See the Create Resource", () => {
         metadata: {
           name: "no name",
           resource_type_id: props.resourceType.id,
-          uris: []
+          uris: [],
+          username: "",
         }
       };
 
@@ -949,7 +950,8 @@ describe("See the Create Resource", () => {
         metadata: {
           name: "v5 default",
           resource_type_id: props.resourceType.id,
-          uris: []
+          uris: [],
+          username: "",
         }
       };
 
@@ -996,7 +998,8 @@ describe("See the Create Resource", () => {
         metadata: {
           name: "v5 default",
           resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
-          uris: []
+          uris: [],
+          username: "",
         }
       };
 
@@ -1047,7 +1050,8 @@ describe("See the Create Resource", () => {
         metadata: {
           name: "v5 default",
           resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
-          uris: []
+          uris: [],
+          username: "",
         }
       };
 
@@ -1099,7 +1103,8 @@ describe("See the Create Resource", () => {
         metadata: {
           name: "v5 default",
           resource_type_id: TEST_RESOURCE_TYPE_V5_TOTP,
-          uris: []
+          uris: [],
+          username: null,
         }
       };
 
@@ -1142,7 +1147,8 @@ describe("See the Create Resource", () => {
         metadata: {
           name: "v4 default",
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
-          uris: []
+          uris: [],
+          username: "",
         }
       };
 
@@ -1190,7 +1196,8 @@ describe("See the Create Resource", () => {
         metadata: {
           name: "v4 default totp",
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
-          uris: []
+          uris: [],
+          username: "",
         }
       };
 
@@ -1237,7 +1244,8 @@ describe("See the Create Resource", () => {
         metadata: {
           name: "v4 default totp",
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
-          uris: []
+          uris: [],
+          username: "",
         }
       };
 
@@ -1281,7 +1289,8 @@ describe("See the Create Resource", () => {
         metadata: {
           name: "v4 default",
           resource_type_id: TEST_RESOURCE_TYPE_TOTP,
-          uris: []
+          uris: [],
+          username: null,
         }
       };
 
@@ -1324,7 +1333,8 @@ describe("See the Create Resource", () => {
           name: "v4 password string",
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
           description: "note converted",
-          uris: []
+          uris: [],
+          username: "",
         }
       };
 

@@ -402,6 +402,16 @@ class EditResource extends Component {
     }
     resourceFormEntity.removeEmptySecret({validate: false});
     resourceFormEntity.addRequiredSecret({validate: false});
+
+    const resourceType = this.props.resourceTypes.getFirstById(resourceFormEntity.resourceTypeId);
+    const shouldResetUsername = !resourceFormEntity.metadata.username
+      || resourceFormEntity.metadata.username.length === 0;
+
+    if (shouldResetUsername) {
+      const usernameResetValue = resourceType.isStandaloneTotp() ? null : "";
+      resourceFormEntity.set("metadata.username", usernameResetValue, {validate: false});
+    }
+
     return resourceFormEntity;
   }
 
