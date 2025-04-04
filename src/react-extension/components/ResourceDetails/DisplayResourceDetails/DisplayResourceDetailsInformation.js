@@ -336,7 +336,7 @@ class DisplayResourceDetailsInformation extends React.Component {
                       {this.resource.folder_parent_id === null &&
                         <>
                           <CabinetSVG />
-                          <Trans>My workspace</Trans>
+                          <span><Trans>My workspace</Trans></span>
                         </>
                       }
                       {this.resource.folder_parent_id !== null &&
