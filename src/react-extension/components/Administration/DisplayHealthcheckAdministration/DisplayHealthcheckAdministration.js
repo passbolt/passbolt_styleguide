@@ -72,20 +72,21 @@ class DisplayHealthcheckAdministration extends Component {
   }
 
   /**
-   * Returns true if the user has the user directory capability
+   * Returns true if the "User directory" section should be displayed.
+   *
    * @returns {boolean}
    */
-  get isUserDirectoryEnabled() {
-    return this.canIUse('directorySync');
+  get shouldDisplayUserDirectory() {
+    return this.canIUse('directorySync') && Boolean(this.healthCheckData.directorySync);
   }
 
-
   /**
-   * Can I use the sso plugin
+   * Returns true if the "SSO" section should be displayed.
+   *
    * @returns {boolean}
    */
-  get canIUseSso() {
-    return this.canIUse('sso');
+  get shouldDisplaySSO() {
+    return this.canIUse('sso') && Boolean(this.healthCheckData.sso);
   }
 
   render() {
@@ -1302,7 +1303,7 @@ class DisplayHealthcheckAdministration extends Component {
               <div>{isSmtpEndpointsDisabled()}</div>
             </div>
 
-            {this.isUserDirectoryEnabled &&
+            {this.shouldDisplayUserDirectory &&
               <>
                 <h4><Trans>Directory Sync</Trans></h4>
                 <div className="healthcheck-directorySync-section">
@@ -1311,7 +1312,7 @@ class DisplayHealthcheckAdministration extends Component {
               </>
             }
 
-            {this.canIUseSso &&
+            {this.shouldDisplaySSO &&
               <>
                 <h4><Trans>SSO</Trans></h4>
                 <div className="healthcheck-sso-section">
