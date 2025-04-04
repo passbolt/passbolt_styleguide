@@ -42,8 +42,6 @@ class FilterResourcesByBreadcrumb extends Component {
       }
       case ResourceWorkspaceFilterTypes.FAVORITE:
         return [...items, this.getLastBreadcrumb(this.translate("Favorite"))];
-      case ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED:
-        return [...items, this.getLastBreadcrumb(this.translate("Recently modified"))];
       case ResourceWorkspaceFilterTypes.SHARED_WITH_ME:
         return [...items, this.getLastBreadcrumb(this.translate("Shared with me"))];
       case ResourceWorkspaceFilterTypes.EXPIRED:
