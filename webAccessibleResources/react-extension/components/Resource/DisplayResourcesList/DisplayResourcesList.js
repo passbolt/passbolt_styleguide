@@ -910,7 +910,7 @@ class DisplayResourcesList extends React.Component {
                 </div>
               </div>
             }
-            {(filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN || filterType === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED ||
+            {(filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN ||
                 filterType === ResourceWorkspaceFilterTypes.ALL) &&
               <div className="empty-content">
                 <CircleOffSVG/>

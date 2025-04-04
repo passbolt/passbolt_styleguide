@@ -32,7 +32,7 @@ import HandleReviewAccountRecoveryRequestRoute from "../HandleReviewAccountRecov
 import DisplayHttpError from '../../Common/Error/DisplayHttpError/DisplayHttpError';
 import ArrowLeftSVG from "../../../../img/svg/arrow_left.svg";
 import InfoSVG from "../../../../img/svg/info.svg";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import DisplayUserWorkspaceEmptyDetails from '../DisplayUserWorkspaceEmptyDetails/DisplayUserWorkspaceEmptyDetails';
 import Footer from '../../Common/Footer/Footer';
 import DisplayUsersWorkspaceFilterBar from '../DisplayUsersWorkspaceFilterBar/DisplayUsersWorkspaceFilterBar';
@@ -275,6 +275,7 @@ DisplayUserWorkspace.propTypes = {
   userWorkspaceContext: PropTypes.any,
   history: PropTypes.any,
   navigationContext: PropTypes.any, // The application navigation context
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withAppContext(withNavigationContext(withUserWorkspace(DisplayUserWorkspace))));
+export default withRouter(withAppContext(withNavigationContext(withUserWorkspace(withTranslation('common')(DisplayUserWorkspace)))));

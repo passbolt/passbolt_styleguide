@@ -48,7 +48,7 @@ class CellUserAccountRecovery extends Component {
 }
 
 CellUserAccountRecovery.propTypes = {
-  value: PropTypes.object.isRequired, // The value to display
+  value: PropTypes.object, // The value to display
   t: PropTypes.func, // The translation function
 };
 

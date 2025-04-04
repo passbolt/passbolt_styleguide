@@ -34,7 +34,7 @@ import OrchestrateMfaSettings from '../../MFA/OrchestrateMfaSettings/Orchestrate
 import {withRbac} from '../../../../shared/context/Rbac/RbacContext';
 import {uiActions} from '../../../../shared/services/rbacs/uiActionEnumeration';
 import ArrowLeftSVG from "../../../../img/svg/arrow_left.svg";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import DisplayUserProfileHelp from "../DisplayUserProfile/DisplayUserProfileHelp";
 import Footer from "../../Common/Footer/Footer";
@@ -227,6 +227,7 @@ DisplayUserSettingsWorkspace.propTypes = {
   mfaContext: PropTypes.object,
   rbacContext: PropTypes.any, // The role based access control context
   navigationContext: PropTypes.any, // The application navigation context
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withAppContext(withRbac(withAccountRecovery(withMfa(withNavigationContext(DisplayUserSettingsWorkspace))))));
+export default withRouter(withAppContext(withRbac(withAccountRecovery(withMfa(withNavigationContext(withTranslation('common')(DisplayUserSettingsWorkspace)))))));

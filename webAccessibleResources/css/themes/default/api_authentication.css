@@ -101,6 +101,7 @@
   --Dialog-error: var(--Palette-Contrast-3);
   --Dialog-Dialog-background: var(--Palette-Gradient-6);
   --Field-Field-background: var(--Palette-Gradient-1);
+  --Field-Inline-button-background: var(--Palette-Gradient-1);
   --Field-Field-border: var(--Palette-Gradient-6);
   --Field-Field-border-focus: var(--Palette-Contrast-1);
   --Field-Field-button-background: var(--Palette-Gradient-3);
@@ -171,6 +172,7 @@
   --Text-and-icons-secret-number: var(--Palette-Contrast-1);
   --Text-and-icons-secret-number-hover: var(--Palette-Contrast-5);
   --Text-and-icons-secret-special-chars: var(--Palette-Contrast-3);
+  --Workspace-Menu-Dividers: var(--Palette-Gradient-3);
   /* Passbolt Radii */
   /* Mode: Square */
   --Section-border-radius: 0.8rem;
@@ -2480,7 +2482,7 @@ input[type=file] {
   height: 3rem;
 }
 .select-container.inline .select .selected-value {
-  background: var(--Field-Infield-button-background);
+  background: var(--Field-Inline-button-background);
   box-shadow: inset 0 0 0 0.1rem var(--Field-Field-border);
   padding: 0.5rem 1.6rem;
 }
@@ -4432,7 +4434,8 @@ body {
   align-self: stretch;
   padding: 3.2rem;
 }
-.login.page .content .logo-svg {
+.login.page .content .logo-svg,
+.login.page .content .logo {
   margin: auto auto 1.6rem auto;
   width: 20rem;
 }
@@ -4584,6 +4587,7 @@ body {
 }
 .login.page .install-extension a.browser-webstore {
   border: 0;
+  width: 100%;
 }
 .login.page .install-extension a.browser-webstore img {
   display: block;
@@ -4594,6 +4598,9 @@ body {
 .login.page .install-extension a.browser-webstore.firefox img,
 .login.page .install-extension a.browser-webstore.edge img {
   padding: 1.6rem 0;
+}
+.login.page .install-extension a.browser-webstore:after {
+  content: none;
 }
 .login.page .introduce-setup-extension .animated-setup-introduction.chrome {
   background: transparent url('../../../img/illustrations/pin_passbolt.gif') center center no-repeat;
@@ -4732,7 +4739,8 @@ body {
   .login.page .content .loading-bar {
     display: block;
   }
-  .login.page .content .logo-svg {
+  .login.page .content .logo-svg,
+  .login.page .content .logo {
     margin: 6.4rem auto 1.6rem auto;
   }
   .login.page .content .login-form {

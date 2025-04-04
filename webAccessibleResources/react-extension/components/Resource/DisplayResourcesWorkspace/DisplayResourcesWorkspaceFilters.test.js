@@ -111,7 +111,6 @@ describe("As a signed-in users I can see filters", () => {
   each([
     {filter: ResourceWorkspaceFilterTypes.NONE},
     {filter: ResourceWorkspaceFilterTypes.ALL},
-    {filter: ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED},
     {filter: ResourceWorkspaceFilterTypes.ROOT_FOLDER},
     {filter: ResourceWorkspaceFilterTypes.GROUP},
     {filter: ResourceWorkspaceFilterTypes.TAG},

@@ -101,6 +101,7 @@
   --Dialog-error: var(--Palette-Contrast-3);
   --Dialog-Dialog-background: var(--Palette-Gradient-5);
   --Field-Field-background: var(--Palette-Gradient-2);
+  --Field-Inline-button-background: var(--Palette-Gradient-2);
   --Field-Field-border: var(--Palette-Gradient-3);
   --Field-Field-border-focus: var(--Palette-Contrast-1);
   --Field-Field-button-background: var(--Palette-Gradient-3);
@@ -171,6 +172,7 @@
   --Text-and-icons-secret-number: var(--Palette-Contrast-1);
   --Text-and-icons-secret-number-hover: var(--Palette-Contrast-5);
   --Text-and-icons-secret-special-chars: var(--Palette-Contrast-3);
+  --Workspace-Menu-Dividers: var(--Palette-Gradient-3);
   /* Passbolt Radii */
   /* Mode: Square */
   --Section-border-radius: 0.8rem;
@@ -2481,7 +2483,7 @@ input[type=file] {
   height: 3rem;
 }
 .select-container.inline .select .selected-value {
-  background: var(--Field-Infield-button-background);
+  background: var(--Field-Inline-button-background);
   box-shadow: inset 0 0 0 0.1rem var(--Field-Field-border);
   padding: 0.5rem 1.6rem;
 }

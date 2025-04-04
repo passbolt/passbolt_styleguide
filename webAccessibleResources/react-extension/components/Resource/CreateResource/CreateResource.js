@@ -119,7 +119,12 @@ class CreateResource extends Component {
    * @return {EntityValidationError}
    */
   // eslint-disable-next-line no-unused-vars
-  validateForm = memoize(resourceFormDto => new ResourceFormEntity(resourceFormDto, {validate: false, resourceTypes: this.props.resourceTypes}).validate());
+  validateForm = memoize(resourceFormDto => {
+    const resourceFormEntity = new ResourceFormEntity(resourceFormDto, {validate: false, resourceTypes: this.props.resourceTypes});
+    resourceFormEntity.removeEmptySecret({validate: false});
+    resourceFormEntity.addRequiredSecret({validate: false});
+    return resourceFormEntity.validate();
+  });
 
   /**
    * Verify the data health. This intends for user, to inform if data form has invalid size
@@ -361,6 +366,16 @@ class CreateResource extends Component {
     }
     resourceFormEntity.removeEmptySecret({validate: false});
     resourceFormEntity.addRequiredSecret({validate: false});
+
+    const resourceType = this.props.resourceTypes.getFirstById(resourceFormEntity.resourceTypeId);
+    const shouldResetUsername = !resourceFormEntity.metadata.username
+      || resourceFormEntity.metadata.username.length === 0;
+
+    if (shouldResetUsername) {
+      const usernameResetValue = resourceType.isStandaloneTotp() ? null : "";
+      resourceFormEntity.set("metadata.username", usernameResetValue, {validate: false});
+    }
+
     return resourceFormEntity;
   }
 

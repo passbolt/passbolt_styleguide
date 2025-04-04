@@ -30,7 +30,7 @@ class DisplayDragResource extends React.Component {
    * @returns {boolean}
    */
   isMultipleSelected() {
-    return this.props.resourceWorkspaceContext.selectedResources.length > 1;
+    return this.selectedResources.length > 1;
   }
 
   /**
@@ -38,7 +38,7 @@ class DisplayDragResource extends React.Component {
    * @returns {boolean}
    */
   hasMoreThanThreeResourcesSelected() {
-    return this.props.resourceWorkspaceContext.selectedResources.length > 3;
+    return this.selectedResources.length > 3;
   }
 
   /**
@@ -46,7 +46,7 @@ class DisplayDragResource extends React.Component {
    * @returns {string|*}
    */
   get numberOfResources() {
-    return this.props.resourceWorkspaceContext.selectedResources.length > 99 ? '99+' : this.props.resourceWorkspaceContext.selectedResources.length;
+    return this.selectedResources.length > 99 ? '99+' : this.props.resourceWorkspaceContext.selectedResources.length;
   }
 
   /**
@@ -56,7 +56,7 @@ class DisplayDragResource extends React.Component {
   render() {
     return (
       <div className={`drag-and-drop ${this.hasMoreThanThreeResourcesSelected() ? "item-n" : `item-${this.numberOfResources}`}`}>
-        <span className="message">{this.selectedResources[0].metadata.name}</span>
+        <span className="message">{this.selectedResources[0]?.metadata.name}</span>
         {this.isMultipleSelected() &&
           <span className="count">
             {this.numberOfResources}

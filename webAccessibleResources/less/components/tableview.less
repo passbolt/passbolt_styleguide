@@ -295,8 +295,11 @@
         float: left;
       }
       &:hover {
-        .secret {
+        .secret:has(+ .password-view, + .totp-view) {
           max-width: calc(100% - 2.6rem); // secret field - secret preview button
+        }
+        .secret button:disabled {
+          color: var(--Text-and-icons-Main-text);
         }
         .password-view, .totp-view {
           display: flex;
