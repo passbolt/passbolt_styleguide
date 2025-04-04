@@ -68,8 +68,7 @@ class DisplayResourcesWorkspaceFilters extends React.Component {
       filterType === ResourceWorkspaceFilterTypes.ROOT_FOLDER ||
       filterType === ResourceWorkspaceFilterTypes.TAG ||
       filterType === ResourceWorkspaceFilterTypes.GROUP ||
-      filterType === ResourceWorkspaceFilterTypes.TEXT ||
-      filterType === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED;
+      filterType === ResourceWorkspaceFilterTypes.TEXT;
   }
 
   /**

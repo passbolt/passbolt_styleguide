@@ -48,12 +48,6 @@ describe("Resource Workspace Context", () => {
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.ALL);
     });
 
-    it("AS LU I should have an RECENTLY-MODIFIED filter when I went to /app/passwords with such a filter", async() => {
-      await page.goToRecentlyModified();
-      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL && page.filter.type !== ResourceWorkspaceFilterTypes.NONE);
-      expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED);
-    });
-
     it("AS LU I should have an SHARED-WITH-ME filter when I went to /app/passwords with such a filter", async() => {
       await page.goToShareWithMe();
       await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL && page.filter.type !== ResourceWorkspaceFilterTypes.NONE);
@@ -120,13 +114,6 @@ describe("Resource Workspace Context", () => {
       await page.goToAllItems();
       expect(page.filteredResources).toStrictEqual(context.resources);
     });
-
-    it("AS LU I should have all resources all resources when the filter is RECENTLY-MODIFIED", async() => {
-      await page.goToRecentlyModified();
-      expect(page.filteredResources).toBe(context.resources);
-    });
-
-    it.todo("AS LU I should have the most recent created resource when the filter is RECENTLY-MODIFIED");
 
     it("AS LU I should have resources shared with me when the filter is SHARED-WITH-ME", async() => {
       const expectedResourcesCount = 6;
