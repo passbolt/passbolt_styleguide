@@ -9,7 +9,7 @@ html, body {
     align-self: stretch;
     padding: 3.2rem;
 
-    .logo-svg {
+    .logo-svg, .logo {
       margin: auto auto 1.6rem auto;
       width: 20rem;
     }
@@ -142,6 +142,7 @@ html, body {
   .install-extension {
     a.browser-webstore {
       border: 0;
+      width: 100%;
       img {
         display: block;
         margin-left: auto;
@@ -150,6 +151,9 @@ html, body {
       }
       &.firefox img, &.edge img{
         padding: 1.6rem 0;
+      }
+      &:after {
+        content: none;
       }
     }
   }
@@ -322,7 +326,7 @@ html, body {
         display:block;
       }
 
-      .logo-svg {
+      .logo-svg, .logo {
         margin: 6.4rem auto 1.6rem auto;
       }
 

@@ -125,6 +125,7 @@ class AddResourceTotp extends Component {
         }
       };
       this.props.onChange?.(eventTotp);
+      this.setState({warningImportFile: null});
     } catch (error) {
       this.handleImportError(error);
     }
@@ -203,8 +204,7 @@ class AddResourceTotp extends Component {
   async getDataFromQrCode(file) {
     const html5QrCode = new Html5Qrcode("upload-qr-code", {formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]});
     const result = await html5QrCode.scanFileV2(file, false);
-    // Decode uri for special characters
-    return new URL(decodeURIComponent(result.decodedText));
+    return new URL(result.decodedText);
   }
 
   /**

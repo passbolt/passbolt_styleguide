@@ -126,8 +126,9 @@ describe("ManageAccountRecoveryUserSettings", () => {
 
     await page.clickOnSave();
     await waitForTrue(() => props.accountRecoveryContext.setUserAccountRecoveryStatus.mock.calls.length > 0);
-
     expect(props.accountRecoveryContext.setUserAccountRecoveryStatus).toHaveBeenCalledWith('rejected');
+
+    await waitForTrue(() => props.actionFeedbackContext.displaySuccess.mock.calls.length > 0);
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith('The account recovery subscription setting has been updated.');
     expect(props.onClose).toHaveBeenCalledTimes(1);
   });
