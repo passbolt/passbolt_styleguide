@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React from "react";
+import React, {Fragment} from "react";
 import FilterResourcesByFoldersItem from "./FilterResourcesByFoldersItem";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
@@ -23,8 +23,8 @@ import {withDialog} from "../../../contexts/DialogContext";
 import ReactList from "react-list";
 import {Trans, withTranslation} from "react-i18next";
 import {withDrag} from "../../../contexts/DragContext";
-import CarretDownSVG from "../../../../img/svg/caret_down.svg";
-import CarretRightSVG from "../../../../img/svg/caret_right.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
 import CabinetSVG from "../../../../img/svg/cabinet.svg";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
@@ -52,7 +52,8 @@ class FilterResourcesByFolders extends React.Component {
       draggingOverTitle: false,
       draggingOverTitleSince: null,
       open: true,
-      moreMenuOpen: false
+      moreMenuOpen: false,
+      folders: this.getRootFolders()
     };
   }
 
@@ -76,6 +77,8 @@ class FilterResourcesByFolders extends React.Component {
     this.handleDragOverTitle = this.handleDragOverTitle.bind(this);
     this.handleDropTitle = this.handleDropTitle.bind(this);
     this.handleTitleMoreClickEvent = this.handleTitleMoreClickEvent.bind(this);
+    this.handleToggleOpenFolder = this.handleToggleOpenFolder.bind(this);
+    this.handleToggleCloseFolder = this.handleToggleCloseFolder.bind(this);
   }
 
   /**
@@ -127,6 +130,36 @@ class FilterResourcesByFolders extends React.Component {
       const contextualMenuProps = {left, top: top + 19, className: "right", onBeforeHide};
       this.props.contextualMenuContext.show(FilterResourcesByRootFolderContextualMenu, contextualMenuProps);
     }
+  }
+
+  /**
+   * Handle toggle open folder
+   * Add the child folders to the folders to display
+   * @param folderId
+   */
+  handleToggleOpenFolder(folderId) {
+    const childrenFolders = this.props.context.folders.filter(folder => folder.folder_parent_id === folderId);
+    this.sortFoldersAlphabetically(childrenFolders);
+    const folderIndex = this.state.folders.findIndex(folder => folder.id === folderId);
+    const folders = this.state.folders.toSpliced(folderIndex + 1, 0, ...childrenFolders);
+    this.setState({folders});
+  }
+
+  /**
+   * Handle toggle close folder
+   * Remove the child folders from the folders to display
+   * @param folderId
+   */
+  handleToggleCloseFolder(folderId) {
+    const foldersToClose = [folderId];
+    const folders = this.state.folders.filter(folder => {
+      if (foldersToClose.includes(folder.folder_parent_id)) {
+        foldersToClose.push(folder.id);
+        return false;
+      }
+      return true;
+    });
+    this.setState({folders});
   }
 
   /**
@@ -303,6 +336,35 @@ class FilterResourcesByFolders extends React.Component {
   }
 
   /**
+   * Render folder tree for rows
+   * @param items
+   * @param ref
+   * @return {JSX.Element}
+   */
+  renderFolderTree(items, ref) {
+    return <ul ref={ref} className="folders-tree">{items}</ul>;
+  }
+
+  /**
+   * Render item folder row
+   * @param index
+   * @param key
+   * @return {JSX.Element}
+   */
+  renderItem(index, key) {
+    const item = this.state.folders[index];
+
+    return <Fragment key={key}>
+      <FilterResourcesByFoldersItem
+        key={item.id}
+        folder={item}
+        toggleOpenFolder={this.handleToggleOpenFolder}
+        toggleCloseFolder={this.handleToggleCloseFolder}
+      />
+    </Fragment>;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -341,8 +403,8 @@ class FilterResourcesByFolders extends React.Component {
                         onContextMenu={this.handleTitleContextualMenuEvent}>
                         <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()} tabIndex={1}>
                           {isOpen
-                            ? <CarretDownSVG />
-                            : <CarretRightSVG />
+                            ? <CaretDownSVG />
+                            : <CaretRightSVG />
                           }
                         </div>
                         <CabinetSVG />
@@ -370,17 +432,14 @@ class FilterResourcesByFolders extends React.Component {
           {!isLoading && isOpen && rootFolders.length === 0 &&
           <em className="empty-content"><Trans>empty</Trans></em>
           }
-          {!isLoading && isOpen && rootFolders.length > 0 &&
+          {!isLoading && isOpen && this.state.folders.length > 0 &&
           <ReactList
-            itemRenderer={(index, key) => <FilterResourcesByFoldersItem
-              key={key}
-              folder={rootFolders[index]}/>
-            }
-            itemsRenderer={(items, ref) => <ul ref={ref} className="folders-tree">{items}</ul>}
-            length={rootFolders.length}
-            pageSize={20}
-            minSize={20}
-            type="simple">
+            itemRenderer={(index, key) => this.renderItem(index, key)}
+            itemsRenderer={(items, ref) => this.renderFolderTree(items, ref)}
+            length={this.state.folders.length}
+            pageSize={30}
+            minSize={30}
+            type="uniform">
           </ReactList>
           }
         </div>

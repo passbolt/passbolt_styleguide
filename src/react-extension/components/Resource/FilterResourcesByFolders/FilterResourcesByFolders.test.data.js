@@ -16,6 +16,7 @@ import {defaultFolderDto} from "../../../../shared/models/entity/folder/folderEn
 import {ownerFolderPermissionDto, readFolderPermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import MockPort from "../../../test/mock/MockPort";
+import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -36,14 +37,14 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
-    resourceWorkspaceContext: {
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
       filter: {
         type: ResourceWorkspaceFilterTypes.FOLDER,
         payload: {
           folder: foldersMock[0]
         }
-      }
-    },
+      },
+    }),
     dragContext: {
       dragging: true,
       draggedItems: {
