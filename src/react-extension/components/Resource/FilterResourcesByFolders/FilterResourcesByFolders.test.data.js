@@ -33,9 +33,10 @@ export function defaultAppContext(appContext) {
 
 /**
  * Default props
+ * @param {object} data Override the default props.
  * @returns {any}
  */
-export function defaultProps() {
+export function defaultProps(data = {}) {
   return {
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       filter: {
@@ -57,9 +58,15 @@ export function defaultProps() {
     history: {
       push: jest.fn()
     },
+    match: {
+      params: {
+        filterByFolderId: foldersMock[0].id
+      }
+    },
     contextualMenuContext: {
       show: jest.fn()
-    }
+    },
+    ...data
   };
 }
 

@@ -22,6 +22,7 @@ import FilterResourcesByFoldersPage from "./FilterResourcesByFolders.test.page";
 import {defaultResourcesDtos} from "../../../../shared/models/entity/resource/resourcesCollection.test.data";
 import {foldersMock} from "./FilterResourcesByFolders.test.data";
 import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFoldersItemContextualMenu";
+import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -70,8 +71,6 @@ describe("See Folders", () => {
       expect(page.filterResourcesByFoldersItem.name(5)).toBe("ChildCertificates2");
       expect(page.filterResourcesByFoldersItem.selectedFolderName).toBe("Accounting");
     });
-
-    it.todo('As LU I should see selected folder name with parents open');
 
     it('As LU I should be able to close folder to hide the child folders', async() => {
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
@@ -157,18 +156,14 @@ describe("See Folders", () => {
 
       const page = new FilterResourcesByFoldersPage(context, props);
 
-      await page.filterResourcesByFoldersItem.dragStartOnFolder(1);
-      await page.filterResourcesByFoldersItem.dragEndOnFolder(1);
       await page.filterResourcesByFolders.onDragOver;
       await page.filterResourcesByFolders.onDragLeave;
       await page.filterResourcesByFolders.onDragOver;
       await page.filterResourcesByFolders.onDrop;
-      expect(props.dragContext.onDragStart).toHaveBeenCalled();
-      expect(props.dragContext.onDragEnd).toHaveBeenCalled();
     });
 
     it('As LU I should be able to drag and drop resources on another folder', async() => {
-      expect.assertions(2);
+      expect.assertions(4);
       const context = defaultAppContext(); // The applicative context
       const resources = defaultResourcesDtos();
       const props = defaultProps({
@@ -184,20 +179,59 @@ describe("See Folders", () => {
       });
 
       context.port.addRequestListener("passbolt.resources.move-by-ids", async(resourcesIds, destinationFolder) => {
-        expect(destinationFolder).toStrictEqual(foldersMock[3].id);
+        expect(destinationFolder).toStrictEqual(foldersMock[4].id);
         expect(resourcesIds).toStrictEqual(resources.map(r => r.id));
       });
 
       const page = new FilterResourcesByFoldersPage(context, props);
 
-      await page.filterResourcesByFoldersItem.dragStartOnFolder(2);
-      await page.filterResourcesByFoldersItem.dragEndOnFolder(2);
-      await page.filterResourcesByFolders.onDragOver;
-      await page.filterResourcesByFolders.onDragLeave;
-      await page.filterResourcesByFolders.onDragOver;
-      await page.filterResourcesByFolders.onDrop;
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
+      await page.filterResourcesByFoldersItem.onDropFolder(4);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
+    });
+  });
+
+  describe('As LU I should see the Folder section open to the selected folder with parent open', () => {
+    const context = defaultAppContext(); // The applicative context
+    const props = defaultProps({
+      resourceWorkspaceContext: defaultResourceWorkspaceContext({
+        filter: {
+          type: ResourceWorkspaceFilterTypes.FOLDER,
+          payload: {
+            folder: foldersMock[4]
+          }
+        },
+      }),
+      match: {
+        params: {
+          filterByFolderId: foldersMock[4].id
+        }
+      }
+    });
+    /**
+     * Given an organization with 5 Folders with a child folder selected
+     * Then I should see the Folder selected with parent folder open
+     */
+
+    beforeEach(() => {
+      page = new FilterResourcesByFoldersPage(context, props);
+    });
+
+    it('As LU I should see selected folder name with parents open', () => {
+      expect(page.filterResourcesByFoldersItem.count).toBe(5);
+      expect(page.filterResourcesByFoldersItem.name(1)).toBe("Accounting");
+      expect(page.filterResourcesByFoldersItem.name(2)).toBe("ParentCertificates");
+      expect(page.filterResourcesByFoldersItem.name(3)).toBe("Certificates");
+      expect(page.filterResourcesByFoldersItem.name(4)).toBe("ChildCertificates1");
+      expect(page.filterResourcesByFoldersItem.name(5)).toBe("ChildCertificates2");
+      expect(page.filterResourcesByFoldersItem.selectedFolderName).toBe("ChildCertificates1");
     });
   });
 
