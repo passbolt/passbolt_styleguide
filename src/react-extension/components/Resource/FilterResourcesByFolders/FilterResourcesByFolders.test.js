@@ -21,6 +21,7 @@ import FilterResourcesByRootFolderContextualMenu from "./FilterResourcesByRootFo
 import FilterResourcesByFoldersPage from "./FilterResourcesByFolders.test.page";
 import {defaultResourcesDtos} from "../../../../shared/models/entity/resource/resourcesCollection.test.data";
 import {foldersMock} from "./FilterResourcesByFolders.test.data";
+import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFoldersItemContextualMenu";
 
 beforeEach(() => {
   jest.resetModules();
@@ -56,6 +57,30 @@ describe("See Folders", () => {
       expect(page.filterResourcesByFolders.rootFolderName).toBe('My workspace');
     });
 
+    it('As LU I should see all folders name', async() => {
+      expect(page.filterResourcesByFolders.exists()).toBeTruthy();
+      expect(page.filterResourcesByFoldersItem.exists()).toBeTruthy();
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
+      expect(page.filterResourcesByFoldersItem.count).toBe(5);
+      expect(page.filterResourcesByFoldersItem.name(1)).toBe("Accounting");
+      expect(page.filterResourcesByFoldersItem.name(2)).toBe("ParentCertificates");
+      expect(page.filterResourcesByFoldersItem.name(3)).toBe("Certificates");
+      expect(page.filterResourcesByFoldersItem.name(4)).toBe("ChildCertificates1");
+      expect(page.filterResourcesByFoldersItem.name(5)).toBe("ChildCertificates2");
+      expect(page.filterResourcesByFoldersItem.selectedFolderName).toBe("Accounting");
+    });
+
+    it.todo('As LU I should see selected folder name with parents open');
+
+    it('As LU I should be able to close folder to hide the child folders', async() => {
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
+      expect(page.filterResourcesByFoldersItem.count).toBe(5);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      expect(page.filterResourcesByFoldersItem.count).toBe(2);
+    });
+
     it('As LU I should be able to filter by root folder', async() => {
       await page.title.click();
       expect(props.history.push).toHaveBeenCalledWith(`/app/passwords`, {filter: {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER}});
@@ -69,6 +94,12 @@ describe("See Folders", () => {
     it('As LU I should be able to open a contextual menu for root folder with right click', async() => {
       await page.filterResourcesByFolders.openContextualMenuWithRightClick;
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByRootFolderContextualMenu, {});
+    });
+
+    it('As LU I should be able to open a contextual menu for a folder with right click on a child folder', async() => {
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      await page.filterResourcesByFoldersItem.openContextualMenuWithRightClick(3);
+      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {folder: foldersMock[2]});
     });
 
     it('As LU I should be able to drag and drop a folder on the root folder', async() => {

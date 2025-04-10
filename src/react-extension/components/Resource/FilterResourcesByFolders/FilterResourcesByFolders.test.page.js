@@ -20,6 +20,8 @@ import {FilterResourcesByFoldersItemPageObject} from "./FilterResourcesByFolders
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import FilterResourcesByFolders from "./FilterResourcesByFolders";
 import {DragContext} from "../../../contexts/DragContext";
+import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
+import {ContextualMenuContext} from "../../../contexts/ContextualMenuContext";
 
 /**
  * The FilterResourcesByFolders component represented as a page
@@ -35,9 +37,13 @@ export default class FilterResourcesByFoldersPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
-            <DragContext.Provider value={props.dragContext}>
-              <FilterResourcesByFolders.WrappedComponent {...props}/>
-            </DragContext.Provider>
+            <ContextualMenuContext.Provider value={props.contextualMenuContext}>
+              <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
+                <DragContext.Provider value={props.dragContext}>
+                  <FilterResourcesByFolders.WrappedComponent {...props}/>
+                </DragContext.Provider>
+              </ResourceWorkspaceContext.Provider>
+            </ContextualMenuContext.Provider>
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>

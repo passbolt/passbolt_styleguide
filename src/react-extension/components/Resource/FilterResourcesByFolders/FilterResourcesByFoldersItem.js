@@ -118,6 +118,11 @@ class FilterResourcesByFoldersItem extends React.Component {
     event.stopPropagation();
     const open = !this.state.open;
     this.setState({open});
+    if (open) {
+      this.props.toggleOpenFolder(this.props.folder.id);
+    } else {
+      this.props.toggleCloseFolder(this.props.folder.id);
+    }
   }
 
   /**
@@ -437,33 +442,11 @@ class FilterResourcesByFoldersItem extends React.Component {
   }
 
   /**
-   * Sort a list of folders alphabetically
-   * @param {array} folders The list of folders to sort
+   * Has the children folder.
+   * @returns {boolean}
    */
-  sortFoldersAlphabetically(folders) {
-    folders.sort((folderA, folderB) => {
-      const folderAName = folderA.name.toLowerCase();
-      const folderBName = folderB.name.toLowerCase();
-
-      if (folderAName < folderBName) {
-        return -1;
-      } else if (folderAName > folderBName) {
-        return 1;
-      }
-
-      return 0;
-    });
-  }
-
-  /**
-   * Get the folder children.
-   * @returns {array}
-   */
-  getChildrenFolders() {
-    const folders = this.props.context.folders.filter(folder => folder.folder_parent_id === this.props.folder.id);
-    this.sortFoldersAlphabetically(folders);
-
-    return folders;
+  get hasChildrenFolders() {
+    return this.props.context.folders.filter(folder => folder.folder_parent_id === this.props.folder.id).length > 0;
   }
 
   /**
@@ -487,17 +470,20 @@ class FilterResourcesByFoldersItem extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const folderChildren = this.getChildrenFolders();
-    const hasChildren = folderChildren.length > 0;
+    const hasChildren = this.hasChildrenFolders;
     const isSelected = this.isSelected();
     const isDisabled = this.isDisabled();
     const isDragged = this.isDragged();
     const isOpen = this.isOpen();
     const canDropInto = this.canDropInto();
     const showDropFocus = this.state.draggingOver && canDropInto;
+    const depth = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.props.folder.folder_parent_id).length;
+    const paddingStyle = {
+      paddingLeft: `calc(1.5rem * ${depth})`,
+    };
+
     return (
-      <li
-        className={`${isOpen ? "opened" : "closed"} folder-item`}>
+      <li className="folder-item">
         <div className={`row ${isSelected ? "selected" : ""} ${isDisabled ? "disabled" : ""} ${isDragged ? "is-dragged" : ""} ${showDropFocus ? "drop-focus" : ""} ${hasChildren ? "" : "no-child"} ${this.state.moreMenuOpen ? "highlight" : ""}`}
           draggable="true"
           onDrop={this.handleDropEvent}
@@ -509,7 +495,8 @@ class FilterResourcesByFoldersItem extends React.Component {
           <div className="main-cell-wrapper">
             <div className="main-cell"
               onClick={this.handleSelectEvent}
-              onContextMenu={this.handleContextualMenuEvent}>
+              onContextMenu={this.handleContextualMenuEvent}
+              style={paddingStyle}>
               <button className="link no-border" type="button">
                 {hasChildren &&
                   <div className="toggle-folder" onClick={this.handleToggleOpenFolder}>
@@ -533,13 +520,6 @@ class FilterResourcesByFoldersItem extends React.Component {
             </div>
           }
         </div>
-        {hasChildren && isOpen &&
-        <ul className="folders-tree">
-          {folderChildren.map(folder => <DecoratedFoldersTreeItem
-            key={`folders-tree-${folder.id}`}
-            folder={folder}/>)}
-        </ul>
-        }
       </li>
     );
   }
@@ -553,8 +533,8 @@ FilterResourcesByFoldersItem.propTypes = {
   folder: PropTypes.object,
   resourceWorkspaceContext: PropTypes.any,
   dragContext: PropTypes.any,
+  toggleOpenFolder: PropTypes.func,
+  toggleCloseFolder: PropTypes.func
 };
-
-const DecoratedFoldersTreeItem = withRouter(withAppContext(withContextualMenu(withResourceWorkspace(withDrag(FilterResourcesByFoldersItem)))));
 
 export default withRouter(withAppContext(withContextualMenu(withResourceWorkspace(withDrag(FilterResourcesByFoldersItem)))));
