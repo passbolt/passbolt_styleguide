@@ -26,7 +26,7 @@
       padding: 0;
 
       &.folders-tree {
-        padding: .1rem 0 0 1.5rem;
+        padding: .1rem 0 0 0;
       }
     }
 
@@ -52,6 +52,18 @@
         // Selected
         &:hover, &:focus-visible, &:focus, &.highlight, &.selected {
             background: var(--Sections-Filter-selected);
+
+            // Focus within
+            &:focus-within {
+              box-shadow: none;
+
+              &:has(button:focus-visible) {
+                box-shadow:
+                        0 0 .4rem var(--States-Focus),
+                        inset 0 0 0 .1rem var(--States-Focus);
+              }
+            }
+
             .main-cell button {
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -70,7 +82,7 @@
         }
 
         // Focus
-        &:focus, &:focus-visible {
+        &:focus-within {
             background: var(--Sections-Filter-selected);
             box-shadow:
                 0 0 .4rem var(--States-Focus),

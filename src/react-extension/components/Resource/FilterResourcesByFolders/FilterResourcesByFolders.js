@@ -87,8 +87,8 @@ class FilterResourcesByFolders extends React.Component {
    */
   componentDidMount() {
     if (this.props.match.params.filterByFolderId) {
-      // Add folder id and parent id that should be open
-      this.addSelectedFolderAndParentIdsToBeOpen(this.props.match.params.filterByFolderId);
+      // Add folder parent id that should be open
+      this.addParentFolderIdsToBeOpen(this.props.match.params.filterByFolderId);
     }
   }
 
@@ -101,7 +101,7 @@ class FilterResourcesByFolders extends React.Component {
     const hasFolderRouteChange = folderId !== prevProps.match.params.filterByFolderId;
     if (hasFolderRouteChange && folderId) {
       // Add folder id and parent id that should be open
-      this.addSelectedFolderAndParentIdsToBeOpen(folderId);
+      this.addParentFolderIdsToBeOpen(folderId);
     }
   }
 
@@ -202,11 +202,11 @@ class FilterResourcesByFolders extends React.Component {
   }
 
   /**
-   * Add selected folder id and parent folder ids in te state folderIdsOpened
+   * Add parent folder ids in te state folderIdsOpened
    * @param folderId The folder id selected
    */
-  addSelectedFolderAndParentIdsToBeOpen(folderId) {
-    const folderIdsOpened = [...this.state.folderIdsOpened, folderId];
+  addParentFolderIdsToBeOpen(folderId) {
+    const folderIdsOpened = [...this.state.folderIdsOpened];
     const selectedFolder = this.props.context.folders?.find(folder => folder.id === folderId);
     // If the selected folder has a parent. Open it if not yet open.
     let folderParentId = selectedFolder?.folder_parent_id;
@@ -526,7 +526,7 @@ class FilterResourcesByFolders extends React.Component {
                         onDrop={this.handleDropTitle}
                         onClick={this.handleClickOnTitle}
                         onContextMenu={this.handleTitleContextualMenuEvent}>
-                        <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()} tabIndex={1}>
+                        <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()}>
                           {isOpen
                             ? <CaretDownSVG />
                             : <CaretRightSVG />
