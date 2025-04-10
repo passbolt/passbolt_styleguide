@@ -98,7 +98,7 @@ describe("As LU I should see the password export dialog", () => {
       await waitFor(() => {
         expect(page.select.className).toBe("selected-value disabled");
         expect(page.exportButton.getAttribute("disabled")).not.toBeNull();
-        expect(page.exportButton.className).toBe("button primary disabled processing");
+        expect(page.exportButton.className).toBe("button primary form disabled processing");
         expect(page.exportButton.hasAttribute("disabled")).toBeTruthy();
         expect(page.cancelButton.className).toBe("link cancel");
         expect(page.cancelButton.hasAttribute("disabled")).toBeTruthy();

@@ -6,26 +6,57 @@
 
         .warning-message, .error-message {
             margin-bottom: 0;
+            flex-basis: 100%;
         }
     }
 
-    .checkbox input[type=checkbox] {
-        margin-bottom: 0;
+    .checkbox  {
+        align-items: flex-start;
 
-        & + label {
-            font-weight: 700;
-            .info {
-                color: @text-info-color;
-                font-weight: normal;
+        input[type=checkbox] {
+            margin-bottom: 0;
+            position: relative;
+            top: .5rem;
+
+            & + label {
+                font-weight: 700;
+                display: flex;
+                flex-direction: column;
+                flex-wrap: wrap;
+
+                .info {
+                    color: var(--Text-and-icons-Secondary-text);
+                    font-weight: normal;
+                    margin-left: .8rem;
+                }
+
+                .allow-content-type-item {
+                    display: flex;
+                    align-items: center;
+                }
             }
-        }
 
-        &:disabled {
-            background: none;
+            &:disabled {
+                background: none;
+            }
         }
     }
 
     .tooltip-text {
         max-width: none;
+    }
+
+    label svg {
+        width: 2.4rem;
+        height: 2.4rem;
+        margin: 0 1rem 0 0;
+    }
+
+    .warning svg {
+        --icon-color: var(--Field-Warning);
+    }
+
+    .error svg {
+        --icon-color: var(--Field-Error);
     }
 }

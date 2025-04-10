@@ -177,23 +177,7 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToAdministrationRequested() {
-    let pathname = "/app/administration/email-notification";
-    if (this.isMfaEnabled) {
-      pathname = "/app/administration/mfa";
-    } else if (this.isUserDirectoryEnabled) {
-      pathname = "/app/administration/users-directory";
-    } else if (this.isSmtpSettingsEnable) {
-      pathname = "/app/administration/smtp-settings";
-    } else if (this.isSelfRegistrationEnable) {
-      pathname = "/app/administration/self-registation";
-    } else if (this.isPasswordPoliciesEnable) {
-      pathname = "/app/administration/password-policies";
-    } else if (this.isUserPassphrasePoliciesEnable) {
-      pathname = "/app/administration/user-passphrase-policies";
-    } else if (this.isPasswordExpiryEnable) {
-      pathname = "/app/administration/password-expiry";
-    }
-    await this.goTo("api", pathname);
+    await this.goTo("browser-extension", "/app/administration");
   }
 
   /**
@@ -483,12 +467,7 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToUserSettingsMfaRequested() {
-    //Application to point
-    let app = "api";
-    if (window.chrome?.webview) {
-      app = "browser-extension";
-    }
-    await this.goTo(app, "/app/settings/mfa");
+    await this.goTo("browser-extension", "/app/settings/mfa");
   }
 
   /**

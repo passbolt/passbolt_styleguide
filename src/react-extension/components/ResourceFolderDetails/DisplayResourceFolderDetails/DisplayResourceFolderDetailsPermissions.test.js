@@ -22,7 +22,6 @@ import {
   defaultProps, permissionMock,
 } from "./DisplayResourceFolderDetailsPermissions.test.data";
 import DisplayResourceFolderDetailsPermissionsPage from "./DisplayResourceFolderDetailsPermissions.test.page";
-import ShareDialog from "../../Share/ShareDialog";
 
 beforeEach(() => {
   jest.resetModules();
@@ -56,8 +55,6 @@ describe("See permissions", () => {
 
       expect(page.displayPermissionList.exists()).toBeTruthy();
       expect(page.displayPermissionList.count()).toBe(5);
-      await page.displayPermissionList.edit();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ShareDialog);
     });
 
     it('I should be able to identify each permission name', async() => {

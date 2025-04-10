@@ -1,3 +1,4 @@
+import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import DisplayResourcesList from "./DisplayResourcesList";
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
@@ -8,29 +9,30 @@ import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 export default {
   title: 'Components/Resource/DisplayResourcesList',
-  component: DisplayResourcesList
+  component: DisplayResourcesList,
+  decorators: [
+    (Story, {args}) =>
+      <AppContext.Provider value={args.context}>
+        <MemoryRouter initialEntries={['/']}>
+          <div className="page">
+            <div className="panel">
+              <Route component={routerProps =>
+                <DisplayResourcesList {...args} {...routerProps}/>}>
+              </Route>
+            </div>
+          </div>
+        </MemoryRouter>
+      </AppContext.Provider>,
+  ]
 };
 
-const defaultContext = defaultAppContext();
-
-
-const Template = args =>
-  <AppContext.Provider value={defaultContext}>
-    <MemoryRouter initialEntries={['/']}>
-      <div className="page">
-        <div className="panel">
-          <Route component={routerProps =>
-            <DisplayResourcesList {...args} {...routerProps}/>}>
-          </Route>
-        </div>
-      </div>
-    </MemoryRouter>
-  </AppContext.Provider>;
-
-export const Empty = Template.bind({});
-Empty.args = {
-  resourceWorkspaceContext: defaultResourceWorkspaceContext()
+export const Empty = {
+  args: {
+    context: defaultAppContext(),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext()
+  },
 };
 
-export const Populated = Template.bind({});
-Populated.args = propsWithFilteredResources();
+export const Populated = {
+  args: propsWithFilteredResources(),
+};

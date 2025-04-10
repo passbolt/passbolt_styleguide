@@ -8,7 +8,13 @@ import {defaultAppContext, tagToDelete} from "./DeleteResourceTag.test.data";
 
 export default {
   title: 'Components/ResourceTag/DeleteResourceTag',
-  component: DeleteResourceTag
+  component: DeleteResourceTag,
+  decorators: [
+    (Story, {args}) =>
+      <AppContext.Provider value={args.context}>
+        <Story {...args} />
+      </AppContext.Provider>
+  ],
 };
 
 
@@ -23,26 +29,18 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-
-export const Initial = Template.bind({});
-Initial.args = {
-  context: defaultAppContext({
-    tagToDelete: tagToDelete("apache")
-  })
+export const Initial = {
+  args: {
+    context: defaultAppContext({
+      tagToDelete: tagToDelete("apache")
+    })
+  }
 };
 
-export const WithLongTagName = Template.bind({});
-WithLongTagName.args = {
-  context: defaultAppContext({
-    tagToDelete: tagToDelete("tagname".repeat(10))
-  })
-};
-
-Initial.argTypes = {
-  context: {
-    control: {
-      type: 'object'
-    }
-  },
-  onClose: () => {}
+export const WithLongTagName = {
+  args: {
+    context: defaultAppContext({
+      tagToDelete: tagToDelete("tagname".repeat(10))
+    })
+  }
 };

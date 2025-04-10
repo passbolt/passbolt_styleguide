@@ -499,59 +499,55 @@ class DeleteUserWithConflicts extends Component {
         className="delete-user-dialog">
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content intro">
-            <p>
-              <Trans>
-                You are about to delete the user <strong className="dialog-variable">{{user: this.getUserFullName(this.userToDelete)}}</strong>.
-              </Trans>
-            </p>
+            <p><Trans>You are about to delete the user <strong className="dialog-variable">{{user: this.getUserFullName(this.userToDelete)}}</strong>.</Trans></p>
             <p><Trans>This user is the sole owner of some content. You need to transfer the ownership to others to continue.</Trans></p>
-          </div>
-          <div className="ownership-transfer">
-            {this.hasFolderConflict() &&
-            <div>
-              <h3><Trans>Folders</Trans></h3>
-              <ul className="ownership-transfer-items">
-                {this.foldersErrors.map(folderError =>
-                  <li key={folderError.id}>
-                    <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
-                      <label htmlFor="transfer_folder_owner">{folderError.name} (<Trans>Folder</Trans>) <Trans>new owner</Trans>:</label>
-                      <Select className="form-element" value={this.state.owners[folderError.id]} items={this.getAcoPermissionsList(folderError.id)} onChange={event => this.handleOnChangeOwner(event, folderError.id)}/>
-                    </div>
-                  </li>
-                )}
-              </ul>
+            <div className="ownership-transfer no-margin">
+              {this.hasFolderConflict() &&
+              <div>
+                <h3><Trans>Folders</Trans></h3>
+                <ul className="ownership-transfer-items">
+                  {this.foldersErrors.map(folderError =>
+                    <li key={folderError.id}>
+                      <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
+                        <label htmlFor="transfer_folder_owner">{folderError.name} (<Trans>Folder</Trans>) <Trans>new owner</Trans>:</label>
+                        <Select className="form-element" value={this.state.owners[folderError.id]} items={this.getAcoPermissionsList(folderError.id)} onChange={event => this.handleOnChangeOwner(event, folderError.id)}/>
+                      </div>
+                    </li>
+                  )}
+                </ul>
+              </div>
+              }
+              {this.hasResourcesConflict() &&
+              <div>
+                <h3><Trans>Resources</Trans></h3>
+                <ul className="ownership-transfer-items">
+                  {this.resourcesErrors.map(resourceError =>
+                    <li key={resourceError.id}>
+                      <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
+                        <label htmlFor="transfer_resource_owner">{resourceError.metadata.name} (<Trans>Resource</Trans>) <Trans>new owner</Trans>:</label>
+                        <Select className="form-element" value={this.state.owners[resourceError.id]} items={this.getAcoPermissionsList(resourceError.id)} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}/>
+                      </div>
+                    </li>
+                  )}
+                </ul>
+              </div>
+              }
+              {this.hasGroupsConflict() &&
+              <div>
+                <h3><Trans>Groups</Trans></h3>
+                <ul className="ownership-transfer-items">
+                  {this.groupsErrors.map(groupError =>
+                    <li key={groupError.id}>
+                      <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
+                        <label htmlFor="transfer_group_manager">{groupError.name} (<Trans>Group</Trans>) <Trans>new manager</Trans>:</label>
+                        <Select className="form-element" value={this.state.managers[groupError.id]} items={this.getGroupUsersList(groupError.id)} onChange={event => this.handleOnChangeManager(event, groupError.id)}/>
+                      </div>
+                    </li>
+                  )}
+                </ul>
+              </div>
+              }
             </div>
-            }
-            {this.hasResourcesConflict() &&
-            <div>
-              <h3><Trans>Resources</Trans></h3>
-              <ul className="ownership-transfer-items">
-                {this.resourcesErrors.map(resourceError =>
-                  <li key={resourceError.id}>
-                    <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
-                      <label htmlFor="transfer_resource_owner">{resourceError.metadata.name} (<Trans>Resource</Trans>) <Trans>new owner</Trans>:</label>
-                      <Select className="form-element" value={this.state.owners[resourceError.id]} items={this.getAcoPermissionsList(resourceError.id)} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}/>
-                    </div>
-                  </li>
-                )}
-              </ul>
-            </div>
-            }
-            {this.hasGroupsConflict() &&
-            <div>
-              <h3><Trans>Groups</Trans></h3>
-              <ul className="ownership-transfer-items">
-                {this.groupsErrors.map(groupError =>
-                  <li key={groupError.id}>
-                    <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
-                      <label htmlFor="transfer_group_manager">{groupError.name} (<Trans>Group</Trans>) <Trans>new manager</Trans>:</label>
-                      <Select className="form-element" value={this.state.managers[groupError.id]} items={this.getGroupUsersList(groupError.id)} onChange={event => this.handleOnChangeManager(event, groupError.id)}/>
-                    </div>
-                  </li>
-                )}
-              </ul>
-            </div>
-            }
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>

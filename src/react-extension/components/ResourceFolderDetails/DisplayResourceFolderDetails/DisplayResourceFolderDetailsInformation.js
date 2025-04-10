@@ -12,13 +12,18 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withRouter} from "react-router-dom";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import FolderSVG from "../../../../img/svg/folder.svg";
+import ShareFolderSVG from "../../../../img/svg/share_folder.svg";
+import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
+import CabinetSVG from "../../../../img/svg/cabinet.svg";
 
 class DisplayResourceFolderDetailsInformation extends React.Component {
   /**
@@ -122,14 +127,16 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
    * @param {string} folderId The folder id
    * @returns {string}
    */
-  getFolderName(folderId) {
-    if (folderId === null) {
-      return '/';
+  getFolderName(folderParentId) {
+    if (folderParentId === null) {
+      return this.props.t("My workspace");
     }
 
     if (this.props.context.folders) {
-      const folder = this.props.context.folders.find(item => item.id === folderId);
-      return folder?.name;
+      const folder = this.props.context.folders.find(item => item.id === folderParentId);
+      if (folder) {
+        return folder.name;
+      }
     }
 
     return "";
@@ -154,6 +161,26 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
   }
 
   /**
+   * Render the tooltip folders structure.
+   * @param {array<FolderEntity>} folderStructure The folders structure.
+   * @render {JSX}
+   */
+  renderTooltipFolderStructure(folderStructure) {
+    if (folderStructure.length === 0) {
+      return <span><Trans>My workspace</Trans></span>;
+    }
+
+    return folderStructure?.map((folder, index) =>
+      <div key={folder.id} className="folder-level" style={{marginLeft: `${5 * index}px`}}>
+        {folder.folder_parent_id !== null &&
+          <span className="caret">›</span>
+        }
+        <span>{folder.name}</span>
+      </div>
+    );
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -162,56 +189,67 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
     const modifierUsername = this.state.modifier?.username || "";
     const createdDateTimeAgo = formatDateTimeAgo(this.folder.created, this.props.t, this.props.context.locale);
     const modifiedDateTimeAgo = formatDateTimeAgo(this.folder.modified, this.props.t, this.props.context.locale);
-    const folderParentName = this.getFolderName(this.folder.folder_parent_id);
+    const folderStructure = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.folder.folder_parent_id);
 
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
-              <Trans>Information</Trans>
-              {this.state.open &&
-              <Icon name="caret-down"/>
-              }
-              {!this.state.open &&
-              <Icon name="caret-right"/>
+              <span className="accordion-title">
+                <Trans>Information</Trans>
+              </span>
+              {this.state.open
+                ? <CaretDownSVG />
+                : <CaretRightSVG />
               }
             </button>
           </h4>
         </div>
-        <div className="accordion-content">
-          <ul>
-            <li className="username">
-              <span className="label"><Trans>Name</Trans></span>
-              <span className="value">{this.folder.name}</span>
-            </li>
-            <li className="modified">
-              <span className="label"><Trans>Modified</Trans></span>
-              <span className="value" title={this.folder.modified}>{modifiedDateTimeAgo}</span>
-            </li>
-            <li className="modified-by">
-              <span className="label"><Trans>Modified by</Trans></span>
-              <span className="value">{modifierUsername}</span>
-            </li>
-            <li className="modified">
-              <span className="label"><Trans>Created</Trans></span>
-              <span className="value" title={this.folder.created}>{createdDateTimeAgo}</span>
-            </li>
-            <li className="modified-by">
-              <span className="label"><Trans>Created by</Trans></span>
-              <span className="value">{creatorUsername}</span>
-            </li>
-            <li className="location">
-              <span className="label"><Trans>Location</Trans></span>
-              <span className="value">
-                <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="link no-border folder-link">
-                  { !this.isFolderParentShared() ? <Icon name="folder"/> : <Icon name="folder-shared"/> }
-                  <span>{folderParentName}</span>
-                </button>
+        {this.state.open &&
+          <div className="accordion-content">
+            <div className="information-label">
+              <span className="username label"><Trans>Name</Trans></span>
+              <span className="created label"><Trans>Created</Trans></span>
+              <span className="created-by label"><Trans>Created by</Trans></span>
+              <span className="modified label"><Trans>Modified</Trans></span>
+              <span className="modified-by label"><Trans>Modified by</Trans></span>
+              <span className="location label"><Trans>Location</Trans></span>
+            </div>
+            <div className="information-value">
+              <span className="username value">{this.folder.name}</span>
+              <span className="created value" title={this.folder.created}>{createdDateTimeAgo}</span>
+              <span className="created-by value">{creatorUsername}</span>
+              <span className="modified value" title={this.folder.modified}>{modifiedDateTimeAgo}</span>
+              <span className="modified-by value">{modifierUsername}</span>
+              <span className="location value">
+                <TooltipPortal message={this.renderTooltipFolderStructure(folderStructure)}>
+                  <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="no-border">
+                    {this.folder.folder_parent_id === null &&
+                      <>
+                        <CabinetSVG />
+                        <Trans>My workspace</Trans>
+                      </>
+                    }
+                    {this.folder.folder_parent_id !== null &&
+                      <>
+                        {this.isFolderParentShared() ? <ShareFolderSVG/> : <FolderSVG/>}
+                        {folderStructure.map(folder =>
+                          <React.Fragment key={folder.id}>
+                            {folder.folder_parent_id !== null &&
+                              <span className="caret">›</span>
+                            }
+                            <span>{folder.name}</span>
+                          </React.Fragment>
+                        )}
+                      </>
+                    }
+                  </button>
+                </TooltipPortal>
               </span>
-            </li>
-          </ul>
-        </div>
+            </div>
+          </div>
+        }
       </div>
     );
   }

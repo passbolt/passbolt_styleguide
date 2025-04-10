@@ -17,7 +17,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Icon from "../../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {Trans, withTranslation} from "react-i18next";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
@@ -33,7 +33,7 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.getDefaultState();
+    this.state = this.defaultState;
     this.bindCallbacks();
   }
 
@@ -41,14 +41,21 @@ class DisplayResourceDetailsActivity extends React.Component {
    * Get default state
    * @returns {*}
    */
-  getDefaultState() {
+  get defaultState() {
     return {
-      activities: null, // list of activities
+      activities: [], // list of activities
       activitiesPage: 1, // pagination for activity
       loadingMore: false, // processing when the user want to see more activities
-      open: false,
       loading: true,
     };
+  }
+
+  /**
+   * Whenever the component has mounted
+   */
+  async componentDidMount() {
+    await this.fetch(this.state.activitiesPage);
+    this.setState({loading: false});
   }
 
   /**
@@ -68,7 +75,6 @@ class DisplayResourceDetailsActivity extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
     this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
   }
 
@@ -77,19 +83,14 @@ class DisplayResourceDetailsActivity extends React.Component {
    * @param previousResource
    */
   async handleResourceChange(previousResource) {
-    // do nothing if the section is closed.
-    if (!this.state.open) {
-      return;
-    }
     // do nothing if the resource doesn't change.
     if (this.resource.id === previousResource.id) {
       return;
     }
 
     // Reset the component, and fetch activities for the new resource.
-    const state = Object.assign({}, this.getDefaultState(), {open: true});
-    await this.setState(state);
-    await this.fetch();
+    this.setState(this.defaultState);
+    await this.fetch(this.state.activitiesPage);
     this.setState({loading: false});
   }
 
@@ -100,24 +101,8 @@ class DisplayResourceDetailsActivity extends React.Component {
   async handleResourceActivitiesRefresh(hasPreviouslyRefreshed) {
     const mustRefresh = !hasPreviouslyRefreshed && this.props.resourceWorkspaceContext.refresh.activities;
     if (mustRefresh) {
-      await this.fetch();
+      await this.fetch(this.state.activitiesPage);
       await this.props.resourceWorkspaceContext.onResourceActivitiesRefreshed();
-    }
-  }
-
-  /**
-   * handle when the users click on the section header.
-   * Open/Close it.
-   */
-  async handleTitleClickEvent() {
-    // If the section is open, reset the component and close the section.
-    if (this.state.open) {
-      const defaultState = this.getDefaultState();
-      this.setState(defaultState);
-    } else {
-      await this.setState({loading: true, open: true});
-      await this.fetch();
-      this.setState({loading: false});
     }
   }
 
@@ -127,29 +112,34 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   async handleMoreClickEvent() {
     const activitiesPage = this.state.activitiesPage + 1;
-    const loadingMore = true;
-    await this.setState({activitiesPage, loadingMore});
-    await this.fetch();
+    this.setState({activitiesPage, loadingMore: true});
+    await this.fetch(activitiesPage);
     this.setState({loadingMore: false});
   }
 
   /**
-   * Fetch the resource activities
+   * Fetch the resource activitiesPage
+   * @param {number} page the page to load
    * @returns {Promise<void>}
    */
-  async fetch() {
+  async fetch(page) {
     const limit = LIMIT_ACTIVITIES_PER_PAGE;
-    const page = this.state.activitiesPage;
     const options = {limit, page};
-    const newActivities = await this.props.context.port.request("passbolt.actionlogs.find-all-for", "Resource", this.resource.id, options);
+    const newActivities = await this.props.context.port.request("passbolt.actionlogs.find-all-for", "Resource", this.resource.id, options) || [];
 
-    let activities;
     // For the first page need to reset activities state
-    if (this.state.activitiesPage > 1) {
-      activities = [...(this.state.activities || []), ...newActivities];
-    } else {
-      activities = [...newActivities];
-    }
+    this.mergeActivities(newActivities);
+  }
+
+  /**
+   * Merge current activities with newly fetched ones.
+   * It avoids to have duplicated activities especially when a refresh is asked.
+   * @param {array} fetchActivities
+   */
+  mergeActivities(fetchActivities) {
+    const newActivities = fetchActivities.filter(activity => !this.state.activities.find(a => a.id === activity.id));
+    const activities = [...this.state.activities, ...newActivities];
+    activities.sort((a, b) => new Date(b.created) - new Date(a.created));
     this.setState({activities});
   }
 
@@ -232,7 +222,7 @@ class DisplayResourceDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> created item <span className="item">{{resourceName}}</span>
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo third-level light">{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
@@ -259,7 +249,7 @@ class DisplayResourceDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> updated item <span className="item">{{resourceName}}</span>
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo third-level light">{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
@@ -286,7 +276,7 @@ class DisplayResourceDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> accessed secret of item <span className="item">{{resourceName}}</span>
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo third-level light">{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
@@ -313,7 +303,7 @@ class DisplayResourceDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> updated secret of item <span className="item">{{resourceName}}</span>
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo third-level light">{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
@@ -333,7 +323,7 @@ class DisplayResourceDetailsActivity extends React.Component {
     const changeTypeLabel = this.getPermissionChangeTypeLabel(changeType);
 
     return (
-      <li key={permission.id} className="clearfix">
+      <li key={permission.id}>
         {permission.user &&
         <UserAvatar user={permission.user} baseUrl={this.baseUrl}/>
         }
@@ -342,7 +332,7 @@ class DisplayResourceDetailsActivity extends React.Component {
         }
         <div className="name">
           <span className="creator">{permissionAroName}</span>
-          <span className="permission-type"> - {permissionLabel}</span>
+          <span className="permission-type"> {permissionLabel}</span>
         </div>
         <div className="type"><span className={changeType}>{changeTypeLabel}</span></div>
       </li>
@@ -368,12 +358,12 @@ class DisplayResourceDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> changed permissions of item <span className="item">{{resourceName}}</span> with
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
             <ul className="permissions-list">
               {activity.data.permissions.added.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "created"))}
               {activity.data.permissions.updated.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "updated"))}
               {activity.data.permissions.removed.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "removed"))}
             </ul>
+            <div className="subinfo third-level light">{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
@@ -463,24 +453,11 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   render() {
     return (
-      <div className={`activity accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
-        <div className="accordion-header">
-          <h4>
-            <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
-              <Trans>Activity</Trans>
-              {this.state.open &&
-              <Icon name="caret-down"/>
-              }
-              {!this.state.open &&
-              <Icon name="caret-right"/>
-              }
-            </button>
-          </h4>
-        </div>
+      <div className={`activity accordion sidebar-section`}>
         <div className="accordion-content">
           {this.state.loading &&
           <div className="processing-wrapper">
-            <Icon name="spinner"/>
+            <SpinnerSVG/>
             <span className="processing-text"><Trans>Retrieving activities</Trans></span>
           </div>
           }

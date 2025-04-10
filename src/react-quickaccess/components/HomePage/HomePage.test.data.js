@@ -25,7 +25,7 @@ import {
 } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import {
   defaultResourceMetadataDto
-} from "../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
+} from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 
 /**
  * Default component props.

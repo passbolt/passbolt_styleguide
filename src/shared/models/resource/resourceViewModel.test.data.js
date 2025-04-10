@@ -12,8 +12,8 @@
  * @since         4.9.4
  */
 
-import {defaultTotpViewModelDto} from "../totp/TotpDto.test.data";
 import {v4 as uuid} from "uuid";
+import {defaultTotpViewModelDto} from "../entity/totp/totpDto.test.data";
 
 export const minimalResourceViewModelDto = (data = {}) => ({
   name: "Resource view model name",

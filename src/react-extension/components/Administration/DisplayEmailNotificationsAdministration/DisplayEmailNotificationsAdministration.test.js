@@ -15,6 +15,7 @@
 /**
  * Unit tests on DisplayEmailNotificationsAdministration in regard of specifications
  */
+import "../../../../../test/mocks/mockPortal.js";
 import {
   defaultEmailNotificationSettings,
   defaultProps,
@@ -47,7 +48,7 @@ describe("See the Email Notifications Settings", () => {
     });
 
     it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
-      expect.assertions(35);
+      expect.assertions(36);
       await waitFor(() => {});
       expect(page.exists()).toBeTruthy();
       //passwords
@@ -106,6 +107,9 @@ describe("See the Email Notifications Settings", () => {
       expect(page.showSecret.checked).toBeTruthy();
       expect(page.showDescription.checked).toBeTruthy();
       expect(page.showComment.checked).toBeTruthy();
+
+      // Save setting banner should be hidden.
+      expect(page.saveWarningBanner).toBeNull();
     });
 
     it('As AD I should save email notifications on the administration settings page and see a confirmation message', async() => {
@@ -220,6 +224,11 @@ describe("See the Email Notifications Settings", () => {
       expectDisabled(page.showSecret);
       expectDisabled(page.showDescription);
       expectDisabled(page.showComment);
+    });
+
+    it('As an administrator when I modify a field, I can see a changes warning message', async() => {
+      await page.checkCommentAdd();
+      expect(page.saveWarningBanner).not.toBeNull();
     });
   });
 

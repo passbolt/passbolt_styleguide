@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../../../img/svg/spinner.svg";
 import {Trans, withTranslation} from "react-i18next";
 
 class FormSubmitButton extends Component {
@@ -39,7 +39,7 @@ class FormSubmitButton extends Component {
    * @returns {string}
    */
   getClassName() {
-    let name = 'button primary';
+    let name = 'button primary form';
     if (this.props.warning) {
       name += ' warning';
     } else if (this.props.attention) {
@@ -74,7 +74,7 @@ class FormSubmitButton extends Component {
         disabled={this.props.disabled}>
         {this.props.value || <Trans>Save</Trans>}
         {this.props.processing &&
-          <Icon name="spinner"/>
+          <SpinnerSVG/>
         }
       </button>
     );

@@ -13,7 +13,6 @@
  */
 
 import EntitySchema from "../entity/abstract/entitySchema";
-import {defaultTotpViewModelDto} from "../totp/TotpDto.test.data";
 import ResourceV5DefaultTotpViewModel from "./ResourceV5DefaultTotpViewModel";
 import {v4 as uuid} from "uuid";
 import {defaultResourcePasswordDescriptionTotpViewModelDto, defaultResourceViewModelDto, minimalResourceViewModelDto} from "./resourceViewModel.test.data";
@@ -21,6 +20,7 @@ import {TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP} from "../entity/resourceType/resourc
 import {DateTime} from "luxon";
 import {defaultResourceDto} from "../entity/resource/resourceEntity.test.data";
 import ResourceViewModel from "./ResourceViewModel";
+import {defaultTotpViewModelDto} from "../entity/totp/totpDto.test.data";
 
 describe("ResourceV5DefaultTotpViewModel", () => {
   describe("::createFromEntity", () => {

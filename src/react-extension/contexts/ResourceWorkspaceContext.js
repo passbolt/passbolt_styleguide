@@ -22,8 +22,8 @@ import sanitizeUrl, {urlProtocols} from "../lib/Sanitize/sanitizeUrl";
 import {DateTime} from "luxon";
 import SorterEntity from "../../shared/models/entity/sorter/sorterEntity";
 import GridUserSettingEntity from "../../shared/models/entity/gridUserSetting/gridUserSettingEntity";
-import GridResourceUserSettingService
-  from "../../shared/services/gridResourceUserSetting/GridResourceUserSettingService";
+import GridResourceUserSettingServiceWorkerService
+  from "../../shared/services/serviceWorker/gridResourceUserSetting/GridResourceUserSettingServiceWorkerService";
 import ColumnsResourceSettingCollection from "../../shared/models/entity/resource/columnsResourceSettingCollection";
 import {withPasswordExpiry} from "./PasswordExpirySettingsContext";
 import {withRbac} from "../../shared/context/Rbac/RbacContext";
@@ -87,6 +87,7 @@ export const ResourceWorkspaceContext = React.createContext({
   onGoToResourceUriRequested: () => {}, // Whenever the users wants to follow a resource uri
   onChangeColumnView: () => {}, // Whenever the users wants to show or hide a column
   onChangeColumnsSettings: () => {}, // Whenever the user change the columns configuration
+  resetGridColumnsSettings: () => {}, // Whenever the user resets the columns configuration
   getHierarchyFolderCache: () => {}, // Whenever the need to get folder hierarchy
 });
 
@@ -102,7 +103,18 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.initializeProperties();
-    this.gridResourceUserSetting = new GridResourceUserSettingService(props.context.port);
+    this.gridResourceUserSetting = new GridResourceUserSettingServiceWorkerService(props.context.port);
+  }
+
+  /**
+   * Get default sorter
+   * @return {object}
+   */
+  get defaultSorter() {
+    return new SorterEntity({
+      propertyName: 'modified', // The name of the property to sort on
+      asc: false // True if the sort must be descendant
+    });
   }
 
   /**
@@ -111,10 +123,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   get defaultState() {
     return {
       filter: {type: ResourceWorkspaceFilterTypes.NONE}, // The current resource search filter
-      sorter: new SorterEntity({
-        propertyName: 'modified', // The name of the property to sort on
-        asc: false // True if the sort must be descendant
-      }),
+      sorter: this.defaultSorter, // The default sorter
       filteredResources: null, // The current list of filtered resources
       selectedResources: [], // The current list of selected resources
       columnsResourceSetting: null, // The settings of columns for resources
@@ -157,6 +166,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       onGoToResourceUriRequested: this.onGoToResourceUriRequested.bind(this), // Whenever the users wants to follow a resource uri
       onChangeColumnView: this.handleChangeColumnView.bind(this), // Whenever the users wants to show or hide a column
       onChangeColumnsSettings: this.handleChangeColumnsSettings.bind(this), // Whenever the user change the columns configuration
+      resetGridColumnsSettings: this.resetGridColumnsSettings.bind(this), // Whenever the user resets the columns configuration
       getHierarchyFolderCache: this.getHierarchyFolderCache.bind(this) // Whenever the need to get folder hierarchy
     };
   }
@@ -236,7 +246,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       await this.unselectAll();
 
       if (this.state.filter.type !== ResourceWorkspaceFilterTypes.GROUP) {
-        await this.populate();
+        this.populate();
       }
     }
   }
@@ -308,6 +318,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
 
     // Known folder
     await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});
+
+    // Multiple resource selected, do not show details folder
+    const hasMultipleResourceSelected = this.state.selectedResources.length > 1;
+    if (hasMultipleResourceSelected) {
+      return;
+    }
+
     await this.detailFolder(folder);
   }
 
@@ -507,6 +524,12 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleNoneResourcesSelected() {
     await this.unselectAll();
+    const {filter} = this.state;
+    const isFolderFilter = filter.type === ResourceWorkspaceFilterTypes.FOLDER;
+    if (isFolderFilter) { // Case of folder filter after unselect, should display folder details
+      await this.handleFolderRouteChange();
+      return;
+    }
     await this.detailNothing();
   }
 
@@ -624,7 +647,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       return;
     }
 
-    const isRecentlyModifiedFilter = filter.type === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED;
     const searchOperations = {
       [ResourceWorkspaceFilterTypes.ROOT_FOLDER]: this.searchByRootFolder.bind(this),
       [ResourceWorkspaceFilterTypes.FOLDER]: this.searchByFolder.bind(this),
@@ -632,9 +654,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       [ResourceWorkspaceFilterTypes.GROUP]: this.searchByGroup.bind(this),
       [ResourceWorkspaceFilterTypes.TEXT]: this.searchByText.bind(this),
       [ResourceWorkspaceFilterTypes.ITEMS_I_OWN]: this.searchByItemsIOwn.bind(this),
+      [ResourceWorkspaceFilterTypes.PRIVATE]: this.searchByPrivate.bind(this),
       [ResourceWorkspaceFilterTypes.FAVORITE]: this.searchByFavorite.bind(this),
       [ResourceWorkspaceFilterTypes.SHARED_WITH_ME]: this.seachBySharedWithMe.bind(this),
-      [ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED]: this.searchByRecentlyModified.bind(this),
       [ResourceWorkspaceFilterTypes.EXPIRED]: this.seachByExpired.bind(this),
       [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
       [ResourceWorkspaceFilterTypes.NONE]: () => { /* No search */ }
@@ -642,53 +664,49 @@ export class ResourceWorkspaceContextProvider extends React.Component {
 
     await searchOperations[filter.type](filter);
 
-    if (!isRecentlyModifiedFilter) {
-      await this.sort();
-    } else {
-      await this.resetSorter();
-    }
+    await this.sort();
   }
 
   /**
    * All filter ( no filter at all )
    * @param filter The All filter
    */
-  async searchAll(filter) {
-    await this.setState({filter, filteredResources: this.resources});
+  searchAll(filter) {
+    this.setState({filter, filteredResources: this.resources}, this.sort);
   }
 
   /**
    * Filter the resources which belongs to the filter root folder
    */
-  async searchByRootFolder(filter) {
+  searchByRootFolder(filter) {
     const folderResources = this.resources.filter(resource => ! resource.folder_parent_id);
-    await this.setState({filter, filteredResources: folderResources});
+    this.setState({filter, filteredResources: folderResources}, this.sort);
   }
 
 
   /**
    * Filter the resources which belongs to the filter folder
    */
-  async searchByFolder(filter) {
+  searchByFolder(filter) {
     const folderId = filter.payload.folder.id;
     const folderResources = this.resources.filter(resource => resource.folder_parent_id === folderId);
-    await this.setState({filter, filteredResources: folderResources});
+    this.setState({filter, filteredResources: folderResources}, this.sort);
   }
 
   /**
    * Filter the resources which belongs to the filter tag
    */
-  async searchByTag(filter) {
+  searchByTag(filter) {
     const tagId = filter.payload.tag.id;
     const tagResources = this.resources.filter(resource => resource.tags && resource.tags.length > 0 && resource.tags.filter(tag => tag.id === tagId).length > 0);
-    await this.setState({filter, filteredResources: tagResources});
+    this.setState({filter, filteredResources: tagResources}, this.sort);
   }
 
   /**
    * Filter the resources which textual properties matched some user text words
    * @param filter A textual filter
    */
-  async searchByText(filter) {
+  searchByText(filter) {
     const text = filter.payload;
     const words =  (text && text.split(/\s+/)) || [''];
     const canUseTags = this.props.context.siteSettings.canIUse("tags");
@@ -716,13 +734,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const matchText = resource => words.every(word => matchResource(word, resource));
 
     const filteredResources = this.resources.filter(matchText);
-    await this.setState({filter, filteredResources});
+    this.setState({filter, filteredResources}, this.sort);
   }
 
   /**
    * Filter the resources which belongs to the filter group
    */
-  async searchByGroup(filter) {
+  searchByGroup(filter) {
     if (this.isFilterEqual(this.state.filter, filter) && Boolean(this.state.filteredResources)) {
       return;
     }
@@ -742,43 +760,62 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       const resourceIds = await this.props.context.port.request('passbolt.resources.find-all-ids-by-is-shared-with-group', filter.payload.group.id) || [];
       // keep only the resource with the group
       const groupResources = this.resources.filter(resource => resourceIds.includes(resource.id));
-      this.setState({filteredResources: groupResources});
+      this.setState({filteredResources: groupResources}, this.sort);
       this.props.loadingContext.remove();
     });
   }
 
   /**
-   * Search for current user personal resources
+   * Search for resources the current user owned
    * @param filter The filter
    */
-  async searchByItemsIOwn(filter) {
+  searchByItemsIOwn(filter) {
     const filteredResources = this.resources.filter(resource => resource.permission.type === 15);
-    await this.setState({filter, filteredResources});
+    this.setState({filter, filteredResources}, this.sort);
   }
+
+  /**
+   * Search for user private resources
+   * @param filter The filter
+   */
+  searchByPrivate(filter) {
+    const filteredResources = this.resources.filter(resource => Boolean(resource.personal));
+    this.setState({filter, filteredResources}, this.sort);
+  }
+
   /**
    * Filter the resources which are the current user favorites one
    */
-  async searchByFavorite(filter) {
+  searchByFavorite(filter) {
     const filteredResources = this.resources.filter(resource => resource.favorite !== null);
-    await this.setState({filter, filteredResources});
+    this.setState({filter, filteredResources}, this.sort);
   }
 
   /**
    * Filter the resources which are shared wit the current user
    */
-  async seachBySharedWithMe(filter) {
+  seachBySharedWithMe(filter) {
     const filteredResources = this.resources.filter(resource => resource.permission.type < 15);
-    await this.setState({filter, filteredResources});
+    this.setState({filter, filteredResources}, this.sort);
   }
 
   /**
    * Keep the most recently modified resources ( current state: just sort everything with the most recent modified resource )
    * @param filter A recently modified filter
    */
-  async searchByRecentlyModified(filter) {
+  searchByRecentlyModified(filter) {
     const recentlyModifiedSorter = (resource1, resource2) => DateTime.fromISO(resource2.modified) < DateTime.fromISO(resource1.modified) ? -1 : 1;
     const filteredResources = this.resources.sort(recentlyModifiedSorter);
-    await this.setState({filter, filteredResources});
+    this.setState({filter, filteredResources}, this.sort);
+  }
+
+  /**
+   * Keep the expired resources
+   * @param filter A "expired" filter
+   */
+  seachByExpired(filter) {
+    const filteredResources = this.resources.filter(resource => resource.expired && new Date(resource.expired) <= new Date());
+    this.setState({filter, filteredResources}, this.sort);
   }
 
   /**
@@ -797,15 +834,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
         this.props.history.push({pathname: '/app/passwords', state: {filter}});
       }
     }
-  }
-
-  /**
-   * Keep the expired resources
-   * @param filter A "expired" filter
-   */
-  async seachByExpired(filter) {
-    const filteredResources = this.resources.filter(resource => resource.expired && new Date(resource.expired) <= new Date());
-    this.setState({filter, filteredResources});
   }
 
   /** RESOURCE SELECTION */
@@ -955,7 +983,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async updateSorter(propertyName) {
     const hasSortPropertyChanged = this.state.sorter.propertyName !== propertyName;
-    const asc = hasSortPropertyChanged  || !this.state.sorter.asc;
+    const asc = hasSortPropertyChanged || !this.state.sorter.asc;
     const sorter = new SorterEntity({propertyName, asc});
     this.setState({sorter}, () => this.updateGridSetting());
   }
@@ -1132,20 +1160,17 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async loadGridResourceSetting() {
     const gridUserSettingEntity = await this.gridResourceUserSetting.getSetting();
     // Merge the columns setting collection by ID
-    const columnsResourceSetting = ColumnsResourceSettingCollection.createFromDefault(gridUserSettingEntity?.columnsSetting);
+    const columnsResourceSetting = ColumnsResourceSettingCollection.createFromDefault(gridUserSettingEntity?.columnsSetting, {keepUnknownValue: false});
     if (!this.props.context.siteSettings.canIUse('totpResourceTypes')) {
       columnsResourceSetting.removeById(ColumnModelTypes.TOTP);
     }
     if (!this.props.passwordExpiryContext.isFeatureEnabled()) {
       columnsResourceSetting.removeById(ColumnModelTypes.EXPIRED);
     }
-    if (!this.hasAttentionRequiredColumn()) {
-      columnsResourceSetting.removeById(ColumnModelTypes.ATTENTION_REQUIRED);
-    }
     if (!this.canUseFolders) {
       columnsResourceSetting.removeById(ColumnModelTypes.LOCATION);
     }
-    const sorter = gridUserSettingEntity?.sorter || this.state.sorter;
+    const sorter = gridUserSettingEntity?.sorter || this.defaultSorter;
     // process the search after the grid setting is loaded
     this.setState({columnsResourceSetting, sorter}, async() => {
       await this.search(this.state.filter);
@@ -1161,11 +1186,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Returns true if the "attention required" column is available
-   * @returns {boolean}
+   * Reset the columns settings
+   *
+   * @return {Promise<void>}
    */
-  hasAttentionRequiredColumn() {
-    return this.props.passwordExpiryContext.isFeatureEnabled();
+  async resetGridColumnsSettings() {
+    await this.gridResourceUserSetting.resetSettings();
+    await this.loadGridResourceSetting();
   }
 
   /**
@@ -1185,7 +1212,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleChangeColumnsSettings(columns) {
     // Merge the columns setting
-    const columnsResourceSetting = this.state.columnsResourceSetting.deepMerge(new ColumnsResourceSettingCollection(columns));
+    const columnsResourceSetting = this.state.columnsResourceSetting.deepMerge(new ColumnsResourceSettingCollection(columns), {keepUnknownValue: false});
     this.setState({columnsResourceSetting}, () => this.updateGridSetting());
   }
 
@@ -1293,9 +1320,9 @@ export const ResourceWorkspaceFilterTypes = {
   GROUP: 'FILTER-BY-GROUP', // Resources shared with a given group
   TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
   ITEMS_I_OWN: 'FILTER-BY-ITEMS-I-OWN', // Resources the users is owner of
+  PRIVATE: 'PRIVATE', // User's private resources
   FAVORITE: 'FILTER-BY-FAVORITE', // Favorite resources
   SHARED_WITH_ME: 'FILTER-BY-SHARED-WITH-ME', // Resources shared with the current user (who is not the owner)
-  RECENTLY_MODIFIED: 'FILTER-BY-RECENTLY-MODIFIED', // Resources recently modified
   EXPIRED: 'FILTER-BY-EXPIRED', // Resources recently modified
 };
 

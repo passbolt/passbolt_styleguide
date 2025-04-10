@@ -1,48 +1,43 @@
-import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
-import PropTypes from "prop-types";
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         5.0.0
+ */
 import EditResourceTag from "./EditResourceTag";
-import MockPort from "../../../test/mock/MockPort";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import React from "react";
+import {MemoryRouter} from "react-router-dom";
 
 
 export default {
   title: 'Components/ResourceTag/EditResourceTag',
-  component: EditResourceTag
-};
-
-const defaultContext = {
-  tagToEdit: {
-    id: 1,
-    slug: "apache"
-  },
-  setContext: () => {},
-  port: new MockPort()
-};
-
-
-const Template = ({context, ...args}) =>
-  <AppContext.Provider value={context}>
+  component: EditResourceTag,
+  decorators: [Story => (
     <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <EditResourceTag {...args} {...routerProps}/>}></Route>
+      <Story/>
     </MemoryRouter>
-  </AppContext.Provider>;
+  )],
+};
 
-Template.propTypes = {
-  context: PropTypes.object,
+const tagToEdit = {
+  id: 1,
+  slug: "apache"
 };
 
 
-export const Initial = Template.bind({});
-Initial.args = {
-  context: defaultContext,
-  onClose: () => {}
-};
 
-Initial.argTypes = {
-  context: {
-    control: {
-      type: 'object'
-    }
+
+export const Initial = {
+  args: {
+    context: defaultUserAppContext({tagToEdit}),
+    onClose: () => {}
   }
 };

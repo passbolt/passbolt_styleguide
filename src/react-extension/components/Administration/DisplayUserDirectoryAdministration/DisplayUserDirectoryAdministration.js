@@ -20,6 +20,8 @@ import Select from "../../Common/Select/Select";
 import DisplayAdministrationUserDirectoryActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationUserDirectoryActions/DisplayAdministrationUserDirectoryActions";
 import UserDirectoryFormService from '../../../../shared/services/forms/userDirectory/UserDirectoryFormService';
 import {withAdminUserDirectory} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
+import {createSafePortal} from "../../../../shared/utils/portals";
+import FileTextSVG from "../../../../img/svg/file_text.svg";
 
 /**
  * This component allows to display the MFA for the administration
@@ -54,7 +56,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
 
   componentDidMount() {
-    this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationUserDirectoryActions);
     this.props.adminUserDirectoryContext.findUserDirectorySettings();
   }
 
@@ -63,7 +64,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
    * Use to clear the data from the form in case the user put something that needs to be cleared.
    */
   componentWillUnmount() {
-    this.props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction();
     this.props.adminUserDirectoryContext.clearContext();
     UserDirectoryFormService.killInstance();
     this.userDirectoryFormService = null;
@@ -301,436 +301,455 @@ class DisplayUserDirectoryAdministration extends React.Component {
     const errors = this.props.adminUserDirectoryContext.getErrors();
     const isSubmitted = this.props.adminUserDirectoryContext.isSubmitted();
     const hadDisabledSettings = this.props.adminUserDirectoryContext.hadDisabledSettings();
+    const hasSaveWarning = this.props.adminUserDirectoryContext.getCurrentSettings() !== null && this.props.adminUserDirectoryContext.hasSettingsChanges();
+    const hasWarnings = this.shouldShowSourceWarningMessage()
+      || !this.isUserDirectoryChecked()
+      || hasSaveWarning;
+
     return (
       <div className="row">
-        <div className="ldap-settings col7 main-column">
-          <h3>
-            <span className="input toggle-switch form-element">
-              <input type="checkbox" className="toggle-switch-checkbox checkbox" name="userDirectoryToggle"
-                onChange={this.handleInputChange} checked={settings.userDirectoryToggle} disabled={this.hasAllInputDisabled()}
-                id="userDirectoryToggle"/>
-              <label htmlFor="userDirectoryToggle"><Trans>Users Directory</Trans></label>
-            </span>
-          </h3>
-          {!this.isUserDirectoryChecked() &&
+        <div className="ldap-settings main-column">
+          <div className="main-content">
+            <h3 className="title">
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="userDirectoryToggle"
+                  onChange={this.handleInputChange} checked={settings.userDirectoryToggle} disabled={this.hasAllInputDisabled()}
+                  id="userDirectoryToggle"/>
+                <label htmlFor="userDirectoryToggle"><Trans>Users Directory</Trans></label>
+              </span>
+            </h3>
+            {this.isUserDirectoryChecked() &&
             <>
-              {hadDisabledSettings &&
-                <div>
-                  <div className="message warning">
-                    <Trans>The configuration has been disabled as it needs to be checked to make it correct before using it.</Trans>
-                  </div>
-                </div>
-              }
-              {!hadDisabledSettings &&
-                <p className="description">
-                  <Trans>No Users Directory is configured. Enable it to synchronise your users and groups with passbolt.</Trans>
-                </p>
-              }
-            </>
-          }
-          {this.isUserDirectoryChecked() &&
-           <>
-             {this.shouldShowSourceWarningMessage() &&
-              <div className="warning message">
-                <Trans><b>Warning:</b> These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.</Trans>
-              </div>
-             }
-             <p className="description">
-               <Trans>A Users Directory is configured. The users and groups of passbolt will synchronize with it.</Trans>
-             </p>
-             <div className={`accordion section-general ${settings.openCredentials ? "" : "closed"}`}>
-               <h4 className="accordion-header">
-                 <button type="button" className="link no-border" onClick={this.handleCredentialTitleClicked}>
-                   {settings.openCredentials && <Icon name="caret-down"/>}
-                   {!settings.openCredentials && <Icon name="caret-right"/>}
-                   <Trans>Credentials</Trans>
-                 </button>
-               </h4>
-               <div className="accordion-content">
-                 <div className="radiolist required">
-                   <label><Trans>Directory type</Trans></label>
-                   <div className="input radio ad openldap form-element ">
-                     <div className="input radio">
-                       <input type="radio" value="ad" onChange={this.handleInputChange} name="directoryType"
-                         checked={this.isActiveDirectoryChecked()} id="directoryTypeAd"
-                         disabled={this.hasAllInputDisabled()}/>
-                       <label htmlFor="directoryTypeAd"><Trans>Active Directory</Trans></label>
-                     </div>
-                     <div className="input radio">
-                       <input type="radio" value="openldap" onChange={this.handleInputChange} name="directoryType"
-                         checked={this.isOpenLdapChecked()} id="directoryTypeOpenLdap"
-                         disabled={this.hasAllInputDisabled()}/>
-                       <label htmlFor="directoryTypeOpenLdap"><Trans>Open Ldap</Trans></label>
-                     </div>
-                   </div>
-                 </div>
-                 <div className={`input text required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                   <label><Trans>Server url</Trans></label>
-                   <div className={`input text singleline connection_info ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''} ${this.state.hasFieldFocus ? "no-focus" : ""}`}>
-                     <input id="server-input" type="text" aria-required={true} className="required host ad openldap form-element" name="host"
-                       value={settings.host} onChange={this.handleInputChange}
-                       placeholder={this.props.t("host")} disabled={this.hasAllInputDisabled()}/>
-                     <div className="protocol" onBlur={this.handleFieldBlur} onFocus={this.handleFieldFocus}>
-                       <Select className="inline" name="connectionType" items={this.connectionType} value={settings.connectionType} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
-                     </div>
-                     <div className="port ad openldap">
-                       <input id="port-input" type="number" aria-required={true} className="required in-field form-element" name="port"
-                         value={settings.port} onChange={this.handleInputChange}
-                         onBlur={this.handleFieldBlur} onFocus={this.handleFieldFocus}
-                         disabled={this.hasAllInputDisabled()}/>
-                     </div>
-                   </div>
-                   {errors.hostError && isSubmitted &&
-                     <div id="server-input-feedback" className="error-message">{errors.hostError}</div>
-                   }
-                   {errors.portError && isSubmitted &&
-                     <div id="port-input-feedback" className="error-message">{errors.portError}</div>
-                   }
-                 </div>
-                 <div className={`select-wrapper input required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                   <label><Trans>Authentication method</Trans></label>
-                   <Select items={this.supportedAuthenticationMethod}
-                     id="authentication-type-select"
-                     name="authenticationType"
-                     value={settings.authenticationType}
-                     onChange={this.handleInputChange}
-                     disabled={this.hasAllInputDisabled()}
-                   />
-                 </div>
-                 {settings.authenticationType === "basic" &&
-                  <div className="singleline clearfix">
-                    <div className={`input text first-field ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                      <label><Trans>Username</Trans></label>
-                      <input id="username-input" type="text" className="fluid form-element" name="username"
-                        value={settings.username} onChange={this.handleInputChange} placeholder={this.props.t("Username")}
-                        disabled={this.hasAllInputDisabled()}/>
-                    </div>
-                    <div className={`input text last-field ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                      <label><Trans>Password</Trans></label>
-                      <input id="password-input" className="fluid form-element" name="password"
-                        value={settings.password} onChange={this.handleInputChange} placeholder={this.props.t("Password")} type="password"
-                        disabled={this.hasAllInputDisabled()}/>
+              <p className="description">
+                <Trans>A Users Directory is configured. The users and groups of passbolt will synchronize with it.</Trans>
+              </p>
+              <div className={`accordion section-general ${settings.openCredentials ? "" : "closed"}`}>
+                <h4 className="accordion-header">
+                  <button type="button" className="link no-border" onClick={this.handleCredentialTitleClicked}>
+                    {settings.openCredentials && <Icon name="caret-down"/>}
+                    {!settings.openCredentials && <Icon name="caret-right"/>}
+                    <Trans>Credentials</Trans>
+                  </button>
+                </h4>
+                <div className="accordion-content">
+                  <div className="radiolist required">
+                    <label><Trans>Directory type</Trans></label>
+                    <div className="input radio ad openldap form-element ">
+                      <div className="input radio">
+                        <input type="radio" value="ad" onChange={this.handleInputChange} name="directoryType"
+                          checked={this.isActiveDirectoryChecked()} id="directoryTypeAd"
+                          disabled={this.hasAllInputDisabled()}/>
+                        <label htmlFor="directoryTypeAd"><Trans>Active Directory</Trans></label>
+                      </div>
+                      <div className="input radio">
+                        <input type="radio" value="openldap" onChange={this.handleInputChange} name="directoryType"
+                          checked={this.isOpenLdapChecked()} id="directoryTypeOpenLdap"
+                          disabled={this.hasAllInputDisabled()}/>
+                        <label htmlFor="directoryTypeOpenLdap"><Trans>Open Ldap</Trans></label>
+                      </div>
                     </div>
                   </div>
-                 }
-                 <div className={`input text required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                   <label><Trans>Domain</Trans></label>
-                   <input id="domain-name-input" aria-required={true}  type="text" name="domain" value={settings.domain}
-                     onChange={this.handleInputChange} className="required fluid form-element"
-                     placeholder="domain.ext" disabled={this.hasAllInputDisabled()}/>
-                   {errors.domainError && isSubmitted &&
-                   <div id="domain-name-input-feedback" className="error-message">{errors.domainError}</div>
-                   }
-                 </div>
-                 <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                   <label><Trans>Base DN</Trans></label>
-                   <input id="base-dn-input" type="text" name="baseDn" value={settings.baseDn}
-                     onChange={this.handleInputChange} className="fluid form-element" placeholder="OU=OrgUsers,DC=mydomain,DC=local"
-                     disabled={this.hasAllInputDisabled()}/>
-                   <div className="help-message">
-                     <Trans>The base DN (default naming context) for the domain.</Trans> <Trans>If this is empty then it will be queried from the RootDSE.</Trans>
-                   </div>
-                 </div>
-               </div>
-             </div>
-             <div
-               className={`accordion section-directory-configuration ${settings.openDirectoryConfiguration ? "" : "closed"}`}>
-               <h4 className="accordion-header">
-                 <button type="button" className="link no-border" onClick={this.handleDirectoryConfigurationTitleClicked}>
-                   {settings.openDirectoryConfiguration && <Icon name="caret-down"/>}
-                   {!settings.openDirectoryConfiguration && <Icon name="caret-right"/>}
-                   <Trans>Directory configuration</Trans>
-                 </button>
-               </h4>
-               <div className="accordion-content">
-                 <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                   <label><Trans>Group path</Trans></label>
-                   <input id="group-path-input" type="text" aria-required={true} name="groupPath" value={settings.groupPath}
-                     onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("Group path")}
-                     disabled={this.hasAllInputDisabled()}/>
-                   <div className="help-message">
-                     <Trans>Group path is used in addition to the base DN while searching groups.</Trans> <Trans>Leave empty if users and groups are in the same DN.</Trans>
-                   </div>
-                 </div>
-                 <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                   <label><Trans>User path</Trans></label>
-                   <input id="user-path-input" type="text" aria-required={true} name="userPath" value={settings.userPath}
-                     onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("User path")}
-                     disabled={this.hasAllInputDisabled()}/>
-                   <div className="help-message"><Trans>User path is used in addition to base DN while searching users.</Trans></div>
-                 </div>
-                 <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                   <label><Trans>Group custom filters</Trans></label>
-                   <input id="group-custom-filters-input" type="text" name="groupCustomFilters" value={settings.groupCustomFilters}
-                     onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("Group custom filters")}
-                     disabled={this.hasAllInputDisabled()}/>
-                   <div className="help-message">
-                     <Trans>Group custom filters are used in addition to the base DN and group path while searching groups.</Trans> <Trans>Leave empty if no additional filter is required.</Trans>
-                   </div>
-                 </div>
-                 <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                   <label><Trans>User custom filters</Trans></label>
-                   <input id="user-custom-filters-input" type="text" name="userCustomFilters" value={settings.userCustomFilters}
-                     onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("User custom filters")}
-                     disabled={this.hasAllInputDisabled()}/>
-                   <div className="help-message">
-                     <Trans>User custom filters are used in addition to the base DN and user path while searching users.</Trans> <Trans>Leave empty if no additional filter is required.</Trans>
-                   </div>
-                 </div>
-                 {this.isOpenLdapChecked() &&
-                 <div>
-                   <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                     <label><Trans>Group object class</Trans></label>
-                     <input id="group-object-class-input" type="text" aria-required={true} name="groupObjectClass"
-                       value={settings.groupObjectClass} onChange={this.handleInputChange} className="required fluid"
-                       placeholder="GroupObjectClass" disabled={this.hasAllInputDisabled()}/>
-                     <div className="help-message">
-                       <Trans>For Openldap only. Defines which group object to use.</Trans> (<Trans>Default</Trans>: groupOfUniqueNames)
-                     </div>
-                   </div>
-                   <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                     <label><Trans>User object class</Trans></label>
-                     <input id="user-object-class-input" type="text" aria-required={true} name="userObjectClass"
-                       value={settings.userObjectClass} onChange={this.handleInputChange} className="required fluid form-element"
-                       placeholder="UserObjectClass" disabled={this.hasAllInputDisabled()}/>
-                     <div className="help-message"><Trans>For Openldap only. Defines which user object to use.</Trans> (<Trans>Default</Trans>: inetOrgPerson)
-                     </div>
-                   </div>
-                   <div className={`input text openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                     <label><Trans>Use email prefix / suffix?</Trans></label>
-                     <div className="input toggle-switch openldap form-element">
-                       <input type="checkbox" className="toggle-switch-checkbox checkbox" name="useEmailPrefix"
-                         value={settings.useEmailPrefix} onChange={this.handleInputChange} id="use-email-prefix-suffix-toggle-button"
-                         disabled={this.hasAllInputDisabled()}/>
-                       <label className="text" htmlFor="use-email-prefix-suffix-toggle-button">
-                         <Trans>Build email based on a prefix and suffix?</Trans>
-                       </label>
-                     </div>
-                     <div className="help-message">
-                       <Trans>Use this option when user entries do not include an email address by default</Trans>
-                     </div>
-                   </div>
-                   {this.isUseEmailPrefixChecked() &&
-                   <div className="singleline clearfix" id="use-email-prefix-suffix-options">
-                     <div className={`input text first-field openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                       <label><Trans>Email prefix</Trans></label>
-                       <input id="email-prefix-input" type="text" aria-required={true} name="emailPrefix" checked={settings.emailPrefix}
-                         onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("Username")}
-                         disabled={this.hasAllInputDisabled()}/>
-                       <div className="help-message">
-                         <Trans>The attribute you would like to use for the first part of the email (usually username).</Trans>
-                       </div>
-                     </div>
-                     <div className={`input text last-field openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-
-                       <label><Trans>Email suffix</Trans></label>
-                       <input id="email-suffix-input" type="text" aria-required={true} name="emailSuffix" value={settings.emailSuffix}
-                         onChange={this.handleInputChange} className="required form-element"
-                         placeholder={this.props.t("@your-domain.com")} disabled={this.hasAllInputDisabled()}/>
-                       <div className="help-message">
-                         <Trans>The domain name part of the email (@your-domain-name).</Trans>
-                       </div>
-                     </div>
-                   </div>
-                   }
-                   <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                     <label><Trans>Group users field mapping</Trans></label>
-                     <input id="field-mapping-openldap-group-users-input" type="text" aria-required={true} name="users" value={settings.fieldsMapping.openldap.group.users}
-                       onChange={this.handleOpenLdapGroupFieldsMappingInputChange} className="fluid form-element" placeholder={this.props.t("Group users field mapping")}
-                       disabled={this.hasAllInputDisabled()}/>
-                     <div className="help-message"><Trans>Directory group&apos;s users field to map to Passbolt group&apos;s field.</Trans></div>
-                     {errors.fieldsMappingOpenLdapGroupUsersError && isSubmitted &&
-                       <div id="field-mapping-openldap-group-users-input-feedback" className="error-message">{errors.fieldsMappingOpenLdapGroupUsersError}</div>
-                     }
-                   </div>
-                 </div>
-                 }
-                 {this.isActiveDirectoryChecked() &&
-                   <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                     <label><Trans>User username field mapping</Trans></label>
-                     <input id="field-mapping-ad-user-username-input" type="text" aria-required={true} name="username" value={settings.fieldsMapping.ad.user.username}
-                       onChange={this.handleAdUserFieldsMappingInputChange} className="fluid form-element" placeholder={this.props.t("User username field mapping")}
-                       disabled={this.hasAllInputDisabled()}/>
-                     <div className="help-message"><Trans>Directory user&apos;s username field to map to Passbolt user&apos;s username field.</Trans></div>
-                     {errors.fieldsMappingAdUserUsernameError && isSubmitted &&
-                       <div id="field-mapping-ad-user-username-input-feedback" className="error-message">{errors.fieldsMappingAdUserUsernameError}</div>
-                     }
-                   </div>
-                 }
-               </div>
-             </div>
-             <div
-               className={`accordion section-sync-options ${settings.openSynchronizationOptions ? "" : "closed"}`}>
-               <h4 className="accordion-header">
-                 <button type="button" className="link no-border" onClick={this.handleSynchronizationOptionsTitleClicked}>
-                   {settings.openSynchronizationOptions && <Icon name="caret-down"/>}
-                   {!settings.openSynchronizationOptions && <Icon name="caret-right"/>}
-                   <Trans>Synchronization options</Trans>
-                 </button>
-               </h4>
-               <div className="accordion-content">
-                 <div className={`select-wrapper input required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                   <label><Trans>Default admin</Trans></label>
-                   <Select items={this.getUsersAllowedToBeDefaultAdmin()}
-                     id="default-user-select"
-                     name="defaultAdmin"
-                     value={settings.defaultAdmin}
-                     onChange={this.handleInputChange}
-                     disabled={this.hasAllInputDisabled()}
-                     search={true}/>
-                   <div className="help-message">
-                     <Trans>The default admin user is the user that will perform the operations for the the directory.</Trans>
-                   </div>
-                 </div>
-                 <div className={`select-wrapper input required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                   <label><Trans>Default group admin</Trans></label>
-                   <Select items={this.getUsersAllowedToBeDefaultGroupAdmin()}
-                     id="default-group-admin-user-select"
-                     name="defaultGroupAdmin"
-                     value={settings.defaultGroupAdmin}
-                     onChange={this.handleInputChange}
-                     disabled={this.hasAllInputDisabled()}
-                     search={true}/>
-                   <div className="help-message">
-                     <Trans>The default group manager is the user that will be the group manager of newly created groups.</Trans>
-                   </div>
-                 </div>
-                 <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                   <label><Trans>Groups parent group</Trans></label>
-                   <input id="groups-parent-group-input" type="text" name="groupsParentGroup"
-                     value={settings.groupsParentGroup} onChange={this.handleInputChange} className="fluid form-element" placeholder={this.props.t("Groups parent group")}
-                     disabled={this.hasAllInputDisabled()}/>
-                   <div className="help-message">
-                     <Trans>Synchronize only the groups which are members of this group.</Trans>
-                   </div>
-                 </div>
-                 <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                   <label><Trans>Users parent group</Trans></label>
-                   <input id="users-parent-group-input" type="text" name="usersParentGroup"
-                     value={settings.usersParentGroup} onChange={this.handleInputChange} className="fluid form-element" placeholder={this.props.t("Users parent group")}
-                     disabled={this.hasAllInputDisabled()}/>
-                   <div className="help-message">
-                     <Trans>Synchronize only the users which are members of this group.</Trans>
-                   </div>
-                 </div>
-                 {this.isActiveDirectoryChecked &&
-                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>User username fallback field</Trans></label>
-                    <input id="fallback-fields-ad-username-fallback-input" type="text" aria-required={true} name="username" value={settings.fallbackFields.ad.username}
-                      onChange={this.handleAdFallbackFieldInputChange} className="fluid form-element" placeholder={this.props.t("User username fallback field")}
-                      disabled={this.hasAllInputDisabled()}/>
-                    <div className="help-message"><Trans>Directory user&apos;s username fallback field to use when user username field cannot be found.</Trans></div>
-                    {errors.fallbackFieldsAdUsernameError && isSubmitted &&
-                      <div id="fallback-fields-ad-username-fallback-input-feedback" className="error-message">{errors.fallbackFieldsAdUsernameError}</div>
+                  <div className={`input text required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Server url</Trans></label>
+                    <div className={`input text singleline connection_info ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''} ${this.state.hasFieldFocus ? "no-focus" : ""}`}>
+                      <input id="server-input" type="text" aria-required={true} className="required host ad openldap form-element" name="host"
+                        value={settings.host} onChange={this.handleInputChange}
+                        placeholder={this.props.t("host")} disabled={this.hasAllInputDisabled()}/>
+                      <div className="protocol" onBlur={this.handleFieldBlur} onFocus={this.handleFieldFocus}>
+                        <Select className="inline" name="connectionType" items={this.connectionType} value={settings.connectionType} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
+                      </div>
+                      <div className="port ad openldap">
+                        <input id="port-input" type="number" aria-required={true} className="required in-field form-element" name="port"
+                          value={settings.port} onChange={this.handleInputChange}
+                          onBlur={this.handleFieldBlur} onFocus={this.handleFieldFocus}
+                          disabled={this.hasAllInputDisabled()}/>
+                      </div>
+                    </div>
+                    {errors.hostError && isSubmitted &&
+                      <div id="server-input-feedback" className="error-message">{errors.hostError}</div>
+                    }
+                    {errors.portError && isSubmitted &&
+                      <div id="port-input-feedback" className="error-message">{errors.portError}</div>
                     }
                   </div>
-                 }
-                 {this.isActiveDirectoryChecked() &&
-                 <div className={`input text clearfix ad ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                   <label><Trans>Enabled users only</Trans></label>
-                   <div className="input toggle-switch ad form-element">
-                     <input type="checkbox" className="toggle-switch-checkbox checkbox" name="enabledUsersOnly"
-                       checked={settings.enabledUsersOnly} onChange={this.handleInputChange} id="enabled-users-only-toggle-button"
-                       disabled={this.hasAllInputDisabled()}/>
-                     <label className="text" htmlFor="enabled-users-only-toggle-button"><Trans>Only synchronize enabled users (AD)</Trans></label>
-                   </div>
-                 </div>
-                 }
-                 <div className="input text clearfix ad openldap">
-                   <label><Trans>Sync operations</Trans></label>
-                   <div className="col6">
-                     <div className="input toggle-switch ad openldap form-element">
-                       <input type="checkbox" className="toggle-switch-checkbox checkbox" name="createUsers"
-                         checked={settings.createUsers} onChange={this.handleInputChange} id="sync-users-create-toggle-button"
-                         disabled={this.hasAllInputDisabled()}/>
-                       <label className="text" htmlFor="sync-users-create-toggle-button"><Trans>Create users</Trans></label>
-                     </div>
-                     <div className="input toggle-switch ad openldap form-element">
-                       <input type="checkbox" className="toggle-switch-checkbox checkbox" name="deleteUsers"
-                         checked={settings.deleteUsers} onChange={this.handleInputChange} id="sync-users-delete-toggle-button"
-                         disabled={this.hasAllInputDisabled()}/>
-                       <label className="text" htmlFor="sync-users-delete-toggle-button"><Trans>Delete users</Trans></label>
-                     </div>
-                     <div className="input toggle-switch ad openldap form-element">
-                       <input type="checkbox" className="toggle-switch-checkbox checkbox" name="updateUsers"
-                         checked={settings.updateUsers} onChange={this.handleInputChange} id="sync-users-update-toggle-button"
-                         disabled={this.hasAllInputDisabled()}/>
-                       <label className="text" htmlFor="sync-users-update-toggle-button"><Trans>Update users</Trans></label>
-                     </div>
-                   </div>
-                   <div className="col6 last">
-                     <div className="input toggle-switch ad openldap form-element">
-                       <input type="checkbox" className="toggle-switch-checkbox checkbox" name="createGroups"
-                         checked={settings.createGroups} onChange={this.handleInputChange} id="sync-groups-create-toggle-button"
-                         disabled={this.hasAllInputDisabled()}/>
-                       <label className="text" htmlFor="sync-groups-create-toggle-button"><Trans>Create groups</Trans></label>
-                     </div>
-                     <div className="input toggle-switch ad openldap form-element">
-                       <input type="checkbox" className="toggle-switch-checkbox checkbox" name="deleteGroups"
-                         checked={settings.deleteGroups} onChange={this.handleInputChange} id="sync-groups-delete-toggle-button"
-                         disabled={this.hasAllInputDisabled()}/>
-                       <label className="text" htmlFor="sync-groups-delete-toggle-button"><Trans>Delete groups</Trans></label>
-                     </div>
-                     <div className="input toggle-switch ad openldap form-element">
-                       <input type="checkbox" className="toggle-switch-checkbox checkbox" name="updateGroups"
-                         checked={settings.updateGroups} onChange={this.handleInputChange} id="sync-groups-update-toggle-button"
-                         disabled={this.hasAllInputDisabled()}/>
-                       <label className="text" htmlFor="sync-groups-update-toggle-button"><Trans>Update groups</Trans></label>
-                     </div>
-                   </div>
-                 </div>
-                 <div className="input text clearfix ad openldap">
-                   <label><Trans>Delete or suspend users</Trans></label>
-                   <div className="help-message"><Trans>Define the behaviour when existing synchronized users are removed
-                     from the users directory</Trans>:
-                   </div>
-                   <div className="radiolist-alt">
-                     <div className={`input radio ${settings.deleteUserBehavior === "delete" ? 'checked' : ''}`}>
-                       <input type="radio" value="delete" onChange={this.handleInputChange} name="deleteUserBehavior"
-                         checked={settings.deleteUserBehavior === "delete"} id="deleteUserBehaviorDelete" disabled={this.hasAllInputDisabled()}/>
-                       <label htmlFor="deleteUserBehaviorDelete">
-                         <span className="name"><Trans>Delete users</Trans></span>
-                         <span className="info">
-                           <Trans>Delete the users and all the data associated with them.</Trans>
-                           &nbsp;
-                           <Trans>The data will be permanently deleted, this action cannot be undone.</Trans>
-                         </span>
-                       </label>
-                     </div>
-                     <div className={`input radio ${settings.deleteUserBehavior === "disable" ? 'checked' : ''}`}>
-                       <input type="radio" value="disable" onChange={this.handleInputChange} name="deleteUserBehavior"
-                         checked={settings.deleteUserBehavior === "disable"} id="deleteUserBehaviorSuspended" disabled={this.hasAllInputDisabled()}/>
-                       <label htmlFor="deleteUserBehaviorSuspended">
-                         <span className="name"><Trans>Suspend users</Trans></span>
-                         <span className="info">
-                           <Trans>Suspend the users, preventing them from signing in to Passbolt and from receiving email notifications.</Trans>
-                           &nbsp;
-                           <Trans>Other users can still share resources with them and add them to groups.</Trans>
-                         </span>
-                       </label>
-                     </div>
-                   </div>
-                 </div>
-               </div>
-             </div>
-           </>
+                  <div className={`select-wrapper input required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Authentication method</Trans></label>
+                    <Select items={this.supportedAuthenticationMethod}
+                      id="authentication-type-select"
+                      name="authenticationType"
+                      value={settings.authenticationType}
+                      onChange={this.handleInputChange}
+                      disabled={this.hasAllInputDisabled()}
+                    />
+                  </div>
+                  {settings.authenticationType === "basic" &&
+                    <div className="singleline clearfix">
+                      <div className={`input text first-field ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                        <label><Trans>Username</Trans></label>
+                        <input id="username-input" type="text" className="fluid form-element" name="username"
+                          value={settings.username} onChange={this.handleInputChange} placeholder={this.props.t("Username")}
+                          disabled={this.hasAllInputDisabled()}/>
+                      </div>
+                      <div className={`input text last-field ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                        <label><Trans>Password</Trans></label>
+                        <input id="password-input" className="fluid form-element" name="password"
+                          value={settings.password} onChange={this.handleInputChange} placeholder={this.props.t("Password")} type="password"
+                          disabled={this.hasAllInputDisabled()}/>
+                      </div>
+                    </div>
+                  }
+                  <div className={`input text required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Domain</Trans></label>
+                    <input id="domain-name-input" aria-required={true}  type="text" name="domain" value={settings.domain}
+                      onChange={this.handleInputChange} className="required fluid form-element"
+                      placeholder="domain.ext" disabled={this.hasAllInputDisabled()}/>
+                    {errors.domainError && isSubmitted &&
+                    <div id="domain-name-input-feedback" className="error-message">{errors.domainError}</div>
+                    }
+                  </div>
+                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Base DN</Trans></label>
+                    <input id="base-dn-input" type="text" name="baseDn" value={settings.baseDn}
+                      onChange={this.handleInputChange} className="fluid form-element" placeholder="OU=OrgUsers,DC=mydomain,DC=local"
+                      disabled={this.hasAllInputDisabled()}/>
+                    <div className="help-message">
+                      <Trans>The base DN (default naming context) for the domain.</Trans> <Trans>If this is empty then it will be queried from the RootDSE.</Trans>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                className={`accordion section-directory-configuration ${settings.openDirectoryConfiguration ? "" : "closed"}`}>
+                <h4 className="accordion-header">
+                  <button type="button" className="link no-border" onClick={this.handleDirectoryConfigurationTitleClicked}>
+                    {settings.openDirectoryConfiguration && <Icon name="caret-down"/>}
+                    {!settings.openDirectoryConfiguration && <Icon name="caret-right"/>}
+                    <Trans>Directory configuration</Trans>
+                  </button>
+                </h4>
+                <div className="accordion-content">
+                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Group path</Trans></label>
+                    <input id="group-path-input" type="text" aria-required={true} name="groupPath" value={settings.groupPath}
+                      onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("Group path")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    <div className="help-message">
+                      <Trans>Group path is used in addition to the base DN while searching groups.</Trans> <Trans>Leave empty if users and groups are in the same DN.</Trans>
+                    </div>
+                  </div>
+                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>User path</Trans></label>
+                    <input id="user-path-input" type="text" aria-required={true} name="userPath" value={settings.userPath}
+                      onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("User path")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    <div className="help-message"><Trans>User path is used in addition to base DN while searching users.</Trans></div>
+                  </div>
+                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Group custom filters</Trans></label>
+                    <input id="group-custom-filters-input" type="text" name="groupCustomFilters" value={settings.groupCustomFilters}
+                      onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("Group custom filters")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    <div className="help-message">
+                      <Trans>Group custom filters are used in addition to the base DN and group path while searching groups.</Trans> <Trans>Leave empty if no additional filter is required.</Trans>
+                    </div>
+                  </div>
+                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>User custom filters</Trans></label>
+                    <input id="user-custom-filters-input" type="text" name="userCustomFilters" value={settings.userCustomFilters}
+                      onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("User custom filters")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    <div className="help-message">
+                      <Trans>User custom filters are used in addition to the base DN and user path while searching users.</Trans> <Trans>Leave empty if no additional filter is required.</Trans>
+                    </div>
+                  </div>
+                  {this.isOpenLdapChecked() &&
+                  <div>
+                    <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                      <label><Trans>Group object class</Trans></label>
+                      <input id="group-object-class-input" type="text" aria-required={true} name="groupObjectClass"
+                        value={settings.groupObjectClass} onChange={this.handleInputChange} className="required fluid"
+                        placeholder="GroupObjectClass" disabled={this.hasAllInputDisabled()}/>
+                      <div className="help-message">
+                        <Trans>For Openldap only. Defines which group object to use.</Trans> (<Trans>Default</Trans>: groupOfUniqueNames)
+                      </div>
+                    </div>
+                    <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                      <label><Trans>User object class</Trans></label>
+                      <input id="user-object-class-input" type="text" aria-required={true} name="userObjectClass"
+                        value={settings.userObjectClass} onChange={this.handleInputChange} className="required fluid form-element"
+                        placeholder="UserObjectClass" disabled={this.hasAllInputDisabled()}/>
+                      <div className="help-message"><Trans>For Openldap only. Defines which user object to use.</Trans> (<Trans>Default</Trans>: inetOrgPerson)
+                      </div>
+                    </div>
+                    <div className={`input text openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                      <label><Trans>Use email prefix / suffix?</Trans></label>
+                      <div className="input toggle-switch openldap form-element">
+                        <input type="checkbox" className="toggle-switch-checkbox checkbox" name="useEmailPrefix"
+                          value={settings.useEmailPrefix} onChange={this.handleInputChange} id="use-email-prefix-suffix-toggle-button"
+                          disabled={this.hasAllInputDisabled()}/>
+                        <label className="text" htmlFor="use-email-prefix-suffix-toggle-button">
+                          <Trans>Build email based on a prefix and suffix?</Trans>
+                        </label>
+                      </div>
+                      <div className="help-message">
+                        <Trans>Use this option when user entries do not include an email address by default</Trans>
+                      </div>
+                    </div>
+                    {this.isUseEmailPrefixChecked() &&
+                    <div className="singleline clearfix" id="use-email-prefix-suffix-options">
+                      <div className={`input text first-field openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                        <label><Trans>Email prefix</Trans></label>
+                        <input id="email-prefix-input" type="text" aria-required={true} name="emailPrefix" checked={settings.emailPrefix}
+                          onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("Username")}
+                          disabled={this.hasAllInputDisabled()}/>
+                        <div className="help-message">
+                          <Trans>The attribute you would like to use for the first part of the email (usually username).</Trans>
+                        </div>
+                      </div>
+                      <div className={`input text last-field openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+
+                        <label><Trans>Email suffix</Trans></label>
+                        <input id="email-suffix-input" type="text" aria-required={true} name="emailSuffix" value={settings.emailSuffix}
+                          onChange={this.handleInputChange} className="required form-element"
+                          placeholder={this.props.t("@your-domain.com")} disabled={this.hasAllInputDisabled()}/>
+                        <div className="help-message">
+                          <Trans>The domain name part of the email (@your-domain-name).</Trans>
+                        </div>
+                      </div>
+                    </div>
+                    }
+                    <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                      <label><Trans>Group users field mapping</Trans></label>
+                      <input id="field-mapping-openldap-group-users-input" type="text" aria-required={true} name="users" value={settings.fieldsMapping.openldap.group.users}
+                        onChange={this.handleOpenLdapGroupFieldsMappingInputChange} className="fluid form-element" placeholder={this.props.t("Group users field mapping")}
+                        disabled={this.hasAllInputDisabled()}/>
+                      <div className="help-message"><Trans>Directory group&apos;s users field to map to Passbolt group&apos;s field.</Trans></div>
+                      {errors.fieldsMappingOpenLdapGroupUsersError && isSubmitted &&
+                        <div id="field-mapping-openldap-group-users-input-feedback" className="error-message">{errors.fieldsMappingOpenLdapGroupUsersError}</div>
+                      }
+                    </div>
+                  </div>
+                  }
+                  {this.isActiveDirectoryChecked() &&
+                    <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                      <label><Trans>User username field mapping</Trans></label>
+                      <input id="field-mapping-ad-user-username-input" type="text" aria-required={true} name="username" value={settings.fieldsMapping.ad.user.username}
+                        onChange={this.handleAdUserFieldsMappingInputChange} className="fluid form-element" placeholder={this.props.t("User username field mapping")}
+                        disabled={this.hasAllInputDisabled()}/>
+                      <div className="help-message"><Trans>Directory user&apos;s username field to map to Passbolt user&apos;s username field.</Trans></div>
+                      {errors.fieldsMappingAdUserUsernameError && isSubmitted &&
+                        <div id="field-mapping-ad-user-username-input-feedback" className="error-message">{errors.fieldsMappingAdUserUsernameError}</div>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+              <div
+                className={`accordion section-sync-options ${settings.openSynchronizationOptions ? "" : "closed"}`}>
+                <h4 className="accordion-header">
+                  <button type="button" className="link no-border" onClick={this.handleSynchronizationOptionsTitleClicked}>
+                    {settings.openSynchronizationOptions && <Icon name="caret-down"/>}
+                    {!settings.openSynchronizationOptions && <Icon name="caret-right"/>}
+                    <Trans>Synchronization options</Trans>
+                  </button>
+                </h4>
+                <div className="accordion-content">
+                  <div className={`select-wrapper input required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Default admin</Trans></label>
+                    <Select items={this.getUsersAllowedToBeDefaultAdmin()}
+                      id="default-user-select"
+                      name="defaultAdmin"
+                      value={settings.defaultAdmin}
+                      onChange={this.handleInputChange}
+                      disabled={this.hasAllInputDisabled()}
+                      search={true}/>
+                    <div className="help-message">
+                      <Trans>The default admin user is the user that will perform the operations for the the directory.</Trans>
+                    </div>
+                  </div>
+                  <div className={`select-wrapper input required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Default group admin</Trans></label>
+                    <Select items={this.getUsersAllowedToBeDefaultGroupAdmin()}
+                      id="default-group-admin-user-select"
+                      name="defaultGroupAdmin"
+                      value={settings.defaultGroupAdmin}
+                      onChange={this.handleInputChange}
+                      disabled={this.hasAllInputDisabled()}
+                      search={true}/>
+                    <div className="help-message">
+                      <Trans>The default group manager is the user that will be the group manager of newly created groups.</Trans>
+                    </div>
+                  </div>
+                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Groups parent group</Trans></label>
+                    <input id="groups-parent-group-input" type="text" name="groupsParentGroup"
+                      value={settings.groupsParentGroup} onChange={this.handleInputChange} className="fluid form-element" placeholder={this.props.t("Groups parent group")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    <div className="help-message">
+                      <Trans>Synchronize only the groups which are members of this group.</Trans>
+                    </div>
+                  </div>
+                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Users parent group</Trans></label>
+                    <input id="users-parent-group-input" type="text" name="usersParentGroup"
+                      value={settings.usersParentGroup} onChange={this.handleInputChange} className="fluid form-element" placeholder={this.props.t("Users parent group")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    <div className="help-message">
+                      <Trans>Synchronize only the users which are members of this group.</Trans>
+                    </div>
+                  </div>
+                  {this.isActiveDirectoryChecked &&
+                    <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                      <label><Trans>User username fallback field</Trans></label>
+                      <input id="fallback-fields-ad-username-fallback-input" type="text" aria-required={true} name="username" value={settings.fallbackFields.ad.username}
+                        onChange={this.handleAdFallbackFieldInputChange} className="fluid form-element" placeholder={this.props.t("User username fallback field")}
+                        disabled={this.hasAllInputDisabled()}/>
+                      <div className="help-message"><Trans>Directory user&apos;s username fallback field to use when user username field cannot be found.</Trans></div>
+                      {errors.fallbackFieldsAdUsernameError && isSubmitted &&
+                        <div id="fallback-fields-ad-username-fallback-input-feedback" className="error-message">{errors.fallbackFieldsAdUsernameError}</div>
+                      }
+                    </div>
+                  }
+                  {this.isActiveDirectoryChecked() &&
+                  <div className={`input text clearfix ad ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Enabled users only</Trans></label>
+                    <div className="input toggle-switch ad form-element">
+                      <input type="checkbox" className="toggle-switch-checkbox checkbox" name="enabledUsersOnly"
+                        checked={settings.enabledUsersOnly} onChange={this.handleInputChange} id="enabled-users-only-toggle-button"
+                        disabled={this.hasAllInputDisabled()}/>
+                      <label className="text" htmlFor="enabled-users-only-toggle-button"><Trans>Only synchronize enabled users (AD)</Trans></label>
+                    </div>
+                  </div>
+                  }
+                  <div className="input text clearfix ad openldap">
+                    <label><Trans>Sync operations</Trans></label>
+                    <div className="col6">
+                      <div className="input toggle-switch ad openldap form-element">
+                        <input type="checkbox" className="toggle-switch-checkbox checkbox" name="createUsers"
+                          checked={settings.createUsers} onChange={this.handleInputChange} id="sync-users-create-toggle-button"
+                          disabled={this.hasAllInputDisabled()}/>
+                        <label className="text" htmlFor="sync-users-create-toggle-button"><Trans>Create users</Trans></label>
+                      </div>
+                      <div className="input toggle-switch ad openldap form-element">
+                        <input type="checkbox" className="toggle-switch-checkbox checkbox" name="deleteUsers"
+                          checked={settings.deleteUsers} onChange={this.handleInputChange} id="sync-users-delete-toggle-button"
+                          disabled={this.hasAllInputDisabled()}/>
+                        <label className="text" htmlFor="sync-users-delete-toggle-button"><Trans>Delete users</Trans></label>
+                      </div>
+                      <div className="input toggle-switch ad openldap form-element">
+                        <input type="checkbox" className="toggle-switch-checkbox checkbox" name="updateUsers"
+                          checked={settings.updateUsers} onChange={this.handleInputChange} id="sync-users-update-toggle-button"
+                          disabled={this.hasAllInputDisabled()}/>
+                        <label className="text" htmlFor="sync-users-update-toggle-button"><Trans>Update users</Trans></label>
+                      </div>
+                    </div>
+                    <div className="col6 last">
+                      <div className="input toggle-switch ad openldap form-element">
+                        <input type="checkbox" className="toggle-switch-checkbox checkbox" name="createGroups"
+                          checked={settings.createGroups} onChange={this.handleInputChange} id="sync-groups-create-toggle-button"
+                          disabled={this.hasAllInputDisabled()}/>
+                        <label className="text" htmlFor="sync-groups-create-toggle-button"><Trans>Create groups</Trans></label>
+                      </div>
+                      <div className="input toggle-switch ad openldap form-element">
+                        <input type="checkbox" className="toggle-switch-checkbox checkbox" name="deleteGroups"
+                          checked={settings.deleteGroups} onChange={this.handleInputChange} id="sync-groups-delete-toggle-button"
+                          disabled={this.hasAllInputDisabled()}/>
+                        <label className="text" htmlFor="sync-groups-delete-toggle-button"><Trans>Delete groups</Trans></label>
+                      </div>
+                      <div className="input toggle-switch ad openldap form-element">
+                        <input type="checkbox" className="toggle-switch-checkbox checkbox" name="updateGroups"
+                          checked={settings.updateGroups} onChange={this.handleInputChange} id="sync-groups-update-toggle-button"
+                          disabled={this.hasAllInputDisabled()}/>
+                        <label className="text" htmlFor="sync-groups-update-toggle-button"><Trans>Update groups</Trans></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="input text clearfix ad openldap">
+                    <label><Trans>Delete or suspend users</Trans></label>
+                    <div className="help-message"><Trans>Define the behaviour when existing synchronized users are removed
+                      from the users directory</Trans>:
+                    </div>
+                    <div className="radiolist-alt">
+                      <div className={`input radio ${settings.deleteUserBehavior === "delete" ? 'checked' : ''}`}>
+                        <input type="radio" value="delete" onChange={this.handleInputChange} name="deleteUserBehavior"
+                          checked={settings.deleteUserBehavior === "delete"} id="deleteUserBehaviorDelete" disabled={this.hasAllInputDisabled()}/>
+                        <label htmlFor="deleteUserBehaviorDelete">
+                          <span className="name"><Trans>Delete users</Trans></span>
+                          <span className="info">
+                            <Trans>Delete the users and all the data associated with them.</Trans>
+                            &nbsp;
+                            <Trans>The data will be permanently deleted, this action cannot be undone.</Trans>
+                          </span>
+                        </label>
+                      </div>
+                      <div className={`input radio ${settings.deleteUserBehavior === "disable" ? 'checked' : ''}`}>
+                        <input type="radio" value="disable" onChange={this.handleInputChange} name="deleteUserBehavior"
+                          checked={settings.deleteUserBehavior === "disable"} id="deleteUserBehaviorSuspended" disabled={this.hasAllInputDisabled()}/>
+                        <label htmlFor="deleteUserBehaviorSuspended">
+                          <span className="name"><Trans>Suspend users</Trans></span>
+                          <span className="info">
+                            <Trans>Suspend the users, preventing them from signing in to Passbolt and from receiving email notifications.</Trans>
+                            &nbsp;
+                            <Trans>Other users can still share resources with them and add them to groups.</Trans>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+            }
+          </div>
+          {hasWarnings &&
+            <div className="warning message">
+              {this.shouldShowSourceWarningMessage() &&
+                <div>
+                  <Trans>These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.</Trans>
+                </div>
+              }
+              {hasSaveWarning &&
+                <div>
+                  <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+                </div>
+              }
+              {!this.isUserDirectoryChecked() &&
+                <>
+                  {hadDisabledSettings &&
+                    <div>
+                      <Trans>The configuration has been disabled as it needs to be checked to make it correct before using it.</Trans>
+                    </div>
+                  }
+                  {!hadDisabledSettings &&
+                    <div>
+                      <p className="description">
+                        <Trans>No Users Directory is configured. Enable it to synchronise your users and groups with passbolt.</Trans>
+                      </p>
+                    </div>
+                  }
+                </>
+              }
+            </div>
           }
         </div>
-        <div className="col4 last">
-          <div className="sidebar-help" id="user-directory-settings-source">
-            <h3><Trans>Configuration source</Trans></h3>
-            <p><Trans>This current configuration source is: </Trans>{this.configurationSource}.</p>
-          </div>
-          <div className="sidebar-help">
-            <h3><Trans>Need help?</Trans></h3>
-            <p><Trans>Check out our ldap configuration guide.</Trans></p>
-            <a className="button" href="https://passbolt.com/docs/admin/user-provisioning/users-directory/"
-              target="_blank" rel="noopener noreferrer">
-              <Icon name="document"/>
-              <span><Trans>Read the documentation</Trans></span>
-            </a>
-          </div>
-        </div>
+        <DisplayAdministrationUserDirectoryActions/>
+        {createSafePortal(
+          <>
+            <div className="sidebar-help-section" id="user-directory-settings-source">
+              <h3><Trans>Configuration source</Trans></h3>
+              <p><Trans>This current configuration source is: </Trans>{this.configurationSource}.</p>
+            </div>
+            <div className="sidebar-help-section">
+              <h3><Trans>Need help?</Trans></h3>
+              <p><Trans>Check out our ldap configuration guide.</Trans></p>
+              <a className="button" href="https://passbolt.com/docs/admin/user-provisioning/users-directory/" target="_blank" rel="noopener noreferrer">
+                <FileTextSVG/>
+                <span><Trans>Read the documentation</Trans></span>
+              </a>
+            </div>
+          </>,
+          document.getElementById("administration-help-panel")
+        )}
       </div>
     );
   }

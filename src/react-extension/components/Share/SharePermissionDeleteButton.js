@@ -14,8 +14,7 @@
 import React, {Component} from "react";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
-
-import Icon from "../../../shared/components/Icons/Icon";
+import CloseSVG from "../../../img/svg/close.svg";
 
 class SharePermissionDeleteButton extends Component {
   handleCloseClick() {
@@ -23,7 +22,7 @@ class SharePermissionDeleteButton extends Component {
   }
 
   getClassName() {
-    let className = 'remove-item button button-transparent';
+    let className = 'remove-item button inline button-transparent';
     if (this.props.disabled) {
       className += ' disabled';
     }
@@ -33,7 +32,7 @@ class SharePermissionDeleteButton extends Component {
   render() {
     return (
       <button type="button" className={this.getClassName()} onClick={this.handleCloseClick.bind(this)}>
-        <Icon name='close' />
+        <CloseSVG/>
         <span className="visually-hidden"><Trans>Remove</Trans></span>
       </button>
     );

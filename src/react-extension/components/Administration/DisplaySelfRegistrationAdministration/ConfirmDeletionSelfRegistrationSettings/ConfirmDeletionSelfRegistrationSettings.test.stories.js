@@ -14,21 +14,18 @@
  * @since         3.8.3
  */
 
-import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
 import {defaultProps} from "../ConfirmSaveSelfRegistrationSettings/ConfirmSaveSelfRegistrationSettings.test.data";
 import ConfirmDeletionSelfRegistrationSettings from "./ConfirmDeletionSelfRegistrationSettings";
 
 
 export default {
   title: 'Components/Administration/ConfirmDeletionSelfRegistrationSettings',
-  component: ConfirmDeletionSelfRegistrationSettings
+  component: ConfirmDeletionSelfRegistrationSettings,
+  parameters: {
+    css: "api_main"
+  }
 };
 
-const Template = args =>
-  <MemoryRouter initialEntries={['/']}>
-    <Route component={routerProps => <ConfirmDeletionSelfRegistrationSettings  {...args} {...routerProps}/>}></Route>
-  </MemoryRouter>;
-
-export const Default = Template.bind({});
-Default.args = defaultProps();
+export const Default = {
+  args: defaultProps()
+};

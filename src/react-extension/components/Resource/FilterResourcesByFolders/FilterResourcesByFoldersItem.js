@@ -12,7 +12,6 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFoldersItemContextualMenu";
@@ -21,6 +20,11 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import {withDrag} from "../../../contexts/DragContext";
 import DisplayDragFolderItem from "./DisplayDragFolderItem";
 import {withRouter} from "react-router-dom";
+import CarretDownSVG from "../../../../img/svg/caret_down.svg";
+import CarretRightSVG from "../../../../img/svg/caret_right.svg";
+import ShareFolderSVG from "../../../../img/svg/share_folder.svg";
+import FolderSVG from "../../../../img/svg/folder.svg";
+import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
 
 class FilterResourcesByFoldersItem extends React.Component {
   /**
@@ -166,7 +170,7 @@ class FilterResourcesByFoldersItem extends React.Component {
       const {left, top} = event.currentTarget.getBoundingClientRect();
       const folder = this.props.folder;
       const onBeforeHide = this.handleCloseMoreMenu;
-      const contextualMenuProps = {folder, left, top: top + 18, className: "right", onBeforeHide};
+      const contextualMenuProps = {folder, left, top: top + 19, className: "right", onBeforeHide};
       this.props.contextualMenuContext.show(FilterResourcesByFoldersItemContextualMenu, contextualMenuProps);
     }
   }
@@ -500,27 +504,24 @@ class FilterResourcesByFoldersItem extends React.Component {
           onDragOver={this.handleDragOverEvent}
           onDragEnd={this.handleDragEndEvent}
           onDragLeave={this.handleDragLeaveEvent}
-          onDragStart={this.handleDragStartEvent}>
+          onDragStart={this.handleDragStartEvent}
+          tabIndex={2}>
           <div className="main-cell-wrapper">
             <div className="main-cell"
               onClick={this.handleSelectEvent}
               onContextMenu={this.handleContextualMenuEvent}>
               <button className="link no-border" type="button">
                 {hasChildren &&
-                <div className="toggle-folder" onClick={this.handleToggleOpenFolder}>
-                  {isOpen &&
-                  <Icon name="caret-down"/>
-                  }
-                  {!isOpen &&
-                  <Icon name="caret-right"/>
-                  }
-                </div>
+                  <div className="toggle-folder" onClick={this.handleToggleOpenFolder}>
+                    {isOpen
+                      ? <CarretDownSVG />
+                      : <CarretRightSVG />
+                    }
+                  </div>
                 }
-                {!this.props.folder.personal &&
-                <Icon name="folder-shared"/>
-                }
-                {this.props.folder.personal &&
-                <Icon name="folder"/>
+                {this.props.folder.personal
+                  ? <FolderSVG />
+                  : <ShareFolderSVG />
                 }
                 <span title={this.props.folder.name} className="folder-name">{this.props.folder.name}</span>
               </button>
@@ -528,7 +529,7 @@ class FilterResourcesByFoldersItem extends React.Component {
           </div>
           {!isDragged &&
             <div className="dropdown right-cell more-ctrl">
-              <button type="button" className={`${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleMoreClickEvent}><Icon name="3-dots-h"/></button>
+              <button type="button" className={`button-transparent inline-menu-horizontal ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleMoreClickEvent}><MoreHorizontalSVG /></button>
             </div>
           }
         </div>

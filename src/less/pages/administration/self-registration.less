@@ -1,13 +1,43 @@
-.self-registration {
-  .domain-row {
-    display: flex;
-    button {
-      margin-left: 10px;
+.page.administration .app .panel.main .panel.middle {
+  .main-page {
+    .main-column {
+      &.self-registration {
+        .main-content {
+          h3 {
+            margin-bottom: 0;
+          }
+          .self-registration-form {
+            display: flex;
+            flex-direction: column;
+
+            & > * {
+              margin-bottom: 1.6rem;
+            }
+
+            .domain-row {
+              display: flex;
+              button {
+                margin-left: 10px;
+              }
+            }
+            .domain-add {
+              button {
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
     }
   }
-  .domain-add {
-    button {
-      width: 100%;
-    }
+}
+
+.save-self-registration-settings-dialog {
+  #domains-list {
+    padding: .8rem;
+  }
+
+  .radiolist-alt .input.radio {
+    background: var(--Field-Field-background);
   }
 }

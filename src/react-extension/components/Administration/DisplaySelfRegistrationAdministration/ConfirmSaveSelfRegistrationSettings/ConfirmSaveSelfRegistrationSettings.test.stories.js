@@ -13,23 +13,18 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.8.3
  */
-
-import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
 import ConfirmSaveSelfRegistrationSettings from "./ConfirmSaveSelfRegistrationSettings";
 import {propsWithMockDomains} from "./ConfirmSaveSelfRegistrationSettings.test.data";
 
 
 export default {
   title: 'Components/Administration/ConfirmSaveSelfRegistrationSettings',
-  component: ConfirmSaveSelfRegistrationSettings
+  component: ConfirmSaveSelfRegistrationSettings,
 };
 
-const Template = args =>
-  <MemoryRouter initialEntries={['/']}>
-    <Route component={routerProps => <ConfirmSaveSelfRegistrationSettings  {...args} {...routerProps}/>}></Route>
-  </MemoryRouter>;
-
-export const Default = Template.bind({});
-Default.args = propsWithMockDomains();
-
+export const Default = {
+  args: propsWithMockDomains(),
+  parameters: {
+    css: "api_main"
+  }
+};

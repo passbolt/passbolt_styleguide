@@ -1,5 +1,3 @@
-import groupsFixtures from "../../fixture/groups";
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +11,9 @@ import groupsFixtures from "../../fixture/groups";
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-export default (storage) => {
+import groupsFixtures from "../../fixture/groups";
+
+export default storage => {
   const groups = JSON.parse(JSON.stringify(groupsFixtures));
   storage.local.set({groups});
 };

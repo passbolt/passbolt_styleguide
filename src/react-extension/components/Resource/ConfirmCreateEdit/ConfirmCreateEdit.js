@@ -77,23 +77,23 @@ class ConfirmCreateEdit extends Component {
   /**
    * Handle close button click.
    */
-  handleCloseClick() {
-    this.reject();
+  async handleCloseClick() {
+    await this.reject();
   }
 
   /**
    * Handle reject button clicked.
    */
-  handleRejectClicked() {
-    this.reject();
+  async handleRejectClicked() {
+    await this.reject();
   }
 
   /**
    * Reject the operation.
    */
-  reject() {
+  async reject() {
+    await this.props.onClose();
     this.props.onReject();
-    this.props.onClose();
   }
 
 

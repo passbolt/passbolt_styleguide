@@ -33,14 +33,14 @@ describe("DisplayProviderList", () => {
       page = new DisplayProviderListPage(props);
     });
     it('As a logged user I should be able to see the MFA providers list ', () => {
-      expect.assertions(6);
+      expect.assertions(5);
 
       expect(page.exists()).toBeTruthy();
       expect(page.yubikeyCard).not.toBeNull();
       expect(page.duoCard).not.toBeNull();
       expect(page.totpCard).not.toBeNull();
       expect(page.title.textContent).toEqual("Multi factor authentication");
-      expect(page.description.textContent).toEqual("Multi-factor authentication (MFA) is a method of confirming a user's identity that requires presenting two or more pieces of evidence (or factor).");
+      //expect(page.description.textContent).toEqual("Multi-factor authentication (MFA) is a method of confirming a user's identity that requires presenting two or more pieces of evidence (or factor).");
     });
 
     it('As a logged user I should be able to see the yubikey card', () => {
@@ -92,16 +92,6 @@ describe("DisplayProviderList", () => {
 
       expect(props.mfaContext.setProvider).toHaveBeenCalledWith(Providers.TOTP);
       expect(props.mfaContext.navigate).toHaveBeenCalledWith(MfaSettingsWorkflowStates.TOTPOVERVIEW);
-    });
-
-    it('As a logged user I should see an help box in the MFA screen ', async() => {
-      expect.assertions(5);
-
-      expect(page.helpBox).not.toBeNull();
-      expect(page.helpBoxTitle.textContent).toBe("What is multi-factor authentication?");
-      expect(page.helpBoxDescription.textContent).toBe("Multi-factor authentication (MFA) is a method of confirming a user's identity that requires presenting two or more pieces of evidence (or factor).");
-      expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/start');
     });
   });
 

@@ -1,33 +1,55 @@
-import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import PropTypes from "prop-types";
 import DisplayUserBadgeMenu from "./DisplayUserBadgeMenu";
 import {defaultProps} from "./DisplayUserBadgeMenu.test.data";
 
 
 export default {
   title: 'Components/User/DisplayUserBadgeMenu',
+  decorators: [
+    Story => (
+      <div className="page">
+        <div className="app">
+          <div className="panel main">
+            <div className="panel middle">
+              <div className="header">
+                <div className="header-right">
+                  <Story/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  ],
   component: DisplayUserBadgeMenu
 };
 
-const Template = args =>
-  <div id="container" className="page password">
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <DisplayUserBadgeMenu {...args} {...routerProps}/>}></Route>
-    </MemoryRouter>
-  </div>;
-
-Template.propTypes = {
-  context: PropTypes.object,
+export const DefaultUserBadgeMenu = {
+  args: defaultProps()
 };
-
-export const Initial = Template.bind({});
-Initial.args = defaultProps();
 
 const propsAttentionRequired = {
   accountRecoveryContext: {
     isAccountRecoveryChoiceRequired: () => true
   }
 };
-export const AttentionRequired = Template.bind({});
-AttentionRequired.args = defaultProps(propsAttentionRequired);
+
+export const AttentionRequired = {
+  args: defaultProps(propsAttentionRequired)
+};
+
+const propsWithUserAvatar = {
+  user: {
+    "username": "user@passbolt.com",
+    profile: {
+      "first_name": "User",
+      "last_name": "Passbolt",
+      avatar: {url: {medium: "img/logo/icon-64.png", small: "img/logo/icon-32.png"}}
+    }
+  }
+};
+
+export const UserAvatarBadgeMenu = {
+  args: defaultProps(propsWithUserAvatar)
+};

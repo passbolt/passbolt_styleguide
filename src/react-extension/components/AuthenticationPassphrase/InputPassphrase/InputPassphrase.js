@@ -288,7 +288,7 @@ class InputPassphrase extends Component {
             </div>
             <div className="submit-wrapper clearfix">
               <button type="button" className="cancel link" onClick={this.handleCloseClick}><Trans>Cancel</Trans></button>
-              <button type="submit" className="button primary" role="button"><Trans>Ok</Trans></button>
+              <button type="submit" className="button primary form" role="button"><Trans>Ok</Trans></button>
             </div>
           </form>
         }

@@ -26,7 +26,7 @@ import ColumnsResourceSettingCollection
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import {
   defaultResourceMetadataDto
-} from "../../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
+} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import {
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_TOTP
@@ -105,7 +105,7 @@ export function propsWithFilteredResourcesAndColumnsHidden(data = {}) {
       filteredResources: resources,
       columnsResourceSetting: new ColumnsResourceSettingCollection([
         {id: "favorite", label: "Favorite", position: 1, show: true},
-        {id: "attentionRequired", label: "Attention", position: 2, show: true},
+        {id: "icon", label: "Icon", position: 2, show: true},
         {id: "name", label: "Name", position: 3, show: true},
         {id: "expires", label: "Expires", position: 4, show: true},
         {id: "username", label: "Username", position: 5, show: false},

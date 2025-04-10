@@ -1,7 +1,22 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         2.11.0
+ */
+
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
 import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
+import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -24,7 +39,7 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
-    resourceWorkspaceContext: {
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
       details: {
         folder:  {
           "id": "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
@@ -47,7 +62,7 @@ export function defaultProps() {
           "personal": false
         }
       }
-    }
+    })
   };
 }
 

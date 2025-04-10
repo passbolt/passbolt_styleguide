@@ -12,44 +12,44 @@
  * @since         3.6.0
  */
 
-import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayUserWorkspaceActions from "./DisplayUserWorkspaceActions";
 import {
-  defaultAppContext,
-  propsWithSelectedUser,
-  propsWithSelectedUserTemporaryHasPendingAccountRecovery
+  propsUserRole, propsWithMyselfAsSelectedUser,
+  propsWithSelectedUser
 } from "./DisplayUserWorkspaceActions.test.data";
 
 
 export default {
   title: 'Components/User/DisplayUserWorkspaceActions',
+  decorators: [
+    Story => (
+      <div className="panel main">
+        <div className="panel middle">
+          <div className="middle-right">
+            <div className="breadcrumbs-and-grid">
+              <div className="top-bar">
+                <div className="action-bar">
+                  <Story/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+  ],
   component: DisplayUserWorkspaceActions
 };
 
-
-const Template = args =>
-  <MockTranslationProvider>
-    <div className="header third">
-      <MemoryRouter initialEntries={['/']}>
-        <Route component={routerProps => <DisplayUserWorkspaceActions {...args} {...routerProps}/>}></Route>
-      </MemoryRouter>
-    </div>
-  </MockTranslationProvider>;
-
-export const AdminWithoutReviewRecovery = Template.bind({});
-AdminWithoutReviewRecovery.args = Object.assign(propsWithSelectedUser(), {context: defaultAppContext()});
-
-export const AdminWithReviewRecovery =  Template.bind({});
-AdminWithReviewRecovery.args = Object.assign(propsWithSelectedUserTemporaryHasPendingAccountRecovery(), {context: defaultAppContext()});
-
-export const User = Template.bind({});
-const userRole = {
-  loggedInUser: {
-    role: {
-      name: 'user'
-    }
-  },
+export const Admin = {
+  args:  propsWithSelectedUser()
 };
-User.args = Object.assign(propsWithSelectedUser, {context: defaultAppContext(userRole)});
+
+export const AdminSelected = {
+  args: propsWithMyselfAsSelectedUser()
+};
+
+export const User = {
+  args: propsUserRole()
+};

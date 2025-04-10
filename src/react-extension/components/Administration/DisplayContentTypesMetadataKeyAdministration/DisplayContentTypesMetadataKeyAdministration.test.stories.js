@@ -13,7 +13,6 @@
  */
 
 import React from "react";
-import PropTypes from "prop-types";
 import DisplayContentTypesMetadataKeyAdministration from "./DisplayContentTypesMetadataKeyAdministration";
 import {
   defaultProps,
@@ -21,49 +20,90 @@ import {
   defaultSettingsAndSingleActiveKeyProps
 } from "./DisplayContentTypesMetadataKeyAdministration.test.data";
 import {within} from "@testing-library/dom";
+import {MemoryRouter} from "react-router-dom";
+import TranslationProvider from "../../Common/Internationalisation/TranslationProvider";
+import DisplayAdministrationWorkspaceBreadcrumb
+  from "../DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
 
 export default {
   title: 'Components/Administration/DisplayContentTypesMetadataKeyAdministration',
-  component: DisplayContentTypesMetadataKeyAdministration
+  component: DisplayContentTypesMetadataKeyAdministration,
+  decorators: [(Story, {args}) =>
+    <MemoryRouter initialEntries={['/app/administration/content-types/metadata']}>
+      <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
+        <div id="container" className="page administration">
+          <div id="app" className="app" style={{margin: "-1rem"}}>
+            <div className="panel main">
+              <div className="panel left">
+                <div className="sidebar-content">
+                  <div className="top-bar-left-navigation">
+                    <div className="navigation">
+                    </div>
+                  </div>
+                  <div className="sidebar-content-left">
+                  </div>
+                </div>
+              </div>
+              <div className="panel middle">
+                <div className="header">
+                </div>
+                <div className="middle-right">
+                  <div className="breadcrumbs-and-grid">
+                    <div className="top-bar">
+                      <DisplayAdministrationWorkspaceBreadcrumb administrationWorkspaceContext={args.administrationWorkspaceContext}/>
+                    </div>
+                    <div className="main-page">
+                      <Story {...args}/>
+                    </div>
+                  </div>
+                  <div className="help-panel">
+                    <div className="sidebar-help">
+                      <div id="administration-help-panel">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </TranslationProvider>
+    </MemoryRouter>
+  ],
 };
 
-const Template = args =>
-  <div className="panel middle">
-    <div className="grid grid-responsive-12">
-      <DisplayContentTypesMetadataKeyAdministration {...args}/>
-    </div>
-  </div>;
-
-Template.propTypes = {
-  context: PropTypes.object,
+export const Initial = {
+  args: defaultProps()
 };
 
-export const Initial = Template.bind({});
-Initial.args = defaultProps();
-
-export const WithValidationError = Template.bind({});
-WithValidationError.args = defaultProps();
-// Trigger the form validation.
-WithValidationError.play = async({canvasElement}) => {
-  const canvas = within(canvasElement);
-  const form = canvas.getByTestId("submit-form");
-  form.requestSubmit();
+export const WithValidationError = {
+  args: defaultProps(),
+  // Trigger the form validation.
+  play: async({canvasElement}) => {
+    const canvas = within(canvasElement);
+    const form = canvas.getByTestId("submit-form");
+    form.requestSubmit();
+  }
 };
 
-export const GeneratedMetadataKey = Template.bind({});
-GeneratedMetadataKey.args = defaultProps();
-// Trigger a key generation.
-GeneratedMetadataKey.play = async({canvasElement}) => {
-  const canvas = within(canvasElement);
-  const form = canvas.getByTestId("generate-key-buton");
-  form.click();
+export const GeneratedMetadataKey = {
+  args: defaultProps(),
+  // Trigger a key generation.
+  play: async({canvasElement}) => {
+    const canvas = within(canvasElement);
+    const form = canvas.getByTestId("generate-key-buton");
+    form.click();
+  }
 };
 
-export const SingleActiveMetadataKey = Template.bind({});
-SingleActiveMetadataKey.args = defaultSettingsAndSingleActiveKeyProps();
+export const SingleActiveMetadataKey = {
+  args: defaultSettingsAndSingleActiveKeyProps()
+};
 
-export const MultipleActiveKeys = Template.bind({});
-MultipleActiveKeys.args = defaultSettingsAndMultipleActiveKeysProps();
+export const MultipleActiveKeys = {
+  args: defaultSettingsAndMultipleActiveKeysProps()
+};
 
-export const MultipleKeys = Template.bind({});
-MultipleKeys.args = defaultSettingsAndMultipleKeysProps();
+export const MultipleKeys = {
+  args: defaultSettingsAndMultipleKeysProps()
+};

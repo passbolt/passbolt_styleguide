@@ -1,14 +1,18 @@
 .contextual-menu {
     position: absolute;
-    background: @dropdown-background;
-    border: 1px solid @default-border;
-    filter: drop-shadow(0 1rem 1rem rgba(0, 0, 0, @shadow-opacity-dropdown));
+    background: var(--Action-button-Action-button-background);
+    box-shadow: inset 0 0 0 .1rem var(--Action-button-Action-button-border), var(--Menu-drop-shadow-Menu-drop-shadow-X, .2rem) var(--Menu-drop-shadow-Menu-drop-shadow-Y, .4rem) var(--Menu-drop-shadow-Menu-drop-shadow-blur, 2rem) 0rem var(--Menu-drop-shadow-Menu-drop-shadow, rgba(0, 0, 0, 0.10));
     border-radius: .4rem;
     z-index: 10;
     display: none;
-    padding: .8rem 0;
+    padding: .8rem .1rem;
     font-size: 1.5rem;
-    line-height: 2rem;
+    line-height: normal;
+
+    &.floating {
+      padding: 0 .1rem;
+    }
+
 
     &.right {
       border-radius: 0 .4rem .4rem .4rem;
@@ -16,7 +20,7 @@
 
     // Separator of contextual menu item
     .separator-before {
-        border-top: 1px solid @default-border;
+        border-top: .1rem solid var(--Workspace-Menu-Dividers);
         margin-top: .4rem;
 
          button {
@@ -26,40 +30,42 @@
 
     // Separator of contextual menu item
     .separator-after {
-        border-bottom: 1px solid @default-border;
-        margin-bottom: .4rem;
-        button {
-            margin-bottom: .4rem;
+        border-bottom: .1rem solid var(--Workspace-Menu-Dividers);
+        &:last-child {
+          border-bottom: none;
+          margin-bottom: 0;
+            button {
+              margin-bottom: 0;
+            }
         }
     }
 
     // Contextual menu item
     button {
         width: 100%;
-        display: block;
+        display: flex;
         border: 0;
         padding: .8rem 1.6rem;
-        color: @dropdown-item-text-color;
-
-        // Contextual menu item hover
-        &:hover {
-            color: @dropdown-item-hover-text-color;
-            background: @dropdown-item-hover-background;
-        }
 
         // Contextual menu item focus visible
-        &:focus {
-          color: @dropdown-item-focus-text-color;
-          background: @dropdown-item-focus-background;
-          box-shadow: 0 0 .4rem @shadow-focus-color;
-          outline: @outline-default-border;
+        &:focus, &:focus-visible, &:hover {
+          display: flex;
+          background: var(--Sections-Filter-selected);
+          text-decoration: none;
+          border: none;
+          outline: none;
+
+          &::after {
+            //Remove after from link
+            display: none;
+          }
         }
 
-        // Contextual menu item pressed
-        &:active {
-          color: @dropdown-item-active-text-color;
-          background: @dropdown-item-active-background;
-          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
-        }
+          // Select item pressed
+          &:active {
+            box-shadow:
+              inset 0 -0.1rem 0 0 var(--States-Active-Highlight),
+              inset 0px .1rem 0 0rem var(--States-Active-Shadow);
+          }
     }
 }

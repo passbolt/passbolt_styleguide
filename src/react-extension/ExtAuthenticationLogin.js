@@ -23,6 +23,7 @@ import OrchestrateLoginBoxMain from "./components/AuthenticationLogin/Orchestrat
 import Footer from "./components/Common/Footer/Footer";
 import OrchestrateLoginBoxFooter from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLoginBoxFooter";
 import SsoContextProvider from "./contexts/SsoContext";
+import LogoSVG from "../img/svg/logo.svg";
 
 /**
  * The login application served by the browser extension.
@@ -133,7 +134,9 @@ class ExtAuthenticationLogin extends Component {
                 <div id="container" className="container page login">
                   <div className="content">
                     <div className="header">
-                      <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                      <div className="logo-svg">
+                        <LogoSVG role="img" width="20rem" height="3.5rem"/>
+                      </div>
                     </div>
                     <div className="login-form">
                       <OrchestrateLoginBoxMain/>
@@ -142,8 +145,8 @@ class ExtAuthenticationLogin extends Component {
                       <OrchestrateLoginBoxFooter/>
                     </div>
                   </div>
+                  <Footer/>
                 </div>
-                <Footer/>
               </AuthenticationLoginContextProvider>
             </SsoContextProvider>
           </Router>

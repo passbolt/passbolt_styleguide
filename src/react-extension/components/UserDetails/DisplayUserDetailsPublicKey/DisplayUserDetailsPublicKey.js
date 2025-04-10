@@ -14,13 +14,14 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {DateTime} from "luxon";
 import {Trans, withTranslation} from "react-i18next";
-import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 /**
  * This component displays the user details about public key
@@ -52,7 +53,6 @@ class DisplayUserDetailsPublicKey extends React.Component {
    */
   bindHandlers() {
     this.handleTitleClicked = this.handleTitleClicked.bind(this);
-    this.handlePublicKeyCopy = this.handlePublicKeyCopy.bind(this);
   }
 
   /**
@@ -100,9 +100,8 @@ class DisplayUserDetailsPublicKey extends React.Component {
     } else {
       expires = this.formatDate(gpgkeyInfo.expires);
     }
-    const armoredKey = gpgkeyInfo.armored_key;
 
-    const formatedGpgkeyInfo = {fingerprint, type, created, expires, armoredKey};
+    const formatedGpgkeyInfo = {fingerprint, type, created, expires};
     this.setState({gpgkeyInfo: formatedGpgkeyInfo});
   }
 
@@ -176,15 +175,6 @@ class DisplayUserDetailsPublicKey extends React.Component {
   }
 
   /**
-   * Handle the copy of the public key
-   */
-  async handlePublicKeyCopy() {
-    const armoredKey = this.state.gpgkeyInfo.armoredKey;
-    await ClipBoard.copy(armoredKey, this.props.context.port);
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The public key has been copied to clipboard"));
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -204,60 +194,42 @@ class DisplayUserDetailsPublicKey extends React.Component {
         <div className="accordion-header">
           <h4>
             <button type="button" onClick={this.handleTitleClicked} className="link no-border">
-              <Trans>Public key</Trans>
-              {this.state.open && <Icon name="caret-down"/>}
-              {!this.state.open && <Icon name="caret-right"/>}
+              <span className="accordion-title">
+                <Trans>Public key</Trans>
+              </span>
+              {this.state.open && <CaretDownSVG/>}
+              {!this.state.open && <CaretRightSVG/>}
             </button>
           </h4>
         </div>
+        {this.state.open &&
         <div className="accordion-content">
           {isLoading &&
           <ul>
             <li className="processing-wrapper">
-              <Icon name="spinner"/>
+              <SpinnerSVG/>
               <span className="processing-text"><Trans>Retrieving public key</Trans></span>
             </li>
           </ul>
           }
           {!isLoading &&
-          <ul>
-            <li className="fingerprint">
-              <span className="label"><Trans>Fingerprint</Trans></span>
-              <span className="value">{this.formatFingerprint(this.state.gpgkeyInfo.fingerprint)}</span>
-            </li>
-            <li className="type">
-              <span className="label"><Trans>Type</Trans></span>
-              <span className="value">{this.state.gpgkeyInfo.type}</span>
-            </li>
-            <li className="created">
-              <span className="label"><Trans>Created</Trans></span>
-              <span className="value">{this.state.gpgkeyInfo.created}</span>
-            </li>
-            <li className="expires">
-              <span className="label"><Trans>Expires</Trans></span>
-              <span className="value">{this.state.gpgkeyInfo.expires}</span>
-            </li>
-            <li className="key">
-              <span className="label"><Trans>Public key</Trans></span>
-              <span className="value">
-                <button
-                  type="button"
-                  className="button-icon copy-public-key"
-                  onClick={this.handlePublicKeyCopy}>
-                  <Icon name="copy-to-clipboard"/>
-                </button>
-              </span>
-            </li>
-            <li className="gpgkey">
-              <textarea
-                className="code"
-                value={this.state.gpgkeyInfo.armoredKey}
-                disabled>
-              </textarea>
-            </li>
-          </ul>
+                    <>
+                      <div className="information-label">
+                        <span className="fingerprint label"><Trans>Fingerprint</Trans></span>
+                        <span className="type label"><Trans>Type</Trans></span>
+                        <span className="created label"><Trans>Created</Trans></span>
+                        <span className="expires label"><Trans>Expires</Trans></span>
+                      </div>
+                      <div className="information-value">
+                        <span className="fingerprint value">{this.formatFingerprint(this.state.gpgkeyInfo.fingerprint)}</span>
+                        <span className="type value">{this.state.gpgkeyInfo.type}</span>
+                        <span className="created value">{this.state.gpgkeyInfo.created}</span>
+                        <span className="expires value">{this.state.gpgkeyInfo.expires}</span>
+                      </div>
+                    </>
           }
         </div>
+        }
       </div>
     );
   }

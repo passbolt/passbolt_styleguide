@@ -14,11 +14,12 @@
 
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withMfa} from "../../../contexts/MFAContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import MfaProviders from "../DisplayProviderList/MfaProviders.data";
 import {DateTime} from "luxon";
+import AnimatedFeedbackSuccessSVG from "../../../../img/svg/success.svg";
 
 /**
  * This component will display the configuration for the mfa provider
@@ -118,13 +119,16 @@ class DisplayMfaProviderConfiguration extends Component {
    */
   render() {
     return (
-      <div className="grid grid-responsive-12">
-        <div className="row mfa-configuration">
-          <div className="col7 main-column">
+      <>
+        <div className="main-column mfa-configuration">
+          <div className="main-content">
             <h3>{this.title}</h3>
             <div className="feedback-card">
               <div className="illustration icon-feedback">
-                <div className="success"></div>
+                <div className="success">
+                  <AnimatedFeedbackSuccessSVG/>
+                </div>
+
               </div>
               <div className="additional-information">
                 <p>
@@ -133,17 +137,18 @@ class DisplayMfaProviderConfiguration extends Component {
                 {this.state.verifiedDate && <p className="created date">
                   {this.state.verifiedDate}
                 </p>}
-                <button onClick={this.handleDeleteClick}
-                  disabled={this.isProcessing}
-                  className="button warning" role="button">Turn off</button>
               </div>
-            </div>
-            <div className="actions-wrapper" onClick={this.handleCancelClick}>
-              <button className="button cancel" disabled={this.isProcessing}>Manage providers</button>
             </div>
           </div>
         </div>
-      </div>
+        <div className="actions-wrapper">
+          <button className="button cancel secondary" onClick={this.handleCancelClick} disabled={this.isProcessing}><Trans>Manage providers</Trans></button>
+          <button className="button primary form" type="button" onClick={this.handleDeleteClick} disabled={this.isProcessing}>
+            <span><Trans>Turn off</Trans></span>
+          </button>
+        </div>
+      </>
+
     );
   }
 }

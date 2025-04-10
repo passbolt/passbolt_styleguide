@@ -4,7 +4,7 @@ body {
 
 .quickaccess {
     .clearfix();
-    background:@default-background;
+    background: var(--Quick-Access-Panel-background);
     box-sizing: border-box;
     width:38rem;
 
@@ -16,13 +16,26 @@ body {
         line-height: 2rem;
     }
 
-    .digit {
-        color: @input-passwords-numbers-color;
+    a:after {
+     display: none;
     }
 
-    .special-char {
-        color: @input-passwords-special-chars-color;
-    }
+    button {
+        .digit {
+          color: var(--Text-and-icons-secret-number);
+        }
+
+        .special-char {
+          color: var(--Text-and-icons-secret-special-chars);
+        }
+
+        &:hover {
+          .digit {
+            color: var(--Text-and-icons-secret-number-hover);
+          }
+        }
+      }
+
 
     .secondary-action, .option-link, .property-action {
         padding: 0;
@@ -37,7 +50,8 @@ body {
         .clearfix();
         display: flex;
         align-items: center;
-        background: @quickaccess-back-link-background;
+
+        background: var(--Quick-Access-Panel-background);
         line-height: 2rem;
 
         .primary-action  {
@@ -61,24 +75,23 @@ body {
 
     .submit-wrapper {
         .clearfix();
-        background: @quickaccess-footer-background;
+        background: var(--Quick-Access-Header-and-footer-background);
         padding: 1.6rem;
         display: flex;
         flex-direction: column;
 
         .button.primary.big {
-          line-height: 2.3rem;
-
-          & + a {
-            margin: 1.6rem auto 0;
-          }
+            background: var(--Quick-Access-Primary-button-background);
+            color: var(--Quick-Access-Primary-button-text);
         }
         .cancel {
-            padding-right: 3rem;
+            margin-right: 3rem;
             border: none;
-            color: @default-text-color;
+            color: var(--Text-and-icons-Main-text);
+            border-bottom: 1px solid var(--Palette-Gradient-7);
+
             &:hover {
-              color: @text-focus-color;
+                border-bottom: 1px solid var(--States-Focus);
             }
         }
         &.flex-row-end {
@@ -98,7 +111,7 @@ body {
         }
     }
     .processing-wrapper {
-        background-color: @quickaccess-header-background;
+        background: var(--Quick-Access-Header-and-footer-background);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -111,6 +124,6 @@ body {
     }
 
     .error-message {
-        color: @text-error-color;
+        color: var(--Palette-Contrast-3);
     }
 }

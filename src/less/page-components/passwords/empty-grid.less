@@ -1,50 +1,33 @@
 /* Define state where there are no passwords, and the filter all items */
-.page.password .tableview.empty {
-    .tableview-header {
-        /* No tableview-header */
-        display: none;
-    }
-    .tableview-content {
-        /* No tableview-header */
-        border: 0;
-        top: 0;
-    }
-    &.all_items .tableview-content {
-        /* Tablet version */
-        @media all and (min-width: 780px) {
-            background-position: center 60%;
-            background-size: 10%;
-        }
-        /* Normal screen version */
-        @media all and (min-width: 1024px) {
-            background-position: center 80%;
-            background-size: 20%;
-        }
-    }
+.tableview.empty {
     .empty-content {
-        text-align: center;
-        margin: auto;
-        width: 50%;
-        padding-top: 2em;
-        color: @tableview-content-text-color;
-        h1 {
-            font-size: 1.5em;
-        }
-        p {
-            font-size: 1em;
-            line-height: 1.5em;
-        }
+        border-top: .1rem solid var(--Workspace-Dividers);
+        display: flex;
+        flex-direction: column;
+        padding: 6.4rem 4.8rem;
+        gap: 1.6rem;
+        width: 100%;
 
-        @media all and (min-width: 780px) {
-            h1 {
-                font-size: 2.2em;
-            }
+        .message {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: .4rem;
+          padding: 0;
 
-            p {
-                font-size: 1.2em;
-                line-height: 1.8em;
-                max-width: inherit;
-            }
+          h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: normal;
+            margin: 0;
+          }
+
+          p {
+            font-size: 1.6rem;
+            line-height: normal;
+            font-weight: 400;
+            text-align: center;
+          }
         }
     }
 }

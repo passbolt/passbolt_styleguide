@@ -20,7 +20,7 @@ import {waitForTrue} from "../../../../test/utils/waitFor";
 import {defaultTagDto} from "../../../shared/models/entity/tag/tagEntity.test.data";
 import {
   defaultResourceMetadataDto
-} from "../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
+} from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import expect from "expect";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {

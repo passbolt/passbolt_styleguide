@@ -15,7 +15,8 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withTranslation, Trans} from "react-i18next";
 import DialogWrapper from "../../Dialog/DialogWrapper/DialogWrapper";
-import Icon from "../../../../../shared/components/Icons/Icon";
+import CaretDownSVG from "../../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../../img/svg/caret_right.svg";
 
 class NotifyError extends Component {
   /**
@@ -134,8 +135,11 @@ class NotifyError extends Component {
                 <div className="accordion error-details">
                   <div className="accordion-header">
                     <button type="button" className="link no-border" onClick={this.handleErrorDetailsToggle}>
-                      <Trans>Error details</Trans>
-                      <Icon baseline={true} name={this.state.showErrorDetails ? "caret-up" : "caret-down"} />
+                      <span><Trans>Error details</Trans></span>
+                      {this.state.showErrorDetails
+                        ? <CaretDownSVG className="baseline svg-icon"/>
+                        : <CaretRightSVG className="baseline svg-icon"/>
+                      }
                     </button>
                   </div>
                   {this.state.showErrorDetails &&

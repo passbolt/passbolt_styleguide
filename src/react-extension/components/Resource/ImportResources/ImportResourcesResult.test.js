@@ -15,7 +15,8 @@
 /**
  * Unit tests on PasswordImportResultDialog in regard of specifications
  */
-import {defaultAppContext, defaultProps, defaultPropsWithNoError} from "./ImportResourcesResult.test.data";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultProps, defaultPropsWithNoError} from "./ImportResourcesResult.test.data";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import ImportResourcesResultPage from "./ImportResourcesResult.test.page";
 

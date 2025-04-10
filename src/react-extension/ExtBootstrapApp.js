@@ -105,6 +105,7 @@ class ExtBootstrapApp extends Component {
           <Switch>
             <Route exact path={[
               "/app/account-recovery/requests/review/:accountRecoveryRequestId",
+              "/app/administration",
               "/app/administration/subscription",
               "/app/administration/account-recovery",
               "/app/administration/sso",
@@ -126,6 +127,8 @@ class ExtBootstrapApp extends Component {
               "/app/settings/profile",
               "/app/settings/passphrase",
               "/app/settings/security-token",
+              "/app/settings/mfa",
+              "/app/settings/mfa/:provider",
               "/app/settings/mobile",
               "/app/settings/desktop",
               "/app/settings/account-recovery",

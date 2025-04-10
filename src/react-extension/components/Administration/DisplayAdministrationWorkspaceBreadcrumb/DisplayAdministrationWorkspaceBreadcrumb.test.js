@@ -64,10 +64,9 @@ describe("As AD I can see a Breadcrumb", () => {
     it(`for: ${scenario.menuType}`, () => {
       const props = defaultProps(scenario.menuType); // The props to pass
       page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
-      expect(page.count).toBe(3);
-      expect(page.item(1)).toBe("Administration");
+      expect(page.count).toBe(2);
+      expect(page.item(1)).toBe("Home");
       expect(page.item(2)).toBe(scenario.expectedBreadcrumb);
-      expect(page.item(3)).toBe("Settings");
     });
   });
 });

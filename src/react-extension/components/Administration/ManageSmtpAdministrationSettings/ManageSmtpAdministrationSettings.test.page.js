@@ -482,7 +482,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {string|undefined}
    */
   get settingsFromFileWarningMessage() {
-    return this.select(".smtp-settings .warning.message")?.textContent;
+    return this.select(".smtp-settings #smtp-settings-source-warning")?.textContent;
   }
 
   /**
@@ -490,7 +490,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {HTMLElement}
    */
   get passboltHelpPage() {
-    return this.selectAll(".sidebar-help a")[0];
+    return this.selectAll(".sidebar-help-section a")[0];
   }
 
   /**
@@ -498,7 +498,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {HTMLElement}
    */
   get smtpProviderHelpPage() {
-    return this.selectAll(".sidebar-help a")[1];
+    return this.selectAll(".sidebar-help-section a")[1];
   }
 
   /**
@@ -506,7 +506,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSaveButton() {
-    return this.selectAll(".actions-wrapper .actions button")[0];
+    return this.select("#save-settings");
   }
 
   /**
@@ -514,7 +514,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsTestButton() {
-    return this.selectAll(".actions-wrapper .actions button")[1];
+    return this.select("#send-test-email");
   }
 
   /**

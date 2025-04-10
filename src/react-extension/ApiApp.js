@@ -20,10 +20,6 @@ import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWor
 import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
 import ManageContextualMenu from "./components/Common/ContextualMenu/ManageContextualMenu";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
-import Footer from "./components/Common/Footer/Footer";
-import DisplayApiUserSettingsWorkspace
-  from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
-import DisplayMainMenu from "./components/Common/Menu/DisplayMainMenu";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import HandleSessionExpired from "./components/Authentication/HandleSessionExpired/HandleSessionExpired";
 import AnnouncementContextProvider from "./contexts/AnnouncementContext";
@@ -46,6 +42,7 @@ import MfaContextProvider from "./contexts/MFAContext";
 import RbacContextProvider from "../shared/context/Rbac/RbacContext";
 import AdminRbacContextProvider from "./contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
 import AdministrationHealthcheckContextProvider from "./contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext";
+import DisplayApiUserSettingsWorkspace from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
 
 /**
  * The passbolt application served by the API.
@@ -126,9 +123,7 @@ class ApiApp extends Component {
                                     <ManageAnnouncements/>
                                     <div id="container" className="page settings">
                                       <div id="app" className="app" tabIndex="1000">
-                                        <div className="header first">
-                                          <DisplayMainMenu/>
-                                        </div>
+                                        {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
                                         <DisplayApiUserSettingsWorkspace/>
                                       </div>
                                     </div>
@@ -136,7 +131,6 @@ class ApiApp extends Component {
                                 </Switch>
                               </NavigationContextProvider>
                             </Router>
-                            <Footer/>
                           </ContextualMenuContextProvider>
                         </AnnouncementContextProvider>
                       </DialogContextProvider>

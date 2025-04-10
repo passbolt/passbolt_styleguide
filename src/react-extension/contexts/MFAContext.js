@@ -25,7 +25,8 @@ export const MfaSettingsWorkflowStates = {
   TOTPOVERVIEW: "Totp Overview",
   SCANTOTPCODE: "Scan totp code",
   VIEWCONFIGURATION: "View a totp configuration",
-  SETUPYUBIKEY: "Setup Yubikey"
+  SETUPYUBIKEY: "Setup Yubikey",
+  SETUPDUO: "Setup Duo"
 };
 
 export const Providers = {

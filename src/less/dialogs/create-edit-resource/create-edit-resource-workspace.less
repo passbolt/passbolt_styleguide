@@ -1,0 +1,282 @@
+/* Create and edit resource dialog workspace */
+.create-resource, .edit-resource {
+  .create-workspace, .edit-workspace {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: var(--Section-border-radius);
+    background: var(--Workspace-Panels-background);
+
+    /* HEADER TITLE */
+    .title {
+      display: flex;
+      padding: 1.6rem;
+      align-items: center;
+      align-self: stretch;
+      border-bottom: 1px solid var(--Workspace-Dividers);
+
+      h2 {
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        margin: 0;
+
+        &.preview {
+          font-weight: 400;
+        }
+      }
+    }
+
+    /* TOTP WORKSPACE */
+    .totp-workspace {
+      display: flex;
+      flex: 1 0 0;
+      align-items: center;
+      align-self: stretch;
+      gap: 1.6rem;
+      border-radius: var(--Section-border-radius);
+      background: var(--Dialog-Dialog-header-and-footer);
+
+      .totp-form {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex: 1 0 0;
+        align-self: stretch;
+        border-radius: var(--Section-border-radius);
+        background: var(--Workspace-Panels-background);
+
+        .secret-key-wrapper {
+          display: flex;
+          align-items: flex-start;
+          gap: .8rem;
+          align-self: stretch;
+        }
+      }
+
+      .totp-view {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex-shrink: 0;
+        align-self: stretch;
+        min-width: 18rem;
+        border-radius: var(--Section-border-radius);
+        background: var(--Workspace-Panels-background);
+
+
+        .totp-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          align-self: stretch;
+          gap: 1.6rem;
+
+          .secret-totp {
+            display: flex;
+            padding: 1.6rem 1.6rem 0 1.6rem;
+            gap: 1.6rem;
+
+            button {
+              gap: 1.6rem;
+
+              .totp-code {
+                display: flex;
+
+                span {
+                  font-size: 24px;
+                  font-weight: 400;
+                  line-height: 2.4rem;
+                }
+              }
+            }
+
+            svg {
+              width: 1.8rem;
+              height: 1.8rem;
+              margin: 0;
+            }
+          }
+        }
+      }
+
+      .upload-qr-code {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    /* CONTENT */
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex: 1 0 0;
+      align-self: stretch;
+      padding: 1.6rem 0;
+      isolation: isolate;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--Workspace-Elevator) transparent;
+
+      /* PASSWORD FIELDS LAYOUT*/
+      .password-fields, .totp-fields, .note-fields, .description-fields {
+        display: flex;
+        padding: 0 1.6rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.6rem;
+        align-self: stretch;
+      }
+
+      .password-fields {
+        padding-bottom: 1.6rem;
+      }
+
+      /* INPUT FIELDS */
+      .input {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+        align-self: stretch;
+
+        .warning-message, .error-message {
+          margin-bottom: 0rem;
+        }
+
+        label, input, textarea {
+          max-width: inherit;
+          margin-bottom: 0;
+        }
+
+        label {
+          display: flex;
+        }
+
+        textarea {
+          height: 14rem;
+          max-height: 40rem;
+        }
+
+        &.input-password-wrapper {
+          margin-bottom: 0;
+
+          .password-button-inline {
+            align-self: stretch;
+          }
+
+          .password-complexity {
+            margin-bottom: 0;
+            align-self: stretch;
+            // Fix: tooltip with position relative make the scrollbar invisible
+            isolation: isolate;
+          }
+        }
+
+        &.password {
+          gap: .2rem;
+        }
+
+        &.password, &.checkbox {
+          flex-direction: row;
+          align-items: center;
+          flex: 1 0 0;
+          align-self: stretch;
+          margin-bottom: 0;
+
+          label, input {
+            margin: 0;
+          }
+        }
+
+        &.select-wrapper {
+          .select-container {
+            align-self: stretch;
+          }
+        }
+      }
+
+
+      /* ADDITIONAL INFORMATIONS */
+      .additional-information {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        align-self: stretch;
+        margin-top: 1.6rem;
+        padding-bottom: .8rem;
+        border-top: 1px solid var(--Workspace-Dividers);
+
+        .section-header {
+          display: flex;
+          padding: 1.2rem 1.6rem;
+          align-items: center;
+          gap: 1.6rem;
+          align-self: stretch;
+
+          h4 {
+            display: flex;
+            align-items: center;
+            flex: 1 0 0;
+            margin: 0;
+            font-size: 15px;
+            font-weight: 700;
+            line-height: normal;
+          }
+
+          // Hover and Focus visible state
+          &:hover, &:focus-visible {
+            color: var(--States-Focus);
+          }
+        }
+
+        .advanced-settings {
+          align-self: stretch;
+          padding: 1.6rem 1.6rem 0 1.6rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1.2rem;
+
+          .input-wrapper-inline {
+            margin-bottom: 0;
+          }
+        }
+
+        /* TABS */
+        .tabs {
+          gap: 1.6rem;
+
+          .tabs-nav {
+            padding: 0 1.6rem;
+          }
+
+          .tabs-active-content {
+            display: flex;
+            padding: 0 1.6rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.6rem;
+            align-self: stretch;
+          }
+        }
+      }
+    }
+
+    .message {
+      display: flex;
+      padding: .8rem 1.6rem 1.2rem 1.6rem;
+      align-items: center;
+      gap: 1rem;
+      align-self: stretch;
+
+      .text {
+        flex: 1 0 0;
+        align-self: stretch;
+      }
+    }
+  }
+}

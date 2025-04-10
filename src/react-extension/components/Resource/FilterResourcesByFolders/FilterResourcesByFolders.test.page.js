@@ -130,7 +130,7 @@ class FilterResourcesByFoldersPageObject {
    * Returns the root folder caret
    */
   get rootFolderCaret() {
-    return this._container.querySelector('.folders-label span svg');
+    return this._container.querySelector('.folders-label .toggle-folder');
   }
 
   /**
@@ -194,6 +194,20 @@ class FilterResourcesByFoldersPageObject {
    */
   get openContextualMenuWithRightClick() {
     return this.rightClick(this.rootFolder);
+  }
+
+  /**
+   * Returns the loading element
+   */
+  get loadingMessage() {
+    return this._container.querySelector('.processing-text');
+  }
+
+  /**
+   * Returns true
+   */
+  isLoading() {
+    return this.loadingMessage !== null && this.loadingMessage.innerHTML === 'Retrieving folders';
   }
 
   /** Click on the component */

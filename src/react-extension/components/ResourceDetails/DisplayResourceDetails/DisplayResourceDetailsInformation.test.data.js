@@ -18,10 +18,7 @@ import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspa
 import {resourceWithTotpDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
-import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  resourceTypesCollectionDto
-} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import {nestedFoldersCollectionDto} from "../../../../shared/models/entity/folder/foldersCollection.test.data";
 
 /**
  * Default component props with folder having owner permission
@@ -49,7 +46,6 @@ export function defaultProps(data = {}) {
         }),
       }
     }),
-    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     ...data
   };
 }
@@ -62,6 +58,33 @@ export function defaultProps(data = {}) {
 export function propsWithDenyUiAction(data = {}) {
   return defaultProps({
     rbacContext: denyRbacContext(),
+    ...data
+  });
+}
+
+/**
+ * With resource in a nested folder.
+ * @param {object} data Override the default props.
+ * @return {object}
+ */
+export function withNestedFoldersProps(data = {}) {
+  const resourceOwner = defaultUserDto();
+  const folders = nestedFoldersCollectionDto();
+
+  return defaultProps({
+    context: defaultUserAppContext({
+      users: [resourceOwner]
+    }),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      details: {
+        resource: resourceWithTotpDto({
+          folder_parent_id: folders[2].id,
+          created_by: resourceOwner.id,
+          modified_by: resourceOwner.id,
+        }),
+      },
+      getHierarchyFolderCache: () => folders
+    }),
     ...data
   });
 }

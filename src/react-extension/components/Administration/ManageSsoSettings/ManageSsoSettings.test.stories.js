@@ -33,10 +33,16 @@ const Template = args =>
       <ActionFeedbackContextProvider>
         <DisplayActionFeedbacks/>
         <AdminSsoSettingsContextProvider {...args}>
-          <div className="panel main">
-            <div className="panel middle">
-              <div className="grid grid-responsive-12">
-                <ManageSsoSettings {...args}/>
+          <div className="page administration">
+            <div className="app" >
+              <div className="panel main">
+                <div className="panel middle">
+                  <div className="middle-right">
+                    <div className="main-page">
+                      <ManageSsoSettings {...args}/>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

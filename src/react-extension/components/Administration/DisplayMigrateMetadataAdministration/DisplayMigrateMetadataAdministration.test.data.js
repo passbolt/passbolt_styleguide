@@ -28,6 +28,7 @@ import {
 import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
 import {defaultMetadataKeysDtos} from "../../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
 import PassboltResponsePaginationHeaderEntity from "../../../../shared/models/entity/apiService/PassboltResponsePaginationHeaderEntity";
+import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
 
 /**
  * Default props.
@@ -38,7 +39,9 @@ export function defaultProps(props = {}) {
   return {
     context: defaultAdministratorAppContext(),
     dialogContext: defaultDialogContext(),
-    administrationWorkspaceContext: defaultAdministrationWorkspaceContext(),
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration:  AdministrationWorkspaceMenuTypes.MIGRATE_METADATA
+    }),
     actionFeedbackContext: defaultActionFeedbackContext(),
     metadataSettingsServiceWorkerService: {
       findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto({

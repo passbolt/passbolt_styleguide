@@ -11,14 +11,42 @@
         place-content: center;
         cursor: pointer;
         content: '';
-        width: 1.4rem;
-        height: 1.4rem;
-        background: @input-checkbox-background;
-        border: 1px solid @input-checkbox-border;
-        border-radius: .2rem;
+        justify-content: center;
+        flex-shrink: 0;
+        flex-direction: column;
+        width: 1.6rem;
+        height: 1.6rem;
+        background: var(--Checkbox-Checkbox-background);
+        border-radius: .25rem;
+        border: none;
+        box-shadow: inset 0 0 0 1.5px var(--Checkbox-Checkbox-border);
         box-sizing: border-box;
 
-        & + label {
+        &.for-grid {
+            box-shadow: inset 0 0 0 1.5px var(--Checkbox-V2-Border-default);
+
+            &:checked {
+                box-shadow: inset 0 0 0 1.5px var(--Checkbox-V2-Border-active);
+
+                &:hover {
+                    box-shadow: inset .1rem .1rem 0 0 var(--States-Hover-Highlight), inset -.1rem -.1rem 0 0 var(--States-Hover-Shadow), inset 0 0 0 1.5px var(--Checkbox-V2-Border-active);
+                }
+            }
+
+            &:checked:before {
+                background-color: var(--Checkbox-V2-Tick);
+            }
+
+            // Disabled box.
+            &:disabled {
+              cursor: default;
+              background: var(--Checkbox-Checkbox-background);
+              opacity: .5;
+              box-shadow: inset 0 0 0 1.5px var(--Checkbox-V2-Border-default);
+            }
+        }
+
+        &+label {
             flex: 1;
             font-weight: 400;
             margin: 0 0 0 1.2rem;
@@ -31,35 +59,28 @@
 
         // Box hover
         &:hover {
-            box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-checkbox-border;
-            border: none;
+            box-shadow: inset .1rem .1rem 0 0 var(--States-Hover-Highlight), inset -.1rem -.1rem 0 0 var(--States-Hover-Shadow), inset 0 0 0 1.5px var(--Checkbox-Checkbox-border);
         }
 
         // Box focus-visible
         &:focus-visible {
-            box-shadow: 0 0 .4rem @shadow-focus-color;
-            border: 1px solid @input-checkbox-focus-border;
-            outline: @outline-default-border;
+            box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
+            border: none;
+            outline: inset 0 0 0 1px var(--Checkbox-Checkbox-border);
 
-            + label {
-              background: @input-focus-background;
-              color: @input-focus-text-color;
+            +label {
+                color: var(--Text-and-icons-Main-text);
             }
         }
 
         // Box pressed
         &:active {
-          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-checkbox-border;
-          border: none;
-
-          + label {
-            background: @label-active-background;
-            color: @label-active-text-color;
-          }
+            box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1.5px var(--Checkbox-Checkbox-border);
+            border: none;
         }
 
         // Disabled state label.
-        &:disabled + label {
+        &:disabled+label {
             opacity: .5;
             cursor: auto;
         }
@@ -67,25 +88,27 @@
         // Disabled box.
         &:disabled {
             cursor: default;
-            box-shadow: none;
-            background: @input-checkbox-disabled-background;
-            border: 1px solid @input-checkbox-disabled-border;
+            background: var(--Checkbox-Checkbox-background);
+            opacity: .5;
+            box-shadow: inset 0 0 0 1.5px var(--Checkbox-Checkbox-border);
             outline: 0;
         }
 
         // Checkmark. Could be replaced with an image
         &:checked:before {
             content: '';
-            width: 1rem;
-            height: 1rem;
-            background-size: 1rem 1rem;
-            background-color: @input-checkbox-control-check-color;
-            mask: @controls-check;
-            -webkit-mask-image: @controls-check;
-            mask-image: @controls-check;
+            width: .8rem;
+            height: .6rem;
+            flex-shrink: 0;
+            background-size: .8rem .6rem;
+            background-color: var(--Checkbox-Checkbox-tick);
+            mask: url('@{images}/controls/check_tick.svg') no-repeat center / contain;
+            -webkit-mask-image: url('@{images}/controls/check_tick.svg') no-repeat center / contain;
+            mask-image: url('@{images}/controls/check_tick.svg')no-repeat center / contain;
         }
+
         &:disabled:before {
-            background: @input-checkbox-disabled-image-background;
+            background: var(--Checkbox-Checkbox-tick);
         }
     }
 }
