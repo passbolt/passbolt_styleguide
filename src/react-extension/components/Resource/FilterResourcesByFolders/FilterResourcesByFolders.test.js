@@ -205,13 +205,13 @@ describe("See Folders", () => {
         filter: {
           type: ResourceWorkspaceFilterTypes.FOLDER,
           payload: {
-            folder: foldersMock[4]
+            folder: foldersMock[2]
           }
         },
       }),
       match: {
         params: {
-          filterByFolderId: foldersMock[4].id
+          filterByFolderId: foldersMock[2].id
         }
       }
     });
@@ -225,13 +225,12 @@ describe("See Folders", () => {
     });
 
     it('As LU I should see selected folder name with parents open', () => {
-      expect(page.filterResourcesByFoldersItem.count).toBe(5);
+      expect.assertions(5);
+      expect(page.filterResourcesByFoldersItem.count).toBe(3);
       expect(page.filterResourcesByFoldersItem.name(1)).toBe("Accounting");
       expect(page.filterResourcesByFoldersItem.name(2)).toBe("ParentCertificates");
       expect(page.filterResourcesByFoldersItem.name(3)).toBe("Certificates");
-      expect(page.filterResourcesByFoldersItem.name(4)).toBe("ChildCertificates1");
-      expect(page.filterResourcesByFoldersItem.name(5)).toBe("ChildCertificates2");
-      expect(page.filterResourcesByFoldersItem.selectedFolderName).toBe("ChildCertificates1");
+      expect(page.filterResourcesByFoldersItem.selectedFolderName).toBe("Certificates");
     });
   });
 

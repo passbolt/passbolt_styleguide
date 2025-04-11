@@ -255,6 +255,9 @@ class FilterResourcesByFoldersItem extends React.Component {
 
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
     const draggingOver = false;
+    if (!this.isOpen()) {
+      this.props.toggleOpenFolder(this.props.folder.id);
+    }
     this.setState({draggingOver});
   }
 
@@ -478,9 +481,6 @@ class FilterResourcesByFoldersItem extends React.Component {
     const canDropInto = this.canDropInto();
     const showDropFocus = this.state.draggingOver && canDropInto;
     const depth = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.props.folder.folder_parent_id).length;
-    const paddingStyle = {
-      paddingLeft: `calc(1.5rem * ${depth})`,
-    };
 
     return (
       <li className="folder-item">
@@ -491,15 +491,14 @@ class FilterResourcesByFoldersItem extends React.Component {
           onDragEnd={this.handleDragEndEvent}
           onDragLeave={this.handleDragLeaveEvent}
           onDragStart={this.handleDragStartEvent}
-          tabIndex={2}>
+          style={{"--folder-depth": depth}}>
           <div className="main-cell-wrapper">
             <div className="main-cell"
               onClick={this.handleSelectEvent}
-              onContextMenu={this.handleContextualMenuEvent}
-              style={paddingStyle}>
+              onContextMenu={this.handleContextualMenuEvent}>
               <button className="link no-border" type="button">
                 {hasChildren &&
-                  <div className="toggle-folder" onClick={this.handleToggleOpenFolder}>
+                  <div className="toggle-folder" onClick={this.handleToggleOpenFolder} role="button">
                     {isOpen
                       ? <CarretDownSVG />
                       : <CarretRightSVG />

@@ -42,6 +42,7 @@ class FilterResourcesByFolders extends React.Component {
     super(props);
     this.state = this.getDefaultState();
     this.bindCallbacks();
+    this.createRefs();
   }
 
   /**
@@ -75,12 +76,19 @@ class FilterResourcesByFolders extends React.Component {
   }
 
   /**
+   * Create DOM nodes or React elements references in order to be able to access them programmatically.
+   */
+  createRefs() {
+    this.folderTreeRef = React.createRef();
+  }
+
+  /**
    * Component did mount
    */
   componentDidMount() {
     if (this.props.match.params.filterByFolderId) {
-      // Add folder id and parent id that should be open
-      this.addSelectedFolderAndParentIdsToBeOpen(this.props.match.params.filterByFolderId);
+      // Add folder parent id that should be open
+      this.addParentFolderIdsToBeOpen(this.props.match.params.filterByFolderId);
     }
   }
 
@@ -89,10 +97,38 @@ class FilterResourcesByFolders extends React.Component {
    * @param prevProps The previous props
    */
   componentDidUpdate(prevProps) {
-    const hasFolderRouteChange = this.props.match.params.filterByFolderId !== prevProps.match.params.filterByFolderId;
-    if (hasFolderRouteChange && this.props.match.params.filterByFolderId) {
+    const folderId = this.props.match.params.filterByFolderId;
+    const hasFolderRouteChange = folderId !== prevProps.match.params.filterByFolderId;
+    if (hasFolderRouteChange && folderId) {
       // Add folder id and parent id that should be open
-      this.addSelectedFolderAndParentIdsToBeOpen(this.props.match.params.filterByFolderId);
+      this.addParentFolderIdsToBeOpen(folderId);
+    }
+  }
+
+  /**
+   * Handles the initial folder scroll ( with a specific manual resource url /folder/view/:id )
+   * @param {array<object>} folders
+   */
+  handleFolderScroll(folders) {
+    const folderToScroll = this.props.resourceWorkspaceContext.scrollTo.folder;
+    const hasNotEmptyRange = this.folderTreeRef.current?.getVisibleRange().some(value => value);
+    if (folderToScroll && hasNotEmptyRange) {
+      this.scrollTo(folders,  this.props.match.params.filterByFolderId);
+      this.props.resourceWorkspaceContext.onFolderScrolled();
+    }
+  }
+
+  /**
+   * Triggers a scroll of the folder tree to a folder given its id, if the folder is not visible yet.
+   * @param {array<object>} folders
+   * @param {string} folderId
+   */
+  scrollTo(folders, folderId) {
+    const folderIndex = folders.findIndex(folder => folder.id === folderId);
+    const [visibleStartIndex, visibleEndIndex] = this.folderTreeRef.current.getVisibleRange();
+    const isInvisible = folderIndex < visibleStartIndex || folderIndex > visibleEndIndex;
+    if (isInvisible) {
+      this.folderTreeRef.current.scrollTo(folderIndex);
     }
   }
 
@@ -166,11 +202,11 @@ class FilterResourcesByFolders extends React.Component {
   }
 
   /**
-   * Add selected folder id and parent folder ids in te state folderIdsOpened
+   * Add parent folder ids in te state folderIdsOpened
    * @param folderId The folder id selected
    */
-  addSelectedFolderAndParentIdsToBeOpen(folderId) {
-    const folderIdsOpened = [...this.state.folderIdsOpened, folderId];
+  addParentFolderIdsToBeOpen(folderId) {
+    const folderIdsOpened = [...this.state.folderIdsOpened];
     const selectedFolder = this.props.context.folders?.find(folder => folder.id === folderId);
     // If the selected folder has a parent. Open it if not yet open.
     let folderParentId = selectedFolder?.folder_parent_id;
@@ -460,6 +496,11 @@ class FilterResourcesByFolders extends React.Component {
     let showDropFocus = false;
     let disabled = false;
 
+    // Handle scroll to the selected folder if needed
+    if (this.props.match.params.filterByFolderId) {
+      this.handleFolderScroll(folders);
+    }
+
     if (isDragging && this.state.draggingOverTitle) {
       const canDragItems = this.canDragItems(this.draggedItems);
       if (canDragItems) {
@@ -485,7 +526,7 @@ class FilterResourcesByFolders extends React.Component {
                         onDrop={this.handleDropTitle}
                         onClick={this.handleClickOnTitle}
                         onContextMenu={this.handleTitleContextualMenuEvent}>
-                        <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()} tabIndex={1}>
+                        <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()}>
                           {isOpen
                             ? <CaretDownSVG />
                             : <CaretRightSVG />
@@ -514,17 +555,18 @@ class FilterResourcesByFolders extends React.Component {
             </div>
           }
           {!isLoading && isOpen && folders.length === 0 &&
-          <em className="empty-content"><Trans>empty</Trans></em>
+            <em className="empty-content"><Trans>empty</Trans></em>
           }
           {!isLoading && isOpen && folders.length > 0 &&
-          <ReactList
-            itemRenderer={(index, key) => this.renderItem(index, key, folders)}
-            itemsRenderer={(items, ref) => this.renderFolderTree(items, ref)}
-            length={folders.length}
-            pageSize={30}
-            minSize={30}
-            type="uniform">
-          </ReactList>
+            <ReactList
+              itemRenderer={(index, key) => this.renderItem(index, key, folders)}
+              itemsRenderer={(items, ref) => this.renderFolderTree(items, ref)}
+              length={folders.length}
+              pageSize={30}
+              minSize={30}
+              type="uniform"
+              ref={this.folderTreeRef}>
+            </ReactList>
           }
         </div>
       </div>
