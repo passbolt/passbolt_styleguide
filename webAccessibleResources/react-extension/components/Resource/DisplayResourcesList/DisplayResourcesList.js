@@ -717,7 +717,10 @@ class DisplayResourcesList extends React.Component {
    */
   handleLocationClick(folderId) {
     if (folderId) {
-      this.props.history.push(`/app/folders/view/${folderId}`);
+      const filterIsDifferent = this.props.resourceWorkspaceContext.filter.payload?.folder?.id !== folderId;
+      if (filterIsDifferent) {
+        this.props.history.push(`/app/folders/view/${folderId}`);
+      }
     } else { // Case of root folder
       const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
       this.props.history.push(`/app/passwords`, {filter});

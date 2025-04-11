@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React from "react";
+import React, {Fragment} from "react";
 import FilterResourcesByFoldersItem from "./FilterResourcesByFoldersItem";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
@@ -23,11 +23,12 @@ import {withDialog} from "../../../contexts/DialogContext";
 import ReactList from "react-list";
 import {Trans, withTranslation} from "react-i18next";
 import {withDrag} from "../../../contexts/DragContext";
-import CarretDownSVG from "../../../../img/svg/caret_down.svg";
-import CarretRightSVG from "../../../../img/svg/caret_right.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
 import CabinetSVG from "../../../../img/svg/cabinet.svg";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
+import memoize from "memoize-one";
 
 // Root virtual folder identifier.
 const ROOT = null;
@@ -41,6 +42,7 @@ class FilterResourcesByFolders extends React.Component {
     super(props);
     this.state = this.getDefaultState();
     this.bindCallbacks();
+    this.createRefs();
   }
 
   /**
@@ -52,17 +54,9 @@ class FilterResourcesByFolders extends React.Component {
       draggingOverTitle: false,
       draggingOverTitleSince: null,
       open: true,
-      moreMenuOpen: false
+      moreMenuOpen: false,
+      folderIdsOpened: []
     };
-  }
-
-  /**
-   * Returns true if the component should be re-rendered
-   */
-  shouldComponentUpdate(prevProps, prevState) {
-    return prevState !== this.state
-      || prevProps.context.folders !== this.props.context.folders
-      || prevProps.resourceWorkspaceContext.filter.type !== this.props.resourceWorkspaceContext.filter.type;
   }
 
   /**
@@ -76,6 +70,153 @@ class FilterResourcesByFolders extends React.Component {
     this.handleDragOverTitle = this.handleDragOverTitle.bind(this);
     this.handleDropTitle = this.handleDropTitle.bind(this);
     this.handleTitleMoreClickEvent = this.handleTitleMoreClickEvent.bind(this);
+    this.handleToggleOpenFolder = this.handleToggleOpenFolder.bind(this);
+    this.handleToggleCloseFolder = this.handleToggleCloseFolder.bind(this);
+    this.handleFolderToDisplay = this.handleFolderToDisplay.bind(this);
+  }
+
+  /**
+   * Create DOM nodes or React elements references in order to be able to access them programmatically.
+   */
+  createRefs() {
+    this.folderTreeRef = React.createRef();
+  }
+
+  /**
+   * Component did mount
+   */
+  componentDidMount() {
+    if (this.props.match.params.filterByFolderId) {
+      // Add folder parent id that should be open
+      this.addParentFolderIdsToBeOpen(this.props.match.params.filterByFolderId);
+    }
+  }
+
+  /**
+   * Component did update
+   * @param prevProps The previous props
+   */
+  componentDidUpdate(prevProps) {
+    const folderId = this.props.match.params.filterByFolderId;
+    const hasFolderRouteChange = folderId !== prevProps.match.params.filterByFolderId;
+    if (hasFolderRouteChange && folderId) {
+      // Add folder id and parent id that should be open
+      this.addParentFolderIdsToBeOpen(folderId);
+    }
+  }
+
+  /**
+   * Handles the initial folder scroll ( with a specific manual resource url /folder/view/:id )
+   * @param {array<object>} folders
+   */
+  handleFolderScroll(folders) {
+    const folderToScroll = this.props.resourceWorkspaceContext.scrollTo.folder;
+    const hasNotEmptyRange = this.folderTreeRef.current?.getVisibleRange().some(value => value);
+    if (folderToScroll && hasNotEmptyRange) {
+      this.scrollTo(folders,  this.props.match.params.filterByFolderId);
+      this.props.resourceWorkspaceContext.onFolderScrolled();
+    }
+  }
+
+  /**
+   * Triggers a scroll of the folder tree to a folder given its id, if the folder is not visible yet.
+   * @param {array<object>} folders
+   * @param {string} folderId
+   */
+  scrollTo(folders, folderId) {
+    const folderIndex = folders.findIndex(folder => folder.id === folderId);
+    const [visibleStartIndex, visibleEndIndex] = this.folderTreeRef.current.getVisibleRange();
+    const isInvisible = folderIndex < visibleStartIndex || folderIndex > visibleEndIndex;
+    if (isInvisible) {
+      this.folderTreeRef.current.scrollTo(folderIndex);
+    }
+  }
+
+  /**
+   * Get folders to display from context folders and the state folderIdsOpened.
+   * @param {array<Object>} folders The folders to ensure the memoized
+   * @param {array<string>} folderIdsOpened The folder ids opened to ensure the memoized
+   *   function is only triggered when the folders are updated or opened.
+   * @return {array<Object>} the folders to display
+   */
+  getFoldersToDisplay = memoize((folders, folderIdsOpened) => this.handleFolderToDisplay(folders, folderIdsOpened));
+
+  /**
+   * Handle folder to display according to te context folders and the state for with folder ids opened
+   * @param {array<Object>} folders The folders from context
+   * @param {array<string>} folderIdsOpened The folder ids that is opened
+   * @returns {*[]} The folders array to display
+   */
+  handleFolderToDisplay(folders, folderIdsOpened) {
+    const foldersByParentIdOrderedByDepth = this.filterFoldersByRootAndFoldersOpened(folders, folderIdsOpened);
+    return this.sortAndFlatFoldersByDepth(foldersByParentIdOrderedByDepth);
+  }
+
+  /**
+   * filter folders by root and folders opened
+   * @param {array<object>} folders
+   * @param {array<string>} folderIdsOpened
+   * @returns {array<object>} An array ordered by depth of folders containing object with parent folder id as a key and an array of folders as value
+   * (example of result: [{null: [folderC, folderA, folderE]}, {folderA.parent_folder_id: [folderK, folderG], ...}, ...]
+   */
+  filterFoldersByRootAndFoldersOpened(folders, folderIdsOpened) {
+    // Store each array of folders by depth rang into an object with parent id as a key and an array of folders as value (example: root folder 0, subfolder 1, ...)
+    const foldersByParentIdOrderedByDepth = [{}];
+    // Loop through each folder form the context and set the foldersByParentIdOrderedByDepth
+    folders?.forEach(folder => {
+      if (folder.folder_parent_id === ROOT) {
+        // Initialize or get the depth 0 of root folders to display
+        (foldersByParentIdOrderedByDepth[0][folder.folder_parent_id] = foldersByParentIdOrderedByDepth[0][folder.folder_parent_id] || []).push(folder);
+      } else if (folderIdsOpened.includes(folder.folder_parent_id)) {
+        const depth = this.props.resourceWorkspaceContext.getHierarchyFolderCache(folder.id).length;
+        // Initialize or get the depth of folders to display
+        foldersByParentIdOrderedByDepth[depth] = foldersByParentIdOrderedByDepth[depth] || {};
+        // Initialize or get the subfolders of a parent to display and add the folder
+        (foldersByParentIdOrderedByDepth[depth][folder.folder_parent_id] = foldersByParentIdOrderedByDepth[depth][folder.folder_parent_id] || []).push(folder);
+      }
+    });
+    return foldersByParentIdOrderedByDepth;
+  }
+
+  /**
+   * Sort and flat array of folders by depth
+   * @param {array<object>} foldersByParentIdOrderedByDepth
+   * @returns {*[]} Array of folders sorted by depth
+   */
+  sortAndFlatFoldersByDepth(foldersByParentIdOrderedByDepth) {
+    // The folders array to display
+    const foldersToDisplay = [];
+    // Loop through each depth corresponding of the order of the array
+    foldersByParentIdOrderedByDepth?.forEach(foldersByParent => {
+      // Get the key (folder parent id) and the value (array of folders)
+      for (const [key, value] of Object.entries(foldersByParent)) {
+        // Get the index of the folder parent id
+        const folderParentIndex = foldersToDisplay.findIndex(folder => folder.id === key);
+        // Sort folders alphabetically
+        this.sortFoldersAlphabetically(value);
+        // Insert folders into the right position
+        foldersToDisplay.splice(folderParentIndex + 1, 0, ...value);
+      }
+    });
+    return foldersToDisplay;
+  }
+
+  /**
+   * Add parent folder ids in te state folderIdsOpened
+   * @param folderId The folder id selected
+   */
+  addParentFolderIdsToBeOpen(folderId) {
+    const folderIdsOpened = [...this.state.folderIdsOpened];
+    const selectedFolder = this.props.context.folders?.find(folder => folder.id === folderId);
+    // If the selected folder has a parent. Open it if not yet open.
+    let folderParentId = selectedFolder?.folder_parent_id;
+    // loop until folder parent id is null
+    while (folderParentId) {
+      const parentFolder = this.props.context.folders.find(folder => folder.id === folderParentId);
+      folderIdsOpened.push(parentFolder.id);
+      folderParentId = parentFolder.folder_parent_id;
+    }
+    this.setState({folderIdsOpened});
   }
 
   /**
@@ -127,6 +268,32 @@ class FilterResourcesByFolders extends React.Component {
       const contextualMenuProps = {left, top: top + 19, className: "right", onBeforeHide};
       this.props.contextualMenuContext.show(FilterResourcesByRootFolderContextualMenu, contextualMenuProps);
     }
+  }
+
+  /**
+   * Handle toggle open folder
+   * Add the folder id to the state folderIdsOpened
+   * @param folderId
+   */
+  handleToggleOpenFolder(folderId) {
+    const folderIdsOpened = [...this.state.folderIdsOpened, folderId];
+    this.setState({folderIdsOpened});
+  }
+
+  /**
+   * Handle toggle close folder
+   * Remove the child folder ids from the state folderIdsOpened
+   * @param folderId
+   */
+  handleToggleCloseFolder(folderId) {
+    const foldersToClose = [folderId];
+    this.props.context.folders.forEach(folder => {
+      if (foldersToClose.includes(folder.folder_parent_id)) {
+        foldersToClose.push(folder.id);
+      }
+    });
+    const folderIdsOpened = this.state.folderIdsOpened.filter(folderId => !foldersToClose.includes(folderId));
+    this.setState({folderIdsOpened});
   }
 
   /**
@@ -272,21 +439,6 @@ class FilterResourcesByFolders extends React.Component {
   }
 
   /**
-   * Get the folders that are at the root of the user.
-   * @returns {array}
-   */
-  getRootFolders() {
-    let folders = [];
-    if (!this.isLoading()) {
-      folders = this.props.context.folders.filter(folder => folder.folder_parent_id === ROOT);
-    }
-
-    this.sortFoldersAlphabetically(folders);
-
-    return folders;
-  }
-
-  /**
    * Check if the user is currently dragging content.
    * @returns {boolean}
    */
@@ -303,16 +455,51 @@ class FilterResourcesByFolders extends React.Component {
   }
 
   /**
+   * Render folder tree for rows
+   * @param items
+   * @param ref
+   * @return {JSX.Element}
+   */
+  renderFolderTree(items, ref) {
+    return <ul ref={ref} className="folders-tree">{items}</ul>;
+  }
+
+  /**
+   * Render item folder row
+   * @param index
+   * @param key
+   * @param folders
+   * @return {JSX.Element}
+   */
+  renderItem(index, key, folders) {
+    const item = folders[index];
+
+    return <Fragment key={key}>
+      <FilterResourcesByFoldersItem
+        key={item.id}
+        folder={item}
+        toggleOpenFolder={this.handleToggleOpenFolder}
+        toggleCloseFolder={this.handleToggleCloseFolder}
+      />
+    </Fragment>;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     const isLoading = this.isLoading();
     const isOpen = this.state.open;
-    const rootFolders = this.getRootFolders();
+    const folders = this.getFoldersToDisplay(this.props.context.folders, this.state.folderIdsOpened);
     const isDragging = this.isDragging();
     let showDropFocus = false;
     let disabled = false;
+
+    // Handle scroll to the selected folder if needed
+    if (this.props.match.params.filterByFolderId) {
+      this.handleFolderScroll(folders);
+    }
 
     if (isDragging && this.state.draggingOverTitle) {
       const canDragItems = this.canDragItems(this.draggedItems);
@@ -339,10 +526,10 @@ class FilterResourcesByFolders extends React.Component {
                         onDrop={this.handleDropTitle}
                         onClick={this.handleClickOnTitle}
                         onContextMenu={this.handleTitleContextualMenuEvent}>
-                        <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()} tabIndex={1}>
+                        <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()}>
                           {isOpen
-                            ? <CarretDownSVG />
-                            : <CarretRightSVG />
+                            ? <CaretDownSVG />
+                            : <CaretRightSVG />
                           }
                         </div>
                         <CabinetSVG />
@@ -367,21 +554,19 @@ class FilterResourcesByFolders extends React.Component {
               <span className="processing-text"><Trans>Retrieving folders</Trans></span>
             </div>
           }
-          {!isLoading && isOpen && rootFolders.length === 0 &&
-          <em className="empty-content"><Trans>empty</Trans></em>
+          {!isLoading && isOpen && folders.length === 0 &&
+            <em className="empty-content"><Trans>empty</Trans></em>
           }
-          {!isLoading && isOpen && rootFolders.length > 0 &&
-          <ReactList
-            itemRenderer={(index, key) => <FilterResourcesByFoldersItem
-              key={key}
-              folder={rootFolders[index]}/>
-            }
-            itemsRenderer={(items, ref) => <ul ref={ref} className="folders-tree">{items}</ul>}
-            length={rootFolders.length}
-            pageSize={20}
-            minSize={20}
-            type="simple">
-          </ReactList>
+          {!isLoading && isOpen && folders.length > 0 &&
+            <ReactList
+              itemRenderer={(index, key) => this.renderItem(index, key, folders)}
+              itemsRenderer={(items, ref) => this.renderFolderTree(items, ref)}
+              length={folders.length}
+              pageSize={30}
+              minSize={30}
+              type="uniform"
+              ref={this.folderTreeRef}>
+            </ReactList>
           }
         </div>
       </div>
@@ -393,6 +578,7 @@ FilterResourcesByFolders.propTypes = {
   context: PropTypes.any, // The app context
   contextualMenuContext: PropTypes.any, // The contextual menu context
   history: PropTypes.object,
+  match: PropTypes.object,
   resourceWorkspaceContext: PropTypes.object,
   dialogContext: PropTypes.any,
   dragContext: PropTypes.any,

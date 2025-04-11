@@ -16,6 +16,7 @@ import {defaultFolderDto} from "../../../../shared/models/entity/folder/folderEn
 import {ownerFolderPermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import MockPort from "../../../test/mock/MockPort";
+import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -36,14 +37,14 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
-    resourceWorkspaceContext: {
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
       filter: {
         type: ResourceWorkspaceFilterTypes.FOLDER,
         payload: {
           folder: foldersMock[0]
         }
       }
-    },
+    }),
     dragContext: {
       dragging: true,
       draggedItems: {
@@ -54,6 +55,8 @@ export function defaultProps() {
       onDragEnd: jest.fn(),
     },
     folder: foldersMock[0],
+    toggleOpenFolder: jest.fn(),
+    toggleCloseFolder: jest.fn(),
     contextualMenuContext: {
       show: jest.fn()
     },
@@ -64,34 +67,6 @@ export function defaultProps() {
       params: {
         filterByFolderId: foldersMock[0].id
       }
-    }
-  };
-}
-
-/**
- * Default props
- * @returns {any}
- */
-export function defaultPropsCloseFolders() {
-  return {
-    dragContext: {
-      dragging: false,
-      draggedItems: null
-    },
-    resourceWorkspaceContext: {
-      filter: {
-        type: ResourceWorkspaceFilterTypes.ALL,
-      }
-    },
-    folder: foldersMock[0],
-    contextualMenuContext: {
-      show: jest.fn()
-    },
-    history: {
-      push: jest.fn()
-    },
-    match: {
-      params: jest.fn()
     }
   };
 }
