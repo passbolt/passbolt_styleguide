@@ -198,7 +198,7 @@ exports.pgpKeys = {
     fingerprint: "DCAD7355136892BCC9E75363AD5C04EA7B62D9AA",
     expires: "Infinity",
     created: "2022-03-08T09:10:53.000Z",
-    algorithm: "EdDSA",
+    algorithm: "eddsa",
     length: 256,
     curve: "ed25519",
     revoked: false,
@@ -305,7 +305,7 @@ exports.pgpKeys = {
     fingerprint: "DCAD7355136892BCC9E75363AD5C04EA7B62D9AA",
     expires: "Infinity",
     created: "2022-03-08T09:10:53.000Z",
-    algorithm: "EdDSA",
+    algorithm: "eddsa",
     length: 256,
     curve: "ed25519",
     revoked: false,
@@ -324,7 +324,7 @@ exports.pgpKeys = {
     created: "2022-05-05T12:22:58.000Z",
     algorithm: "ECDSA",
     length: 256,
-    curve: "p256",
+    curve: "nistP256",
     revoked: false,
   },
   ecdsa_p384: {
@@ -341,7 +341,7 @@ exports.pgpKeys = {
     created: "2022-05-05T12:26:20.000Z",
     algorithm: "ECDSA",
     length: 384,
-    curve: "p384",
+    curve: "nistP384",
     revoked: false,
   },
   ecdsa_p521: {
@@ -358,7 +358,7 @@ exports.pgpKeys = {
     created: "2022-05-05T12:28:39.000Z",
     algorithm: "ECDSA",
     length: 521,
-    curve: "p521",
+    curve: "nistP521",
     revoked: false,
   },
   ecdsa_secp256k1: {
@@ -473,4 +473,22 @@ exports.pgpKeys = {
     curve: "ed25519",
     revoked: false,
   },
+  // an OpenPGP JS V5 generated key pair with EDDSA + ED25519 curve that is considered legacy in OpenPGP JS V6.
+  OpenPpgJsV5EccLegacy: {
+    public: "-----BEGIN PGP PUBLIC KEY BLOCK-----\n\nxjMEaAiovxYJKwYBBAHaRw8BAQdAzFllxBCPNapxpOdat7dwGGivxdnsrEYf\nDtCLWY9mYbrNPU9wZW5QR1BKUyB2NSBFQ0MgbGVnYWN5IDxvcGVucGdwanN2\nNS1lY2MtbGVnYWN5QHBhc3Nib2x0LmNvbT7CjAQQFgoAPgWCaAiovwQLCQcI\nCZB5EYvNRTHa8gMVCAoEFgACAQIZAQKbAwIeARYhBFIykZqf0okyii9vAHkR\ni81FMdryAAAWBAEAiIUsCHjp1Ht1Q/QFqeD3IGOm31MAoq8th2vinnEyOeYA\n/0A5SW8o6+TXn8hewEsN7fG5+gbGcuVAhJd9vwdORUYBzjgEaAiovxIKKwYB\nBAGXVQEFAQEHQFX8Gj8B8AOjpvSgvULgbNxPZTFgolKocuYE5zMVWGg9AwEI\nB8J4BBgWCgAqBYJoCKi/CZB5EYvNRTHa8gKbDBYhBFIykZqf0okyii9vAHkR\ni81FMdryAACA4wEAu0M8K6izYw2o5VbVH03eBC6oZlSfJep4w76Wxn3ZpLUA\n/R77AxKm1cr9cujbPVqRPpK2dn3URWeaWWFdcDsfd4kD\n=nZoM\n-----END PGP PUBLIC KEY BLOCK-----\n",
+    private: "-----BEGIN PGP PRIVATE KEY BLOCK-----\n\nxYYEaAiovxYJKwYBBAHaRw8BAQdAzFllxBCPNapxpOdat7dwGGivxdnsrEYf\nDtCLWY9mYbr+CQMI84bVzB5D9qPgqKzTcUrbyPjiUWCNKu9DbrpE3EqKuk4R\nrmjsb9D1YdEV1BErT+N/I7Ym7WuM/aJKXsiJGOf3g+KGzhXxgPXsz6LiLfKC\nYs09T3BlblBHUEpTIHY1IEVDQyBsZWdhY3kgPG9wZW5wZ3Bqc3Y1LWVjYy1s\nZWdhY3lAcGFzc2JvbHQuY29tPsKMBBAWCgA+BYJoCKi/BAsJBwgJkHkRi81F\nMdryAxUICgQWAAIBAhkBApsDAh4BFiEEUjKRmp/SiTKKL28AeRGLzUUx2vIA\nABYEAQCIhSwIeOnUe3VD9AWp4PcgY6bfUwCiry2Ha+KecTI55gD/QDlJbyjr\n5NefyF7ASw3t8bn6BsZy5UCEl32/B05FRgHHiwRoCKi/EgorBgEEAZdVAQUB\nAQdAVfwaPwHwA6Om9KC9QuBs3E9lMWCiUqhy5gTnMxVYaD0DAQgH/gkDCDQq\nnLHVpr3C4EWIirOi6VSGaF3373zrHUnVSucsRScFJiVdcU1puq6nqKSmU16r\n173i5bYd05nITHhdBn5/0iGnZW+/Vb2bS1YLtSIR9BTCeAQYFgoAKgWCaAio\nvwmQeRGLzUUx2vICmwwWIQRSMpGan9KJMoovbwB5EYvNRTHa8gAAgOMBALtD\nPCuos2MNqOVW1R9N3gQuqGZUnyXqeMO+lsZ92aS1AP0e+wMSptXK/XLo2z1a\nkT6StnZ91EVnmllhXXA7H3eJAw==\n=+9Bm\n-----END PGP PRIVATE KEY BLOCK-----\n",
+    key_id: "4531DAF2",
+    user_ids: [{
+      email: "openpgpjsv5-ecc-legacy@passbolt.com",
+      name: "OpenPGPJS v5 ECC legacy",
+    }],
+    passphrase: "openpgpjsv5-ecc-legacy@passbolt.com",
+    fingerprint: "5232919A9FD289328A2F6F0079118BCD4531DAF2",
+    created: "2025-04-23T08:45:51.000Z",
+    expires: null,
+    algorithm: "eddsa",
+    curve: "ed25519",
+    length: 256,
+    revoked: false
+  }
 };
