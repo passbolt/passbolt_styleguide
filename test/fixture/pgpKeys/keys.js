@@ -198,9 +198,9 @@ exports.pgpKeys = {
     fingerprint: "DCAD7355136892BCC9E75363AD5C04EA7B62D9AA",
     expires: "Infinity",
     created: "2022-03-08T09:10:53.000Z",
-    algorithm: "EdDSA",
+    algorithm: "eddsaLegacy",
     length: 256,
-    curve: "ed25519",
+    curve: "ed25519Legacy",
     revoked: false,
   },
   server: {
@@ -305,9 +305,9 @@ exports.pgpKeys = {
     fingerprint: "DCAD7355136892BCC9E75363AD5C04EA7B62D9AA",
     expires: "Infinity",
     created: "2022-03-08T09:10:53.000Z",
-    algorithm: "EdDSA",
+    algorithm: "eddsaLegacy",
     length: 256,
-    curve: "ed25519",
+    curve: "ed25519Legacy",
     revoked: false,
   },
   ecdsa_p256: {
@@ -324,7 +324,7 @@ exports.pgpKeys = {
     created: "2022-05-05T12:22:58.000Z",
     algorithm: "ECDSA",
     length: 256,
-    curve: "p256",
+    curve: "nistP256",
     revoked: false,
   },
   ecdsa_p384: {
@@ -341,7 +341,7 @@ exports.pgpKeys = {
     created: "2022-05-05T12:26:20.000Z",
     algorithm: "ECDSA",
     length: 384,
-    curve: "p384",
+    curve: "nistP384",
     revoked: false,
   },
   ecdsa_p521: {
@@ -358,7 +358,7 @@ exports.pgpKeys = {
     created: "2022-05-05T12:28:39.000Z",
     algorithm: "ECDSA",
     length: 521,
-    curve: "p521",
+    curve: "nistP521",
     revoked: false,
   },
   ecdsa_secp256k1: {
