@@ -57,6 +57,7 @@ class OrchestrateResourceForm extends Component {
           onChange={this.props.onChange}
           resourceType={this.props.resourceType}
           onConvertToDescription={this.props.onConvertToDescription}
+          isAllowedToConvertNote={this.props.isAllowedToConvertNote}
           warnings={this.props.warnings}
           errors={this.props.errors}
           disabled={this.props.disabled}
@@ -83,6 +84,7 @@ OrchestrateResourceForm.propTypes = {
   onChange: PropTypes.func, //The resource setter
   onConvertToNote: PropTypes.func, //The resource note to convert
   onConvertToDescription: PropTypes.func, //The resource description to convert
+  isAllowedToConvertNote: PropTypes.bool, // The user is allowed to convert a note into a description
   passwordEntropy: PropTypes.number, // the current password entropy if any
   consumePasswordEntropyError: PropTypes.func, // a password entropy state consumer callback
   t: PropTypes.func, // The translation function

@@ -45,6 +45,9 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {DateTime} from "luxon";
 import EditResourceSkeleton from "./EditResourceSkeleton";
+import {
+  RESOURCE_TYPE_PASSWORD_STRING_SLUG
+} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 class EditResource extends Component {
   constructor(props) {
@@ -437,12 +440,14 @@ class EditResource extends Component {
    */
   async updateResource(resource) {
     const isSecretChanged = resource.secret.areSecretsDifferent(this.state.originalSecret);
-    if (!isSecretChanged) {
-      await this.props.context.port.request("passbolt.resources.update", resource.toResourceDto(), null);
-      return;
+    if (this.props.resource.resource_type_id === resource.resourceTypeId) {
+      if (!isSecretChanged) {
+        await this.props.context.port.request("passbolt.resources.update", resource.toResourceDto(), null);
+        return;
+      }
     }
 
-    if (this.shouldUpdateExpirationDate()) {
+    if (isSecretChanged && this.shouldUpdateExpirationDate()) {
       resource.set("expired", this.getResourceExpirationDate());
     }
 
@@ -566,6 +571,15 @@ class EditResource extends Component {
   }
 
   /**
+   * Is allowed to convert a note
+   * @returns {boolean}
+   */
+  get isAllowedToConvertNote() {
+    const resourceType = this.props.resourceTypes.getFirstById(this.props.resource.resource_type_id);
+    return resourceType.slug === RESOURCE_TYPE_PASSWORD_STRING_SLUG;
+  }
+
+  /**
    * Should input be disabled? True if state is processing
    * @returns {boolean}
    */
@@ -660,6 +674,7 @@ class EditResource extends Component {
                     onChange={this.handleInputChange}
                     onConvertToDescription={this.handleConvertToDescription}
                     onConvertToNote={this.handleConvertToNote}
+                    isAllowedToConvertNote={this.isAllowedToConvertNote}
                     passwordEntropy={this.state.passwordEntropy}
                     consumePasswordEntropyError={this.consumePasswordEntropyError}
                     disabled={this.hasAllInputDisabled}
