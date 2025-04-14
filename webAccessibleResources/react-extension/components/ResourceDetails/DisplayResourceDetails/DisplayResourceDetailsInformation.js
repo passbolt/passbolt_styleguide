@@ -154,10 +154,7 @@ class DisplayResourceDetailsInformation extends React.Component {
   handleFolderParentClickEvent() {
     if (this.resource.folder_parent_id) { // Case of specific folder
       const folderParent = this.props.context.folders.find(item => item.id === this.resource.folder_parent_id);
-      const filterIsDifferent = this.props.resourceWorkspaceContext.filter.payload?.folder?.id !== folderParent.id;
-      if (filterIsDifferent) {
-        this.props.history.push(`/app/folders/view/${folderParent.id}`);
-      }
+      this.props.history.push(`/app/folders/view/${folderParent.id}`);
     } else { // Case of root folder
       const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
       this.props.history.push(`/app/passwords`, {filter});

@@ -100,6 +100,7 @@ class AddResourceNote extends Component {
    * =============================================================
    */
   render() {
+    const canConvertNote = this.props.isAllowedToConvertNote && this.isResourceTypeV4Default && this.canHaveMetadataDescription;
     return (
       <>
         <div className="title">
@@ -132,7 +133,7 @@ class AddResourceNote extends Component {
             </div>
           </div>
         </div>
-        {this.isResourceTypeV4Default && this.canHaveMetadataDescription &&
+        {canConvertNote &&
           <div className="message notice">
             <p className="text">
               <strong><Trans>Information</Trans>:</strong> <Trans>Note is a secret and it is not searchable.</Trans> <Trans>If you want it to be a searchable, you can convert it into a description.</Trans> <Trans>This is not recommended.</Trans>
@@ -152,6 +153,7 @@ AddResourceNote.propTypes = {
   resource: PropTypes.object, // The resource to edit or create
   onChange: PropTypes.func, //The resource setter
   onConvertToDescription: PropTypes.func, //The resource note to convert
+  isAllowedToConvertNote: PropTypes.bool, //The user is allowed to convert a note into description
   resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource type entity
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection),
   t: PropTypes.func, // The translation function

@@ -4737,7 +4737,8 @@ html {
   height: 8rem;
 }
 .user.profile .button.open + .dropdown-content .informations {
-  gap: 1.6rem;
+  display: flex;
+  flex-direction: column;
   align-self: stretch;
   padding: 0.8rem 1.6rem;
 }
@@ -4746,18 +4747,20 @@ html {
   color: var(--Text-and-icons-Main-text);
   overflow: hidden;
   text-align: center;
+  text-overflow: ellipsis;
   line-height: normal;
   font-style: normal;
-  text-overflow: ellipsis;
   justify-content: center;
   flex-direction: column;
-  display: flex;
+  display: block;
+  flex: 1;
+  overflow-wrap: break-word;
 }
 .user.profile .button.open + .dropdown-content .informations .name {
   font-size: 1.6rem;
   font-weight: 700;
   margin-bottom: 0.8rem;
-  height: 1.9rem;
+  line-height: 1.9rem;
 }
 .user.profile .button.open + .dropdown-content .informations .email {
   font-size: 1.4rem;
@@ -4906,7 +4909,7 @@ html {
   padding: 0;
 }
 .navigation-secondary ul.folders-tree {
-  padding: 0.1rem 0 0 0;
+  padding: 0.1rem 0 0 1.5rem;
 }
 .navigation-secondary li {
   /*
@@ -4974,20 +4977,6 @@ html {
 .navigation-secondary .row.selected {
   background: var(--Sections-Filter-selected);
 }
-.navigation-secondary .row:hover:focus-within,
-.navigation-secondary .row:focus-visible:focus-within,
-.navigation-secondary .row:focus:focus-within,
-.navigation-secondary .row.highlight:focus-within,
-.navigation-secondary .row.selected:focus-within {
-  box-shadow: none;
-}
-.navigation-secondary .row:hover:focus-within:has(button:focus-visible),
-.navigation-secondary .row:focus-visible:focus-within:has(button:focus-visible),
-.navigation-secondary .row:focus:focus-within:has(button:focus-visible),
-.navigation-secondary .row.highlight:focus-within:has(button:focus-visible),
-.navigation-secondary .row.selected:focus-within:has(button:focus-visible) {
-  box-shadow: 0 0 0.4rem var(--States-Focus), inset 0 0 0 0.1rem var(--States-Focus);
-}
 .navigation-secondary .row:hover .main-cell button,
 .navigation-secondary .row:focus-visible .main-cell button,
 .navigation-secondary .row:focus .main-cell button,
@@ -5004,7 +4993,8 @@ html {
 .navigation-secondary .row .right-cell button {
   margin-right: 0.8rem;
 }
-.navigation-secondary .row:focus-within {
+.navigation-secondary .row:focus,
+.navigation-secondary .row:focus-visible {
   background: var(--Sections-Filter-selected);
   box-shadow: 0 0 0.4rem var(--States-Focus), inset 0 0 0 0.1rem var(--States-Focus);
 }

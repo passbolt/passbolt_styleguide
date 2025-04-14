@@ -818,21 +818,18 @@ describe("See the Create Resource", () => {
       });
 
       it('As a signed-in user I should be able to convert a note to a description for a v4 default', async() => {
-        expect.assertions(2);
+        expect.assertions(1);
 
         const props = defaultProps({resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION})});
-        mockContextRequest(props.context, () => ({password: "password", description: "description"}));
+        mockContextRequest(props.context, () => ({password: "RN9n8XuECN3", description: "description"}));
         const page = new EditResourcePage(props);
         await waitFor(() => {});
 
         await page.click(page.getSectionItem(2));
         await page.fillInput(page.note, "note");
 
-        await page.click(page.convertToDescription);
-
         // expectations
-        expect(page.sectionItemSelected.textContent).toBe("Description");
-        expect(page.description.value).toBe("note");
+        expect(page.convertToDescription).toBeNull();
       });
     });
 
@@ -1335,6 +1332,47 @@ describe("See the Create Resource", () => {
       expect(props.onClose).toBeCalled();
     });
 
+    it('As a signed-in user I should be able to save a resource v4 default without changing secret, only resource type', async() => {
+      expect.assertions(3);
+      const props = defaultProps({resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING})});
+      mockContextRequest(props.context, () => ({password: "RN9n8XuECN3"}));
+      const page = new EditResourcePage(props);
+      await waitFor(() => {});
+
+      await page.click(page.getSectionItem(2));
+
+      await page.click(page.convertToNote);
+
+      await page.fillInput(page.name, "v4 default");
+
+      mockContextRequest(props.context, jest.fn());
+      await page.click(page.saveButton);
+
+      const resourceDtoExpected = {
+        id: props.resource.id,
+        expired: null,
+        folder_parent_id: null,
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+        metadata: {
+          name: "v4 default",
+          username: props.resource.metadata.username,
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+          uris: props.resource.metadata.uris,
+          description: null
+        }
+      };
+
+      const secretDtoExpected = {
+        password: "RN9n8XuECN3",
+        description: props.resource.metadata.description
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been updated successfully");
+      expect(props.onClose).toBeCalled();
+    });
+
     it('As a signed-in user I should be able to save a resource v4 totp after password and note deleted', async() => {
       expect.assertions(3);
       const props = defaultProps({resource: defaultResourceDto({metadata: defaultResourceMetadataDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, description: null})})});
@@ -1379,8 +1417,8 @@ describe("See the Create Resource", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As a signed-in user I should be able to save a resource v4 password string', async() => {
-      expect.assertions(3);
+    it('As a signed-in user I should be able to save a resource v4 password and note after standalone totp deleted', async() => {
+      expect.assertions(4);
       const props = defaultProps({resource: defaultResourceDto({metadata: defaultResourceMetadataDto({resource_type_id: TEST_RESOURCE_TYPE_TOTP, description: null})})});
       mockContextRequest(props.context, () => ({totp: defaultTotpDto()}));
       const page = new EditResourcePage(props);
@@ -1394,13 +1432,13 @@ describe("See the Create Resource", () => {
       await page.click(page.addSecret);
       await page.click(page.addSecretNote);
 
-      await page.fillInput(page.note, "note converted");
+      await page.fillInput(page.note, "note");
 
       await page.click(page.deleteSecretTotp);
 
-      await page.click(page.convertToDescription);
+      expect(page.convertToDescription).toBeNull();
 
-      await page.fillInput(page.name, "v4 password string");
+      await page.fillInput(page.name, "v4 password and note");
 
       mockContextRequest(props.context, jest.fn());
       await page.click(page.saveButton);
@@ -1409,17 +1447,20 @@ describe("See the Create Resource", () => {
         id: props.resource.id,
         expired: null,
         folder_parent_id: null,
-        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
         metadata: {
-          name: "v4 password string",
+          name: "v4 password and note",
           username: props.resource.metadata.username,
-          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
           uris: props.resource.metadata.uris,
-          description: "note converted"
+          description: null
         }
       };
 
-      const secretDtoExpected = "RN9n8XuECN3";
+      const secretDtoExpected = {
+        password: "RN9n8XuECN3",
+        description: "note"
+      };
 
       // expectations
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDtoExpected, secretDtoExpected);
