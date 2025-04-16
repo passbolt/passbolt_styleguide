@@ -84,7 +84,8 @@
         }
 
         .informations {
-          gap: 1.6rem;
+          display: flex;
+          flex-direction: column;
           align-self: stretch;
           padding: .8rem 1.6rem;
 
@@ -96,17 +97,18 @@
             text-overflow: ellipsis;
             line-height: normal;
             font-style: normal;
-            text-overflow: ellipsis;
             justify-content: center;
             flex-direction: column;
-            display: flex;
+            display: block;
+            flex: 1;
+            overflow-wrap: break-word;
           }
 
           .name {
             font-size: 1.6rem;
             font-weight: 700;
             margin-bottom: .8rem;
-            height: 1.9rem;
+            line-height: 1.9rem;
           }
 
           .email {

@@ -29,6 +29,7 @@ export function defaultProps(data = {}) {
     context: defaultAppContext(),
     onChange: jest.fn(),
     onConvertToDescription: jest.fn(),
+    isAllowedToConvertNote: true,
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     resourceType: new ResourceTypeEntity(resourceTypeV5DefaultDto()),
     resource: defaultResourceFormDto()

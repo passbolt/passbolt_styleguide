@@ -582,6 +582,7 @@ class CreateResource extends Component {
                 onChange={this.handleInputChange}
                 onConvertToDescription={this.handleConvertToDescription}
                 onConvertToNote={this.handleConvertToNote}
+                isAllowedToConvertNote={true}
                 passwordEntropy={this.state.passwordEntropy}
                 warnings={warnings}
                 errors={errors}
