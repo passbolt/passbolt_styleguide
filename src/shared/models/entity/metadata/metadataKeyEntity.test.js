@@ -204,7 +204,7 @@ describe("MetadataKeyEntity", () => {
       expect(entity3.expired).toStrictEqual(dto3.expired);
     });
   });
-  describe("::dtDto", () => {
+  describe("::toDto", () => {
     it("minimal to dto", () => {
       expect.assertions(5);
       // minimal set with the data property
