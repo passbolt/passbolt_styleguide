@@ -40,7 +40,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
       "type": "object",
       "required": [
         "user_id",
-        "data",
+        "data"
       ],
       "properties": {
         "id": {
@@ -57,6 +57,11 @@ class MetadataPrivateKeyEntity extends EntityV2 {
           "type": "string",
           "format": "uuid",
           "nullable": true,
+        },
+        "data_signed_by_current_user": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
         },
         "data": {
           "anyOf": [{
@@ -122,6 +127,13 @@ class MetadataPrivateKeyEntity extends EntityV2 {
     return this.toDto();
   }
 
+  /**
+   * @inheritdoc
+   */
+  marshall() {
+    this._props.data_signed_by_current_user = null;
+  }
+
   /*
    * ==================================================
    * Dynamic properties getters
@@ -129,7 +141,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    */
   /**
    * Get the raw data unencrypted if it hasn't been decrypted already.
-   * @returns {string}
+   * @returns {string | MetadataPrivateKeyDataEntity}
    */
   get data() {
     return this.isDecrypted
@@ -144,6 +156,36 @@ class MetadataPrivateKeyEntity extends EntityV2 {
   get metadataKeyId() {
     return this._props.metadata_key_id || null;
   }
+
+  /**
+   * Returns true if the data has been decrypted already.
+   * @returns {boolean}
+   */
+  get isDecrypted() {
+    return Boolean(this._data);
+  }
+
+  /**
+   * Returns the user_id
+   * @returns {string}
+   */
+  get userId() {
+    return this._props.user_id;
+  }
+
+  /**
+   * Returns the data_signed_by_current_user
+   * @returns {string|null}
+   */
+  get isDataSignedByCurrentUser() {
+    return this._props.data_signed_by_current_user || null;
+  }
+
+  /*
+   * ==================================================
+   * Dynamic properties setters
+   * ==================================================
+   */
 
   /**
    * Set the data.
@@ -164,19 +206,14 @@ class MetadataPrivateKeyEntity extends EntityV2 {
   }
 
   /**
-   * Returns true if the data has been decrypted already.
-   * @returns {boolean}
+   * Set the data_signed_by_current_user property.
+   * The value should be a date time string and can be nullable.
+   * @param {string|null} value
+   * @throws {EntityValidationError} if the `dataSignedByCurrentUser` is not valid
    */
-  get isDecrypted() {
-    return Boolean(this._data);
-  }
-
-  /**
-   * Returns the user_id
-   * @returns {string}
-   */
-  get userId() {
-    return this._props.user_id;
+  set isDataSignedByCurrentUser(value) {
+    EntitySchema.validateProp("data_signed_by_current_user", value, this.cachedSchema.properties.data_signed_by_current_user);
+    this._props.data_signed_by_current_user = value;
   }
 }
 

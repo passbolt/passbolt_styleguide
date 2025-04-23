@@ -17,6 +17,7 @@ import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withImportAccountKitContext} from "../../../contexts/Desktop/ImportAccountKitContext";
+import ImportBackgroundSVG from "../../../../img/svg/import_background.svg";
 
 class ImportAccountKit extends React.Component {
   /**
@@ -180,12 +181,7 @@ class ImportAccountKit extends React.Component {
     return (
       <div className="import-account-kit">
         <div className="big avatar">
-          <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="90" height="90" rx="45" fill="#939598" />
-            <path d="M65.997 51.9822V61.316C66.0007 61.9294 65.883 62.5374 65.6509 63.1051C65.4187 63.6729 65.0766 64.1891 64.6442 64.6241C64.2117 65.0591 63.6976 65.4044 63.1312 65.64C62.5649 65.8755 61.9576 65.9968 61.3442 65.9968H28.634C27.3925 65.9968 26.2019 65.5036 25.3241 64.6258C24.4462 63.748 23.9531 62.5574 23.9531 61.316V51.9822" stroke="white" strokeWidth="2.58413" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M56.663 35.6409L44.9748 23.9527L33.2866 35.6409" stroke="white" strokeWidth="2.58413" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M44.9751 23.9527V51.982" stroke="white" strokeWidth="2.58413" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <ImportBackgroundSVG/>
         </div>
         <form
           onSubmit={this.handleUpload} noValidate>

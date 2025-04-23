@@ -65,6 +65,14 @@ class MetadataPrivateKeyDataEntity extends EntityV2 {
   get armoredKey() {
     return this._props.armored_key;
   }
+
+  /**
+   * Returns the fingerprint field of the entity
+   * @returns {string}
+   */
+  get fingerprint() {
+    return this._props.fingerprint;
+  }
 }
 
 export default MetadataPrivateKeyDataEntity;

@@ -88,5 +88,12 @@ describe("MetadataPrivateKeyDataEntity", () => {
 
       expect(entity.armoredKey).toStrictEqual(dto.armored_key);
     });
+    it("`fingerprint` should return the right value", () => {
+      expect.assertions(1);
+      const dto = defaultMetadataPrivateKeyDataDto();
+      const entity = new MetadataPrivateKeyDataEntity(dto);
+
+      expect(entity.fingerprint).toStrictEqual(dto.fingerprint);
+    });
   });
 });

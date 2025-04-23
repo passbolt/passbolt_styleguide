@@ -34,6 +34,7 @@ export const defaultMetadataPrivateKeyDto = (data = {}) => minimalMetadataPrivat
   id: uuidv4(),
   user_id: uuidv4(),
   metadata_key_id: uuidv4(),
+  data_signed_by_current_user: null,
   modified: "2022-10-11T08:09:00+00:00",
   created_by: uuidv4(),
   created: "2022-10-11T08:09:00+00:00",

@@ -63,7 +63,7 @@ class GetStartedDesktop extends React.Component {
           <button
             type="button"
             onClick={this.handleStart}
-            className="button primary form">
+            className="button primary form get-started">
             <Trans>Start</Trans>
           </button>
         </div>

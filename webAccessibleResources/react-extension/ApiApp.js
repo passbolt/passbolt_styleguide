@@ -42,7 +42,6 @@ import MfaContextProvider from "./contexts/MFAContext";
 import RbacContextProvider from "../shared/context/Rbac/RbacContext";
 import AdminRbacContextProvider from "./contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
 import AdministrationHealthcheckContextProvider from "./contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext";
-import DisplayApiUserSettingsWorkspace from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
 
 /**
  * The passbolt application served by the API.
@@ -88,8 +87,6 @@ class ApiApp extends Component {
                                     "/app/administration/password-expiry",
                                     "/app/administration/content-types/metadata",
                                     "/app/administration/content-types/metadata-key",
-                                    "/app/administration/migrate-metadata",
-                                    "/app/administration/allow-content-types",
                                   ]}/>
                                   <Route path="/app/administration">
                                     <AdministrationWorkspaceContextProvider>
@@ -116,17 +113,6 @@ class ApiApp extends Component {
                                         </AdminUserDirectoryContextProvider>
                                       </AdminSmtpSettingsContextProvider>
                                     </AdministrationWorkspaceContextProvider>
-                                  </Route>
-                                  <Route path={["/app/settings/mfa"]}>
-                                    <ManageDialogs/>
-                                    <ManageContextualMenu/>
-                                    <ManageAnnouncements/>
-                                    <div id="container" className="page settings">
-                                      <div id="app" className="app" tabIndex="1000">
-                                        {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
-                                        <DisplayApiUserSettingsWorkspace/>
-                                      </div>
-                                    </div>
                                   </Route>
                                 </Switch>
                               </NavigationContextProvider>

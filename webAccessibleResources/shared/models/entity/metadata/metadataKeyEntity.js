@@ -23,7 +23,6 @@ class MetadataKeyEntity extends EntityV2 {
    */
   constructor(dto, options = {}) {
     super(dto, options);
-
     // Associations
     if (this._props.metadata_private_keys) {
       this._metadata_private_keys = new MetadataPrivateKeysCollection(this._props.metadata_private_keys, {...options, clone: false});
@@ -122,6 +121,30 @@ class MetadataKeyEntity extends EntityV2 {
       error.addError("id:metadata_private_keys", 'same_id', '`id` and the `metadata_private_keys.id` should be the same');
       throw error;
     }
+  }
+
+  /**
+   * Assert that the decrypted metadata private key fingerprint is equal to the metadata public key
+   *
+   * @throws {EntityValidationError} if the decrypted metadata private key fingerprint is not equal to the metadata public key.
+   */
+  assertFingerprintPublicAndPrivateKeysMatch() {
+    const privateMetadataKeysLength = this._metadata_private_keys?.length || 0;
+
+    if (privateMetadataKeysLength === 0) {
+      return;
+    }
+
+    this._metadata_private_keys.items.forEach((metadataPrivateKey, index) => {
+      if (!metadataPrivateKey.isDecrypted) {
+        return;
+      }
+      if (metadataPrivateKey.data.fingerprint !== this.fingerprint) {
+        const error = new EntityValidationError();
+        error.addError(`metadata_private_keys.${index}.fingerprint`, 'fingerprint_match', 'The fingerprint of the metadata private key does not match the fingerprint of the metadata public key');
+        throw error;
+      }
+    });
   }
 
   /*

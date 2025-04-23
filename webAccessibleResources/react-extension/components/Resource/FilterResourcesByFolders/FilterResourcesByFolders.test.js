@@ -21,6 +21,8 @@ import FilterResourcesByRootFolderContextualMenu from "./FilterResourcesByRootFo
 import FilterResourcesByFoldersPage from "./FilterResourcesByFolders.test.page";
 import {defaultResourcesDtos} from "../../../../shared/models/entity/resource/resourcesCollection.test.data";
 import {foldersMock} from "./FilterResourcesByFolders.test.data";
+import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFoldersItemContextualMenu";
+import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -56,6 +58,28 @@ describe("See Folders", () => {
       expect(page.filterResourcesByFolders.rootFolderName).toBe('My workspace');
     });
 
+    it('As LU I should see all folders name', async() => {
+      expect(page.filterResourcesByFolders.exists()).toBeTruthy();
+      expect(page.filterResourcesByFoldersItem.exists()).toBeTruthy();
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
+      expect(page.filterResourcesByFoldersItem.count).toBe(5);
+      expect(page.filterResourcesByFoldersItem.name(1)).toBe("Accounting");
+      expect(page.filterResourcesByFoldersItem.name(2)).toBe("ParentCertificates");
+      expect(page.filterResourcesByFoldersItem.name(3)).toBe("Certificates");
+      expect(page.filterResourcesByFoldersItem.name(4)).toBe("ChildCertificates1");
+      expect(page.filterResourcesByFoldersItem.name(5)).toBe("ChildCertificates2");
+      expect(page.filterResourcesByFoldersItem.selectedFolderName).toBe("Accounting");
+    });
+
+    it('As LU I should be able to close folder to hide the child folders', async() => {
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
+      expect(page.filterResourcesByFoldersItem.count).toBe(5);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      expect(page.filterResourcesByFoldersItem.count).toBe(2);
+    });
+
     it('As LU I should be able to filter by root folder', async() => {
       await page.title.click();
       expect(props.history.push).toHaveBeenCalledWith(`/app/passwords`, {filter: {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER}});
@@ -69,6 +93,12 @@ describe("See Folders", () => {
     it('As LU I should be able to open a contextual menu for root folder with right click', async() => {
       await page.filterResourcesByFolders.openContextualMenuWithRightClick;
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByRootFolderContextualMenu, {});
+    });
+
+    it('As LU I should be able to open a contextual menu for a folder with right click on a child folder', async() => {
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      await page.filterResourcesByFoldersItem.openContextualMenuWithRightClick(3);
+      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {folder: foldersMock[2]});
     });
 
     it('As LU I should be able to drag and drop a folder on the root folder', async() => {
@@ -126,18 +156,14 @@ describe("See Folders", () => {
 
       const page = new FilterResourcesByFoldersPage(context, props);
 
-      await page.filterResourcesByFoldersItem.dragStartOnFolder(1);
-      await page.filterResourcesByFoldersItem.dragEndOnFolder(1);
       await page.filterResourcesByFolders.onDragOver;
       await page.filterResourcesByFolders.onDragLeave;
       await page.filterResourcesByFolders.onDragOver;
       await page.filterResourcesByFolders.onDrop;
-      expect(props.dragContext.onDragStart).toHaveBeenCalled();
-      expect(props.dragContext.onDragEnd).toHaveBeenCalled();
     });
 
     it('As LU I should be able to drag and drop resources on another folder', async() => {
-      expect.assertions(2);
+      expect.assertions(4);
       const context = defaultAppContext(); // The applicative context
       const resources = defaultResourcesDtos();
       const props = defaultProps({
@@ -153,20 +179,58 @@ describe("See Folders", () => {
       });
 
       context.port.addRequestListener("passbolt.resources.move-by-ids", async(resourcesIds, destinationFolder) => {
-        expect(destinationFolder).toStrictEqual(foldersMock[3].id);
+        expect(destinationFolder).toStrictEqual(foldersMock[4].id);
         expect(resourcesIds).toStrictEqual(resources.map(r => r.id));
       });
 
       const page = new FilterResourcesByFoldersPage(context, props);
 
-      await page.filterResourcesByFoldersItem.dragStartOnFolder(2);
-      await page.filterResourcesByFoldersItem.dragEndOnFolder(2);
-      await page.filterResourcesByFolders.onDragOver;
-      await page.filterResourcesByFolders.onDragLeave;
-      await page.filterResourcesByFolders.onDragOver;
-      await page.filterResourcesByFolders.onDrop;
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
+      await page.filterResourcesByFoldersItem.onDropFolder(4);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
+    });
+  });
+
+  describe('As LU I should see the Folder section open to the selected folder with parent open', () => {
+    const context = defaultAppContext(); // The applicative context
+    const props = defaultProps({
+      resourceWorkspaceContext: defaultResourceWorkspaceContext({
+        filter: {
+          type: ResourceWorkspaceFilterTypes.FOLDER,
+          payload: {
+            folder: foldersMock[2]
+          }
+        },
+      }),
+      match: {
+        params: {
+          filterByFolderId: foldersMock[2].id
+        }
+      }
+    });
+    /**
+     * Given an organization with 5 Folders with a child folder selected
+     * Then I should see the Folder selected with parent folder open
+     */
+
+    beforeEach(() => {
+      page = new FilterResourcesByFoldersPage(context, props);
+    });
+
+    it('As LU I should see selected folder name with parents open', () => {
+      expect.assertions(5);
+      expect(page.filterResourcesByFoldersItem.count).toBe(3);
+      expect(page.filterResourcesByFoldersItem.name(1)).toBe("Accounting");
+      expect(page.filterResourcesByFoldersItem.name(2)).toBe("ParentCertificates");
+      expect(page.filterResourcesByFoldersItem.name(3)).toBe("Certificates");
+      expect(page.filterResourcesByFoldersItem.selectedFolderName).toBe("Certificates");
     });
   });
 

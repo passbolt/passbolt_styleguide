@@ -4381,18 +4381,18 @@ iframe.cachette {
   border: none;
 }
 .get-started-desktop .step {
-  width: 24px;
-  height: 24px;
+  width: 2.4rem;
+  height: 2.4rem;
   display: inline-flex;
   box-sizing: border-box;
-  border: 2px solid #000000;
-  border-radius: 1000px;
-  line-height: 20px;
-  font-size: 15px;
+  border: 2px solid var(--Text-and-icons-Main-text);
+  border-radius: 100rem;
+  line-height: 2rem;
+  font-size: 1.4rem;
   flex-direction: column;
   align-items: center;
-  color: #000000;
-  margin-right: 15px;
+  color: var(--Text-and-icons-Main-text);
+  margin-right: 1.6rem;
 }
 .import-account-kit .big.avatar {
   text-align: center;
@@ -4413,11 +4413,12 @@ iframe.cachette {
   font-size: 1.6rem;
   line-height: 2rem;
   margin-top: 1.6rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0rem;
 }
 .import-account-kit-details .user .user-email {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  color: var(--Text-and-icons-Main-text);
+  font-size: 1.4rem;
+  opacity: 0.5;
 }
 .import-account-kit-details .user .user-domain {
   font-size: 1.5rem;
@@ -4452,6 +4453,15 @@ body {
   font-size: 1.6rem;
   line-height: 2.4rem;
   margin-bottom: 1.6rem;
+}
+.login.page .get-started-description {
+  font-size: 1.4rem;
+  color: var(--Text-and-icons-Secondary-text);
+  margin-bottom: 1.6rem;
+}
+.login.page .button.get-started {
+  width: 100%;
+  padding: 1rem 1.6rem;
 }
 .login.page .processing-wrapper {
   display: flex;
@@ -4747,6 +4757,7 @@ body {
   .login.page .content .login-form {
     border-radius: var(--Section-border-radius);
     max-width: 37.2rem;
+    min-width: 37rem;
     margin: auto;
     padding: 4.8rem 4rem;
     background: var(--Dialog-Dialog-fill);
@@ -4757,6 +4768,7 @@ body {
   }
   .login.page .content .login-box-footer {
     max-width: 37.2rem;
+    min-width: 37rem;
     margin: auto;
   }
   .login.page .content .login-box-footer .login-box-footer-actions {

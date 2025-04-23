@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.10.0
  */
+import CollectionValidationError from "../abstract/collectionValidationError";
 import EntityV2Collection from "../abstract/entityV2Collection";
 import MetadataKeyEntity from "./metadataKeyEntity";
 
@@ -59,6 +60,23 @@ class MetadataKeysCollection extends EntityV2Collection {
   validateBuildRules(item, options = {}) {
     this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
     this.assertNotExist("fingerprint", item._props.fingerprint, {haystackSet: options?.uniqueFingerprintsSetCache});
+  }
+
+  /**
+   * Assert that all metadate private key fingerprint match with their public key fingerprint
+   *
+   * @throws {CollectionValidationError} if one of the decrypted metadata private key fingerprint is not equal to its metadata public key.
+   */
+  assertFingerprintsPublicAndPrivateKeysMatch() {
+    this._items.forEach((metadataKey, index) => {
+      try {
+        metadataKey.assertFingerprintPublicAndPrivateKeysMatch(index);
+      } catch (error) {
+        const collectionValidationError = new CollectionValidationError();
+        collectionValidationError.addItemValidationError(index, error);
+        throw collectionValidationError;
+      }
+    });
   }
 
   /**
