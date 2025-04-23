@@ -21,8 +21,11 @@ import {
   defaultMinimalMetadataKeysDtos
 } from "./metadataKeysCollection.test.data";
 import {defaultMetadataPrivateKeyDataDto} from "./metadataPrivateKeyDataEntity.test.data";
-import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
+import {decryptedMetadataPrivateKeyDto, defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import {v4 as uuidv4} from "uuid";
+import EntityValidationError from "../abstract/entityValidationError";
+import CollectionValidationError from "../abstract/collectionValidationError";
 
 describe("MetadataKeysCollection", () => {
   describe("::getSchema", () => {
@@ -275,6 +278,64 @@ describe("MetadataKeysCollection", () => {
       const time = performance.now() - start;
       expect(collection).toHaveLength(count);
       expect(time).toBeLessThan(10_000);
+    });
+  });
+  describe("::assertFingerprintsPublicAndPrivateKeysMatch", () => {
+    it("should return if private key is not decrypted", () => {
+      expect.assertions(1);
+
+      const metadataKeyDto = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true});
+      const collection = new MetadataKeysCollection([metadataKeyDto]);
+
+      expect(() => collection.assertFingerprintsPublicAndPrivateKeysMatch()).not.toThrow();
+    });
+
+    it("should return if no private keys are set", () => {
+      expect.assertions(1);
+
+      const metadataKeyDto = defaultMetadataKeyDto({});
+      const collection = new MetadataKeysCollection([metadataKeyDto]);
+
+      expect(() => collection.assertFingerprintsPublicAndPrivateKeysMatch()).not.toThrow();
+    });
+
+    it("should throw an error if fingerprint does not match between public key and private keys", () => {
+      expect.assertions(2);
+      const metadataKeyId =  uuidv4();
+
+      const metadataKeyDto = defaultMetadataKeyDto({
+        id: metadataKeyId,
+        fingerprint: "1039097B2E1D31979FF662502714A820FAEF4FF3",
+        metadata_private_keys: [decryptedMetadataPrivateKeyDto({metadata_key_id: metadataKeyId})]
+      });
+
+      const collection = new MetadataKeysCollection([metadataKeyDto]);
+
+      try {
+        collection.assertFingerprintsPublicAndPrivateKeysMatch();
+      } catch (error) {
+        const entityValidationError = new EntityValidationError();
+        entityValidationError.addError('metadata_private_keys.0.fingerprint', 'fingerprint_match', 'The fingerprint of the metadata private key does not match the fingerprint of the metadata public key');
+        const collectionValidationError = new CollectionValidationError();
+        collectionValidationError.addItemValidationError(0, entityValidationError);
+
+        expect(error).toBeInstanceOf(CollectionValidationError);
+        expect(error).toEqual(collectionValidationError);
+      }
+    });
+
+    it("should succeed if fingerprint match between public key and private keys", () => {
+      expect.assertions(1);
+      const metadataKeyId =  uuidv4();
+      const metadataKeyDto = defaultMetadataKeyDto({
+        id: metadataKeyId,
+        fingerprint: pgpKeys.metadataKey.fingerprint,
+        metadata_private_keys: [decryptedMetadataPrivateKeyDto({metadata_key_id: metadataKeyId})]
+      });
+
+      const collection = new MetadataKeysCollection([metadataKeyDto]);
+
+      expect(() => collection.assertFingerprintsPublicAndPrivateKeysMatch()).not.toThrow();
     });
   });
 });
