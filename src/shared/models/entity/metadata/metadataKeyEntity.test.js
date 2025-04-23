@@ -235,6 +235,16 @@ describe("MetadataKeyEntity", () => {
     });
   });
 
+  describe("::toContentCodeConfirmTrustRequestDto", () => {
+    it("contains metadata private keys without data", () => {
+      expect.assertions(1);
+      const dto = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true});
+      const entity = new MetadataKeyEntity(dto);
+      dto.metadata_private_keys.forEach(privateKey => delete privateKey.data);
+      expect(entity.toContentCodeConfirmTrustRequestDto()).toEqual(dto);
+    });
+  });
+
   describe("::assertFingerprintPublicAndPrivateKeysMatch", () => {
     it("should return if private key is not decrypted", () => {
       expect.assertions(1);

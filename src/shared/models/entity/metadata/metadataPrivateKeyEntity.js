@@ -120,6 +120,16 @@ class MetadataPrivateKeyEntity extends EntityV2 {
   }
 
   /**
+   * Return JSON stringification without data property
+   * @returns {object}
+   */
+  toContentCodeConfirmTrustRequestDto() {
+    const result = this.toDto();
+    delete result.data;
+    return result;
+  }
+
+  /**
    * Customizes JSON stringification behavior
    * @returns {object}
    */
