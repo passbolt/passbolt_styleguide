@@ -170,6 +170,18 @@ class MetadataKeyEntity extends EntityV2 {
     return result;
   }
 
+  /**
+   * Return JSON stringification without data property in metadata private key
+   * @returns {object}
+   */
+  toContentCodeConfirmTrustRequestDto() {
+    const result = this.toDto();
+    if (this._metadata_private_keys) {
+      result.metadata_private_keys = this._metadata_private_keys.items.map(privateKey => privateKey.toContentCodeConfirmTrustRequestDto());
+    }
+    return result;
+  }
+
   /*
    * ==================================================
    * Dynamic properties getters

@@ -343,6 +343,28 @@ describe("MetadataPrivateKeyEntity", () => {
     });
   });
 
+  describe("::toContentCodeConfirmTrustRequestDto", () => {
+    it("should export all fields from props except data encrypted", () => {
+      expect.assertions(1);
+
+      const dto = defaultMetadataPrivateKeyDto();
+      const entity = new MetadataPrivateKeyEntity(dto);
+      delete dto.data;
+
+      expect(entity.toContentCodeConfirmTrustRequestDto()).toStrictEqual(dto);
+    });
+
+    it("should export all fields from props except data decrypted", () => {
+      expect.assertions(1);
+
+      const dto = decryptedMetadataPrivateKeyDto();
+      const entity = new MetadataPrivateKeyEntity(dto);
+      delete dto.data;
+
+      expect(entity.toContentCodeConfirmTrustRequestDto()).toStrictEqual(dto);
+    });
+  });
+
   describe("::toJSON", () => {
     it("should export all fields from props: with data encrypted", () => {
       expect.assertions(1);
