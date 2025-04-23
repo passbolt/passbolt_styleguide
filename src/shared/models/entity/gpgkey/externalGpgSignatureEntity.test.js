@@ -47,12 +47,13 @@ describe("ExternalGpgSignatureEntity", () => {
 
   describe("::constructor", () => {
     it("constructor works if valid minimal DTO is provided", () => {
-      expect.assertions(2);
+      expect.assertions(3);
       const dto = adaExternalGpgSignatureEntityDto();
       const entity = new ExternalGpgSignatureEntity(dto);
 
       expect(entity._props.issuer_fingerprint).toStrictEqual(dto.issuer_fingerprint);
       expect(entity._props.is_verified).toStrictEqual(dto.is_verified);
+      expect(entity._props.created).toStrictEqual(dto.created);
     });
 
     it("constructor fails if issuer fingerprint is malformed", () => {

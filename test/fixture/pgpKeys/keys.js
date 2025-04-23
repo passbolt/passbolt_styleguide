@@ -466,7 +466,7 @@ exports.pgpKeys = {
       name: "Metadata Test Key",
     }],
     fingerprint: "1039097B2E1D31979FF662502714A820FAEF4FF2",
-    created: "2024-10-04T10:39: at 10:39:00.000Z",
+    created: "2024-10-04T10:39.000Z",
     algorithm: "EdDSA",
     length: 256,
     curve: "ed25519",

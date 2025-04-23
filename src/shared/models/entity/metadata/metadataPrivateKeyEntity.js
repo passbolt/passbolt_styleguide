@@ -141,7 +141,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    */
   /**
    * Get the raw data unencrypted if it hasn't been decrypted already.
-   * @returns {string}
+   * @returns {string | MetadataPrivateKeyDataEntity}
    */
   get data() {
     return this.isDecrypted
