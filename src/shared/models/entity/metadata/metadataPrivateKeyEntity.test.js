@@ -379,6 +379,17 @@ describe("MetadataPrivateKeyEntity", () => {
     });
   });
 
+  describe("::toDataDto", () => {
+    it("should export the data field", () => {
+      expect.assertions(1);
+
+      const dto = defaultMetadataPrivateKeyDto();
+      const entity = new MetadataPrivateKeyEntity(dto);
+
+      expect(entity.toDataDto()).toStrictEqual({data: dto.data});
+    });
+  });
+
   describe("::toJSON", () => {
     it("should export all fields from props: with data encrypted", () => {
       expect.assertions(1);
