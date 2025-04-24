@@ -20,6 +20,7 @@ import Tooltip from "../../Common/Tooltip/Tooltip";
 import Select from "../../Common/Select/Select";
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
 import DownloadFileSVG from "../../../../img/svg/download_file.svg";
+import {GPG_KEY_TYPES} from '../../UserDetails/DisplayUserDetailsPublicKey/DisplayUserDetailsPublicKey';
 
 /**
  * This component displays the user GPG information
@@ -105,7 +106,7 @@ class DisplayUserGpgInformation extends React.Component {
     const gpgkeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
     // format the gpgkey info.
     const keyId = gpgkeyInfo.key_id;
-    const type = this.gpgkeyType[gpgkeyInfo.algorithm];
+    const type = GPG_KEY_TYPES[gpgkeyInfo.algorithm];
     const uIds = gpgkeyInfo.user_ids;
     const created = this.formatDate(gpgkeyInfo.created);
     let expires;
@@ -117,35 +118,11 @@ class DisplayUserGpgInformation extends React.Component {
       expires = this.formatDate(gpgkeyInfo.expires);
     }
 
+    const curve = gpgkeyInfo.curve;
     const fingerprint = gpgkeyInfo.fingerprint;
     const length = gpgkeyInfo.length;
 
-    return {keyId, type, uIds, created, expires, fingerprint, length};
-  }
-
-  /**
-   * Get the list of gpgkey types associated to their algorithms.
-   * @return {object}
-   */
-  get gpgkeyType() {
-    return {
-      // RSA (any type) [HAC]
-      rsa: "RSA",
-      // Elgamal (Encrypt only) [ELGAMAL] [HAC]
-      elgamal: "Elgamal",
-      // DSA (Sign only) [FIPS186] [HAC]
-      dsa: "DSA",
-      // ECDH (Encrypt only) [RFC6637]
-      ecdh: "ECDH",
-      // ECDSA (Sign only) [RFC6637]
-      ecdsa: "ECDSA",
-      // EdDSA (Sign only) [{@link https://tools.ietf.org/html/draft-koch-eddsa-for-openpgp-04|Draft RFC}]
-      eddsa: "EdDSA",
-      // Reserved for AEDH
-      aedh: "AEDH",
-      // Reserved for AEDSA
-      aedsa: "AEDSA"
-    };
+    return {keyId, type, uIds, created, expires, fingerprint, length, curve};
   }
 
   /**
@@ -245,7 +222,7 @@ class DisplayUserGpgInformation extends React.Component {
                 </tr>
                 <tr>
                   <td><Trans>Fingerprint</Trans></td>
-                  <td className="fingerprint"><Fingerprint fingerprint={this.gpgKeyInfo.fingerprint}/></td>
+                  <td className="fingerprint">{this.gpgKeyInfo.fingerprint && <Fingerprint fingerprint={this.gpgKeyInfo.fingerprint}/>}</td>
                 </tr>
                 <tr>
                   <td><Trans>Created</Trans></td>
@@ -263,6 +240,12 @@ class DisplayUserGpgInformation extends React.Component {
                   <td><Trans>Algorithm</Trans></td>
                   <td className="algorithm">{this.gpgKeyInfo.type}</td>
                 </tr>
+                {this.gpgKeyInfo.curve &&
+                  <tr>
+                    <td><Trans>Curve</Trans></td>
+                    <td className="curve">{this.gpgKeyInfo.curve}</td>
+                  </tr>
+                }
               </tbody>
             </table>
           </div>
