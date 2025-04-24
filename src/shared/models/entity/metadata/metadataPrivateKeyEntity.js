@@ -120,6 +120,15 @@ class MetadataPrivateKeyEntity extends EntityV2 {
   }
 
   /**
+   * Return data property with stringification
+   * @returns {object}
+   */
+  toDataDto() {
+    const result = this.toDto();
+    return {data: result.data};
+  }
+
+  /**
    * Return JSON stringification without data property
    * @returns {object}
    */
