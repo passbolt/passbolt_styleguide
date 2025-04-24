@@ -160,6 +160,14 @@ class MetadataPrivateKeyEntity extends EntityV2 {
   }
 
   /**
+   * Get the metadata private key id.
+   * @returns {string|null}
+   */
+  get id() {
+    return this._props.id || null;
+  }
+
+  /**
    * Get the metadata key id if any or null.
    * @returns {string|null}
    */
