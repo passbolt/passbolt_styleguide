@@ -120,6 +120,15 @@ class MetadataPrivateKeyEntity extends EntityV2 {
   }
 
   /**
+   * Return data property with stringification
+   * @returns {object}
+   */
+  toDataDto() {
+    const result = this.toDto();
+    return {data: result.data};
+  }
+
+  /**
    * Return JSON stringification without data property
    * @returns {object}
    */
@@ -157,6 +166,14 @@ class MetadataPrivateKeyEntity extends EntityV2 {
     return this.isDecrypted
       ? this._data
       : this._props.data;
+  }
+
+  /**
+   * Get the metadata private key id.
+   * @returns {string|null}
+   */
+  get id() {
+    return this._props.id || null;
   }
 
   /**

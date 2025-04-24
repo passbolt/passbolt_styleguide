@@ -23,25 +23,6 @@ import {Trans, withTranslation} from "react-i18next";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
-export const GPG_KEY_TYPES = {
-  // RSA (any type) [HAC]
-  rsa: "RSA",
-  // Elgamal (Encrypt only) [ELGAMAL] [HAC]
-  elgamal: "Elgamal",
-  // DSA (Sign only) [FIPS186] [HAC]
-  dsa: "DSA",
-  // ECDH (Encrypt only) [RFC6637]
-  ecdh: "ECDH",
-  // ECDSA (Sign only) [RFC6637]
-  ecdsa: "ECDSA",
-  // EdDSA Legacy (OpenPGP v5 generated key read by OpenPGP v6)
-  eddsa: "EdDSA",
-  // Reserved for AEDH
-  aedh: "AEDH",
-  // Reserved for AEDSA
-  aedsa: "AEDSA"
-};
-
 /**
  * This component displays the user details about public key
  */
@@ -106,9 +87,10 @@ class DisplayUserDetailsPublicKey extends React.Component {
    */
   async fetchGpgkeyInfo() {
     const gpgkeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
+
     // format the gpgkey info.
     const fingerprint = gpgkeyInfo.fingerprint;
-    const type = GPG_KEY_TYPES[gpgkeyInfo.algorithm];
+    const type = this.gpgkeyType[gpgkeyInfo.algorithm];
     const created = this.formatDate(gpgkeyInfo.created);
     let expires;
     if (gpgkeyInfo.expires === null) {
@@ -119,10 +101,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
       expires = this.formatDate(gpgkeyInfo.expires);
     }
 
-    const curve = gpgkeyInfo.curve;
-    const length = gpgkeyInfo.length;
-
-    const formatedGpgkeyInfo = {fingerprint, type, created, expires, curve, length};
+    const formatedGpgkeyInfo = {fingerprint, type, created, expires};
     this.setState({gpgkeyInfo: formatedGpgkeyInfo});
   }
 
@@ -137,6 +116,31 @@ class DisplayUserDetailsPublicKey extends React.Component {
     } catch (error) {
       return "";
     }
+  }
+
+  /**
+   * Get the list of gpgkey types associated to their algorithms.
+   * @return {object}
+   */
+  get gpgkeyType() {
+    return {
+      // RSA (any type) [HAC]
+      rsa: "RSA",
+      // Elgamal (Encrypt only) [ELGAMAL] [HAC]
+      elgamal: "Elgamal",
+      // DSA (Sign only) [FIPS186] [HAC]
+      dsa: "DSA",
+      // ECDH (Encrypt only) [RFC6637]
+      ecdh: "ECDH",
+      // ECDSA (Sign only) [RFC6637]
+      ecdsa: "ECDSA",
+      // EdDSA (Sign only) [{@link https://tools.ietf.org/html/draft-koch-eddsa-for-openpgp-04|Draft RFC}]
+      eddsa: "EdDSA",
+      // Reserved for AEDH
+      aedh: "AEDH",
+      // Reserved for AEDSA
+      aedsa: "AEDSA"
+    };
   }
 
   /**
@@ -213,20 +217,12 @@ class DisplayUserDetailsPublicKey extends React.Component {
                       <div className="information-label">
                         <span className="fingerprint label"><Trans>Fingerprint</Trans></span>
                         <span className="type label"><Trans>Type</Trans></span>
-                        {this.state.gpgkeyInfo.curve &&
-                          <span className="curve label"><Trans>Curve</Trans></span>
-                        }
-                        <span className="length label"><Trans>Length</Trans></span>
                         <span className="created label"><Trans>Created</Trans></span>
                         <span className="expires label"><Trans>Expires</Trans></span>
                       </div>
                       <div className="information-value">
                         <span className="fingerprint value">{this.formatFingerprint(this.state.gpgkeyInfo.fingerprint)}</span>
                         <span className="type value">{this.state.gpgkeyInfo.type}</span>
-                        {this.state.gpgkeyInfo.curve &&
-                          <span className="curve value">{this.state.gpgkeyInfo.curve}</span>
-                        }
-                        <span className="length value">{this.state.gpgkeyInfo.length}</span>
                         <span className="created value">{this.state.gpgkeyInfo.created}</span>
                         <span className="expires value">{this.state.gpgkeyInfo.expires}</span>
                       </div>
