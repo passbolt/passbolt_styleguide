@@ -199,6 +199,20 @@ describe("MetadataPrivateKeyEntity", () => {
       expect(entity2.metadataKeyId).toStrictEqual(dto2.metadata_key_id);
     });
 
+    it("`id` should return the right value", () => {
+      expect.assertions(2);
+      const dto1 = minimalMetadataPrivateKeyDto({
+        id: null
+      });
+      const entity1 = new MetadataPrivateKeyEntity(dto1);
+
+      const dto2 = defaultMetadataPrivateKeyDto();
+      const entity2 = new MetadataPrivateKeyEntity(dto2);
+
+      expect(entity1.id).toBeNull();
+      expect(entity2.id).toStrictEqual(dto2.id);
+    });
+
     it("`data` should return the right value: with string", () => {
       expect.assertions(1);
       const dto = defaultMetadataPrivateKeyDto();
