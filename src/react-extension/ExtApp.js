@@ -73,6 +73,8 @@ import AdministrationPasswordExpiryContextProvider from "./contexts/Administrati
 import PasswordExpirySettingsContextProvider from "./contexts/PasswordExpirySettingsContext";
 import ResourceTypesLocalStorageContextProvider from "../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import MetadataTypesSettingsLocalStorageContextProvider from "../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import HandleConfirmMetadataKeyEntryEvents
+  from "./components/Metadata/HandleConfirmMetadataKeyEntryEvents/HandleConfirmMetadataKeyEntryEvents";
 
 /**
  * The passbolt application served by the browser extension.
@@ -105,6 +107,7 @@ class ExtApp extends Component {
 
                                     { /* Dialogs Management */}
                                     <HandlePassphraseEntryEvents/>
+                                    <HandleConfirmMetadataKeyEntryEvents/>
                                     <HandleFolderMoveStrategyEvents/>
                                     <HandleProgressEvents/>
                                     <HandleSessionExpired/>
