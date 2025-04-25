@@ -15,6 +15,7 @@ import EntitySchema from "../abstract/entitySchema";
 import EntityV2 from "../abstract/entityV2";
 import EntityValidationError from "../abstract/entityValidationError";
 import MetadataPrivateKeyDataEntity from "./metadataPrivateKeyDataEntity";
+import UserEntity from "../user/userEntity";
 
 const PGP_STRING_MAX_LENGTH = 10_000;
 
@@ -106,15 +107,25 @@ class MetadataPrivateKeyEntity extends EntityV2 {
 
   /**
    * Customizes JSON stringification behavior
+   *
+   * @param {object} [contain] optional
    * @returns {object}
    */
-  toDto() {
+  toDto(contain) {
     const result = Object.assign({}, this._props);
 
     const data = this.data;
     result.data = data instanceof MetadataPrivateKeyDataEntity
       ? data.toDto()
       : data;
+
+    if (!contain) {
+      return result;
+    }
+
+    if (this._creator && contain.creator) {
+      result.creator = this._creator.toDto(UserEntity.ALL_CONTAIN_OPTIONS);
+    }
 
     return result;
   }
@@ -143,14 +154,17 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    * @returns {object}
    */
   toJSON() {
-    return this.toDto();
+    return this.toDto(UserEntity.ALL_CONTAIN_OPTIONS);
   }
 
   /**
    * @inheritdoc
    */
   marshall() {
-    this._props.data_signed_by_current_user = null;
+    /*
+     *  TODO re-enabled it when it will possible to create entity with data_signed_by_current_user defined
+     * this._props.data_signed_by_current_user = null;
+     */
   }
 
   /*
@@ -208,11 +222,45 @@ class MetadataPrivateKeyEntity extends EntityV2 {
     return this._props.data_signed_by_current_user || null;
   }
 
+  /**
+   * Returns the modifiedBy
+   * @returns {string}
+   */
+  get modifiedBy() {
+    return this._props.modified_by;
+  }
+
+  /**
+   * Returns the modified
+   * @returns {string}
+   */
+  get modified() {
+    return this._props.modified;
+  }
+
   /*
    * ==================================================
    * Dynamic properties setters
    * ==================================================
    */
+
+  /**
+   * Set the modified property.
+   * The value should be a date time string.
+   * @param {string} modified
+   */
+  set modified(modified) {
+    this._props.modified = modified;
+  }
+
+  /**
+   * Set the modified by property.
+   * The value should be a user id.
+   * @param {string} modifiedBy
+   */
+  set modifiedBy(modifiedBy) {
+    this._props.modifiedBy = modifiedBy;
+  }
 
   /**
    * Set the data.
@@ -241,6 +289,16 @@ class MetadataPrivateKeyEntity extends EntityV2 {
   set isDataSignedByCurrentUser(value) {
     EntitySchema.validateProp("data_signed_by_current_user", value, this.cachedSchema.properties.data_signed_by_current_user);
     this._props.data_signed_by_current_user = value;
+  }
+
+  /**
+   * MetadataPrivateKeyEntity.ALL_CONTAIN_OPTIONS
+   * @returns {object} all contain options that can be used in toDto()
+   */
+  static get ALL_CONTAIN_OPTIONS() {
+    return {
+      creator: true,
+    };
   }
 }
 

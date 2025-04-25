@@ -139,7 +139,7 @@ describe("MetadataPrivateKeyEntity", () => {
       expect(entity._props.metadata_key_id).toBeUndefined();
       expect(entity._props.user_id).toStrictEqual(dto.user_id);
       expect(entity._props.data).toStrictEqual(dto.data);
-      expect(entity._props.data_signed_by_current_user).toBeNull();
+      expect(entity._props.data_signed_by_current_user).toBeUndefined();
       expect(entity._props.created).toBeUndefined();
       expect(entity._props.created_by).toBeUndefined();
       expect(entity._props.modified).toBeUndefined();
