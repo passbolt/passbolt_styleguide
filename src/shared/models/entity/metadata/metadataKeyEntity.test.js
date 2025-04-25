@@ -20,6 +20,7 @@ import MetadataPrivateKeysCollection from "./metadataPrivateKeysCollection";
 import {v4 as uuidv4} from "uuid";
 import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
 import EntityValidationError from "../abstract/entityValidationError";
+import {defaultUserDto} from "../user/userEntity.test.data";
 
 describe("MetadataKeyEntity", () => {
   describe("::getSchema", () => {
@@ -95,6 +96,17 @@ describe("MetadataKeyEntity", () => {
         {scenario: "with invalid metadata private key build rule", value: defaultMetadataPrivateKeyDto()},
       ];
       assertEntityProperty.assertAssociation(MetadataKeyEntity, "metadata_private_keys", metadataKeyDto, successScenarios, failScenarios);
+    });
+
+    it("validates creator property", () => {
+      const sessionKeysBundleDto = defaultMetadataKeyDto();
+      const successScenarios = [
+        {scenario: "a valid option", value: defaultUserDto()},
+      ];
+      const failScenarios = [
+        {scenario: "with invalid session private key build rule", value: {"role": "admin"}},
+      ];
+      assertEntityProperty.assertAssociation(MetadataKeyEntity, "creator", sessionKeysBundleDto, successScenarios, failScenarios);
     });
   });
 
