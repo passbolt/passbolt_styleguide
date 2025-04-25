@@ -150,7 +150,10 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    * @inheritdoc
    */
   marshall() {
-    this._props.data_signed_by_current_user = null;
+    /*
+     *  TODO re-enabled it when it will possible to create entity with data_signed_by_current_user defined
+     * this._props.data_signed_by_current_user = null;
+     */
   }
 
   /*
@@ -208,11 +211,45 @@ class MetadataPrivateKeyEntity extends EntityV2 {
     return this._props.data_signed_by_current_user || null;
   }
 
+  /**
+   * Returns the modifiedBy
+   * @returns {string}
+   */
+  get modifiedBy() {
+    return this._props.modified_by;
+  }
+
+  /**
+   * Returns the modified
+   * @returns {string}
+   */
+  get modified() {
+    return this._props.modified;
+  }
+
   /*
    * ==================================================
    * Dynamic properties setters
    * ==================================================
    */
+
+  /**
+   * Set the modified property.
+   * The value should be a date time string.
+   * @param {string} modified
+   */
+  set modified(modified) {
+    this._props.modified = modified;
+  }
+
+  /**
+   * Set the modified by property.
+   * The value should be a user id.
+   * @param {string} modifiedBy
+   */
+  set modifiedBy(modifiedBy) {
+    this._props.modifiedBy = modifiedBy;
+  }
 
   /**
    * Set the data.
