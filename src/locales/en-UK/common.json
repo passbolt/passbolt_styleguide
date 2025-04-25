@@ -1695,6 +1695,7 @@
   "You will be able to save it after submitting": "You will be able to save it after submitting",
   "You will need this recovery kit later to access your account (for example on a new device).": "You will need this recovery kit later to access your account (for example on a new device).",
   "you@organization.com": "you@organization.com",
+  "Your administrator may have rolled back the metadata key and you need to trust it prior to its usage.": "Your administrator may have rolled back the metadata key and you need to trust it prior to its usage.",
   "Your administrator may have rotated the metadata key and you need to trust it prior to its usage.": "Your administrator may have rotated the metadata key and you need to trust it prior to its usage.",
   "Your browser is not configured to work with this passbolt instance.": "Your browser is not configured to work with this passbolt instance.",
   "Your language is missing or you discovered an error in the translation, help us to improve passbolt.": "Your language is missing or you discovered an error in the translation, help us to improve passbolt.",
