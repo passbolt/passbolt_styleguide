@@ -49,42 +49,10 @@ class ConfirmMetadataKeyPage extends React.Component {
   }
 
   /**
-   * Get the user who created the metadata key.
-   * @returns {object}
-   */
-  get creator() {
-    return this.metadataKey?.creator || {profile: {first_name: this.translate("unknown"), last_name: this.translate("unknown")}};
-  }
-
-  /**
-   * Get the trusted metadata key.
-   * @returns {object}
-   */
-  get metadataTrustedKey() {
-    return this.props.confirmMetadataKey.metadataTrustedKey;
-  }
-
-  /**
-   * Get the metadata key.
-   * @returns {object}
-   */
-  get metadataKey() {
-    return this.props.confirmMetadataKey.metadataKey;
-  }
-
-  /**
-   * Get the creator name.
-   * @returns {string}
-   */
-  get creatorName() {
-    return `${this.creator.profile.first_name} ${this.creator.profile.last_name}`;
-  }
-
-  /**
    * Close the dialog.
    */
   close() {
-    this.props.context.port.emit(this.props.requestId, false);
+    this.props.context.port.emit(this.props.requestId,  "SUCCESS", false);
     this.props.onComplete();
   }
 
@@ -111,7 +79,7 @@ class ConfirmMetadataKeyPage extends React.Component {
     event.preventDefault();
 
     this.setState({processing: true});
-    this.props.context.port.emit(this.props.requestId, true);
+    this.props.context.port.emit(this.props.requestId, "SUCCESS", true);
     this.setState({processing: false});
     this.props.onComplete();
   }
@@ -121,9 +89,8 @@ class ConfirmMetadataKeyPage extends React.Component {
    * @returns {boolean}
    */
   get isMetadataKeyRotation() {
-    const signedDate = this.metadataTrustedKey.signed;
-    const newMetadataSignedDate = this.metadataKey.metadata_private_keys?.[0]?.data_signed_by_current_user;
-    return newMetadataSignedDate > signedDate;
+    // The key would not be already signed for a rotation.
+    return this.props.metadataKey.metadataPrivateKeys?.items?.[0]?.dataSignedByCurrentUser === null;
   }
 
   /**
@@ -148,8 +115,11 @@ class ConfirmMetadataKeyPage extends React.Component {
   }
 
   render() {
-    const creatorName = this.creatorName;
     const isMetadataKeyRotation = this.isMetadataKeyRotation;
+    const creatorName = this.props.metadataKey?.creator ?
+      (<>{this.props.metadataKey?.creator?.profile?.name} ({this.props.metadataKey?.creator.username})</>) :
+      this.translate('Unknown User');
+
     return (
       <div className="confirm-metadata-key" onKeyDown={this.handleKeyDown}>
         <div className="back-link">
@@ -203,8 +173,8 @@ class ConfirmMetadataKeyPage extends React.Component {
                     </div>
                     <div className="info-data">
                       <div className="fingerprint">
-                        <div className="fingerprint-line">{this.metadataKey.fingerprint?.substring(0, 20)?.replace(/.{4}/g, '$& ')}</div>
-                        <div className="fingerprint-line">{this.metadataKey.fingerprint?.substring(20)?.replace(/.{4}/g, '$& ')}</div>
+                        <div className="fingerprint-line">{this.props.metadataKey.fingerprint?.substring(0, 20)?.replace(/.{4}/g, '$& ')}</div>
+                        <div className="fingerprint-line">{this.props.metadataKey.fingerprint?.substring(20)?.replace(/.{4}/g, '$& ')}</div>
                       </div>
                     </div>
                   </div>
@@ -230,7 +200,8 @@ class ConfirmMetadataKeyPage extends React.Component {
 ConfirmMetadataKeyPage.propTypes = {
   context: PropTypes.object, // The application context
   requestId: PropTypes.string.isRequired, // The request id
-  confirmMetadataKey: PropTypes.object.isRequired, // Object containing the previous metadata key trusted and the new one to trust
+  metadataKey: PropTypes.object.isRequired, // New metadata key entity
+  metadataTrustedKey: PropTypes.object.isRequired, // Trusted metadata key entity
   onComplete: PropTypes.func,
   t: PropTypes.func, // The translation function
 };

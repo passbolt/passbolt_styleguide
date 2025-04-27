@@ -32,14 +32,14 @@ describe("ConfirmMetadataKey", () => {
     await waitFor(() => {});
 
     expect(page.exists()).toBeTruthy();
-    expect(page.submitButton.textContent).toStrictEqual("Trust the new key");
-    expect(page.submitButton.getAttribute("class")).toStrictEqual("button primary full-width  attention");
+    expect(page.submitButton.textContent).toStrictEqual("Trust the key");
+    expect(page.submitButton.getAttribute("class")).toStrictEqual("button primary full-width  warning");
 
     await page.openMoreInformation();
     await page.submit();
 
-    expect(page.fingerprint.textContent).toStrictEqual(props.confirmMetadataKey.metadataKey.fingerprint.replace(/.{4}/g, '$& '));
-    expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, true);
+    expect(page.fingerprint.textContent).toStrictEqual(props.metadataKey.fingerprint.replace(/.{4}/g, '$& '));
+    expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, "SUCCESS", true);
     expect(props.onComplete).toHaveBeenCalled();
   });
 
@@ -57,8 +57,8 @@ describe("ConfirmMetadataKey", () => {
     await page.openMoreInformation();
     await page.submit();
 
-    expect(page.fingerprint.textContent).toStrictEqual(props.confirmMetadataKey.metadataKey.fingerprint.replace(/.{4}/g, '$& '));
-    expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, true);
+    expect(page.fingerprint.textContent).toStrictEqual(props.metadataKey.fingerprint.replace(/.{4}/g, '$& '));
+    expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, "SUCCESS", true);
     expect(props.onComplete).toHaveBeenCalled();
   });
 
@@ -73,7 +73,7 @@ describe("ConfirmMetadataKey", () => {
 
     await page.close();
 
-    expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, false);
+    expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, "SUCCESS", false);
     expect(props.onComplete).toHaveBeenCalled();
   });
 });
