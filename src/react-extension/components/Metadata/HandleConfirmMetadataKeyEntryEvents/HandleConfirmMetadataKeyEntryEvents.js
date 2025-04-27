@@ -17,6 +17,9 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
 import ConfirmMetadataKey from "../ConfirmMetadataKey/ConfirmMetadataKey";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import MetadataKeyEntity from "../../../../shared/models/entity/metadata/metadataKeyEntity";
+import MetadataTrustedKeyEntity from "../../../../shared/models/entity/metadata/metadataTrustedKeyEntity";
 
 /**
  * This component listens any event related to confirm metadata entry dialog actions to perform
@@ -54,10 +57,20 @@ class HandleConfirmMetadataKeyEntryEvents extends React.Component {
   /**
    * Handle the dialog request event
    * @param {string} requestId
-   * @param {object} confirmMetadataKey
+   * @param {object} data The confirmation data
+   * @param {object} data.metadata_key The metadata key to request the trust for
+   * @param {object} data.metadata_trusted_key The trusted metadata key stored information
    */
-  async handleConfirmMetadataEntryRequestEvent(requestId, confirmMetadataKey) {
-    this.props.dialogContext.open(ConfirmMetadataKey, {requestId: requestId, confirmMetadataKey: confirmMetadataKey});
+  async handleConfirmMetadataEntryRequestEvent(requestId, data) {
+    try {
+      // Set validation to false as data is required for the entity used by the service worker but should not be sent to the content code.
+      const metadataKey = new MetadataKeyEntity(data.metadata_key, {validate: false});
+      const metadataTrustedKey = new MetadataTrustedKeyEntity(data.metadata_trusted_key);
+      this.props.dialogContext.open(ConfirmMetadataKey, {requestId, metadataKey, metadataTrustedKey});
+    } catch (error) {
+      console.log(error);
+      this.props.dialogContext.open(NotifyError, {error});
+    }
   }
 
   /**

@@ -424,18 +424,11 @@ class CreateResource extends Component {
    */
   handleSaveError(error) {
     // It can happen when the user has closed the passphrase entry dialog by instance.
-    if (error.name !== "UserAbortsOperationError") {
-      // Unexpected error occurred.
-      console.error(error);
-      this.handleError(error);
+    if (error?.name === "UserAbortsOperationError" || error?.name === "UntrustedMetadataKeyError") {
+      console.warn(error);
+      return;
     }
-  }
-
-  /**
-   * Handle any unexpected errors.
-   * @param error
-   */
-  handleError(error) {
+    console.error(error);
     this.props.dialogContext.open(NotifyError, {error});
   }
 
