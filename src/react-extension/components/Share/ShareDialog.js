@@ -171,26 +171,15 @@ class ShareDialog extends Component {
    * @param {object} error The returned error
    */
   handleSaveError(error) {
-    // It can happen when the user has closed the passphrase entry dialog by instance.
-    if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
-    } else {
-      // Unexpected error occurred.
-      console.error(error);
-      this.handleError(error);
-      this.setState({processing: false});
-    }
-  }
+    this.setState({processing: false});
 
-  /**
-   * handle error to display the error dialog
-   * @param error
-   */
-  handleError(error) {
-    const errorDialogProps = {
-      error: error
-    };
-    this.props.dialogContext.open(NotifyError, errorDialogProps);
+    // It can happen when the user has closed the passphrase entry dialog by instance.
+    if (error?.name === "UserAbortsOperationError" || error?.name === "UntrustedMetadataKeyError") {
+      console.warn(error);
+      return;
+    }
+    console.error(error);
+    this.props.dialogContext.open(NotifyError, {error});
   }
 
   /**

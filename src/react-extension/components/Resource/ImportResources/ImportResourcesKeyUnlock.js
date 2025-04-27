@@ -207,11 +207,12 @@ class ImportResourcesKeyUnlock extends Component {
    */
   handleImportError(error) {
     const userAbortsOperation = error.name === "UserAbortsOperationError";
+    const isUntrustedMetadataKeyError = error.name === "UntrustedMetadataKeyError";
     const isInvalidPasswordOrKeyFile = error.code === "InvalidKey" || error.code === "InvalidArg";
 
     this.toggleProcessing();
 
-    if (userAbortsOperation) {
+    if (userAbortsOperation || isUntrustedMetadataKeyError) {
       // If the user aborts the operation, then do nothing. It happens when the users close the passphrase dialog
     } else if (isInvalidPasswordOrKeyFile) {
       // If the credentials are invalid.

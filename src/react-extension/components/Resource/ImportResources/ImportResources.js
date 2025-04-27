@@ -310,12 +310,13 @@ class ImportResources extends Component {
    */
   handleImportError(error, b64FileContent, fileType) {
     const isUserAbortsOperation = error.name === "UserAbortsOperationError";
+    const isUntrustedMetadataKeyError = error.name === "UntrustedMetadataKeyError";
     const isKdbxBadSignatureError = error.name === "KdbxError" && error.code === "BadSignature";
     const isKdbxProtectedError = error.name === "KdbxError" && (error.code === "InvalidKey" || error.code === "InvalidArg");
     const isCsvError = error.name === "FileFormatError";
 
     this.toggleProcessing();
-    if (isUserAbortsOperation) {
+    if (isUserAbortsOperation || isUntrustedMetadataKeyError) {
       // If the user aborts the operation, then do nothing. It happens when the users close the passphrase dialog
     } else if (isKdbxProtectedError) {
       // If the keepass file is protected
