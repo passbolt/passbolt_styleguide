@@ -82,7 +82,7 @@ describe("MetadataTrustedKeyEntity", () => {
     it("should return true if metadata key is trusted", () => {
       expect.assertions(1);
       const metadataPrivateKey = new MetadataPrivateKeyEntity(decryptedMetadataPrivateKeyDto());
-      metadataPrivateKey.isDataSignedByCurrentUser = pgpKeys.metadataKey.created;
+      metadataPrivateKey.dataSignedByCurrentUser = pgpKeys.metadataKey.created;
 
       const dto = defaultMetadataTrustedKeyDto({fingerprint: metadataPrivateKey.data.fingerprint});
       const entity = new MetadataTrustedKeyEntity(dto);
@@ -105,7 +105,7 @@ describe("MetadataTrustedKeyEntity", () => {
     it("should return false if metadata key is trusted and fingerprint not match", () => {
       expect.assertions(1);
       const metadataPrivateKey = new MetadataPrivateKeyEntity(decryptedMetadataPrivateKeyDto());
-      metadataPrivateKey.isDataSignedByCurrentUser = pgpKeys.metadataKey.created;
+      metadataPrivateKey.dataSignedByCurrentUser = pgpKeys.metadataKey.created;
 
       const dto = defaultMetadataTrustedKeyDto({fingerprint: pgpKeys.ada.fingerprint});
       const entity = new MetadataTrustedKeyEntity(dto);
