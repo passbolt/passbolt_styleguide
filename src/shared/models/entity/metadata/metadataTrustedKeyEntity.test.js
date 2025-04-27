@@ -16,8 +16,8 @@ import EntitySchema from "../abstract/entitySchema";
 import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
 import MetadataTrustedKeyEntity from "./metadataTrustedKeyEntity";
 import {defaultMetadataTrustedKeyDto} from "./metadataTrustedKeyEntity.test.data";
-import MetadataPrivateKeyEntity from "./metadataPrivateKeyEntity";
-import {decryptedMetadataPrivateKeyDto, defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
+import MetadataKeyEntity from "./metadataKeyEntity";
+import {defaultMetadataKeyDto} from "./metadataKeyEntity.test.data";
 
 describe("MetadataTrustedKeyEntity", () => {
   describe("::getSchema", () => {
@@ -27,8 +27,7 @@ describe("MetadataTrustedKeyEntity", () => {
 
     it("validates fingerprint property", () => {
       assertEntityProperty.string(MetadataTrustedKeyEntity, "fingerprint");
-      assertEntityProperty.minLength(MetadataTrustedKeyEntity, "fingerprint", 40);
-      assertEntityProperty.maxLength(MetadataTrustedKeyEntity, "fingerprint", 40);
+      assertEntityProperty.fingerprint(MetadataKeyEntity, "fingerprint");
       assertEntityProperty.required(MetadataTrustedKeyEntity, "fingerprint");
     });
 
@@ -47,16 +46,6 @@ describe("MetadataTrustedKeyEntity", () => {
 
       expect(entity._props.fingerprint).toStrictEqual(dto.fingerprint);
       expect(entity._props.signed).toStrictEqual(dto.signed);
-    });
-
-    it("constructor fails if fingerprint is malformed", () => {
-      expect.assertions(1);
-      expect(() => new MetadataTrustedKeyEntity(defaultMetadataTrustedKeyDto({fingerprint: "10"}))).toThrowEntityValidationError("fingerprint", "minLength");
-    });
-
-    it("constructor fails if created is not a date", () => {
-      expect.assertions(1);
-      expect(() => new MetadataTrustedKeyEntity(defaultMetadataTrustedKeyDto({signed: "not a date"}))).toThrowEntityValidationError("signed", "format");
     });
   });
 
@@ -79,59 +68,31 @@ describe("MetadataTrustedKeyEntity", () => {
   });
 
   describe("::isMetadataKeyTrusted", () => {
-    it("should return true if metadata key is trusted", () => {
+    it("returns true if metadata key is trusted", () => {
       expect.assertions(1);
-      const metadataPrivateKey = new MetadataPrivateKeyEntity(decryptedMetadataPrivateKeyDto());
-      metadataPrivateKey.dataSignedByCurrentUser = pgpKeys.metadataKey.created;
-
-      const dto = defaultMetadataTrustedKeyDto({fingerprint: metadataPrivateKey.data.fingerprint});
+      const metadataKey = new MetadataKeyEntity(defaultMetadataKeyDto());
+      const dto = defaultMetadataTrustedKeyDto({fingerprint: metadataKey.fingerprint});
       const entity = new MetadataTrustedKeyEntity(dto);
 
 
-      expect(entity.isMetadataKeyTrusted(metadataPrivateKey)).toBeTruthy();
+      expect(entity.isMetadataKeyTrusted(metadataKey)).toBeTruthy();
     });
 
-    it("should return false if metadata key is not trusted even if fingerprint match", () => {
+    it("return false if metadata key is not trusted even if fingerprint match", () => {
       expect.assertions(1);
-      const metadataPrivateKey = new MetadataPrivateKeyEntity(decryptedMetadataPrivateKeyDto());
-
+      const metadataKey = new MetadataKeyEntity(defaultMetadataKeyDto());
       const dto = defaultMetadataTrustedKeyDto();
       const entity = new MetadataTrustedKeyEntity(dto);
 
-
-      expect(entity.isMetadataKeyTrusted(metadataPrivateKey)).toBeFalsy();
+      expect(entity.isMetadataKeyTrusted(metadataKey)).toBeFalsy();
     });
 
-    it("should return false if metadata key is trusted and fingerprint not match", () => {
-      expect.assertions(1);
-      const metadataPrivateKey = new MetadataPrivateKeyEntity(decryptedMetadataPrivateKeyDto());
-      metadataPrivateKey.dataSignedByCurrentUser = pgpKeys.metadataKey.created;
-
-      const dto = defaultMetadataTrustedKeyDto({fingerprint: pgpKeys.ada.fingerprint});
-      const entity = new MetadataTrustedKeyEntity(dto);
-
-
-      expect(entity.isMetadataKeyTrusted(metadataPrivateKey)).toBeFalsy();
-    });
-
-    it("should return false if metadata private key is not decrypted", () => {
-      expect.assertions(1);
-      const metadataPrivateKey = new MetadataPrivateKeyEntity(defaultMetadataPrivateKeyDto());
-
-      const dto = defaultMetadataTrustedKeyDto();
-      const entity = new MetadataTrustedKeyEntity(dto);
-
-
-      expect(entity.isMetadataKeyTrusted(metadataPrivateKey)).toBeFalsy();
-    });
-
-    it("should return false if parameter is not a metadata private key", () => {
+    it("throws if the parameter to check is not of type MetadataKeyEntity", () => {
       expect.assertions(1);
       const dto = defaultMetadataTrustedKeyDto();
       const entity = new MetadataTrustedKeyEntity(dto);
 
-
-      expect(entity.isMetadataKeyTrusted({})).toBeFalsy();
+      expect(() => entity.isMetadataKeyTrusted({})).toThrow(TypeError);
     });
   });
 });

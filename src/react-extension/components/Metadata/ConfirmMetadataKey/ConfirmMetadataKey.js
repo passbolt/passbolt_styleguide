@@ -51,42 +51,10 @@ class ConfirmMetadataKey extends Component {
   }
 
   /**
-   * Get the user who created the metadata key.
-   * @returns {object}
-   */
-  get creator() {
-    return this.metadataKey?.creator || {profile: {first_name: this.translate("unknown"), last_name: this.translate("unknown")}};
-  }
-
-  /**
-   * Get the trusted metadata key.
-   * @returns {object}
-   */
-  get metadataTrustedKey() {
-    return this.props.confirmMetadataKey.metadataTrustedKey;
-  }
-
-  /**
-   * Get the metadata key.
-   * @returns {object}
-   */
-  get metadataKey() {
-    return this.props.confirmMetadataKey.metadataKey;
-  }
-
-  /**
-   * Get the creator name.
-   * @returns {string}
-   */
-  get creatorName() {
-    return `${this.creator.profile.first_name} ${this.creator.profile.last_name}`;
-  }
-
-  /**
    * Close the dialog.
    */
   close() {
-    this.props.context.port.emit(this.props.requestId, false);
+    this.props.context.port.emit(this.props.requestId, "SUCCESS", false);
     this.props.onClose();
   }
 
@@ -113,19 +81,18 @@ class ConfirmMetadataKey extends Component {
     event.preventDefault();
 
     this.setState({processing: true});
-    this.props.context.port.emit(this.props.requestId, true);
+    this.props.context.port.emit(this.props.requestId, "SUCCESS", true);
     this.setState({processing: false});
     this.props.onClose();
   }
 
   /**
-   * Is metadata key rotation
+   * Is the metadata key rotated.
    * @returns {boolean}
    */
   get isMetadataKeyRotation() {
-    const signedDate = this.metadataTrustedKey.signed;
-    const newMetadataSignedDate = this.metadataKey.metadata_private_keys?.[0]?.data_signed_by_current_user;
-    return newMetadataSignedDate > signedDate;
+    // The key would not be already signed for a rotation.
+    return this.props.metadataKey.metadataPrivateKeys?.items?.[0]?.dataSignedByCurrentUser === null;
   }
 
   /**
@@ -141,8 +108,11 @@ class ConfirmMetadataKey extends Component {
    * @returns {JSX}
    */
   render() {
-    const creatorName = this.creatorName;
     const isMetadataKeyRotation = this.isMetadataKeyRotation;
+    const creatorName = this.props.metadataKey?.creator ?
+      (<>{this.props.metadataKey?.creator?.profile?.name} ({this.props.metadataKey?.creator.username})</>) :
+      this.translate('Unknown User');
+
     return (
       <DialogWrapper className="confirm-metadata-key-dialog"  title={this.translate("The metadata key has changed.")} onClose={this.handleCloseClick}>
         <form onSubmit={this.handleFormSubmit}>
@@ -152,12 +122,12 @@ class ConfirmMetadataKey extends Component {
                 <div className="content-wrapper">
                   <div className="content">
                     <div>
-                      <span className="name"><Trans>The encryption key used to share metadata between users has been updated by <span className="creator">{{creatorName}}</span>.</Trans></span>
+                      <span className="name"><Trans>The encryption key used to share metadata between users has been updated by <span className="creator">{creatorName}</span>.</Trans></span>
                     </div>
                   </div>
                 </div>
                 <UserAvatar
-                  user={this.creator}
+                  user={this.props.metadataKey.creator}
                   baseUrl={this.props.context.userSettings.getTrustedDomain()}
                   attentionRequired={false}/>
               </li>
@@ -191,14 +161,13 @@ class ConfirmMetadataKey extends Component {
                     {!isMetadataKeyRotation &&
                       <Trans>Your administrator may have rolled back the metadata key and you need to trust it prior to its usage.</Trans>
                     }
-
                   </p>
                   <div className="information-details">
                     <div className="info-type">
                       <Trans>Key fingerprint</Trans>
                     </div>
                     <div className="info-data">
-                      <Fingerprint fingerprint={this.metadataKey.fingerprint}/>
+                      <Fingerprint fingerprint={this.props.metadataKey.fingerprint}/>
                     </div>
                   </div>
                 </div>
@@ -207,7 +176,12 @@ class ConfirmMetadataKey extends Component {
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.state.processing} onClick={this.handleCloseClick}></FormCancelButton>
-            <FormSubmitButton disabled={this.state.processing} processing={this.state.processing} warning={!isMetadataKeyRotation} attention={isMetadataKeyRotation} value={this.translate(isMetadataKeyRotation ? "Trust the new key" : "Trust the key")}></FormSubmitButton>
+            <FormSubmitButton disabled={this.state.processing}
+              processing={this.state.processing}
+              warning={!isMetadataKeyRotation}
+              attention={isMetadataKeyRotation}
+              value={this.translate(isMetadataKeyRotation ? "Trust the new key" : "Trust the key")}>
+            </FormSubmitButton>
           </div>
         </form>
       </DialogWrapper>
@@ -218,7 +192,8 @@ class ConfirmMetadataKey extends Component {
 ConfirmMetadataKey.propTypes = {
   context: PropTypes.object, // The application context
   requestId: PropTypes.string.isRequired, // The request id
-  confirmMetadataKey: PropTypes.object.isRequired, // Object containing the previous metadata key trusted and the new one to trust
+  metadataKey: PropTypes.object.isRequired, // New metadata key entity
+  metadataTrustedKey: PropTypes.object.isRequired, // Trusted metadata key entity
   onClose: PropTypes.func,
   t: PropTypes.func, // The translation function
 };
