@@ -71,7 +71,7 @@ class MetadataTrustedKeyEntity extends EntityV2 {
    */
   isMetadataKeyTrusted(metadataPrivateKey) {
     if (metadataPrivateKey instanceof MetadataPrivateKeyEntity && metadataPrivateKey.isDecrypted) {
-      return metadataPrivateKey.data.fingerprint === this.fingerprint && metadataPrivateKey.isDataSignedByCurrentUser === this.signed;
+      return metadataPrivateKey.data.fingerprint === this.fingerprint && metadataPrivateKey.dataSignedByCurrentUser === this.signed;
     }
     return false;
   }

@@ -24,7 +24,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(dto);
+    super(dto, options);
 
     if (this._props.data && typeof this._props.data !== 'string') {
       this._data = new MetadataPrivateKeyDataEntity(this._props.data, {...options, clone: false});
@@ -218,7 +218,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    * Returns the data_signed_by_current_user
    * @returns {string|null}
    */
-  get isDataSignedByCurrentUser() {
+  get dataSignedByCurrentUser() {
     return this._props.data_signed_by_current_user || null;
   }
 
@@ -286,7 +286,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    * @param {string|null} value
    * @throws {EntityValidationError} if the `dataSignedByCurrentUser` is not valid
    */
-  set isDataSignedByCurrentUser(value) {
+  set dataSignedByCurrentUser(value) {
     EntitySchema.validateProp("data_signed_by_current_user", value, this.cachedSchema.properties.data_signed_by_current_user);
     this._props.data_signed_by_current_user = value;
   }
