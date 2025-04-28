@@ -24,7 +24,7 @@ beforeEach(() => {
 });
 
 describe("ConfirmMetadataKey", () => {
-  it('As a signed in user I can confirm a metadata key more recent', async() => {
+  it("As a signed in user I can confirm a new metadata key", async() => {
     expect.assertions(6);
     const props = defaultProps();
     jest.spyOn(props.context.port, "emit");
@@ -38,12 +38,12 @@ describe("ConfirmMetadataKey", () => {
     await page.openMoreInformation();
     await page.submit();
 
-    expect(page.fingerprint.textContent).toStrictEqual(props.confirmMetadataKey.metadataKey.fingerprint.replace(/.{4}/g, '$& '));
-    expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, true);
+    expect(page.fingerprint.textContent).toStrictEqual(props.metadataKey.fingerprint.replace(/.{4}/g, '$& '));
+    expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, "SUCCESS", true);
     expect(props.onClose).toHaveBeenCalled();
   });
 
-  it('As a signed in user I can confirm a metadata key older', async() => {
+  it("As a signed in user I can confirm a metadata key previously signed that was rolled back", async() => {
     expect.assertions(6);
     const props = defaultPropsWithRollback();
     jest.spyOn(props.context.port, "emit");
@@ -57,8 +57,8 @@ describe("ConfirmMetadataKey", () => {
     await page.openMoreInformation();
     await page.submit();
 
-    expect(page.fingerprint.textContent).toStrictEqual(props.confirmMetadataKey.metadataKey.fingerprint.replace(/.{4}/g, '$& '));
-    expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, true);
+    expect(page.fingerprint.textContent).toStrictEqual(props.metadataKey.fingerprint.replace(/.{4}/g, '$& '));
+    expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, "SUCCESS", true);
     expect(props.onClose).toHaveBeenCalled();
   });
 
@@ -73,7 +73,7 @@ describe("ConfirmMetadataKey", () => {
 
     await page.cancel();
 
-    expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, false);
+    expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, "SUCCESS", false);
     expect(props.onClose).toHaveBeenCalled();
   });
 
@@ -88,7 +88,7 @@ describe("ConfirmMetadataKey", () => {
 
     await page.close();
 
-    expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, false);
+    expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, "SUCCESS", false);
     expect(props.onClose).toHaveBeenCalled();
   });
 });

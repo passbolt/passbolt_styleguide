@@ -121,11 +121,13 @@ describe("MetadataPrivateKeyEntity", () => {
     it("validates created_by property", () => {
       assertEntityProperty.uuid(MetadataPrivateKeyEntity, "created_by");
       assertEntityProperty.notRequired(MetadataPrivateKeyEntity, "created_by");
+      assertEntityProperty.nullable(MetadataPrivateKeyEntity, "created_by");
     });
 
     it("validates modified_by property", () => {
       assertEntityProperty.uuid(MetadataPrivateKeyEntity, "modified_by");
       assertEntityProperty.notRequired(MetadataPrivateKeyEntity, "modified_by");
+      assertEntityProperty.nullable(MetadataPrivateKeyEntity, "modified_by");
     });
   });
 
@@ -249,7 +251,7 @@ describe("MetadataPrivateKeyEntity", () => {
       const dto = minimalMetadataPrivateKeyDto();
       const entity = new MetadataPrivateKeyEntity(dto);
 
-      expect(entity.isDataSignedByCurrentUser).toBeNull();
+      expect(entity.dataSignedByCurrentUser).toBeNull();
     });
 
     it("`data_signed_by_current_user` should the right value", () => {
@@ -257,9 +259,9 @@ describe("MetadataPrivateKeyEntity", () => {
       const dto = minimalMetadataPrivateKeyDto();
 
       const entity = new MetadataPrivateKeyEntity(dto);
-      entity.isDataSignedByCurrentUser = "2022-10-11T08:09:00+00:00";
+      entity.dataSignedByCurrentUser = "2022-10-11T08:09:00+00:00";
 
-      expect(entity.isDataSignedByCurrentUser).toBeTruthy();
+      expect(entity.dataSignedByCurrentUser).toBeTruthy();
     });
   });
 
@@ -287,7 +289,7 @@ describe("MetadataPrivateKeyEntity", () => {
         expect.assertions(1);
         const entity = new MetadataPrivateKeyEntity(defaultMetadataPrivateKeyDto());
 
-        expect(() => { entity.isDataSignedByCurrentUser = "test"; }).toThrow(EntityValidationError);
+        expect(() => { entity.dataSignedByCurrentUser = "test"; }).toThrow(EntityValidationError);
       });
 
       it("`data_signed_by_current_user` could be set with a date", () => {
@@ -295,9 +297,9 @@ describe("MetadataPrivateKeyEntity", () => {
         const dto = defaultMetadataPrivateKeyDto();
         const entity = new MetadataPrivateKeyEntity(dto);
 
-        entity.isDataSignedByCurrentUser = "2022-10-11T08:09:00+00:00";
+        entity.dataSignedByCurrentUser = "2022-10-11T08:09:00+00:00";
 
-        expect(entity.isDataSignedByCurrentUser).toBeTruthy();
+        expect(entity.dataSignedByCurrentUser).toBeTruthy();
       });
 
       it("`data_signed_by_current_user` could be set with a null", () => {
@@ -305,14 +307,14 @@ describe("MetadataPrivateKeyEntity", () => {
         const dto = defaultMetadataPrivateKeyDto();
         const entity = new MetadataPrivateKeyEntity(dto);
 
-        expect(entity.isDataSignedByCurrentUser).toBe(null);
+        expect(entity.dataSignedByCurrentUser).toBe(null);
       });
 
       it("`data_signed_by_current_user` should assert the parameter", () => {
         expect.assertions(1);
         const entity = new MetadataPrivateKeyEntity(defaultMetadataPrivateKeyDto());
 
-        expect(() => { entity.isDataSignedByCurrentUser = "test"; }).toThrow(EntityValidationError);
+        expect(() => { entity.dataSignedByCurrentUser = "test"; }).toThrow(EntityValidationError);
       });
     });
   });

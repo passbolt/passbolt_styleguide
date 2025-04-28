@@ -14,10 +14,15 @@
 
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {v4 as uuidv4} from "uuid";
-import {defaultMetadataKeyDto} from "../../../../shared/models/entity/metadata/metadataKeyEntity.test.data";
+import {
+  defaultMetadataKeyDto,
+  metadataKeyWithSignedMetadataPrivateKeyDataDto
+} from "../../../../shared/models/entity/metadata/metadataKeyEntity.test.data";
 import {
   defaultMetadataTrustedKeyDto
 } from "../../../../shared/models/entity/metadata/metadataTrustedKeyEntity.test.data";
+import MetadataKeyEntity from "../../../../shared/models/entity/metadata/metadataKeyEntity";
+import MetadataTrustedKeyEntity from "../../../../shared/models/entity/metadata/metadataTrustedKeyEntity";
 
 /**
  * Default props.
@@ -25,16 +30,13 @@ import {
  * @returns {object}
  */
 export function defaultProps(data = {}) {
-  const metadataKey = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true});
-  delete metadataKey.metadata_private_keys[0].data;
-  metadataKey.metadata_private_keys[0].data_signed_by_current_user = "2025-04-24T10:39.000Z";
+  const metadataKeyDto = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true, withCreator: true});
+  delete metadataKeyDto.metadata_private_keys[0].data; // Service worker does not return the data.
   return {
     context: defaultUserAppContext(),
     requestId: uuidv4(),
-    confirmMetadataKey: {
-      metadataTrustedKey: defaultMetadataTrustedKeyDto(),
-      metadataKey: metadataKey
-    },
+    metadataTrustedKey: new MetadataTrustedKeyEntity(defaultMetadataTrustedKeyDto()),
+    metadataKey: new MetadataKeyEntity(metadataKeyDto, {validate: false}),
     onClose: jest.fn(),
     ...data
   };
@@ -46,13 +48,13 @@ export function defaultProps(data = {}) {
  * @returns {object}
  */
 export function defaultPropsWithRollback(data = {}) {
+  const metadataKeyDto = metadataKeyWithSignedMetadataPrivateKeyDataDto({}, {withMetadataPrivateKeys: true, withCreator: true});
+  delete metadataKeyDto.metadata_private_keys[0].data; // Service worker does not return the data.
   return {
     context: defaultUserAppContext(),
     requestId: uuidv4(),
-    confirmMetadataKey: {
-      metadataTrustedKey: defaultMetadataTrustedKeyDto(),
-      metadataKey: defaultMetadataKeyDto()
-    },
+    metadataTrustedKey: new MetadataTrustedKeyEntity(defaultMetadataTrustedKeyDto()),
+    metadataKey: new MetadataKeyEntity(metadataKeyDto, {validate: false}),
     onClose: jest.fn(),
     ...data
   };

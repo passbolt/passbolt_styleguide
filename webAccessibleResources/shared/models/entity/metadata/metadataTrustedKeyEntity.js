@@ -12,7 +12,7 @@
  * @since         5.1.0
  */
 import EntityV2 from "../abstract/entityV2";
-import MetadataPrivateKeyEntity from "./metadataPrivateKeyEntity";
+import MetadataKeyEntity from "./metadataKeyEntity";
 
 const FINGERPRINT_MIN_LENGTH = 40;
 const FINGERPRINT_MAX_LENGTH = 40;
@@ -32,6 +32,7 @@ class MetadataTrustedKeyEntity extends EntityV2 {
       "properties": {
         "fingerprint": {
           "type": "string",
+          "pattern": /^[a-f0-9]{40}$/im,
           "minLength": FINGERPRINT_MIN_LENGTH,
           "maxLength": FINGERPRINT_MAX_LENGTH
         },
@@ -65,15 +66,16 @@ class MetadataTrustedKeyEntity extends EntityV2 {
   }
 
   /**
-   * Is metadata key trusted
-   * @param {MetadataPrivateKeyEntity} metadataPrivateKey
+   * Check if a given metadata key is trusted.
+   * @param {MetadataKeyEntity} metadataKey The metadata key to check.
    * @returns {boolean}
+   * @throws {TypeError} If `metadataKey` parameter is not of type MetadataKeyEntity
    */
-  isMetadataKeyTrusted(metadataPrivateKey) {
-    if (metadataPrivateKey instanceof MetadataPrivateKeyEntity && metadataPrivateKey.isDecrypted) {
-      return metadataPrivateKey.data.fingerprint === this.fingerprint && metadataPrivateKey.isDataSignedByCurrentUser === this.signed;
+  isMetadataKeyTrusted(metadataKey) {
+    if (!(metadataKey instanceof MetadataKeyEntity)) {
+      throw new TypeError("The metadataKey is not of MetadataKeyEntity type");
     }
-    return false;
+    return metadataKey.fingerprint === this.fingerprint;
   }
 }
 
