@@ -1,3 +1,14 @@
+<!--
+  The SVGs code is based on the Lucide library, licensed under the LGPL License.
+  https://github.com/lucide-icons/lucide
+
+  Copyright (c) Lucide Authors
+
+  Modifications made by Passbolt SA.
+   - Renaming colors and file name of SVGs.
+
+  @url https://github.com/lucide-icons/lucide/tree/main/icons
+-->
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
     <path d="M7.99967 8.66634C8.36786 8.66634 8.66634 8.36786 8.66634 7.99967C8.66634 7.63148 8.36786 7.33301 7.99967 7.33301C7.63148 7.33301 7.33301 7.63148 7.33301 7.99967C7.33301 8.36786 7.63148 8.66634 7.99967 8.66634Z" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M7.99967 4.00033C8.36786 4.00033 8.66634 3.70185 8.66634 3.33366C8.66634 2.96547 8.36786 2.66699 7.99967 2.66699C7.63148 2.66699 7.33301 2.96547 7.33301 3.33366C7.33301 3.70185 7.63148 4.00033 7.99967 4.00033Z" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
