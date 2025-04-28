@@ -170,7 +170,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       onChangeColumnView: this.handleChangeColumnView.bind(this), // Whenever the users wants to show or hide a column
       onChangeColumnsSettings: this.handleChangeColumnsSettings.bind(this), // Whenever the user change the columns configuration
       resetGridColumnsSettings: this.resetGridColumnsSettings.bind(this), // Whenever the user resets the columns configuration
-      getHierarchyFolderCache: this.getHierarchyFolderCache.bind(this) // Whenever the need to get folder hierarchy
     };
   }
 
@@ -180,8 +179,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   initializeProperties() {
     this.resources = null; // A cache of the last known list of resources from the App context
     this.folders = null; // A cache of the last known list of folders from the App context
-    this.foldersMapById = {}; // A cache of the last known list of folders map by ID from the App context
-    this.hierarchyFolderCache = {}; // A cache of the last known list of folders hierarchy by ID from the App context
   }
 
   /**
@@ -261,11 +258,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const hasFoldersChanged = this.props.context.folders !== this.folders;
     if (hasFoldersChanged) {
       this.folders = this.props.context.folders;
-      this.foldersMapById = this.folders.reduce((result, folder) => {
-        result[folder.id] = folder;
-        return result;
-      }, {});
-      this.hierarchyFolderCache = {};
       await this.refreshSearchFilter();
       await this.updateDetails();
     }
@@ -728,7 +720,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const wordToRegex = word =>  new RegExp(escapeWord(word), 'i');
     const matchWord = (word, value) => wordToRegex(word).test(value);
 
-    const getFolderById = id => this.foldersMapById[id];
+    const getFolderById = id => this.props.context.foldersMapById[id];
     const matchFolderNameProperty = (word, folder) => matchWord(word, folder?.name);
     const matchFolder = (word, folder) => matchFolderNameProperty(word, folder) || (folder?.folder_parent_id && matchFolderCache(word, folder.folder_parent_id));
     const matchFolderCache = (word, id) => {
@@ -1242,43 +1234,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async updateGridSetting() {
     const gridUserSettingEntity = new GridUserSettingEntity({columns_setting: this.state.columnsResourceSetting.toDto(), sorter: this.state.sorter.toDto()});
     await this.gridResourceUserSetting.setSetting(gridUserSettingEntity);
-  }
-
-  /**
-   * Get the hierarchy of a folder by ID in cache
-   * @param {string} id The id of the folder
-   * @returns {array<object>} Array of folders
-   */
-  getHierarchyFolderCache(id) {
-    // When resources are not in a folder
-    if (id === null) {
-      return [];
-    }
-    // Process the hierarchy with a cache map by folder id
-    if (typeof this.hierarchyFolderCache[id] === "undefined") {
-      this.hierarchyFolderCache[id] = this.getHierarchyFolder(id);
-    }
-    return this.hierarchyFolderCache[id];
-  }
-
-  /**
-   * Get the hierarchy of a folder by ID in cache
-   * @param {string} id The id of the folder
-   * @returns {*[]}
-   */
-  getHierarchyFolder(id) {
-    const hierarchy = [];
-    let currentFolderId = id;
-    while (currentFolderId) {
-      const folder = this.foldersMapById[currentFolderId];
-      // Prevent issue if foldersMapById is not loaded yet
-      if (!folder) {
-        return hierarchy;
-      }
-      hierarchy.unshift(folder);
-      currentFolderId = folder.folder_parent_id;
-    }
-    return hierarchy;
   }
 
 

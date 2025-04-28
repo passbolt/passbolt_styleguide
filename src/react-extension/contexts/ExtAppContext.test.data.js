@@ -53,7 +53,9 @@ export function defaultAppContext(appContext = {}) {
       id: TEST_ROLE_USER_ID,
       name: 'user'
     }],
-    setContext: jest.fn()
+    setContext: jest.fn(),
+    foldersMapById: [],
+    getHierarchyFolderCache: jest.fn(() => []),
   };
   return Object.assign(defaultAppContext, appContext);
 }
@@ -78,6 +80,8 @@ export const defaultUserAppContext = (data = {}) => {
     resources: [],
     folders: [],
     setContext: jest.fn(),
+    foldersMapById: [],
+    getHierarchyFolderCache: jest.fn(() => []),
     ...data
   };
 };
