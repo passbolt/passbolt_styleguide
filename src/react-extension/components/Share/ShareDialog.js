@@ -429,10 +429,9 @@ class ShareDialog extends Component {
   /**
    * Use to render a single item of the share permission list
    * @param {integer} index of the item in the source list
-   * @param {integer} key index of the HTML element in the ReactList
    * @returns {JSX.Element}
    */
-  renderItem(index, key) {
+  renderItem(index) {
     const permission = this.state.permissions[index];
     const sharePermissionItemKey = permission.aro.id;
     return (
@@ -446,7 +445,6 @@ class ShareDialog extends Component {
         disabled={this.hasAllInputDisabled()}
         onUpdate={this.handlePermissionUpdate}
         onDelete={this.handlePermissionDelete}
-        isLastItemDisplayed={key >= 2}
         canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
       />
     );
@@ -512,6 +510,7 @@ class ShareDialog extends Component {
                   minSize={this.props.listMinSize}
                   type={this.state.permissions.length < 4 ? "simple" : "uniform"}
                   ref={this.permissionListRef}
+                  usePosition={true}
                   threshold={30}>
                 </ReactList>
               }

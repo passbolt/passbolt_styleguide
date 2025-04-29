@@ -448,10 +448,9 @@ class CreateUserGroup extends Component {
   /**
    * Use to render a single item of the user group list
    * @param {integer} index of the item in the source list
-   * @param {integer} key index of the HTML element in the ReactList
    * @returns {JSX.Element}
    */
-  renderItem(index, key) {
+  renderItem(index) {
     const groupUser = this.state.groups_users[index];
     const createUserGroupItemKey = groupUser.user.id;
     return (
@@ -461,7 +460,6 @@ class CreateUserGroup extends Component {
         groupUser={groupUser}
         onMemberRoleChange={event => this.handleSelectUpdate(event, groupUser.user.id)}
         onMemberRemoved={event => this.handleDeleteClickEvent(event, groupUser.user.id)}
-        isLastItemDisplayed={key >= 2}
         isMemberChanged={true}
         isMemberAdded={true}
         areActionsAllowed={!this.hasAllInputDisabled()}
@@ -544,6 +542,7 @@ class CreateUserGroup extends Component {
                     length={this.state.groups_users.length}
                     minSize={4}
                     type={this.state.groups_users.length < 4 ? "simple" : "uniform"}
+                    usePosition={true}
                     threshold={30}>
                   </ReactList>
                 }
