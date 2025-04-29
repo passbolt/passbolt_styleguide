@@ -29,13 +29,12 @@ import {ContextualMenuContext} from "../../../contexts/ContextualMenuContext";
 export default class FilterResourcesByFoldersPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
+        <AppContext.Provider value={props.context}>
           <Router>
             <ContextualMenuContext.Provider value={props.contextualMenuContext}>
               <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
