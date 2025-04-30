@@ -40,17 +40,6 @@ describe("ImportAccountKit", () => {
       expect(page.importButton.textContent).toEqual("Import account");
     });
 
-    it('As an unknown user configuring the desktop app I should be able to reach documentation about the account kit', async() => {
-      expect.assertions(2);
-
-      jest.spyOn(props.context.port, "emit").mockImplementation(jest.fn());
-
-      await page.click(page.getHelpMessage);
-
-      expect(page.getHelpMessage).not.toBeNull();
-      expect(props.context.port.emit).toHaveBeenCalledWith("passbolt.rendered.open-to-browser", "https://www.passbolt.com/docs/user/quickstart/desktop/windows-app/");
-    });
-
     it('As an unknown user I should be notified if I have uploaded a wrong file format', async() => {
       expect.assertions(2);
 

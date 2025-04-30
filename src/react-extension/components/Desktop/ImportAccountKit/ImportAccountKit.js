@@ -62,7 +62,6 @@ class ImportAccountKit extends React.Component {
     this.handleSelectFile = this.handleSelectFile.bind(this);
     this.handleAccountKitSelected = this.handleAccountKitSelected.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
-    this.openDocumentation = this.openDocumentation.bind(this);
   }
 
 
@@ -165,15 +164,6 @@ class ImportAccountKit extends React.Component {
     }
     return this.setState({errors: {message}});
   }
-
-  /**
-   * Request main process to open browser with link.
-   * @returns {Promise<void>}
-   */
-  openDocumentation() {
-    this.props.context.port.emit("passbolt.rendered.open-to-browser", "https://www.passbolt.com/docs/user/quickstart/desktop/windows-app/");
-  }
-
   /**
    * Render the component
    */
@@ -221,9 +211,9 @@ class ImportAccountKit extends React.Component {
               className="button primary big full-width">
               <Trans>Import account</Trans>
             </button>
-            <button type="button" className="link"  onClick={this.openDocumentation}>
+            <a href="https://www.passbolt.com/docs/user/quickstart/desktop/windows-app/" className="link">
               <Trans>Where can I find my account kit ?</Trans>
-            </button>
+            </a>
           </div>
         </form>
       </div>);
