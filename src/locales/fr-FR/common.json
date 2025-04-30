@@ -1628,7 +1628,7 @@
   "You need use the same computer and browser to finalize the process.": "Vous devez utiliser le même ordinateur et le même navigateur pour finaliser le processus.",
   "You need your passphrase to continue.": "Vous avez besoin de votre phrase de passe pour continuer.",
   "You seem to have Email Notification Settings defined in your passbolt.php (or via environment variables).": "Vous semblez avoir des paramètres de notification par e-mail définis dans votre passbolt.php (ou via des variables d'environnement).",
-  "You should inform your users not to store personal passwords.": "",
+  "You should inform your users not to store personal passwords.": "Vous devez informer vos utilisateurs de ne pas stocker de mots de passe personnels.",
   "You should keep it offline in a safe place.": "Vous devriez le garder hors ligne dans un endroit sûr.",
   "You sign in to passbolt just like you normally do.": "Vous vous connectez à passbolt comme vous le faites habituellement.",
   "You susccessfully signed in with your {{providerName}} account. You can safely save your configuration.": "Vous vous êtes connecté avec votre compte {{providerName}}. Vous pouvez sauvegarder votre configuration en toute sécurité.",
