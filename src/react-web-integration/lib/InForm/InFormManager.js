@@ -185,6 +185,7 @@ class InFormManager {
     }
     return isInformIframe;
   }
+
   /**
    * Whenever the username / password callToActionFields change its position, reposition the call-to-action
    */
