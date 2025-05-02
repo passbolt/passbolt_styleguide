@@ -14,6 +14,7 @@
 import {
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
 } from "../../resourceType/resourceTypeEntity.test.data";
+import ResourceMetadataEntity from "./resourceMetadataEntity";
 
 /**
  * Build minimal resource metadata dto.
@@ -36,7 +37,8 @@ export const minimalResourceMetadataDto = (data = {}) => {
  */
 export const defaultResourceMetadataDto = (data = {}) => {
   const metadataDto = {
-    resource_type_id: data?.resource_type_id || TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+    object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
+    resource_type_id:  data?.resource_type_id || TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
     name: "Passbolt",
     username: "admin@passbolt.com",
     uris: ["https://passbolt.com"],
