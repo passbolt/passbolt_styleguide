@@ -19,28 +19,47 @@
 import {
   domElementLoginOnlyPasswordWithSubmitButton,
   domElementLoginWithAutocompleteAttributeEmail,
-  domElementLoginWithAutocompleteAttributeUsername, domElementLoginWithClassCreateAccount,
+  domElementLoginWithAutocompleteAttributeUsername,
+  domElementLoginWithClassCreateAccount,
   domElementLoginWithClassEmail,
-  domElementLoginWithClassUsername, domElementLoginWithIdAttributeBenutzerkennung, domElementLoginWithIdAttributeBenutzername,
-  domElementLoginWithIdAttributeEmail, domElementLoginWithIdAttributeLogin,
-  domElementLoginWithIdAttributeUsername, domElementLoginWithNameAttributeBenutzerkennung, domElementLoginWithNameAttributeBenutzername, domElementLoginWithNameAttributeBenutzernameAndPasswordAttributePasswort,
-  domElementLoginWithNameAttributeEmail, domElementLoginWithNameAttributeLogin,
+  domElementLoginWithClassUsername,
+  domElementLoginWithIdAttributeBenutzerkennung,
+  domElementLoginWithIdAttributeBenutzername,
+  domElementLoginWithIdAttributeEmail,
+  domElementLoginWithIdAttributeLogin, domElementLoginWithIdAttributeLogto,
+  domElementLoginWithIdAttributeUsername,
+  domElementLoginWithNameAttributeBenutzerkennung,
+  domElementLoginWithNameAttributeBenutzername,
+  domElementLoginWithNameAttributeBenutzernameAndPasswordAttributePasswort,
+  domElementLoginWithNameAttributeEmail,
+  domElementLoginWithNameAttributeLogin,
+  domElementLoginWithNameAttributeLogto,
   domElementLoginWithNameAttributeUsername,
   domElementLoginWithNoTypeAndAutocompleteAttributeEmail,
-  domElementLoginWithNoTypeAndAutocompleteAttributeUsername, domElementLoginWithNoTypeAndClassCreateAccount,
+  domElementLoginWithNoTypeAndAutocompleteAttributeUsername,
+  domElementLoginWithNoTypeAndClassCreateAccount,
   domElementLoginWithNoTypeAndClassEmail,
-  domElementLoginWithNoTypeAndClassUsername, domElementLoginWithNoTypeAndIdAttributeBenutzerkennung, domElementLoginWithNoTypeAndIdAttributeBenutzername,
-  domElementLoginWithNoTypeAndIdAttributeEmail, domElementLoginWithNoTypeAndIdAttributeLogin,
-  domElementLoginWithNoTypeAndIdAttributeUsername, domElementLoginWithNoTypeAndNameAttributeBenutzerkennung, domElementLoginWithNoTypeAndNameAttributeBenutzername,
-  domElementLoginWithNoTypeAndNameAttributeEmail, domElementLoginWithNoTypeAndNameAttributeLogin,
-  domElementLoginWithNoTypeAndNameAttributeUsername, domElementLoginWithNoTypeAndPlaceHolderAttributeE_mail,
+  domElementLoginWithNoTypeAndClassUsername,
+  domElementLoginWithNoTypeAndIdAttributeBenutzerkennung,
+  domElementLoginWithNoTypeAndIdAttributeBenutzername,
+  domElementLoginWithNoTypeAndIdAttributeEmail,
+  domElementLoginWithNoTypeAndIdAttributeLogin,
+  domElementLoginWithNoTypeAndIdAttributeUsername,
+  domElementLoginWithNoTypeAndNameAttributeBenutzerkennung,
+  domElementLoginWithNoTypeAndNameAttributeBenutzername,
+  domElementLoginWithNoTypeAndNameAttributeEmail,
+  domElementLoginWithNoTypeAndNameAttributeLogin,
+  domElementLoginWithNoTypeAndNameAttributeUsername,
+  domElementLoginWithNoTypeAndPlaceHolderAttributeE_mail,
   domElementLoginWithNoTypeAndPlaceHolderAttributeEmail,
-  domElementLoginWithNoTypeAndPlaceHolderAttributeUsername, domElementLoginWithPlaceHolderAttributeE_mail,
+  domElementLoginWithNoTypeAndPlaceHolderAttributeUsername,
+  domElementLoginWithPlaceHolderAttributeE_mail,
   domElementLoginWithPlaceHolderAttributeEmail,
   domElementLoginWithPlaceHolderAttributeUsername,
   domElementLoginWithSubmitButton,
   domElementOnlyPassword,
-  domElementOnlyUsername, domElementWithMultipleLogin,
+  domElementOnlyUsername,
+  domElementWithMultipleLogin,
   domElementWithNoUsernamePassword,
   initializeWindow
 } from "./InformManager.test.data";
@@ -119,6 +138,27 @@ describe("InformManager", () => {
     await informManager.mouseOverOnUsername();
     expect(informManager.iframesLength).toBe(2);
   });
+
+  it("As LU I should see the inform call to action on form with name attribute logto", async() => {
+    // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
+    document.body.innerHTML = domElementLoginWithNameAttributeLogto; // The Dom
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnPassword();
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.blurOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnPassword();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnPassword();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnUsername();
+    expect(informManager.iframesLength).toBe(2);
+  });
+
 
   it("As LU I should see the inform call to action on form with name attribute benutzerkennung", async() => {
     // Set up document body
@@ -324,6 +364,26 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithIdAttributeLogin; // The Dom
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnPassword();
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.blurOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnPassword();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnPassword();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnUsername();
+    expect(informManager.iframesLength).toBe(2);
+  });
+
+  it("As LU I should see the inform call to action on form with id attribute logto", async() => {
+    // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
+    document.body.innerHTML = domElementLoginWithIdAttributeLogto; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
