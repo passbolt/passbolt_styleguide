@@ -162,7 +162,7 @@ describe("As a logged in user, I have to approve or reject the new account recov
     const props = defaultProps(); // The props to pass
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService();
     jest.spyOn(props.context.siteSettings, 'canIUse').mockImplementation(feature => feature === "mfaPolicies");
-    jest.spyOn(props.mfaContext, "getPolicy").mockImplementationOnce(() => MfaPolicyEnumerationTypes.MANDATORY);
+    jest.spyOn(props.mfaContext, "getPolicy").mockImplementationOnce(() => MfaPolicyEnumerationTypes.OPTIN);
 
     // Mock the call for mfa-policy
 
@@ -173,7 +173,6 @@ describe("As a logged in user, I have to approve or reject the new account recov
     });
 
     //Should not with OPT-in
-    jest.spyOn(props.mfaContext, "getPolicy").mockImplementationOnce(() => MfaPolicyEnumerationTypes.OPTIN);
     new HandleStatusCheck(props, mockedAccountRecoveryUserService);
     await waitForTrue(() => isFunctionCalled);
 
