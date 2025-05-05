@@ -23,6 +23,7 @@ export const defaultSessionKeyDto = (data = {}) => {
     foreign_model: "Resource",
     foreign_id: uuidv4(),
     session_key: "9:901D6ED579AFF935F9F157A5198BCE48B50AD87345DEADBA06F42C5D018C78CC",
+    modified: (new Date()).toISOString(),
     ...data,
   };
 

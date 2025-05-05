@@ -40,27 +40,35 @@ describe("SessionKeyEntity", () => {
       assertEntityProperty.required(SessionKeyEntity, "session_key");
       assertEntityProperty.sessionKey(SessionKeyEntity, "session_key");
     });
+
+    it("validates modified property", () => {
+      assertEntityProperty.string(SessionKeyEntity, "modified");
+      assertEntityProperty.notRequired(SessionKeyEntity, "modified");
+      assertEntityProperty.dateTime(SessionKeyEntity, "modified");
+    });
   });
 
   describe("::constructor", () => {
     it("constructor works if valid minimal DTO is provided", () => {
-      expect.assertions(3);
+      expect.assertions(4);
       const dto = defaultSessionKeyDto();
       const entity = new SessionKeyEntity(dto);
 
       expect(entity._props.foreign_id).toStrictEqual(dto.foreign_id);
       expect(entity._props.foreign_model).toStrictEqual(dto.foreign_model);
       expect(entity._props.session_key).toStrictEqual(dto.session_key);
+      expect(entity._props.modified).toStrictEqual(dto.modified);
     });
 
     it("constructor works if valid DTO is provided", () => {
-      expect.assertions(3);
+      expect.assertions(4);
       const dto = defaultSessionKeyDto({foreign_model: "Folder"});
       const entity = new SessionKeyEntity(dto);
 
       expect(entity._props.foreign_id).toStrictEqual(dto.foreign_id);
       expect(entity._props.foreign_model).toStrictEqual(dto.foreign_model);
       expect(entity._props.session_key).toStrictEqual(dto.session_key);
+      expect(entity._props.modified).toStrictEqual(dto.modified);
     });
   });
 
