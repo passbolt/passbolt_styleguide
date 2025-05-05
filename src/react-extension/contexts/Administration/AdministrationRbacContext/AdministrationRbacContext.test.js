@@ -19,6 +19,7 @@ import {defaultSettingsRbacsCollectionData, settingsRbacsCollectionData} from '.
 import {AdminRbacContextProvider} from './AdministrationRbacContext';
 import RbacsCollection from '../../../../shared/models/entity/rbac/rbacsCollection';
 import PassboltServiceUnavailableError from '../../../../shared/lib/Error/PassboltServiceUnavailableError';
+import RbacService from '../../../../shared/services/api/rbac/rbacService';
 
 describe("AdministrationRbacContext", () => {
   let adminRbacContext; // The adminRbacContextProvider to test
@@ -103,9 +104,22 @@ describe("AdministrationRbacContext", () => {
       props.adminRbacContext.save = () => Promise.reject(error);
       fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, () => Promise.reject(error));
 
-      expect(async() => await adminRbacContext.save()).rejects.toThrowError(PassboltServiceUnavailableError);
-      expect(adminRbacContext.state.rbacsUpdated).toEqual(new RbacsCollection([]));
+      const rbacsUpdated = defaultSettingsRbacsCollectionData;
+      adminRbacContext.setRbacsUpdated(new RbacsCollection(rbacsUpdated));
+      await expect(() => adminRbacContext.save()).rejects.toThrowError(PassboltServiceUnavailableError);
+      expect(adminRbacContext.state.rbacsUpdated).toEqual(new RbacsCollection(rbacsUpdated));
       expect(adminRbacContext.state.rbacs).toEqual(null);
+    });
+
+    it("As a logged in administrator I can update the rbacs setting even with no changes", async() => {
+      expect.assertions(1);
+
+      adminRbacContext.setRbacs(new RbacsCollection(defaultSettingsRbacsCollectionData));
+
+      jest.spyOn(RbacService.prototype, "updateAll");
+      await adminRbacContext.save();
+
+      expect(RbacService.prototype.updateAll).not.toHaveBeenCalled();
     });
   });
 });
