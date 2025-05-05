@@ -44,6 +44,7 @@ import {formatDateForApi} from "../../../../shared/utils/dateUtils";
 import {defaultTotpDto} from "../../../../shared/models/entity/totp/totpDto.test.data";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import ResourceMetadataEntity from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity";
 
 describe("See the Create Resource", () => {
   beforeEach(() => {
@@ -907,6 +908,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: props.resourceType.id,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "no name",
           resource_type_id: props.resourceType.id,
           uris: [],
@@ -948,6 +950,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: props.resourceType.id,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v5 default",
           resource_type_id: props.resourceType.id,
           uris: [],
@@ -996,6 +999,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v5 default",
           resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
           uris: [],
@@ -1048,6 +1052,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v5 default",
           resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
           uris: [],
@@ -1101,6 +1106,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_V5_TOTP,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v5 default",
           resource_type_id: TEST_RESOURCE_TYPE_V5_TOTP,
           uris: [],
@@ -1145,6 +1151,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v4 default",
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
           uris: [],
@@ -1194,6 +1201,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v4 default totp",
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
           uris: [],
@@ -1242,6 +1250,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v4 default totp",
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
           uris: [],
@@ -1287,6 +1296,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_TOTP,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v4 default",
           resource_type_id: TEST_RESOURCE_TYPE_TOTP,
           uris: [],
@@ -1330,6 +1340,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v4 password string",
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
           description: "note converted",

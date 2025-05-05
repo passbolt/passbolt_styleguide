@@ -290,6 +290,7 @@ describe("EntityV2", () => {
       }), {
         validate: false
       });
+
       const validationErrors = new EntityValidationError();
       validationErrors.addAssociationError("associated_entity", new EntityValidationError("id", "required", "Could not validate entity TestAssociatedEntityV2."));
       expect(() => entity.validateAssociations()).toThrow(validationErrors);

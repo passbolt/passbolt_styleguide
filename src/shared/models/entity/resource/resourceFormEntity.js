@@ -137,6 +137,7 @@ class ResourceFormEntity extends EntityV2 {
 
       delete this._props.secret;
     }
+
     try {
       super.createAssociations(options);
     } catch (error) {
@@ -223,6 +224,7 @@ class ResourceFormEntity extends EntityV2 {
         // Set the metadata description with empty value
         this.set("metadata.description", null, options);
       }
+
       // Set the resource type id
       this.set("resource_type_id", mutateResourceType.id);
       this.set("metadata.resource_type_id", mutateResourceType.id);
@@ -566,6 +568,7 @@ class ResourceFormEntity extends EntityV2 {
         resource_type_id: this._props.resource_type_id,
         name: "",
         uris: [],
+        object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
       };
     }
   }

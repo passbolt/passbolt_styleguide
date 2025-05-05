@@ -263,6 +263,7 @@ class EntityV2 extends Entity {
       }
     }
   }
+
   /**
    * Set an array property value. The new array value will be validated against the entity schema unless validation is
    * explicitly disabled in the options.
