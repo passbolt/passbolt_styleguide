@@ -48,7 +48,11 @@ class SessionKeyEntity extends EntityV2 {
         "session_key": {
           "type": "string",
           "pattern": /^9:[0-9A-F]{64}$/i,
-        }
+        },
+        "modified": {
+          "type": "string",
+          "format": "date-time"
+        },
       }
     };
   }
