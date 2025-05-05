@@ -648,10 +648,9 @@ class EditUserGroup extends Component {
   /**
    * Use to render a single item of the user group list
    * @param {integer} index of the item in the source list
-   * @param {integer} key index of the HTML element in the ReactList
    * @returns {JSX.Element}
    */
-  renderItem(index, key) {
+  renderItem(index) {
     const groupUser = this.groupsUsers[index];
     const isMemberChanged = this.isMemberChanged(groupUser);
     const isMemberAdded = this.isMemberAdded(groupUser);
@@ -666,7 +665,6 @@ class EditUserGroup extends Component {
         onMemberRoleChange={this.handleMemberRoleChange}
         onMemberRemoved={this.handleMemberRemoved}
         areActionsAllowed={this.areActionsAllowed}
-        isLastItemDisplayed={key >= 2}
       />
     );
   }
@@ -772,6 +770,7 @@ class EditUserGroup extends Component {
                     length={this.groupsUsers.length}
                     minSize={4}
                     type={this.groupsUsers.length < 4 ? "simple" : "uniform"}
+                    usePosition={true}
                     threshold={30}>
                   </ReactList>
                 }

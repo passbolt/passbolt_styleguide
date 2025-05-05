@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Fragment} from "react";
+import React from "react";
 import FilterResourcesByFoldersItem from "./FilterResourcesByFoldersItem";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
@@ -478,14 +478,12 @@ class FilterResourcesByFolders extends React.Component {
   renderItem(index, key, folders) {
     const item = folders[index];
 
-    return <Fragment key={key}>
-      <FilterResourcesByFoldersItem
-        key={item.id}
-        folder={item}
-        toggleOpenFolder={this.handleToggleOpenFolder}
-        toggleCloseFolder={this.handleToggleCloseFolder}
-      />
-    </Fragment>;
+    return <FilterResourcesByFoldersItem
+      key={item.id}
+      folder={item}
+      toggleOpenFolder={this.handleToggleOpenFolder}
+      toggleCloseFolder={this.handleToggleCloseFolder}
+    />;
   }
 
   /**
@@ -569,6 +567,7 @@ class FilterResourcesByFolders extends React.Component {
               pageSize={30}
               minSize={30}
               type="uniform"
+              usePosition={true}
               ref={this.folderTreeRef}>
             </ReactList>
           }
