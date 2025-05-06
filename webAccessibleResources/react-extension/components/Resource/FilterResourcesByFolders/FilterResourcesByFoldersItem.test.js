@@ -16,7 +16,6 @@
  * Unit tests on FoldersTreeItem in regard of specifications
  */
 import {
-  defaultAppContext,
   defaultProps,
   foldersMock,
 } from "./FilterResourcesByFoldersItem.test.data";
@@ -29,13 +28,12 @@ beforeEach(() => {
 
 describe("As LU I should see each folders", () => {
   let page; // The page to test against
-  const appContext = defaultAppContext(); // The app context to pass
+  const props = defaultProps(); // The props to pass
   const requestMockImpl = jest.fn((message, data) => data);
-  const mockContextRequest = (context, implementation) => jest.spyOn(appContext.port, 'request').mockImplementation(implementation);
-  mockContextRequest(appContext, requestMockImpl);
+  const mockContextRequest = (context, implementation) => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
+  mockContextRequest(props.context, requestMockImpl);
 
   describe('As LU I should see and identify each folders open', () => {
-    const props = defaultProps(); // The props to pass
     /**
      * Given an organization with 4 Folders
      * Then I should see the 4 Folders
@@ -44,7 +42,7 @@ describe("As LU I should see each folders", () => {
      */
 
     beforeEach(() => {
-      page = new FilterResourcesByFoldersItemPage(appContext, props);
+      page = new FilterResourcesByFoldersItemPage(props);
     });
 
     it('As LU I should see the folders name and open it', async() => {

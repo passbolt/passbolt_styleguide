@@ -1582,7 +1582,6 @@ textarea.full_report {
 .input.password input[type=text]:focus ~ .password-view-wrapper,
 .input.password input[type=password]:focus ~ .password-view-wrapper {
   box-shadow: none;
-  background: inherit;
 }
 .input.password input[type=text]:disabled ~ .security-token-wrapper .security-token,
 .input.password input[type=password]:disabled ~ .security-token-wrapper .security-token,
@@ -1611,7 +1610,6 @@ textarea.full_report {
   align-items: center;
   gap: 1.6rem;
   border-radius: var(--Token-radius);
-  background: var(--Field-Field-background);
 }
 .input.password .password-view-wrapper .password-view {
   padding: 0.5rem var(--Infield-boxless-padding);
@@ -1714,11 +1712,11 @@ button:hover .digit {
   border-radius: var(--Token-radius);
   justify-content: center;
   align-items: center;
-  gap: 10px;
   font-size: 1.5rem;
   font-weight: 700;
   line-height: normal;
-  padding: var(--Inside-button) 8px;
+  padding: var(--Inside-button) 0.8rem;
+  white-space: nowrap;
 }
 input[type=file] {
   display: none;
@@ -3228,7 +3226,6 @@ html {
   flex-direction: column;
   align-items: stretch;
   justify-content: space-between;
-  gap: 1.6rem;
   align-self: stretch;
   border-radius: var(--Section-border-radius) var(--Section-border-radius) 0 0;
   background: var(--Workspace-Panels-background);

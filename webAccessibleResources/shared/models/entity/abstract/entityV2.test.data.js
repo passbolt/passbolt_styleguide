@@ -166,7 +166,7 @@ export const defaultTestEntityV2Dto = data => ({
   },
   array: [uuid(), uuid()],
   associated_entity: defaultAssociatedTestEntityV2Dto(),
-  ...data
+  ...data,
 });
 
 export const defaultAssociatedTestEntityV2Dto = data => ({

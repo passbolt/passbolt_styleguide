@@ -325,7 +325,6 @@ html {
   flex-direction: column;
   align-items: stretch;
   justify-content: space-between;
-  gap: 1.6rem;
   align-self: stretch;
   border-radius: var(--Section-border-radius) var(--Section-border-radius) 0 0;
   background: var(--Workspace-Panels-background);

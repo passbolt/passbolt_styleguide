@@ -22,7 +22,7 @@ import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_TOTP_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
-  RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG
+  RESOURCE_TYPE_V5_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import {
   defaultProps,
@@ -236,7 +236,7 @@ describe("See the Display Resource Creation Menu", () => {
       //click on totp v5
       page.clickOn(page.displayedContentTypes[1]);
       await waitFor(() => {});
-      resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG);
+      resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
       expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
 
       //switch tab

@@ -719,14 +719,19 @@ class UserWorkspaceContextProvider extends React.Component {
    * @return {string}
    */
   getTranslatedRoleName(id) {
-    if (this.props.context.roles) {
+    if (!this.props.context.roles?.find) {
+      return "";
+    }
+
+    const role = this.props.context.roles.find(role => role.id === id);
+    if (role) {
       /*
        * The i18n parser can't find the translation for passwordStrength.label
        * To fix that we can use it in comment
        * this.translate("admin")
        * this.translate("user")
        */
-      return this.props.t(this.props.context.roles.find(role => role.id === id).name);
+      return this.props.t(role.name);
     }
     return "";
   }

@@ -5,7 +5,7 @@ import AppContext from "../../../../shared/context/AppContext/AppContext";
 import {DragContext} from "../../../contexts/DragContext";
 import {ContextualMenuContext} from "../../../contexts/ContextualMenuContext";
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
-import {defaultAppContext, defaultProps} from "./FilterResourcesByFolders.test.data";
+import {defaultProps} from "./FilterResourcesByFolders.test.data";
 
 
 export default {
@@ -29,7 +29,6 @@ export default {
 
 export const Default = {
   args: {
-    context: defaultAppContext(),
     ...defaultProps()
   }
 };

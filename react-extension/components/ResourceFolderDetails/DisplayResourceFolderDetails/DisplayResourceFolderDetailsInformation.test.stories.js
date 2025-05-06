@@ -2,7 +2,7 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import DisplayResourceFolderDetailsInformation from "./DisplayResourceFolderDetailsInformation";
-import {defaultAppContext, defaultProps} from "./DisplayResourceFolderDetailsInformation.test.data";
+import {defaultProps} from "./DisplayResourceFolderDetailsInformation.test.data";
 
 
 export default {
@@ -27,6 +27,5 @@ const Template = args =>
 
 export const Initial = Template.bind({});
 Initial.args = {
-  context: defaultAppContext(),
   ...defaultProps()
 };

@@ -146,7 +146,8 @@ class DisplayUsers extends React.Component {
    */
   handleUserScroll() {
     const userToScroll = this.props.userWorkspaceContext.scrollTo.user;
-    if (userToScroll) {
+    const hasNotEmptyRange = this.listRef.current?.getVisibleRange().some(value => value);
+    if (userToScroll && hasNotEmptyRange) {
       this.scrollTo(userToScroll.id);
       this.props.userWorkspaceContext.onUserScrolled();
     }

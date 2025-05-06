@@ -45,6 +45,7 @@ import {defaultResourceDto} from "../../../../shared/models/entity/resource/reso
 import {
   defaultResourceMetadataDto
 } from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import ResourceMetadataEntity from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity";
 
 describe("See the Create Resource", () => {
   beforeEach(() => {
@@ -977,6 +978,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: props.resource.resource_type_id,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: props.resource.metadata.name,
           username: props.resource.metadata.username,
           resource_type_id: props.resource.resource_type_id,
@@ -1020,6 +1022,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: props.resource.folder_parent_id,
         resource_type_id: props.resource.resource_type_id,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v5 default",
           username: props.resource.metadata.username,
           resource_type_id: props.resource.resource_type_id,
@@ -1070,6 +1073,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v5 default totp",
           username: props.resource.metadata.username,
           resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
@@ -1123,6 +1127,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v5 default totp",
           username: props.resource.metadata.username,
           resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
@@ -1172,6 +1177,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_V5_TOTP,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v5 totp",
           username: props.resource.metadata.username,
           resource_type_id: TEST_RESOURCE_TYPE_V5_TOTP,
@@ -1217,6 +1223,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: props.resource.resource_type_id,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v4 default",
           username: props.resource.metadata.username,
           resource_type_id: props.resource.metadata.resource_type_id,
@@ -1267,6 +1274,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v4 default totp",
           username: props.resource.metadata.username,
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
@@ -1312,6 +1320,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v4 default totp",
           username: props.resource.metadata.username,
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
@@ -1354,6 +1363,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v4 default",
           username: props.resource.metadata.username,
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
@@ -1399,6 +1409,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_TOTP,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v4 totp",
           username: props.resource.metadata.username,
           resource_type_id: TEST_RESOURCE_TYPE_TOTP,
@@ -1449,6 +1460,7 @@ describe("See the Create Resource", () => {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
         metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v4 password and note",
           username: props.resource.metadata.username,
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,

@@ -121,13 +121,11 @@ describe("MetadataPrivateKeyEntity", () => {
     it("validates created_by property", () => {
       assertEntityProperty.uuid(MetadataPrivateKeyEntity, "created_by");
       assertEntityProperty.notRequired(MetadataPrivateKeyEntity, "created_by");
-      assertEntityProperty.nullable(MetadataPrivateKeyEntity, "created_by");
     });
 
     it("validates modified_by property", () => {
       assertEntityProperty.uuid(MetadataPrivateKeyEntity, "modified_by");
       assertEntityProperty.notRequired(MetadataPrivateKeyEntity, "modified_by");
-      assertEntityProperty.nullable(MetadataPrivateKeyEntity, "modified_by");
     });
   });
 

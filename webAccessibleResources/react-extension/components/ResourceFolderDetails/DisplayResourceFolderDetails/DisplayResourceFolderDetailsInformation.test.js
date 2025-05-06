@@ -18,7 +18,6 @@
 
 
 import {
-  defaultAppContext,
   defaultProps,
 } from "./DisplayResourceFolderDetailsInformation.test.data";
 import DisplayResourceFolderDetailsInformationPage from "./DisplayResourceFolderDetailsInformation.test.page";
@@ -30,9 +29,8 @@ beforeEach(() => {
 
 describe("See information", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
-  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementationOnce(implementation);
+  const mockContextRequest = implementation => jest.spyOn(props.context.port, 'request').mockImplementationOnce(implementation);
 
   describe(' As LU I can see information of a resource', () => {
     /**
@@ -45,7 +43,7 @@ describe("See information", () => {
 
     beforeEach(() => {
       mockContextRequest(() => defaultFolderDto(props.resourceWorkspaceContext.details.folder, {withCreator: true, withModifier: true}));
-      page = new DisplayResourceFolderDetailsInformationPage(context, props);
+      page = new DisplayResourceFolderDetailsInformationPage(props);
     });
 
     it('I should see the information of a resource', async() => {

@@ -189,7 +189,7 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
     const modifierUsername = this.state.modifier?.username || "";
     const createdDateTimeAgo = formatDateTimeAgo(this.folder.created, this.props.t, this.props.context.locale);
     const modifiedDateTimeAgo = formatDateTimeAgo(this.folder.modified, this.props.t, this.props.context.locale);
-    const folderStructure = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.folder.folder_parent_id);
+    const folderStructure = this.props.context.getHierarchyFolderCache(this.folder.folder_parent_id);
 
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>

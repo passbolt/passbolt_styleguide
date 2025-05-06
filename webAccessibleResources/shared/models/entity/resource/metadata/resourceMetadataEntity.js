@@ -68,10 +68,10 @@ class ResourceMetadataEntity extends EntityV2 {
 
   /**
    * Get resource metadata object type
-   * @returns {string} admin or user
+   * @returns {string|null} ResourceMetadataEntity.METADATA_OBJECT_TYPE
    */
   get objectType() {
-    return this._props.object_type;
+    return this._props.object_type || null;
   }
 
   /**

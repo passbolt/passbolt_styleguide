@@ -16,8 +16,8 @@ import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import React from "react";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import AddResourceName from "./AddResourceName";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 export default {
   title: 'Components/Resource/AddResourceName',
@@ -49,14 +49,17 @@ export default {
 
 export const Default = {
   args: {
-    resource: defaultResourceDto()
+    resource: defaultResourceDto(),
+    context: defaultAppContext({
+      getHierarchyFolderCache: () => []
+    }),
   }
 };
 
 export const SubFolder = {
   args: {
     resource: defaultResourceDto(),
-    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+    context: defaultAppContext({
       getHierarchyFolderCache: () => [{name: "Folder"}, {name: "subfolder"}]
     }),
   }

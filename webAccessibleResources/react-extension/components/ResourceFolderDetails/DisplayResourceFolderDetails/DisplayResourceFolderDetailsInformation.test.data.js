@@ -11,26 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
-import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
-import MockPort from "../../../test/mock/MockPort";
 import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-
-/**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
- */
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    siteSettings: new SiteSettings(siteSettingsFixture),
-    port: new MockPort(),
-    users: mockUsers
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 
 /**
@@ -39,6 +22,7 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
+    context: defaultAppContext({users: mockUsers}),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       details: {
         folder:  {
