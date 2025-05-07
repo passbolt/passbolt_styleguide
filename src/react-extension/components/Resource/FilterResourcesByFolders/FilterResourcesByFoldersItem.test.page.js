@@ -27,12 +27,11 @@ import {DragContext} from "../../../contexts/DragContext";
 export default class FilterResourcesByFoldersItemPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
+      <AppContext.Provider value={props.context}>
         <Router>
           <DragContext.Provider value={props.dragContext}>
             <FilterResourcesByFoldersItem.WrappedComponent {...props}/>

@@ -37,12 +37,12 @@ import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPoli
 export function defaultProps(data = {}) {
   const defaultData = {
     folderParentId: null,
-    context: defaultAppContext(),
-    actionFeedbackContext: defaultActionFeedbackContext(),
-    resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
-    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+    context: defaultAppContext({
       getHierarchyFolderCache: () => [{name: "Folder", id: "1"}, {name: "subfolder", id: "2"}]
     }),
+    actionFeedbackContext: defaultActionFeedbackContext(),
+    resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     resourceType: new ResourceTypeEntity(resourceTypeV5DefaultDto()),

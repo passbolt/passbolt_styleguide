@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Fragment} from "react";
+import React from "react";
 import FilterResourcesByFoldersItem from "./FilterResourcesByFoldersItem";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
@@ -168,7 +168,7 @@ class FilterResourcesByFolders extends React.Component {
         // Initialize or get the depth 0 of root folders to display
         (foldersByParentIdOrderedByDepth[0][folder.folder_parent_id] = foldersByParentIdOrderedByDepth[0][folder.folder_parent_id] || []).push(folder);
       } else if (folderIdsOpened.includes(folder.folder_parent_id)) {
-        const depth = this.props.resourceWorkspaceContext.getHierarchyFolderCache(folder.id).length;
+        const depth = this.props.context.getHierarchyFolderCache(folder.id).length;
         // Initialize or get the depth of folders to display
         foldersByParentIdOrderedByDepth[depth] = foldersByParentIdOrderedByDepth[depth] || {};
         // Initialize or get the subfolders of a parent to display and add the folder
@@ -213,7 +213,9 @@ class FilterResourcesByFolders extends React.Component {
     // loop until folder parent id is null
     while (folderParentId) {
       const parentFolder = this.props.context.folders.find(folder => folder.id === folderParentId);
-      folderIdsOpened.push(parentFolder.id);
+      if (!folderIdsOpened.includes(parentFolder.id)) {
+        folderIdsOpened.push(parentFolder.id);
+      }
       folderParentId = parentFolder.folder_parent_id;
     }
     this.setState({folderIdsOpened});
@@ -276,8 +278,10 @@ class FilterResourcesByFolders extends React.Component {
    * @param folderId
    */
   handleToggleOpenFolder(folderId) {
-    const folderIdsOpened = [...this.state.folderIdsOpened, folderId];
-    this.setState({folderIdsOpened});
+    if (!this.state.folderIdsOpened.includes(folderId)) {
+      const folderIdsOpened = [...this.state.folderIdsOpened, folderId];
+      this.setState({folderIdsOpened});
+    }
   }
 
   /**
@@ -474,14 +478,12 @@ class FilterResourcesByFolders extends React.Component {
   renderItem(index, key, folders) {
     const item = folders[index];
 
-    return <Fragment key={key}>
-      <FilterResourcesByFoldersItem
-        key={item.id}
-        folder={item}
-        toggleOpenFolder={this.handleToggleOpenFolder}
-        toggleCloseFolder={this.handleToggleCloseFolder}
-      />
-    </Fragment>;
+    return <FilterResourcesByFoldersItem
+      key={item.id}
+      folder={item}
+      toggleOpenFolder={this.handleToggleOpenFolder}
+      toggleCloseFolder={this.handleToggleCloseFolder}
+    />;
   }
 
   /**
@@ -565,6 +567,7 @@ class FilterResourcesByFolders extends React.Component {
               pageSize={30}
               minSize={30}
               type="uniform"
+              usePosition={true}
               ref={this.folderTreeRef}>
             </ReactList>
           }

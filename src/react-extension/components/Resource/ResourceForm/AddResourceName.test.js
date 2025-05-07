@@ -18,7 +18,7 @@
 
 import {defaultProps} from './AddResourceName.test.data';
 import AddResourceNamePage from './AddResourceName.test.page';
-import {defaultResourceWorkspaceContext} from '../../../contexts/ResourceWorkspaceContext.test.data';
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -27,9 +27,9 @@ beforeEach(() => {
 describe("AddResourceName", () => {
   let page; // The page to test against
   const props = defaultProps({
-    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+    context: defaultAppContext({
       getHierarchyFolderCache: () => [{name: "Folder"}, {name: "subfolder"}]
-    }),
+    })
   });
 
   describe('As LU I can see the name field.', () => {

@@ -13,11 +13,10 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import debounce from "debounce-promise";
 
 
 const PADDING_SIZE = 8;
-const PADDING_LEFT_FIRST_COLUMN_ADDED = 4;
+const PADDING_FIRST_COLUMN_ADDED = 20;
 
 export const TableContext = React.createContext({
   columns: [], // The columns to display
@@ -48,7 +47,6 @@ export default class TableContextProvider extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.bindCallbacks();
     this.createRefs();
   }
 
@@ -73,14 +71,6 @@ export default class TableContextProvider extends Component {
       onEndDraggingColumn: this.handleEndDraggingColumns.bind(this), // Whenever a column end to be dragged
       onChangeColumns: this.handleChangeColumns.bind(this) // Whenever columns change
     };
-  }
-
-  /**
-   * Bind callbacks methods
-   * @return {void}
-   */
-  bindCallbacks() {
-    this.handleChangeColumnsDebounced = debounce(this.handleChangeColumns, 2000);
   }
 
   /**
@@ -264,12 +254,12 @@ export default class TableContextProvider extends Component {
    */
   getColumnsPaddingWidth(columns) {
     // Get the columns padding widths from the displayed columns
-    return PADDING_SIZE * columns.filter(c => !c.excludeFromWidthComputation).length + PADDING_LEFT_FIRST_COLUMN_ADDED;
+    return PADDING_SIZE * columns.filter(c => !c.excludeFromWidthComputation).length + PADDING_FIRST_COLUMN_ADDED;
   }
 
   /**
    * Set the columns width based on actual width of the tableview width to maintain the same proportionality
-   * @param actualWidth
+   * @param columns
    */
   setColumnsWidthFromActualWidth(columns) {
     const actualWidth = this.getTableWidth(columns);
@@ -285,8 +275,8 @@ export default class TableContextProvider extends Component {
       // Scale the widths with the ratio
       columns.forEach(column => {
         if (column.resizable) {
-          // rounding avoids a slight shift on the left of the grid that happens sometimes
-          column.width = Math.round(column.width * ratio);
+          // rounding down avoids a slight shift on the left of the grid that happens sometimes and a scrolling
+          column.width = Math.floor(column.width * ratio);
         }
       });
       // Get the table width from all columns

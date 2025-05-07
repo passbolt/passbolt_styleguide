@@ -135,6 +135,7 @@ class FilterResourcesByFoldersItem extends React.Component {
     if (selectedFolder?.folder_parent_id) {
       if (selectedFolder.folder_parent_id === this.props.folder.id) {
         this.setState({open: true});
+        this.props.toggleOpenFolder(this.props.folder.id);
       } else {
         this.openFolderParentTree(selectedFolder.folder_parent_id);
       }
@@ -255,9 +256,6 @@ class FilterResourcesByFoldersItem extends React.Component {
 
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
     const draggingOver = false;
-    if (!this.isOpen()) {
-      this.props.toggleOpenFolder(this.props.folder.id);
-    }
     this.setState({draggingOver});
   }
 
@@ -480,7 +478,7 @@ class FilterResourcesByFoldersItem extends React.Component {
     const isOpen = this.isOpen();
     const canDropInto = this.canDropInto();
     const showDropFocus = this.state.draggingOver && canDropInto;
-    const depth = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.props.folder.folder_parent_id).length;
+    const depth = this.props.context.getHierarchyFolderCache(this.props.folder.folder_parent_id).length;
 
     return (
       <li className="folder-item">

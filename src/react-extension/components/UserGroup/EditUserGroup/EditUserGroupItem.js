@@ -138,7 +138,7 @@ class EditUserGroupItem extends Component {
             items={this.isManagerSelectOptions}
             onChange={event => this.props.onMemberRoleChange(event, this.props.groupUser)}
             disabled={!this.props.areActionsAllowed}
-            direction={this.props.isLastItemDisplayed ? "top" : "bottom"}/>
+            direction="bottom"/>
         </div>
 
         <div className="actions">
@@ -172,7 +172,6 @@ EditUserGroupItem.propTypes = {
   isMemberChanged: PropTypes.bool,
   isMemberAdded: PropTypes.bool,
   areActionsAllowed: PropTypes.bool,
-  isLastItemDisplayed: PropTypes.bool,
   t: PropTypes.func, // The translation function
 };
 

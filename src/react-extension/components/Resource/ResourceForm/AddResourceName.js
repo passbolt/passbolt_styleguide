@@ -15,8 +15,8 @@
 import React, {Component, Fragment} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import ResourceIcon from "../../../../shared/components/Icons/ResourceIcon";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 
 class AddResourceName extends Component {
   constructor(props) {
@@ -56,7 +56,7 @@ class AddResourceName extends Component {
    * Returns the current list of breadcrumb items
    */
   get breadcrumbItems() {
-    const foldersHierarchy = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.props.resource?.folder_parent_id);
+    const foldersHierarchy = this.props.context.getHierarchyFolderCache(this.props.resource?.folder_parent_id);
     return <div className="breadcrumbs">
       <div className="folder-name"><Trans>My workspace</Trans></div>
       {foldersHierarchy?.map(folder =>
@@ -126,7 +126,7 @@ class AddResourceName extends Component {
 }
 
 AddResourceName.propTypes = {
-  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
+  context: PropTypes.any, // The app context
   resource: PropTypes.object, // The resource to update
   warnings: PropTypes.object, //The warnings validation
   errors: PropTypes.object, // The errors entity error validation
@@ -135,5 +135,5 @@ AddResourceName.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default  withResourceWorkspace(withTranslation('common')(AddResourceName));
+export default  withAppContext(withTranslation('common')(AddResourceName));
 

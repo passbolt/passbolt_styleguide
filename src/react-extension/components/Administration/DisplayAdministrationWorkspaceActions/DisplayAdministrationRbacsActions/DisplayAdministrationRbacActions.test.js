@@ -28,14 +28,14 @@ beforeEach(() => {
 describe("As AD I can see the administration role based access control action", () => {
   let page; // The page to test against
 
-  it('As AD I should see the save disabled for administration role based access control action', async() => {
+  it('As AD I should see the save enabled for administration role based access control action', async() => {
     expect.assertions(2);
 
     const props = defaultProps();
     page = new DisplayAdministrationRbacActionsPage(props);
 
     expect(page.exists()).toBeTruthy();
-    expect(page.saveButton.hasAttribute("disabled")).toBeTruthy();
+    expect(page.saveButton.hasAttribute("disabled")).toBeFalsy();
   });
 
   it('As AD I should see the save button enable when changes exist', async() => {

@@ -52,7 +52,7 @@ class DisplayAdministrationRbacActions extends React.Component {
    * @returns {boolean}
    */
   isSaveEnabled() {
-    return !this.props.adminRbacContext.isProcessing() && this.props.adminRbacContext.hasSettingsChanges();
+    return !this.props.adminRbacContext.isProcessing();
   }
 
   /**

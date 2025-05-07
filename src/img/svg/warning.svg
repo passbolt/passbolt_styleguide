@@ -1,3 +1,14 @@
+<!--
+  The SVGs code is based on the Lucide library, licensed under the LGPL License.
+  https://github.com/lucide-icons/lucide
+
+  Copyright (c) Lucide Authors
+
+  Modifications made by Passbolt SA.
+   - Renaming colors and file name of SVGs.
+
+  @url https://github.com/lucide-icons/lucide/tree/main/icons
+-->
 <svg viewBox="0 0 128 128" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
   <path id="warning-dot" d="M64.0382,46.7607v23.4118" fill="none" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-dashoffset="23.42" stroke-dasharray="23.42"/>
   <path id="warning-bar" d="M64.0382,93.585h.0878" fill="none" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-dashoffset="0.09" stroke-dasharray="0.09"/>
