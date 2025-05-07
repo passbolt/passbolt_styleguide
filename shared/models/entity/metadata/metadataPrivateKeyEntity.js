@@ -79,7 +79,8 @@ class MetadataPrivateKeyEntity extends EntityV2 {
         },
         "created_by": {
           "type": "string",
-          "format": "uuid"
+          "format": "uuid",
+          "nullable": true,
         },
         "modified": {
           "type": "string",
@@ -87,7 +88,8 @@ class MetadataPrivateKeyEntity extends EntityV2 {
         },
         "modified_by": {
           "type": "string",
-          "format": "uuid"
+          "format": "uuid",
+          "nullable": true,
         },
       }
     };

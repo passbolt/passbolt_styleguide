@@ -3989,6 +3989,12 @@ html {
   margin-left: auto;
   margin-right: 1.6rem;
 }
+.dialog .submit-wrapper button.primary,
+.dialog .dialog-footer button.primary,
+.dialog .submit-wrapper .button.primary,
+.dialog .dialog-footer .button.primary {
+  font-weight: 400;
+}
 .dialog .message span.svg-icon {
   margin-right: 0.5rem;
 }
