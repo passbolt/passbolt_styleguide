@@ -25,8 +25,8 @@ class ColumnUsernameModel extends ColumnModel {
   constructor(columnDto = {}) {
     columnDto.id = ColumnModelTypes.USERNAME;
     columnDto.field = ColumnFields.METADATA_USERNAME;
-    columnDto.width = columnDto.width || 145;
-    columnDto.defaultWidth = 145;
+    columnDto.width = columnDto.width || 210;
+    columnDto.defaultWidth = 210;
     columnDto.resizable = true;
     columnDto.draggable = true;
     columnDto.sortable = true;
