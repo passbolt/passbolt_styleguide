@@ -73,7 +73,8 @@ export function withNestedFoldersProps(data = {}) {
 
   return defaultProps({
     context: defaultUserAppContext({
-      users: [resourceOwner]
+      users: [resourceOwner],
+      getHierarchyFolderCache: () => folders
     }),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       details: {
@@ -83,7 +84,6 @@ export function withNestedFoldersProps(data = {}) {
           modified_by: resourceOwner.id,
         }),
       },
-      getHierarchyFolderCache: () => folders
     }),
     ...data
   });

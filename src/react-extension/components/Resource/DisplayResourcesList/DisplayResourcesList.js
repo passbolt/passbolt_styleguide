@@ -142,7 +142,7 @@ class DisplayResourcesList extends React.Component {
     this.defaultColumns.push(new ColumnUriModel({cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("URI")}}}));
     this.defaultColumns.push(new ColumnModifiedModel({cellRenderer: {component: CellDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Modified")}}}));
     if (this.canUseFolders) {
-      this.defaultColumns.push(new ColumnLocationModel({getValue: resource => this.props.resourceWorkspaceContext.getHierarchyFolderCache(resource.folder_parent_id), cellRenderer: {component: CellLocation, props: {onClick: this.handleLocationClick, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Location")}}}));
+      this.defaultColumns.push(new ColumnLocationModel({getValue: resource => this.props.context.getHierarchyFolderCache(resource.folder_parent_id), cellRenderer: {component: CellLocation, props: {onClick: this.handleLocationClick, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Location")}}}));
     }
   }
 

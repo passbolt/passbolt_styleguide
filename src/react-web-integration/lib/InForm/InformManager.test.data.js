@@ -83,6 +83,16 @@ export const domElementLoginWithNameAttributeLogin =
   '</div>';
 
 /**
+ * Create a login form with name attribute login in DOM
+ * @type {string}
+ */
+export const domElementLoginWithNameAttributeLogto =
+  '<div>' +
+  '  <input type="text" name="logto"/>' +
+  '  <input type="text" name="password"/>' +
+  '</div>';
+
+/**
  * Create a login form with name attribute benutzerkennung in DOM
  * @type {string}
  */
@@ -251,6 +261,16 @@ export const domElementLoginWithIdAttributeLogin =
   '<div>' +
   '  <input type="text" id="Test_Ploginutg"/>' +
   '  <input type="text" id="YahooPassword"/>' +
+  '</div>';
+
+/**
+ * Create a login form with id attribute logto in DOM
+ * @type {string}
+ */
+export const domElementLoginWithIdAttributeLogto =
+  '<div>' +
+  '  <input type="text" id="logto"/>' +
+  '  <input type="text" id="password"/>' +
   '</div>';
 
 /**

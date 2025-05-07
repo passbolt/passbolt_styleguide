@@ -111,7 +111,7 @@ class ConfirmMetadataKey extends Component {
     const isMetadataKeyRotation = this.isMetadataKeyRotation;
     const creatorName = this.props.metadataKey?.creator ?
       (<>{this.props.metadataKey?.creator?.profile?.name} ({this.props.metadataKey?.creator.username})</>) :
-      this.translate('Unknown User');
+      this.translate('Unknown user');
 
     return (
       <DialogWrapper className="confirm-metadata-key-dialog"  title={this.translate("The metadata key has changed.")} onClose={this.handleCloseClick}>

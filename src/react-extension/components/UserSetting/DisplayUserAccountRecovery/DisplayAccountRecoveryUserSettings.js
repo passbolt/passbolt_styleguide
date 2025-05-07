@@ -153,6 +153,14 @@ class DisplayAccountRecoveryUserSettings extends Component {
   }
 
   /**
+   * Returns true when the review button should be displayed.
+   * @returns {boolean}
+   */
+  get shouldDisplayReview() {
+    return this.isReady && this.isAccountRecoveryFeatureEnabled && this.hasNotApprovedStatus() && !this.isStatusApproved();
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -228,7 +236,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
           </div>
         </div>
         <div className="actions-wrapper">
-          {this.hasNotApprovedStatus() && !this.isStatusApproved() &&
+          {this.shouldDisplayReview &&
             <button type='button' className="button primary form" onClick={this.handleReviewClick}><Trans>Review</Trans></button>
           }
         </div>

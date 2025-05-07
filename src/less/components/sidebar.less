@@ -250,7 +250,7 @@
         .information-label, .information-value {
           display: flex;
           flex-direction: column;
-          gap: .4rem;
+          gap: .8rem;
 
           .label, .value {
             white-space: nowrap;
@@ -362,6 +362,11 @@
         display: grid;
         gap: .8rem;
         flex-direction: column;
+
+        .description-content {
+          white-space: pre-line;
+          overflow-wrap: anywhere;
+        }
 
         &.error-message {
           background-color: var(--Palette-Error);

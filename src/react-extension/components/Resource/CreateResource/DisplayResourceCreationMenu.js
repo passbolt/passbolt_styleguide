@@ -29,7 +29,7 @@ import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_TOTP_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
-  RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG
+  RESOURCE_TYPE_V5_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import CreateResource from "./CreateResource";
@@ -186,7 +186,7 @@ class DisplayResourceCreationMenu extends Component {
           </button>
         }
         {this.hasTotpV5 &&
-          <button id="totp_action" type="button" className="button-transparent card" onClick={e => this.handleContentTypeClick(e, RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG)}>
+          <button id="totp_action" type="button" className="button-transparent card" onClick={e => this.handleContentTypeClick(e, RESOURCE_TYPE_V5_TOTP_SLUG)}>
             <TotpSVG/>
             <div className="card-information">
               <span className="title"><Trans>TOTP</Trans></span>

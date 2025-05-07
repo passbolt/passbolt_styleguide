@@ -15,7 +15,7 @@
 /**
  * Unit tests on FilterResourcesByFolders in regard of specifications
  */
-import {defaultAppContext, defaultProps} from "./FilterResourcesByFolders.test.data";
+import {defaultProps} from "./FilterResourcesByFolders.test.data";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import FilterResourcesByRootFolderContextualMenu from "./FilterResourcesByRootFolderContextualMenu";
 import FilterResourcesByFoldersPage from "./FilterResourcesByFolders.test.page";
@@ -30,11 +30,10 @@ beforeEach(() => {
 
 describe("See Folders", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
   const requestMockImpl = jest.fn((message, data) => data);
-  const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
-  mockContextRequest(context, requestMockImpl);
+  const mockContextRequest = (context, implementation) => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
+  mockContextRequest(props.context, requestMockImpl);
 
   describe('As LU I see the folders', () => {
     /**
@@ -45,7 +44,7 @@ describe("See Folders", () => {
      */
 
     beforeEach(() => {
-      page = new FilterResourcesByFoldersPage(context, props);
+      page = new FilterResourcesByFoldersPage(props);
     });
 
     it('As LU I should collapse the folder tree area', async() => {
@@ -109,7 +108,7 @@ describe("See Folders", () => {
       await page.filterResourcesByFolders.onDragOver;
       await page.filterResourcesByFolders.onDrop;
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", null);
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", null);
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
     });
 
@@ -120,7 +119,7 @@ describe("See Folders", () => {
       await page.filterResourcesByFoldersItem.dragEndOnFolder(2);
       await page.filterResourcesByFoldersItem.onDropFolder(1);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", foldersMock[0].id);
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", foldersMock[0].id);
     });
 
     it('As LU I should be able to open and close folder to see or not the child folders', async() => {
@@ -135,7 +134,6 @@ describe("See Folders", () => {
   describe('As LU I should be able to drag and drop resources on folders', () => {
     it('As LU I should be able to drag and drop resources on the root folder', async() => {
       expect.assertions(2);
-      const context = defaultAppContext(); // The applicative context
       const resources = defaultResourcesDtos();
       const props = defaultProps({
         dragContext: {
@@ -149,12 +147,12 @@ describe("See Folders", () => {
         }
       });
 
-      context.port.addRequestListener("passbolt.resources.move-by-ids", async(resourcesIds, destinationFolder) => {
+      props.context.port.addRequestListener("passbolt.resources.move-by-ids", async(resourcesIds, destinationFolder) => {
         expect(destinationFolder).toBeNull();
         expect(resourcesIds).toStrictEqual(resources.map(r => r.id));
       });
 
-      const page = new FilterResourcesByFoldersPage(context, props);
+      const page = new FilterResourcesByFoldersPage(props);
 
       await page.filterResourcesByFolders.onDragOver;
       await page.filterResourcesByFolders.onDragLeave;
@@ -164,7 +162,6 @@ describe("See Folders", () => {
 
     it('As LU I should be able to drag and drop resources on another folder', async() => {
       expect.assertions(4);
-      const context = defaultAppContext(); // The applicative context
       const resources = defaultResourcesDtos();
       const props = defaultProps({
         dragContext: {
@@ -178,12 +175,12 @@ describe("See Folders", () => {
         }
       });
 
-      context.port.addRequestListener("passbolt.resources.move-by-ids", async(resourcesIds, destinationFolder) => {
+      props.context.port.addRequestListener("passbolt.resources.move-by-ids", async(resourcesIds, destinationFolder) => {
         expect(destinationFolder).toStrictEqual(foldersMock[4].id);
         expect(resourcesIds).toStrictEqual(resources.map(r => r.id));
       });
 
-      const page = new FilterResourcesByFoldersPage(context, props);
+      const page = new FilterResourcesByFoldersPage(props);
 
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
@@ -199,7 +196,6 @@ describe("See Folders", () => {
   });
 
   describe('As LU I should see the Folder section open to the selected folder with parent open', () => {
-    const context = defaultAppContext(); // The applicative context
     const props = defaultProps({
       resourceWorkspaceContext: defaultResourceWorkspaceContext({
         filter: {
@@ -221,7 +217,7 @@ describe("See Folders", () => {
      */
 
     beforeEach(() => {
-      page = new FilterResourcesByFoldersPage(context, props);
+      page = new FilterResourcesByFoldersPage(props);
     });
 
     it('As LU I should see selected folder name with parents open', () => {
@@ -235,16 +231,15 @@ describe("See Folders", () => {
   });
 
   describe('As LU I should see the Folder section empty', () => {
-    const context = defaultAppContext(); // The applicative context
     const props = defaultProps();
-    context.folders = [];
+    props.context.folders = [];
     /**
      * Given an organization with 0 Folders
      * Then I should see the Folder section empty
      */
 
     beforeEach(() => {
-      page = new FilterResourcesByFoldersPage(context, props);
+      page = new FilterResourcesByFoldersPage(props);
     });
 
     it('I should see the Folders section empty', () => {
@@ -253,12 +248,11 @@ describe("See Folders", () => {
   });
 
   describe('As LU I see a loading feedback in the section when the folders are not yet fetched', () => {
-    const context = defaultAppContext(); // The applicative context
     const props = defaultProps();
-    context.folders = null;
+    props.context.folders = null;
 
     beforeEach(() => {
-      page = new FilterResourcesByFoldersPage(context, props);
+      page = new FilterResourcesByFoldersPage(props);
     });
 
     it('I should see the loading message “Retrieving folders', async() => {
