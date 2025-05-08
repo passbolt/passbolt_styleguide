@@ -20,6 +20,8 @@ import {FilterResourcesByFoldersItemPageObject} from "./FilterResourcesByFolders
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import FilterResourcesByFolders from "./FilterResourcesByFolders";
 import {DragContext} from "../../../contexts/DragContext";
+import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
+import {ContextualMenuContext} from "../../../contexts/ContextualMenuContext";
 
 /**
  * The FilterResourcesByFolders component represented as a page
@@ -27,17 +29,20 @@ import {DragContext} from "../../../contexts/DragContext";
 export default class FilterResourcesByFoldersPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
+        <AppContext.Provider value={props.context}>
           <Router>
-            <DragContext.Provider value={props.dragContext}>
-              <FilterResourcesByFolders.WrappedComponent {...props}/>
-            </DragContext.Provider>
+            <ContextualMenuContext.Provider value={props.contextualMenuContext}>
+              <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
+                <DragContext.Provider value={props.dragContext}>
+                  <FilterResourcesByFolders.WrappedComponent {...props}/>
+                </DragContext.Provider>
+              </ResourceWorkspaceContext.Provider>
+            </ContextualMenuContext.Provider>
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>

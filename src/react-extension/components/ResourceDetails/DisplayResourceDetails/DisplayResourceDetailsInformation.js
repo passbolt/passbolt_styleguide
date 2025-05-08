@@ -154,7 +154,10 @@ class DisplayResourceDetailsInformation extends React.Component {
   handleFolderParentClickEvent() {
     if (this.resource.folder_parent_id) { // Case of specific folder
       const folderParent = this.props.context.folders.find(item => item.id === this.resource.folder_parent_id);
-      this.props.history.push(`/app/folders/view/${folderParent.id}`);
+      const filterIsDifferent = this.props.resourceWorkspaceContext.filter.payload?.folder?.id !== folderParent.id;
+      if (filterIsDifferent) {
+        this.props.history.push(`/app/folders/view/${folderParent.id}`);
+      }
     } else { // Case of root folder
       const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
       this.props.history.push(`/app/passwords`, {filter});
@@ -285,7 +288,7 @@ class DisplayResourceDetailsInformation extends React.Component {
     const modifierUsername = this.state.modifier?.username || "";
     const createdDateTimeAgo = formatDateTimeAgo(this.resource.created, this.props.t, this.props.context.locale);
     const modifiedDateTimeAgo = formatDateTimeAgo(this.resource.modified, this.props.t, this.props.context.locale);
-    const folderStructure = this.props.resourceWorkspaceContext.getHierarchyFolderCache(this.resource.folder_parent_id);
+    const folderStructure = this.props.context.getHierarchyFolderCache(this.resource.folder_parent_id);
 
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>

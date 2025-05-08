@@ -43,9 +43,14 @@ export function defaultAppContext(appContext) {
     defaultResourceDto({personal: true}),
     defaultResourceDto({personal: true}),
   ];
+  const foldersMapById = folders.reduce((result, folder) => {
+    result[folder.id] = folder;
+    return result;
+  }, {});
 
   const defaultAppContext = defaultUserAppContext({
     folders,
+    foldersMapById,
     resources,
   });
   return Object.assign(defaultAppContext, appContext || {});
@@ -105,6 +110,7 @@ export function defaultResourceWorkspaceContext(data = {}) {
       single: jest.fn()
     },
     onResourceScrolled: jest.fn(),
+    onFolderScrolled: jest.fn(),
     onResourceEdited: jest.fn(),
     onSorterChanged: jest.fn(),
     onResourcesToExport: jest.fn(),
@@ -114,7 +120,6 @@ export function defaultResourceWorkspaceContext(data = {}) {
     onChangeColumnView:  jest.fn(),
     onChangeColumnsSettings: jest.fn(),
     resetGridColumnsSettings: jest.fn(),
-    getHierarchyFolderCache: jest.fn(() => []),
     onResourceDescriptionDecrypted: jest.fn(),
     ...data
   };

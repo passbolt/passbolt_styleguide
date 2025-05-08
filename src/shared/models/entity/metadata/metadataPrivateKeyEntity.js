@@ -15,6 +15,7 @@ import EntitySchema from "../abstract/entitySchema";
 import EntityV2 from "../abstract/entityV2";
 import EntityValidationError from "../abstract/entityValidationError";
 import MetadataPrivateKeyDataEntity from "./metadataPrivateKeyDataEntity";
+import UserEntity from "../user/userEntity";
 
 const PGP_STRING_MAX_LENGTH = 10_000;
 
@@ -23,7 +24,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(dto);
+    super(dto, options);
 
     if (this._props.data && typeof this._props.data !== 'string') {
       this._data = new MetadataPrivateKeyDataEntity(this._props.data, {...options, clone: false});
@@ -40,7 +41,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
       "type": "object",
       "required": [
         "user_id",
-        "data",
+        "data"
       ],
       "properties": {
         "id": {
@@ -58,6 +59,11 @@ class MetadataPrivateKeyEntity extends EntityV2 {
           "format": "uuid",
           "nullable": true,
         },
+        "data_signed_by_current_user": {
+          "type": "string",
+          "format": "date-time",
+          "nullable": true
+        },
         "data": {
           "anyOf": [{
             "type": "string",
@@ -73,7 +79,8 @@ class MetadataPrivateKeyEntity extends EntityV2 {
         },
         "created_by": {
           "type": "string",
-          "format": "uuid"
+          "format": "uuid",
+          "nullable": true,
         },
         "modified": {
           "type": "string",
@@ -81,7 +88,8 @@ class MetadataPrivateKeyEntity extends EntityV2 {
         },
         "modified_by": {
           "type": "string",
-          "format": "uuid"
+          "format": "uuid",
+          "nullable": true,
         },
       }
     };
@@ -101,9 +109,11 @@ class MetadataPrivateKeyEntity extends EntityV2 {
 
   /**
    * Customizes JSON stringification behavior
+   *
+   * @param {object} [contain] optional
    * @returns {object}
    */
-  toDto() {
+  toDto(contain) {
     const result = Object.assign({}, this._props);
 
     const data = this.data;
@@ -111,6 +121,33 @@ class MetadataPrivateKeyEntity extends EntityV2 {
       ? data.toDto()
       : data;
 
+    if (!contain) {
+      return result;
+    }
+
+    if (this._creator && contain.creator) {
+      result.creator = this._creator.toDto(UserEntity.ALL_CONTAIN_OPTIONS);
+    }
+
+    return result;
+  }
+
+  /**
+   * Return data property with stringification
+   * @returns {object}
+   */
+  toDataDto() {
+    const result = this.toDto();
+    return {data: result.data};
+  }
+
+  /**
+   * Return JSON stringification without data property
+   * @returns {object}
+   */
+  toContentCodeConfirmTrustRequestDto() {
+    const result = this.toDto();
+    delete result.data;
     return result;
   }
 
@@ -119,7 +156,17 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    * @returns {object}
    */
   toJSON() {
-    return this.toDto();
+    return this.toDto(UserEntity.ALL_CONTAIN_OPTIONS);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  marshall() {
+    /*
+     *  TODO re-enabled it when it will possible to create entity with data_signed_by_current_user defined
+     * this._props.data_signed_by_current_user = null;
+     */
   }
 
   /*
@@ -129,7 +176,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    */
   /**
    * Get the raw data unencrypted if it hasn't been decrypted already.
-   * @returns {string}
+   * @returns {string | MetadataPrivateKeyDataEntity}
    */
   get data() {
     return this.isDecrypted
@@ -138,11 +185,83 @@ class MetadataPrivateKeyEntity extends EntityV2 {
   }
 
   /**
+   * Get the metadata private key id.
+   * @returns {string|null}
+   */
+  get id() {
+    return this._props.id || null;
+  }
+
+  /**
    * Get the metadata key id if any or null.
    * @returns {string|null}
    */
   get metadataKeyId() {
     return this._props.metadata_key_id || null;
+  }
+
+  /**
+   * Returns true if the data has been decrypted already.
+   * @returns {boolean}
+   */
+  get isDecrypted() {
+    return Boolean(this._data);
+  }
+
+  /**
+   * Returns the user_id
+   * @returns {string}
+   */
+  get userId() {
+    return this._props.user_id;
+  }
+
+  /**
+   * Returns the data_signed_by_current_user
+   * @returns {string|null}
+   */
+  get dataSignedByCurrentUser() {
+    return this._props.data_signed_by_current_user || null;
+  }
+
+  /**
+   * Returns the modifiedBy
+   * @returns {string}
+   */
+  get modifiedBy() {
+    return this._props.modified_by;
+  }
+
+  /**
+   * Returns the modified
+   * @returns {string}
+   */
+  get modified() {
+    return this._props.modified;
+  }
+
+  /*
+   * ==================================================
+   * Dynamic properties setters
+   * ==================================================
+   */
+
+  /**
+   * Set the modified property.
+   * The value should be a date time string.
+   * @param {string} modified
+   */
+  set modified(modified) {
+    this._props.modified = modified;
+  }
+
+  /**
+   * Set the modified by property.
+   * The value should be a user id.
+   * @param {string} modifiedBy
+   */
+  set modifiedBy(modifiedBy) {
+    this._props.modifiedBy = modifiedBy;
   }
 
   /**
@@ -164,19 +283,24 @@ class MetadataPrivateKeyEntity extends EntityV2 {
   }
 
   /**
-   * Returns true if the data has been decrypted already.
-   * @returns {boolean}
+   * Set the data_signed_by_current_user property.
+   * The value should be a date time string and can be nullable.
+   * @param {string|null} value
+   * @throws {EntityValidationError} if the `dataSignedByCurrentUser` is not valid
    */
-  get isDecrypted() {
-    return Boolean(this._data);
+  set dataSignedByCurrentUser(value) {
+    EntitySchema.validateProp("data_signed_by_current_user", value, this.cachedSchema.properties.data_signed_by_current_user);
+    this._props.data_signed_by_current_user = value;
   }
 
   /**
-   * Returns the user_id
-   * @returns {string}
+   * MetadataPrivateKeyEntity.ALL_CONTAIN_OPTIONS
+   * @returns {object} all contain options that can be used in toDto()
    */
-  get userId() {
-    return this._props.user_id;
+  static get ALL_CONTAIN_OPTIONS() {
+    return {
+      creator: true,
+    };
   }
 }
 

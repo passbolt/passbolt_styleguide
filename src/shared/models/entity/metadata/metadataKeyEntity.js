@@ -13,6 +13,7 @@
  */
 import EntityV2 from "../abstract/entityV2";
 import EntityValidationError from "../abstract/entityValidationError";
+import UserEntity from "../user/userEntity";
 import MetadataPrivateKeysCollection from "./metadataPrivateKeysCollection";
 
 const PGP_STRING_MAX_LENGTH = 10_000;
@@ -23,12 +24,16 @@ class MetadataKeyEntity extends EntityV2 {
    */
   constructor(dto, options = {}) {
     super(dto, options);
-
     // Associations
     if (this._props.metadata_private_keys) {
       this._metadata_private_keys = new MetadataPrivateKeysCollection(this._props.metadata_private_keys, {...options, clone: false});
       delete this._props.metadata_private_keys;
       this.assertSameMetadataKeyId();
+    }
+
+    if (this._props.creator) {
+      this._creator = new UserEntity(this._props.creator, {...options, clone: false});
+      delete this._props.creator;
     }
   }
 
@@ -89,6 +94,7 @@ class MetadataKeyEntity extends EntityV2 {
           "nullable": true,
         },
         "metadata_private_keys": MetadataPrivateKeysCollection.getSchema(),
+        "creator": UserEntity.getSchema(),
       }
     };
   }
@@ -124,6 +130,30 @@ class MetadataKeyEntity extends EntityV2 {
     }
   }
 
+  /**
+   * Assert that the decrypted metadata private key fingerprint is equal to the metadata public key
+   *
+   * @throws {EntityValidationError} if the decrypted metadata private key fingerprint is not equal to the metadata public key.
+   */
+  assertFingerprintPublicAndPrivateKeysMatch() {
+    const privateMetadataKeysLength = this._metadata_private_keys?.length || 0;
+
+    if (privateMetadataKeysLength === 0) {
+      return;
+    }
+
+    this._metadata_private_keys.items.forEach((metadataPrivateKey, index) => {
+      if (!metadataPrivateKey.isDecrypted) {
+        return;
+      }
+      if (metadataPrivateKey.data.fingerprint !== this.fingerprint) {
+        const error = new EntityValidationError();
+        error.addError(`metadata_private_keys.${index}.fingerprint`, 'fingerprint_match', 'The fingerprint of the metadata private key does not match the fingerprint of the metadata public key');
+        throw error;
+      }
+    });
+  }
+
   /*
    * ==================================================
    * Serialization
@@ -143,7 +173,25 @@ class MetadataKeyEntity extends EntityV2 {
     if (this._metadata_private_keys && contain.metadata_private_keys) {
       result.metadata_private_keys = this._metadata_private_keys.toDto();
     }
+    if (this._creator && contain.creator) {
+      result.creator = this._creator.toDto(UserEntity.ALL_CONTAIN_OPTIONS);
+    }
 
+    return result;
+  }
+
+  /**
+   * Return JSON stringification without data property in metadata private key
+   * @returns {object}
+   */
+  toContentCodeConfirmTrustRequestDto() {
+    const result = this.toDto();
+    if (this._metadata_private_keys) {
+      result.metadata_private_keys = this._metadata_private_keys.items.map(privateKey => privateKey.toContentCodeConfirmTrustRequestDto());
+    }
+    if (this._creator) {
+      result.creator = this._creator.toDto(UserEntity.ALL_CONTAIN_OPTIONS);
+    }
     return result;
   }
 
@@ -199,6 +247,14 @@ class MetadataKeyEntity extends EntityV2 {
    */
   get expired() {
     return this._props.expired || null;
+  }
+
+  /**
+   * Get the creator if any.
+   * @returns {UserEntity|null}
+   */
+  get creator() {
+    return this._creator || null;
   }
 
   /*

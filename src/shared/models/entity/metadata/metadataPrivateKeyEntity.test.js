@@ -44,6 +44,16 @@ describe("MetadataPrivateKeyEntity", () => {
       assertEntityProperty.nullable(MetadataPrivateKeyEntity, "user_id");
     });
 
+    it("validates data_signed_by_current_user property", () => {
+      /*
+       * The marshall set the value to null and by the way the property will never fail
+       * assertEntityProperty.string(MetadataPrivateKeyEntity, "data_signed_by_current_user");
+       * assertEntityProperty.dateTime(MetadataPrivateKeyEntity, "data_signed_by_current_user");
+       * assertEntityProperty.notRequired(MetadataPrivateKeyEntity, "data_signed_by_current_user");
+       */
+      assertEntityProperty.nullable(MetadataPrivateKeyEntity, "data_signed_by_current_user");
+    });
+
     it("validates data property", () => {
       assertEntityProperty.required(MetadataPrivateKeyEntity, "data");
 
@@ -111,17 +121,19 @@ describe("MetadataPrivateKeyEntity", () => {
     it("validates created_by property", () => {
       assertEntityProperty.uuid(MetadataPrivateKeyEntity, "created_by");
       assertEntityProperty.notRequired(MetadataPrivateKeyEntity, "created_by");
+      assertEntityProperty.nullable(MetadataPrivateKeyEntity, "created_by");
     });
 
     it("validates modified_by property", () => {
       assertEntityProperty.uuid(MetadataPrivateKeyEntity, "modified_by");
       assertEntityProperty.notRequired(MetadataPrivateKeyEntity, "modified_by");
+      assertEntityProperty.nullable(MetadataPrivateKeyEntity, "modified_by");
     });
   });
 
   describe("::constructor", () => {
     it("constructor works if valid minimal DTO is provided", () => {
-      expect.assertions(8);
+      expect.assertions(9);
       const dto = minimalMetadataPrivateKeyDto();
       const entity = new MetadataPrivateKeyEntity(dto);
 
@@ -129,6 +141,7 @@ describe("MetadataPrivateKeyEntity", () => {
       expect(entity._props.metadata_key_id).toBeUndefined();
       expect(entity._props.user_id).toStrictEqual(dto.user_id);
       expect(entity._props.data).toStrictEqual(dto.data);
+      expect(entity._props.data_signed_by_current_user).toBeUndefined();
       expect(entity._props.created).toBeUndefined();
       expect(entity._props.created_by).toBeUndefined();
       expect(entity._props.modified).toBeUndefined();
@@ -136,7 +149,7 @@ describe("MetadataPrivateKeyEntity", () => {
     });
 
     it("constructor works if valid DTO is provided: with data", () => {
-      expect.assertions(8);
+      expect.assertions(9);
       const dto = defaultMetadataPrivateKeyDto();
       const entity = new MetadataPrivateKeyEntity(dto);
 
@@ -148,6 +161,7 @@ describe("MetadataPrivateKeyEntity", () => {
       expect(entity._props.created_by).toStrictEqual(dto.created_by);
       expect(entity._props.modified).toStrictEqual(dto.modified);
       expect(entity._props.modified_by).toStrictEqual(dto.modified_by);
+      expect(entity._props.data_signed_by_current_user).toBeNull();
     });
 
     it("constructor works if valid DTO is provided: with armored_key", () => {
@@ -187,6 +201,20 @@ describe("MetadataPrivateKeyEntity", () => {
       expect(entity2.metadataKeyId).toStrictEqual(dto2.metadata_key_id);
     });
 
+    it("`id` should return the right value", () => {
+      expect.assertions(2);
+      const dto1 = minimalMetadataPrivateKeyDto({
+        id: null
+      });
+      const entity1 = new MetadataPrivateKeyEntity(dto1);
+
+      const dto2 = defaultMetadataPrivateKeyDto();
+      const entity2 = new MetadataPrivateKeyEntity(dto2);
+
+      expect(entity1.id).toBeNull();
+      expect(entity2.id).toStrictEqual(dto2.id);
+    });
+
     it("`data` should return the right value: with string", () => {
       expect.assertions(1);
       const dto = defaultMetadataPrivateKeyDto();
@@ -217,6 +245,24 @@ describe("MetadataPrivateKeyEntity", () => {
       expect(entity1.userId).toBeNull();
       expect(entity2.userId).toStrictEqual(dto2.user_id);
     });
+
+    it("`data_signed_by_current_user` should null if not set", () => {
+      expect.assertions(1);
+      const dto = minimalMetadataPrivateKeyDto();
+      const entity = new MetadataPrivateKeyEntity(dto);
+
+      expect(entity.dataSignedByCurrentUser).toBeNull();
+    });
+
+    it("`data_signed_by_current_user` should the right value", () => {
+      expect.assertions(1);
+      const dto = minimalMetadataPrivateKeyDto();
+
+      const entity = new MetadataPrivateKeyEntity(dto);
+      entity.dataSignedByCurrentUser = "2022-10-11T08:09:00+00:00";
+
+      expect(entity.dataSignedByCurrentUser).toBeTruthy();
+    });
   });
 
   describe("::setters", () => {
@@ -243,7 +289,32 @@ describe("MetadataPrivateKeyEntity", () => {
         expect.assertions(1);
         const entity = new MetadataPrivateKeyEntity(defaultMetadataPrivateKeyDto());
 
-        expect(() => { entity.data = "test"; }).toThrow(EntityValidationError);
+        expect(() => { entity.dataSignedByCurrentUser = "test"; }).toThrow(EntityValidationError);
+      });
+
+      it("`data_signed_by_current_user` could be set with a date", () => {
+        expect.assertions(1);
+        const dto = defaultMetadataPrivateKeyDto();
+        const entity = new MetadataPrivateKeyEntity(dto);
+
+        entity.dataSignedByCurrentUser = "2022-10-11T08:09:00+00:00";
+
+        expect(entity.dataSignedByCurrentUser).toBeTruthy();
+      });
+
+      it("`data_signed_by_current_user` could be set with a null", () => {
+        expect.assertions(1);
+        const dto = defaultMetadataPrivateKeyDto();
+        const entity = new MetadataPrivateKeyEntity(dto);
+
+        expect(entity.dataSignedByCurrentUser).toBe(null);
+      });
+
+      it("`data_signed_by_current_user` should assert the parameter", () => {
+        expect.assertions(1);
+        const entity = new MetadataPrivateKeyEntity(defaultMetadataPrivateKeyDto());
+
+        expect(() => { entity.dataSignedByCurrentUser = "test"; }).toThrow(EntityValidationError);
       });
     });
   });
@@ -285,6 +356,39 @@ describe("MetadataPrivateKeyEntity", () => {
       const entity = new MetadataPrivateKeyEntity(dto);
 
       expect(entity.toDto()).toStrictEqual(dto);
+    });
+  });
+
+  describe("::toContentCodeConfirmTrustRequestDto", () => {
+    it("should export all fields from props except data encrypted", () => {
+      expect.assertions(1);
+
+      const dto = defaultMetadataPrivateKeyDto();
+      const entity = new MetadataPrivateKeyEntity(dto);
+      delete dto.data;
+
+      expect(entity.toContentCodeConfirmTrustRequestDto()).toStrictEqual(dto);
+    });
+
+    it("should export all fields from props except data decrypted", () => {
+      expect.assertions(1);
+
+      const dto = decryptedMetadataPrivateKeyDto();
+      const entity = new MetadataPrivateKeyEntity(dto);
+      delete dto.data;
+
+      expect(entity.toContentCodeConfirmTrustRequestDto()).toStrictEqual(dto);
+    });
+  });
+
+  describe("::toDataDto", () => {
+    it("should export the data field", () => {
+      expect.assertions(1);
+
+      const dto = defaultMetadataPrivateKeyDto();
+      const entity = new MetadataPrivateKeyEntity(dto);
+
+      expect(entity.toDataDto()).toStrictEqual({data: dto.data});
     });
   });
 

@@ -223,7 +223,7 @@ class SharePermissionItem extends Component {
             value={this.state.permissionType.toString()}
             disabled={this.isInputDisabled()}
             onChange={this.handleUpdate}
-            direction={this.props.isLastItemDisplayed ? "top" : "bottom"}
+            direction="bottom"
           />
         </div>
 
@@ -245,7 +245,6 @@ SharePermissionItem.propTypes = {
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
   permissionType: PropTypes.number,
-  isLastItemDisplayed: PropTypes.bool,
   t: PropTypes.func, // The translation function
 };
 

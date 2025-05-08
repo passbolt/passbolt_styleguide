@@ -16,9 +16,7 @@
  * Unit tests on FoldersTreeItem in regard of specifications
  */
 import {
-  defaultAppContext,
   defaultProps,
-  defaultPropsCloseFolders,
   foldersMock,
 } from "./FilterResourcesByFoldersItem.test.data";
 import FilterResourcesByFoldersItemPage from "./FilterResourcesByFoldersItem.test.page";
@@ -30,13 +28,12 @@ beforeEach(() => {
 
 describe("As LU I should see each folders", () => {
   let page; // The page to test against
-  const appContext = defaultAppContext(); // The app context to pass
+  const props = defaultProps(); // The props to pass
   const requestMockImpl = jest.fn((message, data) => data);
-  const mockContextRequest = (context, implementation) => jest.spyOn(appContext.port, 'request').mockImplementation(implementation);
-  mockContextRequest(appContext, requestMockImpl);
+  const mockContextRequest = (context, implementation) => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
+  mockContextRequest(props.context, requestMockImpl);
 
   describe('As LU I should see and identify each folders open', () => {
-    const props = defaultProps(); // The props to pass
     /**
      * Given an organization with 4 Folders
      * Then I should see the 4 Folders
@@ -45,19 +42,25 @@ describe("As LU I should see each folders", () => {
      */
 
     beforeEach(() => {
-      page = new FilterResourcesByFoldersItemPage(appContext, props);
+      page = new FilterResourcesByFoldersItemPage(props);
     });
 
-    it('As LU I should see all folders name', async() => {
+    it('As LU I should see the folders name and open it', async() => {
+      expect.assertions(4);
       expect(page.filterResourcesByFoldersItem.exists()).toBeTruthy();
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
-      expect(page.filterResourcesByFoldersItem.count).toBe(4);
-      expect(page.filterResourcesByFoldersItem.name(1)).toBe("Certificates");
-      expect(page.filterResourcesByFoldersItem.name(2)).toBe("ChildCertificates1");
-      expect(page.filterResourcesByFoldersItem.name(3)).toBe("ChildCertificates3");
-      expect(page.filterResourcesByFoldersItem.name(4)).toBe("ChildCertificates2");
-      expect(page.filterResourcesByFoldersItem.selectedFolderName).toBe("Certificates");
+      expect(page.filterResourcesByFoldersItem.count).toBe(1);
+      expect(props.toggleOpenFolder).toHaveBeenCalled();
+      expect(props.toggleCloseFolder).not.toHaveBeenCalled();
+    });
+
+    it('As LU I should see the folders name and close it', async() => {
+      expect.assertions(3);
+      expect(page.filterResourcesByFoldersItem.exists()).toBeTruthy();
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
+      expect(props.toggleOpenFolder).toHaveBeenCalled();
+      expect(props.toggleCloseFolder).toHaveBeenCalled();
     });
 
     it('As LU I should filter by folder', async() => {
@@ -73,48 +76,6 @@ describe("As LU I should see each folders", () => {
     it('As LU I should be able to open a contextual menu for a folder with right click on parent folder', async() => {
       await page.filterResourcesByFoldersItem.openContextualMenuWithRightClick(1);
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {folder: foldersMock[0]});
-    });
-
-    it('As LU I should be able to open a contextual menu for a folder with right click on a child folder', async() => {
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
-      await page.filterResourcesByFoldersItem.openContextualMenuWithRightClick(3);
-      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {folder: foldersMock[0]});
-    });
-
-    it('As LU I should be able to drag and drop a folder on another folder', async() => {
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
-      await page.filterResourcesByFoldersItem.dragStartOnFolder(3);
-      await page.filterResourcesByFoldersItem.dragEndOnFolder(1);
-      await page.filterResourcesByFoldersItem.dragOverOnFolder(1);
-      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(1);
-      await page.filterResourcesByFoldersItem.onDropFolder(3);
-      expect(props.dragContext.onDragStart).toHaveBeenCalled();
-      expect(props.dragContext.onDragEnd).toHaveBeenCalled();
-      expect(appContext.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951dc", foldersMock[1].id);
-    });
-
-    it('As LU I should be able to close folder to hide the child folders', async() => {
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
-      expect(page.filterResourcesByFoldersItem.count).toBe(3);
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
-      expect(page.filterResourcesByFoldersItem.count).toBe(1);
-    });
-  });
-
-  describe('As LU I should see and identify each folders close', () => {
-    const props = defaultPropsCloseFolders(); // The props to pass
-    /**
-     * Given an organization with 4 folders closed
-     * Then I should see the 1 Folders
-     */
-
-    beforeEach(() => {
-      page = new FilterResourcesByFoldersItemPage(appContext, props);
-    });
-
-    it('As LU I should be able to open folder to see or not the child folders', async() => {
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
-      expect(page.filterResourcesByFoldersItem.count).toBe(3);
     });
   });
 });

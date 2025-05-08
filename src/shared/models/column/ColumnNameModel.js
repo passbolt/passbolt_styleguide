@@ -25,8 +25,8 @@ class ColumnNameModel extends ColumnModel {
   constructor(columnDto = {}) {
     columnDto.id = ColumnModelTypes.NAME;
     columnDto.field = ColumnFields.METADATA_NAME;
-    columnDto.width = columnDto.width || 145;
-    columnDto.defaultWidth = 145;
+    columnDto.width = columnDto.width || 210;
+    columnDto.defaultWidth = 210;
     columnDto.resizable = true;
     columnDto.draggable = true;
     columnDto.sortable = true;

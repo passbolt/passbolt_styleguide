@@ -51,7 +51,8 @@ export const ResourceWorkspaceContext = React.createContext({
     folder: null, // The folder to focus details on
   },
   scrollTo: {
-    resource: null // The resource to scroll to
+    resource: null, // The resource to scroll to
+    folder: null // The folder to scroll to
   },
   refresh: {
     permissions: false // Flag to force the refresh of the permissions
@@ -132,7 +133,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
         folder: null, // The folder to focus details on
       },
       scrollTo: {
-        resource: null // The resource to scroll to
+        resource: null, // The resource to scroll to
+        folder: null // The folder to scroll to
       },
       refresh: {
         activities: false, // Flag to force the refresh of the activities
@@ -143,6 +145,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       lockDisplayDetail: true, // lock the detail to display the folder or password sidebar
       resourcesToExport: null, // The resources / folders to export
       onLockDetail: this.handleLockDetail.bind(this), // Lock or unlock detail (hide or display the folder or password sidebar)
+      onFolderScrolled: this.handleFolderScrolled.bind(this), // Whenever one scrolled to a resource
       onResourceScrolled: this.handleResourceScrolled.bind(this), // Whenever one scrolled to a resource
       onResourceEdited: this.handleResourceEdited.bind(this), // Whenever a resource descript has been edited
       onResourceDescriptionEdited: this.handleResourceDescriptionEdited.bind(this), // Whenever a resource description has been edited
@@ -167,7 +170,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       onChangeColumnView: this.handleChangeColumnView.bind(this), // Whenever the users wants to show or hide a column
       onChangeColumnsSettings: this.handleChangeColumnsSettings.bind(this), // Whenever the user change the columns configuration
       resetGridColumnsSettings: this.resetGridColumnsSettings.bind(this), // Whenever the user resets the columns configuration
-      getHierarchyFolderCache: this.getHierarchyFolderCache.bind(this) // Whenever the need to get folder hierarchy
     };
   }
 
@@ -177,8 +179,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   initializeProperties() {
     this.resources = null; // A cache of the last known list of resources from the App context
     this.folders = null; // A cache of the last known list of folders from the App context
-    this.foldersMapById = {}; // A cache of the last known list of folders map by ID from the App context
-    this.hierarchyFolderCache = {}; // A cache of the last known list of folders hierarchy by ID from the App context
   }
 
   /**
@@ -258,11 +258,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const hasFoldersChanged = this.props.context.folders !== this.folders;
     if (hasFoldersChanged) {
       this.folders = this.props.context.folders;
-      this.foldersMapById = this.folders.reduce((result, folder) => {
-        result[folder.id] = folder;
-        return result;
-      }, {});
-      this.hierarchyFolderCache = {};
       await this.refreshSearchFilter();
       await this.updateDetails();
     }
@@ -325,6 +320,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       return;
     }
 
+    await this.scrollToFolder(folder);
     await this.detailFolder(folder);
   }
 
@@ -369,7 +365,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       // If the resource does not exist , it should display an error
       if (resource) {
         await this.selectFromRoute(resource);
-        await this.scrollTo(resource);
+        await this.scrollToResource(resource);
         await this.detailResource(resource);
       } else {
         this.handleUnknownResource();
@@ -441,6 +437,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Handle the scrolling of a resource
    */
   async handleResourceScrolled() {
+    await this.scrollNothing();
+  }
+
+  /**
+   * Handle the scrolling of a folder
+   */
+  async handleFolderScrolled() {
     await this.scrollNothing();
   }
 
@@ -717,7 +720,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const wordToRegex = word =>  new RegExp(escapeWord(word), 'i');
     const matchWord = (word, value) => wordToRegex(word).test(value);
 
-    const getFolderById = id => this.foldersMapById[id];
+    const getFolderById = id => this.props.context.foldersMapById[id];
     const matchFolderNameProperty = (word, folder) => matchWord(word, folder?.name);
     const matchFolder = (word, folder) => matchFolderNameProperty(word, folder) || (folder?.folder_parent_id && matchFolderCache(word, folder.folder_parent_id));
     const matchFolderCache = (word, id) => {
@@ -1076,8 +1079,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Set the resource to scroll to
    * @param resource A resource
    */
-  async scrollTo(resource) {
+  async scrollToResource(resource) {
     await this.setState({scrollTo: {resource}});
+  }
+
+  /**
+   * Set the folder to scroll to
+   * @param folder A folder
+   */
+  async scrollToFolder(folder) {
+    await this.setState({scrollTo: {folder}});
   }
 
   /**
@@ -1180,7 +1191,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
        */
       const selectedResources = this.state.selectedResources;
       if (selectedResources.length === 1) {
-        await this.scrollTo(selectedResources[0]);
+        await this.scrollToResource(selectedResources[0]);
       }
     });
   }
@@ -1223,43 +1234,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async updateGridSetting() {
     const gridUserSettingEntity = new GridUserSettingEntity({columns_setting: this.state.columnsResourceSetting.toDto(), sorter: this.state.sorter.toDto()});
     await this.gridResourceUserSetting.setSetting(gridUserSettingEntity);
-  }
-
-  /**
-   * Get the hierarchy of a folder by ID in cache
-   * @param {string} id The id of the folder
-   * @returns {array<object>} Array of folders
-   */
-  getHierarchyFolderCache(id) {
-    // When resources are not in a folder
-    if (id === null) {
-      return [];
-    }
-    // Process the hierarchy with a cache map by folder id
-    if (typeof this.hierarchyFolderCache[id] === "undefined") {
-      this.hierarchyFolderCache[id] = this.getHierarchyFolder(id);
-    }
-    return this.hierarchyFolderCache[id];
-  }
-
-  /**
-   * Get the hierarchy of a folder by ID in cache
-   * @param {string} id The id of the folder
-   * @returns {*[]}
-   */
-  getHierarchyFolder(id) {
-    const hierarchy = [];
-    let currentFolderId = id;
-    while (currentFolderId) {
-      const folder = this.foldersMapById[currentFolderId];
-      // Prevent issue if foldersMapById is not loaded yet
-      if (!folder) {
-        return hierarchy;
-      }
-      hierarchy.unshift(folder);
-      currentFolderId = folder.folder_parent_id;
-    }
-    return hierarchy;
   }
 
 

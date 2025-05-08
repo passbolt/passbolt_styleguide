@@ -15,35 +15,25 @@
 import {defaultFolderDto} from "../../../../shared/models/entity/folder/folderEntity.test.data";
 import {ownerFolderPermissionDto, readFolderPermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
-import MockPort from "../../../test/mock/MockPort";
-
-/**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any}
- */
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    port: new MockPort(),
-    folders: foldersMock
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
+import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props
+ * @param {object} data Override the default props.
  * @returns {any}
  */
-export function defaultProps() {
+export function defaultProps(data = {}) {
   return {
-    resourceWorkspaceContext: {
+    context: defaultAppContext({folders: foldersMock}),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
       filter: {
         type: ResourceWorkspaceFilterTypes.FOLDER,
         payload: {
           folder: foldersMock[0]
         }
-      }
-    },
+      },
+    }),
     dragContext: {
       dragging: true,
       draggedItems: {
@@ -56,9 +46,15 @@ export function defaultProps() {
     history: {
       push: jest.fn()
     },
+    match: {
+      params: {
+        filterByFolderId: foldersMock[0].id
+      }
+    },
     contextualMenuContext: {
       show: jest.fn()
-    }
+    },
+    ...data
   };
 }
 

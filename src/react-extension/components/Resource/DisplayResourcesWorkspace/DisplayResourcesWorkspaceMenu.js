@@ -339,7 +339,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   get isPasswordResources() {
-    return this.props.resourceTypes.getFirstById(this.selectedResources[0].resource_type_id)?.hasPassword();
+    return this.props.resourceTypes?.getFirstById(this.selectedResources[0].resource_type_id)?.hasPassword();
   }
 
   /**
@@ -347,7 +347,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @returns {boolean}
    */
   canCopyTotp() {
-    return this.props.resourceTypes.getFirstById(this.selectedResources[0].resource_type_id)?.hasTotp();
+    return this.props.resourceTypes?.getFirstById(this.selectedResources[0].resource_type_id)?.hasTotp();
   }
 
   /**
@@ -355,7 +355,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   get isStandaloneTotpResource() {
-    return this.props.resourceTypes.getFirstById(this.selectedResources[0].resource_type_id).isStandaloneTotp();
+    return this.props.resourceTypes?.getFirstById(this.selectedResources[0].resource_type_id).isStandaloneTotp();
   }
 
   /**

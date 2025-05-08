@@ -40,6 +40,8 @@ import debounce from "debounce-promise";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import WorkspaceSwitcher, {WORKSPACE_ENUM} from '../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher';
 import RoleEntity from '../../../../shared/models/entity/role/roleEntity';
+import {uiActions} from '../../../../shared/services/rbacs/uiActionEnumeration';
+import {withRbac} from '../../../../shared/context/Rbac/RbacContext';
 
 const GAP_AND_PADDING_BUTTONS = 22;
 
@@ -163,7 +165,7 @@ class DisplayUserWorkspace extends React.Component {
    */
   get isUserAdmin() {
     const loggedInUser = this.props.context.loggedInUser;
-    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN;
+    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN && this.props.rbacContext.canIUseUiAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE);
   }
 
   /**
@@ -274,8 +276,9 @@ DisplayUserWorkspace.propTypes = {
   context: PropTypes.any, // The application context
   userWorkspaceContext: PropTypes.any,
   history: PropTypes.any,
+  rbacContext: PropTypes.any, // The role based access control context
   navigationContext: PropTypes.any, // The application navigation context
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withAppContext(withNavigationContext(withUserWorkspace(withTranslation('common')(DisplayUserWorkspace)))));
+export default withRouter(withAppContext(withRbac(withNavigationContext(withUserWorkspace(withTranslation('common')(DisplayUserWorkspace))))));

@@ -13,12 +13,14 @@
  */
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
+import {decryptedMetadataPrivateKeyDto, defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 import MetadataKeyEntity from "./metadataKeyEntity";
 import {defaultMetadataKeyDto, minimalMetadataKeyDto} from "./metadataKeyEntity.test.data";
 import MetadataPrivateKeysCollection from "./metadataPrivateKeysCollection";
 import {v4 as uuidv4} from "uuid";
 import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import EntityValidationError from "../abstract/entityValidationError";
+import {defaultUserDto} from "../user/userEntity.test.data";
 
 describe("MetadataKeyEntity", () => {
   describe("::getSchema", () => {
@@ -94,6 +96,17 @@ describe("MetadataKeyEntity", () => {
         {scenario: "with invalid metadata private key build rule", value: defaultMetadataPrivateKeyDto()},
       ];
       assertEntityProperty.assertAssociation(MetadataKeyEntity, "metadata_private_keys", metadataKeyDto, successScenarios, failScenarios);
+    });
+
+    it("validates creator property", () => {
+      const sessionKeysBundleDto = defaultMetadataKeyDto();
+      const successScenarios = [
+        {scenario: "a valid option", value: defaultUserDto()},
+      ];
+      const failScenarios = [
+        {scenario: "with invalid session private key build rule", value: {"role": "admin"}},
+      ];
+      assertEntityProperty.assertAssociation(MetadataKeyEntity, "creator", sessionKeysBundleDto, successScenarios, failScenarios);
     });
   });
 
@@ -204,7 +217,7 @@ describe("MetadataKeyEntity", () => {
       expect(entity3.expired).toStrictEqual(dto3.expired);
     });
   });
-  describe("::dtDto", () => {
+  describe("::toDto", () => {
     it("minimal to dto", () => {
       expect.assertions(5);
       // minimal set with the data property
@@ -231,6 +244,70 @@ describe("MetadataKeyEntity", () => {
       const dto = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true});
       const entity = new MetadataKeyEntity(dto);
       expect(entity.toDto({metadata_private_keys: true})).toEqual(dto);
+    });
+  });
+
+  describe("::toContentCodeConfirmTrustRequestDto", () => {
+    it("contains metadata private keys without data", () => {
+      expect.assertions(1);
+      const dto = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true});
+      const entity = new MetadataKeyEntity(dto);
+      dto.metadata_private_keys.forEach(privateKey => delete privateKey.data);
+      expect(entity.toContentCodeConfirmTrustRequestDto()).toEqual(dto);
+    });
+  });
+
+  describe("::assertFingerprintPublicAndPrivateKeysMatch", () => {
+    it("should return if private key is not decrypted", () => {
+      expect.assertions(1);
+
+      const dto = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true});
+      const entity = new MetadataKeyEntity(dto);
+
+      expect(() => entity.assertFingerprintPublicAndPrivateKeysMatch()).not.toThrow();
+    });
+
+    it("should return if no private keys are set", () => {
+      expect.assertions(1);
+
+      const dto = defaultMetadataKeyDto({});
+      const entity = new MetadataKeyEntity(dto);
+
+      expect(() => entity.assertFingerprintPublicAndPrivateKeysMatch()).not.toThrow();
+    });
+
+    it("should throw an error if fingerprint does not match between public key and private keys", () => {
+      expect.assertions(2);
+      const metadataKeyId =  uuidv4();
+      const dto = defaultMetadataKeyDto({
+        id: metadataKeyId,
+        fingerprint: "1039097B2E1D31979FF662502714A820FAEF4FF3",
+        metadata_private_keys: [decryptedMetadataPrivateKeyDto({metadata_key_id: metadataKeyId})]
+      });
+      const entity = new MetadataKeyEntity(dto);
+
+      try {
+        entity.assertFingerprintPublicAndPrivateKeysMatch();
+      } catch (error) {
+        const entityValidationError = new EntityValidationError();
+        entityValidationError.addError('metadata_private_keys.0.fingerprint', 'fingerprint_match', 'The fingerprint of the metadata private key does not match the fingerprint of the metadata public key');
+
+        expect(error).toBeInstanceOf(EntityValidationError);
+        expect(error).toEqual(entityValidationError);
+      }
+    });
+
+    it("should succeed if fingerprint match between public key and private keys", () => {
+      expect.assertions(1);
+      const metadataKeyId =  uuidv4();
+      const dto = defaultMetadataKeyDto({
+        id: metadataKeyId,
+        fingerprint: pgpKeys.metadataKey.fingerprint,
+        metadata_private_keys: [decryptedMetadataPrivateKeyDto({metadata_key_id: metadataKeyId})]
+      });
+      const entity = new MetadataKeyEntity(dto);
+
+      expect(() => entity.assertFingerprintPublicAndPrivateKeysMatch()).not.toThrow();
     });
   });
 });

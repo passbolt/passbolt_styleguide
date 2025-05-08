@@ -1,12 +1,6 @@
 .navigation-secondary-tree {
     align-self: stretch;
 
-    li {
-        .row.no-child {
-            padding-left: 2.4rem;
-        }
-    }
-
     .row {
         border-radius: var(--Button-border-radius);
 
@@ -103,6 +97,7 @@
         &.disabled {
             cursor: default;
             pointer-events: none;
+            opacity: .5;
 
             .main-cell {
 
@@ -138,6 +133,16 @@
                     }
                 }
             }
+        }
+
+        .folder-item .row {
+          /* Folder levels (should be override with JS) */
+          --folder-depth: 0;
+          padding-left: calc(2.5rem + var(--folder-depth) * 1.5rem);
+
+          &.no-child {
+            padding-left: calc(3.9rem + var(--folder-depth) * 1.5rem);
+          }
         }
     }
 
@@ -182,10 +187,5 @@
             }
         }
 
-    }
-
-    /*All other levels*/
-    li > ul {
-        padding-left: 1.5rem;
     }
 }

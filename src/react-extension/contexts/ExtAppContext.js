@@ -33,6 +33,7 @@ class ExtAppContextProvider extends React.Component {
     this.state = this.getDefaultState(props);
     this.bindCallbacks();
     this.initEventHandlers();
+    this.hierarchyFolderCache = {}; // A cache of the last known list of folders hierarchy by ID from the App context
   }
 
   async componentDidMount() {
@@ -71,6 +72,7 @@ class ExtAppContextProvider extends React.Component {
       user: null,
       resources: null,
       folders: null,
+      foldersMapById: [], // A list of folders map by ID from the App context
       users: null, // The current list of all users
       groups: null,
 
@@ -149,6 +151,9 @@ class ExtAppContextProvider extends React.Component {
 
       // Locale
       onUpdateLocaleRequested: this.onUpdateLocaleRequested.bind(this),
+
+      // Get folder hierarchy
+      getHierarchyFolderCache: this.getHierarchyFolderCache.bind(this)
     };
   }
 
@@ -224,7 +229,12 @@ class ExtAppContextProvider extends React.Component {
     const storageData = await this.props.storage.local.get(["folders"]);
     if (storageData.folders) {
       const folders = storageData.folders;
-      this.setState({folders: folders});
+      const foldersMapById = folders.reduce((result, folder) => {
+        result[folder.id] = folder;
+        return result;
+      }, {});
+      this.hierarchyFolderCache = {};
+      this.setState({folders, foldersMapById});
     }
   }
 
@@ -286,6 +296,43 @@ class ExtAppContextProvider extends React.Component {
     this.setState({account});
   }
 
+  /**
+   * Get the hierarchy of a folder by ID in cache
+   * @param {string} id The id of the folder
+   * @returns {array<object>} Array of folders
+   */
+  getHierarchyFolderCache(id) {
+    // When resources are not in a folder
+    if (id === null) {
+      return [];
+    }
+    // Process the hierarchy with a cache map by folder id
+    if (typeof this.hierarchyFolderCache[id] === "undefined") {
+      this.hierarchyFolderCache[id] = this.getHierarchyFolder(id);
+    }
+    return this.hierarchyFolderCache[id];
+  }
+
+  /**
+   * Get the hierarchy of a folder by ID in cache
+   * @param {string} id The id of the folder
+   * @returns {*[]}
+   */
+  getHierarchyFolder(id) {
+    const hierarchy = [];
+    let currentFolderId = id;
+    while (currentFolderId) {
+      const folder = this.state.foldersMapById[currentFolderId];
+      // Prevent issue if foldersMapById is not loaded yet
+      if (!folder) {
+        return hierarchy;
+      }
+      hierarchy.unshift(folder);
+      currentFolderId = folder.folder_parent_id;
+    }
+    return hierarchy;
+  }
+
   /*
    * =============================================================
    *  State changes on local storage change
@@ -307,7 +354,12 @@ class ExtAppContextProvider extends React.Component {
     }
     if (changes.folders && changes.folders.newValue) {
       const folders = changes.folders.newValue;
-      this.setState({folders});
+      const foldersMapById = folders.reduce((result, folder) => {
+        result[folder.id] = folder;
+        return result;
+      }, {});
+      this.hierarchyFolderCache = {};
+      this.setState({folders, foldersMapById});
     }
     if (changes.users && changes.users.newValue) {
       const users = changes.users.newValue;

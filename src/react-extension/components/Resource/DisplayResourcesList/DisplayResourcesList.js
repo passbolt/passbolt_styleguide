@@ -142,7 +142,7 @@ class DisplayResourcesList extends React.Component {
     this.defaultColumns.push(new ColumnUriModel({cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("URI")}}}));
     this.defaultColumns.push(new ColumnModifiedModel({cellRenderer: {component: CellDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Modified")}}}));
     if (this.canUseFolders) {
-      this.defaultColumns.push(new ColumnLocationModel({getValue: resource => this.props.resourceWorkspaceContext.getHierarchyFolderCache(resource.folder_parent_id), cellRenderer: {component: CellLocation, props: {onClick: this.handleLocationClick, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Location")}}}));
+      this.defaultColumns.push(new ColumnLocationModel({getValue: resource => this.props.context.getHierarchyFolderCache(resource.folder_parent_id), cellRenderer: {component: CellLocation, props: {onClick: this.handleLocationClick, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Location")}}}));
     }
   }
 
@@ -717,7 +717,10 @@ class DisplayResourcesList extends React.Component {
    */
   handleLocationClick(folderId) {
     if (folderId) {
-      this.props.history.push(`/app/folders/view/${folderId}`);
+      const filterIsDifferent = this.props.resourceWorkspaceContext.filter.payload?.folder?.id !== folderId;
+      if (filterIsDifferent) {
+        this.props.history.push(`/app/folders/view/${folderId}`);
+      }
     } else { // Case of root folder
       const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
       this.props.history.push(`/app/passwords`, {filter});

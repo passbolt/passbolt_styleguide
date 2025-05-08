@@ -171,26 +171,15 @@ class ShareDialog extends Component {
    * @param {object} error The returned error
    */
   handleSaveError(error) {
-    // It can happen when the user has closed the passphrase entry dialog by instance.
-    if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
-    } else {
-      // Unexpected error occurred.
-      console.error(error);
-      this.handleError(error);
-      this.setState({processing: false});
-    }
-  }
+    this.setState({processing: false});
 
-  /**
-   * handle error to display the error dialog
-   * @param error
-   */
-  handleError(error) {
-    const errorDialogProps = {
-      error: error
-    };
-    this.props.dialogContext.open(NotifyError, errorDialogProps);
+    // It can happen when the user has closed the passphrase entry dialog by instance.
+    if (error?.name === "UserAbortsOperationError" || error?.name === "UntrustedMetadataKeyError") {
+      console.warn(error);
+      return;
+    }
+    console.error(error);
+    this.props.dialogContext.open(NotifyError, {error});
   }
 
   /**
@@ -440,10 +429,9 @@ class ShareDialog extends Component {
   /**
    * Use to render a single item of the share permission list
    * @param {integer} index of the item in the source list
-   * @param {integer} key index of the HTML element in the ReactList
    * @returns {JSX.Element}
    */
-  renderItem(index, key) {
+  renderItem(index) {
     const permission = this.state.permissions[index];
     const sharePermissionItemKey = permission.aro.id;
     return (
@@ -457,7 +445,6 @@ class ShareDialog extends Component {
         disabled={this.hasAllInputDisabled()}
         onUpdate={this.handlePermissionUpdate}
         onDelete={this.handlePermissionDelete}
-        isLastItemDisplayed={key >= 2}
         canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
       />
     );
@@ -523,6 +510,7 @@ class ShareDialog extends Component {
                   minSize={this.props.listMinSize}
                   type={this.state.permissions.length < 4 ? "simple" : "uniform"}
                   ref={this.permissionListRef}
+                  usePosition={true}
                   threshold={30}>
                 </ReactList>
               }

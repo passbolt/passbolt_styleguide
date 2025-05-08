@@ -87,6 +87,7 @@ import HeartSVG from "../../../img/svg/heart.svg";
 import HelpSVG from "../../../img/svg/help.svg";
 import HomeSVG from "../../../img/svg/home.svg";
 import ImageSVG from "../../../img/svg/image.svg";
+import ImportSVG from "../../../img/svg/import.svg";
 import InfoSVG from "../../../img/svg/info.svg";
 import InternationalSVG from "../../../img/svg/international.svg";
 import KeySVG from "../../../img/svg/key.svg";
@@ -256,6 +257,7 @@ const iconsSVGs = [
   HelpSVG,
   HomeSVG,
   ImageSVG,
+  ImportSVG,
   InfoSVG,
   KeySVG,
   KeySquareSVG,

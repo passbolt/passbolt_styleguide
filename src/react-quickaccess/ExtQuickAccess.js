@@ -39,7 +39,9 @@ import ResourceLocalStorageProvider from "./contexts/ResourceLocalStorageContext
 import ResourceTypesLocalStorageContextProvider from "../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import MetadataTypesSettingsLocalStorageContextProvider from "../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import AccountEntity from "../shared/models/entity/account/accountEntity";
-
+import ConfirmMetadataKeyDialog from "./components/ConfirmMetadataKeyPage/ConfirmMetadataKeyPage";
+import MetadataKeyEntity from "../shared/models/entity/metadata/metadataKeyEntity";
+import MetadataTrustedKeyEntity from "../shared/models/entity/metadata/metadataTrustedKeyEntity";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/webAccessibleResources/quickaccess/home',
@@ -94,7 +96,7 @@ class ExtQuickAccess extends React.Component {
   bindCallbacks() {
     this.focusSearch = this.focusSearch.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
-    this.handlekeyDown = this.handleKeyDown.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleBackgroundPageRequiresPassphraseEvent = this.handleBackgroundPageRequiresPassphraseEvent.bind(this);
     this.handlePassphraseDialogCompleted = this.handlePassphraseDialogCompleted.bind(this);
     this.loginSuccessCallback = this.loginSuccessCallback.bind(this);
@@ -104,6 +106,8 @@ class ExtQuickAccess extends React.Component {
     this.getOpenerTabId = this.getOpenerTabId.bind(this);
     this.getBootstrapFeature = this.getBootstrapFeature.bind(this);
     this.getDetached = this.getDetached.bind(this);
+    this.handleBackgroundPageConfirmMetadataKeyEvent = this.handleBackgroundPageConfirmMetadataKeyEvent.bind(this);
+    this.handleConfirmMetadataKeyDialogCompleted = this.handleConfirmMetadataKeyDialogCompleted.bind(this);
   }
 
   /**
@@ -114,6 +118,7 @@ class ExtQuickAccess extends React.Component {
   async componentDidMount() {
     try {
       this.state.port.on('passbolt.passphrase.request', this.handleBackgroundPageRequiresPassphraseEvent);
+      this.state.port.on('passbolt.metadata-key.trust-confirm', this.handleBackgroundPageConfirmMetadataKeyEvent);
       this.handlePassphraseRequest();
       await this.checkPluginIsConfigured();
       await this.getUser();
@@ -164,6 +169,11 @@ class ExtQuickAccess extends React.Component {
       getOpenerTabId: this.getOpenerTabId, // Get the opener tab id, useful when used in detached mode to get info of the opener tab.
       getBootstrapFeature: this.getBootstrapFeature, // The bootstrap feature.
       getDetached: this.getDetached, // The detached mode
+      // Confirm metadata key
+      confirmMetadataKeyRequired: false,
+      confirmMetadataKeyRequestId: null,
+      confirmMetadataKeyMetadataKey: null,
+      confirmMetadataKeyMetadataTrustedKey: null
     };
   }
 
@@ -312,6 +322,31 @@ class ExtQuickAccess extends React.Component {
     this.setState({passphraseRequired: true, passphraseRequestId: requestId});
   }
 
+  /**
+   * Handle background page confirm metadata key event
+   * @param requestId
+   * @param confirmMetadataKey
+   */
+  handleBackgroundPageConfirmMetadataKeyEvent(requestId, data) {
+    try {
+      // Set validation to false as data is required for the entity used by the service worker but should not be sent to the content code.
+      const metadataKey = new MetadataKeyEntity(data.metadata_key, {validate: false});
+      const metadataTrustedKey = new MetadataTrustedKeyEntity(data.metadata_trusted_key);
+      this.setState({
+        confirmMetadataKeyRequired: true,
+        confirmMetadataKeyRequestId: requestId,
+        confirmMetadataKeyMetadataKey: metadataKey,
+        confirmMetadataKeyMetadataTrustedKey: metadataTrustedKey
+      });
+    } catch (error) {
+      console.log(error);
+      this.setState({
+        hasError: true,
+        errorMessage: error.message
+      });
+    }
+  }
+
   handlePassphraseDialogCompleted() {
     if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.REQUEST_PASSPHRASE) {
       window.close();
@@ -324,6 +359,18 @@ class ExtQuickAccess extends React.Component {
     if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.REQUEST_PASSPHRASE) {
       this.handleBackgroundPageRequiresPassphraseEvent(this.props.bootstrapRequestId);
     }
+  }
+
+  /**
+   * Handle confirm metadata key dialog completed
+   */
+  handleConfirmMetadataKeyDialogCompleted() {
+    this.setState({
+      confirmMetadataKeyRequired: false,
+      confirmMetadataKeyRequestId: null,
+      confirmMetadataKeyMetadataKey: null,
+      confirmMetadataKeyMetadataTrustedKey: null
+    });
   }
 
   isReady() {
@@ -399,7 +446,13 @@ class ExtQuickAccess extends React.Component {
                     {this.state.passphraseRequired &&
                       <PassphraseDialog requestId={this.state.passphraseRequestId} onComplete={this.handlePassphraseDialogCompleted} canRememberMe={this.canRememberMe}/>
                     }
-                    <div className={`${this.state.passphraseRequired ? "visually-hidden" : ""}`}>
+                    {this.state.confirmMetadataKeyRequired &&
+                      <ConfirmMetadataKeyDialog requestId={this.state.confirmMetadataKeyRequestId}
+                        metadataKey={this.state.confirmMetadataKeyMetadataKey}
+                        metadataTrustedKey={this.state.confirmMetadataKeyMetadataTrustedKey}
+                        onComplete={this.handleConfirmMetadataKeyDialogCompleted}/>
+                    }
+                    <div className={`${this.state.passphraseRequired || this.state.confirmMetadataKeyRequired ? "visually-hidden" : ""}`}>
                       <Route path={SEARCH_VISIBLE_ROUTES} render={() => (
                         <Search ref={el => this.searchRef = el}/>
                       )}/>

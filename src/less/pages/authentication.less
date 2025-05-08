@@ -3,7 +3,6 @@ html, body {
 }
 .login.page {
   height: 100vh;
-
   .content {
     flex: 1 0 0;
     align-self: stretch;
@@ -30,6 +29,17 @@ html, body {
     font-size: 1.6rem;
     line-height: 2.4rem;
     margin-bottom: 1.6rem;
+  }
+
+  .get-started-description {
+    font-size: 1.4rem;
+    color: var(--Text-and-icons-Secondary-text);
+    margin-bottom: 1.6rem;
+  }
+
+  .button.get-started {
+    width: 100%;
+    padding: 1rem 1.6rem;
   }
 
   .processing-wrapper {
@@ -333,6 +343,7 @@ html, body {
       .login-form {
         border-radius: var(--Section-border-radius);
         max-width:37.2rem;
+        min-width: 37rem;
         margin:auto;
         padding:4.8rem 4rem;
         background: var(--Dialog-Dialog-fill);
@@ -345,6 +356,7 @@ html, body {
 
       .login-box-footer {
         max-width:37.2rem;
+        min-width: 37rem;
         margin:auto;
         .login-box-footer-actions {
           margin:1.6rem auto;
