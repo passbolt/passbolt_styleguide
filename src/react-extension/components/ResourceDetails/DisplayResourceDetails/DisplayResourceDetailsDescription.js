@@ -84,7 +84,7 @@ class DisplayResourceDetailsDescription extends React.Component {
    * @returns {boolean}
    */
   hasNoDescription() {
-    return this.resource.metadata.description === null
+    return !this.resource.metadata.description
       || this.resource.metadata.description?.length === 0;
   }
 
