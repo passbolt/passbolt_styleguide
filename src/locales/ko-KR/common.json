@@ -1192,7 +1192,7 @@
   "The encrypted metadata settings were updated.": "암호화된 메타데이터 설정이 업데이트되었습니다.",
   "The encrypted metadata were migrated.": "암호화된 메타데이터가 마이그레이션되었습니다.",
   "The encryption key used to share metadata between users has been updated by <1>{{creatorName}}</1>.": "사용자 간에 메타데이터를 공유하는 데 사용되는 암호화 키가 <1>{{creatorName}}</1>에 의해 업데이트되었습니다.",
-  "The encryption key used to share metadata between users has been updated by <1>{creatorName}</1>.": "The encryption key used to share metadata between users has been updated by <1>{creatorName}</1>.",
+  "The encryption key used to share metadata between users has been updated by <1>{creatorName}</1>.": "사용자 간에 메타데이터를 공유하는 데 사용되는 암호화 키가 <1>{creatorName}</1>에 의해 업데이트되었습니다.",
   "The endpoints for updating the users directory configurations are disabled.": "사용자 디렉터리 구성을 업데이트하기 위한 엔드포인트가 비활성화됩니다.",
   "The endpoints for updating the users directory configurations are enabled.": "사용자 디렉터리 구성을 업데이트하기 위한 엔트포인트가 활성화되었습니다.",
   "The environment variable GNUPGHOME is set to {gpgHomeDirectory}": "환경 변수 GNUPGHOME이 {gpgHomeDirectory}로 설정됨",
