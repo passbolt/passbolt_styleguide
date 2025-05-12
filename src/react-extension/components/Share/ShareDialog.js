@@ -51,7 +51,7 @@ class ShareDialog extends Component {
    */
   async componentDidMount() {
     if (this.props.context.shareDialogProps.resourcesIds) {
-      this.resources = await this.props.context.port.request('passbolt.resources.find-all-by-ids-for-display-permissions', this.props.context.shareDialogProps.resourcesIds);
+      await this.findResourcesDetails();
     }
     if (this.props.context.shareDialogProps.foldersIds) {
       this.folders = await this.props.context.port.request('passbolt.share.get-folders', this.props.context.shareDialogProps.foldersIds);
@@ -104,6 +104,20 @@ class ShareDialog extends Component {
   }
 
   /**
+   * Find the resources details.
+   * Close the dialog in case of error.
+   * @returns {Promise<void>}
+   */
+  async findResourcesDetails() {
+    try {
+      this.resources = await this.props.context.port.request('passbolt.resources.find-all-by-ids-for-display-permissions', this.props.context.shareDialogProps.resourcesIds);
+    } catch (error) {
+      this.handleError(error);
+      this.props.onClose();
+    }
+  }
+
+  /**
    * Handle close button click.
    * @returns {void}
    */
@@ -153,7 +167,8 @@ class ShareDialog extends Component {
       await this.shareSave();
       await this.handleSaveSuccess();
     } catch (error) {
-      this.handleSaveError(error);
+      this.setState({processing: false});
+      this.handleError(error);
     }
   }
 
@@ -167,12 +182,12 @@ class ShareDialog extends Component {
   }
 
   /**
-   * Handle save operation error.
+   * Handle an error.
+   * If the user declined to proceed, by refusing to enter their passphrase or trust the key, do nothing.
+   * For any other error, show the error dialog.
    * @param {object} error The returned error
    */
-  handleSaveError(error) {
-    this.setState({processing: false});
-
+  handleError(error) {
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error?.name === "UserAbortsOperationError" || error?.name === "UntrustedMetadataKeyError") {
       console.warn(error);
