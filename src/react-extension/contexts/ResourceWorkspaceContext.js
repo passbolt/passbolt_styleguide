@@ -30,6 +30,7 @@ import {withRbac} from "../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../shared/services/rbacs/uiActionEnumeration";
 import {ColumnModelTypes} from "../../shared/models/column/ColumnModel";
 import getPropValue from "../lib/Object/getPropValue";
+import {withTranslation} from "react-i18next";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -632,9 +633,39 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   populate() {
     if (this.canUseFolders) {
-      this.props.context.port.request("passbolt.folders.update-local-storage");
+      this.populateFolders();
     }
-    this.props.context.port.request("passbolt.resources.update-local-storage");
+    this.populateResources();
+  }
+
+  /**
+   * Populate the resources local storage
+   * @returns {Promise<void>}
+   */
+  async populateResources() {
+    try {
+      await this.props.context.port.request("passbolt.resources.update-local-storage");
+    } catch (error) {
+      console.error(error);
+      const message = this.props.t("Unable to load/refresh the resources.")
+        + (error?.message ? ` ${error?.message}` : "");
+      await this.props.actionFeedbackContext.displayError(message);
+    }
+  }
+
+  /**
+   * Populate the folders local storage
+   * @returns {Promise<void>}
+   */
+  async populateFolders() {
+    try {
+      await this.props.context.port.request("passbolt.folders.update-local-storage");
+    } catch (error) {
+      console.error(error);
+      const message = this.props.t("Unable to load/refresh the folders.");
+      Number(error?.message ? ` ${error?.message}` : "");
+      await this.props.actionFeedbackContext.displayError(message);
+    }
   }
 
   /** RESOURCE SEARCH  **/
@@ -1259,10 +1290,11 @@ ResourceWorkspaceContextProvider.propTypes = {
   actionFeedbackContext: PropTypes.object,
   passwordExpiryContext: PropTypes.object, // the password expiry contexts
   rbacContext: PropTypes.any, // The role based access control context
-  loadingContext: PropTypes.object // The loading context
+  loadingContext: PropTypes.object, // The loading context
+  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withPasswordExpiry(withLoading(withActionFeedback(withRouter(ResourceWorkspaceContextProvider))))));
+export default withAppContext(withRbac(withPasswordExpiry(withLoading(withActionFeedback(withRouter(withTranslation('common')(ResourceWorkspaceContextProvider)))))));
 
 /**
  * Resource Workspace Context Consumer HOC
