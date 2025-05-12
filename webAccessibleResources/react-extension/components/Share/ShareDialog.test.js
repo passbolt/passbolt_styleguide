@@ -20,13 +20,15 @@ import {
   defaultAppContext,
   defaultProps,
   mockResultsFolders,
-  mockResultsResources, mockResultsResourcesAndFolders
+  mockResultsResources,
+  mockResultsResourcesAndFolders
 } from "./ShareDialog.test.data";
 import {ActionFeedbackContext} from "../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import NotifyError from "../Common/Error/NotifyError/NotifyError";
 import {waitForTrue} from "../../../../test/utils/waitFor";
+import UserAbortsOperationError from "../../lib/Error/UserAbortsOperationError";
 
 beforeAll(() => {
   global.scrollTo = jest.fn();
@@ -44,7 +46,7 @@ afterEach(() => {
 describe("As Lu I should see the share dialog", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
-  const props = defaultProps(); // The props to pass
+  let props = null; // The component props
 
   const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
 
@@ -59,6 +61,7 @@ describe("As Lu I should see the share dialog", () => {
       const requestResourcesMockImpl = path => mockResultsResources[path];
       mockContextRequest(requestResourcesMockImpl);
       context.setContext({shareDialogProps});
+      props = defaultProps();
       page = new ShareDialogPage(context, props);
     });
 
@@ -182,6 +185,40 @@ describe("As Lu I should see the share dialog", () => {
       expect(page.exists()).toBeTruthy();
       await page.escapeKey(page.dialogClose);
       expect(props.onClose).toBeCalled();
+    });
+
+    it('displays an error dialog if the resource details cannot be loaded due to an unexpected error', async() => {
+      expect.assertions(2);
+      const error = new Error("Unexpected error");
+      const requestBextMockImpl = request => {
+        switch (request) {
+          case "passbolt.resources.find-all-by-ids-for-display-permissions":
+            throw error;
+        }
+      };
+      mockContextRequest(requestBextMockImpl);
+      page = new ShareDialogPage(context, props);
+
+      // Throw general error message
+      expect(props.onClose).toBeCalled();
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
+    });
+
+    it('closes the share dialogs if the resource details cannot be loaded due to users not entering their passphrase when requested. This happens when the metadata need to be decrypted.', async() => {
+      expect.assertions(2);
+      const error = new UserAbortsOperationError();
+      const requestBextMockImpl = request => {
+        switch (request) {
+          case "passbolt.resources.find-all-by-ids-for-display-permissions":
+            throw error;
+        }
+      };
+      mockContextRequest(requestBextMockImpl);
+      page = new ShareDialogPage(context, props);
+
+      // Throw general error message
+      expect(props.onClose).toBeCalled();
+      expect(props.dialogContext.open).not.toHaveBeenCalled();
     });
 
     it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
