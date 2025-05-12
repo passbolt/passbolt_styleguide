@@ -18,6 +18,7 @@ import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEnt
 import RoleEntity from "../role/roleEntity";
 import ProfileEntity from "../profile/profileEntity";
 import GpgkeyEntity from "../gpgkey/gpgkeyEntity";
+import {v4 as uuid} from "uuid";
 
 /**
  * These tests are duplicata and adaptation from the UserEntity of the Bext.
@@ -63,6 +64,12 @@ describe("UserEntity", () => {
       assertEntityProperty.dateTime(UserEntity, "disabled");
       assertEntityProperty.nullable(UserEntity, "disabled");
       assertEntityProperty.notRequired(UserEntity, "disabled");
+    });
+
+    it("validates missing_metadata_keys_ids property", () => {
+      assertEntityProperty.array(UserEntity, "missing_metadata_keys_ids");
+      assertEntityProperty.assertArrayItemUuid(UserEntity, "missing_metadata_keys_ids");
+      assertEntityProperty.notRequired(UserEntity, "missing_metadata_keys_ids");
     });
 
     it("validates created property", () => {
@@ -146,6 +153,41 @@ describe("UserEntity", () => {
       delete dto.is_mfa_enabled;
 
       expect(entity.toDto(UserEntity.ALL_CONTAIN_OPTIONS)).toEqual(dto);
+    });
+  });
+
+  describe("::missingMetadataKeysIds", () => {
+    it("should return an empty array if missing_metadata_keys_ids is not defined", () => {
+      expect.assertions(1);
+
+      const dto = defaultUserDto({}, {
+        withRole: true,
+        withGpgkey: true,
+      });
+      const entity = new UserEntity(dto);
+
+      expect(entity.missingMetadataKeysIds).toEqual([]);
+    });
+    it("should return an array of missing_metadata_keys_ids", () => {
+      expect.assertions(1);
+      const uuid1 = uuid();
+      const uuid2 = uuid();
+
+      const dto = defaultUserDto({
+        missing_metadata_keys_ids: [
+          uuid1,
+          uuid2
+        ]
+      }, {
+        withRole: true,
+        withGpgkey: true,
+      });
+      const entity = new UserEntity(dto);
+
+      expect(entity.missingMetadataKeysIds).toEqual([
+        uuid1,
+        uuid2
+      ]);
     });
   });
 });
