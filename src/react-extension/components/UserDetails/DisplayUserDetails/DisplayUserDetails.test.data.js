@@ -18,6 +18,7 @@ import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
+import {defaultAccountRecoveryUserContext} from "../../../contexts/AccountRecoveryUserContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -1421,10 +1422,11 @@ export function defaultProps() {
           "last_logged_in": "",
           is_mfa_enabled: false
         }
-      }
+      },
     },
     actionFeedbackContext: {
       displaySuccess: jest.fn(),
-    }
+    },
+    accountRecoveryContext: defaultAccountRecoveryUserContext()
   };
 }
