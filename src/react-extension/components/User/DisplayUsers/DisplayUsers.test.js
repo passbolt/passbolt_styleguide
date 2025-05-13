@@ -54,10 +54,13 @@ describe("Display Users", () => {
     });
 
     it('AS LU, I should see the appropriate filtered list of users with a user attention required', async() => {
+      expect.assertions(3);
+
       page = new DisplayUsersPage(propsWithFirstUserAttentionRequired());
       await waitFor(() => {});
       expect(page.usersCount).toBe(2);
       expect(page.user(1).attentionRequired).toBeTruthy();
+      expect(page.user(2).attentionRequired).toBeTruthy();
     });
   });
 
