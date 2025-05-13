@@ -17,9 +17,11 @@
  */
 
 import "../../../../../test/mocks/mockClipboard";
+import {defaultAdministratorAppContext, defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultAppContext, defaultProps} from "./DisplayUserDetails.test.data";
 import DisplayUserDetailsPage from "./DisplayUserDetails.test.page";
 import {waitFor} from "@testing-library/react";
+import {v4 as uuidv4} from "uuid";
 
 beforeEach(() => {
   jest.resetModules();
@@ -32,44 +34,97 @@ describe("Display User Details", () => {
 
   const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
 
-  beforeEach(() => {
-    page = new DisplayUserDetailsPage(context, props);
+  describe("Should display user details sections", () => {
+    beforeEach(() => {
+      page = new DisplayUserDetailsPage(context, props);
+    });
+
+    it('As LU I should follow a permalink to see the details of a user', async() => {
+      expect.assertions(2);
+      mockContextRequest(context, () => {});
+      jest.spyOn(props.actionFeedbackContext, "displaySuccess").mockImplementationOnce(() => {});
+      await page.copyPermalink();
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith("http://localhost/app/users/view/54c6278e-f824-5fda-91ff-3e946b18d994");
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
+    });
+    it('As LU I should see groups of an active user', async() => {
+      // Set the context in order the detailed user to be inactive
+      const propsWithInactiveUser = defaultProps();
+      propsWithInactiveUser.userWorkspaceContext.details.user.active = false;
+      page = new DisplayUserDetailsPage(context, propsWithInactiveUser);
+      await waitFor(() => {});
+
+      expect(page.canSeeUserGroups).toBeFalsy();
+    });
+
+    it('As LU I should see Gpg keys of an active user', async() => {
+      // Set the default detailed user is active
+      expect(page.canSeeGpgKey).toBeTruthy();
+    });
+
+    it('As LU I should not see groups of an inactive user', async() => {
+      expect(page.canSeeUserGroups).toBeTruthy();
+    });
+
+    it('As LU I should not see Gpg keys of an inactive user', async() => {
+      // Set the context in order the detailed user to be inactive
+      const propsWithInactiveUser = defaultProps();
+      propsWithInactiveUser.userWorkspaceContext.details.user.active = false;
+      page = new DisplayUserDetailsPage(context, propsWithInactiveUser);
+      await waitFor(() => {});
+
+      expect(page.canSeeGpgKey).toBeFalsy();
+    });
   });
 
-  it('As LU I should follow a permalink to see the details of a user', async() => {
-    expect.assertions(2);
-    mockContextRequest(context, () => {});
-    jest.spyOn(props.actionFeedbackContext, "displaySuccess").mockImplementationOnce(() => {});
-    await page.copyPermalink();
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith("http://localhost/app/users/view/54c6278e-f824-5fda-91ff-3e946b18d994");
-    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
-  });
-  it('As LU I should see groups of an active user', async() => {
-    // Set the context in order the detailed user to be inactive
-    const propsWithInactiveUser = defaultProps();
-    propsWithInactiveUser.userWorkspaceContext.details.user.active = false;
-    page = new DisplayUserDetailsPage(context, propsWithInactiveUser);
-    await waitFor(() => {});
+  describe("Should display attention required", () => {
+    it('As LU I should see the action required badge in case of pending account recovery request', async() => {
+      const propsWithAttentionRequired = defaultProps();
 
-    expect(page.canSeeUserGroups).toBeFalsy();
-  });
+      propsWithAttentionRequired.userWorkspaceContext.details.user.pending_account_recovery_request = {id: uuidv4()};
 
-  it('As LU I should see Gpg keys of an active user', async() => {
-    // Set the default detailed user is active
-    expect(page.canSeeGpgKey).toBeTruthy();
-  });
+      page = new DisplayUserDetailsPage(context, propsWithAttentionRequired);
 
-  it('As LU I should not see groups of an inactive user', async() => {
-    expect(page.canSeeUserGroups).toBeTruthy();
-  });
+      expect(page.hasAttentionRequired).toBeTruthy();
+    });
 
-  it('As LU I should not see Gpg keys of an inactive user', async() => {
-    // Set the context in order the detailed user to be inactive
-    const propsWithInactiveUser = defaultProps();
-    propsWithInactiveUser.userWorkspaceContext.details.user.active = false;
-    page = new DisplayUserDetailsPage(context, propsWithInactiveUser);
-    await waitFor(() => {});
+    it('As AD I should see the action required badge in case the user is missing metadata keys', async() => {
+      const propsWithMissingMetadataKeys = defaultProps();
+      const context = defaultAdministratorAppContext();
 
-    expect(page.canSeeGpgKey).toBeFalsy();
+      propsWithMissingMetadataKeys.userWorkspaceContext.details.user.missingMetadataKeysIds = [uuidv4()];
+
+      page = new DisplayUserDetailsPage(context, propsWithMissingMetadataKeys);
+
+      expect(page.hasAttentionRequired).toBeTruthy();
+    });
+
+    it('As AD I not should see the action required badge if the plugin metadata is disabled', async() => {
+      const propsWithMissingMetadataKeys = defaultProps();
+      const context = defaultAdministratorAppContext({
+        context: {
+          siteSettings: {
+            canIUse: () => false
+          }
+        },
+      });
+
+      propsWithMissingMetadataKeys.userWorkspaceContext.details.user.missingMetadataKeysIds = [uuidv4()];
+
+      page = new DisplayUserDetailsPage(context, propsWithMissingMetadataKeys);
+
+      expect(page.hasAttentionRequired).toBeTruthy();
+    });
+
+    it('As LU I should not see the action required badge in case the user is missing metadata keys', async() => {
+      const propsWithMissingMetadataKeys = defaultProps();
+      const context = defaultUserAppContext();
+
+      propsWithMissingMetadataKeys.userWorkspaceContext.details.user.missingMetadataKeysIds = [uuidv4()];
+
+      page = new DisplayUserDetailsPage(context, propsWithMissingMetadataKeys);
+
+      expect(page.hasAttentionRequired).toBeFalsy();
+    });
   });
 });
