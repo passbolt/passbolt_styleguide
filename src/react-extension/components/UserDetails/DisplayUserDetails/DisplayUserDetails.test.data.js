@@ -19,6 +19,7 @@ import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 import {defaultAccountRecoveryUserContext} from "../../../contexts/AccountRecoveryUserContext.test.data";
+import {v4 as uuidv4} from "uuid";
 
 /**
  * Returns the default app context for the unit test
@@ -1427,6 +1428,20 @@ export function defaultProps() {
     actionFeedbackContext: {
       displaySuccess: jest.fn(),
     },
-    accountRecoveryContext: defaultAccountRecoveryUserContext()
+    accountRecoveryContext: defaultAccountRecoveryUserContext(),
   };
+}
+
+export function withMissingMetadataKeysProps(props = {}) {
+  const propsWitMissingMetadataKeys = defaultProps();
+  propsWitMissingMetadataKeys.userWorkspaceContext.details.user.missing_metadata_keys_ids = [uuidv4()];
+
+  return Object.assign(propsWitMissingMetadataKeys, props);
+}
+
+export function withRequestAccountRecoveryRequestProps(props = {}) {
+  const propsWithRequestAccountRecoveryRequest = defaultProps();
+  propsWithRequestAccountRecoveryRequest.userWorkspaceContext.details.user.pending_account_recovery_request = [uuidv4()];
+
+  return Object.assign(propsWithRequestAccountRecoveryRequest, props);
 }

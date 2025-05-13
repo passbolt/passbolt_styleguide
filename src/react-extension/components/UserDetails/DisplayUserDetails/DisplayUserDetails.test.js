@@ -18,10 +18,9 @@
 
 import "../../../../../test/mocks/mockClipboard";
 import {defaultAdministratorAppContext, defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultAppContext, defaultProps} from "./DisplayUserDetails.test.data";
+import {defaultAppContext, defaultProps, withMissingMetadataKeysProps, withRequestAccountRecoveryRequestProps} from "./DisplayUserDetails.test.data";
 import DisplayUserDetailsPage from "./DisplayUserDetails.test.page";
 import {waitFor} from "@testing-library/react";
-import {v4 as uuidv4} from "uuid";
 
 beforeEach(() => {
   jest.resetModules();
@@ -79,9 +78,7 @@ describe("Display User Details", () => {
 
   describe("Should display attention required", () => {
     it('As LU I should see the action required badge in case of pending account recovery request', async() => {
-      const propsWithAttentionRequired = defaultProps();
-
-      propsWithAttentionRequired.userWorkspaceContext.details.user.pending_account_recovery_request = {id: uuidv4()};
+      const propsWithAttentionRequired = withRequestAccountRecoveryRequestProps();
 
       page = new DisplayUserDetailsPage(context, propsWithAttentionRequired);
 
@@ -89,10 +86,8 @@ describe("Display User Details", () => {
     });
 
     it('As AD I should see the action required badge in case the user is missing metadata keys', async() => {
-      const propsWithMissingMetadataKeys = defaultProps();
+      const propsWithMissingMetadataKeys = withMissingMetadataKeysProps();
       const context = defaultAdministratorAppContext();
-
-      propsWithMissingMetadataKeys.userWorkspaceContext.details.user.missingMetadataKeysIds = [uuidv4()];
 
       page = new DisplayUserDetailsPage(context, propsWithMissingMetadataKeys);
 
@@ -100,7 +95,7 @@ describe("Display User Details", () => {
     });
 
     it('As AD I not should see the action required badge if the plugin metadata is disabled', async() => {
-      const propsWithMissingMetadataKeys = defaultProps();
+      const propsWithMissingMetadataKeys = withMissingMetadataKeysProps();
       const context = defaultAdministratorAppContext({
         context: {
           siteSettings: {
@@ -109,18 +104,14 @@ describe("Display User Details", () => {
         },
       });
 
-      propsWithMissingMetadataKeys.userWorkspaceContext.details.user.missingMetadataKeysIds = [uuidv4()];
-
       page = new DisplayUserDetailsPage(context, propsWithMissingMetadataKeys);
 
       expect(page.hasAttentionRequired).toBeTruthy();
     });
 
     it('As LU I should not see the action required badge in case the user is missing metadata keys', async() => {
-      const propsWithMissingMetadataKeys = defaultProps();
+      const propsWithMissingMetadataKeys = withMissingMetadataKeysProps();
       const context = defaultUserAppContext();
-
-      propsWithMissingMetadataKeys.userWorkspaceContext.details.user.missingMetadataKeysIds = [uuidv4()];
 
       page = new DisplayUserDetailsPage(context, propsWithMissingMetadataKeys);
 
