@@ -162,7 +162,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
   /**
    * Clone the dto for sharing purpose
    * @params {string} userId
-   * @returns {object}
+   * @returns {MetadataPrivateKeyEntity}
    */
   cloneForSharing(userId) {
     const cloneDto = {
