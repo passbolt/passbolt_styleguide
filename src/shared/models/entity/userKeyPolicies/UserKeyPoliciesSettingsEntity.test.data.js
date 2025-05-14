@@ -13,12 +13,20 @@
  */
 
 /**
- * Build default user gpg key policies settings dto.
+ * Build default user key policies settings dto.
  * @param {object} data The data to override the default dto.
  * @returns {object}
  */
-export const defaultUserGpgKeyPoliciesSettingsDto = (data = {}) => ({
-  preferred_key_type: "eddsa",
+export const defaultUserKeyPoliciesSettingsDto = (data = {}) => ({
+  preferred_key_type: "curve",
+  preferred_key_curve: "curve25519_legacy+ed25519_legacy",
   source: "default",
+  ...data
+});
+
+export const rsaUserKeyPoliciesSettingsDto = (data = {}) => ({
+  preferred_key_type: "rsa",
+  preferred_key_size: 4096,
+  source: "env",
   ...data
 });
