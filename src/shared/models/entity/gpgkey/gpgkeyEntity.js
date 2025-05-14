@@ -20,6 +20,8 @@ const FINGERPRINT_MIN_LENGTH = 40;
 const FINGERPRINT_MAX_LENGTH = 40;
 const KEY_ID_MIN_LENGTH = 8;
 const KEY_ID_MAX_LENGTH = 16;
+export const GPG_KEY_TYPE_RSA = "rsa";
+export const GPG_KEY_TYPE_EDDSA = "eddsa";
 
 class GpgkeyEntity extends EntityV2 {
   /**
