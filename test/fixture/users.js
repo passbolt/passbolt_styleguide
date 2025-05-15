@@ -233,8 +233,7 @@ export default [
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "32d29702-85e2-539d-98ac-6abfa7aadf01",
@@ -273,8 +272,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "ecc26246-0331-5297-ac16-1c1e57d22ebd",
@@ -295,8 +293,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     "disabled": "2020-05-13T07:32:49+00:00",
   }, {
     "id": "e7fa0375-61df-5dbc-9e42-e0d363bd0ecf",
@@ -317,8 +314,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false,
     disabled: "2020-05-13T07:32:49+00:00",
   }, {
@@ -359,8 +355,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "92946500-2940-54ff-889a-3da69afe5078",
@@ -381,8 +376,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false,
     disabled: "2020-05-13T07:32:49+00:00",
   }, {
@@ -404,8 +398,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: true
   }, {
     "id": "5b81d798-df23-5d02-9f49-709851a4501f",
@@ -426,8 +419,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "8d04cf98-716b-5f6d-9fe8-c130f8992646",
@@ -448,8 +440,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "2eb86906-983b-59dc-ba9f-6e8e7754c416",
@@ -489,8 +480,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "67ed8efc-0ab0-5797-be26-2449f979e82a",
@@ -530,8 +520,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "f7e9754a-2f64-5cdd-8ba2-178b33383505",
@@ -552,8 +541,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false,
     disabled: "2020-05-13T07:32:49+00:00",
   }, {
@@ -575,8 +563,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "7afa66ed-53aa-5d65-84c5-506d2b362898",
@@ -616,8 +603,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "86b3eb2f-2dd0-56b3-8978-920615cf7c17",
@@ -657,6 +643,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "2020-05-13T15:56:49+00:00",
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: true,
     disabled: "2020-05-13T07:32:49+00:00",
   }, {
@@ -678,8 +665,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "98c2bef5-cd5f-59e7-a1a7-0107c9a7cf08",
@@ -700,8 +686,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "33966163-6457-50a7-968e-836b904d7867",
@@ -741,8 +726,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: true
   }, {
     "id": "be030f90-6fd8-57b1-b48a-a693a7684a43",
@@ -763,8 +747,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     disabled: "2020-05-13T07:32:49+00:00",
   }, {
     "id": "e1ebc592-b90d-5e22-9f40-50e52911673b",
@@ -785,8 +768,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "af5e1f70-a0ee-5b76-935b-c846f8a6a190",
@@ -807,8 +789,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "904bcd9f-ff51-5cfd-9de8-d2c876ade498",
@@ -848,8 +829,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "6aabffc9-f788-58f8-9bc9-f4c102ad2f53",
@@ -870,8 +850,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "620de627-8f07-5427-9149-e2c43219c5aa",
@@ -892,8 +871,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: true,
     disabled: "2020-05-13T07:32:49+00:00",
   }, {
@@ -915,8 +893,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "2cff151f-3c67-5ca9-8af9-884fb06d96cf",
@@ -937,8 +914,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: true
   }, {
     "id": "442a3c46-df26-5f93-8c50-2b52f08e7d83",
@@ -959,8 +935,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "928c44c3-fcb5-5d28-b975-a749b288ad0f",
@@ -981,8 +956,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: true
   }, {
     "id": "796ce5c5-964a-5f79-8212-5e88bd33e6bd",
@@ -1003,8 +977,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false,
     disabled: "2020-05-13T07:32:49+00:00",
   }, {
@@ -1026,8 +999,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "a0559bb5-050b-50a3-ad39-c6756a46dbb7",
@@ -1048,8 +1020,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }, {
     "id": "81504708-c785-58e7-bd19-c1f2385dd074",
@@ -1070,8 +1041,7 @@ missing_metadata_keys_ids: [],
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": "",    
-missing_metadata_keys_ids: [],
-
+    missing_metadata_keys_ids: [],
     is_mfa_enabled: false
   }
 ];
