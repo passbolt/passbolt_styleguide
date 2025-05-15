@@ -12,6 +12,7 @@
  * @since         4.10.0
  */
 import EntityV2 from "../../abstract/entityV2";
+import IconEntity from "./IconEntity";
 
 const ENTITY_NAME = 'ResourceMetadataEntity';
 const RESOURCE_NAME_MAX_LENGTH = 255;
@@ -62,8 +63,32 @@ class ResourceMetadataEntity extends EntityV2 {
           "maxLength": RESOURCE_DESCRIPTION_MAX_LENGTH,
           "nullable": true,
         },
+        "icon": IconEntity.getSchema(),
       },
     };
+  }
+
+  /**
+   * @inheritdoc
+   */
+  createAssociations(options = {}) {
+    if (!this._props.icon) {
+      super.createAssociations(options);
+      return;
+    }
+
+    try {
+      this._icon = new IconEntity(this._props.icon, options);
+      delete this._props.icon;
+    } catch (e) {
+      /*
+       * The error is not thrown to avoid breaking the app because of the icon.
+       * The app will use default data instead for the icons.
+       */
+      console.warn("The associated icon entity could not be set.", e);
+    }
+
+    super.createAssociations(options);
   }
 
   /**
@@ -111,6 +136,14 @@ class ResourceMetadataEntity extends EntityV2 {
    */
   get uris() {
     return this._props.uris || [];
+  }
+
+  /**
+   * Returns the icon associated entity
+   * @returns {IconEntity|null}
+   */
+  get icon() {
+    return this._icon || null;
   }
 
   /*

@@ -16,6 +16,7 @@ import * as assertEntityProperty from "../../../../../../test/assert/assertEntit
 import ResourceMetadataEntity from "./resourceMetadataEntity";
 import {defaultResourceMetadataDto, minimalResourceMetadataDto} from "./resourceMetadataEntity.test.data";
 import EntityValidationError from "../../abstract/entityValidationError";
+import {defaultIconDto} from "./iconEntity.test.data";
 
 describe("Resource Metadata entity", () => {
   describe("ResourceMetadataEntity::getSchema", () => {
@@ -60,6 +61,14 @@ describe("Resource Metadata entity", () => {
       assertEntityProperty.nullable(ResourceMetadataEntity, "description");
       assertEntityProperty.notRequired(ResourceMetadataEntity, "description");
     });
+
+    it("validates icon property", () => {
+      const successScenario = [
+        {scenario: "valid icon", value: defaultIconDto()},
+      ];
+      assertEntityProperty.assertAssociation(ResourceMetadataEntity, "icon", defaultResourceMetadataDto(), successScenario, []);
+      assertEntityProperty.notRequired(ResourceMetadataEntity, "icon");
+    });
   });
 
   describe("ResourceEntity::constructor", () => {
@@ -85,6 +94,13 @@ describe("Resource Metadata entity", () => {
       const metadataDto = defaultResourceMetadataDto();
       const metadataEntity = new ResourceMetadataEntity(metadataDto);
       expect(metadataEntity.toDto()).toEqual(metadataDto);
+    });
+
+    it("works even if the associated icon cannot be validated", () => {
+      const metadataDto = defaultResourceMetadataDto({
+        icon: {}
+      });
+      expect(() => new ResourceMetadataEntity(metadataDto)).not.toThrow();
     });
   });
 });
