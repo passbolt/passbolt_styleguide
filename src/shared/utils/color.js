@@ -12,25 +12,16 @@
  * @since         5.2.0
  */
 
-import {KEEPASS_ICON_SET} from "./IconEntity";
-
 /**
- * Build minimal icon dto.
- * @param {object} data The data to override the default dto.
- * @returns {object}
+ * Returns a contrasted color computed from the given color in hex format.
+ * @param {string} color
+ * @returns {string}
  */
-export const minimalIconDto = (data = {}) => ({
-  type: KEEPASS_ICON_SET,
-  ...data,
-});
-
-/**
- * Build default icon dto.
- * @param {object} data The data to override the default dto.
- * @returns {object}
- */
-export const defaultIconDto = (data = {}) => minimalIconDto({
-  value: 42,
-  background_color: "#E64626",
-  ...data,
-});
+export const getContrastedColor = color => {
+  const c = color.substring(1).match(/(\S{2})/g);
+  const r = parseInt(c[0], 16);
+  const g = parseInt(c[1], 16);
+  const b = parseInt(c[2], 16);
+  const l = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+  return l > 125 ? '#000000' : '#ffffff';
+};

@@ -1,0 +1,21 @@
+<!--
+ Passbolt ~ Open source password manager for teams
+ Copyright (c) Passbolt SA (https://www.passbolt.com)
+
+ Licensed under GNU Affero General Public License version 3 of the or any later version.
+ For full copyright and license information, please see the LICENSE.txt
+ Redistributions of files must retain the above copyright notice.
+
+ @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ @link          https://www.passbolt.com Passbolt(tm)
+ @since         5.2.0
+-->
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M20.7958 7.78711H15.225C14.8028 7.78711 14.398 7.9548 14.0995 8.2533C13.801 8.5518 13.6333 8.95664 13.6333 9.37878V22.1121C13.6333 22.5343 13.801 22.9391 14.0995 23.2376C14.398 23.5361 14.8028 23.7038 15.225 23.7038H24.775C25.1971 23.7038 25.602 23.5361 25.9005 23.2376C26.199 22.9391 26.3667 22.5343 26.3667 22.1121V13.358L20.7958 7.78711Z" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20.7959 7.78711V13.358H26.3667" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M26.3668 29.8984L22.1582 29.8984" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17.8418 29.8984L13.6333 29.8984" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20 27.7408L20 23.7041" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M19.9999 32.0565C21.1918 32.0565 22.1581 31.0903 22.1581 29.8984C22.1581 28.7065 21.1918 27.7402 19.9999 27.7402C18.808 27.7402 17.8418 28.7065 17.8418 29.8984C17.8418 31.0903 18.808 32.0565 19.9999 32.0565Z" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

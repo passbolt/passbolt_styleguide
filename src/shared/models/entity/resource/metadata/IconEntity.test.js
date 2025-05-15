@@ -13,7 +13,7 @@
  */
 import EntitySchema from "../../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../../test/assert/assertEntityProperty";
-import IconEntity, {KEEPASS_ICON_SET, PASSBOLT_ICON_SET} from "./IconEntity";
+import IconEntity, {ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET} from "./IconEntity";
 import {defaultIconDto, minimalIconDto} from "./iconEntity.test.data";
 
 describe("Icon entity", () => {
@@ -24,8 +24,8 @@ describe("Icon entity", () => {
 
     it("validates type property", () => {
       assertEntityProperty.string(IconEntity, "type");
-      assertEntityProperty.enumeration(IconEntity, "type", [KEEPASS_ICON_SET, PASSBOLT_ICON_SET]);
-      assertEntityProperty.required(IconEntity, "type");
+      assertEntityProperty.enumeration(IconEntity, "type", [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET]);
+      assertEntityProperty.notRequired(IconEntity, "type");
     });
 
     it("validates value property", () => {
@@ -71,6 +71,15 @@ describe("Icon entity", () => {
       const iconEntity = new IconEntity(iconDto);
       expect(iconEntity.toDto()).toEqual(iconDto);
     });
+
+    it("should throw an error if value is set without the type", () => {
+      expect.assertions(1);
+
+      const iconDto = defaultIconDto();
+      delete iconDto.type;
+
+      expect(() => new IconEntity(iconDto)).toThrow();
+    });
   });
 
   describe("::getters", () => {
@@ -81,15 +90,15 @@ describe("Icon entity", () => {
 
       expect(iconEntity.type).toEqual("keepass-icon-set");
       expect(iconEntity.value).toEqual(42);
-      expect(iconEntity.backgroundColor).toEqual("#C70004");
+      expect(iconEntity.backgroundColor).toEqual("#E64626");
     });
 
     it("should return the expected values with minimal data", () => {
       expect.assertions(3);
 
-      const iconEntity = new IconEntity(minimalIconDto());
+      const iconEntity = new IconEntity({});
 
-      expect(iconEntity.type).toEqual("keepass-icon-set");
+      expect(iconEntity.type).toBeNull();
       expect(iconEntity.value).toBeNull();
       expect(iconEntity.backgroundColor).toBeNull();
     });

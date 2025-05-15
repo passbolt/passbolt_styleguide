@@ -71,6 +71,6 @@ export default class OrchestrateResourceFormPage {
    * @returns {boolean}
    */
   get hasAppearanceForm() {
-    return Boolean(this._page.container.querySelector('.appearance'));
+    return Boolean(this._page.container.querySelector('.appearance-workspace'));
   }
 }

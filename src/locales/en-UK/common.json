@@ -189,6 +189,7 @@
   "App.fullBaseUrl is not set to HTTPS": "App.fullBaseUrl is not set to HTTPS",
   "App.fullBaseUrl is set to HTTPS": "App.fullBaseUrl is set to HTTPS",
   "App.fullBaseUrl validation OK": "App.fullBaseUrl validation OK",
+  "Appearance": "Appearance",
   "Application (client) ID": "Application (client) ID",
   "Application configuration": "Application configuration",
   "Apply": "Apply",

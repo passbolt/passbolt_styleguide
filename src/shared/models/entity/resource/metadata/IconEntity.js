@@ -12,6 +12,7 @@
  * @since         5.2.0
  */
 import EntityV2 from "../../abstract/entityV2";
+import EntityValidationError from "../../abstract/entityValidationError";
 
 export const KEEPASS_ICON_SET = "keepass-icon-set";
 export const PASSBOLT_ICON_SET = "passbolt-icon-set";
@@ -24,9 +25,7 @@ export default class IconEntity extends EntityV2 {
   static getSchema() {
     return {
       "type": "object",
-      "required": [
-        "type",
-      ],
+      "required": [],
       "properties": {
         "type": {
           "type": "string",
@@ -47,11 +46,22 @@ export default class IconEntity extends EntityV2 {
   }
 
   /**
+   * @inheritDoc
+   */
+  validateBuildRules() {
+    if (Boolean(this._props.value) && !this._props.type) {
+      const error = new EntityValidationError();
+      error.addError("type", "required_with_value", "The property type must be set if the property value is set");
+      throw error;
+    }
+  }
+
+  /**
    * Returns the type of the icon set used.
-   * @returns {string}
+   * @returns {string\null}
    */
   get type() {
-    return this._props.type;
+    return this._props.type || null;
   }
 
   /**

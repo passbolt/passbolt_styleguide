@@ -1,0 +1,18 @@
+<!--
+  The SVGs code is based on the Lucide library, licensed under the LGPL License.
+  https://github.com/lucide-icons/lucide
+
+  Copyright (c) Lucide Authors
+
+  Modifications made by Passbolt SA.
+   - Renaming colors and file name of SVGs.
+
+  @url https://github.com/lucide-icons/lucide/tree/main/icons
+-->
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.4358 22.3852C13.3117 22.3852 14.8325 20.8645 14.8325 18.9885C14.8325 17.1126 13.3117 15.5918 11.4358 15.5918C9.55982 15.5918 8.03906 17.1126 8.03906 18.9885C8.03906 20.8645 9.55982 22.3852 11.4358 22.3852Z" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M21.475 8.9502L13.8345 16.5907" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20.2085 13.3292L22.1627 11.375" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M30.5067 31.049V29.4425C30.5067 28.5903 30.1682 27.7731 29.5657 27.1706C28.9631 26.568 28.1459 26.2295 27.2937 26.2295H20.8678C20.0156 26.2295 19.1984 26.568 18.5958 27.1706C17.9933 27.7731 17.6548 28.5903 17.6548 29.4425V31.049" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24.0807 23.0168C25.8551 23.0168 27.2936 21.5783 27.2936 19.8038C27.2936 18.0293 25.8551 16.5908 24.0807 16.5908C22.3062 16.5908 20.8677 18.0293 20.8677 19.8038C20.8677 21.5783 22.3062 23.0168 24.0807 23.0168Z" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
