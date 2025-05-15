@@ -20,7 +20,7 @@ const createResource = (index, data = {}) => ({
   metadata: {
     name: `password-${index}`,
     username: "www-data",
-    uris: ["http:\/\/www.apache.org\/"],
+    uris: ["https:\/\/www.passbolt.com\/", "https:\/\/www.passbolt.com\/docs"],
     description: "Apache is the world\u0027s most used web server software.",
   },
   deleted: false,

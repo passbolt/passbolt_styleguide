@@ -76,4 +76,69 @@
   .folder-level span.caret {
     margin-right: .5rem;
   }
+
+  // Specific style for resource uris badge.
+  &.additional-uris {
+    padding: 0;
+    .list-uris {
+      display: block;
+      max-height: 10rem;
+      padding: .4rem .8rem;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--Workspace-Elevator) transparent;
+
+      button.link {
+        > span {
+          display: block;
+        }
+        &:after {
+          background-color: var(--Tool-tip-Tool-tip-text);
+        }
+
+        &:link, &:visited {
+          color: var(--Tool-tip-Tool-tip-text);
+        }
+
+        &:active, &:hover {
+          color: var(--Tool-tip-Tool-tip-text);
+          box-shadow: none;
+          border: none;
+          cursor: pointer;
+          &::after {
+            background-color: var(--Palette-Contrast-1);
+          }
+        }
+
+        &:focus, &:focus-visible {
+          box-shadow: none;
+          border: none;
+          cursor: pointer;
+          &::after {
+            background-color: var(--Palette-Contrast-1);
+            box-shadow: 0 0 .4rem 0 var(--States-Focus);
+          }
+        }
+      }
+
+      span.link {
+        cursor: default;
+      }
+
+      .link {
+        display: block;
+        color: var(--Tool-tip-Tool-tip-text);
+        font-size: 11px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        margin-bottom: .5rem;
+        max-width: 100%;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
 }

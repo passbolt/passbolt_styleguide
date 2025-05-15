@@ -12,7 +12,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.2.0
  */
-import {render} from "@testing-library/react";
+import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import DisplayResourceUrisBadge from "./DisplayResourceUrisBadge";
 /**
@@ -45,14 +45,14 @@ export default class DisplayResourceUrisBadgePage {
    * Returns the tooltip which count the number of uris
    */
   get tooltip() {
-    return this._page.container.querySelector('.tooltip');
+    return this._page.container.querySelector('.tooltip-portal span');
   }
 
   /**
    * Returns the uris list element
    */
   get listUris() {
-    return this._page.container.querySelector('.list-uris');
+    return document.body.querySelector('.list-uris');
   }
 
   /**
@@ -60,5 +60,14 @@ export default class DisplayResourceUrisBadgePage {
    */
   exists() {
     return this.badge !== null;
+  }
+
+  /**
+   * Click on the element
+   * @param {Element} element
+   */
+  async hover(element) {
+    fireEvent.mouseEnter(element);
+    await waitFor(() => {});
   }
 }

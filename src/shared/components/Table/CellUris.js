@@ -14,11 +14,13 @@
 import React, {Component, memo} from "react";
 import PropTypes from "prop-types";
 import sanitizeUrl, {urlProtocols} from "../../../react-extension/lib/Sanitize/sanitizeUrl";
+import DisplayResourceUrisBadge
+  from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 
 /**
  * This component represents a table cell link
  */
-class CellLink extends Component {
+class CellUris extends Component {
   /**
    * Default constructor
    * @param props Component props
@@ -58,11 +60,19 @@ class CellLink extends Component {
   }
 
   /**
-   * Get the value
-   * @return {Object}
+   * Get the main uri
+   * @return {string}
    */
-  get value() {
-    return this.props.value;
+  get mainUri() {
+    return this.props.value?.[0];
+  }
+
+  /**
+   * Get the additional uris
+   * @return {Array<string>}
+   */
+  get additionalUris() {
+    return this.props.value?.slice(1);
   }
 
   /**
@@ -70,26 +80,29 @@ class CellLink extends Component {
    * @return {JSX}
    */
   render() {
-    const safeLink = this.safeLink(this.value);
+    const safeLink = this.safeLink(this.mainUri);
     return (
-      <div title={this.value}>
+      <div title={this.additionalUris?.length === 0 && this.mainUri}>
         {safeLink &&
-          <button className="no-border" type="button" onClick={this.handleClick}><span>{this.value}</span></button>
+          <button title={this.additionalUris?.length > 0 && this.mainUri} className="no-border ellipsis" type="button" onClick={this.handleClick}><span>{this.mainUri}</span></button>
         }
         {!safeLink &&
-          <span>{this.value}</span>
+          <span title={this.additionalUris?.length > 0 && this.mainUri}>{this.mainUri}</span>
+        }
+        {this.additionalUris?.length > 0 &&
+          <DisplayResourceUrisBadge additionalUris={this.additionalUris}/>
         }
       </div>
     );
   }
 }
 
-CellLink.propTypes = {
-  value: PropTypes.string, // The value to display
+CellUris.propTypes = {
+  value: PropTypes.arrayOf(PropTypes.string), // The value to display
   onClick: PropTypes.func, // The onClick event function
 };
 
-export default memo(CellLink);
+export default memo(CellUris);
 
 const linkAuthorizedProtocols = [
   urlProtocols.FTP,
