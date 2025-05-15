@@ -1,0 +1,97 @@
+.badge {
+  display: inline-flex;
+  padding: 0 .4rem .1rem .4rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--Token-radius);
+  background: var(--Workspace-Dividers-lighter);
+
+  .count {
+    color: var(--Text-and-icons-Secondary-text);
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  .tooltip-text {
+    padding: 0;
+    &::before {
+      content: " ";
+      position: absolute;
+      border: .5rem solid transparent;
+    }
+
+    &.bottom:after {
+      right: calc(15% - .3rem);
+    }
+  }
+
+  /* Ease the tooltip left when you mouse over the tooltip container */
+  .tooltip:hover .tooltip-text, .tooltip:focus .tooltip-text {
+    &.bottom, &.bottom:after {
+      transform: translate(15%);
+    }
+  }
+
+  .list-uris {
+    display: block;
+    max-height: 10rem;
+    padding: .4rem .8rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--Workspace-Elevator) transparent;
+  }
+
+  button.link {
+    > span {
+      display: block;
+    }
+    &:after {
+      background-color: var(--Tool-tip-Tool-tip-text);
+    }
+
+    &:link, &:visited {
+      color: var(--Tool-tip-Tool-tip-text);
+    }
+
+    &:active, &:hover {
+      box-shadow: none;
+      border: none;
+      cursor: pointer;
+      &::after {
+        background-color: var(--Palette-Contrast-1);
+      }
+    }
+
+    &:focus, &:focus-visible {
+      box-shadow: none;
+      border: none;
+      cursor: pointer;
+      &::after {
+        background-color: var(--Palette-Contrast-1);
+        box-shadow: 0 0 .4rem 0 var(--States-Focus);
+      }
+    }
+  }
+
+  span.link {
+    cursor: default;
+  }
+
+  .link {
+    display: block;
+    color: var(--Tool-tip-Tool-tip-text);
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: .5rem;
+    max-width: 100%;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
