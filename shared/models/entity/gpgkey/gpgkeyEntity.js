@@ -20,11 +20,6 @@ const FINGERPRINT_MIN_LENGTH = 40;
 const FINGERPRINT_MAX_LENGTH = 40;
 const KEY_ID_MIN_LENGTH = 8;
 const KEY_ID_MAX_LENGTH = 16;
-export const GPG_KEY_TYPE_RSA = "rsa";
-export const GPG_KEY_TYPE_CURVE = "curve";
-export const GPG_KEY_SIZE_RSA_3072 = 3072;
-export const GPG_KEY_SIZE_RSA_4096 = 4096;
-export const GPG_KEY_CURVE_25519 = "curve25519_legacy+ed25519_legacy";
 
 class GpgkeyEntity extends EntityV2 {
   /**
