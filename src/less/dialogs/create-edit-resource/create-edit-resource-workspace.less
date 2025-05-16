@@ -346,7 +346,7 @@
           &.transparent {
             background-color: var(--Palette-Gradient-2);
             svg {
-              stroke: var(--Text-and-icons-Main-text);
+              --icon-color: var(--Resource-icon-Resource-icon-color);
             }
           }
 
@@ -384,6 +384,10 @@
           height: 4rem;
           border-radius: 100%;
           background-color: var(--Palette-Gradient-6);
+
+          svg {
+            --icon-color: var(--Resource-icon-Resource-icon-color);
+          }
 
           &.selected {
             background-color: var(--Palette-Contrast-1);

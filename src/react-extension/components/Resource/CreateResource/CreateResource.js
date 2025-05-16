@@ -182,6 +182,7 @@ class CreateResource extends Component {
     }
 
     this.resourceFormEntity.set(name, value, {validate: false});
+
     const newState = {resource: this.resourceFormEntity.toDto()};
 
     if (name === "secret.password") {

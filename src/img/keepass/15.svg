@@ -11,7 +11,7 @@
   @link          https://www.passbolt.com Passbolt(tm)
   @since         5.2.0
 -->
-<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M9.00684 24.9658H30.9065V27.2439C30.9065 28.9904 29.4941 30.4028 27.7476 30.4028H10.5104C9.67507 30.4028 9.00684 29.7345 9.00684 28.8993V24.9658Z" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M9.00684 22.7025L27.0946 10.3555" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+<path d="M9.00684 24.9658H30.9065V27.2439C30.9065 28.9904 29.4941 30.4028 27.7476 30.4028H10.5104C9.67507 30.4028 9.00684 29.7345 9.00684 28.8993V24.9658Z" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M9.00684 22.7025L27.0946 10.3555" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

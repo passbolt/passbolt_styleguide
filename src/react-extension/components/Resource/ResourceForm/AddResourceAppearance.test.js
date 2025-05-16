@@ -54,6 +54,26 @@ describe("AddResourceAppearance", () => {
       });
     });
 
+    it('can pick the transparent color.', async() => {
+      expect.assertions(3);
+
+      const props = defaultProps();
+      const page = new AddResourceAppearancePage(props);
+
+      const colorItem = page.colorPickerItem(14);
+      expect(page.isColorPickerItemSelected(colorItem)).toBeFalsy();
+
+      await page.click(colorItem);
+
+      expect(props.onChange).toHaveBeenCalledTimes(1);
+      expect(props.onChange).toHaveBeenCalledWith({
+        target: {
+          name: "metadata.icon.background_color",
+          value: "#00000000",
+        },
+      });
+    });
+
     it('can switch back to the default color', async() => {
       expect.assertions(3);
 

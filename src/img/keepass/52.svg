@@ -9,7 +9,7 @@
 
   @url https://github.com/lucide-icons/lucide/tree/main/icons
 -->
-<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M26.8171 19.0996H13.7009C13.0471 19.0996 12.5171 19.6296 12.5171 20.2834V29.5484C12.5171 30.2022 13.0471 30.7322 13.7009 30.7322H26.8171C27.4709 30.7322 28.0009 30.2022 28.0009 29.5484V20.2834C28.0009 19.6296 27.4709 19.0996 26.8171 19.0996Z" stroke="var(--icon-color)" stroke-width="1.5" stroke-linejoin="round"/>
-<path d="M14.9795 19.1V14.5385C14.9795 11.6185 17.347 9.25098 20.267 9.25098C23.187 9.25098 25.5545 11.6185 25.5545 14.5385V19.1" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+<path d="M26.8171 19.0996H13.7009C13.0471 19.0996 12.5171 19.6296 12.5171 20.2834V29.5484C12.5171 30.2022 13.0471 30.7322 13.7009 30.7322H26.8171C27.4709 30.7322 28.0009 30.2022 28.0009 29.5484V20.2834C28.0009 19.6296 27.4709 19.0996 26.8171 19.0996Z" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linejoin="round"/>
+<path d="M14.9795 19.1V14.5385C14.9795 11.6185 17.347 9.25098 20.267 9.25098C23.187 9.25098 25.5545 11.6185 25.5545 14.5385V19.1" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
