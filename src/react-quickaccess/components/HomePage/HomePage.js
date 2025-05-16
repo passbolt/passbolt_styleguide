@@ -37,6 +37,8 @@ import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import DisplayResourceUrisBadge
+  from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
@@ -292,7 +294,13 @@ class HomePage extends React.Component {
                               <span className="title">{resource.metadata.name}</span>
                               <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
                             </div>
-                            <span className="url">{resource.metadata.uris?.[0]}</span>
+                            <div className="uris">
+                              <span className="url">{resource.metadata.uris?.[0]}</span>
+                              {resource.metadata.uris?.length > 1 &&
+                                <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)}/>
+                              }
+                            </div>
+
                           </div>
                           <Icon name="chevron-right"/>
                         </Link>

@@ -106,9 +106,21 @@
               .inline-resource-name {
                 .ellipsis();
               }
+              .uris {
+                display: flex;
+                gap: .4rem;
+                min-width: 0;
+
+                .badge {
+                  margin-top: .2rem;
+                }
+              }
               .url {
                 display:block;
-                font-size:1.3rem;
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
                 padding-top:.4rem;
                 color: var(--Text-and-icons-Secondary-text);
                 .ellipsis();
