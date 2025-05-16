@@ -12,7 +12,7 @@
  * @since         5.2.0
  */
 
-import {KEEPASS_ICON_SET} from "./IconEntity";
+import {ICON_TYPE_KEEPASS_ICON_SET} from "./IconEntity";
 
 /**
  * Build minimal icon dto.
@@ -20,7 +20,7 @@ import {KEEPASS_ICON_SET} from "./IconEntity";
  * @returns {object}
  */
 export const minimalIconDto = (data = {}) => ({
-  type: KEEPASS_ICON_SET,
+  type: ICON_TYPE_KEEPASS_ICON_SET,
   ...data,
 });
 

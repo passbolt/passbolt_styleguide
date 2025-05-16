@@ -9,8 +9,8 @@
 
   @url https://github.com/lucide-icons/lucide/tree/main/icons
 -->
-<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M15.1458 29.6148C17.8496 29.6148 20.0415 27.4228 20.0415 24.719C20.0415 22.0151 17.8496 19.8232 15.1458 19.8232C12.4419 19.8232 10.25 22.0151 10.25 24.719C10.25 27.4228 12.4419 29.6148 15.1458 29.6148Z" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M29.6155 10.25L18.603 21.2624" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M27.79 16.5617L30.6066 13.7451" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+<path d="M15.1458 29.6148C17.8496 29.6148 20.0415 27.4228 20.0415 24.719C20.0415 22.0151 17.8496 19.8232 15.1458 19.8232C12.4419 19.8232 10.25 22.0151 10.25 24.719C10.25 27.4228 12.4419 29.6148 15.1458 29.6148Z" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M29.6155 10.25L18.603 21.2624" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M27.79 16.5617L30.6066 13.7451" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

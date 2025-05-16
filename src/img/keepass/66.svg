@@ -9,7 +9,7 @@
 
   @url https://github.com/lucide-icons/lucide/tree/main/icons
 -->
-<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M20 8.08301V31.9163" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M25.4167 12.417H17.2917C16.2861 12.417 15.3216 12.8165 14.6106 13.5275C13.8995 14.2386 13.5 15.203 13.5 16.2087C13.5 17.2143 13.8995 18.1787 14.6106 18.8898C15.3216 19.6008 16.2861 20.0003 17.2917 20.0003H22.7083C23.7139 20.0003 24.6784 20.3998 25.3894 21.1109C26.1005 21.822 26.5 22.7864 26.5 23.792C26.5 24.7976 26.1005 25.762 25.3894 26.4731C24.6784 27.1842 23.7139 27.5837 22.7083 27.5837H13.5" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+<path d="M20 8.08301V31.9163" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M25.4167 12.417H17.2917C16.2861 12.417 15.3216 12.8165 14.6106 13.5275C13.8995 14.2386 13.5 15.203 13.5 16.2087C13.5 17.2143 13.8995 18.1787 14.6106 18.8898C15.3216 19.6008 16.2861 20.0003 17.2917 20.0003H22.7083C23.7139 20.0003 24.6784 20.3998 25.3894 21.1109C26.1005 21.822 26.5 22.7864 26.5 23.792C26.5 24.7976 26.1005 25.762 25.3894 26.4731C24.6784 27.1842 23.7139 27.5837 22.7083 27.5837H13.5" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
