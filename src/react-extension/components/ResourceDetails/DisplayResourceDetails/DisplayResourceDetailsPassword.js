@@ -30,6 +30,7 @@ import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import EyeCloseSVG from "../../../../img/svg/eye_close.svg";
 import EyeOpenSVG from "../../../../img/svg/eye_open.svg";
+import DisplayResourceUrisBadge from "../../Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 
 class DisplayResourceDetailsPassword extends React.Component {
   /**
@@ -98,7 +99,7 @@ class DisplayResourceDetailsPassword extends React.Component {
    */
   get safeUri() {
     return sanitizeUrl(
-      this.resource.metadata.uris?.[0], {
+      this.mainUri, {
         whiteListedProtocols: resourceLinkAuthorizedProtocols,
         defaultProtocol: urlProtocols.HTTPS
       });
@@ -237,7 +238,7 @@ class DisplayResourceDetailsPassword extends React.Component {
    * Whenever the user wants to follow a resource uri.
    */
   handleGoToResourceUriClick() {
-    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.resource.metadata.uris[0]);
+    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.mainUri);
   }
 
   /**
@@ -246,6 +247,22 @@ class DisplayResourceDetailsPassword extends React.Component {
    */
   displaySuccessNotification(message) {
     this.props.actionFeedbackContext.displaySuccess(message);
+  }
+
+  /**
+   * Get the main uri
+   * @return {string}
+   */
+  get mainUri() {
+    return this.resource.metadata.uris?.[0];
+  }
+
+  /**
+   * Get the additional uris
+   * @return {Array<string>}
+   */
+  get additionalUris() {
+    return this.resource.metadata.uris?.slice(1);
   }
 
   /**
@@ -310,8 +327,11 @@ class DisplayResourceDetailsPassword extends React.Component {
               <span className="uri value">
                 {this.safeUri &&
                   <button type="button" className="link no-border" onClick={this.handleGoToResourceUriClick}>
-                    <span>{this.resource.metadata.uris?.[0]}</span></button>}
-                {!this.safeUri && <span>{this.resource.metadata.uris?.[0]}</span>}
+                    <span>{this.mainUri}</span></button>}
+                {!this.safeUri && <span>{this.mainUri}</span>}
+                {this.additionalUris?.length > 0 &&
+                  <DisplayResourceUrisBadge additionalUris={this.additionalUris}/>
+                }
               </span>
             </div>
           </div>
