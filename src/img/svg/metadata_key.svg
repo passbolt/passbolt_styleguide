@@ -9,10 +9,17 @@
 
   @url https://github.com/lucide-icons/lucide/tree/main/icons
 -->
-<svg width="49" height="48" viewBox="0 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M8.59692 44H36.5969C37.6578 44 38.6752 43.5786 39.4254 42.8284C40.1755 42.0783 40.5969 41.0609 40.5969 40V14L30.5969 4H12.5969C11.5361 4 10.5186 4.42143 9.7685 5.17157C9.01835 5.92172 8.59692 6.93913 8.59692 8V20" stroke="var(--icon-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M28.5969 4V12C28.5969 13.0609 29.0184 14.0783 29.7685 14.8284C30.5186 15.5786 31.5361 16 32.5969 16H40.5969" stroke="var(--icon-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M8.59692 36C10.8061 36 12.5969 34.2091 12.5969 32C12.5969 29.7909 10.8061 28 8.59692 28C6.38778 28 4.59692 29.7909 4.59692 32C4.59692 34.2091 6.38778 36 8.59692 36Z" stroke="var(--icon-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M20.5969 20L11.5969 29" stroke="var(--icon-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M18.5969 22L20.5969 24" stroke="var(--icon-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
+  <g clip-path="url(#clip0_2127_307746)">
+    <path d="M2.66667 14.6872H12C12.3536 14.6872 12.6928 14.5467 12.9428 14.2967C13.1929 14.0466 13.3333 13.7075 13.3333 13.3539V4.68718L10 1.35385H4.00001C3.64638 1.35385 3.30724 1.49433 3.0572 1.74438C2.80715 1.99442 2.66667 2.33356 2.66667 2.68718V6.68718" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M9.33333 1.35385V4.02052C9.33333 4.37414 9.4738 4.71328 9.72385 4.96333C9.9739 5.21338 10.313 5.35385 10.6667 5.35385H13.3333" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M2.66666 12.0205C3.40304 12.0205 3.99999 11.4236 3.99999 10.6872C3.99999 9.95081 3.40304 9.35385 2.66666 9.35385C1.93028 9.35385 1.33333 9.95081 1.33333 10.6872C1.33333 11.4236 1.93028 12.0205 2.66666 12.0205Z" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6.66667 6.68716L3.66667 9.68716" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6 7.35385L6.66667 8.02052" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <defs>
+    <clipPath id="clip0_2127_307746">
+      <rect width="16" height="16" fill="white" transform="translate(0 0.0205078)"/>
+    </clipPath>
+  </defs>
 </svg>
