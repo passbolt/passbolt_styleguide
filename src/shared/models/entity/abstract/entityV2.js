@@ -305,7 +305,13 @@ class EntityV2 extends Entity {
     if (!this._props[basePropName]) {
       this._props[basePropName] = [];
     }
-    this._props[basePropName][index] = value;
+    if (value != null) {
+      // set value in array if not null or undefined
+      this._props[basePropName][index] = value;
+    } else {
+      // if value to set is null or undefined remove the element in the array
+      this._props[basePropName].splice(index, 1);
+    }
   }
 
   /**

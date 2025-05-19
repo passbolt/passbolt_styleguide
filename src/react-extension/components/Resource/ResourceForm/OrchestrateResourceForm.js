@@ -23,6 +23,7 @@ import {
   ResourceEditCreateFormEnumerationTypes
 } from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import AddResourceUris from "./AddResourceUris";
 
 /**
  * The component orchestrates the resource form edition and creation.
@@ -68,6 +69,14 @@ class OrchestrateResourceForm extends Component {
           onChange={this.props.onChange}
           resourceType={this.props.resourceType}
           onConvertToNote={this.props.onConvertToNote}
+          warnings={this.props.warnings}
+          errors={this.props.errors}
+          disabled={this.props.disabled}
+        />;
+      case ResourceEditCreateFormEnumerationTypes.URIS:
+        return <AddResourceUris
+          resource={this.props.resource}
+          onChange={this.props.onChange}
           warnings={this.props.warnings}
           errors={this.props.errors}
           disabled={this.props.disabled}
