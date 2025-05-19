@@ -115,10 +115,27 @@ describe("See the Create Resource", () => {
         expect(page.exists()).toBeTruthy();
         expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
         // select description form
-        await page.click(page.getSectionItem(2));
+        await page.click(page.menuDescription);
         // expectations
         expect(page.sectionItemSelected.textContent).toStrictEqual("Description");
         expect(page.description).toBeDefined();
+        expect(page.password).toBeNull();
+      });
+
+      it('As a signed-in user I should be able to select uris form', async() => {
+        expect.assertions(5);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+        expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
+        // select description form
+        await page.click(page.getSectionItem(3));
+        // expectations
+        expect(page.sectionItemSelected.textContent).toStrictEqual("URIs");
+        expect(page.mainUri).toBeDefined();
         expect(page.password).toBeNull();
       });
     });
@@ -781,6 +798,97 @@ describe("See the Create Resource", () => {
       });
     });
 
+    describe("should init uri field", () => {
+      it('As a signed-in user I should be able to see a main uri filled on password and updated it', async() => {
+        expect.assertions(2);
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => page.exists);
+
+        await page.fillInput(page.uri, "test");
+        await page.click(page.menuUris);
+        expect(page.mainUri.value).toBe("test");
+
+        await page.fillInput(page.mainUri, "https://www.passbolt.com");
+        // expectations
+        expect(page.mainUri.value).toBe("https://www.passbolt.com");
+      });
+
+      it('As a signed-in user I should be able to fill a main uri and add additional and delte some', async() => {
+        expect.assertions(4);
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => page.exists);
+
+        await page.click(page.menuUris);
+
+        expect(page.addUri.hasAttribute("disabled")).toBeTruthy();
+
+        await page.fillInput(page.mainUri, "https://www.passbolt.com");
+        expect(page.addUri.hasAttribute("disabled")).toBeFalsy();
+
+        await page.click(page.addUri);
+        await page.fillInput(page.getAdditionalUri(1), "https://www.passbolt.com/blog");
+        await page.click(page.addUri);
+        await page.fillInput(page.getAdditionalUri(2), "https://www.passbolt.com/docs");
+        await page.click(page.getDeleteAdditionalUri(1));
+
+        // expectations
+        expect(page.mainUri.value).toBe("https://www.passbolt.com");
+        expect(page.getAdditionalUri(1).value).toBe("https://www.passbolt.com/docs");
+      });
+
+      it('As a signed-in user I should be aware about the URI maxLength', async() => {
+        expect.assertions(6);
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => page.exists);
+
+        await page.click(page.menuUris);
+
+        page.fillInput(page.mainUri, "a".repeat(1024));
+
+        await page.click(page.addUri);
+        page.fillInput(page.getAdditionalUri(1), "a".repeat(1024));
+
+        // expectations
+        expect(page.mainUri.value).toEqual("a".repeat(1024));
+        expect(page.mainUriWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.mainUriErrorMessage).toBeNull();
+        expect(page.getAdditionalUri(1).value).toEqual("a".repeat(1024));
+        expect(page.getAdditionalUriWarningMessage(1).textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.getAdditionalUriErrorMessage(1)).toBeNull();
+      });
+
+      it('As a signed-in user I should be blocked if I exceed the URI maxLength', async() => {
+        expect.assertions(9);
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => page.exists);
+
+        await page.click(page.menuUris);
+
+        page.fillInput(page.mainUri, "a".repeat(1025));
+
+        await page.click(page.addUri);
+        page.fillInput(page.getAdditionalUri(1), "a".repeat(1025));
+
+        // expectations
+        expect(page.mainUri.value).toEqual("a".repeat(1025));
+        expect(page.mainUriWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.mainUriErrorMessage).toBeNull();
+        expect(page.getAdditionalUri(1).value).toEqual("a".repeat(1025));
+        expect(page.getAdditionalUriWarningMessage(1).textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.getAdditionalUriErrorMessage(1)).toBeNull();
+
+        await page.click(page.saveButton);
+
+        expect(page.mainUriWarningMessage).toBeNull();
+        expect(page.mainUriErrorMessage.textContent).toEqual("This is the maximum size for this field, make sure your data was not truncated.");
+        expect(page.getAdditionalUriErrorMessage(1).textContent).toEqual("This is the maximum size for this field, make sure your data was not truncated.");
+      });
+    });
+
     describe("should send the form", () => {
       it('should open the creation confirmation dialog if the entropy of the password is too low', async() => {
         expect.assertions(3);
@@ -943,6 +1051,11 @@ describe("See the Create Resource", () => {
 
       await page.fillInput(page.name, "v5 default");
 
+      await page.click(page.menuUris);
+      await page.fillInput(page.mainUri, "https://www.passbolt.com");
+      await page.click(page.addUri);
+      await page.fillInput(page.getAdditionalUri(1), "https://www.passbolt.com/docs");
+
       await page.click(page.saveButton);
 
       const resourceDtoExpected = {
@@ -953,7 +1066,7 @@ describe("See the Create Resource", () => {
           object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v5 default",
           resource_type_id: props.resourceType.id,
-          uris: [],
+          uris: ["https://www.passbolt.com", "https://www.passbolt.com/docs"],
           username: "",
         }
       };

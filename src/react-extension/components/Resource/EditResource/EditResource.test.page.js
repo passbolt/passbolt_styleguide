@@ -124,14 +124,14 @@ export default class EditResourcePage {
   }
 
   /**
-   * Returns the uri warning mesage input element
+   * Returns the uri error message input element
    */
   get uriErrorMessage() {
     return this._page.container.querySelector('.uri.error-message');
   }
 
   /**
-   * Returns the uri warning mesage input element
+   * Returns the uri warning message input element
    */
   get uriWarningMessage() {
     return this._page.container.querySelector('.uri.warning-message');
@@ -205,6 +205,72 @@ export default class EditResourcePage {
    */
   get menuDescription() {
     return this._page.container.querySelector('#menu-description');
+  }
+
+  /**
+   * Returns the left sidebar uris input element
+   */
+  get menuUris() {
+    return this._page.container.querySelector('#menu-uris');
+  }
+
+  /**
+   * Returns the main uri input element
+   */
+  get mainUri() {
+    return this._page.container.querySelector('#resource-main-uri');
+  }
+
+  /**
+   * Returns the uri error message input element
+   */
+  get mainUriErrorMessage() {
+    return this._page.container.querySelector('.main-uri.error-message');
+  }
+
+  /**
+   * Returns the uri warning message input element
+   */
+  get mainUriWarningMessage() {
+    return this._page.container.querySelector('.main-uri.warning-message');
+  }
+
+  /**
+   * Returns the add uri button element
+   */
+  get addUri() {
+    return this._page.container.querySelector('.uri-add button');
+  }
+
+  /**
+   * Returns the additional uri input element
+   * @param {number} index
+   */
+  getAdditionalUri(index) {
+    return this._page.container.querySelector(`#resource-additional-uri-${index}`);
+  }
+
+  /**
+   * Returns the additional uri error message element
+   * @param {number} index
+   */
+  getAdditionalUriErrorMessage(index) {
+    return this._page.container.querySelector(`.additional-uri-${index}.error-message`);
+  }
+
+  /**
+   * Returns the additional uri warning message element
+   * @param {number} index
+   */
+  getAdditionalUriWarningMessage(index) {
+    return this._page.container.querySelector(`.additional-uri-${index}.warning-message`);
+  }
+
+  /**
+   * Returns the delete additional uri button element
+   */
+  getDeleteAdditionalUri(index) {
+    return this._page.container.querySelector(`#resource-delete-additional-uri-${index}`);
   }
 
   /**

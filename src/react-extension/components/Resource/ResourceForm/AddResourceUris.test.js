@@ -26,8 +26,8 @@ beforeEach(() => {
 describe("AddResourceUris", () => {
   let page; // The page to test against
 
-  describe('As LU I can see the description form.', () => {
-    it('As LU I can see the description password form.', () => {
+  describe('As LU I can see the uris form.', () => {
+    it('As LU I can see the uris form.', () => {
       expect.assertions(4);
 
       const props = defaultProps({resource: {metadata: {uris: [""]}}});
@@ -35,7 +35,7 @@ describe("AddResourceUris", () => {
 
       expect(page.exists).toBeTruthy();
       expect(page.title.textContent).toEqual("URIs");
-      expect(page.mainUris.value).toEqual("");
+      expect(page.mainUri.value).toEqual("");
       expect(page.addUri.hasAttribute("disabled")).toBeTruthy();
     });
   });
@@ -51,7 +51,7 @@ describe("AddResourceUris", () => {
         value = event.target.value;
       });
       page = new AddResourceUrisPage(props);
-      await page.fillInput(page.mainUris, "https://www.passbolt.com");
+      await page.fillInput(page.mainUri, "https://www.passbolt.com");
 
       expect(props.onChange).toHaveBeenCalledTimes(1);
       expect(name).toEqual("metadata.uris.0");
@@ -82,7 +82,7 @@ describe("AddResourceUris", () => {
   });
 
   describe('As LU I should delete an additional uri.', () => {
-    it('As LU I can see the description form disabled.', async() => {
+    it('As LU I can see the uris form deleted.', async() => {
       expect.assertions(3);
 
       let name, value;

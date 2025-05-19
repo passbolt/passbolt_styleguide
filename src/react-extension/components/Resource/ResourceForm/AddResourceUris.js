@@ -146,10 +146,10 @@ class AddResourceUris extends Component {
               <label htmlFor="resource-main-uri"><Trans>Main URI</Trans>{this.isMaxLengthWarnings("uris.0") && <AttentionSVG className="attention-required"/>}</label>
               <input id="resource-main-uri" disabled={this.props.disabled} name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange}/>
               {this.isMaxLengthError("uris.0") &&
-                <div className="uri error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
+                <div className="main-uri error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
               }
               {this.isMaxLengthWarnings("uris.0") &&
-                <div className="uri warning-message">
+                <div className="main-uri warning-message">
                   <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
                 </div>
               }
@@ -161,10 +161,10 @@ class AddResourceUris extends Component {
                   <input id={`resource-additional-uri-${index + 1}`} autoFocus={index + 1 === this.additionalUris.length} disabled={this.props.disabled} name={`metadata.uris.${index + 1}`} maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource.metadata.uris[index + 1]} onChange={this.handleInputChange}/>
                   <button type="button" className="button-icon" id={`resource-delete-additional-uri-${index + 1}`} onClick={() => this.handleDeleteUriClick(index + 1)}><Icon name="trash"/></button>
                   {this.isMaxLengthError(`uris.${index + 1}`) &&
-                    <div className="uri error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
+                    <div className={`additional-uri-${index + 1} error-message`}><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
                   }
                   {this.isMaxLengthWarnings(`uris.${index + 1}`) &&
-                    <div className="uri warning-message">
+                    <div className={`additional-uri-${index + 1} warning-message`}>
                       <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
                     </div>
                   }
