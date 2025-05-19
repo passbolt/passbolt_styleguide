@@ -82,7 +82,7 @@ export function searchWithResultProps() {
   const context = defaultAppContext({
     search: "apache",
   });
-  return defaultProps({context, resources: [defaultResourceDto({metadata: defaultResourceMetadataDto({name: "apache", uris: ["http://www.apache.org"]})}), defaultResourceDto()]});
+  return defaultProps({context, resources: [defaultResourceDto({metadata: defaultResourceMetadataDto({name: "apache", uris: ["http://www.apache.org", "https://www.apache.org/projects"]})}), defaultResourceDto()]});
 }
 
 /**
