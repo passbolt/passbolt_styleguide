@@ -18,6 +18,7 @@
 
 import {defaultProps, propsWithLargeAmountOfUris} from './DisplayResourceUrisBadge.test.data';
 import DisplayResourceUrisBadgePage from './DisplayResourceUrisBadge.test.page';
+import "../../../../../test/mocks/mockPortal";
 
 beforeEach(() => {
   jest.resetModules();
@@ -54,6 +55,11 @@ describe("DisplayResourceUrisBadge", () => {
 
       const props = defaultProps();
       page = new DisplayResourceUrisBadgePage(props);
+      jest.spyOn(window.HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+        () => ({x: 0, y: 0, widths: 100, height: 500, top: 0, right: 400, bottom: 500, left: 0})
+      );
+
+      await page.hover(page.tooltip);
 
       expect(page.listUris).toBeDefined();
       expect(page.listUris.textContent).toEqual(props.additionalUris.join(""));

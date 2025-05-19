@@ -13,8 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import Tooltip from "../../Common/Tooltip/Tooltip";
 import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
+import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
 
 const linkAuthorizedProtocols = [
   urlProtocols.FTP,
@@ -83,9 +83,9 @@ class DisplayResourceUrisBadge extends React.Component {
   render() {
     return (
       <div className="badge">
-        <Tooltip direction="bottom" message={this.additionalUrisLinks}>
+        <TooltipPortal direction="bottom" message={this.additionalUrisLinks} className="additional-uris">
           <span className="count">{this.numberOfUris}</span>
-        </Tooltip>
+        </TooltipPortal>
       </div>
     );
   }
