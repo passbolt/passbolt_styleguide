@@ -257,7 +257,12 @@ class HomePage extends React.Component {
                           <span className="title">{resource.metadata.name}</span>
                           <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
                         </div>
-                        <span className="url">{resource.metadata.uris?.[0]}</span>
+                        <div className="uris">
+                          <span className="url">{resource.metadata.uris?.[0]}</span>
+                          {resource.metadata.uris?.length > 1 &&
+                            <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)}/>
+                          }
+                        </div>
                       </button>
                       <Link className="chevron-right-wrapper" to={`/webAccessibleResources/quickaccess/resources/view/${resource.id}`}>
                         <Icon name="chevron-right"/>
@@ -300,7 +305,6 @@ class HomePage extends React.Component {
                                 <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)}/>
                               }
                             </div>
-
                           </div>
                           <Icon name="chevron-right"/>
                         </Link>
