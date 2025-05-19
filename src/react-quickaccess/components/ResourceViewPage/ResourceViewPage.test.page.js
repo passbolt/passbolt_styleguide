@@ -126,6 +126,22 @@ export default class ResourceViewPagePage {
   }
 
   /**
+   * The additonal uris button.
+   * @returns {Element}
+   */
+  get additionalUrisSection() {
+    return this._page.container.querySelector(".accordion-header.additional-uris button");
+  }
+
+  /**
+   * The list uris.
+   * @returns {NodeListOf<Element>}
+   */
+  get listUris() {
+    return this._page.container.querySelectorAll(".list-uris .property-value");
+  }
+
+  /**
    * Click on the given element.
    * @param {Element} element The element to click on.
    * @returns {Promise<void>}

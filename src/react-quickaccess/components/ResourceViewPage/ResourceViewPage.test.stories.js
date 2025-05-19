@@ -5,7 +5,7 @@ import ResourceViewPage from "./ResourceViewPage";
 import {
   defaultProps,
   deniedRbacProps,
-  disabledApiFlagsProps,
+  disabledApiFlagsProps, multipleUrisResourceProps,
   standaloneTotpResourceProps,
   totpResourceProps
 } from "./ResourceViewPage.test.data";
@@ -51,3 +51,7 @@ TotpResourceView.parameters = parameters;
 export const StandaloneTotpResourceView = Template.bind({});
 StandaloneTotpResourceView.args = standaloneTotpResourceProps();
 StandaloneTotpResourceView.parameters = parameters;
+
+export const ResourceMultipleUrisView = Template.bind({});
+ResourceMultipleUrisView.args = multipleUrisResourceProps();
+ResourceMultipleUrisView.parameters = parameters;
