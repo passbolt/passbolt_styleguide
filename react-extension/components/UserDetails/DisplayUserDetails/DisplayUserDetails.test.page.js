@@ -62,14 +62,6 @@ export default class DisplayUserDetailsPage {
   }
 
   /**
-   * Returns true if the user avatar has an attention required badge
-   * @returns {boolean}
-   */
-  get hasAttentionRequired() {
-    return Boolean(this._page.container.querySelector('.attention-required'));
-  }
-
-  /**
    * Copy the user permalink
    */
   async copyPermalink() {

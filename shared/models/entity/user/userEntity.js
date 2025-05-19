@@ -95,13 +95,6 @@ class UserEntity extends EntityV2 {
           "format": "date-time",
           "nullable": true,
         },
-        "missing_metadata_keys_ids": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "uuid"
-          },
-        },
         "created": {
           "type": "string",
           "format": "date-time"
@@ -206,14 +199,6 @@ class UserEntity extends EntityV2 {
       return null;
     }
     return this._props.deleted;
-  }
-
-  /**
-   * Get missing metadata keys ids for a user
-   * @returns {(array)} the list of missing metadata keys
-   */
-  get missingMetadataKeysIds() {
-    return this._props.missing_metadata_keys_ids || [];
   }
 
   /**

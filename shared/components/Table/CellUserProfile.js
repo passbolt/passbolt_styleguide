@@ -24,7 +24,7 @@ class CellUserProfile extends Component {
    * @returns {boolean}
    */
   get isAttentionRequired() {
-    return (Boolean(this.props.value.pending_account_recovery_request)) || this.props.value.missing_metadata_keys_ids?.length > 0;
+    return Boolean(this.props.value.pending_account_recovery_request);
   }
 
   /**

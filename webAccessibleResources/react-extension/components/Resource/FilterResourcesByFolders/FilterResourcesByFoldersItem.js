@@ -45,7 +45,7 @@ class FilterResourcesByFoldersItem extends React.Component {
     return {
       draggingOver: false,
       draggingOverSince: null,
-      open: false,
+      open: this.props.isOpen,
       moreMenuOpen: false
     };
   }
@@ -522,12 +522,18 @@ class FilterResourcesByFoldersItem extends React.Component {
   }
 }
 
+FilterResourcesByFoldersItem.defaultProps = {
+  isOpen: false,
+};
+
+
 FilterResourcesByFoldersItem.propTypes = {
   context: PropTypes.any, // The app context
   contextualMenuContext: PropTypes.any, // The contextual menu context
   history: PropTypes.object,
   match: PropTypes.object,
   folder: PropTypes.object,
+  isOpen: PropTypes.bool.isRequired,
   resourceWorkspaceContext: PropTypes.any,
   dragContext: PropTypes.any,
   toggleOpenFolder: PropTypes.func,

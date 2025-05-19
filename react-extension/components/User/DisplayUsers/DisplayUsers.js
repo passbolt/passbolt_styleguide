@@ -297,7 +297,7 @@ class DisplayUsers extends React.Component {
    * @returns {boolean}
    */
   get hasAttentionRequiredColumn() {
-    return (this.props.context.siteSettings.canIUse("accountRecovery") || this.props.context.siteSettings.canIUse("metadata")) && this.isLoggedInUserAdmin;
+    return this.props.context.siteSettings.canIUse("accountRecovery") && this.isLoggedInUserAdmin;
   }
 
   /**

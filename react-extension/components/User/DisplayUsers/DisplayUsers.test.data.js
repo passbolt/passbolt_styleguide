@@ -224,6 +224,5 @@ export function propsWithNoUsersWithTextSearch() {
 export function propsWithFirstUserAttentionRequired() {
   const props = defaultProps();
   props.userWorkspaceContext.filteredUsers[0].pending_account_recovery_request = true;
-  props.userWorkspaceContext.filteredUsers[1].missing_metadata_keys_ids = ["81100609-d60d-4dc8-a8c8-de45522eee1b"];
   return props;
 }
