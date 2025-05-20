@@ -23,6 +23,7 @@ import {
   contextWithoutEdit,
   defaultAppContext,
   defaultProps,
+  propsWithUserMissingMetadataKeys,
   propsWithUserTemporaryHasPendingAccountRecovery
 } from "./DisplayUsersContextualMenu.test.data";
 import DisplayUsersContextualMenuPage from "./DisplayUsersContextualMenu.test.page";
@@ -32,6 +33,8 @@ import ConfirmDisableUserMFA from "../ConfirmDisableUserMFA/ConfirmDisableUserMF
 import DeleteUser from "../DeleteUser/DeleteUser";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import HandleReviewAccountRecoveryWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
+import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/ConfirmShareMissingMetadataKeys";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -234,5 +237,33 @@ describe("Display Users Contextual Menu", () => {
     const accountRecoveryRequestId = props.user.pending_account_recovery_request.id;
     expect(props.workflowContext.start).toHaveBeenCalledWith(HandleReviewAccountRecoveryWorkflow, {accountRecoveryRequestId});
     expect(props.hide).toHaveBeenCalled();
+  });
+
+  it("As AD I should share missing metadata keys with a user if I have the capability to do it", async() => {
+    expect.assertions(3);
+    const props = propsWithUserMissingMetadataKeys();
+    page = new DisplayUsersContextualMenuPage(context, props);
+    await waitFor(() => {});
+
+    // The logged user is admin
+    expect(page.canEdit).toBeTruthy();
+
+    jest.spyOn(context, 'setContext').mockImplementationOnce(() => {});
+    jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(() => {});
+    jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
+
+    await page.shareMissingMetadataKeys();
+
+    expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmShareMissingMetadataKeys);
+    expect(props.hide).toHaveBeenCalled();
+  });
+
+  it('As AD I should not be able to share missing metadata key with user role', async() => {
+    expect.assertions(1);
+    const props = propsWithUserMissingMetadataKeys();
+    page = new DisplayUsersContextualMenuPage(defaultUserAppContext(), props);
+    await waitFor(() => {});
+
+    expect(page.canShareMissingMetadataKeys).toBeFalsy();
   });
 });

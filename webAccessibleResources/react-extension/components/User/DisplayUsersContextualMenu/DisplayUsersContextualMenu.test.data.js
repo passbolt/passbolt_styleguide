@@ -112,3 +112,16 @@ export function propsWithUserTemporaryHasPendingAccountRecovery(data = {}) {
     ...data,
   });
 }
+
+
+/**
+ * Props with user having missing metadata keys
+ */
+export function propsWithUserMissingMetadataKeys(data = {}) {
+  return defaultProps({
+    user: {
+      missing_metadata_keys_ids: ["54c6278e-f824-5fda-91ff-3e946b18d997"]
+    },
+    ...data,
+  });
+}

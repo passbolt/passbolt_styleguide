@@ -477,12 +477,10 @@ class FilterResourcesByFolders extends React.Component {
    */
   renderItem(index, key, folders) {
     const item = folders[index];
-    const isOpen = this.state.folderIdsOpened.includes(item.id);
 
     return <FilterResourcesByFoldersItem
       key={item.id}
       folder={item}
-      isOpen={isOpen}
       toggleOpenFolder={this.handleToggleOpenFolder}
       toggleCloseFolder={this.handleToggleCloseFolder}
     />;

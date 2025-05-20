@@ -14,7 +14,6 @@
 
 import React from "react";
 import {Link, withRouter} from "react-router-dom";
-import canSuggestUrl from "./canSuggestUrl";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
@@ -37,6 +36,9 @@ import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import DisplayResourceUrisBadge
+  from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
+import CanSuggestService from "../../../shared/services/canSuggestService/canSuggestService";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
@@ -128,7 +130,7 @@ class HomePage extends React.Component {
 
     for (const i in resources) {
       const resource = resources[i];
-      if (resource.metadata?.uris?.[0] && this.isPasswordResource(resource.resource_type_id) && canSuggestUrl(activeTabUrl, resource.metadata.uris[0])) {
+      if (resource.metadata?.uris?.[0] && this.isPasswordResource(resource.resource_type_id) && CanSuggestService.canSuggestUri(activeTabUrl, resource.metadata.uris[0])) {
         suggestedResources.push(resource);
         if (suggestedResources.length === SUGGESTED_RESOURCES_LIMIT) {
           break;
@@ -255,7 +257,12 @@ class HomePage extends React.Component {
                           <span className="title">{resource.metadata.name}</span>
                           <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
                         </div>
-                        <span className="url">{resource.metadata.uris?.[0]}</span>
+                        <div className="uris">
+                          <span className="url">{resource.metadata.uris?.[0]}</span>
+                          {resource.metadata.uris?.length > 1 &&
+                            <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)}/>
+                          }
+                        </div>
                       </button>
                       <Link className="chevron-right-wrapper" to={`/webAccessibleResources/quickaccess/resources/view/${resource.id}`}>
                         <Icon name="chevron-right"/>
@@ -292,7 +299,12 @@ class HomePage extends React.Component {
                               <span className="title">{resource.metadata.name}</span>
                               <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
                             </div>
-                            <span className="url">{resource.metadata.uris?.[0]}</span>
+                            <div className="uris">
+                              <span className="url">{resource.metadata.uris?.[0]}</span>
+                              {resource.metadata.uris?.length > 1 &&
+                                <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)}/>
+                              }
+                            </div>
                           </div>
                           <Icon name="chevron-right"/>
                         </Link>

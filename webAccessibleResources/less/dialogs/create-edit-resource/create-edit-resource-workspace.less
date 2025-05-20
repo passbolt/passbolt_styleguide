@@ -123,7 +123,7 @@
       scrollbar-color: var(--Workspace-Elevator) transparent;
 
       /* PASSWORD FIELDS LAYOUT*/
-      .password-fields, .totp-fields, .note-fields, .description-fields {
+      .password-fields, .totp-fields, .note-fields, .description-fields, .uris-fields {
         display: flex;
         padding: 0 1.6rem;
         flex-direction: column;
@@ -134,6 +134,18 @@
 
       .password-fields {
         padding-bottom: 1.6rem;
+      }
+
+      .uris-fields {
+        .additional-uri-wrapper {
+          display: flex;
+          align-items: flex-start;
+          gap: .8rem;
+          align-self: stretch;
+        }
+        .uri-add {
+          align-self: center;
+        }
       }
 
       /* INPUT FIELDS */

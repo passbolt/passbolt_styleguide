@@ -151,15 +151,13 @@ html {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  position: absolute;
-  height: 100%;
-  width: 100%;
 }
 .page .app {
   display: flex;
   align-items: flex-start;
   align-self: stretch;
-  flex: 1;
+  height: 100vh;
+  width: 100vw;
 }
 .page .app .panel.main {
   display: flex;

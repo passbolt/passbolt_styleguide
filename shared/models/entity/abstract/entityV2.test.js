@@ -471,6 +471,14 @@ describe("EntityV2", () => {
       entity.set("array.0", "test");
       expect(entity.toDto().array[0]).toEqual("test");
     });
+
+    it("should delete the array properties if null or undefined.", () => {
+      expect.assertions(2);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      expect(entity.toDto().array.length).toEqual(2);
+      entity.set("array.1", null, {validate: false});
+      expect(entity.toDto().array.length).toEqual(1);
+    });
   });
 
   describe("::diffProps", () => {

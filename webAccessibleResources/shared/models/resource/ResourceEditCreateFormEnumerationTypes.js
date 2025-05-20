@@ -21,5 +21,6 @@ export const ResourceEditCreateFormEnumerationTypes = {
   PASSWORD: "secret.password",
   TOTP: "secret.totp",
   NOTE: "secret.description",
-  DESCRIPTION: "metadata.description"
+  DESCRIPTION: "metadata.description",
+  URIS: "metadata.uris",
 };

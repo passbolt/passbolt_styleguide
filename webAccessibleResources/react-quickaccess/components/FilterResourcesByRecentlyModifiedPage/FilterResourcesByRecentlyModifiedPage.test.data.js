@@ -58,7 +58,7 @@ export const withFilteredResourcesProps = (data = {}) => ({
       metadata: {
         name: "apache",
         username: "www-data",
-        uri: "http://www.apache.org/",
+        uris: ["http://www.apache.org/", "http://www.apache.org/projects"],
         description: "Apache is the world's most used web server software.",
       }
     }, {withFavorite: true}),
@@ -66,7 +66,7 @@ export const withFilteredResourcesProps = (data = {}) => ({
       metadata: {
         name: "esaie",
         username: "test",
-        uri: "http://www.essaie.org/",
+        uris: ["http://www.essaie.org/"],
         description: "",
       }
     }, {withFavorite: true}),

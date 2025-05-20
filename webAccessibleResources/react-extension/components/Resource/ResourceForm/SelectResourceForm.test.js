@@ -29,7 +29,7 @@ import {
   resourceTypePasswordStringDto,
   resourceTypeV5DefaultTotpDto,
   resourceTypeV5TotpDto,
-  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
+  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, TEST_RESOURCE_TYPE_PASSWORD_STRING
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
@@ -63,6 +63,24 @@ describe("SelectResourceForm", () => {
       await waitFor(() => {});
 
       expect(page.getSectionItem(2)).toBeUndefined();
+    });
+
+    it('As LU I do not see the resource uris for v4 default.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()), resource: defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: {password: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.getSectionItem(3)).toBeUndefined();
+    });
+
+    it('As LU I do not see the resource uris for v4 legacy.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()), resource: defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING, secret: {password: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.getSectionItem(3)).toBeUndefined();
     });
 
     it('As LU the resource secret section password should be selected.', async() => {
@@ -100,6 +118,15 @@ describe("SelectResourceForm", () => {
 
       expect(page.sectionItemSelected.textContent).toStrictEqual("Description");
     });
+
+    it('As LU the resource secret section description should be selected.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.URIS});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.sectionItemSelected.textContent).toStrictEqual("URIs");
+    });
   });
 
   describe('As LU I can select another resource form.', () => {
@@ -127,6 +154,19 @@ describe("SelectResourceForm", () => {
       await page.click(page.getSectionItem(2));
 
       expect(props.onSelectForm).toHaveBeenCalledWith(expect.any(Object), ResourceEditCreateFormEnumerationTypes.DESCRIPTION);
+    });
+
+    it('As LU I can select the resource uris sections from a password lead.', async() => {
+      expect.assertions(2);
+      const props = defaultProps();
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
+
+      await page.click(page.getSectionItem(3));
+
+      expect(props.onSelectForm).toHaveBeenCalledWith(expect.any(Object), ResourceEditCreateFormEnumerationTypes.URIS);
     });
   });
 

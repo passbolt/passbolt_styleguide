@@ -19,6 +19,7 @@ import EntityValidationError from "../abstract/entityValidationError";
 import {defaultPgpMessage} from "../../../../../test/assert/assertEntityProperty.test.data";
 import {defaultMetadataPrivateKeyDataDto} from "./metadataPrivateKeyDataEntity.test.data";
 import MetadataPrivateKeyDataEntity from "./metadataPrivateKeyDataEntity";
+import {v4 as uuidv4} from "uuid";
 
 describe("MetadataPrivateKeyEntity", () => {
   describe("::getSchema", () => {
@@ -413,6 +414,23 @@ describe("MetadataPrivateKeyEntity", () => {
       const parsedData = JSON.parse(JSON.stringify(entity));
 
       expect(parsedData).toStrictEqual(dto);
+    });
+  });
+
+  describe("::cloneForSharing", () => {
+    it("should export metadata_key_id and data fields and assign user_id", () => {
+      expect.assertions(1);
+
+      const userId = uuidv4();
+      const dto = defaultMetadataPrivateKeyDto();
+      const entity = new MetadataPrivateKeyEntity(dto);
+      const clonedEntityForSharing = entity.cloneForSharing(userId);
+
+      expect(clonedEntityForSharing.toDto()).toStrictEqual({
+        user_id: userId,
+        metadata_key_id: dto.metadata_key_id,
+        data: dto.data
+      });
     });
   });
 });

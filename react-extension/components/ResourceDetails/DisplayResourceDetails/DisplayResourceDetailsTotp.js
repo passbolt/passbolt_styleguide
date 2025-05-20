@@ -31,6 +31,7 @@ import EyeCloseSVG from "../../../../img/svg/eye_close.svg";
 import EyeOpenSVG from "../../../../img/svg/eye_open.svg";
 import Totp from "../../../../shared/components/Totp/Totp";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import DisplayResourceUrisBadge from "../../Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 
 class DisplayResourceDetailsTotp extends React.Component {
   /**
@@ -98,7 +99,7 @@ class DisplayResourceDetailsTotp extends React.Component {
    */
   get safeUri() {
     return sanitizeUrl(
-      this.resource.metadata.uris?.[0], {
+      this.mainUri, {
         whiteListedProtocols: resourceLinkAuthorizedProtocols,
         defaultProtocol: urlProtocols.HTTPS
       });
@@ -241,6 +242,22 @@ class DisplayResourceDetailsTotp extends React.Component {
   }
 
   /**
+   * Get the main uri
+   * @return {string}
+   */
+  get mainUri() {
+    return this.resource.metadata.uris?.[0];
+  }
+
+  /**
+   * Get the additional uris
+   * @return {Array<string>}
+   */
+  get additionalUris() {
+    return this.resource.metadata.uris?.slice(1);
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -310,8 +327,11 @@ class DisplayResourceDetailsTotp extends React.Component {
                 <span className="uri value">
                   {this.safeUri &&
                     <button type="button" className="link no-border" onClick={this.handleGoToResourceUriClick}>
-                      <span>{this.resource.metadata.uris?.[0]}</span></button>}
-                  {!this.safeUri && <span>{this.resource.metadata.uris?.[0]}</span>}
+                      <span>{this.mainUri}</span></button>}
+                  {!this.safeUri && <span>{this.mainUri}</span>}
+                  {this.additionalUris?.length > 0 &&
+                    <DisplayResourceUrisBadge additionalUris={this.additionalUris}/>
+                  }
                 </span>
               }
             </div>

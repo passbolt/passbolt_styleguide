@@ -67,12 +67,22 @@
                 .inline-resource-name {
                     .ellipsis();
                 }
-                .url {
+                .uris {
+                  display: flex;
+                  gap: .4rem;
+                  min-width: 0;
+
+                  .url {
                     display:block;
                     font-size:1.3rem;
                     padding-top:.4rem;
                     color: var(--Text-and-icons-Secondary-text);
                     .ellipsis();
+                  }
+
+                  .badge {
+                    margin-top: .2rem;
+                  }
                 }
             }
             .chevron-right-wrapper {
@@ -106,12 +116,25 @@
               .inline-resource-name {
                 .ellipsis();
               }
-              .url {
-                display:block;
-                font-size:1.3rem;
-                padding-top:.4rem;
-                color: var(--Text-and-icons-Secondary-text);
-                .ellipsis();
+              .uris {
+                display: flex;
+                gap: .4rem;
+                min-width: 0;
+
+                .url {
+                  display:block;
+                  font-size: 1.2rem;
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: normal;
+                  padding-top:.4rem;
+                  color: var(--Text-and-icons-Secondary-text);
+                  .ellipsis();
+                }
+
+                .badge {
+                  margin-top: .2rem;
+                }
               }
             }
           }
