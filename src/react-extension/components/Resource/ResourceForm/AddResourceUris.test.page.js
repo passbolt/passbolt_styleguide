@@ -40,7 +40,7 @@ export default class AddResourceUrisPage {
   /**
    * Returns the uri input element
    */
-  get mainUris() {
+  get mainUri() {
     return this._page.container.querySelector('#resource-main-uri');
   }
 

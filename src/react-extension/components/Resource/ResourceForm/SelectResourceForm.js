@@ -26,6 +26,7 @@ import TotpSVG from "../../../../img/svg/totp.svg";
 import NotesSVG from "../../../../img/svg/notes.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import AlignLeftSVG from "../../../../img/svg/align_left.svg";
+import LinkSVG from "../../../../img/svg/link.svg";
 //import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
 import DeleteSVG from "../../../../img/svg/delete.svg";
 import {
@@ -172,11 +173,27 @@ class SelectResourceForm extends Component {
   }
 
   /**
+   * Is resource type has metadata
+   * @returns {boolean}
+   */
+  get isResourceTypeHasMetadata() {
+    return this.isResourceTypeV5 || this.isResourceTypeV4PasswordString;
+  }
+
+  /**
    * Is resource type has description metadata
    * @returns {boolean}
    */
   get isResourceTypeHasDescriptionMetadata() {
     return this.props.resourceType?.hasMetadataDescription();
+  }
+
+  /**
+   * Is resource type V5
+   * @returns {boolean}
+   */
+  get isResourceTypeV5() {
+    return this.props.resourceType?.isV5();
   }
 
   /**
@@ -336,7 +353,7 @@ class SelectResourceForm extends Component {
               }
             </>
           }
-          {this.isResourceTypeHasDescriptionMetadata &&
+          {this.isResourceTypeHasMetadata &&
             <>
               <button type="button" className="section-header no-border" onClick={this.handleDisplayMetadataClick}>
                 {this.state.displayMetadata
@@ -346,13 +363,26 @@ class SelectResourceForm extends Component {
                 <span className="ellipsis"><Trans>Metadata</Trans></span>
               </button>
               {this.state.displayMetadata &&
-                <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.DESCRIPTION === this.selectedForm ? "selected" : ""} ${!this.isResourceTypeHasDescriptionMetadata ? "disabled" : ""}`}>
-                  <button type="button" id="menu-description" className="no-border" disabled={this.props.disabled}
-                    onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.DESCRIPTION)}>
-                    <AlignLeftSVG/>
-                    <span className="ellipsis"><Trans>Description</Trans></span>
-                  </button>
-                </div>
+                <>
+                  {this.isResourceTypeHasDescriptionMetadata &&
+                  <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.DESCRIPTION === this.selectedForm ? "selected" : ""}`}>
+                    <button type="button" id="menu-description" className="no-border" disabled={this.props.disabled}
+                      onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.DESCRIPTION)}>
+                      <AlignLeftSVG/>
+                      <span className="ellipsis"><Trans>Description</Trans></span>
+                    </button>
+                  </div>
+                  }
+                  {this.isResourceTypeV5 &&
+                  <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.URIS === this.selectedForm ? "selected" : ""}`}>
+                    <button type="button" id="menu-uris" className="no-border" disabled={this.props.disabled}
+                      onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.URIS)}>
+                      <LinkSVG/>
+                      <span className="ellipsis"><Trans>URIs</Trans></span>
+                    </button>
+                  </div>
+                  }
+                </>
               }
             </>
           }
