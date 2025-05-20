@@ -14,6 +14,21 @@
 import CanSuggestService from "./canSuggestService";
 
 describe("CanSuggestService", () => {
+  describe("::canSuggestUris", () => {
+    it("should suggest matching domain urls", () => {
+      expect(CanSuggestService.canSuggestUris("https://www.passbolt.com", ["https://www.passbolt.com", "https://email"])).toBe(true);
+      expect(CanSuggestService.canSuggestUris("https://email", ["https://www.passbolt.com", "https://email"])).toBe(true);
+    });
+
+    it("shouldn't suggest urls not matching the exact domain", () => {
+      expect(CanSuggestService.canSuggestUris("https://www.not-passbolt.com", ["passbolt.com", "http://email", "email"])).toBe(false);
+      expect(CanSuggestService.canSuggestUris("https://www.attacker-passbolt.com", ["passbolt.com", "http://email", "email"])).toBe(false);
+      expect(CanSuggestService.canSuggestUris("https://email", ["passbolt.com", "http://email"])).toBe(false);
+      expect(CanSuggestService.canSuggestUris("https://www.not-passbolt.com", null)).toBe(false);
+      expect(CanSuggestService.canSuggestUris("https://www.not-passbolt.com", undefined)).toBe(false);
+    });
+  });
+
   describe("::canSuggestUri", () => {
     it("should suggest matching domain urls", () => {
       expect(CanSuggestService.canSuggestUri("ssh://www.passbolt.com", "ssh://www.passbolt.com")).toBe(true);
