@@ -109,7 +109,7 @@ class DisplayUserDetails extends React.Component {
    */
   hasUserIsMissingKeys() {
     if (this.isLoggedInUserAdmin() && Boolean(this.props.context.siteSettings?.canIUse('metadata'))) {
-      return this.user.missing_metadata_keys_ids?.length > 0;
+      return this.user.missing_metadata_key_ids?.length > 0;
     }
     return false;
   }

@@ -90,8 +90,8 @@ class ConfirmShareMissingMetadataKeys extends React.Component {
    * @returns {number} The number of metadata keys that can be shared.
    */
   get numberOfKeysCanBeShared() {
-    const loggedInUserMissingMetadataKeys = this.props.context.loggedInUser.missing_metadata_keys_ids;
-    const userMissingMetadataKeys = this.props.user.missing_metadata_keys_ids;
+    const loggedInUserMissingMetadataKeys = this.props.context.loggedInUser.missing_metadata_key_ids;
+    const userMissingMetadataKeys = this.props.user.missing_metadata_key_ids;
 
     if (loggedInUserMissingMetadataKeys.length === 0) {
       return userMissingMetadataKeys.length;
@@ -114,8 +114,8 @@ class ConfirmShareMissingMetadataKeys extends React.Component {
    */
   render() {
     const isDisabled = this.hasAllButtonsDisabled();
-    const loggedInUserMissingMetadataKeys = this.props.context.loggedInUser.missing_metadata_keys_ids;
-    const userMissingMetadataKeys = this.props.user.missing_metadata_keys_ids;
+    const loggedInUserMissingMetadataKeys = this.props.context.loggedInUser.missing_metadata_key_ids;
+    const userMissingMetadataKeys = this.props.user.missing_metadata_key_ids;
 
     return (
       <DialogWrapper className='delete-sso-settings-dialog' title={this.props.t("Share missing metadata keys?")} onClose={this.props.onClose} disabled={isDisabled}>

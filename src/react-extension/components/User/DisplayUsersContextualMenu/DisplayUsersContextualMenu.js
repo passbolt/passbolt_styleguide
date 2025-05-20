@@ -287,7 +287,7 @@ class DisplayUsersContextualMenu extends React.Component {
    * @returns {boolean}
    */
   hasMissingMetadataKeysRequest() {
-    return this.user && this.user.missing_metadata_keys_ids?.length > 0;
+    return this.user && this.user.missing_metadata_key_ids?.length > 0;
   }
 
   /**

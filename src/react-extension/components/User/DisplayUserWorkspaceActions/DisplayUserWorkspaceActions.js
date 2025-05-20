@@ -254,7 +254,7 @@ class DisplayUserWorkspaceActions extends React.Component {
   get canIShareMissingMetadataKeys() {
     return this.hasOneUserSelected()
       && this.props.context.siteSettings.canIUse("metadata")
-      && this.selectedUser.missing_metadata_keys_ids?.length > 0;
+      && this.selectedUser.missing_metadata_key_ids?.length > 0;
   }
 
   /**

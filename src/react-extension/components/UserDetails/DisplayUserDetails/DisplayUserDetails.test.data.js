@@ -1434,7 +1434,7 @@ export function defaultProps() {
 
 export function withMissingMetadataKeysProps(props = {}) {
   const propsWitMissingMetadataKeys = defaultProps();
-  propsWitMissingMetadataKeys.userWorkspaceContext.details.user.missing_metadata_keys_ids = [uuidv4()];
+  propsWitMissingMetadataKeys.userWorkspaceContext.details.user.missing_metadata_key_ids = [uuidv4()];
 
   return Object.assign(propsWitMissingMetadataKeys, props);
 }
