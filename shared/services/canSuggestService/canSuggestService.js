@@ -14,6 +14,7 @@
 
 import XRegExp from "xregexp";
 import ipRegex from "ip-regex";
+import assertString from "validator/es/lib/util/assertString";
 
 // Hostname allowed characters regex
 const regexHostnameAllowedChars = XRegExp('^[\\p{L}\\p{N}.-]*$');
@@ -22,6 +23,17 @@ const regexHostnameAllowedChars = XRegExp('^[\\p{L}\\p{N}.-]*$');
  * The can suggest service
  */
 class CanSuggestService {
+  /**
+   * Check if an uri can be suggested for an array of uris.
+   * @param {string} uri
+   * @param {Array<string>} suggestedUris
+   * @returns {boolean}
+   */
+  canSuggestUris(uri, suggestedUris) {
+    assertString(uri);
+    return suggestedUris?.some(suggestedUri => this.canSuggestUri(uri, suggestedUri)) || false;
+  }
+
   /**
    * Check if an uri can be suggested for a given one.
    * The uris can be suggested if:
@@ -37,6 +49,8 @@ class CanSuggestService {
    * @returns {boolean}
    */
   canSuggestUri(uri, suggestedUri) {
+    assertString(uri);
+    assertString(suggestedUri);
     let uriObject;
 
     try {
