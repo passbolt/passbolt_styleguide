@@ -48,7 +48,7 @@
     "jest-junit": "^16.0.0",
     "jest-useragent-mock": "^0.1.1",
     "jest-webextension-mock": "^3.8.9",
-    "lockfile-lint": "^4.14.0",
+    "lockfile-lint": "^4.14.1",
     "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4"
   },
@@ -80,6 +80,11 @@
   "overrides": {
     "fetch-mock": {
       "path-to-regexp": "3.3.0"
+    },
+    "i18next-parser": {
+      "cheerio": {
+        "undici": "6.21.2"
+      }
     }
   },
   "scripts": {
