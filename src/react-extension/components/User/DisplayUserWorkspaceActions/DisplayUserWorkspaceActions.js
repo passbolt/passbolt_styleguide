@@ -197,8 +197,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     const shareMissingMetadataKeysDialogProps = {
       user: this.selectedUser,
     };
-    this.props.context.setContext({shareMissingMetadataKeysDialogProps});
-    this.props.dialogContext.open(ConfirmShareMissingMetadataKeys);
+    this.props.dialogContext.open(ConfirmShareMissingMetadataKeys, shareMissingMetadataKeysDialogProps);
   }
 
   /**

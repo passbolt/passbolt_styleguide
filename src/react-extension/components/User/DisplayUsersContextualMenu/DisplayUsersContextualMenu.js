@@ -209,10 +209,10 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   handleShareMissingMetadataKeysEvent() {
     const shareMissingMetadataKeysDialogProps = {
-      user: this.selectedUser,
+      user: this.user,
     };
-    this.props.context.setContext({shareMissingMetadataKeysDialogProps});
-    this.props.dialogContext.open(ConfirmShareMissingMetadataKeys);
+
+    this.props.dialogContext.open(ConfirmShareMissingMetadataKeys, shareMissingMetadataKeysDialogProps);
     this.props.hide();
   }
 
