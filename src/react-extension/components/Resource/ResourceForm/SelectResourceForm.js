@@ -390,21 +390,21 @@ class SelectResourceForm extends Component {
                       </button>
                     </div>
                   }
+                  {this.isResourceTypeV5 &&
+                    <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.URIS === this.selectedForm ? "selected" : ""}`}>
+                      <button type="button" id="menu-uris" className="no-border" disabled={this.props.disabled}
+                        onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.URIS)}>
+                        <LinkSVG/>
+                        <span className="ellipsis"><Trans>URIs</Trans></span>
+                      </button>
+                    </div>
+                  }
                   {this.isResourceTypeHasDescriptionMetadata &&
                   <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.DESCRIPTION === this.selectedForm ? "selected" : ""}`}>
                     <button type="button" id="menu-description" className="no-border" disabled={this.props.disabled}
                       onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.DESCRIPTION)}>
                       <AlignLeftSVG/>
                       <span className="ellipsis"><Trans>Description</Trans></span>
-                    </button>
-                  </div>
-                  }
-                  {this.isResourceTypeV5 &&
-                  <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.URIS === this.selectedForm ? "selected" : ""}`}>
-                    <button type="button" id="menu-uris" className="no-border" disabled={this.props.disabled}
-                      onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.URIS)}>
-                      <LinkSVG/>
-                      <span className="ellipsis"><Trans>URIs</Trans></span>
                     </button>
                   </div>
                   }
