@@ -132,7 +132,7 @@ describe("See the Create Resource", () => {
         expect(page.exists()).toBeTruthy();
         expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
         // select description form
-        await page.click(page.getSectionItem(3));
+        await page.click(page.getSectionItem(4));
         // expectations
         expect(page.sectionItemSelected.textContent).toStrictEqual("URIs");
         expect(page.mainUri).toBeDefined();
@@ -236,7 +236,7 @@ describe("See the Create Resource", () => {
 
         await page.click(page.deleteSecretPassword);
 
-        await page.click(page.getSectionItem(2));
+        await page.click(page.getSectionItem(3));
 
         // expectations
         expect(page.sectionItemSelected.textContent).toStrictEqual("Description");
@@ -650,7 +650,7 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be redirected to the totp form if there is an error', async() => {
         expect.assertions(3);
 
-        await page.click(page.getSectionItem(2));
+        await page.click(page.getSectionItem(3));
         expect(page.sectionItemSelected.textContent).toBe("Description");
 
         await page.click(page.saveButton);

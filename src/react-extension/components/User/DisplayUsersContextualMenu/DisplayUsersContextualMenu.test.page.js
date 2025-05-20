@@ -162,7 +162,6 @@ export default class DisplayUsersContextualMenuPage {
    * Call to share missing metadata keys with a user
    */
   async shareMissingMetadataKeys() {
-    console.log(this._page.container.querySelectorAll('li button.link'));
     const element = this._page.container.querySelectorAll('li button.link')[8];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);

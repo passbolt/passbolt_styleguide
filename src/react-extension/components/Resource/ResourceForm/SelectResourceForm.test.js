@@ -127,6 +127,15 @@ describe("SelectResourceForm", () => {
 
       expect(page.sectionItemSelected.textContent).toStrictEqual("URIs");
     });
+
+    it('As LU the resource metadata section appearance should be selected.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.APPEARANCE});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.sectionItemSelected.textContent).toStrictEqual("Appearance");
+    });
   });
 
   describe('As LU I can select another resource form.', () => {
@@ -138,7 +147,7 @@ describe("SelectResourceForm", () => {
 
       expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
 
-      await page.click(page.getSectionItem(2));
+      await page.click(page.getSectionItem(3));
 
       expect(props.onSelectForm).toHaveBeenCalledWith(expect.any(Object), ResourceEditCreateFormEnumerationTypes.DESCRIPTION);
     });
@@ -151,7 +160,7 @@ describe("SelectResourceForm", () => {
 
       expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
 
-      await page.click(page.getSectionItem(2));
+      await page.click(page.getSectionItem(3));
 
       expect(props.onSelectForm).toHaveBeenCalledWith(expect.any(Object), ResourceEditCreateFormEnumerationTypes.DESCRIPTION);
     });
@@ -164,9 +173,22 @@ describe("SelectResourceForm", () => {
 
       expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
 
-      await page.click(page.getSectionItem(3));
+      await page.click(page.getSectionItem(4));
 
       expect(props.onSelectForm).toHaveBeenCalledWith(expect.any(Object), ResourceEditCreateFormEnumerationTypes.URIS);
+    });
+
+    it('As LU I can select the resource description sections from a totp lead.', async() => {
+      expect.assertions(2);
+      const props = defaultProps();
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
+
+      await page.click(page.getSectionItem(2));
+
+      expect(props.onSelectForm).toHaveBeenCalledWith(expect.any(Object), ResourceEditCreateFormEnumerationTypes.APPEARANCE);
     });
   });
 
@@ -481,7 +503,7 @@ describe("SelectResourceForm", () => {
 
   describe('As LU I should see the select disabled.', () => {
     it('As LU I can see the select form disabled.', async() => {
-      expect.assertions(8);
+      expect.assertions(9);
 
       const props = defaultProps({disabled: true, resource: defaultResourceFormDto({secret: {password: "", description: "", totp: {}}})});
       page = new SelectResourceFormPage(props);
@@ -494,6 +516,7 @@ describe("SelectResourceForm", () => {
       expect(page.getSectionItem(2).hasAttribute("disabled")).toBeTruthy();
       expect(page.getSectionItem(3).hasAttribute("disabled")).toBeTruthy();
       expect(page.getSectionItem(4).hasAttribute("disabled")).toBeTruthy();
+      expect(page.getSectionItem(5).hasAttribute("disabled")).toBeTruthy();
     });
   });
 });
