@@ -14,7 +14,6 @@
 
 import React from "react";
 import {Link, withRouter} from "react-router-dom";
-import canSuggestUrl from "./canSuggestUrl";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
@@ -39,6 +38,7 @@ import {
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import DisplayResourceUrisBadge
   from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
+import CanSuggestService from "../../../shared/services/canSuggestService/canSuggestService";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
@@ -130,7 +130,7 @@ class HomePage extends React.Component {
 
     for (const i in resources) {
       const resource = resources[i];
-      if (resource.metadata?.uris?.[0] && this.isPasswordResource(resource.resource_type_id) && canSuggestUrl(activeTabUrl, resource.metadata.uris[0])) {
+      if (resource.metadata?.uris?.[0] && this.isPasswordResource(resource.resource_type_id) && CanSuggestService.canSuggestUri(activeTabUrl, resource.metadata.uris[0])) {
         suggestedResources.push(resource);
         if (suggestedResources.length === SUGGESTED_RESOURCES_LIMIT) {
           break;
