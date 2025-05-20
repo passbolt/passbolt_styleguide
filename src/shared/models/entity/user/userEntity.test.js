@@ -66,10 +66,10 @@ describe("UserEntity", () => {
       assertEntityProperty.notRequired(UserEntity, "disabled");
     });
 
-    it("validates missing_metadata_keys_ids property", () => {
-      assertEntityProperty.array(UserEntity, "missing_metadata_keys_ids");
-      assertEntityProperty.assertArrayItemUuid(UserEntity, "missing_metadata_keys_ids");
-      assertEntityProperty.notRequired(UserEntity, "missing_metadata_keys_ids");
+    it("validates missing_metadata_key_ids property", () => {
+      assertEntityProperty.array(UserEntity, "missing_metadata_key_ids");
+      assertEntityProperty.assertArrayItemUuid(UserEntity, "missing_metadata_key_ids");
+      assertEntityProperty.notRequired(UserEntity, "missing_metadata_key_ids");
     });
 
     it("validates created property", () => {
@@ -157,7 +157,7 @@ describe("UserEntity", () => {
   });
 
   describe("::missingMetadataKeysIds", () => {
-    it("should return an empty array if missing_metadata_keys_ids is not defined", () => {
+    it("should return an empty array if missing_metadata_key_ids is not defined", () => {
       expect.assertions(1);
 
       const dto = defaultUserDto({}, {
@@ -168,13 +168,13 @@ describe("UserEntity", () => {
 
       expect(entity.missingMetadataKeysIds).toEqual([]);
     });
-    it("should return an array of missing_metadata_keys_ids", () => {
+    it("should return an array of missing_metadata_key_ids", () => {
       expect.assertions(1);
       const uuid1 = uuid();
       const uuid2 = uuid();
 
       const dto = defaultUserDto({
-        missing_metadata_keys_ids: [
+        missing_metadata_key_ids: [
           uuid1,
           uuid2
         ]
@@ -191,13 +191,13 @@ describe("UserEntity", () => {
     });
 
 
-    it("should set the missing_metadata_keys_ids", () => {
+    it("should set the missing_metadata_key_ids", () => {
       expect.assertions(1);
       const uuid1 = uuid();
       const uuid2 = uuid();
 
       const dto = defaultUserDto({
-        missing_metadata_keys_ids: []
+        missing_metadata_key_ids: []
       }, {
         withRole: true,
         withGpgkey: true,
