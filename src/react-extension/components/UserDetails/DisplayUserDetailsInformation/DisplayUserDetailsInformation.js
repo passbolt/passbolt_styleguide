@@ -123,6 +123,16 @@ class DisplayUserDetailsInformation extends React.Component {
   }
 
   /**
+   * Returns true if the metadate feature is enabled and if the logged in user is an admin.
+   * @returns {boolean}
+   */
+  hasMetadataDataSection() {
+    return this.props.context.siteSettings.canIUse("metadata")
+        && this.isLoggedInUserAdmin()
+        && this.user.active;
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -167,6 +177,9 @@ class DisplayUserDetailsInformation extends React.Component {
             {this.hasDisableUserSection() &&
                 <span className="suspended label"><Trans>Suspended</Trans></span>
             }
+            {this.hasMetadataDataSection() &&
+              <span className="metadata-keys label"><Trans>Metadata keys</Trans></span>
+            }
           </div>
           <div className="information-value">
             <span className="role value capitalize">{role}</span>
@@ -194,6 +207,12 @@ class DisplayUserDetailsInformation extends React.Component {
                     [true]: <Trans>Yes</Trans>,
                   }[isUserSuspended(this.user)]}
                 </span>
+            }
+            {this.hasMetadataDataSection() &&
+                <span className="metadata-keys value">{{
+                  [true]: <Trans>Missing</Trans>,
+                  [false]: <Trans>All</Trans>,
+                }[this.user?.missing_metadata_key_ids?.length > 0]}</span>
             }
           </div>
         </div>
