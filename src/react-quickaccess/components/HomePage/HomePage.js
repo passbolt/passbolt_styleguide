@@ -130,7 +130,7 @@ class HomePage extends React.Component {
 
     for (const i in resources) {
       const resource = resources[i];
-      if (resource.metadata?.uris?.[0] && this.isPasswordResource(resource.resource_type_id) && CanSuggestService.canSuggestUri(activeTabUrl, resource.metadata.uris[0])) {
+      if (this.isPasswordResource(resource.resource_type_id) && CanSuggestService.canSuggestUris(activeTabUrl, resource.metadata.uris)) {
         suggestedResources.push(resource);
         if (suggestedResources.length === SUGGESTED_RESOURCES_LIMIT) {
           break;
