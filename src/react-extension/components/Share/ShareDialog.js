@@ -502,12 +502,13 @@ class ShareDialog extends Component {
   render() {
     return (
       <DialogWrapper
+        className="share-dialog"
         title={this.getTitle()}
         subtitle={this.getSubtitle()}
         tooltip={this.getTooltip()}
         onClose={this.handleClose}
         disabled={this.hasAllInputDisabled()}>
-        <form className="share-form" onSubmit={this.handleFormSubmit} noValidate>
+        <form className="share-form grid-and-footer" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className="scroll permission-edit">
               {(this.state.loading) &&
@@ -556,7 +557,7 @@ class ShareDialog extends Component {
               </div>
             }
           </div>
-          <div className="submit-wrapper clearfix">
+          <div className="submit-wrapper">
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
             <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
           </div>
