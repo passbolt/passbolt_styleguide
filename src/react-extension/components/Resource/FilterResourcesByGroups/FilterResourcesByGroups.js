@@ -144,14 +144,14 @@ class FilterResourcesByGroups extends React.Component {
                     <h3 className="section-title">
                       <span className="folders-label">
                         <button type="button" className="link no-border">
-                          <UsersSVG />
-                          <span><Trans>Groups</Trans></span>
                           <div className="toggle-folder">
                             {this.state.open
                               ? <CarretDownSVG />
                               : <CarretRightSVG />
                             }
                           </div>
+                          <UsersSVG />
+                          <span><Trans>Groups</Trans></span>
                         </button>
                       </span>
                     </h3>

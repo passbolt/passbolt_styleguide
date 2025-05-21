@@ -203,14 +203,14 @@ class FilterResourcesByTags extends React.Component {
                   <h3 className="section-title">
                     <span className="folders-label" onClick={this.handleTitleClickEvent} onContextMenu={this.handleTitleContextualMenuEvent}>
                       <button type="button" className="link no-border">
-                        <TagV2SVG />
-                        <span>{this.state.title}</span>
                         <div className="toggle-folder">
                           {this.state.open
                             ? <CarretDownSVG />
                             : <CarretRightSVG />
                           }
                         </div>
+                        <TagV2SVG />
+                        <span>{this.state.title}</span>
                       </button>
                     </span>
                   </h3>
