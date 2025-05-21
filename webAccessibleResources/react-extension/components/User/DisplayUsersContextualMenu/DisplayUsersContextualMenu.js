@@ -209,10 +209,10 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   handleShareMissingMetadataKeysEvent() {
     const shareMissingMetadataKeysDialogProps = {
-      user: this.selectedUser,
+      user: this.user,
     };
-    this.props.context.setContext({shareMissingMetadataKeysDialogProps});
-    this.props.dialogContext.open(ConfirmShareMissingMetadataKeys);
+
+    this.props.dialogContext.open(ConfirmShareMissingMetadataKeys, shareMissingMetadataKeysDialogProps);
     this.props.hide();
   }
 
@@ -287,7 +287,7 @@ class DisplayUsersContextualMenu extends React.Component {
    * @returns {boolean}
    */
   hasMissingMetadataKeysRequest() {
-    return this.user && this.user.missing_metadata_keys_ids?.length > 0;
+    return this.user && this.user.missing_metadata_key_ids?.length > 0;
   }
 
   /**

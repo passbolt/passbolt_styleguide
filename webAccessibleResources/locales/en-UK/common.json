@@ -1506,6 +1506,8 @@
   "UI Permissions": "UI Permissions",
   "Uid": "Uid",
   "Unable to copy the TOTP": "Unable to copy the TOTP",
+  "Unable to load/refresh the folders.": "Unable to load/refresh the folders.",
+  "Unable to load/refresh the resources.": "Unable to load/refresh the resources.",
   "Unable to mark the resource as expired._one": "Unable to mark the resource as expired.",
   "Unable to mark the resource as expired._other": "Unable to mark the resources as expired.",
   "Unable to preview the TOTP": "Unable to preview the TOTP",

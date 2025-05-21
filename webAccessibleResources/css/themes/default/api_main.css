@@ -3249,13 +3249,15 @@ html {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  position: absolute;
+  height: 100%;
+  width: 100%;
 }
 .page .app {
   display: flex;
   align-items: flex-start;
   align-self: stretch;
-  height: 100vh;
-  width: 100vw;
+  flex: 1;
 }
 .page .app .panel.main {
   display: flex;
@@ -5103,6 +5105,17 @@ iframe {
   font-size: 100%;
   vertical-align: baseline;
   background: 0 0;
+}
+iframe#passbolt-iframe-login,
+iframe#passbolt-iframe-setup,
+iframe#passbolt-iframe-recover,
+iframe#passbolt-iframe-account-recovery {
+  min-height: 76.8rem;
+  min-width: 42rem;
+}
+iframe#passbolt-iframe-app {
+  min-height: 76.8rem;
+  min-width: 128rem;
 }
 iframe.full-screen {
   position: absolute;

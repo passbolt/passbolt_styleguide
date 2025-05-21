@@ -7,6 +7,17 @@ iframe {
   vertical-align: baseline;
   background: 0 0;
 }
+iframe#passbolt-iframe-login,
+iframe#passbolt-iframe-setup,
+iframe#passbolt-iframe-recover,
+iframe#passbolt-iframe-account-recovery {
+  min-height: 76.8rem;
+  min-width: 42rem;
+}
+iframe#passbolt-iframe-app {
+  min-height: 76.8rem;
+  min-width: 128rem;
+}
 iframe.full-screen {
   position: absolute;
   width: 100%;

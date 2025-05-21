@@ -147,7 +147,7 @@ describe("SelectResourceForm", () => {
 
       expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
 
-      await page.click(page.getSectionItem(3));
+      await page.click(page.menuDescription);
 
       expect(props.onSelectForm).toHaveBeenCalledWith(expect.any(Object), ResourceEditCreateFormEnumerationTypes.DESCRIPTION);
     });
@@ -160,7 +160,7 @@ describe("SelectResourceForm", () => {
 
       expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
 
-      await page.click(page.getSectionItem(3));
+      await page.click(page.menuDescription);
 
       expect(props.onSelectForm).toHaveBeenCalledWith(expect.any(Object), ResourceEditCreateFormEnumerationTypes.DESCRIPTION);
     });
@@ -173,7 +173,7 @@ describe("SelectResourceForm", () => {
 
       expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
 
-      await page.click(page.getSectionItem(4));
+      await page.click(page.menuUris);
 
       expect(props.onSelectForm).toHaveBeenCalledWith(expect.any(Object), ResourceEditCreateFormEnumerationTypes.URIS);
     });

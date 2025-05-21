@@ -276,7 +276,7 @@ describe("See the Create Resource", () => {
 
         await page.click(page.deleteSecretPassword);
 
-        await page.click(page.getSectionItem(3));
+        await page.click(page.menuDescription);
 
         // expectations
         expect(page.sectionItemSelected.textContent).toStrictEqual("Description");
@@ -708,7 +708,7 @@ describe("See the Create Resource", () => {
         expect.assertions(3);
 
         await page.fillInput(page.resourceTotpKey, "");
-        await page.click(page.getSectionItem(3));
+        await page.click(page.menuDescription);
         expect(page.sectionItemSelected.textContent).toBe("Description");
 
         await page.click(page.saveButton);

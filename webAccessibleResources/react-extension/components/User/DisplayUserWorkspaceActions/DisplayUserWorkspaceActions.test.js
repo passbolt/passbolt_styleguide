@@ -268,7 +268,7 @@ describe("Display User Workspace Actions", () => {
     await waitFor(() => {});
     await page.shareMetadataKeys();
 
-    expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmShareMissingMetadataKeys);
+    expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmShareMissingMetadataKeys, {"user": props.userWorkspaceContext.selectedUsers[0]});
   });
 
   it('As LU I should not be able to share missing metadata key with user role', async() => {

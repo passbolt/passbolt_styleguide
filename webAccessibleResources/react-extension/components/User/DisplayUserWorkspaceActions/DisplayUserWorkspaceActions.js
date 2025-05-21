@@ -197,8 +197,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     const shareMissingMetadataKeysDialogProps = {
       user: this.selectedUser,
     };
-    this.props.context.setContext({shareMissingMetadataKeysDialogProps});
-    this.props.dialogContext.open(ConfirmShareMissingMetadataKeys);
+    this.props.dialogContext.open(ConfirmShareMissingMetadataKeys, shareMissingMetadataKeysDialogProps);
   }
 
   /**
@@ -254,7 +253,7 @@ class DisplayUserWorkspaceActions extends React.Component {
   get canIShareMissingMetadataKeys() {
     return this.hasOneUserSelected()
       && this.props.context.siteSettings.canIUse("metadata")
-      && this.selectedUser.missing_metadata_keys_ids?.length > 0;
+      && this.selectedUser.missing_metadata_key_ids?.length > 0;
   }
 
   /**

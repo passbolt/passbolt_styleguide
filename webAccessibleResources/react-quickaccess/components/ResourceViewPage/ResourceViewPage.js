@@ -650,7 +650,7 @@ class ResourceViewPage extends React.Component {
               <span className="visually-hidden"><Trans>Open in new window</Trans></span>
             </a>
           </li>
-          {additionalUris?.length > 1 &&
+          {additionalUris?.length > 0 &&
             <li className="property">
               <div className="information">
                 <div className="accordion">

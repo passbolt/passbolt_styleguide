@@ -38,7 +38,7 @@ export function defaultProps(props = {}) {
           id: TEST_ROLE_ADMIN_ID,
           name: 'admin'
         },
-        missing_metadata_keys_ids: missingAdminMetadataKeys,
+        missing_metadata_key_ids: missingAdminMetadataKeys,
       }
     }),
     onClose: jest.fn(),
@@ -51,7 +51,7 @@ export function defaultProps(props = {}) {
         first_name: "Ada",
         last_name: "Lovelace"
       }),
-      missing_metadata_keys_ids: missingMetadataKeys,
+      missing_metadata_key_ids: missingMetadataKeys,
     }),
     dialogContext: {
       open: () => {}

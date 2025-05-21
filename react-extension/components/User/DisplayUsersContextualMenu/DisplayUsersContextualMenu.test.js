@@ -254,7 +254,7 @@ describe("Display Users Contextual Menu", () => {
 
     await page.shareMissingMetadataKeys();
 
-    expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmShareMissingMetadataKeys);
+    expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmShareMissingMetadataKeys, {"user": {"missing_metadata_key_ids": ["54c6278e-f824-5fda-91ff-3e946b18d997"]}});
     expect(props.hide).toHaveBeenCalled();
   });
 
