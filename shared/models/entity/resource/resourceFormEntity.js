@@ -44,6 +44,7 @@ class ResourceFormEntity extends EntityV2 {
   constructor(dtos = {}, options = {}) {
     super(dtos, options);
   }
+
   /**
    *  @inheritDoc
    * @returns {{metadata: ResourceMetadataEntity, secret: SecretDataEntity}}
@@ -386,7 +387,7 @@ class ResourceFormEntity extends EntityV2 {
     const result = Object.assign({}, this._props);
 
     if (this._metadata) {
-      result.metadata = this.metadata.toDto();
+      result.metadata = this.metadata.toDto(ResourceMetadataEntity.DEFAULT_CONTAIN);
     }
     if (this._secret) {
       result.secret = this.secret.toDto();
@@ -403,7 +404,7 @@ class ResourceFormEntity extends EntityV2 {
     const result = Object.assign({}, this._props);
 
     if (this._metadata) {
-      result.metadata = this.metadata.toDto();
+      result.metadata = this.metadata.toDto(ResourceMetadataEntity.DEFAULT_CONTAIN);
     }
 
     return result;
@@ -446,7 +447,7 @@ class ResourceFormEntity extends EntityV2 {
     // Verify metadata
     if (this.metadata) {
       validationError = this.validateMaxLengthAgainstSchema(
-        this.metadata.toDto(),
+        this.metadata.toDto(ResourceMetadataEntity.DEFAULT_CONTAIN),
         this.metadata,
         validationError
       );

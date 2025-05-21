@@ -28,6 +28,8 @@
   --Palette-Select-highlight-2: hsl(213, 67%, 12%);
   --Text-and-icons-Main-text: var(--Palette-Gradient-9);
   --Text-and-icons-Secondary-text: var(--Palette-Gradient-8);
+  --Text-and-icons-clear-color: #FFFFFF;
+  --Text-and-icons-dark-color: #000000;
   --Primary-button-Primary-button-text: var(--Palette-Gradient-9);
   --Action-button-Action-button-background: var(--Palette-Gradient-4);
   --Action-button-Action-button-background-2: var(--Palette-Gradient-5);
@@ -6517,11 +6519,31 @@ iframe.cachette {
 .sidebar.user .sidebar-header {
   border-bottom: 0.1rem solid var(--Workspace-Dividers);
 }
-.sidebar.group .sidebar-header .teaser-image svg:not(.attention-required),
-.sidebar.user .sidebar-header .teaser-image svg:not(.attention-required) {
+.sidebar.group .sidebar-header .teaser-image,
+.sidebar.user .sidebar-header .teaser-image {
   width: 5.6rem;
   height: 5.6rem;
+}
+.sidebar.group .sidebar-header .teaser-image svg,
+.sidebar.user .sidebar-header .teaser-image svg {
+  width: 100%;
+  height: 100%;
+}
+.sidebar.group .sidebar-header .teaser-image svg:not(.attention-required),
+.sidebar.user .sidebar-header .teaser-image svg:not(.attention-required) {
   margin-top: 0;
+}
+.sidebar.group .sidebar-header .teaser-image.clear-stroke svg,
+.sidebar.user .sidebar-header .teaser-image.clear-stroke svg {
+  --icon-color: var(--Text-and-icons-clear-color);
+}
+.sidebar.group .sidebar-header .teaser-image.dark-stroke svg,
+.sidebar.user .sidebar-header .teaser-image.dark-stroke svg {
+  --icon-color: var(--Text-and-icons-dark-color);
+}
+.sidebar.group .sidebar-header .teaser-image.transparent svg,
+.sidebar.user .sidebar-header .teaser-image.transparent svg {
+  --icon-color: var(--Text-and-icons-Main-text);
 }
 .sidebar.empty {
   display: flex;
@@ -6604,12 +6626,23 @@ iframe.cachette {
   width: 5.6rem;
   height: 5.6rem;
 }
+.sidebar .sidebar-header .teaser-image svg {
+  width: 100%;
+  height: 100%;
+}
 .sidebar .sidebar-header .teaser-image svg:not(.attention-required) {
-  width: 3.3rem;
-  height: 3.3rem;
   margin-top: 0.15rem;
   --icon-color: var(--Resource-icon-Resource-icon-color);
   --icon-background-color: none;
+}
+.sidebar .sidebar-header .teaser-image.clear-stroke svg {
+  --icon-color: var(--Text-and-icons-clear-color);
+}
+.sidebar .sidebar-header .teaser-image.dark-stroke svg {
+  --icon-color: var(--Text-and-icons-dark-color);
+}
+.sidebar .sidebar-header .teaser-image.transparent svg {
+  --icon-color: var(--Text-and-icons-Main-text);
 }
 .sidebar .sidebar-header.suspended .teaser-image,
 .sidebar .sidebar-header.inactive .teaser-image,
@@ -7179,8 +7212,20 @@ iframe.cachette {
   margin-right: 0.2rem;
 }
 .tableview table td.cell-name .teaser-image svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 1;
   --icon-stroke-width: 0.1rem;
   --icon-color: var(--Resource-icon-Resource-icon-color);
+}
+.tableview table td.cell-name .teaser-image.clear-stroke svg {
+  --icon-color: var(--Text-and-icons-clear-color);
+}
+.tableview table td.cell-name .teaser-image.dark-stroke svg {
+  --icon-color: var(--Text-and-icons-dark-color);
+}
+.tableview table td.cell-name .teaser-image.transparent svg {
+  --icon-color: var(--Text-and-icons-Main-text);
 }
 .tableview table td.cell-password .secret,
 .tableview table td.cell-totp .secret {
@@ -8612,8 +8657,8 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 .edit-resource .dialog-content .grid-and-footer .grid .resource-info.skeleton {
   height: 9.2rem;
 }
-.create-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon,
-.edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon {
+.create-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image,
+.edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8624,10 +8669,22 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
   width: 5.6rem;
   height: 5.6rem;
 }
-.create-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon svg,
-.edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon svg {
-  width: 3.3rem;
-  height: 3.3rem;
+.create-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image.clear-stroke svg,
+.edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image.clear-stroke svg {
+  --icon-color: var(--Text-and-icons-clear-color);
+}
+.create-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image.dark-stroke svg,
+.edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image.dark-stroke svg {
+  --icon-color: var(--Text-and-icons-dark-color);
+}
+.create-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image.transparent svg,
+.edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image.transparent svg {
+  --icon-color: var(--Text-and-icons-Main-text);
+}
+.create-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image svg,
+.edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image svg {
+  width: 100%;
+  height: 100%;
   margin-top: 0.25rem;
   --icon-color: var(--Resource-icon-Resource-icon-color);
   --icon-background-color: none;
@@ -9114,6 +9171,160 @@ svg .edit-resource .dialog-content .left-sidebar .section-card .card .title:firs
 .edit-resource .edit-workspace .message .text {
   flex: 1 0 0;
   align-self: stretch;
+}
+.create-resource .create-workspace .appearance-workspace,
+.edit-resource .create-workspace .appearance-workspace,
+.create-resource .edit-workspace .appearance-workspace,
+.edit-resource .edit-workspace .appearance-workspace {
+  display: flex;
+  flex: 1 0 0;
+}
+.create-resource .create-workspace .appearance-workspace .content > *,
+.edit-resource .create-workspace .appearance-workspace .content > *,
+.create-resource .edit-workspace .appearance-workspace .content > *,
+.edit-resource .edit-workspace .appearance-workspace .content > * {
+  padding: 0 1.6rem 0.8rem;
+}
+.create-resource .create-workspace .appearance-workspace .appearance-form,
+.edit-resource .create-workspace .appearance-workspace .appearance-form,
+.create-resource .edit-workspace .appearance-workspace .appearance-form,
+.edit-resource .edit-workspace .appearance-workspace .appearance-form {
+  display: flex;
+  flex-direction: column;
+}
+.create-resource .create-workspace .appearance-workspace h3,
+.edit-resource .create-workspace .appearance-workspace h3,
+.create-resource .edit-workspace .appearance-workspace h3,
+.edit-resource .edit-workspace .appearance-workspace h3 {
+  font-size: 1.8rem;
+}
+.create-resource .create-workspace .appearance-workspace .color-section,
+.edit-resource .create-workspace .appearance-workspace .color-section,
+.create-resource .edit-workspace .appearance-workspace .color-section,
+.edit-resource .edit-workspace .appearance-workspace .color-section,
+.create-resource .create-workspace .appearance-workspace .icons-section,
+.edit-resource .create-workspace .appearance-workspace .icons-section,
+.create-resource .edit-workspace .appearance-workspace .icons-section,
+.edit-resource .edit-workspace .appearance-workspace .icons-section {
+  display: flex;
+  gap: 1.6rem;
+  flex-direction: column;
+}
+.create-resource .create-workspace .appearance-workspace .color-section > *,
+.edit-resource .create-workspace .appearance-workspace .color-section > *,
+.create-resource .edit-workspace .appearance-workspace .color-section > *,
+.edit-resource .edit-workspace .appearance-workspace .color-section > *,
+.create-resource .create-workspace .appearance-workspace .icons-section > *,
+.edit-resource .create-workspace .appearance-workspace .icons-section > *,
+.create-resource .edit-workspace .appearance-workspace .icons-section > *,
+.edit-resource .edit-workspace .appearance-workspace .icons-section > * {
+  margin: 0;
+  padding: 0;
+}
+.create-resource .create-workspace .appearance-workspace label,
+.edit-resource .create-workspace .appearance-workspace label,
+.create-resource .edit-workspace .appearance-workspace label,
+.edit-resource .edit-workspace .appearance-workspace label {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-weight: normal;
+}
+.create-resource .create-workspace .appearance-workspace .color-picker,
+.edit-resource .create-workspace .appearance-workspace .color-picker,
+.create-resource .edit-workspace .appearance-workspace .color-picker,
+.edit-resource .edit-workspace .appearance-workspace .color-picker {
+  display: flex;
+  gap: 1.6rem;
+  flex-direction: row;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin: 0.8rem 0;
+}
+.create-resource .create-workspace .appearance-workspace .color-picker .color-picker-item,
+.edit-resource .create-workspace .appearance-workspace .color-picker .color-picker-item,
+.create-resource .edit-workspace .appearance-workspace .color-picker .color-picker-item,
+.edit-resource .edit-workspace .appearance-workspace .color-picker .color-picker-item {
+  position: relative;
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 100%;
+}
+.create-resource .create-workspace .appearance-workspace .color-picker .color-picker-item:not([disabled]),
+.edit-resource .create-workspace .appearance-workspace .color-picker .color-picker-item:not([disabled]),
+.create-resource .edit-workspace .appearance-workspace .color-picker .color-picker-item:not([disabled]),
+.edit-resource .edit-workspace .appearance-workspace .color-picker .color-picker-item:not([disabled]) {
+  cursor: pointer;
+}
+.create-resource .create-workspace .appearance-workspace .color-picker .color-picker-item.transparent,
+.edit-resource .create-workspace .appearance-workspace .color-picker .color-picker-item.transparent,
+.create-resource .edit-workspace .appearance-workspace .color-picker .color-picker-item.transparent,
+.edit-resource .edit-workspace .appearance-workspace .color-picker .color-picker-item.transparent {
+  background-color: var(--Palette-Gradient-2);
+}
+.create-resource .create-workspace .appearance-workspace .color-picker .color-picker-item.transparent svg,
+.edit-resource .create-workspace .appearance-workspace .color-picker .color-picker-item.transparent svg,
+.create-resource .edit-workspace .appearance-workspace .color-picker .color-picker-item.transparent svg,
+.edit-resource .edit-workspace .appearance-workspace .color-picker .color-picker-item.transparent svg {
+  --icon-color: var(--Resource-icon-Resource-icon-color);
+}
+.create-resource .create-workspace .appearance-workspace .color-picker .color-picker-item svg.checked,
+.edit-resource .create-workspace .appearance-workspace .color-picker .color-picker-item svg.checked,
+.create-resource .edit-workspace .appearance-workspace .color-picker .color-picker-item svg.checked,
+.edit-resource .edit-workspace .appearance-workspace .color-picker .color-picker-item svg.checked {
+  width: 3.6rem;
+  height: 3.6rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.create-resource .create-workspace .appearance-workspace .icons-section,
+.edit-resource .create-workspace .appearance-workspace .icons-section,
+.create-resource .edit-workspace .appearance-workspace .icons-section,
+.edit-resource .edit-workspace .appearance-workspace .icons-section {
+  border-top: 1px solid var(--Workspace-Dividers);
+}
+.create-resource .create-workspace .appearance-workspace .icons-section h3,
+.edit-resource .create-workspace .appearance-workspace .icons-section h3,
+.create-resource .edit-workspace .appearance-workspace .icons-section h3,
+.edit-resource .edit-workspace .appearance-workspace .icons-section h3 {
+  margin: 1.2rem 0 0.4rem;
+}
+.create-resource .create-workspace .appearance-workspace .icon-picker,
+.edit-resource .create-workspace .appearance-workspace .icon-picker,
+.create-resource .edit-workspace .appearance-workspace .icon-picker,
+.edit-resource .edit-workspace .appearance-workspace .icon-picker {
+  display: flex;
+  gap: 0.7rem;
+  flex-direction: row;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin: 0.8rem 0;
+}
+.create-resource .create-workspace .appearance-workspace .icon-picker .icon-picker-item,
+.edit-resource .create-workspace .appearance-workspace .icon-picker .icon-picker-item,
+.create-resource .edit-workspace .appearance-workspace .icon-picker .icon-picker-item,
+.edit-resource .edit-workspace .appearance-workspace .icon-picker .icon-picker-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 100%;
+  background-color: var(--Palette-Gradient-6);
+}
+.create-resource .create-workspace .appearance-workspace .icon-picker .icon-picker-item svg,
+.edit-resource .create-workspace .appearance-workspace .icon-picker .icon-picker-item svg,
+.create-resource .edit-workspace .appearance-workspace .icon-picker .icon-picker-item svg,
+.edit-resource .edit-workspace .appearance-workspace .icon-picker .icon-picker-item svg {
+  --icon-color: var(--Resource-icon-Resource-icon-color);
+}
+.create-resource .create-workspace .appearance-workspace .icon-picker .icon-picker-item.selected,
+.edit-resource .create-workspace .appearance-workspace .icon-picker .icon-picker-item.selected,
+.create-resource .edit-workspace .appearance-workspace .icon-picker .icon-picker-item.selected,
+.edit-resource .edit-workspace .appearance-workspace .icon-picker .icon-picker-item.selected {
+  background-color: var(--Palette-Contrast-1);
 }
 /* Resource creation menu dialog */
 .create-resource-menu {
