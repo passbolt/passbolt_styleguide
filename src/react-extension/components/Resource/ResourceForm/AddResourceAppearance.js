@@ -20,9 +20,7 @@ import {
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import {getContrastedColor} from "../../../../shared/utils/color";
 import {KEEPASS_ICON_LIST} from "./keepassIconList.data";
-import {KEEPASS_ICON_SET} from "../../../../shared/models/entity/resource/metadata/IconEntity";
-
-const COLOR_TRANSPARENT = "#00000000";
+import {ICON_TYPE_KEEPASS_ICON_SET, COLOR_TRANSPARENT} from "../../../../shared/models/entity/resource/metadata/IconEntity";
 
 const COLOR_LIST = [
   "#DFDFDF",
@@ -102,7 +100,7 @@ class AddResourceAppearance extends Component {
     this.props.onChange?.({
       target: {
         name: "metadata.icon.type",
-        value: KEEPASS_ICON_SET,
+        value: ICON_TYPE_KEEPASS_ICON_SET,
       },
     });
   }
@@ -138,7 +136,7 @@ class AddResourceAppearance extends Component {
    * @returns {boolean}
    */
   isDefaultIconSelected() {
-    return !this.props.resource?.metadata?.icon?.value;
+    return typeof(this.props.resource?.metadata?.icon?.value) !== "number";
   }
 
   /**

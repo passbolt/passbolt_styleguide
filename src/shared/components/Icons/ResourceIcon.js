@@ -14,26 +14,61 @@
 
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import KeySVG from "../../../img/svg/key.svg";
-import TotpSVG from "../../../img/svg/totp.svg";
-import PasswordWithTotpSVG from "../../../img/svg/password_with_totp.svg";
 import ResourceTypesCollection from "../../models/entity/resourceType/resourceTypesCollection";
 import {withResourceTypesLocalStorage} from "../../context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-
-
-const resourceTypeSlugIconMap = {
-  'password-string': <KeySVG/>,
-  'password-and-description': <KeySVG/>,
-  'v5-default': <KeySVG/>,
-  'v5-password-string': <KeySVG/>,
-  'totp': <TotpSVG/>,
-  'v5-totp-standalone': <TotpSVG/>,
-  'password-description-totp': <PasswordWithTotpSVG/>,
-  'v5-default-with-totp': <PasswordWithTotpSVG/>,
-};
+import {KEEPASS_ICON_LIST} from "../../../react-extension/components/Resource/ResourceForm/keepassIconList.data";
+import {ICON_TYPE_KEEPASS_ICON_SET, COLOR_TRANSPARENT} from "../../models/entity/resource/metadata/IconEntity";
+import {getContrastedColor} from "../../utils/color";
+import {PASSBOLT_DEFAULT_RESOURCE_TYPE_ICON_MAP} from "../../../react-extension/components/Resource/ResourceForm/passboltDefaultResourceTypeIcons.data";
 
 export class ResourceIcon extends Component {
   static resourceTypeIdIconMap = {};
+
+  /**
+   * Returns the icon that needs to be displayed.
+   * The icon is the one selected in the metadata or the default from the resource types if not set.
+   * @returns {JSX}
+   */
+  getResourceIcon() {
+    if (typeof(this.props.resource.metadata?.icon?.value) !== "number" || this.props.resource.metadata?.icon?.type !== ICON_TYPE_KEEPASS_ICON_SET) {
+      return ResourceIcon.getDefaultResourceTypeIcon(this.props.resource.resource_type_id, this.props.resourceTypes);
+    }
+
+    return KEEPASS_ICON_LIST[this.props.resource.metadata.icon.value];
+  }
+
+  /**
+   * Returns the CSS style to set background color that needs to be displayed.
+   * @returns {{backgroundColor: string}|null}
+   */
+  getResourceColor() {
+    const color = this.props.resource.metadata?.icon?.background_color;
+    if (color) {
+      return {backgroundColor: color};
+    }
+    return null;
+  }
+
+  /**
+   * Returns the class to set the right contrasted color on the icon.
+   * If the default color is used, null is returned instead.
+   * @returns {string|null}
+   */
+  getContrastedColorClassName() {
+    const color = this.getResourceColor();
+    if (!color) {
+      return null;
+    }
+
+    if (color.backgroundColor === COLOR_TRANSPARENT) {
+      return "transparent";
+    }
+
+    const contrastedColor = getContrastedColor(color.backgroundColor);
+    return contrastedColor === "#000000"
+      ? "dark-stroke"
+      : "clear-stroke";
+  }
 
   /**
    * Returns a cached icon based on the given resource type id and the resource types.
@@ -41,10 +76,10 @@ export class ResourceIcon extends Component {
    * @param {ResourceTypesCollection} resourceTypes
    * @returns {ReactDOM}
    */
-  static getResourceTypeIcon(resourceTypeId, resourceTypes) {
+  static getDefaultResourceTypeIcon(resourceTypeId, resourceTypes) {
     if (!ResourceIcon.resourceTypeIdIconMap[resourceTypeId]) {
       const resourceTypeSlug = resourceTypes.getFirstById(resourceTypeId).slug;
-      ResourceIcon.resourceTypeIdIconMap[resourceTypeId] = resourceTypeSlugIconMap[resourceTypeSlug];
+      ResourceIcon.resourceTypeIdIconMap[resourceTypeId] = PASSBOLT_DEFAULT_RESOURCE_TYPE_ICON_MAP[resourceTypeSlug];
     }
 
     return ResourceIcon.resourceTypeIdIconMap[resourceTypeId];
@@ -55,8 +90,8 @@ export class ResourceIcon extends Component {
    */
   render() {
     return (
-      <div className="teaser-image">
-        {ResourceIcon.getResourceTypeIcon(this.props.resource.resource_type_id, this.props.resourceTypes)}
+      <div className={`teaser-image ${this.getContrastedColorClassName()}`} style={this.getResourceColor()}>
+        {this.getResourceIcon()}
       </div>
     );
   }

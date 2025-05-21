@@ -14,8 +14,9 @@
 import EntityV2 from "../../abstract/entityV2";
 import EntityValidationError from "../../abstract/entityValidationError";
 
-export const KEEPASS_ICON_SET = "keepass-icon-set";
-export const PASSBOLT_ICON_SET = "passbolt-icon-set";
+export const ICON_TYPE_KEEPASS_ICON_SET = "keepass-icon-set";
+export const ICON_TYPE_PASSBOLT_ICON_SET = "passbolt-icon-set";
+export const COLOR_TRANSPARENT = "#00000000";
 
 export default class IconEntity extends EntityV2 {
   /**
@@ -29,7 +30,7 @@ export default class IconEntity extends EntityV2 {
       "properties": {
         "type": {
           "type": "string",
-          "enum": [KEEPASS_ICON_SET, PASSBOLT_ICON_SET]
+          "enum": [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET]
         },
         "value": {
           "type": "integer",

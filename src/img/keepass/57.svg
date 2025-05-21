@@ -9,8 +9,8 @@
 
   @url https://github.com/lucide-icons/lucide/tree/main/icons
 -->
-<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="10.0977" y="10.2451" width="19.6525" height="19.5053" rx="2" stroke="var(--icon-color)" stroke-width="1.5"/>
-<path d="M10.0127 16.6963L29.6239 16.6963" stroke="var(--icon-color)" stroke-width="1.5"/>
-<path d="M16.7622 10.25L16.7622 29.8613" stroke="var(--icon-color)" stroke-width="1.5"/>
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+<rect x="10.0977" y="10.2451" width="19.6525" height="19.5053" rx="2" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)" />
+<path d="M10.0127 16.6963L29.6239 16.6963" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)" />
+<path d="M16.7622 10.25L16.7622 29.8613" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)" />
 </svg>
