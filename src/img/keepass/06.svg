@@ -1,0 +1,21 @@
+<!--
+ Passbolt ~ Open source password manager for teams
+ Copyright (c) Passbolt SA (https://www.passbolt.com)
+
+ Licensed under GNU Affero General Public License version 3 of the or any later version.
+ For full copyright and license information, please see the LICENSE.txt
+ Redistributions of files must retain the above copyright notice.
+
+ @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ @link          https://www.passbolt.com Passbolt(tm)
+ @since         5.2.0
+-->
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M32.1212 26.1619V20.0054C32.1209 19.7355 32.0496 19.4704 31.9146 19.2368C31.7795 19.0031 31.5853 18.8091 31.3516 18.6741L25.9647 15.5959C25.7307 15.4608 25.4653 15.3896 25.1951 15.3896C24.9249 15.3896 24.6595 15.4608 24.4255 15.5959L19.0386 18.6741C18.8049 18.8091 18.6107 19.0031 18.4756 19.2368C18.3406 19.4704 18.2693 19.7355 18.269 20.0054V26.1619C18.2693 26.4318 18.3406 26.6969 18.4756 26.9306C18.6107 27.1643 18.8049 27.3583 19.0386 27.4933L24.4255 30.5715C24.6595 30.7066 24.9249 30.7777 25.1951 30.7777C25.4653 30.7777 25.7307 30.7066 25.9647 30.5715L31.3516 27.4933C31.5853 27.3583 31.7795 27.1643 31.9146 26.9306C32.0496 26.6969 32.1209 26.4318 32.1212 26.1619Z" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M18.4771 19.2051L25.1953 23.0914L31.9136 19.2051" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M25.1953 30.5511V23.084" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M21.5433 13.0063L15.5745 9.36538C15.3405 9.2303 15.0751 9.15918 14.805 9.15918C14.5348 9.15918 14.2694 9.2303 14.0354 9.36538L8.64847 12.4436C8.41472 12.5786 8.22058 12.7726 8.0855 13.0063C7.95043 13.24 7.87918 13.5051 7.87891 13.775V19.9315C7.87918 20.2014 7.95043 20.4665 8.0855 20.7001C8.22058 20.9338 8.41472 21.1279 8.64847 21.2628L14.7598 24.6137" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8.08691 12.9746L14.8052 16.8609L21.5235 12.9746" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.8052 24.6107V16.8535" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -69,6 +69,39 @@ class ResourceMetadataEntity extends EntityV2 {
   }
 
   /**
+   * @inheritDoc
+   * @returns {{icon: IconEntity}}
+   */
+  static get associations() {
+    return {
+      icon: IconEntity,
+    };
+  }
+
+  /*
+   * ==================================================
+   * Serialization
+   * ==================================================
+   */
+  /**
+   * Return a DTO ready to be sent to API or content code
+   *
+   * @param {object} [contain] optional
+   * @returns {object}
+   */
+  toDto(contain) {
+    const result = Object.assign({}, this._props);
+    if (!contain) {
+      return result;
+    }
+
+    if (this._icon && contain.icon) {
+      result.icon = this._icon.toDto();
+    }
+    return result;
+  }
+
+  /**
    * @inheritdoc
    */
   createAssociations(options = {}) {
@@ -79,7 +112,6 @@ class ResourceMetadataEntity extends EntityV2 {
 
     try {
       this._icon = new IconEntity(this._props.icon, options);
-      delete this._props.icon;
     } catch (e) {
       /*
        * The error is not thrown to avoid breaking the app because of the icon.
@@ -88,6 +120,7 @@ class ResourceMetadataEntity extends EntityV2 {
       console.warn("The associated icon entity could not be set.", e);
     }
 
+    delete this._props.icon;
     super.createAssociations(options);
   }
 
@@ -173,6 +206,14 @@ class ResourceMetadataEntity extends EntityV2 {
    */
   static get URI_MAX_LENGTH() {
     return RESOURCE_URI_MAX_LENGTH;
+  }
+
+  /**
+   * ResourceMetadataEntity.DEFAULT_CONTAIN
+   * @return {object}
+   */
+  static get DEFAULT_CONTAIN() {
+    return {icon: true};
   }
 }
 
