@@ -404,6 +404,8 @@ class ResourceFormEntity extends EntityV2 {
 
     if (this._metadata) {
       result.metadata = this.metadata.toDto();
+      //@todo: remove later when metadata.object_type validation throws error again instead of a console.warn
+      result.metadata.object_type = ResourceMetadataEntity.METADATA_OBJECT_TYPE;
     }
 
     return result;
