@@ -147,45 +147,48 @@
     }
 
     &.navigation-groups {
-        .root:not(.group-item){
-            position: relative;
+        .row {
+          padding: .6rem 0 .6rem 1rem;
 
-            .more-ctrl {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                right: 3.2rem; // 4rem for the desired position in the design - .8rem for the current margin-right
-                z-index: 10;
+          .main-cell-wrapper .main-cell {
+            button {
+              gap: .6rem;
+              width: calc(100% - .5rem);
+
+              & > svg {
+                margin-right: .2rem;
+              }
             }
+          }
         }
 
         .group-item {
             .row {
-                padding: .8rem 0 .8rem 2.6rem;
+                padding-left: 2.6rem;
             }
         }
     }
 
     &.navigation-tags {
-        .root:not(.tag-item){
-            position: relative;
+        .row {
+          padding: .6rem 0 .6rem 1rem;
 
-            .more-ctrl {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                right: 3.2rem; // 4rem for the desired position in the design - .8rem for the current margin-right
-                z-index: 10;
+          .main-cell-wrapper .main-cell {
+            button {
+              gap: .6rem;
+              width: calc(100% - .5rem);
+
+              & > svg {
+                margin-right: .2rem;
+              }
             }
+          }
         }
 
-        .tag-item {
-            .more-ctrl {
-                button {
-                    margin-right: 0;
-                }
-            }
+      .tag-item {
+        .row {
+          padding-left: 2.6rem;
         }
-
+      }
     }
 }
