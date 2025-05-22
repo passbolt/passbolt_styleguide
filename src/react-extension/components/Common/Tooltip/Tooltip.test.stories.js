@@ -16,9 +16,9 @@
  * Storybook tests on Tootlip in regard of specifications
  */
 import React from "react";
-import Icon from "../../../../shared/components/Icons/Icon";
 import Tooltip from "./Tooltip";
 import TooltipPortal from "./TooltipPortal";
+import InfoSVG from "../../../../img/svg/info.svg";
 
 export default {
   title: 'Foundations/Tooltip',
@@ -46,7 +46,7 @@ export const DefaultTooltip = {
         <Tooltip message="Tool tip placeholder" direction="right">
           <Tooltip message="Tool tip placeholder" direction="bottom">
             <Tooltip message="Tool tip placeholder" direction="left">
-              <Icon name="info-circle"/>
+              <InfoSVG/>
             </Tooltip>
           </Tooltip>
         </Tooltip>
@@ -58,6 +58,6 @@ export const DefaultTooltip = {
 export const PortalTooltip = {
   render: () =>
     <TooltipPortal message="Tool tip placeholder">
-      <Icon name="info-circle"/>
+      <InfoSVG/>
     </TooltipPortal>
 };

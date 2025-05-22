@@ -17,7 +17,6 @@ import React from "react";
 import {withRouter} from "react-router-dom";
 import {Link} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../shared/components/Icons/Icon";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
@@ -37,6 +36,8 @@ import {
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import DisplayResourceUrisBadge
   from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
+import CloseSVG from "../../../img/svg/close.svg";
+import CaretLeftSVG from "../../../img/svg/caret_left.svg";
 
 const BROWSED_RESOURCES_LIMIT = 100;
 
@@ -157,13 +158,13 @@ class FilterResourcesByFavoritePage extends React.Component {
       <div className="index-list">
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.props.t("Go back")}>
-            <Icon name="chevron-left"/>
+            <CaretLeftSVG/>
             <span className="primary-action-title">
               <Trans>Favorite</Trans>
             </span>
           </a>
           <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button" title={this.props.t("Cancel")}>
-            <Icon name="close"/>
+            <CloseSVG className="close"/>
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>
         </div>

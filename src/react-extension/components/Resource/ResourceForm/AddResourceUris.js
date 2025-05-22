@@ -19,7 +19,8 @@ import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import AttentionSVG from "../../../../img/svg/attention.svg";
-import Icon from "../../../../shared/components/Icons/Icon";
+import DeleteSVG from "../../../../img/svg/delete.svg";
+import AddSVG from "../../../../img/svg/add.svg";
 
 class AddResourceUris extends Component {
   constructor(props) {
@@ -159,7 +160,7 @@ class AddResourceUris extends Component {
               {this.hasMultipleUris && this.additionalUris.map((uri, index) => (
                 <div key={index} className="additional-uri-wrapper">
                   <input id={`resource-additional-uri-${index + 1}`} autoFocus={index + 1 === this.additionalUris.length} disabled={this.props.disabled} name={`metadata.uris.${index + 1}`} maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource.metadata.uris[index + 1]} onChange={this.handleInputChange}/>
-                  <button type="button" className="button-icon" id={`resource-delete-additional-uri-${index + 1}`} onClick={() => this.handleDeleteUriClick(index + 1)}><Icon name="trash"/></button>
+                  <button type="button" className="button-icon" id={`resource-delete-additional-uri-${index + 1}`} onClick={() => this.handleDeleteUriClick(index + 1)}><DeleteSVG/></button>
                   {this.isMaxLengthError(`uris.${index + 1}`) &&
                     <div className={`additional-uri-${index + 1} error-message`}><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
                   }
@@ -174,7 +175,7 @@ class AddResourceUris extends Component {
             </div>
             <div className="uri-add">
               <button type="button" disabled={this.canAddUri} onClick={this.handleAddUriClick}>
-                <Icon name="add"/>
+                <AddSVG/>
                 <span><Trans>Add URI</Trans></span>
               </button>
             </div>

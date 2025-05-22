@@ -31,7 +31,7 @@ import CloseSvg from "../../../img/svg/close.svg";
 import DiceSVG from "../../../img/svg/dice.svg";
 import CopySVG from "../../../img/svg/copy.svg";
 import HealthCheckSuccessSvg from "../../../img/svg/healthcheck_success.svg";
-import Icon from "../../../shared/components/Icons/Icon";
+import CaretLeftSVG from "../../../img/svg/caret_left.svg";
 
 class GeneratePasswordPage extends React.Component {
   constructor(props) {
@@ -204,7 +204,7 @@ class GeneratePasswordPage extends React.Component {
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick}
             title={this.translate("Cancel the operation")}>
-            <Icon name="chevron-left"/>
+            <CaretLeftSVG/>
             <span className="primary-action-title"><Trans>Generate password</Trans></span>
           </a>
           <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button"

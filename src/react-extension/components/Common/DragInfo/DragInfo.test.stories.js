@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 import React from "react";
-import Icon from "../../../../shared/components/Icons/Icon";
+import CircleXSVG from "../../../../img/svg/circle_x.svg";
 
 export default {
   title: 'Foundations/DragInfo',
@@ -60,7 +60,7 @@ const Template = () =>
     <div style={{width: "25%"}}>
       <div className="drag-and-drop-wrapper" draggable={true} style={{top: "15%"}}>
         <div className="drag-and-drop item-1">
-          <Icon name="ban"/>
+          <CircleXSVG/>
           <span className="message not-allowed">You are not allowed to move this content</span>
         </div>
       </div>

@@ -14,7 +14,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
@@ -31,6 +30,8 @@ import GoogleSsoSettingsEntity from "../../../../shared/models/entity/ssoSetting
 import OAuth2SsoSettingsEntity from "../../../../shared/models/entity/ssoSettings/OAuth2SsoSettingsEntity";
 import AdfsSsoSettingsEntity from "../../../../shared/models/entity/ssoSettings/AdfsSsoSettingsEntity";
 import {createSafePortal} from "../../../../shared/utils/portals";
+import FileTextSVG from "../../../../img/svg/file_text.svg";
+import GoSVG from "../../../../img/svg/go.svg";
 
 /**
  * This component displays the SSO administration settings
@@ -226,7 +227,7 @@ class ManageSsoSettings extends React.Component {
               <h3><Trans>Need some help?</Trans></h3>
               <p><Trans>For more information about SSO, checkout the dedicated page on the help website.</Trans></p>
               <a className="button" href="https://passbolt.com/docs/admin/authentication/sso/" target="_blank" rel="noopener noreferrer">
-                <Icon name="document"/>
+                <FileTextSVG/>
                 <span><Trans>Read the documentation</Trans></span>
               </a>
             </div>
@@ -234,7 +235,7 @@ class ManageSsoSettings extends React.Component {
             <div className="sidebar-help-section">
               <h3><Trans>How do I configure a AzureAD SSO?</Trans></h3>
               <a className="button" href="https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/add-application-portal-setup-sso" target="_blank" rel="noopener noreferrer">
-                <Icon name="external-link"/>
+                <GoSVG/>
                 <span><Trans>Read the documentation</Trans></span>
               </a>
             </div>
@@ -243,7 +244,7 @@ class ManageSsoSettings extends React.Component {
             <div className="sidebar-help-section">
               <h3><Trans>How do I configure a Google SSO?</Trans></h3>
               <a className="button" href="https://developers.google.com/identity/openid-connect/openid-connect" target="_blank" rel="noopener noreferrer">
-                <Icon name="external-link"/>
+                <GoSVG/>
                 <span><Trans>Read the documentation</Trans></span>
               </a>
             </div>
@@ -252,7 +253,7 @@ class ManageSsoSettings extends React.Component {
             <div className="sidebar-help-section">
               <h3><Trans>How do I configure an AD FS SSO?</Trans></h3>
               <a className="button" href="https://learn.microsoft.com/en-gb/microsoft-365/troubleshoot/active-directory/set-up-adfs-for-single-sign-on" target="_blank" rel="noopener noreferrer">
-                <Icon name="external-link"/>
+                <GoSVG/>
                 <span><Trans>Read the documentation</Trans></span>
               </a>
             </div>

@@ -12,7 +12,6 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
@@ -23,6 +22,7 @@ import DisplayUserGroupDetailsMembers from "../DisplayUserGroupDetailsMembers/Di
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
+import LinkSVG from "../../../../img/svg/link.svg";
 
 /**
  * This component displays the details of a users group
@@ -104,7 +104,7 @@ class DisplayUserGroupDetails extends React.Component {
               <span className="subtitle"><Trans>Group</Trans></span>
             </h3>
             <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this group")} onClick={this.handlePermalinkClick}>
-              <Icon name="link"/>
+              <LinkSVG/>
               <span className="visuallyhidden"><Trans>Copy the link to this group</Trans></span>
             </button>
           </div>

@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../shared/components/Icons/Icon";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import Password from "../../../shared/components/Password/Password";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import CloseSVG from "../../../img/svg/close.svg";
 
 class PassphraseDialog extends React.Component {
   constructor(props) {
@@ -134,7 +134,7 @@ class PassphraseDialog extends React.Component {
             <span className="primary-action-title"><Trans>Passphrase required</Trans></span>
           </a>
           <a onClick={this.handleCloseButtonClick} className="secondary-action button-transparent button" title={this.translate("Cancel the operation")}>
-            <Icon name="close"/>
+            <CloseSVG/>
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </a>
         </div>

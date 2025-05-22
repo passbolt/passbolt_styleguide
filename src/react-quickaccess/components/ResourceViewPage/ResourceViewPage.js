@@ -16,7 +16,6 @@ import Transition from 'react-transition-group/Transition';
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {withRouter} from "react-router-dom";
-import Icon from "../../../shared/components/Icons/Icon";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import ClipBoard from '../../../shared/lib/Browser/clipBoard';
 import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
@@ -33,6 +32,12 @@ import {
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import CaretDownSVG from "../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../img/svg/caret_right.svg";
+import CaretLeftSVG from "../../../img/svg/caret_left.svg";
+import GoSVG from "../../../img/svg/go.svg";
+import CopySVG from "../../../img/svg/copy.svg";
+import HealthCheckSuccessSvg from "../../../img/svg/healthcheck_success.svg";
+import EyeCloseSVG from "../../../img/svg/eye_close.svg";
+import EyeOpenSVG from "../../../img/svg/eye_open.svg";
 
 /**
  * Default display time of error message in ms.
@@ -445,11 +450,11 @@ class ResourceViewPage extends React.Component {
       <div className="resource item-browse">
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick}>
-            <Icon name="chevron-left"/>
+            <CaretLeftSVG/>
             <span className="primary-action-title">{this.state.resource.metadata?.name}</span>
           </a>
           <a href={`${this.props.context.userSettings.getTrustedDomain()}/app/passwords/view/${this.props.match.params.id}`} className="secondary-action button-transparent button" target="_blank" rel="noopener noreferrer" title={this.translate("View it in passbolt")}>
-            <Icon name="internal-link"/>
+            <GoSVG/>
             <span className="visually-hidden"><Trans>Edit in passbolt</Trans></span>
           </a>
         </div>
@@ -474,7 +479,7 @@ class ResourceViewPage extends React.Component {
                   <Transition in={this.state.copyLoginState === "default"} appear={false} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copyLoginState !== "default" ? "visually-hidden" : ""}`}>
-                        <Icon name="copy-to-clipboard"/>
+                        <CopySVG/>
                       </span>
                     )}
                   </Transition>
@@ -488,7 +493,7 @@ class ResourceViewPage extends React.Component {
                   <Transition in={this.state.copyLoginState === "done"} appear={true} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copyLoginState !== "done" ? "visually-hidden" : ""}`}>
-                        <Icon name="check"/>
+                        <HealthCheckSuccessSvg/>
                       </span>
                     )}
                   </Transition>
@@ -512,7 +517,7 @@ class ResourceViewPage extends React.Component {
                         <Transition in={!this.state.isPasswordDecrypting} appear={false} timeout={500}>
                           {status => (
                             <span className={`transition fade-${status} ${this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}>
-                              <Icon name={isPasswordPreviewed ? "eye-close" : "eye-open"}/>
+                              {isPasswordPreviewed ? <EyeCloseSVG/> : <EyeOpenSVG/>}
                             </span>
                           )}
                         </Transition>
@@ -533,7 +538,7 @@ class ResourceViewPage extends React.Component {
                     <Transition in={this.state.copyPasswordState === "default"} appear={false} timeout={500}>
                       {status => (
                         <span className={`transition fade-${status} ${this.state.copyPasswordState !== "default" ? "visually-hidden" : ""}`}>
-                          <Icon name="copy-to-clipboard"/>
+                          <CopySVG/>
                         </span>
                       )}
                     </Transition>
@@ -547,7 +552,7 @@ class ResourceViewPage extends React.Component {
                     <Transition in={this.state.copyPasswordState === "done"} appear={true} timeout={500}>
                       {status => (
                         <span className={`transition fade-${status} ${this.state.copyPasswordState !== "done" ? "visually-hidden" : ""}`}>
-                          <Icon name="check"/>
+                          <HealthCheckSuccessSvg/>
                         </span>
                       )}
                     </Transition>
@@ -581,7 +586,7 @@ class ResourceViewPage extends React.Component {
                       <Transition in={!this.state.isTotpDecrypting} appear={false} timeout={500}>
                         {status => (
                           <span className={`transition fade-${status} ${this.state.isTotpDecrypting ? "visually-hidden" : ""}`}>
-                            <Icon name={isTotpPreviewed ? "eye-close" : "eye-open"}/>
+                            {isTotpPreviewed ? <EyeCloseSVG/> : <EyeOpenSVG/>}
                           </span>
                         )}
                       </Transition>
@@ -602,7 +607,7 @@ class ResourceViewPage extends React.Component {
                   <Transition in={this.state.copyTotpState === "default"} appear={false} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copyTotpState !== "default" ? "visually-hidden" : ""}`}>
-                        <Icon name="copy-to-clipboard"/>
+                        <CopySVG/>
                       </span>
                     )}
                   </Transition>
@@ -616,7 +621,7 @@ class ResourceViewPage extends React.Component {
                   <Transition in={this.state.copyTotpState === "done"} appear={true} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copyTotpState !== "done" ? "visually-hidden" : ""}`}>
-                        <Icon name="check"/>
+                        <HealthCheckSuccessSvg/>
                       </span>
                     )}
                   </Transition>
@@ -646,7 +651,7 @@ class ResourceViewPage extends React.Component {
             </div>
             <a href={`${this.sanitizeResourceUrl(primaryUri) ? this.sanitizeResourceUrl(primaryUri) : "#"}`} role="button" className={`button button-transparent property-action ${!this.sanitizeResourceUrl(primaryUri) ? "disabled" : ""}`}
               onClick={this.handleGoToUrlClick} target="_blank" rel="noopener noreferrer" title={this.translate("open in a new tab")}>
-              <Icon name="external-link"/>
+              <GoSVG/>
               <span className="visually-hidden"><Trans>Open in new window</Trans></span>
             </a>
           </li>

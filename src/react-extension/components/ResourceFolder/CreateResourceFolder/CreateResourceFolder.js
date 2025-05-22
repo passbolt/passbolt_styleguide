@@ -22,9 +22,9 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import {Trans, withTranslation} from "react-i18next";
 import {maxSizeValidation} from "../../../lib/Error/InputValidator";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {RESOURCE_NAME_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
 import {withRouter} from "react-router-dom";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class CreateResourceFolder extends Component {
   /**
@@ -295,7 +295,7 @@ class CreateResourceFolder extends Component {
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="folder-name-input"><Trans>Name</Trans>{this.state.nameWarning &&
-                  <Icon name="exclamation"/>
+                <AttentionSVG className="attention-required"/>
               }</label>
               <input id="folder-name-input" name="name"
                 ref={this.nameRef}

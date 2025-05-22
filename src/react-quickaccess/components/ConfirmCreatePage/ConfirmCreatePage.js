@@ -16,7 +16,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../shared/components/Icons/Icon";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
@@ -29,6 +28,8 @@ import ResourceTypesCollection from "../../../shared/models/entity/resourceType/
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import CaretLeftSVG from "../../../img/svg/caret_left.svg";
+import CloseSVG from "../../../img/svg/close.svg";
 
 /**
  * The component display error variations.
@@ -159,11 +160,11 @@ class ConfirmCreatePage extends React.PureComponent {
       <div className="confirm-create">
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.translate("Edit password")}>
-            <Icon name="chevron-left"/>
+            <CaretLeftSVG/>
             <span className="primary-action-title"><Trans>Confirm password creation</Trans></span>
           </a>
           <a href="#" className="secondary-action button-transparent button" onClick={this.handleGoBackClick} title={this.translate("Reject")}>
-            <Icon name="close"/>
+            <CloseSVG className="close"/>
             <span className="visually-hidden"><Trans>Reject</Trans></span>
           </a>
         </div>

@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withTranslation} from "react-i18next";
-import Icon from "../../../../shared/components/Icons/Icon";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 
 class DisplayRbacSection extends React.Component {
   /**
@@ -26,7 +26,7 @@ class DisplayRbacSection extends React.Component {
       <>
         <div className={`flex-container inner level-${this.props.level}`}>
           <div className="flex-item first">
-            <span><Icon name="caret-down" baseline={true}/>&nbsp;&nbsp;{this.props.label}</span>
+            <span><CaretDownSVG className="caret-down"/>&nbsp;&nbsp;{this.props.label}</span>
           </div>
           <div className="flex-item">
             &nbsp;

@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import LogoSVG from "../../../img/svg/logo.svg";
+import PowerSVG from "../../../img/svg/power.svg";
 
 class Header extends React.Component {
   constructor(props) {
@@ -41,7 +41,7 @@ class Header extends React.Component {
           <span>
             <a role="button" className={`option-link button button-transparent`} onClick={this.handleLogoutClick} title={this.translate("sign out")}>
               <span className="visually-hidden"><Trans>sign out</Trans></span>
-              <Icon name="power"/>
+              <PowerSVG/>
             </a>
           </span>
         }
