@@ -175,7 +175,15 @@ class DisplayResourceWorkspacePageObject {
    * @returns {HTMLElement}
    */
   menuColumnViewItem(index) {
-    return this._container.querySelectorAll('.actions-secondary .dropdown-content li')[index - 1].querySelector('input[type=\"checkbox\"]');
+    return this._container.querySelectorAll('.actions-secondary .dropdown-content li .checkbox')[index - 1].querySelector('input[type=\"checkbox\"]');
+  }
+
+  /**
+   * Returns the rows height setting item radio elements of password workspace menu
+   * @returns {HTMLElement}
+   */
+  menuRowHeightItem(index) {
+    return this._container.querySelectorAll('.actions-secondary .dropdown-content li .radio')[index - 1].querySelector('input[type=\"radio\"]');
   }
 
   /**

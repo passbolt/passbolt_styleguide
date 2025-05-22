@@ -68,7 +68,7 @@ describe("Display the Confirm share missing metadata keys Dialog", () => {
       const page = new ConfirmShareMissingMetadataKeysPage(props);
 
       expect(page.dialogContent).toEqual("You can't share metadata keys with Ada Lovelace (ada@passbolt.com) because you don't have access to them. Ask another administrator for help.");
-      expect(page.confirmButton.textContent).toEqual("OK");
+      expect(page.confirmButton.textContent).toEqual("Ok");
       expect(page.cancelButton).toEqual(null);
 
       jest.spyOn(MetadataKeysServiceWorkerService.prototype, "share");

@@ -196,6 +196,7 @@ class DisplayResourcesList extends React.Component {
     // Column resource settings have changed
     const hasColumnsResourceViewChange = this.columnsResourceSetting?.hasDifferentShowValue(prevProps.resourceWorkspaceContext.columnsResourceSetting);
     const hasColumnsSettingsChanged = prevProps.resourceWorkspaceContext.columnsResourceSetting !== this.props.resourceWorkspaceContext.columnsResourceSetting;
+
     if (hasColumnsSettingsChanged || hasColumnsResourceViewChange) {
       this.mergeAndSortColumns();
     }
@@ -216,6 +217,7 @@ class DisplayResourcesList extends React.Component {
     const hasResourceColumnsChange = nextState.columns !== this.state.columns;
     const hasColumnOrderChanged = nextProps.resourceWorkspaceContext.columnsResourceSetting !== this.props.resourceWorkspaceContext.columnsResourceSetting;
     const hasColumnsResourceViewChange = columnsResourceSetting?.hasDifferentShowValue(this.props.resourceWorkspaceContext.columnsResourceSetting);
+    const hasRowsSettingChanged = nextProps.resourceWorkspaceContext.rowsSetting?.height !== this.props.resourceWorkspaceContext.rowsSetting?.height;
     const mustHidePreviewPassword = hasFilteredResourcesChanged || hasSingleSelectedResourceChanged || hasSelectedResourcesLengthChanged || hasSorterChanged;
     if (mustHidePreviewPassword) {
       this.hidePreviewedCellule();
@@ -228,7 +230,8 @@ class DisplayResourcesList extends React.Component {
       hasResourceColumnsChange ||
       hasColumnsResourceViewChange ||
       hasResourcePreviewSecretChange ||
-      hasColumnOrderChanged;
+      hasColumnOrderChanged ||
+      hasRowsSettingChanged;
   }
 
   /**
@@ -944,6 +947,7 @@ class DisplayResourcesList extends React.Component {
           <GridTable
             columns={this.columnsFiltered}
             rows={this.resources}
+            rowsSetting={this.props.resourceWorkspaceContext.rowsSetting}
             sorter={this.props.resourceWorkspaceContext.sorter}
             onSortChange={this.handleSortByColumnClick}
             onChange={this.handleChangeColumnsSettings}
