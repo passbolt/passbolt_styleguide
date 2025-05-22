@@ -1,27 +1,75 @@
-.dialog {
-    .share-form {
-        .form-content {
-            padding: 0;
-            .permission-edit {
-              max-height: 26.25rem;
-            }
+.share-dialog {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 6.4rem 61rem;
 
-            .permission-add {
-              padding: 1.6rem;
-            }
-
-            .input.text.autocomplete input  {
-              margin-bottom: 0;
-            }
-
-            // remove all margin bottom for direct child element
-            & > * {
-              margin-bottom: 0;
+    .dialog {
+        padding: 0;
+        max-width: 70rem;
+        min-width: 50rem;
+        max-height: 80rem;
+         margin: 0;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-self: center;
+        .dialog-header {
+            padding: 2.4rem;
+        
+            .dialog-title-wrapper h2 {
+              font-size: 2.4rem;
             }
           }
+        
+  .dialog-content {
+    display: flex;
+    padding-right: 1.6rem;
+    padding-left: 1.6rem;
+    align-items: center;
+    flex: 1 0 0;
+    align-self: stretch;
+
+    .grid-and-footer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        flex: 1 0 0;
+        align-self: stretch;
+
+        .permission-edit {
+            max-height: 26.25rem;
+          }
+
+          .permission-add {
+            padding: 1.6rem;
+          }
+
+          .input.text.autocomplete input  {
+            margin-bottom: 0;
+          }
+
+          // remove all margin bottom for direct child element
+          & > * {
+            margin-bottom: 0;
+          }
+      }
+
+      .submit-wrapper {
+        display: flex;
+        padding: 1.6rem 0;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 2.4rem;
+        align-self: stretch;
+      }
     }
-
-
+  }
+      }
+.dialog {
     .permissions {
         &.scroll {
             .scroll-shadow();
