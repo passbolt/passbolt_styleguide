@@ -145,7 +145,7 @@ class ConfirmShareMissingMetadataKeys extends React.Component {
             }
             {
               this.numberOfKeysCanBeShared === 0 && (
-                <FormSubmitButton disabled={isDisabled} processing={this.state.processing} value={this.props.t("OK")}/>
+                <FormSubmitButton disabled={isDisabled} processing={this.state.processing} value={this.props.t("Ok")}/>
               )
             }
           </div>
