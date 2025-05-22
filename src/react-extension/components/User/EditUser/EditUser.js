@@ -22,10 +22,11 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import {Trans, withTranslation} from "react-i18next";
 import {maxSizeValidation} from '../../../lib/Error/InputValidator';
-import Icon from "../../../../shared/components/Icons/Icon";
 import {USER_INPUT_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import {DateTime} from "luxon";
+import AttentionSVG from "../../../../img/svg/attention.svg";
+import InfoSVG from "../../../../img/svg/info.svg";
 
 class EditUser extends Component {
   /**
@@ -435,7 +436,7 @@ class EditUser extends Component {
           <div className="form-content">
             <div className={`input text required ${this.state.first_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="user-first-name-input"><Trans>First name</Trans>{this.state.first_nameWarning &&
-                  <Icon name="exclamation"/>
+                <AttentionSVG className="attention-required"/>
               }</label>
               <input id="user-first-name-input" name="first_name"
                 ref={this.firstNameRef} type="text" value={this.state.first_name} placeholder={this.translate("First name")}
@@ -472,7 +473,7 @@ class EditUser extends Component {
             </div>
             <div className="input text required disabled">
               <label htmlFor="user-username-input"><Trans>Username / Email</Trans>{this.state.last_nameWarning &&
-                  <Icon name="exclamation"/>
+                <AttentionSVG className="attention-required"/>
               }</label>
               <input id="user-username-input" name="username"
                 maxLength="128"
@@ -495,7 +496,7 @@ class EditUser extends Component {
                 />
                 <label htmlFor="is_admin_checkbox"><Trans>This user is an administrator</Trans></label>
                 <Tooltip message={this.translate("Administrators can add and delete users. They can also create groups and assign group managers. By default they can not see all passwords.")}>
-                  <Icon name="info-circle"/>
+                  <InfoSVG/>
                 </Tooltip>
               </span>
               {this.isSuspendedUserFeatureEnabled() &&
@@ -511,7 +512,7 @@ class EditUser extends Component {
                   />
                   <label htmlFor="is_suspended_checkbox"> <Trans>Suspend this user</Trans></label>
                   <Tooltip message={this.translate("This user will not be able to sign in to passbolt and receive email notifications. Other users can share resource with it and add this user to a group.")}>
-                    <Icon name="info-circle"/>
+                    <InfoSVG/>
                   </Tooltip>
                 </span>
               }

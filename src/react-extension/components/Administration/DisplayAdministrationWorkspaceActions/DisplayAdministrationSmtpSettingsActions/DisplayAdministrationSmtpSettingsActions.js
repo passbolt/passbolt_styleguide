@@ -14,11 +14,11 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {withAdminSmtpSettings} from "../../../../contexts/AdminSmtpSettingsContext";
 import SendTestMailDialog from "../../SendTestMailDialog/SendTestMailDialog";
 import {withDialog} from "../../../../contexts/DialogContext";
+import PlugSVG from "../../../../../img/svg/plug.svg";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -115,7 +115,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
       <div className="actions-wrapper">
         <div className="left-actions-wrapper">
           <button type="button" className="button secondary" disabled={!this.isTestEnabled()} id="send-test-email" onClick={this.handleTestClick}>
-            <Icon name="plug"/>
+            <PlugSVG/>
             <span><Trans>Send test email</Trans></span>
           </button>
         </div>

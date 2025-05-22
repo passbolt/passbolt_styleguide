@@ -8,6 +8,7 @@ import AllItemsSVG from "../../../img/svg/all_items.svg";
 import ArrowBigDownDashSVG from "../../../img/svg/arrow_big_down_dash.svg";
 import ArrowBigUpDashSVG from "../../../img/svg/arrow_big_up_dash.svg";
 import ArrowDownSVG from "../../../img/svg/arrow_down.svg";
+import ArrowUpSVG from "../../../img/svg/arrow_up.svg";
 import ArrowLeftSVG from "../../../img/svg/arrow_left.svg";
 import AttentionSVG from "../../../img/svg/attention.svg";
 import BellSVG from "../../../img/svg/bell.svg";
@@ -19,6 +20,7 @@ import CalendarCogSVG from "../../../img/svg/calendar_cog.svg";
 import CameraSVG from "../../../img/svg/camera.svg";
 import CardSVG from "../../../img/svg/card.svg";
 import CaretDownSVG from "../../../img/svg/caret_down.svg";
+import CaretLeftSVG from "../../../img/svg/caret_left.svg";
 import CaretRightSVG from "../../../img/svg/caret_right.svg";
 import CastleSVG from "../../../img/svg/castle.svg";
 import ChevronLeftSVG from "../../../img/svg/chevron_left.svg";
@@ -113,6 +115,7 @@ import NotSharedSVG from "../../../img/svg/not_shared.svg";
 import NotesSVG from "../../../img/svg/notes.svg";
 import PaintbrushSVG from "../../../img/svg/paintbrush.svg";
 import PaletteSVG from "../../../img/svg/palette.svg";
+import PlugSVG from "../../../img/svg/plug.svg";
 import PanelsTopLeftSVG from "../../../img/svg/panels_top_left.svg";
 import PassboltSVG from "../../../img/svg/passbolt.svg";
 import PassphrasePolicySVG from "../../../img/svg/passphrase_policy.svg";
@@ -186,6 +189,7 @@ const iconsSVGs = [
   ArrowBigDownDashSVG,
   ArrowBigUpDashSVG,
   ArrowDownSVG,
+  ArrowUpSVG,
   ArrowLeftSVG,
   AttentionSVG,
   BellSVG,
@@ -197,6 +201,7 @@ const iconsSVGs = [
   CameraSVG,
   CardSVG,
   CaretDownSVG,
+  CaretLeftSVG,
   CaretRightSVG,
   CastleSVG,
   ChevronLeftSVG,
@@ -280,6 +285,7 @@ const iconsSVGs = [
   NotesSVG,
   PaintbrushSVG,
   PaletteSVG,
+  PlugSVG,
   PanelsTopLeftSVG,
   PassboltSVG,
   PinSVG,

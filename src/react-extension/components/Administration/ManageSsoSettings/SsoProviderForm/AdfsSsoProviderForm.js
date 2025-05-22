@@ -18,8 +18,8 @@ import PropTypes from "prop-types";
 import {withActionFeedback} from "../../../../contexts/ActionFeedbackContext";
 import {withAdminSso} from "../../../../contexts/AdminSsoContext";
 import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
-import Icon from "../../../../../shared/components/Icons/Icon";
 import Password from "../../../../../shared/components/Password/Password";
+import CopySVG from "../../../../../img/svg/copy.svg";
 
 /**
  * This component displays the Adfs SSO settings form
@@ -179,7 +179,7 @@ class AdfsSsoProviderForm extends React.Component {
             <input id="sso-redirect-url-input" type="text" className="fluid form-element disabled" name="redirect_url"
               value={this.fullRedirectUrl} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
             <a onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button button-icon">
-              <Icon name="copy-to-clipboard"/>
+              <CopySVG/>
             </a>
           </div>
           <p>

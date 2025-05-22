@@ -24,9 +24,9 @@ import {withLoading} from "../../../contexts/LoadingContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {maxSizeValidation} from '../../../lib/Error/InputValidator';
 import {RESOURCE_TAG_MAX_LENGTH} from "../../../../shared/constants/inputs.const";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 /**
  * Component allows the user to edit a tag from a dialog
@@ -272,7 +272,7 @@ class EditResourceTag extends Component {
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-tag-form-name"><Trans>Tag name</Trans>{this.state.nameWarning &&
-                  <Icon name="exclamation"/>
+                <AttentionSVG className="attention-required"/>
               }</label>
               <input id="edit-tag-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}

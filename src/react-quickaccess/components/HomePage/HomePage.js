@@ -16,7 +16,6 @@ import React from "react";
 import {Link, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../shared/components/Icons/Icon";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import {withRbac} from "../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
@@ -39,6 +38,10 @@ import {
 import DisplayResourceUrisBadge
   from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 import CanSuggestService from "../../../shared/services/canSuggestService/canSuggestService";
+import CaretRightSVG from "../../../img/svg/caret_right.svg";
+import FilterSVG from "../../../img/svg/filter.svg";
+import UsersSVG from "../../../img/svg/users.svg";
+import TagV2SVG from "../../../img/svg/tag_v2.svg";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
@@ -265,7 +268,7 @@ class HomePage extends React.Component {
                         </div>
                       </button>
                       <Link className="chevron-right-wrapper" to={`/webAccessibleResources/quickaccess/resources/view/${resource.id}`}>
-                        <Icon name="chevron-right"/>
+                        <CaretRightSVG/>
                       </Link>
                     </li>
                   ))}
@@ -306,7 +309,7 @@ class HomePage extends React.Component {
                               }
                             </div>
                           </div>
-                          <Icon name="chevron-right"/>
+                          <CaretRightSVG/>
                         </Link>
                       </li>
                     ))}
@@ -322,24 +325,24 @@ class HomePage extends React.Component {
               <ul className="list-items">
                 <li className="filter-entry">
                   <Link to={"/webAccessibleResources/quickaccess/more-filters"}>
-                    <Icon name="filter"/>
+                    <FilterSVG/>
                     <span className="filter-title"><Trans>Filters</Trans></span>
-                    <Icon name="chevron-right"/>
+                    <CaretRightSVG/>
                   </Link>
                 </li>
                 <li className="filter-entry">
                   <Link to={"/webAccessibleResources/quickaccess/resources/group"}>
-                    <Icon name="users"/>
+                    <UsersSVG/>
                     <span className="filter-title"><Trans>Groups</Trans></span>
-                    <Icon name="chevron-right"/>
+                    <CaretRightSVG/>
                   </Link>
                 </li>
                 {canUseTag &&
                   <li className="filter-entry">
                     <Link to={"/webAccessibleResources/quickaccess/resources/tag"}>
-                      <Icon name="tag"/>
+                      <TagV2SVG />
                       <span className="filter-title"><Trans>Tags</Trans></span>
-                      <Icon name="chevron-right"/>
+                      <CaretRightSVG/>
                     </Link>
                   </li>
                 }
