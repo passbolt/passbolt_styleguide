@@ -11,14 +11,16 @@
     .sidebar-header {
       border-bottom: .1rem solid var(--Workspace-Dividers);
       .teaser-image {
-        width: 5.6rem;
-        height: 5.6rem;
 
         svg {
-          width: 100%;
-          height: 100%;
+          width: 5.6rem;
+          height: 5.6rem;
           &:not(.attention-required) {
             margin-top: 0;
+          }
+          &.attention-required {
+            width: 2rem;
+            height: 2rem;
           }
         }
 
