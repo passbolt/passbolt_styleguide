@@ -36,13 +36,13 @@ import {defaultResourceDto} from "../../../../shared/models/entity/resource/reso
  */
 export function defaultProps(data = {}) {
   const defaultData = {
-    context: defaultAppContext({
-      getHierarchyFolderCache: () => [{name: "Folder", id: "1"}, {name: "subfolder", id: "2"}]
-    }),
+    context: defaultAppContext(),
     resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT}),
     actionFeedbackContext: defaultActionFeedbackContext(),
     resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
-    resourceWorkspaceContext: defaultResourceWorkspaceContext(),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      getHierarchyFolderCache: () => [{name: "Folder", id: "1"}, {name: "subfolder", id: "2"}]
+    }),
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     passwordPoliciesContext: defaultPasswordPoliciesContext({

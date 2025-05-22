@@ -12,9 +12,6 @@
                 }
                 a {
                   border: 0;
-                  &:hover {
-                    color: var(--Palette-Contrast-1);
-                  }
                 }
 
                 button:hover {
@@ -25,7 +22,6 @@
               flex: 1;
               display: flex;
               flex-direction: column;
-              min-width: 0;
 
               .password-wrapper, .totp-wrapper {
                 display: flex;
@@ -37,44 +33,6 @@
 
                 .totp-code + .svg-icon.timer {
                   margin-left: .5rem;
-                }
-              }
-
-              .accordion {
-                .accordion-header {
-                  svg {
-                    --icon-color: var(--Text-and-icons-Secondary-text);
-                    &.caret-down, &.caret-right {
-                      width: inherit;
-                      height: inherit;
-                    }
-
-                    &.caret-right {
-                      margin-right: .2rem;
-                    }
-                  }
-                }
-              }
-              .accordion-content {
-                .list-uris {
-                  display: block;
-                  max-height: 6rem;
-                  padding-top: .4rem;
-                  overflow-y: auto;
-                  scrollbar-width: thin;
-                  scrollbar-color: var(--Workspace-Elevator) transparent;
-
-                  .property-value {
-                    font-size: 1.3rem;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: normal;
-                    max-width: 100%;
-
-                    &:last-child {
-                      margin-bottom: 0;
-                    }
-                  }
                 }
               }
             }

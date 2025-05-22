@@ -17,7 +17,7 @@ import ResourceViewPagePage from "./ResourceViewPage.test.page";
 import {
   defaultProps,
   deniedRbacProps,
-  disabledApiFlagsProps, multipleUrisResourceProps,
+  disabledApiFlagsProps,
   standaloneTotpResourceProps,
   totpResourceProps
 } from "./ResourceViewPage.test.data";
@@ -206,19 +206,6 @@ describe("ResourceViewPage", () => {
       expect(page.totpText).toStrictEqual("Copy TOTP to clipboard");
       expect(page.totp.hasAttribute("disabled")).toBeTruthy();
       expect(page.copyTotpButton).toBeNull();
-    });
-  });
-
-  describe('As LU, I should see additional uris.', () => {
-    it('As LU, I should be able to see additional uris', async() => {
-      expect.assertions(1);
-      const props = multipleUrisResourceProps(); // The props to pass
-      const page = new ResourceViewPagePage(props);
-      await waitFor(() => {});
-
-      await page.click(page.additionalUrisSection);
-
-      expect(page.listUris.length).toStrictEqual(4);
     });
   });
 });

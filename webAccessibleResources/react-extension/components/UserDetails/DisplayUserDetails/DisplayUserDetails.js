@@ -103,23 +103,13 @@ class DisplayUserDetails extends React.Component {
   isAccountRecoveryEnabled() {
     return this.props.accountRecoveryContext.isPolicyEnabled();
   }
-  /**
-   * Check if selected or current user is missing metadata keys
-   * @returns {boolean}
-   */
-  hasUserIsMissingKeys() {
-    if (this.isLoggedInUserAdmin() && Boolean(this.props.context.siteSettings?.canIUse('metadata'))) {
-      return this.user.missing_metadata_key_ids?.length > 0;
-    }
-    return false;
-  }
 
   /**
    * Get attention required
    * @returns {boolean}
    */
   get hasAttentionRequired() {
-    return (this.isAccountRecoveryEnabled() && Boolean(this.user.pending_account_recovery_request)) || this.hasUserIsMissingKeys();
+    return this.isAccountRecoveryEnabled() && Boolean(this.user.pending_account_recovery_request);
   }
 
   /**

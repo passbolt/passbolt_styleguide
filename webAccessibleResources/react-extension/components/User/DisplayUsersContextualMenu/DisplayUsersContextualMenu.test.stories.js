@@ -19,7 +19,6 @@ import DisplayUsersContextualMenu from "./DisplayUsersContextualMenu";
 import {
   defaultAppContext,
   defaultProps,
-  propsWithUserMissingMetadataKeys,
   propsWithUserTemporaryHasPendingAccountRecovery
 } from "./DisplayUsersContextualMenu.test.data";
 
@@ -43,10 +42,6 @@ export const AdminWithoutReviewRecovery = {
 
 export const AdminWithReviewRecovery = {
   args: propsWithUserTemporaryHasPendingAccountRecovery({context: defaultAppContext()})
-};
-
-export const AdminWithMissingMetadataKeys = {
-  args: propsWithUserMissingMetadataKeys({context: defaultAppContext()})
 };
 
 export const User = {

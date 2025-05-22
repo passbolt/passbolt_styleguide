@@ -23,7 +23,7 @@ import {Trans, withTranslation} from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import FolderSidebarSVG from "../../../../img/svg/folder-sidebar.svg";
+import FolderSVG from "../../../../img/svg/folder.svg";
 import LinkSVG from "../../../../img/svg/link.svg";
 import Tabs from "../../Common/Tab/Tabs";
 import Tab from "../../Common/Tab/Tab";
@@ -93,7 +93,7 @@ class DisplayResourceFolderDetails extends React.Component {
       <div className="sidebar resource">
         <div className={`sidebar-header ${canUseAuditLog ? "" : "with-separator"}`}>
           <div className="teaser-image">
-            <FolderSidebarSVG/>
+            <FolderSVG/>
           </div>
           <div className="title-area">
             <h3>

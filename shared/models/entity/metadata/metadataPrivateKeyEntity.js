@@ -160,20 +160,6 @@ class MetadataPrivateKeyEntity extends EntityV2 {
   }
 
   /**
-   * Clone the dto for sharing purpose
-   * @params {string} userId
-   * @returns {MetadataPrivateKeyEntity}
-   */
-  cloneForSharing(userId) {
-    const cloneDto = {
-      user_id: userId,
-      metadata_key_id: this.metadataKeyId,
-      data: this.data
-    };
-    return new MetadataPrivateKeyEntity(cloneDto);
-  }
-
-  /**
    * @inheritdoc
    */
   marshall() {

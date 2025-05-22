@@ -226,7 +226,7 @@ class AddResourcePassword extends Component {
         </div>
         <div className="content">
           <div className="password-fields">
-            <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
+            <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="resource-uri"><Trans>URI</Trans>{this.isMaxLengthWarnings("uris.0", "metadata") && <AttentionSVG className="attention-required"/>}</label>
               <input id="resource-uri" disabled={this.props.disabled} name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange}/>
               {this.isMaxLengthError("uris.0", "metadata") &&
@@ -238,7 +238,7 @@ class AddResourcePassword extends Component {
                 </div>
               }
             </div>
-            <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
+            <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="resource-username"><Trans>Username</Trans>{this.isMaxLengthWarnings("username", "metadata") && <AttentionSVG className="attention-required"/>}</label>
               <input id="resource-username" disabled={this.props.disabled} name="metadata.username" type="text" className="fluid" maxLength="255" autoComplete="off" placeholder={this.translate("Username")} value={this.props.resource?.metadata?.username} onChange={this.handleInputChange}/>
               {this.isMaxLengthError("username", "metadata") &&
@@ -250,7 +250,7 @@ class AddResourcePassword extends Component {
                 </div>
               }
             </div>
-            <div className={`input-password-wrapper input ${this.props.disabled ? 'disabled' : ''}`}>
+            <div className={`input-password-wrapper input ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="resource-password">
                 <Trans>Password</Trans>
                 {this.isMaxLengthWarnings("password", "secret") && <AttentionSVG className="attention-required"/>}

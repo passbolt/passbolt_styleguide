@@ -65,12 +65,4 @@ export default class OrchestrateResourceFormPage {
   get hasDescriptionForm() {
     return Boolean(this._page.container.querySelector('.description'));
   }
-
-  /**
-   * Returns the appearance form
-   * @returns {boolean}
-   */
-  get hasAppearanceForm() {
-    return Boolean(this._page.container.querySelector('.appearance-workspace'));
-  }
 }

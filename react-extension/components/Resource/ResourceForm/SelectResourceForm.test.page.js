@@ -133,20 +133,6 @@ export default class SelectResourceFormPage {
   }
 
   /**
-   * Returns the left sidebar description input element
-   */
-  get menuDescription() {
-    return this._page.container.querySelector('#menu-description');
-  }
-
-  /**
-   * Returns the left sidebar uris input element
-   */
-  get menuUris() {
-    return this._page.container.querySelector('#menu-uris');
-  }
-
-  /**
    * Returns true if the page object exists in the container
    */
   exists() {

@@ -31,8 +31,6 @@ import {
   withResourceTypesLocalStorage
 } from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
-import CaretDownSVG from "../../../img/svg/caret_down.svg";
-import CaretRightSVG from "../../../img/svg/caret_right.svg";
 
 /**
  * Default display time of error message in ms.
@@ -57,7 +55,6 @@ class ResourceViewPage extends React.Component {
     this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
     this.handleCopyTotpClick = this.handleCopyTotpClick.bind(this);
     this.handlePreviewTotpButtonClick = this.handlePreviewTotpButtonClick.bind(this);
-    this.handleClickAdditionalUrisSection = this.handleClickAdditionalUrisSection.bind(this);
   }
 
   initState() {
@@ -73,8 +70,7 @@ class ResourceViewPage extends React.Component {
       previewedSecret: null, // The type of previewed secret
       plaintextSecretDto: null, // The current resource password decrypted
       isPasswordDecrypting: false, // if the password is decrypting
-      isTotpDecrypting: false, // if the totp is decrypting
-      isOpenAdditionalUris: false // section additional uris open
+      isTotpDecrypting: false // if the totp is decrypting
     };
   }
 
@@ -375,20 +371,8 @@ class ResourceViewPage extends React.Component {
     }
   }
 
-  /**
-   * Handle click on additional uris
-   */
-  handleClickAdditionalUrisSection() {
-    this.setState({isOpenAdditionalUris: !this.state.isOpenAdditionalUris});
-  }
-
-  /**
-   * Sanitize resource url
-   * @param url
-   * @returns {string|boolean|*}
-   */
-  sanitizeResourceUrl(url) {
-    return sanitizeUrl(url, {
+  sanitizeResourceUrl() {
+    return sanitizeUrl(this.state.resource.metadata?.uris?.[0], {
       whiteListedProtocols: resourceLinkAuthorizedProtocols,
       defaultProtocol: urlProtocols.HTTPS
     });
@@ -436,7 +420,7 @@ class ResourceViewPage extends React.Component {
 
   render() {
     const primaryUri = this.state.resource.metadata?.uris?.[0];
-    const additionalUris = this.state.resource.metadata?.uris?.slice(1);
+    const sanitizeResourceUrl = this.sanitizeResourceUrl();
     const isPasswordPreviewed = this.isPasswordPreviewed();
     const isTotpPreviewed = this.isTotpPreviewed();
     const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
@@ -628,12 +612,12 @@ class ResourceViewPage extends React.Component {
           <li className="property">
             <div className="information">
               <span className="property-name">URI</span>
-              {primaryUri && this.sanitizeResourceUrl(primaryUri) &&
-                <a href={this.sanitizeResourceUrl(primaryUri)} role="button" className="property-value" target="_blank" rel="noopener noreferrer">
+              {primaryUri && sanitizeResourceUrl &&
+                <a href={sanitizeResourceUrl} role="button" className="property-value" target="_blank" rel="noopener noreferrer">
                   {primaryUri}
                 </a>
               }
-              {primaryUri && !this.sanitizeResourceUrl(primaryUri) &&
+              {primaryUri && !sanitizeResourceUrl &&
                 <span className="property-value">
                   {primaryUri}
                 </span>
@@ -644,43 +628,12 @@ class ResourceViewPage extends React.Component {
                 </span>
               }
             </div>
-            <a href={`${this.sanitizeResourceUrl(primaryUri) ? this.sanitizeResourceUrl(primaryUri) : "#"}`} role="button" className={`button button-transparent property-action ${!this.sanitizeResourceUrl(primaryUri) ? "disabled" : ""}`}
+            <a href={`${sanitizeResourceUrl ? sanitizeResourceUrl : "#"}`} role="button" className={`button button-transparent property-action ${!sanitizeResourceUrl ? "disabled" : ""}`}
               onClick={this.handleGoToUrlClick} target="_blank" rel="noopener noreferrer" title={this.translate("open in a new tab")}>
               <Icon name="external-link"/>
               <span className="visually-hidden"><Trans>Open in new window</Trans></span>
             </a>
           </li>
-          {additionalUris?.length > 0 &&
-            <li className="property">
-              <div className="information">
-                <div className="accordion">
-                  <div className="accordion-header additional-uris" onClick={this.handleClickAdditionalUrisSection}>
-                    <button type="button" className="link no-border property-name">
-                      {this.state.isOpenAdditionalUris
-                        ? <CaretDownSVG className="caret-down"/>
-                        : <CaretRightSVG className="caret-right"/>
-                      }
-                      <span><Trans>Additional URIs</Trans></span>
-                    </button>
-                  </div>
-                  {this.state.isOpenAdditionalUris &&
-                    <div className="accordion-content">
-                      <div className="list-uris">
-                        {additionalUris.map((uri, index) => {
-                          const safeUri = this.sanitizeResourceUrl(uri);
-                          if (safeUri) {
-                            return <a href={safeUri} className="property-value" key={index} target="_blank" rel="noopener noreferrer"><span className="ellipsis">{uri}</span></a>;
-                          }
-                          return <span className="property-value" key={index}>{uri}</span>;
-                        })
-                        }
-                      </div>
-                    </div>
-                  }
-                </div>
-              </div>
-            </li>
-          }
         </ul>
         <div className="submit-wrapper input">
           <a href="#" id="popupAction" className={`button primary big full-width ${this.state.usingOnThisTab ? "disabled" : ""}`} role="button" onClick={this.handleUseOnThisTabClick}>

@@ -127,7 +127,9 @@ class DisplayResourcesListDetails extends React.Component {
     const resource = this.props.resourceWorkspaceContext.selectedResources[index];
     return (
       <div key={resource.id} className="sidebar-header">
-        <ResourceIcon resource={resource} />
+        <div className="teaser-image">
+          <ResourceIcon resource={resource} />
+        </div>
         <div className="title-area">
           <h3>
             <div className="title-wrapper">

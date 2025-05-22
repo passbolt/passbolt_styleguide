@@ -43,8 +43,6 @@ import EmailSVG from "../../../../img/svg/email.svg";
 import KeySVG from "../../../../img/svg/key.svg";
 import DeleteSVG from "../../../../img/svg/delete.svg";
 import EditSVG from "../../../../img/svg/edit.svg";
-import MetadataKeySVG from "../../../../img/svg/metadata_key.svg";
-import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/ConfirmShareMissingMetadataKeys";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -72,7 +70,6 @@ class DisplayUserWorkspaceActions extends React.Component {
     this.handleResendInviteClickEvent = this.handleResendInviteClickEvent.bind(this);
     this.handleReviewRecoveryRequestEvent = this.handleReviewRecoveryRequestEvent.bind(this);
     this.handleClearSelectionClick = this.handleClearSelectionClick.bind(this);
-    this.handleShareMissingMetadataKeysEvent = this.handleShareMissingMetadataKeysEvent.bind(this);
   }
 
   /**
@@ -191,16 +188,6 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
-   * Handle share missing metadata keys click event
-   */
-  handleShareMissingMetadataKeysEvent() {
-    const shareMissingMetadataKeysDialogProps = {
-      user: this.selectedUser,
-    };
-    this.props.dialogContext.open(ConfirmShareMissingMetadataKeys, shareMissingMetadataKeysDialogProps);
-  }
-
-  /**
    * Get selected user
    * @returns {user|null}
    */
@@ -245,15 +232,6 @@ class DisplayUserWorkspaceActions extends React.Component {
     return this.hasOneUserSelected()
       && this.props.context.siteSettings.canIUse("accountRecovery")
       && Boolean(this.selectedUser.pending_account_recovery_request);
-  }
-
-  /**
-   * Check if the user can use the share missing data key capability.
-   */
-  get canIShareMissingMetadataKeys() {
-    return this.hasOneUserSelected()
-      && this.props.context.siteSettings.canIUse("metadata")
-      && this.selectedUser.missing_metadata_key_ids?.length > 0;
   }
 
   /**
@@ -415,14 +393,6 @@ class DisplayUserWorkspaceActions extends React.Component {
                     <button id="review-recovery" className="button-action-contextual" type="button" onClick={this.handleReviewRecoveryRequestEvent}>
                       <BuoySVG/>
                       <span><Trans>Review recovery request</Trans></span>
-                    </button>
-                  </li>
-                }
-                {this.canIShareMissingMetadataKeys &&
-                  <li>
-                    <button id="share-metadata-keys" className="button-action-contextual" type="button" onClick={this.handleShareMissingMetadataKeysEvent}>
-                      <MetadataKeySVG/>
-                      <span><Trans>Share metadata keys</Trans></span>
                     </button>
                   </li>
                 }

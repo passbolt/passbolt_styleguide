@@ -66,13 +66,6 @@ export default class DisplayUserDetailsInformationPage {
   }
 
   /**
-   * Returns the detailed metadata keys status
-   */
-  get metadataKeysStatus() {
-    return this._page.container.querySelector('.metadata-keys.value').textContent;
-  }
-
-  /**
    * Returns true if the component is in a collapsed mode
    */
   get isCollapsed() {

@@ -29,7 +29,6 @@ import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import ConfirmDisableUserMFA from "../ConfirmDisableUserMFA/ConfirmDisableUserMFA";
 import HandleReviewAccountRecoveryRequestWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
-import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/ConfirmShareMissingMetadataKeys";
 
 beforeEach(() => {
   jest.resetModules();
@@ -252,30 +251,6 @@ describe("Display User Workspace Actions", () => {
     page = new DisplayUserWorkspaceActionsPage(propsUserRole());
     await waitFor(() => {});
     expect(page.canReviewAccountRecovery).toBeFalsy();
-  });
-
-  it('As AD I should be able to share missing metadata keys if a user is selected', async() => {
-    expect.assertions(1);
-    page = new DisplayUserWorkspaceActionsPage(propsWithSelectedUser());
-    await waitFor(() => {});
-    expect(page.canShareMissingMetadataKeys).toBeTruthy();
-  });
-
-  it('As AD I can click to share missing metadata keys if a user is selected', async() => {
-    expect.assertions(1);
-    const props = propsWithSelectedUser();
-    page = new DisplayUserWorkspaceActionsPage(props);
-    await waitFor(() => {});
-    await page.shareMetadataKeys();
-
-    expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmShareMissingMetadataKeys, {"user": props.userWorkspaceContext.selectedUsers[0]});
-  });
-
-  it('As LU I should not be able to share missing metadata key with user role', async() => {
-    expect.assertions(1);
-    page = new DisplayUserWorkspaceActionsPage(propsUserRole());
-    await waitFor(() => {});
-    expect(page.canShareMissingMetadataKeys).toBeFalsy();
   });
 });
 

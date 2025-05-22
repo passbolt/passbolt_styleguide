@@ -28,7 +28,7 @@ import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import GridTable from "../../../../shared/components/Table/GridTable";
 import CellFavorite from "../../../../shared/components/Table/CellFavorite";
-import CellUris from "../../../../shared/components/Table/CellUris";
+import CellLink from "../../../../shared/components/Table/CellLink";
 import CellPassword from "../../../../shared/components/Table/CellPassword";
 import CellButton from "../../../../shared/components/Table/CellButton";
 import CellHeaderCheckbox from "../../../../shared/components/Table/CellHeaderCheckbox";
@@ -139,7 +139,7 @@ class DisplayResourcesList extends React.Component {
     if (this.props.context.siteSettings.canIUse('totpResourceTypes')) {
       this.defaultColumns.push(new ColumnTotpModel({cellRenderer: {component: CellTotp, props: {title: this.translate("secret"), getPreviewTotp: this.getPreviewTotp, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onTotpClick: this.handleCopyTotpClick, onPreviewTotpClick: this.handlePreviewTotpButtonClick, hasTotp: this.isTotpResources}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("TOTP")}}}));
     }
-    this.defaultColumns.push(new ColumnUriModel({cellRenderer: {component: CellUris, props: {onClick: this.handleGoToResourceUriClick}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("URI")}}}));
+    this.defaultColumns.push(new ColumnUriModel({cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("URI")}}}));
     this.defaultColumns.push(new ColumnModifiedModel({cellRenderer: {component: CellDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Modified")}}}));
     if (this.canUseFolders) {
       this.defaultColumns.push(new ColumnLocationModel({getValue: resource => this.props.context.getHierarchyFolderCache(resource.folder_parent_id), cellRenderer: {component: CellLocation, props: {onClick: this.handleLocationClick, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Location")}}}));

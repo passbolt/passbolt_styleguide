@@ -28,8 +28,6 @@
   --Palette-Select-highlight-2: hsl(200, 10%, 12%);
   --Text-and-icons-Main-text: var(--Palette-Gradient-9);
   --Text-and-icons-Secondary-text: var(--Palette-Gradient-8);
-  --Text-and-icons-clear-color: #FFFFFF;
-  --Text-and-icons-dark-color: #000000;
   --Primary-button-Primary-button-text: var(--Palette-Gradient-1);
   --Action-button-Action-button-background: var(--Palette-Gradient-4);
   --Action-button-Action-button-background-2: var(--Palette-Gradient-4);
@@ -3956,12 +3954,7 @@ body {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.quickaccess .index-list .suggested-resource-entry .resource-details .uris {
-  display: flex;
-  gap: 0.4rem;
-  min-width: 0;
-}
-.quickaccess .index-list .suggested-resource-entry .resource-details .uris .url {
+.quickaccess .index-list .suggested-resource-entry .resource-details .url {
   display: block;
   font-size: 1.3rem;
   padding-top: 0.4rem;
@@ -3971,9 +3964,6 @@ body {
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
-}
-.quickaccess .index-list .suggested-resource-entry .resource-details .uris .badge {
-  margin-top: 0.2rem;
 }
 .quickaccess .index-list .suggested-resource-entry .chevron-right-wrapper {
   display: flex;
@@ -4006,17 +3996,9 @@ body {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.quickaccess .index-list .browse-resource-entry a .inline-resource-entry .uris {
-  display: flex;
-  gap: 0.4rem;
-  min-width: 0;
-}
-.quickaccess .index-list .browse-resource-entry a .inline-resource-entry .uris .url {
+.quickaccess .index-list .browse-resource-entry a .inline-resource-entry .url {
   display: block;
-  font-size: 1.2rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+  font-size: 1.3rem;
   padding-top: 0.4rem;
   color: var(--Text-and-icons-Secondary-text);
   white-space: nowrap;
@@ -4024,9 +4006,6 @@ body {
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
-}
-.quickaccess .index-list .browse-resource-entry a .inline-resource-entry .uris .badge {
-  margin-top: 0.2rem;
 }
 .quickaccess .index-list .filter-entry:last-child a,
 .quickaccess .index-list .browse-resource-entry:last-child a {
@@ -4131,9 +4110,6 @@ body {
 .quickaccess .item-browse .properties .property a {
   border: 0;
 }
-.quickaccess .item-browse .properties .property a:hover {
-  color: var(--Palette-Contrast-1);
-}
 .quickaccess .item-browse .properties .property button:hover {
   color: var(--Palette-Contrast-1);
 }
@@ -4141,7 +4117,6 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0;
 }
 .quickaccess .item-browse .properties .information .password-wrapper,
 .quickaccess .item-browse .properties .information .totp-wrapper {
@@ -4157,35 +4132,6 @@ body {
 .quickaccess .item-browse .properties .information .password-wrapper .totp-code + .svg-icon.timer,
 .quickaccess .item-browse .properties .information .totp-wrapper .totp-code + .svg-icon.timer {
   margin-left: 0.5rem;
-}
-.quickaccess .item-browse .properties .information .accordion .accordion-header svg {
-  --icon-color: var(--Text-and-icons-Secondary-text);
-}
-.quickaccess .item-browse .properties .information .accordion .accordion-header svg.caret-down,
-.quickaccess .item-browse .properties .information .accordion .accordion-header svg.caret-right {
-  width: inherit;
-  height: inherit;
-}
-.quickaccess .item-browse .properties .information .accordion .accordion-header svg.caret-right {
-  margin-right: 0.2rem;
-}
-.quickaccess .item-browse .properties .information .accordion-content .list-uris {
-  display: block;
-  max-height: 6rem;
-  padding-top: 0.4rem;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--Workspace-Elevator) transparent;
-}
-.quickaccess .item-browse .properties .information .accordion-content .list-uris .property-value {
-  font-size: 1.3rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  max-width: 100%;
-}
-.quickaccess .item-browse .properties .information .accordion-content .list-uris .property-value:last-child {
-  margin-bottom: 0;
 }
 .quickaccess .item-browse .properties .property-value {
   max-width: 30rem;
@@ -4781,145 +4727,4 @@ body {
 .tooltip:hover .tooltip-text.left:after,
 .tooltip:focus .tooltip-text.left:after {
   transform: translate(0, -50%);
-}
-/*
-	Tooltips Portal
-*/
-/* Tooltip Portal container */
-.tooltip-portal {
-  display: flex;
-  cursor: pointer;
-}
-.tooltip-portal:focus,
-.tooltip-portal :focus-visible {
-  outline: 0;
-}
-.tooltip-portal span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-/* Tooltip text */
-.tooltip-portal-text {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  z-index: 1000;
-  max-width: 24rem;
-  width: max-content;
-  padding: 0.4rem 0.8rem;
-  background: var(--Tool-tip-Tool-tip-background);
-  color: var(--Tool-tip-Tool-tip-text);
-  border-radius: var(--Menu-radius);
-  font-size: 1.2rem;
-  line-height: 1.6rem;
-  font-weight: normal;
-  text-align: left;
-  /* only right for now */
-}
-.tooltip-portal-text::after {
-  content: " ";
-  position: absolute;
-  border: 0.5rem solid transparent;
-}
-.tooltip-portal-text.top::after {
-  left: calc(50% - 5px);
-  top: 100%;
-  border-top-color: var(--Tool-tip-Tool-tip-background);
-}
-.tooltip-portal-text.right::after {
-  bottom: calc(50% - 5px);
-  right: 100%;
-  border-right-color: var(--Tool-tip-Tool-tip-background);
-}
-.tooltip-portal-text.bottom::after {
-  right: calc(50% - 5px);
-  bottom: 100%;
-  border-bottom-color: var(--Tool-tip-Tool-tip-background);
-}
-.tooltip-portal-text.left::after {
-  top: calc(50% - 5px);
-  left: 100%;
-  border-left-color: var(--Tool-tip-Tool-tip-background);
-}
-.tooltip-portal-text .folder-level span.caret {
-  margin-right: 0.5rem;
-}
-.tooltip-portal-text.additional-uris {
-  padding: 0;
-}
-.tooltip-portal-text.additional-uris .list-uris {
-  display: block;
-  max-height: 10rem;
-  padding: 0.4rem 0.8rem;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--Workspace-Elevator) transparent;
-}
-.tooltip-portal-text.additional-uris .list-uris button.link > span {
-  display: block;
-}
-.tooltip-portal-text.additional-uris .list-uris button.link:after {
-  background-color: var(--Tool-tip-Tool-tip-text);
-}
-.tooltip-portal-text.additional-uris .list-uris button.link:link,
-.tooltip-portal-text.additional-uris .list-uris button.link:visited {
-  color: var(--Tool-tip-Tool-tip-text);
-}
-.tooltip-portal-text.additional-uris .list-uris button.link:active,
-.tooltip-portal-text.additional-uris .list-uris button.link:hover {
-  color: var(--Tool-tip-Tool-tip-text);
-  box-shadow: none;
-  border: none;
-  cursor: pointer;
-}
-.tooltip-portal-text.additional-uris .list-uris button.link:active::after,
-.tooltip-portal-text.additional-uris .list-uris button.link:hover::after {
-  background-color: var(--Palette-Contrast-1);
-}
-.tooltip-portal-text.additional-uris .list-uris button.link:focus,
-.tooltip-portal-text.additional-uris .list-uris button.link:focus-visible {
-  box-shadow: none;
-  border: none;
-  cursor: pointer;
-}
-.tooltip-portal-text.additional-uris .list-uris button.link:focus::after,
-.tooltip-portal-text.additional-uris .list-uris button.link:focus-visible::after {
-  background-color: var(--Palette-Contrast-1);
-  box-shadow: 0 0 0.4rem 0 var(--States-Focus);
-}
-.tooltip-portal-text.additional-uris .list-uris span.link {
-  cursor: default;
-}
-.tooltip-portal-text.additional-uris .list-uris .link {
-  display: block;
-  color: var(--Tool-tip-Tool-tip-text);
-  font-size: 1.1rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  margin-bottom: 0.5rem;
-  max-width: 100%;
-}
-.tooltip-portal-text.additional-uris .list-uris .link:last-child {
-  margin-bottom: 0;
-}
-.badge {
-  display: inline-flex;
-  padding: 0 0.4rem 0.1rem 0.4rem;
-  flex-direction: column;
-  flex-shrink: 0;
-  justify-content: center;
-  align-items: center;
-  border-radius: var(--Token-radius);
-  background: var(--Workspace-Dividers-lighter);
-}
-.badge .count {
-  color: var(--Text-and-icons-Secondary-text);
-  font-size: 1.2rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
 }

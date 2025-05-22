@@ -108,14 +108,6 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Returns true if one can share missing metadata keys with a user
-   */
-  get canShareMissingMetadataKeys() {
-    const element = this._page.container.querySelector('#share-metadata-keys');
-    return Boolean(element);
-  }
-
-  /**
    * Asks for copy actions through the dropdown
    */
   async copyActions() {
@@ -170,15 +162,6 @@ export default class DisplayUserWorkspaceActionsPage {
     const element = this._page.container.querySelector('#review-recovery');
     await this.click(element);
   }
-
-  /**
-   * Share metadata keys with user
-   */
-  async shareMetadataKeys() {
-    const element = this._page.container.querySelector('#share-metadata-keys');
-    await this.click(element);
-  }
-
 
   /**
    * click on element

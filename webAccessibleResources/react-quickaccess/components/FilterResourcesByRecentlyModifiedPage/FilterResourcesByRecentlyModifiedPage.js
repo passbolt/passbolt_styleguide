@@ -19,8 +19,6 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_SLUG
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
-import DisplayResourceUrisBadge
-  from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 
 const BROWSED_RESOURCES_LIMIT = 500;
 
@@ -186,12 +184,7 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
                             <span className="title">{resource.metadata.name}</span>
                             <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
                           </div>
-                          <div className="uris">
-                            <span className="url">{resource.metadata.uris?.[0]}</span>
-                            {resource.metadata.uris?.length > 1 &&
-                              <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)}/>
-                            }
-                          </div>
+                          <span className="url">{resource.metadata.uris?.[0]}</span>
                         </div>
                       </a>
                     </li>

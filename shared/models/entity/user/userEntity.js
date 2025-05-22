@@ -95,13 +95,6 @@ class UserEntity extends EntityV2 {
           "format": "date-time",
           "nullable": true,
         },
-        "missing_metadata_key_ids": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "uuid"
-          },
-        },
         "created": {
           "type": "string",
           "format": "date-time"
@@ -209,14 +202,6 @@ class UserEntity extends EntityV2 {
   }
 
   /**
-   * Get missing metadata keys ids for a user
-   * @returns {(array)} the list of missing metadata keys
-   */
-  get missingMetadataKeysIds() {
-    return this._props.missing_metadata_key_ids || [];
-  }
-
-  /**
    * Get user creation date
    * @returns {(string|null)} date
    */
@@ -231,15 +216,6 @@ class UserEntity extends EntityV2 {
   get modified() {
     return this._props.modified || null;
   }
-
-  /**
-   * Set the user missing metadata keys ids
-   * @params {array} the missing metadata keys ids
-   */
-  set missingMetadataKeysIds(missingMetadataKeysIds) {
-    this._props.missing_metadata_key_ids = missingMetadataKeysIds;
-  }
-
 
   /**
    * UserEntity.ALL_CONTAIN_OPTIONS

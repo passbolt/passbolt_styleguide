@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {createSafePortal} from "../../../../shared/utils/portals";
+import {createPortal} from "react-dom";
 
 const MARGIN = 10;
 
@@ -146,7 +146,7 @@ class TooltipPortal extends Component {
           {this.props.children}
         </span>
         {this.state.hasToDisplayTooltip &&
-          createSafePortal(<span ref={this.tooltipTextRef} className={`tooltip-portal-text ${this.state.direction} ${this.props.className}`}
+          createPortal(<span ref={this.tooltipTextRef} className={`tooltip-portal-text ${this.state.direction}`}
             style={{top: `${this.state.top}px`, left: `${this.state.left}px`}}>
             {this.props.message}
           </span>, document.body)
@@ -159,8 +159,7 @@ class TooltipPortal extends Component {
 TooltipPortal.propTypes = {
   children: PropTypes.any,
   message: PropTypes.any.isRequired,
-  onMouseHover: PropTypes.func,
-  className: PropTypes.string,
+  onMouseHover: PropTypes.func
 };
 
 export default TooltipPortal;

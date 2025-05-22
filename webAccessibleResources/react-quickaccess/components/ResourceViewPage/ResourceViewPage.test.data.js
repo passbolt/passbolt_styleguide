@@ -13,10 +13,6 @@ import {
 } from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import {TEST_RESOURCE_TYPE_V5_DEFAULT} from "../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
-import {
-  defaultResourceMetadataDto
-} from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 
 /**
  * Default component props.
@@ -98,22 +94,6 @@ export function standaloneTotpResourceProps(props = {}) {
   const resources = [resourceStandaloneTotpDto(), defaultResourceDto()];
   storage.local.set({resources});
 
-  return defaultProps({
-    context: defaultAppContext({storage}),
-    initialEntries: `/${resources[0].id}`,
-    ...props
-  });
-}
-
-/**
- * Props for user having a denied access to all ui action
- * @param {Object} props The props to override
- * @returns {object}
- */
-export function multipleUrisResourceProps(props = {}) {
-  const storage = new MockStorage();
-  const resources = [defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT, metadata: defaultResourceMetadataDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT, uris: ["https://passbolt.com", "https://community.passbolt.com", "https://www.passbolt.com/docs", "https://www.passbolt.com/blog", "https://www.passbolt.com/security"]}),})];
-  storage.local.set({resources});
   return defaultProps({
     context: defaultAppContext({storage}),
     initialEntries: `/${resources[0].id}`,

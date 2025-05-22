@@ -102,7 +102,6 @@ import LockSVG from "../../../img/svg/lock.svg";
 import LockedSVG from "../../../img/svg/locked.svg";
 import LogoutSVG from "../../../img/svg/logout.svg";
 import MenuSVG from "../../../img/svg/menu.svg";
-import MetadataKeySVG from "../../../img/svg/metadata_key.svg";
 import MfaSVG from "../../../img/svg/mfa.svg";
 import MfaPolicySVG from "../../../img/svg/mfa_policy.svg";
 import MobileSVG from "../../../img/svg/mobile.svg";
@@ -271,7 +270,6 @@ const iconsSVGs = [
   LockedSVG,
   LogoutSVG,
   MenuSVG,
-  MetadataKeySVG,
   MobileSVG,
   MoreHorizontalSVG,
   MoreVerticalSVG,
