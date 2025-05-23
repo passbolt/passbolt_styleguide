@@ -508,7 +508,7 @@ class ShareDialog extends Component {
         tooltip={this.getTooltip()}
         onClose={this.handleClose}
         disabled={this.hasAllInputDisabled()}>
-        <form className="share-form grid-and-footer" onSubmit={this.handleFormSubmit} noValidate>
+        <form className="share-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className="scroll permission-edit">
               {(this.state.loading) &&
