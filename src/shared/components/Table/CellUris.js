@@ -82,12 +82,12 @@ class CellUris extends Component {
   render() {
     const safeLink = this.safeLink(this.mainUri);
     return (
-      <div title={this.additionalUris?.length === 0 ? this.mainUri : ""}>
+      <div>
         {safeLink &&
-          <button title={this.additionalUris?.length > 0 ? this.mainUri : ""} className="no-border ellipsis" type="button" onClick={this.handleClick}><span>{this.mainUri}</span></button>
+          <button title={this.mainUri} className="no-border ellipsis" type="button" onClick={this.handleClick}><span>{this.mainUri}</span></button>
         }
         {!safeLink &&
-          <span title={this.additionalUris?.length > 0 ? this.mainUri : ""}>{this.mainUri}</span>
+          <span title={this.mainUri}>{this.mainUri}</span>
         }
         {this.additionalUris?.length > 0 &&
           <DisplayResourceUrisBadge additionalUris={this.additionalUris}/>
