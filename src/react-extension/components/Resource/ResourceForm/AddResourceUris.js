@@ -22,6 +22,8 @@ import AttentionSVG from "../../../../img/svg/attention.svg";
 import DeleteSVG from "../../../../img/svg/delete.svg";
 import AddSVG from "../../../../img/svg/add.svg";
 
+const URIS_LIMIT = 20;
+
 class AddResourceUris extends Component {
   constructor(props) {
     super(props);
@@ -104,7 +106,7 @@ class AddResourceUris extends Component {
    */
   get canAddUri() {
     const lastUri = this.props.resource?.metadata?.uris?.[this.props.resource.metadata.uris.length - 1];
-    return !(lastUri?.length > 0);
+    return lastUri?.length > 0 && this.props.resource.metadata.uris.length < URIS_LIMIT;
   }
 
   /**
@@ -174,7 +176,7 @@ class AddResourceUris extends Component {
               }
             </div>
             <div className="uri-add">
-              <button type="button" disabled={this.canAddUri} onClick={this.handleAddUriClick}>
+              <button type="button" disabled={!this.canAddUri} onClick={this.handleAddUriClick}>
                 <AddSVG/>
                 <span><Trans>Add URI</Trans></span>
               </button>
