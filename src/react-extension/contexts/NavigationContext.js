@@ -55,6 +55,9 @@ export const NavigationContext = React.createContext({
   // Users
   onGoToUsersRequested: () => {
   }, // Whenever the user wants to navigate to the users workspace
+  // Help
+  onGoToHelpRequested: () => {
+  }, // Whenever the user wants to navigate to the help passbolt documentation
   // User settings
   onGoToUserSettingsProfileRequested: () => {
   }, // Whenever the user wants to navigate to the users settings workspace profile section.
@@ -128,6 +131,8 @@ class NavigationContextProvider extends React.Component {
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
       onGoToUsersRequested: this.onGoToUsersRequested.bind(this), // Whenever the user wants to navigate to the users workspace
+      // Help
+      onGoToHelpRequested: this.onGoToHelpRequested.bind(this), // Whenever the user wants to navigate to the help passbolt documentation
       // User settings
       onGoToUserSettingsProfileRequested: this.onGoToUserSettingsProfileRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace profile section.
       onGoToUserSettingsPassphraseRequested: this.onGoToUserSettingsPassphraseRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace pasphrase section.
@@ -422,6 +427,20 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToUsersRequested() {
     await this.goTo("browser-extension", "/app/users");
+  }
+
+  /*
+   * =============================================================
+   *  Help navigation
+   * =============================================================
+   */
+
+  /**
+   * Whenever the user wants to navigate to the passbolt help documentation.
+   * @returns {Promise<void>}
+   */
+  async onGoToHelpRequested() {
+    await this.onGoToNewTab("https://www.passbolt.com/docs/");
   }
 
   /*
