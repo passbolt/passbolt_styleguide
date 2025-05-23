@@ -566,8 +566,14 @@ class CreateResource extends Component {
         <form onSubmit={this.handleFormSubmit} className="grid-and-footer" noValidate>
           <div className="grid">
             <AddResourceName
-              resource={this.state.resource} folderParentId={this.props.folderParentId} onChange={this.handleInputChange} warnings={warnings}
-              errors={errors} disabled={this.state.isProcessing}/>
+              resource={this.state.resource}
+              folderParentId={this.props.folderParentId}
+              onChange={this.handleInputChange}
+              warnings={warnings}
+              errors={errors}
+              disabled={this.state.isProcessing}
+              onIconClick={this.onSelectForm}
+            />
             <div className="create-workspace">
               <OrchestrateResourceForm
                 resourceFormSelected={this.state.resourceFormSelected}

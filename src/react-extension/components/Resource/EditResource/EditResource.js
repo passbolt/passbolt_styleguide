@@ -658,6 +658,7 @@ class EditResource extends Component {
                   disabled={this.hasAllInputDisabled}
                   warnings={warnings}
                   errors={errors}
+                  onIconClick={this.onSelectForm}
                 />
                 <div className="edit-workspace">
                   <OrchestrateResourceForm

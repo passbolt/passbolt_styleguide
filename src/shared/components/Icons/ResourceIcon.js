@@ -90,7 +90,7 @@ export class ResourceIcon extends Component {
    */
   render() {
     return (
-      <div className={`teaser-image ${this.getContrastedColorClassName()}`} style={this.getResourceColor()}>
+      <div className={`teaser-image ${this.getContrastedColorClassName()}`} style={this.getResourceColor()} onClick={this.props?.clickCallback}>
         {this.getResourceIcon()}
       </div>
     );
@@ -100,6 +100,7 @@ export class ResourceIcon extends Component {
 ResourceIcon.propTypes = {
   resource: PropTypes.object,
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  clickCallback: PropTypes.func, // A click callback
 };
 
 export default withResourceTypesLocalStorage(ResourceIcon);
