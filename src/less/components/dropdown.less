@@ -27,6 +27,10 @@
             &.add-secret {
               background: var(--Primary-button-Primary-button-menu-background)
             }
+
+            &.switcher {
+              background: var(--Workspace-Workspace-button-background);
+            }
         }
     }
 
@@ -56,6 +60,10 @@
           background: var(--Primary-button-Primary-button-menu-background);
         }
 
+        &.menu-switcher {
+          background: var(--Workspace-Workspace-button-background);
+        }
+
         &.visible {
             display: block;
         }
@@ -69,59 +77,6 @@
             left: 0;
             border-radius: 0 var(--Menu-radius) var(--Menu-radius) var(--Menu-radius);
         }
-
-        &.over {
-            right: -.1rem;
-            top: -.4rem;
-            z-index: 10;
-            padding: 0;
-            box-shadow: none;
-            border: none;
-
-            &:before {
-                content: "";
-                position: absolute;
-                width: 100%;
-                border-radius: var(--Workspace-selection-button-radius);
-                // 4.1rem is the height of a single dropdown item in this context
-                top: 4.1rem;
-                height: calc(100% - 4.1rem);
-                box-shadow: var(--Menu-drop-shadow-Menu-drop-shadow-X) var(--Menu-drop-shadow-Menu-drop-shadow-Y) var(--Menu-drop-shadow-Menu-drop-shadow-blur) 0 var(--Menu-drop-shadow-Menu-drop-shadow);
-            }
-
-            button.no-border {
-                display: flex;
-                justify-content: flex-end;
-                padding: 1rem var(--Workspace-selection-button-padding);
-                gap: 1.6rem;
-            }
-
-            li {
-                position: relative;
-                background: var(--Workspace-Workspace-button-background);
-                border-left: .1rem solid var(--Action-button-Action-button-border);
-                border-right: .1rem solid var(--Action-button-Action-button-border);
-
-                &:first-child {
-                    border-radius: var(--Workspace-selection-button-radius) var(--Workspace-selection-button-radius) 0 0;
-                    border-top: .1rem solid var(--Action-button-Action-button-border);
-
-                    button {
-                        border-radius: var(--Workspace-selection-button-radius) var(--Workspace-selection-button-radius) 0 0;
-                    }
-                }
-
-                &:last-child {
-                    border-radius: 0 0 var(--Workspace-selection-button-radius) var(--Workspace-selection-button-radius);
-                    border-bottom: .1rem solid var(--Action-button-Action-button-border);
-
-                    button {
-                        border-radius: 0 0 var(--Workspace-selection-button-radius) var(--Workspace-selection-button-radius);
-                    }
-                }
-            }
-        }
-
 
         // Separator of dropdown menu item
         .separator-after {
