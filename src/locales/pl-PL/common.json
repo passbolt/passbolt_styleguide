@@ -1441,6 +1441,8 @@
   "UI Permissions": "Uprawnienia interfejsu użytkownika",
   "Uid": "Uid",
   "Unable to copy the TOTP": "Nie można skopiować TOTP",
+  "Unable to load/refresh the folders.": "Unable to load/refresh the folders.",
+  "Unable to load/refresh the resources.": "Unable to load/refresh the resources.",
   "Unable to preview the TOTP": "Nie można wyświetlić podglądu TOTP",
   "Unable to use the password on this page. Copy and paste the information instead.": "Nie można użyć hasła na tej stronie. W takim wypadku skopiuj i wklej tę informację.",
   "Unchanged": "Bez zmian",
