@@ -64,6 +64,7 @@ export const globalTypes = {
         { value: 'pt-BR', right: '🇧🇷', title: 'Português Brasil (beta)' },
         { value: 'ro-RO', right: '🇷🇴', title: 'Română (beta)' },
         { value: 'ru-RU', right: '🇷🇺', title: 'Pусский (beta)' },
+        { value: 'sl-SI', right: '🇸🇮', title: 'Slovenščina' },
         { value: 'sv-SE', right: '🇸🇪', title: 'Svenska' },
       ],
     },
