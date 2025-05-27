@@ -147,6 +147,13 @@ export default class SelectResourceFormPage {
   }
 
   /**
+   * Returns the upgrade cards element
+   */
+  get upgradeCards() {
+    return this._page.container.querySelector('.section-card .card');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
