@@ -452,6 +452,7 @@ SelectResourceForm.propTypes = {
   onSelectForm: PropTypes.func, // The on select form function
   onAddSecret: PropTypes.func, // The on add secret function
   onDeleteSecret: PropTypes.func, // The on delete secret function
+  onUpgradeToV5: PropTypes.func, // The on delete secret function
   resource: PropTypes.object, // The resource to edit or create
   resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource type entity
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection),

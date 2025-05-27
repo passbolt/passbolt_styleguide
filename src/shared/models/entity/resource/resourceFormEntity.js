@@ -31,7 +31,8 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
-  RESOURCE_TYPE_V5_TOTP_SLUG
+  RESOURCE_TYPE_V5_TOTP_SLUG,
+  V4_TO_V5_RESOURCE_TYPE_MAPPING
 } from "../resourceType/resourceTypeSchemasDefinition";
 import assertString from "validator/es/lib/util/assertString";
 import {ResourceEditCreateFormEnumerationTypes} from "../../resource/ResourceEditCreateFormEnumerationTypes";
@@ -557,6 +558,22 @@ class ResourceFormEntity extends EntityV2 {
       } else if (resourceType.isV4()) {
         this.secret.set("password", "", options);
       }
+    }
+  }
+
+  /**
+   * Upgrade resource v4 to resource v5
+   * @returns {void}
+   */
+  upgradeToV5() {
+    const resourceType = this.resourceTypes.getFirstById(this.resourceTypeId);
+    const v5ResourceTypeSlug = V4_TO_V5_RESOURCE_TYPE_MAPPING[resourceType?.slug];
+    //Do nothing if slug cannot be found
+    if (v5ResourceTypeSlug) {
+      const v5ResourceType = this.resourceTypes.getFirstBySlug(v5ResourceTypeSlug);
+      this.set("resource_type_id", v5ResourceType.id);
+      this.set("metadata.resource_type_id", v5ResourceType.id);
+      this.set("metadata.object_type", ResourceMetadataEntity.METADATA_OBJECT_TYPE);
     }
   }
 
