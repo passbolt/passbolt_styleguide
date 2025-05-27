@@ -624,6 +624,14 @@ class EditResource extends Component {
     return this.props.t;
   }
 
+  /**
+   * The upgrade to v5 action raised by user
+   * @returns {void}
+   */
+  upgradeToV5() {
+    this.resourceFormEntity.upgradeToV5();
+  }
+
   /*
    * =============================================================
    *  Render view
