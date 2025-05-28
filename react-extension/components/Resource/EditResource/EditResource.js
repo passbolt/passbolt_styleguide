@@ -636,6 +636,8 @@ class EditResource extends Component {
    */
   onUpgradeToV5() {
     this.resourceFormEntity.upgradeToV5();
+    const resourceType = this.props.resourceTypes.getFirstById(this.resourceFormEntity.resourceTypeId);
+    this.setState({resource: this.resourceFormEntity.toDto(), resourceType});
   }
 
   /*
