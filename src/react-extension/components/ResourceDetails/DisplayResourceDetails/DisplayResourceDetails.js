@@ -37,6 +37,16 @@ import Tabs from "../../Common/Tab/Tabs";
 import Tab from "../../Common/Tab/Tab";
 import DisplayResourceDetailsNote from "./DisplayResourceDetailsNote";
 import ResourceIcon from "../../../../shared/components/Icons/ResourceIcon";
+import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import {
+  V4_TO_V5_RESOURCE_TYPE_MAPPING
+} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import {
+  withMetadataTypesSettingsLocalStorage
+} from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -45,7 +55,18 @@ class DisplayResourceDetails extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.state = this.defaultState;
     this.bindCallbacks();
+  }
+
+  /**
+   * Get the default state
+   * @returns {object}
+   */
+  get defaultState() {
+    return {
+      displayUpgrade: true
+    };
   }
 
   /**
@@ -54,6 +75,7 @@ class DisplayResourceDetails extends React.Component {
   bindCallbacks() {
     this.handlePermalinkClick = this.handlePermalinkClick.bind(this);
     this.handleCloseClick = this.handleCloseClick.bind(this);
+    this.handleDisplayUpgradeClick = this.handleDisplayUpgradeClick.bind(this);
   }
 
   /**
@@ -104,6 +126,13 @@ class DisplayResourceDetails extends React.Component {
   }
 
   /**
+   * Handles the click on the display upgrade button.
+   */
+  handleDisplayUpgradeClick() {
+    this.setState({displayUpgrade: !this.state.displayUpgrade});
+  }
+
+  /**
    * Is TOTP resource
    * @return {boolean}
    */
@@ -141,6 +170,16 @@ class DisplayResourceDetails extends React.Component {
    */
   get hasSecureNote() {
     return this.props.resourceTypes?.getFirstById(this.props.resourceWorkspaceContext.details.resource.resource_type_id)?.hasSecretDescription();
+  }
+
+  /**
+   * Should display the upgrade resource section
+   * @returns {boolean}
+   */
+  get shouldDisplayUpgradeResource() {
+    const resourceType = this.props.resourceTypes?.getFirstById(this.props.resourceWorkspaceContext.details.resource.resource_type_id);
+    const v5ResourceTypeSlug = V4_TO_V5_RESOURCE_TYPE_MAPPING[resourceType?.slug];
+    return this.props.metadataTypeSettings?.allowV4V5Upgrade && resourceType?.isV4() && this.props.resourceTypes.hasOneWithSlug(v5ResourceTypeSlug);
   }
 
   /**
@@ -215,7 +254,33 @@ class DisplayResourceDetails extends React.Component {
             </button>
           </div>
         </div>
-
+        {this.shouldDisplayUpgradeResource &&
+          <div className="section-card">
+            <div className="card">
+              <button type="button" className="title no-border" onClick={this.handleDisplayUpgradeClick}>
+                <ArrowBigUpDashSVG/>
+                <span className="text ellipsis"><Trans>Resource upgrade available</Trans></span>
+                {this.state.displayUpgrade
+                  ? <CaretDownSVG className="caret-down"/>
+                  : <CaretRightSVG className="caret-right"/>
+                }
+              </button>
+              {this.state.displayUpgrade &&
+                <div className="content">
+                  <p><Trans>Upgrade for security improvements and new features.</Trans></p>
+                  <div className="actions-wrapper">
+                    <a className="link" href="https://www.passbolt.com/blog/the-road-to-passbolt-v5-encrypted-metadata-and-other-core-security-changes-2" target="_blank" rel="noopener noreferrer">
+                      <span className="ellipsis"><Trans>Learn more</Trans></span>
+                    </a>
+                    <button disabled={this.state.processing} type="button">
+                      <span className="ellipsis"><Trans>Upgrade</Trans></span>
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
         <div className="sidebar-content">
           {!canUseAuditLog
             ? this.renderResourceDetail()
@@ -240,7 +305,8 @@ DisplayResourceDetails.propTypes = {
   resourceWorkspaceContext: PropTypes.object,
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withResourceTypesLocalStorage(withActionFeedback(withTranslation('common')(DisplayResourceDetails))))));
+export default withAppContext(withRbac(withMetadataTypesSettingsLocalStorage(withResourceTypesLocalStorage(withActionFeedback(withResourceWorkspace(withTranslation('common')(DisplayResourceDetails)))))));
