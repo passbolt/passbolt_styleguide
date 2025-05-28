@@ -33,6 +33,9 @@ import {
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  resourceTypesV4CollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -65,6 +68,33 @@ describe("SelectResourceForm", () => {
       expect(page.getSectionItem(2)).toBeUndefined();
     });
 
+    it('As LU I should see the upgrade resource cards for v4 default.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()), resource: defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: {password: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.upgradeCard).toBeDefined();
+    });
+
+    it('As LU I should not see the upgrade resource v4 default if no resource type v5 corresponding.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resourceTypes: new ResourceTypesCollection(resourceTypesV4CollectionDto()), resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()), resource: defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: {password: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.upgradeCard).toBeNull();
+    });
+
+    it('As LU I should not see the upgrade resource v4 default if props canUpgradeResource is false.', async() => {
+      expect.assertions(1);
+      const props = defaultProps({canUpgradeResource: false, resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()), resource: defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: {password: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.upgradeCard).toBeNull();
+    });
+
     it('As LU I do not see the resource uris for v4 default.', async() => {
       expect.assertions(1);
       const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()), resource: defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: {password: ""}})});
@@ -90,6 +120,15 @@ describe("SelectResourceForm", () => {
       await waitFor(() => {});
 
       expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
+    });
+
+    it('As LU I should not see the upgrade resource for a resource v5.', async() => {
+      expect.assertions(1);
+      const props = defaultProps();
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.upgradeCard).toBeNull();
     });
 
     it('As LU the resource secret section totp should be selected.', async() => {
@@ -498,6 +537,21 @@ describe("SelectResourceForm", () => {
       await waitFor(() => {});
 
       expect(page.deleteSecretPassword).toBeNull();
+    });
+  });
+
+  describe('As LU I can upgrade a resource.', () => {
+    it('As LU I can upgrade a resource v4 to v5.', async() => {
+      expect.assertions(2);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()), resource: defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: {password: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.upgradeCard).toBeDefined();
+
+      await page.click(page.upgradeButton);
+
+      expect(props.onUpgradeToV5).toHaveBeenCalled();
     });
   });
 

@@ -193,7 +193,7 @@ describe("See the Create Resource", () => {
       });
 
       it('As a signed-in user I should be able to add secret with a resource type mutation', async() => {
-        expect.assertions(2);
+        expect.assertions(3);
 
         const props = defaultProps();
         mockContextRequest(props.context, () => ({object_type: SECRET_DATA_OBJECT_TYPE, password: "password", description: "description"}));
@@ -206,6 +206,7 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
         expect(page.note).toBeDefined();
+        expect(page.upgradeCard).toBeNull();
       });
 
       it('As a signed-in user I should be able to add secret with a resource type mutation with a standalone totp', async() => {
@@ -224,7 +225,7 @@ describe("See the Create Resource", () => {
       });
 
       it('As a signed-in user I should be able to add secret totp for a resource v4 password string', async() => {
-        expect.assertions(2);
+        expect.assertions(3);
 
         const props = defaultProps({resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING})});
         mockContextRequest(props.context, () => ({password: "password"}));
@@ -237,6 +238,7 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
         expect(page.note).toBeDefined();
+        expect(page.upgradeCard).toBeDefined();
       });
     });
 
@@ -837,7 +839,7 @@ describe("See the Create Resource", () => {
       });
 
       it('As a signed-in user I should be able to convert a note to a description for a v4 default', async() => {
-        expect.assertions(1);
+        expect.assertions(2);
 
         const props = defaultProps({resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION})});
         mockContextRequest(props.context, () => ({password: "RN9n8XuECN3", description: "description"}));
@@ -849,6 +851,7 @@ describe("See the Create Resource", () => {
 
         // expectations
         expect(page.convertToDescription).toBeNull();
+        expect(page.upgradeCard).toBeDefined();
       });
     });
 
@@ -1446,6 +1449,47 @@ describe("See the Create Resource", () => {
         password: "RN9n8XuECN3",
         totp: defaultTotpDto({secret_key: "JBSWY3DPEHPK3PXP"}),
         description: props.resource.metadata.description
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been updated successfully");
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As a signed-in user I should be able to upgrade and save a resource v4 default to v5 default', async() => {
+      expect.assertions(3);
+      const props = defaultProps({resource: defaultResourceDto({metadata: defaultResourceMetadataDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, description: null})})});
+      mockContextRequest(props.context, () => ({password: "RN9n8XuECN3", description: "description"}));
+      const page = new EditResourcePage(props);
+      await waitFor(() => {});
+
+      await page.click(page.upgradeButton);
+
+      await page.fillInput(page.name, "v4 default upgraded");
+
+      mockContextRequest(props.context, jest.fn());
+      await page.click(page.saveButton);
+
+      const resourceDtoExpected = {
+        id: props.resource.id,
+        expired: null,
+        folder_parent_id: null,
+        resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+        metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
+          name: "v4 default upgraded",
+          username: props.resource.metadata.username,
+          resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+          uris: props.resource.metadata.uris,
+          description: props.resource.metadata.description
+        }
+      };
+
+      const secretDtoExpected = {
+        object_type: SECRET_DATA_OBJECT_TYPE,
+        password: "RN9n8XuECN3",
+        description: "description"
       };
 
       // expectations

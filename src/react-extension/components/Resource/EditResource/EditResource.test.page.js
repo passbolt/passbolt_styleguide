@@ -487,6 +487,7 @@ export default class EditResourcePage {
 
   /**
    * Returns the complexity text input element
+   * @return {Element}
    */
   get complexityText() {
     return this._page.container.querySelector('.complexity-text');
@@ -494,6 +495,7 @@ export default class EditResourcePage {
 
   /**
    * Returns the progress bar element
+   * @return {Element}
    */
   get progressBar() {
     return this._page.container.querySelector('.progress-bar');
@@ -501,6 +503,7 @@ export default class EditResourcePage {
 
   /**
    * Returns the convert to description button element
+   * @return {Element}
    */
   get convertToDescription() {
     return this._page.container.querySelector('#convert-to-description');
@@ -508,9 +511,26 @@ export default class EditResourcePage {
 
   /**
    * Returns the convert to note button element
+   * @return {Element}
    */
   get convertToNote() {
     return this._page.container.querySelector('#convert-to-note');
+  }
+
+  /**
+   * Returns the upgrade cards element
+   * @return {Element}
+   */
+  get upgradeCard() {
+    return this._page.container.querySelector('.section-card .card');
+  }
+
+  /**
+   * Returns the upgrade cards button element
+   * @return {Element}
+   */
+  get upgradeButton() {
+    return this._page.container.querySelector('.section-card .card .content button');
   }
 
   /**

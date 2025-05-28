@@ -51,13 +51,13 @@ export class ResourceIcon extends Component {
 
   /**
    * Returns the class to set the right contrasted color on the icon.
-   * If the default color is used, null is returned instead.
-   * @returns {string|null}
+   * If the default color is used, empty string is returned instead.
+   * @returns {string}
    */
   getContrastedColorClassName() {
     const color = this.getResourceColor();
     if (!color) {
-      return null;
+      return "";
     }
 
     if (color.backgroundColor === COLOR_TRANSPARENT) {

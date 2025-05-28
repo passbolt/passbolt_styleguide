@@ -31,7 +31,8 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
-  RESOURCE_TYPE_V5_TOTP_SLUG
+  RESOURCE_TYPE_V5_TOTP_SLUG,
+  V4_TO_V5_RESOURCE_TYPE_MAPPING
 } from "../resourceType/resourceTypeSchemasDefinition";
 import assertString from "validator/es/lib/util/assertString";
 import {ResourceEditCreateFormEnumerationTypes} from "../../resource/ResourceEditCreateFormEnumerationTypes";
@@ -133,7 +134,11 @@ class ResourceFormEntity extends EntityV2 {
           this._secret = secretEntityClass.createFromDefault(this._props.secret, options);
         }
       } catch (error) {
-        validationErrors.addAssociationError("secret", error);
+        if (error instanceof EntityValidationError) {
+          validationErrors.addAssociationError("secret", error);
+        } else {
+          throw error;
+        }
       }
 
       delete this._props.secret;
@@ -557,6 +562,35 @@ class ResourceFormEntity extends EntityV2 {
       } else if (resourceType.isV4()) {
         this.secret.set("password", "", options);
       }
+    }
+  }
+
+  /**
+   * Upgrade resource v4 to resource v5
+   * @returns {void}
+   * @throws {Error} If no secret entity class has been found.
+   */
+  upgradeToV5() {
+    const resourceType = this.resourceTypes.getFirstById(this.resourceTypeId);
+
+    let v5ResourceTypeSlug = null;
+    if (resourceType.slug === RESOURCE_TYPE_PASSWORD_STRING_SLUG) {
+      v5ResourceTypeSlug = RESOURCE_TYPE_V5_DEFAULT_SLUG;
+    } else if (resourceType.slug in V4_TO_V5_RESOURCE_TYPE_MAPPING) {
+      v5ResourceTypeSlug = V4_TO_V5_RESOURCE_TYPE_MAPPING[resourceType.slug];
+    }
+    //Do nothing if slug cannot be found
+    if (v5ResourceTypeSlug) {
+      const v5ResourceType = this.resourceTypes.getFirstBySlug(v5ResourceTypeSlug);
+      const secretEntityClass = this.getSecretEntityClassByResourceType(v5ResourceTypeSlug);
+      if (!secretEntityClass) {
+        throw new Error(`No secret association class has been found in resource types.`);
+      }
+      this.set("resource_type_id", v5ResourceType.id);
+      this.set("metadata.resource_type_id", v5ResourceType.id);
+      this.set("metadata.object_type", ResourceMetadataEntity.METADATA_OBJECT_TYPE);
+      // Set the secret with the secret data v5
+      this.set("secret", new secretEntityClass(this.secret.toDto()));
     }
   }
 
