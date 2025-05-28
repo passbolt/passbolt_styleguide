@@ -89,6 +89,13 @@ export default class DisplayResourceDetailsPage {
   }
 
   /**
+   * Returns the upgrade card
+   */
+  get upgradeCard() {
+    return this._page.container.querySelector('.section-card .card');
+  }
+
+  /**
    * Returns the close button
    * @returns {HTMLElement}
    */

@@ -23,10 +23,21 @@ import {defaultProps} from "./DisplayResourceDetails.test.data";
 import DisplayResourceDetailsPage from "./DisplayResourceDetails.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {
+  defaultResourceDto,
   resourceLegacyDto,
   resourceStandaloneTotpDto, resourceWithTotpDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  resourceTypesV4CollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV50FreshDto,
+} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import {TEST_RESOURCE_TYPE_V5_DEFAULT} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 jest.mock("./DisplayResourceDetailsInformation", () => () => <></>);
 jest.mock("./DisplayResourceDetailsPassword", () => () => <div className="password"></div>);
@@ -169,6 +180,43 @@ describe("DisplayResourceDetails", () => {
       const props = defaultProps(); // The props to pass
       const page = new DisplayResourceDetailsPage(props);
       expect(page.description).toBeNull();
+    });
+  });
+
+  describe('As LU I can see the card section', () => {
+    it('As LU I can see the card section', () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.upgradeCard).toBeDefined();
+    });
+
+    it('As LU I cannot see the card section if there is no resource v5 corresponding', () => {
+      expect.assertions(1);
+      const props = defaultProps({resourceTypes: new ResourceTypesCollection(resourceTypesV4CollectionDto())});
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.upgradeCard).toBeNull();
+    });
+
+    it('As LU I cannot see the card section if user is not allowed to upgrade', () => {
+      expect.assertions(1);
+      const props = defaultProps({metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto())});
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.upgradeCard).toBeNull();
+    });
+
+    it('As LU I cannot see the card section if resource is v5', () => {
+      expect.assertions(1);
+      const resourceWorkspaceContext = defaultResourceWorkspaceContext({
+        details: {
+          resource: defaultResourceDto({
+            resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT
+          }),
+        }
+      });
+      const props = defaultProps({resourceWorkspaceContext});
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.upgradeCard).toBeNull();
     });
   });
 
