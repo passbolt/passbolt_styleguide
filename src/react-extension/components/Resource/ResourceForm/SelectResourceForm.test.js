@@ -74,7 +74,7 @@ describe("SelectResourceForm", () => {
       page = new SelectResourceFormPage(props);
       await waitFor(() => {});
 
-      expect(page.upgradeCards).toBeDefined();
+      expect(page.upgradeCard).toBeDefined();
     });
 
     it('As LU I should not see the upgrade resource v4 default if no resource type v5 corresponding.', async() => {
@@ -83,7 +83,7 @@ describe("SelectResourceForm", () => {
       page = new SelectResourceFormPage(props);
       await waitFor(() => {});
 
-      expect(page.upgradeCards).toBeNull();
+      expect(page.upgradeCard).toBeNull();
     });
 
     it('As LU I should not see the upgrade resource v4 default if props canUpgradeResource is false.', async() => {
@@ -92,7 +92,7 @@ describe("SelectResourceForm", () => {
       page = new SelectResourceFormPage(props);
       await waitFor(() => {});
 
-      expect(page.upgradeCards).toBeNull();
+      expect(page.upgradeCard).toBeNull();
     });
 
     it('As LU I do not see the resource uris for v4 default.', async() => {
@@ -128,7 +128,7 @@ describe("SelectResourceForm", () => {
       page = new SelectResourceFormPage(props);
       await waitFor(() => {});
 
-      expect(page.upgradeCards).toBeNull();
+      expect(page.upgradeCard).toBeNull();
     });
 
     it('As LU the resource secret section totp should be selected.', async() => {
@@ -537,6 +537,21 @@ describe("SelectResourceForm", () => {
       await waitFor(() => {});
 
       expect(page.deleteSecretPassword).toBeNull();
+    });
+  });
+
+  describe('As LU I can upgrade a resource.', () => {
+    it('As LU I can upgrade a resource v4 to v5.', async() => {
+      expect.assertions(2);
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()), resource: defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: {password: ""}})});
+      page = new SelectResourceFormPage(props);
+      await waitFor(() => {});
+
+      expect(page.upgradeCard).toBeDefined();
+
+      await page.click(page.upgradeButton);
+
+      expect(props.onUpgradeToV5).toHaveBeenCalled();
     });
   });
 

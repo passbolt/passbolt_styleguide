@@ -37,6 +37,7 @@ export function defaultProps(data = {}) {
     onAddSecret: jest.fn(),
     onDeleteSecret: jest.fn(),
     canUpgradeResource: true,
+    onUpgradeToV5: jest.fn(),
   };
   return Object.assign(defaultData, data);
 }

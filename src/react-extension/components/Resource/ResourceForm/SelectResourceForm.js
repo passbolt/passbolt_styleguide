@@ -71,6 +71,7 @@ class SelectResourceForm extends Component {
     this.handleSelectForm = this.handleSelectForm.bind(this);
     this.handleAddSecret = this.handleAddSecret.bind(this);
     this.handleDeleteSecret = this.handleDeleteSecret.bind(this);
+    this.handleUpgradeClick = this.handleUpgradeClick.bind(this);
   }
 
   /**
@@ -122,6 +123,15 @@ class SelectResourceForm extends Component {
   handleDeleteSecret(secret) {
     if (this.props.onDeleteSecret) {
       this.props.onDeleteSecret(secret);
+    }
+  }
+
+  /**
+   * Handle upgrade resource
+   */
+  handleUpgradeClick() {
+    if (this.props.onUpgradeToV5) {
+      this.props.onUpgradeToV5();
     }
   }
 
@@ -427,7 +437,7 @@ class SelectResourceForm extends Component {
                     <a className="link" href="https://www.passbolt.com/blog/the-road-to-passbolt-v5-encrypted-metadata-and-other-core-security-changes-2" target="_blank" rel="noopener noreferrer">
                       <span className="ellipsis"><Trans>Learn more</Trans></span>
                     </a>
-                    <button disabled={this.props.disabled} type="button">
+                    <button disabled={this.props.disabled} type="button" onClick={this.handleUpgradeClick}>
                       <span className="ellipsis"><Trans>Upgrade</Trans></span>
                     </button>
                   </div>

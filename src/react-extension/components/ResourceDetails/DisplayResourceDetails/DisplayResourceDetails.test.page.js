@@ -69,6 +69,7 @@ export default class DisplayResourceDetailsPage {
 
   /**
    * Returns the password
+   * @return {Element}
    */
   get password() {
     return this._page.container.querySelector('.password');
@@ -76,6 +77,7 @@ export default class DisplayResourceDetailsPage {
 
   /**
    * Returns the totp
+   * @return {Element}
    */
   get totp() {
     return this._page.container.querySelector('.totp');
@@ -83,6 +85,7 @@ export default class DisplayResourceDetailsPage {
 
   /**
    * Returns the description
+   * @return {Element}
    */
   get description() {
     return this._page.container.querySelector('.description');
@@ -90,17 +93,18 @@ export default class DisplayResourceDetailsPage {
 
   /**
    * Returns the upgrade card
+   * @return {Element}
    */
   get upgradeCard() {
     return this._page.container.querySelector('.section-card .card');
   }
 
   /**
-   * Returns the close button
-   * @returns {HTMLElement}
+   * Returns the upgrade cards button element
+   * @return {Element}
    */
-  get closeButton() {
-    return this._page.container.querySelector('.dialog-close');
+  get upgradeButton() {
+    return this._page.container.querySelector('.section-card .card .content button');
   }
 
   /**
@@ -152,11 +156,6 @@ export default class DisplayResourceDetailsPage {
   /** Click on the permalink */
   async selectPermalink()  {
     await this.click(this.permalink);
-  }
-
-  /** Click on the close */
-  async closeResourceDetails() {
-    await this.click(this.closeButton);
   }
 }
 
