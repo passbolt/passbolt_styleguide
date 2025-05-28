@@ -25,6 +25,7 @@ import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metada
 import {
   defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto
 } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 
 /**
  * Default props
@@ -42,6 +43,7 @@ export function defaultProps(data = {}) {
       default_resource_types: "v5",
       ...data?.metadataTypeSettings
     })),
+    actionFeedbackContext: defaultActionFeedbackContext(),
     ...data,
   };
 }
@@ -69,6 +71,7 @@ export function propsWithUnencryptedDescriptionResource(data = {}) {
       default_resource_types: "v5",
       ...data?.metadataTypeSettings
     })),
+    actionFeedbackContext: defaultActionFeedbackContext(),
     initialEntries: `/app/passwords/view/${resourceWorkspaceContext.details.resource.id}`,
     ...data,
   };

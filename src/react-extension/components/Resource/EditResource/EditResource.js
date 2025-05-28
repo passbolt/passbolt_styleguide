@@ -90,6 +90,7 @@ class EditResource extends Component {
     this.onSelectForm = this.onSelectForm.bind(this);
     this.onAddSecret = this.onAddSecret.bind(this);
     this.onDeleteSecret = this.onDeleteSecret.bind(this);
+    this.onUpgradeToV5 = this.onUpgradeToV5.bind(this);
     this.handleConvertToDescription = this.handleConvertToDescription.bind(this);
     this.handleConvertToNote = this.handleConvertToNote.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -458,6 +459,7 @@ class EditResource extends Component {
     const resourceDto = resource.toResourceDto();
     const resourceType = this.props.resourceTypes.getFirstById(resource.resourceTypeId);
     const secretDto = resourceType.isPasswordString() ? resource.toSecretDto().password : resource.toSecretDto();
+
     await this.props.context.port.request("passbolt.resources.update", resourceDto, secretDto);
   }
 
@@ -632,7 +634,7 @@ class EditResource extends Component {
    * The upgrade to v5 action raised by user
    * @returns {void}
    */
-  upgradeToV5() {
+  onUpgradeToV5() {
     this.resourceFormEntity.upgradeToV5();
   }
 
@@ -661,6 +663,7 @@ class EditResource extends Component {
               onDeleteSecret={this.onDeleteSecret}
               onSelectForm={this.onSelectForm}
               canUpgradeResource={this.props.metadataTypeSettings?.allowV4V5Upgrade}
+              onUpgradeToV5={this.onUpgradeToV5}
               disabled={this.hasAllInputDisabled}
             />
             <form className="grid-and-footer" onSubmit={this.handleFormSubmit} noValidate>

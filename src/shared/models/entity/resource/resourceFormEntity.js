@@ -568,6 +568,7 @@ class ResourceFormEntity extends EntityV2 {
   /**
    * Upgrade resource v4 to resource v5
    * @returns {void}
+   * @throws {Error} If no secret entity class has been found.
    */
   upgradeToV5() {
     const resourceType = this.resourceTypes.getFirstById(this.resourceTypeId);
@@ -581,9 +582,15 @@ class ResourceFormEntity extends EntityV2 {
     //Do nothing if slug cannot be found
     if (v5ResourceTypeSlug) {
       const v5ResourceType = this.resourceTypes.getFirstBySlug(v5ResourceTypeSlug);
+      const secretEntityClass = this.getSecretEntityClassByResourceType(v5ResourceTypeSlug);
+      if (!secretEntityClass) {
+        throw new Error(`No secret association class has been found in resource types.`);
+      }
       this.set("resource_type_id", v5ResourceType.id);
       this.set("metadata.resource_type_id", v5ResourceType.id);
       this.set("metadata.object_type", ResourceMetadataEntity.METADATA_OBJECT_TYPE);
+      // Set the secret with the secret data v5
+      this.set("secret", new secretEntityClass(this.secret.toDto()));
     }
   }
 
