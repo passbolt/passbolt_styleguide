@@ -28,6 +28,8 @@
   --Palette-Select-highlight-2: hsl(43, 40%, 87%);
   --Text-and-icons-Main-text: var(--Palette-Gradient-9);
   --Text-and-icons-Secondary-text: var(--Palette-Gradient-7);
+  --Text-and-icons-clear-color: #FFFFFF;
+  --Text-and-icons-dark-color: #000000;
   --Primary-button-Primary-button-text: var(--Palette-Gradient-1);
   --Action-button-Action-button-background: var(--Palette-Gradient-2);
   --Action-button-Action-button-background-2: var(--Palette-Gradient-2);
@@ -1279,6 +1281,7 @@ button.primary.create,
 .button.primary.create {
   background: var(--Primary-button-Primary-button-background);
   color: var(--Primary-button-Primary-button-text);
+  padding: 0.8rem 2.4rem;
 }
 button.primary.form,
 .button.primary.form {
@@ -2620,13 +2623,14 @@ input[type=file] {
 .select-container .select .select-items .search-input {
   background: var(--Field-Infield-search-background);
   margin: 0.8rem;
+  padding-right: calc(var(--Search-field-padding) + 2.5rem);
   width: initial;
   max-width: none;
 }
-.select-container .select .select-items .svg-icon {
+.select-container .select .select-items svg.search {
   position: absolute;
-  top: 2.15rem;
-  right: 1.8rem;
+  top: 1.7rem;
+  right: 1.6rem;
 }
 .select-container .select .select-items .items {
   max-height: 18rem;
@@ -3293,7 +3297,7 @@ html {
 }
 .page .app .panel.main .panel.left .sidebar-content .top-bar-left {
   display: flex;
-  padding: 2.95rem 1.6rem 1.65rem 3.2rem;
+  padding: 2.95rem 1.6rem 1.65rem 4rem;
   gap: 0.8rem;
   align-self: stretch;
 }
@@ -4037,12 +4041,14 @@ html {
 .accordion .accordion-header a:hover,
 .accordion .accordion-header button:hover {
   color: var(--Palette-Contrast-1);
+  --icon-color: var(--Palette-Contrast-1);
 }
 .accordion .accordion-header a:hover:disabled,
 .accordion .accordion-header button:hover:disabled,
 .accordion .accordion-header a:hover.disabled,
 .accordion .accordion-header button:hover.disabled {
   color: var(--Text-and-icons-Main-text);
+  --icon-color: var(--Text-and-icons-Icons);
 }
 .accordion h3.accordion-header a,
 .accordion h3.accordion-header button {
@@ -4120,13 +4126,13 @@ html {
 .login .accordion .accordion-content {
   margin-top: 1.2rem;
 }
-.accordion.sidebar-section .svg-icon.exclamation {
+.accordion.sidebar-section .attention-required {
   --icon-exclamation-background-color: hsl(18, 80%, 44%);
 }
 .accordion.sidebar-section .accordion-header button {
   border: 0;
 }
-.accordion.sidebar-section .accordion-header button .svg-icon.exclamation {
+.accordion.sidebar-section .accordion-header button svg.attention-required {
   position: relative;
   right: inherit;
   padding-right: 0.3rem;
@@ -4143,6 +4149,14 @@ html {
 }
 .error-details .accordion-header a {
   border: 0;
+}
+.error-details .accordion-header svg.caret-right,
+.error-details .accordion-header svg.caret-down {
+  width: inherit;
+  height: inherit;
+}
+.error-details .accordion-header svg.caret-right {
+  margin-right: 0.2rem;
 }
 .error-details .accordion-content textarea {
   margin-top: 0.8rem;

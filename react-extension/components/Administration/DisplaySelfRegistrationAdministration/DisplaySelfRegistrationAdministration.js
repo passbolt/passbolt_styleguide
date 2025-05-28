@@ -13,7 +13,6 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
@@ -28,6 +27,8 @@ import debounce from "debounce-promise";
 import {createSafePortal} from "../../../../shared/utils/portals";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
 import DisplayAdministrationSelfRegistrationActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSelfRegistrationActions/DisplayAdministrationSelfRegistrationActions";
+import AddSVG from "../../../../img/svg/add.svg";
+import DeleteSVG from "../../../../img/svg/delete.svg";
 
 /**
  * This component allows to display the Self registration for the administration
@@ -322,7 +323,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
                       <div className="domain-row">
                         <input type="text" className="full-width" onChange={this.handleInputChange} id={`input-${key}`} name={key} value={this.allowedDomains.get(key)}
                           disabled={!this.hasAllInputDisabled} ref={this.dynamicRefs.setRef(key)} placeholder={this.props.t("domain")} />
-                        <button type="button" disabled={!this.canDelete()} className="button-icon" id={`delete-${key}`} onClick={() => this.handleDeleteRow(key)}><Icon name="trash"/></button>
+                        <button type="button" disabled={!this.canDelete()} className="button-icon" id={`delete-${key}`} onClick={() => this.handleDeleteRow(key)}><DeleteSVG/></button>
                       </div>
                       {this.hasWarnings() && this.state.warnings.get(key) &&
                    <div id="domain-name-input-feedback" className="warning-message"><Trans>{this.state.warnings.get(key)}</Trans></div>
@@ -335,7 +336,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
                 }
                 <div className="domain-add">
                   <button type="button" onClick={this.handleAddRowClick}>
-                    <Icon name="add"/>
+                    <AddSVG/>
                     <span><Trans>Add</Trans></span>
                   </button>
                 </div>

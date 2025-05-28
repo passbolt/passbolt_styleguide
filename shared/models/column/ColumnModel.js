@@ -67,7 +67,7 @@ export const ColumnFields = {
   TOTP: 'totp',
   METADATA_NAME: 'metadata.name',
   METADATA_USERNAME: 'metadata.username',
-  METADATA_URIS: 'metadata.uris.0',
+  METADATA_URIS: 'metadata.uris',
   USER_PROFILE: "profile",
   USER_USERNAME: "username",
   USER_ROLE: "role_id",

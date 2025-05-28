@@ -19,9 +19,12 @@ import {withActionFeedback} from "../../../../contexts/ActionFeedbackContext";
 import {withAdminSso} from "../../../../contexts/AdminSsoContext";
 import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
 import Select from "../../../Common/Select/Select";
-import Icon from "../../../../../shared/components/Icons/Icon";
 import Password from "../../../../../shared/components/Password/Password";
 import AzureSsoSettingsEntity from "../../../../../shared/models/entity/ssoSettings/AzureSsoSettingsEntity";
+import CopySVG from "../../../../../img/svg/copy.svg";
+import CalendarSVG from "../../../../../img/svg/copy.svg";
+import CaretDownSVG from "../../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../../img/svg/caret_right.svg";
 
 /**
  * This component displays the Azure SSO settings form
@@ -223,7 +226,7 @@ class AzureSsoProviderForm extends React.Component {
             <input id="sso-redirect-url-input" type="text" className="fluid form-element disabled" name="redirect_url"
               value={this.fullRedirectUrl} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
             <button type="button" onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button-icon">
-              <Icon name="copy-to-clipboard"/>
+              <CopySVG/>
             </button>
           </div>
           <p>
@@ -279,7 +282,7 @@ class AzureSsoProviderForm extends React.Component {
           <div className="button-inline">
             <input id="sso-azure-secret-expiry-input" type="date" className={`fluid form-element ${ssoConfig.client_secret_expiry ? "" : "empty"}`} name="client_secret_expiry"  ref={this.clientSecretExpiryInputRef}
               value={ssoConfig.client_secret_expiry || ""} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
-            <Icon name="calendar"/>
+            <CalendarSVG/>
           </div>
           {errors?.hasError('client_secret_expiry') &&
             <div className="error-message">{this.displayErrors(errors.getError('client_secret_expiry'))}</div>
@@ -294,7 +297,8 @@ class AzureSsoProviderForm extends React.Component {
           <div className={`accordion operation-details ${this.state.advancedSettingsOpened ? "" : "closed"}`}>
             <div className="accordion-header" onClick={this.handleAdvancedSettingsCLick}>
               <button type="button" className="link no-border" id="advanced-settings-panel-button">
-                <Trans>Advanced settings</Trans>&nbsp;<Icon name={this.state.advancedSettingsOpened ? "caret-down" : "caret-right"}/>
+                {this.state.advancedSettingsOpened ? <CaretDownSVG className="caret-down"/> : <CaretRightSVG className="caret-right"/>}
+                <Trans>Advanced settings</Trans>
               </button>
             </div>
           </div>

@@ -23,44 +23,39 @@ import {
 
 export default {
   title: 'Components/Authentication/DisplayUnexpectedError',
-  component: DisplayUnexpectedError
-};
-
-const Template = args =>
-  <div id="container" className="container page login">
-    <div className="content">
-      <div className="login-form">
-        <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <DisplayUnexpectedError {...args} {...routerProps}/>}/>
-        </MemoryRouter>
+  component: DisplayUnexpectedError,
+  decorators: [(Story, {args}) =>
+    <div id="container" className="container page login">
+      <div className="content">
+        <div className="login-form">
+          <MemoryRouter initialEntries={['/']}>
+            <Route component={routerProps => <Story {...args} {...routerProps}/>}/>
+          </MemoryRouter>
+        </div>
       </div>
     </div>
-  </div>;
-
-
-export const Initial = Template.bind({});
-Initial.args = defaultProps();
-Initial.parameters = {
-  css: "ext_authentication"
+  ],
+  parameters: {
+    css: "ext_authentication"
+  }
 };
 
-export const SignInError = Template.bind({});
-SignInError.args = defaultProps({
-  title: "Sorry, you have not been signed in.",
-  message: "Something went wrong, the sign in failed with the following error",
-});
-SignInError.parameters = {
-  css: "ext_authentication"
+
+export const Initial = {
+  args: defaultProps()
 };
 
-export const ErrorWithData = Template.bind({});
-ErrorWithData.args = passboltApiFetchErrorProps();
-ErrorWithData.parameters = {
-  css: "ext_authentication"
+export const SignInError = {
+  args: defaultProps({
+    title: "Sorry, you have not been signed in.",
+    message: "Something went wrong, the sign in failed with the following error",
+  })
 };
 
-export const ErrorWithDetails = Template.bind({});
-ErrorWithDetails.args = passboltEntityValidationErrorProps();
-ErrorWithDetails.parameters = {
-  css: "ext_authentication"
+export const ErrorWithData = {
+  args: passboltApiFetchErrorProps()
+};
+
+export const ErrorWithDetails = {
+  args: passboltEntityValidationErrorProps()
 };

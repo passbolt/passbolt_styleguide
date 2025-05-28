@@ -13,8 +13,8 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
+import SearchSVG from "../../../../../img/svg/search.svg";
 
 class SearchBar extends Component {
   /**
@@ -87,7 +87,7 @@ class SearchBar extends Component {
               value={this.props.value}/>
             <div className="search-button-wrapper">
               <button className="button button-transparent" value={this.placeholderLabel} onBlur={this.handleSubmitButtonBlur} onFocus={this.handleSubmitButtonFocus} type="submit" disabled={this.props.disabled ? 'disabled' : ''}>
-                <Icon name="search"/>
+                <SearchSVG/>
                 <span className="visuallyhidden"><Trans>{this.placeholderLabel}</Trans></span>
               </button>
             </div>

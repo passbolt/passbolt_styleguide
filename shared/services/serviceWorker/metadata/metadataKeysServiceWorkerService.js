@@ -18,6 +18,7 @@ import MetadataKeyEntity from "../../../models/entity/metadata/metadataKeyEntity
 export const METADATA_KEYS_CREATE_EVENT = "passbolt.metadata.create-key";
 export const METADATA_KEYS_GENERATE_EVENT = "passbolt.metadata.generate-metadata-key";
 export const METADATA_KEYS_FIND_ALL_EVENT = "passbolt.metadata.find-all-non-deleted-metadata-keys";
+export const METADATA_SHARE_METADATA_PRIVATE_KEYS_EVENT = "passbolt.metadata.share-missing-metadata-private-keys-with-user";
 
 class MetadataKeysServiceWorkerService {
   /**
@@ -58,6 +59,15 @@ class MetadataKeysServiceWorkerService {
     const contains = {public_key: true, private_key: true};
     const metadataKeyDto = await this.port.request(METADATA_KEYS_CREATE_EVENT, metadataKeyPair.toDto(contains));
     return new MetadataKeyEntity(metadataKeyDto);
+  }
+
+  /**
+   * Share a missing metadata keys with an expected user.
+   * @param {string} userId The user id which does not have all keys.
+   * @returns {Promise<void>}
+   */
+  async share(userId) {
+    await this.port.request(METADATA_SHARE_METADATA_PRIVATE_KEYS_EVENT, userId);
   }
 }
 

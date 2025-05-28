@@ -123,7 +123,7 @@
       scrollbar-color: var(--Workspace-Elevator) transparent;
 
       /* PASSWORD FIELDS LAYOUT*/
-      .password-fields, .totp-fields, .note-fields, .description-fields {
+      .password-fields, .totp-fields, .note-fields, .description-fields, .uris-fields {
         display: flex;
         padding: 0 1.6rem;
         flex-direction: column;
@@ -134,6 +134,18 @@
 
       .password-fields {
         padding-bottom: 1.6rem;
+      }
+
+      .uris-fields {
+        .additional-uri-wrapper {
+          display: flex;
+          align-items: flex-start;
+          gap: .8rem;
+          align-self: stretch;
+        }
+        .uri-add {
+          align-self: center;
+        }
       }
 
       /* INPUT FIELDS */
@@ -276,6 +288,111 @@
       .text {
         flex: 1 0 0;
         align-self: stretch;
+      }
+    }
+
+    .appearance-workspace {
+      display: flex;
+      flex: 1 0 0;
+
+      .content > * {
+        padding: 0 1.6rem .8rem;
+      }
+
+      .appearance-form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      h3 {
+        font-size: 1.8rem;
+      }
+
+      .color-section, .icons-section {
+        display: flex;
+        gap: 1.6rem;
+        flex-direction: column;
+
+        & > * {
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      label {
+        display: flex;
+        align-items: center;
+        gap: .8rem;
+        font-weight: normal;
+      }
+      .color-picker {
+        display: flex;
+        gap: 1.6rem;
+        flex-direction: row;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        margin: .8rem 0;
+
+        .color-picker-item {
+          position: relative;
+          width: 3.6rem;
+          height: 3.6rem;
+          border-radius: 100%;
+
+          &:not([disabled]) {
+            cursor: pointer;
+          }
+
+          &.transparent {
+            background-color: var(--Palette-Gradient-2);
+            svg {
+              --icon-color: var(--Resource-icon-Resource-icon-color);
+            }
+          }
+
+          svg.checked {
+            width: 3.6rem;
+            height: 3.6rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+          }
+        }
+      }
+
+      .icons-section {
+        border-top: 1px solid var(--Workspace-Dividers);
+        h3 {
+          margin: 1.2rem 0 .4rem;
+        }
+      }
+
+      .icon-picker {
+        display: flex;
+        gap: .7rem;
+        flex-direction: row;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        margin: .8rem 0;
+
+        .icon-picker-item {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          width: 4rem;
+          height: 4rem;
+          border-radius: 100%;
+          background-color: var(--Palette-Gradient-6);
+
+          svg {
+            --icon-color: var(--Resource-icon-Resource-icon-color);
+          }
+
+          &.selected {
+            background-color: var(--Palette-Contrast-1);
+          }
+        }
       }
     }
   }

@@ -35,7 +35,9 @@ export function defaultProps(data = {}) {
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     onSelectForm: jest.fn(),
     onAddSecret: jest.fn(),
-    onDeleteSecret: jest.fn()
+    onDeleteSecret: jest.fn(),
+    canUpgradeResource: true,
+    onUpgradeToV5: jest.fn(),
   };
   return Object.assign(defaultData, data);
 }

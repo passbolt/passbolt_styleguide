@@ -1636,13 +1636,14 @@ input[type=file] {
 .select-container .select .select-items .search-input {
   background: var(--Field-Infield-search-background);
   margin: 0.8rem;
+  padding-right: calc(var(--Search-field-padding) + 2.5rem);
   width: initial;
   max-width: none;
 }
-.select-container .select .select-items .svg-icon {
+.select-container .select .select-items svg.search {
   position: absolute;
-  top: 2.15rem;
-  right: 1.8rem;
+  top: 1.7rem;
+  right: 1.6rem;
 }
 .select-container .select .select-items .items {
   max-height: 18rem;
@@ -2182,6 +2183,7 @@ button.primary.create,
 .button.primary.create {
   background: var(--Primary-button-Primary-button-background);
   color: var(--Primary-button-Primary-button-text);
+  padding: 0.8rem 2.4rem;
 }
 button.primary.form,
 .button.primary.form {

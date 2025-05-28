@@ -20,6 +20,10 @@ import {
   resourceWithTotpDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import {
+  defaultResourceMetadataDto
+} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import {TEST_RESOURCE_TYPE_TOTP} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 /**
  * Default component props with resource having owner permission
@@ -63,6 +67,11 @@ export function standaloneTotpProps(data = {}) {
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       details: {
         resource: resourceStandaloneTotpDto({
+          metadata: defaultResourceMetadataDto({
+            resource_type_id: TEST_RESOURCE_TYPE_TOTP,
+            uris: ["https://passbolt.com", "https://passbolt.com/doc"],
+            username: null,
+          }),
           created_by: resourceOwner.id,
           modified_by: resourceOwner.id,
         }),

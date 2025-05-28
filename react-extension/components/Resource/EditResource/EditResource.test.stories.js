@@ -7,6 +7,9 @@ import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceConte
 import {
   ResourceTypesLocalStorageContext
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import {
+  MetadataTypesSettingsLocalStorageContext
+} from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import {ResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
 import {
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
@@ -30,14 +33,16 @@ export default {
         <AppContext.Provider value={args.context}>
           <DialogContextProvider>
             <ActionFeedbackContext.Provider value={args.actionFeedbackContext}>
-              <ResourceTypesLocalStorageContext.Provider value={{get: () => args.resourceTypes, resourceTypes: args.resourceTypes}}>
-                <ResourceWorkspaceContext.Provider value={args.resourceWorkspaceContext}>
-                  <ResourcePasswordGeneratorContext.Provider value={args.resourcePasswordGeneratorContext}>
-                    <ManageDialogs/>
-                    <Story {...args}/>
-                  </ResourcePasswordGeneratorContext.Provider>
-                </ResourceWorkspaceContext.Provider>
-              </ResourceTypesLocalStorageContext.Provider>
+              <MetadataTypesSettingsLocalStorageContext.Provider value={{get: () => args.metadataTypeSettings, metadataTypeSettings: args.metadataTypeSettings}}>
+                <ResourceTypesLocalStorageContext.Provider value={{get: () => args.resourceTypes, resourceTypes: args.resourceTypes}}>
+                  <ResourceWorkspaceContext.Provider value={args.resourceWorkspaceContext}>
+                    <ResourcePasswordGeneratorContext.Provider value={args.resourcePasswordGeneratorContext}>
+                      <ManageDialogs/>
+                      <Story {...args}/>
+                    </ResourcePasswordGeneratorContext.Provider>
+                  </ResourceWorkspaceContext.Provider>
+                </ResourceTypesLocalStorageContext.Provider>
+              </MetadataTypesSettingsLocalStorageContext.Provider>
             </ActionFeedbackContext.Provider>
           </DialogContextProvider>
         </AppContext.Provider>

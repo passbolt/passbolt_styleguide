@@ -71,5 +71,15 @@ describe("OrchestrateResourceForm", () => {
       expect(page.hasNoteForm).toBeFalsy();
       expect(page.hasDescriptionForm).toBeTruthy();
     });
+
+    it('As LU I can see the resource appearance form.', () => {
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.APPEARANCE});
+      page = new OrchestrateResourceFormPage(props);
+      expect(page.hasPasswordForm).toBeFalsy();
+      expect(page.hasTotpForm).toBeFalsy();
+      expect(page.hasNoteForm).toBeFalsy();
+      expect(page.hasDescriptionForm).toBeFalsy();
+      expect(page.hasAppearanceForm).toBeTruthy();
+    });
   });
 });

@@ -111,7 +111,7 @@ describe("FilterResourcesByGroupPage", () => {
       const expectedResource2 = props.resources[1];
 
       expect(page.resources.length).toEqual(2);
-      expect(page.getResource(0).textContent).toStrictEqual(`${expectedResource.metadata.name} (${expectedResource.metadata.username})${expectedResource.metadata.uris[0]}`);
+      expect(page.getResource(0).textContent).toStrictEqual(`${expectedResource.metadata.name} (${expectedResource.metadata.username})${expectedResource.metadata.uris[0]}+1`);
       expect(page.getResource(1).textContent).toStrictEqual(`${expectedResource2.metadata.name} (${expectedResource2.metadata.username})${expectedResource2.metadata.uris[0]}`);
     });
 
@@ -129,7 +129,7 @@ describe("FilterResourcesByGroupPage", () => {
 
       const expectedResource = props.resources[0];
       expect(page.resources?.length).toStrictEqual(1);
-      expect(page.getResource(0).textContent).toStrictEqual(`${expectedResource.metadata.name} (${expectedResource.metadata.username})${expectedResource.metadata.uris[0]}`);
+      expect(page.getResource(0).textContent).toStrictEqual(`${expectedResource.metadata.name} (${expectedResource.metadata.username})${expectedResource.metadata.uris[0]}+1`);
     });
 
     it("should display a message saying that the search leads to an empty result", async() => {

@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 import React from "react";
-import Icon from "../../../../shared/components/Icons/Icon";
+import LockSVG from "../../../../img/svg/lock.svg";
 
 export default {
   title: 'Foundations/TextField',
@@ -144,7 +144,7 @@ export const DefaultTextFields = {
         <div className="input textarea">
           <label htmlFor="textarea1">
             Description
-            <Icon name="lock"/>
+            <LockSVG/>
           </label>
           <textarea id="textarea1" placeholder="Add a description" disabled={false}/>
         </div>
@@ -153,7 +153,7 @@ export const DefaultTextFields = {
         <div className="input textarea">
           <label htmlFor="textarea2">
             Description
-            <Icon name="lock"/>
+            <LockSVG/>
           </label>
           <textarea id="textarea2" placeholder="Add a description" disabled={false}/>
           <div className="help-message">Help message</div>
@@ -163,7 +163,7 @@ export const DefaultTextFields = {
         <div className="input textarea disabled">
           <label htmlFor="textarea3">
             Description
-            <Icon name="lock"/>
+            <LockSVG/>
           </label>
           <textarea id="textarea3" placeholder="Add a description" defaultValue="Value" disabled={true}/>
         </div>
@@ -172,7 +172,7 @@ export const DefaultTextFields = {
         <div className="input textarea disabled">
           <label htmlFor="textarea4">
             Description
-            <Icon name="lock"/>
+            <LockSVG/>
           </label>
           <textarea id="textarea4" placeholder="Add a description" disabled={true}/>
           <div className="help-message">Help message</div>

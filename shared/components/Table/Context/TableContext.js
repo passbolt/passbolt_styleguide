@@ -13,6 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import {ROW_SETTING_HEIGHT_COMPACT} from "../../../models/entity/rowsSetting/rowsSettingEntity";
 
 
 const PADDING_SIZE = 8;
@@ -351,7 +352,7 @@ export default class TableContextProvider extends Component {
   render() {
     return (
       <TableContext.Provider value={this.state}>
-        <div ref={this.tableviewRef} className="tableview">
+        <div ref={this.tableviewRef} className={`tableview ${this.props.rowsSetting?.height ? this.props.rowsSetting.height : ROW_SETTING_HEIGHT_COMPACT}`}>
           {this.props.children}
         </div>
       </TableContext.Provider>
@@ -362,6 +363,7 @@ export default class TableContextProvider extends Component {
 TableContextProvider.propTypes = {
   columns: PropTypes.array.isRequired, // The columns to display
   rows: PropTypes.array.isRequired, // The rows to display
+  rowsSetting: PropTypes.object, // The rows setting to adapt display
   sorter: PropTypes.object, // The sorter object containing the property name and the direction
   selectedRowsIds: PropTypes.array, // The selected row ids
   onSortChange: PropTypes.func, // The on sort property

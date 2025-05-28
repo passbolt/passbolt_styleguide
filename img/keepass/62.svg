@@ -1,0 +1,20 @@
+<!--
+  The SVGs code is based on the Lucide library, licensed under the LGPL License.
+  https://github.com/lucide-icons/lucide
+
+  Copyright (c) Lucide Authors
+
+  Modifications made by Passbolt SA.
+   - Renaming colors and file name of SVGs.
+
+  @url https://github.com/lucide-icons/lucide/tree/main/icons
+-->
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+<path d="M25.9001 23C25.7053 21.7451 25.1088 20.5871 24.2001 19.7L24.0001 19.5C23.4001 18.9 23.0001 18 23.0001 17V13C23.0001 12.2044 22.684 11.4413 22.1214 10.8787C21.5588 10.3161 20.7957 10 20.0001 10C19.2044 10 18.4414 10.3161 17.8788 10.8787C17.3162 11.4413 17.0001 12.2044 17.0001 13V17C17.0077 17.5248 16.9048 18.0453 16.6981 18.5277C16.4914 19.0101 16.1854 19.4436 15.8001 19.8C14.9097 20.7006 14.3164 21.8522 14.1001 23.1" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17 18C15 22 13 17 10 20" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17 16.9001C20 15.0001 23 16.9001 23 16.9001C23 16.9001 21 20.0001 20 20.9001C19 20.0001 17 16.9001 17 16.9001Z" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M23 18C25 22 27 17 30 20" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10 27C10 26 11 26 11 25C11 24.4 11.4 24 12 24C13 24 13 23 14 23C14.4 23 14.7 23.2 14.9 23.5L16.8 27C16.998 27.3776 17.0701 27.8086 17.0059 28.23C16.9416 28.6515 16.7444 29.0414 16.4429 29.3429C16.1414 29.6444 15.7515 29.8416 15.33 29.9059C14.9086 29.9701 14.4776 29.898 14.1 29.7L10.6 27.8C10.2 27.7 10 27.4 10 27Z" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M16.7002 29C17.6831 29.6367 18.8291 29.9754 20.0002 29.9754C21.1713 29.9754 22.3173 29.6367 23.3002 29" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M29.9999 27C29.9999 26 28.9999 26 28.9999 25C28.9999 24.4 28.5999 24 27.9999 24C26.9999 24 26.9999 23 25.9999 23C25.5999 23 25.2999 23.2 25.0999 23.5L23.1999 27C23.0019 27.3776 22.9298 27.8086 22.994 28.23C23.0583 28.6515 23.2555 29.0414 23.557 29.3429C23.8584 29.6444 24.2484 29.8416 24.6698 29.9059C25.0913 29.9701 25.5223 29.898 25.8999 29.7L29.3999 27.8C29.7999 27.7 29.9999 27.4 29.9999 27Z" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

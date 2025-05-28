@@ -13,7 +13,6 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
@@ -22,6 +21,8 @@ import UserDirectoryFormService from '../../../../shared/services/forms/userDire
 import {withAdminUserDirectory} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
 import {createSafePortal} from "../../../../shared/utils/portals";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 /**
  * This component allows to display the MFA for the administration
@@ -326,8 +327,10 @@ class DisplayUserDirectoryAdministration extends React.Component {
               <div className={`accordion section-general ${settings.openCredentials ? "" : "closed"}`}>
                 <h4 className="accordion-header">
                   <button type="button" className="link no-border" onClick={this.handleCredentialTitleClicked}>
-                    {settings.openCredentials && <Icon name="caret-down"/>}
-                    {!settings.openCredentials && <Icon name="caret-right"/>}
+                    {settings.openCredentials
+                      ? <CaretDownSVG className="caret-down"/>
+                      : <CaretRightSVG className="caret-right"/>
+                    }
                     <Trans>Credentials</Trans>
                   </button>
                 </h4>
@@ -422,8 +425,10 @@ class DisplayUserDirectoryAdministration extends React.Component {
                 className={`accordion section-directory-configuration ${settings.openDirectoryConfiguration ? "" : "closed"}`}>
                 <h4 className="accordion-header">
                   <button type="button" className="link no-border" onClick={this.handleDirectoryConfigurationTitleClicked}>
-                    {settings.openDirectoryConfiguration && <Icon name="caret-down"/>}
-                    {!settings.openDirectoryConfiguration && <Icon name="caret-right"/>}
+                    {settings.openDirectoryConfiguration
+                      ? <CaretDownSVG className="caret-down"/>
+                      : <CaretRightSVG className="caret-right"/>
+                    }
                     <Trans>Directory configuration</Trans>
                   </button>
                 </h4>
@@ -548,8 +553,10 @@ class DisplayUserDirectoryAdministration extends React.Component {
                 className={`accordion section-sync-options ${settings.openSynchronizationOptions ? "" : "closed"}`}>
                 <h4 className="accordion-header">
                   <button type="button" className="link no-border" onClick={this.handleSynchronizationOptionsTitleClicked}>
-                    {settings.openSynchronizationOptions && <Icon name="caret-down"/>}
-                    {!settings.openSynchronizationOptions && <Icon name="caret-right"/>}
+                    {settings.openSynchronizationOptions
+                      ? <CaretDownSVG className="caret-down"/>
+                      : <CaretRightSVG className="caret-right"/>
+                    }
                     <Trans>Synchronization options</Trans>
                   </button>
                 </h4>

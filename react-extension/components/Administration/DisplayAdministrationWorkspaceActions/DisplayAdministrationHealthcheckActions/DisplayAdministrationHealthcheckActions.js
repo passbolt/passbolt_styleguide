@@ -15,11 +15,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../../../shared/components/Icons/Icon";
 import {withActionFeedback} from '../../../../contexts/ActionFeedbackContext';
 import {
   withAdministrationHealthcheck
 } from "../../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext";
+import RefreshSVG from "../../../../../img/svg/refresh.svg";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -79,7 +79,7 @@ class DisplayAdministrationHealthcheckActions extends React.Component {
             <ul>
               <li>
                 <button type="button" disabled={!this.isRefreshEnabled()} id="save-settings" onClick={this.handleRefresh}>
-                  <Icon name="refresh"/>
+                  <RefreshSVG/>
                   <span><Trans>Refresh</Trans></span>
                 </button>
               </li>

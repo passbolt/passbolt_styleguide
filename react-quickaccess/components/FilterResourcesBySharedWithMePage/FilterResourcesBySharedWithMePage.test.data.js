@@ -19,6 +19,7 @@ import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/
 import {
   defaultMetadataTypesSettingsV4Dto
 } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import {updatePermissionDto} from "../../../shared/models/entity/permission/permissionEntity.test.data";
 
 /**
  * Default component props
@@ -55,18 +56,20 @@ export const withFilteredResourcesProps = (data = {}) => ({
   context: defaultAppContext(data.context),
   resources: [
     defaultResourceDto({
+      permission: updatePermissionDto(),
       metadata: {
         name: "apache",
         username: "www-data",
-        uri: "http://www.apache.org/",
+        uris: ["http://www.apache.org/", "http://www.apache.org/projects"],
         description: "Apache is the world's most used web server software.",
       }
     }, {withFavorite: true}),
     defaultResourceDto({
+      permission: updatePermissionDto(),
       metadata: {
         name: "esaie",
         username: "test",
-        uri: "http://www.essaie.org/",
+        uris: ["http://www.essaie.org/"],
         description: "",
       }
     }, {withFavorite: true}),

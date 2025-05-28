@@ -100,6 +100,15 @@ export default class DisplayUsersContextualMenuPage {
   }
 
   /**
+   * Returns true if one can share missing metadata keys with a user
+   */
+  get canShareMissingMetadataKeys() {
+    const element = this._page.container.querySelector('#share-metadata-keys');
+    return Boolean(element);
+  }
+
+
+  /**
    * Call to the edit an user action
    */
   async edit() {
@@ -144,6 +153,16 @@ export default class DisplayUsersContextualMenuPage {
    */
   async reviewRecovery() {
     const element = this._page.container.querySelectorAll('li button.link')[7];
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
+    await waitFor(() => {});
+  }
+
+  /**
+   * Call to share missing metadata keys with a user
+   */
+  async shareMissingMetadataKeys() {
+    const element = this._page.container.querySelectorAll('li button.link')[8];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});

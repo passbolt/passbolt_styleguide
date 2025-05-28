@@ -15,18 +15,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import AppContext, {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {withDrag} from "../../../contexts/DragContext";
+import CircleXSVG from "../../../../img/svg/circle_x.svg";
 
 class DisplayDragFolderItem extends React.Component {
-  /**
-   * Check if the user is currently dragging content.
-   * @returns {number}
-   */
-  isDragging() {
-    return this.props.dragContext.dragging;
-  }
-
   /**
    * return dragged items
    * @returns {*}
@@ -90,7 +82,7 @@ class DisplayDragFolderItem extends React.Component {
     return (
       <div className="drag-and-drop item-1">
         {!canDrag &&
-        <Icon name="ban"/>
+          <CircleXSVG/>
         }
         <span className={`message ${!canDrag ? "not-allowed" : ""}`}>{dragFeedbackText}</span>
         <span className="count">1</span>

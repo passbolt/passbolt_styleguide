@@ -13,10 +13,11 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../Icons/Icon";
 import CellHeaderDefault from "./CellHeaderDefault";
 import {withTable} from "./Context/TableContext";
 import ColumnModel from "../../models/column/ColumnModel";
+import ArrowDownSVG from "../../../img/svg/arrow_down.svg";
+import ArrowUpSVG from "../../../img/svg/arrow_up.svg";
 
 /**
  * This component represents a table cell header wrapper
@@ -295,10 +296,10 @@ class CellHeaderWrapper extends Component {
               <CellHeader {...this.propsCellHeader}/>
               <span className="cell-header-icon-sort">
                 {this.isSortedColumn(this.column.field) && this.isSortedAsc() &&
-                  <Icon name="ascending"/>
+                  <ArrowDownSVG/>
                 }
                 {this.isSortedColumn(this.column.field) && !this.isSortedAsc() &&
-                  <Icon name="descending"/>
+                  <ArrowUpSVG/>
                 }
               </span>
             </div>

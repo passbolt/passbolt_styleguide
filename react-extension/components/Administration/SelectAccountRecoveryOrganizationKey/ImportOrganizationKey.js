@@ -15,10 +15,10 @@
 import React from "react";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
-import Icon from "../../../../shared/components/Icons/Icon";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import InfoSVG from "../../../../img/svg/info.svg";
 
 /**
  * This component allows to display the import organization key for the administration
@@ -264,7 +264,7 @@ class ImportOrganizationKey extends React.Component {
           </div>
           {!this.state.hasAlreadyBeenValidated &&
             <div className="message notice no-margin">
-              <Icon baseline={true} name="info-circle" />
+              <InfoSVG className="svg-icon info baseline"/>
               <strong><Trans>Pro tip</Trans>:</strong> <Trans>Learn how to <a href="https://help.passbolt.com/configure/account-recovery" target="_blank" rel="noopener noreferrer">generate a key separately.</a></Trans>
             </div>
           }

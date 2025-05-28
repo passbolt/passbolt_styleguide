@@ -21,6 +21,11 @@ import {
 import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {TEST_RESOURCE_TYPE_PASSWORD_STRING} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto
+} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 
 /**
  * Default props
@@ -30,11 +35,16 @@ export function defaultProps(data = {}) {
   const resourceWorkspaceContext = data.resourceWorkspaceContext || resourceWorkspaceContextWithSelectedResourceIOwn();
   delete data.resourceWorkspaceContext;
   return {
-    ...data,
     context: defaultUserAppContext(data.context),
     rbacContext: defaultAdministratorRbacContext(data.rbacContext),
     resourceWorkspaceContext: resourceWorkspaceContext,
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto({
+      default_resource_types: "v5",
+      ...data?.metadataTypeSettings
+    })),
+    actionFeedbackContext: defaultActionFeedbackContext(),
+    ...data,
   };
 }
 
@@ -57,6 +67,11 @@ export function propsWithUnencryptedDescriptionResource(data = {}) {
     resourceWorkspaceContext: resourceWorkspaceContext,
     rbacContext: defaultAdministratorRbacContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto({
+      default_resource_types: "v5",
+      ...data?.metadataTypeSettings
+    })),
+    actionFeedbackContext: defaultActionFeedbackContext(),
     initialEntries: `/app/passwords/view/${resourceWorkspaceContext.details.resource.id}`,
     ...data,
   };

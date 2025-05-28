@@ -28,6 +28,8 @@
   --Palette-Select-highlight-2: hsl(213, 67%, 12%);
   --Text-and-icons-Main-text: var(--Palette-Gradient-9);
   --Text-and-icons-Secondary-text: var(--Palette-Gradient-8);
+  --Text-and-icons-clear-color: #FFFFFF;
+  --Text-and-icons-dark-color: #000000;
   --Primary-button-Primary-button-text: var(--Palette-Gradient-9);
   --Action-button-Action-button-background: var(--Palette-Gradient-4);
   --Action-button-Action-button-background-2: var(--Palette-Gradient-5);
@@ -1279,6 +1281,7 @@ button.primary.create,
 .button.primary.create {
   background: var(--Primary-button-Primary-button-background);
   color: var(--Primary-button-Primary-button-text);
+  padding: 0.8rem 2.4rem;
 }
 button.primary.form,
 .button.primary.form {
@@ -2620,13 +2623,14 @@ input[type=file] {
 .select-container .select .select-items .search-input {
   background: var(--Field-Infield-search-background);
   margin: 0.8rem;
+  padding-right: calc(var(--Search-field-padding) + 2.5rem);
   width: initial;
   max-width: none;
 }
-.select-container .select .select-items .svg-icon {
+.select-container .select .select-items svg.search {
   position: absolute;
-  top: 2.15rem;
-  right: 1.8rem;
+  top: 1.7rem;
+  right: 1.6rem;
 }
 .select-container .select .select-items .items {
   max-height: 18rem;
@@ -3293,7 +3297,7 @@ html {
 }
 .page .app .panel.main .panel.left .sidebar-content .top-bar-left {
   display: flex;
-  padding: 2.95rem 1.6rem 1.65rem 3.2rem;
+  padding: 2.95rem 1.6rem 1.65rem 4rem;
   gap: 0.8rem;
   align-self: stretch;
 }
@@ -3657,12 +3661,14 @@ html {
 .accordion .accordion-header a:hover,
 .accordion .accordion-header button:hover {
   color: var(--Palette-Contrast-1);
+  --icon-color: var(--Palette-Contrast-1);
 }
 .accordion .accordion-header a:hover:disabled,
 .accordion .accordion-header button:hover:disabled,
 .accordion .accordion-header a:hover.disabled,
 .accordion .accordion-header button:hover.disabled {
   color: var(--Text-and-icons-Main-text);
+  --icon-color: var(--Text-and-icons-Icons);
 }
 .accordion h3.accordion-header a,
 .accordion h3.accordion-header button {
@@ -3740,13 +3746,13 @@ html {
 .login .accordion .accordion-content {
   margin-top: 1.2rem;
 }
-.accordion.sidebar-section .svg-icon.exclamation {
+.accordion.sidebar-section .attention-required {
   --icon-exclamation-background-color: #DD6A00;
 }
 .accordion.sidebar-section .accordion-header button {
   border: 0;
 }
-.accordion.sidebar-section .accordion-header button .svg-icon.exclamation {
+.accordion.sidebar-section .accordion-header button svg.attention-required {
   position: relative;
   right: inherit;
   padding-right: 0.3rem;
@@ -4120,7 +4126,6 @@ html {
 }
 .drag-and-drop-wrapper .drag-and-drop svg {
   --icon-color: var(--Text-and-icons-Main-text);
-  margin-right: 0.8rem;
   margin-top: 0.1rem;
 }
 .drag-and-drop-wrapper .drag-and-drop span.message {
@@ -4185,6 +4190,10 @@ html {
 .dropdown .button.open.add-secret {
   background: var(--Primary-button-Primary-button-menu-background);
 }
+.dropdown button.open.switcher,
+.dropdown .button.open.switcher {
+  background: var(--Workspace-Workspace-button-background);
+}
 .dropdown .dropdown-content {
   float: left;
   position: absolute;
@@ -4208,6 +4217,9 @@ html {
 .dropdown .dropdown-content.menu-create-primary {
   background: var(--Primary-button-Primary-button-menu-background);
 }
+.dropdown .dropdown-content.menu-switcher {
+  background: var(--Workspace-Workspace-button-background);
+}
 .dropdown .dropdown-content.visible {
   display: block;
 }
@@ -4218,49 +4230,6 @@ html {
 .dropdown .dropdown-content.right {
   left: 0;
   border-radius: 0 var(--Menu-radius) var(--Menu-radius) var(--Menu-radius);
-}
-.dropdown .dropdown-content.over {
-  right: -0.1rem;
-  top: -0.4rem;
-  z-index: 10;
-  padding: 0;
-  box-shadow: none;
-  border: none;
-}
-.dropdown .dropdown-content.over:before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  border-radius: var(--Workspace-selection-button-radius);
-  top: 4.1rem;
-  height: calc(100% - 4.1rem);
-  box-shadow: var(--Menu-drop-shadow-Menu-drop-shadow-X) var(--Menu-drop-shadow-Menu-drop-shadow-Y) var(--Menu-drop-shadow-Menu-drop-shadow-blur) 0 var(--Menu-drop-shadow-Menu-drop-shadow);
-}
-.dropdown .dropdown-content.over button.no-border {
-  display: flex;
-  justify-content: flex-end;
-  padding: 1rem var(--Workspace-selection-button-padding);
-  gap: 1.6rem;
-}
-.dropdown .dropdown-content.over li {
-  position: relative;
-  background: var(--Workspace-Workspace-button-background);
-  border-left: 0.1rem solid var(--Action-button-Action-button-border);
-  border-right: 0.1rem solid var(--Action-button-Action-button-border);
-}
-.dropdown .dropdown-content.over li:first-child {
-  border-radius: var(--Workspace-selection-button-radius) var(--Workspace-selection-button-radius) 0 0;
-  border-top: 0.1rem solid var(--Action-button-Action-button-border);
-}
-.dropdown .dropdown-content.over li:first-child button {
-  border-radius: var(--Workspace-selection-button-radius) var(--Workspace-selection-button-radius) 0 0;
-}
-.dropdown .dropdown-content.over li:last-child {
-  border-radius: 0 0 var(--Workspace-selection-button-radius) var(--Workspace-selection-button-radius);
-  border-bottom: 0.1rem solid var(--Action-button-Action-button-border);
-}
-.dropdown .dropdown-content.over li:last-child button {
-  border-radius: 0 0 var(--Workspace-selection-button-radius) var(--Workspace-selection-button-radius);
 }
 .dropdown .dropdown-content .separator-after {
   border-bottom: 1px solid var(--Workspace-Menu-Dividers);
@@ -5322,6 +5291,104 @@ button.card .card-information .info {
   -webkit-line-clamp: 2;
   white-space: normal;
 }
+.section-card {
+  display: flex;
+  padding: 1.6rem;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+}
+.section-card .card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0;
+  border-radius: var(--Section-border-radius);
+  background: var(--Context-buttons-Updgrade-resource-card-title);
+  min-width: 0;
+}
+.section-card .card .title {
+  display: flex;
+  padding: 0.8rem 1.2rem;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+}
+.section-card .card .title .text {
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: normal;
+  flex: 1 0 0;
+  text-align: left;
+}
+svg .section-card .card .title:first-child {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+.section-card .card .content {
+  display: flex;
+  padding: 0.8rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  align-self: stretch;
+  border-top: 0.1rem solid var(--Action-button-Active-action-button-border);
+  background: var(--Context-buttons-Updgrade-resource-card-background);
+  border-radius: 0 0 var(--Section-border-radius) var(--Section-border-radius);
+  box-sizing: border-box;
+}
+.section-card .card .content p {
+  font-size: 1.3rem;
+  font-weight: 400;
+  line-height: normal;
+}
+.section-card .card .content .actions-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.6rem;
+  align-self: stretch;
+  min-width: 0;
+}
+.section-card .card .content .actions-wrapper button,
+.section-card .card .content .actions-wrapper a {
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: normal;
+}
+.section-card .card .content .actions-wrapper button.link,
+.section-card .card .content .actions-wrapper a.link {
+  font-weight: 400;
+}
+#workspace-switcher {
+  display: flex;
+  position: relative;
+  padding-right: var(--Workspace-selection-button-extra-gap);
+}
+#workspace-switcher .dropdown button {
+  padding-left: var(--Workspace-selection-button-padding);
+  padding-right: var(--Workspace-selection-button-padding);
+}
+#workspace-switcher .dropdown button svg.cog {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+#workspace-switcher .dropdown .dropdown-content {
+  padding: 0.1rem 0;
+}
+#workspace-switcher .dropdown .dropdown-content li button.no-border {
+  display: flex;
+  padding: 1rem var(--Workspace-selection-button-padding);
+  gap: 1.6rem;
+  margin-bottom: 0.1rem;
+}
+#workspace-switcher .dropdown .dropdown-content li:last-child button.no-border {
+  margin-bottom: 0;
+}
+#workspace-switcher svg {
+  width: 1.8rem;
+  height: 1.8rem;
+}
 .panel.main .panel.middle .main-page .row .http-error.main-column .main-content > * {
   text-align: center;
 }
@@ -6359,6 +6426,7 @@ html.launching .launching-screen p {
 }
 .mfa-setup .totp-setup .qrcode img {
   border-radius: var(--Button-border-radius);
+  height: 22.8rem;
 }
 .mfa-setup .totp-setup .input.password {
   display: block;
@@ -6618,10 +6686,13 @@ html.launching .launching-screen p {
   font-weight: 700;
   font-size: 1.8rem;
 }
-.ldap-settings.main-column .accordion h4.accordion-header button .svg-icon.caret-right svg,
-.ldap-settings.main-column .accordion h4.accordion-header button .svg-icon.caret-down svg {
+.ldap-settings.main-column .accordion h4.accordion-header button svg.caret-right,
+.ldap-settings.main-column .accordion h4.accordion-header button svg.caret-down {
   width: inherit;
   height: inherit;
+}
+.ldap-settings.main-column .accordion h4.accordion-header button svg.caret-right {
+  margin-right: 0.2rem;
 }
 .dialog .ldap-test-settings-report .directory-list-content {
   height: 22rem;

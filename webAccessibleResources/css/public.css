@@ -196,7 +196,7 @@ html {
 }
 .page .app .panel.main .panel.left .sidebar-content .top-bar-left {
   display: flex;
-  padding: 2.95rem 1.6rem 1.65rem 3.2rem;
+  padding: 2.95rem 1.6rem 1.65rem 4rem;
   gap: 0.8rem;
   align-self: stretch;
 }

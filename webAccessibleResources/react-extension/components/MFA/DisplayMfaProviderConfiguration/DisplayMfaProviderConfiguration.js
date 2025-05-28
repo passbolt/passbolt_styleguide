@@ -143,7 +143,7 @@ class DisplayMfaProviderConfiguration extends Component {
         </div>
         <div className="actions-wrapper">
           <button className="button cancel secondary" onClick={this.handleCancelClick} disabled={this.isProcessing}><Trans>Manage providers</Trans></button>
-          <button className="button primary form" type="button" onClick={this.handleDeleteClick} disabled={this.isProcessing}>
+          <button className="button primary warning form" type="button" onClick={this.handleDeleteClick} disabled={this.isProcessing}>
             <span><Trans>Turn off</Trans></span>
           </button>
         </div>

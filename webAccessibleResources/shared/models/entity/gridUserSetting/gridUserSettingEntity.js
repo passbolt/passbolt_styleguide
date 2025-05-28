@@ -14,6 +14,7 @@
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 import ColumnsSettingCollection from "../columnSetting/columnsSettingCollection";
+import RowsSettingEntity from "../rowsSetting/rowsSettingEntity";
 import SorterEntity from "../sorter/sorterEntity";
 
 
@@ -37,10 +38,15 @@ class GridUserSettingEntity extends Entity {
     if (this._props.columns_setting) {
       this._columns_setting = new ColumnsSettingCollection(this._props.columns_setting, {clone: false});
     }
-    delete this._props._columns_setting;
+
+    this._rows_setting = RowsSettingEntity.createFromDefault(this._props.rows_setting);
+
     if (this._props.sorter) {
       this._sorter = new SorterEntity(this._props.sorter, {clone: false});
     }
+
+    delete this._props._columns_setting;
+    delete this._props._rows_setting;
     delete this._props.sorter;
   }
 
@@ -57,7 +63,8 @@ class GridUserSettingEntity extends Entity {
       ],
       "properties": {
         "columns_setting": ColumnsSettingCollection.getSchema(),
-        "sorter": SorterEntity.getSchema()
+        "sorter": SorterEntity.getSchema(),
+        "rows_setting": RowsSettingEntity.getSchema(),
       }
     };
   }
@@ -81,6 +88,9 @@ class GridUserSettingEntity extends Entity {
     }
     if (this.columnsSetting && contain.columns_setting) {
       result.columns_setting = this.columnsSetting.toDto();
+    }
+    if (this.rowsSetting && contain.rows_setting) {
+      result.rows_setting = this.rowsSetting.toDto();
     }
     if (this.sorter && contain.sorter) {
       result.sorter = this.sorter.toDto();
@@ -108,6 +118,14 @@ class GridUserSettingEntity extends Entity {
    */
   get columnsSetting() {
     return this._columns_setting;
+  }
+
+  /**
+   * Get the associated rows setting
+   * @returns {RowsSettingEntity || null)}
+   */
+  get rowsSetting() {
+    return this._rows_setting || null;
   }
 
   /**

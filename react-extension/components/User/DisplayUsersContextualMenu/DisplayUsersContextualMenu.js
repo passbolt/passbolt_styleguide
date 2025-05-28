@@ -34,6 +34,8 @@ import SendSVG from '../../../../img/svg/send.svg';
 import FingerprintDisabledSVG from '../../../../img/svg/fingerprint_disabled.svg';
 import DeleteSVG from '../../../../img/svg/delete.svg';
 import BuoySVG from '../../../../img/svg/buoy.svg';
+import MetadataKeySVG from "../../../../img/svg/metadata_key.svg";
+import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/ConfirmShareMissingMetadataKeys";
 
 class DisplayUsersContextualMenu extends React.Component {
   /**
@@ -57,6 +59,7 @@ class DisplayUsersContextualMenu extends React.Component {
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleDisableMfaEvent = this.handleDisableMfaEvent.bind(this);
     this.handleReviewRecoveryRequestClickEvent = this.handleReviewRecoveryRequestClickEvent.bind(this);
+    this.handleShareMissingMetadataKeysEvent = this.handleShareMissingMetadataKeysEvent.bind(this);
   }
 
   /**
@@ -202,6 +205,18 @@ class DisplayUsersContextualMenu extends React.Component {
   }
 
   /**
+   * Handle share missing metadata keys click event
+   */
+  handleShareMissingMetadataKeysEvent() {
+    const shareMissingMetadataKeysDialogProps = {
+      user: this.user,
+    };
+
+    this.props.dialogContext.open(ConfirmShareMissingMetadataKeys, shareMissingMetadataKeysDialogProps);
+    this.props.hide();
+  }
+
+  /**
    * Display error dialog
    * @param error
    */
@@ -236,6 +251,13 @@ class DisplayUsersContextualMenu extends React.Component {
   }
 
   /**
+   * Check if the user can use the share missing data key capability.
+   */
+  get canIShareMissingMetadataKeys() {
+    return this.props.context.siteSettings.canIUse("metadata") && this.isLoggedInUserAdmin();
+  }
+
+  /**
    * Can delete the user. A user cannot deleted its own account.
    * @returns {boolean}
    */
@@ -258,6 +280,14 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   hasPendingAccountRecoveryRequest() {
     return this.user && Boolean(this.user.pending_account_recovery_request);
+  }
+
+  /**
+   * Has a pending account recovery for the user.
+   * @returns {boolean}
+   */
+  hasMissingMetadataKeysRequest() {
+    return this.user && this.user.missing_metadata_key_ids?.length > 0;
   }
 
   /**
@@ -330,8 +360,8 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button className="link no-border" type="button"  onClick={this.handlePermalinkCopy}>
-                  <LinkSVG/><span><Trans>Copy permalink</Trans></span>
+                <button className="link no-border" type="button" onClick={this.handlePermalinkCopy}>
+                  <LinkSVG /><span><Trans>Copy permalink</Trans></span>
                 </button>
               </div>
             </div>
@@ -347,7 +377,7 @@ class DisplayUsersContextualMenu extends React.Component {
                   onClick={this.handlePublicKeyCopy}
                   disabled={!this.canCopyPublicKey()}
                   className="link no-border">
-                  <KeySVG/><span><Trans>Copy public key</Trans></span>
+                  <KeySVG /><span><Trans>Copy public key</Trans></span>
                 </button>
               </div>
             </div>
@@ -359,84 +389,98 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button className="link no-border" type="button"  onClick={this.handleUsernameCopy}>
-                  <EmailSVG/><span><Trans>Copy email address</Trans></span>
+                <button className="link no-border" type="button" onClick={this.handleUsernameCopy}>
+                  <EmailSVG /><span><Trans>Copy email address</Trans></span>
                 </button>
               </div>
             </div>
           </div>
         </li>
         {this.canIUseEdit() &&
-        <li key="edit-user" className="ready">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <button className="link no-border" type="button"  id="edit" onClick={this.handleEditClickEvent}>
-                  <EditSVG/><span><Trans>Edit</Trans></span>
-                </button>
+          <li key="edit-user" className="ready">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button className="link no-border" type="button" id="edit" onClick={this.handleEditClickEvent}>
+                    <EditSVG /><span><Trans>Edit</Trans></span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
+          </li>
         }
         {this.canIUseResend &&
-        <li key="resend-invite-user" className="ready">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <button type="button"  id="resend"
-                  onClick={this.handleResendInviteClickEvent}
-                  disabled={!this.canResendInviteToUser}
-                  className="link no-border">
-                  <SendSVG/><span><Trans>Resend invite</Trans></span>
-                </button>
+          <li key="resend-invite-user" className="ready">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button type="button" id="resend"
+                    onClick={this.handleResendInviteClickEvent}
+                    disabled={!this.canResendInviteToUser}
+                    className="link no-border">
+                    <SendSVG /><span><Trans>Resend invite</Trans></span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
+          </li>
         }
         {this.canIUseMfa &&
-        <li key="disable-user-mfa" className="ready">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <button type="button"
-                  id="disable-mfa"
-                  onClick={this.handleDisableMfaEvent}
-                  disabled={!this.canDisableMfaForUser}
-                  className="link no-border">
-                  <FingerprintDisabledSVG/><span><Trans>Disable MFA</Trans></span>
-                </button>
+          <li key="disable-user-mfa" className="ready">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button type="button"
+                    id="disable-mfa"
+                    onClick={this.handleDisableMfaEvent}
+                    disabled={!this.canDisableMfaForUser}
+                    className="link no-border">
+                    <FingerprintDisabledSVG /><span><Trans>Disable MFA</Trans></span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
+          </li>
         }
         {this.canIUseDelete() &&
-        <li key="delete-user" className="ready">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <button type="button"  id="delete" onClick={this.handleDeleteClickEvent} disabled={!this.canDeleteUser()} className="link no-border">
-                  <DeleteSVG/><span><Trans>Delete</Trans></span>
-                </button>
+          <li key="delete-user" className="ready">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button type="button" id="delete" onClick={this.handleDeleteClickEvent} disabled={!this.canDeleteUser()} className="link no-border">
+                    <DeleteSVG /><span><Trans>Delete</Trans></span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
+          </li>
         }
         {this.canIReviewAccountRecoveryRequest() &&
-        <li key="review-recovery-user" className="ready">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <button type="button"  id="review-recovery" onClick={this.handleReviewRecoveryRequestClickEvent} disabled={!this.hasPendingAccountRecoveryRequest()} className="link no-border">
-                  <BuoySVG/><span><Trans>Review recovery request</Trans></span>
-                </button>
+          <li key="review-recovery-user" className="ready">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button type="button" id="review-recovery" onClick={this.handleReviewRecoveryRequestClickEvent} disabled={!this.hasPendingAccountRecoveryRequest()} className="link no-border">
+                    <BuoySVG /><span><Trans>Review recovery request</Trans></span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
+          </li>
+        }
+        {this.canIShareMissingMetadataKeys &&
+          <li key="missing-metadata-keys" className="ready">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button id="share-metadata-keys" type="button" onClick={this.handleShareMissingMetadataKeysEvent} disabled={!this.hasMissingMetadataKeysRequest()} className="link no-border">
+                    <MetadataKeySVG />
+                    <span><Trans>Share metadata keys</Trans></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
         }
       </ContextualMenuWrapper>
     );

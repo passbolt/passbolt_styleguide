@@ -26,7 +26,9 @@ import TotpSVG from "../../../../img/svg/totp.svg";
 import NotesSVG from "../../../../img/svg/notes.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import AlignLeftSVG from "../../../../img/svg/align_left.svg";
-//import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
+import LinkSVG from "../../../../img/svg/link.svg";
+import PaintBrushSVG from "../../../../img/svg/paintbrush.svg";
+import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
 import DeleteSVG from "../../../../img/svg/delete.svg";
 import {
   ResourceEditCreateFormEnumerationTypes
@@ -36,6 +38,9 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import {
+  V4_TO_V5_RESOURCE_TYPE_MAPPING
+} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 class SelectResourceForm extends Component {
   constructor(props) {
@@ -66,6 +71,7 @@ class SelectResourceForm extends Component {
     this.handleSelectForm = this.handleSelectForm.bind(this);
     this.handleAddSecret = this.handleAddSecret.bind(this);
     this.handleDeleteSecret = this.handleDeleteSecret.bind(this);
+    this.handleUpgradeClick = this.handleUpgradeClick.bind(this);
   }
 
   /**
@@ -117,6 +123,15 @@ class SelectResourceForm extends Component {
   handleDeleteSecret(secret) {
     if (this.props.onDeleteSecret) {
       this.props.onDeleteSecret(secret);
+    }
+  }
+
+  /**
+   * Handle upgrade resource
+   */
+  handleUpgradeClick() {
+    if (this.props.onUpgradeToV5) {
+      this.props.onUpgradeToV5();
     }
   }
 
@@ -177,6 +192,31 @@ class SelectResourceForm extends Component {
    */
   get isResourceTypeHasDescriptionMetadata() {
     return this.props.resourceType?.hasMetadataDescription();
+  }
+
+  /**
+   * Is resource type V5
+   * @returns {boolean}
+   */
+  get isResourceTypeV5() {
+    return this.props.resourceType?.isV5();
+  }
+
+  /**
+   * Should the 'Metadata' section be displayed
+   * @returns {boolean}
+   */
+  get shouldDisplayMetadataSection() {
+    return this.isResourceTypeHasDescriptionMetadata || this.isResourceTypeV5;
+  }
+
+  /**
+   * Should display the upgrade resource section
+   * @returns {boolean}
+   */
+  get shouldDisplayUpgradeResource() {
+    const v5ResourceTypeSlug = V4_TO_V5_RESOURCE_TYPE_MAPPING[this.props.resourceType?.slug];
+    return this.props.canUpgradeResource && this.props.resourceType?.isV4() && this.props.resourceTypes.hasOneWithSlug(v5ResourceTypeSlug);
   }
 
   /**
@@ -336,7 +376,7 @@ class SelectResourceForm extends Component {
               }
             </>
           }
-          {this.isResourceTypeHasDescriptionMetadata &&
+          {this.shouldDisplayMetadataSection &&
             <>
               <button type="button" className="section-header no-border" onClick={this.handleDisplayMetadataClick}>
                 {this.state.displayMetadata
@@ -346,60 +386,87 @@ class SelectResourceForm extends Component {
                 <span className="ellipsis"><Trans>Metadata</Trans></span>
               </button>
               {this.state.displayMetadata &&
-                <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.DESCRIPTION === this.selectedForm ? "selected" : ""} ${!this.isResourceTypeHasDescriptionMetadata ? "disabled" : ""}`}>
-                  <button type="button" id="menu-description" className="no-border" disabled={this.props.disabled}
-                    onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.DESCRIPTION)}>
-                    <AlignLeftSVG/>
-                    <span className="ellipsis"><Trans>Description</Trans></span>
-                  </button>
-                </div>
+                <>
+                  {this.isResourceTypeV5 &&
+                    <>
+                      <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.APPEARANCE === this.selectedForm ? "selected" : ""}`}>
+                        <button type="button" id="menu-appearance" className="no-border" disabled={this.props.disabled}
+                          onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.APPEARANCE)}>
+                          <PaintBrushSVG/>
+                          <span className="ellipsis"><Trans>Appearance</Trans></span>
+                        </button>
+                      </div>
+                      <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.URIS === this.selectedForm ? "selected" : ""}`}>
+                        <button type="button" id="menu-uris" className="no-border" disabled={this.props.disabled}
+                          onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.URIS)}>
+                          <LinkSVG/>
+                          <span className="ellipsis"><Trans>URIs</Trans></span>
+                        </button>
+                      </div>
+                    </>
+                  }
+                  {this.isResourceTypeHasDescriptionMetadata &&
+                  <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.DESCRIPTION === this.selectedForm ? "selected" : ""}`}>
+                    <button type="button" id="menu-description" className="no-border" disabled={this.props.disabled}
+                      onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.DESCRIPTION)}>
+                      <AlignLeftSVG/>
+                      <span className="ellipsis"><Trans>Description</Trans></span>
+                    </button>
+                  </div>
+                  }
+                </>
               }
             </>
           }
         </div>
-        {/* Upgrade v4 to v5
-
-        <div className="section-card">
-          <div className="card">
-            <button type="button" className="title no-border" onClick={this.handleDisplayUpgradeClick}>
-              <ArrowBigUpDashSVG/>
-              <span className="text ellipsis"><Trans>Upgrade available</Trans></span>
-              {this.state.displayUpgrade
-                ? <CaretDownSVG className="caret-down"/>
-                : <CaretRightSVG className="caret-right"/>
-              }
-            </button>
-            {this.state.displayUpgrade &&
-              <div className="content">
-                <p><Trans>Upgrade for security improvements and new features.</Trans></p>
-                <div className="actions-wrapper">
-                  <button type="button" className="button link">
-                    <span className="ellipsis"><Trans>Learn more</Trans></span>
-                  </button>
-                  <button type="button">
-                    <span className="ellipsis"><Trans>Upgrade</Trans></span>
-                  </button>
+        {this.shouldDisplayUpgradeResource &&
+          <div className="section-card">
+            <div className="card">
+              <button type="button" className="title no-border" onClick={this.handleDisplayUpgradeClick}>
+                <ArrowBigUpDashSVG/>
+                <span className="text ellipsis"><Trans>Upgrade available</Trans></span>
+                {this.state.displayUpgrade
+                  ? <CaretDownSVG className="caret-down"/>
+                  : <CaretRightSVG className="caret-right"/>
+                }
+              </button>
+              {this.state.displayUpgrade &&
+                <div className="content">
+                  <p><Trans>Upgrade for security improvements and new features.</Trans></p>
+                  <div className="actions-wrapper">
+                    <a className="link" href="https://www.passbolt.com/blog/the-road-to-passbolt-v5-encrypted-metadata-and-other-core-security-changes-2" target="_blank" rel="noopener noreferrer">
+                      <span className="ellipsis"><Trans>Learn more</Trans></span>
+                    </a>
+                    <button disabled={this.props.disabled} type="button" onClick={this.handleUpgradeClick}>
+                      <span className="ellipsis"><Trans>Upgrade</Trans></span>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            }
+              }
+            </div>
           </div>
-        </div>
-
-        */}
+        }
       </div>
     );
   }
 }
+
+
+SelectResourceForm.defaultProps = {
+  canUpgradeResource: false
+};
 
 SelectResourceForm.propTypes = {
   resourceFormSelected: PropTypes.string, // The resource form selected
   onSelectForm: PropTypes.func, // The on select form function
   onAddSecret: PropTypes.func, // The on add secret function
   onDeleteSecret: PropTypes.func, // The on delete secret function
+  onUpgradeToV5: PropTypes.func, // The on delete secret function
   resource: PropTypes.object, // The resource to edit or create
   resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource type entity
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection),
   disabled: PropTypes.bool, // The disabled property
+  canUpgradeResource: PropTypes.bool.isRequired, // The can upgrade resource property
   t: PropTypes.func, // The translation function
 };
 

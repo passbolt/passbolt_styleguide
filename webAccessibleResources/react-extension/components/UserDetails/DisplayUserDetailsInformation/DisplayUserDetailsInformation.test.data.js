@@ -15,6 +15,8 @@
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultAccountRecoveryUserContext} from "../../../contexts/AccountRecoveryUserContext.test.data";
 import {TEST_ROLE_ADMIN_ID} from "../../../../shared/models/entity/role/role.test.data";
+import {v4 as uuidv4} from "uuid";
+import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
 
 /**
  * Default props
@@ -70,9 +72,28 @@ export function defaultProps() {
           },
           "__placeholder_last_logged_in__": "",
           "last_logged_in": "",
+          missing_metadata_key_ids: [],
           is_mfa_enabled: false
         }
       }
     }
+  };
+}
+
+export function defaultWithMissingMetadataKeysProps(props = {}) {
+  const withMissingMetadataKeysProps = defaultProps();
+  withMissingMetadataKeysProps.userWorkspaceContext.details.user.missing_metadata_key_ids = [uuidv4()];
+  return {
+    ...withMissingMetadataKeysProps,
+    ...props
+  };
+}
+
+export function defaultUserProps(props = {}) {
+  const userProps = defaultProps();
+  userProps.userWorkspaceContext.details.user = defaultUserDto();
+  return {
+    ...userProps,
+    ...props
   };
 }

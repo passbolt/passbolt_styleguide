@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import React from "react";
 import {Link, withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../shared/components/Icons/Icon";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
@@ -19,6 +18,10 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_SLUG
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
+import DisplayResourceUrisBadge
+  from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
+import CaretLeftSVG from "../../../img/svg/caret_left.svg";
+import CloseSVG from "../../../img/svg/close.svg";
 
 const BROWSED_RESOURCES_LIMIT = 500;
 
@@ -142,13 +145,13 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
       <div className="index-list">
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.translate("Go back")}>
-            <Icon name="chevron-left"/>
+            <CaretLeftSVG/>
             <span className="primary-action-title">
               <Trans>Recently modified</Trans>
             </span>
           </a>
           <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
-            <Icon name="close"/>
+            <CloseSVG className="close"/>
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>
         </div>
@@ -184,7 +187,12 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
                             <span className="title">{resource.metadata.name}</span>
                             <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
                           </div>
-                          <span className="url">{resource.metadata.uris?.[0]}</span>
+                          <div className="uris">
+                            <span className="url">{resource.metadata.uris?.[0]}</span>
+                            {resource.metadata.uris?.length > 1 &&
+                              <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)}/>
+                            }
+                          </div>
                         </div>
                       </a>
                     </li>

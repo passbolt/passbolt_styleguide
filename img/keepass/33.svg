@@ -1,0 +1,17 @@
+<!--
+ Passbolt ~ Open source password manager for teams
+ Copyright (c) Passbolt SA (https://www.passbolt.com)
+
+ Licensed under GNU Affero General Public License version 3 of the or any later version.
+ For full copyright and license information, please see the LICENSE.txt
+ Redistributions of files must retain the above copyright notice.
+
+ @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ @link          https://www.passbolt.com Passbolt(tm)
+ @since         5.2.0
+-->
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+<path d="M24.8268 21.2356C27.6491 18.7308 29.7734 15.436 30.7461 11.7948L31.3106 9.68559C31.3736 9.4462 31.3106 9.18413 31.1266 9.00774C30.9502 8.82378 30.6894 8.75323 30.4487 8.82378L28.332 9.38824C24.6983 10.3622 21.4035 12.4789 18.8987 15.3075L15.4981 15.1588C14.8341 15.1311 14.1638 15.4827 13.8047 16.0547L10.6435 21.0504C10.4671 21.3251 10.5024 21.6854 10.7355 21.9261C10.869 22.0596 11.053 22.1302 11.2369 22.1302C11.3642 22.1302 11.4914 22.1025 11.6036 22.0306L13.8539 20.6623C14.4813 20.2818 15.1592 20.0349 15.8433 19.9215C15.4339 20.7896 15.0811 21.6791 14.8127 22.6027C14.7346 22.8496 14.8064 23.118 14.9891 23.3007L16.8311 25.1427C16.9647 25.2763 17.1487 25.3468 17.3326 25.3468C17.3956 25.3468 17.4662 25.3406 17.5304 25.3191C18.4552 25.0508 19.3435 24.698 20.2116 24.2885C20.0995 24.9726 19.8513 25.6505 19.4707 26.278L18.1024 28.5219C17.9336 28.8042 17.9752 29.1645 18.2083 29.3976C18.3494 29.5312 18.5258 29.6017 18.7022 29.6017C18.8357 29.6017 18.963 29.5589 19.0827 29.4896L24.0784 26.3284C24.6504 25.9667 24.9994 25.3028 24.9717 24.6325L24.8268 21.2356Z" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-miterlimit="10"/>
+<path d="M13.0443 27.0781L8.36426 31.7582" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

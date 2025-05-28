@@ -48,6 +48,10 @@ import EditResourceSkeleton from "./EditResourceSkeleton";
 import {
   RESOURCE_TYPE_PASSWORD_STRING_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import {
+  withMetadataTypesSettingsLocalStorage
+} from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 
 class EditResource extends Component {
   constructor(props) {
@@ -86,6 +90,7 @@ class EditResource extends Component {
     this.onSelectForm = this.onSelectForm.bind(this);
     this.onAddSecret = this.onAddSecret.bind(this);
     this.onDeleteSecret = this.onDeleteSecret.bind(this);
+    this.onUpgradeToV5 = this.onUpgradeToV5.bind(this);
     this.handleConvertToDescription = this.handleConvertToDescription.bind(this);
     this.handleConvertToNote = this.handleConvertToNote.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -454,6 +459,7 @@ class EditResource extends Component {
     const resourceDto = resource.toResourceDto();
     const resourceType = this.props.resourceTypes.getFirstById(resource.resourceTypeId);
     const secretDto = resourceType.isPasswordString() ? resource.toSecretDto().password : resource.toSecretDto();
+
     await this.props.context.port.request("passbolt.resources.update", resourceDto, secretDto);
   }
 
@@ -624,6 +630,14 @@ class EditResource extends Component {
     return this.props.t;
   }
 
+  /**
+   * The upgrade to v5 action raised by user
+   * @returns {void}
+   */
+  onUpgradeToV5() {
+    this.resourceFormEntity.upgradeToV5();
+  }
+
   /*
    * =============================================================
    *  Render view
@@ -648,6 +662,8 @@ class EditResource extends Component {
               onAddSecret={this.onAddSecret}
               onDeleteSecret={this.onDeleteSecret}
               onSelectForm={this.onSelectForm}
+              canUpgradeResource={this.props.metadataTypeSettings?.allowV4V5Upgrade}
+              onUpgradeToV5={this.onUpgradeToV5}
               disabled={this.hasAllInputDisabled}
             />
             <form className="grid-and-footer" onSubmit={this.handleFormSubmit} noValidate>
@@ -658,6 +674,7 @@ class EditResource extends Component {
                   disabled={this.hasAllInputDisabled}
                   warnings={warnings}
                   errors={errors}
+                  onIconClick={this.onSelectForm}
                 />
                 <div className="edit-workspace">
                   <OrchestrateResourceForm
@@ -698,7 +715,8 @@ EditResource.propTypes = {
   passwordPoliciesContext: PropTypes.object, // The password policy context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withPasswordPolicies(withPasswordExpiry(withResourceTypesLocalStorage(withActionFeedback(withDialog(withResourceWorkspace(withTranslation('common')(EditResource))))))));
+export default withAppContext(withPasswordPolicies(withPasswordExpiry(withMetadataTypesSettingsLocalStorage(withResourceTypesLocalStorage(withActionFeedback(withDialog(withResourceWorkspace(withTranslation('common')(EditResource)))))))));

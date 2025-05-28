@@ -1,32 +1,89 @@
-.dialog {
-    .share-form {
-        .form-content {
-            padding: 0;
-            .permission-edit {
-              max-height: 26.25rem;
-            }
+.share-dialog {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 6.4rem 39rem 12.8rem;
 
-            .permission-add {
-              padding: 1.6rem;
-            }
+    .dialog {
+        padding: 0;
+        max-width: 70rem;
+        min-width: 50rem;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-height: 100%;
+        align-self: center;
 
-            .input.text.autocomplete input  {
-              margin-bottom: 0;
-            }
+        .dialog-header {
+            padding: 2.4rem;
 
-            // remove all margin bottom for direct child element
-            & > * {
-              margin-bottom: 0;
+            .dialog-title-wrapper h2 {
+              font-size: 2.4rem;
             }
           }
+
+  .dialog-content {
+    display: flex;
+    padding-right: 1.6rem;
+    padding-left: 1.6rem;
+    align-items: center;
+    align-self: stretch;
+    min-height: 0;
+
+    .share-form {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex: 1 0 0;
+        align-self: stretch;
+
+        .form-content {
+          padding: 0;
+          max-height: calc(100% - 6.8rem);
+          min-height: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+
+          > * {
+            margin-bottom: 0;
+          }
+        }
+
+        .permission-add {
+          padding: 1.6rem;
+        }
+
+        .input.text.autocomplete input  {
+          margin-bottom: 0;
+        }
+
+        // remove all margin bottom for direct child element
+        & > * {
+          margin-bottom: 0;
+        }
+      }
+
+      .submit-wrapper {
+        display: flex;
+        padding: 1.6rem 0;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 2.4rem;
+        align-self: stretch;
+      }
     }
+  }
+}
 
-
+.dialog {
     .permissions {
         &.scroll {
             .scroll-shadow();
-            height: 100%;
-            max-height: 26.25rem;
             margin: 0;
         }
 
@@ -146,20 +203,6 @@
             .avatar, .aro .aro-name .ellipsis, .aro-details, .permission_changes {
                 opacity: 0.5;
             }
-        }
-    }
-}
-
-/* hide icons if there is no space */
-@media all and (max-width: 480px) {
-    .dialog .permissions {
-        &.scroll {
-            height: auto;
-            margin: 0;
-        }
-        .row .user,
-        .row .group {
-            width: 45%;
         }
     }
 }

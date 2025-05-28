@@ -121,6 +121,7 @@ export function defaultResourceWorkspaceContext(data = {}) {
     onChangeColumnsSettings: jest.fn(),
     resetGridColumnsSettings: jest.fn(),
     onResourceDescriptionDecrypted: jest.fn(),
+    onChangeRowSettingsHeight: jest.fn(),
     ...data
   };
 }

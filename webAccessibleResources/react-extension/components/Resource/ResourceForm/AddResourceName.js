@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import ResourceIcon from "../../../../shared/components/Icons/ResourceIcon";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {ResourceEditCreateFormEnumerationTypes} from "../../../../shared/models/resource/ResourceEditCreateFormEnumerationTypes";
 
 class AddResourceName extends Component {
   constructor(props) {
@@ -40,6 +41,15 @@ class AddResourceName extends Component {
    */
   bindCallbacks() {
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.onResourceIconClick = this.onResourceIconClick.bind(this);
+  }
+
+  /**
+   * Click callback on resource icon
+   * @param {ReactEvent} e
+   */
+  onResourceIconClick(e) {
+    this.props.onIconClick(e, ResourceEditCreateFormEnumerationTypes.APPEARANCE);
   }
 
   /**
@@ -102,7 +112,7 @@ class AddResourceName extends Component {
     return (
       <div className="resource-info">
         <div className="resource-icon">
-          <ResourceIcon resource={this.props.resource}/>
+          <ResourceIcon resource={this.props.resource} clickCallback={this.onResourceIconClick}/>
         </div>
         <div className="information">
           <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
@@ -133,6 +143,7 @@ AddResourceName.propTypes = {
   onChange: PropTypes.func, // The on change function
   disabled: PropTypes.bool, // The disabled property
   t: PropTypes.func, // The translation function
+  onIconClick: PropTypes.func, // The callback to change the current form
 };
 
 export default  withAppContext(withTranslation('common')(AddResourceName));

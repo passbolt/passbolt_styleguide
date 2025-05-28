@@ -11,9 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         v5.0.0
  */
+import {defaultNavigationContext} from "../../../../contexts/NavigationContext.test.data";
 
 export const defaultProps = (data = {}) => ({
   isUserAdmin: true,
   isUserWorkspaceVisible: true,
+  navigationContext: defaultNavigationContext(),
   ...data,
 });

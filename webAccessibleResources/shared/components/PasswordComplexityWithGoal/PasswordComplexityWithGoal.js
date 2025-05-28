@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {SecretGeneratorComplexity} from "../../lib/SecretGenerator/SecretGeneratorComplexity";
 import Tooltip from "../../../react-extension/components/Common/Tooltip/Tooltip";
-import Icon from "../Icons/Icon";
+import InfoSVG from "../../../img/svg/info.svg";
 
 /**
  * This component represents a password complexity with the strength and a goal, an entropy and a bar
@@ -158,7 +158,7 @@ class PasswordComplexityWithGoal extends React.PureComponent {
       <div className="password-complexity with-goal">
         <span className="complexity-text">
           <Tooltip message={this.currentEntropyTooltipMessage}>
-            {this.passwordStrengthLabel} <Icon name="info-circle"/>
+            {this.passwordStrengthLabel} <InfoSVG/>
           </Tooltip>
         </span>
         <span className="progress">

@@ -61,7 +61,7 @@ body {
             padding: 1.6rem;
             .ellipsis();
 
-            .svg-icon {
+            svg {
               margin-right: 1.6rem;
             }
             .primary-action-title {
@@ -83,6 +83,10 @@ body {
         .button.primary.big {
             background: var(--Quick-Access-Primary-button-background);
             color: var(--Quick-Access-Primary-button-text);
+
+            &.processing {
+                color: transparent;
+            }
         }
         .cancel {
             margin-right: 3rem;

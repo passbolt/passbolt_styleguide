@@ -14,11 +14,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../shared/components/Icons/Icon";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import CaretDownSVG from "../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../img/svg/caret_right.svg";
+import CloseSVG from "../../../img/svg/close.svg";
 
 class ConfirmMetadataKeyPage extends React.Component {
   constructor(props) {
@@ -127,7 +127,7 @@ class ConfirmMetadataKeyPage extends React.Component {
             <span className="primary-action-title"><Trans>The metadata key has changed</Trans></span>
           </a>
           <a onClick={this.handleCloseClick} className="secondary-action button-transparent button" title={this.translate("Cancel the operation")}>
-            <Icon name="close"/>
+            <CloseSVG className="close"/>
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </a>
         </div>

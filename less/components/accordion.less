@@ -5,9 +5,11 @@
         }
         a:hover, button:hover {
             color: var(--Palette-Contrast-1);
+            --icon-color: var(--Palette-Contrast-1);
 
             &:disabled, &.disabled {
               color: var(--Text-and-icons-Main-text);
+              --icon-color: var(--Text-and-icons-Icons);
             }
         }
     }
@@ -92,7 +94,7 @@
     }
 }
 .accordion.sidebar-section {
-    .svg-icon.exclamation {
+    .attention-required {
         --icon-exclamation-background-color: @icon-exclamation-required-color;
     }
 
@@ -100,8 +102,8 @@
         button {
             border:0;
 
-            .svg-icon {
-              &.exclamation {
+            svg {
+              &.attention-required {
                 position: relative;
                 right: inherit;
                 padding-right: .3rem;

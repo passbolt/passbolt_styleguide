@@ -8,6 +8,28 @@
         button {
             padding-left: var(--Workspace-selection-button-padding);
             padding-right: var(--Workspace-selection-button-padding);
+
+            svg.cog {
+              width: 2.4rem;
+              height: 2.4rem;
+            }
+        }
+
+        .dropdown-content {
+          padding: .1rem 0;
+          li {
+            button.no-border {
+              display: flex;
+              padding: 1rem var(--Workspace-selection-button-padding);
+              gap: 1.6rem;
+              margin-bottom: .1rem;
+            }
+
+            &:last-child button.no-border {
+              margin-bottom: 0;
+            }
+          }
+
         }
     }
 

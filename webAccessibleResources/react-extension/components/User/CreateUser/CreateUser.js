@@ -22,10 +22,11 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import {Trans, withTranslation} from "react-i18next";
 import {maxSizeValidation} from "../../../lib/Error/InputValidator";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {USER_INPUT_MAX_LENGTH} from "../../../../shared/constants/inputs.const";
 import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
 import Tooltip from "../../Common/Tooltip/Tooltip";
+import AttentionSVG from "../../../../img/svg/attention.svg";
+import InfoSVG from "../../../../img/svg/info.svg";
 
 class CreateUser extends Component {
   /**
@@ -377,7 +378,7 @@ class CreateUser extends Component {
           <div className="form-content">
             <div className={`input text required ${this.state.first_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="user-first-name-input"><Trans>First name</Trans>{this.state.first_nameWarning &&
-                  <Icon name="exclamation"/>
+                <AttentionSVG className="attention-required"/>
               }</label>
               <input id="user-first-name-input" name="first_name"
                 ref={this.firstNameRef}
@@ -398,7 +399,7 @@ class CreateUser extends Component {
             </div>
             <div className={`input text required ${this.state.last_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="user-last-name-input"><Trans>Last name</Trans>{this.state.last_nameWarning &&
-                  <Icon name="exclamation"/>
+                <AttentionSVG className="attention-required"/>
               }</label>
               <input id="user-last-name-input" name="last_name"
                 ref={this.lastNameRef}
@@ -419,7 +420,7 @@ class CreateUser extends Component {
             </div>
             <div className={`input text required ${this.state.usernameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="user-username-input"><Trans>Username / Email</Trans>{this.state.usernameWarning &&
-                  <Icon name="exclamation"/>
+                <AttentionSVG className="attention-required"/>
               }</label>
               <input id="user-username-input" name="username"
                 maxLength="128"
@@ -451,7 +452,7 @@ class CreateUser extends Component {
                 />
                 <label htmlFor="is_admin_checkbox"><Trans>This user is an administrator</Trans></label>
                 <Tooltip message={this.translate("Administrators can add and delete users. They can also create groups and assign group managers. By default they can not see all passwords.")}>
-                  <Icon name="info-circle"/>
+                  <InfoSVG/>
                 </Tooltip>
               </span>
             </div>

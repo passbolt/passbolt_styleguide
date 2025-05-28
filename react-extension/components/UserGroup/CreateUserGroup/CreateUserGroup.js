@@ -26,8 +26,8 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
 import EditUserGroupItem from "../EditUserGroup/EditUserGroupItem";
 import {maxSizeValidation} from '../../../lib/Error/InputValidator';
-import Icon from "../../../../shared/components/Icons/Icon";
 import {RESOURCE_GROUP_NAME_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class CreateUserGroup extends Component {
   /**
@@ -513,7 +513,7 @@ class CreateUserGroup extends Component {
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="group_name"><Trans>Group name</Trans>{this.state.nameWarning &&
-                  <Icon name="exclamation"/>
+                <AttentionSVG className="attention-required"/>
               }</label>
               <input id="group-name-input" name="name" aria-required={true} className="required" maxLength="50" type="text" placeholder={this.translate("group name")}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}

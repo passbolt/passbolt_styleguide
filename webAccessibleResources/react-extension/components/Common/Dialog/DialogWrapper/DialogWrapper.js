@@ -14,8 +14,8 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import DialogCloseButton from "../DialogCloseButton/DialogCloseButton";
-import Icon from "../../../../../shared/components/Icons/Icon";
 import Tooltip from "../../Tooltip/Tooltip";
+import InfoSVG from "../../../../../img/svg/info.svg";
 
 class DialogWrapper extends Component {
   /**
@@ -92,7 +92,7 @@ class DialogWrapper extends Component {
               </h2>
               {(this.props.tooltip && this.props.tooltip !== '') &&
                 <Tooltip message={this.props.tooltip}>
-                  <Icon name='info-circle'/>
+                  <InfoSVG/>
                 </Tooltip>
               }
             </div>

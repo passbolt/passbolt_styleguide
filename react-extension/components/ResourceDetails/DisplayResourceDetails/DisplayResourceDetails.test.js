@@ -21,12 +21,26 @@ import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import React from 'react';
 import {defaultProps} from "./DisplayResourceDetails.test.data";
 import DisplayResourceDetailsPage from "./DisplayResourceDetails.test.page";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {
+  defaultResourceDto,
   resourceLegacyDto,
   resourceStandaloneTotpDto, resourceWithTotpDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  resourceTypesV4CollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV50FreshDto,
+} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import {TEST_RESOURCE_TYPE_V5_DEFAULT} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import {waitFor} from "@testing-library/react";
+import ResourceMetadataEntity from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity";
+import {SECRET_DATA_OBJECT_TYPE} from "../../../../shared/models/entity/secretData/secretDataEntity";
+import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
 
 jest.mock("./DisplayResourceDetailsInformation", () => () => <></>);
 jest.mock("./DisplayResourceDetailsPassword", () => () => <div className="password"></div>);
@@ -68,11 +82,11 @@ describe("DisplayResourceDetails", () => {
 
       expect.assertions(2);
       mockContextRequest(copyClipboardMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementation(() => {});
 
       await page.selectPermalink();
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${props.context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resourceWorkspaceContext.details.resource.id}`);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The permalink has been copied to clipboard");
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The permalink has been copied to clipboard");
     });
   });
 
@@ -169,6 +183,134 @@ describe("DisplayResourceDetails", () => {
       const props = defaultProps(); // The props to pass
       const page = new DisplayResourceDetailsPage(props);
       expect(page.description).toBeNull();
+    });
+  });
+
+  describe('As LU I can see the card section', () => {
+    it('As LU I can see the card section', () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.upgradeCard).toBeDefined();
+    });
+
+    it('As LU I cannot see the card section if there is no resource v5 corresponding', () => {
+      expect.assertions(1);
+      const props = defaultProps({resourceTypes: new ResourceTypesCollection(resourceTypesV4CollectionDto())});
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.upgradeCard).toBeNull();
+    });
+
+    it('As LU I cannot see the card section if user is not allowed to upgrade', () => {
+      expect.assertions(1);
+      const props = defaultProps({metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto())});
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.upgradeCard).toBeNull();
+    });
+
+    it('As LU I cannot see the card section if resource is v5', () => {
+      expect.assertions(1);
+      const resourceWorkspaceContext = defaultResourceWorkspaceContext({
+        details: {
+          resource: defaultResourceDto({
+            resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT
+          }),
+        }
+      });
+      const props = defaultProps({resourceWorkspaceContext});
+      const page = new DisplayResourceDetailsPage(props);
+      expect(page.upgradeCard).toBeNull();
+    });
+  });
+
+  describe('As LU I can upgrade a resource', () => {
+    it('As LU I can upgrade a resource v4 to v5', async() => {
+      expect.assertions(2);
+      const props = defaultProps();
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: "RN9n8XuECN3", description: "description"}));
+      const page = new DisplayResourceDetailsPage(props);
+      await waitFor(() => {});
+
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(jest.fn());
+
+      await page.click(page.upgradeButton);
+
+      const resourceDtoExpected = {
+        id: props.resourceWorkspaceContext.details.resource.id,
+        expired: null,
+        folder_parent_id: null,
+        resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+        metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
+          name: props.resourceWorkspaceContext.details.resource.metadata.name,
+          username: props.resourceWorkspaceContext.details.resource.metadata.username,
+          resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+          uris: props.resourceWorkspaceContext.details.resource.metadata.uris,
+          description: props.resourceWorkspaceContext.details.resource.metadata.description
+        }
+      };
+
+      const secretDtoExpected = {
+        object_type: SECRET_DATA_OBJECT_TYPE,
+        password: "RN9n8XuECN3",
+        description: "description"
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been updated successfully");
+    });
+
+    it('As LU I cannot upgrade a v4 to V5 if an unexpected error happens', async() => {
+      expect.assertions(2);
+      const props = defaultProps();
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: "RN9n8XuECN3", description: "description"}));
+      const page = new DisplayResourceDetailsPage(props);
+      await waitFor(() => {});
+
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => { throw new Error("Error"); });
+
+      await page.click(page.upgradeButton);
+
+      const resourceDtoExpected = {
+        id: props.resourceWorkspaceContext.details.resource.id,
+        expired: null,
+        folder_parent_id: null,
+        resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+        metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
+          name: props.resourceWorkspaceContext.details.resource.metadata.name,
+          username: props.resourceWorkspaceContext.details.resource.metadata.username,
+          resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+          uris: props.resourceWorkspaceContext.details.resource.metadata.uris,
+          description: props.resourceWorkspaceContext.details.resource.metadata.description
+        }
+      };
+
+      const secretDtoExpected = {
+        object_type: SECRET_DATA_OBJECT_TYPE,
+        password: "RN9n8XuECN3",
+        description: "description"
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith("There was an unexpected error...");
+    });
+
+    it('As LU I cannot upgrade a v4 to V5 if user aborts operation', async() => {
+      expect.assertions(3);
+      const props = defaultProps();
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => { throw new UserAbortsOperationError("Error"); });
+      const page = new DisplayResourceDetailsPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.upgradeButton);
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledTimes(1);
+      expect(props.context.port.request).not.toHaveBeenCalledWith("passbolt.resources.update");
+      expect(props.actionFeedbackContext.displayError).not.toHaveBeenCalled();
     });
   });
 
