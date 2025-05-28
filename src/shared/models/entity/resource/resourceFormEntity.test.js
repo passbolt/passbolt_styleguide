@@ -835,6 +835,19 @@ describe("Resource Form entity", () => {
     });
   });
   describe("ResourceFormEntity:upgradeToV5", () => {
+    it("Should update resource password string to v5 default", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING, secret: {password: "password"}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.upgradeToV5();
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT);
+      expect(resourceFormEntity.metadata.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT);
+      expect(resourceFormEntity.metadata.objectType).toEqual(ResourceMetadataEntity.METADATA_OBJECT_TYPE);
+    });
     it("Should update resource password and description to v5 default", () => {
       expect.assertions(3);
       const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, secret: {password: "", description: ""}});
