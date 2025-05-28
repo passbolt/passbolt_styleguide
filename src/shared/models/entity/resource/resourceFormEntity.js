@@ -567,7 +567,13 @@ class ResourceFormEntity extends EntityV2 {
    */
   upgradeToV5() {
     const resourceType = this.resourceTypes.getFirstById(this.resourceTypeId);
-    const v5ResourceTypeSlug = V4_TO_V5_RESOURCE_TYPE_MAPPING[resourceType?.slug];
+
+    let v5ResourceTypeSlug = null;
+    if (resourceType.slug === RESOURCE_TYPE_PASSWORD_STRING_SLUG) {
+      v5ResourceTypeSlug = RESOURCE_TYPE_V5_DEFAULT_SLUG;
+    } else if (resourceType.slug in V4_TO_V5_RESOURCE_TYPE_MAPPING) {
+      v5ResourceTypeSlug = V4_TO_V5_RESOURCE_TYPE_MAPPING[resourceType.slug];
+    }
     //Do nothing if slug cannot be found
     if (v5ResourceTypeSlug) {
       const v5ResourceType = this.resourceTypes.getFirstBySlug(v5ResourceTypeSlug);
