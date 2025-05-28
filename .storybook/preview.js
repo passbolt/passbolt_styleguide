@@ -66,6 +66,7 @@ export const globalTypes = {
         { value: 'ru-RU', right: '🇷🇺', title: 'Pусский (beta)' },
         { value: 'sl-SI', right: '🇸🇮', title: 'Slovenščina' },
         { value: 'sv-SE', right: '🇸🇪', title: 'Svenska' },
+        { value: 'uk-UA', right: '🇺🇦', title: 'Українська (beta)' },
       ],
     },
   },
