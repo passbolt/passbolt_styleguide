@@ -12,14 +12,19 @@
  * @since         3.0.0
  */
 import resourcesFixtures from "../../fixture/resources";
+import {defaultTotpDto} from "../../../src/shared/models/entity/totp/totpDto.test.data";
+import {
+  TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP
+} from "../../../src/shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
-export default (resourceId) => {
+export default resourceId => {
   const resource = resourcesFixtures.find(resource => resource.id === resourceId);
-  if (resource.resource_type_id === 'a28a04cd-6f53-518a-967c-9963bf9cec51') {
+  if (resource.resource_type_id === TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP) {
     return {
-      password: "trustno1",
-      description: "this is an encrypted description"
-    }
+      password: "fa2fN\"y!Pk0=f2Vi<n",
+      description: "this is an encrypted description",
+      totp: defaultTotpDto()
+    };
   } else {
     return "fa2fN\"y!Pk0=f2Vi<n";
   }

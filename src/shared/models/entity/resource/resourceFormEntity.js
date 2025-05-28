@@ -134,7 +134,11 @@ class ResourceFormEntity extends EntityV2 {
           this._secret = secretEntityClass.createFromDefault(this._props.secret, options);
         }
       } catch (error) {
-        validationErrors.addAssociationError("secret", error);
+        if (error instanceof EntityValidationError) {
+          validationErrors.addAssociationError("secret", error);
+        } else {
+          throw error;
+        }
       }
 
       delete this._props.secret;

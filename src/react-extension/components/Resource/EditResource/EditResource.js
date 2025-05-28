@@ -48,6 +48,10 @@ import EditResourceSkeleton from "./EditResourceSkeleton";
 import {
   RESOURCE_TYPE_PASSWORD_STRING_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import {
+  withMetadataTypesSettingsLocalStorage
+} from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 
 class EditResource extends Component {
   constructor(props) {
@@ -656,6 +660,7 @@ class EditResource extends Component {
               onAddSecret={this.onAddSecret}
               onDeleteSecret={this.onDeleteSecret}
               onSelectForm={this.onSelectForm}
+              canUpgradeResource={this.props.metadataTypeSettings?.allowV4V5Upgrade}
               disabled={this.hasAllInputDisabled}
             />
             <form className="grid-and-footer" onSubmit={this.handleFormSubmit} noValidate>
@@ -707,7 +712,8 @@ EditResource.propTypes = {
   passwordPoliciesContext: PropTypes.object, // The password policy context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withPasswordPolicies(withPasswordExpiry(withResourceTypesLocalStorage(withActionFeedback(withDialog(withResourceWorkspace(withTranslation('common')(EditResource))))))));
+export default withAppContext(withPasswordPolicies(withPasswordExpiry(withMetadataTypesSettingsLocalStorage(withResourceTypesLocalStorage(withActionFeedback(withDialog(withResourceWorkspace(withTranslation('common')(EditResource)))))))));

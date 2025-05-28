@@ -193,7 +193,7 @@ describe("See the Create Resource", () => {
       });
 
       it('As a signed-in user I should be able to add secret with a resource type mutation', async() => {
-        expect.assertions(2);
+        expect.assertions(3);
 
         const props = defaultProps();
         mockContextRequest(props.context, () => ({object_type: SECRET_DATA_OBJECT_TYPE, password: "password", description: "description"}));
@@ -206,6 +206,7 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
         expect(page.note).toBeDefined();
+        expect(page.upgradeCards).toBeNull();
       });
 
       it('As a signed-in user I should be able to add secret with a resource type mutation with a standalone totp', async() => {
@@ -224,7 +225,7 @@ describe("See the Create Resource", () => {
       });
 
       it('As a signed-in user I should be able to add secret totp for a resource v4 password string', async() => {
-        expect.assertions(2);
+        expect.assertions(3);
 
         const props = defaultProps({resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING})});
         mockContextRequest(props.context, () => ({password: "password"}));
@@ -237,6 +238,7 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.sectionItemSelected.textContent).toStrictEqual("TOTP");
         expect(page.note).toBeDefined();
+        expect(page.upgradeCards).toBeDefined();
       });
     });
 
@@ -837,7 +839,7 @@ describe("See the Create Resource", () => {
       });
 
       it('As a signed-in user I should be able to convert a note to a description for a v4 default', async() => {
-        expect.assertions(1);
+        expect.assertions(2);
 
         const props = defaultProps({resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION})});
         mockContextRequest(props.context, () => ({password: "RN9n8XuECN3", description: "description"}));
@@ -849,6 +851,7 @@ describe("See the Create Resource", () => {
 
         // expectations
         expect(page.convertToDescription).toBeNull();
+        expect(page.upgradeCards).toBeDefined();
       });
     });
 
