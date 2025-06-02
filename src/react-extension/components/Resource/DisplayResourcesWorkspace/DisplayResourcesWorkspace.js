@@ -296,7 +296,7 @@ class Workspace extends Component {
                           <div className="radiolist">
                             <div className="input radio">
                               <input type="radio" checked={rowsSetting?.height === ROW_SETTING_HEIGHT_COMFORTABLE} value={ROW_SETTING_HEIGHT_COMFORTABLE} id="rows_setting.height.comfortable" name="rows_setting.height" onChange={this.handleOnChangeRowsSetting}/>
-                              <label htmlFor="rows_setting.height.comfortable"><Trans>Confortable</Trans></label>
+                              <label htmlFor="rows_setting.height.comfortable"><Trans>Comfortable</Trans></label>
                             </div>
                           </div>
                         </DropdownMenuItem>
