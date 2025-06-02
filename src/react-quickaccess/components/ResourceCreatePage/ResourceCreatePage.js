@@ -19,7 +19,6 @@ import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
-import Icon from "../../../shared/components/Icons/Icon";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import Password from "../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
@@ -46,6 +45,10 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_SLUG
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import ResourceViewModelFactory from "../../../shared/models/resource/ResourceViewModelFactory";
+import CaretLeftSVG from "../../../img/svg/caret_left.svg";
+import CloseSVG from "../../../img/svg/close.svg";
+import DiceSVG from "../../../img/svg/dice.svg";
+import SettingsSVG from "../../../img/svg/settings.svg";
 
 class ResourceCreatePage extends React.Component {
   /**
@@ -562,11 +565,11 @@ class ResourceCreatePage extends React.Component {
       <div className="resource-create">
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.translate("Cancel the operation")}>
-            <Icon name="chevron-left"/>
+            <CaretLeftSVG/>
             <span className="primary-action-title"><Trans>Create password</Trans></span>
           </a>
           <Link to="/webAccessibleResources/quickaccess/home" onClick={this.handleCancelButtonClick} className="secondary-action button-transparent button" title={this.translate("Cancel")}>
-            <Icon name="close"/>
+            <CloseSVG/>
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>
         </div>
@@ -610,13 +613,13 @@ class ResourceCreatePage extends React.Component {
                     autoComplete="new-password" placeholder={this.translate('Password')} id="password" inputRef={this.passwordInputRef}/>
                   <button type="button" onClick={this.handleGeneratePasswordButtonClick}
                     className={`password-generate button-icon button ${this.state.processing ? "disabled" : ""}`}>
-                    <Icon name='dice'/>
+                    <DiceSVG/>
                     <span className="visually-hidden"><Trans>Generate</Trans></span>
                   </button>
                   {this.canUsePasswordGenerator &&
                     <button type="button" onClick={this.handleOpenGenerator}
                       className="password-generator button-icon button">
-                      <Icon name='settings'/>
+                      <SettingsSVG/>
                       <span className="visually-hidden"><Trans>Open generator</Trans></span>
                     </button>
                   }

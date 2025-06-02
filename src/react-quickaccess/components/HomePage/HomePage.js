@@ -14,10 +14,8 @@
 
 import React from "react";
 import {Link, withRouter} from "react-router-dom";
-import canSuggestUrl from "./canSuggestUrl";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../shared/components/Icons/Icon";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import {withRbac} from "../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
@@ -37,6 +35,13 @@ import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import DisplayResourceUrisBadge
+  from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
+import CanSuggestService from "../../../shared/services/canSuggestService/canSuggestService";
+import CaretRightSVG from "../../../img/svg/caret_right.svg";
+import FilterSVG from "../../../img/svg/filter.svg";
+import UsersSVG from "../../../img/svg/users.svg";
+import TagV2SVG from "../../../img/svg/tag_v2.svg";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
@@ -128,7 +133,7 @@ class HomePage extends React.Component {
 
     for (const i in resources) {
       const resource = resources[i];
-      if (resource.metadata?.uris?.[0] && this.isPasswordResource(resource.resource_type_id) && canSuggestUrl(activeTabUrl, resource.metadata.uris[0])) {
+      if (this.isPasswordResource(resource.resource_type_id) && CanSuggestService.canSuggestUris(activeTabUrl, resource.metadata.uris)) {
         suggestedResources.push(resource);
         if (suggestedResources.length === SUGGESTED_RESOURCES_LIMIT) {
           break;
@@ -255,10 +260,15 @@ class HomePage extends React.Component {
                           <span className="title">{resource.metadata.name}</span>
                           <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
                         </div>
-                        <span className="url">{resource.metadata.uris?.[0]}</span>
+                        <div className="uris">
+                          <span className="url">{resource.metadata.uris?.[0]}</span>
+                          {resource.metadata.uris?.length > 1 &&
+                            <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)}/>
+                          }
+                        </div>
                       </button>
                       <Link className="chevron-right-wrapper" to={`/webAccessibleResources/quickaccess/resources/view/${resource.id}`}>
-                        <Icon name="chevron-right"/>
+                        <CaretRightSVG/>
                       </Link>
                     </li>
                   ))}
@@ -292,9 +302,14 @@ class HomePage extends React.Component {
                               <span className="title">{resource.metadata.name}</span>
                               <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
                             </div>
-                            <span className="url">{resource.metadata.uris?.[0]}</span>
+                            <div className="uris">
+                              <span className="url">{resource.metadata.uris?.[0]}</span>
+                              {resource.metadata.uris?.length > 1 &&
+                                <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)}/>
+                              }
+                            </div>
                           </div>
-                          <Icon name="chevron-right"/>
+                          <CaretRightSVG/>
                         </Link>
                       </li>
                     ))}
@@ -310,24 +325,24 @@ class HomePage extends React.Component {
               <ul className="list-items">
                 <li className="filter-entry">
                   <Link to={"/webAccessibleResources/quickaccess/more-filters"}>
-                    <Icon name="filter"/>
+                    <FilterSVG/>
                     <span className="filter-title"><Trans>Filters</Trans></span>
-                    <Icon name="chevron-right"/>
+                    <CaretRightSVG/>
                   </Link>
                 </li>
                 <li className="filter-entry">
                   <Link to={"/webAccessibleResources/quickaccess/resources/group"}>
-                    <Icon name="users"/>
+                    <UsersSVG/>
                     <span className="filter-title"><Trans>Groups</Trans></span>
-                    <Icon name="chevron-right"/>
+                    <CaretRightSVG/>
                   </Link>
                 </li>
                 {canUseTag &&
                   <li className="filter-entry">
                     <Link to={"/webAccessibleResources/quickaccess/resources/tag"}>
-                      <Icon name="tag"/>
+                      <TagV2SVG />
                       <span className="filter-title"><Trans>Tags</Trans></span>
-                      <Icon name="chevron-right"/>
+                      <CaretRightSVG/>
                     </Link>
                   </li>
                 }

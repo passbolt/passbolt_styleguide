@@ -1,0 +1,22 @@
+<!--
+ Passbolt ~ Open source password manager for teams
+ Copyright (c) Passbolt SA (https://www.passbolt.com)
+
+ Licensed under GNU Affero General Public License version 3 of the or any later version.
+ For full copyright and license information, please see the LICENSE.txt
+ Redistributions of files must retain the above copyright notice.
+
+ @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ @link          https://www.passbolt.com Passbolt(tm)
+ @since         5.2.0
+-->
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+<path d="M26.4999 14.5751C27.6918 14.5751 28.6581 13.6088 28.6581 12.4169C28.6581 11.225 27.6918 10.2588 26.4999 10.2588C25.308 10.2588 24.3418 11.225 24.3418 12.4169C24.3418 13.6088 25.308 14.5751 26.4999 14.5751Z" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M18.2744 23.25C20.0693 23.25 21.5244 21.7949 21.5244 20C21.5244 18.2051 20.0693 16.75 18.2744 16.75C16.4795 16.75 15.0244 18.2051 15.0244 20C15.0244 21.7949 16.4795 23.25 18.2744 23.25Z" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M23.6826 31.0155C24.8745 31.0155 25.8407 30.0493 25.8407 28.8574C25.8407 27.6654 24.8745 26.6992 23.6826 26.6992C22.4906 26.6992 21.5244 27.6654 21.5244 28.8574C21.5244 30.0493 22.4906 31.0155 23.6826 31.0155Z" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.2397 16.2079C11.4316 16.2079 12.3978 15.2416 12.3978 14.0497C12.3978 12.8578 11.4316 11.8916 10.2397 11.8916C9.04777 11.8916 8.08154 12.8578 8.08154 14.0497C8.08154 15.2416 9.04777 16.2079 10.2397 16.2079Z" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20.4468 22.5391L22.7651 26.6993" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24.465 14.1406L20.6074 17.5339" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M15.6429 17.9443L12.0889 15.444" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

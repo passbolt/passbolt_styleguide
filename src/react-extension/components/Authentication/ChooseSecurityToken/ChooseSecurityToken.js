@@ -17,8 +17,8 @@ import {Trans, withTranslation} from "react-i18next";
 import {CirclePicker} from "react-color";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import Tooltip from "../../Common/Tooltip/Tooltip";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {isValidSecurityToken} from "../../../../shared/utils/assertions";
+import InfoSVG from "../../../../img/svg/info.svg";
 
 class ChooseSecurityToken extends Component {
   /**
@@ -297,7 +297,7 @@ class ChooseSecurityToken extends Component {
                 <Trans>Security token</Trans>
               </label>
               <Tooltip message={this.props.t("Only alphanumeric, dash and underscore characters are accepted.")}>
-                <Icon name="info-circle"/>
+                <InfoSVG/>
               </Tooltip>
             </div>
             <input

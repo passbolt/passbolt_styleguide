@@ -14,8 +14,9 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 class DisplayUnexpectedError extends Component {
   /**
@@ -94,9 +95,12 @@ class DisplayUnexpectedError extends Component {
         {this.hasErrorDetails &&
           <div className="accordion error-details">
             <div className="accordion-header">
-              <button className="link no-border" type="button" onClick={this.handleErrorDetailsToggle}>
-                <Trans>Error details</Trans>
-                <Icon name={this.state.showErrorDetails ? "caret-up" : "caret-down"} />
+              <button className="no-border" type="button" onClick={this.handleErrorDetailsToggle}>
+                {this.state.showErrorDetails
+                  ? <CaretDownSVG className="caret-down"/>
+                  : <CaretRightSVG className="caret-right"/>
+                }
+                <span><Trans>Error details</Trans></span>
               </button>
             </div>
             {this.state.showErrorDetails &&

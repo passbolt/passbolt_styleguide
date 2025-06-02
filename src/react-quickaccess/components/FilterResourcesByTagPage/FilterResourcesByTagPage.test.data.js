@@ -71,7 +71,7 @@ export const withFilteredResourcesProps = (data = {}) => {
     metadata: {
       name: "apache",
       username: "www-data",
-      uris: ["http://www.apache.org/"],
+      uris: ["http://www.apache.org/", "http://www.apache.org/projects"],
       description: "Apache is the world\u0027s most used web server software.",
     }
   }, {withTags: true});

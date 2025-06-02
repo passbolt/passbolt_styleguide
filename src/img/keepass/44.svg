@@ -1,0 +1,17 @@
+<!--
+ Passbolt ~ Open source password manager for teams
+ Copyright (c) Passbolt SA (https://www.passbolt.com)
+
+ Licensed under GNU Affero General Public License version 3 of the or any later version.
+ For full copyright and license information, please see the LICENSE.txt
+ Redistributions of files must retain the above copyright notice.
+
+ @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ @link          https://www.passbolt.com Passbolt(tm)
+ @since         5.2.0
+-->
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+<path d="M23.1752 9.16699H11.4084C11.4084 9.16699 10.2826 9.39527 9.8763 9.80159C9.46997 10.2079 9.2417 10.759 9.2417 11.3337V28.667C9.2417 29.2416 9.46997 29.7927 9.8763 30.1991C10.2826 30.6054 10.8337 30.8337 11.4084 30.8337H28.5918C29.1665 30.8337 29.7176 30.6054 30.1239 30.1991C30.5302 29.7927 30.7585 29.2416 30.7585 28.667V16.7503L23.1752 9.16699Z" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M23.1753 9.16699V16.7503H30.7586" stroke="var(--icon-color)" stroke-width="var(--icon-stroke-width)"  stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

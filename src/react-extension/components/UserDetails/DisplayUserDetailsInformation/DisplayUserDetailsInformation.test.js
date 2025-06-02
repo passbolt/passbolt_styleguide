@@ -16,7 +16,7 @@
  * Unit tests on DisplayUserDetailsInformation in regard of specifications
  */
 
-import {defaultProps} from "./DisplayUserDetailsInformation.test.data";
+import {defaultProps, defaultUserProps, defaultWithMissingMetadataKeysProps} from "./DisplayUserDetailsInformation.test.data";
 import DisplayUserDetailsInformationPage from "./DisplayUserDetailsInformation.test.page";
 
 beforeEach(() => {
@@ -57,5 +57,21 @@ describe("Display User Details Information", () => {
 
   it('As LU I should see the detailed mfa status', () => {
     expect(page.mfaStatus).toBe('Disabled');
+  });
+
+  it('As LU I not should see the detailed missing metadata key ids status', () => {
+    const props = defaultUserProps();
+    page = new DisplayUserDetailsInformationPage(props);
+    expect(page.mfaStatus).toBe('Disabled');
+  });
+
+  it('As AD I should see the detailed metadata key status when missing metadata keys', () => {
+    const props = defaultWithMissingMetadataKeysProps();
+    page = new DisplayUserDetailsInformationPage(props);
+    expect(page.metadataKeysStatus).toBe('Missing');
+  });
+
+  it('As AD I should see the detailed metadata key status when having all metadata keys', () => {
+    expect(page.metadataKeysStatus).toBe('All');
   });
 });

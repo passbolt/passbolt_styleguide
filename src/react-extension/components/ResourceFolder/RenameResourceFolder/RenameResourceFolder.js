@@ -22,9 +22,9 @@ import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelBut
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {maxSizeValidation} from '../../../lib/Error/InputValidator';
 import {RESOURCE_FOLDER_NAME_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class RenameResourceFolder extends Component {
   /**
@@ -333,7 +333,7 @@ class RenameResourceFolder extends Component {
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="folder-name-input"><Trans>Folder name</Trans>{this.state.nameWarning &&
-                  <Icon name="exclamation"/>
+                <AttentionSVG className="attention-required"/>
               }</label>
               <input id="folder-name-input" name="name"
                 ref={this.nameRef}

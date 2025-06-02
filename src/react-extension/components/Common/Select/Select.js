@@ -14,9 +14,10 @@
 
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import CustomPropTypes from "../../../../shared/lib/PropTypes/CustomPropTypes";
+import SearchSVG from "../../../../img/svg/search.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 
 /**
  * Display of the Select component
@@ -175,7 +176,7 @@ class Select extends Component {
    * Handle scroll event on document. Hide the component if any.
    */
   handleDocumentScrollEvent(event) {
-    if (this.itemsRef.current.contains(event.target)) {
+    if (this.itemsRef.current.contains(event.target) || this.selectItemsRef.current.contains(event.target)) {
       return;
     }
     this.closeSelect();
@@ -391,14 +392,14 @@ class Select extends Component {
             tabIndex={this.props.disabled ? -1 : 0}
             onClick={this.handleSelectClick}>
             <span className="value">{this.selectedItemLabel}</span>
-            <Icon name="caret-down"/>
+            <CaretDownSVG/>
           </div>
           <div ref={this.selectItemsRef} className={`select-items ${this.state.open ? 'visible' : ''}`}>
             {this.props.search &&
               <>
                 <input className="search-input" name="search"
                   value={this.state.search} onChange={this.handleInputChange} type="text"/>
-                <Icon name="search"/>
+                <SearchSVG className="search"/>
               </>
             }
             <ul ref={this.itemsRef} className="items">

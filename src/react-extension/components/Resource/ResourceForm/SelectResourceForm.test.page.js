@@ -133,6 +133,38 @@ export default class SelectResourceFormPage {
   }
 
   /**
+   * Returns the left sidebar description input element
+   * @return {Element}
+   */
+  get menuDescription() {
+    return this._page.container.querySelector('#menu-description');
+  }
+
+  /**
+   * Returns the left sidebar uris input element
+   * @return {Element}
+   */
+  get menuUris() {
+    return this._page.container.querySelector('#menu-uris');
+  }
+
+  /**
+   * Returns the upgrade cards element
+   * @return {Element}
+   */
+  get upgradeCard() {
+    return this._page.container.querySelector('.section-card .card');
+  }
+
+  /**
+   * Returns the upgrade cards button element
+   * @return {Element}
+   */
+  get upgradeButton() {
+    return this._page.container.querySelector('.section-card .card .content button');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {

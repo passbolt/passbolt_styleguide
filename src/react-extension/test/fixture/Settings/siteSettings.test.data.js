@@ -145,10 +145,16 @@ export const defaultCeSiteSettings = siteSettings => {
             {
               "locale": "ru-RU",
               "label": "Pусский (beta)"
+            }, {
+              "locale": "sl-SI",
+              "label": "Slovenščina (beta)"
             },
             {
               "locale": "sv-SE",
               "label": "Svenska"
+            }, {
+              "locale": "uk-UA",
+              "label": "Українська (beta)"
             }
           ]
         },

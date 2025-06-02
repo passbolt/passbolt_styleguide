@@ -20,7 +20,36 @@
 export function defaultNavigationContext(context = {}) {
   const defaultContext = {
     onGoToNewTab: jest.fn(),
-    onGoToPasswordsRequested: jest.fn()
+    onGoToPasswordsRequested: jest.fn(),
+    // Administration
+    onGoToAdministrationRequested: jest.fn(),
+    onGoToAdministrationSelfRegistrationRequested: jest.fn(),
+    onGoToAdministrationMfaRequested: jest.fn(),
+    onGoToAdministrationUsersDirectoryRequested: jest.fn(),
+    onGoToAdministrationEmailNotificationsRequested: jest.fn(),
+    onGoToAdministrationSubscriptionRequested: jest.fn(),
+    onGoToAdministrationInternationalizationRequested: jest.fn(),
+    onGoToAdministrationAccountRecoveryRequested: jest.fn(),
+    onGoToAdministrationSmtpSettingsRequested: jest.fn(),
+    onGoToAdministrationSsoRequested: jest.fn(),
+    onGoToAdministrationPasswordPoliciesRequested: jest.fn(),
+    onGoToAdministrationUserPassphrasePoliciesRequested: jest.fn(),
+    onGoToAdministrationPasswordExpirySettingsRequested: jest.fn(),
+    onGoToAdministrationHealthcheckRequested: jest.fn(),
+    onGoToUsersRequested: jest.fn(),
+    onGoToHelpRequested: jest.fn(),
+    onGoToUserSettingsProfileRequested: jest.fn(),
+    onGoToUserSettingsPassphraseRequested: jest.fn(),
+    onGoToUserSettingsSecurityTokenRequested: jest.fn(),
+    onGoToUserSettingsThemeRequested: jest.fn(),
+    onGoToUserSettingsMfaRequested: jest.fn(),
+    onGoToUserSettingsKeysRequested: jest.fn(),
+    onGoToUserSettingsMobileRequested: jest.fn(),
+    onGoToUserSettingsDesktopRequested: jest.fn(),
+    onGoToUserSettingsAccountRecoveryRequested: jest.fn(),
+    onGoToAdministrationRbacsRequested: jest.fn(),
+    onGoToAdministrationMigrateMetadataRequested: jest.fn(),
+    onGoToAdministrationAllowContentTypesRequested: jest.fn(),
   };
   return Object.assign(defaultContext, context);
 }
