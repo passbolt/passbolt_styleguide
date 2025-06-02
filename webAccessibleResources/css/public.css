@@ -340,12 +340,6 @@ html {
   gap: 1.6rem;
 }
 /*
- * Page skeleton layout
- */
-.temporary.skeleton {
-  position: absolute;
-}
-/*
  * scroll
  */
 .scroll {

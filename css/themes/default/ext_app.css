@@ -1989,6 +1989,9 @@ input[type=file] {
 .checkbox input[type=checkbox].for-grid:checked:hover {
   box-shadow: inset 0.1rem 0.1rem 0 0 var(--States-Hover-Highlight), inset -0.1rem -0.1rem 0 0 var(--States-Hover-Shadow), inset 0 0 0 1.5px var(--Checkbox-V2-Border-active);
 }
+.checkbox input[type=checkbox].for-grid:checked:active {
+  box-shadow: inset -0.1rem -0.1rem 0 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1.5px var(--Checkbox-V2-Border-active);
+}
 .checkbox input[type=checkbox].for-grid:checked:before {
   background-color: var(--Checkbox-V2-Tick);
 }
@@ -3438,12 +3441,6 @@ html {
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-}
-/*
- * Page skeleton layout
- */
-.temporary.skeleton {
-  position: absolute;
 }
 /*
 	Grid Layout
@@ -4984,7 +4981,7 @@ html {
 .navigation-secondary .row .main-cell button {
   border: 0;
   font-weight: 400;
-  color: #000000;
+  color: var(--Text-and-icons-Main-text);
   display: flex;
   align-items: center;
   width: 100%;
@@ -4998,6 +4995,7 @@ html {
 .navigation-secondary .row .main-cell button svg {
   width: 1.8rem;
   height: 1.8rem;
+  --icon-color: var(--Text-and-icons-Icons);
 }
 .navigation-secondary .row .right-cell {
   float: right;
@@ -5015,6 +5013,9 @@ html {
 }
 .navigation-secondary .row .right-cell button.open:hover {
   box-shadow: inset 0.1rem 0 0 0 var(--Action-button-Action-button-border), inset -0.1rem 0 0 0 var(--Action-button-Action-button-border), inset 0 0.1rem 0 0 var(--Action-button-Action-button-border);
+}
+.navigation-secondary .row .right-cell button svg {
+  --icon-color: var(--Text-and-icons-Icons);
 }
 .navigation-secondary .row:hover .right-cell button {
   display: flex;
@@ -6419,10 +6420,6 @@ iframe.cachette {
 .dialog .permissions .row .avatar {
   float: left;
 }
-.dialog .permissions .row .avatar svg {
-  width: 4.2rem;
-  height: 4.2rem;
-}
 .dialog .permissions .row .aro {
   flex: 1 1 auto;
   width: 30%;
@@ -6462,13 +6459,13 @@ iframe.cachette {
   margin-left: 0.8rem;
 }
 .dialog .permissions .row.skeleton {
-  height: 42px;
+  height: 5.6rem;
   position: relative;
 }
 .dialog .permissions .row.skeleton .avatar {
   float: left;
-  width: 4.2rem;
-  height: 4.2rem;
+  width: 5.6rem;
+  height: 5.6rem;
   background: var(--Dialog-Dialog-background);
   border-radius: 50%;
   flex: none;

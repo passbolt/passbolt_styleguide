@@ -1990,6 +1990,9 @@ input[type=file] {
 .checkbox input[type=checkbox].for-grid:checked:hover {
   box-shadow: inset 0.1rem 0.1rem 0 0 var(--States-Hover-Highlight), inset -0.1rem -0.1rem 0 0 var(--States-Hover-Shadow), inset 0 0 0 1.5px var(--Checkbox-V2-Border-active);
 }
+.checkbox input[type=checkbox].for-grid:checked:active {
+  box-shadow: inset -0.1rem -0.1rem 0 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1.5px var(--Checkbox-V2-Border-active);
+}
 .checkbox input[type=checkbox].for-grid:checked:before {
   background-color: var(--Checkbox-V2-Tick);
 }
@@ -3439,12 +3442,6 @@ html {
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-}
-/*
- * Page skeleton layout
- */
-.temporary.skeleton {
-  position: absolute;
 }
 /*
 	Grid Layout
@@ -5029,7 +5026,7 @@ html {
 .navigation-secondary .row .main-cell button {
   border: 0;
   font-weight: 400;
-  color: #FFFFFF;
+  color: var(--Text-and-icons-Main-text);
   display: flex;
   align-items: center;
   width: 100%;
@@ -5043,6 +5040,7 @@ html {
 .navigation-secondary .row .main-cell button svg {
   width: 1.8rem;
   height: 1.8rem;
+  --icon-color: var(--Text-and-icons-Icons);
 }
 .navigation-secondary .row .right-cell {
   float: right;
@@ -5060,6 +5058,9 @@ html {
 }
 .navigation-secondary .row .right-cell button.open:hover {
   box-shadow: inset 0.1rem 0 0 0 var(--Action-button-Action-button-border), inset -0.1rem 0 0 0 var(--Action-button-Action-button-border), inset 0 0.1rem 0 0 var(--Action-button-Action-button-border);
+}
+.navigation-secondary .row .right-cell button svg {
+  --icon-color: var(--Text-and-icons-Icons);
 }
 .navigation-secondary .row:hover .right-cell button {
   display: flex;

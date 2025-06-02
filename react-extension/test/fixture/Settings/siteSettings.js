@@ -166,6 +166,9 @@ const siteSettings = (isProEdition = true) => ({
           }, {
             locale: "sv-SE",
             label: "Svenska"
+          }, {
+            locale: "uk-UA",
+            label: "Українська (beta)"
           }
         ]
       },

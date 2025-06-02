@@ -1792,6 +1792,9 @@ input[type=file] {
 .checkbox input[type=checkbox].for-grid:checked:hover {
   box-shadow: inset 0.1rem 0.1rem 0 0 var(--States-Hover-Highlight), inset -0.1rem -0.1rem 0 0 var(--States-Hover-Shadow), inset 0 0 0 1.5px var(--Checkbox-V2-Border-active);
 }
+.checkbox input[type=checkbox].for-grid:checked:active {
+  box-shadow: inset -0.1rem -0.1rem 0 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1.5px var(--Checkbox-V2-Border-active);
+}
 .checkbox input[type=checkbox].for-grid:checked:before {
   background-color: var(--Checkbox-V2-Tick);
 }
@@ -3241,12 +3244,6 @@ html {
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-}
-/*
- * Page skeleton layout
- */
-.temporary.skeleton {
-  position: absolute;
 }
 /*
 	Grid Layout
