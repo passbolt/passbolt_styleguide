@@ -25,6 +25,8 @@ import CarretRightSVG from "../../../../img/svg/caret_right.svg";
 import ShareFolderSVG from "../../../../img/svg/share_folder.svg";
 import FolderSVG from "../../../../img/svg/folder.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import {withDialog} from "../../../contexts/DialogContext";
 
 class FilterResourcesByFoldersItem extends React.Component {
   /**
@@ -247,16 +249,31 @@ class FilterResourcesByFoldersItem extends React.Component {
     const resources = this.props.dragContext.draggedItems.resources.map(resource => resource.id);
     const isDroppingOnDraggedItem = this.draggedItems.folders.some(item => item.id === folderParentId);
     if (!isDroppingOnDraggedItem) {
-      if (folders?.length > 0) {
-        this.props.context.port.request("passbolt.folders.move-by-id", folders[0], folderParentId);
-      } else if (resources?.length > 0) {
-        this.props.context.port.request("passbolt.resources.move-by-ids", resources, folderParentId);
+      try {
+        if (folders?.length > 0) {
+          this.props.context.port.request("passbolt.folders.move-by-id", folders[0], folderParentId);
+        } else if (resources?.length > 0) {
+          this.props.context.port.request("passbolt.resources.move-by-ids", resources, folderParentId);
+        }
+      } catch (error) {
+        this.handleError(error);
       }
     }
 
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
     const draggingOver = false;
     this.setState({draggingOver});
+  }
+
+  /**
+   * handle error and display error dialog
+   * @param error
+   */
+  handleError(error) {
+    const errorDialogProps = {
+      error: error
+    };
+    this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
 
   /**
@@ -536,8 +553,9 @@ FilterResourcesByFoldersItem.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   resourceWorkspaceContext: PropTypes.any,
   dragContext: PropTypes.any,
+  dialogContext: PropTypes.object, // The dialog context
   toggleOpenFolder: PropTypes.func,
   toggleCloseFolder: PropTypes.func
 };
 
-export default withRouter(withAppContext(withContextualMenu(withResourceWorkspace(withDrag(FilterResourcesByFoldersItem)))));
+export default withRouter(withAppContext(withContextualMenu(withDialog(withResourceWorkspace(withDrag(FilterResourcesByFoldersItem))))));
