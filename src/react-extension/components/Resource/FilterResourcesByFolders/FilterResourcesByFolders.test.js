@@ -23,6 +23,7 @@ import {defaultResourcesDtos} from "../../../../shared/models/entity/resource/re
 import {foldersMock} from "./FilterResourcesByFolders.test.data";
 import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFoldersItemContextualMenu";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 beforeEach(() => {
   jest.resetModules();
@@ -122,6 +123,24 @@ describe("See Folders", () => {
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", foldersMock[0].id);
     });
 
+    it('As LU I should throw an error dialog if somethings went wrong when a folder is dropped', async() => {
+      expect.assertions(2);
+
+      const error = new Error("ERROR");
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => { throw error; });
+
+      const page = new FilterResourcesByFoldersPage(props);
+
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(2);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(2);
+      await page.filterResourcesByFoldersItem.onDropFolder(1);
+
+      // Throw dialog general error message
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", foldersMock[0].id);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
+    });
+
     it('As LU I should be able to open and close folder to see or not the child folders', async() => {
       expect(page.filterResourcesByFoldersItem.count).toBe(2);
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
@@ -192,6 +211,40 @@ describe("See Folders", () => {
       await page.filterResourcesByFoldersItem.onDropFolder(4);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
+    });
+
+    it('As LU I should throw an error dialog if somethings went wrong when a resource is dropped', async() => {
+      expect.assertions(2);
+      const resources = defaultResourcesDtos();
+      const props = defaultProps({
+        dragContext: {
+          dragging: true,
+          draggedItems: {
+            folders: [],
+            resources: resources
+          },
+          onDragStart: jest.fn(),
+          onDragEnd: jest.fn(),
+        }
+      });
+
+      const error = new Error("ERROR");
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => { throw error; });
+
+      const page = new FilterResourcesByFoldersPage(props);
+
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
+      await page.filterResourcesByFoldersItem.onDropFolder(4);
+
+      // Throw dialog general error message
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.move-by-ids", resources.map(resource => resource.id), foldersMock[4].id);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
   });
 
