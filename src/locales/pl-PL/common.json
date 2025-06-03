@@ -1500,7 +1500,7 @@
   "User ids": "Identyfikatory użytkownika",
   "User object class": "Klasa obiektu użytkownika",
   "User passphrase minimal entropy": "Minimalna entropia hasła dostępu użytkownika",
-  "User passphrase policies": "User passphrase policies",
+  "User passphrase policies": "Zasady generowania haseł użytkownika",
   "User Passphrase Policies": "Polityki haseł dostępu użytkownika",
   "User path": "Ścieżka użytkownika",
   "User path is used in addition to base DN while searching users.": "Ścieżka użytkownika jest używana jako dodatek do bazowego DN podczas wyszukiwania użytkowników.",
