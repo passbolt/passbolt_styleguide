@@ -17,6 +17,7 @@ import {ownerFolderPermissionDto, readFolderPermissionDto} from "../../../../sha
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 
 /**
  * Default props
@@ -46,6 +47,7 @@ export function defaultProps(data = {}) {
     history: {
       push: jest.fn()
     },
+    dialogContext: defaultDialogContext(),
     match: {
       params: {
         filterByFolderId: foldersMock[0].id

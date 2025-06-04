@@ -3666,6 +3666,28 @@ body {
   -ms-text-overflow: ellipsis;
   color: var(--Text-and-icons-Secondary-text);
 }
+.web-integration .in-form-menu-item .teaser-image {
+  display: flex;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 100%;
+  background: var(--Resource-icon-Resource-icons-backgound);
+  --icon-color: var(--Resource-icon-Resource-icon-color);
+}
+.web-integration .in-form-menu-item .teaser-image.clear-stroke svg {
+  --icon-color: var(--Text-and-icons-clear-color);
+}
+.web-integration .in-form-menu-item .teaser-image.dark-stroke svg {
+  --icon-color: var(--Text-and-icons-dark-color);
+}
+.web-integration .in-form-menu-item .teaser-image.transparent svg {
+  --icon-color: var(--Text-and-icons-Main-text);
+}
+.web-integration .in-form-menu-item .teaser-image svg {
+  width: 4rem;
+  height: 4rem;
+}
 .web-integration a:after {
   content: none;
 }

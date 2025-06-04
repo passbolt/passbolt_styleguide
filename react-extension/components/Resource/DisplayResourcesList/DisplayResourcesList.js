@@ -795,7 +795,7 @@ class DisplayResourcesList extends React.Component {
    * @return {boolean}
    */
   isTotpResources(resource) {
-    return this.props.resourceTypes?.getFirstById(resource.resource_type_id).hasTotp();
+    return this.props.resourceTypes?.getFirstById(resource.resource_type_id)?.hasTotp();
   }
 
   /**

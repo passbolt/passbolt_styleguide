@@ -8729,6 +8729,19 @@ svg .section-card .card .title:first-child {
 .edit-resource .dialog-content .grid-and-footer .grid .resource-info.skeleton {
   height: 9.2rem;
 }
+.create-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .button-transparent,
+.edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .button-transparent {
+  padding: 0;
+  border-radius: 50%;
+}
+.create-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .button-transparent:hover .teaser-image,
+.edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .button-transparent:hover .teaser-image {
+  box-shadow: inset 0.1rem 0.1rem 0 0 var(--States-Hover-Highlight), inset -0.1rem -0.1rem 0 0 var(--States-Hover-Shadow);
+}
+.create-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .button-transparent:active .teaser-image,
+.edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .button-transparent:active .teaser-image {
+  box-shadow: inset -0.1rem -0.1rem 0 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1px var(--Context-buttons-Context-button-border);
+}
 .create-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image,
 .edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image {
   display: flex;
@@ -8740,7 +8753,6 @@ svg .section-card .card .title:first-child {
   border-radius: 50%;
   width: 5.6rem;
   height: 5.6rem;
-  cursor: pointer;
 }
 .create-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image.clear-stroke svg,
 .edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image.clear-stroke svg {

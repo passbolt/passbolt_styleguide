@@ -24,7 +24,7 @@ import DisplayResourceDetailsPage from "./DisplayResourceDetails.test.page";
 import {
   defaultResourceDto,
   resourceLegacyDto,
-  resourceStandaloneTotpDto, resourceWithTotpDto
+  resourceStandaloneTotpDto, resourceWithReadPermissionDto, resourceWithTotpDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
@@ -35,7 +35,9 @@ import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metada
 import {
   defaultMetadataTypesSettingsV50FreshDto,
 } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import {
+  defaultResourceWorkspaceContext,
+} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {TEST_RESOURCE_TYPE_V5_DEFAULT} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import {waitFor} from "@testing-library/react";
 import ResourceMetadataEntity from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity";
@@ -296,6 +298,21 @@ describe("DisplayResourceDetails", () => {
       // expectations
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDtoExpected, secretDtoExpected);
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith("There was an unexpected error...");
+    });
+
+    it('As LU I cannot upgrade a v4 to V5 if resource permission is read', async() => {
+      expect.assertions(1);
+      const props = defaultProps({resourceWorkspaceContext: defaultResourceWorkspaceContext({
+        details: {
+          resource: resourceWithReadPermissionDto(),
+        }
+      })});
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: "RN9n8XuECN3", description: "description"}));
+      const page = new DisplayResourceDetailsPage(props);
+      await waitFor(() => {});
+
+      // expectations
+      expect(page.upgradeButton).toBeNull();
     });
 
     it('As LU I cannot upgrade a v4 to V5 if user aborts operation', async() => {

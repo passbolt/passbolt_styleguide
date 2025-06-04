@@ -102,6 +102,31 @@ body {
           color: var(--Text-and-icons-Secondary-text);
         }
       }
+
+      .teaser-image {
+        display: flex;
+        justify-content: center;
+        width: 4rem;
+        height: 4rem;
+        border-radius: 100%;
+        background: var(--Resource-icon-Resource-icons-backgound);
+        --icon-color: var(--Resource-icon-Resource-icon-color);
+
+        &.clear-stroke svg {
+          --icon-color: var(--Text-and-icons-clear-color);
+        }
+        &.dark-stroke svg {
+          --icon-color: var(--Text-and-icons-dark-color);
+        }
+        &.transparent svg {
+          --icon-color: var(--Text-and-icons-Main-text);
+        }
+
+        svg {
+          width: 4rem;
+          height: 4rem;
+        }
+      }
     }
   }
 

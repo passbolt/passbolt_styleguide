@@ -39,11 +39,12 @@ class CellUris extends Component {
 
   /**
    * Handle click
-   * @param event
+   * @param {Event} event
+   * @param {string} safeLink
    */
-  handleClick(event) {
+  handleClick(event, safeLink) {
     event.stopPropagation();
-    this.props.onClick(this.value);
+    this.props.onClick(safeLink);
   }
 
   /**
@@ -84,7 +85,7 @@ class CellUris extends Component {
     return (
       <div>
         {safeLink &&
-          <button title={this.mainUri} className="no-border ellipsis" type="button" onClick={this.handleClick}><span>{this.mainUri}</span></button>
+          <button title={this.mainUri} className="no-border ellipsis" type="button" onClick={event => this.handleClick(event, safeLink)}><span>{this.mainUri}</span></button>
         }
         {!safeLink &&
           <span title={this.mainUri}>{this.mainUri}</span>
