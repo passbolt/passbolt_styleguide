@@ -567,6 +567,7 @@ class CreateResource extends Component {
           <div className="grid">
             <AddResourceName
               resource={this.state.resource}
+              resourceType={this.state.resourceType}
               folderParentId={this.props.folderParentId}
               onChange={this.handleInputChange}
               warnings={warnings}
