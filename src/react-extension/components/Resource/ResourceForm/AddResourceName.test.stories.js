@@ -18,6 +18,11 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import AddResourceName from "./AddResourceName";
 import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {resourceTypesCollectionDto} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import {resourceTypePasswordAndDescriptionDto, resourceTypeV5DefaultDto} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 export default {
   title: 'Components/Resource/AddResourceName',
@@ -50,6 +55,19 @@ export default {
 export const Default = {
   args: {
     resource: defaultResourceDto(),
+    resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    context: defaultAppContext({
+      getHierarchyFolderCache: () => []
+    }),
+  }
+};
+
+export const DefaultVersion5 = {
+  args: {
+    resource: defaultResourceFormDto(),
+    resourceType: new ResourceTypeEntity(resourceTypeV5DefaultDto()),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     context: defaultAppContext({
       getHierarchyFolderCache: () => []
     }),
@@ -59,6 +77,8 @@ export const Default = {
 export const SubFolder = {
   args: {
     resource: defaultResourceDto(),
+    resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     context: defaultAppContext({
       getHierarchyFolderCache: () => [{name: "Folder"}, {name: "subfolder"}]
     }),
