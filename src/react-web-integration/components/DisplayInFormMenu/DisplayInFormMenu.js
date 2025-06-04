@@ -33,8 +33,8 @@ import {
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import DiceSVG from "../../../img/svg/dice.svg";
 import AddSVG from "../../../img/svg/add.svg";
-import KeySVG from "../../../img/svg/key.svg";
 import SearchSVG from "../../../img/svg/search.svg";
+import ResourceIcon from "../../../shared/components/Icons/ResourceIcon";
 
 /** The maximum length of visibility of a generated password */
 const TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH = 15;
@@ -300,7 +300,7 @@ class DisplayInFormMenu extends React.Component {
         disabled={this.state.resourceIdProcessing === resource.id}
         title={resource.metadata.name}
         description={resource.metadata?.username}
-        icon={<KeySVG />}
+        icon={<ResourceIcon resource={resource} resourceTypes={this.props.resourceTypes}/>}
       />
     ]), []);
   }
