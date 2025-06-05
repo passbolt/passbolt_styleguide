@@ -208,7 +208,7 @@ class DisplayResourceDetails extends React.Component {
       console.warn(error);
       return;
     }
-    await this.props.actionFeedbackContext.displayError(this.translate("There was an unexpected error..."));
+    await this.props.actionFeedbackContext.displayError(error.message);
   }
 
   /**
