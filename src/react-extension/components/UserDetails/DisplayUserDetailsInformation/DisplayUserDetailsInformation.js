@@ -22,6 +22,7 @@ import {Trans, withTranslation} from "react-i18next";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {isUserSuspended} from "../../../../shared/utils/userUtils";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 /**
  * This component displays the user details about information
@@ -210,7 +211,7 @@ class DisplayUserDetailsInformation extends React.Component {
             }
             {this.hasMetadataDataSection() &&
                 <span className="metadata-keys value">{{
-                  [true]: <Trans>Missing</Trans>,
+                  [true]: <><Trans>Missing</Trans><AttentionSVG className="attention-required"/></>,
                   [false]: <Trans>All</Trans>,
                 }[this.user?.missing_metadata_key_ids?.length > 0]}</span>
             }
