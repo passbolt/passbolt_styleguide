@@ -277,6 +277,15 @@ describe("Display User Workspace Actions", () => {
     await waitFor(() => {});
     expect(page.canShareMissingMetadataKeys).toBeFalsy();
   });
+
+  it('As AD with missing keys I should not be able to share missing metadata key myself', async() => {
+    expect.assertions(1);
+    const props = propsWithMyselfAsSelectedUser();
+    page = new DisplayUserWorkspaceActionsPage(props);
+    await waitFor(() => {});
+
+    expect(page.canShareMissingMetadataKeys).toBeFalsy();
+  });
 });
 
 

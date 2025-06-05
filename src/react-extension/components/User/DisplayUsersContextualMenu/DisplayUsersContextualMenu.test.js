@@ -266,4 +266,15 @@ describe("Display Users Contextual Menu", () => {
 
     expect(page.canShareMissingMetadataKeys).toBeFalsy();
   });
+
+  it('As AD with missing keys I should not be able to share missing metadata key myself', async() => {
+    expect.assertions(1);
+    const props = propsWithUserMissingMetadataKeys({
+      id: context.loggedInUser.id
+    });
+    page = new DisplayUsersContextualMenuPage(context, props);
+    await waitFor(() => {});
+
+    expect(page.canShareMissingMetadataKeys).toBeFalsy();
+  });
 });
