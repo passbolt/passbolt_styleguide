@@ -295,7 +295,7 @@ describe("DisplayResourceDetails", () => {
 
       // expectations
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDtoExpected, secretDtoExpected);
-      expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith("There was an unexpected error...");
+      expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith("Error");
     });
 
     it('As LU I cannot upgrade a v4 to V5 if user aborts operation', async() => {

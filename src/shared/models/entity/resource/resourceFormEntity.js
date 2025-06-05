@@ -124,7 +124,7 @@ class ResourceFormEntity extends EntityV2 {
       const resourceType = this.resourceTypes.getFirstById(this._props.resource_type_id);
       const secretEntityClass = this.getSecretEntityClassByResourceType(resourceType.slug);
       if (!secretEntityClass) {
-        throw new Error(`No secret association class has been found in resource types.`);
+        throw new Error("No secret association class has been found in resource types.");
       }
       try {
         // For editing and validation, it's important to keep null or undefined property and not set with default value
@@ -219,7 +219,7 @@ class ResourceFormEntity extends EntityV2 {
       // Get the secret entity class associate
       const secretEntityClass = this.getSecretEntityClassByResourceType(mutateResourceType.slug);
       if (!secretEntityClass) {
-        throw new Error(`No secret association class has been found in resource types.`);
+        throw new Error("No secret association class has been found in resource types.");
       }
       // Set the secret with the actual secret data
       this.set("secret", new secretEntityClass(this.secret.toDto(), {validate: false}));
@@ -272,7 +272,7 @@ class ResourceFormEntity extends EntityV2 {
       // Get the secret entity class associate
       const secretEntityClass = this.getSecretEntityClassByResourceType(mutateResourceType.slug);
       if (!secretEntityClass) {
-        throw new Error(`No secret association class has been found in resource types.`);
+        throw new Error("No secret association class has been found in resource types.");
       }
       // Set the secret with the new secret data
       this.set("secret", new secretEntityClass(resourceDto.secret, options));
@@ -295,7 +295,7 @@ class ResourceFormEntity extends EntityV2 {
     const resourceType = this.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
     const secretEntityClass = this.getSecretEntityClassByResourceType(resourceType?.slug);
     if (!secretEntityClass) {
-      throw new Error(`No secret association class has been found in resource types.`);
+      throw new Error("No secret association class has been found in resource types.");
     }
     // Set the secret with the new secret data
     this.set("secret", new secretEntityClass(this.secret.toDto(), options));
@@ -318,7 +318,7 @@ class ResourceFormEntity extends EntityV2 {
     const resourceType = this.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_STRING_SLUG);
     const secretEntityClass = this.getSecretEntityClassByResourceType(resourceType?.slug);
     if (!secretEntityClass) {
-      throw new Error(`No secret association class has been found in resource types.`);
+      throw new Error("No secret association class has been found in resource types.");
     }
     // Set the metadata description with the secret description
     this.set("metadata.description", this.secret?.description || "", options);
@@ -584,12 +584,14 @@ class ResourceFormEntity extends EntityV2 {
       const v5ResourceType = this.resourceTypes.getFirstBySlug(v5ResourceTypeSlug);
       const secretEntityClass = this.getSecretEntityClassByResourceType(v5ResourceTypeSlug);
       if (!secretEntityClass) {
-        throw new Error(`No secret association class has been found in resource types.`);
+        throw new Error("No secret association class has been found in resource types.");
       }
       this.set("resource_type_id", v5ResourceType.id);
       this.set("metadata.resource_type_id", v5ResourceType.id);
       this.set("metadata.object_type", ResourceMetadataEntity.METADATA_OBJECT_TYPE);
-      // Set the secret with the secret data v5
+      /*
+       *  Set the secret with the secret data v5
+       */
       this.set("secret", new secretEntityClass(this.secret.toDto()));
     }
   }
