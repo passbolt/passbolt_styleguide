@@ -242,7 +242,7 @@ class FilterResourcesByFoldersItem extends React.Component {
    * Handle when the user drop content on this component.
    * @param {ReactEvent} event The event
    */
-  handleDropEvent() {
+  async handleDropEvent() {
     // The user cannot drop the dragged content on a dragged item.
     const folders = this.props.dragContext.draggedItems.folders.map(folder => folder.id);
     const folderParentId = this.props.folder.id;
@@ -251,9 +251,9 @@ class FilterResourcesByFoldersItem extends React.Component {
     if (!isDroppingOnDraggedItem) {
       try {
         if (folders?.length > 0) {
-          this.props.context.port.request("passbolt.folders.move-by-id", folders[0], folderParentId);
+          await this.props.context.port.request("passbolt.folders.move-by-id", folders[0], folderParentId);
         } else if (resources?.length > 0) {
-          this.props.context.port.request("passbolt.resources.move-by-ids", resources, folderParentId);
+          await this.props.context.port.request("passbolt.resources.move-by-ids", resources, folderParentId);
         }
       } catch (error) {
         this.handleError(error);
