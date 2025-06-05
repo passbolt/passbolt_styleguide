@@ -134,7 +134,7 @@
             button {
                 border: 0;
                 font-weight: 400;
-                color: @default-text-color;
+                color: var(--Text-and-icons-Main-text);
                 display: flex;
                 align-items: center;
                 width: 100%;
@@ -149,6 +149,7 @@
                 svg {
                     width: 1.8rem;
                     height: 1.8rem;
+                    --icon-color: var(--Text-and-icons-Icons);
                 }
             }
         }
@@ -180,6 +181,10 @@
                         inset -.1rem 0 0 0 var(--Action-button-Action-button-border),
                         inset 0 .1rem 0 0 var(--Action-button-Action-button-border);
                     }
+                }
+
+                svg {
+                  --icon-color: var(--Text-and-icons-Icons);
                 }
             }
         }

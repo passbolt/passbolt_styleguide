@@ -12,6 +12,7 @@
  * @since         4.10.0
  */
 import EntityV2 from "../../abstract/entityV2";
+import IconEntity from "./IconEntity";
 
 const ENTITY_NAME = 'ResourceMetadataEntity';
 const RESOURCE_NAME_MAX_LENGTH = 255;
@@ -62,8 +63,65 @@ class ResourceMetadataEntity extends EntityV2 {
           "maxLength": RESOURCE_DESCRIPTION_MAX_LENGTH,
           "nullable": true,
         },
+        "icon": IconEntity.getSchema(),
       },
     };
+  }
+
+  /**
+   * @inheritDoc
+   * @returns {{icon: IconEntity}}
+   */
+  static get associations() {
+    return {
+      icon: IconEntity,
+    };
+  }
+
+  /*
+   * ==================================================
+   * Serialization
+   * ==================================================
+   */
+  /**
+   * Return a DTO ready to be sent to API or content code
+   *
+   * @param {object} [contain] optional
+   * @returns {object}
+   */
+  toDto(contain) {
+    const result = Object.assign({}, this._props);
+    if (!contain) {
+      return result;
+    }
+
+    if (this._icon && contain.icon) {
+      result.icon = this._icon.toDto();
+    }
+    return result;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  createAssociations(options = {}) {
+    if (!this._props.icon) {
+      super.createAssociations(options);
+      return;
+    }
+
+    try {
+      this._icon = new IconEntity(this._props.icon, options);
+    } catch (e) {
+      /*
+       * The error is not thrown to avoid breaking the app because of the icon.
+       * The app will use default data instead for the icons.
+       */
+      console.warn("The associated icon entity could not be set.", e);
+    }
+
+    delete this._props.icon;
+    super.createAssociations(options);
   }
 
   /**
@@ -113,6 +171,14 @@ class ResourceMetadataEntity extends EntityV2 {
     return this._props.uris || [];
   }
 
+  /**
+   * Returns the icon associated entity
+   * @returns {IconEntity|null}
+   */
+  get icon() {
+    return this._icon || null;
+  }
+
   /*
    * ==================================================
    * Static properties getters
@@ -140,6 +206,14 @@ class ResourceMetadataEntity extends EntityV2 {
    */
   static get URI_MAX_LENGTH() {
     return RESOURCE_URI_MAX_LENGTH;
+  }
+
+  /**
+   * ResourceMetadataEntity.DEFAULT_CONTAIN
+   * @return {object}
+   */
+  static get DEFAULT_CONTAIN() {
+    return {icon: true};
   }
 }
 

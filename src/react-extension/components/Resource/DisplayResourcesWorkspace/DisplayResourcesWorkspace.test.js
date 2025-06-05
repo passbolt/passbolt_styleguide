@@ -211,6 +211,22 @@ describe("DisplayResourcesWorkspace", () => {
       await page.displayResourceWorkspacePageObject.clickOn(page.displayResourceWorkspacePageObject.menuColumnViewResetButton);
       expect(props.resourceWorkspaceContext.resetGridColumnsSettings).toHaveBeenCalled();
     });
+
+    it('As LU I can change row height', async() => {
+      expect.assertions(2);
+
+      const props = defaultProps({
+        resourceWorkspaceContext: defaultResourceWorkspaceContext(),
+      });
+
+      // The resourceWorkspaceContext to pass
+      page = new DisplayResourceWorkspacePage(props);
+
+      await page.displayResourceWorkspacePageObject.clickOn(page.displayResourceWorkspacePageObject.menuColumnView);
+      expect(page.displayResourceWorkspacePageObject.menuRowHeightItem(2)).not.toBeNull();
+      await page.displayResourceWorkspacePageObject.clickOn(page.displayResourceWorkspacePageObject.menuRowHeightItem(2));
+      expect(props.resourceWorkspaceContext.onChangeRowSettingsHeight).toHaveBeenCalledWith("comfortable");
+    });
   });
 
   describe("As LU I can see the empty sidebar", () => {

@@ -61,6 +61,7 @@ export function propsWithSelectedUser(props) {
           "__placeholder_last_logged_in__": "",
           "last_logged_in": "",
           is_mfa_enabled: true,
+          missing_metadata_key_ids: ["f848277c-5398-58f8-a82a-72397af2d450"],
           pending_account_recovery_request: {
             id: "54c6278e-f824-5fda-91ff-3e946b18d997"
           },

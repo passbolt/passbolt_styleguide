@@ -7,6 +7,16 @@ iframe {
   vertical-align: baseline;
   background: 0 0;
 
+  &#passbolt-iframe-login, &#passbolt-iframe-setup, &#passbolt-iframe-recover, &#passbolt-iframe-account-recovery  {
+    min-height: 76.8rem; // Fix scrolling bar on the app
+    min-width: 42rem; // Fix scrolling bar on the app
+  }
+
+  &#passbolt-iframe-app {
+    min-height: 76.8rem; // Fix scrolling bar on the app
+    min-width: 128rem; // Fix scrolling bar on the app
+  }
+
   &.full-screen {
     position:absolute;
     width:100%;

@@ -273,8 +273,21 @@
       height: 2.4rem;
       margin-right: .2rem;
       svg {
+        width: 100%;
+        height: 100%;
+        stroke-width: 1;
         --icon-stroke-width: .1rem;
         --icon-color: var(--Resource-icon-Resource-icon-color);
+      }
+
+      &.clear-stroke svg {
+        --icon-color: var(--Text-and-icons-clear-color);
+      }
+      &.dark-stroke svg {
+        --icon-color: var(--Text-and-icons-dark-color);
+      }
+      &.transparent svg {
+        --icon-color: var(--Text-and-icons-Main-text);
       }
     }
 
@@ -311,6 +324,44 @@
     td.cell-location {
       span.caret {
         flex-shrink: 0;
+      }
+    }
+  }
+
+  &.comfortable {
+    .tableview-header {
+      height: 4rem;
+    }
+
+    .tableview-content {
+      top: 4.2rem;
+    }
+
+    table {
+      th {
+        .resizer {
+          top: .7rem;
+          height: 2.6rem;
+        }
+      }
+      tr {
+        height: 4.2rem;
+
+        &:before {
+          background: linear-gradient(var(--Grid-Grid-background),var(--Grid-Grid-background) 4.1rem, var(--Workspace-Dividers), var(--Workspace-Dividers) 4.2rem);
+          height: 4.2rem;
+        }
+
+        &.selected {
+          &:before {
+            background: linear-gradient(var(--Grid-Grid-selected-row),var(--Grid-Grid-selected-row) 4.1rem, var(--Workspace-Dividers), var(--Workspace-Dividers) 4.2rem);
+          }
+        }
+      }
+
+      td.cell-name .teaser-image {
+        height: 3rem;
+        width: 3rem;
       }
     }
   }

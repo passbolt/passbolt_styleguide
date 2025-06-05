@@ -64,6 +64,7 @@ class GridTable extends Component {
       <TableContextProvider
         columns={this.props.columns}
         rows={this.props.rows}
+        rowsSetting={this.props.rowsSetting}
         selectedRowsIds={this.props.selectedRowsIds}
         sorter={this.props.sorter}
         onSortChange={this.props.onSortChange}
@@ -90,6 +91,7 @@ class GridTable extends Component {
 GridTable.propTypes = {
   columns: PropTypes.array.isRequired, // The columns to display
   rows: PropTypes.array.isRequired, // The rows to display
+  rowsSetting: PropTypes.object, // The rows to display
   sorter: PropTypes.object, // The sorter object containing the property name and the direction
   selectedRowsIds: PropTypes.array, // The selected row ids
   isRowInactive: PropTypes.func, // The inactive row function to apply to add inactive class name

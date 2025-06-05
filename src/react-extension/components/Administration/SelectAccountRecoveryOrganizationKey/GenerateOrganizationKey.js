@@ -14,7 +14,6 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
@@ -29,6 +28,8 @@ import PownedService from "../../../../shared/services/api/secrets/pownedService
 import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
 import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import PasswordComplexityWithGoal from "../../../../shared/components/PasswordComplexityWithGoal/PasswordComplexityWithGoal";
+import InfoSVG from "../../../../img/svg/info.svg";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -480,7 +481,7 @@ class GenerateOrganizationKey extends React.Component {
             <label htmlFor="generate-organization-key-form-algorithm">
               <Trans>Algorithm</Trans>
               <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}>
-                <Icon name="info-circle"/>
+                <InfoSVG/>
               </Tooltip>
             </label>
             <input id="generate-organization-key-form-algorithm" name="algorithm" value={this.state.algorithm}
@@ -491,7 +492,7 @@ class GenerateOrganizationKey extends React.Component {
             <label htmlFor="generate-organization-key-form-keySize">
               <Trans>Key Size</Trans>
               <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}>
-                <Icon name="info-circle"/>
+                <InfoSVG/>
               </Tooltip>
             </label>
             <input id="generate-organization-key-form-key-size" name="keySize" value={this.state.keySize}
@@ -502,7 +503,7 @@ class GenerateOrganizationKey extends React.Component {
             <label htmlFor="generate-organization-key-form-password">
               <Trans>Organization key passphrase</Trans>
               {this.isPassphraseWarning &&
-                <Icon name="exclamation"/>
+                <AttentionSVG className="attention-required"/>
               }
             </label>
             <Password id="generate-organization-key-form-password" name="password"

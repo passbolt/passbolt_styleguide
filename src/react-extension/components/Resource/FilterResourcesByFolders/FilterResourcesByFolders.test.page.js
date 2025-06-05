@@ -22,6 +22,7 @@ import FilterResourcesByFolders from "./FilterResourcesByFolders";
 import {DragContext} from "../../../contexts/DragContext";
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
 import {ContextualMenuContext} from "../../../contexts/ContextualMenuContext";
+import {DialogContext} from "../../../contexts/DialogContext";
 
 /**
  * The FilterResourcesByFolders component represented as a page
@@ -37,11 +38,13 @@ export default class FilterResourcesByFoldersPage {
         <AppContext.Provider value={props.context}>
           <Router>
             <ContextualMenuContext.Provider value={props.contextualMenuContext}>
-              <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
-                <DragContext.Provider value={props.dragContext}>
-                  <FilterResourcesByFolders.WrappedComponent {...props}/>
-                </DragContext.Provider>
-              </ResourceWorkspaceContext.Provider>
+              <DialogContext.Provider value={props.dialogContext}>
+                <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
+                  <DragContext.Provider value={props.dragContext}>
+                    <FilterResourcesByFolders.WrappedComponent {...props}/>
+                  </DragContext.Provider>
+                </ResourceWorkspaceContext.Provider>
+              </DialogContext.Provider>
             </ContextualMenuContext.Provider>
           </Router>
         </AppContext.Provider>

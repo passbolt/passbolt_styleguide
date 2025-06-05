@@ -100,7 +100,7 @@ describe("HomePage", () => {
       expect.assertions(2);
       const props = defaultProps({
         resources: [
-          defaultResourceDto({metadata: defaultResourceMetadataDto({name: "apache", uris: ["http://www.apache.org"]})}),
+          defaultResourceDto({metadata: defaultResourceMetadataDto({name: "apache", uris: ["http://www.passbolt.com", "http://www.apache.org"]})}),
           defaultResourceDto(),
         ]
       });
@@ -113,7 +113,7 @@ describe("HomePage", () => {
       const suggestedResource = props.resources[0];
 
       expect(page.suggestedResourcesEntries.length).toStrictEqual(1);
-      expect(page.getSuggestedResourceItem(0).textContent).toStrictEqual(`${suggestedResource.metadata.name} (${suggestedResource.metadata.username})${suggestedResource.metadata.uris[0]}`);
+      expect(page.getSuggestedResourceItem(0).textContent).toStrictEqual(`${suggestedResource.metadata.name} (${suggestedResource.metadata.username})${suggestedResource.metadata.uris[0]}+1`);
     });
 
     it("it should show a message telling there is no suggested resources for the currently active URL", async() => {

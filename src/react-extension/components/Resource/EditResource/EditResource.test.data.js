@@ -28,6 +28,10 @@ import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 import {defaultPasswordPoliciesContext} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
 import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
 import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto
+} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 
 
 /**
@@ -36,15 +40,19 @@ import {defaultResourceDto} from "../../../../shared/models/entity/resource/reso
  */
 export function defaultProps(data = {}) {
   const defaultData = {
-    context: defaultAppContext(),
+    context: defaultAppContext({
+      getHierarchyFolderCache: () => [{name: "Folder", id: "1"}, {name: "subfolder", id: "2"}]
+    }),
     resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT}),
     actionFeedbackContext: defaultActionFeedbackContext(),
     resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
-    resourceWorkspaceContext: defaultResourceWorkspaceContext({
-      getHierarchyFolderCache: () => [{name: "Folder", id: "1"}, {name: "subfolder", id: "2"}]
-    }),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto({
+      default_resource_types: "v5",
+      ...data?.metadataTypeSettings
+    })),
     passwordPoliciesContext: defaultPasswordPoliciesContext({
       policies: defaultPasswordPoliciesDto({
         external_dictionary_check: false,

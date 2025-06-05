@@ -502,6 +502,7 @@ class ShareDialog extends Component {
   render() {
     return (
       <DialogWrapper
+        className="share-dialog"
         title={this.getTitle()}
         subtitle={this.getSubtitle()}
         tooltip={this.getTooltip()}
@@ -556,7 +557,7 @@ class ShareDialog extends Component {
               </div>
             }
           </div>
-          <div className="submit-wrapper clearfix">
+          <div className="submit-wrapper">
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
             <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
           </div>

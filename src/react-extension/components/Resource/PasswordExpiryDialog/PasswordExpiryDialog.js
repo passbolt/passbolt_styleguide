@@ -18,12 +18,12 @@ import {Trans, withTranslation} from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PasswordExpiryDialogViewModel, {PasswordExpiryOptionEnum} from "../../../../shared/models/passwordExpirySettings/PasswordExpiryDialogViewModel";
+import CalendarSVG from "../../../../img/svg/copy.svg";
 
 class PasswordExpiryDialog extends React.Component {
   /**
@@ -237,7 +237,7 @@ class PasswordExpiryDialog extends React.Component {
                         onChange={this.handleDateChange}
                         disabled={this.hasAllInputDisabled()}
                       />
-                      <Icon name="calendar"/>
+                      <CalendarSVG/>
                     </div>
                   </span>
                   {errors?.hasError("passwordExpiryDate") && this.displayErrors(errors.getError("passwordExpiryDate"))}

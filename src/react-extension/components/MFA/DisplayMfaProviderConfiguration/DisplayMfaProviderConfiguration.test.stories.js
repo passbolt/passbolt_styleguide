@@ -20,25 +20,50 @@ import {propsMfaWithProvider} from "./DisplayMfaProviderConfiguration.test.data"
 
 export default {
   title: 'Components/MFA/DisplayMfaProviderConfiguration',
-  component: DisplayMfaProviderConfiguration
+  component: DisplayMfaProviderConfiguration,
+  decorators: [(Story, {args}) =>
+    <MfaContextProvider {...args}>
+      <MockTranslationProvider>
+        <div id="container" className="page settings">
+          <div id="app" className="app" tabIndex="1000" style={{margin: "-1rem"}}>
+            <div className="panel main">
+              <div className="panel left">
+                <div className="sidebar-content">
+                </div>
+              </div>
+              <div className="panel middle">
+                <div className="header">
+                </div>
+                <div className="middle-right">
+                  <div className="breadcrumbs-and-grid">
+                    <div className="top-bar">
+                    </div>
+                    <div className="main-page">
+                      <Story {...args}/>
+                    </div>
+                  </div>
+                  <div className="help-panel">
+                    <div className="sidebar-help">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </MockTranslationProvider>;
+    </MfaContextProvider>
+  ]
 };
 
-const Template = args =>
-  <MfaContextProvider {...args}>
-    <MockTranslationProvider>
-      <div className="panel middle">
-        <div className="grid grid-responsive-12">
-          <DisplayMfaProviderConfiguration {...args} />
-        </div>
-      </div>
-    </MockTranslationProvider>;
-  </MfaContextProvider>;
+export const Totp = {
+  args: propsMfaWithProvider(Providers.TOTP)
+};
 
-export const Totp = Template.bind({});
-Totp.args = propsMfaWithProvider(Providers.TOTP);
+export const Yubikey = {
+  args: propsMfaWithProvider(Providers.YUBIKEY)
+};
 
-export const Yubikey = Template.bind({});
-Yubikey.args = propsMfaWithProvider(Providers.YUBIKEY);
-
-export const Duo = Template.bind({});
-Duo.args = propsMfaWithProvider(Providers.DUO);
+export const Duo = {
+  args: propsMfaWithProvider(Providers.DUO)
+};

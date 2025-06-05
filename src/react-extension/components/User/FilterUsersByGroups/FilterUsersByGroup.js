@@ -315,14 +315,14 @@ class FilterUsersByGroup extends React.Component {
                   <h3 className="section-title">
                     <span className="folders-label" onClick={this.handleTitleClickEvent}>
                       <button type="button" className="link no-border">
-                        <UsersSVG />
-                        <span>{this.state.title}</span>
                         <div className="toggle-folder">
                           {this.state.open
                             ? <CarretDownSVG />
                             : <CarretRightSVG />
                           }
                         </div>
+                        <UsersSVG />
+                        <span>{this.state.title}</span>
                       </button>
                     </span>
                   </h3>

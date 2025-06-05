@@ -17,10 +17,11 @@ import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import Icon from "../../../../shared/components/Icons/Icon";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {Trans, withTranslation} from "react-i18next";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 const LIMIT_ACTIVITIES_PER_PAGE = 5;
 
@@ -413,11 +414,9 @@ class DisplayUserDetailsActivity extends React.Component {
           <h4>
             <button type="button" className="link no-border" onClick={this.handleTitleClickEvent}>
               <Trans>Activity</Trans>
-              {this.state.open &&
-              <Icon name="caret-down"/>
-              }
-              {!this.state.open &&
-              <Icon name="caret-right"/>
+              {this.state.open
+                ? <CaretDownSVG className="caret-down"/>
+                : <CaretRightSVG className="caret-right"/>
               }
             </button>
           </h4>

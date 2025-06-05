@@ -47,6 +47,7 @@ import DisplayResourcesListDetails from "../../ResourceDetails/DisplayResourceDe
 import debounce from "debounce-promise";
 import RevertSVG from "../../../../img/svg/revert.svg";
 import {ColumnModelTypes} from "../../../../shared/models/column/ColumnModel";
+import {ROW_SETTING_HEIGHT_COMFORTABLE, ROW_SETTING_HEIGHT_COMPACT} from "../../../../shared/models/entity/rowsSetting/rowsSettingEntity";
 
 const GAP_AND_PADDING_BUTTONS = 22;
 
@@ -70,6 +71,7 @@ class Workspace extends Component {
     this.handleViewDetailClickEvent = this.handleViewDetailClickEvent.bind(this);
     this.handleWindowResizeEventDebounced = debounce(this.handleWindowResizeEvent.bind(this), 50);
     this.handleOnResetColumnsSettings = this.handleOnResetColumnsSettings.bind(this);
+    this.handleOnChangeRowsSetting = this.handleOnChangeRowsSetting.bind(this);
   }
 
   /**
@@ -144,6 +146,15 @@ class Workspace extends Component {
   handleOnChangeColumnView(event) {
     const target = event.target;
     this.props.resourceWorkspaceContext.onChangeColumnView(target.id, target.checked);
+  }
+
+  /**
+   * Handle the event on when the rows setings is changing.
+   * @param {React.Event} event
+   */
+  handleOnChangeRowsSetting(event) {
+    const target = event.target;
+    this.props.resourceWorkspaceContext.onChangeRowSettingsHeight(target.value);
   }
 
   /**
@@ -223,6 +234,8 @@ class Workspace extends Component {
     const canUseTags = this.props.context.siteSettings.canIUse("tags")
       && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
 
+    const rowsSetting = this.props.resourceWorkspaceContext.rowsSetting;
+
     return (
       <div className="panel main">
         <div className="panel left resource-filter">
@@ -271,6 +284,22 @@ class Workspace extends Component {
                         <CaretDownSVG/>
                       </DropdownButton>
                       <DropdownMenu direction="left">
+                        <DropdownMenuItem keepOpenOnClick={true}>
+                          <div className="radiolist">
+                            <div className="input radio">
+                              <input type="radio" checked={!rowsSetting?.height || rowsSetting?.height === ROW_SETTING_HEIGHT_COMPACT} value={ROW_SETTING_HEIGHT_COMPACT} id="rows_setting.height.compact" name="rows_setting.height" onChange={this.handleOnChangeRowsSetting}/>
+                              <label htmlFor="rows_setting.height.compact"><Trans>Compact</Trans></label>
+                            </div>
+                          </div>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem keepOpenOnClick={true} separator={true}>
+                          <div className="radiolist">
+                            <div className="input radio">
+                              <input type="radio" checked={rowsSetting?.height === ROW_SETTING_HEIGHT_COMFORTABLE} value={ROW_SETTING_HEIGHT_COMFORTABLE} id="rows_setting.height.comfortable" name="rows_setting.height" onChange={this.handleOnChangeRowsSetting}/>
+                              <label htmlFor="rows_setting.height.comfortable"><Trans>Comfortable</Trans></label>
+                            </div>
+                          </div>
+                        </DropdownMenuItem>
                         {this.columnsResourceSetting?.map((column, index) =>
                           <DropdownMenuItem keepOpenOnClick={true} key={column.id} separator={this.hasSeparator(column, index)}>
                             <div className="input checkbox">

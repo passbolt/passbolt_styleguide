@@ -31,6 +31,7 @@ import {uiActions} from "../../shared/services/rbacs/uiActionEnumeration";
 import {ColumnModelTypes} from "../../shared/models/column/ColumnModel";
 import getPropValue from "../lib/Object/getPropValue";
 import {withTranslation} from "react-i18next";
+import RowsSettingEntity from "../../shared/models/entity/rowsSetting/rowsSettingEntity";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -47,6 +48,7 @@ export const ResourceWorkspaceContext = React.createContext({
   filteredResources: [], // The current list of filtered resources
   selectedResources: [], // The current list of selected resources
   columnsResourceSetting: [], // The settings of columns for resources
+  rowsSetting: null, // The setting for the display of the rows
   details: {
     resource: null, // The resource to focus details on
     folder: null, // The folder to focus details on
@@ -90,6 +92,7 @@ export const ResourceWorkspaceContext = React.createContext({
   onChangeColumnView: () => {}, // Whenever the users wants to show or hide a column
   onChangeColumnsSettings: () => {}, // Whenever the user change the columns configuration
   resetGridColumnsSettings: () => {}, // Whenever the user resets the columns configuration
+  onChangeRowSettingsHeight: () => {}, // Whenever the user change the row settings
   getHierarchyFolderCache: () => {}, // Whenever the need to get folder hierarchy
 });
 
@@ -103,6 +106,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.rowsSetting = RowsSettingEntity.createFromDefault();
     this.state = this.defaultState;
     this.initializeProperties();
     this.gridResourceUserSetting = new GridResourceUserSettingServiceWorkerService(props.context.port);
@@ -129,6 +133,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       filteredResources: null, // The current list of filtered resources
       selectedResources: [], // The current list of selected resources
       columnsResourceSetting: null, // The settings of columns for resources
+      rowsSetting: this.rowsSetting.toDto(), // The setting for the display of the rows
       details: {
         resource: null, // The resource to focus details on
         folder: null, // The folder to focus details on
@@ -171,6 +176,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       onChangeColumnView: this.handleChangeColumnView.bind(this), // Whenever the users wants to show or hide a column
       onChangeColumnsSettings: this.handleChangeColumnsSettings.bind(this), // Whenever the user change the columns configuration
       resetGridColumnsSettings: this.resetGridColumnsSettings.bind(this), // Whenever the user resets the columns configuration
+      onChangeRowSettingsHeight: this.onChangeRowSettingsHeight.bind(this), // Whenever the user change the rows setting
     };
   }
 
@@ -1213,8 +1219,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       columnsResourceSetting.removeById(ColumnModelTypes.LOCATION);
     }
     const sorter = gridUserSettingEntity?.sorter || this.defaultSorter;
+    const rowsSetting = gridUserSettingEntity?.rowsSetting;
     // process the search after the grid setting is loaded
-    this.setState({columnsResourceSetting, sorter}, async() => {
+    this.setState({columnsResourceSetting, sorter, rowsSetting}, async() => {
       await this.search(this.state.filter);
       /*
        * we run scrollTo again here as all data is loaded and the previous sort is loaded as well.
@@ -1235,6 +1242,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async resetGridColumnsSettings() {
     await this.gridResourceUserSetting.resetSettings();
     await this.loadGridResourceSetting();
+    this.onChangeRowSettingsHeight(this.rowsSetting.height);
   }
 
   /**
@@ -1259,11 +1267,26 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
+   * Handle change columns setting
+   * @param {RowsSettingEntity} rowsSetting
+   */
+  onChangeRowSettingsHeight(rowsSettingHeight) {
+    const rowsSetting = new RowsSettingEntity(this.state.rowsSetting);
+    rowsSetting.set("height", rowsSettingHeight);
+    this.rowsSetting = rowsSetting;
+    this.setState({rowsSetting: rowsSetting.toDto()}, () => this.updateGridSetting());
+  }
+
+  /**
    * Update the columns setting
    * @return {Promise<void>}
    */
   async updateGridSetting() {
-    const gridUserSettingEntity = new GridUserSettingEntity({columns_setting: this.state.columnsResourceSetting.toDto(), sorter: this.state.sorter.toDto()});
+    const gridUserSettingEntity = new GridUserSettingEntity({
+      columns_setting: this.state.columnsResourceSetting.toDto(),
+      sorter: this.state.sorter.toDto(),
+      rows_setting: this.rowsSetting.toDto(),
+    });
     await this.gridResourceUserSetting.setSetting(gridUserSettingEntity);
   }
 

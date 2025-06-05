@@ -62,3 +62,7 @@ export const Note = {
 export const Description = {
   args: defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.DESCRIPTION})
 };
+
+export const Uris = {
+  args: defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.URIS})
+};

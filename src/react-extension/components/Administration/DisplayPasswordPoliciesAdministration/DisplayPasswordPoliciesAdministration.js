@@ -14,7 +14,6 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
@@ -24,6 +23,8 @@ import Select from "../../Common/Select/Select";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import {createSafePortal} from "../../../../shared/utils/portals";
 import BuoySVG from "../../../../img/svg/buoy.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
 class DisplayPasswordPoliciesAdministration extends React.Component {
   /**
@@ -225,7 +226,11 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
               </div>
               <div className="accordion-header">
                 <button id="accordion-toggle-password" className="link no-border" type="button" onClick={this.handlePasswordSectionToggle}>
-                  <Icon name={this.state.showPasswordSection ? "caret-down" : "caret-right"}/><Trans>Passwords settings</Trans>
+                  {this.state.showPasswordSection
+                    ? <CaretDownSVG className="caret-down"/>
+                    : <CaretRightSVG className="caret-right"/>
+                  }
+                  <Trans>Passwords settings</Trans>
                 </button>
               </div>
               {this.state.showPasswordSection && <div className="passwords-settings">
@@ -304,7 +309,11 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
               }
               <div className="accordion-header">
                 <button id="accordion-toggle-passphrase" className="link no-border" type="button" onClick={this.handlePassphraseSectionToggle}>
-                  <Icon name={this.state.showPassphraseSection ? "caret-down" : "caret-right"}/><Trans>Passphrase settings</Trans>
+                  {this.state.showPassphraseSection
+                    ? <CaretDownSVG className="caret-down"/>
+                    : <CaretRightSVG className="caret-right"/>
+                  }
+                  <Trans>Passphrase settings</Trans>
                 </button>
               </div>
               {this.state.showPassphraseSection && <div className="passphrase-settings">

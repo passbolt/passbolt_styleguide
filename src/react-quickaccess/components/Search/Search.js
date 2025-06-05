@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withTranslation, Trans} from "react-i18next";
-import Icon from "../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import SearchSVG from "../../../img/svg/search.svg";
 
 class Search extends React.Component {
   constructor(props) {
@@ -62,7 +62,7 @@ class Search extends React.Component {
             ref={this.searchInputRef} onChange={this.handleInputChange} value={this.props.context.search} />
           <div className="search-button-wrapper">
             <button className="button button-transparent" value={this.translate("Search")} type="submit">
-              <Icon name="search"/>
+              <SearchSVG/>
               <span className="visuallyhidden"><Trans>Search</Trans></span>
             </button>
           </div>

@@ -13,8 +13,9 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
+import CaretDownSVG from "../../../../../img/svg/caret_down.svg";
+import CaretRightSVG from "../../../../../img/svg/caret_right.svg";
 
 class ShowErrorDetails extends Component {
   /**
@@ -100,7 +101,10 @@ class ShowErrorDetails extends Component {
       <div className="accordion error-details">
         <div className="accordion-header">
           <button type="button" className="link no-border" onClick={this.handleErrorDetailsToggle}>
-            <Icon baseline={true} name={this.state.showErrorDetails ? "caret-down" : "caret-right"}/>
+            {this.state.showErrorDetails
+              ? <CaretDownSVG className="caret-down"/>
+              : <CaretRightSVG className="caret-right"/>
+            }
             <Trans>Error details</Trans>
           </button>
         </div>
