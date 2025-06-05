@@ -182,10 +182,17 @@ describe("Resource Workspace Context", () => {
     });
 
     it("AS LU I should have resources belonged to a folder if the filter is FOLDER", async() => {
+      expect.assertions(2);
+
       const expectedResourcesCount = 1;
+
+      context.port.addRequestListener("passbolt.resources.update-local-storage-by-folder-parent-id", async() => {});
+      jest.spyOn(context.port, "request");
+
       await page.goToFolder(context.folders[0]);
       await waitForTrue(() => page.filteredResources.length !== totalResourcesCount);
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update-local-storage-by-folder-parent-id", context.folders[0].id);
     });
 
     it("AS LU I should have resources belonged to a root folder the filter is ROOT-FOLDER", async() => {
@@ -196,7 +203,7 @@ describe("Resource Workspace Context", () => {
     });
   });
 
-  describe("As LU I should hav the appropriate selected resources at any time", () => {
+  describe("As LU I should have the appropriate selected resources at any time", () => {
     it("As LU I should have an initial set of selected resources to empty", () => {
       expect(page.selectedResources).toBeDefined();
       expect(page.selectedResources).toHaveLength(0);
