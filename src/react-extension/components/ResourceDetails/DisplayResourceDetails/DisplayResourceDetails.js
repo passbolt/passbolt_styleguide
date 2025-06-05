@@ -266,7 +266,14 @@ class DisplayResourceDetails extends React.Component {
   get shouldDisplayUpgradeResource() {
     const resourceType = this.props.resourceTypes?.getFirstById(this.resource.resource_type_id);
     const v5ResourceTypeSlug = V4_TO_V5_RESOURCE_TYPE_MAPPING[resourceType?.slug];
-    return this.props.metadataTypeSettings?.allowV4V5Upgrade && resourceType?.isV4() && this.props.resourceTypes.hasOneWithSlug(v5ResourceTypeSlug);
+    return this.canUpdate && this.props.metadataTypeSettings?.allowV4V5Upgrade && resourceType?.isV4() && this.props.resourceTypes.hasOneWithSlug(v5ResourceTypeSlug);
+  }
+
+  /**
+   * Can update the resource
+   */
+  get canUpdate() {
+    return this.resource.permission.type >= 7;
   }
 
   /**

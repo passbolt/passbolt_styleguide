@@ -161,6 +161,25 @@
           }
 
           .resource-icon {
+            .button-transparent {
+              padding: 0;
+              border-radius: 50%;
+
+              &:hover {
+                .teaser-image {
+                  box-shadow: inset 0.1rem 0.1rem 0 0 var(--States-Hover-Highlight), 
+                              inset -0.1rem -0.1rem 0 0 var(--States-Hover-Shadow);
+                }
+              }
+              &:active {
+                .teaser-image {
+
+                box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), 
+                            inset .1rem .1rem 0 0 var(--States-Active-Shadow), 
+                            inset 0 0 0 1px var(--Context-buttons-Context-button-border);
+                          }
+              }
+            }
             .teaser-image {
               display: flex;
               align-items: center;
@@ -171,7 +190,6 @@
               border-radius: 50%;
               width: 5.6rem;
               height: 5.6rem;
-              cursor: pointer;
 
               &.clear-stroke svg {
                 --icon-color: var(--Text-and-icons-clear-color);

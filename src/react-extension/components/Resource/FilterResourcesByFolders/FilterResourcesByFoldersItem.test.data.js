@@ -17,6 +17,7 @@ import {ownerFolderPermissionDto} from "../../../../shared/models/entity/permiss
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 
 /**
  * Default props
@@ -48,6 +49,7 @@ export function defaultProps() {
     contextualMenuContext: {
       show: jest.fn()
     },
+    dialogContext: defaultDialogContext(),
     history: {
       push: jest.fn(),
     },

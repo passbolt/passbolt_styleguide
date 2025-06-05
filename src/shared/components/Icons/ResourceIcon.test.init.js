@@ -14,9 +14,9 @@
 
 import React from "react";
 import {ResourceIcon} from "./ResourceIcon";
-import KeySVG from "../../../img/svg/key.svg";
-import TotpSVG from "../../../img/svg/totp.svg";
-import PasswordWithTotpSVG from "../../../img/svg/password_with_totp.svg";
+import PasswordSVG from "../../../img/passbolt-default-resource-type-icons/password.svg";
+import TotpSVG from "../../../img/passbolt-default-resource-type-icons/totp.svg";
+import PasswordWithTotpSVG from "../../../img/passbolt-default-resource-type-icons/password-with-totp.svg";
 import {
   TEST_RESOURCE_TYPE_PASSWORD_STRING,
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
@@ -29,12 +29,12 @@ import {
 } from "../../models/entity/resourceType/resourceTypeEntity.test.data";
 
 ResourceIcon.resourceTypeIdIconMap = {
-  [TEST_RESOURCE_TYPE_PASSWORD_STRING]: <KeySVG/>,
-  [TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION]: <KeySVG/>,
+  [TEST_RESOURCE_TYPE_PASSWORD_STRING]: <PasswordSVG/>,
+  [TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION]: <PasswordSVG/>,
   [TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP]: <PasswordWithTotpSVG/>,
   [TEST_RESOURCE_TYPE_TOTP]: <TotpSVG />,
-  [TEST_RESOURCE_TYPE_V5_DEFAULT]: <KeySVG/>,
-  [TEST_RESOURCE_TYPE_V5_PASSWORD_STRING]: <KeySVG/>,
+  [TEST_RESOURCE_TYPE_V5_DEFAULT]: <PasswordSVG/>,
+  [TEST_RESOURCE_TYPE_V5_PASSWORD_STRING]: <PasswordSVG/>,
   [TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP]: <PasswordWithTotpSVG/>,
   [TEST_RESOURCE_TYPE_V5_TOTP]: <TotpSVG />,
 };

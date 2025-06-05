@@ -672,6 +672,7 @@ class EditResource extends Component {
               <div className="grid">
                 <AddResourceName
                   resource={this.state.resource}
+                  resourceType={this.state.resourceType}
                   onChange={this.handleInputChange}
                   disabled={this.hasAllInputDisabled}
                   warnings={warnings}
