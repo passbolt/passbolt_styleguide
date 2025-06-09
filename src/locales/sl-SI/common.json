@@ -34,7 +34,7 @@
   "<0>Warning</0>: This secret will expire after some time (typically a few months). Make sure you save the expiry date and rotate it on time.": "<0>Opozorilo</0>: Ta skrivnost bo po nekaj časa potekla (običajno po nekaj mesecih).  Poskrbite, da si zapomnite rok uporabe in jo rotirate pravočasno.",
   "<0>Warning</0>: UPN is not active by default on Azure and requires a specific option set on Azure to be working.": "<0>Opozorilo</0>: UPN privzeto ni aktiven v Azure in zahteva posebno nastavitveno možnost, da deluje.",
   "<0>When a user creates a resource, a default expiry date is set to </0><1></1><2>days</2>": "<0>Ko uporabnik ustvari vir, se privzeti datum poteka nastavi čez </0><1></1><2>dni</2>",
-  "1. Click download the account kit.": "1. Kliknite \"Prenesi komplet računa.\"",
+  "1. Click download the account kit.": "1. Kliknite \"Prenesi paket računa.\"",
   "1. Install the application from the store.": "1. Namestite aplikacijo iz trgovine.",
   "2. Install the application from the store.": "2. Namestite aplikacijo iz trgovine.",
   "2. Open the application on your phone.": "2. Odprite aplikacijo na svojem telefonu.",
