@@ -32,7 +32,9 @@ describe("ReviewAccountRecoveryRequest", () => {
 
     await page.selectReview(page.acceptCheckbox);
     expect(page.acceptCheckbox.checked).toBeTruthy();
+    expect(page.acceptCheckboxCreatorName.textContent).toStrictEqual("I verified with Betty Holberton (betty@passbolt.com) that the request is valid.");
     expect(page.rejectCheckbox.checked).toBeFalsy();
+    expect(page.rejectCheckboxCreatorName.textContent).toStrictEqual("Betty Holberton (betty@passbolt.com) did not initiate this request.");
     await page.submit();
     const status = 'approved';
 
