@@ -21,6 +21,7 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import MetadataKeysServiceWorkerService from "../../../../shared/services/serviceWorker/metadata/metadataKeysServiceWorkerService";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 
 /**
  * Component for confirming and handling the sharing of missing metadata keys.
@@ -68,6 +69,7 @@ class ConfirmShareMissingMetadataKeys extends React.Component {
     this.setState({processing: true});
     try {
       await this.metadataKeysServiceWorkerService.share(this.props.user.id);
+      this.props.userWorkspaceContext.onRefreshSelectedUsers();
       this.props.actionFeedbackContext.displaySuccess(this.props.t("Metadata keys has been shared with ({{username}}", {username: this.props.user.username}));
     } catch (error) {
       console.error(error);
@@ -158,9 +160,10 @@ class ConfirmShareMissingMetadataKeys extends React.Component {
 ConfirmShareMissingMetadataKeys.propTypes = {
   context: PropTypes.any, // The application context
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  userWorkspaceContext: PropTypes.any, // the user workspace context
   user: PropTypes.object, // The user which is missing keys
   onClose: PropTypes.func, // The close dialog callback
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withTranslation('common')(ConfirmShareMissingMetadataKeys)));
+export default withAppContext(withActionFeedback(withUserWorkspace(withTranslation('common')(ConfirmShareMissingMetadataKeys))));
