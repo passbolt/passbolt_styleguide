@@ -1,25 +1,95 @@
-// Exception for group edit dialog and form.
 .edit-group-dialog {
-  .form-content {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 6.4rem 39rem 12.8rem;
+
+  .dialog {
     padding: 0;
+    max-width: 70rem;
+    min-width: 50rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: 100%;
+    align-self: center;
 
-    .input.required {
-      &:first-child {
-        padding: 1.6rem 1.6rem 0 1.6rem;
+    .dialog-header {
+      padding: 2.4rem;
+
+      .dialog-title-wrapper h2 {
+        font-size: 2.4rem;
       }
-      padding: 0 1.6rem;
     }
 
-    .permission-edit {
-      max-height: 26.25rem;
-    }
+    .dialog-content {
+      display: flex;
+      padding-right: 1.6rem;
+      padding-left: 1.6rem;
+      align-items: center;
+      align-self: stretch;
+      min-height: 0;
 
-    .permission-add {
-      padding: 1.6rem;
-    }
+      .group-form {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex: 1 0 0;
+        align-self: stretch;
+        width: 100%;
 
-    .input.text.autocomplete input  {
-      margin-bottom: 0;
+        .form-content {
+          padding: 0;
+          max-height: calc(100% - 6.8rem);
+          min-height: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+
+          .group_members {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+          }
+
+          > * {
+            margin-bottom: 0;
+          }
+        }
+
+        .input.required {
+          &:first-child {
+            padding: 1.6rem 1.6rem 0 1.6rem;
+          }
+          padding: .4rem 1.6rem 1.2rem 1.6rem;
+        }
+
+        .permission-add {
+          padding: 1.6rem;
+        }
+
+        .input.text.autocomplete input  {
+          margin-bottom: 0;
+        }
+
+        // remove all margin bottom for direct child element
+        & > * {
+          margin-bottom: 0;
+        }
+      }
+
+      .submit-wrapper {
+        display: flex;
+        padding: 1.6rem 0;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 2.4rem;
+        align-self: stretch;
+      }
     }
   }
 }

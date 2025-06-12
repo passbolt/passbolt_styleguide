@@ -81,6 +81,7 @@ import {
 } from "../../src/shared/models/entity/gpgkey/externalGpgKeyEntity.test.data";
 import {defaultMetadataKeyDto} from "../../src/shared/models/entity/metadata/metadataKeyEntity.test.data";
 import {pgpKeys} from "../fixture/pgpKeys/keys";
+import mockRequestFindResourcesByIds from "./request/mockRequestFindResourcesByIds";
 
 export default storage => {
   const mockPort = new MockPort(storage);
@@ -100,6 +101,7 @@ export default storage => {
   mockPort.addRequestListener("passbolt.resources.update", mockRequestResourcesUpdate);
   mockPort.addRequestListener("passbolt.resources.find-details", mockRequestResourcesFindDetails);
   mockPort.addRequestListener("passbolt.share.find-resources-for-share", mockRequestShareGetResources);
+  mockPort.addRequestListener("passbolt.resources.find-all-by-ids-for-display-permissions", mockRequestFindResourcesByIds);
   mockPort.addRequestListener("passbolt.share.search-aros", mockRequestShareSearchAros);
   mockPort.addRequestListener("passbolt.secret.find-by-resource-id", mockRequestSecretDecrypt);
   mockPort.addRequestListener("passbolt.comments.create", mockRequestCommentsCreate);
