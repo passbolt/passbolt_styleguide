@@ -670,6 +670,19 @@ class EditUserGroup extends Component {
   }
 
   /**
+   * Returns true if a warning should be displayed
+   * @returns {boolean}
+   */
+  get hasWarnings() {
+    return (
+      (!this.isLoading && !this.hasMembers) ||
+      (this.hasMembers && !this.hasManager) ||
+      (!this.isLoading && !this.isManager) ||
+      (this.hasMembersChanges && this.hasManager)
+    );
+  }
+
+  /**
    * Use to render the container of the list of the ReactList component
    * @param {Array<JSX.Element>} items the list of the items to be rendered as children element of the conainer
    * @param {*} ref the ref ReactList needs to manage the scrll
@@ -794,24 +807,36 @@ class EditUserGroup extends Component {
                 </div>
               }
 
-              {!this.isLoading && !this.hasMembers &&
-                <div className="message warning">
-                  <span><Trans>The group is empty, please add a group manager.</Trans></span>
+              {this.hasWarnings && (
+                <div className="warning message">
+                  {!this.isLoading && !this.hasMembers && (
+                    <div className="message warning">
+                      <span><Trans>The group is empty, please add a group manager.</Trans></span>
+                    </div>
+                  )}
+
+                  {this.hasMembers && !this.hasManager && (
+                    <div className="message error at-least-one-manager">
+                      <span><Trans>Please make sure there is at least one group manager.</Trans></span>
+                    </div>
+                  )}
+
+                  {!this.isLoading && !this.isManager && (
+                    <div className="message warning feedback cannot-add-user">
+                      <span><Trans>Only the group manager can add new people to a group.</Trans></span>
+                    </div>
+                  )}
+
+                  {this.hasMembersChanges && this.hasManager && (
+                    <div className="message warning feedback">
+                      <span><Trans>You need to click save for the changes to take place.</Trans></span>
+                    </div>
+                  )}
                 </div>
-              }
+              )}
               {this.hasMembers && !this.hasManager &&
                 <div className="message error at-least-one-manager">
                   <span><Trans>Please make sure there is at least one group manager.</Trans></span>
-                </div>
-              }
-              {!this.isLoading && !this.isManager &&
-                <div className="message warning feedback cannot-add-user">
-                  <span><Trans>Only the group manager can add new people to a group.</Trans></span>
-                </div>
-              }
-              {this.hasMembersChanges && this.hasManager &&
-                <div className="message warning feedback">
-                  <span><Trans>You need to click save for the changes to take place.</Trans></span>
                 </div>
               }
             </div>
