@@ -524,7 +524,7 @@
   "For security reasons please check with your administrator that this is a change that they initiated.": "З міркувань безпеки, будь ласка, перевірте з вашим адміністратором, що це зміна, яку вони ініціювали.",
   "For security reasons please check with your administrator that this is a change that they initiated. The new fingerprint:": "З міркувань безпеки, будь ласка, перевірте з вашим адміністратором, що це зміна, яку вони ініціювали. Новий відбиток:",
   "Full base url is not set": "Повну базову URL-адресу не встановлено",
-  "Full base url is set to {fullBaseUrl}": "Повну базову URL-адресу встановлено на {fullBaseUrl}",
+  "Full base url is set to {fullBaseUrl}": "Повну базову URL-адресу встановлено у {fullBaseUrl}",
   "Full report": "Повний звіт",
   "GD or Imagick extension is installed": "Розширення GD або Imagick встановлено",
   "Generate": "Згенерувати",
