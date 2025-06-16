@@ -821,7 +821,7 @@ class EditUserGroup extends Component {
                     </div>
                   )}
 
-                  {!this.isLoading && !this.isManager && (
+                  {!this.isLoading && !this.isManager && this.hasManager && (
                     <div className="message warning feedback cannot-add-user">
                       <span><Trans>Only the group manager can add new people to a group.</Trans></span>
                     </div>
