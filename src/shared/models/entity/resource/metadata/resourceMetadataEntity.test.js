@@ -18,6 +18,9 @@ import {defaultResourceMetadataDto, minimalResourceMetadataDto} from "./resource
 import EntityValidationError from "../../abstract/entityValidationError";
 import {defaultIconDto} from "./iconEntity.test.data";
 import IconEntity from "./IconEntity";
+import CustomFieldsCollection from "../../customField/customFieldsCollection";
+import {defaultCustomField} from "../../customField/customFieldEntity.test.data";
+import {defaultCustomFieldsCollection} from "../../customField/customFieldsCollection.test.data";
 
 describe("ResourceMetadataEntity", () => {
   describe("::getSchema", () => {
@@ -70,6 +73,18 @@ describe("ResourceMetadataEntity", () => {
       assertEntityProperty.assertAssociation(ResourceMetadataEntity, "icon", defaultResourceMetadataDto(), successScenario, []);
       assertEntityProperty.notRequired(ResourceMetadataEntity, "icon");
     });
+
+    it("validates custom_fields property", () => {
+      const successScenario = [
+        {scenario: "valid custom fileds", value: defaultCustomFieldsCollection()},
+      ];
+      const failingScenario = [
+        {scenario: "invalid data type", value: 42},
+        {scenario: "invalid custom field entity", value: [defaultCustomField({metadata_value: "val", secret_value: "val"})]},
+      ];
+      assertEntityProperty.assertAssociation(ResourceMetadataEntity, "custom_fields", defaultResourceMetadataDto(), successScenario, failingScenario);
+      assertEntityProperty.notRequired(ResourceMetadataEntity, "custom_fields");
+    });
   });
 
   describe("::constructor", () => {
@@ -107,11 +122,9 @@ describe("ResourceMetadataEntity", () => {
 
   describe("::toDto", () => {
     it("should return the full dto", () => {
-      expect.assertions(7);
+      expect.assertions(8);
 
-      const metadata = new ResourceMetadataEntity(defaultResourceMetadataDto({
-        icon: defaultIconDto()
-      }));
+      const metadata = new ResourceMetadataEntity(defaultResourceMetadataDto({}, {withIcon: true, withCustomFields: true}));
 
       const dto = metadata.toDto(ResourceMetadataEntity.DEFAULT_CONTAIN);
       expect(dto.object_type).toStrictEqual("PASSBOLT_RESOURCE_METADATA");
@@ -121,14 +134,13 @@ describe("ResourceMetadataEntity", () => {
       expect(dto.uris).toStrictEqual(metadata.uris);
       expect(dto.description).toStrictEqual(metadata.description);
       expect(dto.icon).toStrictEqual(metadata._icon.toDto());
+      expect(dto.custom_fields).toStrictEqual(metadata._customFields.toDto());
     });
 
     it("should return the minimal dto", () => {
-      expect.assertions(7);
+      expect.assertions(8);
 
-      const metadata = new ResourceMetadataEntity(defaultResourceMetadataDto({
-        icon: defaultIconDto()
-      }));
+      const metadata = new ResourceMetadataEntity(defaultResourceMetadataDto({}, {withIcon: true, withCustomFields: true}));
 
       const dto = metadata.toDto();
       expect(dto.object_type).toStrictEqual("PASSBOLT_RESOURCE_METADATA");
@@ -138,29 +150,55 @@ describe("ResourceMetadataEntity", () => {
       expect(dto.uris).toStrictEqual(metadata.uris);
       expect(dto.description).toStrictEqual(metadata.description);
       expect(dto.icon).toBeUndefined();
+      expect(dto.custom_fields).toBeUndefined();
     });
   });
 
-  describe("getter ::icon", () => {
-    it("should return the prop _icon", () => {
-      expect.assertions(2);
+  describe("::getters", () => {
+    describe("::icon", () => {
+      it("should return the prop _icon", () => {
+        expect.assertions(2);
 
-      const iconDto = defaultIconDto();
-      const metadata = new ResourceMetadataEntity(defaultResourceMetadataDto({
-        icon: iconDto
-      }));
+        const iconDto = defaultIconDto();
+        const metadata = new ResourceMetadataEntity(defaultResourceMetadataDto({
+          icon: iconDto
+        }));
 
-      const icon = metadata.icon;
-      expect(icon).toBeInstanceOf(IconEntity);
-      expect(icon.toDto()).toStrictEqual(iconDto);
+        const icon = metadata.icon;
+        expect(icon).toBeInstanceOf(IconEntity);
+        expect(icon.toDto()).toStrictEqual(iconDto);
+      });
+
+      it("should return null if the icon is not set", () => {
+        expect.assertions(1);
+
+        const metadata = new ResourceMetadataEntity(defaultResourceMetadataDto());
+
+        expect(metadata.icon).toBeNull();
+      });
     });
 
-    it("should return null if the icon is not set", () => {
-      expect.assertions(1);
+    describe("::customFields", () => {
+      it("should return the prop _customFields", () => {
+        expect.assertions(2);
 
-      const metadata = new ResourceMetadataEntity(defaultResourceMetadataDto());
+        const customFieldsDto = defaultCustomFieldsCollection();
+        const metadata = new ResourceMetadataEntity(defaultResourceMetadataDto({
+          custom_fields: customFieldsDto
+        }));
 
-      expect(metadata.icon).toBeNull();
+        const customFieldsCollection = metadata.customFields;
+        expect(customFieldsCollection).toBeInstanceOf(CustomFieldsCollection);
+        expect(customFieldsCollection.toDto()).toStrictEqual(customFieldsDto);
+      });
+
+      it("should return null if the customFields is not set", () => {
+        expect.assertions(1);
+
+        const metadata = new ResourceMetadataEntity(defaultResourceMetadataDto());
+
+        expect(metadata.customFields).toBeNull();
+      });
     });
   });
 });
