@@ -423,6 +423,88 @@ describe("ResourceTypeEntity", () => {
     });
   });
 
+  describe("::hasCustomFields", () => {
+    it("standalone totp should not have custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasCustomFields()).toBeFalsy();
+    });
+
+    it("password totp should not have custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypePasswordDescriptionTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasCustomFields()).toBeFalsy();
+    });
+
+    it("password and description should not have custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypePasswordAndDescriptionDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasCustomFields()).toBeFalsy();
+    });
+
+    it("password string should not have custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypePasswordStringDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasCustomFields()).toBeFalsy();
+    });
+
+    it("v5 default should have custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasCustomFields()).toBeTruthy();
+    });
+
+    it("v5 default totp should have password", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasCustomFields()).toBeTruthy();
+    });
+
+    it("v5 password string should not have custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5PasswordStringDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasCustomFields()).toBeFalsy();
+    });
+
+    it("v5 totp should not have custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5TotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasCustomFields()).toBeFalsy();
+    });
+    it("v5 custom fields should have custom fields", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5CustomFieldsDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasCustomFields()).toBeTruthy();
+    });
+  });
+
   describe("::isStandaloneTotp", () => {
     it("standalone totp should be standalone totp", () => {
       expect.assertions(1);

@@ -69,6 +69,12 @@ export const METADATA_DESCRIPTION_RESOURCE_TYPES = [
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG
 ];
 
+export const CUSTOM_FIELDS_RESOURCE_TYPES = [
+  RESOURCE_TYPE_V5_DEFAULT_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG
+];
+
 class ResourceTypeEntity extends EntityV2 {
   /**
    * @inheritdoc
@@ -207,6 +213,14 @@ class ResourceTypeEntity extends EntityV2 {
    */
   hasPassword() {
     return PASSWORD_RESOURCE_TYPES.includes(this.slug);
+  }
+
+  /**
+   * Has custom fields
+   * @returns {boolean}
+   */
+  hasCustomFields() {
+    return CUSTOM_FIELDS_RESOURCE_TYPES.includes(this.slug);
   }
 
   /**

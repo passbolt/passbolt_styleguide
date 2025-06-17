@@ -281,6 +281,32 @@ describe("ResourceTypesCollection", () => {
     });
   });
 
+  describe("::hasSomeCustomFieldsResourceTypes", () => {
+    it("should not have some custom fields resource types.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
+      expect(resourceTypes.hasSomeCustomFieldsResourceTypes()).toBeFalsy();
+    });
+
+    it("should have some custom fields resource types v5.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
+      expect(resourceTypes.hasSomeCustomFieldsResourceTypes(RESOURCE_TYPE_VERSION_5)).toBeTruthy();
+    });
+
+    it("should not have some custom fields resource types.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesV5CollectionDto());
+      expect(resourceTypes.hasSomeCustomFieldsResourceTypes(RESOURCE_TYPE_VERSION_4)).toBeFalsy();
+    });
+
+    it("should not have some custom fields resource types.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
+      expect(resourceTypes.hasSomeCustomFieldsResourceTypes(RESOURCE_TYPE_VERSION_5)).toBeFalsy();
+    });
+  });
+
   describe("::hasSomeNoteResourceTypes", () => {
     it("should have some note resource types.", () => {
       expect.assertions(1);

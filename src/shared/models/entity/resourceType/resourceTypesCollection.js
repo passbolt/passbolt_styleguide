@@ -167,6 +167,15 @@ class ResourceTypesCollection extends EntityV2Collection {
   }
 
   /**
+   * Has some custom fields resource types
+   * @param {string} [version] The version @todo adapt when v5 will be the default
+   * @returns {boolean}
+   */
+  hasSomeCustomFieldsResourceTypes(version = RESOURCE_TYPE_VERSION_4) {
+    return this.items.some(resourceType => resourceType.hasCustomFields() && resourceType.version === version);
+  }
+
+  /**
    * Has some note resource types
    * @param {string} [version] The version @todo adapt when v5 will be the default
    * @returns {boolean}
