@@ -19,6 +19,7 @@ import {
   resourceTypePasswordDescriptionTotpDto,
   resourceTypePasswordStringDto,
   resourceTypeTotpDto,
+  resourceTypeV5CustomFieldsDto,
   resourceTypeV5DefaultDto,
   resourceTypeV5DefaultTotpDto,
   resourceTypeV5PasswordStringDto,
@@ -229,6 +230,17 @@ describe("ResourceTypeEntity", () => {
       expect(resourceTypeEntity.definition.secret).toBeTruthy();
       expect(resourceTypeEntity.definition.secret).toStrictEqual(expectedSecretDefinition);
     });
+    it("should set the right secret definition for: v5 custom fields", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "v5-custom-fields"});
+      const expectedSecretDefinition = resourceTypeV5CustomFieldsDto().definition.secret;
+
+      const resourceTypeEntity = new ResourceTypeEntity(dto);
+
+      expect(resourceTypeEntity.definition.secret).toBeTruthy();
+      expect(resourceTypeEntity.definition.secret).toStrictEqual(expectedSecretDefinition);
+    });
   });
 
   describe("::getters", () => {
@@ -318,6 +330,15 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.hasTotp()).toBeTruthy();
     });
+
+    it("v5 custom fields should not have totp", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5CustomFieldsDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasTotp()).toBeFalsy();
+    });
   });
 
   describe("::hasPassword", () => {
@@ -388,6 +409,14 @@ describe("ResourceTypeEntity", () => {
       expect.assertions(1);
 
       const dto = resourceTypeV5TotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasPassword()).toBeFalsy();
+    });
+    it("v5 custom fields should not have password", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5CustomFieldsDto();
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.hasPassword()).toBeFalsy();
@@ -466,6 +495,15 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.isStandaloneTotp()).toBeTruthy();
     });
+
+    it("v5 custom fields should not be standalone totp", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5CustomFieldsDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneTotp()).toBeFalsy();
+    });
   });
 
   describe("::hasSecretDescription", () => {
@@ -540,6 +578,14 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.hasSecretDescription()).toBeFalsy();
     });
+    it("v5 custom fields should not have secret description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5CustomFieldsDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasSecretDescription()).toBeFalsy();
+    });
   });
 
   describe("::hasMetadataDescription", () => {
@@ -610,6 +656,14 @@ describe("ResourceTypeEntity", () => {
       expect.assertions(1);
 
       const dto = resourceTypeV5TotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasMetadataDescription()).toBeTruthy();
+    });
+    it("v5 custom fields should have metadata description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5CustomFieldsDto();
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.hasMetadataDescription()).toBeTruthy();
@@ -696,6 +750,15 @@ describe("ResourceTypeEntity", () => {
       expect(entity.isV5()).toBeTruthy();
       expect(entity.isV4()).toBeFalsy();
     });
+    it("v5 custom fields should be v5 version", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypeV5CustomFieldsDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isV5()).toBeTruthy();
+      expect(entity.isV4()).toBeFalsy();
+    });
   });
 
   describe("::isPasswordString", () => {
@@ -766,6 +829,15 @@ describe("ResourceTypeEntity", () => {
       expect.assertions(1);
 
       const dto = resourceTypeV5TotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isPasswordString()).toBeFalsy();
+    });
+
+    it("v5 custom field should not be a password string", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5CustomFieldsDto();
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.isPasswordString()).toBeFalsy();

@@ -168,7 +168,7 @@ describe("ResourceTypesCollection", () => {
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
       resourceTypes.filterByResourceTypeVersion("v5");
 
-      expect(resourceTypes).toHaveLength(4);
+      expect(resourceTypes).toHaveLength(5);
 
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBeFalsy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBeFalsy();
@@ -592,7 +592,7 @@ describe("ResourceTypesCollection", () => {
       const start = performance.now();
       const collection = new ResourceTypesCollection(dtos);
       const time = performance.now() - start;
-      expect(collection).toHaveLength(8);
+      expect(collection).toHaveLength(9);
       expect(time).toBeLessThan(5_000);
     });
   });
