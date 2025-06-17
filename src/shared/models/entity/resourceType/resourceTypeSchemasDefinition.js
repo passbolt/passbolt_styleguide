@@ -235,11 +235,10 @@ const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
                 },
                 metadata_value: {
                   anyOf: [
-                    {type: "string"},
+                    {type: "string", maxLength: 5000},
                     {type: "number"},
                     {type: "boolean"}
                   ],
-                  maxLength: 5000,
                   nullable: true
                 },
               }
@@ -283,11 +282,10 @@ const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
                 },
                 secret_value: {
                   anyOf: [
-                    {type: "string"},
+                    {type: "string", maxLength: 5000},
                     {type: "number"},
                     {type: "boolean"}
                   ],
-                  maxLength: 5000,
                   nullable: true
                 }
               }
