@@ -227,4 +227,24 @@ describe("CustomFieldEntity", () => {
       expect(() => new CustomFieldEntity(dto)).toThrow();
     });
   });
+
+  describe("::getters", () => {
+    it("::value (from secret_value) ", () => {
+      expect.assertions(1);
+      const dto = defaultCustomField();
+      const entity = new CustomFieldEntity(dto);
+      expect(entity.value).toStrictEqual(dto.secret_value);
+    });
+
+    it("::value (from metadata_value) ", () => {
+      expect.assertions(1);
+      const dto = defaultCustomField({
+        metadata_value: 'Value',
+      });
+      delete dto.secret_value;
+
+      const entity = new CustomFieldEntity(dto);
+      expect(entity.value).toStrictEqual(dto.metadata_value);
+    });
+  });
 });

@@ -152,6 +152,14 @@ class CustomFieldEntity extends EntityV2 {
       throw validataionError;
     }
   }
+
+  /**
+   * Returns the value of the custom field.
+   * @returns {string|number|boolean}
+   */
+  get value() {
+    return this._props.secret_value || this._props.metadata_value;
+  }
 }
 
 export default CustomFieldEntity;
