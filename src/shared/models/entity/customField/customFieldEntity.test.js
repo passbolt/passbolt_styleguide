@@ -14,7 +14,9 @@
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import CustomFieldEntity from "./customFieldEntity";
-import {defaultCustomField} from "./customFieldEntity.test.data";
+import {customFieldWithAllInMetadata, customFieldWithAllInSecret, defaultCustomField, emptyCustomFieldDto} from "./customFieldEntity.test.data";
+import {isUUID} from "validator";
+import {v4 as uuidv4} from "uuid";
 
 describe("CustomFieldEntity", () => {
   describe("::getSchema", () => {
@@ -229,6 +231,24 @@ describe("CustomFieldEntity", () => {
   });
 
   describe("::getters", () => {
+    it("::key (from secret_key) ", () => {
+      expect.assertions(1);
+
+      const dto = customFieldWithAllInSecret();
+      const entity = new CustomFieldEntity(dto);
+
+      expect(entity.key).toStrictEqual(dto.secret_key);
+    });
+
+    it("::key (from metadata_key) ", () => {
+      expect.assertions(1);
+
+      const dto = customFieldWithAllInMetadata();
+      const entity = new CustomFieldEntity(dto);
+
+      expect(entity.key).toStrictEqual(dto.metadata_key);
+    });
+
     it("::value (from secret_value) ", () => {
       expect.assertions(1);
       const dto = defaultCustomField();
@@ -245,6 +265,103 @@ describe("CustomFieldEntity", () => {
 
       const entity = new CustomFieldEntity(dto);
       expect(entity.value).toStrictEqual(dto.metadata_value);
+    });
+  });
+
+  describe("::areFieldsDifferent", () => {
+    it("returns false if all props are similar", () => {
+      expect.assertions(1);
+      const dto = defaultCustomField();
+      const entity = new CustomFieldEntity(dto);
+      expect(CustomFieldEntity.areFieldsDifferent(entity, entity)).toStrictEqual(false);
+    });
+
+    it("returns true if ids are different", () => {
+      expect.assertions(1);
+      const dtoA = defaultCustomField();
+      const dtoB = defaultCustomField();
+      const entityA = new CustomFieldEntity(dtoA);
+      const entityB = new CustomFieldEntity(dtoB);
+      expect(CustomFieldEntity.areFieldsDifferent(entityA, entityB)).toStrictEqual(true);
+    });
+
+    it("returns true if id are the same but value is transferred from secret to metadata", () => {
+      expect.assertions(2);
+      const dtoA = defaultCustomField();
+      const dtoB = defaultCustomField({
+        id: dtoA.id,
+        metadata_key: dtoA.metadata_key,
+        metadata_value: dtoA.secret_value
+      });
+      delete dtoB.secret_value;
+      const entityA = new CustomFieldEntity(dtoA);
+      const entityB = new CustomFieldEntity(dtoB);
+
+      expect(CustomFieldEntity.areFieldsDifferent(entityA, entityB)).toStrictEqual(true);
+      expect(entityA.value).toStrictEqual(entityB.value);
+    });
+
+    it("should throw an error if the types or not the expected ones", () => {
+      expect.assertions(2);
+      const dto = defaultCustomField();
+      const entity = new CustomFieldEntity(dto);
+
+      expect(() => CustomFieldEntity.areFieldsDifferent(entity, null)).toThrowError();
+      expect(() => CustomFieldEntity.areFieldsDifferent(null, entity)).toThrowError();
+    });
+  });
+
+  describe("::createFromDefault", () => {
+    it("returns a CustomFieldEntity with default data set when no parameter is given", () => {
+      expect.assertions(7);
+      const entity = CustomFieldEntity.createFromDefault();
+      expect(entity).toBeInstanceOf(CustomFieldEntity);
+      expect(isUUID(entity._props.id)).toStrictEqual(true);
+      expect(entity._props.type).toStrictEqual("text");
+      expect(entity._props.metadata_key).toStrictEqual("");
+      expect(entity._props.secret_key).toBeUndefined();
+      expect(entity._props.metadata_value).toBeUndefined();
+      expect(entity._props.secret_value).toStrictEqual("");
+    });
+
+    it("returns a CustomFieldEntity with data set from the given parameters", () => {
+      expect.assertions(7);
+      const dto = {
+        id: uuidv4(),
+        type: "number",
+        metadata_key: null,
+        secret_key: "Secret key",
+        metadata_value: null,
+        secret_value: 42,
+      };
+      const entity = CustomFieldEntity.createFromDefault(dto);
+      expect(entity).toBeInstanceOf(CustomFieldEntity);
+      expect(entity._props.id).toStrictEqual(dto.id);
+      expect(entity._props.type).toStrictEqual(dto.type);
+      expect(entity._props.metadata_key).toBeNull();
+      expect(entity._props.secret_key).toStrictEqual(dto.secret_key);
+      expect(entity._props.metadata_key).toBeNull();
+      expect(entity._props.secret_value).toStrictEqual(dto.secret_value);
+    });
+  });
+
+  describe("::isEmpty", () => {
+    it("should return true if both the key and the value is not set (event if ID is set)", () => {
+      expect.assertions(1);
+
+      const dto = emptyCustomFieldDto();
+      const entity = new CustomFieldEntity(dto);
+
+      expect(entity.isEmpty()).toStrictEqual(true);
+    });
+
+    it("should return false if both the key and the value is not set (event if ID is set)", () => {
+      expect.assertions(1);
+
+      const dto = defaultCustomField();
+      const entity = new CustomFieldEntity(dto);
+
+      expect(entity.isEmpty()).toStrictEqual(false);
     });
   });
 });

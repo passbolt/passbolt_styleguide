@@ -20,3 +20,27 @@ export const defaultCustomField = (data = {}) => ({
   secret_value: "secret-0",
   ...data
 });
+
+export const customFieldWithAllInMetadata = (data = {}) => ({
+  id: uuidv4(),
+  type: "text",
+  metadata_key: "key-0",
+  metadata_value: "secret-0",
+  ...data
+});
+
+export const customFieldWithAllInSecret = (data = {}) => ({
+  id: uuidv4(),
+  type: "text",
+  secret_key: "key-0",
+  secret_value: "secret-0",
+  ...data
+});
+
+export const emptyCustomFieldDto = (data = {}) => ({
+  id: uuidv4(),
+  type: "text",
+  secret_key: "",
+  secret_value: "",
+  ...data
+});

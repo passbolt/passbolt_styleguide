@@ -17,7 +17,7 @@ import CustomFieldEntity from "./customFieldEntity";
 
 const CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE = 50_000;
 
-class CutsomFieldsCollection extends EntityV2Collection {
+export default class CustomFieldsCollection extends EntityV2Collection {
   /**
    * @inheritDoc
    */
@@ -75,7 +75,7 @@ class CutsomFieldsCollection extends EntityV2Collection {
    * @private
    */
   assertContentDoNotExceedMaxSize(item, options) {
-    if (options.contentInformation.currentSize + item.value.length <= CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE) {
+    if (options.contentInformation.currentSize + item.value.toString().length <= CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE) {
       return;
     }
 
@@ -93,7 +93,7 @@ class CutsomFieldsCollection extends EntityV2Collection {
     const contentInformation = {currentSize: 0};
     const onItemPushed = item => {
       uniqueIdsSetCache.add(item._props.id);
-      contentInformation.currentSize += item.value.length;
+      contentInformation.currentSize += item.value.toString().length;
     };
 
     options = {
@@ -104,6 +104,13 @@ class CutsomFieldsCollection extends EntityV2Collection {
 
     super.pushMany(data, entityOptions, options);
   }
-}
 
-export default CutsomFieldsCollection;
+  /**
+   * Returns true if the collection is considered empty.
+   * Even if an element is present in the collection, as long as this element is considered empty, the collection will be.
+   */
+  isEmpty() {
+    return this.length === 0
+      || !(this.items.find(i => !i.isEmpty()));
+  }
+}

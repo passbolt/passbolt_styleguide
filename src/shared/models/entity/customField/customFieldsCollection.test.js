@@ -12,13 +12,14 @@
  * @since         5.3.0
  */
 import EntitySchema from "../abstract/entitySchema";
-import CutsomFieldsCollection from "./customFieldsCollection";
+import {defaultCustomField, emptyCustomFieldDto} from "./customFieldEntity.test.data";
+import CustomFieldsCollection from "./customFieldsCollection";
 import {customFieldsCollectionDtos, defaultCustomFieldsCollection} from "./customFieldsCollection.test.data";
 
 describe("CustomFieldsCollection", () => {
   describe("::getSchema", () => {
     it("schema must validate", () => {
-      EntitySchema.validateSchema(CutsomFieldsCollection.name, CutsomFieldsCollection.getSchema());
+      EntitySchema.validateSchema(CustomFieldsCollection.name, CustomFieldsCollection.getSchema());
     });
   });
 
@@ -26,7 +27,7 @@ describe("CustomFieldsCollection", () => {
     it("works with empty data", () => {
       expect.assertions(1);
 
-      const collection = new CutsomFieldsCollection([]);
+      const collection = new CustomFieldsCollection([]);
 
       expect(collection).toHaveLength(0);
     });
@@ -35,7 +36,7 @@ describe("CustomFieldsCollection", () => {
       expect.assertions(7);
 
       const dtos = defaultCustomFieldsCollection();
-      const collection = new CutsomFieldsCollection(dtos);
+      const collection = new CustomFieldsCollection(dtos);
 
       expect(collection).toHaveLength(2);
       expect(collection.items[0]._props.id).toEqual(dtos[0].id);
@@ -49,7 +50,7 @@ describe("CustomFieldsCollection", () => {
     it("should throw if the collection schema does not validate", () => {
       expect.assertions(1);
 
-      expect(() => new CutsomFieldsCollection({}))
+      expect(() => new CustomFieldsCollection({}))
         .toThrowEntityValidationError("items");
     });
 
@@ -59,7 +60,7 @@ describe("CustomFieldsCollection", () => {
       const dtos = defaultCustomFieldsCollection();
       delete dtos[0].id;
 
-      const collection = new CutsomFieldsCollection(dtos, {ignoreInvalidEntity: true});
+      const collection = new CustomFieldsCollection(dtos, {ignoreInvalidEntity: true});
 
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0]._props.id).toEqual(dtos[1].id);
@@ -68,34 +69,138 @@ describe("CustomFieldsCollection", () => {
     it("should throw if one there are too many elements in the collection", () => {
       expect.assertions(1);
 
-      const maxItems = CutsomFieldsCollection.getSchema().maxItems;
+      const maxItems = CustomFieldsCollection.getSchema().maxItems;
       const collectionDto = customFieldsCollectionDtos(maxItems + 1);
 
-      expect(() => new CutsomFieldsCollection(collectionDto))
+      expect(() => new CustomFieldsCollection(collectionDto))
         .toThrowCollectionValidationError("maxItems");
     });
 
-    it("should throw if the content total size exceed the maximum allowed: with many elements", () => {
+    it("should not throw if the content total size reach the exact maximum allowed", () => {
+      expect.assertions(1);
+
+      const data = {secret_value: "a".repeat(5_000)};
+      const collectionDto = customFieldsCollectionDtos(10, data);
+
+      expect(() => new CustomFieldsCollection(collectionDto)).not.toThrowError();
+    });
+
+    it("should throw if the content total size exceed the maximum allowed: with strings", () => {
       expect.assertions(1);
 
       const data = {secret_value: "a".repeat(5_000)};
       const collectionDto = customFieldsCollectionDtos(11, data);
 
-      expect(() => new CutsomFieldsCollection(collectionDto))
+      expect(() => new CustomFieldsCollection(collectionDto))
+        .toThrowCollectionValidationError("10.items.maxContentSize");
+    });
+
+    it("should throw if the content total size exceed the maximum allowed: with a number", () => {
+      expect.assertions(1);
+
+      const data = {secret_value: "a".repeat(5_000)};
+      const collectionDto = customFieldsCollectionDtos(10, data);
+      const extraCustomField = defaultCustomField({
+        type: "number",
+        secret_value: 42
+      });
+      collectionDto.push(extraCustomField);
+
+      expect(() => new CustomFieldsCollection(collectionDto))
+        .toThrowCollectionValidationError("10.items.maxContentSize");
+    });
+
+    it("should throw if the content total size exceed the maximum allowed: with a boolean (true)", () => {
+      expect.assertions(1);
+
+      const data = {secret_value: "a".repeat(5_000)};
+      const collectionDto = customFieldsCollectionDtos(10, data);
+      const extraCustomField = defaultCustomField({
+        type: "boolean",
+        secret_value: true,
+      });
+      collectionDto.push(extraCustomField);
+
+      expect(() => new CustomFieldsCollection(collectionDto))
+        .toThrowCollectionValidationError("10.items.maxContentSize");
+    });
+
+    it("should throw if the content total size exceed the maximum allowed: with a boolean (false)", () => {
+      expect.assertions(1);
+
+      const data = {secret_value: "a".repeat(5_000)};
+      const collectionDto = customFieldsCollectionDtos(10, data);
+      const extraCustomField = defaultCustomField({
+        type: "boolean",
+        secret_value: false
+      });
+      collectionDto.push(extraCustomField);
+
+      expect(() => new CustomFieldsCollection(collectionDto))
         .toThrowCollectionValidationError("10.items.maxContentSize");
     });
   });
 
   describe("::pushMany", () => {
     it("[performance] should ensure performance adding large dataset remains effective.", async() => {
-      const count = CutsomFieldsCollection.getSchema().maxItems;
+      const count = CustomFieldsCollection.getSchema().maxItems;
       const dtos = customFieldsCollectionDtos(count);
 
       const start = performance.now();
-      const collection = new CutsomFieldsCollection(dtos);
+      const collection = new CustomFieldsCollection(dtos);
       const time = performance.now() - start;
       expect(collection).toHaveLength(count);
       expect(time).toBeLessThan(5);
+    });
+  });
+
+  describe("::isEmpty", () => {
+    it("should return true if the collection is empty", async() => {
+      expect.assertions(1);
+
+      const collection = new CustomFieldsCollection([]);
+
+      expect(collection.isEmpty()).toStrictEqual(true);
+    });
+
+    it("should return true if the collection is full of empty key/value", async() => {
+      expect.assertions(1);
+
+      const collection = new CustomFieldsCollection([
+        emptyCustomFieldDto(),
+        emptyCustomFieldDto(),
+        emptyCustomFieldDto(),
+        emptyCustomFieldDto(),
+        emptyCustomFieldDto(),
+        emptyCustomFieldDto(),
+      ]);
+
+      expect(collection.isEmpty()).toStrictEqual(true);
+    });
+
+    it("should return false if at least 1 element in the collection is not empty", async() => {
+      expect.assertions(1);
+
+      const collection = new CustomFieldsCollection([
+        emptyCustomFieldDto(),
+        emptyCustomFieldDto(),
+        emptyCustomFieldDto(),
+        emptyCustomFieldDto(),
+        emptyCustomFieldDto(),
+        defaultCustomField(),
+      ]);
+
+      expect(collection.isEmpty()).toStrictEqual(false);
+    });
+
+    it("should return false if all element are not empty", async() => {
+      expect.assertions(1);
+
+      const collection = new CustomFieldsCollection([
+        defaultCustomField(),
+      ]);
+
+      expect(collection.isEmpty()).toStrictEqual(false);
     });
   });
 });

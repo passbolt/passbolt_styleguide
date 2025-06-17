@@ -32,11 +32,13 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
-  V4_TO_V5_RESOURCE_TYPE_MAPPING
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
+  V4_TO_V5_RESOURCE_TYPE_MAPPING,
 } from "../resourceType/resourceTypeSchemasDefinition";
 import assertString from "validator/es/lib/util/assertString";
 import {ResourceEditCreateFormEnumerationTypes} from "../../resource/ResourceEditCreateFormEnumerationTypes";
 import EntityValidationError from "../abstract/entityValidationError";
+import SecretDataV5StandaloneCustomFieldsCollection from "../secretData/secretDataV5StandaloneCustomFieldsCollection";
 
 class ResourceFormEntity extends EntityV2 {
   /**
@@ -98,7 +100,8 @@ class ResourceFormEntity extends EntityV2 {
           SecretDataV4DefaultEntity.getSchema(),
           SecretDataV4DefaultTotpEntity.getSchema(),
           SecretDataV4StandaloneTotpEntity.getSchema(),
-          SecretDataV4PasswordStringEntity.getSchema()
+          SecretDataV4PasswordStringEntity.getSchema(),
+          SecretDataV5StandaloneCustomFieldsCollection.getSchema(),
         ]},
       }
     };
@@ -179,6 +182,8 @@ class ResourceFormEntity extends EntityV2 {
         return SecretDataV4StandaloneTotpEntity;
       case RESOURCE_TYPE_PASSWORD_STRING_SLUG:
         return SecretDataV4PasswordStringEntity;
+      case RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG:
+        return SecretDataV5StandaloneCustomFieldsCollection;
       default:
         return null;
     }
@@ -346,6 +351,8 @@ class ResourceFormEntity extends EntityV2 {
         return resourceType.hasTotp();
       case ResourceEditCreateFormEnumerationTypes.NOTE:
         return resourceType.hasSecretDescription();
+      case ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS:
+        return resourceType.hasCustomFields();
       default:
         return false;
     }
@@ -523,11 +530,14 @@ class ResourceFormEntity extends EntityV2 {
    * Remove empty secret
    * @param {object} [options] Options
    *
-   * Note: This function remove only empty Totp on:
-   * V4:
-   *  - password, description and Totp
-   * V5:
-   *  - DefaultTotp
+   * This function removes:
+   *
+   * - empty Totp on:
+   *    - V4: password, description and Totp
+   *    - V5: DefaultTotp
+   *
+   * - empty custom fields on:
+   *    - V5: Default and defaultTotp
    *
    * Not supported:
    *   - Other resource type
@@ -537,6 +547,13 @@ class ResourceFormEntity extends EntityV2 {
     if (this.secret instanceof SecretDataV4DefaultTotpEntity || this.secret instanceof SecretDataV5DefaultTotpEntity) {
       if (!this.secret.totp.hasSecretKey) {
         this.deleteSecret(ResourceEditCreateFormEnumerationTypes.TOTP, options);
+      }
+    }
+
+    //If custom_fields has no value then remove it
+    if (this.secret instanceof SecretDataV5DefaultEntity || this.secret instanceof SecretDataV5DefaultTotpEntity) {
+      if (this.secret.customFields && !this.secret.customFields.isEmpty()) {
+        this.deleteSecret(ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS, options);
       }
     }
   }

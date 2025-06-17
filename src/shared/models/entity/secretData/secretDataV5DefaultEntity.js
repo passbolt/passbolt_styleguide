@@ -14,6 +14,7 @@
 
 import SecretDataEntity, {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
 import assertString from "validator/es/lib/util/assertString";
+import CustomFieldsCollection from "../customField/customFieldsCollection";
 
 class SecretDataV5DefaultEntity extends SecretDataEntity {
   /**
@@ -40,6 +41,15 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
           "nullable": true,
         },
       }
+    };
+  }
+
+  /**
+   * @inheritDoc
+   */
+  static get associations() {
+    return {
+      custom_fields: CustomFieldsCollection,
     };
   }
 
@@ -113,6 +123,14 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
    */
   get description() {
     return this._props.description;
+  }
+
+  /**
+   * Get the associated custom fields collection
+   * @returns {CustomFieldsCollection | null}
+   */
+  get customFields() {
+    return this._customFields || null;
   }
 }
 

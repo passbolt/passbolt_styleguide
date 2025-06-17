@@ -19,6 +19,7 @@ import {defaultSecretDataV5DefaultTotpEntityDto, minimalSecretDataV5DefaultTotpE
 import TotpEntity from "../totp/totpEntity";
 import {defaultTotpDto} from "../totp/totpDto.test.data";
 import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import CustomFieldsCollection from "../customField/customFieldsCollection";
 
 describe("SecretDataV5DefaultTotpEntity", () => {
   describe("::getSchema", () => {
@@ -62,9 +63,9 @@ describe("SecretDataV5DefaultTotpEntity", () => {
   });
 
   describe("::associations", () => {
-    it("associations should have totp in associations", () => {
+    it("associations should have totp and custom_fields", () => {
       expect.assertions(1);
-      expect(SecretDataV5DefaultTotpEntity.associations).toStrictEqual({totp: TotpEntity});
+      expect(SecretDataV5DefaultTotpEntity.associations).toStrictEqual({totp: TotpEntity, custom_fields: CustomFieldsCollection});
     });
   });
 

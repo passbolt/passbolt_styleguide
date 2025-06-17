@@ -17,6 +17,7 @@ import * as assertEntityProperty from "../../../../../test/assert/assertEntityPr
 import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
 import {defaultSecretDataV5DefaultDto, minimalDefaultSecretDataV5DefaultDto} from "./secretDataV5DefaultEntity.test.data";
 import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import CustomFieldsCollection from "../customField/customFieldsCollection";
 
 describe("SecretDataV5DefaultEntity", () => {
   describe("::getSchema", () => {
@@ -61,6 +62,13 @@ describe("SecretDataV5DefaultEntity", () => {
       expect(entity.objectType).toStrictEqual(dto.object_type);
       expect(entity.password).toStrictEqual(dto.password);
       expect(entity.description).toStrictEqual(dto.description);
+    });
+  });
+
+  describe("::associations", () => {
+    it("associations should have custom_fields", () => {
+      expect.assertions(1);
+      expect(SecretDataV5DefaultEntity.associations).toStrictEqual({custom_fields: CustomFieldsCollection});
     });
   });
 

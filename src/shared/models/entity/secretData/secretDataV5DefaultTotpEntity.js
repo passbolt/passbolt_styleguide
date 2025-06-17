@@ -16,6 +16,7 @@ import TotpEntity from "../totp/totpEntity";
 import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
 import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
 import assertString from "validator/es/lib/util/assertString";
+import CustomFieldsCollection from "../customField/customFieldsCollection";
 
 class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
   /**
@@ -42,7 +43,8 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
    */
   static get associations() {
     return {
-      totp: TotpEntity
+      totp: TotpEntity,
+      custom_fields: CustomFieldsCollection,
     };
   }
 
@@ -122,6 +124,14 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
    */
   get totp() {
     return this._totp;
+  }
+
+  /**
+   * Get the associated custom fields collection
+   * @returns {CustomFieldsCollection | null}
+   */
+  get customFields() {
+    return this._customFields || null;
   }
 }
 
