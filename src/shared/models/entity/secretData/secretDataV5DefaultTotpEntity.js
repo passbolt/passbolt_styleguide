@@ -34,6 +34,7 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
       "properties": {
         ...SecretDataV5DefaultEntity.getSchema().properties,
         "totp": TotpEntity.getSchema(),
+        "custom_fields": CustomFieldsCollection.getSchema(),
       }
     };
   }
@@ -68,7 +69,7 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
     const defaultData = {
       object_type: SECRET_DATA_OBJECT_TYPE,
       password: "",
-      totp: TotpEntity.createFromDefault({}, {validate: false}).toDto()
+      totp: TotpEntity.createFromDefault({}, {validate: false}).toDto(),
     };
 
     return new SecretDataV5DefaultTotpEntity({...defaultData, ...data}, options);
@@ -88,6 +89,8 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
         return "";
       case "totp":
         return TotpEntity.createFromDefault({}, {validate: false}).toDto();
+      case "custom_fields":
+        return CustomFieldsCollection.createFromDefault([], {validate: false}).toDto();
       default:
         return;
     }
@@ -99,9 +102,30 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
    * @returns {boolean}
    */
   areSecretsDifferent(secretDto) {
+    if (this.password !== secretDto.password) {
+      return true;
+    }
+
+    if (this.description !== secretDto.description) {
+      return true;
+    }
+
     const totp = this.totp.toDto();
     const isTotpDifferent = Object.keys(totp).some(key => totp[key] !== secretDto.totp?.[key]);
-    return this.password !== secretDto.password || isTotpDifferent || this.description !== secretDto.description;
+    if (isTotpDifferent) {
+      return true;
+    }
+
+    const isCustomFieldDefined = typeof(this._customFields) !== "undefined" && this._customFields !== null;
+    const isOtherCustomFieldDefined = typeof(secretDto.custom_fields) !== "undefined" && secretDto.custom_fields !== null;
+    if (!isCustomFieldDefined && !isOtherCustomFieldDefined) {
+      return false;
+    }
+
+    const otherCollection = new CustomFieldsCollection(secretDto.custom_fields, {validate: false});
+    const isCustomFieldsDifferent = CustomFieldsCollection.areCollectionsDifferent(this._customFields, otherCollection);
+
+    return isCustomFieldsDifferent;
   }
 
   /**
@@ -113,6 +137,10 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
 
     if (this.totp) {
       result.totp = this.totp.toDto();
+    }
+
+    if (this.customFields) {
+      result.custom_fields = this.customFields.toDto();
     }
 
     return result;

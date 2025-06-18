@@ -40,6 +40,7 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
           "maxLength": 10000,
           "nullable": true,
         },
+        "custom_fields": CustomFieldsCollection.getSchema(),
       }
     };
   }
@@ -101,7 +102,20 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
    * @returns {boolean}
    */
   areSecretsDifferent(secretDto) {
-    return this.password !== secretDto.password || this.description !== secretDto.description;
+    if (this.password !== secretDto.password || this.description !== secretDto.description) {
+      return true;
+    }
+
+    const isCustomFieldDefined = typeof(this._customFields) !== "undefined" && this._customFields !== null;
+    const isOtherCustomFieldDefined = typeof(secretDto.custom_fields) !== "undefined" && secretDto.custom_fields !== null;
+    if (!isCustomFieldDefined && !isOtherCustomFieldDefined) {
+      return false;
+    }
+
+    const otherCollection = new CustomFieldsCollection(secretDto.custom_fields, {validate: false});
+    const isCustomFieldsDifferent = CustomFieldsCollection.areCollectionsDifferent(this._customFields, otherCollection);
+
+    return isCustomFieldsDifferent;
   }
 
   /*

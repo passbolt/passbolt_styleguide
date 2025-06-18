@@ -113,4 +113,31 @@ export default class CustomFieldsCollection extends EntityV2Collection {
     return this.length === 0
       || !(this.items.find(i => !i.isEmpty()));
   }
+
+  /**
+   * Returns true if both collection are different
+   * @param {CustomFieldsCollection} collectionA
+   * @param {CustomFieldsCollection} collectionB
+   * @returns {boolean}
+   * @throws {TypeError} if any of the parameters are not of type CustomefieldsCollection
+   */
+  static areCollectionsDifferent(collectionA, collectionB) {
+    if (!(collectionA instanceof CustomFieldsCollection) || !(collectionB instanceof CustomFieldsCollection)) {
+      throw new TypeError("Both paramerters must be of type CustomFieldsCollection");
+    }
+
+    const length = collectionA.length;
+    if (length !== collectionB.length) {
+      return true;
+    }
+
+    for (let i = 0; i < length; i++) {
+      const areFieldsDifferent = CustomFieldEntity.areFieldsDifferent(collectionA.items[i], collectionB.items[i]);
+      if (areFieldsDifferent) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }

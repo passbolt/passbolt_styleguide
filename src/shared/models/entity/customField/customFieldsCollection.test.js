@@ -13,8 +13,10 @@
  */
 import EntitySchema from "../abstract/entitySchema";
 import {defaultCustomField, emptyCustomFieldDto} from "./customFieldEntity.test.data";
+import CustomFieldEntity from "./customFieldEntity";
 import CustomFieldsCollection from "./customFieldsCollection";
 import {customFieldsCollectionDtos, defaultCustomFieldsCollection} from "./customFieldsCollection.test.data";
+import {v4 as uuidv4} from "uuid";
 
 describe("CustomFieldsCollection", () => {
   describe("::getSchema", () => {
@@ -201,6 +203,48 @@ describe("CustomFieldsCollection", () => {
       ]);
 
       expect(collection.isEmpty()).toStrictEqual(false);
+    });
+  });
+
+  describe("::areCollectionsDifferent", () => {
+    it("should throw an error if the parameters are not of the right type.", async() => {
+      expect.assertions(2);
+
+      const collection = new CustomFieldsCollection(defaultCustomFieldsCollection());
+
+      expect(() => CustomFieldsCollection.areCollectionsDifferent(null, collection)).toThrowError();
+      expect(() => CustomFieldsCollection.areCollectionsDifferent(collection, null)).toThrowError();
+    });
+
+    it("should return false if both collection are identical.", async() => {
+      expect.assertions(1);
+
+      const collection = new CustomFieldsCollection(defaultCustomFieldsCollection());
+      expect(CustomFieldsCollection.areCollectionsDifferent(collection, collection)).toStrictEqual(false);
+    });
+
+    it("should return true if collections have different size.", async() => {
+      expect.assertions(1);
+
+      const dtoA = defaultCustomFieldsCollection();
+      const dtoB = [...dtoA];
+      dtoB.push(new CustomFieldEntity(defaultCustomField()));
+
+      const collectionA = new CustomFieldsCollection(dtoA);
+      const collectionB = new CustomFieldsCollection(dtoB);
+      expect(CustomFieldsCollection.areCollectionsDifferent(collectionA, collectionB)).toStrictEqual(true);
+    });
+
+    it("should return true if collections have different items.", async() => {
+      expect.assertions(1);
+
+      const dtoA = defaultCustomFieldsCollection();
+      const dtoB = [...dtoA];
+      dtoB[1] = {...dtoA[1], id: uuidv4()};
+
+      const collectionA = new CustomFieldsCollection(dtoA);
+      const collectionB = new CustomFieldsCollection(dtoB);
+      expect(CustomFieldsCollection.areCollectionsDifferent(collectionA, collectionB)).toStrictEqual(true);
     });
   });
 });
