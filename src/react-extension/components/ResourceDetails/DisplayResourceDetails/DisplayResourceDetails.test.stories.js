@@ -27,6 +27,7 @@ import {
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {RbacContext} from "../../../../shared/context/Rbac/RbacContext";
 import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
+import {resourceWithCustomFields} from "./DisplayResourceDetailsCustomFields.test.data";
 
 /**
  * DisplayResourceDetails stories
@@ -97,10 +98,23 @@ export const StandaloneTotp = {
   }
 };
 
-export const WithUnencryptedDescrition = {
+export const WithUnencryptedDescription = {
   args: {
     storage: storage,
     port: port,
     ...propsWithUnencryptedDescriptionResource(),
+  }
+};
+
+
+export const WithCustomFields = {
+  args: {
+    ...defaultProps({
+      resourceWorkspaceContext: defaultResourceWorkspaceContext({
+        details: {
+          resource: resourceWithCustomFields,
+        }
+      })
+    }),
   }
 };

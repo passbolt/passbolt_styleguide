@@ -15,7 +15,7 @@
 import EntityV2 from "../abstract/entityV2";
 import EntityValidationError from "../abstract/entityValidationError";
 
-const CUSTOM_FIELD_TYPE = {
+export const CUSTOM_FIELD_TYPE = {
   TEXT: "text",
   PASSWORD: "password",
   BOOLEAN: "boolean",
@@ -93,63 +93,63 @@ class CustomFieldEntity extends EntityV2 {
    * @inheritdoc
    */
   validateBuildRules() {
-    let validataionError;
+    let validationError;
 
     if (!this._props.metadata_key && !this._props.secret_key) {
-      validataionError = new EntityValidationError();
-      validataionError.addError("key", "metadata_key-secret_key", "The custom field key should be defined in either the metadata_key or the secret_key");
+      validationError = new EntityValidationError();
+      validationError.addError("key", "metadata_key-secret_key", "The custom field key should be defined in either the metadata_key or the secret_key");
     }
 
     if (this._props.metadata_key && this._props.secret_key) {
-      validataionError = validataionError || new EntityValidationError();
-      validataionError.addError("key", "metadata_key-secret_key", "The custom field key should be defined in only one of either the metadata_key or the secret_key");
+      validationError = validationError || new EntityValidationError();
+      validationError.addError("key", "metadata_key-secret_key", "The custom field key should be defined in only one of either the metadata_key or the secret_key");
     }
 
     if (!this._props.metadata_value && !this._props.secret_value) {
-      validataionError = validataionError || new EntityValidationError();
-      validataionError.addError("value", "metadata_value-secret_value", "The custom field value should be defined in either the metadata_value or the secret_value");
+      validationError = validationError || new EntityValidationError();
+      validationError.addError("value", "metadata_value-secret_value", "The custom field value should be defined in either the metadata_value or the secret_value");
     }
 
     if (this._props.metadata_value && this._props.secret_value) {
-      validataionError = validataionError || new EntityValidationError();
-      validataionError.addError("value", "metadata_value-secret_value", "The custom field value should be defined in only one of either the metadata_value or the secret_value");
+      validationError = validationError || new EntityValidationError();
+      validationError.addError("value", "metadata_value-secret_value", "The custom field value should be defined in only one of either the metadata_value or the secret_value");
     }
 
     if (this._props.secret_key && this._props.metadata_value) {
-      validataionError = validataionError || new EntityValidationError();
-      validataionError.addError("value", "secret_key-metadata_value", "The custom field value should not be set in metadata_value if the ket is defined in the secret_key");
+      validationError = validationError || new EntityValidationError();
+      validationError.addError("value", "secret_key-metadata_value", "The custom field value should not be set in metadata_value if the ket is defined in the secret_key");
     }
 
     const value = this._props.secret_value || this._props.metadata_value;
     if (this._props.type === CUSTOM_FIELD_TYPE.TEXT) {
       if (typeof value !== "string") {
-        validataionError = validataionError || new EntityValidationError();
-        validataionError.addError("value", "value-type", "The type and the value type should match");
+        validationError = validationError || new EntityValidationError();
+        validationError.addError("value", "value-type", "The type and the value type should match");
       } else if (value.length > 5000) {
-        validataionError = validataionError || new EntityValidationError();
-        validataionError.addError("value", "maxLength", `The length of the value should not exceed ${CUSTOM_FIELD_TEXT_MAX_LENGTH} characters`);
+        validationError = validationError || new EntityValidationError();
+        validationError.addError("value", "maxLength", `The length of the value should not exceed ${CUSTOM_FIELD_TEXT_MAX_LENGTH} characters`);
       }
     } else if (this._props.type === CUSTOM_FIELD_TYPE.PASSWORD) {
       if (typeof value !== "string") {
-        validataionError = validataionError || new EntityValidationError();
-        validataionError.addError("value", "value-type", "The type and the value type should match");
+        validationError = validationError || new EntityValidationError();
+        validationError.addError("value", "value-type", "The type and the value type should match");
       } else if (value.length > 4096) {
-        validataionError = validataionError || new EntityValidationError();
-        validataionError.addError("value", "maxLength", `The length of the value should not exceed ${CUSTOM_FIELD_PASSWORD_MAX_LENGTH} characters`);
+        validationError = validationError || new EntityValidationError();
+        validationError.addError("value", "maxLength", `The length of the value should not exceed ${CUSTOM_FIELD_PASSWORD_MAX_LENGTH} characters`);
       }
     } else if (this._props.type === CUSTOM_FIELD_TYPE.URI && typeof value !== "string") {
-      validataionError = validataionError || new EntityValidationError();
-      validataionError.addError("value", "value-type", "The type and the value type should match");
+      validationError = validationError || new EntityValidationError();
+      validationError.addError("value", "value-type", "The type and the value type should match");
     } else if (this._props.type === CUSTOM_FIELD_TYPE.NUMBER && typeof value !== "number") {
-      validataionError = validataionError || new EntityValidationError();
-      validataionError.addError("value", "value-type", "The type and the value type should match");
+      validationError = validationError || new EntityValidationError();
+      validationError.addError("value", "value-type", "The type and the value type should match");
     } else if (this._props.type === CUSTOM_FIELD_TYPE.BOOLEAN && typeof value !== "boolean") {
-      validataionError = validataionError || new EntityValidationError();
-      validataionError.addError("value", "value-type", "The type and the value type should match");
+      validationError = validationError || new EntityValidationError();
+      validationError.addError("value", "value-type", "The type and the value type should match");
     }
 
-    if (validataionError) {
-      throw validataionError;
+    if (validationError) {
+      throw validationError;
     }
   }
 

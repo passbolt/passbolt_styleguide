@@ -43,6 +43,7 @@ import {waitFor} from "@testing-library/react";
 import ResourceMetadataEntity from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity";
 import {SECRET_DATA_OBJECT_TYPE} from "../../../../shared/models/entity/secretData/secretDataEntity";
 import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
+import {resourceWithCustomFields} from "./DisplayResourceDetailsCustomFields.test.data";
 
 jest.mock("./DisplayResourceDetailsInformation", () => () => <></>);
 jest.mock("./DisplayResourceDetailsPassword", () => () => <div className="password"></div>);
@@ -349,5 +350,44 @@ describe("DisplayResourceDetails", () => {
   describe('As LU I can see the activity section', () => {
     it.todo('As LU I can see the activity section');
     it.todo('As LU I cannot see the activity section if denied by RBAC');
+  });
+  describe('As LU I can see the custom fields section', () => {
+    let page;
+
+    beforeEach(() => {
+      const props = defaultProps(
+        {resourceWorkspaceContext: defaultResourceWorkspaceContext({
+          details: {
+            resource: resourceWithCustomFields,
+          }
+        })});
+
+      page = new DisplayResourceDetailsPage(props);
+    });
+    it('As LU I can see the custom field subtitle', async() => {
+      expect.assertions(1);
+
+      expect(page.subtitle).toEqual("Custom fields");
+    });
+    it('As LU I can see the custom field section', async() => {
+      expect.assertions(1);
+
+      expect(page.customFieldTab).toBeDefined();
+    });
+    it('As LU I cannot see the section if resource does not contain custom fields', async() => {
+      expect.assertions(1);
+
+      const props = defaultProps(
+        {resourceWorkspaceContext: defaultResourceWorkspaceContext({
+          details: {
+            resource: resourceWithReadPermissionDto(),
+          }
+        })});
+
+      const page = new DisplayResourceDetailsPage(props);
+      await waitFor(() => {});
+
+      expect(page.customFieldTab).toBeNull();
+    });
   });
 });

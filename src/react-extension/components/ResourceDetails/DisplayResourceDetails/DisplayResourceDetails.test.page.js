@@ -139,6 +139,10 @@ export default class DisplayResourceDetailsPage {
     return this._page.container.querySelectorAll('.sidebar-content .tabs li button')?.[index];
   }
 
+  get customFieldTab() {
+    return this._page.container.querySelector('.sidebar-content .custom-fields');
+  }
+
   /**
    * Returns true if the page object exists in the container
    */

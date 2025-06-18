@@ -48,6 +48,7 @@ import {
 } from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import ResourceFormEntity from "../../../../shared/models/entity/resource/resourceFormEntity";
+import DisplayResourceDetailsCustomFields from "./DisplayResourceDetailsCustomFields";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -106,6 +107,8 @@ class DisplayResourceDetails extends React.Component {
       case "totp":
       case "v5-totp-standalone":
         return this.translate("TOTP");
+      case "v5-custom-fields":
+        return this.translate("Custom fields");
       default:
         return this.translate("Resource");
     }
@@ -259,6 +262,15 @@ class DisplayResourceDetails extends React.Component {
     return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasSecretDescription();
   }
 
+
+  /*
+   * Is resource has custom fields
+   * @return {boolean}
+   */
+  get hasCustomFields() {
+    return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasCustomFields() && this.resource.metadata.customFields?.length > 0;
+  }
+
   /**
    * Should display the upgrade resource section
    * @returns {boolean}
@@ -304,6 +316,9 @@ class DisplayResourceDetails extends React.Component {
         }
         {this.hasSecureNote &&
           <DisplayResourceDetailsNote />
+        }
+        {this.hasCustomFields &&
+          <DisplayResourceDetailsCustomFields />
         }
         {canViewShare &&
           <DisplayResourceDetailsPermission />
