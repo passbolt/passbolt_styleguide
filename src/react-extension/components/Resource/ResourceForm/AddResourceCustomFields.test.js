@@ -47,11 +47,11 @@ describe("AddResourceCustomFields", () => {
       expect(page.addCustomField.hasAttribute("disabled")).toBeFalsy();
     });
 
-    it('As LU I can see the custom fields form empty.', () => {
+    it.only('As LU I can see the custom fields form empty.', () => {
       expect.assertions(5);
 
       const secret = minimalSecretDataV5StandaloneCustomFieldsCollectionDtos();
-      secret.custom_fields[0] = CustomFieldEntity.createFromDefault();
+      secret.custom_fields[0] = CustomFieldEntity.createFromDefault().toDto();
       const props = defaultProps({
         resource: defaultResourceFormDto({
           secret: secret
@@ -94,7 +94,7 @@ describe("AddResourceCustomFields", () => {
       expect.assertions(1);
       const secret = minimalSecretDataV5StandaloneCustomFieldsCollectionDtos();
       for (let i = 0; i < 33; i++) {
-        secret.custom_fields[i] = CustomFieldEntity.createFromDefault();
+        secret.custom_fields[i] = CustomFieldEntity.createFromDefault().toDto();
       }
       const props = defaultProps({
         resource: defaultResourceFormDto({

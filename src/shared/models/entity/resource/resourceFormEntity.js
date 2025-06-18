@@ -455,6 +455,14 @@ class ResourceFormEntity extends EntityV2 {
           validationError
         );
       }
+      // Verify secret custom fields association
+      if (this.secret.customFields) {
+        validationError = this.validateMaxLengthAgainstSchema(
+          this.secret.customFields.toDto(),
+          this.secret.customFields,
+          validationError
+        );
+      }
     }
     // Verify metadata
     if (this.metadata) {

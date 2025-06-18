@@ -20,6 +20,9 @@ import AddSVG from "../../../../img/svg/add.svg";
 import SecureTextarea from "../../../../shared/components/SecureTextarea/SecureTextarea";
 import CustomFieldEntity from "../../../../shared/models/entity/customField/customFieldEntity";
 import Tooltip from "../../Common/Tooltip/Tooltip";
+import {
+  CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE
+} from "../../../../shared/models/entity/customField/customFieldsCollection";
 
 class AddResourceCustomFields extends Component {
   constructor(props) {
@@ -99,7 +102,7 @@ class AddResourceCustomFields extends Component {
 
   /**
    * Display the content surrounded or not with a tooltip.
-   * @param {ReactDOM} content content to display
+   * @param {React.JSX.Element} content content to display
    * @param {boolean} isDisabled if disabled the tooltip is added
    * @returns {ReactDOM}
    */
@@ -107,6 +110,42 @@ class AddResourceCustomFields extends Component {
     return isDisabled
       ? <Tooltip message={<Trans>You have reach the row limit.</Trans>} direction="bottom">{content}</Tooltip>
       : <>{content}</>;
+  }
+
+  /**
+   * Checks if there is a max length warning for a specific property.
+   *
+   * @param {string} propName - The name of the property to check for max length warnings.
+   * @returns {boolean} - Returns true if there is a max length warning for the property, false otherwise.
+   */
+  isMaxLengthWarnings(propName) {
+    return !this.isCustomFieldsCollectionMaxContentSizeReached && this.props.warnings?.hasError(propName, "maxLength");
+  }
+
+  /**
+   * Get the max length according to the index of the custom field
+   * @param index
+   * @returns {number}
+   */
+  customFieldValueMaxLengthAllowed(index) {
+    const currentCustomFieldValueMaxLengthAllowed = (CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE - this.customFieldsValueLength) + this.props.resource?.secret.custom_fields[index].secret_value.length;
+    return Math.min(5000, currentCustomFieldValueMaxLengthAllowed);
+  }
+
+  /**
+   * Get the custom fields value total length
+   * @returns {*}
+   */
+  get customFieldsValueLength() {
+    return this.props.resource?.secret.custom_fields.reduce((total, custom_field) => total + custom_field.secret_value.length, 0);
+  }
+
+  /**
+   * Is custom fields collection max content size is reached
+   * @returns {boolean}
+   */
+  get isCustomFieldsCollectionMaxContentSizeReached() {
+    return this.customFieldsValueLength === CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE;
   }
 
   /*
@@ -143,12 +182,23 @@ class AddResourceCustomFields extends Component {
                     id={`resource-custom-fields-value-${index}`}
                     name={`secret.custom_fields.${index}.secret_value`}
                     placeholder={this.translate("Value")}
+                    maxLength={this.customFieldValueMaxLengthAllowed(index)}
                     value={custom_field.secret_value}
                     onChange={this.handleInputChange}
                     disabled={this.props.disabled}
                   />
                   <button type="button" className="button-transparent inline" id={`resource-delete-custom-field-${index}`} onClick={() => this.handleDeleteCustomFieldClick(index)}><DeleteSVG/></button>
                 </div>
+                {this.isMaxLengthWarnings(`custom_fields.${index}.metadata_key`) &&
+                  <div className={`resource-custom-fields-key-${index} warning-message`}>
+                    <Trans>The key exceeds the character limit, make sure your data won’t be truncated.</Trans>
+                  </div>
+                }
+                {this.isMaxLengthWarnings(`custom_fields.${index}.metadata_value`) &&
+                  <div className={`resource-custom-fields-value-${index} warning-message`}>
+                    <Trans>The value exceeds the character limit, make sure your data won’t be truncated.</Trans>
+                  </div>
+                }
               </div>
             ))
             }
@@ -163,6 +213,11 @@ class AddResourceCustomFields extends Component {
             </div>
           </div>
         </div>
+        {this.isCustomFieldsCollectionMaxContentSizeReached &&
+          <div className="warning message no-margin">
+            <Trans>You have reach the maximum content size limit.</Trans>
+          </div>
+        }
       </>
     );
   }

@@ -15,7 +15,7 @@ import EntityV2Collection from "../abstract/entityV2Collection";
 import EntityValidationError from "../abstract/entityValidationError";
 import CustomFieldEntity from "./customFieldEntity";
 
-const CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE = 50_000;
+export const CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE = 50_000;
 
 export default class CustomFieldsCollection extends EntityV2Collection {
   /**

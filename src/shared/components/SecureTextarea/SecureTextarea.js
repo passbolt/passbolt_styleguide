@@ -79,7 +79,7 @@ class SecureTextarea extends Component {
           value={this.props.value}
           onChange={this.handleInputChange} disabled={this.props.disabled}
           readOnly={this.props.readOnly} autoComplete={this.props.autoComplete}
-          aria-required={true}>
+          maxLength={this.props.maxLength}>
         </textarea>
         <div className="textarea-view-wrapper">
           <button type="button" onClick={this.handleViewTextareaButtonClick}
@@ -112,6 +112,7 @@ SecureTextarea.propTypes = {
   autoComplete: PropTypes.string, // The auto complete of the textarea
   disabled: PropTypes.bool, // Disabled textarea
   readOnly: PropTypes.bool, // Read only textarea
+  maxLength: PropTypes.number, // Max length textarea
   onChange: PropTypes.func // Function onChange of the textarea
 };
 
