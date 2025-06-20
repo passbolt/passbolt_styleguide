@@ -450,6 +450,7 @@ class ResourceFormEntity extends EntityV2 {
       const customFieldMetadata = customField.toDto();
       // Remove secret value to keep only metadata key
       delete customFieldMetadata.secret_value;
+      delete customFieldMetadata.secret_key;
       customFieldsMetadata.push(customFieldMetadata);
     }
     return new CustomFieldsCollection(customFieldsMetadata);

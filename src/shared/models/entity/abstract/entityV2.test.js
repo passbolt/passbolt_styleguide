@@ -16,7 +16,7 @@ import EntityV2 from "./entityV2";
 import {
   defaultAssociatedTestEntityV2Dto,
   defaultTestEntityV2Dto,
-  minimalTestEntityV2Dto,
+  minimalTestEntityV2Dto, TestAssociatedCollection,
   TestAssociatedEntityV2,
   TestEntityV2,
   TestWithAssociationEntityV2
@@ -156,7 +156,7 @@ describe("EntityV2", () => {
       entity.validateSchema();
       new TestEntityV2(defaultTestEntityV2Dto()); // ensure the cache is used even when validating entity from constructor.
       expect(TestEntityV2.getSchema).toHaveBeenCalledTimes(2);
-      expect(TestAssociatedEntityV2.getSchema).toHaveBeenCalledTimes(3);
+      expect(TestAssociatedEntityV2.getSchema).toHaveBeenCalledTimes(5);
     });
 
     it("validates should remove association required if skipSchemaAssociationValidation option.", () => {
@@ -304,7 +304,7 @@ describe("EntityV2", () => {
 
     it("retrieves associations of an entity.", () => {
       expect.assertions(1);
-      expect(TestEntityV2.associations).toStrictEqual({"associated_entity": TestAssociatedEntityV2});
+      expect(TestEntityV2.associations).toStrictEqual({"associated_entity": TestAssociatedEntityV2, "associated_collection": TestAssociatedCollection});
     });
   });
 
@@ -478,6 +478,45 @@ describe("EntityV2", () => {
       expect(entity.toDto().array.length).toEqual(2);
       entity.set("array.1", null, {validate: false});
       expect(entity.toDto().array.length).toEqual(1);
+    });
+
+    it("set an association collection property value with dto.", () => {
+      expect.assertions(1);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      const associatedTestCollectionV2Dto = [defaultAssociatedTestEntityV2Dto()];
+      entity.set("associated_collection", associatedTestCollectionV2Dto);
+      expect(entity.associatedCollection.toDto()).toStrictEqual(associatedTestCollectionV2Dto);
+    });
+
+    it("set an association property value with collection.", () => {
+      expect.assertions(1);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      const associatedTestCollectionV2Dto = [defaultAssociatedTestEntityV2Dto()];
+      const associatedTestCollectionV2 = new TestAssociatedCollection(associatedTestCollectionV2Dto);
+      entity.set("associated_collection", associatedTestCollectionV2);
+      expect(entity.associatedCollection).toStrictEqual(associatedTestCollectionV2);
+    });
+
+    it("set an association property value with property in the association.", () => {
+      expect.assertions(1);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      const id = uuid();
+      entity.set("associated_collection.0.id", id);
+      expect(entity.associatedCollection.items[0].id).toStrictEqual(id);
+    });
+
+    it("throw if association property value with property in the association collection have no item at the index.", () => {
+      expect.assertions(2);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      const id = uuid();
+      expect(entity.associatedCollection).toBeDefined();
+      expect(() => entity.set("associated_collection.1.id", id)).toThrow(new Error("The collection \"associatedCollection\" has no item at the index \"1\"."));
+    });
+
+    it("throws if association property value is not valid object.", () => {
+      expect.assertions(1);
+      const entity = new TestEntityV2(defaultTestEntityV2Dto());
+      expect(() => entity.set("associated_collection.0.id", {id: "no uuid"})).toThrow(new Error("Could not validate property id."));
     });
   });
 

@@ -156,6 +156,32 @@ describe("CustomFieldsCollection", () => {
     });
   });
 
+  describe("::currentSize", () => {
+    it("should return the size of the collection values", async() => {
+      expect.assertions(1);
+
+      const data = {secret_value: "a".repeat(1_000)};
+      const collectionDto = customFieldsCollectionDtos(10, data);
+      const customFieldsCollection = new CustomFieldsCollection(collectionDto);
+
+      expect(customFieldsCollection.currentSize).toStrictEqual(10_000);
+    });
+
+    it("should return 0 if all element in the collection is empty", async() => {
+      expect.assertions(1);
+
+      const collection = new CustomFieldsCollection([
+        emptyCustomFieldDto(),
+        emptyCustomFieldDto(),
+        emptyCustomFieldDto(),
+        emptyCustomFieldDto(),
+        emptyCustomFieldDto(),
+      ]);
+
+      expect(collection.currentSize).toStrictEqual(0);
+    });
+  });
+
   describe("::isEmpty", () => {
     it("should return true if the collection is empty", async() => {
       expect.assertions(1);

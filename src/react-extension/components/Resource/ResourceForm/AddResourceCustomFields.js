@@ -97,7 +97,7 @@ class AddResourceCustomFields extends Component {
    * @returns {boolean}
    */
   get canAddCustomField() {
-    return this.props.resource?.secret?.custom_fields?.length < 33;
+    return this.props.resource?.secret?.custom_fields?.length < 33 || this.isCustomFieldsCollectionMaxContentSizeReached;
   }
 
   /**

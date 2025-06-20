@@ -16,6 +16,7 @@ import Entity from "./entity";
 import assertString from "validator/es/lib/util/assertString";
 import EntityValidationError from "./entityValidationError";
 import {snakeCaseToCamelCase} from "../../../utils/stringUtils";
+import entityCollection from "./entityCollection";
 
 const SCALAR_PROPERTY_TYPES = ["string", "number", "integer", "boolean"];
 const ARRAY_PROPERTY_TYPE = "array";
@@ -253,7 +254,9 @@ class EntityV2 extends Entity {
       if (schemaProperties?.type === ARRAY_PROPERTY_TYPE) {
         this.setArrayProp(propName, value, options);
       } else {
-        if (!SCALAR_PROPERTY_TYPES.includes(schemaProperties?.type)) {
+        if (schemaProperties?.type && !SCALAR_PROPERTY_TYPES.includes(schemaProperties?.type)) {
+          throw new Error("The property \"associated_entity\" should reference scalar properties only.");
+        } else if (schemaProperties?.anyOf?.some(property => !SCALAR_PROPERTY_TYPES.includes(property.type))) {
           throw new Error("The property \"associated_entity\" should reference scalar properties only.");
         }
         if (validate) {
@@ -314,6 +317,65 @@ class EntityV2 extends Entity {
     }
   }
 
+
+  /**
+   * Set a collection of entities. The new array value will be validated by the entity against the entity schema unless validation is
+   * explicitly disabled in the options.
+   *
+   * Note: This function sets association collection and association collection entity properties. Not supported:
+   *   - set an entity in collection;
+   *
+   * @param {string} propName The property name.
+   * @param {*} value The value to set.
+   * @param {object} [options] Options.
+   * @throws {Error} If the property does not respect the index format.
+   * @throws {Error} If the property does not include an index.
+   * @throws {Error} If the collection has no item.
+   * @throws {EntityValidationError} If the property does not validate the entity schema.
+   * @private
+   */
+  setCollection(propName, value, options) {
+    assertString(propName); // Assert propName is a string
+    const propNameSplit = propName.split(".");
+    const collectionPropName = propNameSplit[0];
+    let index = null;
+
+    if (propNameSplit.length === 1) {
+      if (value instanceof this.constructor.associations[propName]) {
+        // Set the association collection
+        this[`_${collectionPropName}`] = value;
+      } else {
+        // Instantiate a new association collection with the value
+        this[`_${collectionPropName}`] = new this.constructor.associations[propName](value, options);
+      }
+    } else if (propNameSplit.length > 1) {
+      //Validate array index format
+      const arrayIndexMatch = propNameSplit[1].match(/^(\d+)$/);
+      if (!arrayIndexMatch) {
+        throw new Error(`The property "${propNameSplit[0]}" has an invalid index format. Expected format: digits.`);
+      }
+      index = parseInt(arrayIndexMatch[1], 10);
+    } else {
+      throw new Error(`The property "${propNameSplit[0]}" has no index passed.`);
+    }
+    if (!this[`_${collectionPropName}`] || !this[`_${collectionPropName}`]._items[index]) {
+      throw new Error(`The collection "${propNameSplit[0]}" has no item at the index "${propNameSplit[1]}".`);
+    }
+    if (value != null) {
+      if (propNameSplit.length > 2) {
+        // set value in array if not null or undefined
+        const concatenatedPropName = propNameSplit.slice(2).join('.');
+        this[`_${collectionPropName}`]._items[index].set(concatenatedPropName, value, options);
+      } else {
+        // set value in array if not null or undefined
+        this[`_${collectionPropName}`].push(value, options, options);
+      }
+    } else {
+      // if value to set is null or undefined remove the element in the array
+      this[`_${collectionPropName}`].items.splice(index, 1);
+    }
+  }
+
   /**
    * Set an association or an association property value. The new association value will be validated against the entity schema unless validation is
    * explicitly disabled in the options.
@@ -347,9 +409,14 @@ class EntityV2 extends Entity {
           // Instantiate a new empty association entity with no validation to set the value after
           this[`_${associationPropName}`] = new this.constructor.associations[propNameSplit[0]]({}, {validate: false});
         }
-        const concatenatedPropName = propNameSplit.slice(1).join('.');
-        // loop to set the association prop name
-        this[`_${associationPropName}`].set(concatenatedPropName, value, options);
+        if (this[`_${associationPropName}`] instanceof entityCollection) {
+          const collectionPropName = propNameSplit.toSpliced(0, 1, associationPropName).join('.');
+          this.setCollection(collectionPropName, value, options);
+        } else {
+          const concatenatedPropName = propNameSplit.slice(1).join('.');
+          // loop to set the association prop name
+          this[`_${associationPropName}`].set(concatenatedPropName, value, options);
+        }
       } else {
         if (value instanceof this.constructor.associations[propName]) {
           // Set the association

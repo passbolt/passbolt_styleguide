@@ -75,7 +75,8 @@ export default class CustomFieldsCollection extends EntityV2Collection {
    * @private
    */
   assertContentDoNotExceedMaxSize(item, options) {
-    if (options.contentInformation.currentSize + item.value.toString().length <= CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE) {
+    const currentSize = options?.contentInformation?.currentSize || this.currentSize;
+    if (currentSize + item.value.toString().length <= CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE) {
       return;
     }
 
@@ -103,6 +104,14 @@ export default class CustomFieldsCollection extends EntityV2Collection {
     };
 
     super.pushMany(data, entityOptions, options);
+  }
+
+  /**
+   * Returns the current size.
+   * Calculate the size of all custom field entity value.
+   */
+  get currentSize() {
+    return this.items.reduce((size, customFieldEntity) => customFieldEntity.value.toString().length + size, 0);
   }
 
   /**
@@ -171,6 +180,7 @@ export default class CustomFieldsCollection extends EntityV2Collection {
     for (const customFieldEntity of collectionSecret) {
       const customFieldMetadataEntity = customFieldsMetadataMapById[customFieldEntity.id];
       customFieldEntity.metadata_key = customFieldMetadataEntity.metadata_key;
+      customFieldEntity.metadata_value = customFieldMetadataEntity.metadata_value;
     }
   }
 }
