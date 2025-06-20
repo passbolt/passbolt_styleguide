@@ -119,7 +119,7 @@ export default class CustomFieldsCollection extends EntityV2Collection {
    * @param {CustomFieldsCollection} collectionA
    * @param {CustomFieldsCollection} collectionB
    * @returns {boolean}
-   * @throws {TypeError} if any of the parameters are not of type CustomefieldsCollection
+   * @throws {TypeError} if any of the parameters are not of type CustomFieldsCollection
    */
   static areCollectionsDifferent(collectionA, collectionB) {
     if (!(collectionA instanceof CustomFieldsCollection) || !(collectionB instanceof CustomFieldsCollection)) {
@@ -139,5 +139,38 @@ export default class CustomFieldsCollection extends EntityV2Collection {
     }
 
     return false;
+  }
+
+  /**
+   * Merge collection metadata in secret
+   * Alter the secret collection to add metadata key
+   * @param collectionMetadata
+   * @param collectionSecret
+   * @throws {TypeError} if any of the parameters are not of type CustomFieldsCollection
+   * @throws {TypeError} if any of the parameters have not the same length
+   */
+  static mergeCollectionsMetadataInSecret(collectionMetadata, collectionSecret) {
+    if (!(collectionMetadata instanceof CustomFieldsCollection) || !(collectionSecret instanceof CustomFieldsCollection)) {
+      throw new TypeError("Both paramerters must be of type CustomFieldsCollection");
+    }
+
+    const length = collectionMetadata.length;
+    if (length !== collectionSecret.length) {
+      throw new TypeError("Collections are corrupted");
+    }
+
+    if (collectionMetadata.isEmpty()) {
+      return;
+    }
+
+    const customFieldsMetadataMapById = collectionMetadata.items.reduce((result, customField) => {
+      result[customField.id] = customField;
+      return result;
+    }, {});
+
+    for (const customFieldEntity of collectionSecret) {
+      const customFieldMetadataEntity = customFieldsMetadataMapById[customFieldEntity.id];
+      customFieldEntity.metadata_key = customFieldMetadataEntity.metadata_key;
+    }
   }
 }

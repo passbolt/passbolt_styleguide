@@ -17,6 +17,7 @@ import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
 import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
 import assertString from "validator/es/lib/util/assertString";
 import CustomFieldsCollection from "../customField/customFieldsCollection";
+import CustomFieldEntity from "../customField/customFieldEntity";
 
 class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
   /**
@@ -78,7 +79,7 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
   /**
    * Return the default secret property.
    * @param {string} propName the property
-   * @returns {string | object | undefined}
+   * @returns {string | CustomFieldsCollection | undefined}
    */
   static getDefaultProp(propName) {
     assertString(propName);
@@ -90,7 +91,7 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
       case "totp":
         return TotpEntity.createFromDefault({}, {validate: false}).toDto();
       case "custom_fields":
-        return CustomFieldsCollection.createFromDefault([], {validate: false}).toDto();
+        return new CustomFieldsCollection([CustomFieldEntity.createFromDefault()]).toDto();
       default:
         return;
     }

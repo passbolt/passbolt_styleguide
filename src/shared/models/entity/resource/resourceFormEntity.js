@@ -40,6 +40,7 @@ import SecretDataV5StandaloneCustomFieldsCollection from "../secretData/secretDa
 import SecretDataV5StandaloneTotpEntity from "../secretData/secretDataV5StandaloneTotpEntity";
 import ResourceMetadataEntity from "./metadata/resourceMetadataEntity";
 import {CUSTOM_FIELD_KEY_MAX_LENGTH, CUSTOM_FIELD_TEXT_MAX_LENGTH} from "../customField/customFieldEntity";
+import CustomFieldsCollection from "../customField/customFieldsCollection";
 
 class ResourceFormEntity extends EntityV2 {
   /**
@@ -418,6 +419,11 @@ class ResourceFormEntity extends EntityV2 {
 
     if (this._metadata) {
       result.metadata = this.metadata.toDto(ResourceMetadataEntity.DEFAULT_CONTAIN);
+      // Add manually custom fields in metadata if any in secret property
+      if (this.secret.customFields) {
+        const customFieldsCollection = this.createCustomFieldsMetadataCollectionFromSecret();
+        result.metadata.custom_fields = customFieldsCollection.toDto();
+      }
     }
 
     return result;
@@ -432,6 +438,21 @@ class ResourceFormEntity extends EntityV2 {
       return this.secret.toDto();
     }
     return null;
+  }
+
+  /**
+   * Create the custom fields collection for metadata from secret property
+   * @returns {CustomFieldsCollection}
+   */
+  createCustomFieldsMetadataCollectionFromSecret() {
+    const customFieldsMetadata = [];
+    for (const customField of this.secret.customFields) {
+      const customFieldMetadata = customField.toDto();
+      // Remove secret value to keep only metadata key
+      delete customFieldMetadata.secret_value;
+      customFieldsMetadata.push(customFieldMetadata);
+    }
+    return new CustomFieldsCollection(customFieldsMetadata);
   }
 
   /**

@@ -21,7 +21,6 @@ import {defaultSecretDataV5StandaloneCustomFieldsCollectionDtos, minimalSecretDa
 import {defaultCustomField} from "../customField/customFieldEntity.test.data";
 import {v4 as uuidv4} from "uuid";
 import CustomFieldEntity from "../customField/customFieldEntity";
-import CustomFieldsCollection from "../customField/customFieldsCollection";
 
 describe("SecretDataV5StandaloneCustomFieldsCollection", () => {
   describe("::getSchema", () => {
@@ -132,19 +131,19 @@ describe("SecretDataV5StandaloneCustomFieldsCollection", () => {
       expect(prop).toBeUndefined();
     });
 
-    it("should return a default CustomFieldsCollection with a signle empty item", () => {
+    it("should return an array with a single empty item", () => {
       expect.assertions(7);
 
-      const customFieldsCollection = SecretDataV5StandaloneCustomFieldsCollection.getDefaultProp("custom_fields");
-      expect(customFieldsCollection).toBeInstanceOf(CustomFieldsCollection);
-      expect(customFieldsCollection).toHaveLength(1);
+      const customFieldsCollectionDto = SecretDataV5StandaloneCustomFieldsCollection.getDefaultProp("custom_fields");
+      expect(customFieldsCollectionDto).toBeInstanceOf(Array);
+      expect(customFieldsCollectionDto).toHaveLength(1);
 
-      const customFieldEntity = customFieldsCollection.items[0];
-      expect(customFieldEntity._props.type).toStrictEqual("text");
-      expect(customFieldEntity._props.metadata_key).toStrictEqual("");
-      expect(customFieldEntity._props.secret_value).toStrictEqual("");
-      expect(customFieldEntity._props.secret_key).toBeUndefined();
-      expect(customFieldEntity._props.metadata_value).toBeUndefined();
+      const customFieldEntity = customFieldsCollectionDto[0];
+      expect(customFieldEntity.type).toStrictEqual("text");
+      expect(customFieldEntity.metadata_key).toStrictEqual("");
+      expect(customFieldEntity.secret_value).toStrictEqual("");
+      expect(customFieldEntity.secret_key).toBeUndefined();
+      expect(customFieldEntity.metadata_value).toBeUndefined();
     });
   });
 

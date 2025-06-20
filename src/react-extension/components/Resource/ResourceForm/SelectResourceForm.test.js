@@ -36,6 +36,8 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {
   resourceTypesV4CollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import CustomFieldsCollection from "../../../../shared/models/entity/customField/customFieldsCollection";
+import CustomFieldEntity from "../../../../shared/models/entity/customField/customFieldEntity";
 
 beforeEach(() => {
   jest.resetModules();
@@ -142,7 +144,7 @@ describe("SelectResourceForm", () => {
 
     it('As LU the resource secret section custom fields should be selected.', async() => {
       expect.assertions(1);
-      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS, resourceType: new ResourceTypeEntity(resourceTypeV5CustomFieldsDto()), resource: defaultResourceFormDto({secret: {custom_fields: []}})});
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS, resourceType: new ResourceTypeEntity(resourceTypeV5CustomFieldsDto()), resource: defaultResourceFormDto({secret: {custom_fields: new CustomFieldsCollection([CustomFieldEntity.createFromDefault().toDto()])}})});
       page = new SelectResourceFormPage(props);
       await waitFor(() => {});
 
@@ -271,7 +273,7 @@ describe("SelectResourceForm", () => {
 
     it('As LU I can see secrets that can be added for a resource v5 from a custom fields lead.', async() => {
       expect.assertions(4);
-      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resourceType: new ResourceTypeEntity(resourceTypeV5CustomFieldsDto()), resource: defaultResourceFormDto({secret: {custom_fields: []}})});
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resourceType: new ResourceTypeEntity(resourceTypeV5CustomFieldsDto()), resource: defaultResourceFormDto({secret: {custom_fields: new CustomFieldsCollection([CustomFieldEntity.createFromDefault().toDto()])}})});
       page = new SelectResourceFormPage(props);
       await waitFor(() => {});
 
@@ -600,7 +602,7 @@ describe("SelectResourceForm", () => {
 
     it('As LU I can delete secret custom fields for a resource v5 default totp.', async() => {
       expect.assertions(2);
-      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resourceType: new ResourceTypeEntity(resourceTypeV5DefaultTotpDto()), resource: defaultResourceFormDto({secret: {password: "", totp: {}, custom_fields: []}})});
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resourceType: new ResourceTypeEntity(resourceTypeV5DefaultTotpDto()), resource: defaultResourceFormDto({secret: {password: "", totp: {}, custom_fields: new CustomFieldsCollection([CustomFieldEntity.createFromDefault().toDto()])}})});
       page = new SelectResourceFormPage(props);
       await waitFor(() => {});
 

@@ -15,6 +15,7 @@
 import SecretDataEntity, {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
 import assertString from "validator/es/lib/util/assertString";
 import CustomFieldsCollection from "../customField/customFieldsCollection";
+import CustomFieldEntity from "../customField/customFieldEntity";
 
 class SecretDataV5DefaultEntity extends SecretDataEntity {
   /**
@@ -82,7 +83,7 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
   /**
    * Return the default secret property.
    * @param {string} propName the property
-   * @returns {string | undefined}
+   * @returns {string | CustomFieldsCollection | undefined}
    */
   static getDefaultProp(propName) {
     assertString(propName);
@@ -91,6 +92,8 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
         return "";
       case "description":
         return "";
+      case "custom_fields":
+        return new CustomFieldsCollection([CustomFieldEntity.createFromDefault()]).toDto();
       default:
         return;
     }
@@ -116,6 +119,20 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
     const isCustomFieldsDifferent = CustomFieldsCollection.areCollectionsDifferent(this._customFields, otherCollection);
 
     return isCustomFieldsDifferent;
+  }
+
+  /**
+   * Get the DTO of properties managed by the form.
+   * @returns {object}
+   */
+  toDto() {
+    const result = Object.assign({}, this._props);
+
+    if (this.customFields) {
+      result.custom_fields = this.customFields.toDto();
+    }
+
+    return result;
   }
 
   /*

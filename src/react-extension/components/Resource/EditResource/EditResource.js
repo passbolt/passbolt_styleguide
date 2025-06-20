@@ -52,6 +52,7 @@ import {
   withMetadataTypesSettingsLocalStorage
 } from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import CustomFieldsCollection from "../../../../shared/models/entity/customField/customFieldsCollection";
 
 class EditResource extends Component {
   constructor(props) {
@@ -106,6 +107,7 @@ class EditResource extends Component {
   async initializeResourceForm() {
     const resourceDto = {...this.props.resource};
     const secret = await this.getDecryptedSecret();
+    this.mergeCustomFieldsMetadataAndSecret(resourceDto, secret);
     resourceDto.secret = secret;
     this.resourceFormEntity = new ResourceFormEntity(resourceDto, {validate: false, resourceTypes: this.props.resourceTypes});
     const passwordEntropy = secret?.password?.length
@@ -120,6 +122,21 @@ class EditResource extends Component {
       resourceFormSelected: this.selectResourceFormByResourceSecretData(),
       passwordEntropy
     });
+  }
+
+  /**
+   * Merge custom fields metadata into secret
+   * @param {object} resourceDto
+   * @param {object} secret
+   * @return {void}
+   */
+  mergeCustomFieldsMetadataAndSecret(resourceDto, secret) {
+    if (secret?.custom_fields?.length > 0) {
+      const customFieldsMetadataCollection = new CustomFieldsCollection(resourceDto.metadata.custom_fields);
+      const customFieldsSecretCollection = new CustomFieldsCollection(secret.custom_fields);
+      CustomFieldsCollection.mergeCollectionsMetadataInSecret(customFieldsMetadataCollection, customFieldsSecretCollection);
+      secret.custom_fields = customFieldsSecretCollection.toDto();
+    }
   }
 
   /**
@@ -191,6 +208,8 @@ class EditResource extends Component {
       return ResourceEditCreateFormEnumerationTypes.PASSWORD;
     } else if (this.resourceFormEntity?.secret?.totp != null) {
       return ResourceEditCreateFormEnumerationTypes.TOTP;
+    } else if (this.resourceFormEntity?.secret?.custom_fields?.length > 0) {
+      return ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS;
     } else if (this.resourceFormEntity?.secret?.description != null) {
       return ResourceEditCreateFormEnumerationTypes.NOTE;
     }

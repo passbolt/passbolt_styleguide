@@ -124,7 +124,7 @@ class AddResourceCustomFields extends Component {
 
   /**
    * Get the max length according to the index of the custom field
-   * @param index
+   * @param {number} index
    * @returns {number}
    */
   customFieldValueMaxLengthAllowed(index) {
@@ -174,7 +174,7 @@ class AddResourceCustomFields extends Component {
         </div>
         <div className="content">
           <div className="custom-fields-fields">
-            {this.props.resource?.secret.custom_fields.map((custom_field, index) => (
+            {this.props.resource?.secret.custom_fields?.map((custom_field, index) => (
               <div key={index} className="custom-field-row">
                 <div className="input custom-field">
                   <input id={`resource-custom-fields-key-${index}`} disabled={this.props.disabled} name={`secret.custom_fields.${index}.metadata_key`} maxLength="255" type="text" autoComplete="off" placeholder={this.translate("Key")} value={custom_field.metadata_key} onChange={this.handleInputChange}/>

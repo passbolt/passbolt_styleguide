@@ -184,7 +184,7 @@ class SelectResourceForm extends Component {
    * @returns {boolean}
    */
   get isResourceHasCustomFields() {
-    return this.resource?.secret?.custom_fields != null;
+    return this.resource?.secret?.custom_fields?.length > 0;
   }
 
   /**

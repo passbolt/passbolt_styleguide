@@ -99,7 +99,7 @@ export default class SecretDataV5StandaloneCustomFieldsCollection extends Secret
     assertString(propName);
     switch (propName) {
       case "custom_fields":
-        return new CustomFieldsCollection([CustomFieldEntity.createFromDefault()]);
+        return new CustomFieldsCollection([CustomFieldEntity.createFromDefault()]).toDto();
       default:
         return;
     }
