@@ -24,7 +24,9 @@ export const CUSTOM_FIELD_TYPE = {
   URI: "uri",
 };
 
-const CUSTOM_FIELD_TEXT_MAX_LENGTH = 5000;
+
+export const CUSTOM_FIELD_KEY_MAX_LENGTH = 255;
+export const CUSTOM_FIELD_TEXT_MAX_LENGTH = 5000;
 const CUSTOM_FIELD_PASSWORD_MAX_LENGTH = 4096;
 const CUSTOM_FIELD_URI_MAX_LENGTH = 1024;
 
@@ -51,7 +53,7 @@ class CustomFieldEntity extends EntityV2 {
         },
         metadata_key: {
           type: "string",
-          maxLength: 255,
+          maxLength: CUSTOM_FIELD_KEY_MAX_LENGTH,
           nullable: true,
         },
         metadata_value: {
@@ -70,7 +72,7 @@ class CustomFieldEntity extends EntityV2 {
         },
         secret_key: {
           type: "string",
-          maxLength: 255,
+          maxLength: CUSTOM_FIELD_KEY_MAX_LENGTH,
           nullable: true,
         },
         secret_value: {
