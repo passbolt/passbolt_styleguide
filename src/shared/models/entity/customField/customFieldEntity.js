@@ -102,10 +102,6 @@ class CustomFieldEntity extends EntityV2 {
     const {metadata_key, metadata_value, secret_key, secret_value, type} = this._props;
     const isMetadataKeyDefined = typeof metadata_key !== "undefined" && metadata_key !== null;
     const isSecretKeyDefined = typeof secret_key !== "undefined" && secret_key !== null;
-    if (!isMetadataKeyDefined && !isSecretKeyDefined) {
-      validationError = new EntityValidationError();
-      validationError.addError("key", "metadata_key-secret_key", "The custom field key should be defined in either the metadata_key or the secret_key");
-    }
 
     if (isMetadataKeyDefined && isSecretKeyDefined) {
       validationError = validationError || new EntityValidationError();
@@ -114,10 +110,6 @@ class CustomFieldEntity extends EntityV2 {
 
     const isMetadataValueDefined = typeof metadata_value !== "undefined" && metadata_value !== null;
     const isSecretValueDefined = typeof secret_value !== "undefined" && secret_value !== null;
-    if (!isMetadataValueDefined && !isSecretValueDefined) {
-      validationError = validationError || new EntityValidationError();
-      validationError.addError("value", "metadata_value-secret_value", "The custom field value should be defined in either the metadata_value or the secret_value");
-    }
 
     if (isMetadataValueDefined && isSecretValueDefined) {
       validationError = validationError || new EntityValidationError();
@@ -129,30 +121,57 @@ class CustomFieldEntity extends EntityV2 {
       validationError.addError("value", "secret_key-metadata_value", "The custom field value should not be set in metadata_value if the ket is defined in the secret_key");
     }
 
-    const value = secret_value ?? metadata_value;
-    if (typeof value !== "string" && (type === CUSTOM_FIELD_TYPE.TEXT || type === CUSTOM_FIELD_TYPE.PASSWORD || type === CUSTOM_FIELD_TYPE.URI)) {
-      validationError = validationError || new EntityValidationError();
-      validationError.addError("value", "value-type", "The type and the value type should match");
-    } else if (type === CUSTOM_FIELD_TYPE.NUMBER && typeof value !== "number") {
-      validationError = validationError || new EntityValidationError();
-      validationError.addError("value", "value-type", "The type and the value type should match");
-    } else if (type === CUSTOM_FIELD_TYPE.BOOLEAN && typeof value !== "boolean") {
-      validationError = validationError || new EntityValidationError();
-      validationError.addError("value", "value-type", "The type and the value type should match");
-    } else if (type === CUSTOM_FIELD_TYPE.TEXT && value.length > 5000) {
-      validationError = validationError || new EntityValidationError();
-      validationError.addError("value", "maxLength", `The length of the value should not exceed ${CUSTOM_FIELD_TEXT_MAX_LENGTH} characters`);
-    } else if (type === CUSTOM_FIELD_TYPE.PASSWORD && value.length > 4096) {
-      validationError = validationError || new EntityValidationError();
-      validationError.addError("value", "maxLength", `The length of the value should not exceed ${CUSTOM_FIELD_PASSWORD_MAX_LENGTH} characters`);
-    } else if (type === CUSTOM_FIELD_TYPE.URI && value.length > 1024) {
-      validationError = validationError || new EntityValidationError();
-      validationError.addError("value", "maxLength", `The length of the value should not exceed ${CUSTOM_FIELD_URI_MAX_LENGTH} characters`);
+    if (isMetadataValueDefined || isSecretValueDefined) {
+      const value = secret_value ?? metadata_value;
+      if (typeof value !== "string" && (type === CUSTOM_FIELD_TYPE.TEXT || type === CUSTOM_FIELD_TYPE.PASSWORD || type === CUSTOM_FIELD_TYPE.URI)) {
+        validationError = validationError || new EntityValidationError();
+        validationError.addError("value", "value-type", "The type and the value type should match");
+      } else if (type === CUSTOM_FIELD_TYPE.NUMBER && typeof value !== "number") {
+        validationError = validationError || new EntityValidationError();
+        validationError.addError("value", "value-type", "The type and the value type should match");
+      } else if (type === CUSTOM_FIELD_TYPE.BOOLEAN && typeof value !== "boolean") {
+        validationError = validationError || new EntityValidationError();
+        validationError.addError("value", "value-type", "The type and the value type should match");
+      } else if (type === CUSTOM_FIELD_TYPE.TEXT && value.length > 5000) {
+        validationError = validationError || new EntityValidationError();
+        validationError.addError("value", "maxLength", `The length of the value should not exceed ${CUSTOM_FIELD_TEXT_MAX_LENGTH} characters`);
+      } else if (type === CUSTOM_FIELD_TYPE.PASSWORD && value.length > 4096) {
+        validationError = validationError || new EntityValidationError();
+        validationError.addError("value", "maxLength", `The length of the value should not exceed ${CUSTOM_FIELD_PASSWORD_MAX_LENGTH} characters`);
+      } else if (type === CUSTOM_FIELD_TYPE.URI && value.length > 1024) {
+        validationError = validationError || new EntityValidationError();
+        validationError.addError("value", "maxLength", `The length of the value should not exceed ${CUSTOM_FIELD_URI_MAX_LENGTH} characters`);
+      }
     }
+
 
     if (validationError) {
       throw validationError;
     }
+  }
+
+  /**
+   * Return a DTO for custom field metadata
+   * Delete all secret properties
+   * @return {object}
+   */
+  toMetadataDto() {
+    const result = Object.assign({}, this._props);
+    delete result.secret_key;
+    delete result.secret_value;
+    return result;
+  }
+
+  /**
+   * Return a DTO for custom field secret
+   * Delete all metadata properties
+   * @return {object}
+   */
+  toSecretDto() {
+    const result = Object.assign({}, this._props);
+    delete result.metadata_key;
+    delete result.metadata_value;
+    return result;
   }
 
   /**

@@ -80,6 +80,8 @@ import SecretDataV4StandaloneTotpEntity from "../secretData/secretDataV4Standalo
 import secretDataV4PasswordStringEntity from "../secretData/secretDataV4PasswordStringEntity";
 import SecretDataV5StandaloneCustomFieldsCollection from "../secretData/secretDataV5StandaloneCustomFieldsCollection";
 import ResourceTypeEntity from "../resourceType/resourceTypeEntity";
+import CustomFieldEntity from "../customField/customFieldEntity";
+import {emptyCustomFieldDto} from "../customField/customFieldEntity.test.data";
 
 describe("Resource Form entity", () => {
   describe("ResourceFormEntity::getSchema", () => {
@@ -376,6 +378,22 @@ describe("Resource Form entity", () => {
       expect(resourceFormEntity.toDto()).toEqual(resourceDto);
     });
 
+    it("add secret custom fields on v5 totp", () => {
+      expect.assertions(2);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_TOTP, secret: {object_type: SECRET_DATA_OBJECT_TYPE, totp: defaultTotpDto()}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS);
+      resourceDto.secret.custom_fields = [CustomFieldEntity.createFromDefault().toDto()];
+      resourceDto.secret.custom_fields[0].id = resourceFormEntity.secret.customFields.items[0]._props.id;
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP;
+      resourceDto.metadata.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP;
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
     it("add secret note on v5 default", () => {
       expect.assertions(2);
       const resourceDto = defaultResourceFormDto();
@@ -385,6 +403,20 @@ describe("Resource Form entity", () => {
       const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
       resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.NOTE);
       resourceDto.secret.description = "";
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("add secret custom fields on v5 default", () => {
+      expect.assertions(2);
+      const resourceDto = defaultResourceFormDto();
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS);
+      resourceDto.secret.custom_fields = [CustomFieldEntity.createFromDefault().toDto()];
+      resourceDto.secret.custom_fields[0].id = resourceFormEntity.secret.customFields.items[0]._props.id;
       expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT);
       expect(resourceFormEntity.toDto()).toEqual(resourceDto);
     });
@@ -433,6 +465,22 @@ describe("Resource Form entity", () => {
       resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP;
       resourceDto.metadata.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP;
       expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("add secret custom fields on a resource v5 password string", () => {
+      expect.assertions(2);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_PASSWORD_STRING, secret: minimalDefaultSecretDataV5PasswordStringDto()});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      resourceFormEntity.addSecret(ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS);
+      resourceDto.secret.custom_fields = [CustomFieldEntity.createFromDefault().toDto()];
+      resourceDto.secret.custom_fields[0].id = resourceFormEntity.secret.customFields.items[0]._props.id;
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT;
+      resourceDto.metadata.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT;
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT);
       expect(resourceFormEntity.toDto()).toEqual(resourceDto);
     });
 
@@ -733,10 +781,10 @@ describe("Resource Form entity", () => {
     });
 
     it("delete custom_field on v5 default totp", () => {
-      expect.assertions(3);
+      expect.assertions(5);
       const custom_fields = defaultCustomFieldsCollection();
       const resourceDto = defaultResourceFormDto({
-        metadata: defaultResourceMetadataDto({custom_fields}),
+        metadata: defaultResourceMetadataDto(),
         secret: defaultSecretDataV5DefaultTotpEntityDto({custom_fields}),
       });
 
@@ -744,21 +792,20 @@ describe("Resource Form entity", () => {
       const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
 
       const resourceFormEntity = new ResourceFormEntity(resourceDto, {validate: false, resourceTypes: resourceTypesCollection});
-      expect(resourceFormEntity.metadata._customFields).toBeTruthy();
-      /*
-       * add when secrets will be updated with custom_fields
-       * expect(resourceFormEntity.secret._customFields).toBeTruthy();
-       */
+      expect(resourceFormEntity.metadata._customFields).toBeFalsy();
+      expect(resourceFormEntity.secret._customFields).toBeTruthy();
+
       resourceFormEntity.deleteSecret(ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS, {validate: false});
       expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP);
-      expect(resourceFormEntity.metadata._customFields).toBeTruthy();
+      expect(resourceFormEntity.secret._customFields).toBeFalsy();
+      expect(resourceFormEntity.metadata._customFields).toBeFalsy();
     });
 
     it("delete custom_field on v5 default", () => {
-      expect.assertions(3);
+      expect.assertions(5);
       const custom_fields = defaultCustomFieldsCollection();
       const resourceDto = defaultResourceFormDto({
-        metadata: defaultResourceMetadataDto({custom_fields}),
+        metadata: defaultResourceMetadataDto(),
         secret: defaultSecretDataV5DefaultDto({custom_fields}),
       });
 
@@ -766,14 +813,13 @@ describe("Resource Form entity", () => {
       const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
 
       const resourceFormEntity = new ResourceFormEntity(resourceDto, {validate: false, resourceTypes: resourceTypesCollection});
-      expect(resourceFormEntity.metadata._customFields).toBeTruthy();
-      /*
-       * add when secrets will be updated with custom_fields
-       * expect(resourceFormEntity.secret._customFields).toBeTruthy();
-       */
+      expect(resourceFormEntity.metadata._customFields).toBeFalsy();
+      expect(resourceFormEntity.secret._customFields).toBeTruthy();
+
       resourceFormEntity.deleteSecret(ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS, {validate: false});
       expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT);
-      expect(resourceFormEntity.metadata._customFields).toBeTruthy();
+      expect(resourceFormEntity.secret._customFields).toBeFalsy();
+      expect(resourceFormEntity.metadata._customFields).toBeFalsy();
     });
   });
 
@@ -864,6 +910,25 @@ describe("Resource Form entity", () => {
       resourceFormEntity.addRequiredSecret();
       resourceDto.secret.password = null;
       delete resourceDto.secret.totp;
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT;
+      resourceDto.metadata.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT;
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
+    });
+
+    it("remove custom fields secret and add require password secret from v5 default totp resource", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT, secret: {object_type: SECRET_DATA_OBJECT_TYPE, custom_fields: [emptyCustomFieldDto()], description: ""}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection, validate: false});
+      resourceFormEntity.removeEmptySecret({validate: false});
+      resourceFormEntity.addRequiredSecret();
+      resourceDto.secret.password = null;
+      delete resourceDto.secret.custom_fields;
       resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT;
       resourceDto.metadata.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT;
       // expectation

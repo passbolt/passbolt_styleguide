@@ -17,13 +17,13 @@
  */
 import {waitFor} from "@testing-library/react";
 import EditResourcePage from "./EditResource.test.page";
-import {defaultProps, defaultTotpProps} from "./EditResource.test.data";
+import {defaultCustomFieldsProps, defaultProps, defaultTotpProps} from "./EditResource.test.data";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import {
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_PASSWORD_STRING,
-  TEST_RESOURCE_TYPE_TOTP, TEST_RESOURCE_TYPE_V5_DEFAULT,
+  TEST_RESOURCE_TYPE_TOTP, TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS, TEST_RESOURCE_TYPE_V5_DEFAULT,
   TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
   TEST_RESOURCE_TYPE_V5_TOTP
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
@@ -46,6 +46,7 @@ import {
   defaultResourceMetadataDto
 } from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import ResourceMetadataEntity from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity";
+import {defaultCustomField} from "../../../../shared/models/entity/customField/customFieldEntity.test.data";
 
 describe("See the Create Resource", () => {
   beforeEach(() => {
@@ -261,6 +262,55 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
         expect(page.password).toBeDefined();
+      });
+
+      it('As a signed-in user I should be able to delete secret custom fields without a resource type mutation', async() => {
+        expect.assertions(6);
+
+        const props = defaultProps();
+        mockContextRequest(props.context, () => ({object_type: SECRET_DATA_OBJECT_TYPE, password: "RN9n8XuECN3", description: "description", custom_fields: [defaultCustomField()]}));
+        const page = new EditResourcePage(props);
+        await waitFor(() => {});
+
+        // select note form
+        await page.click(page.getSectionItem(2));
+
+        expect(page.sectionItemSelected.textContent).toStrictEqual("Custom fields");
+
+        await page.click(page.deleteSecretCustomFields);
+
+        // expectations
+        expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
+        expect(page.password).toBeDefined();
+
+        mockContextRequest(props.context, jest.fn());
+        await page.click(page.saveButton);
+
+        const resourceDtoExpected = {
+          id: props.resource.id,
+          expired: null,
+          folder_parent_id: props.resource.folder_parent_id,
+          resource_type_id: props.resource.resource_type_id,
+          metadata: {
+            object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
+            name: props.resource.metadata.name,
+            username: props.resource.metadata.username,
+            resource_type_id: props.resource.resource_type_id,
+            uris: props.resource.metadata.uris,
+            description: props.resource.metadata.description
+          }
+        };
+
+        const secretDtoExpected = {
+          object_type: SECRET_DATA_OBJECT_TYPE,
+          password: "RN9n8XuECN3",
+          description: "description"
+        };
+
+        // expectations
+        expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDtoExpected, secretDtoExpected);
+        expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been updated successfully");
+        expect(props.onClose).toBeCalled();
       });
 
       it('As a signed-in user I should be able to delete secret with a resource type mutation', async() => {
@@ -791,6 +841,80 @@ describe("See the Create Resource", () => {
       });
     });
 
+    describe("should edit custom fields form", () => {
+      let props, page;
+      beforeEach(() => {
+        props = defaultCustomFieldsProps();
+        mockContextRequest(props.context, () => ({object_type: SECRET_DATA_OBJECT_TYPE, custom_fields: [{id: props.resource.metadata.custom_fields[0].id,
+          type: "text",
+          secret_value: "secret-0"
+        }]}));
+        page = new EditResourcePage(props);
+      });
+
+      it('As a signed-in user I should be able to add and delete a custom field', async() => {
+        expect.assertions(7);
+        expect(page.exists()).toBeTruthy();
+        expect(page.getDeleteCustomField(0)).toBeNull();
+
+        await page.click(page.addCustomField);
+        // expectations
+        expect(page.getDeleteCustomField(0)).toBeDefined();
+        expect(page.getDeleteCustomField(1)).toBeDefined();
+
+        await page.click(page.getDeleteCustomField(0));
+
+        expect(page.getDeleteCustomField(0)).toBeNull();
+        expect(page.getDeleteCustomField(1)).toBeNull();
+        expect(page.customFieldsLength).toBe(1);
+      });
+
+      it('As a signed-in user I should not be able to add a custom field after 32 rows', async() => {
+        expect.assertions(3);
+        expect(page.exists()).toBeTruthy();
+
+        for (let i = 0; i < 31; i++) {
+          await page.click(page.addCustomField);
+        }
+
+        // expectations
+        expect(page.customFieldsLength).toBe(32);
+        expect(page.addCustomField.hasAttribute("disabled")).toBeTruthy();
+      });
+
+      it('As a signed-in user I should not be able to add a custom field after 50_000 characters', async() => {
+        expect.assertions(4);
+        expect(page.exists()).toBeTruthy();
+
+        for (let i = 0; i < 9; i++) {
+          await page.fillInput(page.getCustomFieldValue(i), "a".repeat(5000));
+          await page.click(page.addCustomField);
+        }
+
+        await page.fillInput(page.getCustomFieldValue(9), "a".repeat(2500));
+        await page.click(page.addCustomField);
+        await page.fillInput(page.getCustomFieldValue(10), "a".repeat(2500));
+
+        // expectations
+        expect(page.customFieldsLength).toBe(11);
+        expect(page.customFieldValueMaxCharactersWarningMessage).toStrictEqual("You have reach the maximum content size limit.");
+        expect(page.addCustomField.hasAttribute("disabled")).toBeTruthy();
+      });
+
+      it('As a signed-in user I should be aware about the key and value maxLength', async() => {
+        expect.assertions(4);
+
+        await page.fillInput(page.getCustomFieldKey(0), "a".repeat(255));
+        await page.fillInput(page.getCustomFieldValue(0), "a".repeat(5000));
+
+        // expectations
+        expect(page.getCustomFieldKey(0).value).toEqual("a".repeat(255));
+        expect(page.getCustomFieldValue(0).value).toEqual("a".repeat(5000));
+        expect(page.getCustomFieldKeyWarningMessage(0).textContent).toEqual("The key exceeds the character limit, make sure your data won’t be truncated.");
+        expect(page.getCustomFieldValueWarningMessage(0).textContent).toEqual("The value exceeds the character limit, make sure your data won’t be truncated.");
+      });
+    });
+
     describe("should edit note form", () => {
       let props, page;
       beforeEach(async() => {
@@ -1155,7 +1279,7 @@ describe("See the Create Resource", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As a signed-in user I should be able to save a resource v5 default with totp', async() => {
+    it('As a signed-in user I should be able to save a resource v5 default with totp and custom fields', async() => {
       expect.assertions(3);
       const props = defaultProps();
       mockContextRequest(props.context, () => ({password: "password"}));
@@ -1174,13 +1298,24 @@ describe("See the Create Resource", () => {
 
       await page.fillInput(page.note, "note");
 
+      await page.click(page.addSecret);
+      await page.click(page.addSecretCustomFields);
+
+      await page.fillInput(page.getCustomFieldKey(0), "PASSBOLT");
+      await page.fillInput(page.getCustomFieldValue(0), "This is a secret");
+
+      await page.click(page.addCustomField);
+      await page.fillInput(page.getCustomFieldKey(1), "PASSBOLT COMMUNITY");
+      await page.fillInput(page.getCustomFieldValue(1), "This is a secret too");
+
       await page.fillInput(page.name, "v5 default totp");
 
       await page.click(page.menuUris);
       await page.click(page.addUri);
       await page.fillInput(page.getAdditionalUri(1), "https://www.passbolt.com/docs");
 
-      mockContextRequest(props.context, jest.fn());
+      const customFields = {};
+      mockContextRequest(props.context, jest.fn(async(message, arg1) => Object.assign(customFields, arg1.metadata.custom_fields)));
       await page.click(page.saveButton);
 
       const resourceDtoExpected = {
@@ -1194,7 +1329,16 @@ describe("See the Create Resource", () => {
           username: props.resource.metadata.username,
           resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
           uris: [...props.resource.metadata.uris, "https://www.passbolt.com/docs"],
-          description: props.resource.metadata.description
+          description: props.resource.metadata.description,
+          custom_fields: [{
+            id: customFields[0].id,
+            metadata_key: "PASSBOLT",
+            type: "text"
+          }, {
+            id: customFields[1].id,
+            metadata_key: "PASSBOLT COMMUNITY",
+            type: "text"
+          }]
         }
       };
 
@@ -1202,7 +1346,16 @@ describe("See the Create Resource", () => {
         object_type: SECRET_DATA_OBJECT_TYPE,
         password: "RN9n8XuECN3",
         totp: defaultTotpDto({secret_key: "JBSWY3DPEHPK3PXP"}),
-        description: "note"
+        description: "note",
+        custom_fields: [{
+          id: customFields[0].id,
+          secret_value: "This is a secret",
+          type: "text"
+        }, {
+          id: customFields[1].id,
+          secret_value: "This is a secret too",
+          type: "text"
+        }]
       };
 
       // expectations
@@ -1265,7 +1418,7 @@ describe("See the Create Resource", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As a signed-in user I should be able to save a resource v5 totp after password and note deleted', async() => {
+    it('As a signed-in user I should be able to save a resource v5 totp after password, custom fields and note deleted', async() => {
       expect.assertions(3);
       const props = defaultProps();
       mockContextRequest(props.context, () => ({object_type: SECRET_DATA_OBJECT_TYPE, password: "password", description: "description"}));
@@ -1279,10 +1432,14 @@ describe("See the Create Resource", () => {
 
       await page.fillInput(page.resourceTotpKey, "   jbsWY3dpeHPK3PXP   ");
 
+      await page.click(page.addSecret);
+      await page.click(page.addSecretCustomFields);
+
       await page.fillInput(page.name, "v5 totp");
 
       await page.click(page.deleteSecretPassword);
       await page.click(page.deleteSecretNote);
+      await page.click(page.deleteSecretCustomFields);
 
       mockContextRequest(props.context, jest.fn());
       await page.click(page.saveButton);
@@ -1305,6 +1462,71 @@ describe("See the Create Resource", () => {
       const secretDtoExpected = {
         object_type: SECRET_DATA_OBJECT_TYPE,
         totp: defaultTotpDto({secret_key: "JBSWY3DPEHPK3PXP"})
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been updated successfully");
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As a signed-in user I should be able to save a resource v5 standalone custom fields', async() => {
+      expect.assertions(4);
+      const props = defaultCustomFieldsProps();
+      mockContextRequest(props.context, () => ({object_type: SECRET_DATA_OBJECT_TYPE, custom_fields: [{id: props.resource.metadata.custom_fields[0].id, type: "text", secret_value: "secret-0"}]}));
+      const page = new EditResourcePage(props);
+      await waitFor(() => {});
+
+      expect(page.customFieldsLength).toStrictEqual(1);
+
+      await page.fillInput(page.getCustomFieldKey(0), "PASSBOLT");
+      await page.fillInput(page.getCustomFieldValue(0), "This is a secret");
+
+      await page.click(page.addCustomField);
+      await page.fillInput(page.getCustomFieldKey(1), "PASSBOLT COMMUNITY");
+      await page.fillInput(page.getCustomFieldValue(1), "This is a secret too");
+
+      await page.fillInput(page.name, "v5 standalone custom fields");
+
+      const customFields = {};
+      mockContextRequest(props.context, jest.fn(async(message, arg1) => Object.assign(customFields, arg1.metadata.custom_fields)));
+      await page.click(page.saveButton);
+
+      const resourceDtoExpected = {
+        id: props.resource.id,
+        expired: null,
+        folder_parent_id: null,
+        resource_type_id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
+        metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
+          name: "v5 standalone custom fields",
+          resource_type_id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
+          uris: props.resource.metadata.uris,
+          description: props.resource.metadata.description,
+          username: props.resource.metadata.username,
+          custom_fields: [{
+            id: customFields[0].id,
+            metadata_key: "PASSBOLT",
+            type: "text"
+          }, {
+            id: customFields[1].id,
+            metadata_key: "PASSBOLT COMMUNITY",
+            type: "text"
+          }]
+        }
+      };
+
+      const secretDtoExpected = {
+        object_type: SECRET_DATA_OBJECT_TYPE,
+        custom_fields: [{
+          id: customFields[0].id,
+          secret_value: "This is a secret",
+          type: "text"
+        }, {
+          id: customFields[1].id,
+          secret_value: "This is a secret too",
+          type: "text"
+        }]
       };
 
       // expectations

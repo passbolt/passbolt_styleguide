@@ -109,6 +109,8 @@ class EditResource extends Component {
     const secret = await this.getDecryptedSecret();
     this.mergeCustomFieldsMetadataAndSecret(resourceDto, secret);
     resourceDto.secret = secret;
+    // Delete the custom fields in the metadata to not have inconsistency if the user remove the custom fields secret
+    delete resourceDto.metadata.custom_fields;
     this.resourceFormEntity = new ResourceFormEntity(resourceDto, {validate: false, resourceTypes: this.props.resourceTypes});
     const passwordEntropy = secret?.password?.length
       ? SecretGenerator.entropy(secret.password)
@@ -134,8 +136,7 @@ class EditResource extends Component {
     if (secret?.custom_fields?.length > 0) {
       const customFieldsMetadataCollection = new CustomFieldsCollection(resourceDto.metadata.custom_fields);
       const customFieldsSecretCollection = new CustomFieldsCollection(secret.custom_fields);
-      CustomFieldsCollection.mergeCollectionsMetadataInSecret(customFieldsMetadataCollection, customFieldsSecretCollection);
-      secret.custom_fields = customFieldsSecretCollection.toDto();
+      secret.custom_fields = CustomFieldsCollection.mergeCollectionsMetadataAndSecret(customFieldsMetadataCollection, customFieldsSecretCollection).toDto();
     }
   }
 
@@ -208,7 +209,7 @@ class EditResource extends Component {
       return ResourceEditCreateFormEnumerationTypes.PASSWORD;
     } else if (this.resourceFormEntity?.secret?.totp != null) {
       return ResourceEditCreateFormEnumerationTypes.TOTP;
-    } else if (this.resourceFormEntity?.secret?.custom_fields?.length > 0) {
+    } else if (this.resourceFormEntity?.secret?.customFields?.length > 0) {
       return ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS;
     } else if (this.resourceFormEntity?.secret?.description != null) {
       return ResourceEditCreateFormEnumerationTypes.NOTE;

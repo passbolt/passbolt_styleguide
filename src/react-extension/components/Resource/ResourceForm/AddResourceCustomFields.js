@@ -71,7 +71,7 @@ class AddResourceCustomFields extends Component {
   handleAddCustomFieldsClick() {
     const eventCustomField = {
       target: {
-        name: `secret.custom_fields.${this.props.resource.secret.custom_fields.length}`,
+        name: `secret.custom_fields.${this.customFieldsLength}`,
         value: CustomFieldEntity.createFromDefault()
       }
     };
@@ -97,7 +97,15 @@ class AddResourceCustomFields extends Component {
    * @returns {boolean}
    */
   get canAddCustomField() {
-    return this.props.resource?.secret?.custom_fields?.length < 33 || this.isCustomFieldsCollectionMaxContentSizeReached;
+    return this.customFieldsLength < 32 && !this.isCustomFieldsCollectionMaxContentSizeReached;
+  }
+
+  /**
+   * Get the custom fields length
+   * @return {*}
+   */
+  get customFieldsLength() {
+    return this.props.resource?.secret?.custom_fields?.length;
   }
 
   /**
@@ -187,15 +195,17 @@ class AddResourceCustomFields extends Component {
                     onChange={this.handleInputChange}
                     disabled={this.props.disabled}
                   />
-                  <button type="button" className="button-transparent inline" id={`resource-delete-custom-field-${index}`} onClick={() => this.handleDeleteCustomFieldClick(index)}><DeleteSVG/></button>
+                  {this.customFieldsLength > 1 &&
+                    <button type="button" className="button-transparent inline" id={`resource-delete-custom-field-${index}`} onClick={() => this.handleDeleteCustomFieldClick(index)}><DeleteSVG/></button>
+                  }
                 </div>
-                {this.isMaxLengthWarnings(`custom_fields.${index}.metadata_key`) &&
-                  <div className={`resource-custom-fields-key-${index} warning-message`}>
+                {this.isMaxLengthWarnings(`custom_fields.${index}.key`) &&
+                  <div className={`resource-custom-fields-key-warning-${index} warning-message`}>
                     <Trans>The key exceeds the character limit, make sure your data won’t be truncated.</Trans>
                   </div>
                 }
-                {this.isMaxLengthWarnings(`custom_fields.${index}.metadata_value`) &&
-                  <div className={`resource-custom-fields-value-${index} warning-message`}>
+                {this.isMaxLengthWarnings(`custom_fields.${index}.value`) &&
+                  <div className={`resource-custom-fields-value-warning-${index} warning-message`}>
                     <Trans>The value exceeds the character limit, make sure your data won’t be truncated.</Trans>
                   </div>
                 }

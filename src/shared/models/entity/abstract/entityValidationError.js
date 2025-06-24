@@ -1,3 +1,5 @@
+import CollectionValidationError from "./collectionValidationError";
+
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -50,13 +52,13 @@ class EntityValidationError extends Error {
    * Add an association error for a given error details
    *
    * @param {string} associationName example: name
-   * @param {EntityValidationError} error
+   * @param {EntityValidationError | CollectionValidationError} error
    */
   addAssociationError(associationName, error) {
     if (typeof associationName !== 'string') {
       throw new TypeError('EntityValidationError addAssociationError associationName should be a string.');
     }
-    if (!(error instanceof EntityValidationError)) {
+    if (!(error instanceof EntityValidationError) && !(error instanceof CollectionValidationError)) {
       throw new TypeError('EntityValidationError addAssociationError errorDetails should be an object.');
     }
     this.details[associationName] = error;

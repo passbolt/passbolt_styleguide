@@ -76,7 +76,7 @@ export default class CustomFieldsCollection extends EntityV2Collection {
    */
   assertContentDoNotExceedMaxSize(item, options) {
     const currentSize = options?.contentInformation?.currentSize || this.currentSize;
-    if (currentSize + item.value.toString().length <= CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE) {
+    if (currentSize + (item.value?.toString().length || 0) <= CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE) {
       return;
     }
 
@@ -94,7 +94,7 @@ export default class CustomFieldsCollection extends EntityV2Collection {
     const contentInformation = {currentSize: 0};
     const onItemPushed = item => {
       uniqueIdsSetCache.add(item._props.id);
-      contentInformation.currentSize += item.value.toString().length;
+      contentInformation.currentSize += item.value?.toString().length || 0;
     };
 
     options = {
@@ -111,7 +111,7 @@ export default class CustomFieldsCollection extends EntityV2Collection {
    * Calculate the size of all custom field entity value.
    */
   get currentSize() {
-    return this.items.reduce((size, customFieldEntity) => customFieldEntity.value.toString().length + size, 0);
+    return this.items.reduce((size, customFieldEntity) => (customFieldEntity.value?.toString().length || 0) + size, 0);
   }
 
   /**
@@ -124,6 +124,24 @@ export default class CustomFieldsCollection extends EntityV2Collection {
   }
 
   /**
+   * Return a DTO for custom fields metadata
+   * Delete all secret properties
+   * @return {*[]}
+   */
+  toMetadataDto() {
+    return this.items.map(customField => customField.toMetadataDto());
+  }
+
+  /**
+   * Return a DTO for custom fields secret
+   * Delete all metadata properties
+   * @return {*[]}
+   */
+  toSecretDto() {
+    return this.items.map(customField => customField.toSecretDto());
+  }
+
+  /**
    * Returns true if both collection are different
    * @param {CustomFieldsCollection} collectionA
    * @param {CustomFieldsCollection} collectionB
@@ -132,7 +150,7 @@ export default class CustomFieldsCollection extends EntityV2Collection {
    */
   static areCollectionsDifferent(collectionA, collectionB) {
     if (!(collectionA instanceof CustomFieldsCollection) || !(collectionB instanceof CustomFieldsCollection)) {
-      throw new TypeError("Both paramerters must be of type CustomFieldsCollection");
+      throw new TypeError("Both parameters must be of type CustomFieldsCollection");
     }
 
     const length = collectionA.length;
@@ -151,36 +169,35 @@ export default class CustomFieldsCollection extends EntityV2Collection {
   }
 
   /**
-   * Merge collection metadata in secret
-   * Alter the secret collection to add metadata key
+   * Merge collection metadata and secret
    * @param collectionMetadata
    * @param collectionSecret
    * @throws {TypeError} if any of the parameters are not of type CustomFieldsCollection
    * @throws {TypeError} if any of the parameters have not the same length
+   * @return {CustomFieldsCollection}
    */
-  static mergeCollectionsMetadataInSecret(collectionMetadata, collectionSecret) {
+  static mergeCollectionsMetadataAndSecret(collectionMetadata, collectionSecret) {
     if (!(collectionMetadata instanceof CustomFieldsCollection) || !(collectionSecret instanceof CustomFieldsCollection)) {
-      throw new TypeError("Both paramerters must be of type CustomFieldsCollection");
+      throw new TypeError("Both parameters must be of type CustomFieldsCollection");
     }
 
     const length = collectionMetadata.length;
     if (length !== collectionSecret.length) {
-      throw new TypeError("Collections are corrupted");
+      console.debug("Collections are corrupted, some data is missing");
     }
 
-    if (collectionMetadata.isEmpty()) {
-      return;
-    }
-
-    const customFieldsMetadataMapById = collectionMetadata.items.reduce((result, customField) => {
-      result[customField.id] = customField;
-      return result;
-    }, {});
-
-    for (const customFieldEntity of collectionSecret) {
-      const customFieldMetadataEntity = customFieldsMetadataMapById[customFieldEntity.id];
-      customFieldEntity.metadata_key = customFieldMetadataEntity.metadata_key;
-      customFieldEntity.metadata_value = customFieldMetadataEntity.metadata_value;
-    }
+    const collectionToMerge = collectionMetadata.toDto();
+    // Deep merge keeping the order from the source and add at the end the new entry
+    const collectionMergedDto = collectionToMerge.reduce((columnsMerged, columnToMerge) => {
+      const index = columnsMerged.findIndex(column => column.id === columnToMerge.id); // Look for the columnsMerged has the same id while iterating
+      // If column found need to merge with value of columnsToMerge
+      if (index > -1) {
+        columnsMerged[index] = Object.assign(columnsMerged[index], columnToMerge);
+        return columnsMerged;
+      }
+      // should not happen, a key value pair is missing
+      return [...columnsMerged, columnToMerge];
+    }, collectionSecret.toDto()); // Initial values of reduce to merge
+    return new CustomFieldsCollection(collectionMergedDto);
   }
 }

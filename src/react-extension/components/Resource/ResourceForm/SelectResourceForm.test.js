@@ -532,7 +532,7 @@ describe("SelectResourceForm", () => {
 
     it('As LU I can see add secrets disabled if all secrets are added.', async() => {
       expect.assertions(1);
-      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypeV5DefaultTotpDto()), resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resource: defaultResourceFormDto({secret: {password: "", description: "", totp: {}}})});
+      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypeV5DefaultTotpDto()), resourceFormSelected: ResourceEditCreateFormEnumerationTypes.TOTP, resource: defaultResourceFormDto({secret: {password: "", description: "", totp: {}, custom_fields: [{}]}})});
       page = new SelectResourceFormPage(props);
       await waitFor(() => {});
 

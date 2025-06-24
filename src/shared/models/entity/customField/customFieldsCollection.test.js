@@ -273,4 +273,92 @@ describe("CustomFieldsCollection", () => {
       expect(CustomFieldsCollection.areCollectionsDifferent(collectionA, collectionB)).toStrictEqual(true);
     });
   });
+
+  describe("::mergeCollectionsMetadataAndSecret", () => {
+    it("should throw an error if the parameters are not of the right type.", async() => {
+      expect.assertions(2);
+
+      const collection = new CustomFieldsCollection(defaultCustomFieldsCollection());
+
+      expect(() => CustomFieldsCollection.mergeCollectionsMetadataAndSecret(null, collection)).toThrowError();
+      expect(() => CustomFieldsCollection.mergeCollectionsMetadataAndSecret(collection, null)).toThrowError();
+    });
+
+    it("should return a collection merged between them.", async() => {
+      expect.assertions(1);
+      const mergedCollection = new CustomFieldsCollection(defaultCustomFieldsCollection());
+
+      const metadataCustomFieldsDto = [...mergedCollection];
+      metadataCustomFieldsDto.forEach(customField => {
+        delete customField.secret_value;
+        delete customField.secret_key;
+      });
+
+      const secretCustomFieldsDto = [...mergedCollection];
+      secretCustomFieldsDto.forEach(customField => {
+        delete customField.metadata_value;
+        delete customField.metadata_key;
+      });
+
+      const metadataCollection = new CustomFieldsCollection(metadataCustomFieldsDto);
+      const secretCollection = new CustomFieldsCollection(secretCustomFieldsDto);
+      expect(CustomFieldsCollection.mergeCollectionsMetadataAndSecret(metadataCollection, secretCollection)).toStrictEqual(mergedCollection);
+    });
+
+    it("should return a merged even if secret collections have different size.", async() => {
+      expect.assertions(1);
+      const mergedCollection = new CustomFieldsCollection(defaultCustomFieldsCollection());
+
+      const metadataCustomFieldsDto =  [...mergedCollection];
+      const secretCustomFieldsDto =  [...mergedCollection];
+      const customField = defaultCustomField();
+      secretCustomFieldsDto.push(customField);
+
+      delete customField.metadata_key;
+      delete customField.metadata_value;
+      mergedCollection.push(customField);
+
+      metadataCustomFieldsDto.forEach(customField => {
+        delete customField.secret_value;
+        delete customField.secret_key;
+      });
+
+      secretCustomFieldsDto.forEach(customField => {
+        delete customField.metadata_value;
+        delete customField.metadata_key;
+      });
+
+      const metadataCollection = new CustomFieldsCollection(metadataCustomFieldsDto);
+      const secretCollection = new CustomFieldsCollection(secretCustomFieldsDto);
+      expect(CustomFieldsCollection.mergeCollectionsMetadataAndSecret(metadataCollection, secretCollection)).toStrictEqual(mergedCollection);
+    });
+
+    it("should return a merged even if metadata collections have different size.", async() => {
+      expect.assertions(1);
+      const mergedCollection = new CustomFieldsCollection(defaultCustomFieldsCollection());
+
+      const metadataCustomFieldsDto =  [...mergedCollection];
+      const secretCustomFieldsDto =  [...mergedCollection];
+      const customField = defaultCustomField();
+      metadataCustomFieldsDto.push(customField);
+
+      delete customField.secret_key;
+      delete customField.secret_value;
+      mergedCollection.push(customField);
+
+      metadataCustomFieldsDto.forEach(customField => {
+        delete customField.secret_value;
+        delete customField.secret_key;
+      });
+
+      secretCustomFieldsDto.forEach(customField => {
+        delete customField.metadata_value;
+        delete customField.metadata_key;
+      });
+
+      const collectionA = new CustomFieldsCollection(metadataCustomFieldsDto);
+      const collectionB = new CustomFieldsCollection(secretCustomFieldsDto);
+      expect(CustomFieldsCollection.mergeCollectionsMetadataAndSecret(collectionA, collectionB)).toStrictEqual(mergedCollection);
+    });
+  });
 });

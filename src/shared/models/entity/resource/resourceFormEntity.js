@@ -40,7 +40,6 @@ import SecretDataV5StandaloneCustomFieldsCollection from "../secretData/secretDa
 import SecretDataV5StandaloneTotpEntity from "../secretData/secretDataV5StandaloneTotpEntity";
 import ResourceMetadataEntity from "./metadata/resourceMetadataEntity";
 import {CUSTOM_FIELD_KEY_MAX_LENGTH, CUSTOM_FIELD_TEXT_MAX_LENGTH} from "../customField/customFieldEntity";
-import CustomFieldsCollection from "../customField/customFieldsCollection";
 
 class ResourceFormEntity extends EntityV2 {
   /**
@@ -420,12 +419,10 @@ class ResourceFormEntity extends EntityV2 {
     if (this._metadata) {
       result.metadata = this.metadata.toDto(ResourceMetadataEntity.DEFAULT_CONTAIN);
       // Add manually custom fields in metadata if any in secret property
-      if (this.secret.customFields) {
-        const customFieldsCollection = this.createCustomFieldsMetadataCollectionFromSecret();
-        result.metadata.custom_fields = customFieldsCollection.toDto();
+      if (this.secret._customFields) {
+        result.metadata.custom_fields = this.secret._customFields.toMetadataDto();
       }
     }
-
     return result;
   }
 
@@ -435,25 +432,14 @@ class ResourceFormEntity extends EntityV2 {
    */
   toSecretDto() {
     if (this._secret) {
-      return this.secret.toDto();
+      const result = this.secret.toDto();
+      // Set manually custom fields in secret if any in secret property
+      if (this.secret._customFields) {
+        result.custom_fields = this.secret._customFields.toSecretDto();
+      }
+      return result;
     }
     return null;
-  }
-
-  /**
-   * Create the custom fields collection for metadata from secret property
-   * @returns {CustomFieldsCollection}
-   */
-  createCustomFieldsMetadataCollectionFromSecret() {
-    const customFieldsMetadata = [];
-    for (const customField of this.secret.customFields) {
-      const customFieldMetadata = customField.toDto();
-      // Remove secret value to keep only metadata key
-      delete customFieldMetadata.secret_value;
-      delete customFieldMetadata.secret_key;
-      customFieldsMetadata.push(customFieldMetadata);
-    }
-    return new CustomFieldsCollection(customFieldsMetadata);
   }
 
   /**
@@ -479,7 +465,7 @@ class ResourceFormEntity extends EntityV2 {
         );
       }
 
-      if (this.secret.customFiels) {
+      if (this.secret.customFields) {
         validationError = this.validateCustomFields(
           this.secret.customFields,
           validationError,
@@ -547,7 +533,7 @@ class ResourceFormEntity extends EntityV2 {
    * Validates custom fields
    * - Validates each key maxLength
    * - Validates each value maxLength
-   * @param {CustomFieldsCollection} customFieldsDto - the custom fields dto to validate
+   * @param {CustomFieldsCollection} customFields - the custom fields dto to validate
    * @param {EntityValidationError|null} currentError - The existing error object or null
    * @private
    */
@@ -555,8 +541,8 @@ class ResourceFormEntity extends EntityV2 {
     let error = currentError;
     for (let i = 0; i < customFields.length; i++) {
       const customField = customFields.items[i];
-      const isKeyTooLong = customField.key.length > CUSTOM_FIELD_KEY_MAX_LENGTH;
-      const isValueTooLong = customField.value.length > CUSTOM_FIELD_TEXT_MAX_LENGTH;
+      const isKeyTooLong = customField.key.length >= CUSTOM_FIELD_KEY_MAX_LENGTH;
+      const isValueTooLong = customField.value.length >= CUSTOM_FIELD_TEXT_MAX_LENGTH;
 
       if (isKeyTooLong || isValueTooLong) {
         error = error || new EntityValidationError();
@@ -577,6 +563,10 @@ class ResourceFormEntity extends EntityV2 {
    * @inheritdoc
    */
   validate(options = {}) {
+    /*
+     * options.skipSchemaAssociationValidation remove the schema required validation on the associations
+     * Required association is not part of the props after the entity is created
+     */
     const validationErrors = super.validate(Object.assign(
       options,
       {
@@ -612,7 +602,7 @@ class ResourceFormEntity extends EntityV2 {
 
     //If custom_fields has no value then remove it
     if (this.secret instanceof SecretDataV5DefaultEntity || this.secret instanceof SecretDataV5DefaultTotpEntity) {
-      if (this.secret.customFields && !this.secret.customFields.isEmpty()) {
+      if (this.secret.customFields && this.secret.customFields.isEmpty()) {
         this.deleteSecret(ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS, options);
       }
     }

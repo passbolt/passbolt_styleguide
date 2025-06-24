@@ -497,7 +497,7 @@ describe("EntityV2", () => {
       expect(entity.associatedCollection).toStrictEqual(associatedTestCollectionV2);
     });
 
-    it("set an association property value with property in the association.", () => {
+    it("set an association property value with property in the association collection.", () => {
       expect.assertions(1);
       const entity = new TestEntityV2(defaultTestEntityV2Dto());
       const id = uuid();

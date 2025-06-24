@@ -243,7 +243,8 @@ class SelectResourceForm extends Component {
   get canAddSecret() {
     return this.canAddSecretPassword
         || this.canAddSecretTotp
-        || this.canAddSecretNote;
+        || this.canAddSecretNote
+        || this.canAddSecretCustomFields;
   }
 
   /**

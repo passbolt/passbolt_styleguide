@@ -149,11 +149,10 @@ describe("SecretDataV5StandaloneCustomFieldsCollection", () => {
 
   describe("::areSecretsDifferent", () => {
     it("should assert its parameters", () => {
-      expect.assertions(2);
+      expect.assertions(1);
 
       const collection = new SecretDataV5StandaloneCustomFieldsCollection(defaultSecretDataV5StandaloneCustomFieldsCollectionDtos());
-      expect(() => SecretDataV5StandaloneCustomFieldsCollection.areSecretsDifferent(null, collection)).toThrowError();
-      expect(() => SecretDataV5StandaloneCustomFieldsCollection.areSecretsDifferent(collection, null)).toThrowError();
+      expect(() => collection.areSecretsDifferent(null)).toThrowError();
     });
 
     it("returns true if both collections have different size", () => {
@@ -163,9 +162,8 @@ describe("SecretDataV5StandaloneCustomFieldsCollection", () => {
       dtoB.custom_fields.push(defaultCustomField());
 
       const collectionA = new SecretDataV5StandaloneCustomFieldsCollection(dtoA);
-      const collectionB = new SecretDataV5StandaloneCustomFieldsCollection(dtoB);
 
-      expect(SecretDataV5StandaloneCustomFieldsCollection.areSecretsDifferent(collectionA, collectionB)).toStrictEqual(true);
+      expect(collectionA.areSecretsDifferent(dtoB)).toStrictEqual(true);
     });
 
     it("returns true if one item in the collection is different", () => {
@@ -176,9 +174,8 @@ describe("SecretDataV5StandaloneCustomFieldsCollection", () => {
       dtoB.custom_fields[1] = {...dtoB.custom_fields[1], id: uuidv4()};
 
       const collectionA = new SecretDataV5StandaloneCustomFieldsCollection(dtoA);
-      const collectionB = new SecretDataV5StandaloneCustomFieldsCollection(dtoB);
 
-      expect(SecretDataV5StandaloneCustomFieldsCollection.areSecretsDifferent(collectionA, collectionB)).toStrictEqual(true);
+      expect(collectionA.areSecretsDifferent(dtoB)).toStrictEqual(true);
     });
 
     it("returns false if collections are identical", () => {
@@ -186,9 +183,8 @@ describe("SecretDataV5StandaloneCustomFieldsCollection", () => {
       const dtoA = defaultSecretDataV5StandaloneCustomFieldsCollectionDtos();
 
       const collectionA = new SecretDataV5StandaloneCustomFieldsCollection(dtoA);
-      const collectionB = new SecretDataV5StandaloneCustomFieldsCollection(dtoA);
 
-      expect(SecretDataV5StandaloneCustomFieldsCollection.areSecretsDifferent(collectionA, collectionB)).toStrictEqual(false);
+      expect(collectionA.areSecretsDifferent(dtoA)).toStrictEqual(false);
     });
   });
 });

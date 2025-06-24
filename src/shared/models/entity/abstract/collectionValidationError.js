@@ -64,6 +64,15 @@ class CollectionValidationError extends Error {
   }
 
   /**
+   * Return true if some error details are present
+   *
+   * @returns {boolean}
+   */
+  hasErrors() {
+    return this.errors.some(error => Object.keys(error.details).length > 0);
+  }
+
+  /**
    * Return the error in the details expected format.
    * @return {object}
    */

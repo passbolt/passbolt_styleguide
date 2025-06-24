@@ -108,30 +108,12 @@ describe("CustomFieldEntity", () => {
       expect(entity._props.secret_value).toStrictEqual(dto.secret_value);
     });
 
-    it("validateBuildRules: no key defined", () => {
-      expect.assertions(1);
-      const dto = defaultCustomField();
-      delete dto?.metadata_key;
-      delete dto?.secret_key;
-
-      expect(() => new CustomFieldEntity(dto)).toThrow();
-    });
-
     it("validateBuildRules: both metadata key and secret key defined", () => {
       expect.assertions(1);
       const dto = defaultCustomField({
         metadata_key: "key",
         secret_key: "key",
       });
-
-      expect(() => new CustomFieldEntity(dto)).toThrow();
-    });
-
-    it("validateBuildRules: no value defined", () => {
-      expect.assertions(1);
-      const dto = defaultCustomField();
-      delete dto?.metadata_value;
-      delete dto?.secret_value;
 
       expect(() => new CustomFieldEntity(dto)).toThrow();
     });

@@ -23,12 +23,6 @@ export default class SecretDataV5StandaloneCustomFieldsCollection extends Secret
    */
   constructor(dto, options = {}) {
     super(dto, options);
-
-    // Associations
-    if (this._props.custom_fields) {
-      this._customFields = new CustomFieldsCollection(this._props.custom_fields, {...options, clone: false});
-      delete this._props.custom_fields;
-    }
   }
 
   /**
@@ -46,6 +40,15 @@ export default class SecretDataV5StandaloneCustomFieldsCollection extends Secret
         ...SecretDataEntity.getSchema().properties,
         "custom_fields": CustomFieldsCollection.getSchema(),
       }
+    };
+  }
+
+  /**
+   * @inheritDoc
+   */
+  static get associations() {
+    return {
+      custom_fields: CustomFieldsCollection,
     };
   }
 
@@ -107,29 +110,12 @@ export default class SecretDataV5StandaloneCustomFieldsCollection extends Secret
 
   /**
    * Returns true if the given 2 secrets are different
-   * @param {SecretDataV5StandaloneCustomFieldsCollection} a
-   * @param {SecretDataV5StandaloneCustomFieldsCollection} b
+   * @param {object} secretDto
    * @returns {boolean}
    * @throws {TypeError} if one of the parameters is not of type SecretDataV5StandaloneCustomFieldsCollection
    */
-  static areSecretsDifferent(a, b) {
-    if (!(a instanceof SecretDataV5StandaloneCustomFieldsCollection) || !(b instanceof SecretDataV5StandaloneCustomFieldsCollection)) {
-      throw new TypeError("Both paramerters must be of type SecretDataV5StandaloneCustomFieldsCollection");
-    }
-
-    const length = a.customFields.length;
-    if (length !== b.customFields.length) {
-      return true;
-    }
-
-    for (let i = 0; i < length; i++) {
-      const fieldA = a.customFields.items[i];
-      const fieldB = b.customFields.items[i];
-
-      if (CustomFieldEntity.areFieldsDifferent(fieldA, fieldB)) {
-        return true;
-      }
-    }
-    return false;
+  areSecretsDifferent(secretDto) {
+    const otherCollection = new CustomFieldsCollection(secretDto.custom_fields, {validate: false});
+    return CustomFieldsCollection.areCollectionsDifferent(this.customFields, otherCollection);
   }
 }

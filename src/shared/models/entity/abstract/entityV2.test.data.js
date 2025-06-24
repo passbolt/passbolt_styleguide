@@ -103,6 +103,35 @@ export class TestEntityV2 extends EntityV2 {
   get associatedCollection() {
     return this._associatedCollection;
   }
+
+  /**
+   * Return a DTO
+   *
+   * @param {object} [contain] optional
+   * @returns {object}
+   */
+  toDto(contain) {
+    const result = Object.assign({}, this._props);
+    if (!contain) {
+      return result;
+    }
+    if (this.associatedEntity && contain.associated_entity) {
+      result.associated_entity = this.associatedEntity.toDto();
+    }
+    if (this.associatedCollection && contain.associated_collection) {
+      result.associated_collection = this.associatedCollection.toDto();
+    }
+
+    return result;
+  }
+
+  /**
+   * TestEntityV2.ALL_CONTAIN_OPTIONS
+   * @returns {object} all contain options that can be used in toDto()
+   */
+  static get ALL_CONTAIN_OPTIONS() {
+    return {associated_entity: true, associated_collection: true};
+  }
 }
 
 export class TestAssociatedEntityV2 extends EntityV2 {

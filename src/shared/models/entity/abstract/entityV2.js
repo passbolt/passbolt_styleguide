@@ -107,6 +107,10 @@ class EntityV2 extends Entity {
     let schema = option?.schema ?? this.cachedSchema;
     if (option?.skipSchemaAssociationValidation) {
       schema = {...schema};
+      /*
+       * Remove required association in the schema to avoid an error on an entity already created.
+       * As the association are not stored in the props, it can not be validated with the schema but rely on its entity validation
+       */
       const requiredAssociations = Object.keys(this.constructor.associations);
       const required = schema.required.filter(requiredSchema => !requiredAssociations.includes(requiredSchema));
       schema.required = required;
@@ -358,11 +362,14 @@ class EntityV2 extends Entity {
     } else {
       throw new Error(`The property "${propNameSplit[0]}" has no index passed.`);
     }
-    if (!this[`_${collectionPropName}`] || !this[`_${collectionPropName}`]._items[index]) {
-      throw new Error(`The collection "${propNameSplit[0]}" has no item at the index "${propNameSplit[1]}".`);
+    if (!this[`_${collectionPropName}`]) {
+      throw new Error(`The collection "${propNameSplit[0]}" has no item".`);
     }
     if (value != null) {
       if (propNameSplit.length > 2) {
+        if (!this[`_${collectionPropName}`]._items[index]) {
+          throw new Error(`The collection "${propNameSplit[0]}" has no item at the index "${propNameSplit[1]}".`);
+        }
         // set value in array if not null or undefined
         const concatenatedPropName = propNameSplit.slice(2).join('.');
         this[`_${collectionPropName}`]._items[index].set(concatenatedPropName, value, options);
