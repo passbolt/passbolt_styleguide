@@ -321,7 +321,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       return;
     }
 
-    // Known folder
+    if (this.canUseFolders) {
+      this.populateFolders();
+    }
+
     this.resourcesServiceWorkerService.updateResourceLocalStorageForParentFolderId(folder.id);
     await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});
 
