@@ -49,6 +49,7 @@ import {
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import ResourceFormEntity from "../../../../shared/models/entity/resource/resourceFormEntity";
 import DisplayResourceDetailsCustomFields from "./DisplayResourceDetailsCustomFields";
+import DisplayResourceDetailsURIs from "./DisplayResourceDetailsURIs";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -272,6 +273,14 @@ class DisplayResourceDetails extends React.Component {
   }
 
   /**
+   * Checks if the resource has multiple URIs.
+   * @returns {boolean} True if the resource has more than one URI, false otherwise.
+   */
+  get hasMultipleUris() {
+    return this.resource.metadata.uris?.length > 1;
+  }
+
+  /**
    * Should display the upgrade resource section
    * @returns {boolean}
    */
@@ -319,6 +328,9 @@ class DisplayResourceDetails extends React.Component {
         }
         {this.hasCustomFields &&
           <DisplayResourceDetailsCustomFields />
+        }
+        {this.hasMultipleUris &&
+          <DisplayResourceDetailsURIs />
         }
         {canViewShare &&
           <DisplayResourceDetailsPermission />

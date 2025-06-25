@@ -28,6 +28,7 @@ import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspa
 import {RbacContext} from "../../../../shared/context/Rbac/RbacContext";
 import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
 import {resourceWithCustomFields} from "./DisplayResourceDetailsCustomFields.test.data";
+import {resourceWithMultipleUris} from "./DisplayResourceDetailsURIs.test.data";
 
 /**
  * DisplayResourceDetails stories
@@ -113,6 +114,18 @@ export const WithCustomFields = {
       resourceWorkspaceContext: defaultResourceWorkspaceContext({
         details: {
           resource: resourceWithCustomFields,
+        }
+      })
+    }),
+  }
+};
+
+export const WithMultipleUris = {
+  args: {
+    ...defaultProps({
+      resourceWorkspaceContext: defaultResourceWorkspaceContext({
+        details: {
+          resource: resourceWithMultipleUris,
         }
       })
     }),

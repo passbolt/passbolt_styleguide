@@ -44,6 +44,7 @@ import ResourceMetadataEntity from "../../../../shared/models/entity/resource/me
 import {SECRET_DATA_OBJECT_TYPE} from "../../../../shared/models/entity/secretData/secretDataEntity";
 import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
 import {resourceWithCustomFields} from "./DisplayResourceDetailsCustomFields.test.data";
+import {resourceWithMultipleUris, resourceWithOneUris} from "./DisplayResourceDetailsURIs.test.data";
 
 jest.mock("./DisplayResourceDetailsInformation", () => () => <></>);
 jest.mock("./DisplayResourceDetailsPassword", () => () => <div className="password"></div>);
@@ -381,6 +382,41 @@ describe("DisplayResourceDetails", () => {
         {resourceWorkspaceContext: defaultResourceWorkspaceContext({
           details: {
             resource: resourceWithReadPermissionDto(),
+          }
+        })});
+
+      const page = new DisplayResourceDetailsPage(props);
+      await waitFor(() => {});
+
+      expect(page.customFieldTab).toBeNull();
+    });
+  });
+
+  describe('As LU I can see the URIs section', () => {
+    let page;
+
+    beforeEach(() => {
+      const props = defaultProps(
+        {resourceWorkspaceContext: defaultResourceWorkspaceContext({
+          details: {
+            resource: resourceWithMultipleUris,
+          }
+        })});
+
+      page = new DisplayResourceDetailsPage(props);
+    });
+    it('As LU I can see the multiple uris section', async() => {
+      expect.assertions(1);
+
+      expect(page.urisTab).toBeDefined();
+    });
+    it('As LU I cannot see the section if resource does not contain more than 1 uri', async() => {
+      expect.assertions(1);
+
+      const props = defaultProps(
+        {resourceWorkspaceContext: defaultResourceWorkspaceContext({
+          details: {
+            resource: resourceWithOneUris,
           }
         })});
 

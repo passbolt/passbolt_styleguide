@@ -260,7 +260,6 @@
 
         .information-value, .field-value {
           .ellipsis();
-
           button {
             max-width: 100%;
             span {
@@ -273,6 +272,10 @@
             }
           }
 
+          .main-uri,  .additional-uris {
+            text-decoration: underline;
+          }
+          
           .location.value {
             button {
               width: 100%;
@@ -290,6 +293,13 @@
             overflow: hidden;
             text-overflow: ellipsis;
             height: 2rem; // set height for empty value
+          }
+
+          .additional-uris {
+            height: auto;
+            display: flex;
+            gap: .8rem;
+            flex-direction: column;
           }
 
           .password-value, .totp-value, .field-secret-value {
