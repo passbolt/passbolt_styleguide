@@ -25,6 +25,9 @@ import EyeCloseSVG from "../../../../img/svg/eye_close.svg";
 import EyeOpenSVG from "../../../../img/svg/eye_open.svg";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withProgress} from "../../../contexts/ProgressContext";
+import ClipBoard from "../../../../shared/lib/Browser/clipBoard";
 
 /**
  * This component display the custom fields section of a resource
@@ -48,9 +51,8 @@ class DisplayResourceDetailsCustomFields extends React.Component {
     return {
       open: false,
       secrets: [],
-      secretPreviewed: null,
+      secretPreviewed: [],
       isSecretsDecrypting: false,
-      showAll: false
     };
   }
 
@@ -60,8 +62,10 @@ class DisplayResourceDetailsCustomFields extends React.Component {
    */
   bindCallbacks() {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
-    this.handleSecretClickEvent = this.handleSecretClickEvent.bind(this);
+    this.handlePreviewSecretClickEvent = this.handlePreviewSecretClickEvent.bind(this);
     this.handleShowAllEvent = this.handleShowAllEvent.bind(this);
+    this.handleCopySecretEvent = this.handleCopySecretEvent.bind(this);
+    this.handleCopyKeyEvent = this.handleCopyKeyEvent.bind(this);
   }
 
   /**
@@ -87,7 +91,7 @@ class DisplayResourceDetailsCustomFields extends React.Component {
    * @returns {boolean} True if the secret is previewed or show all is active
    */
   isPreviewed(id) {
-    return this.state.secretPreviewed === id || this.state.showAll;
+    return this.state.secretPreviewed.includes(id);
   }
 
   /**
@@ -96,7 +100,8 @@ class DisplayResourceDetailsCustomFields extends React.Component {
    * @returns {string|number|boolean} The secret value or undefined if not found
    */
   getSecretValue(id) {
-    return this.state.secrets.find(secret => secret.id === id)?.secretValue;
+    const secretValue = this.state.secrets?.find(secret => secret.id === id)?.secret_value;
+    return secretValue || "";
   }
 
   /**
@@ -105,14 +110,49 @@ class DisplayResourceDetailsCustomFields extends React.Component {
    * @returns {Promise<void>}
    * @todo Implement secret decryption logic in the next ticket
    */
-  async handleSecretClickEvent(id) {
-    if (!id) {
-      if (this.state.secretPreviewed === id) {
-        this.setState({secretPreviewed: null});
-      } else {
-        this.setState({secretPreviewed: id});
-      }
+  async handlePreviewSecretClickEvent(id) {
+    const {secretPreviewed} = this.state;
+
+    if (secretPreviewed.includes(id)) {
+      const updatedSecretPreviewed = secretPreviewed.filter(secretId => secretId !== id);
+      const secrets = updatedSecretPreviewed.length === 0 ? [] : this.state.secrets;
+      this.setState({secretPreviewed: updatedSecretPreviewed, secrets: secrets});
+    } else {
+      const secrets = await this.decryptCustomFieldSecrets();
+      await this.props.resourceWorkspaceContext.onResourcePreviewed();
+      this.setState({secrets, secretPreviewed: [...secretPreviewed, id]});
     }
+  }
+
+  /**
+   * Asynchronously decrypts a custom fields secrets.
+   * @returns {Promise<void>}
+   */
+  async decryptCustomFieldSecrets() {
+    const resourceId = this.resource.id;
+    let customFieldsSecrets;
+
+    this.props.progressContext.open(this.props.t('Decrypting secret(s)'));
+
+    if (this.state.secrets?.length === 0) {
+      try {
+        const plaintextSecretDto = await this.props.context.port.request("passbolt.secret.find-by-resource-id", resourceId);
+        customFieldsSecrets = plaintextSecretDto?.custom_fields;
+      } catch (error) {
+        if (error.name !== "UserAbortsOperationError") {
+          this.props.actionFeedbackContext.displayError(error.message);
+        }
+      }
+    } else {
+      //We have many secrets, the user can preview one by one
+      customFieldsSecrets = this.state.secrets;
+    }
+    if (!customFieldsSecrets) {
+      customFieldsSecrets = [];
+    }
+    this.props.progressContext.close();
+
+    return customFieldsSecrets;
   }
 
   /**
@@ -120,8 +160,54 @@ class DisplayResourceDetailsCustomFields extends React.Component {
    * @returns {Promise<void>}
    */
   async handleShowAllEvent() {
-    await this.handleSecretClickEvent();
-    this.setState({showAll: !this.state.showAll, secretPreviewed: null});
+    if (!this.showAll) {
+      this.setState({isSecretsDecrypting: true});
+      const secrets = await this.decryptCustomFieldSecrets();
+      this.setState({secrets, isSecretsDecrypting: false});
+      const secretPreviewed = this.resource.metadata.customFields.map(customField => customField.id);
+      this.setState({secretPreviewed});
+    } else {
+      this.setState({secrets: [], secretPreviewed: []});
+    }
+  }
+
+  /**
+   * Handles the copying of a secret to the clipboard.
+   * @param {string} id - The ID of the secret to be copied.
+   * @returns {Promise<void>}
+   */
+  async handleCopySecretEvent(id) {
+    const secrets = await this.decryptCustomFieldSecrets();
+    const secret = secrets ? secrets.find(secret => secret.id === id) : null;
+
+    this.props.progressContext.close();
+
+    if (!secret || secret.length === 0) {
+      await this.props.actionFeedbackContext.displayWarning(this.props.t("The password is empty and cannot be copied to clipboard."));
+      return;
+    }
+    await ClipBoard.copy(secret.secret_value, this.props.context.port);
+    await this.props.resourceWorkspaceContext.onResourceCopied();
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The secret has been copied to clipboard"));
+  }
+
+  /**
+   * Handles the event when a key is copied.
+   * @param {string} key - The key to be copied.
+   * @returns {Promise<void>} A promise that resolves when the key has been copied and feedback is displayed.
+   */
+  async handleCopyKeyEvent(key) {
+    await ClipBoard.copy(key, this.props.context.port);
+    await this.props.resourceWorkspaceContext.onResourceCopied();
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The secret has been copied to clipboard"));
+  }
+
+  /**
+   * Determines whether all custom fields are currently being previewed.
+   * @returns {boolean}
+   */
+  get showAll() {
+    return this.state.secretPreviewed.length === this.resource.metadata.customFields.length;
   }
 
   /**
@@ -130,7 +216,7 @@ class DisplayResourceDetailsCustomFields extends React.Component {
    */
   render() {
     const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
-    const canPreviewSecret = this.props.context.siteSettings?.canIUse("previewPassword");
+    const canPreviewSecret = this.props.context.siteSettings?.canIUse("previewPassword") && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
 
     return (
       <div className="detailed-information accordion sidebar-section custom-fields">
@@ -148,60 +234,62 @@ class DisplayResourceDetailsCustomFields extends React.Component {
           </h4>
         </div>
         {this.state.open &&
-                        <div className="accordion-content">
-                          <div className="fields">
-                            <div className="information-label">
-                              {
-                                this.resource.metadata.customFields.map(customField => (
-                                  <span key={customField.id} className={`${customField.metadataKey} label`}>
-                                    {customField.metadataKey}
-                                  </span>
-                                ))
-                              }
-                            </div>
-                            <div className="information-value">
-                              {
-                                this.resource.metadata.customFields.map(customField => {
-                                  const isPreviewed = this.isPreviewed(customField.id);
-
-                                  return (
-                                    <span
-                                      key={customField.id}
-                                      className={`${customField.metadataKey} field-secret-value`}
-                                    >
-                                      <div className={`secret secret-custom-fields ${canPreviewSecret ? "secret-with-preview" : ""} ${isPreviewed ? "" : "secret-copy"}`}
-                                        title={isPreviewed ? this.getSecretValue(customField.id) : "secret"}>
-                                        <HiddenPassword
-                                          canClick={canCopySecret}
-                                          preview={isPreviewed ? this.getSecretValue(customField.id) : ""}
-                                          onClick={() => this.handleSecretClickEvent(customField.id)}
-                                        />
-                                      </div>
-                                      {canPreviewSecret && (
-                                        <button
-                                          type="button"
-                                          onClick={() => this.handleSecretClickEvent(customField.id)}
-                                          className="password-view inline button-transparent"
-                                        >
-                                          {isPreviewed ? <EyeCloseSVG /> : <EyeOpenSVG />}
-                                        </button>
-                                      )}
-                                    </span>
-                                  );
-                                })
-                              }
-                            </div>
-                          </div>
-                          {!this.state.showAll ?
-                            <button type="button" disabled={this.state.isSecretDecrypting} onClick={this.handleShowAllEvent}>
-                              <EyeOpenSVG /><Trans>Show all</Trans>{this.state.secrets.length > 0 && <SpinnerSVG />}
-                            </button>
-                            :
-                            <button type="button" disabled={this.state.isSecretDecrypting} onClick={this.handleShowAllEvent}>
-                              <EyeCloseSVG /><Trans>Hide all</Trans>
-                            </button>
+                    <div className="accordion-content">
+                      <div className="fields">
+                        <div className="information-label">
+                          {
+                            this.resource.metadata.customFields.map(customField => (
+                              <span key={customField.id} title={customField.metadata_key} className={`${customField.metadata_key} label ${canCopySecret && "can-copy"}`} onClick={() => canCopySecret && this.handleCopyKeyEvent(customField.metadata_key)}>
+                                {customField.metadata_key}
+                              </span>
+                            ))
                           }
                         </div>
+                        <div className="information-value">
+                          {
+                            this.resource.metadata.customFields.map(customField => {
+                              const isPreviewed = this.isPreviewed(customField.id);
+
+                              return (
+                                <span
+                                  key={customField.id}
+                                  className={`${customField.metadata_key} field-secret-value`}
+                                >
+                                  <div className={`secret secret-custom-fields ${canPreviewSecret ? "secret-with-preview" : ""} ${isPreviewed ? "" : "secret-copy"}`}
+                                    title={isPreviewed ? this.getSecretValue(customField.id) : this.props.t("Click to copy")}>
+                                    <HiddenPassword
+                                      canClick={canCopySecret}
+                                      isPassword={false}
+                                      preview={isPreviewed ? this.getSecretValue(customField.id) : ""}
+                                      onClick={() => this.handleCopySecretEvent(customField.id)}
+                                    />
+                                  </div>
+
+                                  {canPreviewSecret && (
+                                    <button
+                                      type="button"
+                                      onClick={() => this.handlePreviewSecretClickEvent(customField.id)}
+                                      className="password-view inline button-transparent"
+                                    >
+                                      {isPreviewed ? <EyeCloseSVG /> : <EyeOpenSVG />}
+                                    </button>
+                                  )}
+                                </span>
+                              );
+                            })
+                          }
+                        </div>
+                      </div>
+                      {!this.showAll && canPreviewSecret ?
+                        <button type="button" disabled={this.state.isSecretsDecrypting} onClick={this.handleShowAllEvent} id="show-all-button">
+                          <EyeOpenSVG /><Trans>Show all</Trans>{this.state.isSecretsDecrypting && <SpinnerSVG />}
+                        </button>
+                        :
+                        <button type="button" onClick={this.handleShowAllEvent} id="hide-all-button">
+                          <EyeCloseSVG /><Trans>Hide all</Trans>
+                        </button>
+                      }
+                    </div>
         }
 
       </div>
@@ -213,7 +301,9 @@ DisplayResourceDetailsCustomFields.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
   resourceWorkspaceContext: PropTypes.any, // The resource
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  progressContext: PropTypes.any, // The progress context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withRbac(withTranslation('common')(DisplayResourceDetailsCustomFields))));
+export default withAppContext(withActionFeedback(withResourceWorkspace(withRbac(withProgress(withTranslation('common')(DisplayResourceDetailsCustomFields))))));

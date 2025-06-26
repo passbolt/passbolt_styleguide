@@ -507,7 +507,7 @@ class ResourceViewPage extends React.Component {
                   <span className="property-name"><Trans>Password</Trans></span>
                   <div className="password-wrapper">
                     <div className={`property-value secret secret-password ${isPasswordPreviewed ? "" : "secret-copy"}`}
-                      title={isPasswordPreviewed ? this.state.plaintextSecretDto?.password : "secret"}>
+                      title={isPasswordPreviewed ? this.state.plaintextSecretDto?.password : this.translate("Click to copy")}>
                       <HiddenPassword
                         canClick={canCopySecret}
                         preview={this.state.plaintextSecretDto?.password}
@@ -569,7 +569,8 @@ class ResourceViewPage extends React.Component {
               <div className="information">
                 <span className="property-name"><Trans>TOTP</Trans></span>
                 <div className="totp-wrapper">
-                  <div className={`property-value secret secret-totp ${isTotpPreviewed ? "" : "secret-copy"}`}>
+                  <div className={`property-value secret secret-totp ${isTotpPreviewed ? "" : "secret-copy"}`}
+                    title={isTotpPreviewed ? this.state.plaintextSecretDto?.totp : this.translate("Click to copy")}>
                     {isTotpPreviewed &&
                       <Totp
                         totp={this.state.plaintextSecretDto?.totp}

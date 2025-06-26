@@ -20,7 +20,8 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {resourceTypesCollectionDto} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import {updatePermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultAppContext, defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultUserRbacContext, denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * Default props
@@ -30,6 +31,7 @@ export function defaultProps(props) {
   return {
     ...props,
     context: defaultAppContext(props.context),
+    rbacContext: defaultUserRbacContext(props.rbacContext),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(props.resourceWorkspaceContext),
   };
@@ -48,18 +50,49 @@ export const resourceWithCustomFields = defaultResourceDto({
     customFields: [{
       id: uuidv4(),
       type: CUSTOM_FIELD_TYPE.PASSWORD,
-      metadataKey: "API Key"
+      metadata_key: "API Key",
     },
     {
       id: uuidv4(),
       type: CUSTOM_FIELD_TYPE.PASSWORD,
-      metadataKey: "Environment"
+      metadata_key: "Environment"
     },
     {
       id: uuidv4(),
       type: CUSTOM_FIELD_TYPE.PASSWORD,
-      metadataKey: "Database URL"
+      metadata_key: "Database URL"
     }]
   },
   permission: updatePermissionDto()
+
 });
+
+/**
+ * Generates props with RBAC context set to deny UI action.
+ * @param {Object} data
+ * @param {Object} data.resource - The resource object.
+ * @returns {Object}
+ */
+export function propsWithDenyUiAction(data = {}) {
+  return defaultProps({
+    rbacContext: denyRbacContext(),
+    resourceWorkspaceContext: {details: {resource: data.resource}}});
+}
+
+/**
+ * Generates default props for the DisplayResourceDetails component.
+ *
+ * @param {Object} data
+ * @param {Object} data.resource - The resource object.
+ * @returns {Object}
+ */
+export function propsWithApiFlagDisabled(data = {}) {
+  return defaultProps({
+    context: defaultUserAppContext({
+      siteSettings: {
+        getServerTimezone: () => '',
+        canIUse: () => false,
+      }
+    }),
+    resourceWorkspaceContext: {details: {resource: data.resource}}});
+}

@@ -12,6 +12,8 @@
  * @since         4.3.0
  */
 
+import {v4 as uuidv4} from "uuid";
+
 /*
  * ==================================================
  * DTOs
@@ -69,6 +71,29 @@ export const plaintextSecretTotpDto = (data = {}) => ({
     secret_key: "i73r3rn22atgcmdlqmotr2q7erukgmri46bvzxzlc6jbkckmtlpa",
   },
   ...data
+});
+
+/**
+ * Generates a DTO for plaintext secret custom fields.
+ * @param {Object} data
+ * @param {Array} [data.customFields]
+ * @returns {Object}
+ */
+export const plaintextSecretCustomFieldsDto = (data = {}) => ({
+  custom_fields: [
+    {
+      id: data.customFields?.[0]?.id || uuidv4(),
+      secret_value: "I am a secret"
+    },
+    {
+      id: data.customFields?.[1]?.id || uuidv4(),
+      secret_value: "I am a secret 2"
+    },
+    {
+      id: data.customFields?.[2]?.id || uuidv4(),
+      secret_value: "I am a secret 3"
+    },
+  ]
 });
 
 /*
