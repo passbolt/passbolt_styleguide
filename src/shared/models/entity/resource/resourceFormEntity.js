@@ -539,20 +539,30 @@ class ResourceFormEntity extends EntityV2 {
    */
   validateCustomFields(customFields, currentError) {
     let error = currentError;
+    // Use a Set to collect unique property values
+    const uniqueKeys = new Set();
+
     for (let i = 0; i < customFields.length; i++) {
       const customField = customFields.items[i];
       const isKeyTooLong = customField.key.length >= CUSTOM_FIELD_KEY_MAX_LENGTH;
       const isValueTooLong = customField.value.length >= CUSTOM_FIELD_TEXT_MAX_LENGTH;
 
+      if (uniqueKeys.has(customField.key)) {
+        error = error || new EntityValidationError();
+        error.addError(`custom_fields.${i}.key`, "unique", `The key name is already used`);
+      } else {
+        uniqueKeys.add(customField.key);
+      }
+
       if (isKeyTooLong || isValueTooLong) {
         error = error || new EntityValidationError();
 
         if (isKeyTooLong) {
-          error.addError(`custom_fields.${i}.key`, "maxLength", `The custom field key at index ${i} exceeds maximum length`);
+          error.addError(`custom_fields.${i}.key`, "maxLength", `The custom field key at index ${i} reached the maximum length`);
         }
 
         if (isValueTooLong) {
-          error.addError(`custom_fields.${i}.value`, "maxLength", `The custom field value at index ${i} exceeds maximum length`);
+          error.addError(`custom_fields.${i}.value`, "maxLength", `The custom field value at index ${i} reached the maximum length`);
         }
       }
     }

@@ -789,7 +789,7 @@ describe("See the Create Resource", () => {
       });
 
       it('As a signed-in user I should be aware about the key and value maxLength', async() => {
-        expect.assertions(4);
+        expect.assertions(3);
 
         await page.fillInput(page.getCustomFieldKey(0), "a".repeat(255));
         await page.fillInput(page.getCustomFieldValue(0), "a".repeat(5000));
@@ -797,8 +797,38 @@ describe("See the Create Resource", () => {
         // expectations
         expect(page.getCustomFieldKey(0).value).toEqual("a".repeat(255));
         expect(page.getCustomFieldValue(0).value).toEqual("a".repeat(5000));
-        expect(page.getCustomFieldKeyWarningMessage(0).textContent).toEqual("The key exceeds the character limit, make sure your data won’t be truncated.");
-        expect(page.getCustomFieldValueWarningMessage(0).textContent).toEqual("The value exceeds the character limit, make sure your data won’t be truncated.");
+        expect(page.getCustomFieldKeyAndValueWarningMessage(0).textContent).toEqual("The key and the value reach the character limit, make sure your data won’t be truncated.");
+      });
+
+      it('As a signed-in user I should be aware about the key maxLength', async() => {
+        expect.assertions(2);
+
+        await page.fillInput(page.getCustomFieldKey(0), "a".repeat(255));
+
+        // expectations
+        expect(page.getCustomFieldKey(0).value).toEqual("a".repeat(255));
+        expect(page.getCustomFieldKeyWarningMessage(0).textContent).toEqual("The key reach the character limit, make sure your data won’t be truncated.");
+      });
+
+      it('As a signed-in user I should be aware if the key name is already used', async() => {
+        expect.assertions(1);
+
+        await page.fillInput(page.getCustomFieldKey(0), "key");
+        await page.click(page.addCustomField);
+        await page.fillInput(page.getCustomFieldKey(1), "key");
+
+        // expectations
+        expect(page.getCustomFieldKeyWarningMessage(1).textContent).toEqual("The key name is already used.");
+      });
+
+      it('As a signed-in user I should be aware about the value maxLength', async() => {
+        expect.assertions(2);
+
+        await page.fillInput(page.getCustomFieldValue(0), "a".repeat(5000));
+
+        // expectations
+        expect(page.getCustomFieldValue(0).value).toEqual("a".repeat(5000));
+        expect(page.getCustomFieldValueWarningMessage(0).textContent).toEqual("The value reach the character limit, make sure your data won’t be truncated.");
       });
     });
 

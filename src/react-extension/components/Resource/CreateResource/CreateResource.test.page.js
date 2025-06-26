@@ -413,6 +413,13 @@ export default class CreateResourcePage {
   }
 
   /**
+   * Returns the custom field key and value warning message
+   */
+  getCustomFieldKeyAndValueWarningMessage(index) {
+    return this._page.container.querySelector(`.resource-custom-fields-warning-${index}`);
+  }
+
+  /**
    * Returns the custom field value textarea element
    */
   getCustomFieldValue(index) {

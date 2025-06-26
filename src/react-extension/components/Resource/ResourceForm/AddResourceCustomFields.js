@@ -123,11 +123,23 @@ class AddResourceCustomFields extends Component {
   /**
    * Checks if there is a max length warning for a specific property.
    *
-   * @param {string} propName - The name of the property to check for max length warnings.
+   * @param {string} propName - The name of the property to check for warnings.
+   * @param {string} rule - The rule of the property to check for warnings.
    * @returns {boolean} - Returns true if there is a max length warning for the property, false otherwise.
    */
-  isMaxLengthWarnings(propName) {
-    return !this.isCustomFieldsCollectionMaxContentSizeReached && this.props.warnings?.hasError(propName, "maxLength");
+  isWarnings(propName, rule) {
+    return this.props.warnings?.hasError(propName, rule);
+  }
+
+  /**
+   * Is max length reach for the key and the value
+   * @param index
+   * @returns {boolean}
+   */
+  isMaxLengthKeyAndValueWarning(index) {
+    return this.props.warnings?.hasError(`custom_fields.${index}.key`, "maxLength")
+      && this.props.warnings?.hasError(`custom_fields.${index}.value`, "maxLength")
+      && !this.isCustomFieldsCollectionMaxContentSizeReached;
   }
 
   /**
@@ -183,9 +195,9 @@ class AddResourceCustomFields extends Component {
         <div className="content">
           <div className="custom-fields-fields">
             {this.props.resource?.secret.custom_fields?.map((custom_field, index) => (
-              <div key={index} className="custom-field-row">
+              <div key={index} className="input custom-field-row">
                 <div className="input custom-field">
-                  <input id={`resource-custom-fields-key-${index}`} disabled={this.props.disabled} name={`secret.custom_fields.${index}.metadata_key`} maxLength="255" type="text" autoComplete="off" placeholder={this.translate("Key")} value={custom_field.metadata_key} onChange={this.handleInputChange}/>
+                  <input id={`resource-custom-fields-key-${index}`} autoFocus={index + 1 === this.customFieldsLength} disabled={this.props.disabled} name={`secret.custom_fields.${index}.metadata_key`} maxLength="255" type="text" autoComplete="off" placeholder={this.translate("Key")} value={custom_field.metadata_key} onChange={this.handleInputChange}/>
                   <SecureTextarea
                     id={`resource-custom-fields-value-${index}`}
                     name={`secret.custom_fields.${index}.secret_value`}
@@ -199,15 +211,27 @@ class AddResourceCustomFields extends Component {
                     <button type="button" className="button-transparent inline" id={`resource-delete-custom-field-${index}`} onClick={() => this.handleDeleteCustomFieldClick(index)}><DeleteSVG/></button>
                   }
                 </div>
-                {this.isMaxLengthWarnings(`custom_fields.${index}.key`) &&
+                {this.isWarnings(`custom_fields.${index}.key`, "unique") &&
                   <div className={`resource-custom-fields-key-warning-${index} warning-message`}>
-                    <Trans>The key exceeds the character limit, make sure your data won’t be truncated.</Trans>
+                    <Trans>The key name is already used.</Trans>
                   </div>
                 }
-                {this.isMaxLengthWarnings(`custom_fields.${index}.value`) &&
-                  <div className={`resource-custom-fields-value-warning-${index} warning-message`}>
-                    <Trans>The value exceeds the character limit, make sure your data won’t be truncated.</Trans>
+                {this.isMaxLengthKeyAndValueWarning(index)
+                  ? <div className={`resource-custom-fields-warning-${index} warning-message`}>
+                    <Trans>The key and the value reach the character limit, make sure your data won’t be truncated.</Trans>
                   </div>
+                  : <>
+                    {this.isWarnings(`custom_fields.${index}.key`, "maxLength") &&
+                      <div className={`resource-custom-fields-key-warning-${index} warning-message`}>
+                        <Trans>The key reach the character limit, make sure your data won’t be truncated.</Trans>
+                      </div>
+                    }
+                    {this.isWarnings(`custom_fields.${index}.value`, "maxLength") && !this.isCustomFieldsCollectionMaxContentSizeReached &&
+                      <div className={`resource-custom-fields-value-warning-${index} warning-message`}>
+                        <Trans>The value reach the character limit, make sure your data won’t be truncated.</Trans>
+                      </div>
+                    }
+                  </>
                 }
               </div>
             ))
