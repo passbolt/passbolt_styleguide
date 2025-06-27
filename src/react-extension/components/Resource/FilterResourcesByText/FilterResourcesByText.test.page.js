@@ -93,6 +93,13 @@ class DisplaySearchBarPageObject {
   }
 
   /**
+   * Returns the search icon
+   */
+  get searchIcon() {
+    return this._container.querySelector('svg[name="search"]');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {

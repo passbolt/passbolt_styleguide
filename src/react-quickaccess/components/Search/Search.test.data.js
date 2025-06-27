@@ -13,3 +13,12 @@ export function defaultAppContext(appContext) {
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
+
+export function searchStringAppContext(appContext) {
+  const searchStringAppContext = {
+    port: new MockPort(),
+    updateSearch: () => {},
+    search: "Test input",
+  };
+  return Object.assign(searchStringAppContext, appContext || {});
+}
