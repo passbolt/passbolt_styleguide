@@ -807,7 +807,7 @@ describe("See the Create Resource", () => {
 
         // expectations
         expect(page.getCustomFieldKey(0).value).toEqual("a".repeat(255));
-        expect(page.getCustomFieldKeyWarningMessage(0).textContent).toEqual("The key reach the character limit, make sure your data won’t be truncated.");
+        expect(page.getCustomFieldKeyWarningMessage(0).textContent).toEqual("The key reaches the character limit, make sure your data won’t be truncated.");
       });
 
       it('As a signed-in user I should be aware if the key name is already used', async() => {
@@ -828,7 +828,7 @@ describe("See the Create Resource", () => {
 
         // expectations
         expect(page.getCustomFieldValue(0).value).toEqual("a".repeat(5000));
-        expect(page.getCustomFieldValueWarningMessage(0).textContent).toEqual("The value reach the character limit, make sure your data won’t be truncated.");
+        expect(page.getCustomFieldValueWarningMessage(0).textContent).toEqual("The value reaches the character limit, make sure your data won’t be truncated.");
       });
     });
 

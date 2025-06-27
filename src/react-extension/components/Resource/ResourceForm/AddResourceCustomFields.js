@@ -223,12 +223,12 @@ class AddResourceCustomFields extends Component {
                   : <>
                     {this.isWarnings(`custom_fields.${index}.key`, "maxLength") &&
                       <div className={`resource-custom-fields-key-warning-${index} warning-message`}>
-                        <Trans>The key reach the character limit, make sure your data won’t be truncated.</Trans>
+                        <Trans>The key reaches the character limit, make sure your data won’t be truncated.</Trans>
                       </div>
                     }
                     {this.isWarnings(`custom_fields.${index}.value`, "maxLength") && !this.isCustomFieldsCollectionMaxContentSizeReached &&
                       <div className={`resource-custom-fields-value-warning-${index} warning-message`}>
-                        <Trans>The value reach the character limit, make sure your data won’t be truncated.</Trans>
+                        <Trans>The value reaches the character limit, make sure your data won’t be truncated.</Trans>
                       </div>
                     }
                   </>

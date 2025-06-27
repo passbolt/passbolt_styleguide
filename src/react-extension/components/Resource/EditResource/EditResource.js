@@ -105,25 +105,28 @@ class EditResource extends Component {
    * @returns {Promise<void>}
    */
   async initializeResourceForm() {
-    const resourceDto = {...this.props.resource};
-    const secret = await this.getDecryptedSecret();
-    this.mergeCustomFieldsMetadataAndSecret(resourceDto, secret);
-    resourceDto.secret = secret;
-    // Delete the custom fields in the metadata to not have inconsistency if the user remove the custom fields secret
-    delete resourceDto.metadata.custom_fields;
-    this.resourceFormEntity = new ResourceFormEntity(resourceDto, {validate: false, resourceTypes: this.props.resourceTypes});
-    const passwordEntropy = secret?.password?.length
-      ? SecretGenerator.entropy(secret.password)
-      : null;
+    try {
+      const resourceDto = {...this.props.resource};
+      const secret = await this.getDecryptedSecret();
+      this.mergeCustomFieldsMetadataAndSecret(resourceDto, secret);
+      resourceDto.secret = secret;
+      this.resourceFormEntity = new ResourceFormEntity(resourceDto, {validate: false, resourceTypes: this.props.resourceTypes});
+      const passwordEntropy = secret?.password?.length
+        ? SecretGenerator.entropy(secret.password)
+        : null;
 
-    this.setState({
-      isSecretDecrypting: false,
-      originalSecret: secret,
-      resource: this.resourceFormEntity.toDto(),
-      resourceType: this.props.resourceTypes.getFirstById(this.props.resource.resource_type_id),
-      resourceFormSelected: this.selectResourceFormByResourceSecretData(),
-      passwordEntropy
-    });
+      this.setState({
+        isSecretDecrypting: false,
+        originalSecret: secret,
+        resource: this.resourceFormEntity.toDto(),
+        resourceType: this.props.resourceTypes.getFirstById(this.props.resource.resource_type_id),
+        resourceFormSelected: this.selectResourceFormByResourceSecretData(),
+        passwordEntropy
+      });
+    } catch (error) {
+      this.props.dialogContext.open(NotifyError, {error});
+      this.handleClose();
+    }
   }
 
   /**
@@ -137,6 +140,10 @@ class EditResource extends Component {
       const customFieldsMetadataCollection = new CustomFieldsCollection(resourceDto.metadata.custom_fields);
       const customFieldsSecretCollection = new CustomFieldsCollection(secret.custom_fields);
       secret.custom_fields = CustomFieldsCollection.mergeCollectionsMetadataAndSecret(customFieldsMetadataCollection, customFieldsSecretCollection).toDto();
+      // Set the custom fields to null to remove the reference in the metadata to not have inconsistency if the user remove the custom fields secret
+      resourceDto.metadata.custom_fields = null;
+      // Remove the property
+      delete resourceDto.metadata.custom_fields;
     }
   }
 
@@ -190,14 +197,10 @@ class EditResource extends Component {
 
   /**
    * Get the decrypted secret associated to the resource
-   * @returns {Promise<void>}
+   * @returns {Promise<object>}
    */
   async getDecryptedSecret() {
-    try {
-      return await this.props.context.port.request("passbolt.secret.find-by-resource-id", this.props.resource.id);
-    } catch (error) {
-      this.handleClose();
-    }
+    return await this.props.context.port.request("passbolt.secret.find-by-resource-id", this.props.resource.id);
   }
 
   /**

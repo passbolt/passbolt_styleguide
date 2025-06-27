@@ -931,7 +931,7 @@ describe("See the Create Resource", () => {
 
         // expectations
         expect(page.getCustomFieldKey(0).value).toEqual("a".repeat(255));
-        expect(page.getCustomFieldKeyWarningMessage(0).textContent).toEqual("The key reach the character limit, make sure your data won’t be truncated.");
+        expect(page.getCustomFieldKeyWarningMessage(0).textContent).toEqual("The key reaches the character limit, make sure your data won’t be truncated.");
       });
 
       it('As a signed-in user I should be aware about the value maxLength', async() => {
@@ -941,7 +941,7 @@ describe("See the Create Resource", () => {
 
         // expectations
         expect(page.getCustomFieldValue(0).value).toEqual("a".repeat(5000));
-        expect(page.getCustomFieldValueWarningMessage(0).textContent).toEqual("The value reach the character limit, make sure your data won’t be truncated.");
+        expect(page.getCustomFieldValueWarningMessage(0).textContent).toEqual("The value reaches the character limit, make sure your data won’t be truncated.");
       });
     });
 
@@ -1198,12 +1198,14 @@ describe("See the Create Resource", () => {
     });
 
     it('As LU I cannot editing a resource if secret request throw error', async() => {
-      expect.assertions(2);
+      expect.assertions(3);
       const props = defaultProps(); // The props to pass
-      mockContextRequest(props.context, () => { throw Error(); });
+      const error = new Error("Unexpected Error");
+      mockContextRequest(props.context, () => { throw error; });
       const page = new EditResourcePage(props);
       await waitFor(() => {});
       expect(page.exists()).toBeTruthy();
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
       expect(props.onClose).toHaveBeenCalled();
     });
   });
