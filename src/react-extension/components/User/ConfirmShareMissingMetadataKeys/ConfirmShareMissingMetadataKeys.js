@@ -70,7 +70,7 @@ class ConfirmShareMissingMetadataKeys extends React.Component {
     try {
       await this.metadataKeysServiceWorkerService.share(this.props.user.id);
       this.props.userWorkspaceContext.onRefreshSelectedUsers();
-      this.props.actionFeedbackContext.displaySuccess(this.props.t("Metadata keys has been shared with ({{username}}", {username: this.props.user.username}));
+      this.props.actionFeedbackContext.displaySuccess(this.props.t("Metadata keys have been shared with ({{username}})", {username: this.props.user.username}));
     } catch (error) {
       console.error(error);
       this.props.actionFeedbackContext.displayError(error.message);

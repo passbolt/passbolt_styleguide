@@ -745,7 +745,7 @@
   "Metadata key": "Metadata key",
   "Metadata key policy": "Metadata key policy",
   "Metadata keys": "Metadata keys",
-  "Metadata keys has been shared with ({{username}}": "Metadata keys has been shared with ({{username}}",
+  "Metadata keys have been shared with ({{username}})": "Metadata keys have been shared with ({{username}})",
   "MFA": "MFA",
   "MFA Policy": "MFA Policy",
   "Migrate": "Migrate",
