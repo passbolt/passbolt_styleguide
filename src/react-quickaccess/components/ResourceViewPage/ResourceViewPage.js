@@ -355,8 +355,10 @@ class ResourceViewPage extends React.Component {
   }
 
   handleGoToUrlClick(event) {
+    const primaryUri = this.state.resource.metadata?.uris?.[0];
+
     this.resetError();
-    if (!this.sanitizeResourceUrl()) {
+    if (!this.sanitizeResourceUrl(primaryUri)) {
       event.preventDefault();
     }
   }
