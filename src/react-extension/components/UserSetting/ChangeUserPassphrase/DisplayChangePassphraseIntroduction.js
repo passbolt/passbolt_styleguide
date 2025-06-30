@@ -129,9 +129,13 @@ class DisplayChangePassphraseIntroduction extends React.Component {
             <h3><Trans>Before getting started...</Trans></h3>
             <div className="password-management-bg">
             </div>
-            <p><Trans>The passphrase is stored on your device and never sent server side.</Trans>&nbsp;
-              <Trans>Changing your passphrase will only change it locally.</Trans>&nbsp;
-              <Trans>If you have multiple browsers configured, the passphrase will need to be changed in all places individually.</Trans>
+            <p>
+              <Trans>The passphrase is used to protect your private key locally.</Trans>
+              <Trans>The passphrase is stored on your device and never transmitted to the server.</Trans><br/><br/>
+              <Trans>Changing your passphrase will only update it on your current device and browser profile.</Trans>
+              <Trans>If you use Passbolt on multiple browsers or devices, you’ll need to update the passphrase on each one individually.</Trans><br/><br/>
+              <Trans>Whenever you change your passphrase, Passbolt automatically creates a new key backup encrypted with the updated passphrase.</Trans>
+              <Trans>This backup supersedes the previous one, so be sure to replace any older backups with it.</Trans>&nbsp;
             </p>
             <div className={`input checkbox ${this.state.understandPassphraseError ? 'error' : ''}`}>
               <input id="passphrase-update-understand" type="checkbox" checked={this.state.understandPassphrase}
