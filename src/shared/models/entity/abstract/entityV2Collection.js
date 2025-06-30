@@ -130,6 +130,53 @@ class EntityV2Collection extends EntityCollection {
     // Override this method to add entity validation build rules.
   }
 
+  /**
+   * Validate the items only.
+   * Note: the collection schema and the build rules are not validated.
+   * @param {object} [options] Options
+   */
+  validate(options = {}) {
+    try {
+      /*
+       * Validate schema is not supported on collection already created. The schema validation works only on DTO
+       * this.validateSchema();
+       * Validate build rules is not supported on collection already created. The build rules validation works only on DTO
+       * this.validateBuildRules(options?.validateBuildRules);
+       */
+      this.validateItems(options);
+    } catch (error) {
+      if (!(error instanceof CollectionValidationError)) {
+        throw error;
+      }
+      return error;
+    }
+
+    return null;
+  }
+
+  /**
+   * Validate the entity items
+   * @param {object} [options] Options
+   */
+  validateItems(options = {}) {
+    if (this.length === 0) {
+      return null;
+    }
+
+    const collectionValidationError = new CollectionValidationError();
+    this.items.forEach(((entity, index) => {
+      const errors = entity.validate(options);
+      if (errors) {
+        collectionValidationError.addItemValidationError(index, errors);
+      }
+    }));
+
+    // Throw error if some issues were gathered
+    if (collectionValidationError.hasErrors()) {
+      throw collectionValidationError;
+    }
+  }
+
   /*
    * ==================================================
    * Setters
@@ -149,6 +196,7 @@ class EntityV2Collection extends EntityCollection {
    */
   push(data, entityOptions = {}, options = {}) {
     const entity = this.buildOrCloneEntity(data, entityOptions);
+    // The validation should be controlled by the entityOptions.validate however the impact might needs to be measured prior conditionally validate build rules
     this.validateBuildRules(entity, options?.validateBuildRules);
     this._items.push(entity);
     options?.onItemPushed?.(entity);

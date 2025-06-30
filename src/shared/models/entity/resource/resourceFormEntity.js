@@ -11,32 +11,35 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
+import assertString from "validator/es/lib/util/assertString";
+import {ResourceEditCreateFormEnumerationTypes} from "../../resource/ResourceEditCreateFormEnumerationTypes";
 import EntityV2 from "../abstract/entityV2";
-import ResourceMetadataEntity from "./metadata/resourceMetadataEntity";
-import SecretDataV4DefaultEntity from "../secretData/secretDataV4DefaultEntity";
-import SecretDataV5DefaultEntity from "../secretData/secretDataV5DefaultEntity";
-import SecretDataV5DefaultTotpEntity from "../secretData/secretDataV5DefaultTotpEntity";
-import SecretDataV5StandaloneTotpEntity from "../secretData/secretDataV5StandaloneTotpEntity";
-import SecretDataV5PasswordStringEntity from "../secretData/secretDataV5PasswordStringEntity";
-import SecretDataV4DefaultTotpEntity from "../secretData/secretDataV4DefaultTotpEntity";
-import SecretDataV4StandaloneTotpEntity from "../secretData/secretDataV4StandaloneTotpEntity";
-import SecretDataV4PasswordStringEntity from "../secretData/secretDataV4PasswordStringEntity";
-import SecretDataEntity from "../secretData/secretDataEntity";
-import ResourceTypesCollection from "../resourceType/resourceTypesCollection";
+import EntityValidationError from "../abstract/entityValidationError";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
   RESOURCE_TYPE_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_TOTP_SLUG,
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
-  V4_TO_V5_RESOURCE_TYPE_MAPPING
+  V4_TO_V5_RESOURCE_TYPE_MAPPING,
 } from "../resourceType/resourceTypeSchemasDefinition";
-import assertString from "validator/es/lib/util/assertString";
-import {ResourceEditCreateFormEnumerationTypes} from "../../resource/ResourceEditCreateFormEnumerationTypes";
-import EntityValidationError from "../abstract/entityValidationError";
+import ResourceTypesCollection from "../resourceType/resourceTypesCollection";
+import SecretDataEntity from "../secretData/secretDataEntity";
+import SecretDataV4DefaultEntity from "../secretData/secretDataV4DefaultEntity";
+import SecretDataV4DefaultTotpEntity from "../secretData/secretDataV4DefaultTotpEntity";
+import SecretDataV4PasswordStringEntity from "../secretData/secretDataV4PasswordStringEntity";
+import SecretDataV4StandaloneTotpEntity from "../secretData/secretDataV4StandaloneTotpEntity";
+import SecretDataV5DefaultEntity from "../secretData/secretDataV5DefaultEntity";
+import SecretDataV5DefaultTotpEntity from "../secretData/secretDataV5DefaultTotpEntity";
+import SecretDataV5PasswordStringEntity from "../secretData/secretDataV5PasswordStringEntity";
+import SecretDataV5StandaloneCustomFieldsCollection from "../secretData/secretDataV5StandaloneCustomFieldsCollection";
+import SecretDataV5StandaloneTotpEntity from "../secretData/secretDataV5StandaloneTotpEntity";
+import ResourceMetadataEntity from "./metadata/resourceMetadataEntity";
+import {CUSTOM_FIELD_KEY_MAX_LENGTH, CUSTOM_FIELD_TEXT_MAX_LENGTH} from "../customField/customFieldEntity";
 
 class ResourceFormEntity extends EntityV2 {
   /**
@@ -98,7 +101,8 @@ class ResourceFormEntity extends EntityV2 {
           SecretDataV4DefaultEntity.getSchema(),
           SecretDataV4DefaultTotpEntity.getSchema(),
           SecretDataV4StandaloneTotpEntity.getSchema(),
-          SecretDataV4PasswordStringEntity.getSchema()
+          SecretDataV4PasswordStringEntity.getSchema(),
+          SecretDataV5StandaloneCustomFieldsCollection.getSchema(),
         ]},
       }
     };
@@ -179,6 +183,8 @@ class ResourceFormEntity extends EntityV2 {
         return SecretDataV4StandaloneTotpEntity;
       case RESOURCE_TYPE_PASSWORD_STRING_SLUG:
         return SecretDataV4PasswordStringEntity;
+      case RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG:
+        return SecretDataV5StandaloneCustomFieldsCollection;
       default:
         return null;
     }
@@ -346,6 +352,8 @@ class ResourceFormEntity extends EntityV2 {
         return resourceType.hasTotp();
       case ResourceEditCreateFormEnumerationTypes.NOTE:
         return resourceType.hasSecretDescription();
+      case ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS:
+        return resourceType.hasCustomFields();
       default:
         return false;
     }
@@ -410,8 +418,11 @@ class ResourceFormEntity extends EntityV2 {
 
     if (this._metadata) {
       result.metadata = this.metadata.toDto(ResourceMetadataEntity.DEFAULT_CONTAIN);
+      // Add manually custom fields in metadata if any in secret property
+      if (this.secret._customFields) {
+        result.metadata.custom_fields = this.secret._customFields.toMetadataDto();
+      }
     }
-
     return result;
   }
 
@@ -421,7 +432,12 @@ class ResourceFormEntity extends EntityV2 {
    */
   toSecretDto() {
     if (this._secret) {
-      return this.secret.toDto();
+      const result = this.secret.toDto();
+      // Set manually custom fields in secret if any in secret property
+      if (this.secret._customFields) {
+        result.custom_fields = this.secret._customFields.toSecretDto();
+      }
+      return result;
     }
     return null;
   }
@@ -446,6 +462,13 @@ class ResourceFormEntity extends EntityV2 {
           this.secret.totp.toDto(),
           this.secret.totp,
           validationError
+        );
+      }
+
+      if (this.secret.customFields) {
+        validationError = this.validateCustomFields(
+          this.secret.customFields,
+          validationError,
         );
       }
     }
@@ -507,9 +530,53 @@ class ResourceFormEntity extends EntityV2 {
   }
 
   /**
+   * Validates custom fields
+   * - Validates each key maxLength
+   * - Validates each value maxLength
+   * @param {CustomFieldsCollection} customFields - the custom fields dto to validate
+   * @param {EntityValidationError|null} currentError - The existing error object or null
+   * @private
+   */
+  validateCustomFields(customFields, currentError) {
+    let error = currentError;
+    // Use a Set to collect unique property values
+    const uniqueKeys = new Set();
+
+    for (let i = 0; i < customFields.length; i++) {
+      const customField = customFields.items[i];
+      const isKeyTooLong = customField.key.length >= CUSTOM_FIELD_KEY_MAX_LENGTH;
+      const isValueTooLong = customField.value.length >= CUSTOM_FIELD_TEXT_MAX_LENGTH;
+
+      if (uniqueKeys.has(customField.key)) {
+        error = error || new EntityValidationError();
+        error.addError(`custom_fields.${i}.key`, "unique", `The key name is already used`);
+      } else {
+        uniqueKeys.add(customField.key);
+      }
+
+      if (isKeyTooLong || isValueTooLong) {
+        error = error || new EntityValidationError();
+
+        if (isKeyTooLong) {
+          error.addError(`custom_fields.${i}.key`, "maxLength", `The custom field key at index ${i} reached the maximum length`);
+        }
+
+        if (isValueTooLong) {
+          error.addError(`custom_fields.${i}.value`, "maxLength", `The custom field value at index ${i} reached the maximum length`);
+        }
+      }
+    }
+    return error;
+  }
+
+  /**
    * @inheritdoc
    */
   validate(options = {}) {
+    /*
+     * options.skipSchemaAssociationValidation remove the schema required validation on the associations
+     * Required association is not part of the props after the entity is created
+     */
     const validationErrors = super.validate(Object.assign(
       options,
       {
@@ -523,11 +590,14 @@ class ResourceFormEntity extends EntityV2 {
    * Remove empty secret
    * @param {object} [options] Options
    *
-   * Note: This function remove only empty Totp on:
-   * V4:
-   *  - password, description and Totp
-   * V5:
-   *  - DefaultTotp
+   * This function removes:
+   *
+   * - empty Totp on:
+   *    - V4: password, description and Totp
+   *    - V5: DefaultTotp
+   *
+   * - empty custom fields on:
+   *    - V5: Default and defaultTotp
    *
    * Not supported:
    *   - Other resource type
@@ -537,6 +607,13 @@ class ResourceFormEntity extends EntityV2 {
     if (this.secret instanceof SecretDataV4DefaultTotpEntity || this.secret instanceof SecretDataV5DefaultTotpEntity) {
       if (!this.secret.totp.hasSecretKey) {
         this.deleteSecret(ResourceEditCreateFormEnumerationTypes.TOTP, options);
+      }
+    }
+
+    //If custom_fields has no value then remove it
+    if (this.secret instanceof SecretDataV5DefaultEntity || this.secret instanceof SecretDataV5DefaultTotpEntity) {
+      if (this.secret.customFields && this.secret.customFields.isEmpty()) {
+        this.deleteSecret(ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS, options);
       }
     }
   }

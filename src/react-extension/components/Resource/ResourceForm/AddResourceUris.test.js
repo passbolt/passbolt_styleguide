@@ -59,7 +59,7 @@ describe("AddResourceUris", () => {
     });
   });
 
-  describe('As LU I cshould see add uri enabled if main uri is filled.', () => {
+  describe('As LU I should see add uri enabled if main uri is filled.', () => {
     it('As LU I can add uri.', async() => {
       expect.assertions(5);
 

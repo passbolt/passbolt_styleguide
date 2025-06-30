@@ -12,11 +12,11 @@
  * @since         4.7.0
  */
 import EntityV2Collection from "./entityV2Collection";
-import {TestEntity} from "./entity.test.data";
+import {TestEntityV2} from "./entityV2.test.data";
 
 export class TestEntityV2Collection extends EntityV2Collection {
   get entityClass() {
-    return TestEntity;
+    return TestEntityV2;
   }
 
   /**
@@ -26,7 +26,7 @@ export class TestEntityV2Collection extends EntityV2Collection {
   static getSchema() {
     return {
       "type": "array",
-      "items": TestEntity.getSchema(),
+      "items": TestEntityV2.getSchema(),
     };
   }
 

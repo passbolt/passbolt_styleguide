@@ -140,6 +140,22 @@ export default class DisplayResourceDetailsPage {
   }
 
   /**
+   * Getter for the custom field tab element.
+   * @returns {HTMLElement} The custom field tab element.
+   */
+  get customFieldTab() {
+    return this._page.container.querySelector('.sidebar-content .custom-fields');
+  }
+
+  /**
+   * Getter for the URIs tab element.
+   * @returns {HTMLElement} The URIs tab element.
+   */
+  get urisTab() {
+    return this._page.container.querySelector('.sidebar-content .uris');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {

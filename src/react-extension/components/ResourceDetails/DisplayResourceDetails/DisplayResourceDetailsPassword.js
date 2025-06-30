@@ -311,7 +311,7 @@ class DisplayResourceDetailsPassword extends React.Component {
               <span className="username value"><button type="button" className="no-border" onClick={this.handleUsernameClickEvent}><span>{this.resource.metadata.username}</span></button></span>
               <div className="password-value">
                 <div className={`secret secret-password ${canPreviewSecret ? "secret-with-preview" : ""} ${isPasswordPreviewed ? "" : "secret-copy"}`}
-                  title={isPasswordPreviewed ? this.state.plaintextSecret : "secret"}>
+                  title={isPasswordPreviewed ? this.state.plaintextSecret : this.translate("Click to copy")}>
                   <HiddenPassword
                     canClick={canCopySecret}
                     preview={this.state.plaintextSecret}

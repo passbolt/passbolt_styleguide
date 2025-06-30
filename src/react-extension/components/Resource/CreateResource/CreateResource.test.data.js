@@ -17,6 +17,7 @@ import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import {
+  resourceTypeV5CustomFieldsDto,
   resourceTypeV5DefaultDto, resourceTypeV5TotpDto,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
@@ -65,6 +66,18 @@ export function defaultProps(data = {}) {
 export function defaultTotpProps(data = {}) {
   const defaultData = defaultProps({
     resourceType: new ResourceTypeEntity(resourceTypeV5TotpDto()),
+  });
+
+  return Object.assign(defaultData, data);
+}
+
+/**
+ * Default totp props
+ * @returns {*}
+ */
+export function defaultCustomFieldsProps(data = {}) {
+  const defaultData = defaultProps({
+    resourceType: new ResourceTypeEntity(resourceTypeV5CustomFieldsDto()),
   });
 
   return Object.assign(defaultData, data);

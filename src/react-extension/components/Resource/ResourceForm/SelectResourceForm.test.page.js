@@ -83,6 +83,23 @@ export default class SelectResourceFormPage {
     return this._page.container.querySelector("#delete-totp");
   }
 
+
+  /**
+   * Returns the add secret custom fields
+   * @returns {Element}
+   */
+  get addSecretCustomFields() {
+    return this.selectResourceForm.querySelector("#custom_fields_action");
+  }
+
+  /**
+   * Returns the delete secret custom fields
+   * @returns {Element}
+   */
+  get deleteSecretCustomFields() {
+    return this._page.container.querySelector("#delete-custom-fields");
+  }
+
   /**
    * Returns the add secret note
    * @returns {Element}

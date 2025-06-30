@@ -258,9 +258,8 @@
           }
         }
 
-        .information-value {
+        .information-value, .field-value {
           .ellipsis();
-
           button {
             max-width: 100%;
             span {
@@ -273,6 +272,10 @@
             }
           }
 
+          .main-uri,  .additional-uris {
+            text-decoration: underline;
+          }
+          
           .location.value {
             button {
               width: 100%;
@@ -292,10 +295,24 @@
             height: 2rem; // set height for empty value
           }
 
-          .password-value, .totp-value {
+          .additional-uris {
+            height: auto;
+            display: flex;
+            gap: .8rem;
+            flex-direction: column;
+          }
+
+          .password-value, .totp-value, .field-secret-value {
             display: flex;
             gap: .4rem;
-
+            .password-view {
+              display: none;
+            }
+            &:hover {
+              .password-view{
+                display: flex;
+              }
+            }
             .secret {
               &-with-preview {
                 max-width: calc(100% - 2.4rem);
@@ -401,6 +418,28 @@
           .actions {
             padding: 0 1.6rem 1.6rem 1.6rem;
           }
+        }
+      }
+    }
+
+    .custom-fields {
+      .accordion-content {  
+        padding: 1.6rem;
+        display: flex;
+        flex-direction: column;      
+        gap: 1.6rem;
+
+        .fields {
+          display: flex;
+          align-self: stretch;
+          gap: 1.6rem;
+          .information-value {
+            width: 100%;
+          }
+        }
+        button {
+          justify-self: center;
+          align-self: center;
         }
       }
     }
