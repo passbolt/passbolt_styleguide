@@ -106,7 +106,11 @@ class EditResource extends Component {
    */
   async initializeResourceForm() {
     try {
-      const resourceDto = {...this.props.resource};
+      /*
+       * structuredClone (Node > 17) will create a deep clone to not modify the object in reference
+       * Warning: if the object has function this will throw an error
+       */
+      const resourceDto = structuredClone(this.props.resource);
       const secret = await this.getDecryptedSecret();
       this.mergeCustomFieldsMetadataAndSecret(resourceDto, secret);
       resourceDto.secret = secret;

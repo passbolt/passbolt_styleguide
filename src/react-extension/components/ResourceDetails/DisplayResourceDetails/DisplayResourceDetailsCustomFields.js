@@ -49,7 +49,7 @@ class DisplayResourceDetailsCustomFields extends React.Component {
    */
   getDefaultState() {
     return {
-      open: false,
+      open: true,
       secrets: [],
       secretPreviewed: [],
       isSecretsDecrypting: false,
@@ -164,7 +164,7 @@ class DisplayResourceDetailsCustomFields extends React.Component {
       this.setState({isSecretsDecrypting: true});
       const secrets = await this.decryptCustomFieldSecrets();
       this.setState({secrets, isSecretsDecrypting: false});
-      const secretPreviewed = this.resource.metadata.customFields.map(customField => customField.id);
+      const secretPreviewed = this.resource.metadata.custom_fields.map(customField => customField.id);
       this.setState({secretPreviewed});
     } else {
       this.setState({secrets: [], secretPreviewed: []});
@@ -207,7 +207,7 @@ class DisplayResourceDetailsCustomFields extends React.Component {
    * @returns {boolean}
    */
   get showAll() {
-    return this.state.secretPreviewed.length === this.resource.metadata.customFields.length;
+    return this.state.secretPreviewed.length === this.resource.metadata.custom_fields.length;
   }
 
   /**
@@ -238,16 +238,18 @@ class DisplayResourceDetailsCustomFields extends React.Component {
                       <div className="fields">
                         <div className="information-label">
                           {
-                            this.resource.metadata.customFields.map(customField => (
-                              <span key={customField.id} title={customField.metadata_key} className={`${customField.metadata_key} label ${canCopySecret && "can-copy"}`} onClick={() => canCopySecret && this.handleCopyKeyEvent(customField.metadata_key)}>
+                            this.resource.metadata.custom_fields.map((customField, index) => customField.metadata_key.length > 0
+                              ? <span key={index} title={customField.metadata_key}
+                                className={`${customField.metadata_key} label ${canCopySecret && "can-copy"}`}
+                                onClick={() => canCopySecret && this.handleCopyKeyEvent(customField.metadata_key)}>
                                 {customField.metadata_key}
                               </span>
-                            ))
-                          }
+                              : <span key={index} className="label empty" title={"no key"}><Trans>no key</Trans></span>
+                            )}
                         </div>
                         <div className="information-value">
                           {
-                            this.resource.metadata.customFields.map(customField => {
+                            this.resource.metadata.custom_fields.map(customField => {
                               const isPreviewed = this.isPreviewed(customField.id);
 
                               return (

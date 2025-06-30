@@ -76,21 +76,21 @@ export const plaintextSecretTotpDto = (data = {}) => ({
 /**
  * Generates a DTO for plaintext secret custom fields.
  * @param {Object} data
- * @param {Array} [data.customFields]
+ * @param {Array} [data.custom_fields]
  * @returns {Object}
  */
 export const plaintextSecretCustomFieldsDto = (data = {}) => ({
   custom_fields: [
     {
-      id: data.customFields?.[0]?.id || uuidv4(),
+      id: data.custom_fields?.[0]?.id || uuidv4(),
       secret_value: "I am a secret"
     },
     {
-      id: data.customFields?.[1]?.id || uuidv4(),
+      id: data.custom_fields?.[1]?.id || uuidv4(),
       secret_value: "I am a secret 2"
     },
     {
-      id: data.customFields?.[2]?.id || uuidv4(),
+      id: data.custom_fields?.[2]?.id || uuidv4(),
       secret_value: "I am a secret 3"
     },
   ]

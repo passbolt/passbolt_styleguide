@@ -84,6 +84,14 @@ export default class DisplayResourceDetailsPage {
   }
 
   /**
+   * Returns the custom fields
+   * @return {Element}
+   */
+  get customField() {
+    return this._page.container.querySelector('.custom-fields');
+  }
+
+  /**
    * Returns the description
    * @return {Element}
    */
@@ -137,14 +145,6 @@ export default class DisplayResourceDetailsPage {
    */
   tab(index) {
     return this._page.container.querySelectorAll('.sidebar-content .tabs li button')?.[index];
-  }
-
-  /**
-   * Getter for the custom field tab element.
-   * @returns {HTMLElement} The custom field tab element.
-   */
-  get customFieldTab() {
-    return this._page.container.querySelector('.sidebar-content .custom-fields');
   }
 
   /**

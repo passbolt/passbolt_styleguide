@@ -275,7 +275,7 @@
           .main-uri,  .additional-uris {
             text-decoration: underline;
           }
-          
+
           .location.value {
             button {
               width: 100%;
@@ -303,32 +303,38 @@
           }
 
           .password-value, .totp-value, .field-secret-value {
-            display: flex;
-            gap: .4rem;
+            .secret {
+              float: left;
+              max-width: 100%;
+
+              button{
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+            }
             .password-view {
               display: none;
+              align-items: center;
+              margin: 0 0 0 .6rem;
+              float: left;
             }
             &:hover {
-              .password-view{
+              .secret:has(+ .password-view, + .totp-view) {
+                max-width: calc(100% - 2.6rem); // secret field - secret preview button
+              }
+              .secret button:disabled {
+                color: var(--Text-and-icons-Main-text);
+              }
+              .password-view, .totp-view {
                 display: flex;
               }
             }
             .secret {
-              &-with-preview {
-                max-width: calc(100% - 2.4rem);
-              }
-
               &-copy {
                 button {
                   line-height: 1.9rem; // set height for obfuscated characters
                 }
-              }
-
-              button {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                width: 100%;
               }
             }
           }
@@ -423,16 +429,31 @@
     }
 
     .custom-fields {
-      .accordion-content {  
+      .accordion-content {
         padding: 1.6rem;
         display: flex;
-        flex-direction: column;      
+        flex-direction: column;
         gap: 1.6rem;
 
         .fields {
           display: flex;
           align-self: stretch;
           gap: 1.6rem;
+
+          .information-label {
+            .label.can-copy {
+              cursor: pointer;
+
+              &:hover {
+                color: var(--Palette-Contrast-1);
+              }
+            }
+
+            .label.empty {
+              font-style: italic;
+            }
+          }
+
           .information-value {
             width: 100%;
           }

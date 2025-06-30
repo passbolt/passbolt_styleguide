@@ -112,12 +112,16 @@ class AddResourceCustomFields extends Component {
    * Display the content surrounded or not with a tooltip.
    * @param {React.JSX.Element} content content to display
    * @param {boolean} isDisabled if disabled the tooltip is added
-   * @returns {ReactDOM}
+   * @returns {React.JSX.Element}
    */
   addTooltipOnDisabledElement(content, isDisabled) {
-    return isDisabled
-      ? <Tooltip message={<Trans>You have reach the row limit.</Trans>} direction="bottom">{content}</Tooltip>
-      : <>{content}</>;
+    if (isDisabled) {
+      return this.customFieldsLength === 32
+        ? <Tooltip message={<Trans>You have reached the row limit.</Trans>} direction="bottom">{content}</Tooltip>
+        : <Tooltip message={<Trans>You have reached the maximum content size limit.</Trans>} direction="bottom">{content}</Tooltip>;
+    } else {
+      return <>{content}</>;
+    }
   }
 
   /**
@@ -249,7 +253,7 @@ class AddResourceCustomFields extends Component {
         </div>
         {this.isCustomFieldsCollectionMaxContentSizeReached &&
           <div className="warning message no-margin">
-            <Trans>You have reach the maximum content size limit.</Trans>
+            <Trans>You have reached the maximum content size limit.</Trans>
           </div>
         }
       </>

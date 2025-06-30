@@ -49,6 +49,7 @@ import {resourceWithMultipleUris, resourceWithOneUris} from "./DisplayResourceDe
 jest.mock("./DisplayResourceDetailsInformation", () => () => <></>);
 jest.mock("./DisplayResourceDetailsPassword", () => () => <div className="password"></div>);
 jest.mock("./DisplayResourceDetailsTotp", () => () => <div className="totp"></div>);
+jest.mock("./DisplayResourceDetailsCustomFields", () => () => <div className="custom-fields"></div>);
 jest.mock("./DisplayResourceDetailsActivity", () => () => <></>);
 jest.mock("./DisplayResourceDetailsPermission", () => () => <></>);
 jest.mock("./DisplayResourceDetailsDescription", () => () => <div className="description"></div>);
@@ -365,15 +366,10 @@ describe("DisplayResourceDetails", () => {
 
       page = new DisplayResourceDetailsPage(props);
     });
-    it('As LU I can see the custom field subtitle', async() => {
-      expect.assertions(1);
-
-      expect(page.subtitle).toEqual("Custom fields");
-    });
     it('As LU I can see the custom field section', async() => {
       expect.assertions(1);
 
-      expect(page.customFieldTab).toBeDefined();
+      expect(page.customField).toBeDefined();
     });
     it('As LU I cannot see the section if resource does not contain custom fields', async() => {
       expect.assertions(1);
@@ -388,7 +384,7 @@ describe("DisplayResourceDetails", () => {
       const page = new DisplayResourceDetailsPage(props);
       await waitFor(() => {});
 
-      expect(page.customFieldTab).toBeNull();
+      expect(page.customField).toBeNull();
     });
   });
 
@@ -423,7 +419,7 @@ describe("DisplayResourceDetails", () => {
       const page = new DisplayResourceDetailsPage(props);
       await waitFor(() => {});
 
-      expect(page.customFieldTab).toBeNull();
+      expect(page.customField).toBeNull();
     });
   });
 });
