@@ -32,6 +32,7 @@ import {ColumnModelTypes} from "../../shared/models/column/ColumnModel";
 import getPropValue from "../lib/Object/getPropValue";
 import {withTranslation} from "react-i18next";
 import RowsSettingEntity from "../../shared/models/entity/rowsSetting/rowsSettingEntity";
+import ResourcesServiceWorkerService from "../../shared/services/serviceWorker/resources/resourcesServiceWorkerService";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -110,6 +111,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     this.state = this.defaultState;
     this.initializeProperties();
     this.gridResourceUserSetting = new GridResourceUserSettingServiceWorkerService(props.context.port);
+    this.resourcesServiceWorkerService = new ResourcesServiceWorkerService(props.context.port);
   }
 
   /**
@@ -252,7 +254,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       }
       await this.unselectAll();
 
-      if (this.state.filter.type !== ResourceWorkspaceFilterTypes.GROUP) {
+      if (this.state.filter.type !== ResourceWorkspaceFilterTypes.GROUP
+        && this.state.filter.type !== ResourceWorkspaceFilterTypes.FOLDER) {
         this.populate();
       }
     }
@@ -318,7 +321,11 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       return;
     }
 
-    // Known folder
+    if (this.canUseFolders) {
+      this.populateFolders();
+    }
+
+    this.resourcesServiceWorkerService.updateResourceLocalStorageForParentFolderId(folder.id);
     await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});
 
     // Multiple resource selected, do not show details folder
