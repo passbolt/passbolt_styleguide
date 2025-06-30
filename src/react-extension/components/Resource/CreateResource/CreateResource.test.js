@@ -784,7 +784,7 @@ describe("See the Create Resource", () => {
 
         // expectations
         expect(page.customFieldsLength).toBe(11);
-        expect(page.customFieldValueMaxCharactersWarningMessage).toStrictEqual("You have reach the maximum content size limit.");
+        expect(page.customFieldValueMaxCharactersWarningMessage).toStrictEqual("You have reached the maximum content size limit.");
         expect(page.addCustomField.hasAttribute("disabled")).toBeTruthy();
       });
 

@@ -539,19 +539,20 @@ class ResourceFormEntity extends EntityV2 {
    */
   validateCustomFields(customFields, currentError) {
     let error = currentError;
-    // Use a Set to collect unique property values
-    const uniqueKeys = new Set();
+    // Use an object to collect unique key property values as key and store the index of the custom field
+    const uniqueKeys = {};
 
     for (let i = 0; i < customFields.length; i++) {
       const customField = customFields.items[i];
       const isKeyTooLong = customField.key.length >= CUSTOM_FIELD_KEY_MAX_LENGTH;
       const isValueTooLong = customField.value.length >= CUSTOM_FIELD_TEXT_MAX_LENGTH;
 
-      if (uniqueKeys.has(customField.key)) {
+      if (customField.key.length > 0 && uniqueKeys[customField.key] != null) {
         error = error || new EntityValidationError();
+        error.addError(`custom_fields.${uniqueKeys[customField.key]}.key`, "unique", `The key name is already used`);
         error.addError(`custom_fields.${i}.key`, "unique", `The key name is already used`);
       } else {
-        uniqueKeys.add(customField.key);
+        uniqueKeys[customField.key] = i;
       }
 
       if (isKeyTooLong || isValueTooLong) {

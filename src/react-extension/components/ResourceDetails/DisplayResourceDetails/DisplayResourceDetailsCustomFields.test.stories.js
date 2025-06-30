@@ -17,6 +17,8 @@ import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspa
 import DisplayResourceDetailsCustomFields from "./DisplayResourceDetailsCustomFields";
 import {resourceWithCustomFields} from "./DisplayResourceDetailsCustomFields.test.data";
 import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import {plaintextSecretCustomFieldsDto} from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 export default {
   title: 'Components/ResourceDetails/DisplayResourceDetailsCustomFields',
@@ -44,11 +46,21 @@ export default {
   ]
 };
 
+const resourceWithCustomFieldsDto = resourceWithCustomFields;
 export const Default = {
   args: {
+    context: defaultAppContext({
+      port: {
+        request: () => new Promise(resolve => {
+          setTimeout(() => resolve(plaintextSecretCustomFieldsDto(
+            resourceWithCustomFieldsDto.metadata
+          )), 1000);
+        })
+      }
+    }),
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
-      details: {resource: resourceWithCustomFields}
+      details: {resource: resourceWithCustomFieldsDto}
     }),
   }
 };

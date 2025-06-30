@@ -47,7 +47,7 @@ export const resourceWithCustomFields = defaultResourceDto({
     name: "Passbolt",
     description: "Apache is the world's most used web server software.",
     uris: ["http://www.apache.org/"],
-    customFields: [{
+    custom_fields: [{
       id: uuidv4(),
       type: CUSTOM_FIELD_TYPE.PASSWORD,
       metadata_key: "API Key",

@@ -81,6 +81,7 @@ export default class DisplayResourceDetailsCustomFieldsPage {
   get customFieldValues() {
     return this._page.container.querySelectorAll('.information-value .field-secret-value');
   }
+
   /**
    * Returns all preview buttons (eye icons)
    */
@@ -88,6 +89,19 @@ export default class DisplayResourceDetailsCustomFieldsPage {
     return this._page.container.querySelectorAll('.password-view');
   }
 
+  /**
+   * Returns the "Show all" button
+   */
+  get showAllButton() {
+    return this._page.container.querySelector('#show-all-button');
+  }
+
+  /**
+   * Returns the "Hide all" button
+   */
+  get hideAllButton() {
+    return this._page.container.querySelector('#hide-all-button');
+  }
 
   /**
    * Returns a specific custom field label by index
@@ -105,6 +119,14 @@ export default class DisplayResourceDetailsCustomFieldsPage {
     return this.customFieldValues[index];
   }
 
+  /**
+   * Returns a specific custom field value by index
+   * @param {number} index
+   */
+  getCustomFieldValueButton(index) {
+    const customFieldValue = this.customFieldValues[index];
+    return customFieldValue.querySelector("button span");
+  }
   /**
    * Returns a specific preview button by index
    * @param {number} index

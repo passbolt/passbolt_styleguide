@@ -269,7 +269,7 @@ class DisplayResourceDetails extends React.Component {
    * @return {boolean}
    */
   get hasCustomFields() {
-    return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasCustomFields() && this.resource.metadata.customFields?.length > 0;
+    return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasCustomFields() && this.resource.metadata.custom_fields?.length > 0;
   }
 
   /**
@@ -323,11 +323,11 @@ class DisplayResourceDetails extends React.Component {
         {this.isTotpResources &&
           <DisplayResourceDetailsTotp isStandaloneTotp={this.isStandaloneTotpResource}/>
         }
-        {this.hasSecureNote &&
-          <DisplayResourceDetailsNote />
-        }
         {this.hasCustomFields &&
           <DisplayResourceDetailsCustomFields />
+        }
+        {this.hasSecureNote &&
+          <DisplayResourceDetailsNote />
         }
         {this.hasMultipleUris &&
           <DisplayResourceDetailsURIs />
