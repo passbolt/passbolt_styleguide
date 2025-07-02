@@ -84,9 +84,11 @@
         // Focus
         &:focus-within {
             background: var(--Sections-Filter-selected);
-            box-shadow:
-                0 0 .4rem var(--States-Focus),
-                inset 0 0 0 .1rem var(--States-Focus);
+            &:has(button:focus-visible) {
+              box-shadow:
+                      0 0 .4rem var(--States-Focus),
+                      inset 0 0 0 .1rem var(--States-Focus);
+            }
         }
 
         /*
