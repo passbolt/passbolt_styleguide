@@ -352,6 +352,12 @@
           height: 4.2rem;
         }
 
+        &:hover {
+          &:before {
+            background: linear-gradient(var(--Grid-Grid-hover-row),var(--Grid-Grid-hover-row) 4.1rem, var(--Workspace-Dividers), var(--Workspace-Dividers) 4.2rem);      
+          }
+        }
+
         &.selected {
           &:before {
             background: linear-gradient(var(--Grid-Grid-selected-row),var(--Grid-Grid-selected-row) 4.1rem, var(--Workspace-Dividers), var(--Workspace-Dividers) 4.2rem);
