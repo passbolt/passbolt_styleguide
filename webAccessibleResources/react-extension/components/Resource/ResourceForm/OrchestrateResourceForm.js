@@ -25,6 +25,7 @@ import {
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import AddResourceUris from "./AddResourceUris";
 import AddResourceAppearance from "./AddResourceAppearance";
+import AddResourceCustomFields from "./AddResourceCustomFields";
 
 /**
  * The component orchestrates the resource form edition and creation.
@@ -51,6 +52,13 @@ class OrchestrateResourceForm extends Component {
           onChange={this.props.onChange}
           warnings={this.props.warnings}
           errors={this.props.errors}
+          disabled={this.props.disabled}
+        />;
+      case ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS:
+        return <AddResourceCustomFields
+          resource={this.props.resource}
+          onChange={this.props.onChange}
+          warnings={this.props.warnings}
           disabled={this.props.disabled}
         />;
       case ResourceEditCreateFormEnumerationTypes.NOTE:

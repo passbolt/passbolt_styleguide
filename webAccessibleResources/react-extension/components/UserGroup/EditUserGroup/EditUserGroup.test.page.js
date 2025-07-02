@@ -122,6 +122,13 @@ export default class EditUserGroupTestPage {
   }
 
   /**
+   * Returns the warning message cannot add user
+   */
+  get warningMessageCannotAddUser() {
+    return this._page.container.querySelector('.message.warning.cannot-add-user');
+  }
+
+  /**
    * Returns the username input
    */
   get usernameInput() {

@@ -1,7 +1,7 @@
 import {MemoryRouter} from "react-router-dom";
 import React from "react";
 import MockPort from "../../../test/mock/MockPort";
-import {defaultProps, defaultTotpProps} from "./EditResource.test.data";
+import {defaultCustomFieldsProps, defaultProps, defaultTotpProps} from "./EditResource.test.data";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
 import {
@@ -63,6 +63,13 @@ mockedPortTotp.addRequestListener("passbolt.secret.find-by-resource-id", () => (
 const mockedPasswordStringPort = new MockPort();
 mockedPasswordStringPort.addRequestListener("passbolt.secret.find-by-resource-id", () => ({password: "secret-decrypted"}));
 
+const mockedPortCustomFields = new MockPort();
+const customFieldsProps = defaultCustomFieldsProps();
+mockedPortCustomFields.addRequestListener("passbolt.secret.find-by-resource-id", () => ({custom_fields: [{id: customFieldsProps.resource.metadata.custom_fields[0].id,
+  type: "text",
+  secret_value: "secret-0"
+}]}));
+
 const defaultV5Props = defaultProps();
 defaultV5Props.context.port = mockedDefaultPort;
 export const Default = {
@@ -79,6 +86,12 @@ const defaultV5TotpProps = defaultTotpProps();
 defaultV5TotpProps.context.port = mockedPortTotp;
 export const Totp = {
   args: defaultV5TotpProps
+};
+
+const defaultV5CustomFieldsProps = customFieldsProps;
+defaultV5CustomFieldsProps.context.port = mockedPortCustomFields;
+export const CustomFields = {
+  args: defaultV5CustomFieldsProps
 };
 
 const defaultV5StringProps = defaultProps({resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_V5_PASSWORD_STRING})});

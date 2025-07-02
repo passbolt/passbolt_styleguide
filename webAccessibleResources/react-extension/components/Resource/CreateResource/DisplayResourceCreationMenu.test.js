@@ -20,7 +20,7 @@ import {waitFor} from "@testing-library/dom";
 import {resourceTypeTotpDto, resourceTypeV5PasswordStringDto} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  RESOURCE_TYPE_TOTP_SLUG,
+  RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
@@ -40,7 +40,7 @@ import {defaultFolderDto} from "../../../../shared/models/entity/folder/folderEn
 describe("See the Display Resource Creation Menu", () => {
   describe('Styleguide specifications', () => {
     it('should display the component matches the styleguide', async() => {
-      expect.assertions(10);
+      expect.assertions(11);
 
       const props = defaultProps(); // The props to pass
       const page = new DisplayResourceCreationMenuPage(props);
@@ -64,6 +64,9 @@ describe("See the Display Resource Creation Menu", () => {
 
       // second content type available
       expect(page.getContentTypeName(2).textContent).toStrictEqual("TOTP");
+
+      // third content type available
+      expect(page.getContentTypeName(3).textContent).toStrictEqual("Custom fields");
     });
 
     it("should close the dialog when pressing escape", async() => {
@@ -173,7 +176,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(page.getContentTypeName(1).textContent).toStrictEqual("Password");
 
       // second content type availability
-      expect(page.getContentTypeName(2)).toBeUndefined();
+      expect(page.getContentTypeName(2).textContent).toStrictEqual("Custom fields");
     });
 
     it("should not display Password V4 button if no password content type is available", () => {
@@ -220,7 +223,7 @@ describe("See the Display Resource Creation Menu", () => {
 
   describe("should open the resource creation dialog with the right parameters", () => {
     it("should open the dialog with the right resource type", async() => {
-      expect.assertions(6);
+      expect.assertions(7);
 
       const props = defaultProps(); // The props to pass
       const page = new DisplayResourceCreationMenuPage(props);
@@ -239,6 +242,12 @@ describe("See the Display Resource Creation Menu", () => {
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
       expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
 
+      //click on custom fields v5
+      page.clickOn(page.displayedContentTypes[2]);
+      await waitFor(() => {});
+      resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
+
       //switch tab
       page.clickOn(page.legacyCleartextMetadataTab);
       await waitFor(() => {});
@@ -255,8 +264,8 @@ describe("See the Display Resource Creation Menu", () => {
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
       expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
 
-      expect(props.dialogContext.open).toHaveBeenCalledTimes(4);
-      expect(props.onClose).toHaveBeenCalledTimes(4);
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(5);
+      expect(props.onClose).toHaveBeenCalledTimes(5);
     });
 
     it("should open the dialog with the right folder parent id set", async() => {

@@ -144,6 +144,8 @@ class CreateResource extends Component {
       return ResourceEditCreateFormEnumerationTypes.PASSWORD;
     } else if (this.resourceFormEntity?.secret?.totp != null) {
       return ResourceEditCreateFormEnumerationTypes.TOTP;
+    } else if (this.resourceFormEntity?.secret?.customFields?.length > 0) {
+      return ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS;
     } else if (this.resourceFormEntity?.secret?.description != null) {
       return ResourceEditCreateFormEnumerationTypes.NOTE;
     }

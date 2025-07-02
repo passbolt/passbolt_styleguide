@@ -751,6 +751,26 @@ textarea.full_report {
   width: 30rem;
   height: 9rem;
 }
+.textarea-wrapper {
+  flex: 1 0 0;
+  display: flex;
+  position: relative;
+}
+.textarea-wrapper textarea {
+  flex: 1 0 0;
+  padding-right: 4.6rem;
+}
+.textarea-wrapper textarea.secure {
+  min-height: 3.6rem;
+  height: 7.2rem;
+  max-height: none;
+  -webkit-text-security: disc;
+}
+.textarea-wrapper .textarea-view-wrapper {
+  position: absolute;
+  right: 0.3rem;
+  top: 0.3rem;
+}
 .input-password-wrapper {
   margin-bottom: 1.6rem;
 }

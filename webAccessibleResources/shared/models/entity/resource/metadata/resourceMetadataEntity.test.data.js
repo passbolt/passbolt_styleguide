@@ -14,6 +14,8 @@
 import {
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
 } from "../../resourceType/resourceTypeEntity.test.data";
+import {defaultIconDto} from "./iconEntity.test.data";
+import {defaultCustomFieldsCollection} from "../../customField/customFieldsCollection.test.data";
 import ResourceMetadataEntity from "./resourceMetadataEntity";
 
 /**
@@ -33,9 +35,12 @@ export const minimalResourceMetadataDto = (data = {}) => {
 /**
  * Build default resource metadata dto.
  * @param {object} data The data to override the default dto.
+ * @param {object} [options]
+ * @param {object} [options.withIcon]
+ * @param {object} [options.withCustomFields]
  * @returns {object}
  */
-export const defaultResourceMetadataDto = (data = {}) => {
+export const defaultResourceMetadataDto = (data = {}, options = {}) => {
   const metadataDto = {
     object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
     resource_type_id:  data?.resource_type_id || TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
@@ -45,5 +50,14 @@ export const defaultResourceMetadataDto = (data = {}) => {
     description: "Description",
     ...data
   };
+
+  if (options?.withIcon && !data.icon) {
+    metadataDto.icon = defaultIconDto();
+  }
+
+  if (options?.withCustomFields && !data.custom_fields) {
+    metadataDto.custom_fields = defaultCustomFieldsCollection();
+  }
+
   return metadataDto;
 };

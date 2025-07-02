@@ -84,6 +84,14 @@ export default class DisplayResourceDetailsPage {
   }
 
   /**
+   * Returns the custom fields
+   * @return {Element}
+   */
+  get customField() {
+    return this._page.container.querySelector('.custom-fields');
+  }
+
+  /**
    * Returns the description
    * @return {Element}
    */
@@ -137,6 +145,14 @@ export default class DisplayResourceDetailsPage {
    */
   tab(index) {
     return this._page.container.querySelectorAll('.sidebar-content .tabs li button')?.[index];
+  }
+
+  /**
+   * Getter for the URIs tab element.
+   * @returns {HTMLElement} The URIs tab element.
+   */
+  get urisTab() {
+    return this._page.container.querySelector('.sidebar-content .uris');
   }
 
   /**

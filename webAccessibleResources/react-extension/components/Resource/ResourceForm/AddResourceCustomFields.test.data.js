@@ -1,0 +1,35 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         5.3.0
+ */
+
+
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
+import {
+  defaultSecretDataV5StandaloneCustomFieldsCollectionDtos
+} from "../../../../shared/models/entity/secretData/secretDataV5StandaloneCustomFieldsCollection.test.data";
+
+/**
+ * Default props
+ * @returns {*}
+ */
+export function defaultProps(data = {}) {
+  const defaultData = {
+    context: defaultAppContext(),
+    onChange: jest.fn(),
+    resource: defaultResourceFormDto({
+      secret: defaultSecretDataV5StandaloneCustomFieldsCollectionDtos()
+    })
+  };
+  return Object.assign(defaultData, data);
+}

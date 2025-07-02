@@ -32,7 +32,7 @@ import {
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  RESOURCE_TYPE_TOTP_SLUG,
+  RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
@@ -50,6 +50,7 @@ import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 import DisplayResourceCreationMenu from "../CreateResource/DisplayResourceCreationMenu";
 import CreateResource from "../CreateResource/CreateResource";
+import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
 
 /**
  * This component allows the current user to create a new resource
@@ -70,6 +71,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   bindCallbacks() {
     this.handleCreateMenuPasswordClickEvent = this.handleCreateMenuPasswordClickEvent.bind(this);
     this.handleMenuCreateTotpClickEvent = this.handleMenuCreateTotpClickEvent.bind(this);
+    this.handleMenuCreateCustomFieldsClickEvent = this.handleMenuCreateCustomFieldsClickEvent.bind(this);
     this.handleMenuCreateFolderClickEvent = this.handleMenuCreateFolderClickEvent.bind(this);
     this.handleImportClickEvent = this.handleImportClickEvent.bind(this);
     this.handleMenuCreateOtherClickEvent = this.handleMenuCreateOtherClickEvent.bind(this);
@@ -112,6 +114,14 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
       resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
     }
+    this.openCreateDialog(resourceType);
+  }
+
+  /**
+   * Handle custom fields click event
+   */
+  handleMenuCreateCustomFieldsClickEvent() {
+    const resourceType  = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
     this.openCreateDialog(resourceType);
   }
 
@@ -211,6 +221,18 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   }
 
   /**
+   * Can create custom fields
+   * @returns {boolean}
+   */
+  get canCreateCustomFields() {
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
+    } else {
+      return false;
+    }
+  }
+
+  /**
    * Should the "Other" menu items be displayed.
    * @returns {boolean}
    */
@@ -290,10 +312,18 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
                 </DropdownItem>
               }
               {canUseTotp && this.canCreateStandaloneTotp() &&
-                <DropdownItem separator={!this.hasMetadataTypesV4AndV5()}>
+                <DropdownItem separator={!this.canCreateCustomFields}>
                   <button id="totp_action" type="button" className="no-border" onClick={this.handleMenuCreateTotpClickEvent}>
                     <TotpSVG/>
                     <span><Trans>TOTP</Trans></span>
+                  </button>
+                </DropdownItem>
+              }
+              {this.canCreateCustomFields &&
+                <DropdownItem separator={!canSeeOther}>
+                  <button id="custom_fields_action" type="button" className="no-border" onClick={this.handleMenuCreateCustomFieldsClickEvent}>
+                    <TablePropertiesSVG/>
+                    <span><Trans>Custom fields</Trans></span>
                   </button>
                 </DropdownItem>
               }

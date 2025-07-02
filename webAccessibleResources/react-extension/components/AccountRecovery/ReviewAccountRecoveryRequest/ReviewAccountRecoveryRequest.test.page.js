@@ -54,10 +54,24 @@ export default class ReviewAccountRecoveryRequestPage {
   }
 
   /**
+   * Get the accepted checkbox creator element
+   */
+  get acceptCheckboxCreatorName() {
+    return this._page.container.querySelectorAll('.input.radio .info')[1];
+  }
+
+  /**
    * Get the rejected checkbox element
    */
   get rejectCheckbox() {
     return this._page.container.querySelector('#statusRecoverAccountReject');
+  }
+
+  /**
+   * Get the rejected checkbox creator element
+   */
+  get rejectCheckboxCreatorName() {
+    return this._page.container.querySelectorAll('.input.radio .info')[0];
   }
 
   /**

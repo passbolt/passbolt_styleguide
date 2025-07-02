@@ -19,6 +19,7 @@ export const RESOURCE_TYPE_V5_DEFAULT_SLUG = "v5-default";
 export const RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG = "v5-password-string";
 export const RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG = "v5-default-with-totp";
 export const RESOURCE_TYPE_V5_TOTP_SLUG = "v5-totp-standalone";
+export const RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG = "v5-custom-fields";
 
 //Plaintext secret schema for slug: "password-string"
 export const RESOURCE_TYPE_PASSWORD_STRING_LEGACY_DEFINITION_SCHEMA = {
@@ -180,6 +181,122 @@ const RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_DEFINITION_SCHEMA = {
   }
 };
 
+//Plaintext secret schema for slug: "v5-custom-fields"
+const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
+  resource: {
+    type: "object",
+    required: ["name"],
+    properties: {
+      name: {
+        type: "string",
+        maxLength: 255
+      },
+      username: {
+        type: "string",
+        maxLength: 255,
+        nullable: true
+      },
+      uris: {
+        type: "array",
+        items: {
+          type: "string",
+          maxLength: 1024,
+          nullable: true
+        }
+      },
+      description: {
+        type: "string",
+        maxLength: 10000,
+        nullable: true,
+      },
+      custom_fields: {
+        type: "object",
+        required: ["items"],
+        properties: {
+          items: {
+            type: "array",
+            maxItems: 128,
+            items: {
+              type: "object",
+              required: ["id", "type"],
+              properties: {
+                id: {
+                  type: "string",
+                  format: "uuid"
+                },
+                type: {
+                  type: "string",
+                  enum: ["text", "password", "boolean", "number", "uri"]
+                },
+                metadata_key: {
+                  type: "string",
+                  maxLength: 255,
+                  nullable: true
+                },
+                metadata_value: {
+                  anyOf: [
+                    {type: "string", maxLength: 5000},
+                    {type: "number"},
+                    {type: "boolean"}
+                  ],
+                  nullable: true
+                },
+              }
+            }
+          }
+        }
+      }
+    },
+  },
+  secret: {
+    type: "object",
+    required: ["custom_fields"],
+    properties: {
+      object_type: {
+        type: "string",
+        enum: ['PASSBOLT_SECRET_DATA'],
+      },
+      custom_fields: {
+        type: "object",
+        required: ["items"],
+        properties: {
+          items: {
+            type: "array",
+            maxItems: 128,
+            items: {
+              type: "object",
+              required: ["id", "type"],
+              properties: {
+                id: {
+                  type: "string",
+                  format: "uuid"
+                },
+                type: {
+                  type: "string",
+                  enum: ["text", "password", "boolean", "number", "uri"]
+                },
+                secret_key: {
+                  type: "string",
+                  maxLength: 255,
+                  nullable: true
+                },
+                secret_value: {
+                  anyOf: [
+                    {type: "string", maxLength: 5000},
+                    {type: "number"},
+                    {type: "boolean"}
+                  ],
+                  nullable: true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+  }
+};
+
 //Plaintext secret schema for slug: "v5-default"
 const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
   resource: {
@@ -208,6 +325,7 @@ const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
         maxLength: 10000,
         nullable: true,
       },
+      custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.resource.properties.custom_fields
     },
   },
   secret: {
@@ -228,6 +346,7 @@ const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
         maxLength: 10000,
         nullable: true,
       },
+      custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.secret.properties.custom_fields
     },
   }
 };
@@ -296,6 +415,7 @@ const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
         maxLength: 10000,
         nullable: true,
       },
+      custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.resource.properties.custom_fields
     },
   },
   secret: {
@@ -317,6 +437,7 @@ const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
         nullable: true,
       },
       totp: RESOURCE_TYPE_TOTP_DEFINITION_SCHEMA.secret.properties.totp,
+      custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.secret.properties.custom_fields
     },
   }
 };
@@ -399,6 +520,7 @@ class ResourceTypeSchemasDefinition {
       [RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG]: RESOURCE_TYPE_V5_PASSWORD_STRING_DEFINITION_SCHEMA,
       [RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG]: RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA,
       [RESOURCE_TYPE_V5_TOTP_SLUG]: RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA,
+      [RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG]: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA
     };
   }
 }

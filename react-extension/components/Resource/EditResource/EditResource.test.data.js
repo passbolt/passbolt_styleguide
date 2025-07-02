@@ -17,6 +17,7 @@ import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import {
+  TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
   TEST_RESOURCE_TYPE_V5_DEFAULT, TEST_RESOURCE_TYPE_V5_TOTP,
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
@@ -32,6 +33,10 @@ import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metada
 import {
   defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto
 } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import {
+  defaultResourceMetadataDto
+} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import {v4 as uuidv4} from "uuid";
 
 
 /**
@@ -72,6 +77,25 @@ export function defaultProps(data = {}) {
 export function defaultTotpProps(data = {}) {
   const defaultData = defaultProps({
     resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_V5_TOTP}),
+  });
+
+  return Object.assign(defaultData, data);
+}
+
+/**
+ * Default custom fields props
+ * @returns {*}
+ */
+export function defaultCustomFieldsProps(data = {}) {
+  const customFieldUuid = uuidv4();
+  const customFields = [{
+    id: customFieldUuid,
+    type: "text",
+    metadata_key: "key-0"
+  }];
+  const metadata = defaultResourceMetadataDto({resource_type_id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS, custom_fields: customFields});
+  const defaultData = defaultProps({
+    resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS, metadata: metadata}),
   });
 
   return Object.assign(defaultData, data);

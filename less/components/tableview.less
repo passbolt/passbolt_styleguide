@@ -68,7 +68,7 @@
 
     th, td {
       text-align: left;
-      padding: .3rem .4rem .5rem .4rem;
+      padding: .3rem .4rem;
       vertical-align: middle;
       position: relative;
 
@@ -350,6 +350,12 @@
         &:before {
           background: linear-gradient(var(--Grid-Grid-background),var(--Grid-Grid-background) 4.1rem, var(--Workspace-Dividers), var(--Workspace-Dividers) 4.2rem);
           height: 4.2rem;
+        }
+
+        &:hover {
+          &:before {
+            background: linear-gradient(var(--Grid-Grid-hover-row),var(--Grid-Grid-hover-row) 4.1rem, var(--Workspace-Dividers), var(--Workspace-Dividers) 4.2rem);      
+          }
         }
 
         &.selected {

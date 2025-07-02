@@ -254,7 +254,7 @@ class DisplayUsersContextualMenu extends React.Component {
    * Check if the user can use the share missing data key capability.
    */
   get canIShareMissingMetadataKeys() {
-    return this.props.context.siteSettings.canIUse("metadata") && this.isLoggedInUserAdmin();
+    return this.props.context.siteSettings.canIUse("metadata") && this.isLoggedInUserAdmin() && this.props.context.loggedInUser.id !== this.user.id;
   }
 
   /**

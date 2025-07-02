@@ -43,10 +43,13 @@ import {waitFor} from "@testing-library/react";
 import ResourceMetadataEntity from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity";
 import {SECRET_DATA_OBJECT_TYPE} from "../../../../shared/models/entity/secretData/secretDataEntity";
 import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
+import {resourceWithCustomFields} from "./DisplayResourceDetailsCustomFields.test.data";
+import {resourceWithMultipleUris, resourceWithOneUris} from "./DisplayResourceDetailsURIs.test.data";
 
 jest.mock("./DisplayResourceDetailsInformation", () => () => <></>);
 jest.mock("./DisplayResourceDetailsPassword", () => () => <div className="password"></div>);
 jest.mock("./DisplayResourceDetailsTotp", () => () => <div className="totp"></div>);
+jest.mock("./DisplayResourceDetailsCustomFields", () => () => <div className="custom-fields"></div>);
 jest.mock("./DisplayResourceDetailsActivity", () => () => <></>);
 jest.mock("./DisplayResourceDetailsPermission", () => () => <></>);
 jest.mock("./DisplayResourceDetailsDescription", () => () => <div className="description"></div>);
@@ -297,7 +300,7 @@ describe("DisplayResourceDetails", () => {
 
       // expectations
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDtoExpected, secretDtoExpected);
-      expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith("There was an unexpected error...");
+      expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith("Error");
     });
 
     it('As LU I cannot upgrade a v4 to V5 if resource permission is read', async() => {
@@ -349,5 +352,74 @@ describe("DisplayResourceDetails", () => {
   describe('As LU I can see the activity section', () => {
     it.todo('As LU I can see the activity section');
     it.todo('As LU I cannot see the activity section if denied by RBAC');
+  });
+  describe('As LU I can see the custom fields section', () => {
+    let page;
+
+    beforeEach(() => {
+      const props = defaultProps(
+        {resourceWorkspaceContext: defaultResourceWorkspaceContext({
+          details: {
+            resource: resourceWithCustomFields,
+          }
+        })});
+
+      page = new DisplayResourceDetailsPage(props);
+    });
+    it('As LU I can see the custom field section', async() => {
+      expect.assertions(1);
+
+      expect(page.customField).toBeDefined();
+    });
+    it('As LU I cannot see the section if resource does not contain custom fields', async() => {
+      expect.assertions(1);
+
+      const props = defaultProps(
+        {resourceWorkspaceContext: defaultResourceWorkspaceContext({
+          details: {
+            resource: resourceWithReadPermissionDto(),
+          }
+        })});
+
+      const page = new DisplayResourceDetailsPage(props);
+      await waitFor(() => {});
+
+      expect(page.customField).toBeNull();
+    });
+  });
+
+  describe('As LU I can see the URIs section', () => {
+    let page;
+
+    beforeEach(() => {
+      const props = defaultProps(
+        {resourceWorkspaceContext: defaultResourceWorkspaceContext({
+          details: {
+            resource: resourceWithMultipleUris,
+          }
+        })});
+
+      page = new DisplayResourceDetailsPage(props);
+    });
+    it('As LU I can see the multiple uris section', async() => {
+      expect.assertions(1);
+
+      expect(page.urisTab).toBeDefined();
+    });
+    it('As LU I cannot see the section if resource does not contain more than 1 uri', async() => {
+      expect.assertions(1);
+
+      const props = defaultProps(
+        {resourceWorkspaceContext: defaultResourceWorkspaceContext({
+          details: {
+            resource: resourceWithOneUris,
+          }
+        })});
+
+      const page = new DisplayResourceDetailsPage(props);
+      await waitFor(() => {});
+
+      expect(page.customField).toBeNull();
+    });
   });
 });

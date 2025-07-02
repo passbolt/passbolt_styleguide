@@ -23,7 +23,10 @@ import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/Crea
 import CreateResource from "../CreateResource/CreateResource";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_V5_DEFAULT_SLUG, RESOURCE_TYPE_V5_TOTP_SLUG
+  RESOURCE_TYPE_TOTP_SLUG,
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_SLUG,
+  RESOURCE_TYPE_V5_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {
@@ -282,6 +285,62 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newTotpMenu).toBeNull();
+    });
+  });
+
+  describe('As LU I can create standalone custom fields', () => {
+    it('As LU I can create a standalone custom fields if I have not selected any folder', async() => {
+      expect.assertions(5);
+      const props = defaultProps({metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto())}); // The props to pass
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      expect(page.displayMenu.newCustomFieldsMenu).not.toBeNull();
+      await page.displayMenu.clickOnMenu(page.displayMenu.newCustomFieldsMenu);
+      const resourceTypeExpected = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {folderParentId: null, resourceType: resourceTypeExpected});
+    });
+
+    it('As LU I can create standalone custom fields if I have selected a folder I am allowed to create in', async() => {
+      expect.assertions(5);
+      const props = defaultPropsFolderOwned({metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto())}); // The props to pass
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      expect(page.displayMenu.newCustomFieldsMenu).not.toBeNull();
+      await page.displayMenu.clickOnMenu(page.displayMenu.newCustomFieldsMenu);
+      const resourceTypeExpected = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id, resourceType: resourceTypeExpected});
+    });
+
+    it('As LU I cannot create a standalone custom fields if metadata type settings default is V4 and resource types is only v5', async() => {
+      expect.assertions(4);
+      const props = defaultProps({resourceTypes: new ResourceTypesCollection(resourceTypesV5CollectionDto())}); // The props to pass
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      expect(page.displayMenu.newCustomFieldsMenu).toBeNull();
+    });
+
+    it('As LU I cannot create a standalone custom fields if metadata type settings default is V5 and resource types is only v4', async() => {
+      expect.assertions(4);
+      const props = defaultProps({metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()), resourceTypes: new ResourceTypesCollection(resourceTypesV4CollectionDto())}); // The props to pass
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      expect(page.displayMenu.newCustomFieldsMenu).toBeNull();
     });
   });
 

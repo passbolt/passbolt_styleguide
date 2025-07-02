@@ -47,8 +47,7 @@ export const defaultProps = (data = {}) => ({
   ...data,
   context: defaultAppContext(data?.context),
   resourceWorkspaceContext: defaultResourceWorkspaceContext({
-    ...data?.resourceWorkspaceContext,
-    getHierarchyFolderCache: () => [{name: "Folder", id: "1"}, {name: "subfolder", id: "2"}],
+    ...data?.resourceWorkspaceContext
   }),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto({
     default_resource_types: "v5",

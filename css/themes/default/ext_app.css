@@ -1737,6 +1737,26 @@ textarea.full_report {
   width: 30rem;
   height: 9rem;
 }
+.textarea-wrapper {
+  flex: 1 0 0;
+  display: flex;
+  position: relative;
+}
+.textarea-wrapper textarea {
+  flex: 1 0 0;
+  padding-right: 4.6rem;
+}
+.textarea-wrapper textarea.secure {
+  min-height: 3.6rem;
+  height: 7.2rem;
+  max-height: none;
+  -webkit-text-security: disc;
+}
+.textarea-wrapper .textarea-view-wrapper {
+  position: absolute;
+  right: 0.3rem;
+  top: 0.3rem;
+}
 .input-password-wrapper {
   margin-bottom: 1.6rem;
 }
@@ -4935,6 +4955,8 @@ html {
 }
 .navigation-secondary .row:focus-within {
   background: var(--Sections-Filter-selected);
+}
+.navigation-secondary .row:focus-within:has(button:focus-visible) {
   box-shadow: 0 0 0.4rem var(--States-Focus), inset 0 0 0 0.1rem var(--States-Focus);
 }
 .navigation-secondary .row .main-cell-wrapper {
@@ -5039,6 +5061,8 @@ html {
 .navigation-secondary-tree .row .main-cell-wrapper .main-cell .toggle-folder {
   display: flex;
   align-items: center;
+  align-self: stretch;
+  padding-left: 0.6rem;
 }
 .navigation-secondary-tree .row .main-cell-wrapper .main-cell .toggle-folder svg {
   min-width: 0.8rem;
@@ -5066,6 +5090,10 @@ html {
 }
 .navigation-secondary-tree .row .main-cell-wrapper .main-cell button {
   gap: 0.8rem;
+}
+.navigation-secondary-tree .row .main-cell-wrapper .main-cell button .toggle-folder {
+  padding-left: 0.6rem;
+  align-self: stretch;
 }
 .navigation-secondary-tree .row .main-cell-wrapper .main-cell button .toggle-folder svg {
   width: 0.8rem;
@@ -5116,7 +5144,7 @@ html {
   pointer-events: auto;
 }
 .navigation-secondary-tree.navigation-folders .row {
-  padding: 0.6rem 0 0.6rem 1rem;
+  padding: 0.6rem 0 0.6rem 0.4rem;
 }
 .navigation-secondary-tree.navigation-folders .row .main-cell-wrapper .main-cell button {
   gap: 0.6rem;
@@ -5128,13 +5156,13 @@ html {
 .navigation-secondary-tree.navigation-folders .folder-item .row {
   /* Folder levels (should be override with JS) */
   --folder-depth: 0;
-  padding-left: calc(2.5rem + var(--folder-depth) * 1.5rem);
+  padding-left: calc(1.9rem + var(--folder-depth) * 1.5rem);
 }
 .navigation-secondary-tree.navigation-folders .folder-item .row.no-child {
   padding-left: calc(3.9rem + var(--folder-depth) * 1.5rem);
 }
 .navigation-secondary-tree.navigation-groups .row {
-  padding: 0.6rem 0 0.6rem 1rem;
+  padding: 0.6rem 0 0.6rem 0.4rem;
 }
 .navigation-secondary-tree.navigation-groups .row .main-cell-wrapper .main-cell button {
   gap: 0.6rem;
@@ -5146,8 +5174,11 @@ html {
 .navigation-secondary-tree.navigation-groups .group-item .row {
   padding-left: 2.6rem;
 }
+.navigation-secondary-tree.navigation-tags {
+  padding-bottom: 0.8rem;
+}
 .navigation-secondary-tree.navigation-tags .row {
-  padding: 0.6rem 0 0.6rem 1rem;
+  padding: 0.6rem 0 0.6rem 0.4rem;
 }
 .navigation-secondary-tree.navigation-tags .row .main-cell-wrapper .main-cell button {
   gap: 0.6rem;
@@ -6369,50 +6400,12 @@ iframe.cachette {
   margin: 0;
 }
 .dialog .permissions .row {
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
   padding: 1.6rem;
   border-bottom: 1px solid var(--Workspace-Dividers);
   display: flex;
   align-items: center;
   overflow: hidden;
   /* aro summary */
-}
-.dialog .permissions .row:before,
-.dialog .permissions .row:after {
-  content: "";
-  display: table;
-}
-.dialog .permissions .row:after {
-  clear: both;
-}
-.dialog .permissions .row:before,
-.dialog .permissions .row:after {
-  content: "";
-  display: table;
-}
-.dialog .permissions .row:after {
-  clear: both;
 }
 .dialog .permissions .row.permission-updated {
   background: var(--Notifications-Alert-background);
@@ -6537,7 +6530,8 @@ iframe.cachette {
 .secret-copy > pre {
   display: none;
 }
-.secret-copy.secret-password > button:before {
+.secret-copy.secret-password > button:before,
+.secret-copy.secret-custom-fields > button:before {
   content: '00000000';
 }
 .secret-copy.secret-totp > button:before {
@@ -6787,17 +6781,20 @@ iframe.cachette {
   --icon-exclamation-background-color: var(--Alert-Alert-background);
   --icon-exclamation-border-color: var(--Alert-Alert-background);
 }
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value {
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value,
+.sidebar .sidebar-content .sidebar-section .accordion-content .field-value {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value button {
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .field-value button {
   max-width: 100%;
 }
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value button span {
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value button span,
+.sidebar .sidebar-content .sidebar-section .accordion-content .field-value button span {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -6805,10 +6802,18 @@ iframe.cachette {
   -ms-text-overflow: ellipsis;
   max-width: 100%;
 }
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value button span.caret {
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value button span.caret,
+.sidebar .sidebar-content .sidebar-section .accordion-content .field-value button span.caret {
   min-width: 0.4rem;
 }
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .location.value button {
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .main-uri,
+.sidebar .sidebar-content .sidebar-section .accordion-content .field-value .main-uri,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .additional-uris,
+.sidebar .sidebar-content .sidebar-section .accordion-content .field-value .additional-uris {
+  text-decoration: underline;
+}
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .location.value button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .field-value .location.value button {
   width: 100%;
 }
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label,
@@ -6826,39 +6831,97 @@ iframe.cachette {
   text-overflow: ellipsis;
   height: 2rem;
 }
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value {
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .additional-uris,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .additional-uris {
+  height: auto;
   display: flex;
-  gap: 0.4rem;
+  gap: 0.8rem;
+  flex-direction: column;
 }
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value .secret-with-preview,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value .secret-with-preview,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value .secret-with-preview,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .secret-with-preview {
-  max-width: calc(100% - 2.4rem);
-}
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value .secret-copy button,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value .secret-copy button,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value .secret-copy button,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .secret-copy button {
-  line-height: 1.9rem;
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value .secret,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value .secret,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value .secret,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .secret,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value .secret,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value .secret {
+  float: left;
+  max-width: 100%;
 }
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value .secret button,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value .secret button,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value .secret button,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .secret button {
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .secret button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value .secret button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value .secret button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 100%;
+}
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value .password-view {
+  display: none;
+  align-items: center;
+  margin: 0 0 0 0.6rem;
+  float: left;
+}
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value:hover .secret:has(+ .password-view, + .totp-view),
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value:hover .secret:has(+ .password-view, + .totp-view),
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value:hover .secret:has(+ .password-view, + .totp-view),
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value:hover .secret:has(+ .password-view, + .totp-view),
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value:hover .secret:has(+ .password-view, + .totp-view),
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value:hover .secret:has(+ .password-view, + .totp-view) {
+  max-width: calc(100% - 2.6rem);
+}
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value:hover .secret button:disabled,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value:hover .secret button:disabled,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value:hover .secret button:disabled,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value:hover .secret button:disabled,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value:hover .secret button:disabled,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value:hover .secret button:disabled {
+  color: var(--Text-and-icons-Main-text);
+}
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value:hover .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value:hover .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value:hover .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value:hover .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value:hover .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value:hover .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value:hover .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value:hover .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value:hover .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value:hover .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value:hover .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value:hover .totp-view {
+  display: flex;
+}
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value .secret-copy button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value .secret-copy button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value .secret-copy button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .secret-copy button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value .secret-copy button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value .secret-copy button {
+  line-height: 1.9rem;
 }
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .uri.value,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .uri.value {
   display: flex;
   gap: 0.4rem;
   min-width: 0;
+}
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .metadata-keys.value,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .metadata-keys.value {
+  display: flex;
+  gap: 0.4rem;
+}
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .metadata-keys.value svg.attention-required,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .metadata-keys.value svg.attention-required {
+  --icon-exclamation-color: var(--Alert-Alert-icon);
+  --icon-exclamation-background-color: var(--Alert-Alert-background);
+  --icon-exclamation-border-color: var(--Alert-Alert-background);
 }
 .sidebar .sidebar-content .sidebar-section .accordion-content button.section-action {
   color: var(--Text-and-icons-Main-text);
@@ -6910,6 +6973,33 @@ iframe.cachette {
 }
 .sidebar .sidebar-content .detailed-tags .accordion-content .form-content .actions {
   padding: 0 1.6rem 1.6rem 1.6rem;
+}
+.sidebar .sidebar-content .custom-fields .accordion-content {
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.sidebar .sidebar-content .custom-fields .accordion-content .fields {
+  display: flex;
+  align-self: stretch;
+  gap: 1.6rem;
+}
+.sidebar .sidebar-content .custom-fields .accordion-content .fields .information-label .label.can-copy {
+  cursor: pointer;
+}
+.sidebar .sidebar-content .custom-fields .accordion-content .fields .information-label .label.can-copy:hover {
+  color: var(--Palette-Contrast-1);
+}
+.sidebar .sidebar-content .custom-fields .accordion-content .fields .information-label .label.empty {
+  font-style: italic;
+}
+.sidebar .sidebar-content .custom-fields .accordion-content .fields .information-value {
+  width: 100%;
+}
+.sidebar .sidebar-content .custom-fields .accordion-content button {
+  justify-self: center;
+  align-self: center;
 }
 .sidebar .sidebar-content .secure-note .accordion-content {
   padding: 0.8rem 1.6rem 1.6rem;
@@ -7087,7 +7177,7 @@ iframe.cachette {
 .tableview table th,
 .tableview table td {
   text-align: left;
-  padding: 0.3rem 0.4rem 0.5rem 0.4rem;
+  padding: 0.3rem 0.4rem;
   vertical-align: middle;
   position: relative;
 }
@@ -7324,6 +7414,9 @@ iframe.cachette {
 .tableview.comfortable table tr:before {
   background: linear-gradient(var(--Grid-Grid-background), var(--Grid-Grid-background) 4.1rem, var(--Workspace-Dividers), var(--Workspace-Dividers) 4.2rem);
   height: 4.2rem;
+}
+.tableview.comfortable table tr:hover:before {
+  background: linear-gradient(var(--Grid-Grid-hover-row), var(--Grid-Grid-hover-row) 4.1rem, var(--Workspace-Dividers), var(--Workspace-Dividers) 4.2rem);
 }
 .tableview.comfortable table tr.selected:before {
   background: linear-gradient(var(--Grid-Grid-selected-row), var(--Grid-Grid-selected-row) 4.1rem, var(--Workspace-Dividers), var(--Workspace-Dividers) 4.2rem);
@@ -8318,23 +8411,86 @@ svg .section-card .card .title:first-child {
 .section-card .card .content .actions-wrapper a.link {
   font-weight: 400;
 }
-.edit-group-dialog .form-content {
+.edit-group-dialog {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 6.4rem 39rem 12.8rem;
+}
+.edit-group-dialog .dialog {
   padding: 0;
+  max-width: 70rem;
+  min-width: 50rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 100%;
+  align-self: center;
 }
-.edit-group-dialog .form-content .input.required {
-  padding: 0 1.6rem;
+.edit-group-dialog .dialog .dialog-header {
+  padding: 2.4rem;
 }
-.edit-group-dialog .form-content .input.required:first-child {
+.edit-group-dialog .dialog .dialog-header .dialog-title-wrapper h2 {
+  font-size: 2.4rem;
+}
+.edit-group-dialog .dialog .dialog-content {
+  display: flex;
+  padding-right: 1.6rem;
+  padding-left: 1.6rem;
+  align-items: center;
+  align-self: stretch;
+  min-height: 0;
+}
+.edit-group-dialog .dialog .dialog-content .group-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+  width: 100%;
+}
+.edit-group-dialog .dialog .dialog-content .group-form .form-content {
+  padding: 0;
+  max-height: calc(100% - 6.8rem);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.edit-group-dialog .dialog .dialog-content .group-form .form-content .group_members {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.edit-group-dialog .dialog .dialog-content .group-form .form-content > * {
+  margin-bottom: 0;
+}
+.edit-group-dialog .dialog .dialog-content .group-form .input.required {
+  padding: 0.4rem 1.6rem 1.2rem 1.6rem;
+}
+.edit-group-dialog .dialog .dialog-content .group-form .input.required:first-child {
   padding: 1.6rem 1.6rem 0 1.6rem;
 }
-.edit-group-dialog .form-content .permission-edit {
-  max-height: 26.25rem;
-}
-.edit-group-dialog .form-content .permission-add {
+.edit-group-dialog .dialog .dialog-content .group-form .permission-add {
   padding: 1.6rem;
 }
-.edit-group-dialog .form-content .input.text.autocomplete input {
+.edit-group-dialog .dialog .dialog-content .group-form .input.text.autocomplete input {
   margin-bottom: 0;
+}
+.edit-group-dialog .dialog .dialog-content .group-form > * {
+  margin-bottom: 0;
+}
+.edit-group-dialog .dialog .dialog-content .submit-wrapper {
+  display: flex;
+  padding: 1.6rem 0;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2.4rem;
+  align-self: stretch;
 }
 .delete-user-dialog .intro p + p,
 .delete-group-dialog .intro p + p {
@@ -8770,7 +8926,6 @@ svg .section-card .card .title:first-child {
 .edit-resource .dialog-content .grid-and-footer .grid .resource-info .resource-icon .teaser-image svg {
   width: 100%;
   height: 100%;
-  margin-top: 0.25rem;
   --icon-color: var(--Resource-icon-Resource-icon-color);
   --icon-background-color: none;
 }
@@ -8978,6 +9133,78 @@ svg .section-card .card .title:first-child {
   display: flex;
   align-items: center;
 }
+.create-resource .create-workspace .header,
+.edit-resource .create-workspace .header,
+.create-resource .edit-workspace .header,
+.edit-resource .edit-workspace .header {
+  display: flex;
+  padding: 0.6rem 4rem 0.6rem 0.8rem;
+  align-items: center;
+  align-self: stretch;
+  border-bottom: 0.1rem solid var(--Workspace-Dividers);
+}
+.create-resource .create-workspace .header .key,
+.edit-resource .create-workspace .header .key,
+.create-resource .edit-workspace .header .key,
+.edit-resource .edit-workspace .header .key {
+  display: flex;
+  width: 20.8rem;
+  padding: 0 var(--Search-field-padding);
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  border-radius: var(--Border-radii-Button-border-radius);
+  box-sizing: border-box;
+}
+.create-resource .create-workspace .header .divider-wrapper,
+.edit-resource .create-workspace .header .divider-wrapper,
+.create-resource .edit-workspace .header .divider-wrapper,
+.edit-resource .edit-workspace .header .divider-wrapper {
+  display: flex;
+  height: 3rem;
+  padding: 0.6rem 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+.create-resource .create-workspace .header .divider-wrapper .divider,
+.edit-resource .create-workspace .header .divider-wrapper .divider,
+.create-resource .edit-workspace .header .divider-wrapper .divider,
+.edit-resource .edit-workspace .header .divider-wrapper .divider {
+  background: var(--Workspace-Dividers);
+  width: 0.1rem;
+  height: 1.8rem;
+}
+.create-resource .create-workspace .header .value,
+.edit-resource .create-workspace .header .value,
+.create-resource .edit-workspace .header .value,
+.edit-resource .edit-workspace .header .value {
+  display: flex;
+  padding: 0 var(--Search-field-padding);
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1 0 0;
+  border-radius: var(--Border-radii-Button-border-radius);
+}
+.create-resource .create-workspace .header .label,
+.edit-resource .create-workspace .header .label,
+.create-resource .edit-workspace .header .label,
+.edit-resource .edit-workspace .header .label {
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.create-resource .create-workspace .header .subinfo,
+.edit-resource .create-workspace .header .subinfo,
+.create-resource .edit-workspace .header .subinfo,
+.edit-resource .edit-workspace .header .subinfo {
+  color: var(--Text-and-icons-Secondary-text);
+  font-size: 1.2rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
 .create-resource .create-workspace .content,
 .edit-resource .create-workspace .content,
 .create-resource .edit-workspace .content,
@@ -9015,7 +9242,11 @@ svg .section-card .card .title:first-child {
 .create-resource .create-workspace .content .uris-fields,
 .edit-resource .create-workspace .content .uris-fields,
 .create-resource .edit-workspace .content .uris-fields,
-.edit-resource .edit-workspace .content .uris-fields {
+.edit-resource .edit-workspace .content .uris-fields,
+.create-resource .create-workspace .content .custom-fields-fields,
+.edit-resource .create-workspace .content .custom-fields-fields,
+.create-resource .edit-workspace .content .custom-fields-fields,
+.edit-resource .edit-workspace .content .custom-fields-fields {
   display: flex;
   padding: 0 1.6rem;
   flex-direction: column;
@@ -9044,6 +9275,61 @@ svg .section-card .card .title:first-child {
 .edit-resource .edit-workspace .content .uris-fields .uri-add {
   align-self: center;
 }
+.create-resource .create-workspace .content .custom-fields-fields,
+.edit-resource .create-workspace .content .custom-fields-fields,
+.create-resource .edit-workspace .content .custom-fields-fields,
+.edit-resource .edit-workspace .content .custom-fields-fields {
+  padding: 0;
+}
+.create-resource .create-workspace .content .custom-fields-fields .custom-field-row,
+.edit-resource .create-workspace .content .custom-fields-fields .custom-field-row,
+.create-resource .edit-workspace .content .custom-fields-fields .custom-field-row,
+.edit-resource .edit-workspace .content .custom-fields-fields .custom-field-row {
+  display: flex;
+  padding: 0 0.8rem 1.6rem 1.6rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.8rem;
+  align-self: stretch;
+  border-bottom: 0.1rem solid var(--Workspace-Dividers);
+}
+.create-resource .create-workspace .content .custom-fields-fields .custom-field-row .input.custom-field,
+.edit-resource .create-workspace .content .custom-fields-fields .custom-field-row .input.custom-field,
+.create-resource .edit-workspace .content .custom-fields-fields .custom-field-row .input.custom-field,
+.edit-resource .edit-workspace .content .custom-fields-fields .custom-field-row .input.custom-field {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.8rem;
+  align-self: stretch;
+}
+.create-resource .create-workspace .content .custom-fields-fields .custom-field-row .input.custom-field input,
+.edit-resource .create-workspace .content .custom-fields-fields .custom-field-row .input.custom-field input,
+.create-resource .edit-workspace .content .custom-fields-fields .custom-field-row .input.custom-field input,
+.edit-resource .edit-workspace .content .custom-fields-fields .custom-field-row .input.custom-field input {
+  width: 20rem;
+}
+.create-resource .create-workspace .content .custom-fields-fields .custom-field-row .input.custom-field .textarea-wrapper textarea,
+.edit-resource .create-workspace .content .custom-fields-fields .custom-field-row .input.custom-field .textarea-wrapper textarea,
+.create-resource .edit-workspace .content .custom-fields-fields .custom-field-row .input.custom-field .textarea-wrapper textarea,
+.edit-resource .edit-workspace .content .custom-fields-fields .custom-field-row .input.custom-field .textarea-wrapper textarea {
+  min-height: 3.6rem;
+  height: 7.2rem;
+  max-height: none;
+}
+.create-resource .create-workspace .content .custom-fields-fields .custom-field-row .input.custom-field button.button-transparent.inline,
+.edit-resource .create-workspace .content .custom-fields-fields .custom-field-row .input.custom-field button.button-transparent.inline,
+.create-resource .edit-workspace .content .custom-fields-fields .custom-field-row .input.custom-field button.button-transparent.inline,
+.edit-resource .edit-workspace .content .custom-fields-fields .custom-field-row .input.custom-field button.button-transparent.inline {
+  padding: 0.4rem;
+  margin-top: 0.6rem;
+}
+.create-resource .create-workspace .content .custom-fields-fields .custom-field-add,
+.edit-resource .create-workspace .content .custom-fields-fields .custom-field-add,
+.create-resource .edit-workspace .content .custom-fields-fields .custom-field-add,
+.edit-resource .edit-workspace .content .custom-fields-fields .custom-field-add {
+  align-self: center;
+}
 .create-resource .create-workspace .content .input,
 .edit-resource .create-workspace .content .input,
 .create-resource .edit-workspace .content .input,
@@ -9062,7 +9348,7 @@ svg .section-card .card .title:first-child {
 .edit-resource .create-workspace .content .input .error-message,
 .create-resource .edit-workspace .content .input .error-message,
 .edit-resource .edit-workspace .content .input .error-message {
-  margin-bottom: 0rem;
+  margin-bottom: 0;
 }
 .create-resource .create-workspace .content .input label,
 .edit-resource .create-workspace .content .input label,

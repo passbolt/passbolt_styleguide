@@ -104,6 +104,7 @@ export function propsWithMyselfAsSelectedUser() {
           },
           active: true,
           is_mfa_enabled: true,
+          missing_metadata_key_ids: ["f848277c-5398-58f8-a82a-72397af2d450"],
         }
       ]
     }
