@@ -33,7 +33,6 @@ export class ResourceIcon extends Component {
     if (typeof(this.props.resource.metadata?.icon?.value) !== "number" || this.props.resource.metadata?.icon?.type !== ICON_TYPE_KEEPASS_ICON_SET) {
       return ResourceIcon.getDefaultResourceTypeIcon(this.props.resource.resource_type_id, this.props.resourceTypes);
     }
-
     return KEEPASS_ICON_LIST[this.props.resource.metadata.icon.value];
   }
 

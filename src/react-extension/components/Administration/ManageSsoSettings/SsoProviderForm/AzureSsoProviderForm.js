@@ -225,7 +225,7 @@ class AzureSsoProviderForm extends React.Component {
           <div className="button-inline">
             <input id="sso-redirect-url-input" type="text" className="fluid form-element disabled" name="redirect_url"
               value={this.fullRedirectUrl} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
-            <button type="button" onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button-icon">
+            <button type="button" onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button button-icon">
               <CopySVG/>
             </button>
           </div>

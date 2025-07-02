@@ -14,6 +14,7 @@
 import {v4 as uuid} from "uuid";
 import EntityV2 from "./entityV2";
 import EntityValidationError from "./entityValidationError";
+import EntityV2Collection from "./entityV2Collection";
 
 export class TestEntityV2 extends EntityV2 {
   static getSchema() {
@@ -51,14 +52,16 @@ export class TestEntityV2 extends EntityV2 {
             "type": "string",
           }
         },
-        "associated_entity": TestAssociatedEntityV2.getSchema()
+        "associated_entity": TestAssociatedEntityV2.getSchema(),
+        "associated_collection": TestAssociatedCollection.getSchema()
       }
     };
   }
 
   static get associations() {
     return {
-      "associated_entity": TestAssociatedEntityV2
+      "associated_entity": TestAssociatedEntityV2,
+      "associated_collection": TestAssociatedCollection
     };
   }
 
@@ -95,6 +98,39 @@ export class TestEntityV2 extends EntityV2 {
 
   get associatedEntity() {
     return this._associatedEntity;
+  }
+
+  get associatedCollection() {
+    return this._associatedCollection;
+  }
+
+  /**
+   * Return a DTO
+   *
+   * @param {object} [contain] optional
+   * @returns {object}
+   */
+  toDto(contain) {
+    const result = Object.assign({}, this._props);
+    if (!contain) {
+      return result;
+    }
+    if (this.associatedEntity && contain.associated_entity) {
+      result.associated_entity = this.associatedEntity.toDto();
+    }
+    if (this.associatedCollection && contain.associated_collection) {
+      result.associated_collection = this.associatedCollection.toDto();
+    }
+
+    return result;
+  }
+
+  /**
+   * TestEntityV2.ALL_CONTAIN_OPTIONS
+   * @returns {object} all contain options that can be used in toDto()
+   */
+  static get ALL_CONTAIN_OPTIONS() {
+    return {associated_entity: true, associated_collection: true};
   }
 }
 
@@ -150,6 +186,27 @@ export class TestWithAssociationEntityV2 extends EntityV2 {
   }
 }
 
+export class TestAssociatedCollection extends EntityV2Collection {
+  /**
+   * @inheritDoc
+   */
+  get entityClass() {
+    return TestAssociatedEntityV2;
+  }
+
+  /**
+   * Get metadata private keys collection schema
+   *
+   * @returns {Object} schema
+   */
+  static getSchema() {
+    return {
+      "type": "array",
+      "items": TestAssociatedEntityV2.getSchema()
+    };
+  }
+}
+
 export const minimalTestEntityV2Dto = data => ({
   name: "test name",
   ...data
@@ -166,6 +223,7 @@ export const defaultTestEntityV2Dto = data => ({
   },
   array: [uuid(), uuid()],
   associated_entity: defaultAssociatedTestEntityV2Dto(),
+  associated_collection: [defaultAssociatedTestEntityV2Dto()],
   ...data,
 });
 

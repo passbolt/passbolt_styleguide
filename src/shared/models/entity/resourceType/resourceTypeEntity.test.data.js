@@ -22,6 +22,7 @@ export const TEST_RESOURCE_TYPE_V5_DEFAULT = uuidv4();
 export const TEST_RESOURCE_TYPE_V5_PASSWORD_STRING = uuidv4();
 export const TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP = uuidv4();
 export const TEST_RESOURCE_TYPE_V5_TOTP = uuidv4();
+export const TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS = uuidv4();
 
 /**
  * Resource with string password resource type DTO.
@@ -318,6 +319,43 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
           maxLength: 10000,
           nullable: true,
         },
+        custom_fields: {
+          type: "object",
+          required: ["items"],
+          properties: {
+            items: {
+              type: "array",
+              maxItems: 128,
+              items: {
+                type: "object",
+                required: ["id", "type"],
+                properties: {
+                  id: {
+                    type: "string",
+                    format: "uuid"
+                  },
+                  type: {
+                    type: "string",
+                    enum: ["text", "password", "boolean", "number", "uri"]
+                  },
+                  metadata_key: {
+                    type: "string",
+                    maxLength: 255,
+                    nullable: true
+                  },
+                  metadata_value: {
+                    anyOf: [
+                      {type: "string", maxLength: 5000},
+                      {type: "number"},
+                      {type: "boolean"}
+                    ],
+                    nullable: true
+                  },
+                }
+              }
+            }
+          }
+        }
       }
     },
     secret: {
@@ -338,6 +376,43 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
           maxLength: 10000,
           nullable: true,
         },
+        custom_fields: {
+          type: "object",
+          required: ["items"],
+          properties: {
+            items: {
+              type: "array",
+              maxItems: 128,
+              items: {
+                type: "object",
+                required: ["id", "type"],
+                properties: {
+                  id: {
+                    type: "string",
+                    format: "uuid"
+                  },
+                  type: {
+                    type: "string",
+                    enum: ["text", "password", "boolean", "number", "uri"]
+                  },
+                  secret_key: {
+                    type: "string",
+                    maxLength: 255,
+                    nullable: true
+                  },
+                  secret_value: {
+                    anyOf: [
+                      {type: "string", maxLength: 5000},
+                      {type: "number"},
+                      {type: "boolean"}
+                    ],
+                    nullable: true
+                  }
+                }
+              }
+            }
+          }
+        }
       },
     }
   },
@@ -426,6 +501,43 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
           maxLength: 10000,
           nullable: true,
         },
+        custom_fields: {
+          type: "object",
+          required: ["items"],
+          properties: {
+            items: {
+              type: "array",
+              maxItems: 128,
+              items: {
+                type: "object",
+                required: ["id", "type"],
+                properties: {
+                  id: {
+                    type: "string",
+                    format: "uuid"
+                  },
+                  type: {
+                    type: "string",
+                    enum: ["text", "password", "boolean", "number", "uri"]
+                  },
+                  metadata_key: {
+                    type: "string",
+                    maxLength: 255,
+                    nullable: true
+                  },
+                  metadata_value: {
+                    anyOf: [
+                      {type: "string", maxLength: 5000},
+                      {type: "number"},
+                      {type: "boolean"}
+                    ],
+                    nullable: true
+                  },
+                }
+              }
+            }
+          }
+        }
       }
     },
     secret: {
@@ -470,6 +582,43 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
             },
             period: {
               type: "number"
+            }
+          }
+        },
+        custom_fields: {
+          type: "object",
+          required: ["items"],
+          properties: {
+            items: {
+              type: "array",
+              maxItems: 128,
+              items: {
+                type: "object",
+                required: ["id", "type"],
+                properties: {
+                  id: {
+                    type: "string",
+                    format: "uuid"
+                  },
+                  type: {
+                    type: "string",
+                    enum: ["text", "password", "boolean", "number", "uri"]
+                  },
+                  secret_key: {
+                    type: "string",
+                    maxLength: 255,
+                    nullable: true
+                  },
+                  secret_value: {
+                    anyOf: [
+                      {type: "string", maxLength: 5000},
+                      {type: "number"},
+                      {type: "boolean"}
+                    ],
+                    nullable: true
+                  }
+                }
+              }
             }
           }
         }
@@ -544,6 +693,132 @@ export const resourceTypeV5TotpDto = (data = {}) => ({
             },
             period: {
               type: "number"
+            }
+          }
+        }
+      },
+    }
+  },
+  ...data
+});
+
+/**
+ * Resource V5 TOTP resource type DTO.
+ * @param {object} data The data to override
+ * @returns {object}
+ */
+export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
+  id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
+  name: "V5 custom fields",
+  slug: "v5-custom-fields",
+  definition: {
+    resource: {
+      type: "object",
+      required: ["name"],
+      properties: {
+        name: {
+          type: "string",
+          maxLength: 255
+        },
+        username: {
+          type: "string",
+          maxLength: 255,
+          nullable: true
+        },
+        uris: {
+          type: "array",
+          items: {
+            type: "string",
+            maxLength: 1024,
+            nullable: true
+          }
+        },
+        description: {
+          type: "string",
+          maxLength: 10000,
+          nullable: true,
+        },
+        custom_fields: {
+          type: "object",
+          required: ["items"],
+          properties: {
+            items: {
+              type: "array",
+              maxItems: 128,
+              items: {
+                type: "object",
+                required: ["id", "type"],
+                properties: {
+                  id: {
+                    type: "string",
+                    format: "uuid"
+                  },
+                  type: {
+                    type: "string",
+                    enum: ["text", "password", "boolean", "number", "uri"]
+                  },
+                  metadata_key: {
+                    type: "string",
+                    maxLength: 255,
+                    nullable: true
+                  },
+                  metadata_value: {
+                    anyOf: [
+                      {type: "string", maxLength: 5000},
+                      {type: "number"},
+                      {type: "boolean"}
+                    ],
+                    nullable: true
+                  },
+                }
+              }
+            }
+          }
+        }
+      },
+    },
+    secret: {
+      type: "object",
+      required: ["custom_fields"],
+      properties: {
+        object_type: {
+          type: "string",
+          enum: ['PASSBOLT_SECRET_DATA'],
+        },
+        custom_fields: {
+          type: "object",
+          required: ["items"],
+          properties: {
+            items: {
+              type: "array",
+              maxItems: 128,
+              items: {
+                type: "object",
+                required: ["id", "type"],
+                properties: {
+                  id: {
+                    type: "string",
+                    format: "uuid"
+                  },
+                  type: {
+                    type: "string",
+                    enum: ["text", "password", "boolean", "number", "uri"]
+                  },
+                  secret_key: {
+                    type: "string",
+                    maxLength: 255,
+                    nullable: true
+                  },
+                  secret_value: {
+                    anyOf: [
+                      {type: "string", maxLength: 5000},
+                      {type: "number"},
+                      {type: "boolean"}
+                    ],
+                    nullable: true
+                  }
+                }
+              }
             }
           }
         }

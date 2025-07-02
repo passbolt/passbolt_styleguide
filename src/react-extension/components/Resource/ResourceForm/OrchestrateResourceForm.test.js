@@ -25,6 +25,7 @@ import {
 
 jest.mock("./AddResourcePassword", () => () => <span className="password"></span>);
 jest.mock("./AddResourceTotp", () => () => <span className="totp"></span>);
+jest.mock("./AddResourceCustomFields", () => () => <span className="custom-fields"></span>);
 jest.mock("./AddResourceNote", () => () => <span className="note"></span>);
 jest.mock("./AddResourceDescription", () => () => <span className="description"></span>);
 
@@ -41,6 +42,7 @@ describe("OrchestrateResourceForm", () => {
       page = new OrchestrateResourceFormPage(props);
       expect(page.hasPasswordForm).toBeTruthy();
       expect(page.hasTotpForm).toBeFalsy();
+      expect(page.hasCustomFieldsForm).toBeFalsy();
       expect(page.hasNoteForm).toBeFalsy();
       expect(page.hasDescriptionForm).toBeFalsy();
     });
@@ -50,6 +52,17 @@ describe("OrchestrateResourceForm", () => {
       page = new OrchestrateResourceFormPage(props);
       expect(page.hasPasswordForm).toBeFalsy();
       expect(page.hasTotpForm).toBeTruthy();
+      expect(page.hasCustomFieldsForm).toBeFalsy();
+      expect(page.hasNoteForm).toBeFalsy();
+      expect(page.hasDescriptionForm).toBeFalsy();
+    });
+
+    it('As LU I can see the resource custom field form.', () => {
+      const props = defaultProps({resourceFormSelected: ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS});
+      page = new OrchestrateResourceFormPage(props);
+      expect(page.hasPasswordForm).toBeFalsy();
+      expect(page.hasTotpForm).toBeFalsy();
+      expect(page.hasCustomFieldsForm).toBeTruthy();
       expect(page.hasNoteForm).toBeFalsy();
       expect(page.hasDescriptionForm).toBeFalsy();
     });
@@ -59,6 +72,7 @@ describe("OrchestrateResourceForm", () => {
       page = new OrchestrateResourceFormPage(props);
       expect(page.hasPasswordForm).toBeFalsy();
       expect(page.hasTotpForm).toBeFalsy();
+      expect(page.hasCustomFieldsForm).toBeFalsy();
       expect(page.hasNoteForm).toBeTruthy();
       expect(page.hasDescriptionForm).toBeFalsy();
     });
@@ -68,6 +82,7 @@ describe("OrchestrateResourceForm", () => {
       page = new OrchestrateResourceFormPage(props);
       expect(page.hasPasswordForm).toBeFalsy();
       expect(page.hasTotpForm).toBeFalsy();
+      expect(page.hasCustomFieldsForm).toBeFalsy();
       expect(page.hasNoteForm).toBeFalsy();
       expect(page.hasDescriptionForm).toBeTruthy();
     });
@@ -77,6 +92,7 @@ describe("OrchestrateResourceForm", () => {
       page = new OrchestrateResourceFormPage(props);
       expect(page.hasPasswordForm).toBeFalsy();
       expect(page.hasTotpForm).toBeFalsy();
+      expect(page.hasCustomFieldsForm).toBeFalsy();
       expect(page.hasNoteForm).toBeFalsy();
       expect(page.hasDescriptionForm).toBeFalsy();
       expect(page.hasAppearanceForm).toBeTruthy();

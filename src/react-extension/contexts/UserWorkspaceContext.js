@@ -58,6 +58,7 @@ export const UserWorkspaceContext = React.createContext({
     single: () => {}, // Whenever a single user has been selected
     none: () => {} // Whenever none users have been selected
   },
+  onRefreshSelectedUsers:  () => {}, // Whenever a component request to refresh the selected users
   onGroupToEdit: () => {}, // Whenever a group will be edited
   shouldDisplaySuspendedUsersFilter: () => {}, // returns true if the 'Suspended user' filter should be displayed in the UI
 });
@@ -107,6 +108,7 @@ class UserWorkspaceContextProvider extends React.Component {
         none: this.handleNoneUsersSelected.bind(this), // Whenever none users have been selected
       },
       onGroupToEdit: this.handleGroupToEdit.bind(this), // Whenever a group will be edited
+      onRefreshSelectedUsers:  this.handleRefreshSelectedUsers.bind(this), // Whenever a component request to refresh the selected users
       isAttentionRequired: this.isAttentionRequired.bind(this), // Whenever a user needs attention
       shouldDisplaySuspendedUsersFilter: this.shouldDisplaySuspendedUsersFilter.bind(this), // returns true if the 'Suspended user' filter should be displayed in the UI
     };
@@ -189,6 +191,16 @@ class UserWorkspaceContextProvider extends React.Component {
       await this.refreshSearchFilter();
       await this.updateDetails();
     }
+  }
+
+  /**
+   * Handle the refresh of selected users, to retrieve updated users during action
+   * @returns {void}
+   */
+  handleRefreshSelectedUsers() {
+    const selectedUserIds = new Set(this.state.selectedUsers.map(user => user.id));
+    const selectedUsers = this.props.context.users.filter(user => selectedUserIds.has(user.id));
+    this.setState({selectedUsers});
   }
 
   /**

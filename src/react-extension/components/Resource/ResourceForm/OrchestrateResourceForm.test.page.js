@@ -51,6 +51,14 @@ export default class OrchestrateResourceFormPage {
   }
 
   /**
+   * Returns the custom fields form
+   * @returns {boolean}
+   */
+  get hasCustomFieldsForm() {
+    return Boolean(this._page.container.querySelector('.custom-fields'));
+  }
+
+  /**
    * Returns the note form
    * @returns {boolean}
    */

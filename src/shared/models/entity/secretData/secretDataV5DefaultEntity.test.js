@@ -17,6 +17,10 @@ import * as assertEntityProperty from "../../../../../test/assert/assertEntityPr
 import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
 import {defaultSecretDataV5DefaultDto, minimalDefaultSecretDataV5DefaultDto} from "./secretDataV5DefaultEntity.test.data";
 import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import CustomFieldsCollection from "../customField/customFieldsCollection";
+import CustomFieldEntity from "../customField/customFieldEntity";
+import {defaultCustomField} from "../customField/customFieldEntity.test.data";
+import {defaultCustomFieldsCollection} from "../customField/customFieldsCollection.test.data";
 
 describe("SecretDataV5DefaultEntity", () => {
   describe("::getSchema", () => {
@@ -64,25 +68,41 @@ describe("SecretDataV5DefaultEntity", () => {
     });
   });
 
+  describe("::associations", () => {
+    it("associations should have custom_fields", () => {
+      expect.assertions(1);
+      expect(SecretDataV5DefaultEntity.associations).toStrictEqual({custom_fields: CustomFieldsCollection});
+    });
+  });
+
   describe("::createFromDefault", () => {
     it("create with no data provided", () => {
-      expect.assertions(3);
+      expect.assertions(4);
       const dto = minimalDefaultSecretDataV5DefaultDto();
       const entity = SecretDataV5DefaultEntity.createFromDefault({});
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
       expect(entity.password).toStrictEqual("");
       expect(entity.description).toBeUndefined();
+      expect(entity.customFields).toBeNull();
     });
 
     it("create with data provided", () => {
-      expect.assertions(3);
-      const dto = defaultSecretDataV5DefaultDto();
+      expect.assertions(9);
+      const dto = defaultSecretDataV5DefaultDto({
+        custom_fields: [defaultCustomField()],
+      });
       const entity = SecretDataV5DefaultEntity.createFromDefault(dto);
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
       expect(entity.password).toStrictEqual(dto.password);
       expect(entity.description).toStrictEqual(dto.description);
+      expect(entity.customFields).toBeInstanceOf(CustomFieldsCollection);
+      expect(entity.customFields).toHaveLength(1);
+      expect(entity.customFields.items[0]).toBeInstanceOf(CustomFieldEntity);
+      expect(entity.customFields.items[0]._props.id).toStrictEqual(dto.custom_fields[0].id);
+      expect(entity.customFields.items[0]._props.metadata_key).toStrictEqual(dto.custom_fields[0].metadata_key);
+      expect(entity.customFields.items[0].value).toStrictEqual(dto.custom_fields[0].secret_value);
     });
   });
 
@@ -119,6 +139,26 @@ describe("SecretDataV5DefaultEntity", () => {
       const dto = defaultSecretDataV5DefaultDto();
       const entity = new SecretDataV5DefaultEntity(dto);
       expect(entity.areSecretsDifferent(dto)).toBeFalsy();
+    });
+
+    it("should return false if both custom fields collection are identical", () => {
+      const dto = defaultSecretDataV5DefaultDto({
+        custom_fields: defaultCustomFieldsCollection(),
+      });
+      const entity = new SecretDataV5DefaultEntity(dto);
+      expect(entity.areSecretsDifferent(dto)).toBeFalsy();
+    });
+
+    it("should return true if both custom fields collection are different", () => {
+      const dtoA = defaultSecretDataV5DefaultDto({
+        custom_fields: defaultCustomFieldsCollection(),
+      });
+      const dtoB = {
+        ...dtoA,
+        custom_fields: defaultCustomFieldsCollection(),
+      };
+      const entity = new SecretDataV5DefaultEntity(dtoA);
+      expect(entity.areSecretsDifferent(dtoB)).toBeTruthy();
     });
   });
 });

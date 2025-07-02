@@ -41,6 +41,7 @@ import {
 import {
   V4_TO_V5_RESOURCE_TYPE_MAPPING
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
 
 class SelectResourceForm extends Component {
   constructor(props) {
@@ -179,6 +180,14 @@ class SelectResourceForm extends Component {
   }
 
   /**
+   * Is resource has custom fields
+   * @returns {boolean}
+   */
+  get isResourceHasCustomFields() {
+    return this.resource?.secret?.custom_fields?.length > 0;
+  }
+
+  /**
    * Is resource has note
    * @returns {boolean}
    */
@@ -234,7 +243,8 @@ class SelectResourceForm extends Component {
   get canAddSecret() {
     return this.canAddSecretPassword
         || this.canAddSecretTotp
-        || this.canAddSecretNote;
+        || this.canAddSecretNote
+        || this.canAddSecretCustomFields;
   }
 
   /**
@@ -251,6 +261,14 @@ class SelectResourceForm extends Component {
    */
   get canAddSecretTotp() {
     return !this.isResourceHasTotp && this.props.resourceTypes?.hasSomeTotpResourceTypes(this.props.resourceType?.version);
+  }
+
+  /**
+   * Can add secret custom fields
+   * @returns {boolean}
+   */
+  get canAddSecretCustomFields() {
+    return !this.isResourceHasCustomFields && this.props.resourceTypes?.hasSomeCustomFieldsResourceTypes(this.props.resourceType?.version);
   }
 
   /**
@@ -304,6 +322,15 @@ class SelectResourceForm extends Component {
                   </button>
                 </DropdownItem>
               }
+              {this.canAddSecretCustomFields &&
+                <DropdownItem>
+                  <button id="custom_fields_action" type="button" className="no-border"
+                    onClick={() => this.handleAddSecret(ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS)}>
+                    <TablePropertiesSVG/>
+                    <span><Trans>Custom fields</Trans></span>
+                  </button>
+                </DropdownItem>
+              }
               {this.canAddSecretNote &&
                 <DropdownItem>
                   <button id="note_action" type="button" className="no-border"
@@ -353,6 +380,22 @@ class SelectResourceForm extends Component {
                   </button>
                   {this.isResourceHasMultipleSecret &&
                     <button type="button" id="delete-totp" disabled={this.props.disabled} className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.TOTP)}>
+                      <DeleteSVG/>
+                    </button>
+                  }
+                </div>
+              }
+              {this.isResourceHasCustomFields &&
+                <div className={`section-content ${ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS === this.selectedForm ? "selected" : ""}`}>
+                  <button type="button" className="no-border"
+                    id="secret-totp-tab"
+                    disabled={this.props.disabled}
+                    onClick={event => this.handleSelectForm(event, ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS)}>
+                    <TablePropertiesSVG/>
+                    <span className="ellipsis"><Trans>Custom fields</Trans></span>
+                  </button>
+                  {this.isResourceHasMultipleSecret &&
+                    <button type="button" id="delete-custom-fields" disabled={this.props.disabled} className="button-transparent inline" onClick={() => this.handleDeleteSecret(ResourceEditCreateFormEnumerationTypes.CUSTOM_FIELDS)}>
                       <DeleteSVG/>
                     </button>
                   }

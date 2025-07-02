@@ -106,6 +106,12 @@ class EntitySchema {
       }
     }
 
+    if (typeof(schema.maxItems) === 'number') {
+      if (!EntitySchema.isLessThanOrEqual(dto.length, schema.maxItems)) {
+        validationError = EntitySchema.handleCollectionValidationError('maxItems', `The items array should contain at maximum ${schema.maxItems} item(s).`, validationError);
+      }
+    }
+
     if (validationError) {
       throw validationError;
     }
@@ -614,6 +620,17 @@ class EntitySchema {
    */
   static isGreaterThanOrEqual(prop, gte) {
     return prop >= gte;
+  }
+
+  /**
+   * Check if the value is less than the given value
+   *
+   * @param {number} prop
+   * @param {number} lte
+   * @returns {boolean}
+   */
+  static isLessThanOrEqual(prop, lte) {
+    return prop <= lte;
   }
 
   /**
