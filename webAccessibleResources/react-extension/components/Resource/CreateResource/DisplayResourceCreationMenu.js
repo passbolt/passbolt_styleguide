@@ -168,7 +168,7 @@ class DisplayResourceCreationMenu extends Component {
    * @returns {boolean}
    */
   get hasCustomFieldsV5() {
-    return this.props.resourceTypes?.hasSomeCustomFieldsResourceTypes(RESOURCE_TYPE_VERSION_5);
+    return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
   }
 
   /**

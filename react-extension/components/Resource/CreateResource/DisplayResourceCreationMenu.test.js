@@ -176,7 +176,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(page.getContentTypeName(1).textContent).toStrictEqual("Password");
 
       // second content type availability
-      expect(page.getContentTypeName(2).textContent).toStrictEqual("Custom fields");
+      expect(page.getContentTypeName(2)).toBeUndefined();
     });
 
     it("should not display Password V4 button if no password content type is available", () => {

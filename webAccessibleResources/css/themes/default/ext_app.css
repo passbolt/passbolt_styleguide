@@ -6806,11 +6806,11 @@ iframe.cachette {
 .sidebar .sidebar-content .sidebar-section .accordion-content .field-value button span.caret {
   min-width: 0.4rem;
 }
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .main-uri,
-.sidebar .sidebar-content .sidebar-section .accordion-content .field-value .main-uri,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .additional-uris,
-.sidebar .sidebar-content .sidebar-section .accordion-content .field-value .additional-uris {
-  text-decoration: underline;
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .main-uri button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .field-value .main-uri button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .additional-uris button,
+.sidebar .sidebar-content .sidebar-section .accordion-content .field-value .additional-uris button {
+  width: fit-content;
 }
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .location.value button,
 .sidebar .sidebar-content .sidebar-section .accordion-content .field-value .location.value button {
