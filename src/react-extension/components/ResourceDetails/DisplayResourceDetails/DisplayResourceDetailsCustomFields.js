@@ -44,6 +44,25 @@ class DisplayResourceDetailsCustomFields extends React.Component {
   }
 
   /**
+   * componentDidUpdate React hook
+   * Invoked immediately after props are updated.
+   * Checks if the resource has been changed or updated and if yes, reset the secret preview state.
+   */
+  componentDidUpdate(prevProps) {
+    const previousResource = prevProps.resourceWorkspaceContext?.details?.resource;
+    const currentResource = this.props.resourceWorkspaceContext?.details?.resource;
+    const hasResourceChanged = previousResource?.id !== currentResource?.id
+      || previousResource?.modified !== currentResource?.modified;
+
+    if (hasResourceChanged) {
+      this.setState({
+        secrets: [],
+        secretPreviewed: []
+      });
+    }
+  }
+
+  /**
    * Get default state
    * @returns {object}
    */
