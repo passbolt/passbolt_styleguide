@@ -173,11 +173,12 @@ describe("See the Edit User Group", () => {
     });
 
     it('As AD I should see an error message when the editing group has no group manager anymore', async() => {
-      expect.assertions(1);
+      expect.assertions(2);
       page.groupMember(1).role = 1;
       page.groupMember(2).role = 1;
       await waitFor(() => {});
       expect(page.hasNoManager).toBeTruthy();
+      expect(page.warningMessageCannotAddUser).toBeFalsy();
     });
 
     it("As an user I should see a feedback when name field content is truncated by a field limit", async() => {

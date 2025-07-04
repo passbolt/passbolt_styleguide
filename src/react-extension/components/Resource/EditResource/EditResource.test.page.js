@@ -398,6 +398,70 @@ export default class EditResourcePage {
   }
 
   /**
+   * Returns the add custom field button element
+   */
+  get addCustomField() {
+    return this._page.container.querySelector('.custom-field-add button');
+  }
+
+  /**
+   * Returns the custom field length
+   * @return number
+   */
+  get customFieldsLength() {
+    return this._page.container.querySelectorAll(`.custom-field-row`).length;
+  }
+
+  /**
+   * Returns the custom field key input element
+   */
+  getCustomFieldKey(index) {
+    return this._page.container.querySelector(`#resource-custom-fields-key-${index}`);
+  }
+
+  /**
+   * Returns the custom field key warning message
+   */
+  getCustomFieldKeyWarningMessage(index) {
+    return this._page.container.querySelector(`.resource-custom-fields-key-warning-${index}`);
+  }
+
+  /**
+   * Returns the custom field key and value warning message
+   */
+  getCustomFieldKeyAndValueWarningMessage(index) {
+    return this._page.container.querySelector(`.resource-custom-fields-warning-${index}`);
+  }
+
+  /**
+   * Returns the custom field value textarea element
+   */
+  getCustomFieldValue(index) {
+    return this._page.container.querySelector(`#resource-custom-fields-value-${index}`);
+  }
+
+  /**
+   * Returns the custom field value warning message
+   */
+  getCustomFieldValueWarningMessage(index) {
+    return this._page.container.querySelector(`.resource-custom-fields-value-warning-${index}`);
+  }
+
+  /**
+   * Returns the custom field value max characters warning message
+   */
+  get customFieldValueMaxCharactersWarningMessage() {
+    return this._page.container.querySelector(`.warning.message.no-margin`).textContent;
+  }
+
+  /**
+   * Returns the delete custom field button element
+   */
+  getDeleteCustomField(index) {
+    return this._page.container.querySelector(`#resource-delete-custom-field-${index}`);
+  }
+
+  /**
    * Returns the save button element
    */
   get saveButton() {
@@ -475,6 +539,22 @@ export default class EditResourcePage {
    */
   get deleteSecretNote() {
     return this._page.container.querySelector(".left-sidebar #delete-note");
+  }
+
+  /**
+   * Returns the add secret custom fields
+   * @returns {Element}
+   */
+  get addSecretCustomFields() {
+    return this._page.container.querySelector(".left-sidebar #custom_fields_action");
+  }
+
+  /**
+   * Returns the delete secret custom fields
+   * @returns {Element}
+   */
+  get deleteSecretCustomFields() {
+    return this._page.container.querySelector(".left-sidebar #delete-custom-fields");
   }
 
   /**

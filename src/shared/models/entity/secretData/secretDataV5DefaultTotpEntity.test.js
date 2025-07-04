@@ -19,6 +19,10 @@ import {defaultSecretDataV5DefaultTotpEntityDto, minimalSecretDataV5DefaultTotpE
 import TotpEntity from "../totp/totpEntity";
 import {defaultTotpDto} from "../totp/totpDto.test.data";
 import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import CustomFieldsCollection from "../customField/customFieldsCollection";
+import {defaultCustomField} from "../customField/customFieldEntity.test.data";
+import CustomFieldEntity from "../customField/customFieldEntity";
+import {defaultCustomFieldsCollection} from "../customField/customFieldsCollection.test.data";
 
 describe("SecretDataV5DefaultTotpEntity", () => {
   describe("::getSchema", () => {
@@ -62,9 +66,9 @@ describe("SecretDataV5DefaultTotpEntity", () => {
   });
 
   describe("::associations", () => {
-    it("associations should have totp in associations", () => {
+    it("associations should have totp and custom_fields", () => {
       expect.assertions(1);
-      expect(SecretDataV5DefaultTotpEntity.associations).toStrictEqual({totp: TotpEntity});
+      expect(SecretDataV5DefaultTotpEntity.associations).toStrictEqual({totp: TotpEntity, custom_fields: CustomFieldsCollection});
     });
   });
 
@@ -91,7 +95,7 @@ describe("SecretDataV5DefaultTotpEntity", () => {
 
   describe("::createFromDefault", () => {
     it("create with no data provided", () => {
-      expect.assertions(4);
+      expect.assertions(5);
       const dto = minimalSecretDataV5DefaultTotpEntityDto();
       dto.totp.secret_key = "";
       const entity = SecretDataV5DefaultTotpEntity.createFromDefault({}, {validate: false});
@@ -100,17 +104,26 @@ describe("SecretDataV5DefaultTotpEntity", () => {
       expect(entity.password).toStrictEqual("");
       expect(entity.totp.toDto()).toStrictEqual(dto.totp);
       expect(entity.description).toBeUndefined();
+      expect(entity.customFields).toBeNull();
     });
 
     it("create with data provided", () => {
-      expect.assertions(4);
-      const dto = defaultSecretDataV5DefaultTotpEntityDto();
+      expect.assertions(10);
+      const dto = defaultSecretDataV5DefaultTotpEntityDto({
+        custom_fields: [defaultCustomField()],
+      });
       const entity = new SecretDataV5DefaultTotpEntity(dto);
 
       expect(entity.objectType).toStrictEqual(dto.object_type);
       expect(entity.password).toStrictEqual(dto.password);
       expect(entity.totp.toDto()).toStrictEqual(dto.totp);
       expect(entity.description).toStrictEqual(dto.description);
+      expect(entity.customFields).toBeInstanceOf(CustomFieldsCollection);
+      expect(entity.customFields).toHaveLength(1);
+      expect(entity.customFields.items[0]).toBeInstanceOf(CustomFieldEntity);
+      expect(entity.customFields.items[0]._props.id).toStrictEqual(dto.custom_fields[0].id);
+      expect(entity.customFields.items[0]._props.metadata_key).toStrictEqual(dto.custom_fields[0].metadata_key);
+      expect(entity.customFields.items[0].value).toStrictEqual(dto.custom_fields[0].secret_value);
     });
   });
 
@@ -152,6 +165,26 @@ describe("SecretDataV5DefaultTotpEntity", () => {
       const dto = defaultSecretDataV5DefaultTotpEntityDto();
       const entity = new SecretDataV5DefaultTotpEntity(dto);
       expect(entity.areSecretsDifferent(dto)).toBeFalsy();
+    });
+
+    it("should return false if both custom fields collection are identical", () => {
+      const dto = defaultSecretDataV5DefaultTotpEntityDto({
+        custom_fields: defaultCustomFieldsCollection(),
+      });
+      const entity = new SecretDataV5DefaultTotpEntity(dto);
+      expect(entity.areSecretsDifferent(dto)).toBeFalsy();
+    });
+
+    it("should return true if both custom fields collection are different", () => {
+      const dtoA = defaultSecretDataV5DefaultTotpEntityDto({
+        custom_fields: defaultCustomFieldsCollection(),
+      });
+      const dtoB = {
+        ...dtoA,
+        custom_fields: defaultCustomFieldsCollection(),
+      };
+      const entity = new SecretDataV5DefaultTotpEntity(dtoA);
+      expect(entity.areSecretsDifferent(dtoB)).toBeTruthy();
     });
   });
 });

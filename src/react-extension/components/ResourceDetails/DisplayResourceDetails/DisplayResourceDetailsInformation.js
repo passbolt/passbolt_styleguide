@@ -15,12 +15,10 @@ import React, {Fragment} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {
-  resourceLinkAuthorizedProtocols,
   ResourceWorkspaceFilterTypes,
   withResourceWorkspace
 } from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
-import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
@@ -136,17 +134,6 @@ class DisplayResourceDetailsInformation extends React.Component {
     return this.props.resourceWorkspaceContext.details.resource;
   }
 
-  /**
-   * the resource safe uri
-   * @return {string}
-   */
-  get safeUri() {
-    return sanitizeUrl(
-      this.resource.metadata.uris?.[0], {
-        whiteListedProtocols: resourceLinkAuthorizedProtocols,
-        defaultProtocol: urlProtocols.HTTPS
-      });
-  }
 
   /**
    * Handle when the user selects the folder parent.

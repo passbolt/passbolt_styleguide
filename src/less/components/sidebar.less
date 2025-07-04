@@ -258,9 +258,8 @@
           }
         }
 
-        .information-value {
+        .information-value, .field-value {
           .ellipsis();
-
           button {
             max-width: 100%;
             span {
@@ -271,6 +270,12 @@
                 min-width: .4rem;
               }
             }
+          }
+
+          .main-uri,  .additional-uris {
+            button {
+              width: fit-content;
+            };
           }
 
           .location.value {
@@ -292,26 +297,46 @@
             height: 2rem; // set height for empty value
           }
 
-          .password-value, .totp-value {
+          .additional-uris {
+            height: auto;
             display: flex;
-            gap: .4rem;
+            gap: .8rem;
+            flex-direction: column;
+          }
 
+          .password-value, .totp-value, .field-secret-value {
             .secret {
-              &-with-preview {
-                max-width: calc(100% - 2.4rem);
-              }
+              float: left;
+              max-width: 100%;
 
+              button{
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
+            }
+            .password-view {
+              display: none;
+              align-items: center;
+              margin: 0 0 0 .6rem;
+              float: left;
+            }
+            &:hover {
+              .secret:has(+ .password-view, + .totp-view) {
+                max-width: calc(100% - 2.6rem); // secret field - secret preview button
+              }
+              .secret button:disabled {
+                color: var(--Text-and-icons-Main-text);
+              }
+              .password-view, .totp-view {
+                display: flex;
+              }
+            }
+            .secret {
               &-copy {
                 button {
                   line-height: 1.9rem; // set height for obfuscated characters
                 }
-              }
-
-              button {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                width: 100%;
               }
             }
           }
@@ -320,6 +345,16 @@
             display: flex;
             gap: .4rem;
             min-width: 0;
+          }
+
+          .metadata-keys.value {
+            display: flex;
+            gap: 0.4rem;
+            svg.attention-required {
+              --icon-exclamation-color: var(--Alert-Alert-icon);
+              --icon-exclamation-background-color: var(--Alert-Alert-background);
+              --icon-exclamation-border-color: var(--Alert-Alert-background);
+          }
           }
         }
 
@@ -391,6 +426,43 @@
           .actions {
             padding: 0 1.6rem 1.6rem 1.6rem;
           }
+        }
+      }
+    }
+
+    .custom-fields {
+      .accordion-content {
+        padding: 1.6rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
+
+        .fields {
+          display: flex;
+          align-self: stretch;
+          gap: 1.6rem;
+
+          .information-label {
+            .label.can-copy {
+              cursor: pointer;
+
+              &:hover {
+                color: var(--Palette-Contrast-1);
+              }
+            }
+
+            .label.empty {
+              font-style: italic;
+            }
+          }
+
+          .information-value {
+            width: 100%;
+          }
+        }
+        button {
+          justify-self: center;
+          align-self: center;
         }
       }
     }

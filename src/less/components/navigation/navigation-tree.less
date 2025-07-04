@@ -13,6 +13,8 @@
                 .toggle-folder {
                   display: flex;
                   align-items: center;
+                  align-self: stretch;
+                  padding-left: .6rem; // add a bigger clickable area
 
                     svg {
                         min-width: .8rem;
@@ -46,9 +48,13 @@
                 button {
                     gap: .8rem;
 
-                    .toggle-folder svg {
+                    .toggle-folder {
+                      padding-left: .6rem; // add a bigger clickable area
+                      align-self: stretch;
+                      svg {
                         width: .8rem;
                         height: .8rem;
+                      }
                     }
 
                     svg {
@@ -121,7 +127,7 @@
     }
     &.navigation-folders {
         .row {
-            padding: .6rem 0 .6rem 1rem;
+            padding: .6rem 0 .6rem .4rem; // padding-left = 1rem -.6rem to have a bigger clickable area for the caret
 
             .main-cell-wrapper .main-cell {
                 button {
@@ -138,7 +144,7 @@
         .folder-item .row {
           /* Folder levels (should be override with JS) */
           --folder-depth: 0;
-          padding-left: calc(2.5rem + var(--folder-depth) * 1.5rem);
+          padding-left: calc(1.9rem + var(--folder-depth) * 1.5rem); // padding-left = 2.5rem -.6rem to have a bigger clickable area for the caret
 
           &.no-child {
             padding-left: calc(3.9rem + var(--folder-depth) * 1.5rem);
@@ -148,7 +154,7 @@
 
     &.navigation-groups {
         .row {
-          padding: .6rem 0 .6rem 1rem;
+          padding: .6rem 0 .6rem .4rem; // padding-left = 1rem -.6rem to have a bigger clickable area for the caret
 
           .main-cell-wrapper .main-cell {
             button {
@@ -170,8 +176,9 @@
     }
 
     &.navigation-tags {
+      padding-bottom: .8rem;
         .row {
-          padding: .6rem 0 .6rem 1rem;
+          padding: .6rem 0 .6rem .4rem; // padding-left = 1rem -.6rem to have a bigger clickable area for the caret
 
           .main-cell-wrapper .main-cell {
             button {

@@ -18,6 +18,7 @@ import {
   RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
   RESOURCE_TYPE_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_TOTP_SLUG,
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG, RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG, RESOURCE_TYPE_V5_TOTP_SLUG
 } from "./resourceTypeSchemasDefinition";
@@ -32,7 +33,8 @@ const SUPPORTED_RESOURCE_TYPES = [
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
-  RESOURCE_TYPE_V5_TOTP_SLUG
+  RESOURCE_TYPE_V5_TOTP_SLUG,
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG
 ];
 
 class ResourceTypesCollection extends EntityV2Collection {
@@ -162,6 +164,15 @@ class ResourceTypesCollection extends EntityV2Collection {
    */
   hasSomeTotpResourceTypes(version = RESOURCE_TYPE_VERSION_4) {
     return this.items.some(resourceType => resourceType.hasTotp() && resourceType.version === version);
+  }
+
+  /**
+   * Has some custom fields resource types
+   * @param {string} [version] The version @todo adapt when v5 will be the default
+   * @returns {boolean}
+   */
+  hasSomeCustomFieldsResourceTypes(version = RESOURCE_TYPE_VERSION_4) {
+    return this.items.some(resourceType => resourceType.hasCustomFields() && resourceType.version === version);
   }
 
   /**

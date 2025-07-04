@@ -1,6 +1,6 @@
 import {MemoryRouter} from "react-router-dom";
 import React from "react";
-import {defaultProps, defaultTotpProps} from "./CreateResource.test.data";
+import {defaultCustomFieldsProps, defaultProps, defaultTotpProps} from "./CreateResource.test.data";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
 import CreateResource from "./CreateResource";
@@ -47,6 +47,10 @@ export const Default = {
 
 export const Totp = {
   args: defaultTotpProps()
+};
+
+export const CustomFields = {
+  args: defaultCustomFieldsProps()
 };
 
 export const DefaultLegacy = {

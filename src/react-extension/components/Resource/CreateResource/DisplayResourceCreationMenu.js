@@ -27,12 +27,13 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import MetadataTypesSettingsEntity, {RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  RESOURCE_TYPE_TOTP_SLUG,
+  RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import CreateResource from "./CreateResource";
+import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
 
 class DisplayResourceCreationMenu extends Component {
   constructor(props) {
@@ -163,6 +164,14 @@ class DisplayResourceCreationMenu extends Component {
   }
 
   /**
+   * Returns true if there is at least 1 content type v5 with a custom fields associated.
+   * @returns {boolean}
+   */
+  get hasCustomFieldsV5() {
+    return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -190,6 +199,14 @@ class DisplayResourceCreationMenu extends Component {
             <TotpSVG/>
             <div className="card-information">
               <span className="title"><Trans>TOTP</Trans></span>
+            </div>
+          </button>
+        }
+        {this.hasCustomFieldsV5 &&
+          <button id="custom_fields_action" type="button" className="button-transparent card" onClick={e => this.handleContentTypeClick(e, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG)}>
+            <TablePropertiesSVG/>
+            <div className="card-information">
+              <span className="title"><Trans>Custom fields</Trans></span>
             </div>
           </button>
         }

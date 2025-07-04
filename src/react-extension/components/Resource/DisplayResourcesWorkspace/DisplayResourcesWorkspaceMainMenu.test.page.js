@@ -111,6 +111,14 @@ class DisplayMainMenuPageObject {
   }
 
   /**
+   * Returns the new custom fields menu elements of password workspace menu
+   * @return {HTMLElement}
+   */
+  get newCustomFieldsMenu() {
+    return this._container.querySelector('#custom_fields_action');
+  }
+
+  /**
    * Returns the new other menu elements of password workspace menu
    */
   get newOtherMenu() {

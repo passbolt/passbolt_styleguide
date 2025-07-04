@@ -1,0 +1,23 @@
+.textarea-wrapper {
+  flex: 1 0 0;
+  display: flex;
+  position: relative;
+
+  textarea {
+    flex: 1 0 0;
+    padding-right: 4.6rem;
+
+    &.secure {
+      min-height: 3.6rem;
+      height: 7.2rem;
+      max-height: none;
+      -webkit-text-security: disc;
+    }
+  }
+
+  .textarea-view-wrapper {
+    position: absolute;
+    right: .3rem;
+    top: .3rem;
+  }
+}

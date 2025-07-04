@@ -17,6 +17,7 @@ import {
   defaultArmoredPublicKey,
   defaultPgpMessage
 } from "./assertEntityProperty.test.data";
+import EntityValidationError from "../../src/shared/models/entity/abstract/entityValidationError";
 
 export const SCENARIO_EMPTY = {scenario: "empty", value: ""};
 export const SCENARIO_STRING = {scenario: "a string", value: "valid-string"};
@@ -85,6 +86,14 @@ export const uuid = (EntityClass, propertyName) => {
 export const required = (EntityClass, propertyName) => {
   const dto = {};
   expect(() => new EntityClass(dto)).toThrowEntityValidationError(propertyName, "required", dto);
+};
+
+// used when the property is an association as `required` cannot work in this context
+export const requiredInSchema = (EntityClass, propertyName) => {
+  if (!EntityClass.getSchema().required[propertyName]) {
+    const error = new EntityValidationError();
+    error.addError(propertyName, "required", `${propertyName} is not marked as required in the schema`);
+  }
 };
 
 export const notRequired = (EntityClass, propertyName) => {

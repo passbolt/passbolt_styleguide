@@ -14,6 +14,7 @@
 
 import MockPort from "../../../test/mock/MockPort";
 import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import {v4 as uuid} from 'uuid';
 
 /**
  * Returns the default app context for the unit test
@@ -30,6 +31,7 @@ export function defaultAppContext(appContext) {
       getTrustedDomain: () => (new URL(window.location.href)).origin
     },
     loggedInUser: {
+      id: uuid(),
       role: {
         name: 'admin'
       }
@@ -120,8 +122,8 @@ export function propsWithUserTemporaryHasPendingAccountRecovery(data = {}) {
 export function propsWithUserMissingMetadataKeys(data = {}) {
   return defaultProps({
     user: {
+      id: data.id,
       missing_metadata_key_ids: ["54c6278e-f824-5fda-91ff-3e946b18d997"]
     },
-    ...data,
   });
 }

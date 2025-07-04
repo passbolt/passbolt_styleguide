@@ -13,6 +13,7 @@
  */
 import EntityV2 from "../../abstract/entityV2";
 import IconEntity from "./IconEntity";
+import CustomFieldsCollection from "../../customField/customFieldsCollection";
 
 const ENTITY_NAME = 'ResourceMetadataEntity';
 const RESOURCE_NAME_MAX_LENGTH = 255;
@@ -64,17 +65,19 @@ class ResourceMetadataEntity extends EntityV2 {
           "nullable": true,
         },
         "icon": IconEntity.getSchema(),
+        "custom_fields": CustomFieldsCollection.getSchema(),
       },
     };
   }
 
   /**
    * @inheritDoc
-   * @returns {{icon: IconEntity}}
+   * @returns {{icon: IconEntity, custom_fields: CustomFieldsCollection}}
    */
   static get associations() {
     return {
       icon: IconEntity,
+      custom_fields: CustomFieldsCollection,
     };
   }
 
@@ -97,6 +100,10 @@ class ResourceMetadataEntity extends EntityV2 {
 
     if (this._icon && contain.icon) {
       result.icon = this._icon.toDto();
+    }
+
+    if (this._customFields && contain.custom_fields) {
+      result.custom_fields = this._customFields.toDto();
     }
     return result;
   }
@@ -179,6 +186,14 @@ class ResourceMetadataEntity extends EntityV2 {
     return this._icon || null;
   }
 
+  /**
+   * Returns the custom fields associated collection
+   * @returns {CustomFieldsCollection|null}
+   */
+  get customFields() {
+    return this._customFields || null;
+  }
+
   /*
    * ==================================================
    * Static properties getters
@@ -213,7 +228,10 @@ class ResourceMetadataEntity extends EntityV2 {
    * @return {object}
    */
   static get DEFAULT_CONTAIN() {
-    return {icon: true};
+    return {
+      icon: true,
+      custom_fields: true,
+    };
   }
 }
 

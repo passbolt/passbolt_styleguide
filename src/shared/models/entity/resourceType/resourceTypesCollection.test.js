@@ -39,7 +39,7 @@ import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
   RESOURCE_TYPE_PASSWORD_STRING_SLUG,
-  RESOURCE_TYPE_TOTP_SLUG,
+  RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
@@ -168,7 +168,7 @@ describe("ResourceTypesCollection", () => {
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
       resourceTypes.filterByResourceTypeVersion("v5");
 
-      expect(resourceTypes).toHaveLength(4);
+      expect(resourceTypes).toHaveLength(5);
 
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBeFalsy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBeFalsy();
@@ -278,6 +278,32 @@ describe("ResourceTypesCollection", () => {
       expect.assertions(1);
       const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
       expect(resourceTypes.hasSomeTotpResourceTypes(RESOURCE_TYPE_VERSION_5)).toBeFalsy();
+    });
+  });
+
+  describe("::hasSomeCustomFieldsResourceTypes", () => {
+    it("should not have some custom fields resource types.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
+      expect(resourceTypes.hasSomeCustomFieldsResourceTypes()).toBeFalsy();
+    });
+
+    it("should have some custom fields resource types v5.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
+      expect(resourceTypes.hasSomeCustomFieldsResourceTypes(RESOURCE_TYPE_VERSION_5)).toBeTruthy();
+    });
+
+    it("should not have some custom fields resource types.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesV5CollectionDto());
+      expect(resourceTypes.hasSomeCustomFieldsResourceTypes(RESOURCE_TYPE_VERSION_4)).toBeFalsy();
+    });
+
+    it("should not have some custom fields resource types.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
+      expect(resourceTypes.hasSomeCustomFieldsResourceTypes(RESOURCE_TYPE_VERSION_5)).toBeFalsy();
     });
   });
 
@@ -509,6 +535,19 @@ describe("ResourceTypesCollection", () => {
       expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
     });
 
+    it("should match v5 default for a resource with custom_fields and note.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
+      const resourceDto = {
+        secret: {
+          custom_fields: [{}],
+          description: ""
+        }
+      };
+      const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
+    });
+
     it("should match v5 resource default totp for a resource with totp and note.", () => {
       expect.assertions(1);
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
@@ -529,6 +568,19 @@ describe("ResourceTypesCollection", () => {
         secret: {
           totp: {},
           password: ""
+        }
+      };
+      const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
+    });
+
+    it("should match v5 resource default totp for a resource with totp and custom_fields.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
+      const resourceDto = {
+        secret: {
+          totp: {},
+          custom_fields: [{}]
         }
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG);
@@ -558,6 +610,18 @@ describe("ResourceTypesCollection", () => {
         }
       };
       const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
+      expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
+    });
+
+    it("should match v5 resource totp for a resource with totp.", () => {
+      expect.assertions(1);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
+      const resourceDto = {
+        secret: {
+          custom_fields: [{}],
+        }
+      };
+      const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
       expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
     });
 
@@ -592,7 +656,7 @@ describe("ResourceTypesCollection", () => {
       const start = performance.now();
       const collection = new ResourceTypesCollection(dtos);
       const time = performance.now() - start;
-      expect(collection).toHaveLength(8);
+      expect(collection).toHaveLength(9);
       expect(time).toBeLessThan(5_000);
     });
   });
