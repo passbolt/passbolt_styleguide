@@ -28,5 +28,5 @@ export const PASSBOLT_DEFAULT_RESOURCE_TYPE_ICON_MAP = {
   'v5-totp-standalone': <TotpSVG/>,
   'password-description-totp': <PasswordWithTotpSVG/>,
   'v5-default-with-totp': <PasswordWithTotpSVG/>,
-  'v5-custom-fields': <KeyValueSVG />,
+  'v5-custom-fields-standalone': <KeyValueSVG />,
 };

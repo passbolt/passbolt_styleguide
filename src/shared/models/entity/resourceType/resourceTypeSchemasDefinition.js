@@ -19,7 +19,7 @@ export const RESOURCE_TYPE_V5_DEFAULT_SLUG = "v5-default";
 export const RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG = "v5-password-string";
 export const RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG = "v5-default-with-totp";
 export const RESOURCE_TYPE_V5_TOTP_SLUG = "v5-totp-standalone";
-export const RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG = "v5-custom-fields";
+export const RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG = "v5-custom-fields-standalone";
 
 //Plaintext secret schema for slug: "password-string"
 export const RESOURCE_TYPE_PASSWORD_STRING_LEGACY_DEFINITION_SCHEMA = {
@@ -181,7 +181,7 @@ const RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_DEFINITION_SCHEMA = {
   }
 };
 
-//Plaintext secret schema for slug: "v5-custom-fields"
+//Plaintext secret schema for slug: "v5-custom-fields-standalone"
 const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
   resource: {
     type: "object",
