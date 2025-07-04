@@ -250,7 +250,7 @@ describe("See custom fields", () => {
       await page.clickOn(page.getCustomFieldValueButton(0));
 
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith("I am a secret");
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The secret has been copied to clipboard");
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The custom field value has been copied to clipboard");
     });
 
     it('AS LU, I cannot copy secret of resource if denied by RBAC', async() => {
@@ -282,7 +282,7 @@ describe("See custom fields", () => {
       await page.clickOn(page.getCustomFieldLabel(0));
 
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith("API Key");
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The secret has been copied to clipboard");
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The custom field key has been copied to clipboard");
     });
 
     it('AS LU, I cannot copy secret of resource if denied by RBAC', async() => {
