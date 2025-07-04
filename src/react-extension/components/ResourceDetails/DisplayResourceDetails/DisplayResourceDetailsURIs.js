@@ -130,26 +130,28 @@ class DisplayResourceDetailsURIs extends React.Component {
         {this.state.open && <div className="accordion-content">
           <div className="information-label">
             <span className="main-uri label"><Trans>Main Uri</Trans></span>
-            {
-              this.additionalUris.length > 0 &&
-                                <span className="addictional-uris label"><Trans>Additional URIs</Trans></span>
+            {this.additionalUris.length > 0 &&
+                <span className="addictional-uris label"><Trans>Additional URIs</Trans></span>
             }
           </div>
           <div className="information-value">
             <span className="main-uri value">
-              {this.safeUri(this.mainUri) &&
-                                    <button type="button" className="link no-border" onClick={() => this.handleGoToResourceUriClick(this.mainUri)}>
-                                      <span>{this.mainUri}</span></button>
+              {this.safeUri(this.mainUri)
+                ? <button type="button" className="link" onClick={() => this.handleGoToResourceUriClick(this.mainUri)}>
+                  <span>{this.mainUri}</span>
+                </button>
+                : <span>{this.mainUri}</span>
               }
             </span>
-            {
-              this.additionalUris.length > 0 && <span className="additional-uris value">
-                {this.additionalUris.map((uri, index) => (
-                  this.safeUri(uri) &&
-                                        <button key={uri + index} type="button" className="link no-border" onClick={() => this.handleGoToResourceUriClick(uri)}>
-                                          <span>{uri}</span></button>
-                ))}
-              </span>
+            {this.additionalUris.length > 0 && <span className="additional-uris value">
+              {this.additionalUris.map((uri, index) => (
+                this.safeUri(uri)
+                  ? <button key={index} type="button" className="link" onClick={() => this.handleGoToResourceUriClick(uri)}>
+                    <span>{uri}</span>
+                  </button>
+                  : <span key={index}>{uri}</span>
+              ))}
+            </span>
             }
           </div>
         </div>
