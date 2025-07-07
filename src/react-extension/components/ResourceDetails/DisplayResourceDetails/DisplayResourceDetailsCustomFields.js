@@ -44,6 +44,25 @@ class DisplayResourceDetailsCustomFields extends React.Component {
   }
 
   /**
+   * componentDidUpdate React hook
+   * Invoked immediately after props are updated.
+   * Checks if the resource has been changed or updated and if yes, reset the secret preview state.
+   */
+  componentDidUpdate(prevProps) {
+    const previousResource = prevProps.resourceWorkspaceContext?.details?.resource;
+    const currentResource = this.props.resourceWorkspaceContext?.details?.resource;
+    const hasResourceChanged = previousResource?.id !== currentResource?.id
+      || previousResource?.modified !== currentResource?.modified;
+
+    if (hasResourceChanged) {
+      this.setState({
+        secrets: [],
+        secretPreviewed: []
+      });
+    }
+  }
+
+  /**
    * Get default state
    * @returns {object}
    */
@@ -126,7 +145,7 @@ class DisplayResourceDetailsCustomFields extends React.Component {
 
   /**
    * Asynchronously decrypts a custom fields secrets.
-   * @returns {Promise<void>}
+   * @returns {Promise<Array>}
    */
   async decryptCustomFieldSecrets() {
     const resourceId = this.resource.id;
@@ -178,17 +197,17 @@ class DisplayResourceDetailsCustomFields extends React.Component {
    */
   async handleCopySecretEvent(id) {
     const secrets = await this.decryptCustomFieldSecrets();
-    const secret = secrets ? secrets.find(secret => secret.id === id) : null;
+    const secret = secrets.find(secret => secret.id === id);
 
     this.props.progressContext.close();
 
-    if (!secret || secret.length === 0) {
-      await this.props.actionFeedbackContext.displayWarning(this.props.t("The password is empty and cannot be copied to clipboard."));
+    if (!secret || secret.secret_value.length === 0) {
+      await this.props.actionFeedbackContext.displayWarning(this.props.t("The custom field value is empty and cannot be copied to clipboard."));
       return;
     }
     await ClipBoard.copy(secret.secret_value, this.props.context.port);
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The secret has been copied to clipboard"));
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The custom field value has been copied to clipboard"));
   }
 
   /**
@@ -199,7 +218,7 @@ class DisplayResourceDetailsCustomFields extends React.Component {
   async handleCopyKeyEvent(key) {
     await ClipBoard.copy(key, this.props.context.port);
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The secret has been copied to clipboard"));
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The custom field key has been copied to clipboard"));
   }
 
   /**

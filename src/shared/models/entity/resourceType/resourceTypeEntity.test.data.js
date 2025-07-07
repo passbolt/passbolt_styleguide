@@ -709,8 +709,8 @@ export const resourceTypeV5TotpDto = (data = {}) => ({
  */
 export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
   id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
-  name: "V5 custom fields",
-  slug: "v5-custom-fields",
+  name: "Standalone custom fields",
+  slug: "v5-custom-fields-standalone",
   definition: {
     resource: {
       type: "object",
