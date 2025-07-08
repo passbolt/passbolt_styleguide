@@ -20,6 +20,7 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withLoading} from "../../../contexts/LoadingContext";
 import {Trans, withTranslation} from "react-i18next";
+import CommentsServiceWorkerService from "../CommentsServiceWorkerService";
 
 class ConfirmDeleteDialog extends Component {
   /**
@@ -31,6 +32,7 @@ class ConfirmDeleteDialog extends Component {
     super(props, context);
     this.state = this.defaultState;
     this.bindEventHandlers();
+    this.commentsServiceWorkerService = new CommentsServiceWorkerService(props.context.port);
   }
 
   /**
@@ -69,7 +71,7 @@ class ConfirmDeleteDialog extends Component {
       this.props.loadingContext.add();
 
       // Persist
-      await this.props.context.port.request("passbolt.comments.delete", this.props.context.resourceCommentId);
+      await this.commentsServiceWorkerService.delete(this.props.context.resourceCommentId);
 
       // Complete loading bar
       this.props.loadingContext.remove();
