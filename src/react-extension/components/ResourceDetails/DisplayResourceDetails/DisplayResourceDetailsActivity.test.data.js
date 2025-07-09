@@ -4,6 +4,7 @@ import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
 import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -33,7 +34,8 @@ export function defaultProps() {
       refresh: {
         activities: false
       }
-    }
+    },
+    actionFeedbackContext: defaultActionFeedbackContext()
   };
 }
 

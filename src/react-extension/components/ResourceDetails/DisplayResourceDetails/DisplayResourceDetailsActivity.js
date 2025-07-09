@@ -20,6 +20,7 @@ import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext"
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {Trans, withTranslation} from "react-i18next";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import {withActionFeedback} from '../../../contexts/ActionFeedbackContext';
 import ActivitiesServiceWorkerService from "./ActivitiesServiceWorkerService";
 
 /**
@@ -123,9 +124,14 @@ class DisplayResourceDetailsActivity extends React.Component {
    * @returns {Promise<void>}
    */
   async fetch(page) {
-    const newActivities = await this.activitiesServiceWorkerService.findAllFromResourceId(this.resource.id, {page}) || [];
-    // For the first page need to reset activities state
-    this.mergeActivities(newActivities);
+    try {
+      const newActivities = await this.activitiesServiceWorkerService.findAllFromResourceId(this.resource.id, {page}) || [];
+      // For the first page need to reset activities state
+      this.mergeActivities(newActivities);
+    } catch (error) {
+      console.error(error);
+      this.props.actionFeedbackContext.displayError(error.message);
+    }
   }
 
   /**
@@ -481,7 +487,8 @@ class DisplayResourceDetailsActivity extends React.Component {
 DisplayResourceDetailsActivity.propTypes = {
   context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.any,
+  actionFeedbackContext: PropTypes.object,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsActivity)));
+export default withAppContext(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceDetailsActivity))));
