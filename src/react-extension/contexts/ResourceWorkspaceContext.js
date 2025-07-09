@@ -776,8 +776,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     };
     const matchTagProperty = (word, resource) => resource.tags?.some(tag => matchWord(word, tag.slug));
     const matchUrisProperty = (word, resource) => resource.metadata?.uris?.some(uri => matchWord(word, uri));
+    const matchCustomFieldsProperty = (word, resource) => resource.metadata?.custom_fields?.some(customField => matchWord(word, customField.metadata_key));
     const matchStringProperty = (word, resource) => ['name', 'username', 'description'].some(key => matchWord(word, resource.metadata?.[key]));
-    const matchResource = (word, resource) => matchStringProperty(word, resource) || matchUrisProperty(word, resource) || (canUseTags && matchTagProperty(word, resource)) || (resource?.folder_parent_id && matchFolderCache(word, resource.folder_parent_id));
+    const matchResource = (word, resource) => matchStringProperty(word, resource) || matchUrisProperty(word, resource) || (canUseTags && matchTagProperty(word, resource)) || matchCustomFieldsProperty(word, resource) || (resource?.folder_parent_id && matchFolderCache(word, resource.folder_parent_id));
     const matchText = resource => words.every(word => matchResource(word, resource));
 
     const filteredResources = this.resources.filter(matchText);
