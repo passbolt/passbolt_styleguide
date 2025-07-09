@@ -169,10 +169,9 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      message: error.message
+      error: error
     };
-    this.props.context.setContext({errorDialogProps});
-    this.props.dialogContext.open(NotifyError);
+    this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
 
   /**
@@ -296,7 +295,7 @@ class DisplayUserWorkspaceActions extends React.Component {
   resendInvite() {
     this.props.context.port.request('passbolt.users.resend-invite', this.selectedUser.username)
       .then(this.onResendInviteSuccess.bind(this))
-      .catch(this.onResendInviteFailure.bind(this));
+      .catch(this.handleError.bind(this));
   }
 
   /**
@@ -304,17 +303,6 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   onResendInviteSuccess() {
     this.props.actionFeedbackContext.displaySuccess(this.translate("The invite has been resent successfully"));
-  }
-
-  /**
-   * Whenever the resend invite fails
-   * @param error An error
-   */
-  onResendInviteFailure(error) {
-    const errorDialogProps = {
-      error: error
-    };
-    this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
 
   /**
