@@ -1549,7 +1549,7 @@
   "Users parent group": "사용자 상위 그룹",
   "Users will not be able to self register anymore.": "사용자가 더 이상 자체 등록을 할 수 없습니다.",
   "Using a self-signed certificate": "자체 서명된 인증서를 사용합니다",
-  "Using latest passbolt version ({{version}})": "최신 패스볼트 버전 사용 ({{version}})",
+  "Using latest passbolt version ({{version}})": "최신 패스볼트 버전 사용 중 ({{version}})",
   "Using non-compiled Javascript. Passbolt will be slower": "컴파일되지 않은 자바스크립트를 사용하면 패스볼트 속도가 느려집니다",
   "Valid from:": "유효 기간:",
   "Validate": "확인",
