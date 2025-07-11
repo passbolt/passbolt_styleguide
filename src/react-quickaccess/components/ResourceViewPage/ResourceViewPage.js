@@ -17,7 +17,6 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {withRouter} from "react-router-dom";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
-import ClipBoard from '../../../shared/lib/Browser/clipBoard';
 import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../shared/context/Rbac/RbacContext";
 import HiddenPassword from "../../../shared/components/Password/HiddenPassword";
@@ -38,6 +37,10 @@ import CopySVG from "../../../img/svg/copy.svg";
 import HealthCheckSuccessSvg from "../../../img/svg/healthcheck_success.svg";
 import EyeCloseSVG from "../../../img/svg/eye_close.svg";
 import EyeOpenSVG from "../../../img/svg/eye_open.svg";
+import TimerSVG from "../../../img/svg/timer.svg";
+import ClipboardServiceWorkerService from "../../../shared/services/serviceWorker/clipboard/clipboardServiceWorkerService";
+
+const CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND = 30;
 
 /**
  * Default display time of error message in ms.
@@ -51,6 +54,8 @@ class ResourceViewPage extends React.Component {
     this.state = this.initState();
     this.initEventHandlers();
     this.loadResource();
+    this.currentTimeout = null;
+    this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(props.context.port);
   }
 
   initEventHandlers() {
@@ -79,8 +84,15 @@ class ResourceViewPage extends React.Component {
       plaintextSecretDto: null, // The current resource password decrypted
       isPasswordDecrypting: false, // if the password is decrypting
       isTotpDecrypting: false, // if the totp is decrypting
-      isOpenAdditionalUris: false // section additional uris open
+      isOpenAdditionalUris: false, // section additional uris open
+      copiedProperty: null, //the last property copied
     };
+  }
+
+  componentWillUnmount() {
+    if (this.currentTimeout) {
+      clearTimeout(this.currentTimeout);
+    }
   }
 
   /**
@@ -128,10 +140,21 @@ class ResourceViewPage extends React.Component {
     }
 
     try {
-      this.setState({copyLoginState: 'processing'});
-      await ClipBoard.copy(this.state.resource.metadata?.username, this.props.context.port);
+      this.setState({
+        copiedProperty: "username",
+        copyLoginState: 'processing',
+        copyPasswordState: "default",
+        copyTotpState: "default"
+      });
+
+      if (this.currentTimeout) {
+        clearTimeout(this.currentTimeout);
+      }
+
+      await this.clipboardServiceWorkerService.copy(this.state.resource.metadata?.username);
       this.setState({copyLoginState: 'done'});
-      setTimeout(() => {
+
+      this.currentTimeout = setTimeout(() => {
         this.setState({copyLoginState: 'default'});
       }, 15000);
     } catch (error) {
@@ -189,11 +212,26 @@ class ResourceViewPage extends React.Component {
       return;
     }
 
-    await ClipBoard.copy(plaintextSecretDto.password, this.props.context.port);
-    this.setState({copyPasswordState: 'done'});
-    setTimeout(() => {
-      this.setState({copyPasswordState: 'default'});
-    }, 15000);
+    await this.clipboardServiceWorkerService.copyTemporarily(plaintextSecretDto.password);
+
+    const newState = {
+      copyLoginState: 'default',
+      copyPasswordState: 'done',
+      copyTotpState: "default",
+      copiedProperty: null
+    };
+    this.setState(newState, () => {
+      //ensure it refreshes the animation after another click on the same property
+      this.setState({copiedProperty: "password"});
+    });
+
+    if (this.currentTimeout) {
+      clearTimeout(this.currentTimeout);
+    }
+
+    this.currentTimeout = setTimeout(() => {
+      this.setState({copyPasswordState: 'default', copiedProperty: null});
+    }, CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND * 1000);
   }
 
   /**
@@ -304,11 +342,26 @@ class ResourceViewPage extends React.Component {
     }
 
     const code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
-    await ClipBoard.copy(code, this.props.context.port);
-    this.setState({copyTotpState: 'done'});
-    setTimeout(() => {
-      this.setState({copyTotpState: 'default'});
-    }, 15000);
+    await this.clipboardServiceWorkerService.copyTemporarily(code);
+
+    const newState = {
+      copyLoginState: 'default',
+      copyTotpState: 'done',
+      copyPasswordState: "default",
+      copiedProperty: null
+    };
+    this.setState(newState, () => {
+      //ensure it refreshes the animation after another click on the same property
+      this.setState({copiedProperty: "totp"});
+    });
+
+    if (this.currentTimeout) {
+      clearTimeout(this.currentTimeout);
+    }
+
+    this.currentTimeout = setTimeout(() => {
+      this.setState({copyTotpState: 'default', copiedProperty: null});
+    }, CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND * 1000);
   }
 
   /**
@@ -536,30 +589,37 @@ class ResourceViewPage extends React.Component {
                   </div>
                 </div>
                 {canCopySecret &&
-                  <a role="button" className="button button-transparent property-action copy-password" onClick={this.handleCopyPasswordClick} title={this.translate("Copy to clipboard")}>
-                    <Transition in={this.state.copyPasswordState === "default"} appear={false} timeout={500}>
-                      {status => (
-                        <span className={`transition fade-${status} ${this.state.copyPasswordState !== "default" ? "visually-hidden" : ""}`}>
-                          <CopySVG/>
-                        </span>
-                      )}
-                    </Transition>
-                    <Transition in={this.state.copyPasswordState === "processing"} appear={true} timeout={500}>
-                      {status => (
-                        <span className={`transition fade-${status} ${this.state.copyPasswordState !== "processing" ? "visually-hidden" : ""}`}>
-                          <SpinnerSVG/>
-                        </span>
-                      )}
-                    </Transition>
-                    <Transition in={this.state.copyPasswordState === "done"} appear={true} timeout={500}>
-                      {status => (
-                        <span className={`transition fade-${status} ${this.state.copyPasswordState !== "done" ? "visually-hidden" : ""}`}>
-                          <HealthCheckSuccessSvg/>
-                        </span>
-                      )}
-                    </Transition>
-                    <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
-                  </a>
+                  <>
+                    <a role="button" className="button button-transparent property-action copy-password" onClick={this.handleCopyPasswordClick} title={this.translate("Copy to clipboard")}>
+                      <Transition in={this.state.copyPasswordState === "default"} appear={false} timeout={500}>
+                        {status => (
+                          <span className={`transition fade-${status} ${this.state.copyPasswordState !== "default" ? "visually-hidden" : ""}`}>
+                            <CopySVG/>
+                          </span>
+                        )}
+                      </Transition>
+                      <Transition in={this.state.copyPasswordState === "processing"} appear={true} timeout={500}>
+                        {status => (
+                          <span className={`transition fade-${status} ${this.state.copyPasswordState !== "processing" ? "visually-hidden" : ""}`}>
+                            <SpinnerSVG/>
+                          </span>
+                        )}
+                      </Transition>
+                      <Transition in={this.state.copyPasswordState === "done"} appear={true} timeout={500}>
+                        {status => (
+                          <span className={`transition fade-${status} ${this.state.copyPasswordState !== "done" ? "visually-hidden" : ""}`}>
+                            <HealthCheckSuccessSvg/>
+                          </span>
+                        )}
+                      </Transition>
+                      <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
+                    </a>
+                    {this.state.copiedProperty === "password" &&
+                      <TimerSVG style={{
+                        "--timer-duration": `${CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND}s`,
+                      }}/>
+                    }
+                  </>
                 }
               </li>
             </>
@@ -606,30 +666,37 @@ class ResourceViewPage extends React.Component {
                 </div>
               </div>
               {canCopySecret &&
-                <a role="button" className="button button-transparent property-action copy-totp" onClick={this.handleCopyTotpClick} title={this.translate("Copy to clipboard")}>
-                  <Transition in={this.state.copyTotpState === "default"} appear={false} timeout={500}>
-                    {status => (
-                      <span className={`transition fade-${status} ${this.state.copyTotpState !== "default" ? "visually-hidden" : ""}`}>
-                        <CopySVG/>
-                      </span>
-                    )}
-                  </Transition>
-                  <Transition in={this.state.copyTotpState === "processing"} appear={true} timeout={500}>
-                    {status => (
-                      <span className={`transition fade-${status} ${this.state.copyTotpState !== "processing" ? "visually-hidden" : ""}`}>
-                        <SpinnerSVG/>
-                      </span>
-                    )}
-                  </Transition>
-                  <Transition in={this.state.copyTotpState === "done"} appear={true} timeout={500}>
-                    {status => (
-                      <span className={`transition fade-${status} ${this.state.copyTotpState !== "done" ? "visually-hidden" : ""}`}>
-                        <HealthCheckSuccessSvg/>
-                      </span>
-                    )}
-                  </Transition>
-                  <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
-                </a>
+                <>
+                  <a role="button" className="button button-transparent property-action copy-totp" onClick={this.handleCopyTotpClick} title={this.translate("Copy to clipboard")}>
+                    <Transition in={this.state.copyTotpState === "default"} appear={false} timeout={500}>
+                      {status => (
+                        <span className={`transition fade-${status} ${this.state.copyTotpState !== "default" ? "visually-hidden" : ""}`}>
+                          <CopySVG/>
+                        </span>
+                      )}
+                    </Transition>
+                    <Transition in={this.state.copyTotpState === "processing"} appear={true} timeout={500}>
+                      {status => (
+                        <span className={`transition fade-${status} ${this.state.copyTotpState !== "processing" ? "visually-hidden" : ""}`}>
+                          <SpinnerSVG/>
+                        </span>
+                      )}
+                    </Transition>
+                    <Transition in={this.state.copyTotpState === "done"} appear={true} timeout={500}>
+                      {status => (
+                        <span className={`transition fade-${status} ${this.state.copyTotpState !== "done" ? "visually-hidden" : ""}`}>
+                          <HealthCheckSuccessSvg/>
+                        </span>
+                      )}
+                    </Transition>
+                    <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
+                  </a>
+                  {this.state.copiedProperty === "totp" &&
+                    <TimerSVG style={{
+                      "--timer-duration": `${CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND}s`,
+                    }}/>
+                  }
+                </>
               }
             </li>
           }

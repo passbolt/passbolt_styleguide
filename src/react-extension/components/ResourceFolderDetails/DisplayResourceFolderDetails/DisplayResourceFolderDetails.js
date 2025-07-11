@@ -20,13 +20,13 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
-import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import FolderSidebarSVG from "../../../../img/svg/folder-sidebar.svg";
 import LinkSVG from "../../../../img/svg/link.svg";
 import Tabs from "../../Common/Tab/Tabs";
 import Tab from "../../Common/Tab/Tab";
+import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 class DisplayResourceFolderDetails extends React.Component {
   /**
@@ -51,8 +51,7 @@ class DisplayResourceFolderDetails extends React.Component {
   async handlePermalinkClick() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/folders/view/${this.props.resourceWorkspaceContext.details.folder.id}`;
-    await ClipBoard.copy(permalink, this.props.context.port);
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
+    await this.props.clipboardContext.copy(permalink, this.translate("The permalink has been copied to clipboard."));
   }
 
   /**
@@ -135,8 +134,9 @@ DisplayResourceFolderDetails.propTypes = {
   users: PropTypes.array,
   resourceWorkspaceContext: PropTypes.object,
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  clipboardContext: PropTypes.object,
   t: PropTypes.func, // The translation function
   rbacContext: PropTypes.any, // The role based access control context
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceFolderDetails)))));
+export default withAppContext(withRbac(withResourceWorkspace(withClipboard(withActionFeedback(withTranslation('common')(DisplayResourceFolderDetails))))));

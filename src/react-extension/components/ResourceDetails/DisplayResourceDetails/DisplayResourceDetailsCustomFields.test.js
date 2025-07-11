@@ -249,16 +249,15 @@ describe("See custom fields", () => {
       await page.hover(page.getCustomFieldValue(0));
       await page.clickOn(page.getCustomFieldValueButton(0));
 
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith("I am a secret");
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The custom field value has been copied to clipboard");
+      expect(props.clipboardContext.copy).not.toHaveBeenCalledWith();
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith("I am a secret", "The custom field value has been copied to clipboard.");
     });
 
     it('AS LU, I cannot copy secret of resource if denied by RBAC', async() => {
-      const props = propsWithDenyUiAction(
-        {
-          resource: resourceWithCustomFieldsDto
-        }
-      );
+      expect.assertions(2);
+      const props = propsWithDenyUiAction({
+        resource: resourceWithCustomFieldsDto
+      });
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
@@ -266,8 +265,8 @@ describe("See custom fields", () => {
       await page.hover(page.getCustomFieldValue(0));
       await page.clickOn(page.getCustomFieldValueButton(0));
 
-      expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
-      expect(ActionFeedbackContext._currentValue.displaySuccess).not.toHaveBeenCalled();
+      expect(props.clipboardContext.copy).not.toHaveBeenCalledWith();
+      expect(props.clipboardContext.copyTemporarily).not.toHaveBeenCalledWith();
     });
   });
 
@@ -281,16 +280,16 @@ describe("See custom fields", () => {
       await page.hover(page.getCustomFieldLabel(0));
       await page.clickOn(page.getCustomFieldLabel(0));
 
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith("API Key");
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The custom field key has been copied to clipboard");
+      expect(props.clipboardContext.copy).toHaveBeenCalledWith("API Key", "The custom field key has been copied to clipboard.");
+      expect(props.clipboardContext.copyTemporarily).not.toHaveBeenCalled();
     });
 
     it('AS LU, I cannot copy secret of resource if denied by RBAC', async() => {
-      const props = propsWithDenyUiAction(
-        {
-          resource: resourceWithCustomFieldsDto
-        }
-      );
+      expect.assertions(2);
+
+      const props = propsWithDenyUiAction({
+        resource: resourceWithCustomFieldsDto
+      });
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
@@ -298,8 +297,8 @@ describe("See custom fields", () => {
       await page.hover(page.getCustomFieldLabel(0));
       await page.clickOn(page.getCustomFieldLabel(0));
 
-      expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
-      expect(ActionFeedbackContext._currentValue.displaySuccess).not.toHaveBeenCalled();
+      expect(props.clipboardContext.copy).not.toHaveBeenCalled();
+      expect(props.clipboardContext.copyTemporarily).not.toHaveBeenCalled();
     });
   });
 });

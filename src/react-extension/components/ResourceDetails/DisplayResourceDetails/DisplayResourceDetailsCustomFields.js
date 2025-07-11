@@ -27,7 +27,7 @@ import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withProgress} from "../../../contexts/ProgressContext";
-import ClipBoard from "../../../../shared/lib/Browser/clipBoard";
+import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 /**
  * This component display the custom fields section of a resource
@@ -205,9 +205,8 @@ class DisplayResourceDetailsCustomFields extends React.Component {
       await this.props.actionFeedbackContext.displayWarning(this.props.t("The custom field value is empty and cannot be copied to clipboard."));
       return;
     }
-    await ClipBoard.copy(secret.secret_value, this.props.context.port);
+    this.props.clipboardContext.copyTemporarily(secret.secret_value, "The custom field value has been copied to clipboard.");
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The custom field value has been copied to clipboard"));
   }
 
   /**
@@ -216,9 +215,8 @@ class DisplayResourceDetailsCustomFields extends React.Component {
    * @returns {Promise<void>} A promise that resolves when the key has been copied and feedback is displayed.
    */
   async handleCopyKeyEvent(key) {
-    await ClipBoard.copy(key, this.props.context.port);
+    this.props.clipboardContext.copy(key, "The custom field key has been copied to clipboard.");
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The custom field key has been copied to clipboard"));
   }
 
   /**
@@ -324,7 +322,8 @@ DisplayResourceDetailsCustomFields.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // The resource
   actionFeedbackContext: PropTypes.any, // The action feedback context
   progressContext: PropTypes.any, // The progress context
+  clipboardContext: PropTypes.object, // the clipboard service provide
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withResourceWorkspace(withRbac(withProgress(withTranslation('common')(DisplayResourceDetailsCustomFields))))));
+export default withAppContext(withActionFeedback(withResourceWorkspace(withRbac(withProgress(withClipboard(withTranslation('common')(DisplayResourceDetailsCustomFields)))))));

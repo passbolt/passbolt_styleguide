@@ -23,7 +23,6 @@ import EditResource from "../EditResource/EditResource";
 import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
 import {Trans, withTranslation} from "react-i18next";
-import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withProgress} from "../../../contexts/ProgressContext";
@@ -55,6 +54,7 @@ import DeleteSVG from "../../../../img/svg/delete.svg";
 import EditSVG from "../../../../img/svg/edit.svg";
 import ShareSVG from "../../../../img/svg/share.svg";
 import CloseSVG from "../../../../img/svg/close.svg";
+import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -130,24 +130,21 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   async handleCopyPermalinkClickEvent() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.selectedResources[0].id}`;
-    await ClipBoard.copy(permalink, this.props.context.port);
-    this.displaySuccessNotification(this.translate("The permalink has been copied to clipboard"));
+    await this.props.clipboardContext.copy(permalink, this.translate("The permalink has been copied to clipboard."));
   }
 
   /**
    * handle copy username of one resource
    */
   async handleCopyUsernameClickEvent() {
-    await ClipBoard.copy(this.selectedResources[0].metadata.username, this.props.context.port);
-    this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
+    await this.props.clipboardContext.copy(this.selectedResources[0].metadata.username, this.translate("The username has been copied to clipboard."));
   }
 
   /**
    * handle copy uri of one resource
    */
   async handleCopyUriClickEvent() {
-    await ClipBoard.copy(this.selectedResources[0].metadata.uris[0], this.props.context.port);
-    this.displaySuccessNotification(this.translate("The uri has been copied to clipboard"));
+    await this.props.clipboardContext.copy(this.selectedResources[0].metadata.uris[0], this.translate("The uri has been copied to clipboard."));
   }
 
   /**
@@ -179,7 +176,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     if (!password) {
       throw new TypeError(this.translate("The password is empty."));
     }
-    await ClipBoard.copy(password, this.props.context.port);
+    await this.props.clipboardContext.copyTemporarily(password, this.translate("The secret has been copied to clipboard."));
   }
 
   /**
@@ -205,7 +202,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
 
     await this.copyPasswordToClipboard(plaintextSecretDto);
     this.props.resourceWorkspaceContext.onResourceCopied();
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
   }
 
   /**
@@ -240,9 +236,8 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
       return;
     }
 
-    await ClipBoard.copy(code, this.props.context.port);
+    await this.props.clipboardContext.copyTemporarily(code, this.translate("The TOTP has been copied to clipboard."));
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The TOTP has been copied to clipboard"));
   }
 
   /**
@@ -569,7 +564,8 @@ DisplayResourcesWorkspaceMenu.propTypes = {
   passwordExpiryContext: PropTypes.object, // the password expiry context
   dialogContext: PropTypes.any, // the dialog context
   progressContext: PropTypes.any, // The progress context
+  clipboardContext: PropTypes.object, // the clipboard service provider
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withDialog(withProgress(withPasswordExpiry(withResourceWorkspace(withResourceTypesLocalStorage(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu)))))))));
+export default withAppContext(withClipboard(withRbac(withDialog(withProgress(withPasswordExpiry(withResourceWorkspace(withResourceTypesLocalStorage(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu))))))))));

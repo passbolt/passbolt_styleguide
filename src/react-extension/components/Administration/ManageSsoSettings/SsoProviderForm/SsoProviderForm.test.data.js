@@ -18,6 +18,7 @@ import {
   googleSsoSettingsEntityDtoFromApi,
   oAuth2SsoSettingsEntityDtoFromApi
 } from "../../../../../shared/models/ssoSettings/SsoSettingsViewModel.test.data";
+import {defaultClipboardContext} from "../../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 import {defaultAppContext} from "../../../../contexts/ExtAppContext.test.data";
 
 /**
@@ -28,6 +29,7 @@ import {defaultAppContext} from "../../../../contexts/ExtAppContext.test.data";
 export function defaultProps(data = {}) {
   const defaultProps = {
     context: defaultAppContext(data?.context),
+    clipboardContext: defaultClipboardContext(),
   };
   delete data.context; // Treated in the default
   return Object.assign(defaultProps, data);

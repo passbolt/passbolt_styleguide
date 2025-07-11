@@ -21,7 +21,6 @@ import {
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
-import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import HiddenPassword from "../../../../shared/components/Password/HiddenPassword";
@@ -31,6 +30,7 @@ import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import EyeCloseSVG from "../../../../img/svg/eye_close.svg";
 import EyeOpenSVG from "../../../../img/svg/eye_open.svg";
 import DisplayResourceUrisBadge from "../../Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
+import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 class DisplayResourceDetailsPassword extends React.Component {
   /**
@@ -121,8 +121,7 @@ class DisplayResourceDetailsPassword extends React.Component {
    * Handle when the user select the username of the resource
    */
   async handleUsernameClickEvent() {
-    await ClipBoard.copy(this.resource.metadata.username, this.props.context.port);
-    this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
+    await this.props.clipboardContext.copy(this.resource.metadata.username, this.translate("The username has been copied to clipboard."));
   }
 
   /**
@@ -170,9 +169,8 @@ class DisplayResourceDetailsPassword extends React.Component {
       return;
     }
 
-    await ClipBoard.copy(plaintextSecret, this.props.context.port);
+    await this.props.clipboardContext.copyTemporarily(plaintextSecret, this.translate("The secret has been copied to clipboard."));
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
   }
 
   /**
@@ -347,7 +345,8 @@ DisplayResourceDetailsPassword.propTypes = {
   resourceWorkspaceContext: PropTypes.object,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   progressContext: PropTypes.any, // The progress context
+  clipboardContext: PropTypes.object, // the clipboard service provider
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withActionFeedback(withResourceWorkspace(withProgress(withTranslation('common')(DisplayResourceDetailsPassword))))));
+export default withAppContext(withClipboard(withRbac(withActionFeedback(withResourceWorkspace(withProgress(withTranslation('common')(DisplayResourceDetailsPassword)))))));

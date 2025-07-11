@@ -87,6 +87,8 @@ describe("DisplayResourceDetailsTotp", () => {
 
   describe(' As LU I can copy a TOTP of a resource to clipboard', () => {
     it('AS LU, I should be able to copy the TOTP of a resource to clipboard', async() => {
+      expect.assertions(2);
+
       const props = defaultProps(); // The props to pass
       page = new DisplayResourceDetailsTotpPage(props);
       const totp = defaultTotpViewModelDto();
@@ -97,14 +99,14 @@ describe("DisplayResourceDetailsTotp", () => {
 
       await page.click(page.totp);
 
-      expect.assertions(3);
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.secret.find-by-resource-id", props.resourceWorkspaceContext.details.resource.id);
       const code = TotpCodeGeneratorService.generate(totp);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(code);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The TOTP has been copied to clipboard");
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(code, "The TOTP has been copied to clipboard.");
     });
 
     it('AS LU, I should be able to copy the TOTP of a standalone totp resource to clipboard', async() => {
+      expect.assertions(2);
+
       const props = standaloneTotpProps(); // The props to pass
       page = new DisplayResourceDetailsTotpPage(props);
       const totp = defaultTotpViewModelDto();
@@ -115,11 +117,9 @@ describe("DisplayResourceDetailsTotp", () => {
 
       await page.click(page.totp);
 
-      expect.assertions(3);
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.secret.find-by-resource-id", props.resourceWorkspaceContext.details.resource.id);
       const code = TotpCodeGeneratorService.generate(totp);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(code);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The TOTP has been copied to clipboard");
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(code, "The TOTP has been copied to clipboard.");
     });
 
     it('AS LU, I cannot copy secret of resource if denied by RBAC', async() => {

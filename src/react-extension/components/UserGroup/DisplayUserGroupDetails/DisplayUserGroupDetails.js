@@ -21,8 +21,8 @@ import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import DisplayUserGroupDetailsMembers from "../DisplayUserGroupDetailsMembers/DisplayUserGroupDetailsMembers";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
-import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import LinkSVG from "../../../../img/svg/link.svg";
+import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 /**
  * This component displays the details of a users group
@@ -65,8 +65,7 @@ class DisplayUserGroupDetails extends React.Component {
   async handlePermalinkClick() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/groups/view/${this.group.id}`;
-    await ClipBoard.copy(permalink, this.props.context.port);
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
+    await this.props.clipboardContext.copy(permalink, this.translate("The permalink has been copied to clipboard."));
   }
 
 
@@ -122,7 +121,8 @@ DisplayUserGroupDetails.propTypes = {
   context: PropTypes.any, // The application context
   actionFeedbackContext: PropTypes.any, // The action feedback context,
   userWorkspaceContext: PropTypes.any, // The user workspace context
+  clipboardContext: PropTypes.object, // the clipboard service
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withUserWorkspace(withTranslation('common')(DisplayUserGroupDetails))));
+export default withAppContext(withActionFeedback(withUserWorkspace(withClipboard(withTranslation('common')(DisplayUserGroupDetails)))));

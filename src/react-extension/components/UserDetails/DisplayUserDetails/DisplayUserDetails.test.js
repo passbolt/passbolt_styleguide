@@ -39,13 +39,14 @@ describe("Display User Details", () => {
     });
 
     it('As LU I should follow a permalink to see the details of a user', async() => {
-      expect.assertions(2);
+      expect.assertions(1);
       mockContextRequest(context, () => {});
       jest.spyOn(props.actionFeedbackContext, "displaySuccess").mockImplementationOnce(() => {});
+      jest.spyOn(props.clipboardContext, "copy").mockImplementationOnce(() => {});
       await page.copyPermalink();
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith("http://localhost/app/users/view/54c6278e-f824-5fda-91ff-3e946b18d994");
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
+      expect(props.clipboardContext.copy).toHaveBeenCalledWith("http://localhost/app/users/view/54c6278e-f824-5fda-91ff-3e946b18d994", "The permalink has been copied to clipboard.");
     });
+
     it('As LU I should see groups of an active user', async() => {
       // Set the context in order the detailed user to be inactive
       const propsWithInactiveUser = defaultProps();
