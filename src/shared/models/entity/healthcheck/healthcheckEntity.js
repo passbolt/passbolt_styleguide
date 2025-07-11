@@ -25,6 +25,7 @@ import CoreEntity from "./associations/coreEntity";
 import SmtpSettingsEntity from "./associations/smtpSettingsEntity";
 import DirectorySyncEntity from "./associations/directorySyncEntity";
 import SsoEntity from "./associations/ssoEntity";
+import MetadataEntity from "./associations/metadataEntity";
 
 const ENTITY_NAME = "healthcheck";
 
@@ -42,53 +43,58 @@ class HealthcheckEntity extends Entity {
     // Associations
     if (this._props.ssl) {
       this._ssl = new SslEntity(this._props.ssl, {clone: false});
+      delete this._props.ssl;
     }
-    delete this._props.ssl;
 
     if (this._props.database) {
       this._database = new DatabaseEntity(this._props.database, {clone: false});
+      delete this._props.database;
     }
-    delete this._props.database;
 
     if (this._props.application) {
       this._application = new ApplicationEntity(this._props.application, {clone: false});
+      delete this._props.application;
     }
-    delete this._props.application;
 
     if (this._props.gpg) {
       this._gpg = new GpgEntity(this._props.gpg, {clone: false});
+      delete this._props.gpg;
     }
-    delete this._props.gpg;
 
     if (this._props.environment) {
       this._environment = new EnvironmentEntity(this._props.environment, {clone: false});
+      delete this._props.environment;
     }
-    delete this._props.environment;
 
     if (this._props.configFile) {
       this._configFile = new ConfigFileEntity(this._props.configFile, {clone: false});
+      delete this._props.configFile;
     }
-    delete this._props.configFile;
 
     if (this._props.core) {
       this._core = new CoreEntity(this._props.core, {clone: false});
+      delete this._props.core;
     }
-    delete this._props.core;
 
     if (this._props.smtpSettings) {
       this._smtpSettings = new SmtpSettingsEntity(this._props.smtpSettings, {clone: false});
+      delete this._props.smtpSettings;
     }
-    delete this._props.smtpSettings;
 
     if (this._props.directorySync) {
       this._directorySync = new DirectorySyncEntity(this._props.directorySync, {clone: false});
+      delete this._props.directorySync;
     }
-    delete this._props.directorySync;
 
     if (this._props.sso) {
       this._sso = new SsoEntity(this._props.sso, {clone: false});
+      delete this._props.sso;
     }
-    delete this._props.sso;
+
+    if (this._props.metadata) {
+      this._metadata = new MetadataEntity(this._props.metadata, {clone: false});
+      delete this._props.metadata;
+    }
   }
 
 
@@ -112,7 +118,8 @@ class HealthcheckEntity extends Entity {
         "core": CoreEntity.getSchema(),
         "smtpSettings": SmtpSettingsEntity.getSchema(),
         "directorySync": DirectorySyncEntity.getSchema(),
-        "sso": SsoEntity.getSchema()
+        "sso": SsoEntity.getSchema(),
+        "metadata": MetadataEntity.getSchema(),
       }
     };
   }
@@ -187,6 +194,10 @@ class HealthcheckEntity extends Entity {
 
   get sso() {
     return this._sso || null;
+  }
+
+  get metadata() {
+    return this._metadata;
   }
 }
 
