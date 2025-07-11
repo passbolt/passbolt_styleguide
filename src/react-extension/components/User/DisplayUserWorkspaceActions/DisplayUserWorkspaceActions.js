@@ -27,7 +27,6 @@ import {Trans, withTranslation} from "react-i18next";
 import HandleReviewAccountRecoveryRequestWorkflow
   from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
 import {withWorkflow} from "../../../contexts/WorkflowContext";
-import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
@@ -45,6 +44,7 @@ import DeleteSVG from "../../../../img/svg/delete.svg";
 import EditSVG from "../../../../img/svg/edit.svg";
 import MetadataKeySVG from "../../../../img/svg/metadata_key.svg";
 import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/ConfirmShareMissingMetadataKeys";
+import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -93,8 +93,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    * Handle the will of copying the user email address
    */
   async handleCopyEmailClickEvent() {
-    await ClipBoard.copy(this.selectedUser.username, this.props.context.port);
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The email address has been copied to clipboard"));
+    await this.props.clipboardContext.copy(this.selectedUser.username, this.translate("The email address has been copied to clipboard."));
   }
 
   /**
@@ -102,8 +101,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   async handleCopyPublicKeyEvent() {
     const gpgKeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.selectedUser.id);
-    await ClipBoard.copy(gpgKeyInfo?.armored_key, this.props.context.port);
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The public key has been copied to clipboard"));
+    await this.props.clipboardContext.copy(gpgKeyInfo?.armored_key, this.translate("The public key has been copied to clipboard."));
   }
 
   /**
@@ -286,8 +284,7 @@ class DisplayUserWorkspaceActions extends React.Component {
   async copyPermalink() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/users/view/${this.selectedUser.id}`;
-    await ClipBoard.copy(permalink, this.props.context.port);
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
+    await this.props.clipboardContext.copy(permalink, this.translate("The permalink has been copied to clipboard."));
   }
 
   /**
@@ -447,7 +444,8 @@ DisplayUserWorkspaceActions.propTypes = {
   workflowContext: PropTypes.any, // the workflow context
   dialogContext: PropTypes.any, // the dialog context
   actionFeedbackContext: PropTypes.object, // the action feeedback context
+  clipboardContext: PropTypes.object, // the clipboard service
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withWorkflow(withDialog(withUserWorkspace(withTranslation('common')(DisplayUserWorkspaceActions))))));
+export default withAppContext(withActionFeedback(withWorkflow(withDialog(withUserWorkspace(withClipboard(withTranslation('common')(DisplayUserWorkspaceActions)))))));

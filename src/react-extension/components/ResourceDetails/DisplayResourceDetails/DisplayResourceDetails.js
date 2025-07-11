@@ -23,12 +23,9 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import DisplayResourceDetailsActivity from "./DisplayResourceDetailsActivity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
-import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {
-  withResourceTypesLocalStorage
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import {withResourceTypesLocalStorage} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import DisplayResourceDetailsPassword from "./DisplayResourceDetailsPassword";
 import DisplayResourceDetailsTotp from "./DisplayResourceDetailsTotp";
@@ -40,16 +37,13 @@ import ResourceIcon from "../../../../shared/components/Icons/ResourceIcon";
 import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
-import {
-  V4_TO_V5_RESOURCE_TYPE_MAPPING
-} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
-import {
-  withMetadataTypesSettingsLocalStorage
-} from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import {V4_TO_V5_RESOURCE_TYPE_MAPPING} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import {withMetadataTypesSettingsLocalStorage} from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import ResourceFormEntity from "../../../../shared/models/entity/resource/resourceFormEntity";
 import DisplayResourceDetailsCustomFields from "./DisplayResourceDetailsCustomFields";
 import DisplayResourceDetailsURIs from "./DisplayResourceDetailsURIs";
+import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -121,8 +115,8 @@ class DisplayResourceDetails extends React.Component {
   async handlePermalinkClick() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.resource.id}`;
-    await ClipBoard.copy(permalink, this.props.context.port);
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
+
+    await this.props.clipboardContext.copy(permalink, this.translate("The permalink has been copied to clipboard."));
   }
 
   /**
@@ -427,7 +421,8 @@ DisplayResourceDetails.propTypes = {
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   actionFeedbackContext: PropTypes.any, // The action feedback context
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
+  clipboardContext: PropTypes.object, // the clipboard service
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withMetadataTypesSettingsLocalStorage(withResourceTypesLocalStorage(withActionFeedback(withResourceWorkspace(withTranslation('common')(DisplayResourceDetails)))))));
+export default withAppContext(withRbac(withMetadataTypesSettingsLocalStorage(withResourceTypesLocalStorage(withActionFeedback(withClipboard(withResourceWorkspace(withTranslation('common')(DisplayResourceDetails))))))));

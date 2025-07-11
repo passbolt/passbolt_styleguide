@@ -86,7 +86,7 @@ describe("See Workspace Menu", () => {
     });
 
     it('As LU I can start copying a resource\'s permalink via the workspace main menu', async() => {
-      expect.assertions(5);
+      expect.assertions(4);
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.copyMenuDropdown).not.toBeNull();
       page.displayMenu.clickOnCopyMenu();
@@ -96,12 +96,11 @@ describe("See Workspace Menu", () => {
 
       await page.displayMenu.clickOnMenu(page.displayMenu.permalinkMenu);
 
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/passwords/view/${propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id}`);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(propsOneResourceOwned.clipboardContext.copy).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/passwords/view/${propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id}`, "The permalink has been copied to clipboard.");
     });
 
     it('As LU I should be able to copy a resource username from the workspace main menu', async() => {
-      expect.assertions(6);
+      expect.assertions(5);
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.copyMenuDropdown).not.toBeNull();
       page.displayMenu.clickOnCopyMenu();
@@ -112,12 +111,11 @@ describe("See Workspace Menu", () => {
 
       await page.displayMenu.clickOnMenu(page.displayMenu.usernameMenu);
 
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].metadata.username);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(propsOneResourceOwned.clipboardContext.copy).toHaveBeenCalledWith(propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].metadata.username, "The username has been copied to clipboard.");
     });
 
     it('As LU I should be able to copy a resource uri from the workspace main menu', async() => {
-      expect.assertions(6);
+      expect.assertions(5);
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.copyMenuDropdown).not.toBeNull();
       page.displayMenu.clickOnCopyMenu();
@@ -128,8 +126,7 @@ describe("See Workspace Menu", () => {
 
       await page.displayMenu.clickOnMenu(page.displayMenu.uriMenu);
 
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].metadata.uris[0]);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(propsOneResourceOwned.clipboardContext.copy).toHaveBeenCalledWith(propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].metadata.uris[0], "The uri has been copied to clipboard.");
     });
 
     it('As LU I can start sharing a resource via the workspace main menu', () => {
@@ -139,7 +136,7 @@ describe("See Workspace Menu", () => {
     });
 
     it('As LU I should be able to copy a resource secret from the copy menu', async() => {
-      expect.assertions(6);
+      expect.assertions(5);
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.copyMenuDropdown).not.toBeNull();
       page.displayMenu.clickOnCopyMenu();
@@ -151,8 +148,7 @@ describe("See Workspace Menu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuSecret);
 
       expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password');
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(propsOneResourceOwned.clipboardContext.copyTemporarily).toHaveBeenCalledWith('secret-password', "The secret has been copied to clipboard.");
     });
   });
 
@@ -202,7 +198,7 @@ describe("See Workspace Menu", () => {
     });
 
     it('As LU I should be able to copy a resource secret from the copy menu', async() => {
-      expect.assertions(6);
+      expect.assertions(5);
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.copyMenuDropdown).not.toBeNull();
       page.displayMenu.clickOnCopyMenu();
@@ -214,8 +210,7 @@ describe("See Workspace Menu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuTotp);
 
       expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringMatching(/^[0-9]{6}/));
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(propsOneResourceOwned.clipboardContext.copyTemporarily).toHaveBeenCalledWith(expect.stringMatching(/^[0-9]{6}/), "The TOTP has been copied to clipboard.");
     });
   });
 

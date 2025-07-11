@@ -20,6 +20,7 @@ import {withAdminSso} from "../../../../contexts/AdminSsoContext";
 import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
 import Password from "../../../../../shared/components/Password/Password";
 import CopySVG from "../../../../../img/svg/copy.svg";
+import {withClipboard} from "../../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 /**
  * This component displays the Google SSO settings form
@@ -98,8 +99,7 @@ class GoogleSsoProviderForm extends React.PureComponent {
    * Handle the copy to clipboard button
    */
   async handleCopyRedirectUrl() {
-    await navigator.clipboard.writeText(this.fullRedirectUrl);
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The redirection URL has been copied to the clipboard."));
+    await this.props.clipboardContext.copy(this.fullRedirectUrl, this.translate("The redirection URL has been copied to the clipboard."));
   }
 
   /**
@@ -199,7 +199,8 @@ GoogleSsoProviderForm.propTypes = {
   adminSsoContext: PropTypes.object, // The administration sso configuration context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   context: PropTypes.any, // The application context
+  clipboardContext: PropTypes.object, // the clipboard service provider
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withAdminSso(withTranslation('common')(GoogleSsoProviderForm))));
+export default withAppContext(withActionFeedback(withAdminSso(withClipboard(withTranslation('common')(GoogleSsoProviderForm)))));

@@ -19,6 +19,7 @@ import InFormCredentialsFormField from "./InFormCredentialsFormField";
 import DomUtils from "../Dom/DomUtils";
 import debounce from "debounce-promise";
 import UserEventsService from "../User/UserEventsService";
+import ClipboardServiceWorkerService from "../../../shared/services/serviceWorker/clipboard/clipboardServiceWorkerService";
 
 /**
  * Manages the in-form web integration including call-to-action and menu
@@ -44,6 +45,8 @@ class InFormManager {
    * Initializes the in-form manager
    */
   initialize() {
+    this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(port);
+
     this.findAndSetAuthenticationFields();
     this.handleDomChange();
     this.handleInformCallToActionRepositionEvent();
@@ -55,6 +58,7 @@ class InFormManager {
     this.handleGetCurrentCredentials();
     this.handleFillCredentials();
     this.handleFillPassword();
+    this.handleClipboardEvent();
   }
 
   /**
@@ -65,6 +69,7 @@ class InFormManager {
     this.handleInformCallToActionClickEvent = this.handleInformCallToActionClickEvent.bind(this);
     this.clean = this.clean.bind(this);
     this.destroy = this.destroy.bind(this);
+    this.handleClipboardChange = this.handleClipboardChange.bind(this);
   }
 
   /**
@@ -302,6 +307,21 @@ class InFormManager {
   }
 
   /**
+   * Starts listening to "cut" and "copy" events
+   */
+  handleClipboardEvent() {
+    document.addEventListener("cut", this.handleClipboardChange);
+    document.addEventListener("copy", this.handleClipboardChange);
+  }
+
+  /**
+   * Handler of the "cut" and "copy" event.
+   */
+  handleClipboardChange() {
+    this.clipboardServiceWorkerService.cancelClipboardFlush();
+  }
+
+  /**
    * Remove all event, observer and iframe
    */
   destroy() {
@@ -310,6 +330,8 @@ class InFormManager {
     this.menuField?.destroy();
     this.credentialsFormFields.forEach(field => field.destroy());
     window.removeEventListener('resize', this.clean);
+    document.removeEventListener("cut", this.handleClipboardChange);
+    document.removeEventListener("copy", this.handleClipboardChange);
   }
 
   /**

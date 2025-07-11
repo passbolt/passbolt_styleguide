@@ -21,7 +21,6 @@ import {
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
-import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withProgress} from "../../../contexts/ProgressContext";
@@ -32,6 +31,7 @@ import EyeOpenSVG from "../../../../img/svg/eye_open.svg";
 import Totp from "../../../../shared/components/Totp/Totp";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import DisplayResourceUrisBadge from "../../Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
+import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 class DisplayResourceDetailsTotp extends React.Component {
   /**
@@ -169,9 +169,8 @@ class DisplayResourceDetailsTotp extends React.Component {
       return;
     }
 
-    await ClipBoard.copy(code, this.props.context.port);
+    await this.props.clipboardContext.copyTemporarily(code, this.translate("The TOTP has been copied to clipboard."));
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The TOTP has been copied to clipboard"));
   }
 
   /**
@@ -350,7 +349,8 @@ DisplayResourceDetailsTotp.propTypes = {
   isStandaloneTotp: PropTypes.bool, // The resource types is standalone totp
   actionFeedbackContext: PropTypes.any, // The action feedback context
   progressContext: PropTypes.any, // The progress context
+  clipboardContext: PropTypes.object, // the clipboard service provider
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withActionFeedback(withResourceWorkspace(withProgress(withTranslation('common')(DisplayResourceDetailsTotp))))));
+export default withAppContext(withClipboard(withRbac(withActionFeedback(withResourceWorkspace(withProgress(withTranslation('common')(DisplayResourceDetailsTotp)))))));

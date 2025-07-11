@@ -6,6 +6,7 @@
 import {defaultAppContext} from "../../contexts/AppContext.test.data";
 import {defaultPasswordPoliciesContext} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
 import {defaultPrepareResourceContext} from "../../contexts/PrepareResourceContext.test.data";
+import {defaultClipboardContext} from "../../../react-extension/contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Default props
@@ -20,6 +21,7 @@ export const defaultProps = (props = {}) => ({
     push: jest.fn(),
     goBack: jest.fn()
   },
+  clipboardContext: defaultClipboardContext(),
   ...props
 });
 

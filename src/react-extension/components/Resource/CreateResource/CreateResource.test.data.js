@@ -29,6 +29,7 @@ import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordEx
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 import {defaultPasswordPoliciesContext} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
 import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
+import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 
 /**
@@ -54,6 +55,7 @@ export function defaultProps(data = {}) {
     }),
     onClose: jest.fn(),
     dialogContext: defaultDialogContext(),
+    clipboardContext: defaultClipboardContext(),
   };
 
   return Object.assign(defaultData, data);

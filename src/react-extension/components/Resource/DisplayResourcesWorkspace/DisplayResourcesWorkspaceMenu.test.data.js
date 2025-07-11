@@ -29,6 +29,7 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -41,7 +42,7 @@ export const defaultAppContext = (appContext = {}) => {
     port: new MockPort(),
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: siteSettings,
-    setContext: () => jest.fn()
+    setContext: () => jest.fn(),
   };
   return Object.assign(defaultAppContext, appContext);
 };
@@ -56,6 +57,7 @@ const defaultProps = (data = {}) => ({
   rbacContext: defaultAdministratorRbacContext(),
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   dialogContext: defaultDialogContext(),
+  clipboardContext: defaultClipboardContext(),
   ...data,
 });
 
