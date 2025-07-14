@@ -19,6 +19,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withLoading} from "../../../contexts/LoadingContext";
 import {Trans, withTranslation} from "react-i18next";
+import CommentsServiceWorkerService from "../CommentsServiceWorkerService";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -33,6 +34,7 @@ class AddResourceComment extends React.Component {
     this.state = this.getDefaultState();
     this.bindCallbacks();
     this.createRefs();
+    this.commentsServiceWorkerService = new CommentsServiceWorkerService(props.context.port);
   }
 
   /**
@@ -170,8 +172,7 @@ class AddResourceComment extends React.Component {
       content: commentToAdd,
       user_id: this.props.context.loggedInUser.id
     };
-
-    return await this.props.context.port.request('passbolt.comments.create', payload);
+    return await this.commentsServiceWorkerService.create(payload);
   }
 
   /**
