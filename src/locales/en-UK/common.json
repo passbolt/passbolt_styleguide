@@ -1552,6 +1552,8 @@
   "Unique value set for security.salt": "Unique value set for security.salt",
   "unknown": "unknown",
   "Unknown activity, please contact your administrator.": "Unknown activity, please contact your administrator.",
+  "Unknown group": "Unknown group",
+  "Unknown permission grantee": "Unknown permission grantee",
   "Unknown user": "Unknown user",
   "Unsafe mode": "Unsafe mode",
   "Untitled folder": "Untitled folder",
