@@ -1902,11 +1902,13 @@ textarea.full_report {
   right: 0.3rem;
   top: 0.3rem;
 }
-.input.search .search-button-wrapper .button {
+.input.search .search-button-wrapper .button,
+.input.search .search-button-wrapper .search-icon {
   padding: 0.5rem var(--Infield-boxless-padding);
   border-radius: var(--Token-radius);
 }
-.input.search .search-button-wrapper .button svg:first-child {
+.input.search .search-button-wrapper .button svg:first-child,
+.input.search .search-button-wrapper .search-icon svg:first-child {
   width: 2rem;
   height: 2rem;
 }
@@ -6762,6 +6764,7 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-smtp-section .healthcheck-success,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-directorySync-section .healthcheck-success,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-success,
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-metadata-section .healthcheck-success,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-environment-section .healthcheck-warning,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-configFiles-section .healthcheck-warning,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-core-section .healthcheck-warning,
@@ -6772,6 +6775,7 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-smtp-section .healthcheck-warning,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-directorySync-section .healthcheck-warning,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-warning,
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-metadata-section .healthcheck-warning,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-environment-section .healthcheck-fail,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-configFiles-section .healthcheck-fail,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-core-section .healthcheck-fail,
@@ -6782,6 +6786,7 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-smtp-section .healthcheck-fail,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-directorySync-section .healthcheck-fail,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-fail,
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-metadata-section .healthcheck-fail,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-environment-section .healthcheck-info,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-configFiles-section .healthcheck-info,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-core-section .healthcheck-info,
@@ -6791,7 +6796,8 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-app-section .healthcheck-info,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-smtp-section .healthcheck-info,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-directorySync-section .healthcheck-info,
-.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-info {
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-info,
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-metadata-section .healthcheck-info {
   display: flex;
   align-items: center;
   margin: 1rem 0;
@@ -6809,6 +6815,7 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-smtp-section .healthcheck-success .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-directorySync-section .healthcheck-success .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-success .tooltip,
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-metadata-section .healthcheck-success .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-environment-section .healthcheck-warning .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-configFiles-section .healthcheck-warning .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-core-section .healthcheck-warning .tooltip,
@@ -6819,6 +6826,7 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-smtp-section .healthcheck-warning .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-directorySync-section .healthcheck-warning .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-warning .tooltip,
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-metadata-section .healthcheck-warning .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-environment-section .healthcheck-fail .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-configFiles-section .healthcheck-fail .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-core-section .healthcheck-fail .tooltip,
@@ -6829,6 +6837,7 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-smtp-section .healthcheck-fail .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-directorySync-section .healthcheck-fail .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-fail .tooltip,
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-metadata-section .healthcheck-fail .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-environment-section .healthcheck-info .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-configFiles-section .healthcheck-info .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-core-section .healthcheck-info .tooltip,
@@ -6838,7 +6847,8 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-app-section .healthcheck-info .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-smtp-section .healthcheck-info .tooltip,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-directorySync-section .healthcheck-info .tooltip,
-.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-info .tooltip {
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-info .tooltip,
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-metadata-section .healthcheck-info .tooltip {
   margin: 0.3rem 0 0 -0.5rem;
 }
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-environment-section .healthcheck-success,
@@ -6850,7 +6860,8 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-app-section .healthcheck-success,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-smtp-section .healthcheck-success,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-directorySync-section .healthcheck-success,
-.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-success {
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-success,
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-metadata-section .healthcheck-success {
   background: var(--Healthcheck-Healthcheck-Success);
 }
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-environment-section .healthcheck-warning,
@@ -6862,7 +6873,8 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-app-section .healthcheck-warning,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-smtp-section .healthcheck-warning,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-directorySync-section .healthcheck-warning,
-.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-warning {
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-warning,
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-metadata-section .healthcheck-warning {
   background: var(--Healthcheck-Healthcheck-Warning);
 }
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-environment-section .healthcheck-fail,
@@ -6874,7 +6886,8 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-app-section .healthcheck-fail,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-smtp-section .healthcheck-fail,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-directorySync-section .healthcheck-fail,
-.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-fail {
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-fail,
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-metadata-section .healthcheck-fail {
   background: var(--Healthcheck-Healthcheck-Error);
 }
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-environment-section .healthcheck-info,
@@ -6886,7 +6899,8 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-app-section .healthcheck-info,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-smtp-section .healthcheck-info,
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-directorySync-section .healthcheck-info,
-.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-info {
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-sso-section .healthcheck-info,
+.page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .healthcheck-metadata-section .healthcheck-info {
   background: var(--Healthcheck-Healthcheck-Ignored);
 }
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .svg-icon {

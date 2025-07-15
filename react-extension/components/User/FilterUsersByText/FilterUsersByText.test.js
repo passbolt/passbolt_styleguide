@@ -39,5 +39,15 @@ describe("Filter User By Text", () => {
     await page.search('Some search text');
     jest.runAllTimers();
     expect(props.history.push).toHaveBeenCalledWith(expectedCallParameters);
+    expect(page.button.textContent).toBe("Clear");
+  });
+
+  it('As LU, I should be able to see a search button when I clear all input ', async() => {
+    jest.spyOn(props.history, 'push').mockImplementationOnce(() => {});
+    const expectedCallParameters =  {pathname: "/app/users", state: {filter: {payload: "Some search text", type: "FILTER-BY-TEXT-SEARCH"}}};
+    await page.search('');
+    jest.runAllTimers();
+    expect(props.history.push).toHaveBeenCalledWith(expectedCallParameters);
+    expect(page.button).toBeNull();
   });
 });

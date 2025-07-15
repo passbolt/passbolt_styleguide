@@ -24,6 +24,7 @@ import {
   defaultResourceMetadataDto
 } from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import {TEST_RESOURCE_TYPE_TOTP} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Default component props with resource having owner permission
@@ -47,6 +48,7 @@ export function defaultProps(data = {}) {
       }
     }),
     isStandaloneTotp: false,
+    clipboardContext: defaultClipboardContext(),
     ...data
   };
 }
@@ -78,6 +80,7 @@ export function standaloneTotpProps(data = {}) {
       }
     }),
     isStandaloneTotp: true,
+    clipboardContext: defaultClipboardContext(),
     ...data
   };
 }

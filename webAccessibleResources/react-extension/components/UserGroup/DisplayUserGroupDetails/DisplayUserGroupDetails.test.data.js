@@ -2,6 +2,7 @@ import MockPort from "../../../test/mock/MockPort";
 import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
+import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -1349,6 +1350,7 @@ export function defaultProps() {
     },
     actionFeedbackContext: {
       displaySuccess: jest.fn(),
-    }
+    },
+    clipboardContext: defaultClipboardContext(),
   };
 }

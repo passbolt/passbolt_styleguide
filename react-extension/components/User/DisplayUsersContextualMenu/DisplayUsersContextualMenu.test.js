@@ -48,43 +48,37 @@ describe("Display Users Contextual Menu", () => {
   props.hide = jest.fn();
 
   it("As LU I should copy an user permalink", async() => {
-    expect.assertions(3);
+    expect.assertions(2);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
-    jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(() => {});
     jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
     await page.copyPermalink();
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/users/view/${contextualUserId}`);
-    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
+    expect(props.clipboardContext.copy).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/users/view/${contextualUserId}`, "The permalink has been copied to clipboard.");
     expect(props.hide).toHaveBeenCalled();
   });
 
   it("As LU I should copy an user public key", async() => {
-    expect.assertions(3);
+    expect.assertions(2);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
     const gpgKey = "some key";
     jest.spyOn(context.port, 'request').mockImplementation(() => ({armored_key: gpgKey}));
-    jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(() => {});
     jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
     await page.copyPublicKey();
-    expect(navigator.clipboard.writeText).toHaveBeenLastCalledWith(gpgKey);
-    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
+    expect(props.clipboardContext.copy).toHaveBeenLastCalledWith(gpgKey, "The public key has been copied to clipboard.");
     expect(props.hide).toHaveBeenCalled();
   });
 
   it("As LU I should copy an user email address", async() => {
-    expect.assertions(3);
+    expect.assertions(2);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
-    jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(() => {});
     jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
     await page.copyEmail();
-    expect(navigator.clipboard.writeText).toHaveBeenLastCalledWith("ada@passbolt.com");
-    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
+    expect(props.clipboardContext.copy).toHaveBeenLastCalledWith("ada@passbolt.com", "The email has been copied to clipboard.");
     expect(props.hide).toHaveBeenCalled();
   });
 

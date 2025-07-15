@@ -17,6 +17,7 @@ import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {resourceWithTotpDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Default component props with resource having owner permission
@@ -39,6 +40,7 @@ export function defaultProps(data = {}) {
         }),
       }
     }),
+    clipboardContext: defaultClipboardContext(),
     ...data
   };
 }

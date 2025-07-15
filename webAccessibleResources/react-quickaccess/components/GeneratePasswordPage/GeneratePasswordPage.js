@@ -26,18 +26,19 @@ import Transition from "react-transition-group/cjs/Transition";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
 import Password from "../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
-import ClipBoard from '../../../shared/lib/Browser/clipBoard';
 import CloseSvg from "../../../img/svg/close.svg";
 import DiceSVG from "../../../img/svg/dice.svg";
 import CopySVG from "../../../img/svg/copy.svg";
 import HealthCheckSuccessSvg from "../../../img/svg/healthcheck_success.svg";
 import CaretLeftSVG from "../../../img/svg/caret_left.svg";
+import ClipboardServiceWorkerService from "../../../shared/services/serviceWorker/clipboard/clipboardServiceWorkerService";
 
 class GeneratePasswordPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
     this.initEventHandlers();
+    this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(props.context.port);
   }
 
   get defaultState() {
@@ -161,7 +162,7 @@ class GeneratePasswordPage extends React.Component {
    */
   async handleCopyPassword() {
     this.setState({copySecretState: 'processing'});
-    await ClipBoard.copy(this.state.password, this.props.context.port);
+    this.clipboardServiceWorkerService.copyTemporarily(this.state.password);
     this.setState({copySecretState: 'done'});
     setTimeout(() => {
       this.setState({copySecretState: 'default'});

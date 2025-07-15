@@ -4,6 +4,7 @@ import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
 import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -33,7 +34,8 @@ export function defaultProps() {
         }
       },
       rbacContext: defaultAdministratorRbacContext(),
-      onLockDetail: jest.fn()
-    }
+      onLockDetail: jest.fn(),
+    },
+    clipboardContext: defaultClipboardContext(),
   };
 }

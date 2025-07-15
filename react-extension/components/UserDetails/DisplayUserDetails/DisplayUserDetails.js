@@ -24,8 +24,8 @@ import DisplayUserDetailsPublicKey from "../DisplayUserDetailsPublicKey/DisplayU
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withTranslation, Trans} from "react-i18next";
 import DisplayUserDetailsAccountRecovery from "../DisplayUserDetailsAccountRecovery/DisplayUserDetailsAccountRecovery";
-import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {isUserSuspended} from "../../../../shared/utils/userUtils";
+import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 class DisplayUserDetails extends React.Component {
   /**
@@ -69,8 +69,7 @@ class DisplayUserDetails extends React.Component {
   async handlePermalinkClick() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/users/view/${this.user.id}`;
-    await ClipBoard.copy(permalink, this.props.context.port);
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
+    await this.props.clipboardContext.copy(permalink, this.translate("The permalink has been copied to clipboard."));
   }
 
   /**
@@ -181,7 +180,8 @@ DisplayUserDetails.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   userWorkspaceContext: PropTypes.any, // The user workspace context
   accountRecoveryContext: PropTypes.object, // The account recovery context
+  clipboardContext: PropTypes.object, // the clipboard service
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withAccountRecovery(withUserWorkspace(withActionFeedback(withTranslation('common')(DisplayUserDetails)))));
+export default withAppContext(withAccountRecovery(withUserWorkspace(withActionFeedback(withClipboard(withTranslation('common')(DisplayUserDetails))))));

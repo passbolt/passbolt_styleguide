@@ -57,15 +57,15 @@ describe("See Resource Sidebar", () => {
     });
 
     it('As LU I should be able to identify the name and the permalink', async() => {
-      expect.assertions(4);
+      expect.assertions(3);
       mockContextRequest(copyClipboardMockImpl);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(props.clipboardContext, 'copy').mockImplementation(() => {});
 
       expect(page.name).toBe(props.resourceWorkspaceContext.details.folder.name);
       expect(page.subtitle).toBe('folder');
       await page.selectPermalink();
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/folders/view/${props.resourceWorkspaceContext.details.folder.id}`);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The permalink has been copied to clipboard");
+      expect(props.clipboardContext.copy).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/folders/view/${props.resourceWorkspaceContext.details.folder.id}`, "The permalink has been copied to clipboard.");
     });
 
     it("I should see the share option when rbac is available", async() => {

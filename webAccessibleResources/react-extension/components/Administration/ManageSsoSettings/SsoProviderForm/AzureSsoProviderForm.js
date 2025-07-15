@@ -25,6 +25,7 @@ import CopySVG from "../../../../../img/svg/copy.svg";
 import CalendarSVG from "../../../../../img/svg/copy.svg";
 import CaretDownSVG from "../../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../../img/svg/caret_right.svg";
+import {withClipboard} from "../../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 /**
  * This component displays the Azure SSO settings form
@@ -132,8 +133,7 @@ class AzureSsoProviderForm extends React.Component {
    * Handle the copy to clipboard button
    */
   async handleCopyRedirectUrl() {
-    await navigator.clipboard.writeText(this.fullRedirectUrl);
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The redirection URL has been copied to the clipboard."));
+    await this.props.clipboardContext.copy(this.fullRedirectUrl, this.translate("The redirection URL has been copied to the clipboard."));
   }
 
   /**
@@ -333,7 +333,8 @@ AzureSsoProviderForm.propTypes = {
   adminSsoContext: PropTypes.object, // The administration sso configuration context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   context: PropTypes.any, // The application context
+  clipboardContext: PropTypes.object, // the clipboard context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withAdminSso(withTranslation('common')(AzureSsoProviderForm))));
+export default withAppContext(withActionFeedback(withAdminSso(withClipboard(withTranslation('common')(AzureSsoProviderForm)))));

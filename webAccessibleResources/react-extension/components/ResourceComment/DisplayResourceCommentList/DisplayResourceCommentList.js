@@ -22,6 +22,7 @@ import {DateTime} from "luxon";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {isUserSuspended} from "../../../../shared/utils/userUtils";
+import CommentsServiceWorkerService from "../CommentsServiceWorkerService";
 
 class DisplayResourceCommentList extends React.Component {
   /**
@@ -31,6 +32,7 @@ class DisplayResourceCommentList extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
+    this.commentsServiceWorkerService = new CommentsServiceWorkerService(props.context.port);
   }
 
   /**
@@ -68,7 +70,7 @@ class DisplayResourceCommentList extends React.Component {
     this.setState({actions: {loading: true}});
 
     const resourceId = this.props.resource.id;
-    const comments = await this.props.context.port.request('passbolt.comments.find-all-by-resource', resourceId);
+    const comments = await this.commentsServiceWorkerService.findAllByResource(resourceId);
 
     const commentsSorter = (comment1, comment2) => DateTime.fromISO(comment2.created) < DateTime.fromISO(comment1.created) ? -1 : 1;
     this.setState({comments: comments.sort(commentsSorter)});

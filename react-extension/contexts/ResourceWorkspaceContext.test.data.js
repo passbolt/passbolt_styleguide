@@ -19,6 +19,7 @@ import {readPermissionDto, updatePermissionDto} from "../../shared/models/entity
 import {defaultResourceMetadataDto} from "../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import {defaultTagDto} from "../../shared/models/entity/tag/tagEntity.test.data";
 import {resourceAllTypesDtosCollection, resourceAllTypesDtosCollectionAndVariousPermission} from "../../shared/models/entity/resource/resourcesCollection.test.data";
+import {defaultClipboardContext} from "./Clipboard/ManagedClipboardServiceProvider.test.data";
 
 export function defaultAppContext(appContext) {
   const folders = [
@@ -122,6 +123,7 @@ export function defaultResourceWorkspaceContext(data = {}) {
     resetGridColumnsSettings: jest.fn(),
     onResourceDescriptionDecrypted: jest.fn(),
     onChangeRowSettingsHeight: jest.fn(),
+    clipboardContext: defaultClipboardContext(),
     ...data
   };
 }

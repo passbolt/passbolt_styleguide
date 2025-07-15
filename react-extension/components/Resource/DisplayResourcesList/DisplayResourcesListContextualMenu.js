@@ -26,7 +26,6 @@ import {
 } from "../../../contexts/ResourceWorkspaceContext";
 import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
-import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {withProgress} from "../../../contexts/ProgressContext";
@@ -50,6 +49,7 @@ import ClockIcon from "../../../../img/svg/clock.svg";
 import CalendarIcon from "../../../../img/svg/calendar.svg";
 import TotpIcon from "../../../../img/svg/totp.svg";
 import GoIcon from "../../../../img/svg/go.svg";
+import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -100,8 +100,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle username resource
    */
   async handleUsernameClickEvent() {
-    await ClipBoard.copy(this.resource.metadata.username, this.props.context.port);
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The username has been copied to clipboard"));
+    await this.props.clipboardContext.copy(this.resource.metadata.username, this.translate("The username has been copied to clipboard."));
     this.props.hide();
   }
 
@@ -109,8 +108,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle uri resource
    */
   async handleUriClickEvent() {
-    await ClipBoard.copy(this.resource.metadata.uris[0], this.props.context.port);
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The uri has been copied to clipboard"));
+    await this.props.clipboardContext.copy(this.resource.metadata.uris[0], this.translate("The uri has been copied to clipboard."));
     this.props.hide();
   }
 
@@ -120,8 +118,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
   async handlePermalinkClickEvent() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.resource.id}`;
-    await ClipBoard.copy(permalink, this.props.context.port);
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
+    await this.props.clipboardContext.copy(permalink, this.translate("The permalink has been copied to clipboard."));
     this.props.hide();
   }
 
@@ -146,7 +143,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     if (!password) {
       throw new TypeError(this.translate("The password is empty."));
     }
-    await ClipBoard.copy(password, this.props.context.port);
+    await this.props.clipboardContext.copyTemporarily(password, this.translate("The secret has been copied to clipboard."));
   }
 
   /**
@@ -173,7 +170,6 @@ class DisplayResourcesListContextualMenu extends React.Component {
 
     await this.copyPasswordToClipboard(plaintextSecretDto);
     this.props.resourceWorkspaceContext.onResourceCopied();
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
   }
 
   /**
@@ -209,9 +205,8 @@ class DisplayResourcesListContextualMenu extends React.Component {
       return;
     }
 
-    await ClipBoard.copy(code, this.props.context.port);
+    await this.props.clipboardContext.copyTemporarily(code, this.translate("The TOTP has been copied to clipboard."));
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The TOTP has been copied to clipboard"));
   }
 
   /**
@@ -546,7 +541,8 @@ DisplayResourcesListContextualMenu.propTypes = {
   resource: PropTypes.object, // resource selected
   actionFeedbackContext: PropTypes.any, // The action feedback context
   passwordExpiryContext: PropTypes.object, // The password expiry context
+  clipboardContext: PropTypes.object, // the clipboard service provider
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withDialog(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu)))))))));
+export default withAppContext(withClipboard(withRbac(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withDialog(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu))))))))));

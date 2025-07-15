@@ -1903,11 +1903,13 @@ textarea.full_report {
   right: 0.3rem;
   top: 0.3rem;
 }
-.input.search .search-button-wrapper .button {
+.input.search .search-button-wrapper .button,
+.input.search .search-button-wrapper .search-icon {
   padding: 0.5rem var(--Infield-boxless-padding);
   border-radius: var(--Token-radius);
 }
-.input.search .search-button-wrapper .button svg:first-child {
+.input.search .search-button-wrapper .button svg:first-child,
+.input.search .search-button-wrapper .search-icon svg:first-child {
   width: 2rem;
   height: 2rem;
 }
@@ -4130,6 +4132,7 @@ body {
   display: flex;
   align-items: center;
   padding: 1.6rem;
+  position: relative;
 }
 .quickaccess .item-browse .properties .property:before,
 .quickaccess .item-browse .properties .property:after {
@@ -4256,6 +4259,16 @@ body {
 .quickaccess .item-browse .properties .secret.secret-copy.secret-totp > button:after {
   margin-left: 0.5rem;
   content: '000';
+}
+.quickaccess .item-browse .properties .property-action + .timer {
+  width: 3.2rem;
+  height: 3.2rem;
+  position: absolute;
+  right: 1.25rem;
+  top: 2.1rem;
+  --timer-delay: 0;
+  --timer-stroke-width: 1;
+  pointer-events: none;
 }
 .quickaccess .resource-create .form-container {
   margin: 1.6rem;

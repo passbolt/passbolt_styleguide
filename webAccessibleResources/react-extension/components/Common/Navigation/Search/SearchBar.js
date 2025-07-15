@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import SearchSVG from "../../../../../img/svg/search.svg";
+import CloseSVG from "../../../../../img/svg/close.svg";
 
 class SearchBar extends Component {
   /**
@@ -33,7 +34,7 @@ class SearchBar extends Component {
    */
   bindCallbacks() {
     this.handleChangeEvent = this.handleChangeEvent.bind(this);
-    this.handleOnSubmitEvent = this.handleOnSubmitEvent.bind(this);
+    this.clearSearchInput = this.clearSearchInput.bind(this);
   }
   /**
    * Create elements references
@@ -55,15 +56,11 @@ class SearchBar extends Component {
   }
 
   /**
-   * Handle on submit
-   * @params {ReactEvent} The react event.
+   * Handle clearing of search text
    */
-  handleOnSubmitEvent(event) {
-    event.preventDefault();
-    if (this.props.onSearch) {
-      const text = this.searchInputRef.current.value;
-      this.props.onSearch(text);
-    }
+  clearSearchInput() {
+    this.searchInputRef.current.focus();
+    this.props.onSearch('');
   }
 
   get placeholderLabel() {
@@ -77,7 +74,7 @@ class SearchBar extends Component {
   render() {
     return (
       <div className="col2 search-wrapper">
-        <form className="search" onSubmit={this.handleOnSubmitEvent}>
+        <div className="search">
           <div className={`input search required ${this.props.disabled ? 'disabled' : ''}`}>
             <label className="visuallyhidden"><Trans>Search</Trans></label>
             <input ref={this.searchInputRef} className="required" type="search"
@@ -86,13 +83,19 @@ class SearchBar extends Component {
               placeholder={this.placeholderLabel}
               value={this.props.value}/>
             <div className="search-button-wrapper">
-              <button className="button button-transparent" value={this.placeholderLabel} onBlur={this.handleSubmitButtonBlur} onFocus={this.handleSubmitButtonFocus} type="submit" disabled={this.props.disabled ? 'disabled' : ''}>
-                <SearchSVG/>
-                <span className="visuallyhidden"><Trans>{this.placeholderLabel}</Trans></span>
-              </button>
+              { this.props.value ?
+                <button className="button button-transparent" name="clear-button" type="button" onClick={this.clearSearchInput}>
+                  <CloseSVG/>
+                  <span className="visuallyhidden"><Trans>Clear</Trans></span>
+                </button>
+                :
+                <div className="search-icon">
+                  <SearchSVG name="search"/>
+                </div>
+              }
             </div>
           </div>
-        </form>
+        </div>
       </div>
     );
   }

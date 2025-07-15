@@ -3,6 +3,7 @@ import {defaultAppContext, defaultUserAppContext} from "../../../contexts/ExtApp
 import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Props with selected user
@@ -71,6 +72,7 @@ export function propsWithSelectedUser(props) {
     workflowContext: defaultWorkflowContext(),
     dialogContext: defaultDialogContext(),
     actionFeedbackContext: defaultActionFeedbackContext(),
+    clipboardContext: defaultClipboardContext(),
     ...props
   };
 }

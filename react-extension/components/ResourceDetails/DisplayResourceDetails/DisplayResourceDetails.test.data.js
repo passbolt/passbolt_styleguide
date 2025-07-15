@@ -26,6 +26,7 @@ import {
   defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto
 } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Default props
@@ -44,6 +45,7 @@ export function defaultProps(data = {}) {
       ...data?.metadataTypeSettings
     })),
     actionFeedbackContext: defaultActionFeedbackContext(),
+    clipboardContext: defaultClipboardContext(),
     ...data,
   };
 }

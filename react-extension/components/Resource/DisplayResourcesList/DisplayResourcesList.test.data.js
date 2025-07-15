@@ -35,6 +35,7 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Default props as when initializing the list with no content.
@@ -49,6 +50,7 @@ export function defaultProps(data = {}) {
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     contextualMenuContext: defaultContextualMenuContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    clipboardContext: defaultClipboardContext(),
     ...data
   };
 }

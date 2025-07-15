@@ -20,7 +20,8 @@ export function defaultProps(props = {}) {
   const defaultProps = {
     disabled: false,
     onSearch: () => jest.fn(),
-    placeholder: "Search"
+    placeholder: "Search",
+    value: "",
   };
   return Object.assign(defaultProps, props || {});
 }

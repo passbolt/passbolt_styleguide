@@ -25,7 +25,6 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {Trans, withTranslation} from "react-i18next";
 import {withWorkflow} from "../../../contexts/WorkflowContext";
 import HandleReviewAccountRecoveryRequestWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
-import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import LinkSVG from '../../../../img/svg/link.svg';
 import EmailSVG from '../../../../img/svg/email.svg';
 import KeySVG from '../../../../img/svg/key.svg';
@@ -36,6 +35,7 @@ import DeleteSVG from '../../../../img/svg/delete.svg';
 import BuoySVG from '../../../../img/svg/buoy.svg';
 import MetadataKeySVG from "../../../../img/svg/metadata_key.svg";
 import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/ConfirmShareMissingMetadataKeys";
+import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 class DisplayUsersContextualMenu extends React.Component {
   /**
@@ -104,8 +104,7 @@ class DisplayUsersContextualMenu extends React.Component {
   async handlePermalinkCopy() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/users/view/${this.user.id}`;
-    await ClipBoard.copy(permalink, this.props.context.port);
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
+    await this.props.clipboardContext.copy(permalink, this.translate("The permalink has been copied to clipboard."));
     this.props.hide();
   }
 
@@ -114,9 +113,7 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   async handleUsernameCopy() {
     const username = `${this.user.username}`;
-    await ClipBoard.copy(username, this.props.context.port);
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The email has been copied to clipboard"));
-    this.props.hide();
+    await this.props.clipboardContext.copy(username, this.translate("The email has been copied to clipboard."));
   }
 
   /**
@@ -124,8 +121,7 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   async handlePublicKeyCopy() {
     const gpgkeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
-    await ClipBoard.copy(gpgkeyInfo.armored_key, this.props.context.port);
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The public key has been copied to clipboard"));
+    await this.props.clipboardContext.copy(gpgkeyInfo.armored_key, this.translate("The public key has been copied to clipboard."));
     this.props.hide();
   }
 
@@ -496,8 +492,9 @@ DisplayUsersContextualMenu.propTypes = {
   dialogContext: PropTypes.any, // the dialog context
   user: PropTypes.object, // user selected
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  clipboardContext: PropTypes.object, // the clipboard service
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withWorkflow(withDialog(withActionFeedback(withTranslation('common')(DisplayUsersContextualMenu)))));
+export default withAppContext(withWorkflow(withDialog(withClipboard(withActionFeedback(withTranslation('common')(DisplayUsersContextualMenu))))));
 

@@ -23,7 +23,6 @@ import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withDrag} from "../../../contexts/DragContext";
 import DisplayDragResource from "./DisplayDragResource";
-import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import GridTable from "../../../../shared/components/Table/GridTable";
@@ -60,6 +59,7 @@ import FavoriteSVG from "../../../../img/svg/favorite.svg";
 import CellName from "../../../../shared/components/Table/CellName";
 import CircleOffSVG from "../../../../img/svg/circle_off.svg";
 import memoize from "memoize-one";
+import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -383,8 +383,7 @@ class DisplayResourcesList extends React.Component {
    * @return {Promise<void>}
    */
   async handleCopyUsernameClick(username) {
-    await ClipBoard.copy(username, this.props.context.port);
-    this.props.actionFeedbackContext.displaySuccess(this.translate("The username has been copied to clipboard"));
+    await this.props.clipboardContext.copy(username, this.translate("The username has been copied to clipboard."));
   }
 
   /**
@@ -459,9 +458,8 @@ class DisplayResourcesList extends React.Component {
       return;
     }
 
-    await ClipBoard.copy(code, this.props.context.port);
+    await this.props.clipboardContext.copyTemporarily(code, this.translate("The TOTP has been copied to clipboard."));
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The TOTP has been copied to clipboard"));
   }
 
   /**
@@ -497,9 +495,8 @@ class DisplayResourcesList extends React.Component {
       return;
     }
 
-    await ClipBoard.copy(plaintextSecretDto.password, this.props.context.port);
+    await this.props.clipboardContext.copyTemporarily(plaintextSecretDto.password, this.translate("The password has been copied to clipboard."));
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The password has been copied to clipboard"));
   }
 
   /**
@@ -975,6 +972,7 @@ DisplayResourcesList.propTypes = {
   progressContext: PropTypes.any, // The progress context
   history: PropTypes.any,
   dragContext: PropTypes.any,
+  clipboardContext: PropTypes.object, // the clipboard service provider
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withRouter(withRbac(withActionFeedback(withContextualMenu(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withDrag(withProgress(withTranslation('common')(DisplayResourcesList)))))))))));
+export default withAppContext(withClipboard(withRouter(withRbac(withActionFeedback(withContextualMenu(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withDrag(withProgress(withTranslation('common')(DisplayResourcesList))))))))))));

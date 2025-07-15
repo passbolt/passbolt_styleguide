@@ -1903,11 +1903,13 @@ textarea.full_report {
   right: 0.3rem;
   top: 0.3rem;
 }
-.input.search .search-button-wrapper .button {
+.input.search .search-button-wrapper .button,
+.input.search .search-button-wrapper .search-icon {
   padding: 0.5rem var(--Infield-boxless-padding);
   border-radius: var(--Token-radius);
 }
-.input.search .search-button-wrapper .button svg:first-child {
+.input.search .search-button-wrapper .button svg:first-child,
+.input.search .search-button-wrapper .search-icon svg:first-child {
   width: 2rem;
   height: 2rem;
 }

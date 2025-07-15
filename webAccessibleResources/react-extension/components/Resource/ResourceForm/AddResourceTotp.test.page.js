@@ -22,6 +22,7 @@ import {
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import {ResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
 import AddResourceTotp from "./AddResourceTotp";
+import {ManagedClipboardServiceContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 /**
  * The Add resource totp component represented as a page
  */
@@ -37,7 +38,9 @@ export default class AddResourceTotpPage {
           <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
             <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
               <ResourcePasswordGeneratorContext.Provider value={props.resourcePasswordGeneratorContext}>
-                <AddResourceTotp {...props} />
+                <ManagedClipboardServiceContext.Provider value={props.clipboardContext}>
+                  <AddResourceTotp {...props} />
+                </ManagedClipboardServiceContext.Provider>
               </ResourcePasswordGeneratorContext.Provider>
             </ResourceWorkspaceContext.Provider>
           </ResourceTypesLocalStorageContext.Provider>
