@@ -80,18 +80,18 @@ describe("DisplayResourceDetails", () => {
     });
 
     it('I can copy the resource permalink', async() => {
+      expect.assertions(1);
+
       const mockContextRequest = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
       const copyClipboardMockImpl = jest.fn((_, data) => data);
       const props = defaultProps(); // The props to pass
       const page = new DisplayResourceDetailsPage(props);
 
-      expect.assertions(2);
       mockContextRequest(copyClipboardMockImpl);
       jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementation(() => {});
 
       await page.selectPermalink();
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${props.context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resourceWorkspaceContext.details.resource.id}`);
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The permalink has been copied to clipboard");
+      expect(props.clipboardContext.copy).toHaveBeenCalledWith(`${props.context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resourceWorkspaceContext.details.resource.id}`, "The permalink has been copied to clipboard.");
     });
   });
 

@@ -6,6 +6,7 @@
                 display: flex;
                 align-items: center;
                 padding: 1.6rem;
+                position: relative;
 
                 &:last-child {
                   box-shadow: none;
@@ -135,6 +136,17 @@
                     }
                   }
                 }
+            }
+
+            .property-action + .timer {
+              width: 3.2rem;
+              height: 3.2rem;
+              position: absolute;
+              right: 1.25rem;
+              top: 2.1rem;
+              --timer-delay: 0;
+              --timer-stroke-width: 1;
+              pointer-events: none;
             }
         }
     }

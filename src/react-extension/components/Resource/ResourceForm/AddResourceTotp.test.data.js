@@ -18,6 +18,7 @@ import {
   minimalResourceMetadataDto
 } from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Default props
@@ -29,6 +30,7 @@ export function defaultProps(data = {}) {
     actionFeedbackContext: defaultActionFeedbackContext(),
     onChange: jest.fn(),
     resource: defaultResourceFormDto({metadata: minimalResourceMetadataDto(), secret: {totp: defaultTotpDto({secret_key: ""})}}),
+    clipboardContext: defaultClipboardContext(),
   };
   return Object.assign(defaultData, data);
 }

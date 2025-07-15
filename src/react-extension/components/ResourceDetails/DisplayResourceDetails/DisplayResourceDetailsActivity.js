@@ -20,8 +20,8 @@ import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext"
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {Trans, withTranslation} from "react-i18next";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
-
-const LIMIT_ACTIVITIES_PER_PAGE = 5;
+import {withActionFeedback} from '../../../contexts/ActionFeedbackContext';
+import ActivitiesServiceWorkerService from "./ActivitiesServiceWorkerService";
 
 /**
  * This component display activity section of a resource
@@ -34,6 +34,7 @@ class DisplayResourceDetailsActivity extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.activitiesServiceWorkerService = new ActivitiesServiceWorkerService(props.context.port);
     this.bindCallbacks();
   }
 
@@ -123,12 +124,14 @@ class DisplayResourceDetailsActivity extends React.Component {
    * @returns {Promise<void>}
    */
   async fetch(page) {
-    const limit = LIMIT_ACTIVITIES_PER_PAGE;
-    const options = {limit, page};
-    const newActivities = await this.props.context.port.request("passbolt.actionlogs.find-all-for", "Resource", this.resource.id, options) || [];
-
-    // For the first page need to reset activities state
-    this.mergeActivities(newActivities);
+    try {
+      const newActivities = await this.activitiesServiceWorkerService.findAllFromResourceId(this.resource.id, {page}) || [];
+      // For the first page need to reset activities state
+      this.mergeActivities(newActivities);
+    } catch (error) {
+      console.error(error);
+      this.props.actionFeedbackContext.displayError(error.message);
+    }
   }
 
   /**
@@ -484,7 +487,8 @@ class DisplayResourceDetailsActivity extends React.Component {
 DisplayResourceDetailsActivity.propTypes = {
   context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.any,
+  actionFeedbackContext: PropTypes.object,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsActivity)));
+export default withAppContext(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceDetailsActivity))));

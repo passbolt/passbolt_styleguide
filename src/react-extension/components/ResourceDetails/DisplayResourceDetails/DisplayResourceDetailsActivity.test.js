@@ -24,6 +24,7 @@ import {
 } from "./DisplayResourceDetailsActivity.test.data";
 import DisplayResourceDetailsActivityPage from "./DisplayResourceDetailsActivity.test.page";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
+import {waitFor} from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -124,6 +125,25 @@ describe("See activities", () => {
       };
       await page.displayActivityList.waitForLoading(inProgressFn);
       expect(page.displayActivityList.isLoading()).toBeFalsy();
+    });
+  });
+
+  describe('As a logged in user, I should see an error displayed when there is an unexpected error', () => {
+    /**
+     * When I open the “Activity” section of the secondary sidebar
+     * And the activities are not loaded due to an unexpected error
+     * Then I should see an appropriate error message.
+     */
+    it('I should see an error toaster if the activities do not load due to an unexpected error', async() => {
+      expect.assertions(2);
+
+      const error = {message: "Unable to reach the server, an unexpected error occurred"};
+      mockContextRequest(() => Promise.reject(error));
+      page = new DisplayResourceDetailsActivityPage(context, props);
+
+      await waitFor(() => {});
+      expect(props.actionFeedbackContext.displayError).toHaveBeenCalledTimes(1);
+      expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith(error.message);
     });
   });
 });

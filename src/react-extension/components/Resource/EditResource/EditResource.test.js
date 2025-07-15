@@ -821,23 +821,21 @@ describe("See the Create Resource", () => {
       });
 
       it('As a signed-in user I should be able to copy a resource totp from totp code', async() => {
-        expect.assertions(2);
+        expect.assertions(1);
 
         await page.click(page.resourceTotpCode);
         // expectations
-        expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
-        expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
+        expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledTimes(1);
       });
 
       it('As a signed-in user I should be able to copy a resource totp from totp button', async() => {
-        expect.assertions(3);
+        expect.assertions(2);
 
         expect(page.exists()).toBeTruthy();
         await page.click(page.copyTotpButton);
 
         // expectations
-        expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
-        expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
+        expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledTimes(1);
       });
     });
 

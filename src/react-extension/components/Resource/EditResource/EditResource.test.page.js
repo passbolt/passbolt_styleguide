@@ -26,6 +26,7 @@ import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import {MemoryRouter} from "react-router-dom";
 import DialogContextProvider from "../../../contexts/DialogContext";
+import {ManagedClipboardServiceContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 /**
  * The Edit Resource component represented as a page
  */
@@ -49,7 +50,9 @@ export default class EditResourcePage {
                   <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
                     <ResourcePasswordGeneratorContext.Provider value={props.resourcePasswordGeneratorContext}>
                       <ManageDialogs/>
-                      <EditResource {...props}/>
+                      <ManagedClipboardServiceContext.Provider value={props.clipboardContext}>
+                        <EditResource {...props}/>
+                      </ManagedClipboardServiceContext.Provider>
                     </ResourcePasswordGeneratorContext.Provider>
                   </ResourceWorkspaceContext.Provider>
                 </ResourceTypesLocalStorageContext.Provider>

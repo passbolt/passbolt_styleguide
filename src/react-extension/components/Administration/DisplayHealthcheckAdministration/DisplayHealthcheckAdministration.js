@@ -89,6 +89,15 @@ class DisplayHealthcheckAdministration extends Component {
     return this.canIUse('sso') && Boolean(this.healthCheckData.sso);
   }
 
+  /**
+   * Returns true if the "Metadata" section should be displayed.
+   *
+   * @returns {boolean}
+   */
+  get shouldDisplayMetadata() {
+    return this.canIUse('metadata') && Boolean(this.healthCheckData.metadata);
+  }
+
   render() {
     const healthcheckData = this.healthCheckData;
 
@@ -1214,6 +1223,28 @@ class DisplayHealthcheckAdministration extends Component {
       }
     };
 
+    const isMetadataEncryptionWorking = () => {
+      if (healthcheckData.metadata.canDecryptMetadataPrivateKey === true) {
+        return (
+          <span className='healthcheck-success'>
+            <HealthcheckSuccessSVG />
+            <Trans>The server is able to decrypt the metadata private key.</Trans>
+          </span>
+        );
+      } else {
+        return (
+          <span className='healthcheck-warning'>
+            <TriangleAlertSVG />
+            <Trans>Unable to decrypt the metadata private key.</Trans>
+            {/* wait PB-43710 for clearer definition of metadata healthcheck */}
+            <Tooltip message={this.props.t("For more information, please run the health check from the command line on the server.")}>
+              <InfoSVG className="baseline svg-icon"/>
+            </Tooltip>
+          </span>
+        );
+      }
+    };
+
     const renderHealthcheck = () => {
       if (!healthcheckData || this.props.adminHealthcheckContext.isProcessing())  {
         return (<SpinnerSVG/>);
@@ -1317,6 +1348,15 @@ class DisplayHealthcheckAdministration extends Component {
                 <h4><Trans>SSO</Trans></h4>
                 <div className="healthcheck-sso-section">
                   <div>{isSSlCertificationValidationEnabled()}</div>
+                </div>
+              </>
+            }
+
+            {this.shouldDisplayMetadata &&
+              <>
+                <h4><Trans>Metadata</Trans></h4>
+                <div className="healthcheck-metadata-section">
+                  <div>{isMetadataEncryptionWorking()}</div>
                 </div>
               </>
             }

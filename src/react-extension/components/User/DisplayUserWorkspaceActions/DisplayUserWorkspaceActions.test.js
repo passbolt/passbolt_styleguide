@@ -37,9 +37,6 @@ beforeEach(() => {
 
 describe("Display User Workspace Actions", () => {
   let page; // The page to test against
-  beforeEach(() => {
-
-  });
 
   it('As AD I should edit a selected user', async() => {
     expect.assertions(1);
@@ -85,15 +82,14 @@ describe("Display User Workspace Actions", () => {
   });
 
   it('As LU I can click to copy a selected user permalink', async() => {
-    expect.assertions(2);
+    expect.assertions(1);
     const props = propsUserRole();
     page = new DisplayUserWorkspaceActionsPage(props);
     await waitFor(() => {});
     await page.copyActions();
     await page.copyPermalink();
 
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${props.context.userSettings.getTrustedDomain()}/app/users/view/${props.userWorkspaceContext.selectedUsers[0].id}`);
-    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The permalink has been copied to clipboard");
+    expect(props.clipboardContext.copy).toHaveBeenCalledWith(`${props.context.userSettings.getTrustedDomain()}/app/users/view/${props.userWorkspaceContext.selectedUsers[0].id}`, "The permalink has been copied to clipboard.");
   });
 
   it('As AD I should copy a selected user email', async() => {
@@ -105,15 +101,14 @@ describe("Display User Workspace Actions", () => {
   });
 
   it('As LU I can click to copy a selected user email', async() => {
-    expect.assertions(2);
+    expect.assertions(1);
     const props = propsUserRole();
     page = new DisplayUserWorkspaceActionsPage(props);
     await waitFor(() => {});
     await page.copyActions();
     await page.copyEmailAddress();
 
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.userWorkspaceContext.selectedUsers[0].username);
-    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The email address has been copied to clipboard");
+    expect(props.clipboardContext.copy).toHaveBeenCalledWith(props.userWorkspaceContext.selectedUsers[0].username, "The email address has been copied to clipboard.");
   });
 
   it('As AD I should copy a selected user public key', async() => {
@@ -133,7 +128,7 @@ describe("Display User Workspace Actions", () => {
   });
 
   it('As AD I can click to copy a selected user public key', async() => {
-    expect.assertions(3);
+    expect.assertions(2);
     const props = propsWithSelectedActiveUser();
     const publicKey = pgpKeys.ada.public;
     jest.spyOn(props.context.port, 'request').mockImplementation(() => ({armored_key: publicKey}));
@@ -143,8 +138,7 @@ describe("Display User Workspace Actions", () => {
     await page.copyPublicKey();
 
     expect(props.context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", props.userWorkspaceContext.selectedUsers[0].id);
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(publicKey);
-    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The public key has been copied to clipboard");
+    expect(props.clipboardContext.copy).toHaveBeenCalledWith(publicKey, "The public key has been copied to clipboard.");
   });
 
   it('As LU I should copy an user information with user role', async() => {
