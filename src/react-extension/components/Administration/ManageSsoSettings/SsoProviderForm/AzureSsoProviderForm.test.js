@@ -39,7 +39,7 @@ describe("AzureSsoProviderForm", () => {
   });
 
   it("Should copy the redirect URL in the clipboard", async() => {
-    expect.assertions(5);
+    expect.assertions(3);
     const props = defaultAzureProps();
     const page = new AzureSsoProviderFormPage(props);
     page.clickOn(page.redirectUrlButton);
@@ -47,10 +47,8 @@ describe("AzureSsoProviderForm", () => {
 
     const expectedRedirectUrl = "http://localhost/sso/azure/redirect";
     expect(page.redirect_url.value).toStrictEqual(expectedRedirectUrl);
-    expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expectedRedirectUrl);
-    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
-    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The redirection URL has been copied to the clipboard.");
+    expect(props.clipboardContext.copy).toHaveBeenCalledTimes(1);
+    expect(props.clipboardContext.copy).toHaveBeenCalledWith(expectedRedirectUrl, "The redirection URL has been copied to the clipboard.");
   });
 
   it("Should toggle the advanced settings", async() => {

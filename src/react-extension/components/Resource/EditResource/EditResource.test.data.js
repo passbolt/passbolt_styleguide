@@ -30,12 +30,9 @@ import {defaultPasswordPoliciesContext} from "../../../../shared/context/Passwor
 import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
 import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
-import {
-  defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto
-} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
-import {
-  defaultResourceMetadataDto
-} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import {defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import {defaultResourceMetadataDto} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 import {v4 as uuidv4} from "uuid";
 
 
@@ -65,6 +62,7 @@ export function defaultProps(data = {}) {
     }),
     onClose: jest.fn(),
     dialogContext: defaultDialogContext(),
+    clipboardContext: defaultClipboardContext(),
   };
 
   return Object.assign(defaultData, data);

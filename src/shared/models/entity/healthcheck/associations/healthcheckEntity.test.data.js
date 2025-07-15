@@ -21,6 +21,7 @@ import {defaultCoreData} from "./coreEntity.data";
 import {defaultSmtpSettingsData} from "./smtpSettingsEntity.data";
 import {defaultDirectorySyncData} from "./directorySyncEntity.data";
 import {defaultSsoData} from "./ssoEntity.data";
+import {defaultMetadataData} from "./metadataEntity.data";
 
 export const defaultHealthcheckData = (data = {}) => {
   const defaultData = {
@@ -34,6 +35,7 @@ export const defaultHealthcheckData = (data = {}) => {
     "smtpSettings": defaultSmtpSettingsData(),
     "directorySync": defaultDirectorySyncData(),
     "sso": defaultSsoData(),
+    "metadata": defaultMetadataData(),
     ...data,
   };
 

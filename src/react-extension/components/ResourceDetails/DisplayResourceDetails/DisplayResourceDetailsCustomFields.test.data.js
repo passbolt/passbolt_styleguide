@@ -22,6 +22,7 @@ import {resourceTypesCollectionDto} from "../../../../shared/models/entity/resou
 import {updatePermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
 import {defaultAppContext, defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultUserRbacContext, denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Default props
@@ -34,6 +35,7 @@ export function defaultProps(props) {
     rbacContext: defaultUserRbacContext(props.rbacContext),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(props.resourceWorkspaceContext),
+    clipboardContext: defaultClipboardContext(),
   };
 }
 

@@ -66,8 +66,12 @@ describe("Generate password", () => {
       expect.assertions(1);
       const props = withLastGeneratedPasswordProps(); // The props to pass
       const page = new GeneratePasswordTestPage(props);
+
+      jest.spyOn(props.context.port, "request").mockImplementation(() => {});
+
       await page.copyPassword();
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(page.password);
+
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy-temporarily', page.password);
     });
 
     it('As LU I can change the password generator configuration', async() => {

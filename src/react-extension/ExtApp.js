@@ -75,6 +75,7 @@ import ResourceTypesLocalStorageContextProvider from "../shared/context/Resource
 import MetadataTypesSettingsLocalStorageContextProvider from "../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import HandleConfirmMetadataKeyEntryEvents
   from "./components/Metadata/HandleConfirmMetadataKeyEntryEvents/HandleConfirmMetadataKeyEntryEvents";
+import ManagedClipboardServiceProvider from "./contexts/Clipboard/ManagedClipboardServiceProvider";
 
 /**
  * The passbolt application served by the browser extension.
@@ -99,149 +100,151 @@ class ExtApp extends Component {
                         <ActionFeedbackContextProvider>
                           <DialogContextProvider>
                             <AnnouncementContextProvider>
-                              <ContextualMenuContextProvider>
-                                <LoadingContextProvider>
-                                  <ProgressContextProvider>
-                                    { /* Action Feedback Management */}
-                                    <DisplayActionFeedbacks/>
+                              <ManagedClipboardServiceProvider>
+                                <ContextualMenuContextProvider>
+                                  <LoadingContextProvider>
+                                    <ProgressContextProvider>
+                                      { /* Action Feedback Management */}
+                                      <DisplayActionFeedbacks/>
 
-                                    { /* Dialogs Management */}
-                                    <HandlePassphraseEntryEvents/>
-                                    <HandleConfirmMetadataKeyEntryEvents/>
-                                    <HandleFolderMoveStrategyEvents/>
-                                    <HandleProgressEvents/>
-                                    <HandleSessionExpired/>
+                                      { /* Dialogs Management */}
+                                      <HandlePassphraseEntryEvents/>
+                                      <HandleConfirmMetadataKeyEntryEvents/>
+                                      <HandleFolderMoveStrategyEvents/>
+                                      <HandleProgressEvents/>
+                                      <HandleSessionExpired/>
 
-                                    { /* Announcement Management */}
-                                    {appContext.loggedInUser && appContext.loggedInUser.role.name === "admin"
-                                      && appContext.siteSettings.canIUse('ee')
-                                      && <HandleSubscriptionAnnouncement/>}
+                                      { /* Announcement Management */}
+                                      {appContext.loggedInUser && appContext.loggedInUser.role.name === "admin"
+                                        && appContext.siteSettings.canIUse('ee')
+                                        && <HandleSubscriptionAnnouncement/>}
 
-                                    <Router>
-                                      <NavigationContextProvider>
-                                        { /* Account Recovery Management */}
-                                        {appContext.loggedInUser && (appContext.siteSettings.canIUse('accountRecovery') || appContext.siteSettings.canIUse('mfaPolicies'))
-                                          && <HandleStatusCheck/>}
-                                        <HandleExtAppRouteChanged/>
-                                        <Switch>
-                                          { /* The application first load route points to an html document */ }
-                                          <Route path="/webAccessibleResources/passbolt-iframe-app.html" component={HandleApplicationFirstLoadRoute} />
-                                          { /* The following routes are not handled by the browser extension application. */}
-                                          <Route exact path={[
-                                            "/app/administration/mfa",
-                                            "/app/administration/users-directory",
-                                            "/app/administration/email-notification",
-                                            "/app/administration/smtp-settings",
-                                            "/app/administration/healthcheck",
-                                          ]}/>
-                                          {/* Passwords workspace */}
-                                          <Route path={[
-                                            "/app/folders/view/:filterByFolderId",
-                                            "/app/passwords/view/:selectedResourceId",
-                                            "/app/passwords/filter/:filterType",
-                                            "/app/passwords",
-                                          ]}>
-                                            <PasswordExpirySettingsContextProvider>
-                                              <ResourceWorkspaceContextProvider>
-                                                <MetadataTypesSettingsLocalStorageContextProvider>
-                                                  <ResourceTypesLocalStorageContextProvider>
-                                                    <ResourcePasswordGeneratorContextProvider>
-                                                      <ManageDialogs/>
-                                                      <ManageWorkflows/>
-                                                      <ManageContextualMenu/>
-                                                      <ManageAnnouncements/>
-                                                      <DragContextProvider>
-                                                        <div id="container" className="page password">
-                                                          <div id="app" className="app" tabIndex="1000">
-                                                            <DisplayResourcesWorkspace/>
+                                      <Router>
+                                        <NavigationContextProvider>
+                                          { /* Account Recovery Management */}
+                                          {appContext.loggedInUser && (appContext.siteSettings.canIUse('accountRecovery') || appContext.siteSettings.canIUse('mfaPolicies'))
+                                            && <HandleStatusCheck/>}
+                                          <HandleExtAppRouteChanged/>
+                                          <Switch>
+                                            { /* The application first load route points to an html document */ }
+                                            <Route path="/webAccessibleResources/passbolt-iframe-app.html" component={HandleApplicationFirstLoadRoute} />
+                                            { /* The following routes are not handled by the browser extension application. */}
+                                            <Route exact path={[
+                                              "/app/administration/mfa",
+                                              "/app/administration/users-directory",
+                                              "/app/administration/email-notification",
+                                              "/app/administration/smtp-settings",
+                                              "/app/administration/healthcheck",
+                                            ]}/>
+                                            {/* Passwords workspace */}
+                                            <Route path={[
+                                              "/app/folders/view/:filterByFolderId",
+                                              "/app/passwords/view/:selectedResourceId",
+                                              "/app/passwords/filter/:filterType",
+                                              "/app/passwords",
+                                            ]}>
+                                              <PasswordExpirySettingsContextProvider>
+                                                <ResourceWorkspaceContextProvider>
+                                                  <MetadataTypesSettingsLocalStorageContextProvider>
+                                                    <ResourceTypesLocalStorageContextProvider>
+                                                      <ResourcePasswordGeneratorContextProvider>
+                                                        <ManageDialogs/>
+                                                        <ManageWorkflows/>
+                                                        <ManageContextualMenu/>
+                                                        <ManageAnnouncements/>
+                                                        <DragContextProvider>
+                                                          <div id="container" className="page password">
+                                                            <div id="app" className="app" tabIndex="1000">
+                                                              <DisplayResourcesWorkspace/>
+                                                            </div>
                                                           </div>
-                                                        </div>
-                                                      </DragContextProvider>
-                                                    </ResourcePasswordGeneratorContextProvider>
-                                                  </ResourceTypesLocalStorageContextProvider>
-                                                </MetadataTypesSettingsLocalStorageContextProvider>
-                                              </ResourceWorkspaceContextProvider>
-                                            </PasswordExpirySettingsContextProvider>
-                                          </Route>
-                                          {/* Users workspace */}
-                                          <Route path={[
-                                            "/app/account-recovery/requests/review/:accountRecoveryRequestId",
-                                            "/app/groups/view/:selectedGroupId",
-                                            "/app/groups/edit/:selectedGroupId",
-                                            "/app/users/view/:selectedUserId",
-                                            "/app/users",
-                                          ]}>
-                                            <UserWorkspaceContextProvider>
-                                              <ManageDialogs/>
-                                              <ManageWorkflows/>
-                                              <ManageContextualMenu/>
-                                              <ManageAnnouncements/>
-                                              <div id="container" className="page user">
-                                                <div id="app" className="app" tabIndex="1000">
-                                                  <DisplayUserWorkspace/>
-                                                </div>
-                                              </div>
-                                            </UserWorkspaceContextProvider>
-                                          </Route>
-                                          {/* User settings workspace */}
-                                          <Route path={["/app/settings", "/app/settings/mfa/:provider"]}>
-                                            <UserSettingsContextProvider>
-                                              <UserPassphrasePoliciesContextProvider>
+                                                        </DragContextProvider>
+                                                      </ResourcePasswordGeneratorContextProvider>
+                                                    </ResourceTypesLocalStorageContextProvider>
+                                                  </MetadataTypesSettingsLocalStorageContextProvider>
+                                                </ResourceWorkspaceContextProvider>
+                                              </PasswordExpirySettingsContextProvider>
+                                            </Route>
+                                            {/* Users workspace */}
+                                            <Route path={[
+                                              "/app/account-recovery/requests/review/:accountRecoveryRequestId",
+                                              "/app/groups/view/:selectedGroupId",
+                                              "/app/groups/edit/:selectedGroupId",
+                                              "/app/users/view/:selectedUserId",
+                                              "/app/users",
+                                            ]}>
+                                              <UserWorkspaceContextProvider>
                                                 <ManageDialogs/>
+                                                <ManageWorkflows/>
+                                                <ManageContextualMenu/>
                                                 <ManageAnnouncements/>
-                                                <div id="container" className="page settings">
+                                                <div id="container" className="page user">
                                                   <div id="app" className="app" tabIndex="1000">
-                                                    <DisplayUserSettingsWorkspace/>
+                                                    <DisplayUserWorkspace/>
                                                   </div>
                                                 </div>
-                                              </UserPassphrasePoliciesContextProvider>
-                                            </UserSettingsContextProvider>
-                                          </Route>
-                                          {/* SSO, Subscription and Account Recovery settings */}
-                                          <Route exact path={[
-                                            "/app/administration",
-                                            "/app/administration/subscription",
-                                            "/app/administration/account-recovery",
-                                            "/app/administration/sso",
-                                            "/app/administration/password-policies",
-                                            "/app/administration/user-passphrase-policies",
-                                            "/app/administration/password-expiry",
-                                            "/app/administration/content-types/metadata",
-                                            "/app/administration/content-types/metadata-key",
-                                            "/app/administration/migrate-metadata",
-                                            "/app/administration/allow-content-types",
-                                          ]}>
-                                            <AdministrationWorkspaceContextProvider>
-                                              <AdminAccountRecoveryContextProvider>
-                                                <AdminSubscriptionContextProvider>
-                                                  <AdminSsoContextProvider>
-                                                    <AdminPasswordPoliciesContextProvider>
-                                                      <AdministrationUserPassphrasePoliciesContextProvider>
-                                                        <AdministrationPasswordExpiryContextProvider>
-                                                          <ResourceTypesLocalStorageContextProvider>
-                                                            <ManageDialogs/>
-                                                            <ManageWorkflows/>
-                                                            <AdministrationWorkspace/>
-                                                          </ResourceTypesLocalStorageContextProvider>
-                                                        </AdministrationPasswordExpiryContextProvider>
-                                                      </AdministrationUserPassphrasePoliciesContextProvider>
-                                                    </AdminPasswordPoliciesContextProvider>
-                                                  </AdminSsoContextProvider>
-                                                </AdminSubscriptionContextProvider>
-                                              </AdminAccountRecoveryContextProvider>
-                                            </AdministrationWorkspaceContextProvider>
-                                          </Route>
-                                          {/* Fallback */}
-                                          <Route path="/">
-                                            <HandleRouteFallback/>
-                                          </Route>
-                                        </Switch>
-                                      </NavigationContextProvider>
-                                    </Router>
-                                    <ManageLoading/>
-                                  </ProgressContextProvider>
-                                </LoadingContextProvider>
-                              </ContextualMenuContextProvider>
+                                              </UserWorkspaceContextProvider>
+                                            </Route>
+                                            {/* User settings workspace */}
+                                            <Route path={["/app/settings", "/app/settings/mfa/:provider"]}>
+                                              <UserSettingsContextProvider>
+                                                <UserPassphrasePoliciesContextProvider>
+                                                  <ManageDialogs/>
+                                                  <ManageAnnouncements/>
+                                                  <div id="container" className="page settings">
+                                                    <div id="app" className="app" tabIndex="1000">
+                                                      <DisplayUserSettingsWorkspace/>
+                                                    </div>
+                                                  </div>
+                                                </UserPassphrasePoliciesContextProvider>
+                                              </UserSettingsContextProvider>
+                                            </Route>
+                                            {/* SSO, Subscription and Account Recovery settings */}
+                                            <Route exact path={[
+                                              "/app/administration",
+                                              "/app/administration/subscription",
+                                              "/app/administration/account-recovery",
+                                              "/app/administration/sso",
+                                              "/app/administration/password-policies",
+                                              "/app/administration/user-passphrase-policies",
+                                              "/app/administration/password-expiry",
+                                              "/app/administration/content-types/metadata",
+                                              "/app/administration/content-types/metadata-key",
+                                              "/app/administration/migrate-metadata",
+                                              "/app/administration/allow-content-types",
+                                            ]}>
+                                              <AdministrationWorkspaceContextProvider>
+                                                <AdminAccountRecoveryContextProvider>
+                                                  <AdminSubscriptionContextProvider>
+                                                    <AdminSsoContextProvider>
+                                                      <AdminPasswordPoliciesContextProvider>
+                                                        <AdministrationUserPassphrasePoliciesContextProvider>
+                                                          <AdministrationPasswordExpiryContextProvider>
+                                                            <ResourceTypesLocalStorageContextProvider>
+                                                              <ManageDialogs/>
+                                                              <ManageWorkflows/>
+                                                              <AdministrationWorkspace/>
+                                                            </ResourceTypesLocalStorageContextProvider>
+                                                          </AdministrationPasswordExpiryContextProvider>
+                                                        </AdministrationUserPassphrasePoliciesContextProvider>
+                                                      </AdminPasswordPoliciesContextProvider>
+                                                    </AdminSsoContextProvider>
+                                                  </AdminSubscriptionContextProvider>
+                                                </AdminAccountRecoveryContextProvider>
+                                              </AdministrationWorkspaceContextProvider>
+                                            </Route>
+                                            {/* Fallback */}
+                                            <Route path="/">
+                                              <HandleRouteFallback/>
+                                            </Route>
+                                          </Switch>
+                                        </NavigationContextProvider>
+                                      </Router>
+                                      <ManageLoading/>
+                                    </ProgressContextProvider>
+                                  </LoadingContextProvider>
+                                </ContextualMenuContextProvider>
+                              </ManagedClipboardServiceProvider>
                             </AnnouncementContextProvider>
                           </DialogContextProvider>
                         </ActionFeedbackContextProvider>

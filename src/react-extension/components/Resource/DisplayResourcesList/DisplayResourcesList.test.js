@@ -244,19 +244,23 @@ describe("Display Resources", () => {
 
   describe('As LU, I should copy the username.', () => {
     it('As LU, I should be able to copy the username of a resource', async() => {
+      expect.assertions(1);
+
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
+
       await waitFor(() => {});
+
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
+
       await page.resource(1).selectUsername();
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[0].metadata.username);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(props.clipboardContext.copy).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[0].metadata.username, "The username has been copied to clipboard.");
     });
   });
 
   describe('As LU, I should copy the secret.', () => {
     it('As LU, I should be able to copy the secret of resource', async() => {
-      expect.assertions(6);
+      expect.assertions(4);
       const props = propsWithFilteredResources();
       const totp = defaultTotpViewModelDto();
       const page = new DisplayResourcesListPage(props);
@@ -266,15 +270,13 @@ describe("Display Resources", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
       await page.resource(1).selectPassword();
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.filteredResources[0].id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password');
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith('secret-password', "The password has been copied to clipboard.");
 
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
       await page.resource(4).selectTotp();
       const code = TotpCodeGeneratorService.generate(totp);
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.filteredResources[3].id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(code);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(code, "The TOTP has been copied to clipboard.");
     });
 
     it('As LU, I should not be able to copy the secret of resource  if denied by RBAC.', async() => {

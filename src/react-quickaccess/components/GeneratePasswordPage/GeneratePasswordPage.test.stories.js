@@ -17,6 +17,7 @@ import React from "react";
 import GeneratePasswordPage from "./GeneratePasswordPage";
 import {defaultPrepareResourceContext} from "../../contexts/PrepareResourceContext.test.data";
 import AppContext from "../../../shared/context/AppContext/AppContext";
+import {defaultAppContext} from "../../contexts/AppContext.test.data";
 
 export default {
   title: 'Components/QuickAccess/GeneratePasswordPage',
@@ -34,6 +35,7 @@ export default {
 export const Initial = {
   args: {
     prepareResourceContext: defaultPrepareResourceContext(),
+    context: defaultAppContext(),
     onClose: () => {},
     t: text => text
   },

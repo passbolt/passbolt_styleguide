@@ -75,20 +75,20 @@ describe("DisplayResourceDetailsPassword", () => {
 
   describe(' As LU I can copy username of a resource to clipboard', () => {
     it('AS LU, I should be able to copy the username of a resource to clipboard', async() => {
-      expect.assertions(3);
+      expect.assertions(1);
       page = new DisplayResourceDetailsPasswordPage(props);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       await page.click(page.username);
 
-      expect.assertions(2);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resourceWorkspaceContext.details.resource.metadata.username);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The username has been copied to clipboard");
+      expect(props.clipboardContext.copy).toHaveBeenCalledWith(props.resourceWorkspaceContext.details.resource.metadata.username, "The username has been copied to clipboard.");
     });
   });
 
   describe(' As LU I can copy a secret of a resource to clipboard', () => {
     it('AS LU, I should be able to copy the secret of a resource to clipboard', async() => {
+      expect.assertions(2);
+
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
       mockContextRequest(copyClipboardMockImpl);
@@ -97,10 +97,8 @@ describe("DisplayResourceDetailsPassword", () => {
 
       await page.click(page.password);
 
-      expect.assertions(3);
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.secret.find-by-resource-id", props.resourceWorkspaceContext.details.resource.id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy');
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The secret has been copied to clipboard");
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith('secret-copy', "The secret has been copied to clipboard.");
     });
 
     it('AS LU, I cannot copy secret of resource if denied by RBAC', async() => {

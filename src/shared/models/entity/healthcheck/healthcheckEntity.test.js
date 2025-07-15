@@ -14,7 +14,14 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import HealthcheckEntity from "./healthcheckEntity";
-import {defaultHealthcheckData, defaultHealthcheckAirgappedData, defaultHealthcheckCEdata, defaultHealthcheckDataWithoutDirectorySyncAndSso, defaultHealthcheckDataWithoutDirectorySync, defaultHealthcheckDataWithoutSso} from "./associations/healthcheckEntity.test.data";
+import {
+  defaultHealthcheckData,
+  defaultHealthcheckAirgappedData,
+  defaultHealthcheckCEdata,
+  defaultHealthcheckDataWithoutDirectorySyncAndSso,
+  defaultHealthcheckDataWithoutDirectorySync,
+  defaultHealthcheckDataWithoutSso
+} from "./associations/healthcheckEntity.test.data";
 import healthcheckEntity from "./healthcheckEntity";
 import DatabaseEntity from "./associations/databaseEntity";
 import SslEntity from "./associations/sslEntity";
@@ -26,6 +33,7 @@ import CoreEntity from "./associations/coreEntity";
 import SmtpSettingsEntity from "./associations/smtpSettingsEntity";
 import DirectorySyncEntity from "./associations/directorySyncEntity";
 import SsoEntity from "./associations/ssoEntity";
+import MetadataEntity from "./associations/metadataEntity";
 
 describe("HealthcheckEntity", () => {
   describe("HealthcheckEntity:constructor", () => {
@@ -412,6 +420,16 @@ describe("HealthcheckEntity", () => {
       const ssoEntity = new SsoEntity(ssoDTO);
 
       expect(ssoEntity.sslHostVerification).toBeFalsy();
+    });
+
+    it('it should create a metadataEntity with all properties', () => {
+      const metadataDto = {
+        "canDecryptMetadataPrivateKey": true
+      };
+
+      const metadataEntity = new MetadataEntity(metadataDto);
+
+      expect(metadataEntity.canDecryptMetadataPrivateKey).toStrictEqual(true);
     });
   });
 });
