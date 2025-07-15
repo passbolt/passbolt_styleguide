@@ -558,7 +558,7 @@ class DisplayMigrateMetadataAdministration extends Component {
           <div className="sidebar-help-section">
             <h3><Trans>Need help?</Trans></h3>
             <p><Trans>For more information about the content type support and migration, checkout the dedicated page on the official website.</Trans></p>
-            <a className="button" target="_blank" rel="noopener noreferrer" href="https://passbolt.com/docs" >
+            <a className="button" target="_blank" rel="noopener noreferrer" href="https://passbolt.com/docs/admin/metadata-encryption/migrate-metadata/" >
               <InfoSVG/>
               <span><Trans>Read the documentation</Trans></span>
             </a>
