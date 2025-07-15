@@ -74,7 +74,7 @@ class SearchBar extends Component {
   render() {
     return (
       <div className="col2 search-wrapper">
-        <form className="search">
+        <div className="search">
           <div className={`input search required ${this.props.disabled ? 'disabled' : ''}`}>
             <label className="visuallyhidden"><Trans>Search</Trans></label>
             <input ref={this.searchInputRef} className="required" type="search"
@@ -95,7 +95,7 @@ class SearchBar extends Component {
               }
             </div>
           </div>
-        </form>
+        </div>
       </div>
     );
   }
