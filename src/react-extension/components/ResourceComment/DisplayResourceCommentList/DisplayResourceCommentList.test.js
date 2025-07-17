@@ -18,6 +18,7 @@
 
 import {commentsMock, defaultAppContext, defaultProps} from "./DisplayResourceCommentList.test.data";
 import DisplayResourceCommentListPage from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetailsComment.test.page";
+import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -103,6 +104,26 @@ describe("See comments", () => {
       };
       await page.displayCommentList.waitForLoading(inProgressFn);
       expect(page.displayCommentList.isLoading()).toBeFalsy();
+    });
+  });
+
+  describe('As a logged in user, I should see an error displayed when there is an unexpected error', () => {
+    /**
+     * When I open the Comments section of the secondary sidebar
+     * And the comments are not loaded due to an unexpected error
+     * Then I should see an appropriate error message.
+     */
+    it('I should see an error toaster if the comments do not load due to an unexpected error', async() => {
+      expect.assertions(1);
+
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+
+      const error = {message: "Unable to reach the server, an unexpected error occurred"};
+      mockContextRequest(() => Promise.reject(error));
+      page = new DisplayResourceCommentListPage(context, props);
+
+      await page.title.click();
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(error.message);
     });
   });
 });
