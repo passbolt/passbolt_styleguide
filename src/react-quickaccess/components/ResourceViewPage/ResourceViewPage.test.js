@@ -137,7 +137,7 @@ describe("ResourceViewPage", () => {
       await page.click(page.password);
 
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.context.storage.local.get(["resources"]).resources[0].id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-decrypted');
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy-temporarily', 'secret-decrypted');
     });
 
     it('As LU, I should be able to copy the secret password of resource by clicking on the copy icon', async() => {
@@ -150,7 +150,7 @@ describe("ResourceViewPage", () => {
       await page.click(page.copyPasswordButton);
 
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.context.storage.local.get(["resources"]).resources[0].id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-decrypted');
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy-temporarily', 'secret-decrypted');
     });
 
     it('As LU, I should not be able to copy the secret password of resource  if denied by RBAC.', async() => {
@@ -179,7 +179,7 @@ describe("ResourceViewPage", () => {
       const code = TotpCodeGeneratorService.generate(totp);
 
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.context.storage.local.get(["resources"]).resources[0].id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(code);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy-temporarily', code);
     });
 
     it('As LU, I should be able to copy the secret totp of resource by clicking on the copy icon', async() => {
@@ -194,7 +194,7 @@ describe("ResourceViewPage", () => {
       const code = TotpCodeGeneratorService.generate(totp);
 
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.context.storage.local.get(["resources"]).resources[0].id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(code);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy-temporarily', code);
     });
 
     it('As LU, I should not be able to copy the secret totp of resource  if denied by RBAC.', async() => {

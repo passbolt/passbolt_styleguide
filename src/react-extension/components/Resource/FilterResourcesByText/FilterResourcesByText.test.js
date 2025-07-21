@@ -45,7 +45,8 @@ describe("See Resource SearchBar", () => {
       expect(page.displaySearchBar.exists()).toBeTruthy();
       expect(page.displaySearchBar.label.textContent).toBe("Search");
       expect(page.displaySearchBar.inputText).not.toBeNull();
-      expect(page.displaySearchBar.button).not.toBeNull();
+      expect(page.displaySearchBar.button).toBeNull();
+      expect(page.displaySearchBar.searchIcon).toBeNull();
     });
 
     it('I should be able to search', async() => {
@@ -59,6 +60,22 @@ describe("See Resource SearchBar", () => {
       };
       await waitFor(() => {
         expect(props.history.push).toBeCalledWith({pathname, state});
+      });
+    });
+
+    it('I should see a close button when I type at least one character', async() => {
+      page.displaySearchBar.searchText("searchText");
+      await waitFor(() => {
+        expect(page.displaySearchBar.button.textContent).toBe("Clear");
+        expect(page.displaySearchBar.searchIcon).toBeNull();
+      });
+    });
+
+    it('I should not see a close button when I delete all characters inside the search field', async() => {
+      page.displaySearchBar.searchText("");
+      await waitFor(() => {
+        expect(page.displaySearchBar.inputText.value).toStrictEqual("");
+        expect(page.displaySearchBar.button).toBeNull();
       });
     });
   });

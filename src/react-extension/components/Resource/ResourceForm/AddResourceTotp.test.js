@@ -163,7 +163,7 @@ describe("AddResourceTotp", () => {
 
   describe('As LU I can copy a valid totp', () => {
     it('As LU I can copy the totp from the code.', async() => {
-      expect.assertions(4);
+      expect.assertions(3);
 
       const props = defaultProps(defaultResourceFormDto({resource: {secret: {totp: defaultTotpDto()}}}));
       page = new AddResourceTotpPage(props);
@@ -172,13 +172,12 @@ describe("AddResourceTotp", () => {
       await page.click(page.resourceTotpCode);
       const code = TotpCodeGeneratorService.generate(props.resource.secret.totp);
 
-      expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(code);
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The TOTP has been copied to clipboard");
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledTimes(1);
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(code, "The TOTP has been copied to clipboard.");
     });
 
     it('As LU I can copy the totp from the button.', async() => {
-      expect.assertions(4);
+      expect.assertions(3);
 
       const props = defaultProps(defaultResourceFormDto({resource: {secret: {totp: defaultTotpDto()}}}));
       page = new AddResourceTotpPage(props);
@@ -187,9 +186,8 @@ describe("AddResourceTotp", () => {
       await page.click(page.copyTotpButton);
       const code = TotpCodeGeneratorService.generate(props.resource.secret.totp);
 
-      expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(code);
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The TOTP has been copied to clipboard");
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledTimes(1);
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(code, "The TOTP has been copied to clipboard.");
     });
 
     it('As LU I cannot copy an invalid totp', async() => {

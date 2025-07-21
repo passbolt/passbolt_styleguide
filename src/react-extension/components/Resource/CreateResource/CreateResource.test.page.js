@@ -26,6 +26,7 @@ import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import {MemoryRouter} from "react-router-dom";
 import DialogContextProvider from "../../../contexts/DialogContext";
+import {ManagedClipboardServiceContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 /**
  * The Create Resource component represented as a page
  */
@@ -43,18 +44,20 @@ export default class CreateResourcePage {
           "/app/passwords",
         ]}>
           <AppContext.Provider value={props.context}>
-            <DialogContextProvider>
-              <ActionFeedbackContext.Provider value={props.actionFeedbackContext}>
-                <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
-                  <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
-                    <ResourcePasswordGeneratorContext.Provider value={props.resourcePasswordGeneratorContext}>
-                      <ManageDialogs/>
-                      <CreateResource {...props}/>
-                    </ResourcePasswordGeneratorContext.Provider>
-                  </ResourceWorkspaceContext.Provider>
-                </ResourceTypesLocalStorageContext.Provider>
-              </ActionFeedbackContext.Provider>
-            </DialogContextProvider>
+            <ManagedClipboardServiceContext.Provider value={props.clipboardContext}>
+              <DialogContextProvider>
+                <ActionFeedbackContext.Provider value={props.actionFeedbackContext}>
+                  <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
+                    <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
+                      <ResourcePasswordGeneratorContext.Provider value={props.resourcePasswordGeneratorContext}>
+                        <ManageDialogs/>
+                        <CreateResource {...props}/>
+                      </ResourcePasswordGeneratorContext.Provider>
+                    </ResourceWorkspaceContext.Provider>
+                  </ResourceTypesLocalStorageContext.Provider>
+                </ActionFeedbackContext.Provider>
+              </DialogContextProvider>
+            </ManagedClipboardServiceContext.Provider>
           </AppContext.Provider>
         </MemoryRouter>
       </MockTranslationProvider>

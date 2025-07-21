@@ -34,6 +34,7 @@ import {
 } from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
 import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -81,36 +82,32 @@ describe("DisplayResourcesListContextualMenu", () => {
     });
 
     it('As LU I can start to copy the username of a resource', async() => {
-      expect.assertions(3);
+      expect.assertions(2);
       await page.copyUsername();
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resource.metadata.username);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(props.clipboardContext.copy).toHaveBeenCalledWith(props.resource.metadata.username, "The username has been copied to clipboard.");
       expect(props.hide).toHaveBeenCalled();
     });
 
     it('As LU I can start to copy the password of a resource', async() => {
-      expect.assertions(4);
+      expect.assertions(3);
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordStringDto());
       await page.copyPassword();
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resource.id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password');
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith('secret-password', 'The secret has been copied to clipboard.');
       expect(props.hide).toHaveBeenCalled();
     });
 
     it('As LU I can start to copy the uri of a resource', async() => {
-      expect.assertions(3);
+      expect.assertions(2);
       await page.copyUri();
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resource.metadata.uris[0]);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(props.clipboardContext.copy).toHaveBeenCalledWith(props.resource.metadata.uris[0], "The uri has been copied to clipboard.");
       expect(props.hide).toHaveBeenCalled();
     });
 
     it('As LU I can start to copy the permalink of a resource', async() => {
-      expect.assertions(3);
+      expect.assertions(2);
       await page.copyPermalink();
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${props.context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resource.id}`);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(props.clipboardContext.copy).toHaveBeenCalledWith(`${props.context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resource.id}`, "The permalink has been copied to clipboard.");
       expect(props.hide).toHaveBeenCalled();
     });
 
@@ -142,6 +139,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect.assertions(3);
       jest.spyOn(props.context.port, "request");
       await page.markAsExpired();
+      await waitForTrue(() => ActionFeedbackContext._currentValue.displaySuccess.mock.calls.length > 0);
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.set-expiration-date", [{id: props.resource.id, expired: expect.any(String)}]);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
@@ -212,12 +210,11 @@ describe("DisplayResourcesListContextualMenu", () => {
     });
 
     it('As LU I can start to copy the totp of a resource', async() => {
-      expect.assertions(4);
+      expect.assertions(3);
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordDescriptionTotpDto());
       await page.copyTotp();
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resource.id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringMatching(/^[0-9]{6}/));
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(expect.stringMatching(/^[0-9]{6}/), "The TOTP has been copied to clipboard.");
       expect(props.hide).toHaveBeenCalled();
     });
   });
@@ -255,12 +252,11 @@ describe("DisplayResourcesListContextualMenu", () => {
     });
 
     it('As LU I can start to copy the totp of a resource', async() => {
-      expect.assertions(4);
+      expect.assertions(3);
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordDescriptionTotpDto());
       await page.copyTotp();
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resource.id);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringMatching(/^[0-9]{6}/));
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(expect.stringMatching(/^[0-9]{6}/), "The TOTP has been copied to clipboard.");
       expect(props.hide).toHaveBeenCalled();
     });
   });

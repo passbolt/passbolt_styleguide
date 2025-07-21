@@ -25,11 +25,11 @@ import Totp from "../../../../shared/components/Totp/Totp";
 import Select from "../../Common/Select/Select";
 import TotpEntity, {SUPPORTED_TOTP_ALGORITHMS} from "../../../../shared/models/entity/totp/totpEntity";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
-import ClipBoard from "../../../../shared/lib/Browser/clipBoard";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Html5Qrcode, Html5QrcodeSupportedFormats} from "html5-qrcode";
 import AttentionSVG from "../../../../img/svg/attention.svg";
+import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 class AddResourceTotp extends Component {
   constructor(props) {
@@ -182,8 +182,7 @@ class AddResourceTotp extends Component {
    */
   async handleTotpClick() {
     const code = TotpCodeGeneratorService.generate(this.props.resource.secret.totp);
-    await ClipBoard.copy(code, this.props.context.port);
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The TOTP has been copied to clipboard"));
+    await this.props.clipboardContext.copyTemporarily(code, this.translate("The TOTP has been copied to clipboard."));
   }
 
   /**
@@ -473,8 +472,9 @@ AddResourceTotp.propTypes = {
   t: PropTypes.func, // The translation function
   warnings: PropTypes.object, //The warnings validation
   errors: PropTypes.object, // The errors entity error validation
-  disabled: PropTypes.bool // The disabled property
+  disabled: PropTypes.bool, // The disabled property
+  clipboardContext: PropTypes.object, // the clipboard service provider
 };
 
-export default  withAppContext(withActionFeedback(withTranslation('common')(AddResourceTotp)));
+export default  withAppContext(withClipboard(withActionFeedback(withTranslation('common')(AddResourceTotp))));
 

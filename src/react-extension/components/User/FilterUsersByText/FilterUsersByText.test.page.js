@@ -50,6 +50,20 @@ export default class FilterUsersByTextPage {
   }
 
   /**
+   * Returns the clear button
+   */
+  get button() {
+    return this._page.container.querySelector('.input.search button');
+  }
+
+  /**
+   * Returns the search icon
+   */
+  get searchIcon() {
+    return this._page.container.querySelector('.input.search svg[name="search"]');
+  }
+
+  /**
    * Search for a user matching the given text
    * @param text A search tewt
    */

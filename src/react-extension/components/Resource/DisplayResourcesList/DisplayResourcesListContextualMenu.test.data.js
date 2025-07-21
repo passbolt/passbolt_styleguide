@@ -25,6 +25,7 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Default component props.
@@ -43,6 +44,7 @@ export function defaultProps(data = {}) {
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     passwordExpiryContext: defaultPasswordExpirySettingsContext({policy_override: true}),
+    clipboardContext: defaultClipboardContext(),
     ...data
   };
 }
