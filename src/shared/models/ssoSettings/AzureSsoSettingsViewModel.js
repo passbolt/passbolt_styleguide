@@ -31,6 +31,7 @@ class AzureSsoSettingsViewModel {
     this.client_secret = settings?.client_secret;
     this.email_claim = settings?.email_claim;
     this.prompt = settings?.prompt;
+    this.login_hint = settings?.login_hint ?? true;
 
     if (settings?.client_secret_expiry) {
       /*
@@ -69,6 +70,7 @@ class AzureSsoSettingsViewModel {
         "client_secret_expiry",
         "email_claim",
         "prompt",
+        "login_hint"
       ],
       properties: {
         id: {
@@ -82,6 +84,7 @@ class AzureSsoSettingsViewModel {
         client_secret_expiry: baseEntitySchema.properties.client_secret_expiry,
         email_claim: baseEntitySchema.properties.email_claim,
         prompt: baseEntitySchema.properties.prompt,
+        login_hint: baseEntitySchema.properties.login_hint,
       }
     };
   }
@@ -101,6 +104,7 @@ class AzureSsoSettingsViewModel {
       "client_secret_expiry",
       "email_claim",
       "prompt",
+      "login_hint",
     ];
     return keys.some(key => a[key] !== b[key]);
   }
@@ -133,6 +137,7 @@ class AzureSsoSettingsViewModel {
       client_secret_expiry: this.client_secret_expiry,
       email_claim: this.email_claim,
       prompt: this.prompt,
+      login_hint: this.login_hint,
     };
   }
 
@@ -182,6 +187,7 @@ class AzureSsoSettingsViewModel {
       client_secret_expiry: data.client_secret_expiry,
       email_claim: data.email_claim,
       prompt: data.prompt,
+      login_hint: data.login_hint,
     };
     return new AzureSsoSettingsViewModel(dto);
   }
@@ -206,6 +212,7 @@ class AzureSsoSettingsViewModel {
         client_secret_expiry: clientSecretExpiry,
         email_claim: this.email_claim,
         prompt: this.prompt,
+        login_hint: this.login_hint,
       }
     };
 

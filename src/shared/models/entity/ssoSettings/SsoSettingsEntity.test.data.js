@@ -67,6 +67,7 @@ export const defaultAzureSsoSettingsDto = (data = {}) => {
     client_secret_expiry: new Date().toISOString().substring(0, 10),
     email_claim: "email",
     prompt: "login",
+    login_hint: true,
   };
 
   return Object.assign(defaultData, data);
