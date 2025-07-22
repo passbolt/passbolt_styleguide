@@ -76,6 +76,7 @@ import MetadataTypesSettingsLocalStorageContextProvider from "../shared/context/
 import HandleConfirmMetadataKeyEntryEvents
   from "./components/Metadata/HandleConfirmMetadataKeyEntryEvents/HandleConfirmMetadataKeyEntryEvents";
 import ManagedClipboardServiceProvider from "./contexts/Clipboard/ManagedClipboardServiceProvider";
+import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -146,21 +147,23 @@ class ExtApp extends Component {
                                               <PasswordExpirySettingsContextProvider>
                                                 <ResourceWorkspaceContextProvider>
                                                   <MetadataTypesSettingsLocalStorageContextProvider>
-                                                    <ResourceTypesLocalStorageContextProvider>
-                                                      <ResourcePasswordGeneratorContextProvider>
-                                                        <ManageDialogs/>
-                                                        <ManageWorkflows/>
-                                                        <ManageContextualMenu/>
-                                                        <ManageAnnouncements/>
-                                                        <DragContextProvider>
-                                                          <div id="container" className="page password">
-                                                            <div id="app" className="app" tabIndex="1000">
-                                                              <DisplayResourcesWorkspace/>
+                                                    <MetadataKeysSettingsLocalStorageContextProvider>
+                                                      <ResourceTypesLocalStorageContextProvider>
+                                                        <ResourcePasswordGeneratorContextProvider>
+                                                          <ManageDialogs/>
+                                                          <ManageWorkflows/>
+                                                          <ManageContextualMenu/>
+                                                          <ManageAnnouncements/>
+                                                          <DragContextProvider>
+                                                            <div id="container" className="page password">
+                                                              <div id="app" className="app" tabIndex="1000">
+                                                                <DisplayResourcesWorkspace/>
+                                                              </div>
                                                             </div>
-                                                          </div>
-                                                        </DragContextProvider>
-                                                      </ResourcePasswordGeneratorContextProvider>
-                                                    </ResourceTypesLocalStorageContextProvider>
+                                                          </DragContextProvider>
+                                                        </ResourcePasswordGeneratorContextProvider>
+                                                      </ResourceTypesLocalStorageContextProvider>
+                                                    </MetadataKeysSettingsLocalStorageContextProvider>
                                                   </MetadataTypesSettingsLocalStorageContextProvider>
                                                 </ResourceWorkspaceContextProvider>
                                               </PasswordExpirySettingsContextProvider>
