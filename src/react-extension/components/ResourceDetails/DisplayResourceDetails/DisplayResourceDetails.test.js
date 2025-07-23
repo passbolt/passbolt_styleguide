@@ -45,6 +45,15 @@ import {SECRET_DATA_OBJECT_TYPE} from "../../../../shared/models/entity/secretDa
 import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
 import {resourceWithCustomFields} from "./DisplayResourceDetailsCustomFields.test.data";
 import {resourceWithMultipleUris, resourceWithOneUris} from "./DisplayResourceDetailsURIs.test.data";
+import ActionFailedMissingMetadataKeys
+  from "../../Metadata/ActionFailedMissingMetadataKeys/ActionFailedMissingMetadataKeys";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import {v4 as uuidv4} from "uuid";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 jest.mock("./DisplayResourceDetailsInformation", () => () => <></>);
 jest.mock("./DisplayResourceDetailsPassword", () => () => <div className="password"></div>);
@@ -303,7 +312,7 @@ describe("DisplayResourceDetails", () => {
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith("Error");
     });
 
-    it('As LU I cannot upgrade a v4 to V5 if resource permission is read', async() => {
+    it('As LU I cannot upgrade a v4 to v5 if resource permission is read', async() => {
       expect.assertions(1);
       const props = defaultProps({resourceWorkspaceContext: defaultResourceWorkspaceContext({
         details: {
@@ -331,6 +340,35 @@ describe("DisplayResourceDetails", () => {
       expect(props.context.port.request).toHaveBeenCalledTimes(1);
       expect(props.context.port.request).not.toHaveBeenCalledWith("passbolt.resources.update");
       expect(props.actionFeedbackContext.displayError).not.toHaveBeenCalled();
+    });
+
+    it('As LU I cannot upgrade a v4 to v5 if resource is shared and user has missing metadata keys', async() => {
+      expect.assertions(1);
+      const props = defaultProps({context: defaultUserAppContext({
+        loggedInUser: defaultUserDto({missing_metadata_key_ids: uuidv4()}, {withRole: true})
+      })});
+      const page = new DisplayResourceDetailsPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.upgradeButton);
+
+      // expectations
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ActionFailedMissingMetadataKeys);
+    });
+
+    it('As LU I cannot upgrade a v4 to v5 resource if share metadata key is enforced and user has missing metadata keys', async() => {
+      expect.assertions(1);
+      const props = defaultProps({
+        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: uuidv4()}, {withRole: true})}),
+        metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({allow_usage_of_personal_keys: false})),
+      });
+      const page = new DisplayResourceDetailsPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.upgradeButton);
+
+      // expectations
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ActionFailedMissingMetadataKeys);
     });
   });
 
