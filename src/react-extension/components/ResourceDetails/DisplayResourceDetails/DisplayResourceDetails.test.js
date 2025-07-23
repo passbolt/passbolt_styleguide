@@ -345,7 +345,7 @@ describe("DisplayResourceDetails", () => {
     it('As LU I cannot upgrade a v4 to v5 if resource is shared and user has missing metadata keys', async() => {
       expect.assertions(1);
       const props = defaultProps({context: defaultUserAppContext({
-        loggedInUser: defaultUserDto({missing_metadata_key_ids: uuidv4()}, {withRole: true})
+        loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})
       })});
       const page = new DisplayResourceDetailsPage(props);
       await waitFor(() => {});
@@ -359,7 +359,7 @@ describe("DisplayResourceDetails", () => {
     it('As LU I cannot upgrade a v4 to v5 resource if share metadata key is enforced and user has missing metadata keys', async() => {
       expect.assertions(1);
       const props = defaultProps({
-        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: uuidv4()}, {withRole: true})}),
+        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
         metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({allow_usage_of_personal_keys: false})),
       });
       const page = new DisplayResourceDetailsPage(props);

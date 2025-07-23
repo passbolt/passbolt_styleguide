@@ -464,7 +464,7 @@ DisplayResourceDetails.propTypes = {
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   actionFeedbackContext: PropTypes.any, // The action feedback context
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
-  metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata type settings
+  metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
   clipboardContext: PropTypes.object, // the clipboard service
   t: PropTypes.func, // The translation function
 };
