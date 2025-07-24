@@ -39,8 +39,8 @@ import {
 } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import ActionFailedMissingMetadataKeys
-  from "../../Metadata/ActionFailedMissingMetadataKeys/ActionFailedMissingMetadataKeys";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 class DisplayResourceCreationMenu extends Component {
   constructor(props) {
@@ -86,7 +86,7 @@ class DisplayResourceCreationMenu extends Component {
     if (resourceType.isV5()) {
       const canCreateResourceV5 = this.canCreateResourceV5();
       if (!canCreateResourceV5) {
-        this.props.dialogContext.open(ActionFailedMissingMetadataKeys);
+        this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
         return;
       }
     }

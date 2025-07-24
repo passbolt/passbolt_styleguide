@@ -47,8 +47,8 @@ import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardService
 import {withMetadataKeysSettingsLocalStorage} from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import {withDialog} from "../../../contexts/DialogContext";
-import ActionFailedMissingMetadataKeys
-  from "../../Metadata/ActionFailedMissingMetadataKeys/ActionFailedMissingMetadataKeys";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -146,7 +146,7 @@ class DisplayResourceDetails extends React.Component {
     if (canUpgradeResource) {
       await this.upgradeResource();
     } else {
-      this.displayActionFailed();
+      this.displayActionAborted();
     }
   }
 
@@ -169,10 +169,10 @@ class DisplayResourceDetails extends React.Component {
   }
 
   /**
-   * Display action failed
+   * Display action aborted
    */
-  displayActionFailed() {
-    this.props.dialogContext.open(ActionFailedMissingMetadataKeys);
+  displayActionAborted() {
+    this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
   }
 
   /**

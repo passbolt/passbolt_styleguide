@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.4.0
  */
-import ActionFailedMissingMetadataKeys from "./ActionFailedMissingMetadataKeys";
-import {defaultProps} from "./ActionFailedMissingMetadataKeys.test.data";
+import ActionAbortedMissingMetadataKeys from "./ActionAbortedMissingMetadataKeys";
+import {defaultProps} from "./ActionAbortedMissingMetadataKeys.test.data";
 
 export default {
-  title: 'Components/Metadata/ActionFailedMissingMetadataKeys',
-  component: ActionFailedMissingMetadataKeys
+  title: 'Components/Metadata/ActionAbortedMissingMetadataKeys',
+  component: ActionAbortedMissingMetadataKeys
 };
 
 export const Default = {

@@ -55,8 +55,8 @@ import {
   withMetadataKeysSettingsLocalStorage
 } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import ActionFailedMissingMetadataKeys
-  from "../../Metadata/ActionFailedMissingMetadataKeys/ActionFailedMissingMetadataKeys";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 /**
  * This component allows the current user to create a new resource
@@ -92,7 +92,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
       if (canCreateResource) {
         resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
       } else {
-        this.displayActionFailed();
+        this.displayActionAborted();
         return;
       }
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
@@ -126,7 +126,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
       if (canCreateResource) {
         resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
       } else {
-        this.displayActionFailed();
+        this.displayActionAborted();
         return;
       }
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
@@ -144,7 +144,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
       const resourceType  = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
       this.openCreateDialog(resourceType);
     } else {
-      this.displayActionFailed();
+      this.displayActionAborted();
     }
   }
 
@@ -301,10 +301,10 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   }
 
   /**
-   * Display action failed
+   * Display action aborted
    */
-  displayActionFailed() {
-    this.props.dialogContext.open(ActionFailedMissingMetadataKeys);
+  displayActionAborted() {
+    this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
   }
 
   /**

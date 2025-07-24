@@ -13,21 +13,21 @@
  */
 
 /**
- * Unit tests on ActionFailedMissingMetadataKey in regard of specifications
+ * Unit tests on ActionAbortedMissingMetadataKeys in regard of specifications
  */
-import ActionFailedMissingMetadataKeysPage from "./ActionFailedMissingMetadataKeys.test.page";
+import ActionAbortedMissingMetadataKeysPage from "./ActionAbortedMissingMetadataKeys.test.page";
 import {waitFor} from "@testing-library/react";
-import {defaultProps} from "./ActionFailedMissingMetadataKeys.test.data";
+import {defaultProps} from "./ActionAbortedMissingMetadataKeys.test.data";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-describe("ActionFailedMissingMetadataKey", () => {
+describe("ActionAbortedMissingMetadataKeys", () => {
   it("As a signed in user I can close the dialog with the submit button", async() => {
     expect.assertions(4);
     const props = defaultProps();
-    const page = new ActionFailedMissingMetadataKeysPage(props);
+    const page = new ActionAbortedMissingMetadataKeysPage(props);
     await waitFor(() => {});
 
     expect(page.exists()).toBeTruthy();
@@ -42,7 +42,7 @@ describe("ActionFailedMissingMetadataKey", () => {
   it('As a signed in user I can close a confirm metadata key', async() => {
     expect.assertions(2);
     const props = defaultProps();
-    const page = new ActionFailedMissingMetadataKeysPage(props);
+    const page = new ActionAbortedMissingMetadataKeysPage(props);
     await waitFor(() => {});
 
     expect(page.exists()).toBeTruthy();

@@ -17,7 +17,7 @@ import {Trans, withTranslation} from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 
-class ActionFailedMissingMetadataKeys extends Component {
+class ActionAbortedMissingMetadataKeys extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
@@ -70,7 +70,7 @@ class ActionFailedMissingMetadataKeys extends Component {
    */
   render() {
     return (
-      <DialogWrapper className="action-failed-missing-metadata-keys-dialog"  title={this.translate("Action failed")} onClose={this.handleCloseClick}>
+      <DialogWrapper className="action-aborted-missing-metadata-keys-dialog"  title={this.translate("Action aborted")} onClose={this.handleCloseClick}>
         <form onSubmit={this.handleFormSubmit}>
           <div className="form-content">
             <p>
@@ -90,9 +90,9 @@ class ActionFailedMissingMetadataKeys extends Component {
   }
 }
 
-ActionFailedMissingMetadataKeys.propTypes = {
+ActionAbortedMissingMetadataKeys.propTypes = {
   onClose: PropTypes.func,
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(ActionFailedMissingMetadataKeys);
+export default withTranslation('common')(ActionAbortedMissingMetadataKeys);
