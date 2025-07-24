@@ -31,6 +31,7 @@ import ruTranslations from "../../../../../locales/ru-RU/common.json";
 import slTranslations from "../../../../../locales/sl-SI/common.json";
 import svTranslations from "../../../../../locales/sv-SE/common.json";
 import ukTranslations from "../../../../../locales/uk-UA/common.json";
+import csTranslations from "../../../../../locales/cs-CZ/common.json";
 
 /**
  * This component set up the translation process
@@ -97,6 +98,9 @@ class MockTranslationProvider extends Component {
           },
           "uk-UA": {
             common: ukTranslations
+          },
+          "cs-CZ": {
+            common: csTranslations
           }
         },
         react: {

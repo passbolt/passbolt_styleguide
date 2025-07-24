@@ -155,6 +155,9 @@ export const defaultCeSiteSettings = siteSettings => {
             }, {
               "locale": "uk-UA",
               "label": "Українська (beta)"
+            }, {
+              "locale": "cs-CZ",
+              "label": "Čeština (beta)"
             }
           ]
         },
