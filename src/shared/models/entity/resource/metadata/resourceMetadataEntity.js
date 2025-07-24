@@ -21,6 +21,7 @@ const RESOURCE_USERNAME_MAX_LENGTH = 255;
 const RESOURCE_URI_MAX_LENGTH = 1024;
 const RESOURCE_DESCRIPTION_MAX_LENGTH = 10000;
 const METADATA_OBJECT_TYPE = "PASSBOLT_RESOURCE_METADATA";
+const RESOURCE_URIS_MAX_ITEMS = 32;
 
 class ResourceMetadataEntity extends EntityV2 {
   /**
@@ -57,7 +58,8 @@ class ResourceMetadataEntity extends EntityV2 {
           "items": {
             "type": "string",
             "maxLength": RESOURCE_URI_MAX_LENGTH
-          }
+          },
+          "maxItems": RESOURCE_URIS_MAX_ITEMS
         },
         "description": {
           "type": "string",

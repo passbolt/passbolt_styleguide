@@ -56,7 +56,7 @@ describe("See the Create Resource - save resource", () => {
     const props = defaultProps(); // The props to pass
     const resourceMetaFromTab = {
       name: "Passbolt",
-      uri: "https://passbolt.com",
+      uris: ["https://passbolt.com"],
       username: "username",
       secret_clear: "secret"
     };
@@ -69,11 +69,12 @@ describe("See the Create Resource - save resource", () => {
     await page.save();
     // expected data
     const resourceTypeId = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG).id;
+
     const resourceDto = {
       metadata: {
         name: resourceMetaFromTab.name,
         username: resourceMetaFromTab.username,
-        uris: [resourceMetaFromTab.uri],
+        uris: resourceMetaFromTab.uris,
         resource_type_id: resourceTypeId,
       },
       resource_type_id: resourceTypeId,
@@ -97,7 +98,7 @@ describe("See the Create Resource - save resource", () => {
     const props = defaultProps({metadataTypeSettings}); // The props to pass
     const resourceMetaFromTab = {
       name: "Passbolt",
-      uri: "https://passbolt.com",
+      uris: ["https://passbolt.com"],
       username: "username",
       secret_clear: "secret"
     };
@@ -170,7 +171,7 @@ describe("See the Create Resource - save resource", () => {
 
     const resourceMetaFromTab = {
       name: "",
-      uri: "test",
+      uris: ["test"],
       username: "",
       secret_clear: ""
     };
