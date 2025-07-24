@@ -45,8 +45,8 @@ import {SECRET_DATA_OBJECT_TYPE} from "../../../../shared/models/entity/secretDa
 import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
 import {resourceWithCustomFields} from "./DisplayResourceDetailsCustomFields.test.data";
 import {resourceWithMultipleUris, resourceWithOneUris} from "./DisplayResourceDetailsURIs.test.data";
-import ActionFailedMissingMetadataKeys
-  from "../../Metadata/ActionFailedMissingMetadataKeys/ActionFailedMissingMetadataKeys";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
 import {v4 as uuidv4} from "uuid";
@@ -353,7 +353,7 @@ describe("DisplayResourceDetails", () => {
       await page.click(page.upgradeButton);
 
       // expectations
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ActionFailedMissingMetadataKeys);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ActionAbortedMissingMetadataKeys);
     });
 
     it('As LU I cannot upgrade a v4 to v5 resource if share metadata key is enforced and user has missing metadata keys', async() => {
@@ -368,7 +368,7 @@ describe("DisplayResourceDetails", () => {
       await page.click(page.upgradeButton);
 
       // expectations
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ActionFailedMissingMetadataKeys);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ActionAbortedMissingMetadataKeys);
     });
   });
 

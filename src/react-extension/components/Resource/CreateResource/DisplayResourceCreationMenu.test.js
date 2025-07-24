@@ -39,8 +39,8 @@ import {v4 as uuidv4} from "uuid";
 import {
   defaultMetadataKeysSettingsDto
 } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
-import ActionFailedMissingMetadataKeys
-  from "../../Metadata/ActionFailedMissingMetadataKeys/ActionFailedMissingMetadataKeys";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 import {resourceWorkspaceContextWithSelectedFolderIOwn} from "../../../contexts/ResourceWorkspaceContext.test.data";
 
 /**
@@ -277,7 +277,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(props.onClose).toHaveBeenCalledTimes(5);
     });
 
-    it("should open the action failed dialog if shared metadata key is enforced and missing", async() => {
+    it("should open the action aborted dialog if shared metadata key is enforced and missing", async() => {
       expect.assertions(4);
 
       const props = defaultProps({
@@ -289,22 +289,22 @@ describe("See the Display Resource Creation Menu", () => {
       //click on password v5
       page.clickOn(page.displayedContentTypes[0]);
       await waitFor(() => {});
-      expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionFailedMissingMetadataKeys);
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
 
       //click on totp v5
       page.clickOn(page.displayedContentTypes[1]);
       await waitFor(() => {});
-      expect(props.dialogContext.open).toHaveBeenNthCalledWith(2, ActionFailedMissingMetadataKeys);
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(2, ActionAbortedMissingMetadataKeys);
 
       //click on custom fields v5
       page.clickOn(page.displayedContentTypes[2]);
       await waitFor(() => {});
-      expect(props.dialogContext.open).toHaveBeenNthCalledWith(3, ActionFailedMissingMetadataKeys);
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(3, ActionAbortedMissingMetadataKeys);
 
       expect(props.dialogContext.open).toHaveBeenCalledTimes(3);
     });
 
-    it("should open the action failed dialog if shared metadata key is missing to create a shared resource", async() => {
+    it("should open the action aborted dialog if shared metadata key is missing to create a shared resource", async() => {
       expect.assertions(4);
 
       const props = defaultProps({
@@ -316,17 +316,17 @@ describe("See the Display Resource Creation Menu", () => {
       //click on password v5
       page.clickOn(page.displayedContentTypes[0]);
       await waitFor(() => {});
-      expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionFailedMissingMetadataKeys);
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
 
       //click on totp v5
       page.clickOn(page.displayedContentTypes[1]);
       await waitFor(() => {});
-      expect(props.dialogContext.open).toHaveBeenNthCalledWith(2, ActionFailedMissingMetadataKeys);
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(2, ActionAbortedMissingMetadataKeys);
 
       //click on custom fields v5
       page.clickOn(page.displayedContentTypes[2]);
       await waitFor(() => {});
-      expect(props.dialogContext.open).toHaveBeenNthCalledWith(3, ActionFailedMissingMetadataKeys);
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(3, ActionAbortedMissingMetadataKeys);
 
       expect(props.dialogContext.open).toHaveBeenCalledTimes(3);
     });

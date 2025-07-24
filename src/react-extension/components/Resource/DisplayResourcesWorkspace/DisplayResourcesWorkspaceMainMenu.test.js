@@ -44,8 +44,8 @@ import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadat
 import {
   defaultMetadataKeysSettingsDto
 } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
-import ActionFailedMissingMetadataKeys
-  from "../../Metadata/ActionFailedMissingMetadataKeys/ActionFailedMissingMetadataKeys";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 beforeEach(() => {
   jest.resetModules();
@@ -183,7 +183,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       await page.displayMenu.clickOnMenu(page.displayMenu.newCustomFieldsMenu);
 
-      expect(props.dialogContext.open).toHaveBeenNthCalledWith(3, ActionFailedMissingMetadataKeys);
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(3, ActionAbortedMissingMetadataKeys);
     });
 
     it('As LU I cannot create a shared resource v5 if user has missing keys', async() => {
@@ -205,7 +205,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       await page.displayMenu.clickOnMenu(page.displayMenu.newCustomFieldsMenu);
 
-      expect(props.dialogContext.open).toHaveBeenNthCalledWith(3, ActionFailedMissingMetadataKeys);
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(3, ActionAbortedMissingMetadataKeys);
     });
   });
 

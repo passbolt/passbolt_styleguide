@@ -15,11 +15,11 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import ActionFailedMissingMetadataKeys from "./ActionFailedMissingMetadataKeys";
+import ActionAbortedMissingMetadataKeys from "./ActionAbortedMissingMetadataKeys";
 /**
- * The ActionFailedMissingMetadataKeysPage component represented as a page
+ * The ActionAbortedMissingMetadataKeysPage component represented as a page
  */
-export default class ActionFailedMissingMetadataKeysPage {
+export default class ActionAbortedMissingMetadataKeysPage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -27,7 +27,7 @@ export default class ActionFailedMissingMetadataKeysPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ActionFailedMissingMetadataKeys {...props}/>
+        <ActionAbortedMissingMetadataKeys {...props}/>
       </MockTranslationProvider>
     );
   }
@@ -36,7 +36,7 @@ export default class ActionFailedMissingMetadataKeysPage {
    * Returns the confirm metadata key element
    */
   get confirmMetadataKey() {
-    return this._page.container.querySelector('.action-failed-missing-metadata-keys-dialog');
+    return this._page.container.querySelector('.action-aborted-missing-metadata-keys-dialog');
   }
 
   /**

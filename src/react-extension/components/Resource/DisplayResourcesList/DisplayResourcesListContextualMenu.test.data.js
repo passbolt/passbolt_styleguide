@@ -26,6 +26,10 @@ import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 /**
  * Default component props.
@@ -45,6 +49,7 @@ export function defaultProps(data = {}) {
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     passwordExpiryContext: defaultPasswordExpirySettingsContext({policy_override: true}),
     clipboardContext: defaultClipboardContext(),
+    metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
     ...data
   };
 }

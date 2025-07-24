@@ -30,6 +30,13 @@ import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import {
+  TEST_RESOURCE_TYPE_V5_DEFAULT
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -58,6 +65,7 @@ const defaultProps = (data = {}) => ({
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   dialogContext: defaultDialogContext(),
   clipboardContext: defaultClipboardContext(),
+  metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
   ...data,
 });
 
@@ -72,6 +80,36 @@ export const defaultPropsOneResourceOwned = (data = {}) => defaultProps({
   }),
   ...data,
 });
+
+/**
+ * Default props one selected resource private
+ * @returns {object}
+ */
+export const defaultPropsOneResourceV5Private = (data = {}) => {
+  const resource = defaultResourceDto({personal: true, resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT});
+  return defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [resource],
+      lockDisplayDetail: true,
+    }),
+    ...data,
+  });
+};
+
+/**
+ * Default props one selected resource v5 shared
+ * @returns {object}
+ */
+export const defaultPropsOneResourceV5Shared = (data = {}) => {
+  const resource = defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT});
+  return defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [resource],
+      lockDisplayDetail: true,
+    }),
+    ...data,
+  });
+};
 
 /**
  * Default props one selected totp resource owned
