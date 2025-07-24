@@ -44,4 +44,17 @@ export default class MetadataSetupSettingsEntity extends EntityV2 {
   get enableEncryptedMetadataOnInstall() {
     return this._props.enable_encrypted_metadata_on_install;
   }
+
+  /**
+   * Create a default entity patched with the given data
+   * @param {object} the data to override the default dto with
+   * @returns {MetadataSetupSettingsEntity}
+   */
+  static createFromDefault(data = {}) {
+    const dto = {
+      enable_encrypted_metadata_on_install: false,
+      ...data,
+    };
+    return new MetadataSetupSettingsEntity(dto);
+  }
 }

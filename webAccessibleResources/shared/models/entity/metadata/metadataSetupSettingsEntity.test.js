@@ -51,4 +51,22 @@ describe("MetadataSetupSettingsEntity", () => {
       expect(entity2.enableEncryptedMetadataOnInstall).toStrictEqual(true);
     });
   });
+
+  describe("::createFromDefault", () => {
+    it("should give a default entity when no parameters are given", () => {
+      expect.assertions(2);
+      const entity = MetadataSetupSettingsEntity.createFromDefault();
+
+      expect(entity).toBeInstanceOf(MetadataSetupSettingsEntity);
+      expect(entity.enableEncryptedMetadataOnInstall).toStrictEqual(false);
+    });
+
+    it("should give a valid entity when parameters are given", () => {
+      expect.assertions(2);
+      const entity = MetadataSetupSettingsEntity.createFromDefault(enableMetadataSetupSettingsDto());
+
+      expect(entity).toBeInstanceOf(MetadataSetupSettingsEntity);
+      expect(entity.enableEncryptedMetadataOnInstall).toStrictEqual(true);
+    });
+  });
 });
