@@ -87,6 +87,7 @@ class SaveResource extends React.Component {
    */
   async loadPasswordMetaFromTabForm() {
     const resourceDto = await this.props.context.port.request("passbolt.quickaccess.prepare-autosave");
+    resourceDto.uri = resourceDto.uris && resourceDto.uris.length > 0 ? resourceDto.uris[0] : "";
     resourceDto.password = resourceDto.secret_clear;
     let resourceType;
 
