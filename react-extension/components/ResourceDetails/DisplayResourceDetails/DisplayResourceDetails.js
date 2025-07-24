@@ -44,6 +44,11 @@ import ResourceFormEntity from "../../../../shared/models/entity/resource/resour
 import DisplayResourceDetailsCustomFields from "./DisplayResourceDetailsCustomFields";
 import DisplayResourceDetailsURIs from "./DisplayResourceDetailsURIs";
 import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import {withMetadataKeysSettingsLocalStorage} from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {withDialog} from "../../../contexts/DialogContext";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -137,6 +142,43 @@ class DisplayResourceDetails extends React.Component {
    * Handle upgrade resource
    */
   async handleUpgradeClick() {
+    const canUpgradeResource = this.canUpgradeResource();
+    if (canUpgradeResource) {
+      await this.upgradeResource();
+    } else {
+      this.displayActionAborted();
+    }
+  }
+
+  /**
+   * Can upgrade resource
+   * @return {boolean}
+   */
+  canUpgradeResource() {
+    const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings.allowUsageOfPersonalKeys;
+    const isPersonalResource = this.resource.personal;
+    const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+
+    if (isPersonalResource && isMetadataSharedKeyEnforced && userHasMissingKeys) {
+      return false;
+    } else if (!isPersonalResource && userHasMissingKeys) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Display action aborted
+   */
+  displayActionAborted() {
+    this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
+  }
+
+  /**
+   * Upgrade the resource
+   */
+  async upgradeResource() {
     this.setState({processing: true});
     try {
       const resourceFormEntity = await this.createResourceFormEntity();
@@ -417,12 +459,14 @@ class DisplayResourceDetails extends React.Component {
 DisplayResourceDetails.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
+  dialogContext: PropTypes.any, // The dialog context
   resourceWorkspaceContext: PropTypes.object,
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   actionFeedbackContext: PropTypes.any, // The action feedback context
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
+  metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
   clipboardContext: PropTypes.object, // the clipboard service
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withMetadataTypesSettingsLocalStorage(withResourceTypesLocalStorage(withActionFeedback(withClipboard(withResourceWorkspace(withTranslation('common')(DisplayResourceDetails))))))));
+export default withAppContext(withDialog(withRbac(withMetadataTypesSettingsLocalStorage(withMetadataKeysSettingsLocalStorage(withResourceTypesLocalStorage(withActionFeedback(withClipboard(withResourceWorkspace(withTranslation('common')(DisplayResourceDetails))))))))));

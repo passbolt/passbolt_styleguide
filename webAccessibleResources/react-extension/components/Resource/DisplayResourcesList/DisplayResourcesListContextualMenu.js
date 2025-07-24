@@ -50,6 +50,12 @@ import CalendarIcon from "../../../../img/svg/calendar.svg";
 import TotpIcon from "../../../../img/svg/totp.svg";
 import GoIcon from "../../../../img/svg/go.svg";
 import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
+import {
+  withMetadataKeysSettingsLocalStorage
+} from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -82,8 +88,35 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle edit resource
    */
   handleEditClickEvent() {
-    this.props.dialogContext.open(EditResource, {resource: this.resource});
+    const canEditResource = this.canEditResource();
+    if (canEditResource) {
+      this.props.dialogContext.open(EditResource, {resource: this.resource});
+    } else {
+      this.displayActionAborted();
+    }
     this.props.hide();
+  }
+
+  /**
+   * Can edit the resource
+   * @return {boolean}
+   */
+  canEditResource() {
+    const resourceType = this.props.resourceTypes.getFirstById(this.resource.resource_type_id);
+
+    if (resourceType.isV5()) {
+      const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings.allowUsageOfPersonalKeys;
+      const isPersonalResource = this.resource.personal;
+      const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+
+      if (isPersonalResource && isMetadataSharedKeyEnforced && userHasMissingKeys) {
+        return false;
+      } else if (!isPersonalResource && userHasMissingKeys) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /**
@@ -249,6 +282,13 @@ class DisplayResourcesListContextualMenu extends React.Component {
       resources: [this.resource]
     });
     this.props.hide();
+  }
+
+  /**
+   * Display action aborted
+   */
+  displayActionAborted() {
+    this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
   }
 
   /**
@@ -542,7 +582,8 @@ DisplayResourcesListContextualMenu.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   passwordExpiryContext: PropTypes.object, // The password expiry context
   clipboardContext: PropTypes.object, // the clipboard service provider
+  metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withClipboard(withRbac(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withDialog(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu))))))))));
+export default withAppContext(withMetadataKeysSettingsLocalStorage(withClipboard(withRbac(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withDialog(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu)))))))))));

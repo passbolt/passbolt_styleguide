@@ -79,6 +79,8 @@ each([
 
   {dto: {prompt: -1}, errorType: "type"},
   {dto: {prompt: "this is a test"}, errorType: "enum"},
+
+  {dto: {login_hint: -1}, errorType: "type"},
 ]).describe("should throw an exception if DTO contains invalid values", scenario => {
   it(`scenario: ${JSON.stringify(scenario)}`, () => {
     expect.assertions(2);

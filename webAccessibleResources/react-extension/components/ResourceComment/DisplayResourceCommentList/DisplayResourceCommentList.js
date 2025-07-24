@@ -23,6 +23,7 @@ import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {isUserSuspended} from "../../../../shared/utils/userUtils";
 import CommentsServiceWorkerService from "../CommentsServiceWorkerService";
+import {withActionFeedback} from '../../../contexts/ActionFeedbackContext';
 
 class DisplayResourceCommentList extends React.Component {
   /**
@@ -67,17 +68,23 @@ class DisplayResourceCommentList extends React.Component {
    * Fetch the comments of the resource
    */
   async fetch() {
-    this.setState({actions: {loading: true}});
+    try {
+      this.setState({actions: {loading: true}});
 
-    const resourceId = this.props.resource.id;
-    const comments = await this.commentsServiceWorkerService.findAllByResource(resourceId);
+      const resourceId = this.props.resource.id;
+      const comments = await this.commentsServiceWorkerService.findAllByResource(resourceId);
 
-    const commentsSorter = (comment1, comment2) => DateTime.fromISO(comment2.created) < DateTime.fromISO(comment1.created) ? -1 : 1;
-    this.setState({comments: comments.sort(commentsSorter)});
+      const commentsSorter = (comment1, comment2) => DateTime.fromISO(comment2.created) < DateTime.fromISO(comment1.created) ? -1 : 1;
+      this.setState({comments: comments.sort(commentsSorter)});
 
-    this.props.onFetch(comments);
+      this.props.onFetch(comments);
 
-    this.setState({actions: {loading: false}});
+      this.setState({actions: {loading: false}});
+    } catch (error) {
+      console.error(error);
+      await this.props.actionFeedbackContext.displayError(error.message);
+      this.setState({actions: {loading: false}});
+    }
   }
 
   /**
@@ -181,7 +188,7 @@ class DisplayResourceCommentList extends React.Component {
   }
 }
 
-export default withAppContext(withTranslation('common')(DisplayResourceCommentList));
+export default withAppContext(withActionFeedback(withTranslation('common')(DisplayResourceCommentList)));
 
 DisplayResourceCommentList.propTypes = {
   context: PropTypes.any, // The application context
@@ -189,4 +196,5 @@ DisplayResourceCommentList.propTypes = {
   onFetch: PropTypes.func, // Callback when the comments are fetched
   mustRefresh: PropTypes.bool, // Flag to force the refresh of the list
   t: PropTypes.func, // The translation function
+  actionFeedbackContext: PropTypes.object,
 };

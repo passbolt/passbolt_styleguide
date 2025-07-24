@@ -35,6 +35,19 @@ import {
 import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
+import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import {
+  TEST_RESOURCE_TYPE_V5_DEFAULT
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
+import {v4 as uuidv4} from "uuid";
 
 beforeEach(() => {
   jest.resetModules();
@@ -363,6 +376,36 @@ describe("DisplayResourcesListContextualMenu", () => {
       page = new DisplayResourcesListContextualMenuPage(props);
       expect(page.markAsExpiredItem).toBeNull();
       expect(page.setExpiryDateItem).toBeNull();
+    });
+  });
+
+  describe("As LU I should see action aborted", () => {
+    it('As LU I cannot edit a resource v5 if metadata keys settings enforced metadata shared key and user has missing keys', async() => {
+      expect.assertions(1);
+      const props = defaultProps({
+        // eslint-disable-next-line no-undef
+        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
+        metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({allow_usage_of_personal_keys: false})),
+        resource: defaultResourceDto({personal: true, resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT})
+      }); // The props to pass
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      await page.edit();
+
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
+    });
+
+    it('As LU I cannot edit a shared resource v5 if user has missing keys', async() => {
+      expect.assertions(1);
+      const props = defaultProps({
+        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
+        resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT})
+      }); // The props to pass
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      await page.edit();
+
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
     });
   });
 });

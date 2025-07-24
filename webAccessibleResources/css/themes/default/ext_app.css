@@ -8265,6 +8265,13 @@ table.table-info.horizontal tbody tr:hover {
 .page.administration .app .panel.main .sso-settings.third-party-provider-settings .accordion-header button svg.caret-right {
   margin-right: 0.2rem;
 }
+.page.administration .app .panel.main .sso-settings.third-party-provider-settings .input-wrapper .toggle-swith-title {
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+}
+.page.administration .app .panel.main .sso-settings.third-party-provider-settings .input-wrapper .toggle-switch label {
+  font-weight: 400;
+}
 button.card {
   display: flex;
   height: 6.4rem;

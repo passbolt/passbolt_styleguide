@@ -52,3 +52,26 @@ export const getUserStatus = user => {
 
   return USER_STATUS.ACTIVE;
 };
+
+/**
+ * Returns a string containing `firstname lastname` of the given user or `unknown user` if no data is available.
+ * @param {User} user
+ * @param {function} [t] the translation function. Not necessary if called in a context where it is sure the user is defined
+ * @param {object} [options] options to pass to the formatting function
+ * @returns {string}
+ */
+export const getUserFormattedName = (user, t = null, options = {withUsername: false}) => {
+  const profile = user?.profile;
+  if (!profile) {
+    return t("Unknown user");
+  }
+
+  const hasName = Boolean(profile.first_name) || Boolean(profile.last_name);
+  if (!hasName) {
+    return t("Unknown user");
+  }
+
+  return options.withUsername
+    ? `${profile.first_name} ${profile.last_name} (${user.username})`
+    : `${profile.first_name} ${profile.last_name}`;
+};

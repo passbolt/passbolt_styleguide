@@ -59,18 +59,18 @@ describe("See permissions", () => {
     it('I should be able to identify each permission name', async() => {
       expect.assertions(4);
       await page.title.click();
-      expect(page.displayPermissionList.name(1)).toBe('Ada Lovelace (ada@passbolt.com)');
-      expect(page.displayPermissionList.name(2)).toBe('Admin User (admin@passbolt.com)');
-      expect(page.displayPermissionList.name(3)).toBe('Marketing');
+      expect(page.displayPermissionList.name(1)).toBe('Admin User (admin@passbolt.com)');
+      expect(page.displayPermissionList.name(2)).toBe('Marketing');
+      expect(page.displayPermissionList.name(3)).toBe('Ada Lovelace (ada@passbolt.com)');
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.permissions.find-aco-permissions-for-display", props.resourceWorkspaceContext.details.resource.id, "Resource");
     });
 
     it('I should be able to see each permission type', async() => {
       expect.assertions(3);
       await page.title.click();
-      expect(page.displayPermissionList.type(1)).toBe('can read');
-      expect(page.displayPermissionList.type(2)).toBe('is owner');
-      expect(page.displayPermissionList.type(3)).toBe('can update');
+      expect(page.displayPermissionList.type(1)).toBe('is owner');
+      expect(page.displayPermissionList.type(2)).toBe('can update');
+      expect(page.displayPermissionList.type(3)).toBe('can read');
     });
   });
 

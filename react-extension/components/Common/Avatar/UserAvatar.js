@@ -143,7 +143,7 @@ class UserAvatar extends Component {
    */
   render() {
     const srcAvatar = this.getAvatarSrc();
-    const shouldDisplayDefaultAvatar = this.state.error || this.isDefaultAvatarUrlFromApi() || !srcAvatar;
+    const shouldDisplayDefaultAvatar = this.state.error || !this.props.user || this.isDefaultAvatarUrlFromApi() || !srcAvatar;
 
     return (
       <div className={`${this.props.className}`}>

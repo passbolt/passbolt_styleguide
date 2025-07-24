@@ -62,8 +62,8 @@ describe("See permissions", () => {
       expect(page.displayPermissionList.name(1)).toBe('Ada Lovelace');
       expect(page.displayPermissionList.name(2)).toBe('Admin User');
       expect(page.displayPermissionList.name(3)).toBe('Admin User2');
-      expect(page.displayPermissionList.name(4)).toBe('Accounting');
-      expect(page.displayPermissionList.name(5)).toBe('Marketing');
+      expect(page.displayPermissionList.name(4)).toBe('Marketing');
+      expect(page.displayPermissionList.name(5)).toBe('Accounting');
       expect(context.port.request).toHaveBeenCalledWith("passbolt.permissions.find-aco-permissions-for-display", props.resourceWorkspaceContext.details.folder.id, "Folder");
     });
 

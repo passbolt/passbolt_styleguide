@@ -52,6 +52,7 @@ export const defaultAzureSsoSettingsViewModelDto = (data = {}) => {
     client_secret_expiry: "2033-11-15 00:00:00",
     email_claim: "email",
     prompt: "login",
+    login_hint: true,
   };
 
   return Object.assign(defaultData, data);

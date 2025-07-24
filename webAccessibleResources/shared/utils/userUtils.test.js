@@ -12,7 +12,8 @@
  * @since         4.6.0
  */
 
-import {USER_STATUS, getUserStatus, isUserSuspended} from "./userUtils";
+import {defaultUserDto} from "../models/entity/user/userEntity.test.data";
+import {USER_STATUS, getUserFormattedName, getUserStatus, isUserSuspended} from "./userUtils";
 
 describe("userUtils", () => {
   beforeEach(() => {
@@ -96,6 +97,46 @@ describe("userUtils", () => {
         disabled: null,
       };
       expect(getUserStatus(user)).toStrictEqual(USER_STATUS.ACTIVE);
+    });
+  });
+
+  describe("::getUserFormattedName", () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    const mockTranslation = jest.fn().mockImplementation(s => s);
+
+    it("should return the user name when defined and without username", () => {
+      expect.assertions(2);
+      const user = defaultUserDto();
+      const expectedResult = `${user.profile.first_name} ${user.profile.last_name}`;
+      expect(getUserFormattedName(user, mockTranslation)).toStrictEqual(expectedResult);
+      expect(mockTranslation).not.toHaveBeenCalled();
+    });
+
+    it("should return the user name when defined and with username", () => {
+      expect.assertions(2);
+      const user = defaultUserDto();
+      const expectedResult = `${user.profile.first_name} ${user.profile.last_name} (${user.username})`;
+      expect(getUserFormattedName(user, mockTranslation, {withUsername: true})).toStrictEqual(expectedResult);
+      expect(mockTranslation).not.toHaveBeenCalled();
+    });
+
+    it("should return 'Unknown user' if no name is defined", () => {
+      expect.assertions(3);
+      const user = {profile: {}};
+      expect(getUserFormattedName(user, mockTranslation)).toStrictEqual("Unknown user");
+      expect(mockTranslation).toHaveBeenCalledTimes(1);
+      expect(mockTranslation).toHaveBeenCalledWith("Unknown user");
+    });
+
+    it("should return 'Unknown user' if group is not defined", () => {
+      expect.assertions(3);
+      const user = null;
+      expect(getUserFormattedName(user, mockTranslation)).toStrictEqual("Unknown user");
+      expect(mockTranslation).toHaveBeenCalledTimes(1);
+      expect(mockTranslation).toHaveBeenCalledWith("Unknown user");
     });
   });
 });

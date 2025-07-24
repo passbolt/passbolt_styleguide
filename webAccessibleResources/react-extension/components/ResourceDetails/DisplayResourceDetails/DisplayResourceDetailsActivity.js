@@ -22,6 +22,7 @@ import {Trans, withTranslation} from "react-i18next";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {withActionFeedback} from '../../../contexts/ActionFeedbackContext';
 import ActivitiesServiceWorkerService from "./ActivitiesServiceWorkerService";
+import DisplayAroName from "../../../../shared/components/Aro/DisplayAroName";
 
 /**
  * This component display activity section of a resource
@@ -153,19 +154,6 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   getActivityCreatorFullName(user) {
     return `${user.profile.first_name} ${user.profile.last_name}`;
-  }
-
-  /**
-   * Get a permission aro name
-   * @param {object} permission The permission
-   */
-  getPermissionAroName(permission) {
-    if (permission.user) {
-      const profile = permission.user.profile;
-      return `${profile.first_name} ${profile.last_name}`;
-    } else {
-      return permission.group.name;
-    }
   }
 
   /**
@@ -322,7 +310,6 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   renderSharedActivityPermissionChangeItem(permission, changeType) {
     const permissionLabel = this.getPermissionLabel(permission);
-    const permissionAroName = this.getPermissionAroName(permission);
     const changeTypeLabel = this.getPermissionChangeTypeLabel(changeType);
 
     return (
@@ -334,7 +321,7 @@ class DisplayResourceDetailsActivity extends React.Component {
         <GroupAvatar group={permission.group}/>
         }
         <div className="name">
-          <span className="creator">{permissionAroName}</span>
+          <span className="creator"><DisplayAroName displayAs={permission.aro} user={permission.user} group={permission.group}/></span>
           <span className="permission-type"> {permissionLabel}</span>
         </div>
         <div className="type"><span className={changeType}>{changeTypeLabel}</span></div>

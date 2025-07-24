@@ -23,13 +23,24 @@ import {
   defaultPropsMultipleResource,
   defaultPropsMultipleResourceUpdateRights,
   defaultPropsOneResourceNotOwned,
-  defaultPropsOneResourceOwned, defaultPropsOneTotpResourceOwned
+  defaultPropsOneResourceOwned,
+  defaultPropsOneResourceV5Private, defaultPropsOneResourceV5Shared,
+  defaultPropsOneTotpResourceOwned
 } from "./DisplayResourcesWorkspaceMenu.test.data";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {
   plaintextSecretPasswordDescriptionTotpDto, plaintextSecretPasswordStringDto
 } from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
 import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import {v4 as uuidv4} from "uuid";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 beforeEach(() => {
   jest.resetModules();
@@ -367,6 +378,37 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.clearSelection).not.toBeNull();
       page.displayMenu.clickOnClearSelection();
       expect(propsMultipleResource.resourceWorkspaceContext.onResourceSelected.none).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("As LU I should see action aborted", () => {
+    it('As LU I cannot edit a resource v5 if metadata keys settings enforced metadata shared key and user has missing keys', async() => {
+      expect.assertions(2);
+      const props = defaultPropsOneResourceV5Private({
+        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
+        metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({allow_usage_of_personal_keys: false})),
+      }); // The props to pass
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.editMenu);
+
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
+    });
+
+    it('As LU I cannot edit a shared resource v5 if user has missing keys', async() => {
+      expect.assertions(2);
+      const props = defaultPropsOneResourceV5Shared({
+        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
+      }); // The props to pass
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.editMenu);
+
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
     });
   });
 });

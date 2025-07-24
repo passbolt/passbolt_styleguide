@@ -26,6 +26,7 @@ const SsoProviders = [
       client_secret_expiry: "",
       prompt: "login",
       email_claim: "email",
+      login_hint: true,
     }
   },
   {

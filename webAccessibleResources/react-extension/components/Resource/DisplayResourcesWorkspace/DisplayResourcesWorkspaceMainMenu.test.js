@@ -38,6 +38,14 @@ import {
   defaultMetadataTypesSettingsV50FreshDto, defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto
 } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import DisplayResourceCreationMenu from "../CreateResource/DisplayResourceCreationMenu";
+import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import {v4 as uuidv4} from "uuid";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 beforeEach(() => {
   jest.resetModules();
@@ -153,6 +161,51 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newPasswordMenu).toBeNull();
+    });
+
+    it('As LU I cannot create a resource v5 if metadata keys settings enforced metadata shared key and user has missing keys', async() => {
+      expect.assertions(4);
+      const props = defaultProps({
+        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
+        metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
+        metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({allow_usage_of_personal_keys: false})),
+      }); // The props to pass
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      await page.displayMenu.clickOnMenu(page.displayMenu.newPasswordMenu);
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      await page.displayMenu.clickOnMenu(page.displayMenu.newTotpMenu);
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      await page.displayMenu.clickOnMenu(page.displayMenu.newCustomFieldsMenu);
+
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(3, ActionAbortedMissingMetadataKeys);
+    });
+
+    it('As LU I cannot create a shared resource v5 if user has missing keys', async() => {
+      expect.assertions(4);
+      const props = defaultPropsFolderOwned({
+        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
+        metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto())
+      }); // The props to pass
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      await page.displayMenu.clickOnMenu(page.displayMenu.newPasswordMenu);
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      await page.displayMenu.clickOnMenu(page.displayMenu.newTotpMenu);
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      await page.displayMenu.clickOnMenu(page.displayMenu.newCustomFieldsMenu);
+
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(3, ActionAbortedMissingMetadataKeys);
     });
   });
 

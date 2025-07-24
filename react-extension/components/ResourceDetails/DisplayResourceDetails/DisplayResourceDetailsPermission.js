@@ -22,6 +22,7 @@ import {Trans, withTranslation} from "react-i18next";
 import {isUserSuspended} from "../../../../shared/utils/userUtils";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import DisplayAroName from "../../../../shared/components/Aro/DisplayAroName";
 
 const PERMISSIONS_LABEL = {
   1: 'can read',
@@ -107,32 +108,7 @@ class DisplayResourceDetailsPermission extends React.Component {
   async fetch() {
     this.setState({loading: true});
     const permissions = await this.props.context.port.request('passbolt.permissions.find-aco-permissions-for-display', this.resource.id, "Resource");
-    if (permissions) {
-      permissions.sort((permissionA, permissionB) => this.sortPermissions(permissionA, permissionB));
-    }
     this.setState({permissions, loading: false});
-  }
-
-  /**
-   * Sort permission by user firstname and by group name
-   * @param permissionA
-   * @param permissionB
-   * @returns {number}
-   */
-  sortPermissions(permissionA, permissionB) {
-    // permission have user sort by firstname and lastname
-    if (permissionA.user && permissionB.user) {
-      if (permissionA.user.profile.first_name === permissionB.user.profile.first_name) {
-        return permissionA.user.profile.last_name < permissionB.user.profile.last_name ? -1 : 1;
-      }
-      return permissionA.user.profile.first_name < permissionB.user.profile.first_name ? -1 : 1;
-    } else if (!permissionA.user && permissionB.user) { // sort after group permission user
-      return 1;
-    } else if (permissionA.user && !permissionB.user) {
-      return -1;
-    } else { // otherwise, sort by group
-      return permissionA.group.name < permissionB.group.name ? -1 : 1;
-    }
   }
 
   /**
@@ -144,19 +120,6 @@ class DisplayResourceDetailsPermission extends React.Component {
       this.fetch();
     }
     this.setState({open});
-  }
-
-  /**
-   * Get a permission aro name
-   * @param {object} permission The permission
-   */
-  getPermissionAroName(permission) {
-    if (permission.user) {
-      const profile = permission.user.profile;
-      return `${profile.first_name} ${profile.last_name} (${permission.user.username})`;
-    } else {
-      return permission.group.name;
-    }
   }
 
   /**
@@ -211,16 +174,16 @@ class DisplayResourceDetailsPermission extends React.Component {
                 {this.state.permissions && this.state.permissions.map(permission =>
                   <div key={permission.id}
                     className={`usercard-col-2 ${this.isUserSuspended(permission.user) ? "suspended" : ""}`}>
-                    {permission.user &&
+                    {(permission.user || permission.aro === "User") &&
                       <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
                     }
-                    {permission.group &&
+                    {(permission.group || permission.aro === "Group") &&
                       <GroupAvatar group={permission.group}/>
                     }
                     <div className="content-wrapper">
                       <div className="content">
-                        <div
-                          className="name">{this.getPermissionAroName(permission)}{this.isUserSuspended(permission.user) &&
+                        <div className="name">
+                          <DisplayAroName displayAs={permission.aro} group={permission.group} user={permission.user} withUsername={true}/>{this.isUserSuspended(permission.user) &&
                           <span className="suspended"> <Trans>(suspended)</Trans></span>}</div>
                         <div className="subinfo">{this.props.t(PERMISSIONS_LABEL[permission.type])}</div>
                       </div>

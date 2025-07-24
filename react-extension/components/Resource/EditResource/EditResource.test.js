@@ -47,6 +47,7 @@ import {
 } from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import ResourceMetadataEntity from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity";
 import {defaultCustomField} from "../../../../shared/models/entity/customField/customFieldEntity.test.data";
+import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
 
 describe("See the Create Resource", () => {
   beforeEach(() => {
@@ -1127,6 +1128,71 @@ describe("See the Create Resource", () => {
         expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
       });
 
+      it('should open the creation confirmation dialog if the entropy of the password is too low and throw an UserAbortsOperationError on confirmation', async() => {
+        expect.assertions(3);
+
+        const props = defaultProps();
+        mockContextRequest(props.context, () => ({object_type: SECRET_DATA_OBJECT_TYPE, password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        page.fillInput(page.password, "test");
+        await waitFor(() => {});
+
+        const error = new UserAbortsOperationError();
+        jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
+        jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
+
+        page.click(page.saveButton);
+        await waitFor(() => {});
+
+        const confirmDialogProps = {
+          resourceName: "Passbolt",
+          operation: ConfirmEditCreateOperationVariations.CREATE,
+          rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+          onConfirm: expect.any(Function),
+          onReject: expect.any(Function),
+        };
+
+        expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
+        expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+      });
+
+      it('should open the creation confirmation dialog if the entropy of the password is too low and throw an unexpected error on confirmation', async() => {
+        expect.assertions(4);
+
+        const props = defaultProps();
+        mockContextRequest(props.context, () => ({object_type: SECRET_DATA_OBJECT_TYPE, password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        page.fillInput(page.password, "test");
+        await waitFor(() => {});
+
+        const error = new Error("unexpected error");
+        jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
+        jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
+
+        page.click(page.saveButton);
+        await waitFor(() => {});
+
+        const confirmDialogProps = {
+          resourceName: "Passbolt",
+          operation: ConfirmEditCreateOperationVariations.CREATE,
+          rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+          onConfirm: expect.any(Function),
+          onReject: expect.any(Function),
+        };
+
+        expect(props.dialogContext.open).toHaveBeenCalledTimes(2);
+        expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+        expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
+      });
+
       it('should open the creation confirmation dialog if the password is found in a data breach', async() => {
         expect.assertions(3);
 
@@ -1157,6 +1223,79 @@ describe("See the Create Resource", () => {
 
         expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
         expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+      });
+
+      it('should open the creation confirmation dialog if the password is found in a data breach and throw an UserAbortsOperationError error on confirmation', async() => {
+        expect.assertions(3);
+
+        jest.spyOn(PownedService.prototype, "checkIfPasswordPowned").mockImplementation(async() => true);
+
+        const props = defaultProps({
+          passwordPoliciesContext: defaultPasswordPoliciesContext(),
+        });
+        mockContextRequest(props.context, () => ({object_type: SECRET_DATA_OBJECT_TYPE, password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        page.fillInput(page.password, "Az12./RTY2346");
+        await waitFor(() => {});
+
+        const error = new UserAbortsOperationError();
+        jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
+        jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
+
+        page.click(page.saveButton);
+        await waitFor(() => {});
+
+        const confirmDialogProps = {
+          resourceName: "Passbolt",
+          operation: ConfirmEditCreateOperationVariations.CREATE,
+          rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+          onConfirm: expect.any(Function),
+          onReject: expect.any(Function),
+        };
+
+        expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
+        expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+      });
+
+      it('should open the creation confirmation dialog if the password is found in a data breach and throw an unexpected error on confirmation', async() => {
+        expect.assertions(4);
+
+        jest.spyOn(PownedService.prototype, "checkIfPasswordPowned").mockImplementation(async() => true);
+
+        const props = defaultProps({
+          passwordPoliciesContext: defaultPasswordPoliciesContext(),
+        });
+        mockContextRequest(props.context, () => ({object_type: SECRET_DATA_OBJECT_TYPE, password: "password", description: "description"}));
+        const page = new EditResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        page.fillInput(page.password, "Az12./RTY2346");
+        await waitFor(() => {});
+
+        const error = new Error("unexpected error");
+        jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
+        jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
+
+        page.click(page.saveButton);
+        await waitFor(() => {});
+
+        const confirmDialogProps = {
+          resourceName: "Passbolt",
+          operation: ConfirmEditCreateOperationVariations.CREATE,
+          rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+          onConfirm: expect.any(Function),
+          onReject: expect.any(Function),
+        };
+
+        expect(props.dialogContext.open).toHaveBeenCalledTimes(2);
+        expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+        expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
       });
     });
   });

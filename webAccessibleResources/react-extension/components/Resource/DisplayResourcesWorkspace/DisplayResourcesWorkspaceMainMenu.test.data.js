@@ -27,6 +27,10 @@ import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metada
 import {
   defaultMetadataTypesSettingsV4Dto
 } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 /**
  * Default component props.
@@ -41,6 +45,7 @@ export function defaultProps(data = {}) {
     dialogContext: defaultDialogContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
+    metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
     ...data
   };
 }
@@ -58,6 +63,7 @@ export function defaultPropsFolderOwned(data = {}) {
     dialogContext: defaultDialogContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
+    metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
     ...data
   };
 }
@@ -75,6 +81,7 @@ export function defaultPropsFolderNotOwned(data = {}) {
     dialogContext: defaultDialogContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
+    metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
     ...data
   };
 }
