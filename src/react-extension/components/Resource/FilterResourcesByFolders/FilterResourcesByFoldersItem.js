@@ -27,6 +27,12 @@ import FolderSVG from "../../../../img/svg/folder.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 class FilterResourcesByFoldersItem extends React.Component {
   /**
@@ -253,6 +259,15 @@ class FilterResourcesByFoldersItem extends React.Component {
         if (folders?.length > 0) {
           await this.props.context.port.request("passbolt.folders.move-by-id", folders[0], folderParentId);
         } else if (resources?.length > 0) {
+          const hasSomePersonalResourceV5 = this.props.dragContext.draggedItems.resources.some(resource => resource.personal && this.props.resourceTypes.getFirstById(resource.resource_type_id)?.isV5());
+          // Zero knowledge requires the user to have access to shared metadata key prior to move personal resources into shared folder.
+          if (hasSomePersonalResourceV5 && !this.props.folder.personal) {
+            const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+            if (userHasMissingKeys) {
+              this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
+              return;
+            }
+          }
           await this.props.context.port.request("passbolt.resources.move-by-ids", resources, folderParentId);
         }
       } catch (error) {
@@ -552,10 +567,11 @@ FilterResourcesByFoldersItem.propTypes = {
   folder: PropTypes.object,
   isOpen: PropTypes.bool.isRequired,
   resourceWorkspaceContext: PropTypes.any,
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   dragContext: PropTypes.any,
   dialogContext: PropTypes.object, // The dialog context
   toggleOpenFolder: PropTypes.func,
   toggleCloseFolder: PropTypes.func
 };
 
-export default withRouter(withAppContext(withContextualMenu(withDialog(withResourceWorkspace(withDrag(FilterResourcesByFoldersItem))))));
+export default withRouter(withAppContext(withResourceTypesLocalStorage(withContextualMenu(withDialog(withResourceWorkspace(withDrag(FilterResourcesByFoldersItem)))))));

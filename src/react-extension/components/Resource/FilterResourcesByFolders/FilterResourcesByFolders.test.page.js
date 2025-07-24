@@ -23,6 +23,9 @@ import {DragContext} from "../../../contexts/DragContext";
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
 import {ContextualMenuContext} from "../../../contexts/ContextualMenuContext";
 import {DialogContext} from "../../../contexts/DialogContext";
+import {
+  ResourceTypesLocalStorageContext
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 
 /**
  * The FilterResourcesByFolders component represented as a page
@@ -39,11 +42,13 @@ export default class FilterResourcesByFoldersPage {
           <Router>
             <ContextualMenuContext.Provider value={props.contextualMenuContext}>
               <DialogContext.Provider value={props.dialogContext}>
-                <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
-                  <DragContext.Provider value={props.dragContext}>
-                    <FilterResourcesByFolders.WrappedComponent {...props}/>
-                  </DragContext.Provider>
-                </ResourceWorkspaceContext.Provider>
+                <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
+                  <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
+                    <DragContext.Provider value={props.dragContext}>
+                      <FilterResourcesByFolders.WrappedComponent {...props}/>
+                    </DragContext.Provider>
+                  </ResourceWorkspaceContext.Provider>
+                </ResourceTypesLocalStorageContext.Provider>
               </DialogContext.Provider>
             </ContextualMenuContext.Provider>
           </Router>
