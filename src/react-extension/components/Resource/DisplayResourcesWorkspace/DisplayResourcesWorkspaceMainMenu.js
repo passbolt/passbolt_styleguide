@@ -105,7 +105,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Handle the import click event
    */
   handleImportClickEvent() {
-    this.props.dialogContext.open(ImportResources);
+    this.canImportResources() ? this.props.dialogContext.open(ImportResources) : this.displayActionAborted();
   }
 
   /**
@@ -214,6 +214,16 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     }
 
     return true;
+  }
+
+  /**
+   * Can import resources
+   * @return {boolean}
+   */
+  canImportResources() {
+    const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings.allowUsageOfPersonalKeys;
+    const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+    return !(isMetadataSharedKeyEnforced && userHasMissingKeys);
   }
 
   /**
