@@ -51,6 +51,12 @@ import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 import DisplayResourceCreationMenu from "../CreateResource/DisplayResourceCreationMenu";
 import CreateResource from "../CreateResource/CreateResource";
 import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
+import {
+  withMetadataKeysSettingsLocalStorage
+} from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import ActionFailedMissingMetadataKeys
+  from "../../Metadata/ActionFailedMissingMetadataKeys/ActionFailedMissingMetadataKeys";
 
 /**
  * This component allows the current user to create a new resource
@@ -82,7 +88,13 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   handleCreateMenuPasswordClickEvent() {
     let resourceType;
     if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
-      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+      const canCreateResource = this.canCreateResource();
+      if (canCreateResource) {
+        resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+      } else {
+        this.displayActionFailed();
+        return;
+      }
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
       resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
     }
@@ -110,7 +122,13 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   handleMenuCreateTotpClickEvent() {
     let resourceType;
     if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
-      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
+      const canCreateResource = this.canCreateResource();
+      if (canCreateResource) {
+        resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
+      } else {
+        this.displayActionFailed();
+        return;
+      }
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
       resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
     }
@@ -121,8 +139,13 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Handle custom fields click event
    */
   handleMenuCreateCustomFieldsClickEvent() {
-    const resourceType  = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
-    this.openCreateDialog(resourceType);
+    const canCreateResource = this.canCreateResource();
+    if (canCreateResource) {
+      const resourceType  = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
+      this.openCreateDialog(resourceType);
+    } else {
+      this.displayActionFailed();
+    }
   }
 
   /**
@@ -173,6 +196,24 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    */
   canCreate() {
     return this.folderSelected === null || this.folderSelected.permission.type >= 7;
+  }
+
+  /**
+   * Can create resource
+   * @return {boolean}
+   */
+  canCreateResource() {
+    const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings.allowUsageOfPersonalKeys;
+    const isPersonalFolder = this.folderSelected === null || this.folderSelected.personal;
+    const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+
+    if (isPersonalFolder && isMetadataSharedKeyEnforced && userHasMissingKeys) {
+      return false;
+    } else if (!isPersonalFolder && userHasMissingKeys) {
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -257,6 +298,13 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     );
 
     return otherV5ContentTypes?.length > 0;
+  }
+
+  /**
+   * Display action failed
+   */
+  displayActionFailed() {
+    this.props.dialogContext.open(ActionFailedMissingMetadataKeys);
   }
 
   /**
@@ -366,7 +414,8 @@ DisplayResourcesWorkspaceMainMenu.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
+  metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withDialog(withMetadataTypesSettingsLocalStorage(withResourceTypesLocalStorage(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu)))))));
+export default withAppContext(withRbac(withDialog(withMetadataTypesSettingsLocalStorage(withMetadataKeysSettingsLocalStorage(withResourceTypesLocalStorage(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu))))))));
