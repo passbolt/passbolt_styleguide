@@ -32,19 +32,6 @@ export default class MetadataSetupSettingsEntity extends EntityV2 {
     };
   }
 
-  /*
-   * ==================================================
-   * Dynamic properties getters
-   * ==================================================
-   */
-  /**
-   * Should the metadata encrypted be enabled after install.
-   * @returns {boolean}
-   */
-  get enableEncryptedMetadataOnInstall() {
-    return this._props.enable_encrypted_metadata_on_install;
-  }
-
   /**
    * Create a default entity patched with the given data
    * @param {object} the data to override the default dto with
@@ -56,5 +43,18 @@ export default class MetadataSetupSettingsEntity extends EntityV2 {
       ...data,
     };
     return new MetadataSetupSettingsEntity(dto);
+  }
+
+  /*
+   * ==================================================
+   * Dynamic properties getters
+   * ==================================================
+   */
+  /**
+   * Should the metadata encrypted be enabled after install.
+   * @returns {boolean}
+   */
+  get enableEncryptedMetadataOnInstall() {
+    return this._props.enable_encrypted_metadata_on_install;
   }
 }
