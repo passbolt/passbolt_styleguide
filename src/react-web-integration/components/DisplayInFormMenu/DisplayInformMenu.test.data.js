@@ -15,12 +15,15 @@ import ResourceTypesCollection from "../../../shared/models/entity/resourceType/
 import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
-  defaultMetadataTypesSettingsV4Dto
+  defaultMetadataTypesSettingsV4Dto,
+  defaultMetadataTypesSettingsV6Dto
 } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import {
   defaultPasswordPoliciesContext
 } from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
 import {defaultAppContext} from "../../../react-extension/contexts/ExtAppContext.test.data";
+import {defaultMetadataKeysDtos} from "../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
+import {defaultUserDto} from "../../../shared/models/entity/user/userEntity.test.data";
 
 /**
  * Default component props.
@@ -35,4 +38,19 @@ export function defaultProps(data = {}) {
     passwordPoliciesContext: defaultPasswordPoliciesContext(),
     ...data
   };
+}
+
+/**
+ * Default component props with missing metadata key.
+ * @param {Object} data
+ * @returns props with missing metadata key
+ */
+export function defaultPropsWithMissingMetadataKey(data = {}) {
+  const metadataKeys = defaultMetadataKeysDtos();
+  const missingMetadataKeys = metadataKeys.map(metadata => metadata.id);
+  const metadataTypeSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto());
+  const context = defaultAppContext({
+    loggedInUser: defaultUserDto({missing_metadata_key_ids: missingMetadataKeys})
+  });
+  return defaultProps({context, metadataTypeSettings, ...data});
 }
