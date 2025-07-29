@@ -383,7 +383,8 @@ class DisplayInFormMenu extends React.Component {
    */
   canCreatePassword() {
     if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
-      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+      const userHasMissingKeys = this.props.context.loggedInUser?.missing_metadata_key_ids?.length > 0;
+      return !userHasMissingKeys && this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
       return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
     } else {
