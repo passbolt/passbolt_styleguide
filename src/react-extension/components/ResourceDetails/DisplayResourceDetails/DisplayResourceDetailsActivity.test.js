@@ -133,17 +133,79 @@ describe("See activities", () => {
      * When I open the “Activity” section of the secondary sidebar
      * And the activities are not loaded due to an unexpected error
      * Then I should see an appropriate error message.
+     * I should still be able to see the more button
+     * Clicking on more button should retry the fetch with activities Page value 1
      */
     it('I should see an error toaster if the activities do not load due to an unexpected error', async() => {
-      expect.assertions(2);
+      expect.assertions(6);
 
       const error = {message: "Unable to reach the server, an unexpected error occurred"};
-      mockContextRequest(() => Promise.reject(error));
+      const mockRequest = jest.fn(() => Promise.reject(error));
+      mockContextRequest(mockRequest);
       page = new DisplayResourceDetailsActivityPage(context, props);
 
       await waitFor(() => {});
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalledTimes(1);
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith(error.message);
+      expect(page.displayActivityList.moreButtonExists()).toBeTruthy();
+
+      await page.displayActivityList.moreButtonClick();
+      expect(mockRequest).toHaveBeenCalledTimes(2);
+      // Get the arguments for the first and second calls
+      const firstCallArgs = mockRequest.mock.calls[0];
+      const secondCallArgs = mockRequest.mock.calls[1];
+
+      expect(secondCallArgs).toEqual(firstCallArgs);
+
+      expect(firstCallArgs).toEqual([
+        "passbolt.actionlogs.find-all-for",
+        "Resource",
+        props.resourceWorkspaceContext.details.resource.id,
+        {limit: 5, page: 1}
+      ]);
+    });
+
+    /**
+     * When I click on 'more' of the 'Activity' section of the secondary sidebar
+     * The fetch should be called with activitiesPage value 2
+     * And the activities are not loaded due to an unexpected error
+     * Then I should see an appropriate error message.
+     * Clicking on 'more' button again should call fetch activitiesPage value 2
+     */
+    it('When I click on more button and activities are not loaded due to unexpected error ', async() => {
+      expect.assertions(6);
+      mockContextRequest(activitiesFoundRequestMockImpl);
+      page = new DisplayResourceDetailsActivityPage(context, props);
+      await waitForTrue(() => page.displayActivityList.moreButtonExists());
+
+      const error = {message: "Unable to reach the server, an unexpected error occurred"};
+      const mockRequest = jest.fn(() => Promise.reject(error));
+      mockContextRequest(mockRequest);
+
+      // click on more button - here the activities page value should be 2 and they are not loaded
+      await page.displayActivityList.moreButtonClick();
+
+      expect(props.actionFeedbackContext.displayError).toHaveBeenCalled();
+      expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith(error.message);
+      expect(page.displayActivityList.moreButtonExists()).toBeTruthy();
+      await waitFor(() => {});
+
+      // click on more button again after error display
+      await page.displayActivityList.moreButtonClick();
+
+      expect(mockRequest).toHaveBeenCalledTimes(2);
+      const firstCallArgs = mockRequest.mock.calls[0];
+      const secondCallArgs = mockRequest.mock.calls[1];
+
+      expect(secondCallArgs).toEqual(firstCallArgs);
+
+      // the page is still 2 as it did not load with page : 2 initially
+      expect(firstCallArgs).toEqual([
+        "passbolt.actionlogs.find-all-for",
+        "Resource",
+        props.resourceWorkspaceContext.details.resource.id,
+        {limit: 5, page: 2}
+      ]);
     });
   });
 });
