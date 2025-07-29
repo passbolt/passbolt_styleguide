@@ -257,16 +257,17 @@ class FilterResourcesByFoldersItem extends React.Component {
     if (!isDroppingOnDraggedItem) {
       try {
         if (folders?.length > 0) {
+          if (!this.props.folder.personal && this.userHasMissingKeys) {
+            this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
+            return;
+          }
           await this.props.context.port.request("passbolt.folders.move-by-id", folders[0], folderParentId);
         } else if (resources?.length > 0) {
           const hasSomePersonalResourceV5 = this.props.dragContext.draggedItems.resources.some(resource => resource.personal && this.props.resourceTypes.getFirstById(resource.resource_type_id)?.isV5());
           // Zero knowledge requires the user to have access to shared metadata key prior to move personal resources into shared folder.
-          if (hasSomePersonalResourceV5 && !this.props.folder.personal) {
-            const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
-            if (userHasMissingKeys) {
-              this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
-              return;
-            }
+          if (hasSomePersonalResourceV5 && !this.props.folder.personal && this.userHasMissingKeys) {
+            this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
+            return;
           }
           await this.props.context.port.request("passbolt.resources.move-by-ids", resources, folderParentId);
         }
@@ -278,6 +279,14 @@ class FilterResourcesByFoldersItem extends React.Component {
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
     const draggingOver = false;
     this.setState({draggingOver});
+  }
+
+  /**
+   * User has missing keys
+   * @return {boolean}
+   */
+  get userHasMissingKeys() {
+    return this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
   }
 
   /**
