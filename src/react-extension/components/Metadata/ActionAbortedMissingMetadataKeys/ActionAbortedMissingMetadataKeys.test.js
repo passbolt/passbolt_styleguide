@@ -39,7 +39,7 @@ describe("ActionAbortedMissingMetadataKeys", () => {
     expect(props.onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('As a signed in user I can close a confirm metadata key', async() => {
+  it('As a signed in user I can close an action aborted missing metadata keys', async() => {
     expect.assertions(2);
     const props = defaultProps();
     const page = new ActionAbortedMissingMetadataKeysPage(props);
