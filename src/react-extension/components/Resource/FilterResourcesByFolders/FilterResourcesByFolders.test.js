@@ -221,7 +221,7 @@ describe("See Folders", () => {
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
     });
 
-    it('As LU I should be able to drag and drop personal resources v5 on a shared folder if I have missing keys', async() => {
+    it('As LU I should not be able to drag and drop personal resources v5 on a shared folder if I have missing keys', async() => {
       expect.assertions(3);
       const resources = [defaultResourceDto(), defaultResourceDto({personal: true, resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT})];
       const props = defaultProps({
@@ -235,6 +235,26 @@ describe("See Folders", () => {
           onDragEnd: jest.fn(),
         }
       });
+      props.context.loggedInUser = defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true});
+
+      const page = new FilterResourcesByFoldersPage(props);
+
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
+      await page.filterResourcesByFoldersItem.onDropFolder(4);
+      expect(props.dragContext.onDragStart).toHaveBeenCalled();
+      expect(props.dragContext.onDragEnd).toHaveBeenCalled();
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
+    });
+
+    it('As LU I should not be able to drag and drop a folder on a shared folder if I have missing keys', async() => {
+      expect.assertions(3);
+      const props = defaultProps();
       props.context.loggedInUser = defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true});
 
       const page = new FilterResourcesByFoldersPage(props);
