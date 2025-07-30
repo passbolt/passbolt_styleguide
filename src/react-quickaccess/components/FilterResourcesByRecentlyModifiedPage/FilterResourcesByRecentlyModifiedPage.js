@@ -22,6 +22,10 @@ import DisplayResourceUrisBadge
   from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 import CaretLeftSVG from "../../../img/svg/caret_left.svg";
 import CloseSVG from "../../../img/svg/close.svg";
+import {
+  withMetadataKeysSettingsLocalStorage
+} from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 
 const BROWSED_RESOURCES_LIMIT = 500;
 
@@ -132,6 +136,22 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
     }
   }
 
+  /**
+   * User has missing keys
+   * @return {boolean}
+   */
+  get userHasMissingKeys() {
+    return this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+  }
+
+  /**
+   * Should display action aborted missing metadata keys
+   * @return {boolean}
+   */
+  get shouldDisplayActionAbortedMissingMetadataKeys() {
+    return this.props.metadataTypeSettings.isDefaultResourceTypeV5 && this.userHasMissingKeys && !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
+  }
+
   render() {
     const isReady = this.isReady();
     const isSearching = this.props.context.search.length > 0;
@@ -203,7 +223,7 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
         </div>
         {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
         <div className="submit-wrapper">
-          <Link to="/webAccessibleResources/quickaccess/resources/create" id="popupAction" className="button primary big full-width" role="button">
+          <Link to={`/webAccessibleResources/quickaccess/resources/${this.shouldDisplayActionAbortedMissingMetadataKeys ? "action-aborted-missing-metadata-keys" : "create"}`} id="popupAction" className="button primary big full-width" role="button">
             <Trans>Create new</Trans>
           </Link>
         </div>
@@ -218,6 +238,7 @@ FilterResourcesByRecentlyModifiedPage.propTypes = {
   resources: PropTypes.array, // the available resources
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
+  metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
   // Match, location and history props are injected by the withRouter decoration call.
   match: PropTypes.object,
   location: PropTypes.object,
@@ -225,4 +246,4 @@ FilterResourcesByRecentlyModifiedPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withResourceTypesLocalStorage(withResourcesLocalStorage(withMetadataTypesSettingsLocalStorage(withTranslation('common')(FilterResourcesByRecentlyModifiedPage))))));
+export default withAppContext(withRouter(withResourceTypesLocalStorage(withResourcesLocalStorage(withMetadataTypesSettingsLocalStorage(withMetadataKeysSettingsLocalStorage(withTranslation('common')(FilterResourcesByRecentlyModifiedPage)))))));

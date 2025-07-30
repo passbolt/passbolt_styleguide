@@ -26,6 +26,13 @@ import {
   resourceTypesV4CollectionDto,
   resourceTypesV5CollectionDto
 } from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import {defaultAppContext} from "../../contexts/AppContext.test.data";
+import {defaultUserDto} from "../../../shared/models/entity/user/userEntity.test.data";
+import {v4 as uuidv4} from "uuid";
+import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -70,6 +77,27 @@ describe("MoreFiltersPage", () => {
       const props = defaultProps({metadataTypeSettings: metadataTypeSettingEntity});
       const page = new MoreFiltersPage(props);
       expect(page.createButton).toBeDefined();
+    });
+
+    it("should display action aborted missing metadata keys if share metadata key is enforced and user has missing keys", async() => {
+      expect.assertions(2);
+
+      const props = defaultProps({
+        context: defaultAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
+        metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
+        metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({allow_usage_of_personal_keys: false})),
+      });
+      props.history = createMemoryHistory();
+
+      const initialPath = props.history.location.pathname;
+      const page = new MoreFiltersPage(props);
+
+      expect(page.createButton).toBeDefined();
+
+      await page.clickOnCreateButton();
+      await waitForTrue(() => props.history.location.pathname !== initialPath);
+
+      expect(props.history.location.pathname).toStrictEqual(`/webAccessibleResources/quickaccess/resources/action-aborted-missing-metadata-keys`);
     });
 
     it("should not display the button if metadata type settings are not loaded", () => {

@@ -37,6 +37,10 @@ import DisplayResourceUrisBadge
   from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 import CaretLeftSVG from "../../../img/svg/caret_left.svg";
 import CloseSVG from "../../../img/svg/close.svg";
+import {
+  withMetadataKeysSettingsLocalStorage
+} from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 
 const BROWSED_RESOURCES_LIMIT = 100;
 
@@ -141,6 +145,22 @@ class FilterResourcesBySharedWithMePage extends React.Component {
   }
 
   /**
+   * User has missing keys
+   * @return {boolean}
+   */
+  get userHasMissingKeys() {
+    return this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+  }
+
+  /**
+   * Should display action aborted missing metadata keys
+   * @return {boolean}
+   */
+  get shouldDisplayActionAbortedMissingMetadataKeys() {
+    return this.props.metadataTypeSettings.isDefaultResourceTypeV5 && this.userHasMissingKeys && !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
+  }
+
+  /**
    * Component renderer.
    * @returns {JSX}
    */
@@ -213,7 +233,7 @@ class FilterResourcesBySharedWithMePage extends React.Component {
         </div>
         {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
         <div className="submit-wrapper">
-          <Link to="/webAccessibleResources/quickaccess/resources/create" id="popupAction" className="button primary big full-width" role="button">
+          <Link to={`/webAccessibleResources/quickaccess/resources/${this.shouldDisplayActionAbortedMissingMetadataKeys ? "action-aborted-missing-metadata-keys" : "create"}`} id="popupAction" className="button primary big full-width" role="button">
             <Trans>Create new</Trans>
           </Link>
         </div>
@@ -228,10 +248,11 @@ FilterResourcesBySharedWithMePage.propTypes = {
   resources: PropTypes.array, // the available resources
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
+  metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
   // Location and history props are injected by the withRouter decoration call.
   location: PropTypes.object,
   history: PropTypes.object,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withResourceTypesLocalStorage(withResourcesLocalStorage(withMetadataTypesSettingsLocalStorage(withTranslation('common')(FilterResourcesBySharedWithMePage))))));
+export default withAppContext(withRouter(withResourceTypesLocalStorage(withResourcesLocalStorage(withMetadataTypesSettingsLocalStorage(withMetadataKeysSettingsLocalStorage(withTranslation('common')(FilterResourcesBySharedWithMePage)))))));

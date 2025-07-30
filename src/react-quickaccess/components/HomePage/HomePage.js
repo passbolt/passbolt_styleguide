@@ -42,6 +42,10 @@ import CaretRightSVG from "../../../img/svg/caret_right.svg";
 import FilterSVG from "../../../img/svg/filter.svg";
 import UsersSVG from "../../../img/svg/users.svg";
 import TagV2SVG from "../../../img/svg/tag_v2.svg";
+import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  withMetadataKeysSettingsLocalStorage
+} from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
@@ -215,6 +219,22 @@ class HomePage extends React.Component {
   }
 
   /**
+   * User has missing keys
+   * @return {boolean}
+   */
+  get userHasMissingKeys() {
+    return this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+  }
+
+  /**
+   * Should display action aborted missing metadata keys
+   * @return {boolean}
+   */
+  get shouldDisplayActionAbortedMissingMetadataKeys() {
+    return this.props.metadataTypeSettings.isDefaultResourceTypeV5 && this.userHasMissingKeys && !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
+  }
+
+  /**
    * Component renderer.
    * @returns {JSX}
    */
@@ -352,7 +372,7 @@ class HomePage extends React.Component {
         </div>
         {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
         <div className="submit-wrapper button-after-list input">
-          <Link to={`/webAccessibleResources/quickaccess/resources/create`} id="popupAction" className="button primary big full-width" role="button">
+          <Link to={`/webAccessibleResources/quickaccess/resources/${this.shouldDisplayActionAbortedMissingMetadataKeys ? "action-aborted-missing-metadata-keys" : "create"}`} id="popupAction" className="button primary big full-width" role="button">
             <Trans>Create new</Trans>
           </Link>
           {this.state.useOnThisTabError &&
@@ -372,7 +392,8 @@ HomePage.propTypes = {
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   resourcesLocalStorageContext: PropTypes.object, // The resources local storage context
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
+  metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withResourceTypesLocalStorage(withResourcesLocalStorage(withMetadataTypesSettingsLocalStorage(withTranslation('common')(HomePage)))))));
+export default withAppContext(withRbac(withRouter(withResourceTypesLocalStorage(withResourcesLocalStorage(withMetadataTypesSettingsLocalStorage(withMetadataKeysSettingsLocalStorage(withTranslation('common')(HomePage))))))));

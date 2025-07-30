@@ -26,6 +26,10 @@ import {
 import {
   defaultResourceMetadataDto
 } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 /**
  * Default component props.
@@ -39,6 +43,7 @@ export function defaultProps(data = {}) {
     resourcesLocalStorageContext: defaultResourceLocalStorageContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
+    metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
     resources: null,
     getOpenerTabId: () => 1,
     ...data

@@ -134,7 +134,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     const resourceType = this.props.resourceTypes.getFirstById(this.selectedResources[0].resource_type_id);
 
     if (resourceType.isV5()) {
-      const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings.allowUsageOfPersonalKeys;
+      const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
       const isPersonalResource = this.selectedResources[0].personal;
       const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
 
