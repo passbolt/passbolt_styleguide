@@ -35,6 +35,10 @@ import DiceSVG from "../../../img/svg/dice.svg";
 import AddSVG from "../../../img/svg/add.svg";
 import SearchSVG from "../../../img/svg/search.svg";
 import ResourceIcon from "../../../shared/components/Icons/ResourceIcon";
+import {
+  withMetadataKeysSettingsLocalStorage
+} from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 
 /** The maximum length of visibility of a generated password */
 const TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH = 15;
@@ -383,8 +387,9 @@ class DisplayInFormMenu extends React.Component {
    */
   canCreatePassword() {
     if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
       const userHasMissingKeys = this.props.context.loggedInUser?.missing_metadata_key_ids?.length > 0;
-      return !userHasMissingKeys && this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+      return !isMetadataSharedKeyEnforced && !userHasMissingKeys && this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
       return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
     } else {
@@ -414,7 +419,8 @@ DisplayInFormMenu.propTypes = {
   t: PropTypes.func, // The translation function
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
+  metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
   passwordPoliciesContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withResourceTypesLocalStorage(withMetadataTypesSettingsLocalStorage(withPasswordPolicies(withTranslation('common')(DisplayInFormMenu)))));
+export default withAppContext(withResourceTypesLocalStorage(withMetadataTypesSettingsLocalStorage(withMetadataKeysSettingsLocalStorage(withPasswordPolicies(withTranslation('common')(DisplayInFormMenu))))));
