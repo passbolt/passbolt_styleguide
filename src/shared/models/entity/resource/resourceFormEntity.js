@@ -454,14 +454,16 @@ class ResourceFormEntity extends EntityV2 {
       validationError = this.validateMaxLengthAgainstSchema(
         this.secret.toDto(),
         this.secret,
-        validationError
+        validationError,
+        'secret'
       );
       // Verify secret totp association
       if (this.secret.totp) {
         validationError = this.validateMaxLengthAgainstSchema(
           this.secret.totp.toDto(),
           this.secret.totp,
-          validationError
+          validationError,
+          'secret.totp'
         );
       }
 
@@ -477,7 +479,8 @@ class ResourceFormEntity extends EntityV2 {
       validationError = this.validateMaxLengthAgainstSchema(
         this.metadata.toDto(ResourceMetadataEntity.DEFAULT_CONTAIN),
         this.metadata,
-        validationError
+        validationError,
+        'metadata'
       );
     }
 
@@ -489,10 +492,11 @@ class ResourceFormEntity extends EntityV2 {
    * @param {Object} dataObject - The association or properties to validate
    * @param {Entity} entity - The entity
    * @param {EntityValidationError|null} currentError - The existing error object or null
+   * @param {string} associationName - The name of the association
    * @return {EntityValidationError|null} The updated or unchanged error object
    * @private
    */
-  validateMaxLengthAgainstSchema(dataObject, entity, currentError) {
+  validateMaxLengthAgainstSchema(dataObject, entity, currentError, associationName = '') {
     let error = currentError;
     Object.entries(dataObject).forEach(([fieldName, fieldValue]) => {
       const fieldSchema = entity.constructor.getSchema().properties[fieldName];
@@ -506,9 +510,9 @@ class ResourceFormEntity extends EntityV2 {
             if (value?.length >= maxItemLength) {
               error = error || new EntityValidationError();
               error.addError(
-                `${fieldName}.${index}`,
+                `${associationName}.${fieldName}.${index}`,
                 "maxLength",
-                `${fieldName} at index ${index} exceeds maximum length limit`
+                `${associationName}.${fieldName} at index ${index} exceeds maximum length limit`
               );
             }
           });
@@ -519,9 +523,9 @@ class ResourceFormEntity extends EntityV2 {
         if (typeof maxLength !== "undefined" && fieldValue?.length >= maxLength) {
           error = error || new EntityValidationError();
           error.addError(
-            fieldName,
+            `${associationName}.${fieldName}`,
             "maxLength",
-            `${fieldName} exceeds maximum length limit`
+            `${associationName}.${fieldName} exceeds maximum length limit`
           );
         }
       }

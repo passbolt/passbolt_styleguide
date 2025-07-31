@@ -89,11 +89,13 @@ class AddResourceName extends Component {
 
   /**
    * Checks if there is a max length warning for a specific property.
+   * @param {string} propName - The name of the property to check for max length warning.
+   * @param {string} association - The name of the association to check for max length warning.
    *
    * @returns {boolean} - Returns true if there is a max length warning for the property, false otherwise.
    */
-  isMaxLengthWarnings(propName) {
-    return !this.isMaxLengthError("name") && this.props.warnings?.hasError(propName, "maxLength");
+  isMaxLengthWarnings(propName, association) {
+    return !this.isMaxLengthError() && this.props.warnings?.hasError(`${association}.${propName}`, "maxLength");
   }
 
   /**
@@ -137,10 +139,10 @@ class AddResourceName extends Component {
             <input id="resource-name" name="metadata.name" type="text" value={this.props.resource?.metadata?.name || ""}
               onChange={this.handleInputChange} disabled={this.props.disabled} maxLength="255"
               autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
-            {this.isMaxLengthError("name") &&
+            {this.isMaxLengthError() &&
                 <div className="name error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
             }
-            {this.isMaxLengthWarnings("name") &&
+            {this.isMaxLengthWarnings("name", "metadata") &&
                 <div className="name warning-message">
                   <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
                 </div>

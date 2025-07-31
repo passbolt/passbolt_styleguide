@@ -192,7 +192,7 @@ class AddResourcePassword extends Component {
    * @returns {boolean} - Returns true if there is a max length warning for the property, false otherwise.
    */
   isMaxLengthWarnings(propName, association) {
-    return !this.isMaxLengthError(propName, association) && this.props.warnings?.hasError(propName, "maxLength");
+    return !this.isMaxLengthError(propName, association) && this.props.warnings?.hasError(`${association}.${propName}`, "maxLength");
   }
 
   /**
@@ -342,4 +342,3 @@ AddResourcePassword.propTypes = {
 };
 
 export default  withAppContext(withResourcePasswordGeneratorContext(withTranslation('common')(AddResourcePassword)));
-
