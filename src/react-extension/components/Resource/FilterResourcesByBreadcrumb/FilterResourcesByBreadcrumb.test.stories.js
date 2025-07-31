@@ -2,6 +2,7 @@ import React from "react";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import {MemoryRouter, Route} from "react-router-dom";
 import FilterResourcesByBreadcrumb from "./FilterResourcesByBreadcrumb";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 
 export default {
@@ -33,6 +34,9 @@ export const FolderFilter = {
       filter: {type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder: {name: 'My Folder'}}},
       filteredResources: [{}, {}]
     },
+    context: defaultAppContext({
+      getHierarchyFolderCache: () => [{name: "Folder"}, {name: "subfolder"}]
+    }),
   },
   render: Template
 };

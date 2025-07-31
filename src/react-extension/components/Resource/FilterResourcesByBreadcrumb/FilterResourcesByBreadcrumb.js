@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
 import Breadcrumb from "../../Common/Navigation/Breadcrumbs/Breadcrumb";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
@@ -38,34 +39,42 @@ class FilterResourcesByBreadcrumb extends Component {
       case ResourceWorkspaceFilterTypes.TEXT: {
         const isEmptySearchText = !this.props.resourceWorkspaceContext.filter.payload;
         const filterText = this.props.resourceWorkspaceContext.filter.payload;
-        return isEmptySearchText ? items : [...items, this.getLastBreadcrumb(`${this.translate("Search:")} ${filterText}`)];
+        return isEmptySearchText ? items : [...items, this.getBreadcrumb(`${this.translate("Search:")} ${filterText}`)];
       }
       case ResourceWorkspaceFilterTypes.FAVORITE:
-        return [...items, this.getLastBreadcrumb(this.translate("Favorite"))];
+        return [...items, this.getBreadcrumb(this.translate("Favorite"))];
       case ResourceWorkspaceFilterTypes.SHARED_WITH_ME:
-        return [...items, this.getLastBreadcrumb(this.translate("Shared with me"))];
+        return [...items, this.getBreadcrumb(this.translate("Shared with me"))];
       case ResourceWorkspaceFilterTypes.EXPIRED:
-        return [...items, this.getLastBreadcrumb(this.translate("Expired"))];
+        return [...items, this.getBreadcrumb(this.translate("Expired"))];
       case ResourceWorkspaceFilterTypes.ITEMS_I_OWN:
-        return [...items, this.getLastBreadcrumb(this.translate("Items I own"))];
+        return [...items, this.getBreadcrumb(this.translate("Items I own"))];
       case ResourceWorkspaceFilterTypes.PRIVATE:
-        return [...items, this.getLastBreadcrumb(this.translate("Private"))];
+        return [...items, this.getBreadcrumb(this.translate("Private"))];
       case ResourceWorkspaceFilterTypes.TAG: {
         const filteredTagName = this.props.resourceWorkspaceContext.filter.payload.tag.slug;
-        return [...items, this.getLastBreadcrumb(`${filteredTagName} ${this.translate("(tag)")}`)];
+        return [...items, this.getBreadcrumb(`${filteredTagName} ${this.translate("(tag)")}`)];
       }
       case ResourceWorkspaceFilterTypes.ROOT_FOLDER: {
         return [this.myWorkspaceBreadcrumb];
       }
       case ResourceWorkspaceFilterTypes.FOLDER: {
         const folder = this.props.resourceWorkspaceContext.filter.payload.folder;
+        this.foldersHierarchy = this.props.context.getHierarchyFolderCache(folder?.folder_parent_id);
+
         const currentFolderName = (folder && folder.name) || this.translate("N/A");
-        return [this.myWorkspaceBreadcrumb, this.getLastBreadcrumb(`${currentFolderName} ${this.translate("(folder)")}`)];
+        const currentBreadcrumbItem = this.getBreadcrumb(`${currentFolderName}`, `/app/folders/view/${folder.id}`);
+
+        const subFolders = this.foldersHierarchy.map(folder => {
+          const currentFolderName = (folder && folder.name) || this.translate("N/A");
+          return this.getBreadcrumb(`${currentFolderName}`, `/app/folders/view/${folder.id}`);
+        });
+        return [this.myWorkspaceBreadcrumb, ...subFolders, currentBreadcrumbItem];
       }
       case ResourceWorkspaceFilterTypes.GROUP: {
         const group = this.props.resourceWorkspaceContext.filter.payload.group;
         const currentGroupName = (group && group.name) || this.translate("N/A");
-        return [...items, this.getLastBreadcrumb(`${currentGroupName} ${this.translate("(group)")}`)];
+        return [...items, this.getBreadcrumb(`${currentGroupName} ${this.translate("(group)")}`)];
       }
     }
 
@@ -97,20 +106,21 @@ class FilterResourcesByBreadcrumb extends Component {
   }
 
   /**
-   * Return the last breadcrumb
+   * Return the breadcrumb
    * @param {string} name the breadcrumb name
+   * @param {string} pathname the breadcrumb pathname
    * @return {JSX.Element}
    */
-  getLastBreadcrumb(name) {
-    return <Breadcrumb name={name} onClick={this.onLastBreadcrumbClick.bind(this)}/>;
+  getBreadcrumb(name, pathname) {
+    return <Breadcrumb name={name} onClick={this.onBreadcrumbClick.bind(this, pathname)}/>;
   }
 
   /**
-   * Whenever the user click on the last breadcrumb
+   * Whenever the user click on the breadcrumb
+   * @param {string} pathname the breadcrumb pathname
    * @returns {Promise<void>}
    */
-  async onLastBreadcrumbClick() {
-    const pathname = this.props.location.pathname;
+  async onBreadcrumbClick(pathname = this.props.location.pathname) {
     this.props.history.push({pathname});
   }
 
@@ -147,6 +157,7 @@ class FilterResourcesByBreadcrumb extends Component {
 }
 
 FilterResourcesByBreadcrumb.propTypes = {
+  context: PropTypes.any, // The app context
   resourceWorkspaceContext: PropTypes.object,
   location: PropTypes.object, // The router location
   history: PropTypes.object, // The router history
@@ -154,4 +165,4 @@ FilterResourcesByBreadcrumb.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withNavigationContext(withResourceWorkspace(withTranslation('common')(FilterResourcesByBreadcrumb))));
+export default withRouter(withAppContext(withNavigationContext(withResourceWorkspace(withTranslation('common')(FilterResourcesByBreadcrumb)))));
