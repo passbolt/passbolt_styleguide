@@ -15,6 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {BROWSER_NAMES, detectBrowserName} from "../../../shared/lib/Browser/detectBrowserName";
+import SetupServiceWorkerService from "../../../shared/services/serviceWorker/setup/setupServiceWorkerService";
 
 // The authentication setup workflow states.
 export const AuthenticationSetupWorkflowStates = {
@@ -28,8 +29,11 @@ export const AuthenticationSetupWorkflowStates = {
   SIGNING_IN: 'Signing in',
   COMPLETING_SETUP: 'Completing setup',
   UNEXPECTED_ERROR: 'Unexpected Error',
+  UNEXPECTED_METADATA_ENCRYPTION_ENABLEMENT_ERROR: "Unexpected metadata encryption enablement error",
   VALIDATE_PASSPHRASE: 'Validate passphrase',
   CONFIGURING_SSO: "Configuring SSO",
+  CHECKING_POST_SETUP_METADATA_TASKS: "Checking post setup metadata tasks",
+  ENABLING_METADATA_ENCRYPTION: "Enabling metadata encryption",
 };
 
 /**
@@ -64,6 +68,8 @@ export const AuthenticationSetupContext = React.createContext({
   }, // Whenever the user wants to choose its security token preference.
   validatePrivateKey: () => {
   }, // Whenever we need to verify the imported private key
+  goToAdministrationWorkspace: () => {
+  }, // Whenever an error occured on the metadata encryption enablement and the user clicked on continue
 });
 
 /**
@@ -78,6 +84,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.setupServiceWorkerService = new SetupServiceWorkerService(props.context.port);
   }
 
   /**
@@ -103,6 +110,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
       chooseAccountRecoveryPreference: this.chooseAccountRecoveryPreference.bind(this), // Whenever the user wants to set its account recovery preferences.
       chooseSecurityToken: this.chooseSecurityToken.bind(this), // Whenever the user wants to choose its security token preference.
       validatePrivateKey: this.validatePrivateKey.bind(this), // Whenever we need to verify the imported private key
+      goToAdministrationWorkspace: this.goToAdministrationWorkspace.bind(this), // Whenever an error occured on the metadata encryption enablement and the user clicked on continue
     };
   }
 
@@ -118,10 +126,10 @@ export class AuthenticationSetupContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async initialize() {
-    const isFirstInstall = await this.props.context.port.request('passbolt.setup.is-first-install');
+    const isFirstInstall = await this.setupServiceWorkerService.isFirstInstall();
     const isChromeBrowser = detectBrowserName() === BROWSER_NAMES.CHROME;
-    await this.props.context.port.request('passbolt.setup.start');
-    const userPassphrasePolicies = await this.props.context.port.request('passbolt.setup.get-user-passphrase-policies');
+    await this.setupServiceWorkerService.startSetup();
+    const userPassphrasePolicies = await this.setupServiceWorkerService.getUserPassphrasePolicies();
     // In case of error the background page should just disconnect the extension setup application.
     let state = AuthenticationSetupWorkflowStates.GENERATE_GPG_KEY;
     if (isFirstInstall && isChromeBrowser) {
@@ -147,8 +155,8 @@ export class AuthenticationSetupContextProvider extends React.Component {
   async generateGpgKey(passphrase) {
     const generateKeyDto = {passphrase};
     try {
-      const armoredKey = await this.props.context.port.request('passbolt.setup.generate-key', generateKeyDto);
-      await this.setState({
+      const armoredKey = await this.setupServiceWorkerService.generateKey(generateKeyDto);
+      this.setState({
         state: AuthenticationSetupWorkflowStates.DOWNLOAD_RECOVERY_KIT,
         armored_key: armoredKey,
         gpgKeyGenerated: true,
@@ -164,7 +172,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
    */
   async downloadRecoveryKit() {
     try {
-      await this.props.context.port.request('passbolt.setup.download-recovery-kit');
+      await this.setupServiceWorkerService.downloadRecoveryKit();
     } catch (error) {
       this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
     }
@@ -176,13 +184,13 @@ export class AuthenticationSetupContextProvider extends React.Component {
    */
   async handleRecoveryKitDownloaded() {
     if (await this.isAccountRecoveryOrganizationPolicyEnabled()) {
-      const accountRecoveryOrganizationPolicy = await this.props.context.port.request('passbolt.setup.get-account-recovery-organization-policy');
-      await this.setState({
+      const accountRecoveryOrganizationPolicy = await this.setupServiceWorkerService.getAccountRecoveryOrganisationPolicy();
+      this.setState({
         state: AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE,
         accountRecoveryOrganizationPolicy: accountRecoveryOrganizationPolicy
       });
     } else {
-      await this.setState({state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN});
+      this.setState({state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN});
     }
   }
 
@@ -194,7 +202,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
     if (!this.props.context.siteSettings.canIUse('accountRecovery')) {
       return false;
     }
-    const accountRecoveryOrganizationPolicy = await this.props.context.port.request('passbolt.setup.get-account-recovery-organization-policy');
+    const accountRecoveryOrganizationPolicy = await this.setupServiceWorkerService.getAccountRecoveryOrganisationPolicy();
 
     return accountRecoveryOrganizationPolicy
       && accountRecoveryOrganizationPolicy?.policy !== 'disabled';
@@ -205,7 +213,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async goToImportGpgKey() {
-    await this.setState({
+    this.setState({
       state: AuthenticationSetupWorkflowStates.IMPORT_GPG_KEY
     });
   }
@@ -219,8 +227,8 @@ export class AuthenticationSetupContextProvider extends React.Component {
    */
   async importGpgKey(armoredKey) {
     try {
-      await this.props.context.port.request("passbolt.setup.import-key", armoredKey);
-      await this.setState({
+      await this.setupServiceWorkerService.importKey(armoredKey);
+      this.setState({
         state: AuthenticationSetupWorkflowStates.VALIDATE_PASSPHRASE,
         gpgKeyGenerated: false,
       });
@@ -228,7 +236,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
       if (error.name === "GpgKeyError") {
         throw error;
       } else {
-        await this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
+        this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
       }
     }
   }
@@ -243,12 +251,12 @@ export class AuthenticationSetupContextProvider extends React.Component {
    */
   async checkPassphrase(passphrase, rememberMe = false) {
     try {
-      await this.props.context.port.request("passbolt.setup.verify-passphrase", passphrase);
+      await this.setupServiceWorkerService.verifyPassphrase(passphrase);
       this.setState({rememberMe});
 
       if (await this.isAccountRecoveryOrganizationPolicyEnabled()) {
         this.setState({
-          accountRecoveryOrganizationPolicy: await this.props.context.port.request('passbolt.setup.get-account-recovery-organization-policy'),
+          accountRecoveryOrganizationPolicy: await this.setupServiceWorkerService.getAccountRecoveryOrganisationPolicy(),
           state: AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE
         });
       } else {
@@ -270,10 +278,10 @@ export class AuthenticationSetupContextProvider extends React.Component {
    */
   async chooseAccountRecoveryPreference(status) {
     try {
-      await this.props.context.port.request('passbolt.setup.set-account-recovery-user-setting', status);
-      await this.setState({state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN});
+      await this.setupServiceWorkerService.setAccountRecoveryUserSettings(status);
+      this.setState({state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN});
     } catch (error) {
-      await this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
+      this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
     }
   }
 
@@ -284,13 +292,51 @@ export class AuthenticationSetupContextProvider extends React.Component {
    */
   async chooseSecurityToken(securityTokenDto) {
     try {
-      await this.props.context.port.request("passbolt.setup.set-security-token", securityTokenDto);
+      await this.setupServiceWorkerService.setSecurityToken(securityTokenDto);
       this.setState({state: AuthenticationSetupWorkflowStates.COMPLETING_SETUP});
-      await this.props.context.port.request('passbolt.setup.complete');
+
+      await this.setupServiceWorkerService.completeSetup();
       this.setState({state: AuthenticationSetupWorkflowStates.SIGNING_IN});
-      await this.props.context.port.request('passbolt.setup.sign-in', this.state.rememberMe);
+
+      await this.setupServiceWorkerService.signIn(this.state.rememberMe);
+
+      const isUserAdmin = await this.isLoggedInUserAdmin();
+      if (isUserAdmin) {
+        await this.runPostSetupProcess();
+      } else {
+        await this.setupServiceWorkerService.redirectUserToPostLoginUrl();
+      }
     } catch (error) {
-      await this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
+      this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
+    }
+  }
+
+  /**
+   * Returns true if the currently logged in user is an admin user.
+   * @returns {Promise<boolean>}
+   */
+  async isLoggedInUserAdmin() {
+    const user = await this.setupServiceWorkerService.getCurrentLoggedInUser();
+    return user.role.isAdmin();
+  }
+
+  /**
+   * Whenever the user finishes the setup process and is signed in.
+   * @returns {Promise<void>}
+   */
+  async runPostSetupProcess() {
+    try {
+      this.setState({state: AuthenticationSetupWorkflowStates.CHECKING_POST_SETUP_METADATA_TASKS});
+      const metadataSetupSettings = await this.setupServiceWorkerService.findMetadataSetupSettings();
+      if (metadataSetupSettings.enableEncryptedMetadataOnInstall) {
+        this.setState({state: AuthenticationSetupWorkflowStates.ENABLING_METADATA_ENCRYPTION});
+        await this.setupServiceWorkerService.enableMetadataEncryption();
+      }
+      await this.setupServiceWorkerService.redirectUserToPostLoginUrl();
+    } catch (e) {
+      const error = new Error(e.message);
+      error.details = JSON.parse(JSON.stringify(e));
+      this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_METADATA_ENCRYPTION_ENABLEMENT_ERROR, error: error});
     }
   }
 
@@ -299,7 +345,16 @@ export class AuthenticationSetupContextProvider extends React.Component {
    * @param {string} key the private to check in its armored form
    */
   async validatePrivateKey(key) {
-    await this.props.context.port.request('passbolt.setup.validate-private-key', key);
+    await this.setupServiceWorkerService.validatePrivateKey(key);
+  }
+
+  /**
+   * Callback to redirect the current user to the admin workspace.
+   * It is used when the metadata encryption enablement fails for any reason.
+   * @returns {Promise<void>}
+   */
+  async goToAdministrationWorkspace() {
+    await this.setupServiceWorkerService.goToAdministrationWorkspace();
   }
 
   /**
