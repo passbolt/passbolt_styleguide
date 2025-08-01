@@ -134,7 +134,15 @@ export default class DisplayMigrateMetadataAdministrationPage {
    * Returns the form banner element
    * @returns {HTMLElement}
    */
-  get formBanner() {
+  get formWarningBanner() {
     return this.select(".warning.message");
+  }
+
+  /**
+   * Returns the form banner element
+   * @returns {HTMLElement}
+   */
+  get formErrorBanner() {
+    return this.select(".error.message");
   }
 }
