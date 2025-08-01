@@ -450,6 +450,20 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(page.displayMenu.importMenu).not.toBeNull();
     });
 
+    it('As LU I cannot import resources if share metadata key is enforced and I have missing keys', async() => {
+      expect.assertions(2);
+      const props = defaultProps({
+        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
+        metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({allow_usage_of_personal_keys: false}))
+      }); // The props to pass
+      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      await page.displayMenu.clickOnMenu(page.displayMenu.importMenu);
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
+    });
+
     it('As LU I cannot use the workspace import button if disabled by API flag', async() => {
       expect.assertions(2);
       const appContext = {
