@@ -152,9 +152,29 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * handle share resources
    */
   async handleShareClickEvent() {
-    const resourcesIds = this.selectedResources.map(resource => resource.id);
-    await this.props.context.setContext({shareDialogProps: {resourcesIds}});
-    this.props.dialogContext.open(ShareDialog);
+    const canShareResource = this.canShareResource();
+    if (canShareResource) {
+      const resourcesIds = this.selectedResources.map(resource => resource.id);
+      await this.props.context.setContext({shareDialogProps: {resourcesIds}});
+      this.props.dialogContext.open(ShareDialog);
+    } else {
+      this.displayActionAborted();
+    }
+  }
+
+  /**
+   * Can share the resource
+   * @return {boolean}
+   */
+  canShareResource() {
+    const resourceType = this.props.resourceTypes.getFirstById(this.selectedResources[0].resource_type_id);
+
+    if (resourceType.isV5()) {
+      const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+      return !userHasMissingKeys;
+    }
+
+    return true;
   }
 
   /**
