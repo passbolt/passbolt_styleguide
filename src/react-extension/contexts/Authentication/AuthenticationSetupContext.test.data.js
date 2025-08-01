@@ -14,6 +14,7 @@
 
 import {defaultAppContext} from "../ExtAppContext.test.data";
 import MockPort from "../../test/mock/MockPort";
+import {defaultMetadataSetupSettingsDto} from "../../../shared/models/entity/metadata/metadataSetupSettingsEntity.test.data";
 
 /**
  * Default app context for authentication setup context.
@@ -32,6 +33,8 @@ export function defaultAuthenticationSetupAppContext(appContext) {
   port.addRequestListener("passbolt.setup.set-security-token", jest.fn(() => Promise.resolve()));
   port.addRequestListener("passbolt.setup.complete", jest.fn(() => Promise.resolve()));
   port.addRequestListener("passbolt.setup.sign-in", jest.fn(() => Promise.resolve()));
+  port.addRequestListener("passbolt.metadata.find-setup-settings", jest.fn(async() => defaultMetadataSetupSettingsDto()));
+  port.addRequestListener("passbolt.metadata.enable.", jest.fn(() => Promise.resolve()));
   port._port = {
     onDisconnect: {
       addListener: jest.fn()

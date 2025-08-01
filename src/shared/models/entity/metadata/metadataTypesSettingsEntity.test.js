@@ -259,7 +259,7 @@ describe("MetadataTypesSettings", () => {
     });
   });
 
-  describe("::createFromV5Default", () => {
+  describe("::createFromDefault", () => {
     it("creates from default metadata types settings", () => {
       expect.assertions(14);
       const dto = MetadataTypesSettingsEntity.createFromDefault();
@@ -284,6 +284,65 @@ describe("MetadataTypesSettings", () => {
     it("creates from default metadata types settings with alteration", () => {
       expect.assertions(14);
       const dto = MetadataTypesSettingsEntity.createFromDefault({
+        default_resource_types: RESOURCE_TYPE_VERSION_5,
+        default_folder_type: RESOURCE_TYPE_VERSION_5,
+        default_tag_type: RESOURCE_TYPE_VERSION_5,
+        default_comment_type: RESOURCE_TYPE_VERSION_5,
+        allow_creation_of_v5_resources: true,
+        allow_creation_of_v5_folders: true,
+        allow_creation_of_v5_tags: true,
+        allow_creation_of_v5_comments: true,
+        allow_creation_of_v4_resources: false,
+        allow_creation_of_v4_folders: false,
+        allow_creation_of_v4_tags: false,
+        allow_creation_of_v4_comments: false,
+        allow_v4_v5_upgrade: true,
+        allow_v5_v4_downgrade: true,
+      });
+      const entity = new MetadataTypesSettingsEntity(dto);
+
+      expect(entity._props.default_resource_types).toEqual(RESOURCE_TYPE_VERSION_5);
+      expect(entity._props.default_folder_type).toEqual(RESOURCE_TYPE_VERSION_5);
+      expect(entity._props.default_tag_type).toEqual(RESOURCE_TYPE_VERSION_5);
+      expect(entity._props.default_comment_type).toEqual(RESOURCE_TYPE_VERSION_5);
+      expect(entity._props.allow_creation_of_v5_resources).toBeTruthy();
+      expect(entity._props.allow_creation_of_v5_folders).toBeTruthy();
+      expect(entity._props.allow_creation_of_v5_tags).toBeTruthy();
+      expect(entity._props.allow_creation_of_v5_comments).toBeTruthy();
+      expect(entity._props.allow_creation_of_v4_resources).toBeFalsy();
+      expect(entity._props.allow_creation_of_v4_folders).toBeFalsy();
+      expect(entity._props.allow_creation_of_v4_tags).toBeFalsy();
+      expect(entity._props.allow_creation_of_v4_comments).toBeFalsy();
+      expect(entity._props.allow_v4_v5_upgrade).toBeTruthy();
+      expect(entity._props.allow_v5_v4_downgrade).toBeTruthy();
+    });
+  });
+
+  describe("::createFromV5Default", () => {
+    it("creates from default metadata types settings", () => {
+      expect.assertions(14);
+      const dto = MetadataTypesSettingsEntity.createFromV5Default();
+      const entity = new MetadataTypesSettingsEntity(dto);
+
+      expect(entity._props.default_resource_types).toEqual(RESOURCE_TYPE_VERSION_5);
+      expect(entity._props.default_folder_type).toEqual(RESOURCE_TYPE_VERSION_4);
+      expect(entity._props.default_tag_type).toEqual(RESOURCE_TYPE_VERSION_4);
+      expect(entity._props.default_comment_type).toEqual(RESOURCE_TYPE_VERSION_4);
+      expect(entity._props.allow_creation_of_v5_resources).toBeTruthy();
+      expect(entity._props.allow_creation_of_v5_folders).toBeFalsy();
+      expect(entity._props.allow_creation_of_v5_tags).toBeFalsy();
+      expect(entity._props.allow_creation_of_v5_comments).toBeFalsy();
+      expect(entity._props.allow_creation_of_v4_resources).toBeFalsy();
+      expect(entity._props.allow_creation_of_v4_folders).toBeTruthy();
+      expect(entity._props.allow_creation_of_v4_tags).toBeTruthy();
+      expect(entity._props.allow_creation_of_v4_comments).toBeTruthy();
+      expect(entity._props.allow_v4_v5_upgrade).toBeFalsy();
+      expect(entity._props.allow_v5_v4_downgrade).toBeFalsy();
+    });
+
+    it("creates from default metadata types settings with alteration", () => {
+      expect.assertions(14);
+      const dto = MetadataTypesSettingsEntity.createFromV5Default({
         default_resource_types: RESOURCE_TYPE_VERSION_5,
         default_folder_type: RESOURCE_TYPE_VERSION_5,
         default_tag_type: RESOURCE_TYPE_VERSION_5,

@@ -157,6 +157,33 @@ class MetadataTypesSettingsEntity extends EntityV2 {
   }
 
   /**
+   * Return the default metadata types settings created for a fresh v5 instance.
+   * The value of the default are expected to evolve with passbolt v5 types.
+   * @param {object} data the data to override the default with
+   * @returns {MetadataTypesSettingsEntity}
+   */
+  static createFromV5Default(data = {}) {
+    const defaultData = {
+      default_resource_types: RESOURCE_TYPE_VERSION_5,
+      default_folder_type: RESOURCE_TYPE_VERSION_4,
+      default_tag_type: RESOURCE_TYPE_VERSION_4,
+      default_comment_type: RESOURCE_TYPE_VERSION_4,
+      allow_creation_of_v5_resources: true,
+      allow_creation_of_v5_folders: false,
+      allow_creation_of_v5_tags: false,
+      allow_creation_of_v5_comments: false,
+      allow_creation_of_v4_resources: false,
+      allow_creation_of_v4_folders: true,
+      allow_creation_of_v4_tags: true,
+      allow_creation_of_v4_comments: true,
+      allow_v4_v5_upgrade: false,
+      allow_v5_v4_downgrade: false,
+    };
+
+    return new MetadataTypesSettingsEntity({...defaultData, ...data});
+  }
+
+  /**
    * @inheritDoc
    * @throws {EntityValidationError} If the default resource creation is not allowed.
    */
