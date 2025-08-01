@@ -346,7 +346,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
 
               <div className="radiolist-alt">
                 <div
-                  className={`input radio ${this.state.settings.allow_usage_of_personal_keys === true ? "checked" : ""}`}>
+                  className={`input radio ${this.state.settings.allow_usage_of_personal_keys === true ? "checked" : ""} ${this.hasAllInputDisabled() && 'disabled'}`}>
                   <input type="radio"
                     value="true"
                     onChange={this.handleInputChange}
@@ -363,7 +363,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                   </label>
                 </div>
                 <div
-                  className={`input radio ${this.state.settings.allow_usage_of_personal_keys === false ? "checked" : ""}`}>
+                  className={`input radio ${this.state.settings.allow_usage_of_personal_keys === false ? "checked" : ""} ${this.hasAllInputDisabled() && 'disabled'}`}>
                   <input type="radio"
                     value="false"
                     onChange={this.handleInputChange}
@@ -389,7 +389,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
 
               <div className="radiolist-alt">
                 <div
-                  className={`input radio no-hover ${this.state.settings.zero_knowledge_key_share === false ? "checked" : ""}`}>
+                  className={`input radio ${this.state.settings.zero_knowledge_key_share === false ? "checked" : ""} ${this.hasAllInputDisabled() && 'disabled'}`}>
                   <input type="radio"
                     value="true"
                     name="zero_knowledge_key_share"
@@ -405,7 +405,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                   </label>
                 </div>
                 <div
-                  className={`input radio no-hover ${this.state.settings.zero_knowledge_key_share === true ? "checked" : ""}`}>
+                  className={`input radio ${this.state.settings.zero_knowledge_key_share === true ? "checked" : ""} disabled`}>
                   <input type="radio"
                     value="true"
                     name="zero_knowledge_key_share"

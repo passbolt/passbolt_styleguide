@@ -1,7 +1,6 @@
 {
   "({{count}} resources)_one": "(one resource)",
   "({{count}} resources)_other": "({{count}} resources)",
-  "(folder)": "(folder)",
   "(Folder) new owner:": "(Folder) new owner:",
   "(group)": "(group)",
   "(not yet available)": "(not yet available)",
@@ -927,6 +926,7 @@
   "PHP version is too low, passbolt need PHP 7.4 or higher": "PHP version is too low, passbolt need PHP 7.4 or higher",
   "Pick a color and enter three characters.": "Pick a color and enter three characters.",
   "Pin code": "Pin code",
+  "Please ask another administrator to share it with you.": "Please ask another administrator to share it with you.",
   "Please ask your administrator to share it with you.": "Please ask your administrator to share it with you.",
   "Please authenticate with the Single Sign-On provider to continue.": "Please authenticate with the Single Sign-On provider to continue.",
   "Please confirm": "Please confirm",
@@ -1736,6 +1736,7 @@
   "You do not own any passwords yet. It does feel a bit empty here, create your first password.": "You do not own any passwords yet. It does feel a bit empty here, create your first password.",
   "You have reached the maximum content size limit.": "You have reached the maximum content size limit.",
   "You have reached the row limit.": "You have reached the row limit.",
+  "You lack access to the shared metadata key.": "You lack access to the shared metadata key.",
   "You may remove the passbolt.registration.public setting": "You may remove the passbolt.registration.public setting",
   "You must enable the gd or imagick extensions to use Passbolt": "You must enable the gd or imagick extensions to use Passbolt",
   "You must enable the intl extension to use Passbolt": "You must enable the intl extension to use Passbolt",
