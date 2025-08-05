@@ -22,9 +22,9 @@ describe("MetadataGettingStartedSettingsEntity", () => {
       EntitySchema.validateSchema(MetadataGettingStartedSettingsEntity.name, MetadataGettingStartedSettingsEntity.getSchema());
     });
 
-    it("validates enable_encrypted_metadata_with_getting_started property", () => {
-      assertEntityProperty.boolean(MetadataGettingStartedSettingsEntity, "enable_encrypted_metadata_with_getting_started");
-      assertEntityProperty.required(MetadataGettingStartedSettingsEntity, "enable_encrypted_metadata_with_getting_started");
+    it("validates enabled property", () => {
+      assertEntityProperty.boolean(MetadataGettingStartedSettingsEntity, "enabled");
+      assertEntityProperty.required(MetadataGettingStartedSettingsEntity, "enabled");
     });
   });
 
@@ -34,7 +34,7 @@ describe("MetadataGettingStartedSettingsEntity", () => {
       const dto = defaultMetadataGettingStartedSettingsDto();
       const entity = new MetadataGettingStartedSettingsEntity(dto);
 
-      expect(entity._props.enable_encrypted_metadata_with_getting_started).toBeDefined();
+      expect(entity._props.enabled).toBeDefined();
     });
   });
 
@@ -47,8 +47,8 @@ describe("MetadataGettingStartedSettingsEntity", () => {
       const dto2 = enableMetadataGettingStartedSettingsDto();
       const entity2 = new MetadataGettingStartedSettingsEntity(dto2);
 
-      expect(entity1.enableEncryptedMetadataWithGettingStarted).toStrictEqual(false);
-      expect(entity2.enableEncryptedMetadataWithGettingStarted).toStrictEqual(true);
+      expect(entity1.enabled).toStrictEqual(false);
+      expect(entity2.enabled).toStrictEqual(true);
     });
   });
 
@@ -58,7 +58,7 @@ describe("MetadataGettingStartedSettingsEntity", () => {
       const entity = MetadataGettingStartedSettingsEntity.createFromDefault();
 
       expect(entity).toBeInstanceOf(MetadataGettingStartedSettingsEntity);
-      expect(entity.enableEncryptedMetadataWithGettingStarted).toStrictEqual(false);
+      expect(entity.enabled).toStrictEqual(false);
     });
 
     it("should give a valid entity when parameters are given", () => {
@@ -66,7 +66,7 @@ describe("MetadataGettingStartedSettingsEntity", () => {
       const entity = MetadataGettingStartedSettingsEntity.createFromDefault(enableMetadataGettingStartedSettingsDto());
 
       expect(entity).toBeInstanceOf(MetadataGettingStartedSettingsEntity);
-      expect(entity.enableEncryptedMetadataWithGettingStarted).toStrictEqual(true);
+      expect(entity.enabled).toStrictEqual(true);
     });
   });
 });

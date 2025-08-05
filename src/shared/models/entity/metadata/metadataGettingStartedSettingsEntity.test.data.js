@@ -13,11 +13,11 @@
  */
 
 export const defaultMetadataGettingStartedSettingsDto = (data = {}) => ({
-  enable_encrypted_metadata_with_getting_started: false,
+  enabled: false,
   ...data,
 });
 
 export const enableMetadataGettingStartedSettingsDto = (data = {}) => ({
-  enable_encrypted_metadata_with_getting_started: true,
+  enabled: true,
   ...data,
 });

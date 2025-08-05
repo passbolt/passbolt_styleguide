@@ -22,10 +22,10 @@ export default class MetadataGettingStartedSettingsEntity extends EntityV2 {
     return {
       "type": "object",
       "required": [
-        "enable_encrypted_metadata_with_getting_started",
+        "enabled",
       ],
       "properties": {
-        "enable_encrypted_metadata_with_getting_started": {
+        "enabled": {
           "type": "boolean",
         },
       }
@@ -39,7 +39,7 @@ export default class MetadataGettingStartedSettingsEntity extends EntityV2 {
    */
   static createFromDefault(data = {}) {
     const dto = {
-      enable_encrypted_metadata_with_getting_started: false,
+      enabled: false,
       ...data,
     };
     return new MetadataGettingStartedSettingsEntity(dto);
@@ -54,7 +54,7 @@ export default class MetadataGettingStartedSettingsEntity extends EntityV2 {
    * Should the metadata encrypted be enabled with getting started interface.
    * @returns {boolean}
    */
-  get enableEncryptedMetadataWithGettingStarted() {
-    return this._props.enable_encrypted_metadata_with_getting_started;
+  get enabled() {
+    return this._props.enabled;
   }
 }
