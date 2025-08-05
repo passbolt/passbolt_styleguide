@@ -202,7 +202,8 @@ const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
           type: "string",
           maxLength: 1024,
           nullable: true
-        }
+        },
+        maxItems: 32
       },
       description: {
         type: "string",
@@ -318,7 +319,8 @@ const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
           type: "string",
           maxLength: 1024,
           nullable: true
-        }
+        },
+        maxItems: 32
       },
       description: {
         type: "string",
@@ -372,7 +374,8 @@ const RESOURCE_TYPE_V5_PASSWORD_STRING_DEFINITION_SCHEMA = {
           type: "string",
           maxLength: 1024,
           nullable: true
-        }
+        },
+        maxItems: 32
       },
       description: {
         type: "string",
@@ -408,7 +411,8 @@ const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
           type: "string",
           maxLength: 1024,
           nullable: true
-        }
+        },
+        maxItems: 32
       },
       description: {
         type: "string",
@@ -458,7 +462,8 @@ const RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA = {
           type: "string",
           maxLength: 1024,
           nullable: true
-        }
+        },
+        maxItems: 32
       },
       description: {
         type: "string",

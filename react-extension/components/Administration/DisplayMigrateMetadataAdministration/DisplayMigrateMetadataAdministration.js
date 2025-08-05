@@ -165,6 +165,13 @@ class DisplayMigrateMetadataAdministration extends Component {
   }
 
   /**
+   * Has missing metadata keys
+   * @return {boolean}
+   */
+  get hasMissingMetadataKeys() {
+    return this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+  }
+  /**
    * Should input be disabled? True if state is loading or processing
    * @returns {boolean}
    */
@@ -505,7 +512,7 @@ class DisplayMigrateMetadataAdministration extends Component {
 
               <h4><Trans>Migration scope</Trans></h4>
               <div className="radiolist-alt">
-                <div className={`input radio ${this.state.settings.migrate_personal_content && 'checked'}`}>
+                <div className={`input radio ${this.state.settings.migrate_personal_content && 'checked'}  ${this.hasAllInputDisabled() && 'disabled'}`}>
                   <input type="radio"
                     value="all-content"
                     onChange={this.handleMigrateScopeInputChange}
@@ -518,7 +525,7 @@ class DisplayMigrateMetadataAdministration extends Component {
                     <span className="info"><Trans>All resources including the private ones.</Trans></span>
                   </label>
                 </div>
-                <div className={`input radio ${!this.state.settings.migrate_personal_content && 'checked'}`}>
+                <div className={`input radio ${!this.state.settings.migrate_personal_content && 'checked'} ${this.hasAllInputDisabled() && 'disabled'}`}>
                   <input type="radio"
                     value="shared-only"
                     onChange={this.handleMigrateScopeInputChange}
@@ -541,7 +548,14 @@ class DisplayMigrateMetadataAdministration extends Component {
               </div>
             </div>
           }
-          {!hasGlobalError && this.hasPendingMigration &&
+          {!hasGlobalError && this.hasMissingMetadataKeys &&
+            <div className="error message">
+              <div>
+                <Trans>You lack access to the shared metadata key.</Trans>&nbsp;<Trans>Please ask another administrator to share it with you.</Trans>
+              </div>
+            </div>
+          }
+          {!hasGlobalError && !this.hasMissingMetadataKeys && this.hasPendingMigration &&
             <div className="warning message">
               <div>
                 <Trans><b>Warning:</b> If you have integrations, you will have to make sure they are updated before triggering the migration.</Trans>
@@ -550,7 +564,7 @@ class DisplayMigrateMetadataAdministration extends Component {
           }
         </div>
         <div className="actions-wrapper">
-          <button type="button" className="button primary" disabled={this.state.isProcessing || hasGlobalError} onClick={this.handleFormSubmit}>
+          <button type="button" className="button primary" disabled={this.state.isProcessing || hasGlobalError || this.hasMissingMetadataKeys} onClick={this.handleFormSubmit}>
             <span><Trans>Migrate</Trans></span>
           </button>
         </div>

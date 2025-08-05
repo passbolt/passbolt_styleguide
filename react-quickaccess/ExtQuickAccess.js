@@ -43,6 +43,8 @@ import ConfirmMetadataKeyDialog from "./components/ConfirmMetadataKeyPage/Confir
 import MetadataKeyEntity from "../shared/models/entity/metadata/metadataKeyEntity";
 import MetadataTrustedKeyEntity from "../shared/models/entity/metadata/metadataTrustedKeyEntity";
 import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import ActionAbortedMissingMetadataKeysPage
+  from "./components/ActionAbortedMissingMetadataKeysPage/ActionAbortedMissingMetadataKeysPage";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/webAccessibleResources/quickaccess/home',
@@ -480,6 +482,7 @@ class ExtQuickAccess extends React.Component {
                                       <PrivateRoute exact path="/webAccessibleResources/quickaccess/more-filters" component={MoreFiltersPage}/>
                                       <PrivateRoute exact path="/webAccessibleResources/quickaccess/setup-extension-in-progress" component={SetupExtensionInProgress}/>
                                       <PrivateRoute path="/webAccessibleResources/quickaccess/resources/generate-password" component={GeneratePasswordPage}/>
+                                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/action-aborted-missing-metadata-keys" component={ActionAbortedMissingMetadataKeysPage}/>
                                       <PrivateRoute exact path="/webAccessibleResources/quickaccess/home" component={HomePage}/>
                                     </AnimatedSwitch>
                                   </PasswordExpirySettingsContextProvider>

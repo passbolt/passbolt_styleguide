@@ -381,9 +381,8 @@ describe("DisplayResourcesListContextualMenu", () => {
 
   describe("As LU I should see action aborted", () => {
     it('As LU I cannot edit a resource v5 if metadata keys settings enforced metadata shared key and user has missing keys', async() => {
-      expect.assertions(1);
+      expect.assertions(2);
       const props = defaultProps({
-        // eslint-disable-next-line no-undef
         context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
         metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({allow_usage_of_personal_keys: false})),
         resource: defaultResourceDto({personal: true, resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT})
@@ -393,10 +392,11 @@ describe("DisplayResourcesListContextualMenu", () => {
       await page.edit();
 
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
+      expect(props.hide).toHaveBeenCalledTimes(1);
     });
 
     it('As LU I cannot edit a shared resource v5 if user has missing keys', async() => {
-      expect.assertions(1);
+      expect.assertions(2);
       const props = defaultProps({
         context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
         resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT})
@@ -406,6 +406,21 @@ describe("DisplayResourcesListContextualMenu", () => {
       await page.edit();
 
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
+      expect(props.hide).toHaveBeenCalledTimes(1);
+    });
+
+    it('As LU I cannot share a resource v5 if user has missing keys', async() => {
+      expect.assertions(2);
+      const props = defaultProps({
+        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
+        resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT})
+      }); // The props to pass
+      const page = new DisplayResourcesListContextualMenuPage(props);
+
+      await page.share();
+
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
+      expect(props.hide).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -57,7 +57,7 @@ class PasswordComplexityWithGoal extends React.PureComponent {
   get targetEntropyPositionStyle() {
     const leftPosition = this.relativeTargetEntropyRatio;
     const halfArrowCssSize = "0.6rem";
-    return {left: `calc(${leftPosition}% - ${halfArrowCssSize}`};
+    return {left: `calc(${leftPosition}% - ${halfArrowCssSize})`};
   }
 
   /**

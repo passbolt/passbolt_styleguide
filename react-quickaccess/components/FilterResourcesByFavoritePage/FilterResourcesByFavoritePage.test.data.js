@@ -19,6 +19,10 @@ import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/
 import {
   defaultMetadataTypesSettingsV4Dto
 } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 /**
  * Default component props
@@ -30,6 +34,7 @@ export const defaultProps = (data = {}) => ({
   resources: null,
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
+  metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
   ...data,
 });
 

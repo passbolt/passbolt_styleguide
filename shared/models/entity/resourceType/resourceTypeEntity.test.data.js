@@ -312,7 +312,8 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
             type: "string",
             maxLength: 1024,
             nullable: true
-          }
+          },
+          maxItems: 32,
         },
         description: {
           type: "string",
@@ -448,7 +449,8 @@ export const resourceTypeV5PasswordStringDto = (data = {}) => ({
             type: "string",
             maxLength: 1024,
             nullable: true
-          }
+          },
+          maxItems: 32,
         },
         description: {
           type: "string",
@@ -494,7 +496,8 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
             type: "string",
             maxLength: 1024,
             nullable: true
-          }
+          },
+          maxItems: 32,
         },
         description: {
           type: "string",
@@ -652,7 +655,8 @@ export const resourceTypeV5TotpDto = (data = {}) => ({
             type: "string",
             maxLength: 1024,
             nullable: true
-          }
+          },
+          maxItems: 32,
         },
         description: {
           type: "string",
@@ -731,7 +735,8 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
             type: "string",
             maxLength: 1024,
             nullable: true
-          }
+          },
+          maxItems: 32,
         },
         description: {
           type: "string",

@@ -171,9 +171,9 @@ export function withMetadataKeysSettingsLocalStorage(WrappedComponent) {
       return (
         <MetadataKeysSettingsLocalStorageContext.Consumer>
           {
-            metadataKeySettingsLocalStorageContext => <WrappedComponent
-              metadataKeySettingsLocalStorageContext={metadataKeySettingsLocalStorageContext}
-              metadataKeysSettings={metadataKeySettingsLocalStorageContext.get()}
+            metadataKeysSettingsLocalStorageContext => <WrappedComponent
+              metadataKeysSettingsLocalStorageContext={metadataKeysSettingsLocalStorageContext}
+              metadataKeysSettings={metadataKeysSettingsLocalStorageContext.get()}
               {...this.props}
             />
           }

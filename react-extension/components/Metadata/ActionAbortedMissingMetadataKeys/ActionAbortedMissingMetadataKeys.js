@@ -20,7 +20,6 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 class ActionAbortedMissingMetadataKeys extends Component {
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
     this.bindCallbacks();
   }
 

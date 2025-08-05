@@ -32,10 +32,11 @@ class ExtInForm extends React.Component {
     this.state = this.defaultState;
     this.initLocale();
     this.getAccount();
+    this.getLoggedInUser();
   }
 
   /**
-   * Returns the default stare
+   * Returns the default state
    */
   get defaultState() {
     return {
@@ -43,6 +44,7 @@ class ExtInForm extends React.Component {
       port: this.props.port,
       storage: this.props.storage,
       account: null,
+      loggedInUser: null,
     };
   }
 
@@ -63,6 +65,14 @@ class ExtInForm extends React.Component {
     const accountDto = await this.props.port.request("passbolt.account.get");
     const account = new AccountEntity(accountDto);
     this.setState({account});
+  }
+
+  /**
+   * Get the current user info from background page and set it in the state
+   */
+  async getLoggedInUser() {
+    const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
+    this.setState({loggedInUser});
   }
 
   /**

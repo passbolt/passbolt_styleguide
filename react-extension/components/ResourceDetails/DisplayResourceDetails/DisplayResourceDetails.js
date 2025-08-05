@@ -155,7 +155,7 @@ class DisplayResourceDetails extends React.Component {
    * @return {boolean}
    */
   canUpgradeResource() {
-    const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings.allowUsageOfPersonalKeys;
+    const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
     const isPersonalResource = this.resource.personal;
     const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
 

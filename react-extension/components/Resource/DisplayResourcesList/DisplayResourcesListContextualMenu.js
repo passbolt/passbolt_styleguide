@@ -105,7 +105,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     const resourceType = this.props.resourceTypes.getFirstById(this.resource.resource_type_id);
 
     if (resourceType.isV5()) {
-      const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings.allowUsageOfPersonalKeys;
+      const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
       const isPersonalResource = this.resource.personal;
       const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
 
@@ -123,10 +123,30 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle share resource
    */
   handleShareClickEvent() {
-    const resourcesIds = [this.resource.id];
-    this.props.context.setContext({shareDialogProps: {resourcesIds}});
-    this.props.dialogContext.open(ShareDialog);
+    const canShareResource = this.canShareResource();
+    if (canShareResource) {
+      const resourcesIds = [this.resource.id];
+      this.props.context.setContext({shareDialogProps: {resourcesIds}});
+      this.props.dialogContext.open(ShareDialog);
+    } else {
+      this.displayActionAborted();
+    }
     this.props.hide();
+  }
+
+  /**
+   * Can share the resource
+   * @return {boolean}
+   */
+  canShareResource() {
+    const resourceType = this.props.resourceTypes.getFirstById(this.resource.resource_type_id);
+
+    if (resourceType.isV5()) {
+      const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+      return !userHasMissingKeys;
+    }
+
+    return true;
   }
 
   /**

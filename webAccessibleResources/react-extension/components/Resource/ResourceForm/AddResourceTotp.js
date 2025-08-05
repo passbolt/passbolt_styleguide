@@ -351,9 +351,9 @@ class AddResourceTotp extends Component {
             <div className="totp-fields">
               {!this.isResourceHasPassword &&
                 <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
-                  <label htmlFor="resource-uri"><Trans>URI</Trans>{this.isMaxLengthWarnings("uris.0") && <AttentionSVG className="attention-required"/>}</label>
+                  <label htmlFor="resource-uri"><Trans>URI</Trans>{this.isMaxLengthWarnings("metadata.uris.0") && <AttentionSVG className="attention-required"/>}</label>
                   <input id="resource-uri" disabled={this.props.disabled} name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange} />
-                  {this.isMaxLengthWarnings("uris.0") && !this.isFieldUriError("uris.0") &&
+                  {this.isMaxLengthWarnings("metadata.uris.0") && !this.isFieldUriError("uris.0") &&
                     <div className="uri warning-message">
                       <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
                     </div>
@@ -383,6 +383,11 @@ class AddResourceTotp extends Component {
                     <span><Trans>Upload a QR code</Trans></span>
                   </button>
                 </div>
+                {this.isMaxLengthWarnings("secret.totp.secret_key") && !this.isFieldUriError("secret_key") &&
+                    <div className="secret_key warning-message">
+                      <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
+                    </div>
+                }
                 {this.isFieldTotpError("secret_key") &&
                   <div className="totp-key error-message">{this.secretKeyErrorMessage}</div>
                 }

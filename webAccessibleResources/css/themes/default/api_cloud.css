@@ -1238,10 +1238,6 @@ input[type=file] {
 .radiolist-alt .input.radio:disabled {
   box-shadow: inset 0 0 0 0.1rem var(--Action-button-Action-button-border);
 }
-.radiolist-alt .input.radio:hover:not(.no-hover),
-.radiolist-alt .input.radio:active:not(.no-hover) {
-  background: var(--Workspace-Dividers-lighter);
-}
 .radiolist-alt .input.radio.checked {
   box-shadow: inset -0.1rem -0.1rem 0 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 0 var(--States-Active-Shadow);
   background: var(--Action-button-Active-action-button-background);

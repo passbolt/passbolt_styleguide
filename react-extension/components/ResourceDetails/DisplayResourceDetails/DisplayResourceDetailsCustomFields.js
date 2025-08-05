@@ -205,7 +205,7 @@ class DisplayResourceDetailsCustomFields extends React.Component {
       await this.props.actionFeedbackContext.displayWarning(this.props.t("The custom field value is empty and cannot be copied to clipboard."));
       return;
     }
-    this.props.clipboardContext.copyTemporarily(secret.secret_value, "The custom field value has been copied to clipboard.");
+    this.props.clipboardContext.copyTemporarily(secret.secret_value, this.props.t("The custom field value has been copied to clipboard."));
     await this.props.resourceWorkspaceContext.onResourceCopied();
   }
 
@@ -215,7 +215,7 @@ class DisplayResourceDetailsCustomFields extends React.Component {
    * @returns {Promise<void>} A promise that resolves when the key has been copied and feedback is displayed.
    */
   async handleCopyKeyEvent(key) {
-    this.props.clipboardContext.copy(key, "The custom field key has been copied to clipboard.");
+    this.props.clipboardContext.copy(key, this.props.t("The custom field key has been copied to clipboard."));
     await this.props.resourceWorkspaceContext.onResourceCopied();
   }
 

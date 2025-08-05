@@ -53,7 +53,7 @@ describe("ResourceCreatePage", () => {
 
       const expectedData = {
         name: "Passbolt Browser Extension Test",
-        uri: "https://passbolt-browser-extension/test",
+        uris: ["https://passbolt-browser-extension/test"],
         secret_clear: "AAAAAAAAAAAAAAAAAA",
       };
 
@@ -66,7 +66,7 @@ describe("ResourceCreatePage", () => {
 
       // Assert the form.
       expect(page.name.value).toStrictEqual(expectedData.name);
-      expect(page.uri.value).toStrictEqual(expectedData.uri);
+      expect(page.uri.value).toStrictEqual(expectedData.uris[0]);
       expect(page.username.value).toStrictEqual(props.context.userSettings.username);
       expect(page.password.value).toStrictEqual(expectedData.secret_clear);
     });
@@ -76,7 +76,7 @@ describe("ResourceCreatePage", () => {
 
       const expectedData = {
         name: "newtab",
-        uri: "chrome://newtab/"
+        uris: ["chrome://newtab/"]
       };
 
       const props = defaultProps();
@@ -92,7 +92,7 @@ describe("ResourceCreatePage", () => {
     it("should not initialize with firefox new tab metadata", async() => {
       const expectedData = {
         name: "",
-        uri: "about:newtab"
+        uris: ["about:newtab"]
       };
 
       const props = defaultProps();
@@ -136,7 +136,7 @@ describe("ResourceCreatePage", () => {
 
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => ({
         name: expectedResourceDto.metadata.name,
-        uri: expectedResourceDto.metadata.uris[0],
+        uris: expectedResourceDto.metadata.uris,
       }));
 
       props.context.port.addRequestListener("passbolt.secrets.powned-password", () => 0);
@@ -194,7 +194,7 @@ describe("ResourceCreatePage", () => {
 
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => ({
         name: expectedResourceDto.metadata.name,
-        uri: expectedResourceDto.metadata.uris[0],
+        uris: expectedResourceDto.metadata.uris,
       }));
 
       props.context.port.addRequestListener("passbolt.secrets.powned-password", () => 0);
@@ -231,7 +231,7 @@ describe("ResourceCreatePage", () => {
 
       const preparedResource = {
         name: "Passbolt Browser Extension Test",
-        uri: "https://passbolt-browser-extension/test",
+        uris: ["https://passbolt-browser-extension/test"],
       };
 
       props.prepareResourceContext.consumeLastGeneratedPassword.mockImplementation(() => null);
@@ -271,7 +271,7 @@ describe("ResourceCreatePage", () => {
 
       const preparedResource = {
         name: "Passbolt Browser Extension Test",
-        uri: "https://passbolt-browser-extension/test",
+        uris: ["https://passbolt-browser-extension/test"],
       };
 
       props.prepareResourceContext.consumeLastGeneratedPassword.mockImplementation(() => null);
@@ -335,7 +335,7 @@ describe("ResourceCreatePage", () => {
         isPreparedResourceSet = true;
         return {
           name: expectedResourceDto.metadata.name,
-          uri: expectedResourceDto.metadata.uris[0],
+          uris: expectedResourceDto.metadata.uris,
         };
       });
 

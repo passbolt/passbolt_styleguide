@@ -410,5 +410,19 @@ describe("See Workspace Menu", () => {
 
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
     });
+
+    it('As LU I cannot share a resource v5 if user has missing keys', async() => {
+      expect.assertions(2);
+      const props = defaultPropsOneResourceV5Shared({
+        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
+      }); // The props to pass
+      const page = new DisplayResourcesWorkspaceMenuPage(props.context, props);
+
+      expect(page.displayMenu.exists()).toBeTruthy();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.shareMenu);
+
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
+    });
   });
 });

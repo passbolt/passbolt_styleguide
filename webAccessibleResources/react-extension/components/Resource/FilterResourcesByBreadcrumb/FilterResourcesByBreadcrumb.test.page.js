@@ -11,13 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {render} from "@testing-library/react";
+import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
-import {BrowserRouter as Router} from 'react-router-dom';
+import {Router} from "react-router-dom";
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import FilterResourcesByBreadcrumb from "./FilterResourcesByBreadcrumb";
+import {createMemoryHistory} from "history";
 
 /**
  * The FilterResourcesByBreadcrumb component represented as a page
@@ -28,10 +29,10 @@ export default class FilterResourcesByBreadcrumbPage {
    * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, resourceWorkspaceContext) {
+  constructor(appContext, resourceWorkspaceContext, history) {
     this._page = render(
       <MockTranslationProvider>
-        <Router>
+        <Router history={history || createMemoryHistory()}>
           <AppContext.Provider value={appContext}>
             <ResourceWorkspaceContext.Provider value={resourceWorkspaceContext}>
               <FilterResourcesByBreadcrumb/>
@@ -86,6 +87,23 @@ class DisplayBreadcrumbPageObject {
    */
   item(index) {
     return this._container.querySelectorAll('li')[index - 1].textContent;
+  }
+
+  /**
+   * Returns the item element for the index one
+   */
+  breadcrumbItem(index) {
+    return this._container.querySelectorAll('li')[index - 1];
+  }
+
+  /**
+   * Click on breadcrumb item
+   * @param {number} index of the breadcrumb item to select
+   */
+  async clickOnBreadCrumb(index) {
+    const element = this.breadcrumbItem(index).querySelector(".link");
+    fireEvent.click(element, {button: 0});
+    await waitFor(() => {});
   }
 
   /**

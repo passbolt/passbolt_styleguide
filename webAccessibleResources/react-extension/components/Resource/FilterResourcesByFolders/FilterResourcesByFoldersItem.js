@@ -27,6 +27,12 @@ import FolderSVG from "../../../../img/svg/folder.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 class FilterResourcesByFoldersItem extends React.Component {
   /**
@@ -244,16 +250,16 @@ class FilterResourcesByFoldersItem extends React.Component {
    */
   async handleDropEvent() {
     // The user cannot drop the dragged content on a dragged item.
-    const folders = this.props.dragContext.draggedItems.folders.map(folder => folder.id);
     const folderParentId = this.props.folder.id;
-    const resources = this.props.dragContext.draggedItems.resources.map(resource => resource.id);
     const isDroppingOnDraggedItem = this.draggedItems.folders.some(item => item.id === folderParentId);
     if (!isDroppingOnDraggedItem) {
+      const folders = this.draggedItems.folders;
+      const resources = this.draggedItems.resources;
       try {
         if (folders?.length > 0) {
-          await this.props.context.port.request("passbolt.folders.move-by-id", folders[0], folderParentId);
+          await this.moveFolder(folders);
         } else if (resources?.length > 0) {
-          await this.props.context.port.request("passbolt.resources.move-by-ids", resources, folderParentId);
+          await this.moveResource(resources);
         }
       } catch (error) {
         this.handleError(error);
@@ -263,6 +269,48 @@ class FilterResourcesByFoldersItem extends React.Component {
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
     const draggingOver = false;
     this.setState({draggingOver});
+  }
+
+  /**
+   * Move the folders or display action aborted if is not possible to move
+   * @param {Array<Object>} folders
+   * @return {Promise<void>}
+   */
+  async moveFolder(folders) {
+    // Folders to move
+    const hasSomeSharedFolder = folders.some(folder => !folder.personal);
+    const isPersonalFolder = this.props.folder.personal;
+    // Zero knowledge requires the user to have access to shared metadata key prior to move personal folders into shared folder or shared folders into personal folder.
+    if ((!isPersonalFolder || (hasSomeSharedFolder && isPersonalFolder)) && this.userHasMissingKeys) {
+      this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
+    } else {
+      await this.props.context.port.request("passbolt.folders.move-by-id", folders[0].id, this.props.folder.id);
+    }
+  }
+
+  /**
+   * Move the resources or display action aborted if is not possible to move
+   * @param {Array<Object>} resources
+   * @return {Promise<void>}
+   */
+  async moveResource(resources) {
+    const hasSomePersonalResourceV5 = resources.some(resource => resource.personal && this.props.resourceTypes.getFirstById(resource.resource_type_id)?.isV5());
+    // Zero knowledge requires the user to have access to shared metadata key prior to move personal resources into shared folder.
+    if (hasSomePersonalResourceV5 && !this.props.folder.personal && this.userHasMissingKeys) {
+      this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
+    } else {
+      // Resource ids to move
+      const resourceIds = resources.map(resource => resource.id);
+      await this.props.context.port.request("passbolt.resources.move-by-ids", resourceIds, this.props.folder.id);
+    }
+  }
+
+  /**
+   * User has missing keys
+   * @return {boolean}
+   */
+  get userHasMissingKeys() {
+    return this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
   }
 
   /**
@@ -552,10 +600,11 @@ FilterResourcesByFoldersItem.propTypes = {
   folder: PropTypes.object,
   isOpen: PropTypes.bool.isRequired,
   resourceWorkspaceContext: PropTypes.any,
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   dragContext: PropTypes.any,
   dialogContext: PropTypes.object, // The dialog context
   toggleOpenFolder: PropTypes.func,
   toggleCloseFolder: PropTypes.func
 };
 
-export default withRouter(withAppContext(withContextualMenu(withDialog(withResourceWorkspace(withDrag(FilterResourcesByFoldersItem))))));
+export default withRouter(withAppContext(withResourceTypesLocalStorage(withContextualMenu(withDialog(withResourceWorkspace(withDrag(FilterResourcesByFoldersItem)))))));

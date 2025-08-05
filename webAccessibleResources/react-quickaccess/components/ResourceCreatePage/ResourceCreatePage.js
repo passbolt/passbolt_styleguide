@@ -217,8 +217,8 @@ class ResourceCreatePage extends React.Component {
         name = tabInfo["name"].substring(0, 255);
       }
 
-      if (!ignoreUris.includes(tabInfo["uri"])) {
-        uri = tabInfo["uri"];
+      if (!ignoreUris.includes(tabInfo["uris"]) && tabInfo["uris"].length > 0) {
+        uri = tabInfo["uris"][0];
       }
 
       username = tabInfo.username?.length > 0

@@ -101,7 +101,7 @@ class DisplayResourceCreationMenu extends Component {
    * @return {boolean}
    */
   canCreateResourceV5() {
-    const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings.allowUsageOfPersonalKeys;
+    const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
     const isPersonalFolder = this.folderSelected === null || this.folderSelected.personal;
     const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
 

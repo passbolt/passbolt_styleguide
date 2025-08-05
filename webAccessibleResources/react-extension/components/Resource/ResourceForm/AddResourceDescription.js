@@ -75,10 +75,11 @@ class AddResourceDescription extends Component {
    * Checks if there is a max length warning for a specific property.
    *
    * @param {string} propName - The name of the property to check for max length warnings.
+   * @param {string} association - The name of the association to check for max length warnings.
    * @returns {boolean} - Returns true if there is a max length warning for the property, false otherwise.
    */
-  isMaxLengthWarnings(propName) {
-    return !this.isMaxLengthError(propName) && this.props.warnings?.hasError(propName, "maxLength");
+  isMaxLengthWarnings(propName, association) {
+    return !this.isMaxLengthError(propName) && this.props.warnings?.hasError(`${association}.${propName}`, "maxLength");
   }
 
   /**
@@ -106,7 +107,7 @@ class AddResourceDescription extends Component {
             <div className={`input textarea ${this.props.disabled ? 'disabled' : ''}`}>
               <label htmlFor="resource-description">
                 <Trans>Content</Trans>
-                {this.isMaxLengthWarnings("description") && <AttentionSVG className="attention-required"/>}
+                {this.isMaxLengthWarnings("description", "metadata") && <AttentionSVG className="attention-required"/>}
               </label>
               <textarea
                 id="resource-description"
@@ -120,7 +121,7 @@ class AddResourceDescription extends Component {
               {this.isMaxLengthError("description") &&
                 <div className="description error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
               }
-              {this.isMaxLengthWarnings("description") &&
+              {this.isMaxLengthWarnings("description", "metadata") &&
                 <div className="description warning-message">
                   <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
                 </div>
