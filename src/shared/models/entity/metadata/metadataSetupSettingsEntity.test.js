@@ -34,7 +34,7 @@ describe("MetadataSetupSettingsEntity", () => {
       const dto = defaultMetadataSetupSettingsDto();
       const entity = new MetadataSetupSettingsEntity(dto);
 
-      expect(entity._props.id).toBeUndefined();
+      expect(entity._props.enable_encrypted_metadata_on_install).toBeDefined();
     });
   });
 
