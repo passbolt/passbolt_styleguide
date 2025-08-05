@@ -195,7 +195,7 @@ describe("CustomFieldEntity", () => {
       expect.assertions(1);
       const dto = defaultCustomField({
         type: "text",
-        secret_value: "a".repeat(5001),
+        secret_value: "a".repeat(20001),
       });
 
       expect(() => new CustomFieldEntity(dto)).toThrow();
