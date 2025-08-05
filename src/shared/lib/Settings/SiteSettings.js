@@ -91,7 +91,7 @@ export default class SiteSettings {
    */
   isFeatureBeta(name) {
     assertString(name);
-    const configPath = `passbolt.plugins.${name}.beta`;
+    const configPath = `passbolt.plugins.${name}.isInBeta`;
     const isBeta = getPropValue(this.settings, configPath) || false;
     return isBeta;
   }

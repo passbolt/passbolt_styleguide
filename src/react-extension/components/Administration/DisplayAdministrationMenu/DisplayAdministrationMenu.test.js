@@ -138,13 +138,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "smtpSettings"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "smtpSettings");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.smtpSettings).toBeNull();
@@ -168,13 +164,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "selfRegistration"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "selfRegistration");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.selfRegistration).toBeNull();
@@ -198,13 +190,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "healthcheckUi"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.HEALTHCHECK}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "healthcheckUi");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.healthCheck).toBeNull();
@@ -228,13 +216,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "sso"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "sso");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.ssoSettings).toBeNull();
@@ -258,13 +242,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "mfaPolicies"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "mfaPolicies");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.mfaPolicy).toBeNull();
@@ -288,13 +268,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "rbacs"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "rbacs");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.rbacs).toBeNull();
@@ -318,13 +294,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "userPassphrasePolicies"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "userPassphrasePolicies");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.userPassphrasePolicies).toBeNull();
@@ -348,13 +320,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "passwordExpiry"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "passwordExpiry");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.passwordExpirySettings).toBeNull();

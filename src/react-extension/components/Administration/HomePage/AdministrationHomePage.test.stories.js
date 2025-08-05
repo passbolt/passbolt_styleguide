@@ -66,13 +66,28 @@ export default {
   ]
 };
 
+const betaMetadataProApiContext = defaultAppContext();
+betaMetadataProApiContext.siteSettings.settings.passbolt.plugins.metadata.isInBeta = true;
+
 export const ProApi = {
+  args: {
+    context: betaMetadataProApiContext,
+    navigationContext: defaultNavigationContext(),
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.HOME
+    }),
+    metadataGettingStartedSettings: {enabled: false},
+  }
+};
+
+export const ProApiWithGettingStarted = {
   args: {
     context: defaultAppContext(),
     navigationContext: defaultNavigationContext(),
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
       selectedAdministration: AdministrationWorkspaceMenuTypes.HOME
-    })
+    }),
+    metadataGettingStartedSettings: {enabled: true},
   }
 };
 
@@ -84,6 +99,7 @@ export const CeApi = {
     navigationContext: defaultNavigationContext(),
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
       selectedAdministration: AdministrationWorkspaceMenuTypes.HOME
-    })
+    }),
+    metadataGettingStartedSettings: {enabled: false},
   }
 };
