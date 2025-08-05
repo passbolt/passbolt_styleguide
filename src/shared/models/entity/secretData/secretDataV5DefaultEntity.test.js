@@ -42,7 +42,7 @@ describe("SecretDataV5DefaultEntity", () => {
     it("validates description property", () => {
       assertEntityProperty.string(SecretDataV5DefaultEntity, "description");
       assertEntityProperty.nullable(SecretDataV5DefaultEntity, "description");
-      assertEntityProperty.maxLength(SecretDataV5DefaultEntity, "description", 10000);
+      assertEntityProperty.maxLength(SecretDataV5DefaultEntity, "description", 50000);
     });
   });
 

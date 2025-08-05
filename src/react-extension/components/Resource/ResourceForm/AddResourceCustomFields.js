@@ -153,7 +153,7 @@ class AddResourceCustomFields extends Component {
    */
   customFieldValueMaxLengthAllowed(index) {
     const currentCustomFieldValueMaxLengthAllowed = (CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE - this.customFieldsValueLength) + this.props.resource?.secret.custom_fields[index].secret_value.length;
-    return Math.min(5000, currentCustomFieldValueMaxLengthAllowed);
+    return Math.min(20000, currentCustomFieldValueMaxLengthAllowed);
   }
 
   /**
