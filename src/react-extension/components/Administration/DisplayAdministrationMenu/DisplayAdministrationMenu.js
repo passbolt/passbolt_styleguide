@@ -23,6 +23,11 @@ import {Trans, withTranslation} from "react-i18next";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import {
+  withAdministrationEncryptedMetadataGettingStarted
+} from "../../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
+import MetadataGettingStartedSettingsEntity
+  from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity";
 
 /**
  * This component allows to display the menu of the administration
@@ -202,6 +207,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleMigrateMetadataClick = this.handleMigrateMetadataClick.bind(this);
     this.handleAllowedContentTypesClick = this.handleAllowedContentTypesClick.bind(this);
     this.handleSubmenuClick = this.handleSubmenuClick.bind(this);
+    this.handleMetadataGettingStartedClick = this.handleMetadataGettingStartedClick.bind(this);
   }
 
   /**
@@ -339,6 +345,13 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleContentTypesMetadataKeyClick() {
     this.props.navigationContext.onGoToAdministrationContentTypesMetadataKeyRequested();
+  }
+
+  /**
+   * Handle when the user click on the metadata getting started settings menu
+   */
+  handleMetadataGettingStartedClick() {
+    this.props.navigationContext.onGoToAdministrationMetadataGettingStartedRequested();
   }
 
   /**
@@ -501,6 +514,14 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * If metadata getting started menu is selected
+   * @returns {boolean}
+   */
+  isMetadataGettingStartedSelected() {
+    return AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
    * If content types metadata key menu is selected
    * @returns {boolean}
    */
@@ -545,6 +566,14 @@ class DisplayAdministrationMenu extends React.Component {
     return this.isUserDirectoryEnabled || this.canIUseSelfRegistrationSettings;
   }
 
+  /**
+   * Get the metadataGettingStartedSettings
+   * @return {MetadataGettingStartedSettingsEntity}
+   */
+  get metadataGettingStartedSettings() {
+    return this.props.metadataGettingStartedSettings;
+  }
+
 
   /**
    * Render the component
@@ -581,62 +610,79 @@ class DisplayAdministrationMenu extends React.Component {
                   <div className="main-cell">
                     <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isContentTypesOpened")}>
                       {this.state.isContentTypesOpened ? <CaretDownSVG /> : <CaretRightSVG />}
-                      <span><Trans>Content types</Trans></span>
+                      <span><Trans>Resource types</Trans></span>
                     </button>
                   </div>
                 </div>
               </div>
               {this.state.isContentTypesOpened &&
-                <ul id="administration-sub-menu-content-type" className="menu ready">
-                  <li id="encrypted_metadata_menu">
-                    <div className={`row  ${this.isContentTypesEncryptedMetadataSelected() ? "selected" : ""}`}>
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button className="link no-border" type="button"
-                            onClick={this.handleContentTypesEncryptedMetadataClick}>
-                            <span><Trans>Encrypted metadata</Trans></span>
-                            <span className="chips beta">beta</span>
-                          </button>
+                <ul id="administration-sub-menu-content-type" className="menu">
+                  {this.metadataGettingStartedSettings?.enabled &&
+                    <li id="metadata_getting_started_menu">
+                      <div className={`row  ${this.isMetadataGettingStartedSelected() ? "selected" : ""}`}>
+                        <div className="main-cell-wrapper">
+                          <div className="main-cell">
+                            <button className="link no-border" type="button" onClick={this.handleMetadataGettingStartedClick}>
+                              <span><Trans>Getting started</Trans></span>
+                              <span className="chips new">new</span>
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                  <li id="metadata_key_menu">
-                    <div className={`row  ${this.isContentTypesMetadataKeySelected() ? "selected" : ""}`}>
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button className="link no-border" type="button" onClick={this.handleContentTypesMetadataKeyClick}>
-                            <span><Trans>Metadata key</Trans></span>
-                            <span className="chips beta">beta</span>
-                          </button>
+                    </li>
+                  }
+                  {!this.metadataGettingStartedSettings?.enabled &&
+                    <>
+                      <li id="metadata_key_menu">
+                        <div className={`row  ${this.isContentTypesMetadataKeySelected() ? "selected" : ""}`}>
+                          <div className="main-cell-wrapper">
+                            <div className="main-cell">
+                              <button className="link no-border" type="button" onClick={this.handleContentTypesMetadataKeyClick}>
+                                <span><Trans>Metadata key</Trans></span>
+                                <span className="chips beta">beta</span>
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li id="migrate_metadata_menu">
-                    <div className={`row  ${this.isMigrateMetadataSelected() ? "selected" : ""}`}>
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button className="link no-border" type="button" onClick={this.handleMigrateMetadataClick}>
-                            <span><Trans>Migrate metadata</Trans></span>
-                            <span className="chips beta">beta</span>
-                          </button>
+                      </li>
+                      <li id="encrypted_metadata_menu">
+                        <div className={`row  ${this.isContentTypesEncryptedMetadataSelected() ? "selected" : ""}`}>
+                          <div className="main-cell-wrapper">
+                            <div className="main-cell">
+                              <button className="link no-border" type="button" onClick={this.handleContentTypesEncryptedMetadataClick}>
+                                <span><Trans>Encrypted metadata</Trans></span>
+                                <span className="chips beta">beta</span>
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li id="allowed_content_type_menu">
-                    <div className={`row  ${this.isAllowedContentTypesSelected() ? "selected" : ""}`}>
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button className="link no-border" type="button" onClick={this.handleAllowedContentTypesClick}>
-                            <span><Trans>Allow content types</Trans></span>
-                            <span className="chips beta">beta</span>
-                          </button>
+                      </li>
+                      <li id="migrate_metadata_menu">
+                        <div className={`row  ${this.isMigrateMetadataSelected() ? "selected" : ""}`}>
+                          <div className="main-cell-wrapper">
+                            <div className="main-cell">
+                              <button className="link no-border" type="button" onClick={this.handleMigrateMetadataClick}>
+                                <span><Trans>Migrate metadata</Trans></span>
+                                <span className="chips beta">beta</span>
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </li>
+                      </li>
+                      <li id="allowed_content_type_menu">
+                        <div className={`row  ${this.isAllowedContentTypesSelected() ? "selected" : ""}`}>
+                          <div className="main-cell-wrapper">
+                            <div className="main-cell">
+                              <button className="link no-border" type="button" onClick={this.handleAllowedContentTypesClick}>
+                                <span><Trans>Allow content types</Trans></span>
+                                <span className="chips beta">beta</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </>
+                  }
                 </ul>
               }
             </li>
@@ -890,6 +936,7 @@ DisplayAdministrationMenu.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   history: PropTypes.object, // The router history
   navigationContext: PropTypes.any, // The application navigation context
+  metadataGettingStartedSettings: PropTypes.instanceOf(MetadataGettingStartedSettingsEntity), // The metadata getting started settings
 };
 
-export default withRouter(withAppContext(withNavigationContext(withAdministrationWorkspace(withTranslation("common")(DisplayAdministrationMenu)))));
+export default withRouter(withAppContext(withNavigationContext(withAdministrationWorkspace(withAdministrationEncryptedMetadataGettingStarted(withTranslation("common")(DisplayAdministrationMenu))))));

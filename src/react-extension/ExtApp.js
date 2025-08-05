@@ -77,6 +77,10 @@ import HandleConfirmMetadataKeyEntryEvents
   from "./components/Metadata/HandleConfirmMetadataKeyEntryEvents/HandleConfirmMetadataKeyEntryEvents";
 import ManagedClipboardServiceProvider from "./contexts/Clipboard/ManagedClipboardServiceProvider";
 import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import AdministrationEncryptedMetadataGettingStartedContextProvider
+  from "./contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
+import GettingStartedWithEncryptedMetadataServiceWorkerService
+  from "../shared/services/serviceWorker/metadata/gettingStartedWithEncryptedMetadataServiceWorkerService";
 
 /**
  * The passbolt application served by the browser extension.
@@ -224,9 +228,11 @@ class ExtApp extends Component {
                                                         <AdministrationUserPassphrasePoliciesContextProvider>
                                                           <AdministrationPasswordExpiryContextProvider>
                                                             <ResourceTypesLocalStorageContextProvider>
-                                                              <ManageDialogs/>
-                                                              <ManageWorkflows/>
-                                                              <AdministrationWorkspace/>
+                                                              <AdministrationEncryptedMetadataGettingStartedContextProvider service={new GettingStartedWithEncryptedMetadataServiceWorkerService(appContext.port)}>
+                                                                <ManageDialogs/>
+                                                                <ManageWorkflows/>
+                                                                <AdministrationWorkspace/>
+                                                              </AdministrationEncryptedMetadataGettingStartedContextProvider>
                                                             </ResourceTypesLocalStorageContextProvider>
                                                           </AdministrationPasswordExpiryContextProvider>
                                                         </AdministrationUserPassphrasePoliciesContextProvider>

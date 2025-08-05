@@ -1,3 +1,9 @@
+import MetadataGettingStartedSettingsEntity
+  from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity";
+import {
+  defaultMetadataGettingStartedSettingsDto
+} from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity.test.data";
+
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
@@ -22,6 +28,7 @@ export function defaultProps(data = {}) {
       }
     },
     administrationWorkspaceContext: {},
+    metadataGettingStartedSettings: new MetadataGettingStartedSettingsEntity(defaultMetadataGettingStartedSettingsDto()),
     navigationContext: {
       onGoToAdministrationSubscriptionRequested: jest.fn(),
       onGoToAdministrationEmailNotificationsRequested: jest.fn(),
@@ -39,6 +46,8 @@ export function defaultProps(data = {}) {
       onGoToAdministrationHealthcheckRequested: jest.fn(),
       onGoToAdministrationContentTypesEncryptedMetadataRequested: jest.fn(),
       onGoToAdministrationContentTypesMetadataKeyRequested: jest.fn(),
+      onGoToAdministrationMigrateMetadataRequested: jest.fn(),
+      onGoToAdministrationMetadataGettingStartedRequested: jest.fn(),
     }
   }, data);
 }
