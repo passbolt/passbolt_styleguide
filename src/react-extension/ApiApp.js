@@ -87,6 +87,7 @@ class ApiApp extends Component {
                                     "/app/administration/password-expiry",
                                     "/app/administration/content-types/metadata",
                                     "/app/administration/content-types/metadata-key",
+                                    "/app/administration/content-types/metadata-getting-started",
                                   ]}/>
                                   <Route path="/app/administration">
                                     <AdministrationWorkspaceContextProvider>

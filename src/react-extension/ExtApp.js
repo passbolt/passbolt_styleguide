@@ -215,6 +215,7 @@ class ExtApp extends Component {
                                               "/app/administration/content-types/metadata-key",
                                               "/app/administration/migrate-metadata",
                                               "/app/administration/allow-content-types",
+                                              "/app/administration/content-types/metadata-getting-started",
                                             ]}>
                                               <AdministrationWorkspaceContextProvider>
                                                 <AdminAccountRecoveryContextProvider>
