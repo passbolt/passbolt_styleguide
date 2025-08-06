@@ -265,6 +265,9 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
     const errors = this.state.hasAlreadyBeenValidated ? this.validateForm(this.state.settings) : null;
     const warnings = this.verifyDataHealth(this.state.settings, this.metadataTypesSettings, this.metadataKeys);
     const hasSettingsChanges = this.hasSettingsChanges(this.originalSettings, this.formSettings, this.state.settings);
+    const isFeatureBeta = this.props.context.siteSettings.isFeatureBeta("metadata");
+
+    const shouldDisplayAWarningBlock = isFeatureBeta || hasSettingsChanges;
 
     return (
       <div className="row">
@@ -440,11 +443,18 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
               }
             </form>
           </div>
-          {hasSettingsChanges &&
+          {shouldDisplayAWarningBlock &&
             <div className="warning message">
-              <div>
-                <p><Trans><b>Warning:</b> Don&apos;t forget to save your settings to apply your modification.</Trans></p>
-              </div>
+              {isFeatureBeta &&
+                <div className="form-banner">
+                  <b><Trans>Warning:</Trans></b> <Trans>Your current API version includes beta support for encrypted metadata and new resource types.</Trans> <Trans>To ensure stability and avoid potential issues, upgrade to the latest version before enabling these features.</Trans>
+                </div>
+              }
+              {hasSettingsChanges &&
+                <div>
+                  <p><b><Trans>Warning:</Trans></b> <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans></p>
+                </div>
+              }
             </div>
           }
         </div>

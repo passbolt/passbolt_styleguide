@@ -18,7 +18,9 @@ describe("SiteSettings", () => {
   describe("::isFeatureBeta", () => {
     it("should return true if it is mark beta in the settings", () => {
       expect.assertions(1);
-      const settings = new SiteSettings(defaultProSiteSettings());
+      const settingsDto = defaultProSiteSettings();
+      settingsDto.passbolt.plugins.metadata.isInBeta = true;
+      const settings = new SiteSettings(settingsDto);
       expect(settings.isFeatureBeta("metadata")).toStrictEqual(true);
     });
 

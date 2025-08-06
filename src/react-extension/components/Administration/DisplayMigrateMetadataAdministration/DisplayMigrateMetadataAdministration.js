@@ -354,6 +354,9 @@ class DisplayMigrateMetadataAdministration extends Component {
   render() {
     const warnings = this.verifyDataHealth(this.state.settings, this.props.resourceTypes, this.metadataTypesSettings, this.metadataKeys);
     const hasGlobalError = this.hasGlobalError(warnings);
+    const isFeatureBeta = this.props.context.siteSettings.isFeatureBeta("metadata");
+
+    const shouldDisplayAWarningBlock = !hasGlobalError && (isFeatureBeta || (!this.hasMissingMetadataKeys && this.hasPendingMigration));
     return (
       <div className="row">
         <div id="migrate-metadata-settings" className="main-column">
@@ -555,11 +558,18 @@ class DisplayMigrateMetadataAdministration extends Component {
               </div>
             </div>
           }
-          {!hasGlobalError && !this.hasMissingMetadataKeys && this.hasPendingMigration &&
+          {shouldDisplayAWarningBlock &&
             <div className="warning message">
-              <div>
-                <Trans><b>Warning:</b> If you have integrations, you will have to make sure they are updated before triggering the migration.</Trans>
-              </div>
+              {isFeatureBeta &&
+                <div className="form-banner">
+                  <b><Trans>Warning:</Trans></b> <Trans>Your current API version includes beta support for encrypted metadata and new resource types.</Trans> <Trans>To ensure stability and avoid potential issues, upgrade to the latest version before enabling these features.</Trans>
+                </div>
+              }
+              {!this.hasMissingMetadataKeys && this.hasPendingMigration &&
+                <div>
+                  <p><b><Trans>Warning:</Trans></b> <Trans>If you have integrations, you will have to make sure they are updated before triggering the migration.</Trans></p>
+                </div>
+              }
             </div>
           }
         </div>

@@ -214,7 +214,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       await waitForTrue(() => page.exists());
       await page.clickOnDefaultResourceTypesV5Input();
       expect(page.formBanner).not.toBeNull();
-      expect(page.formBanner.textContent).toEqual("Don't forget to save your settings to apply your modification.");
+      expect(page.formBanner.textContent).toEqual("Warning: Don't forget to save your settings to apply your modification.");
     });
 
     it("updates warning on form settings changes", async() => {
