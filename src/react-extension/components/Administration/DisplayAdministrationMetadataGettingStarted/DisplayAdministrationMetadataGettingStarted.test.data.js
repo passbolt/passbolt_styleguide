@@ -26,9 +26,8 @@ import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 export function defaultProps(data = {}) {
   const defaultData = {
     context: defaultAppContext(),
-    administrationEncryptedMetadataGettingStartedContext: defaultAdministrationEncryptedMetadataGettingStartedContext({
-      metadataGettingStartedSettings: true
-    }),
+    administrationEncryptedMetadataGettingStartedContext: defaultAdministrationEncryptedMetadataGettingStartedContext(),
+    metadataGettingStartedSettings: {enabled: true},
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
       selectedAdministration:  AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED
     }),
@@ -51,8 +50,7 @@ export function defaultProps(data = {}) {
 export function defaultDisabledProps(data = {}) {
   return defaultProps({
     ...data,
-    administrationEncryptedMetadataGettingStartedContext: defaultAdministrationEncryptedMetadataGettingStartedContext({
-      metadataGettingStartedSettings: false
-    }),
+    administrationEncryptedMetadataGettingStartedContext: defaultAdministrationEncryptedMetadataGettingStartedContext(),
+    metadataGettingStartedSettings: {enabled: false},
   });
 }

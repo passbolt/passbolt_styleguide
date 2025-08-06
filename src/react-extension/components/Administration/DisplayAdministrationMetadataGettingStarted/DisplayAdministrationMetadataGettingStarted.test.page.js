@@ -13,12 +13,11 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from '@testing-library/react';
+import {fireEvent, render} from '@testing-library/react';
 import DisplayAdministrationMetadataGettingStarted from './DisplayAdministrationMetadataGettingStarted';
 import AppContext from '../../../../shared/context/AppContext/AppContext';
 import MockTranslationProvider from '../../../test/mock/components/Internationalisation/MockTranslationProvider';
 import {BrowserRouter as Router} from "react-router-dom";
-import AdministrationEncryptedMetadataGettingStartedContextProvider from "../../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
 
 class DisplayAdministrationMetadataGettingStartedPage {
   constructor(props) {
@@ -26,9 +25,7 @@ class DisplayAdministrationMetadataGettingStartedPage {
       <MockTranslationProvider>
         <Router>
           <AppContext.Provider value={props.context}>
-            <AdministrationEncryptedMetadataGettingStartedContextProvider service={props.administrationEncryptedMetadataGettingStartedContext.service}>
-              <DisplayAdministrationMetadataGettingStarted {...props}/>
-            </AdministrationEncryptedMetadataGettingStartedContextProvider>
+            <DisplayAdministrationMetadataGettingStarted {...props}/>
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>
@@ -121,35 +118,31 @@ class DisplayAdministrationMetadataGettingStartedPage {
   }
 
   /** Click on the element */
-  async click(element) {
+  click(element) {
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
   }
 
   /**
    * Selects the enable encrypted metadata radio button
-   * @returns {Promise<void>}
    */
-  async selectEnableEncryptedMetadata() {
-    await this.click(this.enableEncryptedMetadataRadio);
+  selectEnableEncryptedMetadata() {
+    this.click(this.enableEncryptedMetadataRadio);
   }
 
   /**
    * Selects the keep legacy cleartext metadata radio button
-   * @returns {Promise<void>}
    */
-  async selectKeepLegacyCleartextMetadata() {
-    await this.click(this.keepLegacyCleartextMetadataRadio);
+  selectKeepLegacyCleartextMetadata() {
+    this.click(this.keepLegacyCleartextMetadataRadio);
   }
 
   /**
    * Clicks the save button
    * @returns {Promise<void>}
    */
-  async clickSaveButton() {
-    await this.click(this.saveButton);
+  clickSaveButton() {
+    this.click(this.saveButton);
   }
 }
 

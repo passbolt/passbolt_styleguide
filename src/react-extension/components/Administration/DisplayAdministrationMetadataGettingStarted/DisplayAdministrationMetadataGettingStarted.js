@@ -22,6 +22,8 @@ import InfoSVG from "../../../../img/svg/info.svg";
 import {withAdministrationEncryptedMetadataGettingStarted} from "../../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
 import GettingStartedWithEncryptedMetadataServiceWorkerService from "../../../../shared/services/serviceWorker/metadata/gettingStartedWithEncryptedMetadataServiceWorkerService";
 import {withRouter} from "react-router-dom/cjs/react-router-dom.min";
+import {withDialog} from "../../../contexts/DialogContext";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 class DisplayAdministrationMetadataGettingStarted extends Component {
   /**
@@ -34,13 +36,17 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
   }
 
   /**
-   * ComponentDidMount
-   * Invoked immediately after component is inserted into the tree
-   * @return {void}
+   * Whenever the component has updated in terms of props or state
+   * @param {object} _
+   * @param {object} prevState
    */
-  componentDidMount() {
-    //Trick to avoid issue with createPortal
-    this.setState({isReady: this.props.metadataGettingStartedSettings !== null});
+  componentDidUpdate(_, prevState) {
+    if (prevState.canBeConfigured !== null) {
+      return;
+    }
+
+    const canBeConfigured = this.props.metadataGettingStartedSettings?.enabled === true;
+    this.setState({canBeConfigured});
   }
 
   /**
@@ -49,7 +55,7 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
    */
   get defaultState() {
     return {
-      isReady: false,
+      canBeConfigured: this.props.metadataGettingStartedSettings?.enabled ?? null,
       isProcessing: false,
       enableEncryptedMetadata: true
     };
@@ -84,7 +90,7 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
    * @returns {boolean}
    */
   hasAllInputDisabled() {
-    return this.state.isProcessing || !this.props.administrationEncryptedMetadataGettingStartedContext.metadataGettingStartedSettings;
+    return this.state.canBeConfigured !== true || this.props.context.siteSettings.isFeatureBeta("metadata") || this.state.isProcessing;
   }
 
   /**
@@ -114,9 +120,11 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
         await service.keepLegacyClearTextMetadata();
       }
       await this.props.administrationEncryptedMetadataGettingStartedContext.update();
-      this.props.history.push("/app/passwords");
+      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The metadata encryption strategy has been saved successfully."));
+      this.props.history.push("/app/administration");
     } catch (error) {
-      await this.props.actionFeedbackContext.displayError(error.message);
+      console.error(error);
+      this.props.dialogContext.open(NotifyError, {error});
     }
 
     this.setState({
@@ -129,14 +137,16 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
    * @returns {JSX}
    */
   render() {
+    const isFeatureBeta = this.props.context.siteSettings.isFeatureBeta("metadata");
     return (
       <div className="row">
         <div id="metadata-getting-started" className="main-column">
           <div className="main-content">
             <form onSubmit={this.handleFormSubmit} data-testid="submit-form">
-              <h3 className="title"><label><Trans>Getting Started</Trans></label></h3>
+              <h3 className="title"><label><Trans>Getting started</Trans></label></h3>
               <p className="description">
-                <Trans>Define the strategy to enable encrypted metadata and new resource types.</Trans>
+                <Trans>Some of the latest features such as the new resource types require the encrypted metadata feature to be enabled.</Trans><br/>
+                <Trans>Here you can choose to enable it or do it later when ready. We recommend making a backup before, just in case.</Trans>
               </p>
 
               <h4><Trans>Enable Encrypted Metadata</Trans></h4>
@@ -175,6 +185,13 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
               </div>
             </form>
           </div>
+          {isFeatureBeta &&
+            <div className="warning message">
+              <div className="form-banner">
+                <b><Trans>Warning:</Trans></b> <Trans>Your current API version includes beta support for encrypted metadata and new resource types.</Trans> <Trans>To ensure stability and avoid potential issues, upgrade to the latest version before enabling these features.</Trans>
+              </div>
+            </div>
+          }
         </div>
         <div className="actions-wrapper">
           <button id="save-settings" className="button primary form" type="button" disabled={this.hasAllInputDisabled()} onClick={this.handleFormSubmit}>
@@ -185,7 +202,7 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
           <div className="sidebar-help-section">
             <h3><Trans>Need help?</Trans></h3>
             <p><Trans>For more information about the content type support and migration, checkout the dedicated page on the official website.</Trans></p>
-            <a className="button" target="_blank" rel="noopener noreferrer" href="https://passbolt.com/docs/admin/metadata-encryption/encrypted-metadata/" >
+            <a className="button" target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/docs/admin/metadata-encryption/" >
               <InfoSVG />
               <span><Trans>Read the documentation</Trans></span>
             </a>
@@ -199,6 +216,7 @@ class DisplayAdministrationMetadataGettingStarted extends Component {
 
 DisplayAdministrationMetadataGettingStarted.propTypes = {
   context: PropTypes.object, // Defined the expected type for context
+  dialogContext: PropTypes.object, // the dialog context
   actionFeedbackContext: PropTypes.object, // The action feedback context
   history: PropTypes.object, // History property from the rooter
   metadataGettingStartedSettings: PropTypes.object, // The metadata getting started settings
@@ -207,4 +225,4 @@ DisplayAdministrationMetadataGettingStarted.propTypes = {
   t: PropTypes.func, // translation function
 };
 
-export default withAppContext(withRouter(withActionFeedback(withAdministrationEncryptedMetadataGettingStarted(withTranslation('common')(DisplayAdministrationMetadataGettingStarted)))));
+export default withAppContext(withRouter(withActionFeedback(withDialog(withAdministrationEncryptedMetadataGettingStarted(withTranslation('common')(DisplayAdministrationMetadataGettingStarted))))));

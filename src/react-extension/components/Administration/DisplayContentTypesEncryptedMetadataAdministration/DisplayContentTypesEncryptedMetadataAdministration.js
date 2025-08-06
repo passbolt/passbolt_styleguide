@@ -358,22 +358,24 @@ class DisplayContentTypesEncryptedMetadataAdministration extends Component {
                   }
                 </label>
               </div>
-              <div
-                className="input toggle-switch form-element">
-                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="allow_v5_v4_downgrade"
-                  id="allowV5V4DowngradeInput"
-                  onChange={this.handleInputChange} checked={this.state.settings.allow_v5_v4_downgrade}
-                  disabled={this.hasAllInputDisabled()}/>
-                <label htmlFor="allowV5V4DowngradeInput" className="text">
-                  <Trans>Allow users to downgrade their content from encrypted to cleartext metadata type.</Trans>
-                  {warnings?.hasError("allow_v5_v4_downgrade", "resource_types_deleted") &&
-                    <div className="name warning-message"><Trans>All legacy cleartext resource types were previously disabled. Re-enable them if you want users to downgrade their resources.</Trans></div>
-                  }
-                  {warnings?.hasError("allow_v5_v4_downgrade", "allow_creation") &&
-                    <div className="name warning-message"><Trans>Legacy cleartext metadata should be enabled to allow users to downgrade their resources.</Trans></div>
-                  }
-                </label>
-              </div>
+              {/*
+                <div
+                  className="input toggle-switch form-element">
+                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="allow_v5_v4_downgrade"
+                    id="allowV5V4DowngradeInput"
+                    onChange={this.handleInputChange} checked={this.state.settings.allow_v5_v4_downgrade}
+                    disabled={this.hasAllInputDisabled()}/>
+                  <label htmlFor="allowV5V4DowngradeInput" className="text">
+                    <Trans>Allow users to downgrade their content from encrypted to cleartext metadata type.</Trans>
+                    {warnings?.hasError("allow_v5_v4_downgrade", "resource_types_deleted") &&
+                      <div className="name warning-message"><Trans>All legacy cleartext resource types were previously disabled. Re-enable them if you want users to downgrade their resources.</Trans></div>
+                    }
+                    {warnings?.hasError("allow_v5_v4_downgrade", "allow_creation") &&
+                      <div className="name warning-message"><Trans>Legacy cleartext metadata should be enabled to allow users to downgrade their resources.</Trans></div>
+                    }
+                  </label>
+                </div>
+              */}
             </form>
           </div>
           {shouldDisplayAWarningBlock &&
