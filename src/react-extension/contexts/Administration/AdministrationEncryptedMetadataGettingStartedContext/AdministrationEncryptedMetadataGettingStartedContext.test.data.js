@@ -12,7 +12,7 @@
  * @since         5.4.0
  */
 
-export const defaultProps = (data = {}) => ({
+export const defaultAdministrationEncryptedMetadataGettingStartedContext = (data = {}) => ({
   get: jest.fn(),
   metadataKeysGettingStarted: null,
   updateLocalStorage: jest.fn(),

@@ -168,5 +168,12 @@ export default class AdministrationWorkspacePage {
   get isAllowedContentTypesSelected() {
     return Boolean(this._page.container.querySelector('.allow-content-types'));
   }
+
+  /**
+   * Returns true if the password expiry area is visible
+   */
+  get isGetStartedMetadataSelected() {
+    return Boolean(this._page.container.querySelector('#metadata-getting-started'));
+  }
 }
 
