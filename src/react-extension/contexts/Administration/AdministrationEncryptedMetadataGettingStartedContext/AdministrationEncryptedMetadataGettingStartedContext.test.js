@@ -14,7 +14,7 @@
 
 import {waitFor} from "@testing-library/dom";
 import mockComponentSetState from "../../../test/mock/components/React/mockSetState";
-import {defaultProps} from "./AdministrationEncryptedMetadataGettingStartedContext.test.data";
+import {defaultAdministrationEncryptedMetadataGettingStartedContext} from "./AdministrationEncryptedMetadataGettingStartedContext.test.data";
 import AdministrationEncryptedMetadataGettingStartedContextProvider from "./AdministrationEncryptedMetadataGettingStartedContext";
 import {
   defaultMetadataGettingStartedSettingsDto,
@@ -32,7 +32,7 @@ describe("AdministrationEncryptedMetadataGettingStartedContext", () => {
     it("should initialise the default state and handlers", () => {
       expect.assertions(3);
 
-      const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(defaultProps());
+      const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(defaultAdministrationEncryptedMetadataGettingStartedContext());
       mockComponentSetState(contextProvider);
 
       expect(contextProvider.runningUpdatePromise).not.toBeUndefined();
@@ -49,7 +49,7 @@ describe("AdministrationEncryptedMetadataGettingStartedContext", () => {
     it("should return the metadata keys settings if the state have been initialised already", () => {
       expect.assertions(1);
 
-      const props = defaultProps();
+      const props = defaultAdministrationEncryptedMetadataGettingStartedContext();
       const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(props);
       mockComponentSetState(contextProvider);
 
@@ -65,7 +65,7 @@ describe("AdministrationEncryptedMetadataGettingStartedContext", () => {
     it("should return null if the state hasn't been initialized yet and set a blocking promise while the init occurs", async() => {
       expect.assertions(4);
 
-      const props = defaultProps();
+      const props = defaultAdministrationEncryptedMetadataGettingStartedContext();
       const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(props);
       mockComponentSetState(contextProvider);
 
@@ -87,7 +87,7 @@ describe("AdministrationEncryptedMetadataGettingStartedContext", () => {
 
       const metadataGettingStartedSettings = defaultMetadataGettingStartedSettingsDto();
 
-      const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(defaultProps());
+      const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(defaultAdministrationEncryptedMetadataGettingStartedContext());
       mockComponentSetState(contextProvider);
 
       expect(contextProvider.state.metadataGettingStartedSettings).toBeNull();
@@ -101,7 +101,7 @@ describe("AdministrationEncryptedMetadataGettingStartedContext", () => {
     it("should call the service with the right method to trigger the event or the API call.", async() => {
       expect.assertions(1);
 
-      const props = defaultProps();
+      const props = defaultAdministrationEncryptedMetadataGettingStartedContext();
       const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(props);
       const spyOnRequest = jest.spyOn(props.service, "findGettingStartedSettings").mockImplementation(() => Promise.resolve(new MetadataGettingStartedSettingsEntity(defaultMetadataGettingStartedSettingsDto())));
 
@@ -115,7 +115,7 @@ describe("AdministrationEncryptedMetadataGettingStartedContext", () => {
     it("should not call the service twice if a pending promise is running.", async() => {
       expect.assertions(3);
 
-      const props = defaultProps();
+      const props = defaultAdministrationEncryptedMetadataGettingStartedContext();
       let resolveUpdateLocalStoragePromise;
       const spyOnRequest = jest.spyOn(props.service, "findGettingStartedSettings").mockImplementation(
         () => new Promise(resolve => resolveUpdateLocalStoragePromise = () => resolve(new MetadataGettingStartedSettingsEntity(enableMetadataGettingStartedSettingsDto())))
@@ -144,7 +144,7 @@ describe("AdministrationEncryptedMetadataGettingStartedContext", () => {
     it("should call the service again if the promise has been resolved.", async() => {
       expect.assertions(5);
 
-      const props = defaultProps();
+      const props = defaultAdministrationEncryptedMetadataGettingStartedContext();
 
       const spyOnRequest = jest.spyOn(props.service, "findGettingStartedSettings").mockImplementation(() => new MetadataGettingStartedSettingsEntity(defaultMetadataGettingStartedSettingsDto()));
       const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(props);

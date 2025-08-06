@@ -195,6 +195,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const contentTypesMetadataKey = ADMIN_URL_REGEXP.contentTypesMetadataKey.test(location);
     const migrateMetadata = ADMIN_URL_REGEXP.migrateEncryptedMetadata.test(location);
     const allowContentType = ADMIN_URL_REGEXP.allowContentTypes.test(location);
+    const gettingStarted = ADMIN_URL_REGEXP.gettingStarted.test(location);
 
     let selectedAdministration;
     if (isAdminHomePageLocation) {
@@ -237,6 +238,8 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.MIGRATE_METADATA;
     } else if (allowContentType) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES;
+    } else if (gettingStarted) {
+      selectedAdministration = AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED;
     }
 
     // let's check if the current URL is actually supported
@@ -405,4 +408,5 @@ const ADMIN_URL_REGEXP = {
   contentTypesMetadataKey: /^\/app\/administration\/content-types\/metadata-key\/?$/,
   migrateEncryptedMetadata: /^\/app\/administration\/migrate-metadata\/?$/,
   allowContentTypes: /^\/app\/administration\/allow-content-types\/?$/,
+  gettingStarted: /^\/app\/administration\/content-types\/metadata-getting-started\/?$/,
 };

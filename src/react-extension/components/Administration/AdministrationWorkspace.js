@@ -55,6 +55,7 @@ import DisplayMigrateMetadataAdministration from "./DisplayMigrateMetadataAdmini
 import DisplayContentTypesAllowedContentTypesAdministration from "./DisplayContentTypesAllowedContentTypesAdministration/DisplayContentTypesAllowedContentTypesAdministration";
 import AdministrationHomePage from "./HomePage/AdministrationHomePage.js";
 import WorkspaceSwitcher, {WORKSPACE_ENUM} from "../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher.js";
+import DisplayAdministrationMetadataGettingStarted from "./DisplayAdministrationMetadataGettingStarted/DisplayAdministrationMetadataGettingStarted.js";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -228,6 +229,15 @@ class AdministrationWorkspace extends Component {
   }
 
   /**
+   * If get started metadata is selected
+   * @returns {boolean}
+   */
+  isGetStartedMetadataSelected() {
+    return AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+
+  /**
    * Handle go back to resource workspace
    */
   handleGoBack() {
@@ -359,6 +369,10 @@ class AdministrationWorkspace extends Component {
                     }
                     {this.isAllowContentTypesSelected() &&
                       <DisplayContentTypesAllowedContentTypesAdministration/>
+                    }
+                    {
+                      this.isGetStartedMetadataSelected() &&
+                      <DisplayAdministrationMetadataGettingStarted/>
                     }
                   </div>
                 </div>
