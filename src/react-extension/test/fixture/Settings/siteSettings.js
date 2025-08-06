@@ -220,6 +220,9 @@ const siteSettings = (isProEdition = true) => ({
       "metadata": {
         "enabled": true,
       },
+      "selfRegistration": {
+        "enabled": true,
+      },
     }
   }
 });

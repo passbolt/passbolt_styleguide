@@ -19,6 +19,28 @@ import PropTypes from "prop-types";
  */
 class CardItem extends React.PureComponent {
   /**
+   * Returns the pill to display on the card if any
+   * @returns {JSX}
+   */
+  get pill() {
+    if (this.props.isBeta) {
+      return (<span className="chips beta">beta</span>);
+    }
+    if (this.props.isNew) {
+      return (<span className="chips new">new</span>);
+    }
+    return (<></>);
+  }
+
+  /**
+   * Returns true if the card must display a pill
+   * @returns {boolean}
+   */
+  get hasAPill() {
+    return Boolean(this.props.isBeta || this.props.isNew);
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -27,7 +49,7 @@ class CardItem extends React.PureComponent {
       <button type="button" className="button-transparent card" onClick={this.props.onClick}>
         {this.props.icon}
         <div className="card-information">
-          <span className={`title ${this.props.isBeta && "is-beta"}`} title={this.props.title}>{this.props.title}{this.props.isBeta && <span className="chips beta">beta</span>}</span>
+          <span className={`title ${this.hasAPill && "with-pill"}`} title={this.props.title}>{this.props.title}{this.pill}</span>
           {this.props.description &&
             <span className="info" title={this.props.description}>{this.props.description}</span>
           }
@@ -45,7 +67,8 @@ CardItem.propTypes = {
   icon: PropTypes.object.isRequired, // the icon to be displayed
   title: PropTypes.string.isRequired, // the main title of the card
   description: PropTypes.string, // the description or subtitle of the card
-  isBeta: PropTypes.bool.isRequired, // should the card display a beta pill
+  isBeta: PropTypes.bool.isRequired, // should the card display a "beta" pill
+  isNew: PropTypes.bool, /// should the card display a "new" pill
   onClick: PropTypes.func, // the callback to run when clicking the card
 };
 

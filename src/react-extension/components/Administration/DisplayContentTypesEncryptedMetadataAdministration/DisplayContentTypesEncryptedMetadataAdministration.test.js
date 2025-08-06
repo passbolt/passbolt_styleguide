@@ -36,7 +36,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
 
   describe("As a signed-in administrator I can see the content type encrypted metadata administration", () => {
     it("As a signed-in administrator I can see the settings", async() => {
-      expect.assertions(15);
+      expect.assertions(14);
       const props = defaultProps();
 
       const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
@@ -54,7 +54,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect(page.defaultResourceTypesV5Warning).toBeNull();
       expect(page.defaultResourceTypesV4Input.checked).toBe(true);
       expect(page.allowV4V5UpgradeInput.checked).toBe(false);
-      expect(page.allowV5V4DowngradeInput.checked).toBe(false);
+      //expect(page.allowV5V4DowngradeInput.checked).toBe(false);
       expect(page.warningMessagesCount).toBe(0);
       expect(page.errorMessagesCount).toBe(0);
     });
@@ -96,7 +96,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
     });
 
     it("displays warning when v5 and v4 resource creation are allowed and both version resource types are deleted", async() => {
-      expect.assertions(12);
+      expect.assertions(10);
       const props = resourceTypesDeletedProps({
         metadataSettingsServiceWorkerService: {
           findTypesSettings: () => new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto())
@@ -104,7 +104,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       });
       const page = new DisplayContentTypesEncryptedMetadataAdministrationPage(props);
       await waitForTrue(() => page.exists());
-      expect(page.warningMessagesCount).toBe(5);
+      expect(page.warningMessagesCount).toBe(4);
       expect(page.errorMessagesCount).toBe(0);
       expect(page.allowCreationOfV4ResourcesWarning).not.toBeNull();
       expect(page.allowCreationOfV4ResourcesWarning.textContent).toContain("All legacy cleartext resource types were previously disabled. Re-enable them if you want users to create resources of this type.");
@@ -114,8 +114,10 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect(page.defaultResourceTypesV4Warning.textContent).toContain("All legacy cleartext resource types were previously disabled. Re-enable them if you want users to create resources of this type.");
       expect(page.allowV4V5UpgradeWarning).not.toBeNull();
       expect(page.allowV4V5UpgradeWarning.textContent).toContain("All encrypted metadata resource types were previously disabled. Re-enable them if you want users to upgrade their resources.");
-      expect(page.allowV5V4DowngradeWarning).not.toBeNull();
-      expect(page.allowV5V4DowngradeWarning.textContent).toContain("All legacy cleartext resource types were previously disabled. Re-enable them if you want users to downgrade their resources.");
+      /*
+       * expect(page.allowV5V4DowngradeWarning).not.toBeNull();
+       * expect(page.allowV5V4DowngradeWarning.textContent).toContain("All legacy cleartext resource types were previously disabled. Re-enable them if you want users to downgrade their resources.");
+       */
     });
 
     it("displays warning when resource upgrade is allowed and v5 resource creation is not allowed", async() => {
@@ -133,7 +135,8 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       expect(page.allowV4V5UpgradeWarning.textContent).toContain("Encrypted metadata should be enabled to allow users to upgrade their resources.");
     });
 
-    it("displays warning when resource downgrade is allowed and v4 resource creation is not allowed", async() => {
+    //@todo: put back when downgrade is implemented
+    it.skip("displays warning when resource downgrade is allowed and v4 resource creation is not allowed", async() => {
       expect.assertions(4);
       const props = defaultProps({
         metadataSettingsServiceWorkerService: {
@@ -214,7 +217,7 @@ describe("DisplayContentTypesEncryptedMetadataAdministration", () => {
       await waitForTrue(() => page.exists());
       await page.clickOnDefaultResourceTypesV5Input();
       expect(page.formBanner).not.toBeNull();
-      expect(page.formBanner.textContent).toEqual("Don't forget to save your settings to apply your modification.");
+      expect(page.formBanner.textContent).toEqual("Warning: Don't forget to save your settings to apply your modification.");
     });
 
     it("updates warning on form settings changes", async() => {
