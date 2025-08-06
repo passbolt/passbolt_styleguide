@@ -574,6 +574,30 @@ class DisplayAdministrationMenu extends React.Component {
     return this.props.metadataGettingStartedSettings;
   }
 
+  /**
+   * Returns true if the "Getting started" menu item should be displayed
+   * @returns {boolean}
+   */
+  get shouldShowGettingStartedMenu() {
+    return this.metadataGettingStartedSettings.enabled === true && !this.isBeta("metadata");
+  }
+
+  /**
+   * Returns true if the current feature flag is marked beta.
+   * @param {string} flag
+   * @returns {boolean}
+   */
+  isBeta(flag) {
+    return this.props.context.siteSettings.isFeatureBeta(flag);
+  }
+
+  /**
+   * Retursn true when the component is ready to be displayed.
+   * @returns {boolean}
+   */
+  get isReady() {
+    return this.metadataGettingStartedSettings !== null;
+  }
 
   /**
    * Render the component
@@ -583,347 +607,351 @@ class DisplayAdministrationMenu extends React.Component {
     return (
       <div className="navigation-secondary navigation-administration">
         <ul id="administration_menu" className="clearfix menu ready">
-          <li id="home">
-            <div className={`row ${this.isHomeSelected() ? "selected" : ""}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.handleHomeClick}><span><Trans>Home</Trans></span></button>
-                </div>
-              </div>
-            </div>
-          </li>
-          {this.canIUseEE &&
-            <li id="subscription_menu">
-              <div className={`row ${this.isSubscriptionSelected() ? "selected" : ""}`}>
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={this.handleSubscriptionClick}><span><Trans>Subscription</Trans></span></button>
-                  </div>
-                </div>
-              </div>
-            </li>
-          }
-          {this.canIUseMetadata &&
-            <li id="content-types" className="accordion-header">
-              <div className="row">
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isContentTypesOpened")}>
-                      {this.state.isContentTypesOpened ? <CaretDownSVG /> : <CaretRightSVG />}
-                      <span><Trans>Resource types</Trans></span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              {this.state.isContentTypesOpened &&
-                <ul id="administration-sub-menu-content-type" className="menu">
-                  {this.metadataGettingStartedSettings?.enabled &&
-                    <li id="metadata_getting_started_menu">
-                      <div className={`row  ${this.isMetadataGettingStartedSelected() ? "selected" : ""}`}>
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <button className="link no-border" type="button" onClick={this.handleMetadataGettingStartedClick}>
-                              <span><Trans>Getting started</Trans></span>
-                              <span className="chips new">new</span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  }
-                  {!this.metadataGettingStartedSettings?.enabled &&
-                    <>
-                      <li id="metadata_key_menu">
-                        <div className={`row  ${this.isContentTypesMetadataKeySelected() ? "selected" : ""}`}>
-                          <div className="main-cell-wrapper">
-                            <div className="main-cell">
-                              <button className="link no-border" type="button" onClick={this.handleContentTypesMetadataKeyClick}>
-                                <span><Trans>Metadata key</Trans></span>
-                                <span className="chips beta">beta</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li id="encrypted_metadata_menu">
-                        <div className={`row  ${this.isContentTypesEncryptedMetadataSelected() ? "selected" : ""}`}>
-                          <div className="main-cell-wrapper">
-                            <div className="main-cell">
-                              <button className="link no-border" type="button" onClick={this.handleContentTypesEncryptedMetadataClick}>
-                                <span><Trans>Encrypted metadata</Trans></span>
-                                <span className="chips beta">beta</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li id="migrate_metadata_menu">
-                        <div className={`row  ${this.isMigrateMetadataSelected() ? "selected" : ""}`}>
-                          <div className="main-cell-wrapper">
-                            <div className="main-cell">
-                              <button className="link no-border" type="button" onClick={this.handleMigrateMetadataClick}>
-                                <span><Trans>Migrate metadata</Trans></span>
-                                <span className="chips beta">beta</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li id="allowed_content_type_menu">
-                        <div className={`row  ${this.isAllowedContentTypesSelected() ? "selected" : ""}`}>
-                          <div className="main-cell-wrapper">
-                            <div className="main-cell">
-                              <button className="link no-border" type="button" onClick={this.handleAllowedContentTypesClick}>
-                                <span><Trans>Allow content types</Trans></span>
-                                <span className="chips beta">beta</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    </>
-                  }
-                </ul>
-              }
-            </li>
-          }
-          {this.canSeePasswordConfiguration() &&
-            <li id="password-configuration" className="accordion-header">
-              <div className="row">
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isPasswordConfigurationOpened")}>
-                      {this.state.isPasswordConfigurationOpened ? <CaretDownSVG /> : <CaretRightSVG />}
-                      <span><Trans>Password configuration</Trans></span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              {this.state.isPasswordConfigurationOpened &&
-                <ul>
-                  {this.canIUsePasswordExpiry &&
-                    <li id="password_expiry_menu">
-                      <div className={`row ${this.isPasswordExpirySettingsSelected() ? "selected" : ""}`}>
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <button className="link no-border" type="button" onClick={this.handlePasswordExpirySettingsClick}>
-                              <span><Trans>Password Expiry</Trans></span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  }
-                  {this.canIUsePasswordPolicies &&
-                      <li id="password_policy_menu">
-                        <div className={`row ${this.isPasswordPoliciesSelected() ? "selected" : ""}`}>
-                          <div className="main-cell-wrapper">
-                            <div className="main-cell">
-                              <button className="link no-border" type="button" onClick={this.handlePasswordPoliciesClick}><span><Trans>Password Policy</Trans></span></button>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                  }
-                </ul>
-              }
-            </li>
-          }
-          {this.canSeeAuthentication() &&
-            <li id="authentication" className="accordion-header">
-              <div className="row">
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isAuthenticationOpened")}>
-                      {this.state.isAuthenticationOpened ? <CaretDownSVG /> : <CaretRightSVG />}
-                      <span><Trans>Authentication</Trans></span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              {this.state.isAuthenticationOpened &&
-                <ul>
-                  {this.canIUseUserPassphrasePolicies &&
-                    <li id="user_passphrase_policies_menu">
-                      <div className={`row ${this.isUserPassphrasePoliciesSelected() ? "selected" : ""}`}>
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <button className="link no-border" type="button" onClick={this.handleUserPassphrasePoliciesClick}>
-                              <span><Trans>User Passphrase Policies</Trans></span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  }
-                  {this.canIUseAccountRecovery &&
-                    <li id="account_recovery_menu">
-                      <div className={`row ${this.isAccountRecoverySelected() ? "selected" : ""}`}>
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <button className="link no-border" type="button" onClick={this.handleAccountRecoveryClick}>
-                              <span><Trans>Account Recovery</Trans></span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  }
-                  {this.canIUseSso &&
-                    <li id="sso_menu">
-                      <div className={`row ${this.isSsoSelected() ? "selected" : ""}`}>
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <button className="link no-border" type="button" onClick={this.handleSsoClick}>
-                              <span><Trans>Single Sign-On</Trans></span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  }
-                  {this.canIUseMfaPolicy &&
-                    <li id="mfa_policy_menu">
-                      <div className={`row ${this.isMfaPolicySelected() ? "selected" : ""}`}>
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <button className="link no-border" type="button" onClick={this.handleMfaPolicyClick}><span><Trans>MFA Policy</Trans></span></button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  }
-                  {this.isMfaEnabled &&
-                    <li id="mfa_menu">
-                      <div className={`row ${this.isMfaSelected() ? "selected" : ""}`}>
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <button className="link no-border" type="button" onClick={this.handleMfaClick}><span><Trans>Multi Factor Authentication</Trans></span></button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  }
-                </ul>
-              }
-            </li>
-          }
-          {this.canSeeUserProvisionning() &&
-            <li id="user-provisionning" className="accordion-header">
-              <div className="row">
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isUserProvisionningOpened")}>
-                      {this.state.isUserProvisionningOpened ? <CaretDownSVG /> : <CaretRightSVG />}
-                      <span><Trans>User provisionning</Trans></span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              {this.state.isUserProvisionningOpened &&
-                <ul>
-                  {this.isUserDirectoryEnabled &&
-                    <li id="user_directory_menu">
-                      <div className={`row ${this.isUserDirectorySelected() ? "selected" : ""}`}>
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <button className="link no-border" type="button" onClick={this.handleUserDirectoryClick}><span><Trans>Users Directory</Trans></span></button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  }
-                  {this.canIUseSelfRegistrationSettings &&
-                    <li id="self_registration_menu">
-                      <div className={`row ${this.isSelfRegistrationSettingsSelected() ? "selected" : ""}`}>
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <button className="link no-border" type="button" onClick={this.handleSelfRegistrationClick}>
-                              <span><Trans>Self Registration</Trans></span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  }
-                </ul>
-              }
-            </li>
-          }
-          <li id="emails" className="accordion-header">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isEmailsOpened")}>
-                    {this.state.isEmailsOpened ? <CaretDownSVG /> : <CaretRightSVG />}
-                    <span><Trans>Emails</Trans></span>
-                  </button>
-                </div>
-              </div>
-            </div>
-            {this.state.isEmailsOpened &&
-              <ul>
-                {this.canIUseSmtpSettings &&
-                  <li id="smtp_settings_menu">
-                    <div className={`row ${this.isSmtpSettingsSelected() ? "selected" : ""}`}>
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button className="link no-border" type="button" onClick={this.handleSmtpSettingsClick}>
-                            <span><Trans>Email server</Trans></span>
-                          </button>
-                        </div>
-                      </div>
+          {this.isReady &&
+            <>
+              <li id="home">
+                <div className={`row ${this.isHomeSelected() ? "selected" : ""}`}>
+                  <div className="main-cell-wrapper">
+                    <div className="main-cell">
+                      <button className="link no-border" type="button" onClick={this.handleHomeClick}><span><Trans>Home</Trans></span></button>
                     </div>
-                  </li>
-                }
-                <li id="email_notification_menu">
-                  <div className={`row ${this.isEmailNotificationsSelected() ? "selected" : ""}`}>
+                  </div>
+                </div>
+              </li>
+              {this.canIUseEE &&
+                <li id="subscription_menu">
+                  <div className={`row ${this.isSubscriptionSelected() ? "selected" : ""}`}>
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
-                        <button className="link no-border" type="button" onClick={this.handleEmailNotificationsClick}><span><Trans>Email Notifications</Trans></span></button>
+                        <button className="link no-border" type="button" onClick={this.handleSubscriptionClick}><span><Trans>Subscription</Trans></span></button>
                       </div>
                     </div>
                   </div>
                 </li>
-              </ul>
-            }
-          </li>
-          {this.canIUseRbacs &&
-            <li id="rbacs_menu">
-              <div className={`row ${this.isRbacSelected() ? "selected" : ""}`}>
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={this.handleRbacsClick}>
-                      <span><Trans>Role-Based Access Control</Trans></span>
-                    </button>
+              }
+              {this.canIUseMetadata &&
+                <li id="content-types" className="accordion-header">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isContentTypesOpened")}>
+                          {this.state.isContentTypesOpened ? <CaretDownSVG /> : <CaretRightSVG />}
+                          <span><Trans>Resource types</Trans></span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  {this.state.isContentTypesOpened &&
+                    <ul id="administration-sub-menu-content-type" className="menu">
+                      {this.shouldShowGettingStartedMenu &&
+                        <li id="metadata_getting_started_menu">
+                          <div className={`row  ${this.isMetadataGettingStartedSelected() ? "selected" : ""}`}>
+                            <div className="main-cell-wrapper">
+                              <div className="main-cell">
+                                <button className="link no-border" type="button" onClick={this.handleMetadataGettingStartedClick}>
+                                  <span><Trans>Getting started</Trans></span>
+                                  <span className="chips new">new</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      }
+                      {!this.shouldShowGettingStartedMenu &&
+                        <>
+                          <li id="metadata_key_menu">
+                            <div className={`row  ${this.isContentTypesMetadataKeySelected() ? "selected" : ""}`}>
+                              <div className="main-cell-wrapper">
+                                <div className="main-cell">
+                                  <button className="link no-border" type="button" onClick={this.handleContentTypesMetadataKeyClick}>
+                                    <span><Trans>Metadata key</Trans></span>
+                                    {this.isBeta("metadata") && <span className="chips beta">beta</span>}
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                          <li id="encrypted_metadata_menu">
+                            <div className={`row  ${this.isContentTypesEncryptedMetadataSelected() ? "selected" : ""}`}>
+                              <div className="main-cell-wrapper">
+                                <div className="main-cell">
+                                  <button className="link no-border" type="button" onClick={this.handleContentTypesEncryptedMetadataClick}>
+                                    <span><Trans>Encrypted metadata</Trans></span>
+                                    {this.isBeta("metadata") && <span className="chips beta">beta</span>}
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                          <li id="migrate_metadata_menu">
+                            <div className={`row  ${this.isMigrateMetadataSelected() ? "selected" : ""}`}>
+                              <div className="main-cell-wrapper">
+                                <div className="main-cell">
+                                  <button className="link no-border" type="button" onClick={this.handleMigrateMetadataClick}>
+                                    <span><Trans>Migrate metadata</Trans></span>
+                                    {this.isBeta("metadata") && <span className="chips beta">beta</span>}
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                          <li id="allowed_content_type_menu">
+                            <div className={`row  ${this.isAllowedContentTypesSelected() ? "selected" : ""}`}>
+                              <div className="main-cell-wrapper">
+                                <div className="main-cell">
+                                  <button className="link no-border" type="button" onClick={this.handleAllowedContentTypesClick}>
+                                    <span><Trans>Allow content types</Trans></span>
+                                    {this.isBeta("metadata") && <span className="chips beta">beta</span>}
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                        </>
+                      }
+                    </ul>
+                  }
+                </li>
+              }
+              {this.canSeePasswordConfiguration() &&
+                <li id="password-configuration" className="accordion-header">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isPasswordConfigurationOpened")}>
+                          {this.state.isPasswordConfigurationOpened ? <CaretDownSVG /> : <CaretRightSVG />}
+                          <span><Trans>Password configuration</Trans></span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  {this.state.isPasswordConfigurationOpened &&
+                    <ul>
+                      {this.canIUsePasswordExpiry &&
+                        <li id="password_expiry_menu">
+                          <div className={`row ${this.isPasswordExpirySettingsSelected() ? "selected" : ""}`}>
+                            <div className="main-cell-wrapper">
+                              <div className="main-cell">
+                                <button className="link no-border" type="button" onClick={this.handlePasswordExpirySettingsClick}>
+                                  <span><Trans>Password Expiry</Trans></span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      }
+                      {this.canIUsePasswordPolicies &&
+                          <li id="password_policy_menu">
+                            <div className={`row ${this.isPasswordPoliciesSelected() ? "selected" : ""}`}>
+                              <div className="main-cell-wrapper">
+                                <div className="main-cell">
+                                  <button className="link no-border" type="button" onClick={this.handlePasswordPoliciesClick}><span><Trans>Password Policy</Trans></span></button>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                      }
+                    </ul>
+                  }
+                </li>
+              }
+              {this.canSeeAuthentication() &&
+                <li id="authentication" className="accordion-header">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isAuthenticationOpened")}>
+                          {this.state.isAuthenticationOpened ? <CaretDownSVG /> : <CaretRightSVG />}
+                          <span><Trans>Authentication</Trans></span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  {this.state.isAuthenticationOpened &&
+                    <ul>
+                      {this.canIUseUserPassphrasePolicies &&
+                        <li id="user_passphrase_policies_menu">
+                          <div className={`row ${this.isUserPassphrasePoliciesSelected() ? "selected" : ""}`}>
+                            <div className="main-cell-wrapper">
+                              <div className="main-cell">
+                                <button className="link no-border" type="button" onClick={this.handleUserPassphrasePoliciesClick}>
+                                  <span><Trans>User Passphrase Policies</Trans></span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      }
+                      {this.canIUseAccountRecovery &&
+                        <li id="account_recovery_menu">
+                          <div className={`row ${this.isAccountRecoverySelected() ? "selected" : ""}`}>
+                            <div className="main-cell-wrapper">
+                              <div className="main-cell">
+                                <button className="link no-border" type="button" onClick={this.handleAccountRecoveryClick}>
+                                  <span><Trans>Account Recovery</Trans></span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      }
+                      {this.canIUseSso &&
+                        <li id="sso_menu">
+                          <div className={`row ${this.isSsoSelected() ? "selected" : ""}`}>
+                            <div className="main-cell-wrapper">
+                              <div className="main-cell">
+                                <button className="link no-border" type="button" onClick={this.handleSsoClick}>
+                                  <span><Trans>Single Sign-On</Trans></span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      }
+                      {this.canIUseMfaPolicy &&
+                        <li id="mfa_policy_menu">
+                          <div className={`row ${this.isMfaPolicySelected() ? "selected" : ""}`}>
+                            <div className="main-cell-wrapper">
+                              <div className="main-cell">
+                                <button className="link no-border" type="button" onClick={this.handleMfaPolicyClick}><span><Trans>MFA Policy</Trans></span></button>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      }
+                      {this.isMfaEnabled &&
+                        <li id="mfa_menu">
+                          <div className={`row ${this.isMfaSelected() ? "selected" : ""}`}>
+                            <div className="main-cell-wrapper">
+                              <div className="main-cell">
+                                <button className="link no-border" type="button" onClick={this.handleMfaClick}><span><Trans>Multi Factor Authentication</Trans></span></button>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      }
+                    </ul>
+                  }
+                </li>
+              }
+              {this.canSeeUserProvisionning() &&
+                <li id="user-provisionning" className="accordion-header">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isUserProvisionningOpened")}>
+                          {this.state.isUserProvisionningOpened ? <CaretDownSVG /> : <CaretRightSVG />}
+                          <span><Trans>User provisionning</Trans></span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  {this.state.isUserProvisionningOpened &&
+                    <ul>
+                      {this.isUserDirectoryEnabled &&
+                        <li id="user_directory_menu">
+                          <div className={`row ${this.isUserDirectorySelected() ? "selected" : ""}`}>
+                            <div className="main-cell-wrapper">
+                              <div className="main-cell">
+                                <button className="link no-border" type="button" onClick={this.handleUserDirectoryClick}><span><Trans>Users Directory</Trans></span></button>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      }
+                      {this.canIUseSelfRegistrationSettings &&
+                        <li id="self_registration_menu">
+                          <div className={`row ${this.isSelfRegistrationSettingsSelected() ? "selected" : ""}`}>
+                            <div className="main-cell-wrapper">
+                              <div className="main-cell">
+                                <button className="link no-border" type="button" onClick={this.handleSelfRegistrationClick}>
+                                  <span><Trans>Self Registration</Trans></span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      }
+                    </ul>
+                  }
+                </li>
+              }
+              <li id="emails" className="accordion-header">
+                <div className="row">
+                  <div className="main-cell-wrapper">
+                    <div className="main-cell">
+                      <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isEmailsOpened")}>
+                        {this.state.isEmailsOpened ? <CaretDownSVG /> : <CaretRightSVG />}
+                        <span><Trans>Emails</Trans></span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </li>
-          }
-          {this.canIUseLocale &&
-            <li id="internationalization_menu">
-              <div className={`row ${this.isInternationalizationSelected() ? "selected" : ""}`}>
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={this.handleInternationalizationClick}><span><Trans>Internationalisation</Trans></span></button>
+                {this.state.isEmailsOpened &&
+                  <ul>
+                    {this.canIUseSmtpSettings &&
+                      <li id="smtp_settings_menu">
+                        <div className={`row ${this.isSmtpSettingsSelected() ? "selected" : ""}`}>
+                          <div className="main-cell-wrapper">
+                            <div className="main-cell">
+                              <button className="link no-border" type="button" onClick={this.handleSmtpSettingsClick}>
+                                <span><Trans>Email server</Trans></span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    }
+                    <li id="email_notification_menu">
+                      <div className={`row ${this.isEmailNotificationsSelected() ? "selected" : ""}`}>
+                        <div className="main-cell-wrapper">
+                          <div className="main-cell">
+                            <button className="link no-border" type="button" onClick={this.handleEmailNotificationsClick}><span><Trans>Email Notifications</Trans></span></button>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                }
+              </li>
+              {this.canIUseRbacs &&
+                <li id="rbacs_menu">
+                  <div className={`row ${this.isRbacSelected() ? "selected" : ""}`}>
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <button className="link no-border" type="button" onClick={this.handleRbacsClick}>
+                          <span><Trans>Role-Based Access Control</Trans></span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </li>
-          }
-          {this.canIUseHealthcheck &&
-            <li id="healthcheck_menu">
-              <div className={`row ${this.isHealthcheckSelected() ? "selected" : ""}`}>
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={this.handleHealthcheckClick}>
-                      <span><Trans>Passbolt API Status</Trans></span>
-                    </button>
+                </li>
+              }
+              {this.canIUseLocale &&
+                <li id="internationalization_menu">
+                  <div className={`row ${this.isInternationalizationSelected() ? "selected" : ""}`}>
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <button className="link no-border" type="button" onClick={this.handleInternationalizationClick}><span><Trans>Internationalisation</Trans></span></button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </li>
+                </li>
+              }
+              {this.canIUseHealthcheck &&
+                <li id="healthcheck_menu">
+                  <div className={`row ${this.isHealthcheckSelected() ? "selected" : ""}`}>
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <button className="link no-border" type="button" onClick={this.handleHealthcheckClick}>
+                          <span><Trans>Passbolt API Status</Trans></span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              }
+            </>
           }
         </ul>
       </div>

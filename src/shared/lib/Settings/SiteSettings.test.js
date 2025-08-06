@@ -25,7 +25,7 @@ describe("SiteSettings", () => {
     it("should return false if it is mark as not beta in the settings", () => {
       expect.assertions(1);
       const settingsDto = defaultProSiteSettings();
-      settingsDto.passbolt.plugins.metadata.beta = false;
+      settingsDto.passbolt.plugins.metadata.isInBeta = false;
       const settings = new SiteSettings(settingsDto);
       expect(settings.isFeatureBeta("metadata")).toStrictEqual(false);
     });
@@ -33,7 +33,7 @@ describe("SiteSettings", () => {
     it("should return false if there is no beta information in the settings", () => {
       expect.assertions(1);
       const settingsDto = defaultProSiteSettings();
-      delete settingsDto.passbolt.plugins.metadata.beta;
+      delete settingsDto.passbolt.plugins.metadata.isInBeta;
       const settings = new SiteSettings(settingsDto);
       expect(settings.isFeatureBeta("metadata")).toStrictEqual(false);
     });

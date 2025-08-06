@@ -198,7 +198,7 @@ export const defaultCeSiteSettings = siteSettings => {
         "metadata": {
           "version": "1.0.0",
           "enabled": true,
-          "beta": true,
+          "isInBeta": true,
         }
       }
     }
