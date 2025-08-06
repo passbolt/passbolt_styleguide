@@ -352,7 +352,8 @@ export const AdministrationWorkspaceMenuTypes = {
   CONTENT_TYPES_ENCRYPTED_METADATA: "CONTENT_TYPES_ENCRYPTED_METADATA", // Content types encrypted metadata administration menu selected
   CONTENT_TYPES_METADATA_KEY: "CONTENT_TYPES_METADATA_KEY", // Content types metadata key administration menu selected
   MIGRATE_METADATA: "MIGRATE_METADATA", //Migrate metadata administration menu selected
-  ALLOW_CONTENT_TYPES: "ALLOW_CONTENT_TYPES", // Allow content types administraiton menu selected
+  ALLOW_CONTENT_TYPES: "ALLOW_CONTENT_TYPES", // Allow content types administration menu selected
+  METADATA_GETTING_STARTED: "METADATA_GETTING_STARTED", // metadata getting started menu selected
 };
 
 /**
@@ -377,6 +378,7 @@ export const AdministrationWorkspaceFeatureFlag = {
   [AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY]: "metadata", // Content types metadata key flag
   [AdministrationWorkspaceMenuTypes.MIGRATE_METADATA]: "metadata", // Migrate metadata flag
   [AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES]: "metadata", // Allox content types flag
+  [AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED]: "metadata", // Allow  types flag
 };
 
 /**

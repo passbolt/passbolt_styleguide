@@ -255,7 +255,6 @@ class AdministrationWorkspace extends Component {
   }
 
   render() {
-    // const AdministrationWorkspaceAction = this.props.administrationWorkspaceContext.administrationWorkspaceAction;
     return (
       <div id="container" className="page administration">
         <div id="app" className="app" tabIndex="1000">
