@@ -5170,7 +5170,7 @@ iframe.cachette {
   background: var(--Palette-Contrast-2);
 }
 .chips.new {
-  background-color: var(--Palette-Contrast-4);
+  background-color: var(--Palette-Contrast-1);
 }
 .third-party-provider-settings .provider-list {
   display: flex;
@@ -6496,12 +6496,12 @@ html.launching .launching-screen p {
 #administration-home-page .main-content .grid .card .info {
   max-width: 22rem;
 }
-#administration-home-page .main-content .grid .card .title.is-beta {
+#administration-home-page .main-content .grid .card .title.with-pill {
   position: relative;
   max-width: 18.1rem;
   padding-right: 4.7rem;
 }
-#administration-home-page .main-content .grid .card .title.is-beta .chips {
+#administration-home-page .main-content .grid .card .title.with-pill .chips {
   position: absolute;
   right: 0;
   margin-top: 0.3rem;

@@ -1,0 +1,85 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         5.4.0
+ */
+
+import "../../../../../test/mocks/mockPortal.js";
+import {waitFor} from '@testing-library/dom';
+import {defaultDisabledProps, defaultProps} from './DisplayAdministrationMetadataGettingStarted.test.data';
+import DisplayAdministrationMetadataGettingStartedPage from './DisplayAdministrationMetadataGettingStarted.test.page';
+
+describe('DisplayAdministrationMetadataGettingStarted', () => {
+  let page, props;
+
+  beforeEach(() => {
+    props = new defaultProps();
+    page = new DisplayAdministrationMetadataGettingStartedPage(props);
+  });
+
+  it('should display the title and description', () => {
+    expect.assertions(2);
+    expect(page.title).toBe('Getting started');
+    expect(page.description).toBe('Some of the latest features such as the new resource types require the encrypted metadata feature to be enabled.Here you can choose to enable it or do it later when ready. We recommend making a backup before, just in case.');
+  });
+
+  it('should allow selecting enable encrypted metadata and save it', async() => {
+    expect.assertions(3);
+    jest.spyOn(props.context.port, "request");
+
+    await page.selectEnableEncryptedMetadata();
+
+    expect(page.keepLegacyCleartextMetadataRadio.checked).toEqual(false);
+    expect(page.enableEncryptedMetadataRadio.checked).toEqual(true);
+
+    await page.clickSaveButton();
+
+    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.metadata.enable-encrypted-metadata-for-existing-instance");
+  });
+
+  it('As a logged in administrator I can see an help box in administration metadata getting started screen ', async() => {
+    expect.assertions(6);
+
+    expect(page.exists()).toBeTruthy();
+    await waitFor(() => {});
+    expect(page.helpBox).not.toBeNull();
+    expect(page.helpBoxTitle.textContent).toBe("Need help?");
+    expect(page.helpBoxDescription.textContent).toBe("For more information about the content type support and migration, checkout the dedicated page on the official website.");
+    expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
+    expect(page.helpBoxButton.getAttribute('href')).toEqual('https://www.passbolt.com/docs/admin/metadata-encryption/');
+  });
+
+
+  it('should allow selecting keep legacy cleartext metadata and save it', async() => {
+    expect.assertions(3);
+    jest.spyOn(props.context.port, "request");
+
+    page.selectKeepLegacyCleartextMetadata();
+
+    expect(page.keepLegacyCleartextMetadataRadio.checked).toEqual(true);
+    expect(page.enableEncryptedMetadataRadio.checked).toEqual(false);
+
+    page.clickSaveButton();
+
+    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.metadata.keep-cleartext-metadata-for-existing-instance");
+  });
+
+  it('should not be able to save if settings are already saved', async() => {
+    expect.assertions(3);
+
+    props = defaultDisabledProps();
+    page = new DisplayAdministrationMetadataGettingStartedPage(props);
+
+    expect(page.keepLegacyCleartextMetadataRadio.hasAttribute("disabled")).toEqual(true);
+    expect(page.enableEncryptedMetadataRadio.hasAttribute("disabled")).toEqual(true);
+    expect(page.saveButton.hasAttribute("disabled")).toEqual(true);
+  });
+});

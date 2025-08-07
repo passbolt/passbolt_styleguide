@@ -1,3 +1,11 @@
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import MetadataGettingStartedSettingsEntity
+  from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity";
+import {
+  defaultMetadataGettingStartedSettingsDto
+} from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity.test.data";
+import siteSettingsPro from "../../../test/fixture/Settings/siteSettings";
+
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
@@ -15,13 +23,13 @@ export function defaultAppContext(appContext) {
  * @returns {{resource: {id: string, name: string}}}
  */
 export function defaultProps(data = {}) {
+  const siteSettings = new SiteSettings(siteSettingsPro);
   return Object.assign({
     context: {
-      siteSettings: {
-        canIUse: () => true
-      }
+      siteSettings: siteSettings
     },
     administrationWorkspaceContext: {},
+    metadataGettingStartedSettings: new MetadataGettingStartedSettingsEntity(defaultMetadataGettingStartedSettingsDto()),
     navigationContext: {
       onGoToAdministrationSubscriptionRequested: jest.fn(),
       onGoToAdministrationEmailNotificationsRequested: jest.fn(),
@@ -39,6 +47,8 @@ export function defaultProps(data = {}) {
       onGoToAdministrationHealthcheckRequested: jest.fn(),
       onGoToAdministrationContentTypesEncryptedMetadataRequested: jest.fn(),
       onGoToAdministrationContentTypesMetadataKeyRequested: jest.fn(),
+      onGoToAdministrationMigrateMetadataRequested: jest.fn(),
+      onGoToAdministrationMetadataGettingStartedRequested: jest.fn(),
     }
   }, data);
 }

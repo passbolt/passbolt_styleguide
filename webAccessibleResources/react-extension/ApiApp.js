@@ -42,6 +42,10 @@ import MfaContextProvider from "./contexts/MFAContext";
 import RbacContextProvider from "../shared/context/Rbac/RbacContext";
 import AdminRbacContextProvider from "./contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
 import AdministrationHealthcheckContextProvider from "./contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext";
+import FindMetadataGettingStartedSettingsService
+  from "../shared/services/metadata/findMetadataGettingStartedSettingsService";
+import AdministrationEncryptedMetadataGettingStartedContextProvider
+  from "./contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
 
 /**
  * The passbolt application served by the API.
@@ -87,6 +91,7 @@ class ApiApp extends Component {
                                     "/app/administration/password-expiry",
                                     "/app/administration/content-types/metadata",
                                     "/app/administration/content-types/metadata-key",
+                                    "/app/administration/content-types/metadata-getting-started",
                                   ]}/>
                                   <Route path="/app/administration">
                                     <AdministrationWorkspaceContextProvider>
@@ -102,7 +107,9 @@ class ApiApp extends Component {
                                                   <AdminInternationalizationContextProvider>
                                                     <AdminRbacContextProvider>
                                                       <AdministrationHealthcheckContextProvider>
-                                                        <AdministrationWorkspace/>
+                                                        <AdministrationEncryptedMetadataGettingStartedContextProvider service={new FindMetadataGettingStartedSettingsService(appContext.getApiClientOptions())}>
+                                                          <AdministrationWorkspace/>
+                                                        </AdministrationEncryptedMetadataGettingStartedContextProvider>
                                                       </AdministrationHealthcheckContextProvider>
                                                     </AdminRbacContextProvider>
                                                   </AdminInternationalizationContextProvider>

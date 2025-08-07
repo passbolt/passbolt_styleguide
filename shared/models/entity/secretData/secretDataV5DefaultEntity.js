@@ -38,7 +38,7 @@ class SecretDataV5DefaultEntity extends SecretDataEntity {
         },
         "description": {
           "type": "string",
-          "maxLength": 10000,
+          "maxLength": 50000,
           "nullable": true,
         },
         "custom_fields": CustomFieldsCollection.getSchema(),

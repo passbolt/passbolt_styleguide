@@ -194,6 +194,11 @@ export const defaultCeSiteSettings = siteSettings => {
         "log": {
           "version": "1.0.1",
           "enabled": true
+        },
+        "metadata": {
+          "version": "1.0.0",
+          "enabled": true,
+          "isInBeta": true,
         }
       }
     }

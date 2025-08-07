@@ -117,7 +117,7 @@ class AddResourceNote extends Component {
               <textarea
                 id="resource-note"
                 name="secret.description"
-                maxLength="10000"
+                maxLength={this.isResourceTypeV4Default ? "10000" : "50000"}
                 placeholder={this.translate("Add a note")}
                 onChange={this.handleInputChange}
                 disabled={this.props.disabled}

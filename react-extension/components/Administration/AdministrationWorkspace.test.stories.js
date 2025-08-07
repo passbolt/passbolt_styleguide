@@ -43,6 +43,11 @@ import mockStorage from "../../../../test/mocks/mockStorage";
 import mockPort from "../../../../test/mocks/mockPort";
 import {siteSettingsCe} from "../../test/fixture/Settings/siteSettings";
 import {defaultAdministrationWorkspaceContext} from "../../contexts/AdministrationWorkspaceContext.test.data";
+import AdministrationEncryptedMetadataGettingStartedContextProvider from "../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
+
+const fakeAdminGettingStartedService = {
+  findGettingStartedSettings: () => ({enabled: false})
+};
 
 /**
  * AdministrationWorkspace stories
@@ -87,11 +92,13 @@ export default {
                                           <AdminPasswordPoliciesContextProvider>
                                             <AdministrationUserPassphrasePoliciesContextProvider>
                                               <AdministrationPasswordExpiryContextProvider>
-                                                <ManageDialogs/>
-                                                <ManageWorkflows/>
-                                                <div style={{margin: "-1rem"}}>
-                                                  <Story {...args}/>
-                                                </div>
+                                                <AdministrationEncryptedMetadataGettingStartedContextProvider service={fakeAdminGettingStartedService}>
+                                                  <ManageDialogs/>
+                                                  <ManageWorkflows/>
+                                                  <div style={{margin: "-1rem"}}>
+                                                    <Story {...args}/>
+                                                  </div>
+                                                </AdministrationEncryptedMetadataGettingStartedContextProvider>
                                               </AdministrationPasswordExpiryContextProvider>
                                             </AdministrationUserPassphrasePoliciesContextProvider>
                                           </AdminPasswordPoliciesContextProvider>

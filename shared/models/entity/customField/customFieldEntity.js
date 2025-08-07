@@ -26,7 +26,7 @@ export const CUSTOM_FIELD_TYPE = {
 
 
 export const CUSTOM_FIELD_KEY_MAX_LENGTH = 255;
-export const CUSTOM_FIELD_TEXT_MAX_LENGTH = 5000;
+export const CUSTOM_FIELD_TEXT_MAX_LENGTH = 20000;
 const CUSTOM_FIELD_PASSWORD_MAX_LENGTH = 4096;
 const CUSTOM_FIELD_URI_MAX_LENGTH = 1024;
 
@@ -132,7 +132,7 @@ class CustomFieldEntity extends EntityV2 {
       } else if (type === CUSTOM_FIELD_TYPE.BOOLEAN && typeof value !== "boolean") {
         validationError = validationError || new EntityValidationError();
         validationError.addError("value", "value-type", "The type and the value type should match");
-      } else if (type === CUSTOM_FIELD_TYPE.TEXT && value.length > 5000) {
+      } else if (type === CUSTOM_FIELD_TYPE.TEXT && value.length > 20000) {
         validationError = validationError || new EntityValidationError();
         validationError.addError("value", "maxLength", `The length of the value should not exceed ${CUSTOM_FIELD_TEXT_MAX_LENGTH} characters`);
       } else if (type === CUSTOM_FIELD_TYPE.PASSWORD && value.length > 4096) {

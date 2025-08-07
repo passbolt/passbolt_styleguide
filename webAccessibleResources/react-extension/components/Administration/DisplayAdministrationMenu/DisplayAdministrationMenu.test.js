@@ -19,6 +19,11 @@
 import DisplayAdministrationMenuPage from "./DisplayAdministrationMenu.test.page";
 import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
 import {defaultAppContext, defaultProps} from "./DisplayAdministrationMenu.test.data";
+import MetadataGettingStartedSettingsEntity
+  from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity";
+import {
+  enableMetadataGettingStartedSettingsDto
+} from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -133,13 +138,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "smtpSettings"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "smtpSettings");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.smtpSettings).toBeNull();
@@ -163,13 +164,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "selfRegistration"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "selfRegistration");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.selfRegistration).toBeNull();
@@ -193,13 +190,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "healthcheckUi"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.HEALTHCHECK}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "healthcheckUi");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.healthCheck).toBeNull();
@@ -223,13 +216,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "sso"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "sso");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.ssoSettings).toBeNull();
@@ -253,13 +242,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "mfaPolicies"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "mfaPolicies");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.mfaPolicy).toBeNull();
@@ -283,13 +268,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "rbacs"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "rbacs");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.rbacs).toBeNull();
@@ -313,13 +294,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "userPassphrasePolicies"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "userPassphrasePolicies");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.userPassphrasePolicies).toBeNull();
@@ -343,13 +320,9 @@ describe("As AD I can see the administration menu", () => {
     it('If the feature flag is false, the menu should not be visible', async() => {
       expect.assertions(2);
       const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "passwordExpiry"
-          }
-        },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY}
       }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "passwordExpiry");
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.passwordExpirySettings).toBeNull();
@@ -424,10 +397,10 @@ describe("As AD I can see the administration menu", () => {
       }); // The props to pass
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
-      await page.gotoContentTypesMetadataKey();
+      await page.gotoMigrateMetadata();
       expect(page.contentTypesMetadataKey).toBeTruthy();
       expect(page.menuSelected).toBe('Migrate metadata');
-      expect(props.navigationContext.onGoToAdministrationContentTypesMetadataKeyRequested).toHaveBeenCalled();
+      expect(props.navigationContext.onGoToAdministrationMigrateMetadataRequested).toHaveBeenCalled();
     });
 
     it('If the feature flag is false, the menu should not be visible', async() => {
@@ -473,6 +446,38 @@ describe("As AD I can see the administration menu", () => {
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.contentTypesMetadataKey).toBeNull();
+    });
+  });
+
+  describe("As a signed-in administrator on the administration workspace, I can see the Metadata getting started option in the left-side bar", () => {
+    it('If the feature flag is true and getting started is enabled, the menu should be visible', async() => {
+      expect.assertions(4);
+      const props = defaultProps({
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED},
+        metadataGettingStartedSettings: new MetadataGettingStartedSettingsEntity(enableMetadataGettingStartedSettingsDto()),
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      await page.gotoMetadataGettingStartedSettings();
+      expect(page.metadataGettingStartedSettings).toBeTruthy();
+      expect(page.menuSelected).toBe('Getting started');
+      expect(props.navigationContext.onGoToAdministrationMetadataGettingStartedRequested).toHaveBeenCalled();
+    });
+
+    it('If the feature flag is false, the menu should not be visible', async() => {
+      expect.assertions(2);
+      const props = defaultProps({
+        context: {
+          siteSettings: {
+            canIUse: feature => feature !== "metadata"
+          }
+        },
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED},
+        metadataGettingStartedSettings: new MetadataGettingStartedSettingsEntity(enableMetadataGettingStartedSettingsDto()),
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      expect(page.metadataGettingStartedSettings).toBeNull();
     });
   });
 });

@@ -37,8 +37,16 @@ import RBACSVG from "../../../../img/svg/rbac.svg";
 import InternationalSVG from "../../../../img/svg/international.svg";
 import HeartPulseSVG from "../../../../img/svg/heart_pulse.svg";
 import EmailNotificationsSVG from "../../../../img/svg/email_notifications.svg";
+import MetadataKeySVG from "../../../../img/svg/metadata_key.svg";
+import {withAdministrationEncryptedMetadataGettingStarted} from "../../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
 
-
+const metadataMenuItems = [
+  AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED,
+  AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY,
+  AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA,
+  AdministrationWorkspaceMenuTypes.MIGRATE_METADATA,
+  AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES
+];
 
 /**
  * This component represents the Administration Home Page
@@ -54,7 +62,7 @@ class AdministrationHomePage extends React.PureComponent {
    */
   bindCallbacks() {
     this.handleClickOn = this.handleClickOn.bind(this);
-    this.isFlagEnabled = this.isFlagEnabled.bind(this);
+    this.shouldBeDisplayed = this.shouldBeDisplayed.bind(this);
   }
 
   /**
@@ -78,33 +86,36 @@ class AdministrationHomePage extends React.PureComponent {
       redirectTo: this.props.navigationContext.onGoToAdministrationSubscriptionRequested,
       flag: AdministrationWorkspaceMenuTypes.SUBSCRIPTION,
     }, {
-      icon: <EncryptedMetadataSVG/>,
-      title: this.props.t("Encrypted metadata"),
-      description: this.props.t("Choose between cleartext metadata and encrypted metadata."),
-      redirectTo: this.props.navigationContext.onGoToAdministrationContentTypesEncryptedMetadataRequested,
-      flag: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA,
-      isBeta: true,
-    }, {
-      icon: <ArrowBigUpDashSVG/>,
-      title: this.props.t("Migrate metadata"),
-      description: this.props.t("Convert cleartext metadata into encrypted metadata."),
-      redirectTo: this.props.navigationContext.onGoToAdministrationMigrateMetadataRequested,
-      flag: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA,
-      isBeta: true,
-    }, {
-      icon: <ShapesSVG/>,
-      title: this.props.t("Allow content types"),
-      description: this.props.t("Control the content types availability for all users."),
-      redirectTo: this.props.navigationContext.onGoToAdministrationAllowContentTypesRequested,
-      flag: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES,
-      isBeta: true,
+      icon: <MetadataKeySVG/>,
+      title: this.props.t("Getting started"),
+      description: this.props.t("Define the strategy to enable new resource types and encrypted metadata."),
+      redirectTo: this.props.navigationContext.onGoToAdministrationMetadataGettingStartedRequested,
+      flag: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED,
+      isNew: true,
     }, {
       icon: <FileKey2SVG/>,
       title: this.props.t("Metadata key"),
       description: this.props.t("Control the layer of encryption that is used to protect metadata."),
       redirectTo: this.props.navigationContext.onGoToAdministrationContentTypesMetadataKeyRequested,
       flag: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY,
-      isBeta: true,
+    }, {
+      icon: <EncryptedMetadataSVG/>,
+      title: this.props.t("Encrypted metadata"),
+      description: this.props.t("Choose between cleartext metadata and encrypted metadata."),
+      redirectTo: this.props.navigationContext.onGoToAdministrationContentTypesEncryptedMetadataRequested,
+      flag: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA,
+    }, {
+      icon: <ArrowBigUpDashSVG/>,
+      title: this.props.t("Migrate metadata"),
+      description: this.props.t("Convert cleartext metadata into encrypted metadata."),
+      redirectTo: this.props.navigationContext.onGoToAdministrationMigrateMetadataRequested,
+      flag: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA,
+    }, {
+      icon: <ShapesSVG/>,
+      title: this.props.t("Allow resources types"),
+      description: this.props.t("Control the resource types availability for all users."),
+      redirectTo: this.props.navigationContext.onGoToAdministrationAllowContentTypesRequested,
+      flag: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES,
     }, {
       icon: <ExpirySVG/>,
       title: this.props.t("Password expiry"),
@@ -189,7 +200,33 @@ class AdministrationHomePage extends React.PureComponent {
       description: this.props.t("Monitor the passbolt API's health and responsiveness."),
       redirectTo: this.props.navigationContext.onGoToAdministrationHealthcheckRequested,
       flag: AdministrationWorkspaceMenuTypes.HEALTHCHECK,
-    }].filter(this.isFlagEnabled);
+    }].filter(this.shouldBeDisplayed);
+  }
+
+  /**
+   * Returns true if the given card item should be displayed.
+   * @param {object} cardItemData
+   * @returns {boolean}
+   */
+  shouldBeDisplayed(cardItemData) {
+    if (!this.isFlagEnabled(cardItemData)) {
+      //flag is disabled, we don't display the menu item
+      return false;
+    }
+
+    if (!metadataMenuItems.includes(cardItemData.flag)) {
+      //this is not a metadata special menu, so it's displayed
+      return true;
+    }
+
+    const settings = this.props.metadataGettingStartedSettings;
+    if (cardItemData.flag === AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED) {
+      //this is the getting started menu, it will be displayed is the settings ask for it
+      return !this.isDisplayedAsBeta(cardItemData) && settings.enabled;
+    }
+
+    //this is not the getting started menu, then the item is displayed only if the Getting Started menu should not be displayed.
+    return this.isDisplayedAsBeta(cardItemData) || !settings.enabled;
   }
 
   /**
@@ -202,6 +239,26 @@ class AdministrationHomePage extends React.PureComponent {
   }
 
   /**
+   * Should the card be displayed as beta.
+   * @param {object} cardItemData
+   * @returns {boolean}
+   */
+  isDisplayedAsBeta(cardItemData) {
+    if (cardItemData.flag === null) {
+      return false;
+    }
+    return this.props.context.siteSettings.isFeatureBeta(AdministrationWorkspaceFeatureFlag[cardItemData.flag]);
+  }
+
+  /**
+   * Returns true if hte home page is ready to be displayed.
+   * @returns {boolean}
+   */
+  isReady() {
+    return this.props.metadataGettingStartedSettings !== null;
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -211,14 +268,15 @@ class AdministrationHomePage extends React.PureComponent {
         <div id="administration-home-page" className="main-column">
           <div className="main-content">
             <div className="grid">
-              {this.cardItemsData.map(cardItemData =>
+              {this.isReady() && this.cardItemsData.map(cardItemData =>
                 <CardItem
                   key={cardItemData.title}
                   icon={cardItemData.icon}
                   title={cardItemData.title}
                   description={cardItemData.description}
                   onClick={() => this.handleClickOn(cardItemData)}
-                  isBeta={Boolean(cardItemData.isBeta)}
+                  isBeta={this.isDisplayedAsBeta(cardItemData)}
+                  isNew={Boolean(cardItemData.isNew)}
                 />
               )}
             </div>
@@ -232,7 +290,9 @@ class AdministrationHomePage extends React.PureComponent {
 AdministrationHomePage.propTypes = {
   context: PropTypes.object, // the app context
   navigationContext: PropTypes.object, // The application navigation context
+  administrationEncryptedMetadataGettingStartedContext: PropTypes.object, // The administration encrypted metadata getting started context
+  metadataGettingStartedSettings: PropTypes.object, // the metadata getting started settings if any
   t: PropTypes.func, // the translation function
 };
 
-export default withAppContext(withNavigationContext(withTranslation('common')(AdministrationHomePage)));
+export default withAppContext(withAdministrationEncryptedMetadataGettingStarted(withNavigationContext(withTranslation('common')(AdministrationHomePage))));

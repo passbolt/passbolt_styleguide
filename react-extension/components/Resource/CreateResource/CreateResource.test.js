@@ -792,11 +792,11 @@ describe("See the Create Resource", () => {
         expect.assertions(3);
 
         await page.fillInput(page.getCustomFieldKey(0), "a".repeat(255));
-        await page.fillInput(page.getCustomFieldValue(0), "a".repeat(5000));
+        await page.fillInput(page.getCustomFieldValue(0), "a".repeat(20000));
 
         // expectations
         expect(page.getCustomFieldKey(0).value).toEqual("a".repeat(255));
-        expect(page.getCustomFieldValue(0).value).toEqual("a".repeat(5000));
+        expect(page.getCustomFieldValue(0).value).toEqual("a".repeat(20000));
         expect(page.getCustomFieldKeyAndValueWarningMessage(0).textContent).toEqual("The key and the value reach the character limit, make sure your data won’t be truncated.");
       });
 
@@ -824,10 +824,10 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be aware about the value maxLength', async() => {
         expect.assertions(2);
 
-        await page.fillInput(page.getCustomFieldValue(0), "a".repeat(5000));
+        await page.fillInput(page.getCustomFieldValue(0), "a".repeat(20000));
 
         // expectations
-        expect(page.getCustomFieldValue(0).value).toEqual("a".repeat(5000));
+        expect(page.getCustomFieldValue(0).value).toEqual("a".repeat(20000));
         expect(page.getCustomFieldValueWarningMessage(0).textContent).toEqual("The value reaches the character limit, make sure your data won’t be truncated.");
       });
     });
@@ -855,10 +855,10 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be aware about the note maxLength', async() => {
         expect.assertions(3);
 
-        await page.fillInput(page.note, "a".repeat(10000));
+        await page.fillInput(page.note, "a".repeat(50000));
 
         // expectations
-        expect(page.note.value).toEqual("a".repeat(10000));
+        expect(page.note.value).toEqual("a".repeat(50000));
         expect(page.noteWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
         expect(page.noteErrorMessage).toBeNull();
       });
@@ -866,10 +866,10 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be blocked if I exceed the note maxLength', async() => {
         expect.assertions(5);
 
-        await page.fillInput(page.note, "a".repeat(10001));
+        await page.fillInput(page.note, "a".repeat(50001));
 
         // expectations
-        expect(page.note.value).toEqual("a".repeat(10001));
+        expect(page.note.value).toEqual("a".repeat(50001));
         expect(page.noteWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
         expect(page.noteErrorMessage).toBeNull();
 

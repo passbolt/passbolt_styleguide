@@ -91,8 +91,7 @@ class DisplayResourceDetailsActivity extends React.Component {
     }
 
     // Reset the component, and fetch activities for the new resource.
-    this.setState(this.defaultState);
-    await this.fetch(this.state.activitiesPage);
+    this.setState(this.defaultState, async() => await this.fetch(this.state.activitiesPage));
     this.setState({loading: false});
   }
 
@@ -113,7 +112,8 @@ class DisplayResourceDetailsActivity extends React.Component {
    * Open/Close it.
    */
   async handleMoreClickEvent() {
-    const activitiesPage = this.state.activitiesPage + 1;
+    // If initial load : page 1 is not successful, don't increment to page 2
+    const activitiesPage = this.state?.activities?.length > 0 ? this.state.activitiesPage + 1 : this.state.activitiesPage;
     this.setState({activitiesPage, loadingMore: true});
     await this.fetch(activitiesPage);
     this.setState({loadingMore: false});
@@ -132,6 +132,11 @@ class DisplayResourceDetailsActivity extends React.Component {
     } catch (error) {
       console.error(error);
       this.props.actionFeedbackContext.displayError(error.message);
+      // If fetch failed for page 2 or more, decrement page count to try the same page next
+      if (this.state.activitiesPage > 1) {
+        const activitiesPage = this.state.activitiesPage - 1;
+        this.setState({activitiesPage});
+      }
     }
   }
 
