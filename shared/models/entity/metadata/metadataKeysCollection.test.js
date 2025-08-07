@@ -268,6 +268,47 @@ describe("MetadataKeysCollection", () => {
     });
   });
 
+  describe("::filterOutMissingMetadataPrivateKeys", () => {
+    it("should filter out metadata key having no metadata private keys", () => {
+      expect.assertions(1);
+
+      const dtos = [
+        defaultMetadataKeyDto(),
+      ];
+      const collection = new MetadataKeysCollection(dtos);
+      collection.filterOutMissingMetadataPrivateKeys();
+
+      expect(collection.length).toStrictEqual(0);
+    });
+
+    it("should not filter out metadata key having a metadata private keys", () => {
+      expect.assertions(1);
+
+      const dtos = [
+        defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true}),
+      ];
+      const collection = new MetadataKeysCollection(dtos);
+      collection.filterOutMissingMetadataPrivateKeys();
+
+      expect(collection.length).toStrictEqual(1);
+    });
+
+    it("should filter out only metadata keys having no metadata private keys", () => {
+      expect.assertions(1);
+
+      const dtos = [
+        defaultMetadataKeyDto(),
+        defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true}),
+        defaultMetadataKeyDto(),
+        defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true}),
+      ];
+      const collection = new MetadataKeysCollection(dtos);
+      collection.filterOutMissingMetadataPrivateKeys();
+
+      expect(collection.length).toStrictEqual(2);
+    });
+  });
+
   describe("::pushMany", () => {
     it("[performance] should ensure performance adding large dataset remains effective.", async() => {
       const count = 10_000;
