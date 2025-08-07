@@ -76,6 +76,11 @@ import MetadataTypesSettingsLocalStorageContextProvider from "../shared/context/
 import HandleConfirmMetadataKeyEntryEvents
   from "./components/Metadata/HandleConfirmMetadataKeyEntryEvents/HandleConfirmMetadataKeyEntryEvents";
 import ManagedClipboardServiceProvider from "./contexts/Clipboard/ManagedClipboardServiceProvider";
+import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import AdministrationEncryptedMetadataGettingStartedContextProvider
+  from "./contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
+import GettingStartedWithEncryptedMetadataServiceWorkerService
+  from "../shared/services/serviceWorker/metadata/gettingStartedWithEncryptedMetadataServiceWorkerService";
 
 /**
  * The passbolt application served by the browser extension.
@@ -146,21 +151,23 @@ class ExtApp extends Component {
                                               <PasswordExpirySettingsContextProvider>
                                                 <ResourceWorkspaceContextProvider>
                                                   <MetadataTypesSettingsLocalStorageContextProvider>
-                                                    <ResourceTypesLocalStorageContextProvider>
-                                                      <ResourcePasswordGeneratorContextProvider>
-                                                        <ManageDialogs/>
-                                                        <ManageWorkflows/>
-                                                        <ManageContextualMenu/>
-                                                        <ManageAnnouncements/>
-                                                        <DragContextProvider>
-                                                          <div id="container" className="page password">
-                                                            <div id="app" className="app" tabIndex="1000">
-                                                              <DisplayResourcesWorkspace/>
+                                                    <MetadataKeysSettingsLocalStorageContextProvider>
+                                                      <ResourceTypesLocalStorageContextProvider>
+                                                        <ResourcePasswordGeneratorContextProvider>
+                                                          <ManageDialogs/>
+                                                          <ManageWorkflows/>
+                                                          <ManageContextualMenu/>
+                                                          <ManageAnnouncements/>
+                                                          <DragContextProvider>
+                                                            <div id="container" className="page password">
+                                                              <div id="app" className="app" tabIndex="1000">
+                                                                <DisplayResourcesWorkspace/>
+                                                              </div>
                                                             </div>
-                                                          </div>
-                                                        </DragContextProvider>
-                                                      </ResourcePasswordGeneratorContextProvider>
-                                                    </ResourceTypesLocalStorageContextProvider>
+                                                          </DragContextProvider>
+                                                        </ResourcePasswordGeneratorContextProvider>
+                                                      </ResourceTypesLocalStorageContextProvider>
+                                                    </MetadataKeysSettingsLocalStorageContextProvider>
                                                   </MetadataTypesSettingsLocalStorageContextProvider>
                                                 </ResourceWorkspaceContextProvider>
                                               </PasswordExpirySettingsContextProvider>
@@ -212,6 +219,7 @@ class ExtApp extends Component {
                                               "/app/administration/content-types/metadata-key",
                                               "/app/administration/migrate-metadata",
                                               "/app/administration/allow-content-types",
+                                              "/app/administration/content-types/metadata-getting-started",
                                             ]}>
                                               <AdministrationWorkspaceContextProvider>
                                                 <AdminAccountRecoveryContextProvider>
@@ -221,9 +229,11 @@ class ExtApp extends Component {
                                                         <AdministrationUserPassphrasePoliciesContextProvider>
                                                           <AdministrationPasswordExpiryContextProvider>
                                                             <ResourceTypesLocalStorageContextProvider>
-                                                              <ManageDialogs/>
-                                                              <ManageWorkflows/>
-                                                              <AdministrationWorkspace/>
+                                                              <AdministrationEncryptedMetadataGettingStartedContextProvider service={new GettingStartedWithEncryptedMetadataServiceWorkerService(appContext.port)}>
+                                                                <ManageDialogs/>
+                                                                <ManageWorkflows/>
+                                                                <AdministrationWorkspace/>
+                                                              </AdministrationEncryptedMetadataGettingStartedContextProvider>
                                                             </ResourceTypesLocalStorageContextProvider>
                                                           </AdministrationPasswordExpiryContextProvider>
                                                         </AdministrationUserPassphrasePoliciesContextProvider>

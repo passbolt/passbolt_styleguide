@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -280,7 +279,7 @@ class AzureSsoProviderForm extends React.Component {
         <div className={`input text date-wrapper required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>Secret expiry</Trans></label>
           <div className="button-inline">
-            <input id="sso-azure-secret-expiry-input" type="date" className={`fluid form-element ${ssoConfig.client_secret_expiry ? "" : "empty"}`} name="client_secret_expiry"  ref={this.clientSecretExpiryInputRef}
+            <input id="sso-azure-secret-expiry-input" type="date" className={`fluid form-element ${ssoConfig.client_secret_expiry ? "" : "empty"}`} name="client_secret_expiry" ref={this.clientSecretExpiryInputRef}
               value={ssoConfig.client_secret_expiry || ""} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
             <CalendarSVG/>
           </div>
@@ -317,10 +316,26 @@ class AzureSsoProviderForm extends React.Component {
                 </div>
               </div>
             }
+            {ssoConfig.email_claim === "email" &&
+              <div className="warning message">
+                <div>
+                  <Trans><b>Warning</b>: using Azure email field to map with Passbolt username is generally unsafe (see. noauth vulnerability class).</Trans>
+                </div>
+              </div>
+            }
             <div className={`select-wrapper input required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="prompt-input"><Trans>Prompt</Trans></label>
               <Select id="prompt-input" name="prompt" items={this.promptOptionList} value={ssoConfig.prompt} onChange={this.handleInputChange}/>
               <p><Trans>Defines the Azure login behaviour by prompting the user to fully login each time or not.</Trans></p>
+            </div>
+            <div className="input-wrapper form-element">
+              <div className="toggle-swith-title"><Trans>Login hint</Trans></div>
+              <div className="input toggle-switch">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="login_hint"
+                  onChange={this.handleInputChange} checked={ssoConfig.login_hint} disabled={this.hasAllInputDisabled()}
+                  id="login_hint-input"/>
+                <label htmlFor="login_hint-input"><Trans>If checked, users signing in with Microsoft Azure must use their Passbolt email address.</Trans></label>
+              </div>
             </div>
           </>
         }

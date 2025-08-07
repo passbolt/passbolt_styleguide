@@ -20,6 +20,10 @@ import {
   defaultMetadataTypesSettingsV4Dto
 } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import {updatePermissionDto} from "../../../shared/models/entity/permission/permissionEntity.test.data";
+import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 /**
  * Default component props
@@ -31,6 +35,7 @@ export const defaultProps = (data = {}) => ({
   resources: null,
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
+  metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
   ...data,
 });
 
@@ -44,6 +49,7 @@ export const noFilteredResourcesProps = (data = {}) => ({
   resources: [],
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
+  metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
   ...data,
 });
 
@@ -76,5 +82,6 @@ export const withFilteredResourcesProps = (data = {}) => ({
   ],
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
+  metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
   ...data,
 });

@@ -24,6 +24,14 @@ import {foldersMock} from "./FilterResourcesByFolders.test.data";
 import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFoldersItemContextualMenu";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import {
+  TEST_RESOURCE_TYPE_V5_DEFAULT
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
+import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import {v4 as uuidv4} from "uuid";
+import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -211,6 +219,57 @@ describe("See Folders", () => {
       await page.filterResourcesByFoldersItem.onDropFolder(4);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
+    });
+
+    it('As LU I should not be able to drag and drop personal resources v5 on a shared folder if I have missing keys', async() => {
+      expect.assertions(3);
+      const resources = [defaultResourceDto(), defaultResourceDto({personal: true, resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT})];
+      const props = defaultProps({
+        dragContext: {
+          dragging: true,
+          draggedItems: {
+            folders: [],
+            resources: resources
+          },
+          onDragStart: jest.fn(),
+          onDragEnd: jest.fn(),
+        }
+      });
+      props.context.loggedInUser = defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true});
+
+      const page = new FilterResourcesByFoldersPage(props);
+
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
+      await page.filterResourcesByFoldersItem.onDropFolder(4);
+      expect(props.dragContext.onDragStart).toHaveBeenCalled();
+      expect(props.dragContext.onDragEnd).toHaveBeenCalled();
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
+    });
+
+    it('As LU I should not be able to drag and drop a folder on a shared folder if I have missing keys', async() => {
+      expect.assertions(3);
+      const props = defaultProps();
+      props.context.loggedInUser = defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true});
+
+      const page = new FilterResourcesByFoldersPage(props);
+
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(4);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
+      await page.filterResourcesByFoldersItem.onDropFolder(4);
+      expect(props.dragContext.onDragStart).toHaveBeenCalled();
+      expect(props.dragContext.onDragEnd).toHaveBeenCalled();
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
     });
 
     it('As LU I should throw an error dialog if somethings went wrong when a resource is dropped', async() => {

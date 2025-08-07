@@ -169,6 +169,9 @@ const siteSettings = (isProEdition = true) => ({
           }, {
             locale: "uk-UA",
             label: "Українська (beta)"
+          }, {
+            locale: "cs-CZ",
+            label: "Čeština (beta)"
           }
         ]
       },
@@ -215,6 +218,9 @@ const siteSettings = (isProEdition = true) => ({
         "enabled": isProEdition,
       },
       "metadata": {
+        "enabled": true,
+      },
+      "selfRegistration": {
         "enabled": true,
       },
     }

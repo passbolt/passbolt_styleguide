@@ -29,6 +29,7 @@ import DownloadRecoveryKit from "../../Authentication/DownloadRecoveryKit/Downlo
 import ImportGpgKey, {ImportGpgKeyVariations} from "../../Authentication/ImportGpgKey/ImportGpgKey";
 import IntroduceExtension from "../../Authentication/IntroduceExtension/IntroduceExtension";
 import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
+import DisplayMetadataEnablementError from "../../Authentication/DisplayMetadataEnablementError/DisplayMetadataEnablementError";
 
 /**
  * The component orchestrates the setup authentication process
@@ -97,6 +98,19 @@ class SetupAuthentication extends Component {
         return <DisplayUnexpectedError
           error={this.props.authenticationSetupContext.error}
         />;
+      case AuthenticationSetupWorkflowStates.UNEXPECTED_METADATA_ENCRYPTION_ENABLEMENT_ERROR:
+        return <DisplayMetadataEnablementError
+          error={this.props.authenticationSetupContext.error}
+          onClickContinue={this.props.authenticationSetupContext.goToAdministrationWorkspace}
+        />;
+      case AuthenticationSetupWorkflowStates.CHECKING_POST_SETUP_METADATA_TASKS:
+        return <LoadingSpinner
+          title={<Trans>Checking resource types post-account-activation tasks.</Trans>}
+        />;
+      case AuthenticationSetupWorkflowStates.ENABLING_METADATA_ENCRYPTION:
+        return <LoadingSpinner
+          title={<Trans>Enabling encrypted resource metadata.</Trans>}
+        />;
       case AuthenticationSetupWorkflowStates.LOADING:
         return <LoadingSpinner/>;
     }
@@ -106,6 +120,7 @@ class SetupAuthentication extends Component {
 SetupAuthentication.propTypes = {
   context: PropTypes.any, // The application context
   authenticationSetupContext: PropTypes.any.isRequired, // The authentication setup context
+  t: PropTypes.func, // The translation function
 };
 
 export default withAppContext(withAuthenticationSetupContext(withTranslation("common")(SetupAuthentication)));

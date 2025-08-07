@@ -34,6 +34,13 @@ import {
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import CreateResource from "./CreateResource";
 import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
+import {
+  withMetadataKeysSettingsLocalStorage
+} from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 class DisplayResourceCreationMenu extends Component {
   constructor(props) {
@@ -75,21 +82,47 @@ class DisplayResourceCreationMenu extends Component {
     await this.props.onClose();
 
     const resourceType = this.props.resourceTypes.getFirstBySlug(resourceTypeSlug);
-    const folderParentId = this.folderSelectedId;
+
+    if (resourceType.isV5()) {
+      const canCreateResourceV5 = this.canCreateResourceV5();
+      if (!canCreateResourceV5) {
+        this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
+        return;
+      }
+    }
+
+    const folderParentId = this.folderSelected?.id || null;
 
     this.props.dialogContext.open(CreateResource, {resourceType, folderParentId});
   }
 
+  /**
+   * Can create resource v5
+   * @return {boolean}
+   */
+  canCreateResourceV5() {
+    const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
+    const isPersonalFolder = this.folderSelected === null || this.folderSelected.personal;
+    const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+
+    if (isPersonalFolder && isMetadataSharedKeyEnforced && userHasMissingKeys) {
+      return false;
+    } else if (!isPersonalFolder && userHasMissingKeys) {
+      return false;
+    }
+
+    return true;
+  }
 
   /**
    * Get the currently selected folder id if any, null otherwise.
-   * @returns {string|null}
+   * @returns {null|object}
    */
-  get folderSelectedId() {
+  get folderSelected() {
     const filter = this.props.resourceWorkspaceContext.filter;
     const isFilterByFolder = filter && filter.type === ResourceWorkspaceFilterTypes.FOLDER;
     if (isFilterByFolder) {
-      return filter.payload.folder.id;
+      return filter.payload.folder;
     }
     return null;
   }
@@ -273,14 +306,16 @@ class DisplayResourceCreationMenu extends Component {
 }
 
 DisplayResourceCreationMenu.propTypes = {
+  context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   dialogContext: PropTypes.object, // The dialog context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
+  metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
   folderParentId: PropTypes.string, // The folder parent id
   onClose: PropTypes.func, // Whenever the component must be closed
   t: PropTypes.func, // The translation function
 };
 
-export default  withResourceWorkspace(withMetadataTypesSettingsLocalStorage(withResourceTypesLocalStorage(withDialog(withTranslation('common')(DisplayResourceCreationMenu)))));
+export default  withAppContext(withResourceWorkspace(withMetadataTypesSettingsLocalStorage(withMetadataKeysSettingsLocalStorage(withResourceTypesLocalStorage(withDialog(withTranslation('common')(DisplayResourceCreationMenu)))))));
 

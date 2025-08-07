@@ -174,6 +174,13 @@ export default class DisplayAdministrationMenuPage {
     return this._page.container.querySelector('#migrate_metadata_menu .row .main-cell-wrapper .main-cell button');
   }
 
+  /**
+   * Returns the Metadata Getting Started Settings.
+   */
+  get metadataGettingStartedSettings() {
+    return this._page.container.querySelector('#metadata_getting_started_menu .row .main-cell-wrapper .main-cell button');
+  }
+
 
   /**
    * Returns true if the page object exists in the container
@@ -272,6 +279,11 @@ export default class DisplayAdministrationMenuPage {
 
   /** Click on the Content Types Metadata Key element */
   async gotoMigrateMetadata() {
-    await this.click(this.contentTypesMetadataKey);
+    await this.click(this.migrateMetadata);
+  }
+
+  /** Click on the Metadata Getting Started Settings element */
+  async gotoMetadataGettingStartedSettings() {
+    await this.click(this.metadataGettingStartedSettings);
   }
 }

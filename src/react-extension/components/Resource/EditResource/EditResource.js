@@ -95,6 +95,7 @@ class EditResource extends Component {
     this.handleConvertToDescription = this.handleConvertToDescription.bind(this);
     this.handleConvertToNote = this.handleConvertToNote.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.acceptCreationConfirmation = this.acceptCreationConfirmation.bind(this);
     this.rejectEditionConfirmation = this.rejectEditionConfirmation.bind(this);
     this.consumePasswordEntropyError = this.consumePasswordEntropyError.bind(this);
     this.save = this.save.bind(this);
@@ -375,7 +376,7 @@ class EditResource extends Component {
       operation: ConfirmEditCreateOperationVariations.CREATE,
       rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
       resourceName: this.state.resource?.metadata?.name,
-      onConfirm: () => this.save(resourceFormEntity),
+      onConfirm: () => this.acceptCreationConfirmation(resourceFormEntity),
       onReject: this.rejectEditionConfirmation
     };
     this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
@@ -394,10 +395,23 @@ class EditResource extends Component {
       operation: ConfirmEditCreateOperationVariations.CREATE,
       rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
       resourceName: this.state.resource?.metadata?.name,
-      onConfirm: () => this.save(resourceFormEntity),
+      onConfirm: () => this.acceptCreationConfirmation(resourceFormEntity),
       onReject: this.rejectEditionConfirmation
     };
     this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
+  }
+
+  /**
+   * Accept the creation confirmation.
+   * @param {ResourceFormEntity} resourceFormEntity The resource form entity
+   */
+  async acceptCreationConfirmation(resourceFormEntity) {
+    try {
+      await this.save(resourceFormEntity);
+    } catch (error) {
+      await this.toggleProcessing();
+      this.handleSaveError(error);
+    }
   }
 
   /**

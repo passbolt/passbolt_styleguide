@@ -155,6 +155,9 @@ export const defaultCeSiteSettings = siteSettings => {
             }, {
               "locale": "uk-UA",
               "label": "Українська (beta)"
+            }, {
+              "locale": "cs-CZ",
+              "label": "Čeština (beta)"
             }
           ]
         },
@@ -191,6 +194,11 @@ export const defaultCeSiteSettings = siteSettings => {
         "log": {
           "version": "1.0.1",
           "enabled": true
+        },
+        "metadata": {
+          "version": "1.0.0",
+          "enabled": true,
+          "isInBeta": true,
         }
       }
     }

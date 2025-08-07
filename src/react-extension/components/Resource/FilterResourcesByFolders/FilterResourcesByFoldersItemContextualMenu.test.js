@@ -28,6 +28,10 @@ import DeleteResourceFolder from "../../ResourceFolder/DeleteResourceFolder/Dele
 import FilterResourcesByFoldersItemContextualMenuPage from "./FilterResourcesByFoldersItemContextualMenu.test.page";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import {v4 as uuidv4} from "uuid";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 beforeEach(() => {
   jest.resetModules();
@@ -85,6 +89,16 @@ describe("FilterResourcesByFoldersItemContextualMenu", () => {
       const props = propsWithFolderPermissionUpdate(); // The props to pass
       const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
       expect(page.filterResourcesByFoldersItemContextualMenu.shareItem.hasAttribute("disabled")).toBeTruthy();
+    });
+
+    it('As LU I cannot share a folder if I have missing metadata keys.', async() => {
+      const props = defaultProps({
+        context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})})
+      }); // The props to pass
+      const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
+      await page.filterResourcesByFoldersItemContextualMenu.shareFolder();
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ActionAbortedMissingMetadataKeys);
+      expect(props.hide).toHaveBeenCalled();
     });
 
     it("I should see the share option when rbac is available", async() => {

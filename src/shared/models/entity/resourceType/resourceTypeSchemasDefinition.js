@@ -202,7 +202,8 @@ const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
           type: "string",
           maxLength: 1024,
           nullable: true
-        }
+        },
+        maxItems: 32
       },
       description: {
         type: "string",
@@ -235,7 +236,7 @@ const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
                 },
                 metadata_value: {
                   anyOf: [
-                    {type: "string", maxLength: 5000},
+                    {type: "string", maxLength: 20000},
                     {type: "number"},
                     {type: "boolean"}
                   ],
@@ -282,7 +283,7 @@ const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
                 },
                 secret_value: {
                   anyOf: [
-                    {type: "string", maxLength: 5000},
+                    {type: "string", maxLength: 20000},
                     {type: "number"},
                     {type: "boolean"}
                   ],
@@ -318,7 +319,8 @@ const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
           type: "string",
           maxLength: 1024,
           nullable: true
-        }
+        },
+        maxItems: 32
       },
       description: {
         type: "string",
@@ -343,7 +345,7 @@ const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
       },
       description: {
         type: "string",
-        maxLength: 10000,
+        maxLength: 50000,
         nullable: true,
       },
       custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.secret.properties.custom_fields
@@ -372,7 +374,8 @@ const RESOURCE_TYPE_V5_PASSWORD_STRING_DEFINITION_SCHEMA = {
           type: "string",
           maxLength: 1024,
           nullable: true
-        }
+        },
+        maxItems: 32
       },
       description: {
         type: "string",
@@ -408,7 +411,8 @@ const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
           type: "string",
           maxLength: 1024,
           nullable: true
-        }
+        },
+        maxItems: 32
       },
       description: {
         type: "string",
@@ -433,7 +437,7 @@ const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
       },
       description: {
         type: "string",
-        maxLength: 10000,
+        maxLength: 50000,
         nullable: true,
       },
       totp: RESOURCE_TYPE_TOTP_DEFINITION_SCHEMA.secret.properties.totp,
@@ -458,7 +462,8 @@ const RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA = {
           type: "string",
           maxLength: 1024,
           nullable: true
-        }
+        },
+        maxItems: 32
       },
       description: {
         type: "string",

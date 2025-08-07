@@ -85,6 +85,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user wants to navigate to the administration workspace migrate metadata section.
   onGoToAdministrationAllowContentTypesRequested: () => {
   }, // Whenever the user wants to navigate to the administration workspace allow content types section.
+  onGoToAdministrationMetadataGettingStartedRequested: () => {
+  }, // Whenever the user wants to navigate to the administration meadata getting started workspace section.
 });
 
 /**
@@ -144,6 +146,7 @@ class NavigationContextProvider extends React.Component {
       onGoToUserSettingsDesktopRequested: this.onGoToUserSettingsDesktopRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
       onGoToUserSettingsAccountRecoveryRequested: this.onGoToUserSettingsAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace account recovery section.
       onGoToAdministrationRbacsRequested: this.onGoToAdministrationRbacsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace rbacs section.
+      onGoToAdministrationMetadataGettingStartedRequested: this.onGoToAdministrationMetadataGettingStartedRequested.bind(this), // Whenever the user wants to navigate to the administration meadata getting started workspace section.
     };
   }
 
@@ -288,6 +291,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationRbacsRequested() {
     await this.goTo("api", "/app/administration/rbacs");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration metadata getting started workspace section.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationMetadataGettingStartedRequested() {
+    await this.goTo("browser-extension", "/app/administration/content-types/metadata-getting-started");
   }
 
   /**

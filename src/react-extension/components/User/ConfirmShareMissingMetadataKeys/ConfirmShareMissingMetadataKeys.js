@@ -73,7 +73,9 @@ class ConfirmShareMissingMetadataKeys extends React.Component {
       this.props.actionFeedbackContext.displaySuccess(this.props.t("Metadata keys have been shared with ({{username}})", {username: this.props.user.username}));
     } catch (error) {
       console.error(error);
-      this.props.actionFeedbackContext.displayError(error.message);
+      if (error.message) {
+        this.props.actionFeedbackContext.displayError(error.message);
+      }
     }
     this.setState({processing: false});
     this.props.onClose();

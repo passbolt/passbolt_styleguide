@@ -55,6 +55,12 @@ import EditSVG from "../../../../img/svg/edit.svg";
 import ShareSVG from "../../../../img/svg/share.svg";
 import CloseSVG from "../../../../img/svg/close.svg";
 import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import {
+  withMetadataKeysSettingsLocalStorage
+} from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -112,16 +118,63 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * handle edit one resource
    */
   handleEditClickEvent() {
-    this.props.dialogContext.open(EditResource, {resource: this.selectedResources[0]});
+    const canEditResource = this.canEditResource();
+    if (canEditResource) {
+      this.props.dialogContext.open(EditResource, {resource: this.selectedResources[0]});
+    } else {
+      this.displayActionAborted();
+    }
+  }
+
+  /**
+   * Can edit the resource
+   * @return {boolean}
+   */
+  canEditResource() {
+    const resourceType = this.props.resourceTypes.getFirstById(this.selectedResources[0].resource_type_id);
+
+    if (resourceType.isV5()) {
+      const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
+      const isPersonalResource = this.selectedResources[0].personal;
+      const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+
+      if (isPersonalResource && isMetadataSharedKeyEnforced && userHasMissingKeys) {
+        return false;
+      } else if (!isPersonalResource && userHasMissingKeys) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /**
    * handle share resources
    */
   async handleShareClickEvent() {
-    const resourcesIds = this.selectedResources.map(resource => resource.id);
-    await this.props.context.setContext({shareDialogProps: {resourcesIds}});
-    this.props.dialogContext.open(ShareDialog);
+    const canShareResource = this.canShareResource();
+    if (canShareResource) {
+      const resourcesIds = this.selectedResources.map(resource => resource.id);
+      await this.props.context.setContext({shareDialogProps: {resourcesIds}});
+      this.props.dialogContext.open(ShareDialog);
+    } else {
+      this.displayActionAborted();
+    }
+  }
+
+  /**
+   * Can share the resource
+   * @return {boolean}
+   */
+  canShareResource() {
+    const resourceType = this.props.resourceTypes.getFirstById(this.selectedResources[0].resource_type_id);
+
+    if (resourceType.isV5()) {
+      const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+      return !userHasMissingKeys;
+    }
+
+    return true;
   }
 
   /**
@@ -257,11 +310,10 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
-   * display a success notification message
-   * @param message
+   * Display action aborted
    */
-  displaySuccessNotification(message) {
-    this.props.actionFeedbackContext.displaySuccess(message);
+  displayActionAborted() {
+    this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
   }
 
   /**
@@ -565,7 +617,8 @@ DisplayResourcesWorkspaceMenu.propTypes = {
   dialogContext: PropTypes.any, // the dialog context
   progressContext: PropTypes.any, // The progress context
   clipboardContext: PropTypes.object, // the clipboard service provider
+  metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withClipboard(withRbac(withDialog(withProgress(withPasswordExpiry(withResourceWorkspace(withResourceTypesLocalStorage(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu))))))))));
+export default withAppContext(withMetadataKeysSettingsLocalStorage(withClipboard(withRbac(withDialog(withProgress(withPasswordExpiry(withResourceWorkspace(withResourceTypesLocalStorage(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu)))))))))));

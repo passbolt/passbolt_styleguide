@@ -30,6 +30,8 @@ import DownloadFileSVG from "../../../../img/svg/download_file.svg";
 import DeleteSVG from "../../../../img/svg/delete.svg";
 import ShareSVG from "../../../../img/svg/share.svg";
 import RenameSVG from "../../../../img/svg/rename.svg";
+import ActionAbortedMissingMetadataKeys
+  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 class FilterResourcesByFoldersItemContextualMenu extends React.Component {
   /**
@@ -89,9 +91,14 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   handleShareFolderItemClickEvent() {
     if (this.canShare()) {
-      const foldersIds = [this.props.folder.id];
-      this.props.context.setContext({shareDialogProps: {foldersIds}});
-      this.props.dialogContext.open(ShareDialog);
+      const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+      if (!userHasMissingKeys) {
+        const foldersIds = [this.props.folder.id];
+        this.props.context.setContext({shareDialogProps: {foldersIds}});
+        this.props.dialogContext.open(ShareDialog);
+      } else {
+        this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
+      }
       this.handleHide();
     }
   }

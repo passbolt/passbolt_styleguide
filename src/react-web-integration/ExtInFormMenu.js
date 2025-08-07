@@ -21,6 +21,7 @@ import PasswordPoliciesContext from "../shared/context/PasswordPoliciesContext/P
 import ResourceTypesLocalStorageContextProvider from "../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import MetadataTypesSettingsLocalStorageContextProvider from "../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import AccountEntity from "../shared/models/entity/account/accountEntity";
+import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 
 /**
  * Entry point of the in-form menu
@@ -31,10 +32,11 @@ class ExtInForm extends React.Component {
     this.state = this.defaultState;
     this.initLocale();
     this.getAccount();
+    this.getLoggedInUser();
   }
 
   /**
-   * Returns the default stare
+   * Returns the default state
    */
   get defaultState() {
     return {
@@ -42,6 +44,7 @@ class ExtInForm extends React.Component {
       port: this.props.port,
       storage: this.props.storage,
       account: null,
+      loggedInUser: null,
     };
   }
 
@@ -65,6 +68,14 @@ class ExtInForm extends React.Component {
   }
 
   /**
+   * Get the current user info from background page and set it in the state
+   */
+  async getLoggedInUser() {
+    const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
+    this.setState({loggedInUser});
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -73,11 +84,13 @@ class ExtInForm extends React.Component {
         <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json" locale={this.state.locale}>
           <ResourceTypesLocalStorageContextProvider>
             <MetadataTypesSettingsLocalStorageContextProvider>
-              <PasswordPoliciesContext>
-                <div className="web-integration">
-                  <DisplayInFormMenu/>
-                </div>
-              </PasswordPoliciesContext>
+              <MetadataKeysSettingsLocalStorageContextProvider>
+                <PasswordPoliciesContext>
+                  <div className="web-integration">
+                    <DisplayInFormMenu/>
+                  </div>
+                </PasswordPoliciesContext>
+              </MetadataKeysSettingsLocalStorageContextProvider>
             </MetadataTypesSettingsLocalStorageContextProvider>
           </ResourceTypesLocalStorageContextProvider>
         </TranslationProvider>

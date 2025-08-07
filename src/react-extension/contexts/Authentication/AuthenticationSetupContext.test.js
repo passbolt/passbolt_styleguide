@@ -18,6 +18,8 @@ import {AuthenticationSetupContextProvider, AuthenticationSetupWorkflowStates} f
 import {defaultProps, withAccountRecoveryEnabled} from "./AuthenticationSetupContext.test.data";
 import GpgKeyError from "../../lib/Error/GpgKeyError";
 import InvalidMasterPasswordError from "../../lib/Error/InvalidMasterPasswordError";
+import {enableMetadataSetupSettingsDto} from "../../../shared/models/entity/metadata/metadataSetupSettingsEntity.test.data";
+import {defaultAdminUserDto, defaultUserDto} from "../../../shared/models/entity/user/userEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -335,9 +337,27 @@ describe("AuthenticationSetupContextProvider", () => {
   });
 
   describe("AuthenticationSetupContextProvider::chooseSecurityToken", () => {
-    it("When the security token preferences are set with success, the machine state should be set to: SIGNING_IN", async() => {
+    it("When the security token preferences are set with success, the machine state should be set to: CHECKING_POST_SETUP_METADATA_TASKS", async() => {
       const props = defaultProps();
       const contextProvider = new AuthenticationSetupContextProvider(props);
+      props.context.port.addRequestListener("passbolt.users.find-logged-in-user", jest.fn(async() => defaultAdminUserDto()));
+
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(4);
+      await contextProvider.initialize();
+      await contextProvider.chooseSecurityToken({color: "black", textColor: "red"});
+      expect(props.context.port.requestListeners["passbolt.setup.set-security-token"]).toHaveBeenCalledWith({color: "black", textColor: "red"}, undefined);
+      expect(props.context.port.requestListeners["passbolt.setup.complete"]).toHaveBeenCalled();
+      expect(props.context.port.requestListeners["passbolt.setup.sign-in"]).toHaveBeenCalledWith(false, undefined);
+      expect(contextProvider.state.state).toEqual(AuthenticationSetupWorkflowStates.CHECKING_POST_SETUP_METADATA_TASKS);
+    });
+
+    it("When the security token preferences are set with success and the current user is not an admin, the machine state should be set to: SIGNING_IN", async() => {
+      const props = defaultProps();
+      const contextProvider = new AuthenticationSetupContextProvider(props);
+      props.context.port.addRequestListener("passbolt.users.find-logged-in-user", jest.fn(async() => defaultUserDto({}, {withRole: true})));
+
       mockComponentSetState(contextProvider);
 
       expect.assertions(4);
@@ -361,6 +381,43 @@ describe("AuthenticationSetupContextProvider", () => {
       expect(props.context.port.requestListeners["passbolt.setup.set-security-token"]).toHaveBeenCalledWith({color: "black", textColor: "red"}, undefined);
       expect(contextProvider.state.state).toEqual(AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR);
       expect(contextProvider.state.error.message).toEqual("Unexpected error");
+    });
+  });
+
+  describe("AuthenticationSetupContextProvider::runPostSetupProcess", () => {
+    it("When the setup is done, the user is signed in and metadata needs to be enabled, the machine state should be set to: ENABLING_METADATA_ENCRYPTION", async() => {
+      expect.assertions(5);
+
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.metadata.find-setup-settings", jest.fn(async() => enableMetadataSetupSettingsDto()));
+      props.context.port.addRequestListener("passbolt.users.find-logged-in-user", jest.fn(async() => defaultAdminUserDto()));
+
+      const contextProvider = new AuthenticationSetupContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      await contextProvider.initialize();
+      await contextProvider.chooseSecurityToken({color: "black", textColor: "red"});
+      expect(props.context.port.requestListeners["passbolt.setup.set-security-token"]).toHaveBeenCalledWith({color: "black", textColor: "red"}, undefined);
+      expect(props.context.port.requestListeners["passbolt.setup.complete"]).toHaveBeenCalled();
+      expect(props.context.port.requestListeners["passbolt.setup.sign-in"]).toHaveBeenCalledWith(false, undefined);
+      expect(props.context.port.requestListeners["passbolt.users.find-logged-in-user"]).toHaveBeenCalledTimes(1);
+      expect(contextProvider.state.state).toEqual(AuthenticationSetupWorkflowStates.ENABLING_METADATA_ENCRYPTION);
+    });
+
+    it("When the setup is done, the user is signed but metadata cannot be enabled: UNEXPECTED_METADATA_ENCRYPTION_ENABLEMENT_ERROR", async() => {
+      expect.assertions(1);
+
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.metadata.find-setup-settings", jest.fn(async() => enableMetadataSetupSettingsDto()));
+      props.context.port.addRequestListener("passbolt.metadata.enable", jest.fn(() => Promise.reject(new Error("Unexpected error"))));
+      props.context.port.addRequestListener("passbolt.users.find-logged-in-user", jest.fn(async() => defaultAdminUserDto()));
+
+      const contextProvider = new AuthenticationSetupContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      await contextProvider.initialize();
+      await contextProvider.chooseSecurityToken({color: "black", textColor: "red"});
+      expect(contextProvider.state.state).toEqual(AuthenticationSetupWorkflowStates.UNEXPECTED_METADATA_ENCRYPTION_ENABLEMENT_ERROR);
     });
   });
 });

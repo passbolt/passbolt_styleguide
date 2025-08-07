@@ -144,7 +144,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       await waitForTrue(() => page.exists());
       await page.clickOnDisallowUsageOfPersonalKeysInput();
       expect(page.formBanner).not.toBeNull();
-      expect(page.formBanner.textContent).toEqual("Don't forget to save your settings to apply your modification.");
+      expect(page.formBanner.textContent).toEqual("Warning: Don't forget to save your settings to apply your modification.");
     });
 
     it("blocks the form edition when loading the settings", async() => {
@@ -181,7 +181,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       await waitForTrue(() => page.exists());
       await page.clickOnGenerateKeyButton();
       expect(page.formBanner).not.toBeNull();
-      expect(page.formBanner.textContent).toEqual("Don't forget to save your settings to apply your modification.");
+      expect(page.formBanner.textContent).toEqual("Warning: Don't forget to save your settings to apply your modification.");
     });
 
     it("displays the new key details when I generate a key", async() => {
@@ -236,7 +236,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.requiredSharedMetadataKeyError).not.toBeNull();
       expect(page.requiredSharedMetadataKeyError.textContent).toContain("A shared metadata key is required.");
       expect(page.formBanner).not.toBeNull();
-      expect(page.formBanner.textContent).toEqual("A shared metadata key is required to save the metadata keys settings.");
+      expect(page.formBanner.textContent).toEqual("Warning: A shared metadata key is required to save the metadata keys settings.");
     });
   });
 

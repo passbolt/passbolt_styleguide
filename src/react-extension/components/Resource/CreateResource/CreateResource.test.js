@@ -45,6 +45,7 @@ import {defaultTotpDto} from "../../../../shared/models/entity/totp/totpDto.test
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import ResourceMetadataEntity from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity";
+import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
 
 describe("See the Create Resource", () => {
   beforeEach(() => {
@@ -791,11 +792,11 @@ describe("See the Create Resource", () => {
         expect.assertions(3);
 
         await page.fillInput(page.getCustomFieldKey(0), "a".repeat(255));
-        await page.fillInput(page.getCustomFieldValue(0), "a".repeat(5000));
+        await page.fillInput(page.getCustomFieldValue(0), "a".repeat(20000));
 
         // expectations
         expect(page.getCustomFieldKey(0).value).toEqual("a".repeat(255));
-        expect(page.getCustomFieldValue(0).value).toEqual("a".repeat(5000));
+        expect(page.getCustomFieldValue(0).value).toEqual("a".repeat(20000));
         expect(page.getCustomFieldKeyAndValueWarningMessage(0).textContent).toEqual("The key and the value reach the character limit, make sure your data won’t be truncated.");
       });
 
@@ -823,10 +824,10 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be aware about the value maxLength', async() => {
         expect.assertions(2);
 
-        await page.fillInput(page.getCustomFieldValue(0), "a".repeat(5000));
+        await page.fillInput(page.getCustomFieldValue(0), "a".repeat(20000));
 
         // expectations
-        expect(page.getCustomFieldValue(0).value).toEqual("a".repeat(5000));
+        expect(page.getCustomFieldValue(0).value).toEqual("a".repeat(20000));
         expect(page.getCustomFieldValueWarningMessage(0).textContent).toEqual("The value reaches the character limit, make sure your data won’t be truncated.");
       });
     });
@@ -854,10 +855,10 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be aware about the note maxLength', async() => {
         expect.assertions(3);
 
-        await page.fillInput(page.note, "a".repeat(10000));
+        await page.fillInput(page.note, "a".repeat(50000));
 
         // expectations
-        expect(page.note.value).toEqual("a".repeat(10000));
+        expect(page.note.value).toEqual("a".repeat(50000));
         expect(page.noteWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
         expect(page.noteErrorMessage).toBeNull();
       });
@@ -865,10 +866,10 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be blocked if I exceed the note maxLength', async() => {
         expect.assertions(5);
 
-        await page.fillInput(page.note, "a".repeat(10001));
+        await page.fillInput(page.note, "a".repeat(50001));
 
         // expectations
-        expect(page.note.value).toEqual("a".repeat(10001));
+        expect(page.note.value).toEqual("a".repeat(50001));
         expect(page.noteWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
         expect(page.noteErrorMessage).toBeNull();
 
@@ -1016,6 +1017,69 @@ describe("See the Create Resource", () => {
         expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
       });
 
+      it('should open the creation confirmation dialog if the entropy of the password is too low and throw an UserAbortsOperationError on confirmation', async() => {
+        expect.assertions(3);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        page.fillInput(page.password, "test");
+        await waitFor(() => {});
+
+        const error = new UserAbortsOperationError();
+        jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
+        jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
+
+        page.click(page.saveButton);
+        await waitFor(() => {});
+
+        const confirmDialogProps = {
+          resourceName: "",
+          operation: ConfirmEditCreateOperationVariations.CREATE,
+          rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+          onConfirm: expect.any(Function),
+          onReject: expect.any(Function),
+        };
+
+        expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+        expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
+      });
+
+      it('should open the creation confirmation dialog if the entropy of the password is too low and throw an unexpected error on confirmation', async() => {
+        expect.assertions(4);
+
+        const props = defaultProps();
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        page.fillInput(page.password, "test");
+        await waitFor(() => {});
+
+        const error = new Error("unexpected error");
+        jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
+        jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
+
+        page.click(page.saveButton);
+        await waitFor(() => {});
+
+        const confirmDialogProps = {
+          resourceName: "",
+          operation: ConfirmEditCreateOperationVariations.CREATE,
+          rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+          onConfirm: expect.any(Function),
+          onReject: expect.any(Function),
+        };
+
+        expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+        expect(props.dialogContext.open).toHaveBeenCalledTimes(2);
+        expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
+      });
+
       it('should open the creation confirmation dialog if the password is found in a data breach', async() => {
         expect.assertions(3);
 
@@ -1045,6 +1109,77 @@ describe("See the Create Resource", () => {
 
         expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
         expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+      });
+
+      it('should open the creation confirmation dialog if the password is found in a data breach and throw an UserAbortsOperationError on confirmation', async() => {
+        expect.assertions(3);
+
+        jest.spyOn(PownedService.prototype, "checkIfPasswordPowned").mockImplementation(async() => true);
+
+        const props = defaultProps({
+          passwordPoliciesContext: defaultPasswordPoliciesContext(),
+        });
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        page.fillInput(page.password, "Az12./RTY2346");
+        await waitFor(() => {});
+
+        const error = new UserAbortsOperationError();
+        jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
+        jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
+
+        page.click(page.saveButton);
+        await waitFor(() => {});
+
+        const confirmDialogProps = {
+          resourceName: "",
+          operation: ConfirmEditCreateOperationVariations.CREATE,
+          rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+          onConfirm: expect.any(Function),
+          onReject: expect.any(Function),
+        };
+
+        expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+        expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
+      });
+
+      it('should open the creation confirmation dialog if the password is found in a data breach and throw an unexpected error on confirmation', async() => {
+        expect.assertions(4);
+
+        jest.spyOn(PownedService.prototype, "checkIfPasswordPowned").mockImplementation(async() => true);
+
+        const props = defaultProps({
+          passwordPoliciesContext: defaultPasswordPoliciesContext(),
+        });
+        const page = new CreateResourcePage(props);
+        await waitFor(() => {});
+
+        expect(page.exists()).toBeTruthy();
+
+        page.fillInput(page.password, "Az12./RTY2346");
+        await waitFor(() => {});
+
+        const error = new Error("unexpected error");
+        jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
+        jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
+
+        page.click(page.saveButton);
+        await waitFor(() => {});
+
+        const confirmDialogProps = {
+          resourceName: "",
+          operation: ConfirmEditCreateOperationVariations.CREATE,
+          rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+          onConfirm: expect.any(Function),
+          onReject: expect.any(Function),
+        };
+
+        expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+        expect(props.dialogContext.open).toHaveBeenCalledTimes(2);
+        expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
       });
     });
   });
