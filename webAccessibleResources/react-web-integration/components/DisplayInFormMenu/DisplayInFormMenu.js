@@ -389,7 +389,7 @@ class DisplayInFormMenu extends React.Component {
     if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
       const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
       const userHasMissingKeys = this.props.context.loggedInUser?.missing_metadata_key_ids?.length > 0;
-      return !isMetadataSharedKeyEnforced && !userHasMissingKeys && this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+      return !(isMetadataSharedKeyEnforced && userHasMissingKeys) && this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
       return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
     } else {
