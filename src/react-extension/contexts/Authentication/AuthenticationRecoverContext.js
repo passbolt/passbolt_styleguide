@@ -213,6 +213,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       await this.props.context.port.request('passbolt.recover.complete');
       this.setState({state: AuthenticationRecoverWorkflowStates.SIGNING_IN});
       await this.props.context.port.request("passbolt.recover.sign-in", this.state.rememberMe);
+      await this.props.context.port.request("passbolt.auth.post-login-redirect");
     } catch (error) {
       await this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
     }
