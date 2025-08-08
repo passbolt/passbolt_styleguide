@@ -83,7 +83,8 @@ class CellTotp extends Component {
       <>
         {hasTotp &&
           <>
-            <div className={`secret secret-totp ${this.previewedTotp ? "" : "secret-copy"}`}>
+            <div className={`secret secret-totp ${this.previewedTotp ? "" : "secret-copy"}`}
+              title={this.props.title}>
               {this.previewedTotp &&
                 <Totp
                   totp={this.previewedTotp}
