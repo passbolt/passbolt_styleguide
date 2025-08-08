@@ -21,7 +21,7 @@ import Select from "../../../Common/Select/Select";
 import Password from "../../../../../shared/components/Password/Password";
 import AzureSsoSettingsEntity from "../../../../../shared/models/entity/ssoSettings/AzureSsoSettingsEntity";
 import CopySVG from "../../../../../img/svg/copy.svg";
-import CalendarSVG from "../../../../../img/svg/copy.svg";
+import CalendarSVG from "../../../../../img/svg/calendar.svg";
 import CaretDownSVG from "../../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../../img/svg/caret_right.svg";
 import {withClipboard} from "../../../../contexts/Clipboard/ManagedClipboardServiceProvider";
@@ -281,7 +281,7 @@ class AzureSsoProviderForm extends React.Component {
           <div className="button-inline">
             <input id="sso-azure-secret-expiry-input" type="date" className={`fluid form-element ${ssoConfig.client_secret_expiry ? "" : "empty"}`} name="client_secret_expiry" ref={this.clientSecretExpiryInputRef}
               value={ssoConfig.client_secret_expiry || ""} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
-            <CalendarSVG/>
+            <CalendarSVG className="svg-icon"/>
           </div>
           {errors?.hasError('client_secret_expiry') &&
             <div className="error-message">{this.displayErrors(errors.getError('client_secret_expiry'))}</div>

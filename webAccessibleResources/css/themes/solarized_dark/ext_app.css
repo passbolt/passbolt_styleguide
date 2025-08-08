@@ -6861,7 +6861,13 @@ iframe.cachette {
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value .password-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .password-view,
 .sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value .password-view,
-.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value .password-view {
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value .password-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .password-value .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .password-value .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .totp-value .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .totp-value .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-label .field-secret-value .totp-view,
+.sidebar .sidebar-content .sidebar-section .accordion-content .information-value .field-secret-value .totp-view {
   display: none;
   align-items: center;
   margin: 0 0 0 0.6rem;

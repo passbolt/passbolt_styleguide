@@ -160,9 +160,11 @@ class AddResourceUris extends Component {
             <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
               <label htmlFor={`resource-additional-uri-${this.hasMultipleUris ? this.additionalUris.length : ""}`}><Trans>Additional URI</Trans>{this.isMaxLengthWarnings("uris", "metadata") && <AttentionSVG className="attention-required"/>}</label>
               {this.hasMultipleUris && this.additionalUris.map((uri, index) => (
-                <div key={index} className="additional-uri-wrapper">
-                  <input id={`resource-additional-uri-${index + 1}`} autoFocus={index + 1 === this.additionalUris.length} disabled={this.props.disabled} name={`metadata.uris.${index + 1}`} maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource.metadata.uris[index + 1]} onChange={this.handleInputChange}/>
-                  <button type="button" className="button-icon" id={`resource-delete-additional-uri-${index + 1}`} onClick={() => this.handleDeleteUriClick(index + 1)}><DeleteSVG/></button>
+                <>
+                  <div key={index} className="additional-uri-wrapper">
+                    <input id={`resource-additional-uri-${index + 1}`} autoFocus={index + 1 === this.additionalUris.length} disabled={this.props.disabled} name={`metadata.uris.${index + 1}`} maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource.metadata.uris[index + 1]} onChange={this.handleInputChange}/>
+                    <button type="button" className="button-icon" id={`resource-delete-additional-uri-${index + 1}`} onClick={() => this.handleDeleteUriClick(index + 1)}><DeleteSVG/></button>
+                  </div>
                   {this.isMaxLengthError(`uris.${index + 1}`) &&
                     <div className={`additional-uri-${index + 1} error-message`}><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
                   }
@@ -171,7 +173,7 @@ class AddResourceUris extends Component {
                       <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
                     </div>
                   }
-                </div>
+                </>
               ))
               }
             </div>

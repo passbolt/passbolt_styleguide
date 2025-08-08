@@ -225,12 +225,13 @@ describe("AuthenticationRecoverContextProvider", () => {
       const contextProvider = new AuthenticationRecoverContextProvider(props);
       mockComponentSetState(contextProvider);
 
-      expect.assertions(4);
+      expect.assertions(5);
       await contextProvider.initialize();
       await contextProvider.chooseSecurityToken({color: "black", textColor: "red"});
       expect(props.context.port.requestListeners["passbolt.recover.set-security-token"]).toHaveBeenCalledWith({color: "black", textColor: "red"}, undefined);
       expect(props.context.port.requestListeners["passbolt.recover.complete"]).toHaveBeenCalled();
       expect(props.context.port.requestListeners["passbolt.recover.sign-in"]).toHaveBeenCalledWith(null, undefined);
+      expect(props.context.port.requestListeners["passbolt.auth.post-login-redirect"]).toHaveBeenCalledTimes(1);
       expect(contextProvider.state.state).toEqual(AuthenticationRecoverWorkflowStates.SIGNING_IN);
     });
 
