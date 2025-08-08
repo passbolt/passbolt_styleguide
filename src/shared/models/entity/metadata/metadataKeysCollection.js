@@ -127,6 +127,13 @@ class MetadataKeysCollection extends EntityV2Collection {
     return this._items.some(metadataKey => metadataKey.metadataPrivateKeys?.hasEncryptedPrivateKeys());
   }
 
+  /**
+   * Filter out the resources which metadata is encrypted.
+   */
+  filterOutMissingMetadataPrivateKeys() {
+    this.filterByCallback(metadataKey => metadataKey.metadataPrivateKeys?.length);
+  }
+
   /*
    * ==================================================
    * Setters
