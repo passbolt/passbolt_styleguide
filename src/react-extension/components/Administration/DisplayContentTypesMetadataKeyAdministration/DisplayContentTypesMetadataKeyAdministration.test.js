@@ -148,7 +148,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
     });
 
     it("blocks the form edition when loading the settings", async() => {
-      expect.assertions(6);
+      expect.assertions(12);
       let requestGetPromiseResolver;
       const props = defaultProps();
       jest.spyOn(props.metadataSettingsServiceWorkerService, "findKeysSettings")
@@ -163,12 +163,21 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(true);
       expect(page.disallowUsageOfPersonalKeysInput.checked).toBe(false);
 
+      expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(true);
+      expect(page.enableZeroKnowledgeKeyShareInput.checked).toBe(false);
+      await page.clickOnAllowZeroKnowledgeInput();
+      expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(true);
+      expect(page.enableZeroKnowledgeKeyShareInput.checked).toBe(false);
+
       requestGetPromiseResolver(new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()));
       await waitFor(() => {});
 
       await page.clickOnDisallowUsageOfPersonalKeysInput();
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(false);
       expect(page.disallowUsageOfPersonalKeysInput.checked).toBe(true);
+      await page.clickOnAllowZeroKnowledgeInput();
+      expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(false);
+      expect(page.enableZeroKnowledgeKeyShareInput.checked).toBe(true);
     });
   });
 
