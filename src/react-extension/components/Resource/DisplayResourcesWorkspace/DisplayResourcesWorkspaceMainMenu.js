@@ -221,7 +221,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * @return {boolean}
    */
   canImportResources() {
-    const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings.allowUsageOfPersonalKeys;
+    const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
     const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
     return !(isMetadataSharedKeyEnforced && userHasMissingKeys);
   }
