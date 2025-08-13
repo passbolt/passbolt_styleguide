@@ -650,7 +650,7 @@ class EditResource extends Component {
       return false;
     }
 
-    return this.state.resource.password !==  this.state.originalSecret.password;
+    return this.state.resource.secret.password !==  this.state.originalSecret.password;
   }
 
   /**
