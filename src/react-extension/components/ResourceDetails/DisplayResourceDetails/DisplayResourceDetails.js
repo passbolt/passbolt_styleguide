@@ -107,7 +107,7 @@ class DisplayResourceDetails extends React.Component {
       case "totp":
       case "v5-totp-standalone":
         return this.translate("TOTP");
-      case "v5-custom-fields-standalone":
+      case "v5-custom-fields":
         return this.translate("Custom fields");
       default:
         return this.translate("Resource");

@@ -303,7 +303,7 @@ class DisplayResourceDetailsTotp extends React.Component {
             <div className="information-value">
               <div className="totp-value">
                 <div className={`secret secret-totp ${canPreviewSecret ? "secret-with-preview" : ""} ${isTotpPreviewed ? "" : "secret-copy"}`}
-                  title={isTotpPreviewed ? this.state.plaintextSecret : this.translate("Click to copy")}>
+                  title={this.translate("Click to copy")}>
                   {isTotpPreviewed &&
                     <Totp
                       totp={this.state.plaintextSecret}
