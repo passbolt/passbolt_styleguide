@@ -215,6 +215,7 @@ describe("ManageSsoSettings", () => {
             client_secret_expiry: `${formData.client_secret_expiry} 00:00:00`,
             prompt: promptValue,
             email_claim: emailClaimValue,
+            login_hint: true,
           },
         });
         return Object.assign({}, settingsData, ssoSettings);

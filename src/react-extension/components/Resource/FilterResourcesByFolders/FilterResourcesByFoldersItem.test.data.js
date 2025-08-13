@@ -18,6 +18,10 @@ import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceC
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  resourceTypesCollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Default props
@@ -34,6 +38,7 @@ export function defaultProps() {
         }
       }
     }),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     dragContext: {
       dragging: true,
       draggedItems: {

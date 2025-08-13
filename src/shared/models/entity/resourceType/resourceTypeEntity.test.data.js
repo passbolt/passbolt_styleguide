@@ -312,7 +312,8 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
             type: "string",
             maxLength: 1024,
             nullable: true
-          }
+          },
+          maxItems: 32,
         },
         description: {
           type: "string",
@@ -345,7 +346,7 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
                   },
                   metadata_value: {
                     anyOf: [
-                      {type: "string", maxLength: 5000},
+                      {type: "string", maxLength: 20000},
                       {type: "number"},
                       {type: "boolean"}
                     ],
@@ -373,7 +374,7 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
         },
         description: {
           type: "string",
-          maxLength: 10000,
+          maxLength: 50000,
           nullable: true,
         },
         custom_fields: {
@@ -402,7 +403,7 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
                   },
                   secret_value: {
                     anyOf: [
-                      {type: "string", maxLength: 5000},
+                      {type: "string", maxLength: 20000},
                       {type: "number"},
                       {type: "boolean"}
                     ],
@@ -448,7 +449,8 @@ export const resourceTypeV5PasswordStringDto = (data = {}) => ({
             type: "string",
             maxLength: 1024,
             nullable: true
-          }
+          },
+          maxItems: 32,
         },
         description: {
           type: "string",
@@ -494,7 +496,8 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
             type: "string",
             maxLength: 1024,
             nullable: true
-          }
+          },
+          maxItems: 32,
         },
         description: {
           type: "string",
@@ -527,7 +530,7 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
                   },
                   metadata_value: {
                     anyOf: [
-                      {type: "string", maxLength: 5000},
+                      {type: "string", maxLength: 20000},
                       {type: "number"},
                       {type: "boolean"}
                     ],
@@ -555,7 +558,7 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
         },
         description: {
           type: "string",
-          maxLength: 10000,
+          maxLength: 50000,
           nullable: true,
         },
         totp: {
@@ -611,7 +614,7 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
                   },
                   secret_value: {
                     anyOf: [
-                      {type: "string", maxLength: 5000},
+                      {type: "string", maxLength: 20000},
                       {type: "number"},
                       {type: "boolean"}
                     ],
@@ -652,7 +655,8 @@ export const resourceTypeV5TotpDto = (data = {}) => ({
             type: "string",
             maxLength: 1024,
             nullable: true
-          }
+          },
+          maxItems: 32,
         },
         description: {
           type: "string",
@@ -710,7 +714,7 @@ export const resourceTypeV5TotpDto = (data = {}) => ({
 export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
   id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
   name: "Standalone custom fields",
-  slug: "v5-custom-fields-standalone",
+  slug: "v5-custom-fields",
   definition: {
     resource: {
       type: "object",
@@ -731,7 +735,8 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
             type: "string",
             maxLength: 1024,
             nullable: true
-          }
+          },
+          maxItems: 32,
         },
         description: {
           type: "string",
@@ -764,7 +769,7 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
                   },
                   metadata_value: {
                     anyOf: [
-                      {type: "string", maxLength: 5000},
+                      {type: "string", maxLength: 20000},
                       {type: "number"},
                       {type: "boolean"}
                     ],
@@ -811,7 +816,7 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
                   },
                   secret_value: {
                     anyOf: [
-                      {type: "string", maxLength: 5000},
+                      {type: "string", maxLength: 20000},
                       {type: "number"},
                       {type: "boolean"}
                     ],

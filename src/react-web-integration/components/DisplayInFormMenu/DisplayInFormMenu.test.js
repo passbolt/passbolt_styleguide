@@ -17,7 +17,7 @@
  */
 
 import DisplayInFormMenuTestPage from "./DisplayInformMenu.test.page";
-import {defaultProps} from "./DisplayInformMenu.test.data";
+import {defaultProps, defaultPropsWithMissingMetadataKey} from "./DisplayInformMenu.test.data";
 import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultPasswordPoliciesDto} from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
 import {waitFor} from "@testing-library/dom";
@@ -30,6 +30,10 @@ import ResourceTypesCollection from "../../../shared/models/entity/resourceType/
 import {
   resourceTypesV4CollectionDto, resourceTypesV5CollectionDto
 } from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -94,9 +98,37 @@ describe("See the Inform Menu", () => {
       expect(page.informMenuItems.length).toBe(4);
     });
 
+    it('I should  see create credentials menu items if I am missing the shared metadata key but it is not enforced', async() => {
+      expect.assertions(1);
+      const props = defaultPropsWithMissingMetadataKey({metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto())});
+      const resources = [defaultResourceDto(), defaultResourceDto()];
+      const configuration = {inputType: "username", inputValue: "", suggestedResources: resources};
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
+
+      const page = new DisplayInFormMenuTestPage(props);
+      await waitFor(() => {});
+
+      expect(page.informMenuItems.length).toBe(4);
+    });
+
     it('I should not see create credentials menu items if metadata type setting is not loaded', async() => {
       expect.assertions(1);
       const props = defaultProps({metadataTypeSettings: null});
+      const resources = [defaultResourceDto(), defaultResourceDto()];
+      const configuration = {inputType: "username", inputValue: "", suggestedResources: resources};
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
+
+      const page = new DisplayInFormMenuTestPage(props);
+      await waitFor(() => {});
+
+      expect(page.informMenuItems.length).toBe(3);
+    });
+
+    it('I should not see create credentials menu items if I am missing the shared metadata key and it is enforced', async() => {
+      expect.assertions(1);
+      const props = defaultPropsWithMissingMetadataKey();
       const resources = [defaultResourceDto(), defaultResourceDto()];
       const configuration = {inputType: "username", inputValue: "", suggestedResources: resources};
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
@@ -142,6 +174,20 @@ describe("See the Inform Menu", () => {
     it('I should not see save credentials menu items if metadata type setting is not loaded', async() => {
       expect.assertions(1);
       const props = defaultProps({metadataTypeSettings: null});
+      const resources = [defaultResourceDto(), defaultResourceDto()];
+      const configuration = {inputType: "password", inputValue: "thisisapassword", suggestedResources: resources};
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
+
+      const page = new DisplayInFormMenuTestPage(props);
+      await waitFor(() => {});
+
+      expect(page.informMenuItems.length).toBe(3);
+    });
+
+    it('I should not see save credentials menu items if I am missing shared metadata keys', async() => {
+      expect.assertions(1);
+      const props = defaultPropsWithMissingMetadataKey();
       const resources = [defaultResourceDto(), defaultResourceDto()];
       const configuration = {inputType: "password", inputValue: "thisisapassword", suggestedResources: resources};
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);

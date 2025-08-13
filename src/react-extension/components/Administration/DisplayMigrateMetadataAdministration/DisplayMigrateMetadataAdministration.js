@@ -165,6 +165,13 @@ class DisplayMigrateMetadataAdministration extends Component {
   }
 
   /**
+   * Has missing metadata keys
+   * @return {boolean}
+   */
+  get hasMissingMetadataKeys() {
+    return this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+  }
+  /**
    * Should input be disabled? True if state is loading or processing
    * @returns {boolean}
    */
@@ -347,6 +354,9 @@ class DisplayMigrateMetadataAdministration extends Component {
   render() {
     const warnings = this.verifyDataHealth(this.state.settings, this.props.resourceTypes, this.metadataTypesSettings, this.metadataKeys);
     const hasGlobalError = this.hasGlobalError(warnings);
+    const isFeatureBeta = this.props.context.siteSettings.isFeatureBeta("metadata");
+
+    const shouldDisplayAWarningBlock = !hasGlobalError && (isFeatureBeta || (!this.hasMissingMetadataKeys && this.hasPendingMigration));
     return (
       <div className="row">
         <div id="migrate-metadata-settings" className="main-column">
@@ -505,7 +515,7 @@ class DisplayMigrateMetadataAdministration extends Component {
 
               <h4><Trans>Migration scope</Trans></h4>
               <div className="radiolist-alt">
-                <div className={`input radio ${this.state.settings.migrate_personal_content && 'checked'}`}>
+                <div className={`input radio ${this.state.settings.migrate_personal_content && 'checked'}  ${this.hasAllInputDisabled() && 'disabled'}`}>
                   <input type="radio"
                     value="all-content"
                     onChange={this.handleMigrateScopeInputChange}
@@ -518,7 +528,7 @@ class DisplayMigrateMetadataAdministration extends Component {
                     <span className="info"><Trans>All resources including the private ones.</Trans></span>
                   </label>
                 </div>
-                <div className={`input radio ${!this.state.settings.migrate_personal_content && 'checked'}`}>
+                <div className={`input radio ${!this.state.settings.migrate_personal_content && 'checked'} ${this.hasAllInputDisabled() && 'disabled'}`}>
                   <input type="radio"
                     value="shared-only"
                     onChange={this.handleMigrateScopeInputChange}
@@ -541,16 +551,30 @@ class DisplayMigrateMetadataAdministration extends Component {
               </div>
             </div>
           }
-          {!hasGlobalError && this.hasPendingMigration &&
-            <div className="warning message">
+          {!hasGlobalError && this.hasMissingMetadataKeys &&
+            <div className="error message">
               <div>
-                <Trans><b>Warning:</b> If you have integrations, you will have to make sure they are updated before triggering the migration.</Trans>
+                <Trans>You lack access to the shared metadata key.</Trans>&nbsp;<Trans>Please ask another administrator to share it with you.</Trans>
               </div>
+            </div>
+          }
+          {shouldDisplayAWarningBlock &&
+            <div className="warning message">
+              {isFeatureBeta &&
+                <div className="form-banner">
+                  <b><Trans>Warning:</Trans></b> <Trans>Your current API version includes beta support for encrypted metadata and new resource types.</Trans> <Trans>To ensure stability and avoid potential issues, upgrade to the latest version before enabling these features.</Trans>
+                </div>
+              }
+              {!this.hasMissingMetadataKeys && this.hasPendingMigration &&
+                <div>
+                  <p><b><Trans>Warning:</Trans></b> <Trans>If you have integrations, you will have to make sure they are updated before triggering the migration.</Trans></p>
+                </div>
+              }
             </div>
           }
         </div>
         <div className="actions-wrapper">
-          <button type="button" className="button primary" disabled={this.state.isProcessing || hasGlobalError} onClick={this.handleFormSubmit}>
+          <button type="button" className="button primary" disabled={this.state.isProcessing || hasGlobalError || this.hasMissingMetadataKeys} onClick={this.handleFormSubmit}>
             <span><Trans>Migrate</Trans></span>
           </button>
         </div>

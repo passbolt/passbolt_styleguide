@@ -90,6 +90,8 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("Migrate metadata");
       case AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES:
         return this.translate("Allow content types");
+      case AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED:
+        return this.translate("Getting started");
       default:
         return "";
     }

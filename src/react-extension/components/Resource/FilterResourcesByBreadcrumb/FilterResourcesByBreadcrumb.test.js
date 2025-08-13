@@ -20,6 +20,7 @@
 import {defaultAppContext, defaultResourceWorkspaceContext} from "./FilterResourcesByBreadcrumb.test.data";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import FilterResourcesByBreadcrumbPage from "./FilterResourcesByBreadcrumb.test.page";
+import {createMemoryHistory} from "history";
 
 beforeEach(() => {
   jest.resetModules();
@@ -31,7 +32,9 @@ describe("As LU I can see a Breadcrumb", () => {
    * And I should be able to identify each item
    */
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
+  const context = defaultAppContext({
+    getHierarchyFolderCache: () => [{name: "subfolder_1", id: "1"}, {name: "subfolder_2", id: "2"}]
+  }); // The applicative context
 
   it('As LU I should not see a breadcrumb when items are not loaded yet', () => {
     const resourceWorkspaceContext = {
@@ -116,14 +119,20 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
 
-  it('As LU I should see a breadcrumb for a folder', () => {
-    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.FOLDER, {folder: {name: "folder"}}, 1); // The props to pass
-    page = new FilterResourcesByBreadcrumbPage(context, props);
+  it('As LU I should see a breadcrumb for a folder', async() => {
+    const resourceWorkspaceContext = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.FOLDER, {folder: {name: "folder", id: "3"}}, 1); // The props to pass
+    const history = createMemoryHistory();
+    page = new FilterResourcesByBreadcrumbPage(context, resourceWorkspaceContext, history);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
-    expect(page.displayBreadcrumb.count).toBe(2);
+    expect(page.displayBreadcrumb.count).toBe(4);
     expect(page.displayBreadcrumb.item(1)).toBe("My workspace");
-    expect(page.displayBreadcrumb.item(2)).toBe("folder (folder)");
+    expect(page.displayBreadcrumb.item(2)).toBe("subfolder_1");
+    expect(page.displayBreadcrumb.item(3)).toBe("subfolder_2");
+    expect(page.displayBreadcrumb.item(4)).toBe("folder");
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("1");
+    // check if click on subfolder_1 call has the correct id
+    await page.displayBreadcrumb.clickOnBreadCrumb(2);
+    expect(history.location.pathname).toStrictEqual(`/app/folders/view/1`);
   });
 
   it('As LU I should see a breadcrumb for a group', () => {

@@ -322,6 +322,9 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
   render() {
     const errors = this.state.hasAlreadyBeenValidated ? this.validateForm(this.state.settings) : null;
     const hasSettingsChanges = this.hasSettingsChanges(this.originalSettings, this.formSettings, this.state.settings);
+    const isFeatureBeta = this.props.context.siteSettings.isFeatureBeta("metadata");
+
+    const shouldDisplayAWarningBlock = isFeatureBeta || hasSettingsChanges || errors?.hasError("generated_metadata_key", "required");
 
     return (
       <div className="row">
@@ -346,7 +349,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
 
               <div className="radiolist-alt">
                 <div
-                  className={`input radio ${this.state.settings.allow_usage_of_personal_keys === true ? "checked" : ""}`}>
+                  className={`input radio ${this.state.settings.allow_usage_of_personal_keys === true ? "checked" : ""} ${this.hasAllInputDisabled() && 'disabled'}`}>
                   <input type="radio"
                     value="true"
                     onChange={this.handleInputChange}
@@ -363,7 +366,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                   </label>
                 </div>
                 <div
-                  className={`input radio ${this.state.settings.allow_usage_of_personal_keys === false ? "checked" : ""}`}>
+                  className={`input radio ${this.state.settings.allow_usage_of_personal_keys === false ? "checked" : ""} ${this.hasAllInputDisabled() && 'disabled'}`}>
                   <input type="radio"
                     value="false"
                     onChange={this.handleInputChange}
@@ -389,7 +392,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
 
               <div className="radiolist-alt">
                 <div
-                  className={`input radio no-hover ${this.state.settings.zero_knowledge_key_share === false ? "checked" : ""}`}>
+                  className={`input radio ${this.state.settings.zero_knowledge_key_share === false ? "checked" : ""} ${this.hasAllInputDisabled() && 'disabled'}`}>
                   <input type="radio"
                     value="true"
                     name="zero_knowledge_key_share"
@@ -405,7 +408,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                   </label>
                 </div>
                 <div
-                  className={`input radio no-hover ${this.state.settings.zero_knowledge_key_share === true ? "checked" : ""}`}>
+                  className={`input radio ${this.state.settings.zero_knowledge_key_share === true ? "checked" : ""} disabled`}>
                   <input type="radio"
                     value="true"
                     name="zero_knowledge_key_share"
@@ -527,22 +530,23 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
               </div>
             </form>
           </div>
-          {hasSettingsChanges &&
-            <div className="warning message form-banner">
-              <div>
-                <p>
-                  <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
-                </p>
-              </div>
-            </div>
-          }
-          {errors?.hasError("generated_metadata_key", "required") &&
-            <div className="warning message form-banner">
-              <div>
-                <p>
-                  <Trans>A shared metadata key is required to save the metadata keys settings.</Trans>
-                </p>
-              </div>
+          {shouldDisplayAWarningBlock &&
+            <div className="warning message">
+              {isFeatureBeta &&
+                <div className="form-banner">
+                  <b><Trans>Warning:</Trans></b> <Trans>Your current API version includes beta support for encrypted metadata and new resource types.</Trans> <Trans>To ensure stability and avoid potential issues, upgrade to the latest version before enabling these features.</Trans>
+                </div>
+              }
+              {hasSettingsChanges &&
+                <div className="form-banner">
+                  <p><b><Trans>Warning:</Trans></b> <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans></p>
+                </div>
+              }
+              {errors?.hasError("generated_metadata_key", "required") &&
+                <div className="form-banner">
+                  <p><b><Trans>Warning:</Trans></b> <Trans>A shared metadata key is required to save the metadata keys settings.</Trans></p>
+                </div>
+              }
             </div>
           }
         </div>

@@ -27,6 +27,11 @@ import {
 } from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 
 /**
  * Default props
@@ -38,12 +43,14 @@ export function defaultProps(data = {}) {
   return {
     context: defaultUserAppContext(data.context),
     rbacContext: defaultAdministratorRbacContext(data.rbacContext),
+    dialogContext: defaultDialogContext(),
     resourceWorkspaceContext: resourceWorkspaceContext,
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto({
       default_resource_types: "v5",
       ...data?.metadataTypeSettings
     })),
+    metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
     actionFeedbackContext: defaultActionFeedbackContext(),
     clipboardContext: defaultClipboardContext(),
     ...data,

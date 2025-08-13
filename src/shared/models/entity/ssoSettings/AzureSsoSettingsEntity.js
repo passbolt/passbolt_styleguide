@@ -91,6 +91,9 @@ class AzureSsoSettingsEntity extends Entity {
             "none",
           ],
         },
+        "login_hint": {
+          "type": "boolean",
+        },
       }
     };
   }
@@ -114,6 +117,9 @@ class AzureSsoSettingsEntity extends Entity {
     }
     if (!dto?.prompt) {
       dto.prompt = "login";
+    }
+    if (typeof(dto.login_hint) === "undefined") {
+      dto.login_hint = true;
     }
 
     return dto;

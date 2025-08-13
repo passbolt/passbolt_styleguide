@@ -77,10 +77,11 @@ class AddResourceNote extends Component {
    * Checks if there is a max length warning for a specific property.
    *
    * @param {string} propName - The name of the property to check for max length warnings.
+   * @param {string} association - The association name to check for max length warnings.
    * @returns {boolean} - Returns true if there is a max length warning for the property, false otherwise.
    */
-  isMaxLengthWarnings(propName) {
-    return !this.isMaxLengthError(propName) && this.props.warnings?.hasError(propName, "maxLength");
+  isMaxLengthWarnings(propName, association) {
+    return !this.isMaxLengthError(propName) && this.props.warnings?.hasError(`${association}.${propName}`, "maxLength");
   }
 
 
@@ -111,12 +112,12 @@ class AddResourceNote extends Component {
             <div className={`input textarea ${this.props.disabled ? 'disabled' : ''}`}>
               <label htmlFor="resource-note">
                 <Trans>Content</Trans>
-                {this.isMaxLengthWarnings("description") && <AttentionSVG className="attention-required"/>}
+                {this.isMaxLengthWarnings("description", "secret") && <AttentionSVG className="attention-required"/>}
               </label>
               <textarea
                 id="resource-note"
                 name="secret.description"
-                maxLength="10000"
+                maxLength={this.isResourceTypeV4Default ? "10000" : "50000"}
                 placeholder={this.translate("Add a note")}
                 onChange={this.handleInputChange}
                 disabled={this.props.disabled}
@@ -125,7 +126,7 @@ class AddResourceNote extends Component {
               {this.isMaxLengthError("description") &&
                 <div className="note error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
               }
-              {this.isMaxLengthWarnings("description") &&
+              {this.isMaxLengthWarnings("description", "secret") &&
                 <div className="note warning-message">
                   <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
                 </div>

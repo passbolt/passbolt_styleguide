@@ -20,6 +20,7 @@ import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext"
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {Trans, withTranslation} from "react-i18next";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import DisplayAroName from "../../../../shared/components/Aro/DisplayAroName";
 
 const LIMIT_ACTIVITIES_PER_PAGE = 5;
 
@@ -123,19 +124,6 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
    * Get a permission aro name
    * @param {object} permission The permission
    */
-  getPermissionAroName(permission) {
-    if (permission.user) {
-      const profile = permission.user.profile;
-      return `${profile.first_name} ${profile.last_name}`;
-    } else {
-      return permission.group.name;
-    }
-  }
-
-  /**
-   * Get a permission aro name
-   * @param {object} permission The permission
-   */
   getPermissionLabel(permission) {
     switch (permission.type) {
       case 1:
@@ -224,7 +212,6 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
    */
   renderSharedActivityPermissionChangeItem(permission, changeType) {
     const permissionLabel = this.getPermissionLabel(permission);
-    const permissionAroName = this.getPermissionAroName(permission);
     const changeTypeLabel = this.getPermissionChangeTypeLabel(changeType);
 
     return (
@@ -236,7 +223,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
         <GroupAvatar group={permission.group}/>
         }
         <div className="name">
-          <span className="creator">{permissionAroName}</span>
+          <span className="creator"><DisplayAroName displayAs={permission.aro} user={permission.user} group={permission.group}/></span>
           <span className="permission-type"> {permissionLabel}</span>
         </div>
         <div className="type"><span className={changeType}>{changeTypeLabel}</span></div>

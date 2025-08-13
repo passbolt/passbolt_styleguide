@@ -1,6 +1,6 @@
 {
   "name": "passbolt-styleguide",
-  "version": "5.3.2",
+  "version": "5.4.3",
   "license": "AGPL-3.0",
   "copyright": "Copyright 2023 Passbolt SA",
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
@@ -85,7 +85,8 @@
       "cheerio": {
         "undici": "6.21.2"
       }
-    }
+    },
+    "brace-expansion": "^1.1.12"
   },
   "scripts": {
     "build": "npm run build-api-app",

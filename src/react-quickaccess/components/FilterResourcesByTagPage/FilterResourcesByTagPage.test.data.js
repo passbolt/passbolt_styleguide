@@ -20,6 +20,10 @@ import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/
 import {
   defaultMetadataTypesSettingsV4Dto
 } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 /**
  * Default component props
  * @param props
@@ -32,6 +36,7 @@ export const defaultProps = (data = {}) => ({
   ],
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
+  metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
   ...data
 });
 
@@ -45,6 +50,7 @@ export const noResourcesProps = (data = {}) => ({
   resources: null,
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
+  metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
   ...data
 });
 
@@ -58,6 +64,7 @@ export const noTagsProps = (data = {}) => ({
   resources: [],
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
+  metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
   ...data
 });
 
@@ -91,6 +98,7 @@ export const withFilteredResourcesProps = (data = {}) => {
     resources: [resource1, resource2],
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
+    metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
     ...data
   };
 };

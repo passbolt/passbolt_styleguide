@@ -36,6 +36,10 @@ import {
   resourceTypeV5PasswordStringDto,
   resourceTypeV5TotpDto
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import {
+  defaultMetadataKeysSettingsDto
+} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 /**
  * Default props
@@ -53,6 +57,7 @@ export const defaultProps = (data = {}) => ({
     default_resource_types: "v5",
     ...data?.metadataTypeSettings
   })),
+  metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto(data?.metadataKeysSettings)),
   dialogContext: {
     open: jest.fn(),
   },

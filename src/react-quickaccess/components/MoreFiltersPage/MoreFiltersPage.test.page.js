@@ -62,4 +62,13 @@ export default class MoreFiltersPagePage {
     fireEvent.click(this.backButton, {button: 0});
     await waitFor(() => {});
   }
+
+  /**
+   * Simulates a click on the create button
+   * @returns {Promise<void>}
+   */
+  async clickOnCreateButton() {
+    fireEvent.click(this.createButton, {button: 0});
+    await waitFor(() => {});
+  }
 }

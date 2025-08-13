@@ -115,8 +115,8 @@ class AddResourceUris extends Component {
    * @param {string} propName - The name of the property to check for max length warnings.
    * @returns {boolean} - Returns true if there is a max length warning for the property, false otherwise.
    */
-  isMaxLengthWarnings(propName) {
-    return !this.isMaxLengthError(propName) && this.props.warnings?.hasError(propName, "maxLength");
+  isMaxLengthWarnings(propName, association) {
+    return !this.isMaxLengthError(propName) && this.props.warnings?.hasError(`${association}.${propName}`, "maxLength");
   }
 
   /**
@@ -146,12 +146,12 @@ class AddResourceUris extends Component {
         <div className="content">
           <div className="uris-fields">
             <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
-              <label htmlFor="resource-main-uri"><Trans>Main URI</Trans>{this.isMaxLengthWarnings("uris.0") && <AttentionSVG className="attention-required"/>}</label>
+              <label htmlFor="resource-main-uri"><Trans>Main URI</Trans>{this.isMaxLengthWarnings("uris.0", "metadata") && <AttentionSVG className="attention-required"/>}</label>
               <input id="resource-main-uri" disabled={this.props.disabled} name="metadata.uris.0" maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource?.metadata?.uris?.[0]} onChange={this.handleInputChange}/>
               {this.isMaxLengthError("uris.0") &&
                 <div className="main-uri error-message"><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
               }
-              {this.isMaxLengthWarnings("uris.0") &&
+              {this.isMaxLengthWarnings("uris.0", "metadata") &&
                 <div className="main-uri warning-message">
                   <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
                 </div>
@@ -160,18 +160,20 @@ class AddResourceUris extends Component {
             <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
               <label htmlFor={`resource-additional-uri-${this.hasMultipleUris ? this.additionalUris.length : ""}`}><Trans>Additional URI</Trans>{this.isMaxLengthWarnings("uris", "metadata") && <AttentionSVG className="attention-required"/>}</label>
               {this.hasMultipleUris && this.additionalUris.map((uri, index) => (
-                <div key={index} className="additional-uri-wrapper">
-                  <input id={`resource-additional-uri-${index + 1}`} autoFocus={index + 1 === this.additionalUris.length} disabled={this.props.disabled} name={`metadata.uris.${index + 1}`} maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource.metadata.uris[index + 1]} onChange={this.handleInputChange}/>
-                  <button type="button" className="button-icon" id={`resource-delete-additional-uri-${index + 1}`} onClick={() => this.handleDeleteUriClick(index + 1)}><DeleteSVG/></button>
+                <>
+                  <div key={index} className="additional-uri-wrapper">
+                    <input id={`resource-additional-uri-${index + 1}`} autoFocus={index + 1 === this.additionalUris.length} disabled={this.props.disabled} name={`metadata.uris.${index + 1}`} maxLength="1024" type="text" autoComplete="off" placeholder={this.translate("URI")} value={this.props.resource.metadata.uris[index + 1]} onChange={this.handleInputChange}/>
+                    <button type="button" className="button-icon" id={`resource-delete-additional-uri-${index + 1}`} onClick={() => this.handleDeleteUriClick(index + 1)}><DeleteSVG/></button>
+                  </div>
                   {this.isMaxLengthError(`uris.${index + 1}`) &&
                     <div className={`additional-uri-${index + 1} error-message`}><Trans>This is the maximum size for this field, make sure your data was not truncated.</Trans></div>
                   }
-                  {this.isMaxLengthWarnings(`uris.${index + 1}`) &&
+                  {this.isMaxLengthWarnings(`uris.${index + 1}`, "metadata") &&
                     <div className={`additional-uri-${index + 1} warning-message`}>
                       <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated.</Trans>
                     </div>
                   }
-                </div>
+                </>
               ))
               }
             </div>

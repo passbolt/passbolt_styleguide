@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
+import assertString from "validator/es/lib/util/assertString";
 import getPropValue from "../../../react-extension/lib/Object/getPropValue";
 import sanitizeUrl from "../../../react-extension/lib/Sanitize/sanitizeUrl";
 
@@ -81,6 +82,18 @@ export default class SiteSettings {
     }
 
     return result;
+  }
+
+  /**
+   * Returns true if the given feature flag is beta.
+   * @param {string} name the feature flag to check
+   * @returns {boolean}
+   */
+  isFeatureBeta(name) {
+    assertString(name);
+    const configPath = `passbolt.plugins.${name}.isInBeta`;
+    const isBeta = getPropValue(this.settings, configPath) || false;
+    return isBeta;
   }
 
   /**

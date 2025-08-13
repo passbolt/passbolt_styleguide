@@ -233,7 +233,7 @@ describe("ResourceTypeEntity", () => {
     it("should set the right secret definition for: v5 custom fields", () => {
       expect.assertions(2);
 
-      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "v5-custom-fields-standalone"});
+      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "v5-custom-fields"});
       const expectedSecretDefinition = resourceTypeV5CustomFieldsDto().definition.secret;
 
       const resourceTypeEntity = new ResourceTypeEntity(dto);
