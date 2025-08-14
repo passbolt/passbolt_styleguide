@@ -16,6 +16,7 @@ import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import {defaultMetadataKeysSettingsDto} from "./metadataKeysSettingsEntity.test.data";
 import MetadataKeysSettingsEntity from "./metadataKeysSettingsEntity";
+import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 
 describe("MetadataKeysSettings", () => {
   describe("::getSchema", () => {
@@ -32,16 +33,43 @@ describe("MetadataKeysSettings", () => {
       assertEntityProperty.boolean(MetadataKeysSettingsEntity, "zero_knowledge_key_share");
       assertEntityProperty.required(MetadataKeysSettingsEntity, "zero_knowledge_key_share");
     });
+
+    it("validates metadata_private_keys property", () => {
+      const metadataKeysSettingsDto = defaultMetadataKeysSettingsDto();
+      const successScenarios = [
+        {scenario: "a valid option", value: [defaultMetadataPrivateKeyDto()]},
+      ];
+      const failScenarios = [
+        {scenario: "with invalid metadata private key build rule", value: [{}]},
+      ];
+      assertEntityProperty.assertAssociation(MetadataKeysSettingsEntity, "metadata_private_keys", metadataKeysSettingsDto, successScenarios, failScenarios);
+    });
   });
 
   describe("::constructor", () => {
-    it("constructor works if default is provided.", () => {
+    it("constructor works if minimal dto is provided.", () => {
       expect.assertions(2);
       const dto = defaultMetadataKeysSettingsDto();
       const entity = new MetadataKeysSettingsEntity(dto);
 
       expect(entity._props.allow_usage_of_personal_keys).toBeTruthy();
       expect(entity._props.zero_knowledge_key_share).toBeFalsy();
+    });
+
+    it("constructor works if valid DTO is provided", () => {
+      expect.assertions(3);
+      const dto = defaultMetadataKeysSettingsDto({}, {withMetadataPrivateKeys: true});
+      const entity = new MetadataKeysSettingsEntity(dto);
+
+      expect(entity._props.allow_usage_of_personal_keys).toBeTruthy();
+      expect(entity._props.zero_knowledge_key_share).toBeFalsy();
+      expect(entity._metadataPrivateKeys).toStrictEqual(new ShareMetadataPrivateKeysCollection(dto.metadata_private_keys));
+    });
+
+    it("constructor throw an error if the zero knowledge is true and the private metadata key is defined", () => {
+      expect.assertions(1);
+      const dto = defaultMetadataKeysSettingsDto({zero_knowledge_key_share: true}, {withMetadataPrivateKeys: true});
+      expect(() => new MetadataKeysSettingsEntity(dto)).toThrowEntityValidationError("metadata_private_keys", "not_defined_for_zero_knowledge");
     });
   });
 
