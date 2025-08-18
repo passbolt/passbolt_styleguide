@@ -17,6 +17,7 @@ import * as assertEntityProperty from "../../../../../test/assert/assertEntityPr
 import {defaultMetadataKeysSettingsDto} from "./metadataKeysSettingsEntity.test.data";
 import MetadataKeysSettingsEntity from "./metadataKeysSettingsEntity";
 import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
+import ShareMetadataPrivateKeysCollection from "./shareMetadataPrivateKeysCollection";
 
 describe("MetadataKeysSettings", () => {
   describe("::getSchema", () => {
