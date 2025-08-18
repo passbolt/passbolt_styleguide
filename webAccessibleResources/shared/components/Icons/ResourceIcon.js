@@ -77,7 +77,7 @@ export class ResourceIcon extends Component {
    */
   static getDefaultResourceTypeIcon(resourceTypeId, resourceTypes) {
     if (!ResourceIcon.resourceTypeIdIconMap[resourceTypeId]) {
-      const resourceTypeSlug = resourceTypes.getFirstById(resourceTypeId).slug;
+      const resourceTypeSlug = resourceTypes.getFirstById(resourceTypeId)?.slug;
       ResourceIcon.resourceTypeIdIconMap[resourceTypeId] = PASSBOLT_DEFAULT_RESOURCE_TYPE_ICON_MAP[resourceTypeSlug];
     }
 
