@@ -394,12 +394,11 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                 <div
                   className={`input radio ${this.state.settings.zero_knowledge_key_share === false ? "checked" : ""} ${this.hasAllInputDisabled() && 'disabled'}`}>
                   <input type="radio"
-                    value="false"
-                    onChange={this.handleInputChange}
+                    value="true"
                     name="zero_knowledge_key_share"
                     checked={this.state.settings.zero_knowledge_key_share === false}
                     id="disableZeroKnowledgeKeyShareInput"
-                    disabled={this.hasAllInputDisabled()}/>
+                    disabled={true}/>
                   <label htmlFor="disableZeroKnowledgeKeyShareInput">
                     <span className="name"><Trans>User-friendly mode (Better on-boarding)</Trans></span>
                     <span className="info">
@@ -409,14 +408,13 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                   </label>
                 </div>
                 <div
-                  className={`input radio ${this.state.settings.zero_knowledge_key_share === true ? "checked" : ""} ${this.hasAllInputDisabled() && 'disabled'}`}>
+                  className={`input radio ${this.state.settings.zero_knowledge_key_share === true ? "checked" : ""} disabled`}>
                   <input type="radio"
                     value="true"
-                    onChange={this.handleInputChange}
                     name="zero_knowledge_key_share"
                     checked={this.state.settings.zero_knowledge_key_share === true}
                     id="enableZeroKnowledgeKeyShareInput"
-                    disabled={this.hasAllInputDisabled()}/>
+                    disabled={true}/>
                   <label htmlFor="enableZeroKnowledgeKeyShareInput">
                     <span className="name"><Trans>Zero-knowledge mode (More secure)</Trans></span>
                     <span className="info">

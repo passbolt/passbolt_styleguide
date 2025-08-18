@@ -11,16 +11,3 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.10.0
  */
-
-/**
- * Build default metadata types settings.
- * @param {object} [data={}] Data to override
- * @returns {object}
- */
-export const defaultMetadataKeysSettingsDto = (data = {}) => {
-  const defaultData = {
-    allow_usage_of_personal_keys: true,
-    zero_knowledge_key_share: false,
-  };
-  return Object.assign(defaultData, data);
-};
