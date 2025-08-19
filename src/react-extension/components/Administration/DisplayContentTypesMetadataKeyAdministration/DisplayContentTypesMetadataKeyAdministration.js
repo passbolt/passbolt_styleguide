@@ -201,7 +201,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
    * @returns {boolean}
    */
   hasAllInputDisabled() {
-    return this.state.isProcessing;
+    return this.state.isProcessing || this.hasMissingMetadataKeys;
   }
 
   /**
@@ -316,6 +316,14 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
   }
 
   /**
+   * Has missing metadata keys
+   * @return {boolean}
+   */
+  get hasMissingMetadataKeys() {
+    return this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -324,7 +332,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
     const hasSettingsChanges = this.hasSettingsChanges(this.originalSettings, this.formSettings, this.state.settings);
     const isFeatureBeta = this.props.context.siteSettings.isFeatureBeta("metadata");
 
-    const shouldDisplayAWarningBlock = isFeatureBeta || hasSettingsChanges || errors?.hasError("generated_metadata_key", "required");
+    const shouldDisplayAWarningBlock = isFeatureBeta || hasSettingsChanges || errors?.hasError("generated_metadata_key", "required") || this.hasMissingMetadataKeys;
 
     return (
       <div className="row">
@@ -384,7 +392,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                 </div>
               </div>
 
-              <h4><Trans>Zero knowledge (Coming soon)</Trans></h4>
+              <h4><Trans>Zero knowledge</Trans></h4>
 
               <p className="description">
                 <Trans>This section defines how the shared metadata key is shared with users.</Trans>
@@ -549,12 +557,18 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                   <p><b><Trans>Warning:</Trans></b> <Trans>A shared metadata key is required to save the metadata keys settings.</Trans></p>
                 </div>
               }
+              {this.hasMissingMetadataKeys &&
+                <div className="form-banner">
+                  <p><b><Trans>Warning:</Trans></b> <Trans>You are missing shared metadata keys.</Trans> <Trans>Ask another administrator to share them with you to update the metadata keys settings.</Trans></p>
+                </div>
+              }
             </div>
           }
         </div>
         <DisplayContentTypesMetadataKeyAdministrationActions
           onSaveRequested={this.save}
           isProcessing={this.state.isProcessing}
+          isDisabled={this.hasAllInputDisabled()}
         />
         {createSafePortal(
           <div className="sidebar-help-section">

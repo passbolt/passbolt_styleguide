@@ -36,6 +36,14 @@ describe("DisplayContentTypesMetadataKeyAdministrationActions", () => {
     const props = defaultProps({isProcessing: true});
     page = new DisplayContentTypesMetadataKeyAdministrationActionsPage(props);
     expect(page.exists()).toBeTruthy();
+    expect(page.saveButton.className.includes("processing")).toBeTruthy();
+  });
+
+  it('displays the save button as disabled if the component is disabled', async() => {
+    expect.assertions(2);
+    const props = defaultProps({isDisabled: true});
+    page = new DisplayContentTypesMetadataKeyAdministrationActionsPage(props);
+    expect(page.exists()).toBeTruthy();
     expect(page.saveButton.hasAttribute("disabled")).toBeTruthy();
   });
 
