@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.4.0
  */
-import {defaultProSiteSettings} from "../../../react-extension/test/fixture/Settings/siteSettings.test.data";
+import {defaultCeSiteSettings, defaultProSiteSettings} from "../../../react-extension/test/fixture/Settings/siteSettings.test.data";
 import SiteSettings from "./SiteSettings";
 
 describe("SiteSettings", () => {
@@ -50,6 +50,22 @@ describe("SiteSettings", () => {
       expect.assertions(1);
       const settings = new SiteSettings(defaultProSiteSettings());
       expect(() => settings.isFeatureBeta(42)).toThrowError();
+    });
+  });
+
+  describe("::isCeEdition", () => {
+    it("should return true if app is Community Edition", () => {
+      expect.assertions(1);
+      const settingsDto = defaultCeSiteSettings();
+      const settings = new SiteSettings(settingsDto);
+      expect(settings.isCeEdition).toStrictEqual(true);
+    });
+
+    it("should return false if app is Pro Edition", () => {
+      expect.assertions(1);
+      const settingsDto = defaultProSiteSettings();
+      const settings = new SiteSettings(settingsDto);
+      expect(settings.isCeEdition).toStrictEqual(false);
     });
   });
 });
