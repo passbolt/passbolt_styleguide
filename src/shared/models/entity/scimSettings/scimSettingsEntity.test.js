@@ -13,14 +13,14 @@
  */
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import ScimSettingsEntity from "./ScimSettingsEntity";
+import ScimSettingsEntity from "./scimSettingsEntity";
 import {
   defaultScimSettingsDto,
   minimalScimSettingsDto,
   scimSettingsDtoWithNullSecretToken,
   scimSettingsDtoWithInvalidSecretToken,
   scimSettingsDtoWithInvalidSecretTokenLength
-} from "./ScimSettingsEntity.test.data";
+} from "./scimSettingsEntity.test.data";
 import {v4 as uuidv4} from "uuid";
 import EntityValidationError from "../abstract/entityValidationError";
 
