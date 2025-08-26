@@ -46,6 +46,16 @@ describe("ScimSettingsServiceWorkerService", () => {
       expect(result).toBeInstanceOf(ScimSettingsEntity);
       expect(result.toDto()).toEqual(settingsDto);
     });
+
+    it("should return null if no settings found", async() => {
+      portMock.request.mockResolvedValue(null);
+
+      const result = await service.findSettings();
+
+      expect(portMock.request).toHaveBeenCalledWith(SCIM_FIND_SETTINGS_EVENT);
+      expect(result).not.toBeInstanceOf(ScimSettingsEntity);
+      expect(result).toBeNull();
+    });
   });
 
   describe("saveSettings", () => {
