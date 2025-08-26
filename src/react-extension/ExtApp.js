@@ -220,6 +220,7 @@ class ExtApp extends Component {
                                               "/app/administration/migrate-metadata",
                                               "/app/administration/allow-content-types",
                                               "/app/administration/content-types/metadata-getting-started",
+                                              "/app/administration/user-provisionning/scim",
                                             ]}>
                                               <AdministrationWorkspaceContextProvider>
                                                 <AdminAccountRecoveryContextProvider>

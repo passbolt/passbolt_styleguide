@@ -196,6 +196,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const migrateMetadata = ADMIN_URL_REGEXP.migrateEncryptedMetadata.test(location);
     const allowContentType = ADMIN_URL_REGEXP.allowContentTypes.test(location);
     const gettingStarted = ADMIN_URL_REGEXP.gettingStarted.test(location);
+    const scim = ADMIN_URL_REGEXP.scim.test(location);
 
     let selectedAdministration;
     if (isAdminHomePageLocation) {
@@ -240,6 +241,8 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES;
     } else if (gettingStarted) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED;
+    } else if (scim) {
+      selectedAdministration = AdministrationWorkspaceMenuTypes.SCIM;
     }
 
     // let's check if the current URL is actually supported
@@ -356,7 +359,8 @@ export const AdministrationWorkspaceMenuTypes = {
   CONTENT_TYPES_METADATA_KEY: "CONTENT_TYPES_METADATA_KEY", // Content types metadata key administration menu selected
   MIGRATE_METADATA: "MIGRATE_METADATA", //Migrate metadata administration menu selected
   ALLOW_CONTENT_TYPES: "ALLOW_CONTENT_TYPES", // Allow content types administration menu selected
-  METADATA_GETTING_STARTED: "METADATA_GETTING_STARTED", // metadata getting started menu selected
+  METADATA_GETTING_STARTED: "METADATA_GETTING_STARTED", // metadata getting started menu selected``
+  SCIM: "SCIM", // SCIM menu selected
 };
 
 /**
@@ -382,6 +386,7 @@ export const AdministrationWorkspaceFeatureFlag = {
   [AdministrationWorkspaceMenuTypes.MIGRATE_METADATA]: "metadata", // Migrate metadata flag
   [AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES]: "metadata", // Allox content types flag
   [AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED]: "metadata", // Allow  types flag
+  [AdministrationWorkspaceMenuTypes.SCIM]: "scim", // Allow  types flag
 };
 
 /**
@@ -409,4 +414,5 @@ const ADMIN_URL_REGEXP = {
   migrateEncryptedMetadata: /^\/app\/administration\/migrate-metadata\/?$/,
   allowContentTypes: /^\/app\/administration\/allow-content-types\/?$/,
   gettingStarted: /^\/app\/administration\/content-types\/metadata-getting-started\/?$/,
+  scim: /^\/app\/administration\/user-provisionning\/scim\/?$/,
 };

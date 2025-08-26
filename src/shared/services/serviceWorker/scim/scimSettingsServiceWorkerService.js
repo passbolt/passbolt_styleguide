@@ -36,7 +36,11 @@ class ScimSettingsServiceWorkerService {
    */
   async findSettings() {
     const settingsDto = await this.port.request(SCIM_FIND_SETTINGS_EVENT);
-    return new ScimSettingsEntity(settingsDto);
+    if (settingsDto) {
+      return new ScimSettingsEntity(settingsDto);
+    }
+
+    return null;
   }
 
   /**
