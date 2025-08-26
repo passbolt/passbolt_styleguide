@@ -104,6 +104,15 @@ class ScimSettingsEntity extends EntityV2 {
   get secretToken() {
     return this._props.secret_token || null;
   }
+
+
+  /**
+   * ScimSettingsEntity.SECRET_TOKEN_LENGTH
+   * @returns {string}
+   */
+  static get SECRET_TOKEN_LENGTH() {
+    return SECRET_TOKEN_LENGTH;
+  }
 }
 
 export default ScimSettingsEntity;
