@@ -50,7 +50,7 @@ describe("ManageAccountRecoveryAdministrationSettingsTeasing", () => {
     expect(page.title).toBe("Account Recovery");
     expect(page.accountRecoveryPolicyFirstLine).toBe("Help users to recover their accounts.");
     expect(page.upgradeButton).toBeTruthy();
-    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/contact/pro/enterprise");
+    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/contact/sales?utm_campaign=21060976-CE%20to%20Pro&utm_source=product");
 
     const actualDescriptions = Array.from(page.accountRecoveryPoliciesDescription).map(li => li.textContent.trim());
     expect(actualDescriptions).toEqual(expectedAccountRecoveryPoliciesDescriptions);
