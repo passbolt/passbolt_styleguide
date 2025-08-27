@@ -69,16 +69,19 @@ class ScimSettingsServiceWorkerService {
     if (!(formSettings instanceof ScimSettingsEntity)) {
       throw new TypeError("The 'settings' property should be of type 'ScimSettingsEntity'.");
     }
-    const savedSettingsDto = await this.port.request('passbolt.scim.update-settings', id, formSettings.toDto());
+    const updated = formSettings.toDto();
+    delete updated.setting_id;
+    const savedSettingsDto = await this.port.request('passbolt.scim.update-settings', id, updated);
     return new ScimSettingsEntity(savedSettingsDto);
   }
 
   /**
    * Disable the SCIM settings.
+   * @param {string} id The SCIM settings id.
    * @return {Promise<void>}
    */
-  async disableSettings() {
-    await this.port.request(SCIM_DISABLE_SETTINGS_EVENT);
+  async disableSettings(id) {
+    await this.port.request(SCIM_DISABLE_SETTINGS_EVENT, id);
   }
 }
 

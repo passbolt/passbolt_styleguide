@@ -73,6 +73,7 @@ describe("ScimSettingsServiceWorkerService", () => {
 
     it("should update SCIM settings", async() => {
       const settingsDto = scimSettingsWithoutIdDto();
+      delete settingsDto.setting_id;
       const formSettings = new ScimSettingsEntity(settingsDto);
       const id = uuidv4();
       portMock.request.mockResolvedValue(settingsDto);
@@ -92,10 +93,11 @@ describe("ScimSettingsServiceWorkerService", () => {
   describe("disableSettings", () => {
     it("should disable SCIM settings", async() => {
       portMock.request.mockResolvedValue(null);
+      const id = uuidv4();
 
-      await service.disableSettings();
+      await service.disableSettings(id);
 
-      expect(portMock.request).toHaveBeenCalledWith(SCIM_DISABLE_SETTINGS_EVENT);
+      expect(portMock.request).toHaveBeenCalledWith(SCIM_DISABLE_SETTINGS_EVENT, id);
     });
   });
 });

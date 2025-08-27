@@ -390,7 +390,8 @@ class AdministrationWorkspace extends Component {
                 </div>
                 <Switch>
                   <Route exact path={[
-                    "/app/administration"
+                    "/app/administration",
+                    "/app/administration/user-provisionning/scim" // to be removed when documentation will be written
                   ]}/>
                   <Route>
                     <div className="help-panel">
