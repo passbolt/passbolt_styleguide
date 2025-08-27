@@ -6589,6 +6589,13 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form > *:last-child {
   margin-bottom: 0;
 }
+.page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form .input-wrapper .button-inline {
+  display: flex;
+  gap: 0.8rem;
+}
+.page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form .input-wrapper .button-inline .input {
+  flex: 1;
+}
 .page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message,
 .page.administration .app .panel.main .panel.middle .main-page .main-column .error.message {
   align-self: stretch;

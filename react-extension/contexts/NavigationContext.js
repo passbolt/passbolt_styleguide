@@ -87,6 +87,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user wants to navigate to the administration workspace allow content types section.
   onGoToAdministrationMetadataGettingStartedRequested: () => {
   }, // Whenever the user wants to navigate to the administration meadata getting started workspace section.
+  onGoToAdministrationScimRequested: () => {
+  }, // Whenever the user wants to navigate to the administration meadata getting started workspace section.
 });
 
 /**
@@ -147,6 +149,7 @@ class NavigationContextProvider extends React.Component {
       onGoToUserSettingsAccountRecoveryRequested: this.onGoToUserSettingsAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace account recovery section.
       onGoToAdministrationRbacsRequested: this.onGoToAdministrationRbacsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace rbacs section.
       onGoToAdministrationMetadataGettingStartedRequested: this.onGoToAdministrationMetadataGettingStartedRequested.bind(this), // Whenever the user wants to navigate to the administration meadata getting started workspace section.
+      onGoToAdministrationScimRequested: this.onGoToAdministrationScimRequested.bind(this), // Whenever the user wants to navigate to the administration SCIM section.
     };
   }
 
@@ -299,6 +302,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationMetadataGettingStartedRequested() {
     await this.goTo("browser-extension", "/app/administration/content-types/metadata-getting-started");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration SCIM section.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationScimRequested() {
+    await this.goTo("browser-extension", "/app/administration/user-provisionning/scim");
   }
 
   /**
