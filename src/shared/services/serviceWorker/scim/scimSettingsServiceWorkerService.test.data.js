@@ -23,7 +23,7 @@ export function defaultScimSettingsDto() {
     id: uuidv4(),
     scim_user_id: uuidv4(),
     setting_id: uuidv4(),
-    secret_token: "pb_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+    secret_token: "pb_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefg"
   };
 }
 
@@ -47,7 +47,7 @@ export function scimSettingsWithoutIdDto() {
   return {
     scim_user_id: uuidv4(),
     setting_id: uuidv4(),
-    secret_token: "pb_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+    secret_token: "pb_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefg"
   };
 }
 
@@ -60,7 +60,7 @@ export function scimSettingsWithSettingIdDto() {
     id: uuidv4(),
     scim_user_id: uuidv4(),
     setting_id: uuidv4(),
-    secret_token: "pb_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+    secret_token: "pb_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefg"
   };
 }
 

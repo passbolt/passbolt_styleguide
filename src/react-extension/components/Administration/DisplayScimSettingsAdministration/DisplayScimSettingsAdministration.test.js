@@ -119,7 +119,7 @@ describe('DisplayScimSettingsAdministration', () => {
     await page.clickRegenerateSecretTokenButton();
 
     expect(page.scimSecretTokenInput.value).not.toEqual(oldToken);
-    expect(page.scimSecretTokenInput.value).toMatch(/^pb_[A-Za-z0-9]{36}$/);
+    expect(page.scimSecretTokenInput.value).toMatch(/^pb_[A-Za-z0-9]{43}$/);
 
     await page.clickSaveButton();
     expect(props.scimSettingsServiceWorkerService.updateSettings).toHaveBeenCalled();

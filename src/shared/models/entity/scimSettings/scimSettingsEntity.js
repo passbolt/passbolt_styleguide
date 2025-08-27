@@ -14,8 +14,8 @@
 
 import EntityV2 from "../abstract/entityV2";
 
-const SECRET_TOKEN_LENGTH = 39;
-const SECRET_TOKEN_PATTERN = "^pb_[A-Za-z0-9]{36}$";
+const SECRET_TOKEN_LENGTH = 46;
+const SECRET_TOKEN_PATTERN = "^pb_[A-Za-z0-9]{43}$";
 
 class ScimSettingsEntity extends EntityV2 {
   /**
