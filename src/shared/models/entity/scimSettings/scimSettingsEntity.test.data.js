@@ -33,7 +33,7 @@ export const defaultScimSettingsDto = (data = {}) => ({
   id: uuidv4(),
   scim_user_id: uuidv4(),
   setting_id: uuidv4(),
-  secret_token: "pb_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
+  secret_token: "pb_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefg",
   ...data,
 });
 
@@ -64,5 +64,5 @@ export const scimSettingsDtoWithInvalidSecretToken = (data = {}) => ({
  */
 export const scimSettingsDtoWithInvalidSecretTokenLength = (data = {}) => ({
   ...defaultScimSettingsDto(data),
-  secret_token: "pb_123",
+  secret_token: "pb_1234567890890abcdef123",
 });
