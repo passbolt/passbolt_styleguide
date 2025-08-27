@@ -49,7 +49,6 @@ export function defaultProps(data = {}) {
       onGoToAdministrationContentTypesMetadataKeyRequested: jest.fn(),
       onGoToAdministrationMigrateMetadataRequested: jest.fn(),
       onGoToAdministrationMetadataGettingStartedRequested: jest.fn(),
-      onGoToAdministrationScimRequested: jest.fn(),
     }
   }, data);
 }

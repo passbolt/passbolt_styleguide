@@ -183,14 +183,6 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
-   * Returns true if the user has the SCIM capability
-   * @returns {boolean}
-   */
-  get canIUseScim() {
-    return this.canIUse('scim');
-  }
-
-  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
@@ -216,7 +208,6 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleAllowedContentTypesClick = this.handleAllowedContentTypesClick.bind(this);
     this.handleSubmenuClick = this.handleSubmenuClick.bind(this);
     this.handleMetadataGettingStartedClick = this.handleMetadataGettingStartedClick.bind(this);
-    this.handleScimClick = this.handleScimClick.bind(this);
   }
 
   /**
@@ -361,13 +352,6 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleMetadataGettingStartedClick() {
     this.props.navigationContext.onGoToAdministrationMetadataGettingStartedRequested();
-  }
-
-  /**
-   * Handle when the user click on the SCIM settings menu
-   */
-  handleScimClick() {
-    this.props.navigationContext.onGoToAdministrationScimRequested();
   }
 
   /**
@@ -551,14 +535,6 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isAllowedContentTypesSelected() {
     return AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES === this.props.administrationWorkspaceContext.selectedAdministration;
-  }
-
-  /**
-   * If Allow SCIM menu is selected
-   * @returns {boolean}
-   */
-  isScimSelected() {
-    return AdministrationWorkspaceMenuTypes.SCIM === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -872,20 +848,6 @@ class DisplayAdministrationMenu extends React.Component {
                   </div>
                   {this.state.isUserProvisionningOpened &&
                     <ul>
-                      {this.canIUseScim &&
-                        <li id="scim_menu">
-                          <div className={`row ${this.isScimSelected() ? "selected" : ""}`}>
-                            <div className="main-cell-wrapper">
-                              <div className="main-cell">
-                                <button className="link no-border" type="button" onClick={this.handleScimClick}>
-                                  <span><Trans>SCIM</Trans></span>
-                                  {this.isBeta("scim") && <span className="chips beta">beta</span>}
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </li>
-                      }
                       {this.isUserDirectoryEnabled &&
                         <li id="user_directory_menu">
                           <div className={`row ${this.isUserDirectorySelected() ? "selected" : ""}`}>

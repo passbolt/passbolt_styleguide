@@ -6589,13 +6589,6 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form > *:last-child {
   margin-bottom: 0;
 }
-.page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form .input-wrapper .button-inline {
-  display: flex;
-  gap: 0.8rem;
-}
-.page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form .input-wrapper .button-inline .input {
-  flex: 1;
-}
 .page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message,
 .page.administration .app .panel.main .panel.middle .main-page .main-column .error.message {
   align-self: stretch;
@@ -6688,6 +6681,67 @@ html.launching .launching-screen p {
 .page.administration .app .panel.main #administration_menu li ul {
   margin-left: 1.6rem;
 }
+.password-policies-settings-teasing h3#password-policies-settings-title,
+.user-passphrase-policies-settings-teasing h3#password-policies-settings-title,
+.recover-account-settings-teasing h3#password-policies-settings-title,
+.third-party-provider-settings-teasing h3#password-policies-settings-title,
+.password-policies-settings-teasing h3#user-passphrase-policies-title,
+.user-passphrase-policies-settings-teasing h3#user-passphrase-policies-title,
+.recover-account-settings-teasing h3#user-passphrase-policies-title,
+.third-party-provider-settings-teasing h3#user-passphrase-policies-title,
+.password-policies-settings-teasing h3#recover-account-settings-title,
+.user-passphrase-policies-settings-teasing h3#recover-account-settings-title,
+.recover-account-settings-teasing h3#recover-account-settings-title,
+.third-party-provider-settings-teasing h3#recover-account-settings-title,
+.password-policies-settings-teasing h3#third-party-provider-settings-title,
+.user-passphrase-policies-settings-teasing h3#third-party-provider-settings-title,
+.recover-account-settings-teasing h3#third-party-provider-settings-title,
+.third-party-provider-settings-teasing h3#third-party-provider-settings-title {
+  border-bottom: 0.1rem solid var(--Workspace-Dividers);
+}
+.password-policies-settings-teasing .password-policies-info,
+.user-passphrase-policies-settings-teasing .password-policies-info,
+.recover-account-settings-teasing .password-policies-info,
+.third-party-provider-settings-teasing .password-policies-info,
+.password-policies-settings-teasing .user-passphrase-policies-info,
+.user-passphrase-policies-settings-teasing .user-passphrase-policies-info,
+.recover-account-settings-teasing .user-passphrase-policies-info,
+.third-party-provider-settings-teasing .user-passphrase-policies-info,
+.password-policies-settings-teasing .recover-account-info,
+.user-passphrase-policies-settings-teasing .recover-account-info,
+.recover-account-settings-teasing .recover-account-info,
+.third-party-provider-settings-teasing .recover-account-info,
+.password-policies-settings-teasing .third-party-provider-settings-info,
+.user-passphrase-policies-settings-teasing .third-party-provider-settings-info,
+.recover-account-settings-teasing .third-party-provider-settings-info,
+.third-party-provider-settings-teasing .third-party-provider-settings-info {
+  display: flex;
+  padding: 1.2rem;
+  align-items: flex-start;
+  gap: 1.2rem;
+  align-self: stretch;
+  border-radius: var(--Section-border-radius, 0.5rem);
+  background: var(--Action-button-Action-button-background, #F7F7F7);
+  justify-content: space-between;
+}
+.password-policies-settings-teasing p,
+.user-passphrase-policies-settings-teasing p,
+.recover-account-settings-teasing p,
+.third-party-provider-settings-teasing p {
+  margin-top: 1.6rem;
+}
+.password-policies-settings-teasing li,
+.user-passphrase-policies-settings-teasing li,
+.recover-account-settings-teasing li,
+.third-party-provider-settings-teasing li {
+  padding: 0.3rem;
+}
+.password-policies-settings-teasing li > :first-child,
+.user-passphrase-policies-settings-teasing li > :first-child,
+.recover-account-settings-teasing li > :first-child,
+.third-party-provider-settings-teasing li > :first-child {
+  margin-right: 1rem;
+}
 .ldap-settings.main-column label {
   margin: 1.6rem 0;
 }
@@ -6753,6 +6807,15 @@ html.launching .launching-screen p {
 .dialog .directory-structure {
   overflow: auto;
   height: 22rem;
+}
+.ldap-simulate-synchronize-dialog.dialog-wrapper .dialog {
+  max-width: 70rem;
+}
+.ldap-simulate-synchronize-dialog.dialog-wrapper textarea.full_report {
+  max-height: 25rem;
+}
+.ldap-simulate-synchronize-dialog.dialog-wrapper a.button + button.primary {
+  margin-left: auto;
 }
 .page.administration .app .panel.main .panel.middle .main-page .healthcheck-settings .main-content {
   align-items: stretch;

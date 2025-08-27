@@ -10032,47 +10032,76 @@ svg .section-card .card .title:first-child {
   box-shadow: inset 0 0 0 0.1rem var(--Action-button-Active-action-button-border);
   background-color: var(--Action-button-Active-action-button-background);
 }
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information {
+.page.administration .app .panel.main .main-page .subscription-key .subscription-key-teasing-info,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-key-teasing-info {
+  display: flex;
+  align-items: center;
+  gap: 3.2rem;
+  align-self: stretch;
+}
+.page.administration .app .panel.main .main-page .subscription-key .subscription-key-teasing-info div.title-text,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-key-teasing-info div.title-text {
+  font-size: medium;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information {
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
 }
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information h4.subscription-information-subtitle {
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information h4.subscription-information-subtitle,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information h4.subscription-information-subtitle {
   padding-top: 0;
   border-top: none;
 }
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information {
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information {
   display: flex;
   gap: 1.6rem;
 }
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-label,
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information .secondary-information {
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-label,
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information .secondary-information,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .secondary-information {
   color: var(--Text-and-icons-Secondary-text);
 }
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value {
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-value {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-label,
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value {
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-label,
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-value {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
 }
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-label .label,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-label .label,
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value .label,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-value .label,
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-label .value,
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value .value {
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-label .value,
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value .value,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-value .value {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   height: 2rem;
 }
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-label .label button,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-label .label button,
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value .label button,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-value .label button,
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-label .value button,
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value .value button {
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-label .value button,
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value .value button,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-value .value button {
   display: block;
   width: 100%;
   white-space: nowrap;
@@ -10263,13 +10292,6 @@ svg .section-card .card .title:first-child {
 .page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form > *:last-child {
   margin-bottom: 0;
 }
-.page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form .input-wrapper .button-inline {
-  display: flex;
-  gap: 0.8rem;
-}
-.page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form .input-wrapper .button-inline .input {
-  flex: 1;
-}
 .page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message,
 .page.administration .app .panel.main .panel.middle .main-page .main-column .error.message {
   align-self: stretch;
@@ -10361,6 +10383,67 @@ svg .section-card .card .title:first-child {
 }
 .page.administration .app .panel.main #administration_menu li ul {
   margin-left: 1.6rem;
+}
+.password-policies-settings-teasing h3#password-policies-settings-title,
+.user-passphrase-policies-settings-teasing h3#password-policies-settings-title,
+.recover-account-settings-teasing h3#password-policies-settings-title,
+.third-party-provider-settings-teasing h3#password-policies-settings-title,
+.password-policies-settings-teasing h3#user-passphrase-policies-title,
+.user-passphrase-policies-settings-teasing h3#user-passphrase-policies-title,
+.recover-account-settings-teasing h3#user-passphrase-policies-title,
+.third-party-provider-settings-teasing h3#user-passphrase-policies-title,
+.password-policies-settings-teasing h3#recover-account-settings-title,
+.user-passphrase-policies-settings-teasing h3#recover-account-settings-title,
+.recover-account-settings-teasing h3#recover-account-settings-title,
+.third-party-provider-settings-teasing h3#recover-account-settings-title,
+.password-policies-settings-teasing h3#third-party-provider-settings-title,
+.user-passphrase-policies-settings-teasing h3#third-party-provider-settings-title,
+.recover-account-settings-teasing h3#third-party-provider-settings-title,
+.third-party-provider-settings-teasing h3#third-party-provider-settings-title {
+  border-bottom: 0.1rem solid var(--Workspace-Dividers);
+}
+.password-policies-settings-teasing .password-policies-info,
+.user-passphrase-policies-settings-teasing .password-policies-info,
+.recover-account-settings-teasing .password-policies-info,
+.third-party-provider-settings-teasing .password-policies-info,
+.password-policies-settings-teasing .user-passphrase-policies-info,
+.user-passphrase-policies-settings-teasing .user-passphrase-policies-info,
+.recover-account-settings-teasing .user-passphrase-policies-info,
+.third-party-provider-settings-teasing .user-passphrase-policies-info,
+.password-policies-settings-teasing .recover-account-info,
+.user-passphrase-policies-settings-teasing .recover-account-info,
+.recover-account-settings-teasing .recover-account-info,
+.third-party-provider-settings-teasing .recover-account-info,
+.password-policies-settings-teasing .third-party-provider-settings-info,
+.user-passphrase-policies-settings-teasing .third-party-provider-settings-info,
+.recover-account-settings-teasing .third-party-provider-settings-info,
+.third-party-provider-settings-teasing .third-party-provider-settings-info {
+  display: flex;
+  padding: 1.2rem;
+  align-items: flex-start;
+  gap: 1.2rem;
+  align-self: stretch;
+  border-radius: var(--Section-border-radius, 0.5rem);
+  background: var(--Action-button-Action-button-background, #F7F7F7);
+  justify-content: space-between;
+}
+.password-policies-settings-teasing p,
+.user-passphrase-policies-settings-teasing p,
+.recover-account-settings-teasing p,
+.third-party-provider-settings-teasing p {
+  margin-top: 1.6rem;
+}
+.password-policies-settings-teasing li,
+.user-passphrase-policies-settings-teasing li,
+.recover-account-settings-teasing li,
+.third-party-provider-settings-teasing li {
+  padding: 0.3rem;
+}
+.password-policies-settings-teasing li > :first-child,
+.user-passphrase-policies-settings-teasing li > :first-child,
+.recover-account-settings-teasing li > :first-child,
+.third-party-provider-settings-teasing li > :first-child {
+  margin-right: 1rem;
 }
 .recover-account-settings .input.radio,
 .save-recovery-account-settings-dialog .input.radio {
@@ -10803,24 +10886,4 @@ svg .section-card .card .title:first-child {
 .mfa-setup .totp-setup .input.password input[type=password] {
   padding: 0.8rem 0.8rem;
   margin-bottom: 1.2rem;
-}
-#scim-settings input[type=text] {
-  max-width: initial;
-}
-#scim-settings .select-container {
-  max-width: initial;
-  width: 100%;
-  margin-bottom: 0.8rem;
-}
-#scim-settings .select-container .select {
-  max-width: initial;
-  width: 100%;
-}
-#scim-settings .section {
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-}
-#scim-settings .section .toggle-switch {
-  margin-bottom: unset;
 }

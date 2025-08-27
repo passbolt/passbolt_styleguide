@@ -92,8 +92,6 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("Allow content types");
       case AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED:
         return this.translate("Getting started");
-      case AdministrationWorkspaceMenuTypes.SCIM:
-        return this.translate("SCIM");
       default:
         return "";
     }

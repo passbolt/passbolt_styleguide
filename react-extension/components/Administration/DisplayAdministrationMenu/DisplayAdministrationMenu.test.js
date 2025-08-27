@@ -348,8 +348,7 @@ describe("As AD I can see the administration menu", () => {
       const props = defaultProps({
         context: {
           siteSettings: {
-            canIUse: feature => feature !== "metadata",
-            isFeatureBeta: jest.fn()
+            canIUse: feature => feature !== "metadata"
           }
         },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA}
@@ -379,8 +378,7 @@ describe("As AD I can see the administration menu", () => {
       const props = defaultProps({
         context: {
           siteSettings: {
-            canIUse: feature => feature !== "metadata",
-            isFeatureBeta: jest.fn()
+            canIUse: feature => feature !== "metadata"
           }
         },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY}
@@ -410,8 +408,7 @@ describe("As AD I can see the administration menu", () => {
       const props = defaultProps({
         context: {
           siteSettings: {
-            canIUse: feature => feature !== "metadata",
-            isFeatureBeta: jest.fn()
+            canIUse: feature => feature !== "metadata"
           }
         },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA}
@@ -441,8 +438,7 @@ describe("As AD I can see the administration menu", () => {
       const props = defaultProps({
         context: {
           siteSettings: {
-            canIUse: feature => feature !== "metadata",
-            isFeatureBeta: jest.fn()
+            canIUse: feature => feature !== "metadata"
           }
         },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES}
@@ -473,8 +469,7 @@ describe("As AD I can see the administration menu", () => {
       const props = defaultProps({
         context: {
           siteSettings: {
-            canIUse: feature => feature !== "metadata",
-            isFeatureBeta: jest.fn()
+            canIUse: feature => feature !== "metadata"
           }
         },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED},
@@ -483,37 +478,6 @@ describe("As AD I can see the administration menu", () => {
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.metadataGettingStartedSettings).toBeNull();
-    });
-  });
-
-  describe("As a signed-in administrator on the administration workspace, I can see the SCIM option in the left-side bar", () => {
-    it('If the feature flag is true and getting started is enabled, the menu should be visible', async() => {
-      expect.assertions(4);
-      const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SCIM},
-      }); // The props to pass
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      await page.gotoScimSettings();
-      expect(page.scimSettings).toBeTruthy();
-      expect(page.menuSelected).toBe('SCIM');
-      expect(props.navigationContext.onGoToAdministrationScimRequested).toHaveBeenCalled();
-    });
-
-    it('If the feature flag is false, the menu should not be visible', async() => {
-      expect.assertions(2);
-      const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "scim",
-            isFeatureBeta: jest.fn()
-          }
-        },
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SCIM},
-      }); // The props to pass
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      expect(page.scimSettings).toBeNull();
     });
   });
 });

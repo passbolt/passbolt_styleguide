@@ -385,6 +385,7 @@ class DisplaySynchronizeUserDirectoryAdministration extends Component {
             }
           </div>
           <div className="submit-wrapper clearfix">
+            <a className="button" target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/docs/admin/user-provisioning/users-directory/advanced-directory-options/" > <span><Trans>Read the documentation</Trans></span></a>
             <button disabled={this.isLoading()} className="primary button form" type="button" onClick={this.handleClose}><Trans>Ok</Trans></button>
           </div>
         </DialogWrapper>
