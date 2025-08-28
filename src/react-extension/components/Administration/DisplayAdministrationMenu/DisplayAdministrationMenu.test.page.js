@@ -154,6 +154,13 @@ export default class DisplayAdministrationMenuPage {
   }
 
   /**
+   * Returns the Password Policy menu
+   */
+  get passwordPolicySettings() {
+    return this._page.container.querySelector('#password_policy_menu .row .main-cell-wrapper .main-cell button');
+  }
+
+  /**
    * Returns the Content Types Encrypted Metadata.
    */
   get contentTypesEncryptedMetadata() {
@@ -179,6 +186,14 @@ export default class DisplayAdministrationMenuPage {
    */
   get metadataGettingStartedSettings() {
     return this._page.container.querySelector('#metadata_getting_started_menu .row .main-cell-wrapper .main-cell button');
+  }
+
+  /**
+   * Return the pro teasing icon element
+   * @returns {{select: select}}
+   */
+  proTeasingIcon(menu) {
+    return this._page.container.querySelector(`#${menu} [data-testid="frame-svg"]`);
   }
 
 
@@ -265,6 +280,11 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the Password Expiry settings element */
   async gotoPasswordExpirySettings() {
     await this.click(this.passwordExpirySettings);
+  }
+
+  /** Click on the Password Policy settings element */
+  async gotoPasswordPolicySettings() {
+    await this.click(this.passwordPolicySettings);
   }
 
   /** Click on the Content Types Encrypted Metadata element */

@@ -43,7 +43,7 @@ describe("DisplayAdministrationUserPassphrasePoliciesTeasing", () => {
     const expectedUserPassphrasePoliciesDescriptions = [
       "Mitigate risks associated with weak passphrases.",
       "Customise minimum length and complexity.",
-      "Improve overall account security."
+      "Improve overall user account security."
     ];
     await waitFor(() => {});
     expect(page.exists()).toBeTruthy();
