@@ -400,7 +400,7 @@ class DisplayScimSettingsAdministration extends Component {
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="enabled"
                     onChange={this.handleToggleEnabled} checked={this.state.enabled} disabled={this.hasAllInputDisabled()}
                     id="scimSettingsToggle"/>
-                  <label htmlFor="scimSettingsToggle"><Trans>SCIM Settings</Trans></label>
+                  <label htmlFor="scimSettingsToggle"><Trans>SCIM</Trans></label>
                 </span>
               </h3>
               <p className="description">
@@ -473,7 +473,7 @@ class DisplayScimSettingsAdministration extends Component {
                         checked={false}
                         id="send-password-update-toggle-button"/>
                       <label className="text" htmlFor="send-password-update-toggle-button">
-                        <Trans>Groups (Not available).</Trans>
+                        <Trans>Groups (Not supported).</Trans>
                       </label>
                     </span>
                   </div>
