@@ -430,7 +430,7 @@ class DisplayScimSettingsAdministration extends Component {
                         className="fluid form-element"
                         autoComplete="off"
                         name="scim_secret_token"
-                        value={this.state.settings.secret_token}
+                        value={this.state.settings.secret_token ? this.state.settings.secret_token : this.generateScimSecretToken()}
                         preview={true}
                         disabled={!this.state.settings.secret_token}
                       />
