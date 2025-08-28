@@ -15,8 +15,10 @@
 /**
  * Unit tests on CardItem in regard of specifications
  */
+jest.mock("../../../img/svg/Frame.svg", () => () => <svg data-testid="frame-svg" />);
 import React from "react";
 import CardItemPage from "./CardItem.test.page";
+import {waitFor} from "@testing-library/dom";
 
 describe("Card Item", () => {
   it("should display the card with and icon, a title, a description and be able to be clicked", () => {
@@ -51,5 +53,39 @@ describe("Card Item", () => {
     const page = new CardItemPage(props);
 
     expect(page.description).toBeNull();
+  });
+
+  it("should display the card Pro teasing icon if proTeasing is true", async() => {
+    expect.assertions(1);
+
+    const props = {
+      icon: <svg id="icon"></svg>,
+      title: "test",
+      description: "This is the description",
+      onClick: jest.fn(),
+      proTeasing: true,
+    };
+
+    const page = new CardItemPage(props);
+    await waitFor(() => {});
+
+    expect(page.proTeasingIcon).not.toBeNull();
+  });
+
+  it("should not display the card Pro teasing icon if proTeasing is false", async() => {
+    expect.assertions(1);
+
+    const props = {
+      icon: <svg id="icon"></svg>,
+      title: "test",
+      description: "This is the description",
+      onClick: jest.fn(),
+      proTeasing: false,
+    };
+
+    const page = new CardItemPage(props);
+    await waitFor(() => {});
+
+    expect(page.proTeasingIcon).toBeNull();
   });
 });

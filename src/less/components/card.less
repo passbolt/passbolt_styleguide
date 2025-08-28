@@ -25,48 +25,38 @@ button.card {
     }
 
     .card-information {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      gap: .2rem;
-      flex: 1 0 0;
-      max-width: 100%;
-
-      .title {
-        font-size: 1.4rem;
-        font-weight: 700;
+      .title-wrapper {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
         max-width: 100%;
-        .ellipsis();
 
+  .title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    max-width: 100%;
+    position: relative;
+    .ellipsis();
 
-        &.is-beta {
-          position: relative;
-          max-width: 18.1rem; // 22rem - 3.9rem for the beta pill
-          padding-right: 4.7rem;
-
-            .chips {
-                position: absolute;
-                right: 0;
-                margin-top: .3rem;
-            }
-        }
-      }
-
-
-      .title.is-beta {
-        position: relative;
-        max-width: 18.1rem; // 22rem - 3.9rem for the beta pill
-        padding-right: 4.7rem;
-
-        .chips {
-            position: absolute;
-            right: 0;
-            margin-top: .3rem;
-        }
+    .chips {
+      position: absolute;
+      right: -4.7rem; // adjust if pill overlaps FrameSVG
+      top: 0;
+      margin-left: .4rem;
     }
+  }
 
-      .info {
+  svg {
+    width: 1.6rem;
+    height: 1.6rem;
+    flex-shrink: 0;
+  }
+
+  &.with-pill .title {
+    padding-right: 4.7rem; // prevent overlap with pill
+  }
+}
+  .info {
         font-size: 1.2rem;
         line-height: normal;
         color: var(--Text-and-icons-Secondary-text);
@@ -78,7 +68,6 @@ button.card {
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         white-space: normal;
-
       }
     }
   }
