@@ -26,7 +26,7 @@ describe('DisplayScimSettingsAdministration', () => {
 
   it('should display the title and description', () => {
     expect.assertions(2);
-    expect(page.title).toBe('SCIM Settings');
+    expect(page.title).toBe('SCIM');
     expect(page.description).toBe('SCIM is a standard protocol that automates user provisioning and deprovisioning with identity providers.');
   });
 
