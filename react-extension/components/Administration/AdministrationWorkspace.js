@@ -56,6 +56,7 @@ import DisplayContentTypesAllowedContentTypesAdministration from "./DisplayConte
 import AdministrationHomePage from "./HomePage/AdministrationHomePage.js";
 import WorkspaceSwitcher, {WORKSPACE_ENUM} from "../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher.js";
 import DisplayAdministrationMetadataGettingStarted from "./DisplayAdministrationMetadataGettingStarted/DisplayAdministrationMetadataGettingStarted.js";
+import DisplayScimSettingsAdministration from "./DisplayScimSettingsAdministration/DisplayScimSettingsAdministration.js";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -236,6 +237,13 @@ class AdministrationWorkspace extends Component {
     return AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
+  /**
+   * If SCIM is selected
+   * @returns {boolean}
+   */
+  isScimSelected() {
+    return AdministrationWorkspaceMenuTypes.SCIM === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
 
   /**
    * Handle go back to resource workspace
@@ -374,11 +382,16 @@ class AdministrationWorkspace extends Component {
                       this.isGetStartedMetadataSelected() &&
                       <DisplayAdministrationMetadataGettingStarted/>
                     }
+                    {
+                      this.isScimSelected() &&
+                      <DisplayScimSettingsAdministration/>
+                    }
                   </div>
                 </div>
                 <Switch>
                   <Route exact path={[
-                    "/app/administration"
+                    "/app/administration",
+                    "/app/administration/user-provisionning/scim" // to be removed when documentation will be written
                   ]}/>
                   <Route>
                     <div className="help-panel">

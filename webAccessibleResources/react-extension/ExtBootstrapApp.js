@@ -117,6 +117,7 @@ class ExtBootstrapApp extends Component {
               "/app/administration/migrate-metadata",
               "/app/administration/allow-content-types",
               "/app/administration/content-types/metadata-getting-started",
+              "/app/administration/user-provisionning/scim",
               "/app/folders/view/:filterByFolderId",
               "/app/groups/view/:selectedGroupId",
               "/app/groups/edit/:selectedGroupId",

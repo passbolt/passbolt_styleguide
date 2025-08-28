@@ -98,6 +98,16 @@
                     margin-bottom: 0;
                   }
               }
+          .input-wrapper {
+              .button-inline {
+                  display: flex;
+                  gap: 0.8rem;
+
+                  .input {
+                      flex: 1;
+                  }
+              }
+          }
           }
         }
 
@@ -222,43 +232,4 @@
       }
     }
   }
-}
-
-// PRO teasing pages styles
-.password-policies-settings-teasing,
-.user-passphrase-policies-settings-teasing,
-.recover-account-settings-teasing,
-.third-party-provider-settings-teasing {
-    h3#password-policies-settings-title,
-    h3#user-passphrase-policies-title,
-    h3#recover-account-settings-title,
-    h3#third-party-provider-settings-title {
-        border-bottom: .1rem solid var(--Workspace-Dividers);
-    }
-
-    .password-policies-info,
-    .user-passphrase-policies-info,
-    .recover-account-info,
-    .third-party-provider-settings-info {
-        display: flex;
-        padding: 1.2rem;
-        align-items: flex-start;
-        gap: 1.2rem;
-        align-self: stretch;
-        border-radius: var(--Section-border-radius, 0.5rem);
-        background: var(--Action-button-Action-button-background, #F7F7F7);
-        justify-content: space-between;
-    }
-
-    p {
-        margin-top: 1.6rem;
-    }
-
-    li {
-        padding: 0.3rem;
-    }
-
-    li > :first-child {
-        margin-right: 1rem;
-    }
 }
