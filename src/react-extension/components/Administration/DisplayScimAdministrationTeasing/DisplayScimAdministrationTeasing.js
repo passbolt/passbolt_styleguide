@@ -15,11 +15,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {createSafePortal} from "../../../../shared/utils/portals";
-import BuoySVG from "../../../../img/svg/buoy.svg";
 import RedCheck from "../../../../img/svg/red_check.svg";
 
-class ManageAccountRecoveryAdministrationSettingsTeasing extends React.Component {
+class DisplayScimAdministrationTeasing extends React.Component {
   /**
    * Render the component
    * @returns {JSX}
@@ -27,15 +25,15 @@ class ManageAccountRecoveryAdministrationSettingsTeasing extends React.Component
   render() {
     return (
       <div className="row">
-        <div className="recover-account-settings-teasing main-column">
+        <div className="scim-teasing main-column">
           <div className="main-content">
-            <h3 className="title"id="recover-account-settings-title"><Trans>Account Recovery</Trans></h3>
-            <p><Trans>Help users to recover their accounts.</Trans></p>
-            <div className="recover-account-info">
-              <ul className="recover-account-description">
-                <li><RedCheck/><Trans>In case of passphrase loss.</Trans></li>
-                <li><RedCheck/><Trans>In case of private key loss.</Trans></li>
-                <li><RedCheck/><Trans>Configurable with an Organisation Recovery Key.</Trans></li>
+            <h3 className="title" id="scim-title"><Trans>SCIM</Trans></h3>
+            <p><Trans>Automate user identity management and provisioning via standardised SCIM integration.</Trans></p>
+            <div className="scim-info">
+              <ul className="scim-description">
+                <li><RedCheck/><Trans>Efficiently manage user identities in the cloud.</Trans></li>
+                <li><RedCheck/><Trans>Simplify onboarding and offboarding processes.</Trans></li>
+                <li><RedCheck/><Trans>Reduce manual administrative overhead and errors.</Trans></li>
               </ul>
               <div>
                 <a className="button primary" href="https://www.passbolt.com/contact/sales?utm_campaign=21060976-CE%20to%20Pro&utm_source=product" target="_blank" rel="noopener noreferrer"><Trans>Upgrade to Passbolt Pro</Trans></a>
@@ -43,25 +41,26 @@ class ManageAccountRecoveryAdministrationSettingsTeasing extends React.Component
             </div>
           </div>
         </div>
-        {createSafePortal(
+        {/* TODO: Uncomment when we have the documentation ready, until then the help-panel will be hidden for SCIM*/}
+        {/* {createSafePortal(
           <div className="sidebar-help-section">
             <h3><Trans>Need some help?</Trans></h3>
-            <p><Trans>For more information about account recovery, checkout the dedicated page on the help website.</Trans></p>
-            <a className="button" href="https://passbolt.com/docs/admin/authentication/account-recovery/" target="_blank" rel="noopener noreferrer">
-              <BuoySVG />
+            <p><Trans>For more information about SCIM, checkout the dedicated page on the help website.</Trans></p>
+            <a className="button" href="https://www.passbolt.com/docs/" target="_blank" rel="noopener noreferrer">
+              <FileSVG />
               <span><Trans>Read the documentation</Trans></span>
             </a>
           </div>,
           document.getElementById("administration-help-panel")
-        )}
+        )} */}
       </div>
     );
   }
 }
 
-ManageAccountRecoveryAdministrationSettingsTeasing.propTypes = {
+DisplayScimAdministrationTeasing.propTypes = {
   context: PropTypes.object, // Application context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(ManageAccountRecoveryAdministrationSettingsTeasing));
+export default withAppContext(withTranslation('common')(DisplayScimAdministrationTeasing));
