@@ -353,7 +353,7 @@
   "Default value found for security.salt": "Znaleziono domyślną wartość dla security.salt",
   "Define the behaviour when existing synchronized users are removed from the users directory": "Zdefiniuj zachowanie po usunięciu istniejących zsynchronizowanych użytkowników z katalogu użytkowników",
   "Define the default language of the organisation.": "Zdefiniuj domyślny język organizacji.",
-  "Define the minimal entropy for the users' private key passphrase.": "Define the minimal entropy for the users' private key passphrase.",
+  "Define the minimal entropy for the users' private key passphrase.": "Zdefiniuj minimalną entropię dla hasła zabezpieczającego klucz prywatny użytkownika.",
   "Define the strategy to enable new resource types and encrypted metadata.": "Define the strategy to enable new resource types and encrypted metadata.",
   "Define the strategy to manage and migrate the legacy items.": "Określ strategię zarządzania i migrowania przestarzałych elementów.",
   "Define UI level access controls for the user role.": "Define UI level access controls for the user role.",
