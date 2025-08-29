@@ -33,6 +33,7 @@ import MFAPolicySVG from "../../../../img/svg/mfa_policy.svg";
 import SelfRegisterSVG from "../../../../img/svg/self_register.svg";
 import LDAPSVG from "../../../../img/svg/ldap.svg";
 import EmailServerSVG from "../../../../img/svg/email_server.svg";
+import ScimSVG from "../../../../img/svg/scim.svg";
 import RBACSVG from "../../../../img/svg/rbac.svg";
 import InternationalSVG from "../../../../img/svg/international.svg";
 import HeartPulseSVG from "../../../../img/svg/heart_pulse.svg";
@@ -190,6 +191,12 @@ class AdministrationHomePage extends React.PureComponent {
       description: this.props.t("Enable users  to enrol without prior admin invitation."),
       redirectTo: this.props.navigationContext.onGoToAdministrationSelfRegistrationRequested,
       flag: AdministrationWorkspaceMenuTypes.SELF_REGISTRATION,
+    }, {
+      icon: <ScimSVG/>,
+      title: this.props.t("SCIM"),
+      description: this.props.t("Configure the System for Cross-domain Identity Management."),
+      redirectTo: this.props.navigationContext.onGoToAdministrationScimRequested,
+      flag: AdministrationWorkspaceMenuTypes.SCIM,
     }, {
       icon: <EmailServerSVG/>,
       title: this.props.t("Email server"),
