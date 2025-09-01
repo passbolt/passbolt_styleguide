@@ -59,8 +59,9 @@ class InFormCallToActionField {
    * Default constructor
    * @param field The DOM element
    * @param fieldType The type of field
+   * @param shadowRoot The shadow root
    */
-  constructor(field, fieldType) {
+  constructor(field, fieldType, shadowRoot) {
     /** The field to which the in-form is attached */
     this.field = field;
     /** Type of the field ("username" or "password") */
@@ -75,6 +76,8 @@ class InFormCallToActionField {
     this.callToActionClickWatcher = null;
     /** In-form call-to-action click listener callback */
     this.callToActionClickCallback = null;
+
+    this.shadowRoot = shadowRoot;
 
     this.bindCallbacks();
     this.handleInsertionEvent();
@@ -118,7 +121,7 @@ class InFormCallToActionField {
    * Insert an in-form call-to-action iframe
    */
   async insertInformCallToActionIframe() {
-    const iframes = document.querySelectorAll('iframe');
+    const iframes = this.shadowRoot.querySelectorAll('iframe');
     // Use of Array prototype some method cause NodeList is not an array !
     const iframeId = this.iframeId;
     const isIframeAlreadyInserted = Array.prototype.some.call(iframes, iframe => iframe.id === iframeId);
@@ -137,7 +140,7 @@ class InFormCallToActionField {
     const {top, left} = this.calculateFieldPosition();
     const portId = await port.request("passbolt.port.generate-id", "InFormCallToAction");
     const iframe = document.createElement('iframe');
-    document.body.appendChild(iframe);
+    this.shadowRoot.appendChild(iframe);
     const browserExtensionUrl = browser.runtime.getURL("/");
     iframe.id = this.iframeId;
     iframe.style.position = "fixed";
@@ -147,7 +150,6 @@ class InFormCallToActionField {
     iframe.style.border = "none";
     iframe.style.width = '18px';
     iframe.style.height = '18px';
-    iframe.style.zIndex = "123456";  // For you Yahoo with love
     iframe.style.colorScheme = "auto"; // To have the transparency on dark theme
     iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-call-to-action.html?passbolt=${portId}`;
     return iframe;
@@ -205,7 +207,7 @@ class InFormCallToActionField {
      */
     this.callToActionClickWatcher = setInterval(() => {
       // Check if a click has been applied on some iframe
-      const elem = document.activeElement;
+      const elem = this.shadowRoot.activeElement;
       if (elem && elem.tagName === 'IFRAME' && elem.id === this.iframeId) {
         this.field.focus();
         this.callToActionClickCallback();
@@ -246,7 +248,7 @@ class InFormCallToActionField {
    * @param event The mouse-out event
    */
   removeInFormCallToActionWhenMouseOut(event) {
-    const isNotCallToActionIframe = event.relatedTarget && event.relatedTarget.id !== this.iframeId;
+    const isNotCallToActionIframe = event.relatedTarget !== this.shadowRoot.host;
     const isActiveElementAnAuthenticationField = document.activeElement === this.field;
     if (isNotCallToActionIframe && !isActiveElementAnAuthenticationField) {
       this.removeCallToActionIframe();
@@ -257,7 +259,7 @@ class InFormCallToActionField {
    * Remove the call-to-action (iframe)
    */
   removeCallToActionIframe() {
-    const iframes = document.querySelectorAll('iframe');
+    const iframes = this.shadowRoot.querySelectorAll('iframe');
     iframes.forEach(iframe => {
       const identifierToMatch = this.iframeId;
       if (iframe.id === identifierToMatch) {

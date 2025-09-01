@@ -99,17 +99,10 @@ export default class InformManagerPage {
   }
 
   /**
-   * Returns the iframe call to action
-   */
-  get iframesCallToAction() {
-    return document.querySelector('iframe');
-  }
-
-  /**
    * Returns the iframe length
    */
   get iframesLength() {
-    return document.querySelectorAll('iframe').length;
+    return InFormManager.shadowRoot.querySelectorAll('iframe').length;
   }
 
   /** Blur on the username element */

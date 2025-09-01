@@ -26,7 +26,8 @@ import {
   domElementLoginWithIdAttributeBenutzerkennung,
   domElementLoginWithIdAttributeBenutzername,
   domElementLoginWithIdAttributeEmail,
-  domElementLoginWithIdAttributeLogin, domElementLoginWithIdAttributeLogto,
+  domElementLoginWithIdAttributeLogin,
+  domElementLoginWithIdAttributeLogto,
   domElementLoginWithIdAttributeUsername,
   domElementLoginWithNameAttributeBenutzerkennung,
   domElementLoginWithNameAttributeBenutzername,
@@ -74,6 +75,26 @@ beforeEach(() => {
 describe("InformManager", () => {
   // mock port in window
   initializeWindow();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    // Force to true as Jest do not provide opacity value
+    jest.spyOn(InFormManager, "isPageNotVisible").mockImplementation(() => false);
+    /** Mock create element to add a content window property in the iframe due to jest issue with iframe in shadow dom **/
+    const  div = document.createElement("div");
+    const  iframe = document.createElement("iframe");
+    jest.spyOn(document, "createElement").mockImplementation(elementName => {
+      if (elementName === "div") {
+        return div.cloneNode();
+      } else if (elementName === "iframe") {
+        const iframeMock = iframe.cloneNode();
+        Object.defineProperty(iframeMock, "contentWindow", {
+          value: {},
+        });
+        return iframeMock;
+      }
+    });
+  });
 
   afterEach(() => {
     InFormManager.destroy();
@@ -1051,19 +1072,19 @@ describe("InformManager", () => {
     // eslint-disable-next-line no-unsanitized/property
     iframe.contentDocument.body.innerHTML = domElementLoginWithIdAttributeLogin;
     const informManager = new InformManagerPage();
-    expect(informManager.iframesLength).toBe(1);
+    expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsernameIframe();
-    expect(informManager.iframesLength).toBe(2);
+    expect(informManager.iframesLength).toBe(1);
     await informManager.clickOnInformCallToAction();
-    expect(informManager.iframesLength).toBe(2);
+    expect(informManager.iframesLength).toBe(1);
     await informManager.blurOnUsernameIframe();
-    expect(informManager.iframesLength).toBe(1);
+    expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnPasswordIframe();
-    expect(informManager.iframesLength).toBe(2);
-    await informManager.clickOnInformCallToAction(2);
-    expect(informManager.iframesLength).toBe(2);
-    await informManager.blurOnPasswordIframe();
     expect(informManager.iframesLength).toBe(1);
+    await informManager.clickOnInformCallToAction(1);
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnPasswordIframe();
+    expect(informManager.iframesLength).toBe(0);
   });
 
   it("As LU I should destroy inform on port specific message", async() => {
@@ -1077,6 +1098,57 @@ describe("InformManager", () => {
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
     await informManager.destroy();
+    expect(InFormManager.destroy).toHaveBeenCalledTimes(1);
+    expect(informManager.iframesLength).toBe(0);
+  });
+
+  it("As LU I should destroy inform if opacity of the body change", async() => {
+    expect.assertions(4);
+    // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
+    document.body.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
+    jest.spyOn(InFormManager, 'destroy');
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    document.body.style.opacity = "0.3";
+    await informManager.focusOnUsername();
+
+    expect(InFormManager.destroy).toHaveBeenCalledTimes(1);
+    expect(informManager.iframesLength).toBe(0);
+  });
+
+  it("As LU I should destroy inform if opacity of the html change", async() => {
+    expect.assertions(4);
+    // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
+    document.body.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
+    jest.spyOn(InFormManager, 'destroy');
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    document.documentElement.style.opacity = "0.3";
+    await informManager.focusOnUsername();
+
+    expect(InFormManager.destroy).toHaveBeenCalledTimes(1);
+    expect(informManager.iframesLength).toBe(0);
+  });
+
+  it("As LU I should destroy inform if opacity of the host change", async() => {
+    expect.assertions(4);
+    // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
+    document.body.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
+    jest.spyOn(InFormManager, 'destroy');
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    InFormManager.host.setAttribute('style', 'opacity: 0.3 !important');
+    await informManager.focusOnUsername();
+
     expect(InFormManager.destroy).toHaveBeenCalledTimes(1);
     expect(informManager.iframesLength).toBe(0);
   });
