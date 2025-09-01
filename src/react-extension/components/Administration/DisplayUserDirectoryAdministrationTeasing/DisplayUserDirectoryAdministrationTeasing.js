@@ -16,10 +16,13 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {createSafePortal} from "../../../../shared/utils/portals";
-import BuoySVG from "../../../../img/svg/buoy.svg";
+import FileTextSVG from "../../../../img/svg/file_text.svg";
 import RedCheck from "../../../../img/svg/red_check.svg";
 
-class ManageAccountRecoveryAdministrationSettingsTeasing extends React.Component {
+/**
+ * This component displays the User Directory for CE adminstrators
+ */
+class DisplayUserDirectoryAdministrationTeasing extends React.Component {
   /**
    * Render the component
    * @returns {JSX}
@@ -27,18 +30,18 @@ class ManageAccountRecoveryAdministrationSettingsTeasing extends React.Component
   render() {
     return (
       <div className="row">
-        <div className="recover-account-settings-teasing main-column">
+        <div className="ldap-settings-teasing main-column">
           <div className="main-content">
-            <h3 className="title"id="recover-account-settings-title"><Trans>Account Recovery</Trans></h3>
-            <p><Trans>Help users to recover their accounts.</Trans></p>
-            <div className="recover-account-info">
-              <ul className="recover-account-description">
-                <li><RedCheck/><Trans>In case of passphrase loss.</Trans></li>
-                <li><RedCheck/><Trans>In case of private key loss.</Trans></li>
-                <li><RedCheck/><Trans>Configurable with an Organisation Recovery Key.</Trans></li>
+            <h3 className="title" id="ldap-settings-title"><Trans>Users Directory</Trans></h3>
+            <p><Trans>Simplify user management provisioning through integration with existing directories.</Trans></p>
+            <div className="ldap-settings-info">
+              <ul className="ldap-settings-description">
+                <li><RedCheck/><Trans>Automate user onboarding and offboarding.</Trans></li>
+                <li><RedCheck/><Trans>Sync user attributes efficiently.</Trans></li>
+                <li><RedCheck/><Trans>Ensure data consistency and security compliance.</Trans></li>
               </ul>
               <div>
-                <a className="button primary" href="https://www.passbolt.com/contact/sales?utm_campaign=21060976-CE%20to%20Pro&utm_source=product" target="_blank" rel="noopener noreferrer"><Trans>Upgrade to Passbolt Pro</Trans></a>
+                <a className="button primary" href="https://www.passbolt.com/contact/pro/enterprise" target="_blank" rel="noopener noreferrer"><Trans>Upgrade to Passbolt Pro</Trans></a>
               </div>
             </div>
           </div>
@@ -46,9 +49,9 @@ class ManageAccountRecoveryAdministrationSettingsTeasing extends React.Component
         {createSafePortal(
           <div className="sidebar-help-section">
             <h3><Trans>Need some help?</Trans></h3>
-            <p><Trans>For more information about account recovery, checkout the dedicated page on the help website.</Trans></p>
-            <a className="button" href="https://passbolt.com/docs/admin/authentication/account-recovery/" target="_blank" rel="noopener noreferrer">
-              <BuoySVG />
+            <p><Trans>Check out our ldap configuration guide.</Trans></p>
+            <a className="button" href="https://www.passbolt.com/docs/admin/user-provisioning/users-directory/" target="_blank" rel="noopener noreferrer">
+              <FileTextSVG/>
               <span><Trans>Read the documentation</Trans></span>
             </a>
           </div>,
@@ -59,9 +62,9 @@ class ManageAccountRecoveryAdministrationSettingsTeasing extends React.Component
   }
 }
 
-ManageAccountRecoveryAdministrationSettingsTeasing.propTypes = {
-  context: PropTypes.object, // Application context
+DisplayUserDirectoryAdministrationTeasing.propTypes = {
+  context: PropTypes.any, // The application context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(ManageAccountRecoveryAdministrationSettingsTeasing));
+export default withAppContext(withTranslation('common')(DisplayUserDirectoryAdministrationTeasing));
