@@ -210,6 +210,7 @@
   "Are you sure you want to migrate the selected items to use encrypted metadata?": "Are you sure you want to migrate the selected items to use encrypted metadata?",
   "Are you sure?": "Are you sure?",
   "As soon as an administrator validates your request you will receive an email link to complete the process.": "As soon as an administrator validates your request you will receive an email link to complete the process.",
+  "Ask another administrator to share them with you to update the metadata keys settings.": "Ask another administrator to share them with you to update the metadata keys settings.",
   "At least 1 set of characters must be selected": "At least 1 set of characters must be selected",
   "At least one content type should be allowed": "At least one content type should be allowed",
   "Authentication": "Authentication",
@@ -1784,6 +1785,7 @@
   "You are about to move several folders.": "You are about to move several folders.",
   "You are about to move several items.": "You are about to move several items.",
   "You are about to move several resources.": "You are about to move several resources.",
+  "You are missing shared metadata keys.": "You are missing shared metadata keys.",
   "You are not member of any group. Wait for a group manager to add you in a group.": "You are not member of any group. Wait for a group manager to add you in a group.",
   "You are now ready to continue the setup on your phone.": "You are now ready to continue the setup on your phone.",
   "You can choose the default behaviour of multi factor authentication for all users.": "You can choose the default behaviour of multi factor authentication for all users.",
@@ -1844,6 +1846,6 @@
   "Your subscription key is valid and up to date!": "Your subscription key is valid and up to date!",
   "your subscription key will expire": "your subscription key will expire",
   "your subscription requires your attention. The stability of the application is at risk.": "your subscription requires your attention. The stability of the application is at risk.",
-  "Zero knowledge (Coming soon)": "Zero knowledge (Coming soon)",
+  "Zero knowledge": "Zero knowledge",
   "Zero-knowledge mode (More secure)": "Zero-knowledge mode (More secure)"
 }
