@@ -12,15 +12,25 @@
  * @since         4.10.0
  */
 
+import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
+import {v4 as uuidv4} from "uuid";
+
 /**
  * Build default metadata types settings.
  * @param {object} [data={}] Data to override
+ * @param {object} options
+ * @param {object} [options.withMetadataPrivateKeys = false] if true, set the armored_key field with `defaultArmoredKey()`
  * @returns {object}
  */
-export const defaultMetadataKeysSettingsDto = (data = {}) => {
+export const defaultMetadataKeysSettingsDto = (data = {}, options = {}) => {
   const defaultData = {
     allow_usage_of_personal_keys: true,
     zero_knowledge_key_share: false,
   };
+
+  if (!defaultData.metadata_private_keys && options?.withMetadataPrivateKeys) {
+    defaultData.metadata_private_keys = [defaultMetadataPrivateKeyDto({metadata_key_id: uuidv4()}, options?.withMetadataPrivateKeys)];
+  }
+
   return Object.assign(defaultData, data);
 };
