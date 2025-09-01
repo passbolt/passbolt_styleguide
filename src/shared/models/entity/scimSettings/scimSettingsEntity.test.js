@@ -19,7 +19,8 @@ import {
   minimalScimSettingsDto,
   scimSettingsDtoWithNullSecretToken,
   scimSettingsDtoWithInvalidSecretToken,
-  scimSettingsDtoWithInvalidSecretTokenLength
+  scimSettingsDtoWithInvalidSecretTokenLength,
+  scimSettingsDtoForUpdating
 } from "./scimSettingsEntity.test.data";
 import {v4 as uuidv4} from "uuid";
 import EntityValidationError from "../abstract/entityValidationError";
@@ -143,6 +144,57 @@ describe("ScimSettingsEntity", () => {
       const result = entity.toDto();
       expect(result.secret_token).toBeUndefined();
       expect(result.id).toBeUndefined();
+    });
+  });
+  describe("::createFromScimSettingsFind", () => {
+    it("should create a SCIM settings entity with valid DTO", () => {
+      expect.assertions(2);
+      const dto = scimSettingsDtoWithNullSecretToken();
+      const entity = ScimSettingsEntity.createFromScimSettingsFind(dto);
+      expect(entity.id).toBe(dto.id);
+      expect(entity.secretToken).toBe(ScimSettingsEntity.EMPTY_SECRET_VALUE);
+    });
+
+    it("should throw error if id is missing", () => {
+      expect.assertions(1);
+      const dto = minimalScimSettingsDto();
+      expect(() => ScimSettingsEntity.createFromScimSettingsFind(dto)).toThrow(EntityValidationError);
+    });
+
+    it("should throw error if secret_token is present", () => {
+      expect.assertions(1);
+      const dto = defaultScimSettingsDto();
+      expect(() => ScimSettingsEntity.createFromScimSettingsFind(dto)).toThrow(EntityValidationError);
+    });
+  });
+
+  describe("::createFromScimSettingsCreation", () => {
+    it("should create a SCIM settings entity with valid DTO", () => {
+      expect.assertions(1);
+      const dto = defaultScimSettingsDto();
+      const entity = ScimSettingsEntity.createFromScimSettingsCreation(dto);
+      expect(entity.secretToken).toBe(dto.secret_token);
+    });
+
+    it("should throw error if secret_token is missing", () => {
+      expect.assertions(1);
+      const dto = scimSettingsDtoWithNullSecretToken();
+      expect(() => ScimSettingsEntity.createFromScimSettingsCreation(dto)).toThrow(EntityValidationError);
+    });
+  });
+
+  describe("::createFromScimSettingsUpdate", () => {
+    it("should create a SCIM settings entity with valid DTO", () => {
+      expect.assertions(1);
+      const dto = scimSettingsDtoForUpdating();
+      const entity = ScimSettingsEntity.createFromScimSettingsUpdate(dto);
+      expect(entity.settingId).toBeNull();
+    });
+
+    it("should throw error if setting_id is present", () => {
+      expect.assertions(1);
+      const dto = defaultScimSettingsDto();
+      expect(() => ScimSettingsEntity.createFromScimSettingsUpdate(dto)).toThrow(EntityValidationError);
     });
   });
 });

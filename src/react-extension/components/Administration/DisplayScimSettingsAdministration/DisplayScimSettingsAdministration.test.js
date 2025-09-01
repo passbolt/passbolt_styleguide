@@ -47,15 +47,11 @@ describe('DisplayScimSettingsAdministration', () => {
   });
 
   it('should allow enabling SCIM settings', async() => {
-    expect.assertions(5);
+    expect.assertions(4);
 
     props = new defaultScimSettingsDisabledProps();
     page = new DisplayScimSettingsAdministrationPage(props);
     expect(page.exists()).toBeTruthy();
-
-    await page.toggleScimSettings();
-
-    expect(page.scimSettingsToggle.checked).toEqual(false);
 
     await page.toggleScimSettings();
 

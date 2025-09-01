@@ -145,4 +145,12 @@ describe("ScimSettingsFormEntity", () => {
       expect(result.id).toBeUndefined();
     });
   });
+  describe("::createFromDefault", () => {
+    it("should return the default settings", () => {
+      expect.assertions(1);
+      const uuid = uuidv4();
+      const entity = ScimSettingsFormEntity.createFromDefault(uuid);
+      expect(entity.scimUserId).toEqual(uuid);
+    });
+  });
 });

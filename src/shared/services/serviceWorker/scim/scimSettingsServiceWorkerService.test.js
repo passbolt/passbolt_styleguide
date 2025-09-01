@@ -19,7 +19,7 @@ import ScimSettingsServiceWorkerService, {
   SCIM_DISABLE_SETTINGS_EVENT
 } from "./scimSettingsServiceWorkerService";
 import {v4 as uuidv4} from "uuid";
-import {defaultScimSettingsDto, scimSettingsWithoutIdDto, scimSettingsWithSettingIdDto} from "./scimSettingsServiceWorkerService.test.data";
+import {defaultScimSettingsDto, scimSettingsWithoutIdDto} from "./scimSettingsServiceWorkerService.test.data";
 
 describe("ScimSettingsServiceWorkerService", () => {
   let portMock, service;
@@ -60,7 +60,7 @@ describe("ScimSettingsServiceWorkerService", () => {
 
   describe("saveSettings", () => {
     it("should create SCIM settings", async() => {
-      const settingsDto = scimSettingsWithSettingIdDto();
+      const settingsDto = defaultScimSettingsDto();
       const formSettings = new ScimSettingsEntity(settingsDto);
       portMock.request.mockResolvedValue(settingsDto);
 

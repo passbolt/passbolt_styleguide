@@ -48,6 +48,17 @@ export const scimSettingsDtoWithNullSecretToken = (data = {}) => ({
 });
 
 /**
+ * Returns a DTO object with null secret_token and setting_id
+ * @param {object} data
+ * @returns {object}
+ */
+export const scimSettingsDtoForUpdating = (data = {}) => ({
+  ...scimSettingsDtoWithNullSecretToken(data),
+  setting_id: null,
+});
+
+
+/**
  * Returns a DTO object with invalid secret_token pattern
  * @param {object} data
  * @returns {object}
