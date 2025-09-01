@@ -197,34 +197,43 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const allowContentType = ADMIN_URL_REGEXP.allowContentTypes.test(location);
     const gettingStarted = ADMIN_URL_REGEXP.gettingStarted.test(location);
 
+    const isMfaPolicyLocationTeasing = ADMIN_URL_REGEXP.mfaPolicyTeasing.test(location);
+    const isPasswordPoliciesLocationTeasing = ADMIN_URL_REGEXP.passwordPoliciesTeasing.test(location);
+    const isUserDirectoryLocationTeasing = ADMIN_URL_REGEXP.usersDirectoryTeasing.test(location);
+    const isSubscriptionLocationTeasing = ADMIN_URL_REGEXP.subscriptionTeasing.test(location);
+    const isAccountRecoveryLocationTeasing = ADMIN_URL_REGEXP.accountRecoveryTeasing.test(location);
+    const isUserPassphrasePoliciesTeasing = ADMIN_URL_REGEXP.userPassphrasePoliciesTeasing.test(location);
+    const isSsoTeasing = ADMIN_URL_REGEXP.ssoTeasing.test(location);
+
+
     let selectedAdministration;
     if (isAdminHomePageLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.HOME;
-    } else if (isMfaPolicyLocation) {
+    } else if (isMfaPolicyLocation || isMfaPolicyLocationTeasing) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.MFA_POLICY;
-    } else if (isPasswordPoliciesLocation) {
+    } else if (isPasswordPoliciesLocation || isPasswordPoliciesLocationTeasing) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES;
     } else if (isMfaLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.MFA;
-    } else if (isUserDirectoryLocation) {
+    } else if (isUserDirectoryLocation || isUserDirectoryLocationTeasing) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.USER_DIRECTORY;
     } else if (isEmailNotificationLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION;
-    } else if (isSubscriptionLocation) {
+    } else if (isSubscriptionLocation || isSubscriptionLocationTeasing) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SUBSCRIPTION;
     } else if (isInternationalizationLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION;
-    } else if (isAccountRecoveryLocation) {
+    } else if (isAccountRecoveryLocation || isAccountRecoveryLocationTeasing) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY;
     } else if (isSmtpSettingsLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SMTP_SETTINGS;
     } else if (isSelfRegistrationLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SELF_REGISTRATION;
-    } else if (isSso) {
+    } else if (isSso || isSsoTeasing) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SSO;
     } else if (rbac) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.RBAC;
-    } else if (isUserPassphrasePolicies) {
+    } else if (isUserPassphrasePolicies || isUserPassphrasePoliciesTeasing) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES;
     } else if (isPasswordExpirySettings) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY;
@@ -252,14 +261,12 @@ class AdministrationWorkspaceContextProvider extends React.Component {
 
     // the URL is supported, now check if the feature flag is enabled or not (except for email notification which doesn't have flag).
     const currentFeatureFlag = AdministrationWorkspaceFeatureFlag?.[selectedAdministration];
-
-    newState.selectedAdministration = currentFeatureFlag && !this.props.context.siteSettings.canIUse(currentFeatureFlag)
+    newState.selectedAdministration = currentFeatureFlag && !(this.props.context.siteSettings.canIUse(currentFeatureFlag) || (PRO_TEASING_MENUITEMS.includes(selectedAdministration) && this.props.context.siteSettings.isCeEdition))
       ? AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND
       : selectedAdministration;
 
     this.setState(newState);
   }
-
   /**
    * Set the display of the administration workspace action
    * @param administrationWorkspaceAction
@@ -391,17 +398,24 @@ const ADMIN_URL_REGEXP = {
   homePage: /^\/app\/administration\/?$/,
   mfa: /^\/app\/administration\/mfa\/?$/,
   mfaPolicy: /^\/app\/administration\/mfa-policy\/?$/,
+  mfaPolicyTeasing: /^\/app\/administration\/mfa-policy-teasing\/?$/,
   passwordPolicies: /^\/app\/administration\/password-policies\/?$/,
+  passwordPoliciesTeasing: /^\/app\/administration\/password-policies-teasing\/?$/,
   usersDirectory: /^\/app\/administration\/users-directory\/?$/,
+  usersDirectoryTeasing: /^\/app\/administration\/users-directory-teasing\/?$/,
   emailNotification: /^\/app\/administration\/email-notification\/?$/,
   subscription: /^\/app\/administration\/subscription\/?$/,
+  subscriptionTeasing: /^\/app\/administration\/subscription-teasing\/?$/,
   internationalization: /^\/app\/administration\/internationalization\/?$/,
   accountRecovery: /^\/app\/administration\/account-recovery\/?$/,
+  accountRecoveryTeasing: /^\/app\/administration\/account-recovery-teasing\/?$/,
   smtpSettings: /^\/app\/administration\/smtp-settings\/?$/,
   selfRegistration: /^\/app\/administration\/self-registration\/?$/,
   sso: /^\/app\/administration\/sso\/?$/,
+  ssoTeasing: /^\/app\/administration\/sso-teasing\/?$/,
   rbac: /^\/app\/administration\/rbacs\/?$/,
   userPassphrasePolicies: /^\/app\/administration\/user-passphrase-policies\/?$/,
+  userPassphrasePoliciesTeasing: /^\/app\/administration\/user-passphrase-policies-teasing\/?$/,
   passwordExpirySettings: /^\/app\/administration\/password-expiry\/?$/,
   healthcheck: /^\/app\/administration\/healthcheck\/?$/,
   contentTypesEncryptedMetadata: /^\/app\/administration\/content-types\/metadata\/?$/,
@@ -410,3 +424,16 @@ const ADMIN_URL_REGEXP = {
   allowContentTypes: /^\/app\/administration\/allow-content-types\/?$/,
   gettingStarted: /^\/app\/administration\/content-types\/metadata-getting-started\/?$/,
 };
+
+/**
+ * Following menu items should be displayed for CE Admins for PRO Teasing
+ */
+export const PRO_TEASING_MENUITEMS = [
+  AdministrationWorkspaceMenuTypes.SUBSCRIPTION,
+  AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES,
+  AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES,
+  AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY,
+  AdministrationWorkspaceMenuTypes.SSO,
+  AdministrationWorkspaceMenuTypes.MFA_POLICY,
+  AdministrationWorkspaceMenuTypes.USER_DIRECTORY
+];
