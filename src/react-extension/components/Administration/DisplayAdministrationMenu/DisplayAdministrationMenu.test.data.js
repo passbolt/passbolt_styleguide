@@ -22,8 +22,8 @@ export function defaultAppContext(appContext) {
  * Default props
  * @returns {{resource: {id: string, name: string}}}
  */
-export function defaultProps(data = {}, isCeEdition = false) {
-  const siteSettingsValue = isCeEdition ? siteSettingsCe : siteSettingsPro;
+export function defaultProps(data = {}, isCommunityEdition = false) {
+  const siteSettingsValue = isCommunityEdition ? siteSettingsCe : siteSettingsPro;
   const siteSettings = new SiteSettings(siteSettingsValue);
   return Object.assign({
     context: {
@@ -59,6 +59,7 @@ export function defaultProps(data = {}, isCeEdition = false) {
       onGoToAdministrationUserPassphrasePoliciesRequestedTeasing: jest.fn(),
       onGoToAdministrationPasswordPoliciesRequestedTeasing: jest.fn(),
       onGoToAdministrationScimRequested: jest.fn(),
+      onGoToAdministrationScimRequestedTeasing: jest.fn()
     }
   }, data);
 }

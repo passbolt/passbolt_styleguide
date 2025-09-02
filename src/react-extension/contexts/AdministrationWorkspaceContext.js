@@ -205,6 +205,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const isAccountRecoveryLocationTeasing = ADMIN_URL_REGEXP.accountRecoveryTeasing.test(location);
     const isUserPassphrasePoliciesTeasing = ADMIN_URL_REGEXP.userPassphrasePoliciesTeasing.test(location);
     const isSsoTeasing = ADMIN_URL_REGEXP.ssoTeasing.test(location);
+    const scimTeasing = ADMIN_URL_REGEXP.scimTeasing.test(location);
 
 
     let selectedAdministration;
@@ -250,7 +251,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES;
     } else if (gettingStarted) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED;
-    } else if (scim) {
+    } else if (scim || scimTeasing) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SCIM;
     }
 
@@ -264,7 +265,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
 
     // the URL is supported, now check if the feature flag is enabled or not (except for email notification which doesn't have flag).
     const currentFeatureFlag = AdministrationWorkspaceFeatureFlag?.[selectedAdministration];
-    newState.selectedAdministration = currentFeatureFlag && !(this.props.context.siteSettings.canIUse(currentFeatureFlag) || (PRO_TEASING_MENUITEMS.includes(selectedAdministration) && this.props.context.siteSettings.isCeEdition))
+    newState.selectedAdministration = currentFeatureFlag && !(this.props.context.siteSettings.canIUse(currentFeatureFlag) || (PRO_TEASING_MENUITEMS.includes(selectedAdministration) && this.props.context.siteSettings.isCommunityEdition))
       ? AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND
       : selectedAdministration;
 
@@ -429,6 +430,7 @@ const ADMIN_URL_REGEXP = {
   allowContentTypes: /^\/app\/administration\/allow-content-types\/?$/,
   gettingStarted: /^\/app\/administration\/content-types\/metadata-getting-started\/?$/,
   scim: /^\/app\/administration\/user-provisionning\/scim\/?$/,
+  scimTeasing: /^\/app\/administration\/scim-teasing\/?$/,
 };
 
 /**
@@ -441,5 +443,6 @@ export const PRO_TEASING_MENUITEMS = [
   AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY,
   AdministrationWorkspaceMenuTypes.SSO,
   AdministrationWorkspaceMenuTypes.MFA_POLICY,
-  AdministrationWorkspaceMenuTypes.USER_DIRECTORY
+  AdministrationWorkspaceMenuTypes.USER_DIRECTORY,
+  AdministrationWorkspaceMenuTypes.SCIM
 ];

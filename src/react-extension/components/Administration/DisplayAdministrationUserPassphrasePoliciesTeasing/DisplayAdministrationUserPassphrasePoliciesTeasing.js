@@ -18,6 +18,7 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {createSafePortal} from "../../../../shared/utils/portals";
 import BuoySVG from "../../../../img/svg/buoy.svg";
 import RedCheck from "../../../../img/svg/red_check.svg";
+import FrameSVG from "../../../../img/svg/Frame.svg";
 
 class DisplayAdministrationUserPassphrasePoliciesTeasing extends React.Component {
   /**
@@ -29,7 +30,7 @@ class DisplayAdministrationUserPassphrasePoliciesTeasing extends React.Component
       <div className="row">
         <div className="user-passphrase-policies-settings-teasing main-column">
           <div className="main-content">
-            <h3 id="user-passphrase-policies-title" className="title"><Trans>User Passphrase Policies</Trans></h3>
+            <h3 id="user-passphrase-policies-title" className="title"><Trans>User Passphrase Policies</Trans><FrameSVG className="pro-teasing-icon"/></h3>
             <p><Trans>Enforce secure user passphrases to protect account access.</Trans></p>
             <div className="user-passphrase-policies-info">
               <ul className="user-passphrase-policies-description">

@@ -53,19 +53,19 @@ describe("SiteSettings", () => {
     });
   });
 
-  describe("::isCeEdition", () => {
+  describe("::isCommunityEdition", () => {
     it("should return true if app is Community Edition", () => {
       expect.assertions(1);
       const settingsDto = defaultCeSiteSettings();
       const settings = new SiteSettings(settingsDto);
-      expect(settings.isCeEdition).toStrictEqual(true);
+      expect(settings.isCommunityEdition).toStrictEqual(true);
     });
 
     it("should return false if app is Pro Edition", () => {
       expect.assertions(1);
       const settingsDto = defaultProSiteSettings();
       const settings = new SiteSettings(settingsDto);
-      expect(settings.isCeEdition).toStrictEqual(false);
+      expect(settings.isCommunityEdition).toStrictEqual(false);
     });
   });
 });

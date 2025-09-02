@@ -18,6 +18,7 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {createSafePortal} from "../../../../shared/utils/portals";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
 import RedCheck from "../../../../img/svg/red_check.svg";
+import FrameSVG from "../../../../img/svg/Frame.svg";
 
 /**
  * This component displays the SSO administration settings for CE
@@ -32,7 +33,7 @@ class ManageSsoSettingsTeasing extends React.Component {
       <div className="row">
         <div className="third-party-provider-settings-teasing sso-settings main-column">
           <div className="main-content">
-            <h3 className="title" id="third-party-provider-settings-title"><Trans>Single Sign-On</Trans></h3>
+            <h3 className="title" id="third-party-provider-settings-title"><Trans>Single Sign-On</Trans><FrameSVG className="pro-teasing-icon"/></h3>
             <p><Trans>Simplify secure access through integration with identity providers.</Trans></p>
             <div className="third-party-provider-settings-info">
               <ul className="third-party-provider-settings-description">

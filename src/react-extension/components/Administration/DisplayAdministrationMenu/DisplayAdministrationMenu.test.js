@@ -584,7 +584,7 @@ describe("As AD I can see the administration menu", () => {
       expect(page.menuSelected).toBe('Subscription');
       expect(props.navigationContext.onGoToAdministrationSubscriptionRequestedTeasing).toHaveBeenCalled();
       await waitFor(() => {});
-      expect(page.proTeasingIcon).not.toBeNull();
+      expect(page.proTeasingIcon('subscription_menu')).toBeNull();
     });
 
     it('If the feature flag is false, the menu should still be visible', async() => {
@@ -600,7 +600,7 @@ describe("As AD I can see the administration menu", () => {
       expect(page.menuSelected).toBe('Subscription');
       expect(props.navigationContext.onGoToAdministrationSubscriptionRequestedTeasing).toHaveBeenCalled();
       await waitFor(() => {});
-      expect(page.proTeasingIcon).not.toBeNull();
+      expect(page.proTeasingIcon('subscription_menu')).toBeNull();
     });
   });
 
@@ -731,6 +731,39 @@ describe("As AD I can see the administration menu", () => {
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.scimSettings).toBeNull();
+    });
+  });
+
+  describe("As a signed-in CE administrator on the administration workspace, I can see the SCIM option in the left-side bar with pro teasing icon", () => {
+    it('If the feature flag is true, the menu should be visible', async() => {
+      expect.assertions(5);
+      const props = defaultProps({
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SCIM}
+      }, true); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      await page.gotoScimSettings();
+      expect(page.scimSettings).toBeTruthy();
+      expect(page.menuSelected).toBe('SCIM');
+      expect(props.navigationContext.onGoToAdministrationScimRequestedTeasing).toHaveBeenCalled();
+      await waitFor(() => {});
+      expect(page.proTeasingIcon('scim_menu')).not.toBeNull();
+    });
+
+    it('If the feature flag is false, the menu should still be visible', async() => {
+      expect.assertions(5);
+      const props = defaultProps({
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SCIM}
+      }, true); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "scim");
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      await page.gotoScimSettings();
+      expect(page.scimSettings).toBeTruthy();
+      expect(page.menuSelected).toBe('SCIM');
+      expect(props.navigationContext.onGoToAdministrationScimRequestedTeasing).toHaveBeenCalled();
+      await waitFor(() => {});
+      expect(page.proTeasingIcon('scim_menu')).not.toBeNull();
     });
   });
 });

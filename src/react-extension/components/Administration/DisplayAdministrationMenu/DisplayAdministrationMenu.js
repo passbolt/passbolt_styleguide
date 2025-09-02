@@ -70,15 +70,15 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   isProTeasingMenuItem(item) {
-    return (PRO_TEASING_MENUITEMS.includes(item) && this.isCeEdition());
+    return (PRO_TEASING_MENUITEMS.includes(item) && this.isCommunityEdition());
   }
 
   /**
    * Returns true if CE; false if PRO
    * @returns {boolean}
    */
-  isCeEdition() {
-    return this.props.context.siteSettings.isCeEdition;
+  isCommunityEdition() {
+    return this.props.context.siteSettings.isCommunityEdition;
   }
 
   /**
@@ -206,7 +206,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseScim() {
-    return this.canIUse('scim');
+    return this.canIUse('scim')  || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.SCIM);
   }
 
   /**
@@ -267,7 +267,7 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the user directory menu
    */
   handleUserDirectoryClick() {
-    this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationUsersDirectoryRequestedTeasing() : this.props.navigationContext.onGoToAdministrationUsersDirectoryRequested();
+    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationUsersDirectoryRequestedTeasing() : this.props.navigationContext.onGoToAdministrationUsersDirectoryRequested();
   }
 
   /**
@@ -281,7 +281,7 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the subscription menu
    */
   handleSubscriptionClick() {
-    this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationSubscriptionRequestedTeasing() : this.props.navigationContext.onGoToAdministrationSubscriptionRequested();
+    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationSubscriptionRequestedTeasing() : this.props.navigationContext.onGoToAdministrationSubscriptionRequested();
   }
 
   /**
@@ -295,7 +295,7 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the account recovery menu
    */
   handleAccountRecoveryClick() {
-    this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationAccountRecoveryRequestedTeasing() : this.props.navigationContext.onGoToAdministrationAccountRecoveryRequested();
+    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationAccountRecoveryRequestedTeasing() : this.props.navigationContext.onGoToAdministrationAccountRecoveryRequested();
   }
 
   /**
@@ -316,7 +316,7 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the sso menu
    */
   handleSsoClick() {
-    this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationSsoRequestedTeasing() : this.props.navigationContext.onGoToAdministrationSsoRequested();
+    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationSsoRequestedTeasing() : this.props.navigationContext.onGoToAdministrationSsoRequested();
   }
 
   /**
@@ -330,21 +330,21 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the Mfa policy settings menu
    */
   handleMfaPolicyClick() {
-    this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationMfaPolicyRequestedTeasing() : this.props.navigationContext.onGoToAdministrationMfaPolicyRequested();
+    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationMfaPolicyRequestedTeasing() : this.props.navigationContext.onGoToAdministrationMfaPolicyRequested();
   }
 
   /**
    * Handle when the user click on the Password policies settings menu
    */
   handlePasswordPoliciesClick() {
-    this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequestedTeasing() : this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequested();
+    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequestedTeasing() : this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequested();
   }
 
   /**
    * Handle when the user click on the User Passphrase Policies menu
    */
   handleUserPassphrasePoliciesClick() {
-    this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequestedTeasing() : this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequested();
+    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequestedTeasing() : this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequested();
   }
 
   /**
@@ -386,7 +386,7 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the SCIM settings menu
    */
   handleScimClick() {
-    this.props.navigationContext.onGoToAdministrationScimRequested();
+    this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationScimRequestedTeasing() : this.props.navigationContext.onGoToAdministrationScimRequested();
   }
 
   /**
@@ -668,7 +668,6 @@ class DisplayAdministrationMenu extends React.Component {
                       <div className="main-cell">
                         <button className="link no-border" type="button" onClick={this.handleSubscriptionClick}>
                           <span><Trans>Subscription</Trans></span>
-                          { this.isCeEdition() && <FrameSVG className="pro-teasing-icon"/> }
                         </button>
                       </div>
                     </div>
@@ -791,7 +790,7 @@ class DisplayAdministrationMenu extends React.Component {
                             <div className={`row ${this.isPasswordPoliciesSelected() ? "selected" : ""}`}>
                               <div className="main-cell-wrapper">
                                 <div className="main-cell">
-                                  <button className="link no-border" type="button" onClick={this.handlePasswordPoliciesClick}><span><Trans>Password Policy</Trans></span>{ this.isCeEdition() && <FrameSVG className="pro-teasing-icon"/> }</button>
+                                  <button className="link no-border" type="button" onClick={this.handlePasswordPoliciesClick}><span><Trans>Password Policy</Trans></span>{ this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon"/> }</button>
                                 </div>
                               </div>
                             </div>
@@ -822,7 +821,7 @@ class DisplayAdministrationMenu extends React.Component {
                               <div className="main-cell">
                                 <button className="link no-border" type="button" onClick={this.handleUserPassphrasePoliciesClick}>
                                   <span><Trans>User Passphrase Policies</Trans></span>
-                                  { this.isCeEdition() && <FrameSVG className="pro-teasing-icon"/> }
+                                  { this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon"/> }
                                 </button>
                               </div>
                             </div>
@@ -836,7 +835,7 @@ class DisplayAdministrationMenu extends React.Component {
                               <div className="main-cell">
                                 <button className="link no-border" type="button" onClick={this.handleAccountRecoveryClick}>
                                   <span><Trans>Account Recovery</Trans></span>
-                                  { this.isCeEdition() && <FrameSVG className="pro-teasing-icon"/> }
+                                  { this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon"/> }
                                 </button>
                               </div>
                             </div>
@@ -850,7 +849,7 @@ class DisplayAdministrationMenu extends React.Component {
                               <div className="main-cell">
                                 <button className="link no-border" type="button" onClick={this.handleSsoClick}>
                                   <span><Trans>Single Sign-On</Trans></span>
-                                  { this.isCeEdition() && <FrameSVG className="pro-teasing-icon"/> }
+                                  { this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon"/> }
                                 </button>
                               </div>
                             </div>
@@ -863,7 +862,7 @@ class DisplayAdministrationMenu extends React.Component {
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
                                 <button className="link no-border" type="button" onClick={this.handleMfaPolicyClick}><span><Trans>MFA Policy</Trans></span>
-                                  { this.isCeEdition() && <FrameSVG className="pro-teasing-icon"/> }</button>
+                                  { this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon"/> }</button>
                               </div>
                             </div>
                           </div>
@@ -906,6 +905,7 @@ class DisplayAdministrationMenu extends React.Component {
                                 <button className="link no-border" type="button" onClick={this.handleScimClick}>
                                   <span><Trans>SCIM</Trans></span>
                                   {this.isBeta("scim") && <span className="chips beta">beta</span>}
+                                  { this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon"/> }
                                 </button>
                               </div>
                             </div>
@@ -918,7 +918,7 @@ class DisplayAdministrationMenu extends React.Component {
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
                                 <button className="link no-border" type="button" onClick={this.handleUserDirectoryClick}><span><Trans>Users Directory</Trans></span>
-                                  { this.isCeEdition() && <FrameSVG className="pro-teasing-icon"/> }
+                                  { this.isCommunityEdition() && <FrameSVG className="pro-teasing-icon"/> }
                                 </button>
                               </div>
                             </div>
