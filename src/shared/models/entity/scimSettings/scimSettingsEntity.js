@@ -12,11 +12,18 @@
  * @since         5.5.0
  */
 
+import EntitySchema from "../abstract/entitySchema";
 import EntityV2 from "../abstract/entityV2";
+import EntityValidationError from "../abstract/entityValidationError";
 
 const SECRET_TOKEN_LENGTH = 46;
 const SECRET_TOKEN_PATTERN = "^pb_[A-Za-z0-9]{43}$";
+const EMPTY_SECRET_VALUE = "pb_0000000000000000000000000000000000000000000";
 
+/**
+ * SCIM Settings Entity class
+ * Represents SCIM settings with validation and serialization capabilities
+ */
 class ScimSettingsEntity extends EntityV2 {
   /**
    * Get SCIM settings entity schema
@@ -105,6 +112,16 @@ class ScimSettingsEntity extends EntityV2 {
     return this._props.secret_token || null;
   }
 
+  /**
+   * Sets the secret token for the SCIM settings entity.
+   *
+   * @param {string} secretToken - The secret token to be set.
+   * @throws {Error} If the secret token does not conform to the schema.
+   */
+  set secretToken(secretToken) {
+    EntitySchema.validateProp("secret_token", secretToken, this.cachedSchema.properties.secret_token);
+    this._props.secret_token = secretToken;
+  }
 
   /**
    * ScimSettingsEntity.SECRET_TOKEN_LENGTH
@@ -112,6 +129,119 @@ class ScimSettingsEntity extends EntityV2 {
    */
   static get SECRET_TOKEN_LENGTH() {
     return SECRET_TOKEN_LENGTH;
+  }
+
+  /**
+   * The secret value with empty format
+   * @returns {string}
+   */
+  static get EMPTY_SECRET_VALUE() {
+    return EMPTY_SECRET_VALUE;
+  }
+
+  /**
+   * Generate a random secret token that matches the SCIM settings pattern
+   * @returns {string} A secret token starting with "pb_" followed by 36 random alphanumeric characters
+   */
+  static generateScimSecretToken() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const prefix = 'pb_';
+    const secretLength = ScimSettingsEntity.SECRET_TOKEN_LENGTH - prefix.length;
+
+    // Rejection sampling to avoid modulo bias
+    const secret = [];
+    const max = 256 - (256 % chars.length); // 256 - (256 % 62) = 248
+    const randomValues = new Uint8Array(secretLength * 2); // overshoot to reduce loops
+
+    while (secret.length < secretLength) {
+      window.crypto.getRandomValues(randomValues);
+      for (let i = 0; i < randomValues.length && secret.length < secretLength; i++) {
+        const v = randomValues[i];
+        if (v < max) {
+          secret.push(chars[v % chars.length]);
+        }
+      }
+    }
+
+    return prefix + secret.join('');
+  }
+
+
+  /**
+   * Create a SCIM settings entity from a DTO
+   * Validates that id is present and secret_token is not present
+   *
+   * @param {object} scimSettingsDto - The SCIM settings DTO
+   * @returns {ScimSettingsEntity} The created entity
+   * @throws {EntityValidationError} If validation fails
+   */
+  static createFromScimSettingsFind(scimSettingsDto) {
+    const scimSettingsEntity = new ScimSettingsEntity(scimSettingsDto);
+    const entityValidationError = new EntityValidationError();
+
+    // Assert with ScimSettingsEntity that id should be mandatory
+    if (!scimSettingsEntity.id) {
+      entityValidationError.addError("id", "required", "SCIM settings id is mandatory");
+    }
+
+    // Should throw an error if secret_token exists
+    if (scimSettingsEntity.secretToken) {
+      entityValidationError.addError("secretToken", "empty", "SCIM settings should not contain secret_token");
+    }
+
+    if (entityValidationError.hasErrors()) {
+      throw entityValidationError;
+    }
+
+    scimSettingsEntity.secretToken = EMPTY_SECRET_VALUE;
+
+    return scimSettingsEntity;
+  }
+
+  /**
+   * Create a SCIM settings entity for creation
+   * Validates that secret_token is present
+   *
+   * @param {object} scimSettingsDto - The SCIM settings DTO
+   * @returns {ScimSettingsEntity} The created entity
+   * @throws {EntityValidationError} If validation fails
+   */
+  static createFromScimSettingsCreation(scimSettingsDto) {
+    const scimSettingsEntity = new ScimSettingsEntity(scimSettingsDto);
+    const entityValidationError = new EntityValidationError();
+
+    // Assert with ScimSettingsEntity that secret_token should be mandatory
+    if (!scimSettingsEntity.secretToken) {
+      entityValidationError.addError("secretToken", "required", "SCIM settings secret_token is mandatory.");
+    }
+    if (entityValidationError.hasErrors()) {
+      throw entityValidationError;
+    }
+
+    return scimSettingsEntity;
+  }
+
+  /**
+   * Create a SCIM settings entity for update
+   * Validates that setting_id is not present
+   *
+   * @param {object} scimSettingsDto - The SCIM settings DTO
+   * @returns {ScimSettingsEntity} The created entity
+   * @throws {EntityValidationError} If validation fails
+   */
+  static createFromScimSettingsUpdate(scimSettingsDto) {
+    const scimSettingsEntity = new ScimSettingsEntity(scimSettingsDto);
+    const entityValidationError = new EntityValidationError();
+
+    // Assert with ScimSettingsEntity that should throw an error if setting_id exists
+    if (scimSettingsEntity.settingId) {
+      entityValidationError.addError("settingId", "empty", "SCIM settings should not contain setting_id.");
+    }
+    if (entityValidationError.hasErrors()) {
+      throw entityValidationError;
+    }
+
+    return scimSettingsEntity;
   }
 }
 

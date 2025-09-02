@@ -16,7 +16,6 @@ import PropTypes from "prop-types";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import memoize from "memoize-one";
-import {v4 as uuidv4} from "uuid";
 import NotifyError from "../../../components/Common/Error/NotifyError/NotifyError";
 import ScimSettingsEntity from "../../../../shared/models/entity/scimSettings/scimSettingsEntity";
 import ScimSettingsFormEntity from "../../../../shared/models/entity/scimSettings/scimSettingsFormEntity";
@@ -29,17 +28,19 @@ import RefreshSVG from "../../../../img/svg/refresh.svg";
 import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import Password from "../../../../shared/components/Password/Password";
 import Select from "../../Common/Select/Select";
+import {getUserFormattedName} from "../../../../shared/utils/userUtils";
 /*
  * import {createSafePortal} from "../../../../shared/utils/portals";
  * import InfoSVG from "../../../../img/svg/info.svg";
  */
+
 
 /**
  * This component allows to display the SCIM settings for the administration
  */
 class DisplayScimSettingsAdministration extends Component {
   /**
-   * The original settings.
+   * The original settings used to detect changes
    * @type {ScimSettingsFormEntity}
    */
   originalSettings = null;
@@ -77,11 +78,7 @@ class DisplayScimSettingsAdministration extends Component {
       isProcessing: true, // Is the form processing (loading, submitting).
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once.
       enabled: false, // True if originalSettings is not null
-      settings: { // Form data
-        scim_user_id: uuidv4(),
-        setting_id: uuidv4(),
-        secret_token: this.generateScimSecretToken(),
-      },
+      settings: null,
     };
   }
 
@@ -120,16 +117,6 @@ class DisplayScimSettingsAdministration extends Component {
   }
 
   /**
-   * display user firstname, lastname and username
-   * @param user
-   * @returns {string}
-   */
-  displayUser(user) {
-    return `${user.profile.first_name} ${user.profile.last_name} (${user.username})`;
-  }
-
-
-  /**
    * Get admin users
    * @returns {Array} Array of active admin users
    */
@@ -149,7 +136,7 @@ class DisplayScimSettingsAdministration extends Component {
    * @returns {Array<{value: string, label: string}>} Array of admin users formatted for select input
    */
   get adminUsersForSelect() {
-    return this.adminUsers && this.adminUsers.map(user => ({value: user.id, label: this.displayUser(user)}));
+    return this.adminUsers && this.adminUsers.map(user => ({value: user.id, label: getUserFormattedName(user, this.props.t, {withUsername: true})}));
   }
 
   /**
@@ -160,9 +147,7 @@ class DisplayScimSettingsAdministration extends Component {
     this.setState({isProcessing: true});
     try {
       const scimSettings = await this.scimSettingsService.findSettings();
-      if (!scimSettings) {
-        this.setDefaultSettings();
-      } else {
+      if (scimSettings) {
         this.originalSettings = new ScimSettingsFormEntity(scimSettings, {validate: false});
         this.formSettings = new ScimSettingsFormEntity(scimSettings, {validate: false});
         this.setState({
@@ -178,50 +163,16 @@ class DisplayScimSettingsAdministration extends Component {
   }
 
   /**
-   * Generate a random secret token that matches the SCIM settings pattern
-   * @returns {string} A secret token starting with "pb_" followed by 36 random alphanumeric characters
-   */
-  generateScimSecretToken() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = 'pb_';
-    const secretLength = ScimSettingsEntity.SECRET_TOKEN_LENGTH - (result.length);
-    for (let i = 0; i < secretLength; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-
-    return result;
-  }
-
-  /**
    * Enable/Disable the settings
    */
   handleToggleEnabled() {
+    if (!this.state.enabled) {
+      this.formSettings = ScimSettingsFormEntity.createFromDefault(this.adminUsers[0].id);
+      this.setState({
+        settings: this.formSettings.toDto()
+      });
+    }
     this.setState({enabled: !this.state.enabled});
-  }
-
-  /**
-   * Set default settings when no SCIM settings are found
-   */
-  setDefaultSettings() {
-    this.originalSettings = null;
-    this.formSettings = new ScimSettingsFormEntity(this.initSettings(), {validate: false});
-    this.setState({
-      settings: this.formSettings.toDto(),
-      enabled: false // originalSettings is null
-    });
-  }
-
-  /**
-   * Initialize default settings
-   * @returns {Object}
-   */
-  initSettings() {
-    return {
-      enabled: false,
-      scim_user_id: this.adminUsers[0].id,
-      setting_id: uuidv4(),
-      secret_token: this.generateScimSecretToken(),
-    };
   }
 
   /**
@@ -284,7 +235,7 @@ class DisplayScimSettingsAdministration extends Component {
    * Handle the regeneration of the secret token
    */
   handleRegenerateSecretToken() {
-    const secretToken = this.generateScimSecretToken();
+    const secretToken = ScimSettingsEntity.generateScimSecretToken();
     this.setFormPropertyValue("secret_token", secretToken);
   }
 
@@ -315,7 +266,14 @@ class DisplayScimSettingsAdministration extends Component {
     }
 
     try {
-      await this.saveScimSettings();
+      const result = await this.saveScimSettings();
+      //Refresh data returned by server
+      this.formSettings = result ? new ScimSettingsFormEntity(result, {validate: false}) : null;
+      this.originalSettings = result ? new ScimSettingsFormEntity(this.formSettings.toDto(), {validate: false}) : null;
+      this.setState({
+        settings: result ? this.formSettings.toDto() : null,
+        enabled: result !== null
+      });
       await this.props.actionFeedbackContext.displaySuccess(this.props.t("The SCIM settings were updated."));
     } catch (error) {
       await this.handleUnexpectedError(error);
@@ -323,7 +281,6 @@ class DisplayScimSettingsAdministration extends Component {
 
     this.setState({
       isProcessing: false,
-      settings: this.formSettings.toDto()
     });
   }
 
@@ -340,19 +297,21 @@ class DisplayScimSettingsAdministration extends Component {
 
   /**
    * Save the SCIM settings.
-   * @returns {Promise<void>}
+   * @returns {Promise<ScimSettingsEntity|null>}
    */
   async saveScimSettings() {
     if (this.state.enabled) {
+      let scimSettingResult;
       if (!this.originalSettings) {
-        await this.scimSettingsService.createSettings(this.formSettings);
+        scimSettingResult = await this.scimSettingsService.createSettings(this.formSettings);
       } else {
-        await this.scimSettingsService.updateSettings(this.formSettings, this.originalSettings.id);
+        scimSettingResult = await this.scimSettingsService.updateSettings(this.formSettings, this.originalSettings.id);
       }
-    } else {
+      return scimSettingResult;
+    } else if (this.originalSettings) {
       await this.scimSettingsService.disableSettings(this.originalSettings.id);
     }
-    await this.findScimSettings();
+    return null;
   }
 
   /**
@@ -430,11 +389,11 @@ class DisplayScimSettingsAdministration extends Component {
                         className="fluid form-element"
                         autoComplete="off"
                         name="scim_secret_token"
-                        value={this.state.settings.secret_token ? this.state.settings.secret_token : this.generateScimSecretToken()}
+                        value={this.state.settings.secret_token}
                         preview={true}
-                        disabled={!this.state.settings.secret_token}
+                        disabled={this.state.settings.secret_token === ScimSettingsEntity.EMPTY_SECRET_VALUE}
                       />
-                      <button type="button" disabled={!this.state.settings.secret_token} onClick={this.handleCopySecretToken} className="copy-to-clipboard button button-icon">
+                      <button type="button" disabled={this.state.settings.secret_token === ScimSettingsEntity.EMPTY_SECRET_VALUE} onClick={this.handleCopySecretToken} className="copy-to-clipboard button button-icon">
                         <CopySVG/>
                       </button>
                       <button type="button" onClick={this.handleRegenerateSecretToken} className="copy-to-clipboard button button-icon">

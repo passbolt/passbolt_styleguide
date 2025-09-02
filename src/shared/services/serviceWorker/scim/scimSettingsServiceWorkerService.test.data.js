@@ -1,3 +1,4 @@
+
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -13,66 +14,53 @@
  */
 
 import {v4 as uuidv4} from "uuid";
+import ScimSettingsEntity from "../../../models/entity/scimSettings/scimSettingsEntity";
 
 /**
  * Default SCIM settings DTO
+ * @param {Object} [data={}] - Optional overrides for the default values
  * @returns {Object}
  */
-export function defaultScimSettingsDto() {
-  return {
-    id: uuidv4(),
-    scim_user_id: uuidv4(),
-    setting_id: uuidv4(),
-    secret_token: "pb_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefg"
-  };
-}
+export const defaultScimSettingsDto = (data = {}) => ({
+  id: uuidv4(),
+  scim_user_id: uuidv4(),
+  setting_id: uuidv4(),
+  secret_token: "pb_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefg",
+  ...data,
+});
 
 /**
  * SCIM settings DTO without secret_token
- * @returns {Object}
+ * @param {Object} [data={}] - Optional overrides for the default values
  */
-export function scimSettingsWithoutSecretTokenDto() {
-  return {
-    id: uuidv4(),
-    scim_user_id: uuidv4(),
-    setting_id: uuidv4()
-  };
-}
+export const scimSettingsWithoutSecretTokenDto = (data = {}) => {
+  const scimSettingsDto = defaultScimSettingsDto(data);
+  scimSettingsDto.secret_token = ScimSettingsEntity.EMPTY_SECRET_VALUE;
+
+  return scimSettingsDto;
+};
 
 /**
  * SCIM settings DTO without id
+ * @param {Object} [data={}] - Optional overrides for the default values
  * @returns {Object}
  */
-export function scimSettingsWithoutIdDto() {
-  return {
-    scim_user_id: uuidv4(),
-    setting_id: uuidv4(),
-    secret_token: "pb_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefg"
-  };
-}
+export const scimSettingsWithoutIdDto = (data = {}) => {
+  const scimSettingsDto = defaultScimSettingsDto(data);
+  delete scimSettingsDto.id;
 
-/**
- * SCIM settings DTO with setting_id
- * @returns {Object}
- */
-export function scimSettingsWithSettingIdDto() {
-  return {
-    id: uuidv4(),
-    scim_user_id: uuidv4(),
-    setting_id: uuidv4(),
-    secret_token: "pb_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefg"
-  };
-}
+  return scimSettingsDto;
+};
 
 /**
  * SCIM settings DTO with invalid secret_token
+ * @param {Object} [data={}] - Optional overrides for the default values
  * @returns {Object}
  */
-export function scimSettingsWithInvalidSecretTokenDto() {
-  return {
-    id: uuidv4(),
-    scim_user_id: uuidv4(),
-    setting_id: uuidv4(),
-    secret_token: "invalid_token"
-  };
-}
+export const scimSettingsWithInvalidSecretTokenDto = (data = {}) => ({
+  id: uuidv4(),
+  scim_user_id: uuidv4(),
+  setting_id: uuidv4(),
+  secret_token: "invalid_token",
+  ...data,
+});

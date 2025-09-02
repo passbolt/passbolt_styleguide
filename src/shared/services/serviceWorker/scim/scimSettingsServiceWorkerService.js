@@ -70,7 +70,6 @@ class ScimSettingsServiceWorkerService {
       throw new TypeError("The 'settings' property should be of type 'ScimSettingsEntity'.");
     }
     const updated = formSettings.toDto();
-    delete updated.setting_id;
     const savedSettingsDto = await this.port.request('passbolt.scim.update-settings', id, updated);
     return new ScimSettingsEntity(savedSettingsDto);
   }
