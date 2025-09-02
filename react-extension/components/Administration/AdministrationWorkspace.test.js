@@ -43,6 +43,14 @@ jest.mock("./DisplayContentTypesMetadataKeyAdministration/DisplayContentTypesMet
 jest.mock("./DisplayMigrateMetadataAdministration/DisplayMigrateMetadataAdministration", () => () => <span className="migrate-metadata"></span>);
 jest.mock("./DisplayContentTypesAllowedContentTypesAdministration/DisplayContentTypesAllowedContentTypesAdministration", () => () => <span className="allow-content-types"></span>);
 
+jest.mock("./DisplayPasswordPoliciesAdministrationTeasing/DisplayPasswordPoliciesAdministrationTeasing", () => () => <span className="password-policies-details-teasing"></span>);
+jest.mock("./DisplayUserDirectoryAdministrationTeasing/DisplayUserDirectoryAdministrationTeasing", () => () => <span className="user-directory-details-teasing"></span>);
+jest.mock("./DisplaySubscriptionKeyTeasing/DisplaySubscriptionKeyTeasing", () => () => <span className="subscription-key-details-teasing"></span>);
+jest.mock("./ManageAccountRecoveryAdministrationSettingsTeasing/ManageAccountRecoveryAdministrationSettingsTeasing", () => () => <span className="account-recovery-details-teasing"></span>);
+jest.mock("./DisplayAdministrationUserPassphrasePoliciesTeasing/DisplayAdministrationUserPassphrasePoliciesTeasing", () => () => <span className="user-passphrase-policies-details-teasing"></span>);
+jest.mock("./DisplayMfaPolicyAdministrationTeasing/DisplayMfaPolicyAdministrationTeasing", () => () => <span className="mfa-policy-details-teasing"></span>);
+jest.mock("./ManageSsoSettingsTeasing/ManageSsoSettingsTeasing", () => () => <span className="sso-teasing"></span>);
+
 beforeEach(() => {
   jest.resetModules();
 });
@@ -69,6 +77,27 @@ const scenarios = [
   {selectedMenu: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED, field: "isGetStartedMetadataSelected"},
 ];
 
+const ceScenarios = [
+  {selectedMenu: AdministrationWorkspaceMenuTypes.MFA, field: 'isMfaSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.MFA_POLICY, field: 'isMfaPolicyTeasingSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES, field: 'isPasswordPoliciesTeasingSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.USER_DIRECTORY, field: 'isUserDirectoryTeasingSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION, field: 'isEmailNotificationsSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.SUBSCRIPTION, field: 'isSubscriptionKeyTeasingSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION, field: 'isInternationalizationSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY, field: 'isAccountRecoveryTeasingSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.SMTP_SETTINGS, field: 'isSmtpSettingsSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.SELF_REGISTRATION, field: 'isSelfRegistrationSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.SSO, field: 'isSsoTeasingSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.RBAC, field: 'isRbacSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES, field: 'isUserPasphrasePoliciesTeasingSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY, field: 'isPasswordExpirySelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA, field: "isContentTypesEncryptedMetadataSelected"},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY, field: "isContentTypesMetadataSelected"},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA, field: "isMigrateMetadataSelected"},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES, field: "isAllowedContentTypesSelected"},
+];
+
 each(
   scenarios
 ).describe("Display Administration Workspace", currentScenario => {
@@ -87,4 +116,28 @@ each(
     }
   });
 });
+
+each(
+  ceScenarios
+).describe("Display Administration Workspace for CE Admins", currentScenario => {
+  it(`As AD, I should see: ${currentScenario.selectedMenu}`, async() => {
+    console.log("Current Scenario Selected Menu", currentScenario.selectedMenu);
+    expect.assertions(ceScenarios.length);
+
+    const props = defaultProps(currentScenario.selectedMenu, true);
+    jest.spyOn(props.context.siteSettings, "isCeEdition", "get").mockReturnValue(true);
+
+    const page = new AdministrationWorkspacePage(props);
+    await waitFor(() => {});
+
+    expect(page[currentScenario.field]).toBeTruthy();
+
+    const unselectedMenuItem = ceScenarios.filter(scenario => scenario !== currentScenario);
+    for (let i = 0; i < unselectedMenuItem.length; i++) {
+      const fieldName = unselectedMenuItem[i];
+      expect(page[fieldName]).toBeFalsy();
+    }
+  });
+});
+
 

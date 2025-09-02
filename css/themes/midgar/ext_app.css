@@ -8300,44 +8300,36 @@ button.card svg {
   align-items: center;
   flex-shrink: 0;
 }
-button.card .card-information {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 0.2rem;
-  flex: 1 0 0;
+button.card .card-information .title-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   max-width: 100%;
 }
-button.card .card-information .title {
+button.card .card-information .title-wrapper .title {
   font-size: 1.4rem;
   font-weight: 700;
   max-width: 100%;
+  position: relative;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-button.card .card-information .title.is-beta {
-  position: relative;
-  max-width: 18.1rem;
-  padding-right: 4.7rem;
-}
-button.card .card-information .title.is-beta .chips {
+button.card .card-information .title-wrapper .title .chips {
   position: absolute;
-  right: 0;
-  margin-top: 0.3rem;
+  right: -4.7rem;
+  top: 0;
+  margin-left: 0.4rem;
 }
-button.card .card-information .title.is-beta {
-  position: relative;
-  max-width: 18.1rem;
+button.card .card-information .title-wrapper svg {
+  width: 1.6rem;
+  height: 1.6rem;
+  flex-shrink: 0;
+}
+button.card .card-information .title-wrapper.with-pill .title {
   padding-right: 4.7rem;
-}
-button.card .card-information .title.is-beta .chips {
-  position: absolute;
-  right: 0;
-  margin-top: 0.3rem;
 }
 button.card .card-information .info {
   font-size: 1.2rem;
@@ -10033,47 +10025,76 @@ svg .section-card .card .title:first-child {
   box-shadow: inset 0 0 0 0.1rem var(--Action-button-Active-action-button-border);
   background-color: var(--Action-button-Active-action-button-background);
 }
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information {
+.page.administration .app .panel.main .main-page .subscription-key .subscription-key-teasing-info,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-key-teasing-info {
+  display: flex;
+  align-items: center;
+  gap: 3.2rem;
+  align-self: stretch;
+}
+.page.administration .app .panel.main .main-page .subscription-key .subscription-key-teasing-info div.title-text,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-key-teasing-info div.title-text {
+  font-size: medium;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information {
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
 }
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information h4.subscription-information-subtitle {
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information h4.subscription-information-subtitle,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information h4.subscription-information-subtitle {
   padding-top: 0;
   border-top: none;
 }
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information {
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information {
   display: flex;
   gap: 1.6rem;
 }
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-label,
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information .secondary-information {
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-label,
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information .secondary-information,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .secondary-information {
   color: var(--Text-and-icons-Secondary-text);
 }
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value {
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-value {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-label,
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value {
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-label,
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-value {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
 }
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-label .label,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-label .label,
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value .label,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-value .label,
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-label .value,
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value .value {
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-label .value,
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value .value,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-value .value {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   height: 2rem;
 }
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-label .label button,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-label .label button,
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value .label button,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-value .label button,
 .page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-label .value button,
-.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value .value button {
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-label .value button,
+.page.administration .app .panel.main .main-page .subscription-key .subscription-information .information-value .value button,
+.page.administration .app .panel.main .main-page .subscription-key-teasing .subscription-information .information-value .value button {
   display: block;
   width: 100%;
   white-space: nowrap;
@@ -10264,13 +10285,6 @@ svg .section-card .card .title:first-child {
 .page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form > *:last-child {
   margin-bottom: 0;
 }
-.page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form .input-wrapper .button-inline {
-  display: flex;
-  gap: 0.8rem;
-}
-.page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form .input-wrapper .button-inline .input {
-  flex: 1;
-}
 .page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message,
 .page.administration .app .panel.main .panel.middle .main-page .main-column .error.message {
   align-self: stretch;
@@ -10360,8 +10374,150 @@ svg .section-card .card .title:first-child {
   height: 0.8rem;
   width: 0.8rem;
 }
+.page.administration .app .panel.main #administration_menu li button svg.pro-teasing-icon {
+  height: 1.6rem;
+  width: 1.6rem;
+}
 .page.administration .app .panel.main #administration_menu li ul {
   margin-left: 1.6rem;
+}
+.password-policies-settings-teasing h3#password-policies-settings-title,
+.user-passphrase-policies-settings-teasing h3#password-policies-settings-title,
+.recover-account-settings-teasing h3#password-policies-settings-title,
+.third-party-provider-settings-teasing h3#password-policies-settings-title,
+.ldap-settings-teasing h3#password-policies-settings-title,
+.mfa-settings-teasing h3#password-policies-settings-title,
+.scim-teasing h3#password-policies-settings-title,
+.password-policies-settings-teasing h3#user-passphrase-policies-title,
+.user-passphrase-policies-settings-teasing h3#user-passphrase-policies-title,
+.recover-account-settings-teasing h3#user-passphrase-policies-title,
+.third-party-provider-settings-teasing h3#user-passphrase-policies-title,
+.ldap-settings-teasing h3#user-passphrase-policies-title,
+.mfa-settings-teasing h3#user-passphrase-policies-title,
+.scim-teasing h3#user-passphrase-policies-title,
+.password-policies-settings-teasing h3#recover-account-settings-title,
+.user-passphrase-policies-settings-teasing h3#recover-account-settings-title,
+.recover-account-settings-teasing h3#recover-account-settings-title,
+.third-party-provider-settings-teasing h3#recover-account-settings-title,
+.ldap-settings-teasing h3#recover-account-settings-title,
+.mfa-settings-teasing h3#recover-account-settings-title,
+.scim-teasing h3#recover-account-settings-title,
+.password-policies-settings-teasing h3#third-party-provider-settings-title,
+.user-passphrase-policies-settings-teasing h3#third-party-provider-settings-title,
+.recover-account-settings-teasing h3#third-party-provider-settings-title,
+.third-party-provider-settings-teasing h3#third-party-provider-settings-title,
+.ldap-settings-teasing h3#third-party-provider-settings-title,
+.mfa-settings-teasing h3#third-party-provider-settings-title,
+.scim-teasing h3#third-party-provider-settings-title,
+.password-policies-settings-teasing h3#ldap-settings-title,
+.user-passphrase-policies-settings-teasing h3#ldap-settings-title,
+.recover-account-settings-teasing h3#ldap-settings-title,
+.third-party-provider-settings-teasing h3#ldap-settings-title,
+.ldap-settings-teasing h3#ldap-settings-title,
+.mfa-settings-teasing h3#ldap-settings-title,
+.scim-teasing h3#ldap-settings-title,
+.password-policies-settings-teasing h3#mfa-settings-title,
+.user-passphrase-policies-settings-teasing h3#mfa-settings-title,
+.recover-account-settings-teasing h3#mfa-settings-title,
+.third-party-provider-settings-teasing h3#mfa-settings-title,
+.ldap-settings-teasing h3#mfa-settings-title,
+.mfa-settings-teasing h3#mfa-settings-title,
+.scim-teasing h3#mfa-settings-title,
+.password-policies-settings-teasing h3#scim-title,
+.user-passphrase-policies-settings-teasing h3#scim-title,
+.recover-account-settings-teasing h3#scim-title,
+.third-party-provider-settings-teasing h3#scim-title,
+.ldap-settings-teasing h3#scim-title,
+.mfa-settings-teasing h3#scim-title,
+.scim-teasing h3#scim-title {
+  border-bottom: 0.1rem solid var(--Workspace-Dividers);
+  margin: 0 -1.6rem;
+  padding: 1rem 2rem;
+}
+.password-policies-settings-teasing .password-policies-info,
+.user-passphrase-policies-settings-teasing .password-policies-info,
+.recover-account-settings-teasing .password-policies-info,
+.third-party-provider-settings-teasing .password-policies-info,
+.ldap-settings-teasing .password-policies-info,
+.mfa-settings-teasing .password-policies-info,
+.scim-teasing .password-policies-info,
+.password-policies-settings-teasing .user-passphrase-policies-info,
+.user-passphrase-policies-settings-teasing .user-passphrase-policies-info,
+.recover-account-settings-teasing .user-passphrase-policies-info,
+.third-party-provider-settings-teasing .user-passphrase-policies-info,
+.ldap-settings-teasing .user-passphrase-policies-info,
+.mfa-settings-teasing .user-passphrase-policies-info,
+.scim-teasing .user-passphrase-policies-info,
+.password-policies-settings-teasing .recover-account-info,
+.user-passphrase-policies-settings-teasing .recover-account-info,
+.recover-account-settings-teasing .recover-account-info,
+.third-party-provider-settings-teasing .recover-account-info,
+.ldap-settings-teasing .recover-account-info,
+.mfa-settings-teasing .recover-account-info,
+.scim-teasing .recover-account-info,
+.password-policies-settings-teasing .third-party-provider-settings-info,
+.user-passphrase-policies-settings-teasing .third-party-provider-settings-info,
+.recover-account-settings-teasing .third-party-provider-settings-info,
+.third-party-provider-settings-teasing .third-party-provider-settings-info,
+.ldap-settings-teasing .third-party-provider-settings-info,
+.mfa-settings-teasing .third-party-provider-settings-info,
+.scim-teasing .third-party-provider-settings-info,
+.password-policies-settings-teasing .ldap-settings-info,
+.user-passphrase-policies-settings-teasing .ldap-settings-info,
+.recover-account-settings-teasing .ldap-settings-info,
+.third-party-provider-settings-teasing .ldap-settings-info,
+.ldap-settings-teasing .ldap-settings-info,
+.mfa-settings-teasing .ldap-settings-info,
+.scim-teasing .ldap-settings-info,
+.password-policies-settings-teasing .mfa-settings-info,
+.user-passphrase-policies-settings-teasing .mfa-settings-info,
+.recover-account-settings-teasing .mfa-settings-info,
+.third-party-provider-settings-teasing .mfa-settings-info,
+.ldap-settings-teasing .mfa-settings-info,
+.mfa-settings-teasing .mfa-settings-info,
+.scim-teasing .mfa-settings-info,
+.password-policies-settings-teasing .scim-info,
+.user-passphrase-policies-settings-teasing .scim-info,
+.recover-account-settings-teasing .scim-info,
+.third-party-provider-settings-teasing .scim-info,
+.ldap-settings-teasing .scim-info,
+.mfa-settings-teasing .scim-info,
+.scim-teasing .scim-info {
+  display: flex;
+  padding: 1.2rem;
+  align-items: flex-start;
+  gap: 1.2rem;
+  align-self: stretch;
+  border-radius: var(--Section-border-radius, 0.5rem);
+  background: var(--Action-button-Action-button-background, #F7F7F7);
+  justify-content: space-between;
+}
+.password-policies-settings-teasing p,
+.user-passphrase-policies-settings-teasing p,
+.recover-account-settings-teasing p,
+.third-party-provider-settings-teasing p,
+.ldap-settings-teasing p,
+.mfa-settings-teasing p,
+.scim-teasing p {
+  margin-top: 1.6rem;
+}
+.password-policies-settings-teasing li,
+.user-passphrase-policies-settings-teasing li,
+.recover-account-settings-teasing li,
+.third-party-provider-settings-teasing li,
+.ldap-settings-teasing li,
+.mfa-settings-teasing li,
+.scim-teasing li {
+  padding: 0.3rem;
+}
+.password-policies-settings-teasing li > :first-child,
+.user-passphrase-policies-settings-teasing li > :first-child,
+.recover-account-settings-teasing li > :first-child,
+.third-party-provider-settings-teasing li > :first-child,
+.ldap-settings-teasing li > :first-child,
+.mfa-settings-teasing li > :first-child,
+.scim-teasing li > :first-child {
+  margin-right: 1rem;
 }
 .recover-account-settings .input.radio,
 .save-recovery-account-settings-dialog .input.radio {
@@ -10804,27 +10960,4 @@ svg .section-card .card .title:first-child {
 .mfa-setup .totp-setup .input.password input[type=password] {
   padding: 0.8rem 0.8rem;
   margin-bottom: 1.2rem;
-}
-#scim-settings input[type=text] {
-  max-width: initial;
-}
-#scim-settings .input.password {
-  margin-bottom: 0px;
-}
-#scim-settings .select-container {
-  max-width: initial;
-  width: 100%;
-  margin-bottom: 0.8rem;
-}
-#scim-settings .select-container .select {
-  max-width: initial;
-  width: 100%;
-}
-#scim-settings .section {
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-}
-#scim-settings .section .toggle-switch {
-  margin-bottom: unset;
 }

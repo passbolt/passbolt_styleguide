@@ -15,7 +15,7 @@ import React from "react";
 import {withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import CardItem from "../../../../shared/components/Cards/CardItem";
-import {AdministrationWorkspaceFeatureFlag, AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
+import {AdministrationWorkspaceFeatureFlag, AdministrationWorkspaceMenuTypes, PRO_TEASING_MENUITEMS} from "../../../contexts/AdministrationWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import SubscriptionSVG from "../../../../img/svg/subscription.svg";
@@ -83,8 +83,9 @@ class AdministrationHomePage extends React.PureComponent {
       icon: <SubscriptionSVG/>,
       title: this.props.t("Subscription"),
       description: this.props.t("Browse and update the subscription key details."),
-      redirectTo: this.props.navigationContext.onGoToAdministrationSubscriptionRequested,
+      redirectTo: this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationSubscriptionRequestedTeasing : this.props.navigationContext.onGoToAdministrationSubscriptionRequested,
       flag: AdministrationWorkspaceMenuTypes.SUBSCRIPTION,
+      displayProTeasingIcon: this.isCeEdition(),
     }, {
       icon: <MetadataKeySVG/>,
       title: this.props.t("Getting started"),
@@ -126,26 +127,30 @@ class AdministrationHomePage extends React.PureComponent {
       icon: <PasswordPolicySVG/>,
       title: this.props.t("Password policy"),
       description: this.props.t("Modify the default settings of the passwords generator."),
-      redirectTo: this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequested,
+      redirectTo: this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequestedTeasing : this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequested,
       flag: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES,
+      displayProTeasingIcon: this.isCeEdition(),
     }, {
       icon: <PassphrasePolicySVG/>,
       title: this.props.t("User passphrase policies"),
       description: this.props.t("Define the minimal entropy for the users' private key passphrase."),
-      redirectTo: this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequested,
+      redirectTo: this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequestedTeasing : this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequested,
       flag: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES,
+      displayProTeasingIcon: this.isCeEdition(),
     }, {
       icon: <AccountRecoverySVG/>,
       title: this.props.t("Account recovery"),
       description: this.props.t("Control the behavior for account recovery for all users."),
-      redirectTo: this.props.navigationContext.onGoToAdministrationAccountRecoveryRequested,
+      redirectTo: this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationAccountRecoveryRequestedTeasing : this.props.navigationContext.onGoToAdministrationAccountRecoveryRequested,
       flag: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY,
+      displayProTeasingIcon: this.isCeEdition(),
     }, {
       icon: <SSOSVG/>,
       title: this.props.t("Single Sign-On"),
       description: this.props.t("Select which Single Sign-on provider can be use to login."),
-      redirectTo: this.props.navigationContext.onGoToAdministrationSsoRequested,
+      redirectTo: this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationSsoRequestedTeasing : this.props.navigationContext.onGoToAdministrationSsoRequested,
       flag: AdministrationWorkspaceMenuTypes.SSO,
+      displayProTeasingIcon: this.isCeEdition(),
     }, {
       icon: <MFASVG/>,
       title: this.props.t("Multi Factor Authentication"),
@@ -156,14 +161,16 @@ class AdministrationHomePage extends React.PureComponent {
       icon: <MFAPolicySVG/>,
       title: this.props.t("MFA Policy"),
       description: this.props.t("Control the default behaviour of multi factor authentication."),
-      redirectTo: this.props.navigationContext.onGoToAdministrationMfaPolicyRequested,
+      redirectTo: this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationMfaPolicyRequestedTeasing : this.props.navigationContext.onGoToAdministrationMfaPolicyRequested,
       flag: AdministrationWorkspaceMenuTypes.MFA_POLICY,
+      displayProTeasingIcon: this.isCeEdition(),
     }, {
       icon: <LDAPSVG/>,
       title: this.props.t("Users directory"),
       description: this.props.t("Configure the synchronisation of users and groups with passbolt."),
-      redirectTo: this.props.navigationContext.onGoToAdministrationUsersDirectoryRequested,
+      redirectTo: this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationUsersDirectoryRequestedTeasing : this.props.navigationContext.onGoToAdministrationUsersDirectoryRequested,
       flag: AdministrationWorkspaceMenuTypes.USER_DIRECTORY,
+      displayProTeasingIcon: this.isCeEdition(),
     }, {
       icon: <SelfRegisterSVG/>,
       title: this.props.t("Self registration"),
@@ -209,8 +216,8 @@ class AdministrationHomePage extends React.PureComponent {
    * @returns {boolean}
    */
   shouldBeDisplayed(cardItemData) {
-    if (!this.isFlagEnabled(cardItemData)) {
-      //flag is disabled, we don't display the menu item
+    if (!this.isFlagEnabled(cardItemData) && !this.isProTeasingMenuItem(cardItemData)) {
+      //flag is disabled or not eligible for PRO teasing, we don't display the menu item
       return false;
     }
 
@@ -236,6 +243,23 @@ class AdministrationHomePage extends React.PureComponent {
    */
   isFlagEnabled(cardData) {
     return cardData.flag === null || Boolean(this.props.context.siteSettings?.canIUse(AdministrationWorkspaceFeatureFlag[cardData.flag]));
+  }
+
+  /**
+   * If the card is to be displayed for CE Admin as part of PRO teasing
+   * @param {object} cardData
+   * @returns {boolean}
+   */
+  isProTeasingMenuItem(cardData) {
+    return (PRO_TEASING_MENUITEMS.includes(cardData.flag) && this.isCeEdition());
+  }
+
+  /**
+   * Returns true if CE; false if PRO
+   * @returns {boolean}
+   */
+  isCeEdition() {
+    return this.props.context.siteSettings.isCeEdition;
   }
 
   /**
@@ -277,6 +301,7 @@ class AdministrationHomePage extends React.PureComponent {
                   onClick={() => this.handleClickOn(cardItemData)}
                   isBeta={this.isDisplayedAsBeta(cardItemData)}
                   isNew={Boolean(cardItemData.isNew)}
+                  proTeasing={cardItemData.displayProTeasingIcon}
                 />
               )}
             </div>

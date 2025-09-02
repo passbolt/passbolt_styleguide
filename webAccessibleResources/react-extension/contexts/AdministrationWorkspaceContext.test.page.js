@@ -121,6 +121,46 @@ export default class AdministrationWorkspaceContextPage {
   }
 
   /**
+   * Go to the mfa route
+   */
+  async goToMfaPolicy() {
+    this.setup(this.context, this.props);
+    await this.goToLink('.mfa-policy');
+  }
+
+  /**
+   * Returns the Password Policy menu
+   */
+  async goToPasswordPolicySettings() {
+    this.setup(this.context, this.props);
+    await this.goToLink('.password-policies');
+  }
+
+  /**
+   * Returns the Password Policy menu
+   */
+  async goToUserPassphraseSettings() {
+    this.setup(this.context, this.props);
+    await this.goToLink('.user-passphrase-policies');
+  }
+
+  /**
+   * Returns the Password Policy menu
+   */
+  async goToAccountRecoverySettings() {
+    this.setup(this.context, this.props);
+    await this.goToLink('.account-recovery');
+  }
+
+  /**
+   * Returns the Password Policy menu
+   */
+  async goToSsoSettings() {
+    this.setup(this.context, this.props);
+    await this.goToLink('.sso');
+  }
+
+  /**
    * Go to the users directory route
    */
   async goToUsersDirectory() {
@@ -261,6 +301,26 @@ export default class AdministrationWorkspaceContextPage {
           <NavLink
             to={{pathname: "/app/administration/mfa"}}>
             <a className="mfa"></a>
+          </NavLink>
+          <NavLink
+            to={{pathname: "/app/administration/mfa-policy"}}>
+            <a className="mfa-policy"></a>
+          </NavLink>
+          <NavLink
+            to={{pathname: "/app/administration/password-policies"}}>
+            <a className="password-policies"></a>
+          </NavLink>
+          <NavLink
+            to={{pathname: "/app/administration/user-passphrase-policies"}}>
+            <a className="user-passphrase-policies"></a>
+          </NavLink>
+          <NavLink
+            to={{pathname: "/app/administration/sso"}}>
+            <a className="sso"></a>
+          </NavLink>
+          <NavLink
+            to={{pathname: "/app/administration/account-recovery"}}>
+            <a className="account-recovery"></a>
           </NavLink>
           <NavLink
             to={{pathname: "/app/administration/users-directory"}}>
