@@ -10285,6 +10285,13 @@ svg .section-card .card .title:first-child {
 .page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form > *:last-child {
   margin-bottom: 0;
 }
+.page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form .input-wrapper .button-inline {
+  display: flex;
+  gap: 0.8rem;
+}
+.page.administration .app .panel.main .panel.middle .main-page .main-column .main-content form .input-wrapper .button-inline .input {
+  flex: 1;
+}
 .page.administration .app .panel.main .panel.middle .main-page .main-column .warning.message,
 .page.administration .app .panel.main .panel.middle .main-page .main-column .error.message {
   align-self: stretch;
@@ -10373,10 +10380,6 @@ svg .section-card .card .title:first-child {
 .page.administration .app .panel.main #administration_menu li button svg {
   height: 0.8rem;
   width: 0.8rem;
-}
-.page.administration .app .panel.main #administration_menu li button svg.pro-teasing-icon {
-  height: 1.6rem;
-  width: 1.6rem;
 }
 .page.administration .app .panel.main #administration_menu li ul {
   margin-left: 1.6rem;
@@ -10469,20 +10472,13 @@ svg .section-card .card .title:first-child {
 .ldap-settings-teasing .ldap-settings-info,
 .mfa-settings-teasing .ldap-settings-info,
 .scim-teasing .ldap-settings-info,
-.password-policies-settings-teasing .mfa-settings-info,
-.user-passphrase-policies-settings-teasing .mfa-settings-info,
-.recover-account-settings-teasing .mfa-settings-info,
-.third-party-provider-settings-teasing .mfa-settings-info,
-.ldap-settings-teasing .mfa-settings-info,
-.mfa-settings-teasing .mfa-settings-info,
-.scim-teasing .mfa-settings-info,
-.password-policies-settings-teasing .scim-info,
-.user-passphrase-policies-settings-teasing .scim-info,
-.recover-account-settings-teasing .scim-info,
-.third-party-provider-settings-teasing .scim-info,
-.ldap-settings-teasing .scim-info,
-.mfa-settings-teasing .scim-info,
-.scim-teasing .scim-info {
+.password-policies-settings-teasing .mfa-settings-info .scim-info,
+.user-passphrase-policies-settings-teasing .mfa-settings-info .scim-info,
+.recover-account-settings-teasing .mfa-settings-info .scim-info,
+.third-party-provider-settings-teasing .mfa-settings-info .scim-info,
+.ldap-settings-teasing .mfa-settings-info .scim-info,
+.mfa-settings-teasing .mfa-settings-info .scim-info,
+.scim-teasing .mfa-settings-info .scim-info {
   display: flex;
   padding: 1.2rem;
   align-items: flex-start;
@@ -10960,4 +10956,27 @@ svg .section-card .card .title:first-child {
 .mfa-setup .totp-setup .input.password input[type=password] {
   padding: 0.8rem 0.8rem;
   margin-bottom: 1.2rem;
+}
+#scim-settings input[type=text] {
+  max-width: initial;
+}
+#scim-settings .input.password {
+  margin-bottom: 0px;
+}
+#scim-settings .select-container {
+  max-width: initial;
+  width: 100%;
+  margin-bottom: 0.8rem;
+}
+#scim-settings .select-container .select {
+  max-width: initial;
+  width: 100%;
+}
+#scim-settings .section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+#scim-settings .section .toggle-switch {
+  margin-bottom: unset;
 }

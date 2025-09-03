@@ -30,7 +30,7 @@ class DisplayMfaPolicyAdministrationTeasing extends React.Component {
         <div className="mfa-settings-teasing main-column">
           <div className="main-content">
             <h3 className="title" id="mfa-settings-title"><Trans>MFA Policy</Trans></h3>
-            <p><Trans>Enhance security by enforcing multi-factor authentication.</Trans></p>
+            <p><Trans>Enhance security with multi-factor authentication.</Trans></p>
             <div className="mfa-settings-info">
               <ul className="mfa-settings-description">
                 <li><RedCheck/><Trans>Strengthen user authentication.</Trans></li>

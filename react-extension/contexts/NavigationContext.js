@@ -103,6 +103,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the CE Admin wants to navigate to the administration workspace Users Directory.
   onGoToAdministrationScimRequestedTeasing: () => {
   }, // Whenever the CE Admin wants to navigate to the administration workspace SCIM.
+  onGoToAdministrationScimRequested: () => {
+  }, // Whenever the user wants to navigate to the administration meadata getting started workspace section.
 });
 
 /**
@@ -171,6 +173,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationMfaPolicyRequestedTeasing: this.onGoToAdministrationMfaPolicyRequestedTeasing.bind(this),
       onGoToAdministrationUsersDirectoryRequestedTeasing: this.onGoToAdministrationUsersDirectoryRequestedTeasing.bind(this),
       onGoToAdministrationScimRequestedTeasing: this.onGoToAdministrationScimRequestedTeasing.bind(this),
+      onGoToAdministrationScimRequested: this.onGoToAdministrationScimRequested.bind(this), // Whenever the user wants to navigate to the administration SCIM section.
     };
   }
 
@@ -326,6 +329,14 @@ class NavigationContextProvider extends React.Component {
   }
 
   /**
+   * Whenever the user wants to navigate to the administration SCIM section.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationScimRequested() {
+    await this.goTo("browser-extension", "/app/administration/user-provisionning/scim");
+  }
+
+  /**
    * Whenever the user wants to navigate to the administration workspace user passphrase policies.
    * @returns {Promise<void>}
    */
@@ -413,21 +424,21 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToAdministrationMfaPolicyRequestedTeasing() {
-    await this.goTo("browser-extension", "/app/administration/mfa-policy-teasing");
+    await this.goTo("api", "/app/administration/mfa-polic-teasingy");
   }
   /**
    * Whenever the CE Admin wants to navigate to the administration workspace users directory.
    * @returns {Promise<void>}
    */
   async onGoToAdministrationUsersDirectoryRequestedTeasing() {
-    await this.goTo("browser-extension", "/app/administration/users-directory-teasing");
+    await this.goTo("api", "/app/administration/users-directory-teasing");
   }
   /**
    * Whenever the CE Admin wants to navigate to the administration workspace SCIM.
    * @returns {Promise<void>}
    */
   async onGoToAdministrationScimRequestedTeasing() {
-    await this.goTo("browser-extension", "/app/administration/scim-teasing");
+    await this.goTo("api", "/app/administration/scim-teasing");
   }
 
   /**

@@ -15,8 +15,7 @@
 /**
  * Unit tests on DisplayAdministrationMenu in regard of specifications
  */
-jest.mock("../../../img/svg/Frame.svg", () => () => <svg data-testid="frame-svg" />);
-import React from "react";
+
 import DisplayAdministrationMenuPage from "./DisplayAdministrationMenu.test.page";
 import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
 import {defaultAppContext, defaultProps} from "./DisplayAdministrationMenu.test.data";
@@ -25,7 +24,6 @@ import MetadataGettingStartedSettingsEntity
 import {
   enableMetadataGettingStartedSettingsDto
 } from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity.test.data";
-import {waitFor} from "@testing-library/dom";
 
 beforeEach(() => {
   jest.resetModules();
@@ -350,7 +348,8 @@ describe("As AD I can see the administration menu", () => {
       const props = defaultProps({
         context: {
           siteSettings: {
-            canIUse: feature => feature !== "metadata"
+            canIUse: feature => feature !== "metadata",
+            isFeatureBeta: jest.fn()
           }
         },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA}
@@ -380,7 +379,8 @@ describe("As AD I can see the administration menu", () => {
       const props = defaultProps({
         context: {
           siteSettings: {
-            canIUse: feature => feature !== "metadata"
+            canIUse: feature => feature !== "metadata",
+            isFeatureBeta: jest.fn()
           }
         },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY}
@@ -410,7 +410,8 @@ describe("As AD I can see the administration menu", () => {
       const props = defaultProps({
         context: {
           siteSettings: {
-            canIUse: feature => feature !== "metadata"
+            canIUse: feature => feature !== "metadata",
+            isFeatureBeta: jest.fn()
           }
         },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA}
@@ -440,7 +441,8 @@ describe("As AD I can see the administration menu", () => {
       const props = defaultProps({
         context: {
           siteSettings: {
-            canIUse: feature => feature !== "metadata"
+            canIUse: feature => feature !== "metadata",
+            isFeatureBeta: jest.fn()
           }
         },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES}
@@ -471,7 +473,8 @@ describe("As AD I can see the administration menu", () => {
       const props = defaultProps({
         context: {
           siteSettings: {
-            canIUse: feature => feature !== "metadata"
+            canIUse: feature => feature !== "metadata",
+            isFeatureBeta: jest.fn()
           }
         },
         administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED},
@@ -483,218 +486,34 @@ describe("As AD I can see the administration menu", () => {
     });
   });
 
-  describe("As a signed-in CE administrator on the administration workspace, I can see the User Passphrase Policies option in the left-side bar with pro teasing icon", () => {
-    it('If the feature flag is true, the menu should be visible', async() => {
-      expect.assertions(5);
+  describe("As a signed-in administrator on the administration workspace, I can see the SCIM option in the left-side bar", () => {
+    it('If the feature flag is true and getting started is enabled, the menu should be visible', async() => {
+      expect.assertions(4);
       const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES}
-      }, true); // The props to pass
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SCIM},
+      }); // The props to pass
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
-      await page.gotoUserPassphrasePolicies();
-      expect(page.userPassphrasePolicies).toBeTruthy();
-      expect(page.menuSelected).toBe('User Passphrase Policies');
-      expect(props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequestedTeasing).toHaveBeenCalled();
-      await waitFor(() => {});
-      expect(page.proTeasingIcon('user_passphrase_policies_menu')).not.toBeNull();
-    });
-  });
-
-  describe("As a signed-in CE administrator on the administration workspace, I can see the User User Directory option in the left-side bar with pro teasing icon", () => {
-    it('If the feature flag is true, the menu should be visible', async() => {
-      expect.assertions(5);
-      const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.USER_DIRECTORY}
-      }, true); // The props to pass
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      await page.goToUserDirectory();
-      expect(page.userDirectory).toBeTruthy();
-      expect(page.menuSelected).toBe('Users Directory');
-      expect(props.navigationContext.onGoToAdministrationUsersDirectoryRequestedTeasing).toHaveBeenCalled();
-      await waitFor(() => {});
-      expect(page.proTeasingIcon('user_directory_menu')).not.toBeNull();
+      await page.gotoScimSettings();
+      expect(page.scimSettings).toBeTruthy();
+      expect(page.menuSelected).toBe('SCIM');
+      expect(props.navigationContext.onGoToAdministrationScimRequested).toHaveBeenCalled();
     });
 
-    it('If the feature flag is false, the menu should still be visible', async() => {
-      expect.assertions(5);
+    it('If the feature flag is false, the menu should not be visible', async() => {
+      expect.assertions(2);
       const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.USER_DIRECTORY}
-      }, true); // The props to pass
-      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "usersDirectory");
+        context: {
+          siteSettings: {
+            canIUse: feature => feature !== "scim",
+            isFeatureBeta: jest.fn()
+          }
+        },
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SCIM},
+      }); // The props to pass
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
-      await page.goToUserDirectory();
-      expect(page.userDirectory).toBeTruthy();
-      expect(page.menuSelected).toBe('Users Directory');
-      expect(props.navigationContext.onGoToAdministrationUsersDirectoryRequestedTeasing).toHaveBeenCalled();
-      await waitFor(() => {});
-      expect(page.proTeasingIcon('user_directory_menu')).not.toBeNull();
-    });
-  });
-
-  describe("As a signed-in CE administrator on the administration workspace, I can see the User MFA Policy option in the left-side bar with pro teasing icon", () => {
-    it('If the feature flag is true, the menu should be visible', async() => {
-      expect.assertions(5);
-      const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA_POLICY}
-      }, true); // The props to pass
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      await page.gotoMfaPolicy();
-      expect(page.mfaPolicy).toBeTruthy();
-      expect(page.menuSelected).toBe('MFA Policy');
-      expect(props.navigationContext.onGoToAdministrationMfaPolicyRequestedTeasing).toHaveBeenCalled();
-      await waitFor(() => {});
-      expect(page.proTeasingIcon('mfa_policy_menu')).not.toBeNull();
-    });
-
-    it('If the feature flag is false, the menu should still be visible', async() => {
-      expect.assertions(5);
-      const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA_POLICY}
-      }, true); // The props to pass
-      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "mfaPolicy");
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      await page.gotoMfaPolicy();
-      expect(page.mfaPolicy).toBeTruthy();
-      expect(page.menuSelected).toBe('MFA Policy');
-      expect(props.navigationContext.onGoToAdministrationMfaPolicyRequestedTeasing).toHaveBeenCalled();
-      await waitFor(() => {});
-      expect(page.proTeasingIcon('mfa_policy_menu')).not.toBeNull();
-    });
-  });
-
-  describe("As a signed-in CE administrator on the administration workspace, I can see the Subscription option in the left-side bar with pro teasing icon", () => {
-    it('If the feature flag is true, the menu should be visible', async() => {
-      expect.assertions(5);
-      const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SUBSCRIPTION}
-      }, true); // The props to pass
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      await page.goToSubscription();
-      expect(page.subscription).toBeTruthy();
-      expect(page.menuSelected).toBe('Subscription');
-      expect(props.navigationContext.onGoToAdministrationSubscriptionRequestedTeasing).toHaveBeenCalled();
-      await waitFor(() => {});
-      expect(page.proTeasingIcon).not.toBeNull();
-    });
-
-    it('If the feature flag is false, the menu should still be visible', async() => {
-      expect.assertions(5);
-      const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SUBSCRIPTION}
-      }, true); // The props to pass
-      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "subscription");
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      await page.goToSubscription();
-      expect(page.subscription).toBeTruthy();
-      expect(page.menuSelected).toBe('Subscription');
-      expect(props.navigationContext.onGoToAdministrationSubscriptionRequestedTeasing).toHaveBeenCalled();
-      await waitFor(() => {});
-      expect(page.proTeasingIcon).not.toBeNull();
-    });
-  });
-
-  describe("As a signed-in CE administrator on the administration workspace, I can see the Account Recover option in the left-side bar with pro teasing icon", () => {
-    it('If the feature flag is true, the menu should be visible', async() => {
-      expect.assertions(5);
-      const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY}
-      }, true); // The props to pass
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      await page.goToAccountRecovery();
-      expect(page.accountRecovery).toBeTruthy();
-      expect(page.menuSelected).toBe('Account Recovery');
-      expect(props.navigationContext.onGoToAdministrationAccountRecoveryRequestedTeasing).toHaveBeenCalled();
-      await waitFor(() => {});
-      expect(page.proTeasingIcon('account_recovery_menu')).not.toBeNull();
-    });
-
-    it('If the feature flag is false, the menu should still be visible', async() => {
-      expect.assertions(5);
-      const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY}
-      }, true); // The props to pass
-      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "accountRecovery");
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      await page.goToAccountRecovery();
-      expect(page.accountRecovery).toBeTruthy();
-      expect(page.menuSelected).toBe('Account Recovery');
-      expect(props.navigationContext.onGoToAdministrationAccountRecoveryRequestedTeasing).toHaveBeenCalled();
-      await waitFor(() => {});
-      expect(page.proTeasingIcon('account_recovery_menu')).not.toBeNull();
-    });
-  });
-
-  describe("As a signed-in CE administrator on the administration workspace, I can see the SSO option in the left-side bar with pro teasing icon", () => {
-    it('If the feature flag is true, the menu should be visible', async() => {
-      expect.assertions(5);
-      const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SSO}
-      }, true); // The props to pass
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      await page.goToSsoSettings();
-      expect(page.ssoSettings).toBeTruthy();
-      expect(page.menuSelected).toBe('Single Sign-On');
-      expect(props.navigationContext.onGoToAdministrationSsoRequestedTeasing).toHaveBeenCalled();
-      await waitFor(() => {});
-      expect(page.proTeasingIcon('sso_menu')).not.toBeNull();
-    });
-
-    it('If the feature flag is false, the menu should still be visible', async() => {
-      expect.assertions(5);
-      const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SSO}
-      }, true); // The props to pass
-      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "sso");
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      await page.goToSsoSettings();
-      expect(page.ssoSettings).toBeTruthy();
-      expect(page.menuSelected).toBe('Single Sign-On');
-      expect(props.navigationContext.onGoToAdministrationSsoRequestedTeasing).toHaveBeenCalled();
-      await waitFor(() => {});
-      expect(page.proTeasingIcon('sso_menu')).not.toBeNull();
-    });
-  });
-
-  describe("As a signed-in CE administrator on the administration workspace, I can see the Password Policy option in the left-side bar with pro teasing icon", () => {
-    it('If the feature flag is true, the menu should be visible', async() => {
-      expect.assertions(5);
-      const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES}
-      }, true); // The props to pass
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      await page.gotoPasswordPolicySettings();
-      expect(page.passwordPolicySettings).toBeTruthy();
-      expect(page.menuSelected).toBe('Password Policy');
-      expect(props.navigationContext.onGoToAdministrationPasswordPoliciesRequestedTeasing).toHaveBeenCalled();
-      await waitFor(() => {});
-      expect(page.proTeasingIcon('password_policy_menu')).not.toBeNull();
-    });
-
-    it('If the feature flag is false, the menu should still be visible', async() => {
-      expect.assertions(5);
-      const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES}
-      }, true); // The props to pass
-      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "passwordPolicies");
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      await page.gotoPasswordPolicySettings();
-      expect(page.passwordPolicySettings).toBeTruthy();
-      expect(page.menuSelected).toBe('Password Policy');
-      expect(props.navigationContext.onGoToAdministrationPasswordPoliciesRequestedTeasing).toHaveBeenCalled();
-      await waitFor(() => {});
-      expect(page.proTeasingIcon('password_policy_menu')).not.toBeNull();
+      expect(page.scimSettings).toBeNull();
     });
   });
 });

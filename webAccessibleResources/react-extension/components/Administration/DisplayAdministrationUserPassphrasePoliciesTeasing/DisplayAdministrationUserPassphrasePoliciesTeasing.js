@@ -35,7 +35,7 @@ class DisplayAdministrationUserPassphrasePoliciesTeasing extends React.Component
               <ul className="user-passphrase-policies-description">
                 <li><RedCheck/><Trans>Mitigate risks associated with weak passphrases.</Trans></li>
                 <li><RedCheck/><Trans>Customise minimum length and complexity.</Trans></li>
-                <li><RedCheck/><Trans>Improve overall user account security.</Trans></li>
+                <li><RedCheck/><Trans>Improve overall account security.</Trans></li>
               </ul>
               <div>
                 <a className="button primary" href="https://www.passbolt.com/contact/sales?utm_campaign=21060976-CE%20to%20Pro&utm_source=product" target="_blank" rel="noopener noreferrer"><Trans>Upgrade to Passbolt Pro</Trans></a>

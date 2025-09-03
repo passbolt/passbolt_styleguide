@@ -39,7 +39,7 @@ describe("DisplaySubscriptionKeyTeasing", () => {
    */
   it('As CE AD I should see all details about the subscription', async() => {
     page = new DisplaySubscriptionKeyTeasingPage(props.context, props);
-    const subscriptionKeyTeasingInfoDescription = "Passbolt Community Edition (CE) includes all essential features for team collaboration at no cost. For advanced needs such as Single Sign-On (SSO), AD or SCIM integration, consider upgrading to Passbolt Pro. The Pro version also offers premium technical support from our engineering team to ensure smooth operation and expert assistance.";
+    const subscriptionKeyTeasingInfoDescription = "Passbolt Community Edition includes all essential features for team collaboration at no cost. For advanced needs such as Single Sign-On (SSO), Account Recovery and Active Directory integration, consider upgrading to Passbolt Pro. The Pro version also offers direct support from our engineering team to ensure smooth operation and expert assistance.";
     await waitFor(() => {});
     expect(page.title).toBe("Subscription");
     expect(page.subscriptionDetailsTitle).toBe("Details");

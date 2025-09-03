@@ -15,7 +15,7 @@ import React from "react";
 import {withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import CardItem from "../../../../shared/components/Cards/CardItem";
-import {AdministrationWorkspaceFeatureFlag, AdministrationWorkspaceMenuTypes, PRO_TEASING_MENUITEMS} from "../../../contexts/AdministrationWorkspaceContext";
+import {AdministrationWorkspaceFeatureFlag, AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import SubscriptionSVG from "../../../../img/svg/subscription.svg";
@@ -33,6 +33,7 @@ import MFAPolicySVG from "../../../../img/svg/mfa_policy.svg";
 import SelfRegisterSVG from "../../../../img/svg/self_register.svg";
 import LDAPSVG from "../../../../img/svg/ldap.svg";
 import EmailServerSVG from "../../../../img/svg/email_server.svg";
+import ScimSVG from "../../../../img/svg/scim.svg";
 import RBACSVG from "../../../../img/svg/rbac.svg";
 import InternationalSVG from "../../../../img/svg/international.svg";
 import HeartPulseSVG from "../../../../img/svg/heart_pulse.svg";
@@ -46,6 +47,19 @@ const metadataMenuItems = [
   AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA,
   AdministrationWorkspaceMenuTypes.MIGRATE_METADATA,
   AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES
+];
+
+/**
+ * Following menu items should be displayed for CE Admins for PRO Teasing
+ */
+const proTeasingMenuItems = [
+  AdministrationWorkspaceMenuTypes.SUBSCRIPTION,
+  AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES,
+  AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES,
+  AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY,
+  AdministrationWorkspaceMenuTypes.SSO,
+  AdministrationWorkspaceMenuTypes.MFA_POLICY,
+  AdministrationWorkspaceMenuTypes.USER_DIRECTORY
 ];
 
 /**
@@ -178,6 +192,12 @@ class AdministrationHomePage extends React.PureComponent {
       redirectTo: this.props.navigationContext.onGoToAdministrationSelfRegistrationRequested,
       flag: AdministrationWorkspaceMenuTypes.SELF_REGISTRATION,
     }, {
+      icon: <ScimSVG/>,
+      title: this.props.t("SCIM"),
+      description: this.props.t("Configure the System for Cross-domain Identity Management."),
+      redirectTo: this.props.navigationContext.onGoToAdministrationScimRequested,
+      flag: AdministrationWorkspaceMenuTypes.SCIM,
+    }, {
       icon: <EmailServerSVG/>,
       title: this.props.t("Email server"),
       description: this.props.t("Control the SMTP server configuration used to send emails."),
@@ -217,7 +237,7 @@ class AdministrationHomePage extends React.PureComponent {
    */
   shouldBeDisplayed(cardItemData) {
     if (!this.isFlagEnabled(cardItemData) && !this.isProTeasingMenuItem(cardItemData)) {
-      //flag is disabled or not eligible for PRO teasing, we don't display the menu item
+      //flag is disabled and not eligible for PRO teasing, we don't display the menu item
       return false;
     }
 
@@ -251,7 +271,7 @@ class AdministrationHomePage extends React.PureComponent {
    * @returns {boolean}
    */
   isProTeasingMenuItem(cardData) {
-    return (PRO_TEASING_MENUITEMS.includes(cardData.flag) && this.isCeEdition());
+    return proTeasingMenuItems.includes(cardData.flag);
   }
 
   /**

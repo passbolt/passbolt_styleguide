@@ -30,7 +30,7 @@ class ManageAccountRecoveryAdministrationSettingsTeasing extends React.Component
         <div className="recover-account-settings-teasing main-column">
           <div className="main-content">
             <h3 className="title"id="recover-account-settings-title"><Trans>Account Recovery</Trans></h3>
-            <p><Trans>Recover lost user accounts.</Trans></p>
+            <p><Trans>Help users to recover their accounts.</Trans></p>
             <div className="recover-account-info">
               <ul className="recover-account-description">
                 <li><RedCheck/><Trans>In case of passphrase loss.</Trans></li>

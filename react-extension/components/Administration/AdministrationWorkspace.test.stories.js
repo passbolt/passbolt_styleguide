@@ -84,12 +84,6 @@ export default {
                                   "/app/administration/subscription",
                                   "/app/administration/user-passphrase-policies",
                                   "/app/administration/content-types/metadata",
-                                  "/app/administration/account-recovery-teasing",
-                                  "/app/administration/password-policies-teasing",
-                                  "/app/administration/sso-teasing",
-                                  "/app/administration/user-passphrase-policies-teasing",
-                                  "/app/administration/subscription-teasing",
-                                  "/app/administration/mfa-policy-teasing"
                                 ]}>
                                   <AdministrationWorkspaceContextProvider value={args.administrationWorkspaceContext}>
                                     <AdminAccountRecoveryContextProvider>
@@ -163,28 +157,6 @@ export const SubscriptionPage = {
   },
 };
 
-export const SubscriptionPageTeasing = {
-  args: {
-    port: cePort,
-    storage: ceStorage,
-    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.SUBSCRIPTION
-    }),
-    routerInitialEntry: "/app/administration/subscription-teasing"
-  },
-};
-
-export const UsersDirectoryTeasing = {
-  args: {
-    port: cePort,
-    storage: ceStorage,
-    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.USER_DIRECTORY
-    }),
-    routerInitialEntry: "/app/administration/users-directory-teasing"
-  },
-};
-
 export const PasswordExpiryPage = {
   args: {
     port: port,
@@ -210,20 +182,6 @@ export const MfaPolicyPage = {
   }
 };
 
-export const MfaPolicyPageTeasing = {
-  args: {
-    port: cePort,
-    storage: ceStorage,
-    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.MFA_POLICY
-    }),
-    routerInitialEntry: "/app/administration/mfa-policy-teasing"
-  },
-  parameters: {
-    css: "api_main"
-  }
-};
-
 export const PasswordPoliciesPage = {
   args: {
     port: port,
@@ -232,17 +190,6 @@ export const PasswordPoliciesPage = {
       selectedAdministration: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES
     }),
     routerInitialEntry: "/app/administration/password-policies"
-  },
-};
-
-export const PasswordPoliciesPageTeasing = {
-  args: {
-    port: cePort,
-    storage: ceStorage,
-    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES
-    }),
-    routerInitialEntry: "/app/administration/password-policies-teasing"
   },
 };
 
@@ -257,17 +204,6 @@ export const SingleSignOnPage = {
   },
 };
 
-export const SingleSignOnPageTeasing = {
-  args: {
-    port: cePort,
-    storage: ceStorage,
-    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.SSO
-    }),
-    routerInitialEntry: "/app/administration/sso-teasing"
-  },
-};
-
 export const AccountRecoveryPage = {
   args: {
     port: port,
@@ -279,17 +215,6 @@ export const AccountRecoveryPage = {
   },
 };
 
-export const AccountRecoveryPageTeasing = {
-  args: {
-    port: cePort,
-    storage: ceStorage,
-    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY
-    }),
-    routerInitialEntry: "/app/administration/account-recovery-teasing"
-  },
-};
-
 export const UserPassphrasePoliciesPage = {
   args: {
     port: port,
@@ -298,17 +223,6 @@ export const UserPassphrasePoliciesPage = {
       selectedAdministration: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES
     }),
     routerInitialEntry: "/app/administration/user-passphrase-policies"
-  },
-};
-
-export const UserPassphrasePoliciesPageTeasing = {
-  args: {
-    port: cePort,
-    storage: ceStorage,
-    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES,
-    }),
-    routerInitialEntry: "/app/administration/user-passphrase-policies-teasing"
   },
 };
 

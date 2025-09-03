@@ -48,7 +48,7 @@ describe("DisplayMfaPolicyAdministrationTeasing", () => {
     await waitFor(() => {});
     expect(page.exists()).toBeTruthy();
     expect(page.title).toBe("MFA Policy");
-    expect(page.mfaSettingsFirstLine).toBe("Enhance security by enforcing multi-factor authentication.");
+    expect(page.mfaSettingsFirstLine).toBe("Enhance security with multi-factor authentication.");
     expect(page.upgradeButton).toBeTruthy();
     expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/contact/pro/enterprise");
 

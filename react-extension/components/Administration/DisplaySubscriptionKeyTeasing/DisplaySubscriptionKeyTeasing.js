@@ -56,10 +56,10 @@ class DisplaySubscriptionKeyTeasing extends React.Component {
                 <AnimatedFeedback name="infinity_illustration" />
                 <div>
                   <div className="title-text"><Trans>Passbolt CE is free forever!</Trans></div>
-                  <span><Trans>Passbolt Community Edition (CE) includes all essential features for team collaboration at no cost.</Trans>&nbsp;
-                    <Trans>For advanced needs such as Single Sign-On (SSO), AD or SCIM
+                  <span><Trans>Passbolt Community Edition includes all essential features for team collaboration at no cost.</Trans>&nbsp;
+                    <Trans>For advanced needs such as Single Sign-On (SSO), Account Recovery and Active Directory
                                     integration, consider upgrading to Passbolt Pro.</Trans>&nbsp;
-                    <Trans>The Pro version also offers premium technical support from our engineering team to ensure smooth operation and expert assistance.</Trans></span>
+                    <Trans>The Pro version also offers direct support from our engineering team to ensure smooth operation and expert assistance.</Trans></span>
                 </div>
               </div>
             </div>

@@ -196,44 +196,36 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const migrateMetadata = ADMIN_URL_REGEXP.migrateEncryptedMetadata.test(location);
     const allowContentType = ADMIN_URL_REGEXP.allowContentTypes.test(location);
     const gettingStarted = ADMIN_URL_REGEXP.gettingStarted.test(location);
-
-    const isMfaPolicyLocationTeasing = ADMIN_URL_REGEXP.mfaPolicyTeasing.test(location);
-    const isPasswordPoliciesLocationTeasing = ADMIN_URL_REGEXP.passwordPoliciesTeasing.test(location);
-    const isUserDirectoryLocationTeasing = ADMIN_URL_REGEXP.usersDirectoryTeasing.test(location);
-    const isSubscriptionLocationTeasing = ADMIN_URL_REGEXP.subscriptionTeasing.test(location);
-    const isAccountRecoveryLocationTeasing = ADMIN_URL_REGEXP.accountRecoveryTeasing.test(location);
-    const isUserPassphrasePoliciesTeasing = ADMIN_URL_REGEXP.userPassphrasePoliciesTeasing.test(location);
-    const isSsoTeasing = ADMIN_URL_REGEXP.ssoTeasing.test(location);
-
+    const scim = ADMIN_URL_REGEXP.scim.test(location);
 
     let selectedAdministration;
     if (isAdminHomePageLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.HOME;
-    } else if (isMfaPolicyLocation || isMfaPolicyLocationTeasing) {
+    } else if (isMfaPolicyLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.MFA_POLICY;
-    } else if (isPasswordPoliciesLocation || isPasswordPoliciesLocationTeasing) {
+    } else if (isPasswordPoliciesLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES;
     } else if (isMfaLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.MFA;
-    } else if (isUserDirectoryLocation || isUserDirectoryLocationTeasing) {
+    } else if (isUserDirectoryLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.USER_DIRECTORY;
     } else if (isEmailNotificationLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION;
-    } else if (isSubscriptionLocation || isSubscriptionLocationTeasing) {
+    } else if (isSubscriptionLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SUBSCRIPTION;
     } else if (isInternationalizationLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION;
-    } else if (isAccountRecoveryLocation || isAccountRecoveryLocationTeasing) {
+    } else if (isAccountRecoveryLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY;
     } else if (isSmtpSettingsLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SMTP_SETTINGS;
     } else if (isSelfRegistrationLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SELF_REGISTRATION;
-    } else if (isSso || isSsoTeasing) {
+    } else if (isSso) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SSO;
     } else if (rbac) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.RBAC;
-    } else if (isUserPassphrasePolicies || isUserPassphrasePoliciesTeasing) {
+    } else if (isUserPassphrasePolicies) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES;
     } else if (isPasswordExpirySettings) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY;
@@ -249,6 +241,8 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES;
     } else if (gettingStarted) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED;
+    } else if (scim) {
+      selectedAdministration = AdministrationWorkspaceMenuTypes.SCIM;
     }
 
     // let's check if the current URL is actually supported
@@ -261,12 +255,14 @@ class AdministrationWorkspaceContextProvider extends React.Component {
 
     // the URL is supported, now check if the feature flag is enabled or not (except for email notification which doesn't have flag).
     const currentFeatureFlag = AdministrationWorkspaceFeatureFlag?.[selectedAdministration];
-    newState.selectedAdministration = currentFeatureFlag && !(this.props.context.siteSettings.canIUse(currentFeatureFlag) || (PRO_TEASING_MENUITEMS.includes(selectedAdministration) && this.props.context.siteSettings.isCeEdition))
+
+    newState.selectedAdministration = currentFeatureFlag && !this.props.context.siteSettings.canIUse(currentFeatureFlag)
       ? AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND
       : selectedAdministration;
 
     this.setState(newState);
   }
+
   /**
    * Set the display of the administration workspace action
    * @param administrationWorkspaceAction
@@ -363,7 +359,8 @@ export const AdministrationWorkspaceMenuTypes = {
   CONTENT_TYPES_METADATA_KEY: "CONTENT_TYPES_METADATA_KEY", // Content types metadata key administration menu selected
   MIGRATE_METADATA: "MIGRATE_METADATA", //Migrate metadata administration menu selected
   ALLOW_CONTENT_TYPES: "ALLOW_CONTENT_TYPES", // Allow content types administration menu selected
-  METADATA_GETTING_STARTED: "METADATA_GETTING_STARTED", // metadata getting started menu selected
+  METADATA_GETTING_STARTED: "METADATA_GETTING_STARTED", // metadata getting started menu selected``
+  SCIM: "SCIM", // SCIM menu selected
 };
 
 /**
@@ -389,6 +386,7 @@ export const AdministrationWorkspaceFeatureFlag = {
   [AdministrationWorkspaceMenuTypes.MIGRATE_METADATA]: "metadata", // Migrate metadata flag
   [AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES]: "metadata", // Allox content types flag
   [AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED]: "metadata", // Allow  types flag
+  [AdministrationWorkspaceMenuTypes.SCIM]: "scim", // Allow  types flag
 };
 
 /**
@@ -398,24 +396,17 @@ const ADMIN_URL_REGEXP = {
   homePage: /^\/app\/administration\/?$/,
   mfa: /^\/app\/administration\/mfa\/?$/,
   mfaPolicy: /^\/app\/administration\/mfa-policy\/?$/,
-  mfaPolicyTeasing: /^\/app\/administration\/mfa-policy-teasing\/?$/,
   passwordPolicies: /^\/app\/administration\/password-policies\/?$/,
-  passwordPoliciesTeasing: /^\/app\/administration\/password-policies-teasing\/?$/,
   usersDirectory: /^\/app\/administration\/users-directory\/?$/,
-  usersDirectoryTeasing: /^\/app\/administration\/users-directory-teasing\/?$/,
   emailNotification: /^\/app\/administration\/email-notification\/?$/,
   subscription: /^\/app\/administration\/subscription\/?$/,
-  subscriptionTeasing: /^\/app\/administration\/subscription-teasing\/?$/,
   internationalization: /^\/app\/administration\/internationalization\/?$/,
   accountRecovery: /^\/app\/administration\/account-recovery\/?$/,
-  accountRecoveryTeasing: /^\/app\/administration\/account-recovery-teasing\/?$/,
   smtpSettings: /^\/app\/administration\/smtp-settings\/?$/,
   selfRegistration: /^\/app\/administration\/self-registration\/?$/,
   sso: /^\/app\/administration\/sso\/?$/,
-  ssoTeasing: /^\/app\/administration\/sso-teasing\/?$/,
   rbac: /^\/app\/administration\/rbacs\/?$/,
   userPassphrasePolicies: /^\/app\/administration\/user-passphrase-policies\/?$/,
-  userPassphrasePoliciesTeasing: /^\/app\/administration\/user-passphrase-policies-teasing\/?$/,
   passwordExpirySettings: /^\/app\/administration\/password-expiry\/?$/,
   healthcheck: /^\/app\/administration\/healthcheck\/?$/,
   contentTypesEncryptedMetadata: /^\/app\/administration\/content-types\/metadata\/?$/,
@@ -423,17 +414,5 @@ const ADMIN_URL_REGEXP = {
   migrateEncryptedMetadata: /^\/app\/administration\/migrate-metadata\/?$/,
   allowContentTypes: /^\/app\/administration\/allow-content-types\/?$/,
   gettingStarted: /^\/app\/administration\/content-types\/metadata-getting-started\/?$/,
+  scim: /^\/app\/administration\/user-provisionning\/scim\/?$/,
 };
-
-/**
- * Following menu items should be displayed for CE Admins for PRO Teasing
- */
-export const PRO_TEASING_MENUITEMS = [
-  AdministrationWorkspaceMenuTypes.SUBSCRIPTION,
-  AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES,
-  AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES,
-  AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY,
-  AdministrationWorkspaceMenuTypes.SSO,
-  AdministrationWorkspaceMenuTypes.MFA_POLICY,
-  AdministrationWorkspaceMenuTypes.USER_DIRECTORY
-];
