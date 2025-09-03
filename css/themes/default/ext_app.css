@@ -10380,6 +10380,10 @@ svg .section-card .card .title:first-child {
   height: 0.8rem;
   width: 0.8rem;
 }
+.page.administration .app .panel.main #administration_menu li button svg.pro-teasing-icon {
+  height: 1.6rem;
+  width: 1.6rem;
+}
 .page.administration .app .panel.main #administration_menu li ul {
   margin-left: 1.6rem;
 }
@@ -10471,13 +10475,20 @@ svg .section-card .card .title:first-child {
 .ldap-settings-teasing .ldap-settings-info,
 .mfa-settings-teasing .ldap-settings-info,
 .scim-teasing .ldap-settings-info,
-.password-policies-settings-teasing .mfa-settings-info .scim-info,
-.user-passphrase-policies-settings-teasing .mfa-settings-info .scim-info,
-.recover-account-settings-teasing .mfa-settings-info .scim-info,
-.third-party-provider-settings-teasing .mfa-settings-info .scim-info,
-.ldap-settings-teasing .mfa-settings-info .scim-info,
-.mfa-settings-teasing .mfa-settings-info .scim-info,
-.scim-teasing .mfa-settings-info .scim-info {
+.password-policies-settings-teasing .mfa-settings-info,
+.user-passphrase-policies-settings-teasing .mfa-settings-info,
+.recover-account-settings-teasing .mfa-settings-info,
+.third-party-provider-settings-teasing .mfa-settings-info,
+.ldap-settings-teasing .mfa-settings-info,
+.mfa-settings-teasing .mfa-settings-info,
+.scim-teasing .mfa-settings-info,
+.password-policies-settings-teasing .scim-info,
+.user-passphrase-policies-settings-teasing .scim-info,
+.recover-account-settings-teasing .scim-info,
+.third-party-provider-settings-teasing .scim-info,
+.ldap-settings-teasing .scim-info,
+.mfa-settings-teasing .scim-info,
+.scim-teasing .scim-info {
   display: flex;
   padding: 1.2rem;
   align-items: flex-start;

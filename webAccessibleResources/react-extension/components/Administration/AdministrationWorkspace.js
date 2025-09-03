@@ -25,21 +25,29 @@ import DisplayAdministrationWorkspaceBreadcrumb
   from "./DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
 import DisplayUserDirectoryAdministration
   from "./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration";
+import DisplayUserDirectoryAdministrationTeasing from "./DisplayUserDirectoryAdministrationTeasing/DisplayUserDirectoryAdministrationTeasing";
 import DisplayEmailNotificationsAdministration
   from "./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration";
 import DisplaySubscriptionKey from "./DisplaySubscriptionKey/DisplaySubscriptionKey";
+import DisplaySubscriptionKeyTeasing from "./DisplaySubscriptionKeyTeasing/DisplaySubscriptionKeyTeasing";
 import DisplayInternationalizationAdministration
   from "./DisplayInternationalizationAdministration/DisplayInternationalizationAdministration";
 import ManageAccountRecoveryAdministrationSettings
   from "./ManageAccountRecoveryAdministrationSettings/ManageAccountRecoveryAdministrationSettings";
+import ManageAccountRecoveryAdministrationSettingsTeasing
+  from "./ManageAccountRecoveryAdministrationSettingsTeasing/ManageAccountRecoveryAdministrationSettingsTeasing";
 import ManageSmtpAdministrationSettings
   from "./ManageSmtpAdministrationSettings/ManageSmtpAdministrationSettings.js";
 import DisplaySelfRegistrationAdministration from "./DisplaySelfRegistrationAdministration/DisplaySelfRegistrationAdministration";
 import ManageSsoSettings from "./ManageSsoSettings/ManageSsoSettings";
+import ManageSsoSettingsTeasing from "./ManageSsoSettingsTeasing/ManageSsoSettingsTeasing";
 import DisplayMfaPolicyAdministration from "./DisplayMfaPolicyAdministration/DisplayMfaPolicyAdministration";
+import DisplayMfaPolicyAdministrationTeasing from "./DisplayMfaPolicyAdministrationTeasing/DisplayMfaPolicyAdministrationTeasing";
 import DisplayRbacAdministration from "./DisplayRbacAdministration/DisplayRbacAdministration";
 import DisplayPasswordPoliciesAdministration from "./DisplayPasswordPoliciesAdministration/DisplayPasswordPoliciesAdministration";
+import DisplayPasswordPoliciesAdministrationTeasing from "./DisplayPasswordPoliciesAdministrationTeasing/DisplayPasswordPoliciesAdministrationTeasing";
 import DisplayAdministrationUserPassphrasePolicies from "./DisplayAdministrationUserPassphrasePolicies/DisplayAdministrationUserPassphrasePolicies";
+import DisplayAdministrationUserPassphrasePoliciesTeasing from "./DisplayAdministrationUserPassphrasePoliciesTeasing/DisplayAdministrationUserPassphrasePoliciesTeasing";
 import DisplayAdministrationPasswordExpiry from "./DisplayAdministrationPasswordExpiry/DisplayAdministrationPasswordExpiry";
 import DisplayHttpError from "../Common/Error/DisplayHttpError/DisplayHttpError";
 import DisplayHealthcheckAdministration from "./DisplayHealthcheckAdministration/DisplayHealthcheckAdministration";
@@ -74,6 +82,14 @@ class AdministrationWorkspace extends Component {
    */
   bindCallbacks() {
     this.handleGoBack = this.handleGoBack.bind(this);
+  }
+
+  /**
+   * Returns true if CE; false if PRO
+   * @returns {boolean}
+   */
+  isCeEdition() {
+    return this.props.context.siteSettings.isCeEdition;
   }
 
   /**
@@ -325,25 +341,25 @@ class AdministrationWorkspace extends Component {
                       <DisplayMfaAdministration/>
                     }
                     {this.isMfaPolicySelected() &&
-                      <DisplayMfaPolicyAdministration/>
+                      (this.isCeEdition() ? <DisplayMfaPolicyAdministrationTeasing/> : <DisplayMfaPolicyAdministration/>)
                     }
                     {this.isPasswordPoliciesSelected() &&
-                      <DisplayPasswordPoliciesAdministration/>
+                      (this.isCeEdition() ? <DisplayPasswordPoliciesAdministrationTeasing/> : <DisplayPasswordPoliciesAdministration/>)
                     }
                     {this.isUserDirectorySelected() &&
-                      <DisplayUserDirectoryAdministration/>
+                      (this.isCeEdition() ? <DisplayUserDirectoryAdministrationTeasing/> : <DisplayUserDirectoryAdministration/>)
                     }
                     {this.isEmailNotificationsSelected() &&
                       <DisplayEmailNotificationsAdministration/>
                     }
                     {this.isSubscriptionSelected() &&
-                      <DisplaySubscriptionKey/>
+                      (this.isCeEdition() ? <DisplaySubscriptionKeyTeasing/> : <DisplaySubscriptionKey/>)
                     }
                     {this.isInternationalizationSelected() &&
                       <DisplayInternationalizationAdministration/>
                     }
                     {this.isAccountRecoverySelected() &&
-                      <ManageAccountRecoveryAdministrationSettings/>
+                      (this.isCeEdition() ? <ManageAccountRecoveryAdministrationSettingsTeasing/> : <ManageAccountRecoveryAdministrationSettings/>)
                     }
                     {this.isSmtpSettingsSelected() &&
                       <ManageSmtpAdministrationSettings/>
@@ -352,13 +368,13 @@ class AdministrationWorkspace extends Component {
                       <DisplaySelfRegistrationAdministration/>
                     }
                     {this.isSsoSelected() &&
-                      <ManageSsoSettings/>
+                      (this.isCeEdition() ? <ManageSsoSettingsTeasing/> : <ManageSsoSettings/>)
                     }
                     {this.isRbacSelected() &&
                       <DisplayRbacAdministration/>
                     }
                     {this.isUserPassphrasePoliciesSelected() &&
-                      <DisplayAdministrationUserPassphrasePolicies/>
+                      (this.isCeEdition() ? <DisplayAdministrationUserPassphrasePoliciesTeasing/> : <DisplayAdministrationUserPassphrasePolicies/>)
                     }
                     {this.isPasswordExpirySelected() &&
                       <DisplayAdministrationPasswordExpiry/>

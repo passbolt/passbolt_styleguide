@@ -175,5 +175,54 @@ export default class AdministrationWorkspacePage {
   get isGetStartedMetadataSelected() {
     return Boolean(this._page.container.querySelector('#metadata-getting-started'));
   }
+
+  /**
+   * Returns true if the mfa policy area is visible for CE Admins
+   */
+  get isMfaPolicyTeasingSelected() {
+    return Boolean(this._page.container.querySelector('.mfa-policy-details-teasing'));
+  }
+
+  /**
+   * Returns true if the password policies area is visible for CE Admins
+   */
+  get isPasswordPoliciesTeasingSelected() {
+    return Boolean(this._page.container.querySelector('.password-policies-details-teasing'));
+  }
+
+  /**
+   * Returns true if the user directory area is visible for CE Admins
+   */
+  get isUserDirectoryTeasingSelected() {
+    return Boolean(this._page.container.querySelector('.user-directory-details-teasing'));
+  }
+
+  /**
+   * Returns true if the user passphrase policies area is visible for CE Admins
+   */
+  get isUserPasphrasePoliciesTeasingSelected() {
+    return Boolean(this._page.container.querySelector('.user-passphrase-policies-details-teasing'));
+  }
+
+  /**
+   * Returns true if the sso settings area is visible for CE Admins
+   */
+  get isSsoTeasingSelected() {
+    return Boolean(this._page.container.querySelector('.sso-teasing'));
+  }
+
+  /**
+   * Returns true if the account recovery area is visible for CE Admins
+   */
+  get isAccountRecoveryTeasingSelected() {
+    return Boolean(this._page.container.querySelector('.account-recovery-details-teasing'));
+  }
+
+  /**
+   * Returns true if the subscription key area is visible for CE Admins
+   */
+  get isSubscriptionKeyTeasingSelected() {
+    return Boolean(this._page.container.querySelector('.subscription-key-details-teasing'));
+  }
 }
 

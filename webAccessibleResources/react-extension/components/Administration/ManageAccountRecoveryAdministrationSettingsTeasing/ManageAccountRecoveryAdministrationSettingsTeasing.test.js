@@ -48,7 +48,7 @@ describe("ManageAccountRecoveryAdministrationSettingsTeasing", () => {
     await waitFor(() => {});
     expect(page.exists()).toBeTruthy();
     expect(page.title).toBe("Account Recovery");
-    expect(page.accountRecoveryPolicyFirstLine).toBe("Help users to recover their accounts.");
+    expect(page.accountRecoveryPolicyFirstLine).toBe("Recover lost user accounts.");
     expect(page.upgradeButton).toBeTruthy();
     expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/contact/sales?utm_campaign=21060976-CE%20to%20Pro&utm_source=product");
 
