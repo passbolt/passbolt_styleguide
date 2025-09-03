@@ -15,7 +15,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import {
   AdministrationWorkspaceMenuTypes,
-  withAdministrationWorkspace
+  withAdministrationWorkspace,
+  PRO_TEASING_MENUITEMS
 } from "../../../contexts/AdministrationWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withRouter} from "react-router-dom";
@@ -28,6 +29,7 @@ import {
 } from "../../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
 import MetadataGettingStartedSettingsEntity
   from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity";
+import FrameSVG from "../../../../img/svg/Frame.svg";
 
 /**
  * This component allows to display the menu of the administration
@@ -63,6 +65,23 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * If the card is to be displayed for CE Admin as part of PRO teasing
+   * @param {string} item
+   * @returns {boolean}
+   */
+  isProTeasingMenuItem(item) {
+    return (PRO_TEASING_MENUITEMS.includes(item) && this.isCeEdition());
+  }
+
+  /**
+   * Returns true if CE; false if PRO
+   * @returns {boolean}
+   */
+  isCeEdition() {
+    return this.props.context.siteSettings.isCeEdition;
+  }
+
+  /**
    * Returns true if the user has the MFA capability
    * @returns {boolean}
    */
@@ -75,7 +94,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get isUserDirectoryEnabled() {
-    return this.canIUse('directorySync');
+    return this.canIUse('directorySync') || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.USER_DIRECTORY);
   }
 
   /**
@@ -83,7 +102,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseEE() {
-    return this.canIUse('ee');
+    return this.canIUse('ee') || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.SUBSCRIPTION);
   }
 
   /**
@@ -99,7 +118,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseAccountRecovery() {
-    return this.canIUse('accountRecovery');
+    return this.canIUse('accountRecovery') || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY);
   }
 
   /**
@@ -123,7 +142,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseSso() {
-    return this.canIUse('sso');
+    return this.canIUse('sso') || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.SSO);
   }
 
   /**
@@ -131,7 +150,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseMfaPolicy() {
-    return this.canIUse('mfaPolicies');
+    return this.canIUse('mfaPolicies') || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.MFA_POLICY);
   }
 
   /**
@@ -139,7 +158,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUsePasswordPolicies() {
-    return this.canIUse('passwordPoliciesUpdate');
+    return this.canIUse('passwordPoliciesUpdate') || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES);
   }
 
   /**
@@ -155,7 +174,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseUserPassphrasePolicies() {
-    return this.canIUse('userPassphrasePolicies');
+    return this.canIUse('userPassphrasePolicies') || this.isProTeasingMenuItem(AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES);
   }
 
   /**
@@ -248,7 +267,7 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the user directory menu
    */
   handleUserDirectoryClick() {
-    this.props.navigationContext.onGoToAdministrationUsersDirectoryRequested();
+    this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationUsersDirectoryRequestedTeasing() : this.props.navigationContext.onGoToAdministrationUsersDirectoryRequested();
   }
 
   /**
@@ -262,7 +281,7 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the subscription menu
    */
   handleSubscriptionClick() {
-    this.props.navigationContext.onGoToAdministrationSubscriptionRequested();
+    this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationSubscriptionRequestedTeasing() : this.props.navigationContext.onGoToAdministrationSubscriptionRequested();
   }
 
   /**
@@ -276,7 +295,7 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the account recovery menu
    */
   handleAccountRecoveryClick() {
-    this.props.navigationContext.onGoToAdministrationAccountRecoveryRequested();
+    this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationAccountRecoveryRequestedTeasing() : this.props.navigationContext.onGoToAdministrationAccountRecoveryRequested();
   }
 
   /**
@@ -297,7 +316,7 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the sso menu
    */
   handleSsoClick() {
-    this.props.navigationContext.onGoToAdministrationSsoRequested();
+    this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationSsoRequestedTeasing() : this.props.navigationContext.onGoToAdministrationSsoRequested();
   }
 
   /**
@@ -311,21 +330,21 @@ class DisplayAdministrationMenu extends React.Component {
    * Handle when the user click on the Mfa policy settings menu
    */
   handleMfaPolicyClick() {
-    this.props.navigationContext.onGoToAdministrationMfaPolicyRequested();
+    this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationMfaPolicyRequestedTeasing() : this.props.navigationContext.onGoToAdministrationMfaPolicyRequested();
   }
 
   /**
    * Handle when the user click on the Password policies settings menu
    */
   handlePasswordPoliciesClick() {
-    this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequested();
+    this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequestedTeasing() : this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequested();
   }
 
   /**
    * Handle when the user click on the User Passphrase Policies menu
    */
   handleUserPassphrasePoliciesClick() {
-    this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequested();
+    this.isCeEdition() ? this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequestedTeasing() : this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequested();
   }
 
   /**
@@ -647,7 +666,10 @@ class DisplayAdministrationMenu extends React.Component {
                   <div className={`row ${this.isSubscriptionSelected() ? "selected" : ""}`}>
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
-                        <button className="link no-border" type="button" onClick={this.handleSubscriptionClick}><span><Trans>Subscription</Trans></span></button>
+                        <button className="link no-border" type="button" onClick={this.handleSubscriptionClick}>
+                          <span><Trans>Subscription</Trans></span>
+                          { this.isCeEdition() && <FrameSVG className="pro-teasing-icon"/> }
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -769,7 +791,7 @@ class DisplayAdministrationMenu extends React.Component {
                             <div className={`row ${this.isPasswordPoliciesSelected() ? "selected" : ""}`}>
                               <div className="main-cell-wrapper">
                                 <div className="main-cell">
-                                  <button className="link no-border" type="button" onClick={this.handlePasswordPoliciesClick}><span><Trans>Password Policy</Trans></span></button>
+                                  <button className="link no-border" type="button" onClick={this.handlePasswordPoliciesClick}><span><Trans>Password Policy</Trans></span>{ this.isCeEdition() && <FrameSVG className="pro-teasing-icon"/> }</button>
                                 </div>
                               </div>
                             </div>
@@ -800,6 +822,7 @@ class DisplayAdministrationMenu extends React.Component {
                               <div className="main-cell">
                                 <button className="link no-border" type="button" onClick={this.handleUserPassphrasePoliciesClick}>
                                   <span><Trans>User Passphrase Policies</Trans></span>
+                                  { this.isCeEdition() && <FrameSVG className="pro-teasing-icon"/> }
                                 </button>
                               </div>
                             </div>
@@ -813,6 +836,7 @@ class DisplayAdministrationMenu extends React.Component {
                               <div className="main-cell">
                                 <button className="link no-border" type="button" onClick={this.handleAccountRecoveryClick}>
                                   <span><Trans>Account Recovery</Trans></span>
+                                  { this.isCeEdition() && <FrameSVG className="pro-teasing-icon"/> }
                                 </button>
                               </div>
                             </div>
@@ -826,6 +850,7 @@ class DisplayAdministrationMenu extends React.Component {
                               <div className="main-cell">
                                 <button className="link no-border" type="button" onClick={this.handleSsoClick}>
                                   <span><Trans>Single Sign-On</Trans></span>
+                                  { this.isCeEdition() && <FrameSVG className="pro-teasing-icon"/> }
                                 </button>
                               </div>
                             </div>
@@ -837,7 +862,8 @@ class DisplayAdministrationMenu extends React.Component {
                           <div className={`row ${this.isMfaPolicySelected() ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
-                                <button className="link no-border" type="button" onClick={this.handleMfaPolicyClick}><span><Trans>MFA Policy</Trans></span></button>
+                                <button className="link no-border" type="button" onClick={this.handleMfaPolicyClick}><span><Trans>MFA Policy</Trans></span>
+                                  { this.isCeEdition() && <FrameSVG className="pro-teasing-icon"/> }</button>
                               </div>
                             </div>
                           </div>
@@ -891,7 +917,9 @@ class DisplayAdministrationMenu extends React.Component {
                           <div className={`row ${this.isUserDirectorySelected() ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                               <div className="main-cell">
-                                <button className="link no-border" type="button" onClick={this.handleUserDirectoryClick}><span><Trans>Users Directory</Trans></span></button>
+                                <button className="link no-border" type="button" onClick={this.handleUserDirectoryClick}><span><Trans>Users Directory</Trans></span>
+                                  { this.isCeEdition() && <FrameSVG className="pro-teasing-icon"/> }
+                                </button>
                               </div>
                             </div>
                           </div>

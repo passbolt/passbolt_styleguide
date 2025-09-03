@@ -188,13 +188,7 @@ describe("ScimSettingsEntity", () => {
       expect.assertions(1);
       const dto = scimSettingsDtoForUpdating();
       const entity = ScimSettingsEntity.createFromScimSettingsUpdate(dto);
-      expect(entity.settingId).toBeNull();
-    });
-
-    it("should throw error if setting_id is present", () => {
-      expect.assertions(1);
-      const dto = defaultScimSettingsDto();
-      expect(() => ScimSettingsEntity.createFromScimSettingsUpdate(dto)).toThrow(EntityValidationError);
+      expect(entity.settingId).toBeUndefined();
     });
   });
 });

@@ -424,21 +424,21 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToAdministrationMfaPolicyRequestedTeasing() {
-    await this.goTo("api", "/app/administration/mfa-polic-teasingy");
+    await this.goTo("browser-extension", "/app/administration/mfa-policy-teasing");
   }
   /**
    * Whenever the CE Admin wants to navigate to the administration workspace users directory.
    * @returns {Promise<void>}
    */
   async onGoToAdministrationUsersDirectoryRequestedTeasing() {
-    await this.goTo("api", "/app/administration/users-directory-teasing");
+    await this.goTo("browser-extension", "/app/administration/users-directory-teasing");
   }
   /**
    * Whenever the CE Admin wants to navigate to the administration workspace SCIM.
    * @returns {Promise<void>}
    */
   async onGoToAdministrationScimRequestedTeasing() {
-    await this.goTo("api", "/app/administration/scim-teasing");
+    await this.goTo("browser-extension", "/app/administration/scim-teasing");
   }
 
   /**
