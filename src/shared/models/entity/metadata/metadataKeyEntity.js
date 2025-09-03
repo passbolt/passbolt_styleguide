@@ -61,7 +61,7 @@ class MetadataKeyEntity extends EntityV2 {
         "armored_key": {
           "type": "string",
           "maxLength": PGP_STRING_MAX_LENGTH,
-          "pattern": /^-----BEGIN PGP PUBLIC KEY BLOCK-----([\r\n])([ -9;-~]{1,76}: [ -~]{1,76}([\r\n]))*\n([a-zA-Z0-9\/+=]{1,76}([\r\n]))*=[a-zA-Z0-9\/+=]{4}([\r\n])-----END PGP PUBLIC KEY BLOCK-----([\r\n]*)$/,
+          "pattern": /^-----BEGIN PGP PUBLIC KEY BLOCK-----\r?\n((?:[!-9;-~]+:\s?.*\r?\n)*\r?\n)((?:[A-Za-z0-9+/]{1,76}\r?\n)*)([A-Za-z0-9+/]{1,76}={0,2}\r?\n)(=[A-Za-z0-9+/]{4}\r?\n)-----END PGP PUBLIC KEY BLOCK-----\s*$/,
         },
         "created": {
           "type": "string",

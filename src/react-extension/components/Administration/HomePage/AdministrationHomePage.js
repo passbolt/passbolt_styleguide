@@ -15,7 +15,7 @@ import React from "react";
 import {withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import CardItem from "../../../../shared/components/Cards/CardItem";
-import {AdministrationWorkspaceFeatureFlag, AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
+import {AdministrationWorkspaceFeatureFlag, AdministrationWorkspaceMenuTypes, PRO_TEASING_MENUITEMS} from "../../../contexts/AdministrationWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import SubscriptionSVG from "../../../../img/svg/subscription.svg";
@@ -47,19 +47,6 @@ const metadataMenuItems = [
   AdministrationWorkspaceMenuTypes.CONTENT_TYPES_ENCRYPTED_METADATA,
   AdministrationWorkspaceMenuTypes.MIGRATE_METADATA,
   AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES
-];
-
-/**
- * Following menu items should be displayed for CE Admins for PRO Teasing
- */
-const proTeasingMenuItems = [
-  AdministrationWorkspaceMenuTypes.SUBSCRIPTION,
-  AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES,
-  AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES,
-  AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY,
-  AdministrationWorkspaceMenuTypes.SSO,
-  AdministrationWorkspaceMenuTypes.MFA_POLICY,
-  AdministrationWorkspaceMenuTypes.USER_DIRECTORY
 ];
 
 /**
@@ -237,7 +224,7 @@ class AdministrationHomePage extends React.PureComponent {
    */
   shouldBeDisplayed(cardItemData) {
     if (!this.isFlagEnabled(cardItemData) && !this.isProTeasingMenuItem(cardItemData)) {
-      //flag is disabled and not eligible for PRO teasing, we don't display the menu item
+      //flag is disabled or not eligible for PRO teasing, we don't display the menu item
       return false;
     }
 
@@ -271,7 +258,7 @@ class AdministrationHomePage extends React.PureComponent {
    * @returns {boolean}
    */
   isProTeasingMenuItem(cardData) {
-    return proTeasingMenuItems.includes(cardData.flag);
+    return (PRO_TEASING_MENUITEMS.includes(cardData.flag) && this.isCeEdition());
   }
 
   /**
