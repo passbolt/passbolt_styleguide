@@ -230,17 +230,8 @@ class ScimSettingsEntity extends EntityV2 {
    * @throws {EntityValidationError} If validation fails
    */
   static createFromScimSettingsUpdate(scimSettingsDto) {
+    delete scimSettingsDto.setting_id;
     const scimSettingsEntity = new ScimSettingsEntity(scimSettingsDto);
-    const entityValidationError = new EntityValidationError();
-
-    // Assert with ScimSettingsEntity that should throw an error if setting_id exists
-    if (scimSettingsEntity.settingId) {
-      entityValidationError.addError("settingId", "empty", "SCIM settings should not contain setting_id.");
-    }
-    if (entityValidationError.hasErrors()) {
-      throw entityValidationError;
-    }
-
     return scimSettingsEntity;
   }
 }
