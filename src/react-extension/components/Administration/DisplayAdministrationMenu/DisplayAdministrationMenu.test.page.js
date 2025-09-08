@@ -195,6 +195,12 @@ export default class DisplayAdministrationMenuPage {
   proTeasingIcon(menu) {
     return this._page.container.querySelector(`#${menu} [data-testid="frame-svg"]`);
   }
+  /**
+   * Returns the SCIM Settings.
+   */
+  get scimSettings() {
+    return this._page.container.querySelector('#scim_menu .row .main-cell-wrapper .main-cell button');
+  }
 
 
   /**
@@ -305,5 +311,10 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the Metadata Getting Started Settings element */
   async gotoMetadataGettingStartedSettings() {
     await this.click(this.metadataGettingStartedSettings);
+  }
+
+  /** Click on the SCIM Settings element */
+  async gotoScimSettings() {
+    await this.click(this.scimSettings);
   }
 }

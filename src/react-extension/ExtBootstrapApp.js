@@ -125,6 +125,7 @@ class ExtBootstrapApp extends Component {
               "/app/administration/mfa-policy-teasing",
               "/app/administration/users-directory-teasing",
               "/app/administration/scim-teasing",
+              "/app/administration/user-provisionning/scim",
               "/app/folders/view/:filterByFolderId",
               "/app/groups/view/:selectedGroupId",
               "/app/groups/edit/:selectedGroupId",

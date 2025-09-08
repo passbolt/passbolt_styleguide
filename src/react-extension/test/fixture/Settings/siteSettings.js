@@ -223,6 +223,9 @@ const siteSettings = (isProEdition = true) => ({
       "selfRegistration": {
         "enabled": true,
       },
+      "scim": {
+        "enabled": true,
+      },
     }
   }
 });

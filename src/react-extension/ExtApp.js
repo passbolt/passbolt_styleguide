@@ -228,6 +228,7 @@ class ExtApp extends Component {
                                               "/app/administration/mfa-policy-teasing",
                                               "/app/administration/users-directory-teasing",
                                               "/app/administration/scim-teasing",
+                                              "/app/administration/user-provisionning/scim",
                                             ]}>
                                               <AdministrationWorkspaceContextProvider>
                                                 <AdminAccountRecoveryContextProvider>
