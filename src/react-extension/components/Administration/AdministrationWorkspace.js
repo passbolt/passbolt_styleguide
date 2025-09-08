@@ -65,6 +65,7 @@ import AdministrationHomePage from "./HomePage/AdministrationHomePage.js";
 import WorkspaceSwitcher, {WORKSPACE_ENUM} from "../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher.js";
 import DisplayAdministrationMetadataGettingStarted from "./DisplayAdministrationMetadataGettingStarted/DisplayAdministrationMetadataGettingStarted.js";
 import DisplayScimSettingsAdministration from "./DisplayScimSettingsAdministration/DisplayScimSettingsAdministration.js";
+import DisplayScimAdministrationTeasing from "./DisplayScimAdministrationTeasing/DisplayScimAdministrationTeasing.js";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -88,8 +89,8 @@ class AdministrationWorkspace extends Component {
    * Returns true if CE; false if PRO
    * @returns {boolean}
    */
-  isCeEdition() {
-    return this.props.context.siteSettings.isCeEdition;
+  isCommunityEdition() {
+    return this.props.context.siteSettings.isCommunityEdition;
   }
 
   /**
@@ -341,25 +342,25 @@ class AdministrationWorkspace extends Component {
                       <DisplayMfaAdministration/>
                     }
                     {this.isMfaPolicySelected() &&
-                      (this.isCeEdition() ? <DisplayMfaPolicyAdministrationTeasing/> : <DisplayMfaPolicyAdministration/>)
+                      (this.isCommunityEdition() ? <DisplayMfaPolicyAdministrationTeasing/> : <DisplayMfaPolicyAdministration/>)
                     }
                     {this.isPasswordPoliciesSelected() &&
-                      (this.isCeEdition() ? <DisplayPasswordPoliciesAdministrationTeasing/> : <DisplayPasswordPoliciesAdministration/>)
+                      (this.isCommunityEdition() ? <DisplayPasswordPoliciesAdministrationTeasing/> : <DisplayPasswordPoliciesAdministration/>)
                     }
                     {this.isUserDirectorySelected() &&
-                      (this.isCeEdition() ? <DisplayUserDirectoryAdministrationTeasing/> : <DisplayUserDirectoryAdministration/>)
+                      (this.isCommunityEdition() ? <DisplayUserDirectoryAdministrationTeasing/> : <DisplayUserDirectoryAdministration/>)
                     }
                     {this.isEmailNotificationsSelected() &&
                       <DisplayEmailNotificationsAdministration/>
                     }
                     {this.isSubscriptionSelected() &&
-                      (this.isCeEdition() ? <DisplaySubscriptionKeyTeasing/> : <DisplaySubscriptionKey/>)
+                      (this.isCommunityEdition() ? <DisplaySubscriptionKeyTeasing/> : <DisplaySubscriptionKey/>)
                     }
                     {this.isInternationalizationSelected() &&
                       <DisplayInternationalizationAdministration/>
                     }
                     {this.isAccountRecoverySelected() &&
-                      (this.isCeEdition() ? <ManageAccountRecoveryAdministrationSettingsTeasing/> : <ManageAccountRecoveryAdministrationSettings/>)
+                      (this.isCommunityEdition() ? <ManageAccountRecoveryAdministrationSettingsTeasing/> : <ManageAccountRecoveryAdministrationSettings/>)
                     }
                     {this.isSmtpSettingsSelected() &&
                       <ManageSmtpAdministrationSettings/>
@@ -368,13 +369,13 @@ class AdministrationWorkspace extends Component {
                       <DisplaySelfRegistrationAdministration/>
                     }
                     {this.isSsoSelected() &&
-                      (this.isCeEdition() ? <ManageSsoSettingsTeasing/> : <ManageSsoSettings/>)
+                      (this.isCommunityEdition() ? <ManageSsoSettingsTeasing/> : <ManageSsoSettings/>)
                     }
                     {this.isRbacSelected() &&
                       <DisplayRbacAdministration/>
                     }
                     {this.isUserPassphrasePoliciesSelected() &&
-                      (this.isCeEdition() ? <DisplayAdministrationUserPassphrasePoliciesTeasing/> : <DisplayAdministrationUserPassphrasePolicies/>)
+                      (this.isCommunityEdition() ? <DisplayAdministrationUserPassphrasePoliciesTeasing/> : <DisplayAdministrationUserPassphrasePolicies/>)
                     }
                     {this.isPasswordExpirySelected() &&
                       <DisplayAdministrationPasswordExpiry/>
@@ -400,14 +401,16 @@ class AdministrationWorkspace extends Component {
                     }
                     {
                       this.isScimSelected() &&
-                      <DisplayScimSettingsAdministration/>
+                      (this.isCommunityEdition() ? <DisplayScimAdministrationTeasing/> : <DisplayScimSettingsAdministration/>)
+
                     }
                   </div>
                 </div>
                 <Switch>
                   <Route exact path={[
                     "/app/administration",
-                    "/app/administration/user-provisionning/scim" // to be removed when documentation will be written
+                    "/app/administration/user-provisionning/scim", // to be removed when documentation will be written
+                    "app/administration/scim-teasing"
                   ]}/>
                   <Route>
                     <div className="help-panel">

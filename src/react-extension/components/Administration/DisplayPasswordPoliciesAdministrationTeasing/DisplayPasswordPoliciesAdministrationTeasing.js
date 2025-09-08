@@ -18,6 +18,7 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {createSafePortal} from "../../../../shared/utils/portals";
 import BuoySVG from "../../../../img/svg/buoy.svg";
 import RedCheck from "../../../../img/svg/red_check.svg";
+import FrameSVG from "../../../../img/svg/Frame.svg";
 
 class DisplayPasswordPoliciesAdministrationTeasing extends React.Component {
   /**
@@ -29,7 +30,7 @@ class DisplayPasswordPoliciesAdministrationTeasing extends React.Component {
       <div className="row">
         <div className="password-policies-settings-teasing main-column">
           <div className="main-content">
-            <h3 className="title" id="password-policies-settings-title"><Trans>Password Policy</Trans></h3>
+            <h3 className="title" id="password-policies-settings-title"><Trans>Password Policy</Trans><FrameSVG className="pro-teasing-icon"/></h3>
             <p><Trans>Ensure strong and consistent passwords entropy across your organisation.</Trans></p>
             <div className="password-policies-info">
               <ul className="password-policies-description">

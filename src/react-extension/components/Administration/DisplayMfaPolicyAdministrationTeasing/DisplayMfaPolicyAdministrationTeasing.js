@@ -18,6 +18,7 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {createSafePortal} from "../../../../shared/utils/portals";
 import FileSVG from "../../../../img/svg/file.svg";
 import RedCheck from "../../../../img/svg/red_check.svg";
+import FrameSVG from "../../../../img/svg/Frame.svg";
 
 class DisplayMfaPolicyAdministrationTeasing extends React.Component {
   /**
@@ -29,7 +30,7 @@ class DisplayMfaPolicyAdministrationTeasing extends React.Component {
       <div className="row">
         <div className="mfa-settings-teasing main-column">
           <div className="main-content">
-            <h3 className="title" id="mfa-settings-title"><Trans>MFA Policy</Trans></h3>
+            <h3 className="title" id="mfa-settings-title"><Trans>MFA Policy</Trans><FrameSVG className="pro-teasing-icon"/></h3>
             <p><Trans>Enhance security by enforcing multi-factor authentication.</Trans></p>
             <div className="mfa-settings-info">
               <ul className="mfa-settings-description">

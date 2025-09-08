@@ -125,7 +125,7 @@ each(
     expect.assertions(ceScenarios.length);
 
     const props = defaultProps(currentScenario.selectedMenu, true);
-    jest.spyOn(props.context.siteSettings, "isCeEdition", "get").mockReturnValue(true);
+    jest.spyOn(props.context.siteSettings, "isCommunityEdition", "get").mockReturnValue(true);
 
     const page = new AdministrationWorkspacePage(props);
     await waitFor(() => {});
