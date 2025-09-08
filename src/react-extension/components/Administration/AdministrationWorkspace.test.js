@@ -75,6 +75,7 @@ const scenarios = [
   {selectedMenu: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA, field: "isMigrateMetadataSelected"},
   {selectedMenu: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES, field: "isAllowedContentTypesSelected"},
   {selectedMenu: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED, field: "isGetStartedMetadataSelected"},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.SCIM, field: "isScimSelected"},
 ];
 
 const ceScenarios = [
@@ -96,6 +97,7 @@ const ceScenarios = [
   {selectedMenu: AdministrationWorkspaceMenuTypes.CONTENT_TYPES_METADATA_KEY, field: "isContentTypesMetadataSelected"},
   {selectedMenu: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA, field: "isMigrateMetadataSelected"},
   {selectedMenu: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES, field: "isAllowedContentTypesSelected"},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.SCIM, field: "isScimTeasingSelected"},
 ];
 
 each(

@@ -163,6 +163,13 @@ export default class AdministrationWorkspacePage {
   }
 
   /**
+   * Returns true if the SCIM is visible
+   */
+  get isScimSelected() {
+    return Boolean(this._page.container.querySelector('#scim-settings'));
+  }
+
+  /**
    * Returns true if the password expiry area is visible
    */
   get isAllowedContentTypesSelected() {
@@ -209,6 +216,13 @@ export default class AdministrationWorkspacePage {
    */
   get isSsoTeasingSelected() {
     return Boolean(this._page.container.querySelector('.sso-teasing'));
+  }
+
+  /**
+   * Returns true if the SCIM settings area is visible for CE Admins
+   */
+  get isScimTeasingSelected() {
+    return Boolean(this._page.container.querySelector('.scim-teasing'));
   }
 
   /**
