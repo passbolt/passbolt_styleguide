@@ -103,6 +103,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the CE Admin wants to navigate to the administration workspace Users Directory.
   onGoToAdministrationScimRequestedTeasing: () => {
   }, // Whenever the CE Admin wants to navigate to the administration workspace SCIM.
+  onGoToAdministrationScimRequested: () => {
+  }, // Whenever the user wants to navigate to the administration meadata getting started workspace section.
 });
 
 /**
@@ -171,6 +173,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationMfaPolicyRequestedTeasing: this.onGoToAdministrationMfaPolicyRequestedTeasing.bind(this),
       onGoToAdministrationUsersDirectoryRequestedTeasing: this.onGoToAdministrationUsersDirectoryRequestedTeasing.bind(this),
       onGoToAdministrationScimRequestedTeasing: this.onGoToAdministrationScimRequestedTeasing.bind(this),
+      onGoToAdministrationScimRequested: this.onGoToAdministrationScimRequested.bind(this), // Whenever the user wants to navigate to the administration SCIM section.
     };
   }
 
@@ -323,6 +326,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationMetadataGettingStartedRequested() {
     await this.goTo("browser-extension", "/app/administration/content-types/metadata-getting-started");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration SCIM section.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationScimRequested() {
+    await this.goTo("browser-extension", "/app/administration/user-provisionning/scim");
   }
 
   /**

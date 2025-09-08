@@ -57,7 +57,8 @@ export function defaultProps(data = {}, isCeEdition = false) {
       onGoToAdministrationSsoRequestedTeasing: jest.fn(),
       onGoToAdministrationMfaPolicyRequestedTeasing: jest.fn(),
       onGoToAdministrationUserPassphrasePoliciesRequestedTeasing: jest.fn(),
-      onGoToAdministrationPasswordPoliciesRequestedTeasing: jest.fn()
+      onGoToAdministrationPasswordPoliciesRequestedTeasing: jest.fn(),
+      onGoToAdministrationScimRequested: jest.fn(),
     }
   }, data);
 }
