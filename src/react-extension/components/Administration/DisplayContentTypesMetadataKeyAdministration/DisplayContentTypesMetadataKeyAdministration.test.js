@@ -28,6 +28,9 @@ import {
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import {waitFor} from "@testing-library/react";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultAdminUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import {v4 as uuidv4} from "uuid";
 
 describe("DisplayContentTypesMetadataKeyAdministration", () => {
   beforeEach(() => {
@@ -148,7 +151,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
     });
 
     it("blocks the form edition when loading the settings", async() => {
-      expect.assertions(6);
+      expect.assertions(12);
       let requestGetPromiseResolver;
       const props = defaultProps();
       jest.spyOn(props.metadataSettingsServiceWorkerService, "findKeysSettings")
@@ -163,12 +166,21 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(true);
       expect(page.disallowUsageOfPersonalKeysInput.checked).toBe(false);
 
+      expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(true);
+      expect(page.enableZeroKnowledgeKeyShareInput.checked).toBe(false);
+      await page.clickOnAllowZeroKnowledgeInput();
+      expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(true);
+      expect(page.enableZeroKnowledgeKeyShareInput.checked).toBe(false);
+
       requestGetPromiseResolver(new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()));
       await waitFor(() => {});
 
       await page.clickOnDisallowUsageOfPersonalKeysInput();
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(false);
       expect(page.disallowUsageOfPersonalKeysInput.checked).toBe(true);
+      await page.clickOnAllowZeroKnowledgeInput();
+      expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(false);
+      expect(page.enableZeroKnowledgeKeyShareInput.checked).toBe(true);
     });
   });
 
@@ -237,6 +249,19 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.requiredSharedMetadataKeyError.textContent).toContain("A shared metadata key is required.");
       expect(page.formBanner).not.toBeNull();
       expect(page.formBanner.textContent).toEqual("Warning: A shared metadata key is required to save the metadata keys settings.");
+    });
+
+    it("I can see the form disabled if administrator has missing keys", async() => {
+      expect.assertions(3);
+      const props = defaultProps({context: defaultAdministratorAppContext({loggedInUser: defaultAdminUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})})});
+
+      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
+      await waitForTrue(() => page.exists());
+
+      expect(page.exists()).toStrictEqual(true);
+      expect(page.select('.actions-wrapper button.button.primary').hasAttribute("disabled")).toBeTruthy();
+
+      expect(page.formBanner.textContent).toBe("Warning: You are missing shared metadata keys. Ask another administrator to share them with you to update the metadata keys settings.");
     });
   });
 

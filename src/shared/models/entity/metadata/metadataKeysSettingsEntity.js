@@ -12,6 +12,8 @@
  * @since         4.10.0
  */
 import EntityV2 from "../abstract/entityV2";
+import EntityValidationError from "../abstract/entityValidationError";
+import ShareMetadataPrivateKeysCollection from "./shareMetadataPrivateKeysCollection";
 
 class MetadataKeysSettingsEntity extends EntityV2 {
   /**
@@ -31,9 +33,32 @@ class MetadataKeysSettingsEntity extends EntityV2 {
         },
         "zero_knowledge_key_share": {
           "type": "boolean",
-        }
+        },
+        "metadata_private_keys": ShareMetadataPrivateKeysCollection.getSchema(),
       }
     };
+  }
+
+  /**
+   *  @inheritDoc
+   * @returns {{metadata_private_keys: ShareMetadataPrivateKeysCollection}}
+   */
+  static get associations() {
+    return {
+      metadata_private_keys: ShareMetadataPrivateKeysCollection,
+    };
+  }
+
+  /**
+   * @inheritDoc
+   */
+  validateBuildRules() {
+    if (this._props.zero_knowledge_key_share && this.metadataPrivateKeys?.length > 0) {
+      const error = new EntityValidationError();
+      const message = "If the property zero_knowledge_key_share is true, metadata_private_keys cannot be set";
+      error.addError("metadata_private_keys", "not_defined_for_zero_knowledge", message);
+      throw error;
+    }
   }
 
   /**
@@ -48,6 +73,29 @@ class MetadataKeysSettingsEntity extends EntityV2 {
     };
 
     return new MetadataKeysSettingsEntity({...defaultData, ...data});
+  }
+
+  /*
+   * ==================================================
+   * Serialization
+   * ==================================================
+   */
+  /**
+   * Return a DTO ready to be sent to API
+   *
+   * @param {object} [contain] optional
+   * @returns {object}
+   */
+  toDto(contain) {
+    const result = Object.assign({}, this._props);
+    if (!contain) {
+      return result;
+    }
+    if (this._metadataPrivateKeys && contain.metadata_private_keys) {
+      result.metadata_private_keys = this._metadataPrivateKeys.toDto();
+    }
+
+    return result;
   }
 
   /*
@@ -70,6 +118,29 @@ class MetadataKeysSettingsEntity extends EntityV2 {
    */
   get zeroKnowledgeKeyShare() {
     return this._props.zero_knowledge_key_share;
+  }
+
+  /**
+   * Returns the metadataPrivateKeys collection
+   * @returns {MetadataPrivateKeysCollection|null}
+   */
+  get metadataPrivateKeys() {
+    return this._metadataPrivateKeys || null;
+  }
+
+  set metadataPrivateKeys(metadataPrivateKeysCollection) {
+    if (!(metadataPrivateKeysCollection instanceof ShareMetadataPrivateKeysCollection)) {
+      throw new TypeError("The metadataPrivateKeysCollection is not of MetadataPrivateKeysCollection type");
+    }
+    this._metadataPrivateKeys = metadataPrivateKeysCollection;
+  }
+
+  /**
+   * MetadataKeysSettingsEntity.ALL_CONTAIN_OPTIONS
+   * @returns {object} all contain options that can be used in toDto()
+   */
+  static get ALL_CONTAIN_OPTIONS() {
+    return {metadata_private_keys: true};
   }
 }
 

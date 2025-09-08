@@ -98,6 +98,16 @@
                     margin-bottom: 0;
                   }
               }
+          .input-wrapper {
+              .button-inline {
+                  display: flex;
+                  gap: 0.8rem;
+
+                  .input {
+                      flex: 1;
+                  }
+              }
+          }
           }
         }
 
@@ -217,9 +227,69 @@
         width: .8rem;
       }
 
+      button svg.pro-teasing-icon {
+        height: 1.6rem;
+        width: 1.6rem;
+      }
+
       ul {
         margin-left: 1.6rem;
       }
     }
   }
+}
+
+// PRO teasing pages styles
+.password-policies-settings-teasing,
+.user-passphrase-policies-settings-teasing,
+.recover-account-settings-teasing,
+.third-party-provider-settings-teasing,
+.ldap-settings-teasing,
+.mfa-settings-teasing,
+.scim-teasing {
+    h3#password-policies-settings-title,
+    h3#user-passphrase-policies-title,
+    h3#recover-account-settings-title,
+    h3#third-party-provider-settings-title,
+    h3#ldap-settings-title,
+    h3#mfa-settings-title,
+    h3#scim-title {
+        border-bottom: .1rem solid var(--Workspace-Dividers);
+        margin: 0 -1.6rem;
+        padding: 1rem 2rem;
+
+        svg {
+          margin-left: 0.8rem;
+          margin-bottom: -0.1rem;
+        }
+    }
+
+    .password-policies-info,
+    .user-passphrase-policies-info,
+    .recover-account-info,
+    .third-party-provider-settings-info,
+    .ldap-settings-info,
+    .mfa-settings-info,
+    .scim-info {
+        display: flex;
+        padding: 1.2rem;
+        align-items: flex-start;
+        gap: 1.2rem;
+        align-self: stretch;
+        border-radius: var(--Section-border-radius, 0.5rem);
+        background: var(--Action-button-Action-button-background, #F7F7F7);
+        justify-content: space-between;
+    }
+
+    p {
+        margin-top: 1.6rem;
+    }
+
+    li {
+        padding: 0.3rem;
+    }
+
+    li > :first-child {
+        margin-right: 1rem;
+    }
 }

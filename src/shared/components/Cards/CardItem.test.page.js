@@ -47,6 +47,14 @@ export default class ResourceWorkspaceContextPage {
   }
 
   /**
+   * Return the pro teasing icon element
+   * @returns {{select: select}}
+   */
+  get proTeasingIcon() {
+    return this._page.queryByTestId("frame-svg");
+  }
+
+  /**
    * Return the page object of the title header
    * @returns {{select: select}}
    */

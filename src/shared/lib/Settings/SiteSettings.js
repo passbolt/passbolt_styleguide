@@ -192,6 +192,14 @@ export default class SiteSettings {
   }
 
   /**
+   * Get is CE edition true
+   * @returns {boolean}
+   */
+  get isCommunityEdition() {
+    return getPropValue(this.settings, "passbolt.edition") === "ce";
+  }
+
+  /**
    * Get application locale
    * @returns {object}
    */

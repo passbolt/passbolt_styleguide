@@ -388,6 +388,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
             }
           </div>
           <div className="submit-wrapper clearfix">
+            <a className="button" target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/docs/admin/user-provisioning/users-directory/advanced-directory-options/" > <span><Trans>Read the documentation</Trans></span></a>
             <FormCancelButton disabled={this.isLoading()} onClick={this.handleClose}/>
             <button type="submit" disabled={this.isLoading()} className="primary button form" onClick={this.handleSynchronize}><Trans>Synchronize</Trans></button>
           </div>

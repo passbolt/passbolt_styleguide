@@ -21,6 +21,7 @@ import {defaultProps} from "./AdministrationWorkspaceContext.test.data";
 import AdministrationWorkspaceContextPage from "./AdministrationWorkspaceContext.test.page";
 import {AdministrationWorkspaceMenuTypes} from "./AdministrationWorkspaceContext";
 import {defaultAppContext} from "./ExtAppContext.test.data";
+import {waitFor} from "@testing-library/dom";
 
 beforeEach(() => {
   jest.resetModules();
@@ -166,6 +167,175 @@ describe("Administration Workspace Context", () => {
       const keyDto = {data: "key"};
       await page.onUpdateSubscriptionKeyRequested(keyDto);
       expect(context.port.request).toBeCalledWith("passbolt.subscription.update", keyDto);
+    });
+  });
+
+  describe("handleAdministrationMenuRouteChange logic", () => {
+    it("should set selectedAdministration to MFA Policy when route is /app/administration/mfa-policy-teasing and user has permission", async() => {
+      const props = defaultProps({
+        location: {
+          pathname: "/app/administration/mfa-policy-teasing",
+          key: "unique-key"
+        },
+        rbacContext: {
+          canIUseUiAction: () => true
+        },
+        context: {
+          ...context,
+          siteSettings: {
+            canIUse: () => true,
+            isCommunityEdition: true,
+          }
+        }
+      });
+
+      const page = new AdministrationWorkspaceContextPage(context, props);
+      await waitFor(() => {});
+      await page.goToMfaPolicy();
+      expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.MFA_POLICY);
+    });
+
+    it("should set selectedAdministration to Subscription when route is /app/administration/subscription-teasing and user has permission", async() => {
+      const props = defaultProps({
+        location: {
+          pathname: "/app/administration/subscription-teasing",
+          key: "unique-key"
+        },
+        rbacContext: {
+          canIUseUiAction: () => true
+        },
+        context: {
+          ...context,
+          siteSettings: {
+            canIUse: () => true,
+            isCommunityEdition: true,
+          }
+        }
+      });
+
+      const page = new AdministrationWorkspaceContextPage(context, props);
+      await waitFor(() => {});
+      await page.goToSubscription();
+      expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.SUBSCRIPTION);
+    });
+
+    it("should set selectedAdministration to Password Policy when route is /app/administration/password-policies-teasing and user has permission", async() => {
+      const props = defaultProps({
+        location: {
+          pathname: "/app/administration/password-policies-teasing",
+          key: "unique-key"
+        },
+        rbacContext: {
+          canIUseUiAction: () => true
+        },
+        context: {
+          ...context,
+          siteSettings: {
+            canIUse: () => true,
+            isCommunityEdition: true,
+          }
+        }
+      });
+
+      const page = new AdministrationWorkspaceContextPage(context, props);
+      await waitFor(() => {});
+      await page.goToPasswordPolicySettings();
+      expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES);
+    });
+
+    it("should set selectedAdministration to Users Directory when route is /app/administration/users-directory-teasing and user has permission", async() => {
+      const props = defaultProps({
+        location: {
+          pathname: "/app/administration/users-directory-teasing",
+          key: "unique-key"
+        },
+        rbacContext: {
+          canIUseUiAction: () => true
+        },
+        context: {
+          ...context,
+          siteSettings: {
+            canIUse: () => true,
+            isCommunityEdition: true,
+          }
+        }
+      });
+
+      const page = new AdministrationWorkspaceContextPage(context, props);
+      await waitFor(() => {});
+      await page.goToUsersDirectory();
+      expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.USER_DIRECTORY);
+    });
+
+    it("should set selectedAdministration to Users Passphrase when route is /app/administration/user-passphrase-policies-teasing and user has permission", async() => {
+      const props = defaultProps({
+        location: {
+          pathname: "/app/administration/user-passphrase-policies-teasing",
+          key: "unique-key"
+        },
+        rbacContext: {
+          canIUseUiAction: () => true
+        },
+        context: {
+          ...context,
+          siteSettings: {
+            canIUse: () => true,
+            isCommunityEdition: true,
+          }
+        }
+      });
+
+      const page = new AdministrationWorkspaceContextPage(context, props);
+      await waitFor(() => {});
+      await page.goToUserPassphraseSettings();
+      expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES);
+    });
+
+    it("should set selectedAdministration to Account Recovery when route is /app/administration/account-recovery-teasing and user has permission", async() => {
+      const props = defaultProps({
+        location: {
+          pathname: "/app/administration/account-recovery-teasing",
+          key: "unique-key"
+        },
+        rbacContext: {
+          canIUseUiAction: () => true
+        },
+        context: {
+          ...context,
+          siteSettings: {
+            canIUse: () => true,
+            isCommunityEdition: true,
+          }
+        }
+      });
+
+      const page = new AdministrationWorkspaceContextPage(context, props);
+      await waitFor(() => {});
+      await page.goToAccountRecoverySettings();
+      expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY);
+    });
+
+    it("should set selectedAdministration to SSO when route is /app/administration/sso-teasing and user has permission", async() => {
+      const props = defaultProps({
+        location: {
+          pathname: "/app/administration/sso-teasing",
+        },
+        rbacContext: {
+          canIUseUiAction: () => true
+        },
+        context: {
+          ...context,
+          siteSettings: {
+            canIUse: () => true,
+            isCommunityEdition: true,
+          }
+        }
+      });
+
+      const page = new AdministrationWorkspaceContextPage(context, props);
+      await waitFor(() => {});
+      await page.goToSsoSettings();
+      expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.SSO);
     });
   });
 });

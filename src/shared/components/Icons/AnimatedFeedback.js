@@ -17,12 +17,14 @@ import AnimatedFeedbackSuccessSVG from "../../../img/svg/success.svg";
 import AnimatedFeedbackWarningSVG from "../../../img/svg/warning.svg";
 import AnimatedFeedbackAttentionSVG from "../../../img/svg/error-exclamation.svg";
 import AnimatedFeedbackErrorSVG from "../../../img/svg/fail.svg";
+import AnimatedFeedbackInfinitySVG from "../../../img/svg/infinity_illustration.svg";
 
 const animatedIconsSVG = {
   success: <AnimatedFeedbackSuccessSVG/>,
   warning: <AnimatedFeedbackWarningSVG/>,
   attention: <AnimatedFeedbackAttentionSVG/>,
   error: <AnimatedFeedbackErrorSVG/>,
+  infinity_illustration: <AnimatedFeedbackInfinitySVG />,
 };
 
 class AnimatedFeedback extends Component {
