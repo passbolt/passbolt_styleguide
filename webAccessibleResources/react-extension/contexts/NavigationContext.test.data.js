@@ -58,6 +58,10 @@ export function defaultNavigationContext(context = {}) {
     onGoToAdministrationMfaPolicyRequestedTeasing: jest.fn(),
     onGoToAdministrationUsersDirectoryRequestedTeasing: jest.fn(),
     onGoToAdministrationScimRequestedTeasing: jest.fn(),
+    onGoToAdministrationScimRequested: jest.fn(),
+    onGoToAdministrationMfaPolicyRequested: jest.fn(),
+    onGoToAdministrationContentTypesMetadataKeyRequested: jest.fn(),
+    onGoToAdministrationContentTypesEncryptedMetadataRequested: jest.fn(),
   };
   return Object.assign(defaultContext, context);
 }

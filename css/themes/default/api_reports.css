@@ -194,6 +194,8 @@
   --Workspace-selection-button-padding: 1.6rem;
   --Workspace-selection-button-radius: 0.4rem;
   --Workspace-selection-button-extra-gap: 0rem;
+  /* Pro Teasing icon colors */
+  --Badges-Sparkles: var(--Palette-Warning);
 }
 /* palette */
 /* default */
@@ -6736,6 +6738,58 @@ html.launching .launching-screen p {
   border-bottom: 0.1rem solid var(--Workspace-Dividers);
   margin: 0 -1.6rem;
   padding: 1rem 2rem;
+}
+.password-policies-settings-teasing h3#password-policies-settings-title svg,
+.user-passphrase-policies-settings-teasing h3#password-policies-settings-title svg,
+.recover-account-settings-teasing h3#password-policies-settings-title svg,
+.third-party-provider-settings-teasing h3#password-policies-settings-title svg,
+.ldap-settings-teasing h3#password-policies-settings-title svg,
+.mfa-settings-teasing h3#password-policies-settings-title svg,
+.scim-teasing h3#password-policies-settings-title svg,
+.password-policies-settings-teasing h3#user-passphrase-policies-title svg,
+.user-passphrase-policies-settings-teasing h3#user-passphrase-policies-title svg,
+.recover-account-settings-teasing h3#user-passphrase-policies-title svg,
+.third-party-provider-settings-teasing h3#user-passphrase-policies-title svg,
+.ldap-settings-teasing h3#user-passphrase-policies-title svg,
+.mfa-settings-teasing h3#user-passphrase-policies-title svg,
+.scim-teasing h3#user-passphrase-policies-title svg,
+.password-policies-settings-teasing h3#recover-account-settings-title svg,
+.user-passphrase-policies-settings-teasing h3#recover-account-settings-title svg,
+.recover-account-settings-teasing h3#recover-account-settings-title svg,
+.third-party-provider-settings-teasing h3#recover-account-settings-title svg,
+.ldap-settings-teasing h3#recover-account-settings-title svg,
+.mfa-settings-teasing h3#recover-account-settings-title svg,
+.scim-teasing h3#recover-account-settings-title svg,
+.password-policies-settings-teasing h3#third-party-provider-settings-title svg,
+.user-passphrase-policies-settings-teasing h3#third-party-provider-settings-title svg,
+.recover-account-settings-teasing h3#third-party-provider-settings-title svg,
+.third-party-provider-settings-teasing h3#third-party-provider-settings-title svg,
+.ldap-settings-teasing h3#third-party-provider-settings-title svg,
+.mfa-settings-teasing h3#third-party-provider-settings-title svg,
+.scim-teasing h3#third-party-provider-settings-title svg,
+.password-policies-settings-teasing h3#ldap-settings-title svg,
+.user-passphrase-policies-settings-teasing h3#ldap-settings-title svg,
+.recover-account-settings-teasing h3#ldap-settings-title svg,
+.third-party-provider-settings-teasing h3#ldap-settings-title svg,
+.ldap-settings-teasing h3#ldap-settings-title svg,
+.mfa-settings-teasing h3#ldap-settings-title svg,
+.scim-teasing h3#ldap-settings-title svg,
+.password-policies-settings-teasing h3#mfa-settings-title svg,
+.user-passphrase-policies-settings-teasing h3#mfa-settings-title svg,
+.recover-account-settings-teasing h3#mfa-settings-title svg,
+.third-party-provider-settings-teasing h3#mfa-settings-title svg,
+.ldap-settings-teasing h3#mfa-settings-title svg,
+.mfa-settings-teasing h3#mfa-settings-title svg,
+.scim-teasing h3#mfa-settings-title svg,
+.password-policies-settings-teasing h3#scim-title svg,
+.user-passphrase-policies-settings-teasing h3#scim-title svg,
+.recover-account-settings-teasing h3#scim-title svg,
+.third-party-provider-settings-teasing h3#scim-title svg,
+.ldap-settings-teasing h3#scim-title svg,
+.mfa-settings-teasing h3#scim-title svg,
+.scim-teasing h3#scim-title svg {
+  margin-left: 0.8rem;
+  margin-bottom: -0.1rem;
 }
 .password-policies-settings-teasing .password-policies-info,
 .user-passphrase-policies-settings-teasing .password-policies-info,

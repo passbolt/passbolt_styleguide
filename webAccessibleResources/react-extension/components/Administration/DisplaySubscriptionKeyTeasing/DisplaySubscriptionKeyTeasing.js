@@ -45,7 +45,7 @@ class DisplaySubscriptionKeyTeasing extends React.Component {
                     <span className="client-version label"><Trans>Client version:</Trans></span>
                   </div>
                   <div className="information-value">
-                    <span className="edition value">{this.props.context.siteSettings.isCeEdition ? <Trans>Community Edition</Trans> :  <Trans>Pro Edition</Trans>}</span>
+                    <span className="edition value">{this.props.context.siteSettings.isCommunityEdition ? <Trans>Community Edition</Trans> :  <Trans>Pro Edition</Trans>}</span>
                     <span className="server-version value">{this.props.context.siteSettings.version}</span>
                     <span className="client-version value">{this.props.context.extensionVersion}</span>
                   </div>

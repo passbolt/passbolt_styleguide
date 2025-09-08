@@ -18,6 +18,7 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {createSafePortal} from "../../../../shared/utils/portals";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
 import RedCheck from "../../../../img/svg/red_check.svg";
+import FrameSVG from "../../../../img/svg/Frame.svg";
 
 /**
  * This component displays the User Directory for CE adminstrators
@@ -32,7 +33,7 @@ class DisplayUserDirectoryAdministrationTeasing extends React.Component {
       <div className="row">
         <div className="ldap-settings-teasing main-column">
           <div className="main-content">
-            <h3 className="title" id="ldap-settings-title"><Trans>Users Directory</Trans></h3>
+            <h3 className="title" id="ldap-settings-title"><Trans>Users Directory</Trans><FrameSVG className="pro-teasing-icon"/></h3>
             <p><Trans>Simplify user management provisioning through integration with existing directories.</Trans></p>
             <div className="ldap-settings-info">
               <ul className="ldap-settings-description">

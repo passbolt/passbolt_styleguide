@@ -184,7 +184,7 @@ describe("Administration Workspace Context", () => {
           ...context,
           siteSettings: {
             canIUse: () => true,
-            isCeEdition: true,
+            isCommunityEdition: true,
           }
         }
       });
@@ -208,7 +208,7 @@ describe("Administration Workspace Context", () => {
           ...context,
           siteSettings: {
             canIUse: () => true,
-            isCeEdition: true,
+            isCommunityEdition: true,
           }
         }
       });
@@ -232,7 +232,7 @@ describe("Administration Workspace Context", () => {
           ...context,
           siteSettings: {
             canIUse: () => true,
-            isCeEdition: true,
+            isCommunityEdition: true,
           }
         }
       });
@@ -256,7 +256,7 @@ describe("Administration Workspace Context", () => {
           ...context,
           siteSettings: {
             canIUse: () => true,
-            isCeEdition: true,
+            isCommunityEdition: true,
           }
         }
       });
@@ -280,7 +280,7 @@ describe("Administration Workspace Context", () => {
           ...context,
           siteSettings: {
             canIUse: () => true,
-            isCeEdition: true,
+            isCommunityEdition: true,
           }
         }
       });
@@ -304,7 +304,7 @@ describe("Administration Workspace Context", () => {
           ...context,
           siteSettings: {
             canIUse: () => true,
-            isCeEdition: true,
+            isCommunityEdition: true,
           }
         }
       });
@@ -327,7 +327,7 @@ describe("Administration Workspace Context", () => {
           ...context,
           siteSettings: {
             canIUse: () => true,
-            isCeEdition: true,
+            isCommunityEdition: true,
           }
         }
       });

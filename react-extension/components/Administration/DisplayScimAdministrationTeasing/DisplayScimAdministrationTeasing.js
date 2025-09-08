@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import RedCheck from "../../../../img/svg/red_check.svg";
+import FrameSVG from "../../../../img/svg/Frame.svg";
 
 class DisplayScimAdministrationTeasing extends React.Component {
   /**
@@ -27,7 +28,7 @@ class DisplayScimAdministrationTeasing extends React.Component {
       <div className="row">
         <div className="scim-teasing main-column">
           <div className="main-content">
-            <h3 className="title" id="scim-title"><Trans>SCIM</Trans></h3>
+            <h3 className="title" id="scim-title"><Trans>SCIM</Trans><FrameSVG className="pro-teasing-icon"/></h3>
             <p><Trans>Automate user identity management and provisioning via standardised SCIM integration.</Trans></p>
             <div className="scim-info">
               <ul className="scim-description">

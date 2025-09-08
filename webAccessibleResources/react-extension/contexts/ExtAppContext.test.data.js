@@ -29,9 +29,9 @@ import {defaultCeSiteSettings} from "../test/fixture/Settings/siteSettings.test.
  * @param appContext An existing app context
  * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
-export function defaultAppContext(appContext = {}, isCeEdition = false) {
+export function defaultAppContext(appContext = {}, isCommunityEdition = false) {
   const userSettings = new UserSettings(userSettingsFixture);
-  const siteSettings = isCeEdition ? new SiteSettings(defaultCeSiteSettings()) : new SiteSettings(siteSettingsFixture);
+  const siteSettings = isCommunityEdition ? new SiteSettings(defaultCeSiteSettings()) : new SiteSettings(siteSettingsFixture);
   const defaultAppContext = {
     locale: 'en-UK',
     userSettings,

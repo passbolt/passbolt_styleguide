@@ -18,6 +18,7 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {createSafePortal} from "../../../../shared/utils/portals";
 import BuoySVG from "../../../../img/svg/buoy.svg";
 import RedCheck from "../../../../img/svg/red_check.svg";
+import FrameSVG from "../../../../img/svg/Frame.svg";
 
 class ManageAccountRecoveryAdministrationSettingsTeasing extends React.Component {
   /**
@@ -29,7 +30,7 @@ class ManageAccountRecoveryAdministrationSettingsTeasing extends React.Component
       <div className="row">
         <div className="recover-account-settings-teasing main-column">
           <div className="main-content">
-            <h3 className="title"id="recover-account-settings-title"><Trans>Account Recovery</Trans></h3>
+            <h3 className="title"id="recover-account-settings-title"><Trans>Account Recovery</Trans><FrameSVG className="pro-teasing-icon"/></h3>
             <p><Trans>Recover lost user accounts.</Trans></p>
             <div className="recover-account-info">
               <ul className="recover-account-description">
