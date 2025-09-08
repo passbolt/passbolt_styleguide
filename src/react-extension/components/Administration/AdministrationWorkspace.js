@@ -410,7 +410,7 @@ class AdministrationWorkspace extends Component {
                   <Route exact path={[
                     "/app/administration",
                     "/app/administration/user-provisionning/scim", // to be removed when documentation will be written
-                    "app/administration/scim-teasing"
+                    "/app/administration/scim-teasing"
                   ]}/>
                   <Route>
                     <div className="help-panel">
