@@ -23,8 +23,9 @@ class InFormMenuField {
   /**
    * Default constructor
    * @param field
+   * @param shadowRoot The shadow root
    */
-  constructor(field) {
+  constructor(field, shadowRoot) {
     /** The field to which the in-form is attached */
     this.field = field;
     /** An unique identifier for the iframe */
@@ -33,6 +34,9 @@ class InFormMenuField {
     this.isMenuMousingOver = false;
     /** The scrollable field parent */
     this.scrollableFieldParent = null;
+
+
+    this.shadowRoot = shadowRoot;
 
     this.bindCallbacks();
     this.insertInformMenuIframe();
@@ -55,7 +59,7 @@ class InFormMenuField {
    * Insert an in-form menu iframe
    */
   async insertInformMenuIframe() {
-    const iframes = document.querySelectorAll('iframe');
+    const iframes = this.shadowRoot.querySelectorAll('iframe');
     // Use of Array prototype some method cause NodeList is not an array !
     const iframeId = this.iframeId;
     const isIframeAlreadyInserted = Array.prototype.some.call(iframes, iframe => iframe.id === iframeId);
@@ -74,7 +78,7 @@ class InFormMenuField {
     const {top, left} = this.calculateIframePosition();
     const portId = await port.request("passbolt.port.generate-id", "InFormMenu");
     const iframe = document.createElement('iframe');
-    document.body.appendChild(iframe);
+    this.shadowRoot.appendChild(iframe);
     const browserExtensionUrl = browser.runtime.getURL("/");
     iframe.id = this.iframeId;
     iframe.style.position = "fixed";
@@ -84,7 +88,6 @@ class InFormMenuField {
     iframe.style.border = "none";
     iframe.style.width = '370px'; // width of the menu 350px + 20px to display shadows
     iframe.style.height = '220px'; // For 3 items in a row to be display
-    iframe.style.zIndex = "123456";
     iframe.style.colorScheme = "auto"; // To have the transparency on dark theme
     iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-menu.html?passbolt=${portId}`;
     return iframe;
@@ -166,7 +169,7 @@ class InFormMenuField {
    * Remove the menu (iframe)
    */
   removeMenuIframe() {
-    const iframes = document.querySelectorAll('iframe');
+    const iframes = this.shadowRoot.querySelectorAll('iframe');
     iframes.forEach(iframe => {
       const identifierToMatch = this.iframeId;
       if (iframe.id === identifierToMatch) {
