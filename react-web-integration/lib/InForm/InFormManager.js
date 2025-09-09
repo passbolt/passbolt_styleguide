@@ -35,18 +35,65 @@ class InFormManager {
     this.menuField = null;
     /** In-form form fields in the target page*/
     this.credentialsFormFields = [];
-    /** Mutation observer to detect any change on the DOM */
+    /** Mutation observers to detect any change on the DOM */
     this.mutationObserver = null;
 
+    /** The shadow root with the host **/
+    this.host = null;
+    this.shadowRoot = null;
+
+    this.hostMutationObserver = null;
+    this.htmlMutationObserver = null;
+    this.bodyMutationObserver = null;
+
     this.bindCallbacks();
+  }
+
+  /**
+   * Create the shadow host and shadow root and insert in the body
+   */
+  createAndInsertShadowRootWithHost() {
+    this.host = document.createElement('div');
+    /*
+     * Remove all style the component could have inherited from its environment.
+     * Enforce the following style:
+     * - position fixed to have the positioning relative to the viewport
+     * - display block to ensure the component is always displayed
+     * - z-index fixed to the maximum allowed value to ensure the component is always displayed above all the page's components.
+     */
+    this.host.setAttribute('style', 'all: initial; position: fixed !important; display: block !important; z-index: 2147483647 !important');
+    // Block any setter and getter property style, however it can be bypassed with setAttribute.
+    Object.defineProperty(this.host, 'style', {
+      set: () => {},
+      get: () => null,
+    });
+    // Attach shadow in closed mode to not have access except with the reference
+    this.shadowRoot = this.host.attachShadow({mode: 'closed'});
+    /*
+     * Block any click event that is not ins the shadow root
+     * This prevents an attacker to add element in the host and try to add event listener
+     */
+    this.host.addEventListener('click', event => {
+      if (!this.shadowRoot.contains(event.target)) {
+        event.stopImmediatePropagation(); // Block any external event
+      }
+    }, true); // Capture phase
+    // Insert the host in the body
+    document.body.appendChild(this.host);
   }
 
   /**
    * Initializes the in-form manager
    */
   initialize() {
-    this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(port);
+    // Do not initialize if the page is not visible enough before inserting elements
+    if (this.isPageNotVisible()) {
+      console.debug("Cannot insert the in-form menu manager into a page that is not visible.");
+      return;
+    }
 
+    this.clipboardServiceWorkerService = new ClipboardServiceWorkerService(port);
+    this.createAndInsertShadowRootWithHost();
     this.findAndSetAuthenticationFields();
     this.handleDomChange();
     this.handleInformCallToActionRepositionEvent();
@@ -59,6 +106,7 @@ class InFormManager {
     this.handleFillCredentials();
     this.handleFillPassword();
     this.handleClipboardEvent();
+    this.handleDomStyleMutation();
   }
 
   /**
@@ -70,6 +118,52 @@ class InFormManager {
     this.clean = this.clean.bind(this);
     this.destroy = this.destroy.bind(this);
     this.handleClipboardChange = this.handleClipboardChange.bind(this);
+  }
+
+  /**
+   * Monitor inline `style` attribute mutations on the host, <html>, and <body>.
+   * If a mutation makes any of these elements non-visible (e.g., display:none, opacity:0,
+   * visibility:hidden), the component is destroyed as a defensive measure.
+   */
+  handleDomStyleMutation() {
+    // Check any DOM style changes on the element
+    this.hostMutationObserver = new MutationObserver(() => this.destroyIfElementNotVisible(this.host));
+    this.htmlMutationObserver = new MutationObserver(() => this.destroyIfElementNotVisible(document.documentElement));
+    this.bodyMutationObserver = new MutationObserver(() => this.destroyIfElementNotVisible(document.body));
+
+    this.hostMutationObserver.observe(this.host, {attributes: true});
+    this.htmlMutationObserver.observe(document.documentElement, {attributes: true});
+    this.bodyMutationObserver.observe(document.body, {attributes: true});
+  }
+
+  /**
+   * Destroy all if element is not visible enough
+   * @param element
+   */
+  destroyIfElementNotVisible(element) {
+    if (this.isElementNotVisible(element)) {
+      this.destroy();
+    }
+  }
+
+  /**
+   * Is element not visible
+   * @param element
+   * @return {boolean}
+   */
+  isElementNotVisible(element) {
+    const visibilityOptions = {
+      visibilityProperty: true
+    };
+    return getComputedStyle(element).opacity < 0.4 || !element.checkVisibility(visibilityOptions);
+  }
+
+  /**
+   * Is page not visible
+   * @return {boolean}
+   */
+  isPageNotVisible() {
+    return this.isElementNotVisible(document.documentElement) || this.isElementNotVisible(document.body);
   }
 
   /**
@@ -98,7 +192,7 @@ class InFormManager {
         const matchField = fieldToMatch => callToActionField => callToActionField.field === fieldToMatch;
         const existingField = this.callToActionFields.find(matchField(newField));
         const fieldType = newField.matches(InFormFieldSelector.USERNAME_FIELD_SELECTOR) ? 'username' : 'password';
-        return existingField || new InFormCallToActionField(newField, fieldType);
+        return existingField || new InFormCallToActionField(newField, fieldType, this.shadowRoot);
       });
     } else {
       this.clean();
@@ -151,6 +245,15 @@ class InFormManager {
    */
   handleDomChange() {
     const updateAuthenticationFields = mutationsList => {
+      /*
+       * The only way to prevent an attacker trying to move the host into another parent element and add opacity
+       * If the host is not in the body anymore destroy
+       */
+      if (this.host.parentNode !== document.body) {
+        console.debug('Someone has moved the host of the shadow root');
+        this.destroy();
+        return;
+      }
       // Check if the mutation is an iframe added or removed by us
       const isMutationInformIframe = mutation => this.isInformIframe(mutation);
       // Check if our iframe is in the mutation list
@@ -203,7 +306,7 @@ class InFormManager {
    */
   handleInFormMenuInsertionEvent() {
     port.on('passbolt.in-form-menu.open', () => {
-      this.menuField = new InFormMenuField(this.lastCallToActionFieldClicked.field);
+      this.menuField = new InFormMenuField(this.lastCallToActionFieldClicked.field, this.shadowRoot);
     });
   }
 
@@ -326,12 +429,16 @@ class InFormManager {
    */
   destroy() {
     this.mutationObserver.disconnect();
+    this.hostMutationObserver.disconnect();
+    this.htmlMutationObserver.disconnect();
+    this.bodyMutationObserver.disconnect();
     this.callToActionFields.forEach(field => field.destroy());
     this.menuField?.destroy();
     this.credentialsFormFields.forEach(field => field.destroy());
     window.removeEventListener('resize', this.clean);
     document.removeEventListener("cut", this.handleClipboardChange);
     document.removeEventListener("copy", this.handleClipboardChange);
+    this.host.remove();
   }
 
   /**
