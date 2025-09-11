@@ -15,8 +15,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 
-class DisplayContentTypesMetadataKeyAdministration extends React.Component {
+class DisplayContentTypesMetadataKeyAdministrationActions extends React.Component {
   /**
    * Render the component
    * @returns {JSX}
@@ -24,18 +25,22 @@ class DisplayContentTypesMetadataKeyAdministration extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button type="button" className="button primary" disabled={this.props.isProcessing} onClick={this.props.onSaveRequested}>
+        <button type="button" className={`button primary ${this.props.isProcessing && "processing"} ${this.props.isDisabled && "disabled"}`} disabled={this.props.isDisabled} onClick={this.props.onSaveRequested}>
           <span><Trans>Save</Trans></span>
+          {this.props.isProcessing &&
+            <SpinnerSVG/>
+          }
         </button>
       </div>
     );
   }
 }
 
-DisplayContentTypesMetadataKeyAdministration.propTypes = {
+DisplayContentTypesMetadataKeyAdministrationActions.propTypes = {
   isProcessing: PropTypes.bool, // The component is processing
+  isDisabled: PropTypes.bool, // The component is processing
   onSaveRequested: PropTypes.func, // The component save settings callback
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation("common")(DisplayContentTypesMetadataKeyAdministration);
+export default withTranslation("common")(DisplayContentTypesMetadataKeyAdministrationActions);

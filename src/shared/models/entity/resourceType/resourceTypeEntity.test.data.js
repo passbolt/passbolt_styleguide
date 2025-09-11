@@ -321,39 +321,33 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
           nullable: true,
         },
         custom_fields: {
-          type: "object",
-          required: ["items"],
-          properties: {
-            items: {
-              type: "array",
-              maxItems: 128,
-              items: {
-                type: "object",
-                required: ["id", "type"],
-                properties: {
-                  id: {
-                    type: "string",
-                    format: "uuid"
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["text", "password", "boolean", "number", "uri"]
-                  },
-                  metadata_key: {
-                    type: "string",
-                    maxLength: 255,
-                    nullable: true
-                  },
-                  metadata_value: {
-                    anyOf: [
-                      {type: "string", maxLength: 20000},
-                      {type: "number"},
-                      {type: "boolean"}
-                    ],
-                    nullable: true
-                  },
-                }
-              }
+          type: "array",
+          maxItems: 128,
+          items: {
+            type: "object",
+            required: ["id", "type"],
+            properties: {
+              id: {
+                type: "string",
+                format: "uuid"
+              },
+              type: {
+                type: "string",
+                enum: ["text", "password", "boolean", "number", "uri"]
+              },
+              metadata_key: {
+                type: "string",
+                maxLength: 255,
+                nullable: true
+              },
+              metadata_value: {
+                anyOf: [
+                  {type: "string", maxLength: 20000},
+                  {type: "number"},
+                  {type: "boolean"}
+                ],
+                nullable: true
+              },
             }
           }
         }
@@ -378,38 +372,32 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
           nullable: true,
         },
         custom_fields: {
-          type: "object",
-          required: ["items"],
-          properties: {
-            items: {
-              type: "array",
-              maxItems: 128,
-              items: {
-                type: "object",
-                required: ["id", "type"],
-                properties: {
-                  id: {
-                    type: "string",
-                    format: "uuid"
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["text", "password", "boolean", "number", "uri"]
-                  },
-                  secret_key: {
-                    type: "string",
-                    maxLength: 255,
-                    nullable: true
-                  },
-                  secret_value: {
-                    anyOf: [
-                      {type: "string", maxLength: 20000},
-                      {type: "number"},
-                      {type: "boolean"}
-                    ],
-                    nullable: true
-                  }
-                }
+          type: "array",
+          maxItems: 128,
+          items: {
+            type: "object",
+            required: ["id", "type"],
+            properties: {
+              id: {
+                type: "string",
+                format: "uuid"
+              },
+              type: {
+                type: "string",
+                enum: ["text", "password", "boolean", "number", "uri"]
+              },
+              secret_key: {
+                type: "string",
+                maxLength: 255,
+                nullable: true
+              },
+              secret_value: {
+                anyOf: [
+                  {type: "string", maxLength: 20000},
+                  {type: "number"},
+                  {type: "boolean"}
+                ],
+                nullable: true
               }
             }
           }
@@ -505,39 +493,33 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
           nullable: true,
         },
         custom_fields: {
-          type: "object",
-          required: ["items"],
-          properties: {
-            items: {
-              type: "array",
-              maxItems: 128,
-              items: {
-                type: "object",
-                required: ["id", "type"],
-                properties: {
-                  id: {
-                    type: "string",
-                    format: "uuid"
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["text", "password", "boolean", "number", "uri"]
-                  },
-                  metadata_key: {
-                    type: "string",
-                    maxLength: 255,
-                    nullable: true
-                  },
-                  metadata_value: {
-                    anyOf: [
-                      {type: "string", maxLength: 20000},
-                      {type: "number"},
-                      {type: "boolean"}
-                    ],
-                    nullable: true
-                  },
-                }
-              }
+          type: "array",
+          maxItems: 128,
+          items: {
+            type: "object",
+            required: ["id", "type"],
+            properties: {
+              id: {
+                type: "string",
+                format: "uuid"
+              },
+              type: {
+                type: "string",
+                enum: ["text", "password", "boolean", "number", "uri"]
+              },
+              metadata_key: {
+                type: "string",
+                maxLength: 255,
+                nullable: true
+              },
+              metadata_value: {
+                anyOf: [
+                  {type: "string", maxLength: 20000},
+                  {type: "number"},
+                  {type: "boolean"}
+                ],
+                nullable: true
+              },
             }
           }
         }
@@ -589,38 +571,32 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
           }
         },
         custom_fields: {
-          type: "object",
-          required: ["items"],
-          properties: {
-            items: {
-              type: "array",
-              maxItems: 128,
-              items: {
-                type: "object",
-                required: ["id", "type"],
-                properties: {
-                  id: {
-                    type: "string",
-                    format: "uuid"
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["text", "password", "boolean", "number", "uri"]
-                  },
-                  secret_key: {
-                    type: "string",
-                    maxLength: 255,
-                    nullable: true
-                  },
-                  secret_value: {
-                    anyOf: [
-                      {type: "string", maxLength: 20000},
-                      {type: "number"},
-                      {type: "boolean"}
-                    ],
-                    nullable: true
-                  }
-                }
+          type: "array",
+          maxItems: 128,
+          items: {
+            type: "object",
+            required: ["id", "type"],
+            properties: {
+              id: {
+                type: "string",
+                format: "uuid"
+              },
+              type: {
+                type: "string",
+                enum: ["text", "password", "boolean", "number", "uri"]
+              },
+              secret_key: {
+                type: "string",
+                maxLength: 255,
+                nullable: true
+              },
+              secret_value: {
+                anyOf: [
+                  {type: "string", maxLength: 20000},
+                  {type: "number"},
+                  {type: "boolean"}
+                ],
+                nullable: true
               }
             }
           }
@@ -744,39 +720,33 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
           nullable: true,
         },
         custom_fields: {
-          type: "object",
-          required: ["items"],
-          properties: {
-            items: {
-              type: "array",
-              maxItems: 128,
-              items: {
-                type: "object",
-                required: ["id", "type"],
-                properties: {
-                  id: {
-                    type: "string",
-                    format: "uuid"
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["text", "password", "boolean", "number", "uri"]
-                  },
-                  metadata_key: {
-                    type: "string",
-                    maxLength: 255,
-                    nullable: true
-                  },
-                  metadata_value: {
-                    anyOf: [
-                      {type: "string", maxLength: 20000},
-                      {type: "number"},
-                      {type: "boolean"}
-                    ],
-                    nullable: true
-                  },
-                }
-              }
+          type: "array",
+          maxItems: 128,
+          items: {
+            type: "object",
+            required: ["id", "type"],
+            properties: {
+              id: {
+                type: "string",
+                format: "uuid"
+              },
+              type: {
+                type: "string",
+                enum: ["text", "password", "boolean", "number", "uri"]
+              },
+              metadata_key: {
+                type: "string",
+                maxLength: 255,
+                nullable: true
+              },
+              metadata_value: {
+                anyOf: [
+                  {type: "string", maxLength: 20000},
+                  {type: "number"},
+                  {type: "boolean"}
+                ],
+                nullable: true
+              },
             }
           }
         }
@@ -791,38 +761,32 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
           enum: ['PASSBOLT_SECRET_DATA'],
         },
         custom_fields: {
-          type: "object",
-          required: ["items"],
-          properties: {
-            items: {
-              type: "array",
-              maxItems: 128,
-              items: {
-                type: "object",
-                required: ["id", "type"],
-                properties: {
-                  id: {
-                    type: "string",
-                    format: "uuid"
-                  },
-                  type: {
-                    type: "string",
-                    enum: ["text", "password", "boolean", "number", "uri"]
-                  },
-                  secret_key: {
-                    type: "string",
-                    maxLength: 255,
-                    nullable: true
-                  },
-                  secret_value: {
-                    anyOf: [
-                      {type: "string", maxLength: 20000},
-                      {type: "number"},
-                      {type: "boolean"}
-                    ],
-                    nullable: true
-                  }
-                }
+          type: "array",
+          maxItems: 128,
+          items: {
+            type: "object",
+            required: ["id", "type"],
+            properties: {
+              id: {
+                type: "string",
+                format: "uuid"
+              },
+              type: {
+                type: "string",
+                enum: ["text", "password", "boolean", "number", "uri"]
+              },
+              secret_key: {
+                type: "string",
+                maxLength: 255,
+                nullable: true
+              },
+              secret_value: {
+                anyOf: [
+                  {type: "string", maxLength: 20000},
+                  {type: "number"},
+                  {type: "boolean"}
+                ],
+                nullable: true
               }
             }
           }

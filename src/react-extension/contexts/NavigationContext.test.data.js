@@ -50,6 +50,18 @@ export function defaultNavigationContext(context = {}) {
     onGoToAdministrationRbacsRequested: jest.fn(),
     onGoToAdministrationMigrateMetadataRequested: jest.fn(),
     onGoToAdministrationAllowContentTypesRequested: jest.fn(),
+    onGoToAdministrationSubscriptionRequestedTeasing: jest.fn(),
+    onGoToAdministrationPasswordPoliciesRequestedTeasing: jest.fn(),
+    onGoToAdministrationUserPassphrasePoliciesRequestedTeasing: jest.fn(),
+    onGoToAdministrationAccountRecoveryRequestedTeasing: jest.fn(),
+    onGoToAdministrationSsoRequestedTeasing: jest.fn(),
+    onGoToAdministrationMfaPolicyRequestedTeasing: jest.fn(),
+    onGoToAdministrationUsersDirectoryRequestedTeasing: jest.fn(),
+    onGoToAdministrationScimRequestedTeasing: jest.fn(),
+    onGoToAdministrationScimRequested: jest.fn(),
+    onGoToAdministrationMfaPolicyRequested: jest.fn(),
+    onGoToAdministrationContentTypesMetadataKeyRequested: jest.fn(),
+    onGoToAdministrationContentTypesEncryptedMetadataRequested: jest.fn(),
   };
   return Object.assign(defaultContext, context);
 }

@@ -22,15 +22,16 @@ import {defaultAdminUserDto, defaultUserDto} from "../../shared/models/entity/us
 import {adminRoleDto, TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID, userRoleDto} from "../../shared/models/entity/role/role.test.data";
 import {defaultAccountDto} from "../../shared/models/entity/account/accountEntity.test.data";
 import AccountEntity from "../../shared/models/entity/account/accountEntity";
+import {defaultCeSiteSettings} from "../test/fixture/Settings/siteSettings.test.data";
 
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
  * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
-export function defaultAppContext(appContext = {}) {
+export function defaultAppContext(appContext = {}, isCommunityEdition = false) {
   const userSettings = new UserSettings(userSettingsFixture);
-  const siteSettings = new SiteSettings(siteSettingsFixture);
+  const siteSettings = isCommunityEdition ? new SiteSettings(defaultCeSiteSettings()) : new SiteSettings(siteSettingsFixture);
   const defaultAppContext = {
     locale: 'en-UK',
     userSettings,

@@ -46,3 +46,14 @@ export const isBeta = {
     onClick: () => console.log("It clicked!"),
   }
 };
+
+export const proTeasing = {
+  args: {
+    icon: <KeySVG/>,
+    title: "Pro Teasing card item",
+    description: "This is an example of a PRO teasing card item",
+    isBeta: false,
+    onClick: () => console.log("It clicked!"),
+    proTeasing: true,
+  }
+};

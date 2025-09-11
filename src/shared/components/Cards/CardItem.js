@@ -13,6 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
+import FrameSVG from "../../../img/svg/Frame.svg";
 
 /**
  * This component represents a Card item
@@ -49,7 +50,13 @@ class CardItem extends React.PureComponent {
       <button type="button" className="button-transparent card" onClick={this.props.onClick}>
         {this.props.icon}
         <div className="card-information">
-          <span className={`title ${this.hasAPill && "with-pill"}`} title={this.props.title}>{this.props.title}{this.pill}</span>
+          <span className={`title-wrapper ${this.hasAPill && "with-pill"}`}>
+            <span className="title" title={this.props.title}>
+              {this.props.title}
+              {this.pill}
+            </span>
+            {this.props.proTeasing && <FrameSVG />}
+          </span>
           {this.props.description &&
             <span className="info" title={this.props.description}>{this.props.description}</span>
           }
@@ -61,6 +68,7 @@ class CardItem extends React.PureComponent {
 
 CardItem.defaultProps = {
   isBeta: false,
+  proTeasing: false,
 };
 
 CardItem.propTypes = {
@@ -70,6 +78,7 @@ CardItem.propTypes = {
   isBeta: PropTypes.bool.isRequired, // should the card display a "beta" pill
   isNew: PropTypes.bool, /// should the card display a "new" pill
   onClick: PropTypes.func, // the callback to run when clicking the card
+  proTeasing: PropTypes.bool.isRequired,
 };
 
 export default CardItem;

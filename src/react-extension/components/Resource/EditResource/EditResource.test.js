@@ -1404,6 +1404,63 @@ describe("See the Create Resource", () => {
       expect(props.onClose).toBeCalled();
     });
 
+    it('As a signed-in user I should be able to save a resource v5 default with no expiry update', async() => {
+      expect.assertions(3);
+      const expirationPeriod = 15;
+      const passwordExpirySettings = overridenPasswordExpirySettingsEntityDto({
+        default_expiry_period: expirationPeriod
+      });
+
+      const fakeNow = new Date('2023-01-01T00:00:00.000Z');
+
+      jest.useFakeTimers().setSystemTime(fakeNow);
+
+      const expectedExpiryDate = DateTime.utc().plus({days: (expirationPeriod - 1)});
+      const expirationDate = formatDateForApi(expectedExpiryDate);
+
+      const props = defaultProps({
+        passwordExpiryContext: defaultPasswordExpirySettingsContext({
+          getSettings: () => passwordExpirySettings,
+        }),
+        resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT, expired: expirationDate})
+      });
+      mockContextRequest(props.context, () => ({object_type: SECRET_DATA_OBJECT_TYPE, password: "RN9n8XuECN312345", description: "description"}));
+
+      const page = new EditResourcePage(props);
+      await waitFor(() => {});
+
+      await page.click(page.getSectionItem(2));
+      page.fillInput(page.note, "Expiry date not updated");
+      mockContextRequest(props.context, jest.fn());
+      await page.click(page.saveButton);
+
+      const resourceDtoExpected = {
+        id: props.resource.id,
+        expired: props.resource.expired,
+        folder_parent_id: null,
+        resource_type_id: props.resource.resource_type_id,
+        metadata: {
+          object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
+          name: props.resource.metadata.name,
+          username: props.resource.metadata.username,
+          resource_type_id: props.resource.resource_type_id,
+          uris: props.resource.metadata.uris,
+          description: props.resource.metadata.description
+        }
+      };
+
+      const secretDtoExpected = {
+        object_type: SECRET_DATA_OBJECT_TYPE,
+        password: "RN9n8XuECN312345",
+        description: "Expiry date not updated"
+      };
+
+      // expectations
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDtoExpected, secretDtoExpected);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The resource has been updated successfully");
+      expect(props.onClose).toBeCalled();
+    });
+
     it('As a signed-in user I should be able to save a resource v5 default with totp empty', async() => {
       expect.assertions(3);
       const props = defaultProps({resource: defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT, folder_parent_id: "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9"})});

@@ -10,9 +10,9 @@ import DisplayAdministrationEmailNotificationActions from "./DisplayAdministrati
 /**
  * Props with user group details
  */
-export function defaultProps(selectedAdministration) {
+export function defaultProps(selectedAdministration, isCommunityEdition = false) {
   return {
-    context: defaultAppContext(),
+    context: defaultAppContext({}, isCommunityEdition),
     mfaContext: {
       checkMfaChoiceRequired: jest.fn()
     },

@@ -25,21 +25,29 @@ import DisplayAdministrationWorkspaceBreadcrumb
   from "./DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
 import DisplayUserDirectoryAdministration
   from "./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration";
+import DisplayUserDirectoryAdministrationTeasing from "./DisplayUserDirectoryAdministrationTeasing/DisplayUserDirectoryAdministrationTeasing";
 import DisplayEmailNotificationsAdministration
   from "./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration";
 import DisplaySubscriptionKey from "./DisplaySubscriptionKey/DisplaySubscriptionKey";
+import DisplaySubscriptionKeyTeasing from "./DisplaySubscriptionKeyTeasing/DisplaySubscriptionKeyTeasing";
 import DisplayInternationalizationAdministration
   from "./DisplayInternationalizationAdministration/DisplayInternationalizationAdministration";
 import ManageAccountRecoveryAdministrationSettings
   from "./ManageAccountRecoveryAdministrationSettings/ManageAccountRecoveryAdministrationSettings";
+import ManageAccountRecoveryAdministrationSettingsTeasing
+  from "./ManageAccountRecoveryAdministrationSettingsTeasing/ManageAccountRecoveryAdministrationSettingsTeasing";
 import ManageSmtpAdministrationSettings
   from "./ManageSmtpAdministrationSettings/ManageSmtpAdministrationSettings.js";
 import DisplaySelfRegistrationAdministration from "./DisplaySelfRegistrationAdministration/DisplaySelfRegistrationAdministration";
 import ManageSsoSettings from "./ManageSsoSettings/ManageSsoSettings";
+import ManageSsoSettingsTeasing from "./ManageSsoSettingsTeasing/ManageSsoSettingsTeasing";
 import DisplayMfaPolicyAdministration from "./DisplayMfaPolicyAdministration/DisplayMfaPolicyAdministration";
+import DisplayMfaPolicyAdministrationTeasing from "./DisplayMfaPolicyAdministrationTeasing/DisplayMfaPolicyAdministrationTeasing";
 import DisplayRbacAdministration from "./DisplayRbacAdministration/DisplayRbacAdministration";
 import DisplayPasswordPoliciesAdministration from "./DisplayPasswordPoliciesAdministration/DisplayPasswordPoliciesAdministration";
+import DisplayPasswordPoliciesAdministrationTeasing from "./DisplayPasswordPoliciesAdministrationTeasing/DisplayPasswordPoliciesAdministrationTeasing";
 import DisplayAdministrationUserPassphrasePolicies from "./DisplayAdministrationUserPassphrasePolicies/DisplayAdministrationUserPassphrasePolicies";
+import DisplayAdministrationUserPassphrasePoliciesTeasing from "./DisplayAdministrationUserPassphrasePoliciesTeasing/DisplayAdministrationUserPassphrasePoliciesTeasing";
 import DisplayAdministrationPasswordExpiry from "./DisplayAdministrationPasswordExpiry/DisplayAdministrationPasswordExpiry";
 import DisplayHttpError from "../Common/Error/DisplayHttpError/DisplayHttpError";
 import DisplayHealthcheckAdministration from "./DisplayHealthcheckAdministration/DisplayHealthcheckAdministration";
@@ -56,6 +64,8 @@ import DisplayContentTypesAllowedContentTypesAdministration from "./DisplayConte
 import AdministrationHomePage from "./HomePage/AdministrationHomePage.js";
 import WorkspaceSwitcher, {WORKSPACE_ENUM} from "../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher.js";
 import DisplayAdministrationMetadataGettingStarted from "./DisplayAdministrationMetadataGettingStarted/DisplayAdministrationMetadataGettingStarted.js";
+import DisplayScimSettingsAdministration from "./DisplayScimSettingsAdministration/DisplayScimSettingsAdministration.js";
+import DisplayScimAdministrationTeasing from "./DisplayScimAdministrationTeasing/DisplayScimAdministrationTeasing.js";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -73,6 +83,14 @@ class AdministrationWorkspace extends Component {
    */
   bindCallbacks() {
     this.handleGoBack = this.handleGoBack.bind(this);
+  }
+
+  /**
+   * Returns true if CE; false if PRO
+   * @returns {boolean}
+   */
+  isCommunityEdition() {
+    return this.props.context.siteSettings.isCommunityEdition;
   }
 
   /**
@@ -236,6 +254,13 @@ class AdministrationWorkspace extends Component {
     return AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
+  /**
+   * If SCIM is selected
+   * @returns {boolean}
+   */
+  isScimSelected() {
+    return AdministrationWorkspaceMenuTypes.SCIM === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
 
   /**
    * Handle go back to resource workspace
@@ -317,25 +342,25 @@ class AdministrationWorkspace extends Component {
                       <DisplayMfaAdministration/>
                     }
                     {this.isMfaPolicySelected() &&
-                      <DisplayMfaPolicyAdministration/>
+                      (this.isCommunityEdition() ? <DisplayMfaPolicyAdministrationTeasing/> : <DisplayMfaPolicyAdministration/>)
                     }
                     {this.isPasswordPoliciesSelected() &&
-                      <DisplayPasswordPoliciesAdministration/>
+                      (this.isCommunityEdition() ? <DisplayPasswordPoliciesAdministrationTeasing/> : <DisplayPasswordPoliciesAdministration/>)
                     }
                     {this.isUserDirectorySelected() &&
-                      <DisplayUserDirectoryAdministration/>
+                      (this.isCommunityEdition() ? <DisplayUserDirectoryAdministrationTeasing/> : <DisplayUserDirectoryAdministration/>)
                     }
                     {this.isEmailNotificationsSelected() &&
                       <DisplayEmailNotificationsAdministration/>
                     }
                     {this.isSubscriptionSelected() &&
-                      <DisplaySubscriptionKey/>
+                      (this.isCommunityEdition() ? <DisplaySubscriptionKeyTeasing/> : <DisplaySubscriptionKey/>)
                     }
                     {this.isInternationalizationSelected() &&
                       <DisplayInternationalizationAdministration/>
                     }
                     {this.isAccountRecoverySelected() &&
-                      <ManageAccountRecoveryAdministrationSettings/>
+                      (this.isCommunityEdition() ? <ManageAccountRecoveryAdministrationSettingsTeasing/> : <ManageAccountRecoveryAdministrationSettings/>)
                     }
                     {this.isSmtpSettingsSelected() &&
                       <ManageSmtpAdministrationSettings/>
@@ -344,13 +369,13 @@ class AdministrationWorkspace extends Component {
                       <DisplaySelfRegistrationAdministration/>
                     }
                     {this.isSsoSelected() &&
-                      <ManageSsoSettings/>
+                      (this.isCommunityEdition() ? <ManageSsoSettingsTeasing/> : <ManageSsoSettings/>)
                     }
                     {this.isRbacSelected() &&
                       <DisplayRbacAdministration/>
                     }
                     {this.isUserPassphrasePoliciesSelected() &&
-                      <DisplayAdministrationUserPassphrasePolicies/>
+                      (this.isCommunityEdition() ? <DisplayAdministrationUserPassphrasePoliciesTeasing/> : <DisplayAdministrationUserPassphrasePolicies/>)
                     }
                     {this.isPasswordExpirySelected() &&
                       <DisplayAdministrationPasswordExpiry/>
@@ -374,11 +399,18 @@ class AdministrationWorkspace extends Component {
                       this.isGetStartedMetadataSelected() &&
                       <DisplayAdministrationMetadataGettingStarted/>
                     }
+                    {
+                      this.isScimSelected() &&
+                      (this.isCommunityEdition() ? <DisplayScimAdministrationTeasing/> : <DisplayScimSettingsAdministration/>)
+
+                    }
                   </div>
                 </div>
                 <Switch>
                   <Route exact path={[
-                    "/app/administration"
+                    "/app/administration",
+                    "/app/administration/user-provisionning/scim", // to be removed when documentation will be written
+                    "/app/administration/scim-teasing"
                   ]}/>
                   <Route>
                     <div className="help-panel">

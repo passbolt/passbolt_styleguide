@@ -157,6 +157,16 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
   }
 
   /**
+   * Allow zero knowledge
+   * @returns {Promise<void>}
+   */
+  async clickOnAllowZeroKnowledgeInput() {
+    const leftClick = {button: 0};
+    fireEvent.click(this.enableZeroKnowledgeKeyShareInput, leftClick);
+    await waitFor(() => {});
+  }
+
+  /**
    * Generate a new shared metadata key
    * @returns {Promise<void>}
    */

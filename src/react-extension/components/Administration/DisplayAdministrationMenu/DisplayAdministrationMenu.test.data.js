@@ -4,7 +4,7 @@ import MetadataGettingStartedSettingsEntity
 import {
   defaultMetadataGettingStartedSettingsDto
 } from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity.test.data";
-import siteSettingsPro from "../../../test/fixture/Settings/siteSettings";
+import siteSettingsPro, {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
 
 /**
  * Returns the default app context for the unit test
@@ -22,8 +22,9 @@ export function defaultAppContext(appContext) {
  * Default props
  * @returns {{resource: {id: string, name: string}}}
  */
-export function defaultProps(data = {}) {
-  const siteSettings = new SiteSettings(siteSettingsPro);
+export function defaultProps(data = {}, isCommunityEdition = false) {
+  const siteSettingsValue = isCommunityEdition ? siteSettingsCe : siteSettingsPro;
+  const siteSettings = new SiteSettings(siteSettingsValue);
   return Object.assign({
     context: {
       siteSettings: siteSettings
@@ -49,6 +50,16 @@ export function defaultProps(data = {}) {
       onGoToAdministrationContentTypesMetadataKeyRequested: jest.fn(),
       onGoToAdministrationMigrateMetadataRequested: jest.fn(),
       onGoToAdministrationMetadataGettingStartedRequested: jest.fn(),
+
+      onGoToAdministrationSubscriptionRequestedTeasing: jest.fn(),
+      onGoToAdministrationUsersDirectoryRequestedTeasing: jest.fn(),
+      onGoToAdministrationAccountRecoveryRequestedTeasing: jest.fn(),
+      onGoToAdministrationSsoRequestedTeasing: jest.fn(),
+      onGoToAdministrationMfaPolicyRequestedTeasing: jest.fn(),
+      onGoToAdministrationUserPassphrasePoliciesRequestedTeasing: jest.fn(),
+      onGoToAdministrationPasswordPoliciesRequestedTeasing: jest.fn(),
+      onGoToAdministrationScimRequested: jest.fn(),
+      onGoToAdministrationScimRequestedTeasing: jest.fn()
     }
   }, data);
 }
