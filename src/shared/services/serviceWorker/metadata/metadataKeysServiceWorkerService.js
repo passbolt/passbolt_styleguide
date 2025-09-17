@@ -19,6 +19,7 @@ export const METADATA_KEYS_CREATE_EVENT = "passbolt.metadata.create-key";
 export const METADATA_KEYS_GENERATE_EVENT = "passbolt.metadata.generate-metadata-key";
 export const METADATA_KEYS_FIND_ALL_EVENT = "passbolt.metadata.find-all-non-deleted-metadata-keys";
 export const METADATA_SHARE_METADATA_PRIVATE_KEYS_EVENT = "passbolt.metadata.share-missing-metadata-private-keys-with-user";
+export const METADATA_KEYS_EXPIRE_EVENT = "passbolt.metadata.expire-metadata-key";
 
 class MetadataKeysServiceWorkerService {
   /**
@@ -68,6 +69,15 @@ class MetadataKeysServiceWorkerService {
    */
   async share(userId) {
     await this.port.request(METADATA_SHARE_METADATA_PRIVATE_KEYS_EVENT, userId);
+  }
+
+  /**
+   * Expire a metadata keys.
+   * @param {string} metadataKeyId The metadata key id.
+   * @returns {Promise<void>}
+   */
+  async expire(metadataKeyId) {
+    await this.port.request(METADATA_KEYS_EXPIRE_EVENT, metadataKeyId);
   }
 }
 
