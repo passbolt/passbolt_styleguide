@@ -25,6 +25,7 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
   V4_TO_V5_RESOURCE_TYPE_MAPPING,
 } from "../resourceType/resourceTypeSchemasDefinition";
 import ResourceTypesCollection from "../resourceType/resourceTypesCollection";
@@ -40,6 +41,7 @@ import SecretDataV5StandaloneCustomFieldsCollection from "../secretData/secretDa
 import SecretDataV5StandaloneTotpEntity from "../secretData/secretDataV5StandaloneTotpEntity";
 import ResourceMetadataEntity from "./metadata/resourceMetadataEntity";
 import {CUSTOM_FIELD_KEY_MAX_LENGTH, CUSTOM_FIELD_TEXT_MAX_LENGTH} from "../customField/customFieldEntity";
+import SecretDataV5StandaloneNoteEntity from "../secretData/secretDataV5StandaloneNoteEntity";
 
 class ResourceFormEntity extends EntityV2 {
   /**
@@ -185,6 +187,8 @@ class ResourceFormEntity extends EntityV2 {
         return SecretDataV4PasswordStringEntity;
       case RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG:
         return SecretDataV5StandaloneCustomFieldsCollection;
+      case RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG:
+        return SecretDataV5StandaloneNoteEntity;
       default:
         return null;
     }

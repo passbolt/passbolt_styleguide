@@ -25,13 +25,15 @@ import {
   resourceTypeV5DefaultDto,
   resourceTypeV5DefaultTotpDto,
   resourceTypeV5TotpDto,
+  resourceTypeV5StandaloneNoteDto,
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_PASSWORD_STRING,
   TEST_RESOURCE_TYPE_TOTP, TEST_RESOURCE_TYPE_V5_DEFAULT,
   TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
   TEST_RESOURCE_TYPE_V5_PASSWORD_STRING,
-  TEST_RESOURCE_TYPE_V5_TOTP
+  TEST_RESOURCE_TYPE_V5_TOTP,
+  TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE
 } from "../resourceType/resourceTypeEntity.test.data";
 import {
   defaultSecretDataV5DefaultTotpEntityDto,
@@ -82,6 +84,7 @@ import SecretDataV5StandaloneCustomFieldsCollection from "../secretData/secretDa
 import ResourceTypeEntity from "../resourceType/resourceTypeEntity";
 import CustomFieldEntity from "../customField/customFieldEntity";
 import {emptyCustomFieldDto} from "../customField/customFieldEntity.test.data";
+import {defaultSecretDataV5StandaloneNoteDto} from "../secretData/secretDataV5StandaloneNoteEntity.test.data";
 
 describe("Resource Form entity", () => {
   describe("ResourceFormEntity::getSchema", () => {
@@ -188,6 +191,16 @@ describe("Resource Form entity", () => {
       const resourceTypeDtos = resourceTypesCollectionDto();
       const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
 
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+    });
+
+    it("works if complete DTO is provided for a resource v5 standalone note", () => {
+      expect.assertions(1);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE, secret: defaultSecretDataV5StandaloneNoteDto()});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      console.log(resourceTypeDtos);
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
       const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
       expect(resourceFormEntity.toDto()).toEqual(resourceDto);
     });
@@ -335,6 +348,15 @@ describe("Resource Form entity", () => {
       const resourceTypes = new ResourceTypeEntity(resourceTypeV5CustomFieldsDto());
 
       expect(resourceForm.isResourceTypeHasSecretProperty(resourceTypes, "secret.custom_fields")).toStrictEqual(true);
+    });
+
+    it("should return true if the entity has standalone note", () => {
+      expect.assertions(1);
+
+      const resourceForm = new ResourceFormEntity(defaultResourceFormDto(), {validate: false});
+      const resourceTypes = new ResourceTypeEntity(resourceTypeV5StandaloneNoteDto());
+
+      expect(resourceForm.isResourceTypeHasSecretProperty(resourceTypes, "secret.description")).toStrictEqual(true);
     });
 
     it("should return false if the entity has not the target secret", () => {
@@ -659,7 +681,7 @@ describe("Resource Form entity", () => {
       expect(resourceFormEntity.toDto()).toEqual(resourceDto);
     });
 
-    it("delete secret password on v5 default", () => {
+    it("delete secret password on v5 default should create a standalone note", () => {
       expect.assertions(2);
       const resourceDto = defaultResourceFormDto({secret: defaultSecretDataV5DefaultDto()});
       const resourceTypeDtos = resourceTypesCollectionDto();
@@ -668,7 +690,10 @@ describe("Resource Form entity", () => {
       const resourceFormEntity = new ResourceFormEntity(resourceDto, {validate: false, resourceTypes: resourceTypesCollection});
       resourceFormEntity.deleteSecret(ResourceEditCreateFormEnumerationTypes.PASSWORD, {validate: false});
       delete resourceDto.secret.password;
-      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT);
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE;
+      resourceDto.metadata.resource_type_id = TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE;
+
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE);
       expect(resourceFormEntity.toDto()).toEqual(resourceDto);
     });
 
@@ -899,6 +924,24 @@ describe("Resource Form entity", () => {
       expect(resourceFormEntity.validate()).toBeNull();
     });
 
+    it("remove totp secret should set a standalone note from v5 default totp resource", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP, secret: {object_type: SECRET_DATA_OBJECT_TYPE, totp: defaultTotpDto({secret_key: ""}), description: ""}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection, validate: false});
+      resourceFormEntity.removeEmptySecret({validate: false});
+      delete resourceDto.secret.totp;
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE;
+      resourceDto.metadata.resource_type_id = TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE;
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
+    });
+
+
     it("remove totp secret and add require password secret from v5 default totp resource", () => {
       expect.assertions(3);
       const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP, secret: {object_type: SECRET_DATA_OBJECT_TYPE, totp: defaultTotpDto({secret_key: ""}), description: ""}});
@@ -907,8 +950,8 @@ describe("Resource Form entity", () => {
 
       const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection, validate: false});
       resourceFormEntity.removeEmptySecret({validate: false});
-      resourceFormEntity.addRequiredSecret();
-      resourceDto.secret.password = null;
+      resourceFormEntity.addSecret("secret.password");
+      resourceDto.secret.password = "";
       delete resourceDto.secret.totp;
       resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT;
       resourceDto.metadata.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT;
@@ -926,13 +969,30 @@ describe("Resource Form entity", () => {
 
       const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection, validate: false});
       resourceFormEntity.removeEmptySecret({validate: false});
-      resourceFormEntity.addRequiredSecret();
-      resourceDto.secret.password = null;
+      resourceFormEntity.addSecret("secret.password");
+      resourceDto.secret.password = "";
       delete resourceDto.secret.custom_fields;
       resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT;
       resourceDto.metadata.resource_type_id = TEST_RESOURCE_TYPE_V5_DEFAULT;
       // expectation
       expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_DEFAULT);
+      expect(resourceFormEntity.toDto()).toEqual(resourceDto);
+      expect(resourceFormEntity.validate()).toBeNull();
+    });
+
+    it("remove custom fields secret should set a standalone note from v5 default totp resource", () => {
+      expect.assertions(3);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT, secret: {object_type: SECRET_DATA_OBJECT_TYPE, custom_fields: [emptyCustomFieldDto()], description: ""}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection, validate: false});
+      resourceFormEntity.removeEmptySecret({validate: false});
+      delete resourceDto.secret.custom_fields;
+      resourceDto.resource_type_id = TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE;
+      resourceDto.metadata.resource_type_id = TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE;
+      // expectation
+      expect(resourceFormEntity.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE);
       expect(resourceFormEntity.toDto()).toEqual(resourceDto);
       expect(resourceFormEntity.validate()).toBeNull();
     });
