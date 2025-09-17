@@ -26,6 +26,7 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import EyeOpenSVG from "../../../../img/svg/eye_open.svg";
+import EyeCloseSVG from "../../../../img/svg/eye_close.svg";
 
 /**
  * This component display the note section of a resource
@@ -61,6 +62,7 @@ class DisplayResourceDetailsNote extends React.Component {
   bindCallbacks() {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
     this.handleRetryDecryptClickEvent = this.handleRetryDecryptClickEvent.bind(this);
+    this.handleHideNoteClickEvent = this.handleHideNoteClickEvent.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -128,6 +130,18 @@ class DisplayResourceDetailsNote extends React.Component {
    */
   handleRetryDecryptClickEvent() {
     this.decryptAndLoadEncryptedNote();
+  }
+
+  /**
+   * Hide the current decrypted note
+   */
+  handleHideNoteClickEvent() {
+    this.setState({
+      error: false,
+      isSecretDecrypting: false,
+      isSecretDecrypted: false,
+      note: null,
+    });
   }
 
   /*
@@ -204,9 +218,14 @@ class DisplayResourceDetailsNote extends React.Component {
               </p>
             }
             {this.mustShowNote() &&
-              <p className="description-content">
-                {this.state.note}
-              </p>
+              <>
+                <p className="description-content">
+                  {this.state.note}
+                </p>
+                <button type="button" onClick={this.handleHideNoteClickEvent}>
+                  <EyeCloseSVG/><Trans>Hide</Trans>
+                </button>
+              </>
             }
             {this.mustShowEncryptedNote() &&
               <>
