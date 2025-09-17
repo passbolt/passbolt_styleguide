@@ -20,6 +20,7 @@ export const METADATA_KEYS_GENERATE_EVENT = "passbolt.metadata.generate-metadata
 export const METADATA_KEYS_FIND_ALL_EVENT = "passbolt.metadata.find-all-non-deleted-metadata-keys";
 export const METADATA_SHARE_METADATA_PRIVATE_KEYS_EVENT = "passbolt.metadata.share-missing-metadata-private-keys-with-user";
 export const METADATA_KEYS_EXPIRE_EVENT = "passbolt.metadata.expire-metadata-key";
+export const METADATA_KEYS_ROTATE_RESOURCES_EVENT = "passbolt.metadata.rotate-resources-metadata";
 
 class MetadataKeysServiceWorkerService {
   /**
@@ -78,6 +79,14 @@ class MetadataKeysServiceWorkerService {
    */
   async expire(metadataKeyId) {
     await this.port.request(METADATA_KEYS_EXPIRE_EVENT, metadataKeyId);
+  }
+
+  /**
+   * Rotate a metadata keys.
+   * @returns {Promise<void>}
+   */
+  async rotate() {
+    await this.port.request(METADATA_KEYS_ROTATE_RESOURCES_EVENT);
   }
 }
 
