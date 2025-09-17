@@ -1,3 +1,5 @@
+import {ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET} from "../resource/metadata/IconEntity";
+
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -20,6 +22,7 @@ export const RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG = "v5-password-string";
 export const RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG = "v5-default-with-totp";
 export const RESOURCE_TYPE_V5_TOTP_SLUG = "v5-totp-standalone";
 export const RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG = "v5-custom-fields";
+export const RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG = "v5-note";
 
 //Plaintext secret schema for slug: "password-string"
 export const RESOURCE_TYPE_PASSWORD_STRING_LEGACY_DEFINITION_SCHEMA = {
@@ -495,6 +498,67 @@ const RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA = {
   },
 };
 
+//Plaintext secret schema for slug: "v5-note"
+const RESOURCE_TYPE_V5_STANDALONE_NOTE_DEFINITION_SCHEMA = {
+  resource: {
+    type: "object",
+    required: ["name"],
+    properties: {
+      name: {
+        type: "string",
+        maxLength: 255
+      },
+      uris: {
+        type: "array",
+        items: {
+          type: "string",
+          maxLength: 1024,
+          nullable: true
+        },
+        maxItems: 32
+      },
+      description: {
+        type: "string",
+        maxLength: 10000,
+        nullable: true,
+      },
+      icon: {
+        type: "object",
+        required: [],
+        properties: {
+          type: {
+            type: "string",
+            enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+          },
+          value: {
+            type: "number",
+            minimum: 6,
+            nullable: true
+          },
+          background_color: {
+            type: "string",
+            nullable: true,
+          },
+        }
+      }
+    },
+  },
+  secret: {
+    type: "object",
+    required: ["description", "object_type"],
+    properties: {
+      object_type: {
+        type: "string",
+        enum: ['PASSBOLT_SECRET_DATA'],
+      },
+      description: {
+        type: "string",
+        maxLength: 50000,
+      },
+    },
+  }
+};
+
 export const V4_TO_V5_RESOURCE_TYPE_MAPPING = {
   [RESOURCE_TYPE_PASSWORD_STRING_SLUG]: RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   [RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG]: RESOURCE_TYPE_V5_DEFAULT_SLUG,
@@ -513,7 +577,8 @@ class ResourceTypeSchemasDefinition {
       [RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG]: RESOURCE_TYPE_V5_PASSWORD_STRING_DEFINITION_SCHEMA,
       [RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG]: RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA,
       [RESOURCE_TYPE_V5_TOTP_SLUG]: RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA,
-      [RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG]: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA
+      [RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG]: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA,
+      [RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG]: RESOURCE_TYPE_V5_STANDALONE_NOTE_DEFINITION_SCHEMA
     };
   }
 }
