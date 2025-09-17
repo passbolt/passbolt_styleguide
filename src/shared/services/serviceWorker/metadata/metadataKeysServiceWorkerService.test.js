@@ -16,7 +16,7 @@ import MockPort from "../../../../react-extension/test/mock/MockPort";
 import MetadataKeysServiceWorkerService, {
   METADATA_KEYS_CREATE_EVENT, METADATA_KEYS_EXPIRE_EVENT,
   METADATA_KEYS_FIND_ALL_EVENT,
-  METADATA_KEYS_GENERATE_EVENT,
+  METADATA_KEYS_GENERATE_EVENT, METADATA_KEYS_ROTATE_RESOURCES_EVENT,
   METADATA_SHARE_METADATA_PRIVATE_KEYS_EVENT
 } from "./metadataKeysServiceWorkerService";
 import {defaultMetadataKeysDtos} from "../../../models/entity/metadata/metadataKeysCollection.test.data";
@@ -119,6 +119,18 @@ describe("MetadataKeysServiceWorkerService", () => {
       await service.expire(metadataKeyId);
 
       expect(port.request).toHaveBeenCalledWith(METADATA_KEYS_EXPIRE_EVENT, metadataKeyId);
+    });
+  });
+
+  describe("::rotate", () => {
+    it("requests the service worker with the expected event.", async() => {
+      expect.assertions(1);
+
+      jest.spyOn(port, "request").mockReturnValue(() => {});
+
+      await service.rotate();
+
+      expect(port.request).toHaveBeenCalledWith(METADATA_KEYS_ROTATE_RESOURCES_EVENT);
     });
   });
 });
