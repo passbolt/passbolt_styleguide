@@ -123,7 +123,6 @@ each(
   ceScenarios
 ).describe("Display Administration Workspace for CE Admins", currentScenario => {
   it(`As AD, I should see: ${currentScenario.selectedMenu}`, async() => {
-    console.log("Current Scenario Selected Menu", currentScenario.selectedMenu);
     expect.assertions(ceScenarios.length);
 
     const props = defaultProps(currentScenario.selectedMenu, true);
