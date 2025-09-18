@@ -18,6 +18,7 @@ import PasswordSVG from "../../../../img/passbolt-default-resource-type-icons/pa
 import TotpSVG from "../../../../img/passbolt-default-resource-type-icons/totp.svg";
 import PasswordWithTotpSVG from "../../../../img/passbolt-default-resource-type-icons/password-with-totp.svg";
 import KeyValueSVG from "../../../../img/passbolt-default-resource-type-icons/key-value.svg";
+import NotesSVG from "../../../../img/passbolt-default-resource-type-icons/notes.svg";
 
 export const PASSBOLT_DEFAULT_RESOURCE_TYPE_ICON_MAP = {
   'password-string': <PasswordSVG/>,
@@ -29,4 +30,5 @@ export const PASSBOLT_DEFAULT_RESOURCE_TYPE_ICON_MAP = {
   'password-description-totp': <PasswordWithTotpSVG/>,
   'v5-default-with-totp': <PasswordWithTotpSVG/>,
   'v5-custom-fields': <KeyValueSVG />,
+  'v5-note': <NotesSVG />,
 };
