@@ -104,6 +104,14 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
   }
 
   /**
+   * Returns the note v5 warning element
+   * @returns {HTMLElement}
+   */
+  get noteV5Warning() {
+    return this.select("#noteV5Input + label .warning-message");
+  }
+
+  /**
    * Returns the password v4 error element
    * @returns {HTMLElement}
    */
@@ -136,6 +144,14 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
   }
 
   /**
+   * Returns the note v5 error element
+   * @returns {HTMLElement}
+   */
+  get noteV5Error() {
+    return this.select("#noteV5Input + label .error-message");
+  }
+
+  /**
    * Returns the password v4 checkbox element
    * @returns {HTMLElement}
    */
@@ -165,6 +181,14 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
    */
   get totpV5Checkbox() {
     return this.select("#totpV5Input");
+  }
+
+  /**
+   * Returns the note v5 checkbox element
+   * @returns {HTMLElement}
+   */
+  get noteV5Checkbox() {
+    return this.select("#noteV5Input");
   }
 
   /**
@@ -211,6 +235,15 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
   async clickOnTotpV5() {
     const leftClick = {button: 0};
     fireEvent.click(this.totpV5Checkbox, leftClick);
+  }
+
+  /**
+   * Click on the note checkbox
+   * @returns {Promise<void>}
+   */
+  async clickOnNoteV5() {
+    const leftClick = {button: 0};
+    fireEvent.click(this.noteV5Checkbox, leftClick);
   }
 
   /**
