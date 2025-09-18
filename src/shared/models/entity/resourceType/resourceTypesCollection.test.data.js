@@ -42,6 +42,22 @@ export const resourceTypesCollectionDto = () => [
 ];
 
 /**
+ * Resource types collection dto.
+ * @returns {object}
+ */
+export const resourceTypesCollectionWithoutNoteDto = () => [
+  resourceTypePasswordStringDto(),
+  resourceTypePasswordAndDescriptionDto(),
+  resourceTypePasswordDescriptionTotpDto(),
+  resourceTypeTotpDto(),
+  resourceTypeV5DefaultDto(),
+  resourceTypeV5PasswordStringDto(),
+  resourceTypeV5DefaultTotpDto(),
+  resourceTypeV5TotpDto(),
+  resourceTypeV5CustomFieldsDto(),
+];
+
+/**
  * Resource types collection v4 dto.
  * @returns {object}
  */
