@@ -81,6 +81,7 @@ import AdministrationEncryptedMetadataGettingStartedContextProvider
   from "./contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
 import GettingStartedWithEncryptedMetadataServiceWorkerService
   from "../shared/services/serviceWorker/metadata/gettingStartedWithEncryptedMetadataServiceWorkerService";
+import {ResizableSidebarContextProvider} from "./contexts/ResizeSidebar/ResizeSidebarContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -159,11 +160,13 @@ class ExtApp extends Component {
                                                           <ManageContextualMenu/>
                                                           <ManageAnnouncements/>
                                                           <DragContextProvider>
-                                                            <div id="container" className="page password">
-                                                              <div id="app" className="app" tabIndex="1000">
-                                                                <DisplayResourcesWorkspace/>
+                                                            <ResizableSidebarContextProvider>
+                                                              <div id="container" className="page password">
+                                                                <div id="app" className="app" tabIndex="1000">
+                                                                  <DisplayResourcesWorkspace/>
+                                                                </div>
                                                               </div>
-                                                            </div>
+                                                            </ResizableSidebarContextProvider>
                                                           </DragContextProvider>
                                                         </ResourcePasswordGeneratorContextProvider>
                                                       </ResourceTypesLocalStorageContextProvider>
@@ -185,11 +188,13 @@ class ExtApp extends Component {
                                                 <ManageWorkflows/>
                                                 <ManageContextualMenu/>
                                                 <ManageAnnouncements/>
-                                                <div id="container" className="page user">
-                                                  <div id="app" className="app" tabIndex="1000">
-                                                    <DisplayUserWorkspace/>
+                                                <ResizableSidebarContextProvider>
+                                                  <div id="container" className="page user">
+                                                    <div id="app" className="app" tabIndex="1000">
+                                                      <DisplayUserWorkspace/>
+                                                    </div>
                                                   </div>
-                                                </div>
+                                                </ResizableSidebarContextProvider>
                                               </UserWorkspaceContextProvider>
                                             </Route>
                                             {/* User settings workspace */}
