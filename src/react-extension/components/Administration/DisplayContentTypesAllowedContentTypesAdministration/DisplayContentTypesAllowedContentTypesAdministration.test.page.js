@@ -104,6 +104,14 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
   }
 
   /**
+   * Returns the custom fields v5 warning element
+   * @returns {HTMLElement}
+   */
+  get customFieldsV5Warning() {
+    return this.select("#customFieldsV5Input + label .warning-message");
+  }
+
+  /**
    * Returns the note v5 warning element
    * @returns {HTMLElement}
    */
@@ -144,6 +152,14 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
   }
 
   /**
+   * Returns the custom fields v5 error element
+   * @returns {HTMLElement}
+   */
+  get customFieldsV5Error() {
+    return this.select("#customFieldsV5Input + label .error-message");
+  }
+
+  /**
    * Returns the note v5 error element
    * @returns {HTMLElement}
    */
@@ -181,6 +197,14 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
    */
   get totpV5Checkbox() {
     return this.select("#totpV5Input");
+  }
+
+  /**
+   * Returns the custom fields v5 checkbox element
+   * @returns {HTMLElement}
+   */
+  get customFieldsV5Checkbox() {
+    return this.select("#customFieldsV5Input");
   }
 
   /**
@@ -235,6 +259,15 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
   async clickOnTotpV5() {
     const leftClick = {button: 0};
     fireEvent.click(this.totpV5Checkbox, leftClick);
+  }
+
+  /**
+   * Click on the custom fields checkbox
+   * @returns {Promise<void>}
+   */
+  async clickOnCustomFieldsV5() {
+    const leftClick = {button: 0};
+    fireEvent.click(this.customFieldsV5Checkbox, leftClick);
   }
 
   /**

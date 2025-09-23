@@ -232,7 +232,7 @@ class DisplayResourceDetailsNote extends React.Component {
                 <p className="encrypted-description">
                   Never gonna give you up. Never gonna let you down. Never gonna run around and desert you. Never gonna make you cry. Never gonna say goodbye. Never gonna tell a lie and hurt you.
                 </p>
-                <button type="button" disabled={this.state.isSecretDecrypting} onClick={this.handleRetryDecryptClickEvent}>
+                <button type="button" className={`button ${this.state.isSecretDecrypting ? "processing" : ""}`} disabled={this.state.isSecretDecrypting} onClick={this.handleRetryDecryptClickEvent}>
                   <EyeOpenSVG/><Trans>Show</Trans>{this.state.isSecretDecrypting && <SpinnerSVG/>}
                 </button>
               </>

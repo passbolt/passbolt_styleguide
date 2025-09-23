@@ -78,7 +78,7 @@ describe("See custom fields", () => {
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
 
-      expect(page.getCustomFieldValue(0).textContent).toBe("There is no password");
+      expect(page.getCustomFieldValue(0).textContent).toBe("There is no value");
 
       await page.hover(page.getPreviewButton(0));
       await page.clickOn(page.getPreviewButton(0));
@@ -89,7 +89,7 @@ describe("See custom fields", () => {
       await page.hover(page.getPreviewButton(0));
       await page.clickOn(page.getPreviewButton(0));
 
-      expect(page.getCustomFieldValue(0).textContent).toBe("There is no password");
+      expect(page.getCustomFieldValue(0).textContent).toBe("There is no value");
     });
     it('Should not run the decryption a second time for individual field', async() => {
       expect.assertions(4);
@@ -114,7 +114,7 @@ describe("See custom fields", () => {
 
       const page = new DisplayResourceDetailsCustomFieldsPage(props);
 
-      expect(page.getCustomFieldValue(0).textContent).toBe("There is no password");
+      expect(page.getCustomFieldValue(0).textContent).toBe("There is no value");
 
       await page.hover(page.getPreviewButton(0));
       await page.clickOn(page.getPreviewButton(0));
@@ -131,7 +131,7 @@ describe("See custom fields", () => {
       await page.clickOn(page.getPreviewButton(1));
 
       expect(page.getCustomFieldValue(0).textContent).toBe("I am a secret");
-      expect(page.getCustomFieldValue(1).textContent).toBe("There is no password");
+      expect(page.getCustomFieldValue(1).textContent).toBe("There is no value");
     });
 
     it('AS LU, I cannot preview secret of a custom field if denied by RBAC', async() => {
@@ -191,9 +191,9 @@ describe("See custom fields", () => {
 
       await page.clickOn(page.hideAllButton);
 
-      expect(page.getCustomFieldValue(0).textContent).toBe("There is no password");
-      expect(page.getCustomFieldValue(1).textContent).toBe("There is no password");
-      expect(page.getCustomFieldValue(2).textContent).toBe("There is no password");
+      expect(page.getCustomFieldValue(0).textContent).toBe("There is no value");
+      expect(page.getCustomFieldValue(1).textContent).toBe("There is no value");
+      expect(page.getCustomFieldValue(2).textContent).toBe("There is no value");
     });
 
     it('Should not show empty secrets', async() => {
@@ -205,9 +205,9 @@ describe("See custom fields", () => {
 
       await page.clickOn(page.showAllButton);
 
-      expect(page.getCustomFieldValue(0).textContent).toBe("There is no password");
-      expect(page.getCustomFieldValue(1).textContent).toBe("There is no password");
-      expect(page.getCustomFieldValue(2).textContent).toBe("There is no password");
+      expect(page.getCustomFieldValue(0).textContent).toBe("There is no value");
+      expect(page.getCustomFieldValue(1).textContent).toBe("There is no value");
+      expect(page.getCustomFieldValue(2).textContent).toBe("There is no value");
     });
 
     it('AS LU, I cannot preview all secrets of a custom field if denied by RBAC', async() => {
