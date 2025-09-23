@@ -19,7 +19,8 @@ import {
   resourceTypeTotpDto,
   resourceTypeV5DefaultDto,
   resourceTypeV5PasswordStringDto,
-  resourceTypeV5DefaultTotpDto, resourceTypeV5TotpDto, resourceTypeV5CustomFieldsDto
+  resourceTypeV5DefaultTotpDto, resourceTypeV5TotpDto, resourceTypeV5CustomFieldsDto,
+  resourceTypeV5StandaloneNoteDto
 } from "./resourceTypeEntity.test.data";
 import {v4 as uuidv4} from "uuid";
 
@@ -36,7 +37,24 @@ export const resourceTypesCollectionDto = () => [
   resourceTypeV5PasswordStringDto(),
   resourceTypeV5DefaultTotpDto(),
   resourceTypeV5TotpDto(),
-  resourceTypeV5CustomFieldsDto()
+  resourceTypeV5CustomFieldsDto(),
+  resourceTypeV5StandaloneNoteDto()
+];
+
+/**
+ * Resource types collection dto.
+ * @returns {object}
+ */
+export const resourceTypesCollectionWithoutNoteDto = () => [
+  resourceTypePasswordStringDto(),
+  resourceTypePasswordAndDescriptionDto(),
+  resourceTypePasswordDescriptionTotpDto(),
+  resourceTypeTotpDto(),
+  resourceTypeV5DefaultDto(),
+  resourceTypeV5PasswordStringDto(),
+  resourceTypeV5DefaultTotpDto(),
+  resourceTypeV5TotpDto(),
+  resourceTypeV5CustomFieldsDto(),
 ];
 
 /**
@@ -59,7 +77,8 @@ export const resourceTypesV5CollectionDto = () => [
   resourceTypeV5PasswordStringDto(),
   resourceTypeV5DefaultTotpDto(),
   resourceTypeV5TotpDto(),
-  resourceTypeV5CustomFieldsDto()
+  resourceTypeV5CustomFieldsDto(),
+  resourceTypeV5StandaloneNoteDto()
 ];
 
 /**
@@ -85,7 +104,8 @@ export const buildDefineNumberOfResourceTypesDtos = (count = 10) => {
  */
 export const resourceTypesCollectionWithoutPassword = () => [
   resourceTypeTotpDto(),
-  resourceTypeV5TotpDto()
+  resourceTypeV5TotpDto(),
+  resourceTypeV5StandaloneNoteDto()
 ];
 
 /**
@@ -97,5 +117,6 @@ export const resourceTypesCollectionWithoutTOTP = () => [
   resourceTypePasswordAndDescriptionDto(),
   resourceTypeV5DefaultDto(),
   resourceTypeV5PasswordStringDto(),
-  resourceTypeV5CustomFieldsDto()
+  resourceTypeV5CustomFieldsDto(),
+  resourceTypeV5StandaloneNoteDto()
 ];

@@ -2173,6 +2173,10 @@ button.processing:disabled,
   opacity: 1;
   box-shadow: inset 0 0 0 1px var(--Action-button-Action-button-border);
 }
+button.processing svg,
+.button.processing svg {
+  --icon-color: transparent;
+}
 button.processing .svg-icon.spinner,
 .button.processing .svg-icon.spinner {
   position: absolute;
