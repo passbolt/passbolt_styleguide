@@ -199,7 +199,6 @@ describe("Resource Form entity", () => {
       expect.assertions(1);
       const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE, secret: defaultSecretDataV5StandaloneNoteDto()});
       const resourceTypeDtos = resourceTypesCollectionDto();
-      console.log(resourceTypeDtos);
       const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
       const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection});
       expect(resourceFormEntity.toDto()).toEqual(resourceDto);
@@ -1146,7 +1145,7 @@ describe("Resource Form entity", () => {
     });
   });
 
-  describe(":upgradeToV5", () => {
+  describe("::upgradeToV5", () => {
     it("Should upgrade resource password string to v5 default", () => {
       expect.assertions(4);
       const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING, secret: {password: "password"}});
@@ -1218,6 +1217,36 @@ describe("Resource Form entity", () => {
       expect(resourceFormEntity.metadata.resourceTypeId).toEqual(TEST_RESOURCE_TYPE_V5_TOTP);
       expect(resourceFormEntity.metadata.objectType).toEqual(ResourceMetadataEntity.METADATA_OBJECT_TYPE);
       expect(resourceFormEntity.secret.objectType).toEqual(SECRET_DATA_OBJECT_TYPE);
+    });
+  });
+
+  describe("::removeUnusedNonEmptyMetadata", () => {
+    it('should remove the username if the given resource type does not have password', () => {
+      expect.assertions(1);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE, secret: {description: "Here's a description"}});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection, validate: false});
+
+      resourceFormEntity.removeUnusedNonEmptyMetadata();
+
+      // expectation
+      expect(resourceFormEntity.metadata.username).toBeUndefined();
+    });
+
+    it('should keep the username if the given resource type has a password', () => {
+      expect.assertions(1);
+      const resourceDto = defaultResourceFormDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP});
+      const resourceTypeDtos = resourceTypesCollectionDto();
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypeDtos);
+
+      const resourceFormEntity = new ResourceFormEntity(resourceDto, {resourceTypes: resourceTypesCollection, validate: false});
+
+      resourceFormEntity.removeUnusedNonEmptyMetadata();
+
+      // expectation
+      expect(resourceFormEntity.metadata.username).toStrictEqual(resourceDto.metadata.username);
     });
   });
 });

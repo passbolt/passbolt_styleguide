@@ -1678,7 +1678,7 @@ describe("See the Create Resource", () => {
         metadata: {
           object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v5 totp",
-          username: props.resource.metadata.username,
+          username: null,
           resource_type_id: TEST_RESOURCE_TYPE_V5_TOTP,
           uris: props.resource.metadata.uris,
           description: props.resource.metadata.description
@@ -1729,7 +1729,7 @@ describe("See the Create Resource", () => {
           resource_type_id: TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS,
           uris: props.resource.metadata.uris,
           description: props.resource.metadata.description,
-          username: props.resource.metadata.username,
+          username: "",
           custom_fields: [{
             id: customFields[0].id,
             metadata_key: "PASSBOLT",
@@ -2016,7 +2016,7 @@ describe("See the Create Resource", () => {
         metadata: {
           object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
           name: "v4 totp",
-          username: props.resource.metadata.username,
+          username: null,
           resource_type_id: TEST_RESOURCE_TYPE_TOTP,
           uris: props.resource.metadata.uris,
           description: null
