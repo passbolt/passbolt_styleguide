@@ -29,6 +29,7 @@ import {createSafePortal} from "../../../../shared/utils/portals";
 import InfoSVG from "../../../../img/svg/info.svg";
 import KeySVG from "../../../../img/svg/key.svg";
 import TotpSVG from "../../../../img/svg/totp.svg";
+import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
 import NoteSVG from "../../../../img/svg/notes.svg";
 
 class DisplayContentTypesAllowedContentTypesAdministration extends Component {
@@ -361,6 +362,44 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                         }
                       </label>
                     </span>
+                    <span className={`input checkbox form-element ${errors?.hasError("custom_fields_v5") && "error"} ${!errors?.hasError("custom_fields_v5") && warnings?.hasError("custom_fields_v5") && "warning"}`}>
+                      <input type="checkbox"
+                        id="customFieldsV5Input"
+                        className="checkbox"
+                        name="custom_fields_v5"
+                        onChange={this.handleInputChange}
+                        checked={this.state.settings.custom_fields_v5}
+                        disabled={this.isInputDisabled(this.state.settings.custom_fields_v5_count, this.state.settings.custom_fields_v5)}/>
+                      <label htmlFor="customFieldsV5Input">
+                        {this.addTooltipOnDisabledElement(
+                          <div className="allow-content-type-item">
+                            <TablePropertiesSVG/>
+                            <span className="name"><Trans>Custom fields</Trans></span>
+                            <span className="info">{this.props.t(`({{count}} resources)`, {count: this.state.settings.custom_fields_v5_count})}</span>
+                          </div>,
+                          this.isInputDisabled(this.state.settings.custom_fields_v5_count, this.state.settings.custom_fields_v5)
+                        )}
+                        {errors?.hasError("custom_fields_v5", "has_content") &&
+                          <div className="error-message"><Trans>Custom fields resource type is deleted but there is existing custom fields resources.</Trans></div>
+                        }
+                        {errors?.hasError("custom_fields_v5", "minimum_requirement") &&
+                          <div className="error-message"><Trans>At least one content type should be allowed</Trans></div>
+                        }
+                        {!errors?.hasError("custom_fields_v5") &&
+                          <>
+                            {warnings?.hasError("custom_fields_v5", "is_creation_alowed") &&
+                              <div className="warning-message"><Trans>Creation of content type v5 is allowed but custom fields resource type is deleted.</Trans></div>
+                            }
+                            {warnings?.hasError("custom_fields_v5", "active_metadata_key") &&
+                              <div className="warning-message"><Trans>No active metadata key defined.</Trans></div>
+                            }
+                            {warnings?.hasError("custom_fields_v5", "is_creation_not_alowed") &&
+                              <div className="warning-message"><Trans>Creation of content type v5 is not allowed.</Trans></div>
+                            }
+                          </>
+                        }
+                      </label>
+                    </span>
                     <span className={`input checkbox form-element ${errors?.hasError("note_v5") && "error"} ${!errors?.hasError("note_v5") && warnings?.hasError("note_v5") && "warning"}`}>
                       <input type="checkbox"
                         id="noteV5Input"
@@ -379,7 +418,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                           this.isInputDisabled(this.state.settings.note_v5_count, this.state.settings.note_v5)
                         )}
                         {errors?.hasError("note_v5", "has_content") &&
-                          <div className="error-message"><Trans>One (or more) content type v5 having a note is deleted but its resources count is not 0.</Trans></div>
+                          <div className="error-message"><Trans>Note resource type is deleted but there is existing note resources.</Trans></div>
                         }
                         {errors?.hasError("note_v5", "minimum_requirement") &&
                           <div className="error-message"><Trans>At least one content type should be allowed</Trans></div>
@@ -387,7 +426,7 @@ class DisplayContentTypesAllowedContentTypesAdministration extends Component {
                         {!errors?.hasError("note_v5") &&
                           <>
                             {warnings?.hasError("note_v5", "is_creation_alowed") &&
-                              <div className="warning-message"><Trans>Creation of content type v5 is allowed but all content types having note are deleted.</Trans></div>
+                              <div className="warning-message"><Trans>Creation of content type v5 is allowed but note resource type is deleted.</Trans></div>
                             }
                             {warnings?.hasError("note_v5", "active_metadata_key") &&
                               <div className="warning-message"><Trans>No active metadata key defined.</Trans></div>

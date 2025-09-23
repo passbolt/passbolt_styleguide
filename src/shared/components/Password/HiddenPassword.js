@@ -37,7 +37,7 @@ class HiddenPassword extends Component {
     return (
       <button type="button" className="no-border" onClick={this.handleClick.bind(this)} disabled={!this.props.canClick}>
         {isPasswordEmpty
-          ? <span className="password-empty"><Trans>There is no password</Trans></span>
+          ? <span className="password-empty">{this.props.emptySecretSentence}</span>
           : <span className="password-typography">
             {isPasswordDecrypted &&
               <>
@@ -63,10 +63,12 @@ class HiddenPassword extends Component {
 HiddenPassword.defaultProps = {
   preview: null,
   canClick: true,
+  emptySecretSentence: <Trans>There is no password</Trans>
 };
 
 HiddenPassword.propTypes = {
   preview: PropTypes.string, // Is the secret previewed.
+  emptySecretSentence: PropTypes.string, // String to display when the secret is empty
   canClick: PropTypes.bool, // Can the password be clicked on.
   onClick: PropTypes.func, // On click handler.
   t: PropTypes.func, // the translation function

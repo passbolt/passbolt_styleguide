@@ -628,6 +628,21 @@ class ResourceFormEntity extends EntityV2 {
   }
 
   /**
+   * Remove metadata that are set but not in use anymore.
+   * i.e. a username is set on password form but password secret has been removed.
+   *
+   * This function removes:
+   *
+   * - username if password secret is not set
+   */
+  removeUnusedNonEmptyMetadata() {
+    const currentResourceType = this.resourceTypes.getFirstById(this.resourceTypeId);
+    if (!currentResourceType.hasPassword()) {
+      this.metadata.unset("username");
+    }
+  }
+
+  /**
    * Add required secret
    * @param {object} [options] Options
    *
