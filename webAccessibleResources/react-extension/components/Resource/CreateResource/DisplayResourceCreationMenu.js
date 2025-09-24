@@ -23,15 +23,13 @@ import Tab from "../../Common/Tab/Tab";
 import Tabs from "../../Common/Tab/Tabs";
 import KeySVG from "../../../../img/svg/key.svg";
 import TotpSVG from "../../../../img/svg/totp.svg";
-import NotesSVG from "../../../../img/svg/notes.svg";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import MetadataTypesSettingsEntity, {RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
-  RESOURCE_TYPE_V5_TOTP_SLUG,
-  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG
+  RESOURCE_TYPE_V5_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import CreateResource from "./CreateResource";
@@ -207,14 +205,6 @@ class DisplayResourceCreationMenu extends Component {
   }
 
   /**
-   * Returns true if there is a v5 standalone note available.
-   * @returns {boolean}
-   */
-  get hasStandaloneNoteV5() {
-    return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG);
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -242,14 +232,6 @@ class DisplayResourceCreationMenu extends Component {
             <TotpSVG/>
             <div className="card-information">
               <span className="title"><Trans>TOTP</Trans></span>
-            </div>
-          </button>
-        }
-        {this.hasStandaloneNoteV5 &&
-          <button id="standalone_note_action" type="button" className="button-transparent card" onClick={e => this.handleContentTypeClick(e, RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG)}>
-            <NotesSVG/>
-            <div className="card-information">
-              <span className="title"><Trans>Note</Trans></span>
             </div>
           </button>
         }

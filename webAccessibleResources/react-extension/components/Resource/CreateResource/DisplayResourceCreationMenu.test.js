@@ -22,7 +22,6 @@ import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
-  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import {
@@ -50,7 +49,7 @@ import {resourceWorkspaceContextWithSelectedFolderIOwn} from "../../../contexts/
 describe("See the Display Resource Creation Menu", () => {
   describe('Styleguide specifications', () => {
     it('should display the component matches the styleguide', async() => {
-      expect.assertions(12);
+      expect.assertions(11);
 
       const props = defaultProps(); // The props to pass
       const page = new DisplayResourceCreationMenuPage(props);
@@ -76,10 +75,7 @@ describe("See the Display Resource Creation Menu", () => {
       expect(page.getContentTypeName(2).textContent).toStrictEqual("TOTP");
 
       // third content type available
-      expect(page.getContentTypeName(3).textContent).toStrictEqual("Note");
-
-      // fourth content type available
-      expect(page.getContentTypeName(4).textContent).toStrictEqual("Custom fields");
+      expect(page.getContentTypeName(3).textContent).toStrictEqual("Custom fields");
     });
 
     it("should close the dialog when pressing escape", async() => {
@@ -236,7 +232,7 @@ describe("See the Display Resource Creation Menu", () => {
 
   describe("should open the resource creation dialog with the right parameters", () => {
     it("should open the dialog with the right resource type", async() => {
-      expect.assertions(8);
+      expect.assertions(7);
 
       const props = defaultProps(); // The props to pass
       const page = new DisplayResourceCreationMenuPage(props);
@@ -255,14 +251,8 @@ describe("See the Display Resource Creation Menu", () => {
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
       expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
 
-      //click on note v5
-      page.clickOn(page.displayedContentTypes[2]);
-      await waitFor(() => {});
-      resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
-
       //click on custom fields v5
-      page.clickOn(page.displayedContentTypes[3]);
+      page.clickOn(page.displayedContentTypes[2]);
       await waitFor(() => {});
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
       expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
@@ -283,12 +273,12 @@ describe("See the Display Resource Creation Menu", () => {
       resourceType = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
       expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {resourceType, folderParentId});
 
-      expect(props.dialogContext.open).toHaveBeenCalledTimes(6);
-      expect(props.onClose).toHaveBeenCalledTimes(6);
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(5);
+      expect(props.onClose).toHaveBeenCalledTimes(5);
     });
 
     it("should open the action aborted dialog if shared metadata key is enforced and missing", async() => {
-      expect.assertions(5);
+      expect.assertions(4);
 
       const props = defaultProps({
         context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
@@ -306,21 +296,16 @@ describe("See the Display Resource Creation Menu", () => {
       await waitFor(() => {});
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(2, ActionAbortedMissingMetadataKeys);
 
-      //click on note v5
+      //click on custom fields v5
       page.clickOn(page.displayedContentTypes[2]);
       await waitFor(() => {});
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(3, ActionAbortedMissingMetadataKeys);
 
-      //click on custom fields v5
-      page.clickOn(page.displayedContentTypes[3]);
-      await waitFor(() => {});
-      expect(props.dialogContext.open).toHaveBeenNthCalledWith(4, ActionAbortedMissingMetadataKeys);
-
-      expect(props.dialogContext.open).toHaveBeenCalledTimes(4);
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(3);
     });
 
     it("should open the action aborted dialog if shared metadata key is missing to create a shared resource", async() => {
-      expect.assertions(5);
+      expect.assertions(4);
 
       const props = defaultProps({
         context: defaultUserAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
@@ -338,17 +323,12 @@ describe("See the Display Resource Creation Menu", () => {
       await waitFor(() => {});
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(2, ActionAbortedMissingMetadataKeys);
 
-      //click on note v5
+      //click on custom fields v5
       page.clickOn(page.displayedContentTypes[2]);
       await waitFor(() => {});
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(3, ActionAbortedMissingMetadataKeys);
 
-      //click on custom fields v5
-      page.clickOn(page.displayedContentTypes[3]);
-      await waitFor(() => {});
-      expect(props.dialogContext.open).toHaveBeenNthCalledWith(4, ActionAbortedMissingMetadataKeys);
-
-      expect(props.dialogContext.open).toHaveBeenCalledTimes(4);
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(3);
     });
 
     it("should open the dialog with the right folder parent id set", async() => {

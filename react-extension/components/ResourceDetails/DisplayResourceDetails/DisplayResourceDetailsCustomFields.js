@@ -26,6 +26,7 @@ import EyeOpenSVG from "../../../../img/svg/eye_open.svg";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withProgress} from "../../../contexts/ProgressContext";
 import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 /**
@@ -150,6 +151,8 @@ class DisplayResourceDetailsCustomFields extends React.Component {
     const resourceId = this.resource.id;
     let customFieldsSecrets;
 
+    this.props.progressContext.open(this.props.t('Decrypting secret(s)'));
+
     if (this.state.secrets?.length === 0) {
       try {
         const plaintextSecretDto = await this.props.context.port.request("passbolt.secret.find-by-resource-id", resourceId);
@@ -166,6 +169,7 @@ class DisplayResourceDetailsCustomFields extends React.Component {
     if (!customFieldsSecrets) {
       customFieldsSecrets = [];
     }
+    this.props.progressContext.close();
 
     return customFieldsSecrets;
   }
@@ -194,6 +198,8 @@ class DisplayResourceDetailsCustomFields extends React.Component {
   async handleCopySecretEvent(id) {
     const secrets = await this.decryptCustomFieldSecrets();
     const secret = secrets.find(secret => secret.id === id);
+
+    this.props.progressContext.close();
 
     if (!secret || secret.secret_value.length === 0) {
       await this.props.actionFeedbackContext.displayWarning(this.props.t("The custom field value is empty and cannot be copied to clipboard."));
@@ -275,7 +281,6 @@ class DisplayResourceDetailsCustomFields extends React.Component {
                                       isPassword={false}
                                       preview={isPreviewed ? this.getSecretValue(customField.id) : ""}
                                       onClick={() => this.handleCopySecretEvent(customField.id)}
-                                      emptySecretSentence={this.props.t("There is no value")}
                                     />
                                   </div>
 
@@ -295,7 +300,7 @@ class DisplayResourceDetailsCustomFields extends React.Component {
                         </div>
                       </div>
                       {!this.showAll && canPreviewSecret ?
-                        <button className={`button ${this.state.isSecretsDecrypting ? "processing" : ""}`}  disabled={this.state.isSecretsDecrypting} onClick={this.handleShowAllEvent} id="show-all-button">
+                        <button type="button" disabled={this.state.isSecretsDecrypting} onClick={this.handleShowAllEvent} id="show-all-button">
                           <EyeOpenSVG /><Trans>Show all</Trans>{this.state.isSecretsDecrypting && <SpinnerSVG />}
                         </button>
                         :
@@ -316,8 +321,9 @@ DisplayResourceDetailsCustomFields.propTypes = {
   rbacContext: PropTypes.any, // The role based access control context
   resourceWorkspaceContext: PropTypes.any, // The resource
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  progressContext: PropTypes.any, // The progress context
   clipboardContext: PropTypes.object, // the clipboard service provide
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withResourceWorkspace(withRbac(withClipboard(withTranslation('common')(DisplayResourceDetailsCustomFields))))));
+export default withAppContext(withActionFeedback(withResourceWorkspace(withRbac(withProgress(withClipboard(withTranslation('common')(DisplayResourceDetailsCustomFields)))))));

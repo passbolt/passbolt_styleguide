@@ -119,14 +119,6 @@ class DisplayMainMenuPageObject {
   }
 
   /**
-   * Returns the new standalone note menu elements of password workspace menu
-   * @return {HTMLElement}
-   */
-  get newStandaloneNoteMenu() {
-    return this._container.querySelector('#standalone_note_action');
-  }
-
-  /**
    * Returns the new other menu elements of password workspace menu
    */
   get newOtherMenu() {

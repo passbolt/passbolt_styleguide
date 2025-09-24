@@ -34,7 +34,6 @@ import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
-  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import MetadataTypesSettingsEntity, {RESOURCE_TYPE_VERSION_5} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
@@ -51,7 +50,6 @@ import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 import DisplayResourceCreationMenu from "../CreateResource/DisplayResourceCreationMenu";
 import CreateResource from "../CreateResource/CreateResource";
-import NoteSVG from "../../../../img/svg/notes.svg";
 import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
 import {
   withMetadataKeysSettingsLocalStorage
@@ -80,7 +78,6 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     this.handleCreateMenuPasswordClickEvent = this.handleCreateMenuPasswordClickEvent.bind(this);
     this.handleMenuCreateTotpClickEvent = this.handleMenuCreateTotpClickEvent.bind(this);
     this.handleMenuCreateCustomFieldsClickEvent = this.handleMenuCreateCustomFieldsClickEvent.bind(this);
-    this.handleMenuCreateStandaloneNoteClickEvent = this.handleMenuCreateStandaloneNoteClickEvent.bind(this);
     this.handleMenuCreateFolderClickEvent = this.handleMenuCreateFolderClickEvent.bind(this);
     this.handleImportClickEvent = this.handleImportClickEvent.bind(this);
     this.handleMenuCreateOtherClickEvent = this.handleMenuCreateOtherClickEvent.bind(this);
@@ -91,12 +88,13 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   handleCreateMenuPasswordClickEvent() {
     let resourceType;
     if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
-      const isMetadataKeyRequiredAndMissing = this.isMetadataKeyRequiredAndMissing();
-      if (isMetadataKeyRequiredAndMissing) {
-        this.displayMissingKeysDialog();
+      const canCreateResource = this.canCreateResource();
+      if (canCreateResource) {
+        resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+      } else {
+        this.displayActionAborted();
         return;
       }
-      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
       resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
     }
@@ -107,7 +105,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Handle the import click event
    */
   handleImportClickEvent() {
-    this.canImportResources() ? this.props.dialogContext.open(ImportResources) : this.displayMissingKeysDialog();
+    this.canImportResources() ? this.props.dialogContext.open(ImportResources) : this.displayActionAborted();
   }
 
   /**
@@ -124,12 +122,13 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   handleMenuCreateTotpClickEvent() {
     let resourceType;
     if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
-      const isMetadataKeyRequiredAndMissing = this.isMetadataKeyRequiredAndMissing();
-      if (isMetadataKeyRequiredAndMissing) {
-        this.displayMissingKeysDialog();
+      const canCreateResource = this.canCreateResource();
+      if (canCreateResource) {
+        resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
+      } else {
+        this.displayActionAborted();
         return;
       }
-      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
     } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
       resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
     }
@@ -140,27 +139,13 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Handle custom fields click event
    */
   handleMenuCreateCustomFieldsClickEvent() {
-    const isMetadataKeyRequiredAndMissing = this.isMetadataKeyRequiredAndMissing();
-    if (isMetadataKeyRequiredAndMissing) {
-      this.displayMissingKeysDialog();
-      return;
+    const canCreateResource = this.canCreateResource();
+    if (canCreateResource) {
+      const resourceType  = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
+      this.openCreateDialog(resourceType);
+    } else {
+      this.displayActionAborted();
     }
-    const resourceType  = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG);
-    this.openCreateDialog(resourceType);
-  }
-
-  /**
-   * Handle standalone note click event
-   */
-  handleMenuCreateStandaloneNoteClickEvent() {
-    const isMetadataKeyRequiredAndMissing = this.isMetadataKeyRequiredAndMissing();
-    if (isMetadataKeyRequiredAndMissing) {
-      this.displayMissingKeysDialog();
-      return;
-    }
-
-    const resourceType  = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG);
-    this.openCreateDialog(resourceType);
   }
 
   /**
@@ -217,12 +202,18 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Can create resource
    * @return {boolean}
    */
-  isMetadataKeyRequiredAndMissing() {
+  canCreateResource() {
     const isMetadataSharedKeyEnforced = !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
     const isPersonalFolder = this.folderSelected === null || this.folderSelected.personal;
     const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
 
-    return  (isPersonalFolder && isMetadataSharedKeyEnforced && userHasMissingKeys) || (!isPersonalFolder && userHasMissingKeys);
+    if (isPersonalFolder && isMetadataSharedKeyEnforced && userHasMissingKeys) {
+      return false;
+    } else if (!isPersonalFolder && userHasMissingKeys) {
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -293,18 +284,6 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   }
 
   /**
-   * Can create standalone note
-   * @returns {boolean}
-   */
-  get canCreateStandaloneNote() {
-    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
-      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG);
-    } else {
-      return false;
-    }
-  }
-
-  /**
    * Should the "Other" menu items be displayed.
    * @returns {boolean}
    */
@@ -334,7 +313,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   /**
    * Display action aborted
    */
-  displayMissingKeysDialog() {
+  displayActionAborted() {
     this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
   }
 
@@ -399,18 +378,10 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
                 </DropdownItem>
               }
               {this.canCreateCustomFields &&
-                <DropdownItem separator={!this.canCreateStandaloneNote}>
+                <DropdownItem separator={!canSeeOther}>
                   <button id="custom_fields_action" type="button" className="no-border" onClick={this.handleMenuCreateCustomFieldsClickEvent}>
                     <TablePropertiesSVG/>
                     <span><Trans>Custom fields</Trans></span>
-                  </button>
-                </DropdownItem>
-              }
-              {this.canCreateStandaloneNote &&
-                <DropdownItem separator={!canSeeOther}>
-                  <button id="standalone_note_action" type="button" className="no-border" onClick={this.handleMenuCreateStandaloneNoteClickEvent}>
-                    <NoteSVG/>
-                    <span><Trans>Notes</Trans></span>
                   </button>
                 </DropdownItem>
               }

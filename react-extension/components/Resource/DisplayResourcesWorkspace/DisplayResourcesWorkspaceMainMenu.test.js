@@ -26,7 +26,6 @@ import {
   RESOURCE_TYPE_TOTP_SLUG,
   RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
-  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
@@ -397,64 +396,6 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       expect(page.displayMenu.newCustomFieldsMenu).toBeNull();
     });
   });
-
-
-  describe('As LU I can create standalone note', () => {
-    it('As LU I can create a standalone note if I have not selected any folder', async() => {
-      expect.assertions(5);
-      const props = defaultProps({metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto())}); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
-      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
-      expect(page.displayMenu.newStandaloneNoteMenu).not.toBeNull();
-      await page.displayMenu.clickOnMenu(page.displayMenu.newStandaloneNoteMenu);
-      const resourceTypeExpected = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {folderParentId: null, resourceType: resourceTypeExpected});
-    });
-
-    it('As LU I can create standalone note if I have selected a folder I am allowed to create in', async() => {
-      expect.assertions(5);
-      const props = defaultPropsFolderOwned({metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto())}); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
-      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
-      expect(page.displayMenu.newStandaloneNoteMenu).not.toBeNull();
-      await page.displayMenu.clickOnMenu(page.displayMenu.newStandaloneNoteMenu);
-      const resourceTypeExpected = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResource, {folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id, resourceType: resourceTypeExpected});
-    });
-
-    it('As LU I cannot create a standalone note if metadata type settings default is V4 and resource types is only v5', async() => {
-      expect.assertions(4);
-      const props = defaultProps({resourceTypes: new ResourceTypesCollection(resourceTypesV5CollectionDto())}); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
-      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
-      expect(page.displayMenu.newStandaloneNoteMenu).toBeNull();
-    });
-
-    it('As LU I cannot create a standalone note if metadata type settings default is V5 and resource types is only v4', async() => {
-      expect.assertions(4);
-      const props = defaultProps({metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()), resourceTypes: new ResourceTypesCollection(resourceTypesV4CollectionDto())}); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
-      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
-      expect(page.displayMenu.newStandaloneNoteMenu).toBeNull();
-    });
-  });
-
 
   describe('As LU I can open the creation menu', () => {
     it('As LU I can open the creation menu', async() => {

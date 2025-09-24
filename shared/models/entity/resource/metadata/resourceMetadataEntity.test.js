@@ -201,34 +201,4 @@ describe("ResourceMetadataEntity", () => {
       });
     });
   });
-
-  describe("::unset", () => {
-    it("should throw an error if the parameter is not a string", () => {
-      expect.assertions(1);
-
-      const metadata = new ResourceMetadataEntity(defaultResourceMetadataDto());
-
-      expect(() => metadata.unset(42)).toThrow();
-    });
-
-    it("should throw an error if the parameter is a string bu the property is not part of the schema", () => {
-      expect.assertions(1);
-
-      const metadata = new ResourceMetadataEntity(defaultResourceMetadataDto());
-
-      expect(() => metadata.unset("something")).toThrow();
-    });
-
-    it("should delete the property", () => {
-      expect.assertions(2);
-
-      const prop = "username";
-      const dto = defaultResourceMetadataDto();
-      const metadata = new ResourceMetadataEntity(dto);
-
-      expect(metadata._props[prop]).toStrictEqual(dto[prop]);
-      metadata.unset(prop);
-      expect(metadata._props[prop]).toBeUndefined();
-    });
-  });
 });

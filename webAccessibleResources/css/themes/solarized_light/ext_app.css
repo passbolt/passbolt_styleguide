@@ -1252,10 +1252,6 @@ button.processing:disabled,
   opacity: 1;
   box-shadow: inset 0 0 0 1px var(--Action-button-Action-button-border);
 }
-button.processing svg,
-.button.processing svg {
-  --icon-color: transparent;
-}
 button.processing .svg-icon.spinner,
 .button.processing .svg-icon.spinner {
   position: absolute;
@@ -3701,13 +3697,13 @@ html {
   margin-right: 0.4rem;
 }
 .accordion .accordion-content a:hover,
-.accordion .accordion-content button:not(.processing):hover {
+.accordion .accordion-content button:hover {
   color: var(--Palette-Contrast-1);
 }
 .accordion .accordion-content a:hover:disabled,
-.accordion .accordion-content button:not(.processing):hover:disabled,
+.accordion .accordion-content button:hover:disabled,
 .accordion .accordion-content a:hover.disabled,
-.accordion .accordion-content button:not(.processing):hover.disabled {
+.accordion .accordion-content button:hover.disabled {
   color: var(--Text-and-icons-Main-text);
 }
 .accordion .accordion-content .processing-wrapper {
@@ -9452,24 +9448,6 @@ svg .section-card .card .title:first-child {
 .edit-resource .edit-workspace .content .input.select-wrapper .select-container {
   align-self: stretch;
 }
-.create-resource .create-workspace .content .note-fields,
-.edit-resource .create-workspace .content .note-fields,
-.create-resource .edit-workspace .content .note-fields,
-.edit-resource .edit-workspace .content .note-fields {
-  height: 100%;
-}
-.create-resource .create-workspace .content .note-fields .input,
-.edit-resource .create-workspace .content .note-fields .input,
-.create-resource .edit-workspace .content .note-fields .input,
-.edit-resource .edit-workspace .content .note-fields .input {
-  height: 100%;
-}
-.create-resource .create-workspace .content .note-fields .input textarea,
-.edit-resource .create-workspace .content .note-fields .input textarea,
-.create-resource .edit-workspace .content .note-fields .input textarea,
-.edit-resource .edit-workspace .content .note-fields .input textarea {
-  height: 40rem;
-}
 .create-resource .create-workspace .content .additional-information,
 .edit-resource .create-workspace .content .additional-information,
 .create-resource .edit-workspace .content .additional-information,
@@ -9745,7 +9723,6 @@ svg .section-card .card .title:first-child {
 .create-resource-menu .dialog-body {
   padding: 0;
   overflow: hidden;
-  height: 37rem;
 }
 .create-resource-menu .dialog-body .grid {
   display: flex;

@@ -19,7 +19,6 @@ import {
   resourceTypeV5DefaultDto,
   resourceTypeV5DefaultTotpDto,
   resourceTypeV5PasswordStringDto,
-  resourceTypeV5StandaloneNoteDto,
   resourceTypeV5TotpDto
 } from "./resourceTypeEntity.test.data";
 import {resourceTypesCollectionDto} from "./resourceTypesCollection.test.data";
@@ -29,14 +28,10 @@ export const defaultResourceTypesFormDto = (data = {}) => ({
   password_v5: true,
   totp_v4: true,
   totp_v5: true,
-  custom_fields_v5: true,
-  note_v5: true,
   password_v4_count: 10,
   password_v5_count: 14,
   totp_v4_count: 2,
   totp_v5_count: 4,
-  custom_fields_v5_count: 4,
-  note_v5_count: 4,
   has_v4_resource_types: true,
   has_v5_resource_types: true,
   resource_types: resourceTypesCollectionDto(),
@@ -48,7 +43,6 @@ export const withDeletedResourceTypesHavingResources = (data = {}) => defaultRes
   password_v5: false,
   totp_v4: false,
   totp_v5: false,
-  note_v5: false,
   ...data,
 });
 
@@ -57,7 +51,6 @@ export const withDeletedResourceTypes = (data = {}) => withDeletedResourceTypesH
   password_v5_count: 0,
   totp_v4_count: 0,
   totp_v5_count: 0,
-  note_v5_count: 0,
   ...data,
 });
 
@@ -69,6 +62,5 @@ export const resourceTypesCollectionWithCountDto = () => ([
   resourceTypeV5DefaultDto({resources_count: 9}),
   resourceTypeV5PasswordStringDto({resources_count: 3}),
   resourceTypeV5DefaultTotpDto({resources_count: 2}),
-  resourceTypeV5TotpDto({resources_count: 1}),
-  resourceTypeV5StandaloneNoteDto({resources_count: 1})
+  resourceTypeV5TotpDto({resources_count: 1})
 ]);

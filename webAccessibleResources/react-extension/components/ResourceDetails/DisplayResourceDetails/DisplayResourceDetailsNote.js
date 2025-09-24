@@ -26,7 +26,6 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import EyeOpenSVG from "../../../../img/svg/eye_open.svg";
-import EyeCloseSVG from "../../../../img/svg/eye_close.svg";
 
 /**
  * This component display the note section of a resource
@@ -62,7 +61,6 @@ class DisplayResourceDetailsNote extends React.Component {
   bindCallbacks() {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
     this.handleRetryDecryptClickEvent = this.handleRetryDecryptClickEvent.bind(this);
-    this.handleHideNoteClickEvent = this.handleHideNoteClickEvent.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -130,18 +128,6 @@ class DisplayResourceDetailsNote extends React.Component {
    */
   handleRetryDecryptClickEvent() {
     this.decryptAndLoadEncryptedNote();
-  }
-
-  /**
-   * Hide the current decrypted note
-   */
-  handleHideNoteClickEvent() {
-    this.setState({
-      error: false,
-      isSecretDecrypting: false,
-      isSecretDecrypted: false,
-      note: null,
-    });
   }
 
   /*
@@ -218,21 +204,16 @@ class DisplayResourceDetailsNote extends React.Component {
               </p>
             }
             {this.mustShowNote() &&
-              <>
-                <p className="description-content">
-                  {this.state.note}
-                </p>
-                <button type="button" onClick={this.handleHideNoteClickEvent}>
-                  <EyeCloseSVG/><Trans>Hide</Trans>
-                </button>
-              </>
+              <p className="description-content">
+                {this.state.note}
+              </p>
             }
             {this.mustShowEncryptedNote() &&
               <>
                 <p className="encrypted-description">
                   Never gonna give you up. Never gonna let you down. Never gonna run around and desert you. Never gonna make you cry. Never gonna say goodbye. Never gonna tell a lie and hurt you.
                 </p>
-                <button type="button" className={`button ${this.state.isSecretDecrypting ? "processing" : ""}`} disabled={this.state.isSecretDecrypting} onClick={this.handleRetryDecryptClickEvent}>
+                <button type="button" disabled={this.state.isSecretDecrypting} onClick={this.handleRetryDecryptClickEvent}>
                   <EyeOpenSVG/><Trans>Show</Trans>{this.state.isSecretDecrypting && <SpinnerSVG/>}
                 </button>
               </>

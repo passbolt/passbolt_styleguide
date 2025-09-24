@@ -50,7 +50,7 @@ describe("See secure note", () => {
   });
 
   it('See the decrypted description when clicking on the "show" button', async() => {
-    expect.assertions(5);
+    expect.assertions(4);
 
     let resolvedPromise;
     props.context.port.addRequestListener("passbolt.secret.find-by-resource-id", () => new Promise(resolve => resolvedPromise = resolve));
@@ -71,28 +71,6 @@ describe("See secure note", () => {
     //the decrypted message should appear in the section content
     expect(page.description).not.toBeNull();
     expect(page.description.textContent).toBe(descriptionMessage);
-    expect(page.hideButton).not.toBeNull();
-  });
-
-  it('Should hide the decrypted description when clicking on the "hide" button', async() => {
-    expect.assertions(4);
-
-    const descriptionMessage = "This is a description";
-    props.context.port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({description: descriptionMessage}));
-
-    const page = new DisplayResourceDetailsNotePage(props);
-
-    expect(page.showButton).not.toBeNull();
-    page.showButton.click();
-
-    await waitForTrue(() => !page.isLoading());
-
-    //the decrypted message should appear in the section content
-    expect(page.description).not.toBeNull();
-    expect(page.description.textContent).toBe(descriptionMessage);
-
-    page.hideButton.click();
-    expect(page.description).toBeNull();
   });
 
   it('Should not run the decryption a second time', async() => {
