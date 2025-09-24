@@ -31,6 +31,10 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultAdminUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
 import {v4 as uuidv4} from "uuid";
+import expect from "expect";
+import ConfirmMetadataKeyRotationDialog from "./ConfirmMetadataKeyRotationDialog";
+import {defaultMetadataKeyDto} from "../../../../shared/models/entity/metadata/metadataKeyEntity.test.data";
+import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
 
 describe("DisplayContentTypesMetadataKeyAdministration", () => {
   beforeEach(() => {
@@ -80,6 +84,40 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.metadataExpiredKeysWrapper).toBeNull();
     });
 
+    it("As a signed-in administrator I can rotate metadata key if there is one active.", async() => {
+      expect.assertions(13);
+      const props = defaultSettingsAndSingleActiveKeyProps();
+
+      const metadataKeysDto = [defaultMetadataKeyDto({
+        armored_key: pgpKeys.eddsa_ed25519.public,
+        fingerprint: pgpKeys.eddsa_ed25519.fingerprint,
+      })];
+
+      jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
+      jest.spyOn(props.metadataKeysServiceWorkerService, "rotate");
+      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
+      await waitForTrue(() => page.exists());
+
+      expect(page.metadataActiveKeysWrapper).not.toBeNull();
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.algorithm.toLowerCase());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.length.toString());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00"));
+      expect(page.rotateKeyButton.textContent).toStrictEqual("Rotate key");
+      expect(page.noMetadataActiveKeysWrapper).toBeNull();
+      expect(page.metadataExpiredKeysWrapper).toBeNull();
+
+      jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
+
+      await page.clickOnRotateKeyButton();
+
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmMetadataKeyRotationDialog, expect.anything());
+      expect(props.metadataKeysServiceWorkerService.rotate).toHaveBeenCalled();
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.algorithm.toLowerCase());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.length.toString());
+    });
+
     it("As a signed-in administrator I can see the settings configured with multiple active metadata keys.", async() => {
       expect.assertions(15);
       const props = defaultSettingsAndMultipleActiveKeysProps();
@@ -102,6 +140,41 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.length.toString());
       expect(page.noMetadataActiveKeysWrapper).toBeNull();
       expect(page.metadataExpiredKeysWrapper).toBeNull();
+    });
+
+    it("As a signed-in administrator I can resume rotate metadata key if there are multiple active.", async() => {
+      expect.assertions(15);
+      const props = defaultSettingsAndMultipleActiveKeysProps();
+
+      const metadataKeysDto = [defaultMetadataKeyDto({
+        armored_key: pgpKeys.betty.public,
+        fingerprint: pgpKeys.betty.fingerprint,
+      })];
+
+      jest.spyOn(props.metadataKeysServiceWorkerService, "resumeRotation");
+      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
+      await waitForTrue(() => page.exists());
+
+      expect(page.metadataActiveKeysWrapper).not.toBeNull();
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.algorithm.toLowerCase());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.length.toString());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00"));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.algorithm.toLowerCase());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.length.toString());
+      expect(page.rotateKeyButton.textContent).toStrictEqual("Resume rotation");
+      expect(page.noMetadataActiveKeysWrapper).toBeNull();
+      expect(page.metadataExpiredKeysWrapper).toBeNull();
+
+      jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
+
+      await page.clickOnRotateKeyButton();
+
+      expect(props.metadataKeysServiceWorkerService.resumeRotation).toHaveBeenCalled();
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.algorithm.toLowerCase());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.length.toString());
     });
 
     it("As a signed-in administrator I can see the settings configured with multiple active and expired metadata keys.", async() => {
@@ -135,6 +208,75 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.algorithm.toLowerCase());
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.length.toString());
       expect(page.metadataExpiredKeysWrapper.textContent).toContain(formatDateTimeAgo("2023-10-04T15:11:45+00:00")); // expired date
+    });
+
+    it("As a signed-in administrator I can resume rotate metadata key if there are multiple active and expired.", async() => {
+      expect.assertions(26);
+      const props = defaultSettingsAndMultipleKeysProps();
+
+      const metadataKeysDto = [
+        defaultMetadataKeyDto({
+          armored_key: pgpKeys.betty.public,
+          fingerprint: pgpKeys.betty.fingerprint,
+        }),
+        defaultMetadataKeyDto({
+          armored_key: pgpKeys.carol.public,
+          fingerprint: pgpKeys.carol.fingerprint,
+          expired: "2022-03-04T13:59:11+00:00",
+        }),
+        defaultMetadataKeyDto({
+          armored_key: pgpKeys.eddsa_ed25519.public,
+          fingerprint: pgpKeys.eddsa_ed25519.fingerprint,
+          expired: "2023-10-04T15:11:45+00:00",
+        })
+      ];
+
+      jest.spyOn(props.metadataKeysServiceWorkerService, "resumeRotation");
+      jest.spyOn(props.metadataKeysServiceWorkerService, "rotate");
+      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
+      await waitForTrue(() => page.exists());
+
+      expect(page.metadataActiveKeysWrapper).not.toBeNull();
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.algorithm.toLowerCase());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.length.toString());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00"));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.algorithm.toLowerCase());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.length.toString());
+      expect(page.noMetadataActiveKeysWrapper).toBeNull();
+      expect(page.metadataExpiredKeysWrapper).not.toBeNull();
+      expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.carol.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.carol.algorithm.toLowerCase());
+      expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.carol.length.toString());
+      expect(page.metadataExpiredKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-10-11T08:09:00+00:00")); // created date
+      expect(page.metadataExpiredKeysWrapper.textContent).toContain(formatDateTimeAgo("2022-03-04T13:59:11+00:00")); // expired date
+      expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.algorithm.toLowerCase());
+      expect(page.metadataExpiredKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.length.toString());
+      expect(page.metadataExpiredKeysWrapper.textContent).toContain(formatDateTimeAgo("2023-10-04T15:11:45+00:00")); // expired date
+      expect(page.rotateKeyButton.textContent).toStrictEqual("Resume rotation");
+      expect(page.resumeRotateKeyButton.textContent).toStrictEqual("Resume rotation");
+
+      jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
+
+      await page.clickOnRotateKeyButton();
+
+      metadataKeysDto.splice(1, 1);
+      jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
+
+      await page.clickOnResumeRotateKeyButton();
+
+      metadataKeysDto.splice(1, 1);
+      jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
+
+      await page.clickOnResumeRotateKeyButton();
+
+      expect(props.metadataKeysServiceWorkerService.resumeRotation).toHaveBeenCalledTimes(3);
+      expect(props.metadataKeysServiceWorkerService.rotate).toHaveBeenCalledTimes(0);
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, '$& '));
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.algorithm.toLowerCase());
+      expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.length.toString());
     });
   });
 

@@ -15,7 +15,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import MetadataKeyEntity from "../../../../shared/models/entity/metadata/metadataKeyEntity";
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
@@ -63,7 +62,6 @@ class ConfirmMetadataKeyRotationDialog extends React.Component {
    * Handle click on cancel buttons
    */
   async handleCancel() {
-    this.props.onCancel();
     this.props.onClose();
   }
 
@@ -90,7 +88,7 @@ class ConfirmMetadataKeyRotationDialog extends React.Component {
               <tbody>
                 <tr className="fingerprint">
                   <td className="label"><Trans>Fingerprint</Trans></td>
-                  <td className="value"><Fingerprint fingerprint={this.props.metadataKey.fingerprint}/></td>
+                  <td className="value"><Fingerprint fingerprint={this.props.metadataKeyInfo.fingerprint}/></td>
                 </tr>
                 <tr className="algorithm">
                   <td className="label"><Trans>Algorithm</Trans></td>
@@ -98,13 +96,16 @@ class ConfirmMetadataKeyRotationDialog extends React.Component {
                 </tr>
                 <tr className="created">
                   <td className="label"><Trans>Created</Trans></td>
-                  <td className="value">{formatDateTimeAgo(this.props.metadataKey.created, this.props.t, this.props.context.locale)}</td>
+                  {this.props.metadataKeyInfo.created &&
+                    <td className="value">{formatDateTimeAgo(this.props.metadataKeyInfo.created, this.props.t, this.props.context.locale)}</td>
+                  }
+                  {!this.props.metadataKeyInfo.created &&
+                    <td className="empty-value"><Trans>Pending</Trans></td>
+                  }
                 </tr>
               </tbody>
             </table>
           </div>
-          <label><Trans>Summary</Trans></label>
-          <p><Trans>You will rotate the metadata key for all shared resources.</Trans></p>
           <p><Trans>This operation may take a few minutes.</Trans></p>
         </div>
         <div className="submit-wrapper clearfix">
@@ -118,9 +119,7 @@ class ConfirmMetadataKeyRotationDialog extends React.Component {
 
 ConfirmMetadataKeyRotationDialog.propTypes = {
   context: PropTypes.object, // Defined the expected type for context
-  metadataKey: PropTypes.instanceOf(MetadataKeyEntity), // The metadata key
   metadataKeyInfo: PropTypes.object, // The metadata key info
-  onCancel: PropTypes.func, // The cancelation callback
   onConfirm: PropTypes.func, // The confirmation callback
   onClose: PropTypes.func, // The onClose dialog callback
   t: PropTypes.func, // The translation function

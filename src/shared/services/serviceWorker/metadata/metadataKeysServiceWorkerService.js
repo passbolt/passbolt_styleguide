@@ -19,8 +19,8 @@ export const METADATA_KEYS_CREATE_EVENT = "passbolt.metadata.create-key";
 export const METADATA_KEYS_GENERATE_EVENT = "passbolt.metadata.generate-metadata-key";
 export const METADATA_KEYS_FIND_ALL_EVENT = "passbolt.metadata.find-all-non-deleted-metadata-keys";
 export const METADATA_SHARE_METADATA_PRIVATE_KEYS_EVENT = "passbolt.metadata.share-missing-metadata-private-keys-with-user";
-export const METADATA_KEYS_EXPIRE_EVENT = "passbolt.metadata.expire-metadata-key";
-export const METADATA_KEYS_ROTATE_RESOURCES_EVENT = "passbolt.metadata.rotate-resources-metadata";
+export const METADATA_KEYS_ROTATE_EVENT = "passbolt.metadata.rotate-metadata-key";
+export const METADATA_KEYS_RESUME_ROTATE_EVENT = "passbolt.metadata.resume-rotate-metadata-key";
 
 class MetadataKeysServiceWorkerService {
   /**
@@ -73,20 +73,22 @@ class MetadataKeysServiceWorkerService {
   }
 
   /**
-   * Expire a metadata keys.
+   * Rotate a metadata keys.
+   * @param {ExternalGpgKeyPairEntity} metadataKeyPair The metadata key pair.
    * @param {string} metadataKeyId The metadata key id.
    * @returns {Promise<void>}
    */
-  async expire(metadataKeyId) {
-    await this.port.request(METADATA_KEYS_EXPIRE_EVENT, metadataKeyId);
+  async rotate(metadataKeyPair, metadataKeyId) {
+    await this.port.request(METADATA_KEYS_ROTATE_EVENT, metadataKeyPair, metadataKeyId);
   }
 
   /**
-   * Rotate a metadata keys.
+   * Resume incomplete rotation of a metadata keys.
+   * @param {MetadataKeyEntity} metadataKey The metadata key to delete.
    * @returns {Promise<void>}
    */
-  async rotate() {
-    await this.port.request(METADATA_KEYS_ROTATE_RESOURCES_EVENT);
+  async resumeRotation(metadataKey) {
+    await this.port.request(METADATA_KEYS_RESUME_ROTATE_EVENT, metadataKey);
   }
 }
 
