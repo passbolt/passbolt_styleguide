@@ -20,7 +20,7 @@ jobs:
           npx grunt css
           npm run dev:storybook:build
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: JamesIves/github-pages-deploy-action@6c2d9db40f9296374acc17b90404b6e8864128c8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
