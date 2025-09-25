@@ -53,7 +53,7 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
     });
 
     it("displays warning on v4 fields if creation is allowed but there is not content types available", async() => {
-      expect.assertions(6);
+      expect.assertions(7);
 
       const page = new DisplayContentTypesAllowedContentTypesAdministration(withOnlyTotpV5Enabled());
       await waitForTrue(() => page.exists());
@@ -69,10 +69,11 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
 
       expect(page.totpV5Warning).toBeNull();
       expect(page.passwordV5Warning).toBeNull();
+      expect(page.noteV5Warning).toBeNull();
     });
 
     it("displays warning on v5 fields if creation is allowed but there is not content types available", async() => {
-      expect.assertions(6);
+      expect.assertions(10);
 
       const page = new DisplayContentTypesAllowedContentTypesAdministration(withOnlyTotpV4Enabled());
       await waitForTrue(() => page.exists());
@@ -83,6 +84,12 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
       expect(page.totpV5Warning).not.toBeNull();
       expect(page.totpV5Warning.textContent).toStrictEqual("Creation of content type v5 is allowed but all content types having totp are deleted.");
 
+      expect(page.customFieldsV5Warning).not.toBeNull();
+      expect(page.customFieldsV5Warning.textContent).toStrictEqual("Creation of content type v5 is allowed but custom fields resource type is deleted.");
+
+      expect(page.noteV5Warning).not.toBeNull();
+      expect(page.noteV5Warning.textContent).toStrictEqual("Creation of content type v5 is allowed but note resource type is deleted.");
+
       await page.clickOnPasswordV5();
       await page.clickOnTotpV4();
 
@@ -91,21 +98,25 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
     });
 
     it("displays error on fields if v5 is enabled but there is no metadata key set", async() => {
-      expect.assertions(4);
+      expect.assertions(8);
 
       const page = new DisplayContentTypesAllowedContentTypesAdministration(withoutMetadataKeys());
       await waitForTrue(() => page.exists());
 
       expect(page.passwordV5Warning).not.toBeNull();
       expect(page.totpV5Warning).not.toBeNull();
+      expect(page.customFieldsV5Warning).not.toBeNull();
+      expect(page.noteV5Warning).not.toBeNull();
       expect(page.passwordV5Warning.textContent).toStrictEqual("No active metadata key defined.");
       expect(page.totpV5Warning.textContent).toStrictEqual("No active metadata key defined.");
+      expect(page.customFieldsV5Warning.textContent).toStrictEqual("No active metadata key defined.");
+      expect(page.noteV5Warning.textContent).toStrictEqual("No active metadata key defined.");
     });
   });
 
   describe("As a signed-in administrator, I should see errors", () => {
     it("displays error on fields if no resource types is selected and admin tries to save", async() => {
-      expect.assertions(8);
+      expect.assertions(11);
 
       const page = new DisplayContentTypesAllowedContentTypesAdministration(defaultProps());
       await waitForTrue(() => page.exists());
@@ -114,6 +125,7 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
       await page.clickOnTotpV4();
       await page.clickOnPasswordV5();
       await page.clickOnTotpV5();
+      await page.clickOnNoteV5();
 
       await page.save();
 
@@ -121,10 +133,13 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
       expect(page.totpV4Error).not.toBeNull();
       expect(page.passwordV5Error).not.toBeNull();
       expect(page.totpV5Error).not.toBeNull();
+      expect(page.noteV5Error).not.toBeNull();
       expect(page.passwordV4Error.textContent).toStrictEqual("At least one content type should be allowed");
       expect(page.totpV4Error.textContent).toStrictEqual("At least one content type should be allowed");
       expect(page.passwordV5Error.textContent).toStrictEqual("At least one content type should be allowed");
       expect(page.totpV5Error.textContent).toStrictEqual("At least one content type should be allowed");
+      expect(page.customFieldsV5Error.textContent).toStrictEqual("At least one content type should be allowed");
+      expect(page.noteV5Error.textContent).toStrictEqual("At least one content type should be allowed");
     });
   });
 });

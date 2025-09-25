@@ -13,9 +13,9 @@
  */
 
 import {v4 as uuidv4} from "uuid";
-import {minimalMetadataPrivateKeyDto, defaultMetadataPrivateKeyDto} from "passbolt-styleguide/src/shared/models/entity/metadata/metadataPrivateKeyEntity.test.data";
-import {defaultMetadataPrivateKeyDataDto} from "passbolt-styleguide/src/shared/models/entity/metadata/metadataPrivateKeyDataEntity.test.data";
-import {pgpKeys} from "passbolt-styleguide/test/fixture/pgpKeys/keys";
+import {minimalMetadataPrivateKeyDto, defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
+import {defaultMetadataPrivateKeyDataDto} from "./metadataPrivateKeyDataEntity.test.data";
+import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
 
 export const defaultShareMetadataPrivateKeysDtos = (count = 2, data = {}) => {
   const user_id = uuidv4();
