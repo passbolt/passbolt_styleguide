@@ -532,7 +532,7 @@ const RESOURCE_TYPE_V5_STANDALONE_NOTE_DEFINITION_SCHEMA = {
           },
           value: {
             type: "number",
-            minimum: 6,
+            minimum: 0,
             nullable: true
           },
           background_color: {

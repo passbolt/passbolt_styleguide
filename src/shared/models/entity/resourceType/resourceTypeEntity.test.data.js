@@ -840,7 +840,7 @@ export const resourceTypeV5StandaloneNoteDto = (data = {}) => ({
             },
             value: {
               type: "number",
-              minimum: 6,
+              minimum: 0,
               nullable: true
             },
             background_color: {
