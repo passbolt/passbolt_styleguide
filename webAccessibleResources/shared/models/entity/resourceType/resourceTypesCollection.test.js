@@ -30,7 +30,8 @@ import {
   resourceTypePasswordAndDescriptionDto,
   resourceTypeTotpDto,
   resourceTypeV5TotpDto,
-  resourceTypeV5DefaultDto
+  resourceTypeV5DefaultDto,
+  TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE
 } from "./resourceTypeEntity.test.data";
 import CollectionValidationError from "../../entity/abstract/collectionValidationError";
 import {v4 as uuid} from "uuid";
@@ -43,6 +44,7 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
+  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG
 } from "./resourceTypeSchemasDefinition";
 import {RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5} from "../metadata/metadataTypesSettingsEntity";
@@ -164,11 +166,11 @@ describe("ResourceTypesCollection", () => {
     });
 
     it("should filter the collection by resources types by the version 5.", () => {
-      expect.assertions(9);
+      expect.assertions(10);
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
       resourceTypes.filterByResourceTypeVersion("v5");
 
-      expect(resourceTypes).toHaveLength(5);
+      expect(resourceTypes).toHaveLength(6);
 
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBeFalsy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBeFalsy();
@@ -178,6 +180,7 @@ describe("ResourceTypesCollection", () => {
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP)).toBeTruthy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_TOTP)).toBeFalsy();
       expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_TOTP)).toBeTruthy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE)).toBeTruthy();
     });
   });
 
@@ -510,7 +513,7 @@ describe("ResourceTypesCollection", () => {
       expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
     });
 
-    it("should match v5 default for a resource with note.", () => {
+    it("should match v5 standalone for a resource with note.", () => {
       expect.assertions(1);
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
       const resourceDto = {
@@ -518,7 +521,7 @@ describe("ResourceTypesCollection", () => {
           description: ""
         }
       };
-      const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+      const resourceTypeExpected = resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG);
       expect(resourceTypes.getResourceTypeMatchingResource(resourceDto, RESOURCE_TYPE_VERSION_5)).toStrictEqual(resourceTypeExpected);
     });
 
@@ -656,7 +659,7 @@ describe("ResourceTypesCollection", () => {
       const start = performance.now();
       const collection = new ResourceTypesCollection(dtos);
       const time = performance.now() - start;
-      expect(collection).toHaveLength(9);
+      expect(collection).toHaveLength(10);
       expect(time).toBeLessThan(5_000);
     });
   });

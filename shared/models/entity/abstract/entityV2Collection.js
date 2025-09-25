@@ -16,7 +16,6 @@ import EntityCollection from "./entityCollection";
 import CollectionValidationError from "./collectionValidationError";
 import EntityCollectionError from "./entityCollectionError";
 import EntitySchema from "./entitySchema";
-import Logger from "../../../utils/logger";
 
 class EntityV2Collection extends EntityCollection {
   /**
@@ -274,8 +273,7 @@ class EntityV2Collection extends EntityCollection {
         collectionValidationError.addItemValidationError(index, error);
         throw collectionValidationError;
       } else {
-        const errorMessage = `${this.entityClass.name}::pushMany ignored item (${index}) due to validation error.`;
-        Logger.error(new Error(errorMessage, {cause: error}));
+        console.debug(`${this.entityClass.name}::pushMany ignore item (${index}) due to validation error ${JSON.stringify(error?.details)}`);
       }
     } else {
       throw error;

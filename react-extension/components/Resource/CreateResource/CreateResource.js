@@ -383,6 +383,7 @@ class CreateResource extends Component {
     }
     resourceFormEntity.removeEmptySecret({validate: false});
     resourceFormEntity.addRequiredSecret({validate: false});
+    resourceFormEntity.removeUnusedNonEmptyMetadata();
 
     const resourceType = this.props.resourceTypes.getFirstById(resourceFormEntity.resourceTypeId);
     const shouldResetUsername = !resourceFormEntity.metadata.username

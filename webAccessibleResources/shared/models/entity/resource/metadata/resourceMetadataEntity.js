@@ -14,6 +14,7 @@
 import EntityV2 from "../../abstract/entityV2";
 import IconEntity from "./IconEntity";
 import CustomFieldsCollection from "../../customField/customFieldsCollection";
+import assertString from "validator/es/lib/util/assertString";
 
 const ENTITY_NAME = 'ResourceMetadataEntity';
 const RESOURCE_NAME_MAX_LENGTH = 255;
@@ -194,6 +195,20 @@ class ResourceMetadataEntity extends EntityV2 {
    */
   get customFields() {
     return this._customFields || null;
+  }
+
+  /**
+   * Removes a property from this entity
+   */
+  unset(property) {
+    assertString(property);
+    const schema = ResourceMetadataEntity.getSchema();
+
+    if (!schema.properties[property]) {
+      throw new Error("The given property is not part of the schema and therefore cannot be unset.");
+    }
+
+    delete this._props[property];
   }
 
   /*
