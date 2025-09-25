@@ -1,23 +1,23 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.12.0
+ * @since         5.6.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
-import ConfirmMigrateMetadataDialog from "./ConfirmMigrateMetadataDialog";
+import ConfirmMetadataKeyRotationDialog from "./ConfirmMetadataKeyRotationDialog";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
- * The ConfirmMigrateMetadataDialog component represented as a page
+ * The ConfirmMetadataKeyRotationDialog component represented as a page
  */
 export default class ConfirmMigrateMetadataDialogPage {
   /**
@@ -28,23 +28,23 @@ export default class ConfirmMigrateMetadataDialogPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ConfirmMigrateMetadataDialog {...props}/>
+        <ConfirmMetadataKeyRotationDialog {...props}/>
       </MockTranslationProvider>
     );
   }
 
   /**
-   * Returns the confirm migrate metadata element
+   * Returns the confirmation metadata key rotation element
    */
-  get confirmMigrateMetadata() {
-    return this._page.container.querySelector('.confirm-migrate-metadata-dialog');
+  get confirmMetadataKeyRotation() {
+    return this._page.container.querySelector('.confirm-metadata-key-rotation-dialog');
   }
 
   /**
    * Returns true if the page object exists in the container
    */
   exists() {
-    return this.confirmMigrateMetadata !== null;
+    return this.confirmMetadataKeyRotation !== null;
   }
 
   /**
