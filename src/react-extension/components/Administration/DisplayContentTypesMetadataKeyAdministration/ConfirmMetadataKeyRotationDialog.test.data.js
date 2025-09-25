@@ -12,7 +12,6 @@
  * @since         5.6.0
  */
 
-import MetadataKeyEntity from "../../../../shared/models/entity/metadata/metadataKeyEntity";
 import ExternalGpgKeyEntity from "../../../../shared/models/entity/gpgkey/externalGpgKeyEntity";
 import {
   ed25519ExternalPublicGpgKeyEntityDto
@@ -24,12 +23,8 @@ import {
  * @returns {object}
  */
 export function defaultProps(props = {}) {
-  const publicKey = ed25519ExternalPublicGpgKeyEntityDto();
-  const date = new Date();
   return {
-    metadataKey: new MetadataKeyEntity({armored_key: publicKey.armored_key, fingerprint: publicKey.fingerprint, created: date.toISOString()}),
     metadataKeyInfo: new ExternalGpgKeyEntity(ed25519ExternalPublicGpgKeyEntityDto()),
-    onCancel: jest.fn(),
     onConfirm: jest.fn(),
     onClose: jest.fn(),
     ...props

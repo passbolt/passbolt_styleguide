@@ -42,26 +42,24 @@ describe("ConfirmMetadataKeyRotationDialog", () => {
   });
 
   it('should cancel the rotation', async() => {
-    expect.assertions(2);
+    expect.assertions(1);
     const props = defaultProps(); // The props to pass
     const page = new ConfirmMetadataKeyRotationDialogPage(props);
 
     await waitFor(() => {});
 
     await page.clickOn(page.cancelButton);
-    expect(props.onCancel).toHaveBeenCalledTimes(1);
     expect(props.onClose).toHaveBeenCalledTimes(1);
   });
 
   it('should close the dialog', async() => {
-    expect.assertions(2);
+    expect.assertions(1);
     const props = defaultProps(); // The props to pass
     const page = new ConfirmMetadataKeyRotationDialogPage(props);
 
     await waitFor(() => {});
 
     await page.clickOn(page.closeButton);
-    expect(props.onCancel).toHaveBeenCalledTimes(1);
     expect(props.onClose).toHaveBeenCalledTimes(1);
   });
 });

@@ -25,7 +25,7 @@ class DisplayContentTypesMetadataKeyAdministrationActions extends React.Componen
   render() {
     return (
       <div className="actions-wrapper">
-        <button type="button" className={`button primary ${this.props.isProcessing && "processing"} ${this.props.isDisabled && "disabled"}`} disabled={this.props.isDisabled} onClick={this.props.onSaveRequested}>
+        <button type="button" className={`button primary form ${this.props.isProcessing ? "processing" : ""}`} disabled={this.props.isDisabled} onClick={this.props.onSaveRequested}>
           <span><Trans>Save</Trans></span>
           {this.props.isProcessing &&
             <SpinnerSVG/>
