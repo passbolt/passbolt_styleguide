@@ -81,6 +81,11 @@
     "fetch-mock": {
       "path-to-regexp": "3.3.0"
     },
+    "jest-environment-jsdom": {
+      "jsdom": {
+        "form-data": "4.0.4"
+      }
+    },
     "i18next-parser": {
       "cheerio": {
         "undici": "6.21.2"
