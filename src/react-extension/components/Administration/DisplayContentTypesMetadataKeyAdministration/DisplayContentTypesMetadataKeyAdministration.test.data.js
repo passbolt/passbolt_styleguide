@@ -72,7 +72,9 @@ export function defaultProps(props = {}) {
       }),
       createKey: () => new MetadataKeyEntity(
         defaultMetadataKeyDto({fingerprint: pgpKeys.eddsa_ed25519.fingerprint, armored_key: pgpKeys.eddsa_ed25519.public})
-      )
+      ),
+      rotate: () => {},
+      resumeRotation: () => {}
     },
     gpgServiceWorkerService: {
       keyInfo: armoredKey => metadataKeysInfo.getFirst("armored_key", armoredKey),
@@ -98,7 +100,13 @@ export function defaultSettingsAndSingleActiveKeyProps(props = {}) {
 
   return defaultProps({
     metadataKeysServiceWorkerService: {
-      findAll: () => new MetadataKeysCollection(metadataKeysDto)
+      findAll: () => new MetadataKeysCollection(metadataKeysDto),
+      generateKeyPair: () => new ExternalGpgKeyPairEntity({
+        public_key: ed25519ExternalPublicGpgKeyEntityDto(),
+        private_key: ed25519ExternalPrivateGpgKeyEntityDto()
+      }),
+      rotate: () => {},
+      resumeRotation: () => {}
     },
     ...props
   });
@@ -122,7 +130,8 @@ export function defaultSettingsAndMultipleActiveKeysProps(props = {}) {
 
   return defaultProps({
     metadataKeysServiceWorkerService: {
-      findAll: () => new MetadataKeysCollection(metadataKeysDto)
+      findAll: () => new MetadataKeysCollection(metadataKeysDto),
+      resumeRotation: () => {}
     },
     ...props
   });
@@ -156,7 +165,9 @@ export function defaultSettingsAndMultipleKeysProps(props = {}) {
 
   return defaultProps({
     metadataKeysServiceWorkerService: {
-      findAll: () => new MetadataKeysCollection(metadataKeysDto)
+      findAll: () => new MetadataKeysCollection(metadataKeysDto),
+      rotate: () => {},
+      resumeRotation: () => {}
     },
     ...props
   });
