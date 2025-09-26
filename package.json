@@ -92,7 +92,8 @@
       }
     },
     "brace-expansion": "^1.1.12",
-    "copy-anything": "4.0.4"
+    "copy-anything": "4.0.4",
+    "browserslist": "4.26.2"
   },
   "scripts": {
     "build": "npm run build-api-app",
