@@ -367,7 +367,7 @@ class DisplayScimSettingsAdministration extends Component {
               </p>
 
               {
-                this.state.enabled && <>
+                this.state.enabled && this.state.settings && <>
                   <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                     <label><Trans>SCIM URL</Trans></label>
                     <div className="button-inline">
