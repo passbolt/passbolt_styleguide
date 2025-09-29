@@ -213,6 +213,25 @@ const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
         maxLength: 10000,
         nullable: true,
       },
+      icon: {
+        type: "object",
+        required: [],
+        properties: {
+          type: {
+            type: "string",
+            enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+          },
+          value: {
+            type: "number",
+            minimum: 0,
+            nullable: true
+          },
+          background_color: {
+            type: "string",
+            nullable: true,
+          },
+        }
+      },
       custom_fields: {
         type: "array",
         maxItems: 128,
@@ -318,6 +337,25 @@ const RESOURCE_TYPE_V5_DEFAULT_DEFINITION_SCHEMA = {
         maxLength: 10000,
         nullable: true,
       },
+      icon: {
+        type: "object",
+        required: [],
+        properties: {
+          type: {
+            type: "string",
+            enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+          },
+          value: {
+            type: "number",
+            minimum: 0,
+            nullable: true
+          },
+          background_color: {
+            type: "string",
+            nullable: true,
+          },
+        }
+      },
       custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.resource.properties.custom_fields
     },
   },
@@ -373,6 +411,25 @@ const RESOURCE_TYPE_V5_PASSWORD_STRING_DEFINITION_SCHEMA = {
         maxLength: 10000,
         nullable: true,
       },
+      icon: {
+        type: "object",
+        required: [],
+        properties: {
+          type: {
+            type: "string",
+            enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+          },
+          value: {
+            type: "number",
+            minimum: 0,
+            nullable: true
+          },
+          background_color: {
+            type: "string",
+            nullable: true,
+          },
+        }
+      },
     },
   },
   secret: {
@@ -409,6 +466,25 @@ const RESOURCE_TYPE_V5_DEFAULT_TOTP_DEFINITION_SCHEMA = {
         type: "string",
         maxLength: 10000,
         nullable: true,
+      },
+      icon: {
+        type: "object",
+        required: [],
+        properties: {
+          type: {
+            type: "string",
+            enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+          },
+          value: {
+            type: "number",
+            minimum: 0,
+            nullable: true
+          },
+          background_color: {
+            type: "string",
+            nullable: true,
+          },
+        }
       },
       custom_fields: RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA.resource.properties.custom_fields
     },
@@ -460,6 +536,25 @@ const RESOURCE_TYPE_V5_TOTP_DEFINITION_SCHEMA = {
         type: "string",
         maxLength: 10000,
         nullable: true,
+      },
+      icon: {
+        type: "object",
+        required: [],
+        properties: {
+          type: {
+            type: "string",
+            enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+          },
+          value: {
+            type: "number",
+            minimum: 0,
+            nullable: true
+          },
+          background_color: {
+            type: "string",
+            nullable: true,
+          },
+        }
       },
     }
   },
