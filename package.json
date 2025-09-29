@@ -77,11 +77,6 @@
     "xregexp": "^5.1.2"
   },
   "overrides": {
-    "jest-environment-jsdom": {
-      "jsdom": {
-        "form-data": "4.0.4"
-      }
-    },
     "i18next-parser": {
       "cheerio": "1.1.2"
     },
