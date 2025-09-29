@@ -755,7 +755,7 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
     },
     secret: {
       type: "object",
-      required: ["custom_fields"],
+      required: ["custom_fields", "object_type"],
       properties: {
         object_type: {
           type: "string",
