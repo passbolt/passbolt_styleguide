@@ -321,6 +321,25 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
           maxLength: 10000,
           nullable: true,
         },
+        icon: {
+          type: "object",
+          required: [],
+          properties: {
+            type: {
+              type: "string",
+              enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+            },
+            value: {
+              type: "number",
+              minimum: 0,
+              nullable: true
+            },
+            background_color: {
+              type: "string",
+              nullable: true,
+            },
+          }
+        },
         custom_fields: {
           type: "array",
           maxItems: 128,
@@ -446,6 +465,25 @@ export const resourceTypeV5PasswordStringDto = (data = {}) => ({
           maxLength: 10000,
           nullable: true,
         },
+        icon: {
+          type: "object",
+          required: [],
+          properties: {
+            type: {
+              type: "string",
+              enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+            },
+            value: {
+              type: "number",
+              minimum: 0,
+              nullable: true
+            },
+            background_color: {
+              type: "string",
+              nullable: true,
+            },
+          }
+        }
       }
     },
     secret: {
@@ -492,6 +530,25 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
           type: "string",
           maxLength: 10000,
           nullable: true,
+        },
+        icon: {
+          type: "object",
+          required: [],
+          properties: {
+            type: {
+              type: "string",
+              enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+            },
+            value: {
+              type: "number",
+              minimum: 0,
+              nullable: true
+            },
+            background_color: {
+              type: "string",
+              nullable: true,
+            },
+          }
         },
         custom_fields: {
           type: "array",
@@ -640,6 +697,25 @@ export const resourceTypeV5TotpDto = (data = {}) => ({
           maxLength: 10000,
           nullable: true,
         },
+        icon: {
+          type: "object",
+          required: [],
+          properties: {
+            type: {
+              type: "string",
+              enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+            },
+            value: {
+              type: "number",
+              minimum: 0,
+              nullable: true
+            },
+            background_color: {
+              type: "string",
+              nullable: true,
+            },
+          }
+        }
       }
     },
     secret: {
@@ -719,6 +795,25 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
           type: "string",
           maxLength: 10000,
           nullable: true,
+        },
+        icon: {
+          type: "object",
+          required: [],
+          properties: {
+            type: {
+              type: "string",
+              enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+            },
+            value: {
+              type: "number",
+              minimum: 0,
+              nullable: true
+            },
+            background_color: {
+              type: "string",
+              nullable: true,
+            },
+          }
         },
         custom_fields: {
           type: "array",
