@@ -248,7 +248,7 @@ const RESOURCE_TYPE_V5_CUSTOM_FIELDS_DEFINITION_SCHEMA = {
   },
   secret: {
     type: "object",
-    required: ["custom_fields"],
+    required: ["custom_fields",  "object_type"],
     properties: {
       object_type: {
         type: "string",
