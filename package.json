@@ -83,9 +83,7 @@
       }
     },
     "i18next-parser": {
-      "cheerio": {
-        "undici": "6.21.2"
-      }
+      "cheerio": "1.1.2"
     },
     "brace-expansion": "^1.1.12",
     "copy-anything": "4.0.4",
