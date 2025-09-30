@@ -50,7 +50,7 @@ describe("DisplayMfaPolicyAdministrationTeasing", () => {
     expect(page.title).toBe("MFA Policy");
     expect(page.mfaSettingsFirstLine).toBe("Enhance security by enforcing multi-factor authentication.");
     expect(page.upgradeButton).toBeTruthy();
-    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/contact/pro/enterprise");
+    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/ce-to-pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product");
 
     const actualDescriptions = Array.from(page.mfaSettingsDescription).map(li => li.textContent.trim());
     expect(actualDescriptions).toEqual(expectedMfaPolicyDescriptions);

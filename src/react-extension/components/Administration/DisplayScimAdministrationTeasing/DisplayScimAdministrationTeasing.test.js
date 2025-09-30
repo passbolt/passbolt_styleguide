@@ -50,7 +50,7 @@ describe("DisplayScimAdministrationTeasing", () => {
     expect(page.title).toBe("SCIM");
     expect(page.scimFirstLine).toBe("Automate user identity management and provisioning via standardised SCIM integration.");
     expect(page.upgradeButton).toBeTruthy();
-    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/contact/sales?utm_campaign=21060976-CE%20to%20Pro&utm_source=product");
+    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/ce-to-pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product");
 
     const actualDescriptions = Array.from(page.scimDescription).map(li => li.textContent.trim());
     expect(actualDescriptions).toEqual(expectedScimDescriptions);
