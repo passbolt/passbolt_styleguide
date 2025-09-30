@@ -50,7 +50,7 @@ describe("DisplayUserDirectoryAdministrationTeasing", () => {
     expect(page.title).toBe("Users Directory");
     expect(page.usersDirectoryFirstLine).toBe("Simplify user management provisioning through integration with existing directories.");
     expect(page.upgradeButton).toBeTruthy();
-    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/contact/pro/enterprise");
+    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/ce-to-pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product");
 
     const actualDescriptions = Array.from(page.usersDirectoryDescription).map(li => li.textContent.trim());
     expect(actualDescriptions).toEqual(expectedUsersDirectoryDescriptions);
