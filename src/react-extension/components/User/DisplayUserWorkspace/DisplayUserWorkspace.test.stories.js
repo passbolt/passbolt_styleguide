@@ -28,6 +28,7 @@ import mockPort from "../../../../../test/mocks/mockPort";
 import mockStorage from "../../../../../test/mocks/mockStorage";
 import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
 import RbacContextProvider from "../../../../shared/context/Rbac/RbacContext";
+import {ResizableSidebarContextProvider} from "../../../contexts/ResizeSidebar/ResizeSidebarContext";
 
 /**
  * DisplayUserWorkspace stories
@@ -42,29 +43,31 @@ const ExtApp = ({...args}) =>
     <ExtAppContextProvider storage={args.storage} port={args.port}>
       <RbacContextProvider>
         <DialogContextProvider>
-          <NavigationContextProvider>
-            <ContextualMenuContextProvider>
-              <Route path={[
-                "/app/account-recovery/requests/review/:accountRecoveryRequestId",
-                "/app/groups/view/:selectedGroupId",
-                "/app/groups/edit/:selectedGroupId",
-                "/app/users/view/:selectedUserId",
-                "/app/users",
-              ]}>
-                <UserWorkspaceContextProvider>
-                  <ManageDialogs/>
-                  <ManageWorkflows/>
-                  <ManageContextualMenu/>
-                  <ManageAnnouncements/>
-                  <div id="container" className="page user">
-                    <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
-                      <DisplayUserWorkspace/>
+          <ResizableSidebarContextProvider>
+            <NavigationContextProvider>
+              <ContextualMenuContextProvider>
+                <Route path={[
+                  "/app/account-recovery/requests/review/:accountRecoveryRequestId",
+                  "/app/groups/view/:selectedGroupId",
+                  "/app/groups/edit/:selectedGroupId",
+                  "/app/users/view/:selectedUserId",
+                  "/app/users",
+                ]}>
+                  <UserWorkspaceContextProvider>
+                    <ManageDialogs/>
+                    <ManageWorkflows/>
+                    <ManageContextualMenu/>
+                    <ManageAnnouncements/>
+                    <div id="container" className="page user">
+                      <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
+                        <DisplayUserWorkspace/>
+                      </div>
                     </div>
-                  </div>
-                </UserWorkspaceContextProvider>
-              </Route>
-            </ContextualMenuContextProvider>
-          </NavigationContextProvider>
+                  </UserWorkspaceContextProvider>
+                </Route>
+              </ContextualMenuContextProvider>
+            </NavigationContextProvider>
+          </ResizableSidebarContextProvider>
         </DialogContextProvider>
       </RbacContextProvider>
     </ExtAppContextProvider>

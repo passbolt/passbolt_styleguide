@@ -101,6 +101,11 @@
           }
         }
 
+        .resizable-sidebar .panel.left {
+          width: 100%;
+          max-width: 100%;
+        }
+
         .panel.middle {
           display: flex;
           flex-direction: column;
@@ -214,6 +219,81 @@
           }
         }
       }
+      }
+      /* Styles for Resizable Sidebars - Starts here */
+        .resizable-sidebar {
+          display: flex;
+          flex-direction: row;
+          height: 100%;
+
+           &.leftSideBar+.panel.middle {
+            .middle-right {
+              gap: 0;
+
+              .gutter+.panel.aside {
+                width: 97%;
+                max-width: 100%;
+                min-width: 90%;
+              }
+            }
+    
+            .header {
+              justify-content: space-between;
+              gap: 0.2rem;
+            }
+          }
+
+          &.resource-workspace.leftSideBar {
+            min-width: 26rem;
+            max-width: 23.5%;
+          }
+          &.resource-workspace.rightSideBar {
+            min-width: 25%;
+            max-width: 35%;
+          }
+
+          &.users-workspace.leftSideBar {
+            min-width: 29rem;
+            max-width: 24%;;
+          }
+
+          &.users-workspace.rightSideBar {
+            min-width: 25%;
+            max-width: 35%;;
+          }
+    
+          .gutter{
+                width: 1.6rem;
+                background-color:inherit;
+                cursor: col-resize;
+                height: 100%
+              }
+    
+          .sidebar-content {
+            flex: 1;
+            overflow: auto;
+          }
+    
+          .panel.left.resource-filter {
+            max-width: 100%;
+            width: 100%;
+            min-width: 90%;
+          }
+    
+          &.resource-workspace+.panel.middle .header {
+            .header-right {
+              min-width: auto;
+              max-width: 35%;
+            }
+          }
+    
+          &.users-workspace+.panel.middle .header {
+            .header-right {
+              min-width: auto;
+              max-width: 35%;
+            }
+          }
     }
+    /* Styles for Resizable Sidebars - Ends here */
   }
 }

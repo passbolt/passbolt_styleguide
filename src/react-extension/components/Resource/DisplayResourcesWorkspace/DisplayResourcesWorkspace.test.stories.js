@@ -33,6 +33,7 @@ import ResourceTypesLocalStorageContextProvider from "../../../../shared/context
 import WorkflowContextProvider from "../../../contexts/WorkflowContext";
 import ManageWorkflows from "../../Common/Workflow/ManageWorkflows/ManageWorkflows";
 import PasswordExpirySettingsContextProvider from "../../../contexts/PasswordExpirySettingsContext";
+import {ResizableSidebarContextProvider} from "../../../contexts/ResizeSidebar/ResizeSidebarContext";
 
 /**
  * DisplayResourcesWorkspace stories
@@ -48,37 +49,39 @@ const ExtApp = ({...args}) =>
       <RbacContextProvider>
         <WorkflowContextProvider>
           <DialogContextProvider>
-            <NavigationContextProvider>
-              <ContextualMenuContextProvider>
-                <Route path={[
-                  "/app/folders/view/:filterByFolderId",
-                  "/app/passwords/view/:selectedResourceId",
-                  "/app/passwords/filter/:filterType",
-                  "/app/passwords",
-                ]}>
-                  <PasswordExpirySettingsContextProvider>
-                    <ResourceWorkspaceContextProvider>
-                      <MetadataTypesSettingsLocalStorageContextProvider>
-                        <ResourceTypesLocalStorageContextProvider>
-                          <ResourcePasswordGeneratorContextProvider>
-                            <ManageContextualMenu/>
-                            <ManageDialogs/>
-                            <ManageWorkflows/>
-                            <DragContextProvider>
-                              <div id="container" className="page password">
-                                <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
-                                  <DisplayResourcesWorkspace {...args}/>
+            <ResizableSidebarContextProvider>
+              <NavigationContextProvider>
+                <ContextualMenuContextProvider>
+                  <Route path={[
+                    "/app/folders/view/:filterByFolderId",
+                    "/app/passwords/view/:selectedResourceId",
+                    "/app/passwords/filter/:filterType",
+                    "/app/passwords",
+                  ]}>
+                    <PasswordExpirySettingsContextProvider>
+                      <ResourceWorkspaceContextProvider>
+                        <MetadataTypesSettingsLocalStorageContextProvider>
+                          <ResourceTypesLocalStorageContextProvider>
+                            <ResourcePasswordGeneratorContextProvider>
+                              <ManageContextualMenu/>
+                              <ManageDialogs/>
+                              <ManageWorkflows/>
+                              <DragContextProvider>
+                                <div id="container" className="page password">
+                                  <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
+                                    <DisplayResourcesWorkspace {...args}/>
+                                  </div>
                                 </div>
-                              </div>
-                            </DragContextProvider>
-                          </ResourcePasswordGeneratorContextProvider>
-                        </ResourceTypesLocalStorageContextProvider>
-                      </MetadataTypesSettingsLocalStorageContextProvider>
-                    </ResourceWorkspaceContextProvider>
-                  </PasswordExpirySettingsContextProvider>
-                </Route>
-              </ContextualMenuContextProvider>
-            </NavigationContextProvider>
+                              </DragContextProvider>
+                            </ResourcePasswordGeneratorContextProvider>
+                          </ResourceTypesLocalStorageContextProvider>
+                        </MetadataTypesSettingsLocalStorageContextProvider>
+                      </ResourceWorkspaceContextProvider>
+                    </PasswordExpirySettingsContextProvider>
+                  </Route>
+                </ContextualMenuContextProvider>
+              </NavigationContextProvider>
+            </ResizableSidebarContextProvider>
           </DialogContextProvider>
         </WorkflowContextProvider>
       </RbacContextProvider>

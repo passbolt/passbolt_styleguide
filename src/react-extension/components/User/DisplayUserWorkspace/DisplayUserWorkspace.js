@@ -42,6 +42,8 @@ import WorkspaceSwitcher, {WORKSPACE_ENUM} from '../../Common/Navigation/Workspa
 import RoleEntity from '../../../../shared/models/entity/role/roleEntity';
 import {uiActions} from '../../../../shared/services/rbacs/uiActionEnumeration';
 import {withRbac} from '../../../../shared/context/Rbac/RbacContext';
+import ResizableSidebar from "../../ResizableSidebar/ResizableSidebar";
+import {withResizableSidebar} from "../../../contexts/ResizeSidebar/ResizeSidebarContext";
 
 const GAP_AND_PADDING_BUTTONS = 22;
 
@@ -189,6 +191,9 @@ class DisplayUserWorkspace extends React.Component {
    * @return {JSX}
    */
   render() {
+    const {right, containerRef} = this.props.sidebarContext || {};
+    const containerWidth = containerRef?.current?.offsetWidth || 1;
+    const rightHeaderWidth = ((right?.width / containerWidth) * 100) < 25 ? `25%` : `${(right?.width / containerWidth) * 100}%`; // set width of right header
     return (
       <>
         {this.props.context.users &&
@@ -197,30 +202,38 @@ class DisplayUserWorkspace extends React.Component {
         <div className="panel main">
           {this.isAccessAllowed ? (
             <>
-              <div className="panel left">
-                <div className="sidebar-content">
-                  <div className="top-bar-left-navigation">
-                    <div className="navigation">
-                      {/* Add onclick action */}
-                      <button type="button" className="button-transparent back" onClick={this.handleGoBack}>
-                        <ArrowLeftSVG/>
-                      </button>
-                      <span className="title users"><Trans>Users & Groups</Trans></span>
+              <ResizableSidebar
+                resizable
+                gutterLeft={false}
+                minWidth={"18%"}
+                maxWidth={"24%"}
+                classNames={"users-workspace leftSideBar"}
+              >
+                <div className="panel left">
+                  <div className="sidebar-content">
+                    <div className="top-bar-left-navigation">
+                      <div className="navigation">
+                        {/* Add onclick action */}
+                        <button type="button" className="button-transparent back" onClick={this.handleGoBack}>
+                          <ArrowLeftSVG/>
+                        </button>
+                        <span className="title users"><Trans>Users & Groups</Trans></span>
+                      </div>
+                    </div>
+                    <DisplayUserWorkspaceMainActions/>
+                    <div className="sidebar-content-left">
+                      <FilterUsersByShortcut/>
+                      <DisplayGroups/>
                     </div>
                   </div>
-                  <DisplayUserWorkspaceMainActions/>
-                  <div className="sidebar-content-left">
-                    <FilterUsersByShortcut/>
-                    <DisplayGroups/>
-                  </div>
                 </div>
-              </div>
+              </ResizableSidebar>
               <div className="panel middle">
                 <div className="header">
                   <div className="header-left">
                     <FilterUsersByText/>
                   </div>
-                  <div className="header-right">
+                  <div className="header-right" style={{width: rightHeaderWidth}}>
                     <WorkspaceSwitcher isUserAdmin={this.isUserAdmin} isUserWorkspaceVisible={true} currentWorkspace={WORKSPACE_ENUM.USER_AND_GROUPS}/>
                     <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
                   </div>
@@ -247,6 +260,13 @@ class DisplayUserWorkspace extends React.Component {
                     <DisplayUsers/>
                   </div>
                   {this.hasDetailsLocked() &&
+                  <ResizableSidebar
+                    resizable
+                    gutterLeft={true}
+                    minWidth={"25%"}
+                    maxWidth={"35%"}
+                    classNames={"users-workspace rightSideBar"}
+                  >
                     <div className="panel aside">
                       {this.shouldDisplayEmptyDetails &&
                         <DisplayUserWorkspaceEmptyDetails />
@@ -259,6 +279,7 @@ class DisplayUserWorkspace extends React.Component {
                       }
                       <Footer/>
                     </div>
+                  </ResizableSidebar>
                   }
                 </div>
               </div>
@@ -279,6 +300,7 @@ DisplayUserWorkspace.propTypes = {
   rbacContext: PropTypes.any, // The role based access control context
   navigationContext: PropTypes.any, // The application navigation context
   t: PropTypes.func, // The translation function
+  sidebarContext: PropTypes.any,
 };
 
-export default withRouter(withAppContext(withRbac(withNavigationContext(withUserWorkspace(withTranslation('common')(DisplayUserWorkspace))))));
+export default withRouter(withAppContext(withRbac(withNavigationContext(withUserWorkspace(withResizableSidebar(withTranslation('common')(DisplayUserWorkspace)))))));

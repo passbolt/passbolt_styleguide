@@ -44,6 +44,7 @@ import mockPort from "../../../../test/mocks/mockPort";
 import {siteSettingsCe} from "../../test/fixture/Settings/siteSettings";
 import {defaultAdministrationWorkspaceContext} from "../../contexts/AdministrationWorkspaceContext.test.data";
 import AdministrationEncryptedMetadataGettingStartedContextProvider from "../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
+import {ResizableSidebarContextProvider} from "../../contexts/ResizeSidebar/ResizeSidebarContext";
 
 const fakeAdminGettingStartedService = {
   findGettingStartedSettings: () => ({enabled: false})
@@ -70,49 +71,51 @@ export default {
                           <ContextualMenuContextProvider>
                             <LoadingContextProvider>
                               <ProgressContextProvider>
-                                { /* Action Feedback Management */}
-                                <DisplayActionFeedbacks/>
-                                <Route path={[
-                                  "/app/administration",
-                                  "/app/administration/account-recovery",
-                                  "/app/administration/email-notification",
-                                  "/app/administration/mfa",
-                                  "/app/administration/password-expiry",
-                                  "/app/administration/password-policies",
-                                  "/app/administration/smtp-settings",
-                                  "/app/administration/sso",
-                                  "/app/administration/subscription",
-                                  "/app/administration/user-passphrase-policies",
-                                  "/app/administration/content-types/metadata",
-                                  "/app/administration/account-recovery-teasing",
-                                  "/app/administration/password-policies-teasing",
-                                  "/app/administration/sso-teasing",
-                                  "/app/administration/user-passphrase-policies-teasing",
-                                  "/app/administration/subscription-teasing",
-                                  "/app/administration/mfa-policy-teasing"
-                                ]}>
-                                  <AdministrationWorkspaceContextProvider value={args.administrationWorkspaceContext}>
-                                    <AdminAccountRecoveryContextProvider>
-                                      <AdminSubscriptionContextProvider>
-                                        <AdminSsoContextProvider>
-                                          <AdminPasswordPoliciesContextProvider>
-                                            <AdministrationUserPassphrasePoliciesContextProvider>
-                                              <AdministrationPasswordExpiryContextProvider>
-                                                <AdministrationEncryptedMetadataGettingStartedContextProvider service={fakeAdminGettingStartedService}>
-                                                  <ManageDialogs/>
-                                                  <ManageWorkflows/>
-                                                  <div style={{margin: "-1rem"}}>
-                                                    <Story {...args}/>
-                                                  </div>
-                                                </AdministrationEncryptedMetadataGettingStartedContextProvider>
-                                              </AdministrationPasswordExpiryContextProvider>
-                                            </AdministrationUserPassphrasePoliciesContextProvider>
-                                          </AdminPasswordPoliciesContextProvider>
-                                        </AdminSsoContextProvider>
-                                      </AdminSubscriptionContextProvider>
-                                    </AdminAccountRecoveryContextProvider>
-                                  </AdministrationWorkspaceContextProvider>
-                                </Route>
+                                <ResizableSidebarContextProvider>
+                                  { /* Action Feedback Management */}
+                                  <DisplayActionFeedbacks/>
+                                  <Route path={[
+                                    "/app/administration",
+                                    "/app/administration/account-recovery",
+                                    "/app/administration/email-notification",
+                                    "/app/administration/mfa",
+                                    "/app/administration/password-expiry",
+                                    "/app/administration/password-policies",
+                                    "/app/administration/smtp-settings",
+                                    "/app/administration/sso",
+                                    "/app/administration/subscription",
+                                    "/app/administration/user-passphrase-policies",
+                                    "/app/administration/content-types/metadata",
+                                    "/app/administration/account-recovery-teasing",
+                                    "/app/administration/password-policies-teasing",
+                                    "/app/administration/sso-teasing",
+                                    "/app/administration/user-passphrase-policies-teasing",
+                                    "/app/administration/subscription-teasing",
+                                    "/app/administration/mfa-policy-teasing"
+                                  ]}>
+                                    <AdministrationWorkspaceContextProvider value={args.administrationWorkspaceContext}>
+                                      <AdminAccountRecoveryContextProvider>
+                                        <AdminSubscriptionContextProvider>
+                                          <AdminSsoContextProvider>
+                                            <AdminPasswordPoliciesContextProvider>
+                                              <AdministrationUserPassphrasePoliciesContextProvider>
+                                                <AdministrationPasswordExpiryContextProvider>
+                                                  <AdministrationEncryptedMetadataGettingStartedContextProvider service={fakeAdminGettingStartedService}>
+                                                    <ManageDialogs/>
+                                                    <ManageWorkflows/>
+                                                    <div style={{margin: "-1rem"}}>
+                                                      <Story {...args}/>
+                                                    </div>
+                                                  </AdministrationEncryptedMetadataGettingStartedContextProvider>
+                                                </AdministrationPasswordExpiryContextProvider>
+                                              </AdministrationUserPassphrasePoliciesContextProvider>
+                                            </AdminPasswordPoliciesContextProvider>
+                                          </AdminSsoContextProvider>
+                                        </AdminSubscriptionContextProvider>
+                                      </AdminAccountRecoveryContextProvider>
+                                    </AdministrationWorkspaceContextProvider>
+                                  </Route>
+                                </ResizableSidebarContextProvider>
                               </ProgressContextProvider>
                             </LoadingContextProvider>
                           </ContextualMenuContextProvider>
