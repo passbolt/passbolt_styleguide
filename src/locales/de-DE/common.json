@@ -895,7 +895,7 @@
   "Password automatically expires when a user or group with a user who has accessed the password is removed from the permission list.": "Das Passwort verfällt automatisch, wenn ein Benutzer oder eine Gruppe mit einem Benutzer, der auf das Passwort zugegriffen hat, aus der Berechtigungsliste entfernt wird.",
   "Password configuration": "Passwortkonfiguration",
   "Password expiry": "Passwortrichtlinie",
-  "Password Expiry": "Passwortrichtlinie",
+  "Password Expiry": "Passwortablaufrichtlinie",
   "Password expiry date is renewed based on the default password expiry period whenever a password is updated.": "Das Ablaufdatum des Passworts wird auf der Grundlage der Standard-Passwort-Ablaufzeit verlängert, wenn ein Passwort aktualisiert wird.",
   "Password generator default settings": "Passwort-Generator Standardeinstellungen",
   "Password is no longer marked as expired whenever the password is updated.": "Das Passwort ist bei der Aktualisierung des Passworts nicht mehr als abgelaufen markiert.",
