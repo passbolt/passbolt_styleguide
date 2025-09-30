@@ -47,7 +47,7 @@ describe("DisplaySubscriptionKeyTeasing", () => {
     expect(page.serverVersion).toBe('3.11.0');
     expect(page.clientVersion).toBe('5.4.4');
     expect(page.upgradeButton).toBeTruthy();
-    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/contact/sales?utm_campaign=21060976-CE%20to%20Pro&utm_source=product");
+    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/ce-to-pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product");
     expect(page.subscriptionKeyTeasingInfoTitle).toBe("Passbolt CE is free forever!");
     expect(page.subscriptionKeyTeasingInfoDescription).toBe(subscriptionKeyTeasingInfoDescription);
     await waitFor(() => {});

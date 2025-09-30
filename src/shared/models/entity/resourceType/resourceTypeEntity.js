@@ -141,7 +141,7 @@ class ResourceTypeEntity extends EntityV2 {
             },
             "value": {
               "type": "number",
-              "minimum": 6,
+              "minimum": 0,
               "nullable": true
             },
             "background_color": {

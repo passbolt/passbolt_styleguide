@@ -48,6 +48,8 @@ import debounce from "debounce-promise";
 import RevertSVG from "../../../../img/svg/revert.svg";
 import {ColumnModelTypes} from "../../../../shared/models/column/ColumnModel";
 import {ROW_SETTING_HEIGHT_COMFORTABLE, ROW_SETTING_HEIGHT_COMPACT} from "../../../../shared/models/entity/rowsSetting/rowsSettingEntity";
+import ResizableSidebar from "../../ResizableSidebar/ResizableSidebar";
+import {withResizableSidebar} from "../../../contexts/ResizeSidebar/ResizeSidebarContext";
 
 const GAP_AND_PADDING_BUTTONS = 22;
 
@@ -236,33 +238,46 @@ class Workspace extends Component {
 
     const rowsSetting = this.props.resourceWorkspaceContext.rowsSetting;
 
+    /** Calculate the width of the header-right to align with the right sidebar resizing */
+    const {right, containerRef} = this.props.sidebarContext || {};
+    const containerWidth = containerRef?.current?.offsetWidth || 1;
+    const rightHeaderWidth = ((right?.width / containerWidth) * 100) < 25 ? `25%` : `${(right?.width / containerWidth) * 100}%`; // set width of right header
+
     return (
       <div className="panel main">
-        <div className="panel left resource-filter">
-          <div className="sidebar-content">
-            <Logo/>
-            <div className="main-action-wrapper">
-              <DisplayResourcesWorkspaceMainMenu/>
-            </div>
-            <div className="sidebar-content-left">
-              <FilterResourcesByShortcuts/>
-              {canUseFolders &&
-                <FilterResourcesByFolders/>
-              }
-              <FilterResourcesByGroups/>
-              {canUseTags &&
-                <FilterResourcesByTags/>
-              }
+        <ResizableSidebar
+          resizable
+          gutterLeft={false}
+          minWidth={"18%"}
+          maxWidth={"23.4%"}
+          classNames={"resource-workspace leftSideBar"}
+        >
+          <div className="panel left resource-filter">
+            <div className="sidebar-content">
+              <Logo/>
+              <div className="main-action-wrapper">
+                <DisplayResourcesWorkspaceMainMenu/>
+              </div>
+              <div className="sidebar-content-left">
+                <FilterResourcesByShortcuts/>
+                {canUseFolders &&
+                  <FilterResourcesByFolders/>
+                }
+                <FilterResourcesByGroups/>
+                {canUseTags &&
+                  <FilterResourcesByTags/>
+                }
+              </div>
             </div>
           </div>
-        </div>
+        </ResizableSidebar>
         <div className="panel middle">
           <div className="header">
             <div className="header-left">
               <FilterResourcesByText
                 placeholder={this.props.t("Search resource")}/>
             </div>
-            <div className="header-right">
+            <div className="header-right" style={{width: rightHeaderWidth}}>
               <WorkspaceSwitcher isUserAdmin={this.isUserAdmin} isUserWorkspaceVisible={this.isUserWorkspaceVisible} currentWorkspace={WORKSPACE_ENUM.RESOURCE}/>
               <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
             </div>
@@ -329,21 +344,29 @@ class Workspace extends Component {
               <DisplayResourcesList/>
             </div>
             {this.hasLockDetail() &&
+            <ResizableSidebar
+              resizable
+              gutterLeft={true}
+              minWidth={"25%"}
+              maxWidth={"35%"}
+              classNames={"resource-workspace rightSideBar"}
+            >
               <div className="panel aside">
                 {this.shouldDisplayListDetails &&
-                  <DisplayResourcesListDetails />
+                    <DisplayResourcesListDetails />
                 }
                 {this.shouldDisplayEmptyDetails &&
-                  <DisplayEmptyDetails />
+                    <DisplayEmptyDetails />
                 }
                 {this.props.resourceWorkspaceContext.details.folder &&
-                  <DisplayResourceFolderDetails/>
+                    <DisplayResourceFolderDetails/>
                 }
                 {this.props.resourceWorkspaceContext.details.resource &&
-                  <DisplayResourceDetails/>
+                    <DisplayResourceDetails/>
                 }
                 <Footer/>
               </div>
+            </ResizableSidebar>
             }
           </div>
         </div>
@@ -357,6 +380,7 @@ Workspace.propTypes = {
   rbacContext: PropTypes.any, // The rbac context
   resourceWorkspaceContext: PropTypes.any,
   t: PropTypes.func, // The translation function
+  sidebarContext: PropTypes.any,
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withTranslation('common')(Workspace))));
+export default withAppContext(withRbac(withResourceWorkspace(withResizableSidebar(withTranslation('common')(Workspace)))));

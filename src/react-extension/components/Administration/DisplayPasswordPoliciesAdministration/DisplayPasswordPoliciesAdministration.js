@@ -215,8 +215,8 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
             <h3 className="title" id="password-policies-settings-title"><Trans>Password Policy</Trans></h3>
             <form className="form">
               <h4><Trans>Password generator default settings</Trans></h4>
-              <p><Trans>You can modify the default settings of the passwords generator.</Trans>
-                <Trans>Note that this will not prevent a user from customizing the settings while generating a password.</Trans></p>
+              <p><Trans>You can modify the default settings of the passwords generator.</Trans></p>
+              <p><Trans>Note that this will not prevent a user from customizing the settings while generating a password.</Trans></p>
               <label>
                 <Trans>Default password type</Trans>
               </label>

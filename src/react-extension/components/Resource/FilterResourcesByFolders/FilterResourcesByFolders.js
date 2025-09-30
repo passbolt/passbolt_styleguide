@@ -428,18 +428,10 @@ class FilterResourcesByFolders extends React.Component {
    * @param {array} folders The list of folders to sort
    */
   sortFoldersAlphabetically(folders) {
-    folders.sort((folderA, folderB) => {
-      const folderAName = folderA.name.toLowerCase();
-      const folderBName = folderB.name.toLowerCase();
-
-      if (folderAName < folderBName) {
-        return -1;
-      } else if (folderAName > folderBName) {
-        return 1;
-      }
-
-      return 0;
-    });
+    folders.sort((folderA, folderB) => folderA.name.localeCompare(folderB.name, this.props.context.locale, {
+      numeric: true, // Sort numeric values
+      caseFirst: "upper"  // Uppercase letters sort before lowercase
+    }));
   }
 
   /**

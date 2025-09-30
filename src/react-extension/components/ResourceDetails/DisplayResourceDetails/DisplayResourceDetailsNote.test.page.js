@@ -84,10 +84,17 @@ export default class DisplayResourceDetailsNotePage {
   }
 
   /**
-   * Returns the content elements of description
+   * Returns the "show" button
    */
   get showButton() {
     return this._page.container.querySelector('.encrypted-description + button');
+  }
+
+  /**
+   * Returns the "hide" button
+   */
+  get hideButton() {
+    return this._page.container.querySelector('.description-content + button');
   }
 
   /**
