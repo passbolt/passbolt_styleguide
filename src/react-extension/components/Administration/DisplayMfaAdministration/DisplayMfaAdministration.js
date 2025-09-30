@@ -182,7 +182,7 @@ class DisplayMfaAdministration extends React.Component {
                       <p className="description">
                         <Trans>The Yubikey provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
                       </p>
-                      <div className={`input text required ${errors.yubikeyClientIdentifierError && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                      <div className={`input text required yubikey ${errors.yubikeyClientIdentifierError && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                         <label><Trans>Client identifier</Trans></label>
                         <input
                           id="yubikeyClientIdentifier" name="yubikeyClientIdentifier"
