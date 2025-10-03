@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 
 /**
  * The component display variations.
@@ -319,6 +320,9 @@ class ImportGpgKey extends Component {
               className={`button primary big full-width ${processingClassName}`}
               disabled={this.isProcessing}>
               <Trans>Next</Trans>
+              {this.isProcessing &&
+                <SpinnerSVG/>
+              }
             </button>
             {this.props.onSecondaryActionClick &&
             <button className="link" type="button" onClick={this.props.onSecondaryActionClick}>
