@@ -154,7 +154,7 @@ class DisplayResourcesListDetails extends React.Component {
     return (
       <div className="sidebar resource multiple-resources-selected">
         <div className="sidebar-title">
-          {this.props.t(`${count} resources selected`)}
+          {this.props.t("{{count}} resource selected", {count})}
         </div>
         <div className="sidebar-content">
           <ReactList

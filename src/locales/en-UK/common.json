@@ -28,6 +28,8 @@
   "{{count}} password is going to be exported._other": "{{count}} passwords are going to be exported.",
   "{{count}} personal resources_one": "one personal resource",
   "{{count}} personal resources_other": "{{count}} personal resources",
+  "{{count}} resource selected_one": "resource selected",
+  "{{count}} resource selected_other": "resources selected",
   "{{count}} selected_one": "{{count}} selected",
   "{{count}} selected_other": "{{count}} selected",
   "{{count}} shared resources_one": "one shared resource",
