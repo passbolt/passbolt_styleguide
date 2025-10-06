@@ -195,7 +195,7 @@ class ReviewAccountRecoveryRequest extends Component {
                       <span className="name"><Trans>requested an account recovery</Trans></span>
                     </div>
                     <div className="subinfo light">
-                      <span className="dateTimeAgo">{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</span>
+                      <span className="dateTimeAgo" title={this.date}>{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</span>
                       <span className="chips-group">
                         <span className={`chips user-status ${creatorStatus}`}>{this.props.t(creatorStatus)}</span>
                         <span className={`chips user-role ${this.creatorRole}`}>{this.creatorRole}</span>

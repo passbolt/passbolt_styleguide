@@ -219,7 +219,7 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
                 {this.isAccountRecoveryPending &&
               <span className="pending-request-status value"><Trans>To review</Trans></span>
                 }
-                <span className="previous-request value">{this.previousAccountRecoveryRequest ? `${this.capitalizeFirstLetter(this.previousAccountRecoveryRequest.status)} ${formatDateTimeAgo(this.previousAccountRecoveryRequest.created, this.props.t, this.props.context.locale)}` : "Never"}</span>
+                <span className="previous-request value" title={this.previousAccountRecoveryRequest ? this.previousAccountRecoveryRequest.created : "Never"}>{this.previousAccountRecoveryRequest ? `${this.capitalizeFirstLetter(this.previousAccountRecoveryRequest.status)} ${formatDateTimeAgo(this.previousAccountRecoveryRequest.created, this.props.t, this.props.context.locale)}` : "Never"}</span>
                 <span className="requests-count value">{this.state.userRequests.length}</span>
               </div>
             </div>
