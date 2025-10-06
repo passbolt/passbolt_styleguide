@@ -21,6 +21,7 @@ import {
 } from "../../constants/inputs.const";
 import ResourceViewModel from "./ResourceViewModel";
 import {RESOURCE_TYPE_V5_DEFAULT_SLUG} from "../entity/resourceType/resourceTypeSchemasDefinition";
+import {SECRET_DATA_OBJECT_TYPE} from "../entity/secretData/secretDataEntity";
 
 /**
  * ResourceV5Default ViewModel
@@ -197,6 +198,7 @@ class ResourceV5DefaultViewModel extends ResourceViewModel {
       password: this.password,
       description: this.description,
       resource_type_id: this.resource_type_id,
+      object_type: SECRET_DATA_OBJECT_TYPE,
     };
   }
 

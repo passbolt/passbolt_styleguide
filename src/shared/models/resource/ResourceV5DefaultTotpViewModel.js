@@ -23,6 +23,7 @@ import ResourceViewModel from "./ResourceViewModel";
 import {
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG
 } from "../entity/resourceType/resourceTypeSchemasDefinition";
+import {SECRET_DATA_OBJECT_TYPE} from "../entity/secretData/secretDataEntity";
 
 /**
  * ResourceV5DefaultTotp ViewModel
@@ -205,6 +206,7 @@ class ResourceV5DefaultTotpViewModel extends ResourceViewModel {
       description: this.description,
       totp: this.totp,
       resource_type_id: this.resource_type_id,
+      object_type: SECRET_DATA_OBJECT_TYPE,
     };
   }
 
