@@ -51,7 +51,7 @@ describe("DisplayPasswordPoliciesAdministrationTeasing", () => {
     expect(page.title).toBe("Password Policy");
     expect(page.passwordPolicyFirstLine).toBe("Ensure strong and consistent passwords entropy across your organisation.");
     expect(page.upgradeButton).toBeTruthy();
-    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/contact/sales?utm_campaign=21060976-CE%20to%20Pro&utm_source=product");
+    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/ce-to-pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product");
 
     const actualDescriptions = Array.from(page.passwordPoliciesDescription).map(li => li.textContent.trim());
     expect(actualDescriptions).toEqual(expectedPasswordPoliciesDescriptions);

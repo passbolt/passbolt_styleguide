@@ -34,10 +34,17 @@ export default class ConfirmMigrateMetadataDialogPage {
   }
 
   /**
+   * Returns the confirm migrate metadata element
+   */
+  get confirmMigrateMetadata() {
+    return this._page.container.querySelector('.confirm-migrate-metadata-dialog');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
-    return this.accountRecoverySettings !== null;
+    return this.confirmMigrateMetadata !== null;
   }
 
   /**

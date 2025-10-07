@@ -54,12 +54,7 @@ class MockTranslationProvider extends Component {
           "de-DE": {
             common: deTranslations
           },
-          /*
-           * With i18next non-canonical code such as en-UK are not supported out of the box.
-           * This trick fix temporarily the issue for the test but would require a definitive change.
-           * "en-UK": {
-           */
-          "en-GB": {
+          "en-UK": {
             common: enTranslations
           },
           "es-ES": {

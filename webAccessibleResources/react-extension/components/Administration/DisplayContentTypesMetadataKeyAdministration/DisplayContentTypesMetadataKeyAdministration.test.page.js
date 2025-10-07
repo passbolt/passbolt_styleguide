@@ -147,6 +147,22 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
   }
 
   /**
+   * Returns the rotate key button
+   * @returns {HTMLElement}
+   */
+  get rotateKeyButton() {
+    return this.metadataActiveKeysWrapper.querySelector(".table-button button");
+  }
+
+  /**
+   * Resume the rotate key button
+   * @returns {HTMLElement}
+   */
+  get resumeRotateKeyButton() {
+    return this.metadataExpiredKeysWrapper.querySelector(".table-button button");
+  }
+
+  /**
    * Allow or disallow v4 resources creation
    * @returns {Promise<void>}
    */
@@ -173,6 +189,26 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
   async clickOnGenerateKeyButton() {
     const leftClick = {button: 0};
     fireEvent.click(this.generateKeyButton, leftClick);
+    await waitFor(() => {});
+  }
+
+  /**
+   * Rotate a new shared metadata key
+   * @returns {Promise<void>}
+   */
+  async clickOnRotateKeyButton() {
+    const leftClick = {button: 0};
+    fireEvent.click(this.rotateKeyButton, leftClick);
+    await waitFor(() => {});
+  }
+
+  /**
+   * Resume rotate a new shared metadata key
+   * @returns {Promise<void>}
+   */
+  async clickOnResumeRotateKeyButton() {
+    const leftClick = {button: 0};
+    fireEvent.click(this.resumeRotateKeyButton, leftClick);
     await waitFor(() => {});
   }
 

@@ -25,6 +25,34 @@ const ALLOWED_FOREIGN_MODELS = [
 
 class SessionKeyEntity extends EntityV2 {
   /**
+   * @inheritDoc
+   * Marshall the session_key to support with Android & iOS format prior to v2.3.1.
+   * Marshall the modified to support Android format prior to v2.3.1.
+   */
+  marshall() {
+    /*
+     * Normalize session_key: accept mobile keys without an algorithm prefix (iOS/Android). If the prefix is missing,
+     * add it before validation the prefixed value.
+     * Example in:  "536B8D0B..."
+     * Example out: "9:536B8D0B..."
+     */
+    if (typeof(this._props.session_key) === "string" && /^[0-9A-F]{64}$/.test(this._props.session_key)) {
+      this._props.session_key = `9:${this._props.session_key}`;
+    }
+    /*
+     * Normalize modified timestamp, accept Android timestamps that include a zone ID suffix like "[Europe/Paris]".
+     * Parse them as a strict ISO-8601 offset datetime without the zone ID.
+     * Example in:  "2025-09-17T12:15:33.618450+02:00[Europe/Paris]"
+     * Example out: "2025-09-17T12:15:33.618450+02:00"
+     */
+    if (typeof(this._props.modified) === "string") {
+      this._props.modified = this._props.modified.replace(/\[.*\]$/, "");
+    }
+
+    super.marshall();
+  }
+
+  /**
    * Get session private key entity schema
    * @returns {Object} schema
    */

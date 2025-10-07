@@ -39,7 +39,7 @@ class DisplayMfaPolicyAdministrationTeasing extends React.Component {
                 <li><RedCheck/><Trans>Flexible configuration based on user roles or access levels.</Trans></li>
               </ul>
               <div>
-                <a className="button primary" href="https://www.passbolt.com/contact/pro/enterprise" target="_blank" rel="noopener noreferrer"><Trans>Upgrade to Passbolt Pro</Trans></a>
+                <a className="button primary" href="https://www.passbolt.com/ce-to-pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product" target="_blank" rel="noopener noreferrer"><Trans>Upgrade to Passbolt Pro</Trans></a>
               </div>
             </div>
           </div>

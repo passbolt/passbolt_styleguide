@@ -111,5 +111,29 @@ export const foldersMock = [
       aro_foreign_key: "f848277c-5398-58f8-a82a-72397af2d450",
     }),
     folder_parent_id: "3ed65efd-7c41-5906-9c02-71e2d95951da",
-  })
+  }),
+  defaultFolderDto({
+    id: "9e03fd73-04c0-5514-95fa-1a6cf2c7c094",
+    name: "1. Test",
+    permission: readFolderPermissionDto({
+      aco_foreign_key: "9e03fd73-04c0-5514-95fa-1a6cf2c7c094",
+      aro_foreign_key: "f848277c-5398-58f8-a82a-72397af2d450",
+    }),
+  }),
+  defaultFolderDto({
+    id: "9e03fd73-04c0-5514-95fa-1a6cf2c7c095",
+    name: "10. Test",
+    permission: readFolderPermissionDto({
+      aco_foreign_key: "9e03fd73-04c0-5514-95fa-1a6cf2c7c095",
+      aro_foreign_key: "f848277c-5398-58f8-a82a-72397af2d450",
+    }),
+  }),
+  defaultFolderDto({
+    id: "9e03fd73-04c0-5514-95fa-1a6cf2c7c096",
+    name: "2. Test",
+    permission: readFolderPermissionDto({
+      aco_foreign_key: "9e03fd73-04c0-5514-95fa-1a6cf2c7c096",
+      aro_foreign_key: "f848277c-5398-58f8-a82a-72397af2d450",
+    }),
+  }),
 ];

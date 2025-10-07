@@ -32,6 +32,7 @@ import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/
 import {
   defaultMetadataTypesSettingsV6Dto
 } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import {SECRET_DATA_OBJECT_TYPE} from '../../../shared/models/entity/secretData/secretDataEntity';
 
 // Reset the modules before each test.
 beforeEach(() => {
@@ -187,6 +188,7 @@ describe("ResourceCreatePage", () => {
         password: "P4ssb0ltP4ssb0lt",
         description: "",
         resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+        object_type: SECRET_DATA_OBJECT_TYPE,
       };
       const metadataTypeSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto());
       const props = defaultProps({metadataTypeSettings});

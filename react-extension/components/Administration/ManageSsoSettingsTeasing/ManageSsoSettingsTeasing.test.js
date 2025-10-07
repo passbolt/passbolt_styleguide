@@ -50,7 +50,7 @@ describe("ManageSsoSettingsTeasing", () => {
     expect(page.title).toBe("Single Sign-On");
     expect(page.ssoPageFirstLine).toBe("Simplify secure access through integration with identity providers.");
     expect(page.upgradeButton).toBeTruthy();
-    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/contact/sales?utm_campaign=21060976-CE%20to%20Pro&utm_source=product");
+    expect(page.upgradeButton.getAttribute("href")).toBe("https://www.passbolt.com/ce-to-pro?utm_campaign=21060976-CE%20to%20Pro&utm_source=product");
 
     const actualDescriptions = Array.from(page.ssoSettingsDescription).map(li => li.textContent.trim());
     expect(actualDescriptions).toEqual(expectedSsoDescriptions);

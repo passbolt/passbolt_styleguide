@@ -26,10 +26,15 @@ import {
 } from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {
-  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_SLUG
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import CaretLeftSVG from "../../../img/svg/caret_left.svg";
 import CloseSVG from "../../../img/svg/close.svg";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {withMetadataTypesSettingsLocalStorage} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import ResourceMetadataEntity from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity";
+import {SECRET_DATA_OBJECT_TYPE} from "../../../shared/models/entity/secretData/secretDataEntity";
 
 /**
  * The component display error variations.
@@ -95,7 +100,10 @@ class ConfirmCreatePage extends React.PureComponent {
    * @returns {Promise<void>}
    */
   async save() {
-    const resourceTypeId = this.props.resourceTypes?.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG)?.id;
+    const isV5 = this.props.metadataTypeSettings.isDefaultResourceTypeV5;
+    const resourceTypeId = isV5
+      ? this.props.resourceTypes?.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG)?.id
+      : this.props.resourceTypes?.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG)?.id;
 
     const preparedResource = this.props.prepareResourceContext.consumePreparedResource();
     const resourceDto = {
@@ -112,6 +120,11 @@ class ConfirmCreatePage extends React.PureComponent {
       password: preparedResource.password,
       description: ""
     };
+
+    if (isV5) {
+      resourceDto.metadata.object_type = ResourceMetadataEntity.METADATA_OBJECT_TYPE;
+      secretDto.object_type = SECRET_DATA_OBJECT_TYPE;
+    }
 
     this.setState({processing: true});
     try {
@@ -204,6 +217,7 @@ ConfirmCreatePage.propTypes = {
   prepareResourceContext: PropTypes.any, // The password generator context
   passwordExpiryContext: PropTypes.object, // The password expiry context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   // Match, location and history props are injected by the withRouter decoration call.
   match: PropTypes.object,
   location: PropTypes.object,
@@ -211,4 +225,4 @@ ConfirmCreatePage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withResourceTypesLocalStorage(withPrepareResourceContext(withPasswordExpiry(withPasswordPolicies(withTranslation('common')(ConfirmCreatePage)))))));
+export default withAppContext(withRouter(withResourceTypesLocalStorage(withMetadataTypesSettingsLocalStorage(withPrepareResourceContext(withPasswordExpiry(withPasswordPolicies(withTranslation('common')(ConfirmCreatePage))))))));

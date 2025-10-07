@@ -722,7 +722,6 @@ h3 {
 p {
   font-size: 1.5rem;
   line-height: 2rem;
-  max-width: 64rem;
   margin: 0;
   overflow-wrap: break-word;
 }
@@ -1596,7 +1595,6 @@ textarea {
   font-weight: 400;
   line-height: 2rem;
   width: 100%;
-  max-width: 64rem;
   margin-bottom: 1.2rem;
   padding: 0.8rem var(--Search-field-padding);
   border: none;
@@ -3287,6 +3285,8 @@ html {
   align-items: flex-start;
   align-self: stretch;
   flex: 1;
+  /* Styles for Resizable Sidebars - Starts here */
+  /* Styles for Resizable Sidebars - Ends here */
 }
 .page .app .panel.main {
   display: flex;
@@ -3363,6 +3363,10 @@ html {
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--Workspace-Elevator) transparent;
+}
+.page .app .panel.main .resizable-sidebar .panel.left {
+  width: 100%;
+  max-width: 100%;
 }
 .page .app .panel.main .panel.middle {
   display: flex;
@@ -3465,6 +3469,62 @@ html {
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
+}
+.page .app .resizable-sidebar {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+.page .app .resizable-sidebar.leftSideBar + .panel.middle .middle-right {
+  gap: 0;
+}
+.page .app .resizable-sidebar.leftSideBar + .panel.middle .middle-right .gutter + .panel.aside {
+  width: 97%;
+  max-width: 100%;
+  min-width: 90%;
+}
+.page .app .resizable-sidebar.leftSideBar + .panel.middle .header {
+  justify-content: space-between;
+  gap: 0.2rem;
+}
+.page .app .resizable-sidebar.resource-workspace.leftSideBar {
+  min-width: 26rem;
+  max-width: 23.5%;
+}
+.page .app .resizable-sidebar.resource-workspace.rightSideBar {
+  min-width: 25%;
+  max-width: 35%;
+}
+.page .app .resizable-sidebar.users-workspace.leftSideBar {
+  min-width: 29rem;
+  max-width: 24%;
+}
+.page .app .resizable-sidebar.users-workspace.rightSideBar {
+  min-width: 25%;
+  max-width: 35%;
+}
+.page .app .resizable-sidebar .gutter {
+  width: 1.6rem;
+  background-color: inherit;
+  cursor: col-resize;
+  height: 100%;
+}
+.page .app .resizable-sidebar .sidebar-content {
+  flex: 1;
+  overflow: auto;
+}
+.page .app .resizable-sidebar .panel.left.resource-filter {
+  max-width: 100%;
+  width: 100%;
+  min-width: 90%;
+}
+.page .app .resizable-sidebar.resource-workspace + .panel.middle .header .header-right {
+  min-width: auto;
+  max-width: 35%;
+}
+.page .app .resizable-sidebar.users-workspace + .panel.middle .header .header-right {
+  min-width: auto;
+  max-width: 35%;
 }
 /*
 	Grid Layout
@@ -8562,10 +8622,16 @@ svg .section-card .card .title:first-child {
 }
 .password-expiry-dialog .radiolist-alt .radio label .date-wrapper .button-inline {
   width: 100%;
+  display: flex;
 }
-.password-expiry-dialog .radiolist-alt .radio label .date-wrapper .svg-icon svg {
+.password-expiry-dialog .radiolist-alt .radio label .date-wrapper .button-inline svg {
+  position: absolute;
+  right: 1.5rem;
+  top: 0.9rem;
   height: auto;
   width: auto;
+  pointer-events: none;
+  cursor: pointer;
 }
 .password-expiry-dialog .radiolist-alt .radio label span.error-message {
   margin: 0.4rem 0 0;
@@ -8722,6 +8788,21 @@ svg .section-card .card .title:first-child {
 }
 .confirm-metadata-key-dialog .form-content .accordion-content .information-details .info-data .fingerprint .fingerprint-line {
   font-size: 1.6rem;
+}
+.confirm-metadata-key-rotation-dialog .form-content .metadata-key-info {
+  border-radius: 0.4rem;
+  background-color: var(--Action-button-Action-button-background-2);
+  padding: 1.6rem;
+  margin-top: 1.6rem;
+  margin-right: 0;
+}
+.confirm-metadata-key-rotation-dialog .form-content .metadata-key-info table {
+  margin-top: 0;
+  border-spacing: 0.8rem;
+  width: 100%;
+}
+.confirm-metadata-key-rotation-dialog .form-content .metadata-key-info table td {
+  line-height: normal;
 }
 /* Create and edit resource dialog */
 .create-resource,
@@ -10365,25 +10446,25 @@ svg .section-card .card .title:first-child {
 .page.administration .app .panel.main .panel.middle .input.toggle-switch .toggle-switch-checkbox:focus + label {
   background: none;
 }
-.page.administration .app .panel.main .panel.middle .metadata-key-info {
-  border: 1px solid #E0E0E0;
-  border-radius: 3px;
-  background-color: #F8F8F8;
-  padding: 1.6rem;
-  margin-top: 1.6rem;
-  margin-right: 0;
-}
-.page.administration .app .panel.main .panel.middle .metadata-key-info.error {
+.page.administration .app .panel.main .panel.middle .metadata-key-info.error table {
   border: 1px solid #D40101;
   color: #D40101;
 }
 .page.administration .app .panel.main .panel.middle .metadata-key-info.error .empty-value {
   color: #000000;
 }
+.page.administration .app .panel.main .panel.middle .metadata-key-info #metadata-active-keys {
+  margin-bottom: 1.6rem;
+}
 .page.administration .app .panel.main .panel.middle .metadata-key-info table {
-  margin-top: 0;
+  table-layout: fixed;
   border-spacing: 0.8rem;
   width: 100%;
+  border: 1px solid #E0E0E0;
+  border-radius: 3px;
+  background-color: #F8F8F8;
+  padding: 1.6rem;
+  margin-right: 0;
 }
 .page.administration .app .panel.main .panel.middle .metadata-key-info table tr.error-message {
   color: #D40101;
@@ -10716,7 +10797,6 @@ svg .section-card .card .title:first-child {
   margin-right: 0.2rem;
 }
 .password-policies-settings .button-group--nowrap {
-  width: 60%;
   margin-bottom: 1.2rem;
 }
 .password-policies-settings .default-provider {
@@ -10763,6 +10843,7 @@ svg .section-card .card .title:first-child {
 #password-expiry-form-advanced,
 #password-expiry-settings-form {
   margin: 0;
+  width: 100%;
 }
 #password-expiry-form-advanced .radiolist-alt .input.radio,
 #password-expiry-settings-form .radiolist-alt .input.radio {

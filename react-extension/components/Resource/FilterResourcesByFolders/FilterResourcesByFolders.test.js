@@ -57,6 +57,7 @@ describe("See Folders", () => {
     });
 
     it('As LU I should collapse the folder tree area', async() => {
+      expect.assertions(5);
       expect(page.filterResourcesByFolders.exists()).toBeTruthy();
       expect(page.filterResourcesByFolders.displayFolderList).toBeTruthy();
       await page.filterResourcesByFolders.toggleExpanded();
@@ -67,49 +68,59 @@ describe("See Folders", () => {
     });
 
     it('As LU I should see all folders name', async() => {
+      expect.assertions(12);
       expect(page.filterResourcesByFolders.exists()).toBeTruthy();
       expect(page.filterResourcesByFoldersItem.exists()).toBeTruthy();
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
-      expect(page.filterResourcesByFoldersItem.count).toBe(5);
-      expect(page.filterResourcesByFoldersItem.name(1)).toBe("Accounting");
-      expect(page.filterResourcesByFoldersItem.name(2)).toBe("ParentCertificates");
-      expect(page.filterResourcesByFoldersItem.name(3)).toBe("Certificates");
-      expect(page.filterResourcesByFoldersItem.name(4)).toBe("ChildCertificates1");
-      expect(page.filterResourcesByFoldersItem.name(5)).toBe("ChildCertificates2");
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(6);
+      expect(page.filterResourcesByFoldersItem.count).toBe(8);
+      expect(page.filterResourcesByFoldersItem.name(1)).toBe("1. Test");
+      expect(page.filterResourcesByFoldersItem.name(2)).toBe("2. Test");
+      expect(page.filterResourcesByFoldersItem.name(3)).toBe("10. Test");
+      expect(page.filterResourcesByFoldersItem.name(4)).toBe("Accounting");
+      expect(page.filterResourcesByFoldersItem.name(5)).toBe("ParentCertificates");
+      expect(page.filterResourcesByFoldersItem.name(6)).toBe("Certificates");
+      expect(page.filterResourcesByFoldersItem.name(7)).toBe("ChildCertificates1");
+      expect(page.filterResourcesByFoldersItem.name(8)).toBe("ChildCertificates2");
       expect(page.filterResourcesByFoldersItem.selectedFolderName).toBe("Accounting");
     });
 
     it('As LU I should be able to close folder to hide the child folders', async() => {
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
+      expect.assertions(2);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(6);
+      expect(page.filterResourcesByFoldersItem.count).toBe(8);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
       expect(page.filterResourcesByFoldersItem.count).toBe(5);
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
-      expect(page.filterResourcesByFoldersItem.count).toBe(2);
     });
 
     it('As LU I should be able to filter by root folder', async() => {
+      expect.assertions(1);
       await page.title.click();
       expect(props.history.push).toHaveBeenCalledWith(`/app/passwords`, {filter: {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER}});
     });
 
     it('As LU I should be able to open a contextual menu for root folder with the more button', async() => {
+      expect.assertions(1);
       await page.filterResourcesByFolders.openContextualMenuWithButton;
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByRootFolderContextualMenu, {className: "right", left: 0, top: 19, onBeforeHide: expect.any(Function)});
     });
 
     it('As LU I should be able to open a contextual menu for root folder with right click', async() => {
+      expect.assertions(1);
       await page.filterResourcesByFolders.openContextualMenuWithRightClick;
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByRootFolderContextualMenu, {});
     });
 
     it('As LU I should be able to open a contextual menu for a folder with right click on a child folder', async() => {
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
-      await page.filterResourcesByFoldersItem.openContextualMenuWithRightClick(3);
+      expect.assertions(1);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
+      await page.filterResourcesByFoldersItem.openContextualMenuWithRightClick(6);
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {folder: foldersMock[2]});
     });
 
     it('As LU I should be able to drag and drop a folder on the root folder', async() => {
+      expect.assertions(3);
       await page.filterResourcesByFoldersItem.dragStartOnFolder(1);
       await page.filterResourcesByFoldersItem.dragEndOnFolder(1);
       await page.filterResourcesByFolders.onDragOver;
@@ -123,10 +134,10 @@ describe("See Folders", () => {
 
     it('As LU I should be able to drag and drop a folder on another folder', async() => {
       expect.assertions(2);
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
-      await page.filterResourcesByFoldersItem.dragStartOnFolder(2);
-      await page.filterResourcesByFoldersItem.dragEndOnFolder(2);
-      await page.filterResourcesByFoldersItem.onDropFolder(1);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(5);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(5);
+      await page.filterResourcesByFoldersItem.onDropFolder(4);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", foldersMock[0].id);
     });
@@ -139,10 +150,10 @@ describe("See Folders", () => {
 
       const page = new FilterResourcesByFoldersPage(props);
 
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
-      await page.filterResourcesByFoldersItem.dragStartOnFolder(2);
-      await page.filterResourcesByFoldersItem.dragEndOnFolder(2);
-      await page.filterResourcesByFoldersItem.onDropFolder(1);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(5);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(5);
+      await page.filterResourcesByFoldersItem.onDropFolder(4);
 
       // Throw dialog general error message
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", foldersMock[0].id);
@@ -150,11 +161,13 @@ describe("See Folders", () => {
     });
 
     it('As LU I should be able to open and close folder to see or not the child folders', async() => {
-      expect(page.filterResourcesByFoldersItem.count).toBe(2);
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
-      expect(page.filterResourcesByFoldersItem.count).toBe(3);
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
-      expect(page.filterResourcesByFoldersItem.count).toBe(2);
+      expect.assertions(3);
+
+      expect(page.filterResourcesByFoldersItem.count).toBe(5);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
+      expect(page.filterResourcesByFoldersItem.count).toBe(6);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
+      expect(page.filterResourcesByFoldersItem.count).toBe(5);
     });
   });
 
@@ -209,14 +222,14 @@ describe("See Folders", () => {
 
       const page = new FilterResourcesByFoldersPage(props);
 
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
-      await page.filterResourcesByFoldersItem.dragStartOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragEndOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
-      await page.filterResourcesByFoldersItem.onDropFolder(4);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(6);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(7);
+      await page.filterResourcesByFoldersItem.onDropFolder(7);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
     });
@@ -239,14 +252,14 @@ describe("See Folders", () => {
 
       const page = new FilterResourcesByFoldersPage(props);
 
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
-      await page.filterResourcesByFoldersItem.dragStartOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragEndOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
-      await page.filterResourcesByFoldersItem.onDropFolder(4);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(6);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(7);
+      await page.filterResourcesByFoldersItem.onDropFolder(7);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
@@ -259,14 +272,14 @@ describe("See Folders", () => {
 
       const page = new FilterResourcesByFoldersPage(props);
 
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
-      await page.filterResourcesByFoldersItem.dragStartOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragEndOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
-      await page.filterResourcesByFoldersItem.onDropFolder(4);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(6);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(7);
+      await page.filterResourcesByFoldersItem.onDropFolder(7);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
@@ -292,14 +305,14 @@ describe("See Folders", () => {
 
       const page = new FilterResourcesByFoldersPage(props);
 
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
-      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(3);
-      await page.filterResourcesByFoldersItem.dragStartOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragEndOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(4);
-      await page.filterResourcesByFoldersItem.dragOverOnFolder(4);
-      await page.filterResourcesByFoldersItem.onDropFolder(4);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(6);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragLeaveOnFolder(7);
+      await page.filterResourcesByFoldersItem.dragOverOnFolder(7);
+      await page.filterResourcesByFoldersItem.onDropFolder(7);
 
       // Throw dialog general error message
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.move-by-ids", resources.map(resource => resource.id), foldersMock[4].id);
@@ -313,13 +326,13 @@ describe("See Folders", () => {
         filter: {
           type: ResourceWorkspaceFilterTypes.FOLDER,
           payload: {
-            folder: foldersMock[2]
+            folder: foldersMock[5]
           }
         },
       }),
       match: {
         params: {
-          filterByFolderId: foldersMock[2].id
+          filterByFolderId: foldersMock[5].id
         }
       }
     });
@@ -333,12 +346,14 @@ describe("See Folders", () => {
     });
 
     it('As LU I should see selected folder name with parents open', () => {
-      expect.assertions(5);
-      expect(page.filterResourcesByFoldersItem.count).toBe(3);
-      expect(page.filterResourcesByFoldersItem.name(1)).toBe("Accounting");
-      expect(page.filterResourcesByFoldersItem.name(2)).toBe("ParentCertificates");
-      expect(page.filterResourcesByFoldersItem.name(3)).toBe("Certificates");
-      expect(page.filterResourcesByFoldersItem.selectedFolderName).toBe("Certificates");
+      expect.assertions(7);
+      expect(page.filterResourcesByFoldersItem.count).toBe(5);
+      expect(page.filterResourcesByFoldersItem.name(1)).toBe("1. Test");
+      expect(page.filterResourcesByFoldersItem.name(2)).toBe("2. Test");
+      expect(page.filterResourcesByFoldersItem.name(3)).toBe("10. Test");
+      expect(page.filterResourcesByFoldersItem.name(4)).toBe("Accounting");
+      expect(page.filterResourcesByFoldersItem.name(5)).toBe("ParentCertificates");
+      expect(page.filterResourcesByFoldersItem.selectedFolderName).toBe("1. Test");
     });
   });
 
