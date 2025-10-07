@@ -21,6 +21,7 @@ import {DateTime} from "luxon";
 import {defaultResourceDto} from "../entity/resource/resourceEntity.test.data";
 import ResourceViewModel from "./ResourceViewModel";
 import {defaultTotpViewModelDto} from "../entity/totp/totpDto.test.data";
+import {SECRET_DATA_OBJECT_TYPE} from "../entity/secretData/secretDataEntity";
 
 describe("ResourceV5DefaultTotpViewModel", () => {
   describe("::createFromEntity", () => {
@@ -189,7 +190,9 @@ describe("ResourceV5DefaultTotpViewModel", () => {
         password: "this is the expected password",
         description: "The description",
         totp: expectedTotp,
-        resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP};
+        resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP,
+        object_type: SECRET_DATA_OBJECT_TYPE,
+      };
 
       const viewModel = new ResourceV5DefaultTotpViewModel(expectedSecret);
       const secretDto = viewModel.toSecretDto();

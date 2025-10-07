@@ -18,7 +18,6 @@
 import EnterNameFormPage from "./EnterNameForm.test.page";
 import {defaultProps} from "./EnterNameForm.test.data";
 import {waitFor} from "@testing-library/react";
-import fetchMock from "fetch-mock-jest";
 
 beforeEach(() => {
   jest.resetModules();
@@ -34,7 +33,7 @@ describe("As AN I should see the Enter Name Form Page", () => {
      * I should see the enter name form
      */
     beforeEach(() => {
-      fetchMock.reset();
+      jest.resetAllMocks();
       page = new EnterNameFormPage(props);
     });
 

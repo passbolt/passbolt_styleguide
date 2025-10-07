@@ -17,6 +17,7 @@ import MetadataKeysServiceWorkerService, {
   METADATA_KEYS_CREATE_EVENT,
   METADATA_KEYS_FIND_ALL_EVENT,
   METADATA_KEYS_GENERATE_EVENT,
+  METADATA_KEYS_RESUME_ROTATE_EVENT, METADATA_KEYS_ROTATE_EVENT,
   METADATA_SHARE_METADATA_PRIVATE_KEYS_EVENT
 } from "./metadataKeysServiceWorkerService";
 import {defaultMetadataKeysDtos} from "../../../models/entity/metadata/metadataKeysCollection.test.data";
@@ -106,6 +107,42 @@ describe("MetadataKeysServiceWorkerService", () => {
       await service.share(userId);
 
       expect(port.request).toHaveBeenCalledWith(METADATA_SHARE_METADATA_PRIVATE_KEYS_EVENT, userId);
+    });
+  });
+
+  describe("::rotate", () => {
+    it("requests the service worker with the expected event.", async() => {
+      expect.assertions(1);
+
+      const dto = {
+        public_key: {
+          armored_key: pgpKeys.eddsa_ed25519.public,
+        },
+        private_key: {
+          armored_key: pgpKeys.eddsa_ed25519.private,
+        },
+      };
+      const generatedKeyPair = new ExternalGpgKeyPairEntity(dto);
+      const currentMetadataKeyId = uuidv4();
+
+      jest.spyOn(port, "request").mockReturnValue(() => {});
+
+      await service.rotate(generatedKeyPair, currentMetadataKeyId);
+
+      expect(port.request).toHaveBeenCalledWith(METADATA_KEYS_ROTATE_EVENT, generatedKeyPair, currentMetadataKeyId);
+    });
+  });
+
+  describe("::resumeRotation", () => {
+    it("requests the service worker with the expected event.", async() => {
+      expect.assertions(1);
+
+      jest.spyOn(port, "request").mockReturnValue(() => {});
+      const metadataKeyId = uuidv4();
+
+      await service.resumeRotation(metadataKeyId);
+
+      expect(port.request).toHaveBeenCalledWith(METADATA_KEYS_RESUME_ROTATE_EVENT, metadataKeyId);
     });
   });
 });

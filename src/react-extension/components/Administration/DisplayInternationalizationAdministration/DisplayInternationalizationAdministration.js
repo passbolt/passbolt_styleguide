@@ -95,7 +95,7 @@ class DisplayInternationalizationAdministration extends React.Component {
             <form className="form">
               <div className="select-wrapper input">
                 <label htmlFor="app-locale-input"><Trans>Language</Trans></label>
-                <Select className="medium" id="locale-input" name="locale" items={this.supportedLocales} value={lang} onChange={this.handleInputChange}/>
+                <Select id="locale-input" name="locale" items={this.supportedLocales} value={lang} onChange={this.handleInputChange}/>
                 <p><Trans>The default language of the organisation.</Trans></p>
               </div>
             </form>

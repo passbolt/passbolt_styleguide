@@ -58,6 +58,11 @@ describe("ResourceTypesFormEntity", () => {
       assertEntityProperty.required(ResourceTypesFormEntity, "totp_v5");
     });
 
+    it("validates note_v5 property", () => {
+      assertEntityProperty.boolean(ResourceTypesFormEntity, "note_v5");
+      assertEntityProperty.required(ResourceTypesFormEntity, "note_v5");
+    });
+
     it("validates password_v4_count property", () => {
       assertEntityProperty.integer(ResourceTypesFormEntity, "password_v4_count");
       assertEntityProperty.required(ResourceTypesFormEntity, "password_v4_count");
@@ -76,6 +81,11 @@ describe("ResourceTypesFormEntity", () => {
     it("validates totp_v5_count property", () => {
       assertEntityProperty.integer(ResourceTypesFormEntity, "totp_v5_count");
       assertEntityProperty.required(ResourceTypesFormEntity, "totp_v5_count");
+    });
+
+    it("validates note_v5_count property", () => {
+      assertEntityProperty.integer(ResourceTypesFormEntity, "note_v5_count");
+      assertEntityProperty.required(ResourceTypesFormEntity, "note_v5_count");
     });
 
     it("validates has_v4_resource_types property", () => {
@@ -118,11 +128,13 @@ describe("ResourceTypesFormEntity", () => {
       expectedError.addError("password_v5", "has_content", "One (or more) resource type v4 having a totp is deleted but its resources_count is not 0.");
       expectedError.addError("totp_v4", "has_content", "One (or more) resource type v5 having a password is deleted but its resources_count is not 0.");
       expectedError.addError("totp_v5", "has_content", "One (or more) resource type v5 having a totp is deleted but its resources_count is not 0.");
+      expectedError.addError("note_v5", "has_content", "One (or more) resource type v5 having a note is deleted but its resources_count is not 0.");
 
       expectedError.addError("password_v4", "minimum_requirement", "At least one content type should be allowed");
       expectedError.addError("password_v5", "minimum_requirement", "At least one content type should be allowed");
       expectedError.addError("totp_v4", "minimum_requirement", "At least one content type should be allowed");
       expectedError.addError("totp_v5", "has_cominimum_requirementntent", "At least one content type should be allowed");
+      expectedError.addError("note_v5", "has_cominimum_requirementntent", "At least one content type should be allowed");
 
       const dto = withDeletedResourceTypesHavingResources();
       expect(() => new ResourceTypesFormEntity(dto)).toThrow(expectedError);
@@ -173,9 +185,11 @@ describe("ResourceTypesFormEntity", () => {
       expectedError.addError("totp_v4", "is_creation_alowed", "Creation of resource type v4 is allowed but all resource types having totp are deleted.");
       expectedError.addError("password_v5", "is_creation_alowed", "Creation of resource type v5 is allowed but all resource types having passwords are deleted.");
       expectedError.addError("totp_v5", "is_creation_alowed", "Creation of resource type v5 is allowed but all resource types having totp are deleted.");
+      expectedError.addError("note_v5", "is_creation_alowed", "Creation of resource type v5 is allowed but all resource types having note are deleted.");
 
       expectedError.addError("password_v5", "active_metadata_key", "No active metadata key defined.");
       expectedError.addError("totp_v5", "active_metadata_key", "No active metadata key defined.");
+      expectedError.addError("note_v5", "active_metadata_key", "No active metadata key defined.");
 
       const metadataTypesSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto({allow_creation_of_v4_resources: true}));
       const metadataKeysCollection = new MetadataKeysCollection([]);
@@ -210,6 +224,7 @@ describe("ResourceTypesFormEntity", () => {
       const expectedError = new EntityValidationError();
       expectedError.addError("totp_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
       expectedError.addError("password_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
+      expectedError.addError("note_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
 
       const metadataTypesSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto({allow_creation_of_v5_resources: false, default_resource_types: "v4", allow_creation_of_v4_resources: true}));
       const metadataKeysCollection = new MetadataKeysCollection([]);
@@ -237,7 +252,7 @@ describe("ResourceTypesFormEntity", () => {
 
   describe("::createFormResourcesTypesCollection", () => {
     it("should create a ResourceTypesFormEntity for a ResourceTypesCollection", () => {
-      expect.assertions(10);
+      expect.assertions(12);
 
       const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionWithCountDto());
       const resourceTypesFormEntity = ResourceTypesFormEntity.createFormResourcesTypesCollection(resourceTypes);
@@ -248,10 +263,12 @@ describe("ResourceTypesFormEntity", () => {
       expect(resourceTypesFormEntity._props.password_v5).toStrictEqual(true);
       expect(resourceTypesFormEntity._props.totp_v4).toStrictEqual(true);
       expect(resourceTypesFormEntity._props.totp_v5).toStrictEqual(true);
+      expect(resourceTypesFormEntity._props.note_v5).toStrictEqual(true);
       expect(resourceTypesFormEntity._props.password_v4_count).toStrictEqual(18);
       expect(resourceTypesFormEntity._props.password_v5_count).toStrictEqual(14);
       expect(resourceTypesFormEntity._props.totp_v4_count).toStrictEqual(15);
       expect(resourceTypesFormEntity._props.totp_v5_count).toStrictEqual(3);
+      expect(resourceTypesFormEntity._props.note_v5_count).toStrictEqual(1);
     });
   });
 });

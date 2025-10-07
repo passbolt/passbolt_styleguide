@@ -35,6 +35,8 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import {createSafePortal} from "../../../../shared/utils/portals";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
+import {DateTime} from "luxon";
+import ConfirmMetadataKeyRotationDialog from "./ConfirmMetadataKeyRotationDialog";
 
 class DisplayContentTypesMetadataKeyAdministration extends Component {
   /**
@@ -139,6 +141,8 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
   async loadKeys() {
     try {
       const metadataKeys = await this.metadataKeysServiceWorkerService.findAll();
+      // Sort metadata keys by created to display the recent one first
+      metadataKeys.items.sort((metadataKey1, metadataKey2) => DateTime.fromISO(metadataKey2.created) < DateTime.fromISO(metadataKey1.created) ? -1 : 1);
       const activeMetadataKeys = (new MetadataKeysCollection(metadataKeys));
       activeMetadataKeys.filterByCallback(metadataKey => !metadataKey.expired);
       const expiredMetadataKeys = (new MetadataKeysCollection(metadataKeys));
@@ -226,6 +230,62 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
     }
 
     this.setState({isProcessing: false});
+  }
+
+  /**
+   * Rotate the metadata key
+   * @param {MetadataKeyEntity} metadataKeyToExpire The actual metadata key to expire
+   * @return {Promise<void>}
+   */
+  async rotateMetadataKey(metadataKeyToExpire) {
+    this.setState({isProcessing: true});
+    try {
+      const metadataKeyPair = await this.metadataKeysServiceWorkerService.generateKeyPair();
+      const metadataKeyInfo = await this.gpgServiceWorkerService.keyInfo(metadataKeyPair.publicKey.armoredKey);
+      this.props.dialogContext.open(ConfirmMetadataKeyRotationDialog, {metadataKeyInfo, onConfirm: () => this.handleRotateKeyConfirmation(metadataKeyPair, metadataKeyToExpire)});
+    } catch (error) {
+      await this.handleUnexpectedError(error);
+    } finally {
+      this.setState({isProcessing: false});
+    }
+  }
+
+  /**
+   * Handle rotate metadata key confirmation dialog
+   * @param {ExternalGpgKeyPairEntity} metadataKeyPair the new metadata key pair
+   * @param {MetadataKeyEntity} metadataKeyToExpire The actual metadata key to expire
+   * @return {Promise<void>}
+   */
+  async handleRotateKeyConfirmation(metadataKeyPair, metadataKeyToExpire) {
+    try {
+      await this.metadataKeysServiceWorkerService.rotate(metadataKeyPair, metadataKeyToExpire.id);
+      await this.loadKeys();
+      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The metadata key has been rotated."));
+    } catch (error) {
+      await this.handleUnexpectedError(error);
+      // need an update in case it failed in a middle of the process
+      await this.loadKeys();
+    }
+  }
+
+  /**
+   * resume rotation metadata key
+   * @param {MetadataKeyEntity} metadataKeyToDelete The metadata key to delete
+   * @return {Promise<void>}
+   */
+  async resumeRotationMetadataKey(metadataKeyToDelete) {
+    this.setState({isProcessing: true});
+    try {
+      await this.metadataKeysServiceWorkerService.resumeRotation(metadataKeyToDelete);
+      await this.loadKeys();
+      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The metadata key has been rotated."));
+    } catch (error) {
+      await this.handleUnexpectedError(error);
+      // need an update in case it failed in a middle of the process
+      await this.loadKeys();
+    } finally {
+      this.setState({isProcessing: false});
+    }
   }
 
   /**
@@ -440,13 +500,27 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
               <div className={`metadata-key-info ${errors?.hasError("generated_metadata_key", "required") && "error"}`}>
                 {this.state.activeMetadataKeys?.length > 0 &&
                   <div id="metadata-active-keys">
-                    {this.state.activeMetadataKeys?.items.map(metadataKey => {
+                    {this.state.activeMetadataKeys?.items.map((metadataKey, index) => {
                       const metadataKeyInfo = this.state.metadataKeysInfo?.getFirst("fingerprint", metadataKey.fingerprint);
-                      return <table key={metadataKey.fingerprint}className="table-info">
+                      return <table key={metadataKey.fingerprint} className="table-info">
                         <tbody>
                           <tr className="fingerprint">
                             <td className="label"><Trans>Fingerprint</Trans></td>
                             <td className="value"><Fingerprint fingerprint={metadataKey.fingerprint}/></td>
+                            <td className="table-button">
+                              {this.state.activeMetadataKeys.length === 1 && this.state.expiredMetadataKeys?.length === 0 &&
+                              <button className="button primary medium form" type="button" disabled={this.hasAllInputDisabled()}
+                                onClick={() => this.rotateMetadataKey(metadataKey)}>
+                                <Trans>Rotate key</Trans>
+                              </button>
+                              }
+                              {index >= 1 &&
+                                  <button className="button primary medium form" type="button" disabled={this.hasAllInputDisabled()}
+                                    onClick={() => this.resumeRotationMetadataKey(metadataKey)}>
+                                    <Trans>Resume rotation</Trans>
+                                  </button>
+                              }
+                            </td>
                           </tr>
                           <tr className="algorithm">
                             <td className="label"><Trans>Algorithm</Trans></td>
@@ -468,6 +542,12 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                             <td className="empty-value"><Trans>Pending</Trans></td>
                             }
                           </tr>
+                          <tr className="status">
+                            <td className="label"><Trans>Status</Trans></td>
+                            <td className="value"><span
+                              title={"Active"}><Trans>Active</Trans></span>
+                            </td>
+                          </tr>
                         </tbody>
                       </table>;
                     })}
@@ -481,7 +561,7 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                         <tr>
                           <td className="empty-value"><Trans>You need to generate a new shared key to enable encrypted metadata.</Trans></td>
                           <td className="table-button">
-                            <button className="button primary medium" type="button" disabled={this.hasAllInputDisabled()}
+                            <button className="button primary medium form" type="button" disabled={this.hasAllInputDisabled()}
                               onClick={this.generateMetadataKey} data-testid="generate-key-buton">
                               <Trans>Generate key</Trans>
                             </button>
@@ -509,6 +589,14 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                             <tr className="fingerprint">
                               <td className="label"><Trans>Fingerprint</Trans></td>
                               <td className="value"><Fingerprint fingerprint={metadataKey.fingerprint}/></td>
+                              <td className="table-button">
+                                {this.state.activeMetadataKeys.length > 0 && this.formSettings.generatedMetadataKey === null &&
+                                  <button className="button primary medium form" type="button" disabled={this.hasAllInputDisabled()}
+                                    onClick={() => this.resumeRotationMetadataKey(metadataKey)}>
+                                    <Trans>Resume rotation</Trans>
+                                  </button>
+                                }
+                              </td>
                             </tr>
                             <tr className="algorithm">
                               <td className="label"><Trans>Algorithm</Trans></td>
@@ -525,10 +613,10 @@ class DisplayContentTypesMetadataKeyAdministration extends Component {
                                 title={metadataKey.created}>{formatDateTimeAgo(metadataKey.created, this.props.t, this.props.context.locale)}</span>
                               </td>
                             </tr>
-                            <tr className="expired">
-                              <td className="label"><Trans>Expired</Trans></td>
+                            <tr className="status">
+                              <td className="label"><Trans>Status</Trans></td>
                               <td className="value"><span
-                                title={metadataKey.expired}>{formatDateTimeAgo(metadataKey.expired, this.props.t, this.props.context.locale)}</span>
+                                title={metadataKey.expired}>{this.props.t("Expired {{expiredDate}}", {expiredDate: formatDateTimeAgo(metadataKey.expired, this.props.t, this.props.context.locale)})}</span>
                               </td>
                             </tr>
                           </tbody>

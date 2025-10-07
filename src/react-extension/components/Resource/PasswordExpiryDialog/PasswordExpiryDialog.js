@@ -23,7 +23,7 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PasswordExpiryDialogViewModel, {PasswordExpiryOptionEnum} from "../../../../shared/models/passwordExpirySettings/PasswordExpiryDialogViewModel";
-import CalendarSVG from "../../../../img/svg/copy.svg";
+import CalendarSVG from "../../../../img/svg/calendar.svg";
 
 class PasswordExpiryDialog extends React.Component {
   /**

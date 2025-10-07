@@ -13,7 +13,7 @@
  */
 
 import {v4 as uuidv4} from "uuid";
-
+import {ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET} from "../resource/metadata/IconEntity";
 export const TEST_RESOURCE_TYPE_PASSWORD_STRING = uuidv4();
 export const TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION = uuidv4();
 export const TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP = uuidv4();
@@ -23,6 +23,7 @@ export const TEST_RESOURCE_TYPE_V5_PASSWORD_STRING = uuidv4();
 export const TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP = uuidv4();
 export const TEST_RESOURCE_TYPE_V5_TOTP = uuidv4();
 export const TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS = uuidv4();
+export const TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE = uuidv4();
 
 /**
  * Resource with string password resource type DTO.
@@ -320,6 +321,25 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
           maxLength: 10000,
           nullable: true,
         },
+        icon: {
+          type: "object",
+          required: [],
+          properties: {
+            type: {
+              type: "string",
+              enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+            },
+            value: {
+              type: "number",
+              minimum: 0,
+              nullable: true
+            },
+            background_color: {
+              type: "string",
+              nullable: true,
+            },
+          }
+        },
         custom_fields: {
           type: "array",
           maxItems: 128,
@@ -445,6 +465,25 @@ export const resourceTypeV5PasswordStringDto = (data = {}) => ({
           maxLength: 10000,
           nullable: true,
         },
+        icon: {
+          type: "object",
+          required: [],
+          properties: {
+            type: {
+              type: "string",
+              enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+            },
+            value: {
+              type: "number",
+              minimum: 0,
+              nullable: true
+            },
+            background_color: {
+              type: "string",
+              nullable: true,
+            },
+          }
+        }
       }
     },
     secret: {
@@ -491,6 +530,25 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
           type: "string",
           maxLength: 10000,
           nullable: true,
+        },
+        icon: {
+          type: "object",
+          required: [],
+          properties: {
+            type: {
+              type: "string",
+              enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+            },
+            value: {
+              type: "number",
+              minimum: 0,
+              nullable: true
+            },
+            background_color: {
+              type: "string",
+              nullable: true,
+            },
+          }
         },
         custom_fields: {
           type: "array",
@@ -639,6 +697,25 @@ export const resourceTypeV5TotpDto = (data = {}) => ({
           maxLength: 10000,
           nullable: true,
         },
+        icon: {
+          type: "object",
+          required: [],
+          properties: {
+            type: {
+              type: "string",
+              enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+            },
+            value: {
+              type: "number",
+              minimum: 0,
+              nullable: true
+            },
+            background_color: {
+              type: "string",
+              nullable: true,
+            },
+          }
+        }
       }
     },
     secret: {
@@ -719,6 +796,25 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
           maxLength: 10000,
           nullable: true,
         },
+        icon: {
+          type: "object",
+          required: [],
+          properties: {
+            type: {
+              type: "string",
+              enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+            },
+            value: {
+              type: "number",
+              minimum: 0,
+              nullable: true
+            },
+            background_color: {
+              type: "string",
+              nullable: true,
+            },
+          }
+        },
         custom_fields: {
           type: "array",
           maxItems: 128,
@@ -754,7 +850,7 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
     },
     secret: {
       type: "object",
-      required: ["custom_fields"],
+      required: ["custom_fields", "object_type"],
       properties: {
         object_type: {
           type: "string",
@@ -791,6 +887,77 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
             }
           }
         }
+      },
+    }
+  },
+  ...data
+});
+
+/**
+ * Resource V5 standalone note type DTO.
+ * @param {object} data The data to override
+ * @returns {object}
+ */
+export const resourceTypeV5StandaloneNoteDto = (data = {}) => ({
+  id: TEST_RESOURCE_TYPE_V5_STANDALONE_NOTE,
+  name: "V5 Standalone note",
+  slug: "v5-note",
+  definition: {
+    resource: {
+      type: "object",
+      required: ["name"],
+      properties: {
+        name: {
+          type: "string",
+          maxLength: 255
+        },
+        uris: {
+          type: "array",
+          items: {
+            type: "string",
+            maxLength: 1024,
+            nullable: true
+          },
+          maxItems: 32,
+        },
+        description: {
+          type: "string",
+          maxLength: 10000,
+          nullable: true,
+        },
+        icon: {
+          type: "object",
+          required: [],
+          properties: {
+            type: {
+              type: "string",
+              enum: [ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET],
+            },
+            value: {
+              type: "number",
+              minimum: 0,
+              nullable: true
+            },
+            background_color: {
+              type: "string",
+              nullable: true,
+            },
+          }
+        }
+      }
+    },
+    secret: {
+      type: "object",
+      required: ["description", "object_type"],
+      properties: {
+        object_type: {
+          type: "string",
+          enum: ['PASSBOLT_SECRET_DATA'],
+        },
+        description: {
+          type: "string",
+          maxLength: 50000,
+        },
       },
     }
   },

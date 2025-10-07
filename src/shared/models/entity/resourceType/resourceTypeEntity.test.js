@@ -20,6 +20,7 @@ import {
   resourceTypePasswordStringDto,
   resourceTypeTotpDto,
   resourceTypeV5CustomFieldsDto,
+  resourceTypeV5StandaloneNoteDto,
   resourceTypeV5DefaultDto,
   resourceTypeV5DefaultTotpDto,
   resourceTypeV5PasswordStringDto,
@@ -643,6 +644,15 @@ describe("ResourceTypeEntity", () => {
       expect(entity.hasSecretDescription()).toBeTruthy();
     });
 
+    it("v5 standalone note should have secret description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandaloneNoteDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasSecretDescription()).toBeTruthy();
+    });
+
     it("v5 password string should not have secret description", () => {
       expect.assertions(1);
 
@@ -746,6 +756,15 @@ describe("ResourceTypeEntity", () => {
       expect.assertions(1);
 
       const dto = resourceTypeV5CustomFieldsDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasMetadataDescription()).toBeTruthy();
+    });
+
+    it("v5 standalone note should have metadata description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5StandaloneNoteDto();
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.hasMetadataDescription()).toBeTruthy();
