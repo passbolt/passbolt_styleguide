@@ -125,6 +125,13 @@ describe("As LU I should see the password unlock Keypass dialog", () => {
       expect(props.onClose).toBeCalled();
     });
 
+    it('As LU I should see the password field focused when the component is mounted', async() => {
+      expect.assertions(1);
+      await waitFor(() => {
+        expect(document.activeElement === page.password).toBe(true);
+      });
+    });
+
     it('As LU I can stop importing passwords with the keyboard (escape)', async() => {
       expect.assertions(1);
       await page.escapeKey();
