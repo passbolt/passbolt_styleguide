@@ -190,7 +190,7 @@ class DisplayUserDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> requested an account recovery
               </Trans>
             </div>
-            <div className="subinfo third-level light">{activityFormattedDate}</div>
+            <div className="subinfo third-level light" title={activity.created}>{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
@@ -217,7 +217,7 @@ class DisplayUserDetailsActivity extends React.Component {
                 <a rel="noopener noreferrer" href={userLink}><span className="creator">{{activityCreatorName}}</span></a> rejected the account recovery request
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo light" title={activity.created}>{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
@@ -244,7 +244,7 @@ class DisplayUserDetailsActivity extends React.Component {
                 <a rel="noopener noreferrer" href={userLink}><span className="creator">{{activityCreatorName}}</span></a> accepted the account recovery request
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo light" title={activity.created}>{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
@@ -270,7 +270,7 @@ class DisplayUserDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> rejected the account recovery policy
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo light" title={activity.created}>{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
@@ -296,7 +296,7 @@ class DisplayUserDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> accepted the account recovery policy
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo light" title={activity.created}>{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
@@ -323,7 +323,7 @@ class DisplayUserDetailsActivity extends React.Component {
                 <a rel="noopener noreferrer" href={userLink}><span className="creator">{{activityCreatorName}}</span></a> created the user account
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo light" title={activity.created}>{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>

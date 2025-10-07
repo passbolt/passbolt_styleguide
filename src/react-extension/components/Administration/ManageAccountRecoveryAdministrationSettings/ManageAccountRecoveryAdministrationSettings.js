@@ -373,12 +373,12 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                         </tr>
                         <tr className="created">
                           <td className="label"><Trans>Created</Trans></td>
-                          {this.organizationKeyInfo?.created && <td className="value">{formatDateTimeAgo(this.organizationKeyInfo.created, this.props.t, this.props.context.locale)}</td>}
+                          {this.organizationKeyInfo?.created && <td className="value" title={this.organizationKeyInfo.created}>{formatDateTimeAgo(this.organizationKeyInfo.created, this.props.t, this.props.context.locale)}</td>}
                           {!this.organizationKeyInfo?.created && <td className="empty-value"><Trans>not available</Trans></td>}
                         </tr>
                         <tr className="expires">
                           <td className="label"><Trans>Expires</Trans></td>
-                          {this.organizationKeyInfo?.expires && <td className="value">{formatDateTimeAgo(this.organizationKeyInfo.expires, this.props.t, this.props.context.locale)}</td>}
+                          {this.organizationKeyInfo?.expires && <td className="value" title={this.organizationKeyInfo.expires}>{formatDateTimeAgo(this.organizationKeyInfo.expires, this.props.t, this.props.context.locale)}</td>}
                           {!this.organizationKeyInfo?.expires && <td className="empty-value"><Trans>not available</Trans></td>}
                         </tr>
                       </tbody>
