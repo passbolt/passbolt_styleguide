@@ -22,6 +22,7 @@ import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/
 import {
   defaultMetadataTypesSettingsV6Dto
 } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import {SECRET_DATA_OBJECT_TYPE} from "../../../shared/models/entity/secretData/secretDataEntity";
 
 beforeEach(() => {
   jest.resetModules();
@@ -127,6 +128,7 @@ describe("See the Create Resource - save resource", () => {
       password: resourceMetaFromTab.secret_clear,
       description: "",
       resource_type_id: resourceTypeId,
+      object_type: SECRET_DATA_OBJECT_TYPE,
     };
     // expectations
     expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDto, secretDto);

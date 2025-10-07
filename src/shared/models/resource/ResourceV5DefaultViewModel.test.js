@@ -22,6 +22,7 @@ import {
 import {DateTime} from "luxon";
 import ResourceViewModel from "./ResourceViewModel";
 import ResourceV5DefaultViewModel from "./ResourceV5DefaultViewModel";
+import {SECRET_DATA_OBJECT_TYPE} from "../entity/secretData/secretDataEntity";
 
 describe("ResourceV5DefaultViewModel", () => {
   describe("::createFromEntity", () => {
@@ -194,6 +195,7 @@ describe("ResourceV5DefaultViewModel", () => {
         password: dto.password,
         description: dto.description,
         resource_type_id: dto.resource_type_id,
+        object_type: SECRET_DATA_OBJECT_TYPE,
       });
     });
   });
