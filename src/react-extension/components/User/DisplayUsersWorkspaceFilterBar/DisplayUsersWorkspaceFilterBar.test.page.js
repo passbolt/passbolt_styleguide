@@ -58,12 +58,37 @@ export default class DisplayUsersWorkspaceFilterBarPage {
   }
 
   /**
+   * Returns attention required the dropdown button
+   * @returns {Element}
+   */
+  get attentionRequiredFilterButton() {
+    return this._page.container.querySelectorAll('.actions-filter .dropdown')[1]?.querySelector('.button-dropdown');
+  }
+
+  /**
+   * Returns the attention required dropdown button options
+   * @returns {Element}
+   */
+  get attentionFilterOptions() {
+    return this._page.container.querySelectorAll('.actions-filter .dropdown ul.dropdown-content li button');
+  }
+
+  /**
    * Open the dropdown button
    * @returns {Promise<void>}
    */
   async openDropdownFilterButton() {
     const leftClick = {button: 0};
     fireEvent.click(this.dropdownFilterButton, leftClick);
+    await waitFor(() => {});
+  }
+
+  /**
+   * Open the attention required filter button
+   */
+  async openAttentionRequiredFilterButton() {
+    const leftClick = {button: 0};
+    fireEvent.click(this.attentionRequiredFilterButton, leftClick);
     await waitFor(() => {});
   }
 

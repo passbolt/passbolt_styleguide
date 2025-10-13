@@ -369,6 +369,7 @@ class DisplayUsers extends React.Component {
     const isEmpty = isReady && this.users.length === 0;
     const filterType = this.props.userWorkspaceContext.filter.type;
     const isGridReady = isReady && this.users.length !== 0 && this.columnsFiltered.length !== 0;
+    const isSearchFilterApplied = filterType === UserWorkspaceFilterTypes.TEXT;
 
     return (
       <>
@@ -380,7 +381,7 @@ class DisplayUsers extends React.Component {
         }
         {isEmpty &&
           <div className="tableview empty">
-            {filterType === UserWorkspaceFilterTypes.TEXT &&
+            {isSearchFilterApplied &&
               <div className="empty-content">
                 <CircleOffSVG/>
                 <div className="message">
@@ -390,11 +391,11 @@ class DisplayUsers extends React.Component {
                 </div>
               </div>
             }
-            {filterType === UserWorkspaceFilterTypes.SUSPENDED_USER &&
+            { !isSearchFilterApplied &&
               <div className="empty-content">
                 <CircleOffSVG/>
                 <div className="message">
-                  <h1><Trans>There is no users.</Trans></h1>
+                  <h1><Trans>There are no users.</Trans></h1>
                   <p className="try-another-filter"><Trans>You could remove some filters.</Trans></p>
                 </div>
               </div>

@@ -42,6 +42,10 @@ class FilterUsersByBreadcrumb extends Component {
       }
       case UserWorkspaceFilterTypes.SUSPENDED_USER:
         return [...items, this.getLastBreadcrumb(this.translate("Suspended users"))];
+      case UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST:
+        return [...items, this.getLastBreadcrumb(this.translate("Account Recovery Requests"))];
+      case UserWorkspaceFilterTypes.MISSING_METADATA_KEY:
+        return [...items, this.getLastBreadcrumb(this.translate("Missing Metadata Key"))];
       case UserWorkspaceFilterTypes.RECENTLY_MODIFIED:
         return [...items, this.getLastBreadcrumb(this.translate("Recently modified"))];
       case UserWorkspaceFilterTypes.GROUP: {
