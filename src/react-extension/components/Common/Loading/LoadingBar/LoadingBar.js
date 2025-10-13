@@ -47,7 +47,7 @@ class LoadingBar extends React.Component {
         <div className="progress-bar"  >
           <span className="progress"
             onTransitionEnd={this.handleProgressEnd}
-            style={{"width": `${this.props.progress}%` || 0}}>
+            style={{"width": `${this.props.progress || 0}%`}}>
           </span>
         </div>
       </div>

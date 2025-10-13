@@ -69,6 +69,7 @@ class Entity {
       this._getPropByPath(propName);
       return true;
     } catch (error) {
+      console.error(`Failed to check if property "${propName}" is set:`, error);
       return false;
     }
   }

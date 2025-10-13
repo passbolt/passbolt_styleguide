@@ -25,7 +25,7 @@ import {
 import DisplayUserWorkspacePage from "./DisplayUserWorkspace.test.page";
 import {waitFor} from "@testing-library/dom";
 
-jest.mock("../FilterUsersByGroups/FilterUsersByGroup", () => () => <></>); // eslint-disable-line no-use-before-define
+jest.mock("../FilterUsersByGroups/FilterUsersByGroup", () => () => <></>);
 jest.mock("../FilterUsersByShortcut/FilterUsersByShortcut", () => () => <></>);
 jest.mock("../FilterUsersByText/FilterUsersByText", () => () => <></>);
 jest.mock("../../UserGroup/DisplayUserGroupDetails/DisplayUserGroupDetails", () => () => <span className="user-group-details"></span>);

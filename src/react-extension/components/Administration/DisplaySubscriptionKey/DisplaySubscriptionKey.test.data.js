@@ -102,6 +102,7 @@ export function formatDate(date) {
   try {
     return DateTime.fromISO(date).setLocale('en-UK').toLocaleString(DateTime.DATE_SHORT);
   } catch (error) {
+    console.error(`Failed to format date "${date}":`, error);
     return "";
   }
 }

@@ -56,6 +56,7 @@ import {
   withMetadataKeysSettingsLocalStorage
 } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import Logger from "../../../../shared/utils/logger";
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -254,6 +255,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     try {
       code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
     } catch (error) {
+      Logger.error(error);
       await this.props.actionFeedbackContext.displayError(this.translate("Unable to copy the TOTP"));
       return;
     }
@@ -288,6 +290,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
       // a count: 1 is used to minimize the translation file as a singular/plural version already exist.
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been marked as expired.", {count: 1}));
     } catch (error) {
+      Logger.error(error);
       await this.props.actionFeedbackContext.displayError(this.translate("Unable to mark the resource as expired.", {count: 1}));
     } finally {
       this.props.hide();

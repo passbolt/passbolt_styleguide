@@ -61,6 +61,7 @@ import {
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import ActionAbortedMissingMetadataKeys
   from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
+import Logger from "../../../../shared/utils/logger";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -110,6 +111,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
       await this.props.context.port.request("passbolt.resources.set-expiration-date", resourcesExpiryDateToUpdate);
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been marked as expired.", {count: resourcesExpiryDateToUpdate.length}));
     } catch (error) {
+      Logger.error(error);
       await this.props.actionFeedbackContext.displayError(this.translate("Unable to mark the resource as expired.", {count: resourcesExpiryDateToUpdate.length}));
     }
   }
@@ -285,6 +287,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     try {
       code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
     } catch (error) {
+      Logger.error(error);
       await this.props.actionFeedbackContext.displayError(this.translate("Unable to copy the TOTP"));
       return;
     }
