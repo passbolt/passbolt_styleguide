@@ -483,7 +483,7 @@ class EntitySchema {
       try {
         EntitySchema.validateProp(propName, prop, anyOf[i]);
         return;
-      } catch (error) {
+      } catch {
         // All must fail...
       }
     }

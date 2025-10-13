@@ -181,6 +181,7 @@ class DisplaySubscriptionKey extends React.Component {
     try {
       return DateTime.fromISO(date).setLocale(this.props.context.locale).toLocaleString(DateTime.DATE_SHORT);
     } catch (error) {
+      console.error(`Failed to format date "${date}":`, error);
       return "";
     }
   }

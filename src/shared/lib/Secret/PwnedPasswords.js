@@ -27,8 +27,8 @@ export default class PwnedPasswords {
     let response;
     try {
       response = await fetch(url);
-    } catch (e) {
-      throw new ExternalServiceUnavailableError("pwnedpasswords API service is not available");
+    } catch (error) {
+      throw new ExternalServiceUnavailableError("pwnedpasswords API service is not available", {cause: error});
     }
 
     if (response.status !== 200) {

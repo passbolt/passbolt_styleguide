@@ -134,6 +134,7 @@ class ScanTotpCode extends Component {
         await this.props.mfaContext.findMfaSettings();
       }
     } catch (error) {
+      console.error(`Invalid TOTP code:`, error);
       this.setError("invalidCode", true);
     }
   }

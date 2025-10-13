@@ -32,6 +32,7 @@ import Totp from "../../../../shared/components/Totp/Totp";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import DisplayResourceUrisBadge from "../../Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import Logger from "../../../../shared/utils/logger";
 
 class DisplayResourceDetailsTotp extends React.Component {
   /**
@@ -165,6 +166,7 @@ class DisplayResourceDetailsTotp extends React.Component {
     try {
       code = TotpCodeGeneratorService.generate(plaintextSecret);
     } catch (error) {
+      Logger.error(error);
       await this.props.actionFeedbackContext.displayError(this.translate("Unable to copy the TOTP"));
       return;
     }
