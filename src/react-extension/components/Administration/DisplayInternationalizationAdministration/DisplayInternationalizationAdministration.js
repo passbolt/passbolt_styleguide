@@ -115,7 +115,7 @@ class DisplayInternationalizationAdministration extends React.Component {
           <div className="sidebar-help-section">
             <h3><Trans>Want to contribute?</Trans></h3>
             <p><Trans>Your language is missing or you discovered an error in the translation, help us to improve passbolt.</Trans></p>
-            <a className="button" href="https://help.passbolt.com/contribute/translation" target="_blank" rel="noopener noreferrer">
+            <a className="button" href="https://www.passbolt.com/docs/contribute/translation/" target="_blank" rel="noopener noreferrer">
               <HeartSVG />
               <span><Trans>Contribute</Trans></span>
             </a>
