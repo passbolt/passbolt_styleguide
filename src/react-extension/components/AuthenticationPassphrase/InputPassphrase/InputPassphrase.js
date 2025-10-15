@@ -271,10 +271,10 @@ class InputPassphrase extends Component {
                   preview={true}
                   securityToken={this.props.context.userSettings.getSecurityToken()}
                 />
+                {this.state.passphraseError &&
+                  <div className="error-message">{this.state.passphraseError}</div>
+                }
               </div>
-              {this.state.passphraseError &&
-                <div className="error-message">{this.state.passphraseError}</div>
-              }
               {hasRememberMeOptions &&
                 <div className="remember-me">
                   <div className="input checkbox">
