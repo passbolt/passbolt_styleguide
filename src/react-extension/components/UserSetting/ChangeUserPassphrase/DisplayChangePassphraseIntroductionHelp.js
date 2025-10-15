@@ -26,7 +26,7 @@ class DisplayChangePassphraseIntroductionHelp extends React.Component {
         <h3><Trans>What is the role of the passphrase?</Trans></h3>
         <p><Trans>The passphrase is used to encrypt your secret key, which is required to decrypt your secrets, such as the passwords.</Trans></p>
         <p><Trans>Without the private key and the passphrase it is not possible to decrypt!</Trans></p>
-        <a className="button" href="https://help.passbolt.com/tech/auth.html" target="_blank" rel="noopener noreferrer">
+        <a className="button" href="https://www.passbolt.com/docs/user/settings/browser/change-passphrase/" target="_blank" rel="noopener noreferrer">
           <span><Trans>Learn more</Trans></span>
         </a>
       </div>
