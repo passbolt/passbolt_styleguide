@@ -58,6 +58,7 @@ export default (uri, options) => {
     }
     return url.href;
   } catch (error) {
+    console.error(`Failed to sanitize URL:`, error);
     return false;
   }
 };

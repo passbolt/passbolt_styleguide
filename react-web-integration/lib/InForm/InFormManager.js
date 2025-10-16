@@ -85,7 +85,14 @@ class InFormManager {
   /**
    * Initializes the in-form manager
    */
-  initialize() {
+  async initialize() {
+    /**
+     * Wait for all animations to finish before checking if the page is visible.
+     * Note: There is a risk that applications with continuous animations may prevent
+     * the Passbolt in-form application from initializing.
+     */
+    await this.waitingAnimations(document.documentElement);
+    await this.waitingAnimations(document.body);
     // Do not initialize if the page is not visible enough before inserting elements
     if (this.isPageNotVisible()) {
       console.debug("Cannot insert the in-form menu manager into a page that is not visible.");
@@ -156,6 +163,20 @@ class InFormManager {
       visibilityProperty: true
     };
     return getComputedStyle(element).opacity < 0.4 || !element.checkVisibility(visibilityOptions);
+  }
+
+  /**
+   * Waiting all animations on element
+   * @param element
+   * @return {Promise<void>}
+   */
+  async waitingAnimations(element) {
+    const animations = element.getAnimations();
+    await Promise.all(
+      animations.map(animation => new Promise(resolve => {
+        animation.addEventListener("finish", resolve, {once: true});
+      }))
+    );
   }
 
   /**

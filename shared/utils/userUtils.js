@@ -35,6 +35,19 @@ export const USER_STATUS = {
 export const isUserSuspended = user => Boolean(user?.disabled && new Date(user.disabled) <= new Date());
 
 /**
+ * Returns true if the user has requested Account Recovery
+ * @param {User} user the user to check the attention state
+ * @returns {boolean}
+ */
+export const isAccountRecoveryRequested = user => Boolean(user?.pending_account_recovery_request);
+
+/**
+ * Returns true if the user has missing metadata keys
+ * @param {User} user the user to check the attention state
+ * @returns {boolean}
+ */
+export const isMissingMetadataKey = user => user?.missing_metadata_key_ids?.length > 0;
+/**
  * Returns the given user's status
  * @param {User} user
  * @returns {string<USER_STATUS>}

@@ -118,6 +118,7 @@ class InputPassphrase extends Component {
     try {
       await this.props.context.port.request("passbolt.keyring.private.checkpassphrase", this.state.passphrase);
     } catch (error) {
+      console.error(`Invalid passphrase:`, error);
       return false;
     }
     return true;

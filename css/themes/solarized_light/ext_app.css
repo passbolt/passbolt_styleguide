@@ -3661,6 +3661,11 @@ html {
   align-self: stretch;
   min-width: 0;
 }
+.top-bar .action-bar svg.attention-required {
+  --icon-exclamation-color: var(--Alert-Alert-icon);
+  --icon-exclamation-background-color: var(--Alert-Alert-background);
+  --icon-exclamation-border-color: var(--Alert-Alert-background);
+}
 .top-bar .action-bar.icon-only .actions li > button,
 .top-bar .action-bar.icon-only .actions-filter li > button,
 .top-bar .action-bar.icon-only .actions-secondary li > button,
@@ -3728,6 +3733,7 @@ html {
   align-items: center;
   padding: 0.4rem 0 0.4rem 1.6rem;
   align-self: stretch;
+  gap: 0.8rem;
 }
 .top-bar .action-bar .actions-secondary {
   display: flex;
@@ -7020,6 +7026,11 @@ iframe.cachette {
 .sidebar .sidebar-content .detailed-user-groups .accordion-content .content-wrapper .content .subinfo {
   opacity: 0.5;
 }
+.sidebar .sidebar-content .detailed-permission .accordion-content .empty-feedback,
+.sidebar .sidebar-content .detailed-members .accordion-content .empty-feedback,
+.sidebar .sidebar-content .detailed-user-groups .accordion-content .empty-feedback {
+  padding: 1.6rem 1.6rem 0 1.6rem;
+}
 .sidebar .sidebar-content .detailed-comments .accordion-content {
   flex-direction: column;
 }
@@ -9462,13 +9473,6 @@ svg .section-card .card .title:first-child {
 .edit-resource .edit-workspace .content .input label {
   display: flex;
 }
-.create-resource .create-workspace .content .input textarea,
-.edit-resource .create-workspace .content .input textarea,
-.create-resource .edit-workspace .content .input textarea,
-.edit-resource .edit-workspace .content .input textarea {
-  height: 14rem;
-  max-height: 40rem;
-}
 .create-resource .create-workspace .content .input.input-password-wrapper,
 .edit-resource .create-workspace .content .input.input-password-wrapper,
 .create-resource .edit-workspace .content .input.input-password-wrapper,
@@ -9536,20 +9540,33 @@ svg .section-card .card .title:first-child {
 .create-resource .create-workspace .content .note-fields,
 .edit-resource .create-workspace .content .note-fields,
 .create-resource .edit-workspace .content .note-fields,
-.edit-resource .edit-workspace .content .note-fields {
+.edit-resource .edit-workspace .content .note-fields,
+.create-resource .create-workspace .content .description-fields,
+.edit-resource .create-workspace .content .description-fields,
+.create-resource .edit-workspace .content .description-fields,
+.edit-resource .edit-workspace .content .description-fields {
   height: 100%;
 }
 .create-resource .create-workspace .content .note-fields .input,
 .edit-resource .create-workspace .content .note-fields .input,
 .create-resource .edit-workspace .content .note-fields .input,
-.edit-resource .edit-workspace .content .note-fields .input {
+.edit-resource .edit-workspace .content .note-fields .input,
+.create-resource .create-workspace .content .description-fields .input,
+.edit-resource .create-workspace .content .description-fields .input,
+.create-resource .edit-workspace .content .description-fields .input,
+.edit-resource .edit-workspace .content .description-fields .input {
   height: 100%;
 }
 .create-resource .create-workspace .content .note-fields .input textarea,
 .edit-resource .create-workspace .content .note-fields .input textarea,
 .create-resource .edit-workspace .content .note-fields .input textarea,
-.edit-resource .edit-workspace .content .note-fields .input textarea {
-  height: 40rem;
+.edit-resource .edit-workspace .content .note-fields .input textarea,
+.create-resource .create-workspace .content .description-fields .input textarea,
+.edit-resource .create-workspace .content .description-fields .input textarea,
+.create-resource .edit-workspace .content .description-fields .input textarea,
+.edit-resource .edit-workspace .content .description-fields .input textarea {
+  height: 100%;
+  max-height: 100%;
 }
 .create-resource .create-workspace .content .additional-information,
 .edit-resource .create-workspace .content .additional-information,

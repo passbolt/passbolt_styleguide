@@ -60,6 +60,30 @@ describe("Display User Workspace Breadcrumb", () => {
     expect(page.breadcrumbLabels(2)).toBe('Suspended users');
   });
 
+  it('As LU, I should see users with attention state "Account Recovery Requests" if the filter is set to Account Recovery Requests', async() => {
+    expect.assertions(2);
+    page = new FilterUsersByBreadcrumbPage(context, propsWithFilter(UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST));
+    await waitFor(() => {});
+    expect(page.breadcrumbLabels(1)).toBe('All users');
+    expect(page.breadcrumbLabels(2)).toBe('Account Recovery Requests');
+  });
+
+  it('As LU, I should see users with attention state "Missing Metadata Key" if the filter is set to Missing Metadata Key', async() => {
+    expect.assertions(2);
+    page = new FilterUsersByBreadcrumbPage(context, propsWithFilter(UserWorkspaceFilterTypes.MISSING_METADATA_KEY));
+    await waitFor(() => {});
+    expect(page.breadcrumbLabels(1)).toBe('All users');
+    expect(page.breadcrumbLabels(2)).toBe('Missing Metadata Key');
+  });
+
+  it('As LU, I should see "Suspended user" if the filter is set to Suspended user', async() => {
+    expect.assertions(2);
+    page = new FilterUsersByBreadcrumbPage(context, propsWithFilter(UserWorkspaceFilterTypes.SUSPENDED_USER));
+    await waitFor(() => {});
+    expect(page.breadcrumbLabels(1)).toBe('All users');
+    expect(page.breadcrumbLabels(2)).toBe('Suspended users');
+  });
+
   it('As LU, I should see the search text if the filter is set to an non-empty Text', async() => {
     expect.assertions(3);
     page = new FilterUsersByBreadcrumbPage(context, propsWithTextFilter());

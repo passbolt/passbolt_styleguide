@@ -88,7 +88,9 @@ class IdentifyWithSso extends Component {
     this.toggleProcessing();
     try {
       await this.identifyViaSsoService.exec();
-    } catch (e) {}
+    } catch (error) {
+      console.error(`Failed to identify via sso":`, error);
+    }
     this.toggleProcessing();
   }
 

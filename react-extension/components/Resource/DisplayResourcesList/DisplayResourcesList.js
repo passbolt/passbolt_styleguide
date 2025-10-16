@@ -60,6 +60,8 @@ import CellName from "../../../../shared/components/Table/CellName";
 import CircleOffSVG from "../../../../img/svg/circle_off.svg";
 import memoize from "memoize-one";
 import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import FavoriteServiceWorkerService from "./FavoriteServiceWorkerService";
+import Logger from "../../../../shared/utils/logger";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -81,6 +83,7 @@ class DisplayResourcesList extends React.Component {
     this.initEventHandlers();
     this.handleFavoriteClickDebounced = debounce(this.handleFavoriteUpdate, 200);
     this.createRefs();
+    this.favoriteServiceWorkerService = new FavoriteServiceWorkerService(props.context.port);
   }
 
   /**
@@ -454,6 +457,7 @@ class DisplayResourcesList extends React.Component {
     try {
       code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
     } catch (error) {
+      Logger.error(error);
       await this.props.actionFeedbackContext.displayError(this.translate("Unable to copy the TOTP"));
       return;
     }
@@ -696,8 +700,8 @@ class DisplayResourcesList extends React.Component {
 
   async favoriteResource(resource) {
     try {
-      await this.props.context.port.request('passbolt.favorite.add', resource.id);
-      this.displaySuccessNotification(this.translate("The password has been added as a favorite"));
+      await this.favoriteServiceWorkerService.addToFavorites(resource.id);
+      this.displaySuccessNotification(this.translate("The password has been added to favorites"));
     } catch (error) {
       this.displayErrorNotification(error.message);
     }
@@ -705,7 +709,7 @@ class DisplayResourcesList extends React.Component {
 
   async unfavoriteResource(resource) {
     try {
-      await this.props.context.port.request('passbolt.favorite.delete', resource.id);
+      await this.favoriteServiceWorkerService.removeFromFavorites(resource.id);
       this.displaySuccessNotification(this.translate("The password has been removed from favorites"));
     } catch (error) {
       this.displayErrorNotification(error.message);

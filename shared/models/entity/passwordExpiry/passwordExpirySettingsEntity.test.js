@@ -16,7 +16,7 @@ import each from "jest-each";
 import EntitySchema from "../abstract/entitySchema";
 import EntityValidationError from "../abstract/entityValidationError";
 import PasswordExpirySettingsEntity from "./passwordExpirySettingsEntity";
-import {defaultPasswordExpirySettingsDto} from "./passwordExpirySettingsEntity.test.data";
+import {defaultPasswordExpirySettingsDto, defaultPasswordExpirySettingsDtoFromApi} from "./passwordExpirySettingsEntity.test.data";
 
 describe("PasswordExpiry entity", () => {
   it("schema must validate", () => {
@@ -99,6 +99,40 @@ describe("PasswordExpiry entity", () => {
         expect(e).toBeInstanceOf(EntityValidationError);
         expect(e.hasError(fieldName, scenario.errorType)).toStrictEqual(true);
       }
+    });
+  });
+
+  describe("::isFeatureEnabled", () => {
+    it("should return true when id is set", () => {
+      expect.assertions(1);
+
+      const dto = defaultPasswordExpirySettingsDtoFromApi();
+      const entity = new PasswordExpirySettingsEntity(dto);
+
+      expect(entity.isFeatureEnabled).toStrictEqual(true);
+    });
+
+    it("should return false when id is not set", () => {
+      expect.assertions(1);
+
+      const dto = defaultPasswordExpirySettingsDto();
+
+      const entity = new PasswordExpirySettingsEntity(dto);
+
+      expect(entity.isFeatureEnabled).toStrictEqual(false);
+    });
+  });
+
+  describe("::calculateDefaultResourceExpiryDate", () => {
+    it("should always return null as default_expiry_period is always null in CE version", () => {
+      expect.assertions(1);
+      const dto = defaultPasswordExpirySettingsDto({
+        automatic_update: true,
+        automatic_expiry: true,
+      });
+      const entity = new PasswordExpirySettingsEntity(dto);
+
+      expect(entity.calculateDefaultResourceExpiryDate()).toBeNull();
     });
   });
 });

@@ -58,3 +58,19 @@ GroupFilter.args = {
     filteredUsers: []
   }
 };
+
+export const AttentionRequiredRequestsFilter = Template.bind({});
+AttentionRequiredRequestsFilter.args = {
+  userWorkspaceContext: {
+    filter: {type: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST},
+    filteredUsers: [{}, {}]
+  }
+};
+
+export const MissingMetadataKeyFilter = Template.bind({});
+MissingMetadataKeyFilter.args = {
+  userWorkspaceContext: {
+    filter: {type: UserWorkspaceFilterTypes.MISSING_METADATA_KEY},
+    filteredUsers: [{}, {}, {}]
+  }
+};

@@ -60,6 +60,13 @@ export default class DisplayUsersPage {
   }
 
   /**
+   * Returns true if the content is empty
+   */
+  get hasEmptyContentWithFilterApplied() {
+    return Boolean(this._page.container.querySelector('.empty-content .try-another-filter'));
+  }
+
+  /**
    * Returns the number of displayed users
    */
   get usersCount() {

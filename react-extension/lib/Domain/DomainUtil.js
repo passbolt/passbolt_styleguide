@@ -63,7 +63,7 @@ class DomainUtil {
         );
       }
     } catch (error) {
-      throw new Error("Cannot parse domain. The domain is not valid.");
+      throw new Error("Cannot parse domain. The domain is not valid.", {cause: error});
     }
   }
 

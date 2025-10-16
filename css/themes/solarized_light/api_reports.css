@@ -3661,6 +3661,11 @@ html {
   align-self: stretch;
   min-width: 0;
 }
+.top-bar .action-bar svg.attention-required {
+  --icon-exclamation-color: var(--Alert-Alert-icon);
+  --icon-exclamation-background-color: var(--Alert-Alert-background);
+  --icon-exclamation-border-color: var(--Alert-Alert-background);
+}
 .top-bar .action-bar.icon-only .actions li > button,
 .top-bar .action-bar.icon-only .actions-filter li > button,
 .top-bar .action-bar.icon-only .actions-secondary li > button,
@@ -3728,6 +3733,7 @@ html {
   align-items: center;
   padding: 0.4rem 0 0.4rem 1.6rem;
   align-self: stretch;
+  gap: 0.8rem;
 }
 .top-bar .action-bar .actions-secondary {
   display: flex;

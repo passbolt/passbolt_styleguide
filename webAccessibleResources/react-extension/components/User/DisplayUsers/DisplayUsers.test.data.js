@@ -217,6 +217,39 @@ export function propsWithNoUsersWithTextSearch() {
   });
 }
 
+export function propsWithNoUsersWithAllStatusesFilter() {
+  return defaultProps({
+    userWorkspaceContext: defaultUserWorkspaceContext({
+      filteredUsers: [],
+      filter: {
+        type: UserWorkspaceFilterTypes.SUSPENDED_USER
+      }
+    })
+  });
+}
+
+export function propsWithNoUsersAccountRecoveryRequestFilter() {
+  return defaultProps({
+    userWorkspaceContext: defaultUserWorkspaceContext({
+      filteredUsers: [],
+      filter: {
+        type: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST
+      }
+    })
+  });
+}
+
+export function propsWithNoUsersMissingMetadataKeyFilter() {
+  return defaultProps({
+    userWorkspaceContext: defaultUserWorkspaceContext({
+      filteredUsers: [],
+      filter: {
+        type: UserWorkspaceFilterTypes.MISSING_METADATA_KEY
+      }
+    })
+  });
+}
+
 /**
  * Props with no users using the text search
  * @returns {any}

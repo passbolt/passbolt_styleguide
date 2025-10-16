@@ -147,7 +147,7 @@ class ExternalGpgKeyEntity extends Entity {
       try {
         const date = new Date(sanitizedDto.created);
         sanitizedDto.created = date.toISOString();
-      } catch (error) {
+      } catch {
         delete sanitizedDto.created;
       }
     }
@@ -159,7 +159,7 @@ class ExternalGpgKeyEntity extends Entity {
       try {
         const date = new Date(sanitizedDto.expires);
         sanitizedDto.expires = date.toISOString();
-      } catch (error) {
+      } catch {
         delete sanitizedDto.expires;
         console.error(`ExternalGpgKeyEntity::sanitizeDto Unable to sanitize the key for the user ${dto.user_id}`);
       }

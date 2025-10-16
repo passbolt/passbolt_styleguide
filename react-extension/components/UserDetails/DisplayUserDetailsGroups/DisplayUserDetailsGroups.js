@@ -119,7 +119,7 @@ class DisplayUserDetailsGroups extends React.Component {
         {this.state.open &&
         <div className="accordion-content">
           <ul>
-            { hasGroups &&
+            {hasGroups &&
               groups.map(group => (
                 <div
                   key={group.id}
@@ -134,10 +134,10 @@ class DisplayUserDetailsGroups extends React.Component {
                 </div>
               ))
             }
-            {!hasGroups &&
-              <em className="empty-feedback empty-group-feedback"><Trans>The user is not a member of any group yet</Trans></em>
-            }
           </ul>
+          {!hasGroups &&
+            <em className="empty-feedback empty-group-feedback"><Trans>The user is not a member of any group yet</Trans></em>
+          }
         </div>
         }
       </div>

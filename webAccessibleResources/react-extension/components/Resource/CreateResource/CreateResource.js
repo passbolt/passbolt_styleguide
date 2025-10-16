@@ -119,7 +119,6 @@ class CreateResource extends Component {
    *   A clone need to be created before validation to use marshall function from TotpEntity that modify the content but the form should not be modified for the user
    * @return {EntityValidationError}
    */
-  // eslint-disable-next-line no-unused-vars
   validateForm = memoize(resourceFormDto => {
     const resourceFormEntity = new ResourceFormEntity(resourceFormDto, {validate: false, resourceTypes: this.props.resourceTypes});
     resourceFormEntity.removeEmptySecret({validate: false});

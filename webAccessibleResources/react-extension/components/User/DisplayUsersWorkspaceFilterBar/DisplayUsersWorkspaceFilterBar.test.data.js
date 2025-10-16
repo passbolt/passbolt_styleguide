@@ -11,8 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
+import {defaultAppContext, defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {UserWorkspaceFilterTypes} from "../../../contexts/UserWorkspaceContext";
-import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContext.test.data";
+import {defaultUserWorkspaceContext, users, usersWithAttentionRequiredStates} from "../../../contexts/UserWorkspaceContext.test.data";
 
 /**
  * Default component props.
@@ -39,4 +40,82 @@ export function propsFilterBySuspended(data = {}) {
     userWorkspaceContext: defaultUserWorkspaceContext({filter: {type: UserWorkspaceFilterTypes.SUSPENDED_USER}}),
     ...data
   });
+}
+
+export function defaultPropsWithoutAttentionRequiredUsers(data = {}) {
+  return {
+    userWorkspaceContext: defaultUserWorkspaceContext(),
+    context: defaultAppContext({
+      users: users
+    }),
+    history: {
+      push: jest.fn(),
+    },
+    ...data
+  };
+}
+
+export function defaultPropsWithAttentionRequiredUsers(data = {}) {
+  return {
+    userWorkspaceContext: defaultUserWorkspaceContext(),
+    context: defaultAppContext({
+      users: usersWithAttentionRequiredStates
+    }),
+    history: {
+      push: jest.fn(),
+    },
+    ...data
+  };
+}
+
+export function propsWithAttentionFilter(data = {}) {
+  return {
+    userWorkspaceContext: defaultUserWorkspaceContext(),
+    context: defaultAppContext({
+      users: usersWithAttentionRequiredStates
+    }),
+    history: {
+      push: jest.fn(),
+    },
+    ...data
+  };
+}
+
+export function propsWithAttentionRequiredUsersNotAdmin(data = {}) {
+  return {
+    userWorkspaceContext: defaultUserWorkspaceContext(),
+    context: defaultUserAppContext({
+      users: usersWithAttentionRequiredStates,
+    }),
+    history: {
+      push: jest.fn(),
+    },
+    ...data
+  };
+}
+
+export function propsWithUsersFilteredByAccountRecovery(data = {}) {
+  return {
+    userWorkspaceContext: defaultUserWorkspaceContext({filter: {type: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST}}),
+    context: defaultAppContext({
+      users: usersWithAttentionRequiredStates
+    }),
+    history: {
+      push: jest.fn(),
+    },
+    ...data
+  };
+}
+
+export function propsWithUsersFilteredByMissingMetadata(data = {}) {
+  return {
+    userWorkspaceContext: defaultUserWorkspaceContext({filter: {type: UserWorkspaceFilterTypes.MISSING_METADATA_KEY}}),
+    context: defaultAppContext({
+      users: usersWithAttentionRequiredStates
+    }),
+    history: {
+      push: jest.fn(),
+    },
+    ...data
+  };
 }

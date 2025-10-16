@@ -75,6 +75,20 @@ class ImportResourcesKeyUnlock extends Component {
   }
 
   /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.focusOnPassphrase();
+  }
+
+  /**
+   * Put the focus on the passphrase input
+   */
+  focusOnPassphrase() {
+    this.passwordInputRef.current.focus();
+  }
+
+  /**
    * Returns the selected file's name
    */
   get selectedFilename() {

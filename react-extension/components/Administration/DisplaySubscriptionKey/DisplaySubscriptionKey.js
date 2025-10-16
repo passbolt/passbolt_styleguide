@@ -181,6 +181,7 @@ class DisplaySubscriptionKey extends React.Component {
     try {
       return DateTime.fromISO(date).setLocale(this.props.context.locale).toLocaleString(DateTime.DATE_SHORT);
     } catch (error) {
+      console.error(`Failed to format date "${date}":`, error);
       return "";
     }
   }
@@ -251,7 +252,7 @@ class DisplaySubscriptionKey extends React.Component {
                         <span className="email value">{subscription.email}</span>
                         <span className={`users value ${this.hasLimitUsersExceeded() ? "error" : ""}`}>{subscription.users} <span className="secondary-information">(<Trans>currently:</Trans> {this.state.activeUsers})</span></span>
                         <span className="created value">{this.formatDate(subscription.created)}</span>
-                        <span className={`expiry value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(subscription.expiry)} <span className="secondary-information">({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${formatDateTimeAgo(subscription.expiry, this.props.t, this.props.context.locale)}`})</span></span>
+                        <span className={`expiry value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(subscription.expiry)} <span className="secondary-information" title={subscription.expiry}>({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${formatDateTimeAgo(subscription.expiry, this.props.t, this.props.context.locale)}`})</span></span>
                       </div>
                     </div>
                   }

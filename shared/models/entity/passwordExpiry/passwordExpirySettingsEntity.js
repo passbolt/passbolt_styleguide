@@ -77,6 +77,24 @@ class PasswordExpirySettingsEntity extends Entity {
     };
   }
 
+  /**
+   * Calculate the default expiry date will return null as the default expiry is not applicable for CE.
+   * @returns {null}
+   */
+  calculateDefaultResourceExpiryDate() {
+    return null;
+  }
+
+  /*
+   * ==================================================
+   * Dynamic properties getters
+   * ==================================================
+   */
+
+  get isFeatureEnabled() {
+    return Boolean(this._props.id);
+  }
+
   /*
    * ==================================================
    * Static properties getters

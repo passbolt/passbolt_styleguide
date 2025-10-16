@@ -57,7 +57,7 @@ describe("As AD I should see the internationalisation page", () => {
       expect(page.helpBoxTitle.textContent).toBe("Want to contribute?");
       expect(page.helpBoxDescription.textContent).toBe("Your language is missing or you discovered an error in the translation, help us to improve passbolt.");
       expect(page.helpBoxButton.textContent).toEqual("Contribute");
-      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/contribute/translation');
+      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://www.passbolt.com/docs/contribute/translation/');
     });
 
     it('As AD I should be able to see a visual feedback after I saved the internationalisation settings in the administration internationalisation page', async() => {

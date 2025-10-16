@@ -27,8 +27,8 @@ export class ApiClientOptions {
     if (typeof baseUrl === 'string') {
       try {
         this.baseUrl = new URL(baseUrl);
-      } catch (e) {
-        throw new TypeError('ApiClientOption baseUrl is invalid.');
+      } catch (error) {
+        throw new TypeError('ApiClientOption baseUrl is invalid.', {cause: error});
       }
     } else {
       if (baseUrl instanceof URL) {
