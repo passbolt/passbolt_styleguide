@@ -207,7 +207,7 @@ class DisplayUserWorkspace extends React.Component {
                 gutterLeft={false}
                 minWidth={"18%"}
                 maxWidth={"24%"}
-                classNames={"users-workspace leftSideBar"}
+                classNames={"users-workspace left-side-bar"}
               >
                 <div className="panel left">
                   <div className="sidebar-content">
@@ -265,7 +265,7 @@ class DisplayUserWorkspace extends React.Component {
                     gutterLeft={true}
                     minWidth={"25%"}
                     maxWidth={"35%"}
-                    classNames={"users-workspace rightSideBar"}
+                    classNames={"users-workspace right-side-bar"}
                   >
                     <div className="panel aside">
                       {this.shouldDisplayEmptyDetails &&
