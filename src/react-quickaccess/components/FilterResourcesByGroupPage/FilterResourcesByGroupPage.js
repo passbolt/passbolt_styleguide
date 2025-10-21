@@ -29,6 +29,7 @@ import {
   withMetadataKeysSettingsLocalStorage
 } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import GroupServiceWorkerService from "../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 
 const BROWSED_RESOURCES_LIMIT = 500;
 const BROWSED_GROUPS_LIMIT = 500;
@@ -41,6 +42,7 @@ class FilterResourcesByGroupPage extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.initEventHandlers();
+    this.groupServiceWorkerService = new GroupServiceWorkerService(props.context.port);
   }
 
   /**
@@ -133,7 +135,7 @@ class FilterResourcesByGroupPage extends React.Component {
    * @returns {Promise<void>}
    */
   async findAndLoadGroups() {
-    const groups = await this.props.context.port.request('passbolt.groups.find-my-groups');
+    const groups = await this.groupServiceWorkerService.findMyGroups();
     this.sortGroupsAlphabetically(groups);
     this.setState({groups});
   }
