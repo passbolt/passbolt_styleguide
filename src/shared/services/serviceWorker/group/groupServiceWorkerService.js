@@ -25,7 +25,7 @@ export default class GroupServiceWorkerService {
 
   /**
    * Find all the groups the current user is member of.
-   * @returns {Promise<GroupsCollection>}
+   * @returns {Promise<Array<object>>}
    */
   async findMyGroups() {
     return await this.port.request(GROUPS_FIND_MY_GROUPS);
