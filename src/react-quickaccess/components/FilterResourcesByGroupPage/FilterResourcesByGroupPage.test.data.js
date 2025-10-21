@@ -36,7 +36,7 @@ import {
 export function defaultProps(props = {}) {
   const port = new MockPort();
   port.addRequestListener("passbolt.resources.find-all-ids-by-is-shared-with-group", () => new Promise(resolve => setTimeout(() => resolve(props.groups ?? []), 4000)));
-  port.addRequestListener("passbolt.groups.find-all", () => new Promise(resolve => setTimeout(() => resolve(props.resources ?? []), 4000)));
+  port.addRequestListener("passbolt.groups.find-my-groups", () => new Promise(resolve => setTimeout(() => resolve(props.resources ?? []), 4000)));
   const defaultContext = {port};
   const defaultProps = {
     context: defaultAppContext(
@@ -62,7 +62,7 @@ export function defaultProps(props = {}) {
 export function noGroupsProps(props) {
   const port = new MockPort();
   port.addRequestListener("passbolt.resources.find-all-ids-by-is-shared-with-group", () => []);
-  port.addRequestListener("passbolt.groups.find-all", () => []);
+  port.addRequestListener("passbolt.groups.find-my-groups", () => []);
   const defaultContext = {port};
   const context = {
     ...defaultContext,
@@ -92,7 +92,7 @@ export function withGroupsProps(props) {
       name: "group4"
     })
   ];
-  port.addRequestListener("passbolt.groups.find-all", () => groups);
+  port.addRequestListener("passbolt.groups.find-my-groups", () => groups);
   const defaultContext = {port};
   const context = {
     ...defaultContext,
@@ -145,7 +145,7 @@ export function withFilteredResourcesProps(props) {
     }, {withTags: true})
   ];
 
-  port.addRequestListener("passbolt.groups.find-all", () => [
+  port.addRequestListener("passbolt.groups.find-my-groups", () => [
     defaultGroupDto({name: "group1"}),
     defaultGroupDto({name: "group2"})
   ]);
