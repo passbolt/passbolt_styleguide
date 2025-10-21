@@ -20,6 +20,7 @@ import {withRouter} from "react-router-dom";
 import CarretDownSVG from "../../../../img/svg/caret_down.svg";
 import CarretRightSVG from "../../../../img/svg/caret_right.svg";
 import UsersSVG from "../../../../img/svg/users.svg";
+import GroupServiceWorkerService from "../../../../shared/services/serviceWorker/group/groupServiceWorkerService";
 
 /**
  * This component display groups to filter the resources
@@ -33,6 +34,7 @@ class FilterResourcesByGroups extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.bindCallbacks();
+    this.groupServiceWorkerService = new GroupServiceWorkerService(props.context.port);
   }
 
   /**
@@ -58,7 +60,7 @@ class FilterResourcesByGroups extends React.Component {
   async loadGroupsData() {
     if (!this.state.loading) {
       this.setState({loading: true});
-      const groups = await this.props.context.port.request('passbolt.groups.find-my-groups');
+      const groups = await this.groupServiceWorkerService.findMyGroups();
       this.setState({groups, loading: false});
     }
   }
