@@ -21,6 +21,7 @@ import {Trans, withTranslation} from "react-i18next";
 import {withAdminUserDirectory} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import download from "downloadjs";
 
 class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
   /**
@@ -55,6 +56,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
     this.handleFullReportClicked = this.handleFullReportClicked.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSynchronize = this.handleSynchronize.bind(this);
+    this.handleDownloadFullReport = this.handleDownloadFullReport.bind(this);
   }
 
   /**
@@ -118,7 +120,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get users() {
-    return this.state.userDirectorySimulateSynchronizeResult.users;
+    return this.state.userDirectorySimulateSynchronizeResult?.users;
   }
 
   /**
@@ -126,7 +128,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get groups() {
-    return this.state.userDirectorySimulateSynchronizeResult.groups;
+    return this.state.userDirectorySimulateSynchronizeResult?.groups;
   }
 
   /**
@@ -251,6 +253,27 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
   }
 
   /**
+   * Handle download of the full report
+   * @param {Event} event The html event triggering the download.
+   * @param {String} fullReport The full report text generated
+   */
+  handleDownloadFullReport(e, fullReport) {
+    e.preventDefault();
+    /**
+     * Timestamp safe for filename
+     * slice - trim off milliseconds and Z (UTC timezone indicator)
+     * replace - replace T (indicator for Time) with _
+     * replace - replace all : to - because : is not supported in file names
+     *
+     */
+
+    const now = new Date().toISOString().slice(0, 19).replace('T', '_').replace(/:/g, '-');
+    const filename = `passbolt-user-directory-simulate-synchronization-report-${now}.txt`;
+
+    download(fullReport, filename, "text/plain");
+  }
+
+  /**
    * get the full users report
    * @returns {string}
    */
@@ -337,6 +360,8 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {JSX}
    */
   render() {
+    const fullReportText = this.users ? String(this.getFullReport()) : '';
+
     return (
       <div>
         {this.isLoading() &&
@@ -375,9 +400,14 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
               </div>
               <div className="accordion-content">
                 <div className="input text">
-                  <textarea className="full_report" readOnly={true} value={this.getFullReport()}/>
+                  <textarea className="full_report" readOnly={true} value={fullReportText}/>
                 </div>
               </div>
+              {fullReportText &&
+              <button type="button" className="link download-full-report" onClick={event => this.handleDownloadFullReport(event, fullReportText)}>
+                <Trans>Download the Full Report</Trans>
+              </button>
+              }
             </div>
             {this.hasErrorOrIgnoreResource() &&
               <div className="warning message no-margin">

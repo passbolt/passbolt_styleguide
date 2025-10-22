@@ -156,6 +156,13 @@ class DisplaySynchronizeUserDirectoryAdministrationDialogPageObject {
   }
 
   /**
+   * Returns the Download the Full Report link
+   */
+  get downloadReportLink() {
+    return this._container.querySelector('button.link.download-full-report');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {

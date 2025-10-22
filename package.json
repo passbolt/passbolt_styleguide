@@ -77,7 +77,8 @@
     "uuid": "^8.3.0",
     "validator": "^13.9.0",
     "webextension-polyfill": "^0.10.0",
-    "xregexp": "^5.1.2"
+    "xregexp": "^5.1.2",
+    "downloadjs": "^1.4.7"
   },
   "overrides": {
     "i18next-parser": {
