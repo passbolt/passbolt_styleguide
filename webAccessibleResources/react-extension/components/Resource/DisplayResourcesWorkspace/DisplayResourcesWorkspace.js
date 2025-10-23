@@ -250,7 +250,7 @@ class Workspace extends Component {
           gutterLeft={false}
           minWidth={"18%"}
           maxWidth={"23.4%"}
-          classNames={"resource-workspace leftSideBar"}
+          classNames={"resource-workspace left-side-bar"}
         >
           <div className="panel left resource-filter">
             <div className="sidebar-content">
@@ -349,7 +349,7 @@ class Workspace extends Component {
               gutterLeft={true}
               minWidth={"25%"}
               maxWidth={"35%"}
-              classNames={"resource-workspace rightSideBar"}
+              classNames={"resource-workspace right-side-bar"}
             >
               <div className="panel aside">
                 {this.shouldDisplayListDetails &&

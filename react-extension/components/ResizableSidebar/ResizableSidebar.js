@@ -180,8 +180,8 @@ class ResizableSidebar extends React.Component {
     const containerWidth = containerRef?.current?.offsetWidth || 1;
     const widthPercent = this.pxToPercent(widthPx, containerWidth);
 
-    /** use 'resource-workspace leftSideBar' and 'resource-workspace rightSideBar' for Resource Workspace sidebars */
-    /** use 'users-workspace leftSideBar' and 'users-workspace rightSideBar' for Users Workspace sidebars */
+    /** use 'resource-workspace left-side-bar' and 'resource-workspace right-side-bar' for Resource Workspace sidebars */
+    /** use 'users-workspace left-side-bar' and 'users-workspace right-side-bar' for Users Workspace sidebars */
     const classes = `resizable-sidebar${classNames ? ` ${classNames}` : ""}`;
 
     return (

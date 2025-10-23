@@ -2746,6 +2746,7 @@ input[type=file] {
   padding: 0;
   font-size: 1.5rem;
   margin-bottom: 1.6rem;
+  margin-top: 0.8rem;
   border: 0;
   font-weight: normal;
   clear: both;
@@ -3475,31 +3476,31 @@ html {
   flex-direction: row;
   height: 100%;
 }
-.page .app .resizable-sidebar.leftSideBar + .panel.middle .middle-right {
+.page .app .resizable-sidebar.left-side-bar + .panel.middle .middle-right {
   gap: 0;
 }
-.page .app .resizable-sidebar.leftSideBar + .panel.middle .middle-right .gutter + .panel.aside {
+.page .app .resizable-sidebar.left-side-bar + .panel.middle .middle-right .gutter + .panel.aside {
   width: 97%;
   max-width: 100%;
   min-width: 90%;
 }
-.page .app .resizable-sidebar.leftSideBar + .panel.middle .header {
+.page .app .resizable-sidebar.left-side-bar + .panel.middle .header {
   justify-content: space-between;
   gap: 0.2rem;
 }
-.page .app .resizable-sidebar.resource-workspace.leftSideBar {
+.page .app .resizable-sidebar.resource-workspace.left-side-bar {
   min-width: 26rem;
   max-width: 23.5%;
 }
-.page .app .resizable-sidebar.resource-workspace.rightSideBar {
+.page .app .resizable-sidebar.resource-workspace.right-side-bar {
   min-width: 25%;
   max-width: 35%;
 }
-.page .app .resizable-sidebar.users-workspace.leftSideBar {
+.page .app .resizable-sidebar.users-workspace.left-side-bar {
   min-width: 29rem;
   max-width: 24%;
 }
-.page .app .resizable-sidebar.users-workspace.rightSideBar {
+.page .app .resizable-sidebar.users-workspace.right-side-bar {
   min-width: 25%;
   max-width: 35%;
 }
