@@ -123,6 +123,13 @@ class ResourceSecretRevisionsCollection extends EntityV2Collection {
 
     super.pushMany(data, entityOptions, options);
   }
+
+  /**
+   * Filter out the items which have encrypted secrets.
+   */
+  filterOutItemsHavingSecretDataEncrypted() {
+    this.filterByCallback(resourceRevision => !resourceRevision.secrets?.hasSecretsDataEncrypted());
+  }
 }
 
 export default ResourceSecretRevisionsCollection;
