@@ -39,8 +39,14 @@ export default class ImportResourcesResultPage {
     );
   }
 
+  /*
+   * ==================================================
+   * Dialog elements
+   * ==================================================
+   */
+
   /**
-   * Returns the title
+   * Returns the dialog title
    */
   get title() {
     return this._page.container.querySelector(".dialog-header-title").textContent;
@@ -54,11 +60,152 @@ export default class ImportResourcesResultPage {
   }
 
   /**
-   * Returns the dialog close element
+   * Returns the dialog close button element
    */
   get dialogClose() {
     return this._page.container.querySelector('.dialog-close');
   }
+
+  /**
+   * Returns the save button element
+   */
+  get saveButton() {
+    return this._page.container.querySelector('.submit-wrapper button[type="submit"]');
+  }
+
+  /*
+   * ==================================================
+   * Sections detection
+   * ==================================================
+   */
+
+  /**
+   * Returns true if the resources section exists
+   */
+  get hasResourcesSection() {
+    return this._page.container.querySelector('.resources-section') !== null;
+  }
+
+  /**
+   * Returns true if the folders section exists
+   */
+  get hasFoldersSection() {
+    return this._page.container.querySelector('.folder-section') !== null;
+  }
+
+  /*
+   * ==================================================
+   * Base section getters
+   * ==================================================
+   */
+
+  /**
+   * Returns the warning resources section element
+   */
+  get warningResourcesSection() {
+    return this._page.container.querySelector('.resources-section .warning-state')?.closest('.accordion-section');
+  }
+
+  /**
+   * Returns the error resources section element
+   */
+  get errorResourcesSection() {
+    return this._page.container.querySelector('.resources-section .fail-state')?.closest('.accordion-section');
+  }
+
+  /**
+   * Returns the error folders section element
+   */
+  get errorFoldersSection() {
+    return this._page.container.querySelector('.folder-section .fail-state')?.closest('.accordion-section');
+  }
+
+  /*
+   * ==================================================
+   * Resources warnings
+   * ==================================================
+   */
+
+  /**
+   * Returns true if warnings resources section exists
+   */
+  get hasWarningsResourcesSection() {
+    return Boolean(this.warningResourcesSection);
+  }
+
+  /**
+   * Returns the warning resources details accordion button
+   */
+  get warningResourcesDetailsButton() {
+    return this.warningResourcesSection?.querySelector('.accordion-header button');
+  }
+
+  /**
+   * Returns the warning resources debug textarea value
+   */
+  get warningResourcesDebug() {
+    return this.warningResourcesSection?.querySelector('#js_field_debug')?.value;
+  }
+
+  /*
+   * ==================================================
+   * Resources errors
+   * ==================================================
+   */
+
+  /**
+   * Returns true if errors resources section exists
+   */
+  get hasErrorsResourcesSection() {
+    return Boolean(this.errorResourcesSection);
+  }
+
+  /**
+   * Returns the error resources details accordion button
+   */
+  get errorResourcesDetailsButton() {
+    return this.errorResourcesSection?.querySelector('.accordion-header button');
+  }
+
+  /**
+   * Returns the error resources debug textarea value
+   */
+  get errorResourcesDebug() {
+    return this.errorResourcesSection?.querySelector('#js_field_debug')?.value;
+  }
+
+  /*
+   * ==================================================
+   * Folders errors
+   * ==================================================
+   */
+
+  /**
+   * Returns true if errors folders section exists
+   */
+  get hasErrorsFoldersSection() {
+    return Boolean(this.errorFoldersSection);
+  }
+
+  /**
+   * Returns the error folders details accordion button
+   */
+  get errorFoldersDetailsButton() {
+    return this.errorFoldersSection?.querySelector('.accordion-header button');
+  }
+
+  /**
+   * Returns the error folders debug textarea value
+   */
+  get errorFoldersDebug() {
+    return this.errorFoldersSection?.querySelector('#js_field_folders_debug')?.value;
+  }
+
+  /*
+   * ==================================================
+   * Other elements
+   * ==================================================
+   */
 
   /**
    * Returns the result for the index one
@@ -68,39 +215,17 @@ export default class ImportResourcesResultPage {
   }
 
   /**
-   * Returns the reference got the index one
+   * Returns the reference for the index one
    */
   reference(index) {
     return this._page.container.querySelectorAll('p button')[index - 1];
   }
 
-  /**
-   * Returns the error mesage for the index one
+  /*
+   * ==================================================
+   * Utility methods
+   * ==================================================
    */
-  errorMessage(index) {
-    return this._page.container.querySelectorAll('.error.inline-error')[index - 1].textContent;
-  }
-
-  /**
-   * Returns the error details element
-   */
-  get errorDetails() {
-    return this._page.container.querySelector('.accordion-header button');
-  }
-
-  /**
-   * Returns the error debug textarea element
-   */
-  get errorDebug() {
-    return this._page.container.querySelector('#js_field_debug').value;
-  }
-
-  /**
-   * Returns the save button element
-   */
-  get saveButton() {
-    return this._page.container.querySelector('.submit-wrapper button[type=\"submit\"]');
-  }
 
   /**
    * Returns true if the page object exists in the container
@@ -109,36 +234,68 @@ export default class ImportResourcesResultPage {
     return this.title !== null;
   }
 
-  /** Click on the element */
+  /*
+   * ==================================================
+   * Interaction methods
+   * ==================================================
+   */
+
+  /**
+   * Click on the element
+   * @param {HTMLElement} element The element to click
+   */
   async click(element)  {
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
 
-  /** Click without wait for on the element */
+  /**
+   * Trigger escape key on the form
+   */
   escapeKey()  {
-    // Escape key down event
     const escapeKeyDown = {keyCode: 27};
     fireEvent.keyDown(this.form, escapeKeyDown);
   }
 
-  /** Click on close dialog button */
-  async openErrorDetails() {
-    await this.click(this.errorDetails);
+  /**
+   * Click on warning resources details accordion button
+   */
+  async openWarningResourcesDetails() {
+    await this.click(this.warningResourcesDetailsButton);
   }
 
-  /** filter by reference (tag or folder) */
+  /**
+   * Click on error resources details accordion button
+   */
+  async openErrorResourcesDetails() {
+    await this.click(this.errorResourcesDetailsButton);
+  }
+
+  /**
+   * Click on error folders details accordion button
+   */
+  async openErrorFoldersDetails() {
+    await this.click(this.errorFoldersDetailsButton);
+  }
+
+  /**
+   * Filter by reference (tag or folder)
+   */
   async filterByReference() {
     await this.click(this.reference(1));
   }
 
-  /** Click on ok button */
+  /**
+   * Click on ok button
+   */
   async acceptResult() {
     await this.click(this.saveButton);
   }
 
-  /** Click on close dialog button */
+  /**
+   * Click on close dialog button
+   */
   async closeDialog() {
     await this.click(this.dialogClose);
   }
