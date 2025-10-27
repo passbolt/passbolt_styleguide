@@ -15,6 +15,8 @@
 /**
  * Unit tests on DisplaySynchronizeUserDirectoryAdministrationDialog in regard of specifications
  */
+jest.mock('downloadjs', () => jest.fn());
+import download from 'downloadjs';
 import {
   defaultProps,
   mockSynchronizeBody,
@@ -54,8 +56,9 @@ describe("See the synchronize user directory administration dialog", () => {
       await page.displaySynchronizeUserDirectoryAdministrationDialog.click(page.displaySynchronizeUserDirectoryAdministrationDialog.fullReport);
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.textareaReport).not.toBeNull();
       await page.displaySynchronizeUserDirectoryAdministrationDialog.click(page.displaySynchronizeUserDirectoryAdministrationDialog.synchronize);
+      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.downloadReportLink).not.toBeNull();
       expect(props.onClose).toBeCalled();
-      expect.assertions(7);
+      expect.assertions(8);
     });
   });
 
@@ -66,9 +69,40 @@ describe("See the synchronize user directory administration dialog", () => {
     it('As AD I should see the loading dialog', async() => {
       page = new DisplaySynchronizeUserDirectoryAdministrationPage(context, props);
       expect(page.title.hyperlink.textContent).toBe("Synchronize");
+      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.downloadReportLink).toBeNull();
       await page.displaySynchronizeUserDirectoryAdministrationDialog.click(page.displaySynchronizeUserDirectoryAdministrationDialog.dialogClose);
       expect(props.onClose).toBeCalled();
-      expect.assertions(2);
+      expect.assertions(3);
+    });
+  });
+
+  describe('As AD I should be able to download a report', () => {
+    /**
+     * I should see the simulate synchronize report dialog page and
+     * download the report if there is a report
+     */
+    beforeEach(() => {
+      fetch.doMockOnceIf(/directorysync\/synchronize*/, () => mockApiResponse(mockSynchronizeBody));
+      page = new DisplaySynchronizeUserDirectoryAdministrationPage(context, props);
+    });
+    it('As AD I can click the "Download the Full Report" link to trigger the downlaod action', async() => {
+      await waitFor(() => {});
+      expect(page.title.hyperlink.textContent).toBe("Synchronize report");
+      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.resourceSynchronize).toBe('2 users have been synchronized.60 groups have been synchronized.');
+      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.error).toBe('Some resources will not be synchronized and will require your attention, see the full report.');
+      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.noResource).toBeNull();
+      await page.displaySynchronizeUserDirectoryAdministrationDialog.click(page.displaySynchronizeUserDirectoryAdministrationDialog.fullReport);
+      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.textareaReport).not.toBeNull();
+      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.downloadReportLink).not.toBeNull();
+      await page.displaySynchronizeUserDirectoryAdministrationDialog.click(page.displaySynchronizeUserDirectoryAdministrationDialog.downloadReportLink);
+      await waitFor(() => {});
+      expect(download).toHaveBeenCalledTimes(1);
+      const [content, filename, mimeType] = download.mock.calls[0];
+      expect(typeof content).toBe("string");
+      expect(filename).toMatch(/passbolt-user-directory-synchronization-report-.*\.txt/);
+      expect(mimeType).toBe("text/plain");
+
+      expect.assertions(10);
     });
   });
 });
