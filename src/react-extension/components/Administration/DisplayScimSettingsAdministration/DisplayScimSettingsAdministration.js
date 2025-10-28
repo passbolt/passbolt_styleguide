@@ -29,10 +29,8 @@ import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardService
 import Password from "../../../../shared/components/Password/Password";
 import Select from "../../Common/Select/Select";
 import {getUserFormattedName} from "../../../../shared/utils/userUtils";
-/*
- * import {createSafePortal} from "../../../../shared/utils/portals";
- * import InfoSVG from "../../../../img/svg/info.svg";
- */
+import {createSafePortal} from "../../../../shared/utils/portals";
+import DisplayScimSettingsAdministrationHelp from "./DisplayScimSettingsAdministrationHelp";
 
 
 /**
@@ -453,11 +451,6 @@ class DisplayScimSettingsAdministration extends Component {
                       <p><Trans>Please save the settings to disable the feature.</Trans></p>
                     </div>
               }
-              {!hasSettingsChanges && this.state.enabled && this.formSettings?.id &&
-                    <div className="form-banner">
-                      <p><b><Trans>Warning:</Trans></b> <Trans>if you think the secret has been compromised please regenerate and update it in your provider settings.</Trans></p>
-                    </div>
-              }
               {hasSettingsChanges && this.state.enabled && this.formSettings.id &&
                     <div className="form-banner">
                       <p><Trans>Don&apos;t forget to save your settings to apply your modification.</Trans></p>
@@ -476,19 +469,12 @@ class DisplayScimSettingsAdministration extends Component {
             <span><Trans>Save</Trans></span>
           </button>
         </div>
-        {/*
-        createSafePortal(
-          <div className="sidebar-help-section">
-            <h3><Trans>Need help?</Trans></h3>
-            <p><Trans>For more information about SCIM, checkout the dedicated page on the official website.</Trans></p>
-            <a className="button" target="_blank" rel="noopener noreferrer" href="https://passbolt.com/docs/admin/scim/" >
-              <InfoSVG/>
-              <span><Trans>Read the documentation</Trans></span>
-            </a>
-          </div>,
-          document.getElementById("administration-help-panel")
-        )
-        */}
+        {
+          createSafePortal(
+            <DisplayScimSettingsAdministrationHelp shouldDisplayWarning={!hasSettingsChanges && this.state.enabled && this.formSettings?.id}/>,
+            document.getElementById("administration-help-panel")
+          )
+        }
       </div>
     );
   }
