@@ -12,16 +12,16 @@
  * @since         2.13.0
  */
 import SecretEntity from "./secretEntity";
-import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
-import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
-import {SCENARIO_EMPTY} from "passbolt-styleguide/test/assert/assertEntityProperty";
-import {minimalDto, readSecret} from "passbolt-styleguide/src/shared/models/entity/secret/secretEntity.test.data";
-import EntityValidationError from "passbolt-styleguide/src/shared/models/entity/abstract/entityValidationError";
+import EntitySchema from "../abstract/entitySchema";
+import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
+import {SCENARIO_EMPTY} from "../../../../../test/assert/assertEntityProperty";
+import {minimalDto, readSecret} from "./secretEntity.test.data";
+import EntityValidationError from "../abstract/entityValidationError";
 import {
   defaultSecretDataV5DefaultDto
-} from "passbolt-styleguide/src/shared/models/entity/secretData/secretDataV5DefaultEntity.test.data";
+} from "../secretData/secretDataV5DefaultEntity.test.data";
 import SecretDataV5DefaultEntity
-  from "passbolt-styleguide/src/shared/models/entity/secretData/secretDataV5DefaultEntity";
+  from "../secretData/secretDataV5DefaultEntity";
 
 describe("SecretEntity", () => {
   describe("SecretEntity::getSchema", () => {

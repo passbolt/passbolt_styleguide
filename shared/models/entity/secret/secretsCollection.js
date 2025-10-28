@@ -12,8 +12,8 @@
  * @since         4.10.1
  */
 import SecretEntity from "./secretEntity";
-import EntityV2Collection from "passbolt-styleguide/src/shared/models/entity/abstract/entityV2Collection";
-import EntityValidationError from "passbolt-styleguide/src/shared/models/entity/abstract/entityValidationError";
+import EntityV2Collection from "../abstract/entityV2Collection";
+import EntityValidationError from "../abstract/entityValidationError";
 
 class SecretsCollection extends EntityV2Collection {
   /**
