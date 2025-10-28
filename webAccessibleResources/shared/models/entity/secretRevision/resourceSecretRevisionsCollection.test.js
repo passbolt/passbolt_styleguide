@@ -17,6 +17,8 @@ import {defaultResourceSecretRevisionsDtos} from "./resourceSecretRevisionsColle
 import {v4 as uuidv4} from "uuid";
 import {defaultSecretRevisionDto} from "./secretRevisionEntity.test.data";
 import SecretRevisionEntity from "./secretRevisionEntity";
+import {defaultSecretDataV5DefaultDto} from "../secretData/secretDataV5DefaultEntity.test.data";
+import SecretDataV5DefaultEntity from "../secretData/secretDataV5DefaultEntity";
 
 describe("ResourceSecretRevisionsCollection", () => {
   describe("::getSchema", () => {
@@ -130,6 +132,27 @@ describe("ResourceSecretRevisionsCollection", () => {
       const time = performance.now() - start;
       expect(collection).toHaveLength(count);
       expect(time).toBeLessThan(10_000);
+    });
+  });
+
+  describe("::filterOutItemsHavingSecretDataEncrypted", () => {
+    it("should filter out all secret revision that still has an encrypted secret.", async() => {
+      expect.assertions(5);
+
+      const resource_id = uuidv4();
+      const dtos = defaultResourceSecretRevisionsDtos({resource_id}, {count: 4, withSecrets: true});
+
+      const collection = new ResourceSecretRevisionsCollection(dtos);
+      collection.items[0].secrets.items[0].data = new SecretDataV5DefaultEntity(defaultSecretDataV5DefaultDto());
+      collection.items[2].secrets.items[0].data = new SecretDataV5DefaultEntity(defaultSecretDataV5DefaultDto());
+
+      collection.filterOutItemsHavingSecretDataEncrypted();
+
+      expect(collection).toHaveLength(2);
+      expect(collection.items[0].secrets.hasSecretsDataEncrypted()).toStrictEqual(false);
+      expect(collection.items[0].secrets.hasSecretsDataDecrypted()).toStrictEqual(true);
+      expect(collection.items[1].secrets.hasSecretsDataEncrypted()).toStrictEqual(false);
+      expect(collection.items[1].secrets.hasSecretsDataDecrypted()).toStrictEqual(true);
     });
   });
 });
