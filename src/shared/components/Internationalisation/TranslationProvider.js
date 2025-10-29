@@ -94,9 +94,9 @@ class TranslationProvider extends Component {
         useSuspense: false,
       },
       backend: {
-        loadPath: this.props.loadingPath
+        loadPath: (lngs, namespaces) => this.getTranslationPath(lngs, namespaces)
       },
-      supportedLngs: [this.props.locale],
+      supportedLngs: this.supportedLocales,
       fallbackLng: false,
       ns: ["common"],
       defaultNS: "common",
@@ -112,6 +112,44 @@ class TranslationProvider extends Component {
   get isReady() {
     return this.state.i18next !== null;
   }
+
+  /**
+   * Generates the translation file path for i18next with en-GB to en-UK locale mapping.
+   *
+   * i18next no longer supports the non-canonical locale code 'en-UK' and automatically
+   * falls back to the canonical 'en-GB' code. To maintain our existing implementation
+   * which uses 'en-UK' folder structure, this method intercepts the en-GB fallback
+   * and redirects it to our en-UK translation files.
+   * See: https://www.i18next.com/misc/migration-guide#v23.x.x-to-v24.0.0
+   *
+   * @param {string[]} lngs - Array of language codes from i18next
+   * @param {string[]} namespaces - Array of namespace identifiers
+   * @returns {string} The resolved translation file path with en-GB mapped to en-UK
+   */
+  getTranslationPath(lngs, namespaces) {
+    const lng = lngs[0];
+    const ns = namespaces[0];
+    // i18next is doing a fallback on en-GB we are redirecting to our en-UK folder
+    const actualLng = lng === 'en-GB' ? 'en-UK' : lng;
+    const basePath = this.props.loadingPath;
+    return basePath
+      .replace('{{lng}}', actualLng)
+      .replace('{{ns}}', ns);
+  }
+
+  /**
+   * Get supported locales.
+   * @returns {string[]}
+   */
+  get supportedLocales() {
+    const locales = [this.props.locale];
+
+    if (locales.includes('en-UK')) {
+      locales.push('en-GB'); //Need to add the locale to support i18next fallback as en-UK is not supported
+    }
+    return locales;
+  }
+
 
   /**
    * Render the component.
