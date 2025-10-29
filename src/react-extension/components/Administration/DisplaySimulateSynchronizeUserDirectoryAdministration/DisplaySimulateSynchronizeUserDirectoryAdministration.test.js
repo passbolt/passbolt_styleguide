@@ -59,6 +59,27 @@ describe("See the simulate synchronize user directory administration dialog", ()
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.downloadReportLink).not.toBeNull();
       expect(props.onClose).toHaveBeenCalledTimes(1);
     });
+
+    it('As AD I should not see The full report, download link and "synchronize" button in the dialog for my simulate synchronize report', async() => {
+      expect.assertions(7);
+      fetch.doMockOnceIf(/directorysync*/, () => mockApiResponse({
+        "users": [],
+        "groups": []
+      }));
+      const props = defaultProps();
+      const page = new DisplaySimulateSynchronizeUserDirectoryAdministrationPage(defaultAppContext(), props);
+
+      await waitFor(() => {});
+
+      expect(page.title.hyperlink.textContent).toBe("Synchronize simulation report");
+      expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.exists()).toBeTruthy();
+      expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.noReportMessage).toBe('There is nothing to synchronize');
+      expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.textareaReport).toBeNull();
+      expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.downloadReportLink).toBeNull();
+      expect((page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.synchronize).textContent).toBe("Ok");
+      await page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.click(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.synchronize);
+      expect(props.onClose).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('As Ad I should see a loading dialog for my simulate synchronize report if it\'s not yet loaded', () => {

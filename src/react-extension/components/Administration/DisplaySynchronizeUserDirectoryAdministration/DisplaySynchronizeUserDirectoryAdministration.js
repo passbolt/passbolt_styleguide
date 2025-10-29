@@ -370,7 +370,9 @@ class DisplaySynchronizeUserDirectoryAdministration extends Component {
             <p>
               <strong><Trans>The operation was successful.</Trans></strong>
             </p>
-            {this.hasSuccessResource() &&
+            {fullReportText &&
+            <>
+              {this.hasSuccessResource() &&
               <p id="resources-synchronize">
                 {this.hasSuccessUserResource() &&
                   <>{this.translate("{{count}} user has been synchronized.", {count: this.usersSuccess.length})}</>
@@ -380,31 +382,34 @@ class DisplaySynchronizeUserDirectoryAdministration extends Component {
                   <>{this.translate("{{count}} group has been synchronized.", {count: this.groupsSuccess.length})}</>
                 }
               </p>
-            }
-            {!this.hasSuccessResource() &&
+              }
+              {!this.hasSuccessResource() &&
             <p id="no-resources"> <Trans>No resources have been synchronized.</Trans> </p>
-            }
-            <div className={`accordion operation-details ${this.state.openFullReport ? "" : "closed"}`}>
-              <div className="accordion-header" onClick={this.handleFullReportClicked}>
-                <button type="button" className="link no-border">
-                  <span><Trans>Full report</Trans></span>
-                  {this.state.openFullReport
-                    ? <CaretDownSVG className="baeline svg-icon"/>
-                    : <CaretRightSVG className="baeline svg-icon"/>
-                  }
-                </button>
-              </div>
-              <div className="accordion-content">
-                <div className="input text">
-                  <textarea className="full_report" readOnly={true} value={fullReportText}/>
+              }
+              <div className={`accordion operation-details ${this.state.openFullReport ? "" : "closed"}`}>
+                <div className="accordion-header" onClick={this.handleFullReportClicked}>
+                  <button type="button" className="link no-border">
+                    <span><Trans>Full report</Trans></span>
+                    {this.state.openFullReport
+                      ? <CaretDownSVG className="baeline svg-icon"/>
+                      : <CaretRightSVG className="baeline svg-icon"/>
+                    }
+                  </button>
                 </div>
-              </div>
-              {fullReportText &&
+                <div className="accordion-content">
+                  <div className="input text">
+                    <textarea className="full_report" readOnly={true} value={fullReportText}/>
+                  </div>
+                </div>
                 <button type="button" className="link download-full-report" onClick={event => this.handleDownloadFullReport(event, fullReportText)}>
                   <Trans>Download the Full Report</Trans>
                 </button>
-              }
-            </div>
+              </div>
+            </>
+            }
+            {
+              !fullReportText && <p id="no-report-message"><span><Trans>There is nothing to synchronize</Trans></span></p>
+            }
             {this.hasErrorOrIgnoreResource() &&
               <div className="warning message no-margin">
                 <p>

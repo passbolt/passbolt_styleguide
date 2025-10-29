@@ -114,6 +114,13 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPageObject {
   }
 
   /**
+   * Returns the nothing to synchronize message
+   */
+  get noReportMessage() {
+    return this._container.querySelector('#no-report-message').textContent;
+  }
+
+  /**
    * Returns the no resource element
    */
   get noResource() {
