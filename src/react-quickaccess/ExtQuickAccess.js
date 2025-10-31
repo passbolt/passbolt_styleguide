@@ -110,6 +110,7 @@ class ExtQuickAccess extends React.Component {
     this.getDetached = this.getDetached.bind(this);
     this.handleBackgroundPageConfirmMetadataKeyEvent = this.handleBackgroundPageConfirmMetadataKeyEvent.bind(this);
     this.handleConfirmMetadataKeyDialogCompleted = this.handleConfirmMetadataKeyDialogCompleted.bind(this);
+    this.closeWindow = this.closeWindow.bind(this);
   }
 
   /**
@@ -167,6 +168,7 @@ class ExtQuickAccess extends React.Component {
       // Manage popup blur
       shouldCloseAtWindowBlur: true, // when true the quickaccess in detached mode should close when losing focus
       setWindowBlurBehaviour: this.setWindowBlurBehaviour, // set the detached mode blur behaviour
+      closeWindow: this.closeWindow,
       // Quickaccess properties getters.
       getOpenerTabId: this.getOpenerTabId, // Get the opener tab id, useful when used in detached mode to get info of the opener tab.
       getBootstrapFeature: this.getBootstrapFeature, // The bootstrap feature.
@@ -221,11 +223,23 @@ class ExtQuickAccess extends React.Component {
     this.setState({ shouldCloseAtWindowBlur });
   }
 
+  /**
+   * Closes the current window.
+   * @returns {Promise<void>}
+   */
+  async closeWindow() {
+    if (this.getDetached()) {
+      await this.props.port.request('passbolt.active-tab.close');
+    } else {
+      window.close();
+    }
+  }
+
   async checkPluginIsConfigured() {
     const isConfigured = await this.state.port.request("passbolt.addon.is-configured");
     if (!isConfigured) {
       browser.tabs.create({ url: PASSBOLT_GETTING_STARTED_URL });
-      window.close();
+      await this.closeWindow();
     }
   }
 
@@ -280,7 +294,7 @@ class ExtQuickAccess extends React.Component {
   async checkAuthStatus() {
     const { isAuthenticated, isMfaRequired } = await this.state.port.request("passbolt.auth.check-status");
     if (isMfaRequired) {
-      this.redirectToMfaAuthentication();
+      await this.redirectToMfaAuthentication();
       return;
     }
     this.setState({ isAuthenticated });
@@ -290,14 +304,14 @@ class ExtQuickAccess extends React.Component {
   /**
    * Redirect to MFA authentication.
    */
-  redirectToMfaAuthentication() {
+  async redirectToMfaAuthentication() {
     browser.tabs.create({ url: this.state.userSettings.getTrustedDomain() });
-    window.close();
+    await this.closeWindow();
   }
 
   async loginSuccessCallback() {
     if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.LOGIN) {
-      window.close();
+      await this.closeWindow();
       return;
     }
 
@@ -310,15 +324,15 @@ class ExtQuickAccess extends React.Component {
     this.setState({ isAuthenticated: false });
   }
 
-  mfaRequiredCallback(url) {
+  async mfaRequiredCallback(url) {
     browser.tabs.create({ url });
-    window.close();
+    await this.closeWindow();
   }
 
-  handleKeyDown(event) {
+  async handleKeyDown(event) {
     // Close the quickaccess popup when the user presses the "ESC" key.
     if (event.keyCode === 27) {
-      window.close();
+      await this.closeWindow();
     }
   }
 
@@ -351,9 +365,9 @@ class ExtQuickAccess extends React.Component {
     }
   }
 
-  handlePassphraseDialogCompleted() {
+  async handlePassphraseDialogCompleted() {
     if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.REQUEST_PASSPHRASE) {
-      window.close();
+      await this.closeWindow();
     } else {
       this.setState({ passphraseRequired: false, passphraseRequestId: null });
     }

@@ -6,6 +6,7 @@
 import MockPort from "../../../react-extension/test/mock/MockPort";
 import UserSettings from "../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../react-extension/test/fixture/Settings/userSettings";
+import {defaultAppContext} from "../../contexts/AppContext.test.data";
 
 export function defaultAppContext(appContext) {
   const defaultAppContext = {

@@ -64,20 +64,20 @@ class PassphraseDialog extends React.Component {
 
     try {
       await this.props.context.port.request("passbolt.keyring.private.checkpassphrase", this.state.passphrase);
-      this.handlePassphraseSuccess();
+      await this.handlePassphraseSuccess();
     } catch (error) {
       console.error(`Invalid passphrase":`, error);
       this.handlePassphraseError();
     }
   }
 
-  handlePassphraseSuccess() {
+  async handlePassphraseSuccess() {
     const rememberMeDuration = this.state.rememberMe ? -1 : false;
     this.props.context.port.emit(this.props.requestId, "SUCCESS", {
       passphrase: this.state.passphrase,
       rememberMe: rememberMeDuration,
     });
-    this.props.onComplete();
+    await this.props.onComplete();
   }
 
   handlePassphraseError() {

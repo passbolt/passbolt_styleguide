@@ -104,8 +104,8 @@ class SaveResource extends React.Component {
   /**
    * Handles the "close" event
    */
-  handleClose() {
-    window.close();
+  async handleClose() {
+    await this.props.context.closeWindow();
   }
 
   /**
@@ -144,7 +144,7 @@ class SaveResource extends React.Component {
 
     try {
       await this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
-      this.handleClose();
+      await this.handleClose();
     } catch (error) {
       this.handleSubmitError(error);
     }
