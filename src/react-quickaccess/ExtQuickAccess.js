@@ -1,4 +1,3 @@
-import browser from "webextension-polyfill";
 import React from "react";
 import FilterResourcesByFavoritePage from "./components/FilterResourcesByFavoritePage/FilterResourcesByFavoritePage";
 import FilterResourcesByItemsIOwnPage from "./components/FilterResourcesByItemsIOwnPage/FilterResourcesByItemsIOwnPage";
@@ -238,7 +237,7 @@ class ExtQuickAccess extends React.Component {
   async checkPluginIsConfigured() {
     const isConfigured = await this.state.port.request("passbolt.addon.is-configured");
     if (!isConfigured) {
-      browser.tabs.create({ url: PASSBOLT_GETTING_STARTED_URL });
+      await this.props.port.request('passbolt.tabs.open', PASSBOLT_GETTING_STARTED_URL);
       await this.closeWindow();
     }
   }
@@ -305,7 +304,7 @@ class ExtQuickAccess extends React.Component {
    * Redirect to MFA authentication.
    */
   async redirectToMfaAuthentication() {
-    browser.tabs.create({ url: this.state.userSettings.getTrustedDomain() });
+    await this.props.port.request('passbolt.tabs.open', this.state.userSettings.getTrustedDomain());
     await this.closeWindow();
   }
 
@@ -325,7 +324,7 @@ class ExtQuickAccess extends React.Component {
   }
 
   async mfaRequiredCallback(url) {
-    browser.tabs.create({ url });
+    await this.props.port.request('passbolt.tabs.open', url);
     await this.closeWindow();
   }
 
