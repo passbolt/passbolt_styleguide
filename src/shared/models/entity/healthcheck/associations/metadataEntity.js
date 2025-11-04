@@ -39,6 +39,10 @@ class MetadataEntity extends Entity {
       "required": ["canDecryptMetadataPrivateKey"],
       "properties": {
         "canDecryptMetadataPrivateKey": {"type": "boolean"},
+        "canValidatePrivateMetadataKey": {"type": "boolean"},
+        "isServerHasAccessToMetadataKey": {"type": "boolean"},
+        "isServerMetadataKeyAccessInZeroKnowledgeMode": {"type": "boolean"},
+        "noActiveMetadataKey": {"type": "boolean"},
       }
     };
   }
@@ -48,8 +52,45 @@ class MetadataEntity extends Entity {
    * Dynamic properties getters
    *==================================================*
    */
+
+  /**
+   * Returns whether the server can decrypt the metadata private key
+   * @returns {boolean}
+   */
   get canDecryptMetadataPrivateKey() {
     return this._props.canDecryptMetadataPrivateKey;
+  }
+
+  /**
+   * Returns whether the private metadata key can be validated
+   * @returns {boolean}
+   */
+  get canValidatePrivateMetadataKey() {
+    return this._props.canValidatePrivateMetadataKey;
+  }
+
+  /**
+   * Returns whether the server has access to the metadata key
+   * @returns {boolean}
+   */
+  get isServerHasAccessToMetadataKey() {
+    return this._props.isServerHasAccessToMetadataKey;
+  }
+
+  /**
+   * Returns whether the server has access to the metadata private key in zero-knowledge mode
+   * @returns {boolean}
+   */
+  get isServerMetadataKeyAccessInZeroKnowledgeMode() {
+    return this._props.isServerMetadataKeyAccessInZeroKnowledgeMode;
+  }
+
+  /**
+   * Returns whether there is no active metadata key
+   * @returns {boolean}
+   */
+  get noActiveMetadataKey() {
+    return this._props.noActiveMetadataKey;
   }
 
   /*
