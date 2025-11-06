@@ -49,12 +49,13 @@ class MockTranslationProvider extends Component {
       .use(initReactI18next)
       // init i18next, for all options read: https://www.i18next.com/overview/configuration-options
       .init({
-        lng: props.language || 'en-UK',
+        // As en-UK is not supported for the english locale we need to use en-GB
+        lng: props.language || 'en-GB',
         resources: {
           "de-DE": {
             common: deTranslations
           },
-          "en-UK": {
+          "en-GB": {
             common: enTranslations
           },
           "es-ES": {
