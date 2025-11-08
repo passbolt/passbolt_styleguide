@@ -60,6 +60,27 @@ describe("See the synchronize user directory administration dialog", () => {
       expect(props.onClose).toBeCalled();
       expect.assertions(8);
     });
+
+    it('As AD I should not see The full report and download link in the dialog for synchronize report', async() => {
+      expect.assertions(7);
+      fetch.doMockOnceIf(/directorysync\/synchronize*/, () => mockApiResponse({
+        "users": [],
+        "groups": []
+      }));
+      const props = defaultProps();
+      const page = new DisplaySynchronizeUserDirectoryAdministrationPage(context, props);
+
+      await waitFor(() => {});
+
+      expect(page.title.hyperlink.textContent).toBe("Synchronize report");
+      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.exists()).toBeTruthy();
+      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.noReportMessage).toBe('There is nothing to synchronize');
+      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.textareaReport).toBeNull();
+      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.downloadReportLink).toBeNull();
+      expect((page.displaySynchronizeUserDirectoryAdministrationDialog.synchronize).textContent).toBe("Ok");
+      await page.displaySynchronizeUserDirectoryAdministrationDialog.click(page.displaySynchronizeUserDirectoryAdministrationDialog.synchronize);
+      expect(props.onClose).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('As Ad I should see a loading dialog for my synchronize report if it\'s not yet loaded', () => {

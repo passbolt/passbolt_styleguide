@@ -1568,6 +1568,7 @@
   "There is no password": "There is no password",
   "There is no tag.": "There is no tag.",
   "There is no value": "There is no value",
+  "There is nothing to synchronize": "There is nothing to synchronize",
   "There was an issue during the transfer. Please try again later or contact your administrator.": "There was an issue during the transfer. Please try again later or contact your administrator.",
   "There was an unexpected error...": "There was an unexpected error...",
   "These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.": "These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.",

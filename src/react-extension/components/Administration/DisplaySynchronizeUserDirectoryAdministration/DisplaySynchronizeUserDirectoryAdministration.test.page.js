@@ -163,6 +163,12 @@ class DisplaySynchronizeUserDirectoryAdministrationDialogPageObject {
   }
 
   /**
+   * Returns the nothing to synchronize message
+   */
+  get noReportMessage() {
+    return this._container.querySelector('#no-report-message').textContent;
+  }
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
