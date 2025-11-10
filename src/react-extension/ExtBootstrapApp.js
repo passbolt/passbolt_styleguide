@@ -109,6 +109,7 @@ class ExtBootstrapApp extends Component {
               "/app/administration/subscription",
               "/app/administration/account-recovery",
               "/app/administration/sso",
+              "/app/administration/secret-history",
               "/app/administration/password-policies",
               "/app/administration/user-passphrase-policies",
               "/app/administration/password-expiry",

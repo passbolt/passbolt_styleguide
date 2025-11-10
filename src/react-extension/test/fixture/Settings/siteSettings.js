@@ -226,6 +226,10 @@ const siteSettings = (isProEdition = true) => ({
       "scim": {
         "enabled": true,
       },
+      "secretRevisions": {
+        "enabled": true,
+        "maxRevisionsLimit": 11
+      },
     }
   }
 });

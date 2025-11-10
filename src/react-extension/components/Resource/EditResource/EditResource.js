@@ -132,6 +132,7 @@ class EditResource extends Component {
       // It can happen when the user has closed the passphrase entry dialog by instance.
       if (error?.name === "UserAbortsOperationError" || error?.name === "UntrustedMetadataKeyError") {
         console.warn(error);
+        this.handleClose();
         return;
       }
       this.props.dialogContext.open(NotifyError, {error});

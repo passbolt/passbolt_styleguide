@@ -348,6 +348,17 @@ export const MigrateMetadataPage = {
   },
 };
 
+export const SecretHistoryPage = {
+  args: {
+    port: port,
+    storage: storage,
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
+      selectedAdministration: AdministrationWorkspaceMenuTypes.SECRET_HISTORY
+    }),
+    routerInitialEntry: "/app/administration/secret-history"
+  },
+};
+
 export const error403 = {
   args: {
     port: port,

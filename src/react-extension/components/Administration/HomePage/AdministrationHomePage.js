@@ -39,6 +39,7 @@ import InternationalSVG from "../../../../img/svg/international.svg";
 import HeartPulseSVG from "../../../../img/svg/heart_pulse.svg";
 import EmailNotificationsSVG from "../../../../img/svg/email_notifications.svg";
 import MetadataKeySVG from "../../../../img/svg/metadata_key.svg";
+import SecretHistorySVG from "../../../../img/svg/secret_history.svg";
 import {withAdministrationEncryptedMetadataGettingStarted} from "../../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext";
 
 const metadataMenuItems = [
@@ -113,8 +114,8 @@ class AdministrationHomePage extends React.PureComponent {
       flag: AdministrationWorkspaceMenuTypes.MIGRATE_METADATA,
     }, {
       icon: <ShapesSVG/>,
-      title: this.props.t("Allow resources types"),
-      description: this.props.t("Control the resource types availability for all users."),
+      title: this.props.t("Allow content types"),
+      description: this.props.t("Control the content types availability for all users."),
       redirectTo: this.props.navigationContext.onGoToAdministrationAllowContentTypesRequested,
       flag: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES,
     }, {
@@ -130,6 +131,12 @@ class AdministrationHomePage extends React.PureComponent {
       redirectTo: this.isCommunityEdition() ? this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequestedTeasing : this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequested,
       flag: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES,
       displayProTeasingIcon: this.isCommunityEdition(),
+    }, {
+      icon: <SecretHistorySVG/>,
+      title: this.props.t("Secret history"),
+      description: this.props.t("Control how many secret revisions are retained."),
+      redirectTo: this.props.navigationContext.onGoToAdministrationSecretHistoryRequested,
+      flag: AdministrationWorkspaceMenuTypes.SECRET_HISTORY,
     }, {
       icon: <PassphrasePolicySVG/>,
       title: this.props.t("User passphrase policies"),

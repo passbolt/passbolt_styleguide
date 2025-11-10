@@ -22,8 +22,11 @@ export const readSecret = (data = {}) => ({
   id: uuidv4(),
   user_id: uuidv4(),
   resource_id: uuidv4(),
+  secret_revision_id: uuidv4(),
   data: "-----BEGIN PGP MESSAGE----- -----END PGP MESSAGE-----",
   created: "2022-03-04T13:59:11+00:00",
+  created_by: uuidv4(),
   modified: "2022-03-04T13:59:11+00:00",
+  modified_by: uuidv4(),
   ...data
 });

@@ -30,6 +30,11 @@ import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadat
 import {
   defaultMetadataKeysSettingsDto
 } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import SecretRevisionsSettingsEntity
+  from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
+import {
+  defaultSecretRevisionsSettingsDto
+} from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
 
 /**
  * Default component props.
@@ -50,6 +55,7 @@ export function defaultProps(data = {}) {
     passwordExpiryContext: defaultPasswordExpirySettingsContext({policy_override: true}),
     clipboardContext: defaultClipboardContext(),
     metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
+    secretRevisionsSettings: new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto()),
     ...data
   };
 }

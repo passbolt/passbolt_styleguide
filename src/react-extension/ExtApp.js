@@ -82,6 +82,7 @@ import AdministrationEncryptedMetadataGettingStartedContextProvider
 import GettingStartedWithEncryptedMetadataServiceWorkerService
   from "../shared/services/serviceWorker/metadata/gettingStartedWithEncryptedMetadataServiceWorkerService";
 import {ResizableSidebarContextProvider} from "./contexts/ResizeSidebar/ResizeSidebarContext";
+import SecretRevisionsSettingsContextProvider from "../shared/context/SecretRevisionSettingsContext/SecretRevisionsSettingsContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -154,21 +155,23 @@ class ExtApp extends Component {
                                                   <MetadataTypesSettingsLocalStorageContextProvider>
                                                     <MetadataKeysSettingsLocalStorageContextProvider>
                                                       <ResourceTypesLocalStorageContextProvider>
-                                                        <ResourcePasswordGeneratorContextProvider>
-                                                          <ManageDialogs/>
-                                                          <ManageWorkflows/>
-                                                          <ManageContextualMenu/>
-                                                          <ManageAnnouncements/>
-                                                          <DragContextProvider>
-                                                            <ResizableSidebarContextProvider>
-                                                              <div id="container" className="page password">
-                                                                <div id="app" className="app" tabIndex="1000">
-                                                                  <DisplayResourcesWorkspace/>
+                                                        <SecretRevisionsSettingsContextProvider>
+                                                          <ResourcePasswordGeneratorContextProvider>
+                                                            <ManageDialogs/>
+                                                            <ManageWorkflows/>
+                                                            <ManageContextualMenu/>
+                                                            <ManageAnnouncements/>
+                                                            <DragContextProvider>
+                                                              <ResizableSidebarContextProvider>
+                                                                <div id="container" className="page password">
+                                                                  <div id="app" className="app" tabIndex="1000">
+                                                                    <DisplayResourcesWorkspace/>
+                                                                  </div>
                                                                 </div>
-                                                              </div>
-                                                            </ResizableSidebarContextProvider>
-                                                          </DragContextProvider>
-                                                        </ResourcePasswordGeneratorContextProvider>
+                                                              </ResizableSidebarContextProvider>
+                                                            </DragContextProvider>
+                                                          </ResourcePasswordGeneratorContextProvider>
+                                                        </SecretRevisionsSettingsContextProvider>
                                                       </ResourceTypesLocalStorageContextProvider>
                                                     </MetadataKeysSettingsLocalStorageContextProvider>
                                                   </MetadataTypesSettingsLocalStorageContextProvider>
@@ -234,6 +237,7 @@ class ExtApp extends Component {
                                               "/app/administration/users-directory-teasing",
                                               "/app/administration/scim-teasing",
                                               "/app/administration/user-provisionning/scim",
+                                              "/app/administration/secret-history",
                                             ]}>
                                               <AdministrationWorkspaceContextProvider>
                                                 <AdminAccountRecoveryContextProvider>
