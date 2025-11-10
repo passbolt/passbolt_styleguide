@@ -64,13 +64,14 @@ class DisplaySecretResourceHistory extends Component {
       this.resourceSecretRevisionsCollection = await this.secretRevisionsResourceServiceWorkerService.findAllByResourceIdForDisplay(this.props.resource.id);
     } catch (error) {
       // It can happen when the user has closed the passphrase entry dialog by instance.
-      if (error?.name === "UserAbortsOperationError" || error?.name === "UntrustedMetadataKeyError") {
+      if (error?.name === "UserAbortsOperationError") {
         console.warn(error);
         this.handleClose();
         return;
       }
       this.props.dialogContext.open(NotifyError, {error});
       this.handleClose();
+      return;
     }
     this.resourceSecretRevisionsCollection.sortByModified();
 

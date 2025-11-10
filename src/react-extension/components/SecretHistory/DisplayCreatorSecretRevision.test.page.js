@@ -85,6 +85,14 @@ export default class SelectSecretHistoryPage {
   }
 
   /**
+   * Returns the tooltip portal text
+   * @returns {Element}
+   */
+  get tooltipText() {
+    return document.querySelector("body .tooltip-portal-text").textContent;
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
