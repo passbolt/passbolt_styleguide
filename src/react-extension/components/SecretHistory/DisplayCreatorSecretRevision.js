@@ -68,8 +68,14 @@ class DisplayCreatorSecretRevision extends Component {
     if (this.state.tooltipFingerprintMessage) {
       return;
     }
-    const gpgkey = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', userId);
-    const tooltipFingerprintMessage = <Fingerprint fingerprint={gpgkey.fingerprint}/>;
+    let tooltipFingerprintMessage;
+    try {
+      const gpgkey = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', userId);
+      tooltipFingerprintMessage = <Fingerprint fingerprint={gpgkey.fingerprint}/>;
+    } catch (error) {
+      console.error(error);
+      tooltipFingerprintMessage = <p>{error.message}</p>;
+    }
     this.setState({tooltipFingerprintMessage});
   }
 

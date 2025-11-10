@@ -25,6 +25,7 @@ import {defaultUserDto} from "../../../shared/models/entity/user/userEntity.test
 import {defaultProfileDto} from "../../../shared/models/entity/profile/ProfileEntity.test.data";
 import {formatDateTimeAgo} from "../../../shared/utils/dateUtils";
 import {defaultGpgkeyDto} from "../../../shared/models/entity/gpgkey/gpgkeyEntity.test.data";
+import "../../../../test/mocks/mockPortal.js";
 
 beforeEach(() => {
   jest.resetModules();
@@ -107,9 +108,10 @@ describe("DisplayCreatorSecretRevision", () => {
     });
 
     it('As LU I can see the fingerprint of a creator.', async() => {
-      expect.assertions(2);
+      expect.assertions(3);
       const props = defaultProps();
-      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultGpgkeyDto());
+      const gpgKey = defaultGpgkeyDto();
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => gpgKey);
       page = new DisplayCreatorSecretRevisionPage(props);
       await waitFor(() => {});
 
@@ -118,6 +120,30 @@ describe("DisplayCreatorSecretRevision", () => {
       await page.mouseOverOnFingerprint();
 
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", props.secretRevision.creator.id);
+      expect(page.tooltipText).toStrictEqual(gpgKey.fingerprint.replace(/.{4}/g, '$& '));
+    });
+
+    it('As LU I cannot see the fingerprint of a creator deleted.', async() => {
+      expect.assertions(3);
+      const creator = defaultUserDto({
+        username: "betty@passbolt.com",
+        profile: defaultProfileDto({
+          first_name: "Betty",
+          last_name: "Holberton"
+        }),
+        deleted: true
+      });
+      const props = defaultProps({secretRevision: new SecretRevisionEntity(defaultSecretRevisionDto({creator}))});
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => { throw new Error("User key not found"); });
+      page = new DisplayCreatorSecretRevisionPage(props);
+      await waitFor(() => {});
+
+      expect(page.exists()).toBeTruthy();
+
+      await page.mouseOverOnFingerprint();
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", props.secretRevision.creator.id);
+      expect(page.tooltipText).toStrictEqual("User key not found");
     });
   });
 });
