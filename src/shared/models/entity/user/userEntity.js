@@ -19,6 +19,17 @@ import ProfileEntity from "../profile/profileEntity";
 const ENTITY_NAME = 'User';
 
 /**
+ * An enum to gather the different possible user statuses.
+ * These are use in the UI directly and needs to be translated.
+ *
+ */
+export const USER_STATUS = {
+  ACTIVE: "active",
+  SUSPENDED: "suspended",
+  DELETED: "deleted",
+};
+
+/**
  * class UserEntity
  *
  * This is a duplicate of the UserEntity coming from the browser extension and it has been adapted to make it work.
@@ -231,6 +242,46 @@ class UserEntity extends EntityV2 {
   get modified() {
     return this._props.modified || null;
   }
+
+  /**
+   * Get the user formatted name
+   * @param {function} translate The translate function
+   * @param {object} [options] The options
+   * @param {boolean} [options.withUsername = false] The with username option to display the username with the first name and last name
+   * @return {string}
+   */
+  getUserFormattedName(translate = text => text, options = {withUsername: false}) {
+    const profile = this.profile;
+    if (!profile) {
+      return translate("Unknown user");
+    }
+
+    const hasName = Boolean(profile.firstName) || Boolean(profile.lastName);
+    if (!hasName) {
+      return translate("Unknown user");
+    }
+
+    return options.withUsername
+      ? `${profile.firstName} ${profile.lastName} (${this.username})`
+      : `${profile.firstName} ${profile.lastName}`;
+  }
+
+  /**
+   * Returns the given user's status
+   * @returns {string<USER_STATUS>}
+   */
+  get status() {
+    if (this.isDeleted) {
+      return USER_STATUS.DELETED;
+    }
+
+    const isSuspended = Boolean(this._props.disabled && new Date(this._props.disabled) <= new Date());
+    if (isSuspended) {
+      return USER_STATUS.SUSPENDED;
+    }
+
+    return USER_STATUS.ACTIVE;
+  };
 
   /**
    * Set the user missing metadata keys ids

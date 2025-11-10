@@ -87,6 +87,7 @@ import HealthcheckSuccessSVG from "../../../img/svg/healthcheck_success.svg";
 import HealthcheckWarningSVG from "../../../img/svg/healthcheck_warning.svg";
 import HeartSVG from "../../../img/svg/heart.svg";
 import HelpSVG from "../../../img/svg/help.svg";
+import HistorySVG from "../../../img/svg/history.svg";
 import HomeSVG from "../../../img/svg/home.svg";
 import ImageSVG from "../../../img/svg/image.svg";
 import ImportSVG from "../../../img/svg/import.svg";
@@ -131,6 +132,7 @@ import ResourcesSVG from "../../../img/svg/resources.svg";
 import RevertSVG from "../../../img/svg/revert.svg";
 import SaveSVG from "../../../img/svg/save.svg";
 import SearchSVG from "../../../img/svg/search.svg";
+import SecretHistorySVG from "../../../img/svg/secret_history.svg";
 import SelectResourceSVG from "../../../img/svg/select_resource.svg";
 import SelectUserSVG from "../../../img/svg/select_user.svg";
 import SelfRegisterSVG from "../../../img/svg/self_register.svg";
@@ -261,6 +263,7 @@ const iconsSVGs = [
   HealthcheckWarningSVG,
   HeartSVG,
   HelpSVG,
+  HistorySVG,
   HomeSVG,
   ImageSVG,
   ImportSVG,
@@ -342,6 +345,7 @@ const settingIconsSVGs = [
   MfaPolicySVG,
   SsoSVG,
   PasswordPolicySVG,
+  SecretHistorySVG,
   RbacSVG,
   LdapSVG,
   PassphrasePolicySVG,

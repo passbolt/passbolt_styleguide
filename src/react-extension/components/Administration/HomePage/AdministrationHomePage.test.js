@@ -14,7 +14,7 @@
 /**
  * Unit tests on AdministrationHomePage in regard of specifications
  */
-jest.mock("../../../img/svg/Frame.svg", () => () => <svg data-testid="frame-svg" />);
+jest.mock("../../../../img/svg/Frame.svg", () => () => <svg data-testid="frame-svg" />);
 import React from "react";
 import AdministrationHomePagePage from "./AdministrationHomePage.test.page";
 import {defaultProps} from "./AdministrationHomePage.test.data";
@@ -43,6 +43,7 @@ const scenarios = [
   {field: "ssoSettings", title: "Single Sign-On", proRedirect: "onGoToAdministrationSsoRequested", ceRedirect: "onGoToAdministrationSsoRequestedTeasing", checkProIcon: true, clickMethod: "goToSsoSettings"},
   {field: "smtpSettings", title: "Email server", proRedirect: "onGoToAdministrationSmtpSettingsRequested", clickMethod: "goToSmtpSettings"},
   {field: "scimSettings", title: "SCIM", proRedirect: "onGoToAdministrationScimRequested", ceRedirect: "onGoToAdministrationScimRequestedTeasing", checkProIcon: true, clickMethod: "goToscimSettings"},
+  {field: "secretHistorySettings", title: "Secret history", proRedirect: "onGoToAdministrationSecretHistoryRequested", clickMethod: "goToSecretHistorySettings"},
 ];
 
 /**
