@@ -34,6 +34,7 @@ import WorkflowContextProvider from "../../../contexts/WorkflowContext";
 import ManageWorkflows from "../../Common/Workflow/ManageWorkflows/ManageWorkflows";
 import PasswordExpirySettingsContextProvider from "../../../contexts/PasswordExpirySettingsContext";
 import {ResizableSidebarContextProvider} from "../../../contexts/ResizeSidebar/ResizeSidebarContext";
+import SecretRevisionsSettingsContextProvider from "../../../../shared/context/SecretRevisionSettingsContext/SecretRevisionsSettingsContext";
 
 /**
  * DisplayResourcesWorkspace stories
@@ -62,18 +63,20 @@ const ExtApp = ({...args}) =>
                       <ResourceWorkspaceContextProvider>
                         <MetadataTypesSettingsLocalStorageContextProvider>
                           <ResourceTypesLocalStorageContextProvider>
-                            <ResourcePasswordGeneratorContextProvider>
-                              <ManageContextualMenu/>
-                              <ManageDialogs/>
-                              <ManageWorkflows/>
-                              <DragContextProvider>
-                                <div id="container" className="page password">
-                                  <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
-                                    <DisplayResourcesWorkspace {...args}/>
+                            <SecretRevisionsSettingsContextProvider>
+                              <ResourcePasswordGeneratorContextProvider>
+                                <ManageContextualMenu/>
+                                <ManageDialogs/>
+                                <ManageWorkflows/>
+                                <DragContextProvider>
+                                  <div id="container" className="page password">
+                                    <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
+                                      <DisplayResourcesWorkspace {...args}/>
+                                    </div>
                                   </div>
-                                </div>
-                              </DragContextProvider>
-                            </ResourcePasswordGeneratorContextProvider>
+                                </DragContextProvider>
+                              </ResourcePasswordGeneratorContextProvider>
+                            </SecretRevisionsSettingsContextProvider>
                           </ResourceTypesLocalStorageContextProvider>
                         </MetadataTypesSettingsLocalStorageContextProvider>
                       </ResourceWorkspaceContextProvider>

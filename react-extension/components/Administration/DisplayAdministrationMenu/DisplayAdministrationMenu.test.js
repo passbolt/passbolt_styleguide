@@ -15,7 +15,7 @@
 /**
  * Unit tests on DisplayAdministrationMenu in regard of specifications
  */
-jest.mock("../../../img/svg/Frame.svg", () => () => <svg data-testid="frame-svg" />);
+jest.mock("../../../../img/svg/Frame.svg", () => () => <svg data-testid="frame-svg" />);
 import React from "react";
 import DisplayAdministrationMenuPage from "./DisplayAdministrationMenu.test.page";
 import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
@@ -700,6 +700,32 @@ describe("As AD I can see the administration menu", () => {
       expect(props.navigationContext.onGoToAdministrationPasswordPoliciesRequestedTeasing).toHaveBeenCalled();
       await waitFor(() => {});
       expect(page.proTeasingIcon('password_policy_menu')).not.toBeNull();
+    });
+  });
+
+  describe("As a signed-in administrator on the administration workspace, I can see the secret history option in the left-side bar", () => {
+    it('If the feature flag is true, the menu should be visible', async() => {
+      expect.assertions(4);
+      const props = defaultProps({
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SECRET_HISTORY}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      await page.gotoSecretHistorySettings();
+      expect(page.secretHistorySettings).toBeTruthy();
+      expect(page.menuSelected).toBe('Secret history');
+      expect(props.navigationContext.onGoToAdministrationSecretHistoryRequested).toHaveBeenCalled();
+    });
+
+    it('If the feature flag is false, the menu should not be visible', async() => {
+      expect.assertions(2);
+      const props = defaultProps({
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SECRET_HISTORY}
+      }); // The props to pass
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(flag => flag !== "secretRevisions");
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      expect(page.secretHistorySettings).toBeNull();
     });
   });
 

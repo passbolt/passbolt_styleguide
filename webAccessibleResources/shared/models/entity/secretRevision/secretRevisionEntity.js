@@ -12,6 +12,7 @@
  * @since         5.7.0
  */
 import EntityV2 from "../abstract/entityV2";
+import SecretEntity from "../secret/secretEntity";
 import SecretsCollection from "../secret/secretsCollection";
 import UserEntity from "../user/userEntity";
 
@@ -175,7 +176,7 @@ class SecretRevisionEntity extends EntityV2 {
    * @param {object} [contain] optional
    * @returns {object}
    */
-  toDto(contain) {
+  toDto(contain = SecretRevisionEntity.ALL_CONTAIN_OPTIONS) {
     const result = Object.assign({}, this._props);
     if (!contain) {
       return result;
@@ -184,7 +185,7 @@ class SecretRevisionEntity extends EntityV2 {
       result.creator = this._creator.toDto(UserEntity.ALL_CONTAIN_OPTIONS);
     }
     if (this._secrets && contain.secrets) {
-      result.secrets = this._secrets.toDto();
+      result.secrets = this._secrets.toDto(SecretEntity.ALL_CONTAIN_OPTIONS);
     }
 
     return result;

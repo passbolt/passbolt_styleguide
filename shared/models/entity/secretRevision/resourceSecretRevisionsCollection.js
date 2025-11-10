@@ -96,7 +96,7 @@ class ResourceSecretRevisionsCollection extends EntityV2Collection {
    * Transform into dto.
    * @returns {array}
    */
-  toDto(contains = {}) {
+  toDto(contains = SecretRevisionEntity.ALL_CONTAIN_OPTIONS) {
     return this._items.map(entity => entity.toDto(contains));
   }
 

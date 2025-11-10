@@ -83,6 +83,14 @@ class SecretRevisionsSettingsEntity extends EntityV2 {
   get allowSharingRevisions() {
     return this._props.allow_sharing_revisions;
   }
+
+  /**
+   * Get Is feature enabled
+   * @return {boolean}
+   */
+  get isFeatureEnabled() {
+    return this.maxRevisions > 1;
+  }
 }
 
 export default SecretRevisionsSettingsEntity;

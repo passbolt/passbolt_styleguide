@@ -41,6 +41,8 @@ import {
 import {v4 as uuidv4} from "uuid";
 import ActionAbortedMissingMetadataKeys
   from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
+import SecretRevisionsSettingsEntity
+  from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 
 beforeEach(() => {
   jest.resetModules();
@@ -67,10 +69,8 @@ describe("See Workspace Menu", () => {
     });
 
     it('As LU I can start deleting a resource via the workspace main menu', () => {
-      expect.assertions(3);
+      expect.assertions(2);
       expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.moreMenu).not.toBeNull();
-      page.displayMenu.clickOnMoreMenu();
       expect(page.displayMenu.deleteMenu).not.toBeNull();
     });
 
@@ -78,6 +78,14 @@ describe("See Workspace Menu", () => {
       expect.assertions(2);
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.editMenu).not.toBeNull();
+    });
+
+    it('As LU I can start to display a resource secret history via the workspace more menu', () => {
+      expect.assertions(3);
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuSecretHistory).not.toBeNull();
     });
 
     it('As LU I cannot start to mark as expired a resource if the feature flag password expiry is enabled but the feature is disabled', () => {
@@ -175,6 +183,43 @@ describe("See Workspace Menu", () => {
       page.displayMenu.clickOnMoreMenu();
       expect(page.displayMenu.dropdownMenuMarkAsExpired).toBeNull();
       expect(page.displayMenu.dropdownMenuSetExpiryDate).toBeNull();
+    });
+  });
+
+  describe("As LU I cannot use the secret history feature", () => {
+    it('As LU I cannot start to display a resource secret history if the feature flag is enabled but the feature is disabled', () => {
+      expect.assertions(3);
+      const context = defaultAppContext(); // The applicative context
+      context.siteSettings.settings.passbolt.plugins.secretRevisions.enabled = false;
+
+      const propsOneResourceOwned = defaultPropsOneResourceOwned({context: context}); // The props to pass
+      const page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuSecretHistory).toBeNull();
+    });
+
+    it('As LU I cannot start to display a resource secret history if the feature flag is disabled', () => {
+      expect.assertions(3);
+      const context = defaultAppContext(); // The applicative context
+      const propsOneResourceOwned = defaultPropsOneResourceOwned({secretRevisionsSettings: SecretRevisionsSettingsEntity.createFromDefault()}); // The props to pass
+      const page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuSecretHistory).toBeNull();
+    });
+
+    it('As LU I cannot start to display a resource secret history if multiple resources are selected', () => {
+      expect.assertions(3);
+      const context = defaultAppContext(); // The applicative context
+      const propsMultipleResources = defaultPropsMultipleResourceUpdateRights(); // The props to pass
+      const page = new DisplayResourcesWorkspaceMenuPage(context, propsMultipleResources);
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuSecretHistory).toBeNull();
     });
   });
 

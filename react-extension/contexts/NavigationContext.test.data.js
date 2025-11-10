@@ -33,6 +33,7 @@ export function defaultNavigationContext(context = {}) {
     onGoToAdministrationSmtpSettingsRequested: jest.fn(),
     onGoToAdministrationSsoRequested: jest.fn(),
     onGoToAdministrationPasswordPoliciesRequested: jest.fn(),
+    onGoToAdministrationSecretHistoryRequested: jest.fn(),
     onGoToAdministrationUserPassphrasePoliciesRequested: jest.fn(),
     onGoToAdministrationPasswordExpirySettingsRequested: jest.fn(),
     onGoToAdministrationHealthcheckRequested: jest.fn(),
@@ -62,6 +63,7 @@ export function defaultNavigationContext(context = {}) {
     onGoToAdministrationMfaPolicyRequested: jest.fn(),
     onGoToAdministrationContentTypesMetadataKeyRequested: jest.fn(),
     onGoToAdministrationContentTypesEncryptedMetadataRequested: jest.fn(),
+    onGoToAdministrationMetadataGettingStartedRequested: jest.fn(),
   };
   return Object.assign(defaultContext, context);
 }

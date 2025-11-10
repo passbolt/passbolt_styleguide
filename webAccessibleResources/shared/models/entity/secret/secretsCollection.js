@@ -140,6 +140,14 @@ class SecretsCollection extends EntityV2Collection {
 
     super.pushMany(data, entityOptions, options);
   }
+
+  /**
+   * Transform into dto.
+   * @returns {array}
+   */
+  toDto(contains = {}) {
+    return this._items.map(entity => entity.toDto(contains));
+  }
 }
 
 export default SecretsCollection;

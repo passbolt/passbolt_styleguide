@@ -170,6 +170,13 @@ export default class AdministrationWorkspacePage {
   }
 
   /**
+   * Returns true if the secret history is selected
+   */
+  get isSecretHistorySelected() {
+    return Boolean(this._page.container.querySelector('.secret-history-details'));
+  }
+
+  /**
    * Returns true if the password expiry area is visible
    */
   get isAllowedContentTypesSelected() {

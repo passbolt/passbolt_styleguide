@@ -303,6 +303,29 @@ export default class DisplayHealthcheckAdministrationPage {
   }
 
   /**
+   * Returns the healthcheck metadata section
+   */
+  get healthcheckMetadata() {
+    return this._page.container.querySelector('.healthcheck-metadata-section');
+  }
+
+  /**
+   * Returns the healthcheck metadata sub sections isSuccess
+   */
+  get isAllHealthcheckSubSectionMetadataSuccess() {
+    const healthcheckSuccesses = this.healthcheckMetadata.querySelectorAll('.healthcheck-success');
+    return healthcheckSuccesses.length === 4;
+  }
+
+  /**
+   * Returns the healthcheck metadata sub sections isFailed
+   */
+  get isAllHealthcheckSubSectionMetadataFailed() {
+    const healthcheckFails = this.healthcheckMetadata.querySelectorAll('.healthcheck-fail');
+    return healthcheckFails.length === 4;
+  }
+
+  /**
    * Click on the element
    */
   async click(element) {

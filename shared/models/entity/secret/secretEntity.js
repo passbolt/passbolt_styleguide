@@ -189,6 +189,37 @@ class SecretEntity extends EntityV2 {
       throw error;
     }
   }
+
+  /**
+   * Returns a DTO
+   * @param {object} [contain]
+   * @returns {object}
+   */
+  toDto(contain = {}) {
+    const result = Object.assign({}, this._props);
+
+    if (!contain) {
+      return result;
+    }
+    if (this._data && contain.data) {
+      result.data = this._data.toDto();
+    }
+
+    return result;
+  }
+
+  /*
+   * ==================================================
+   * Static properties getters
+   * ==================================================
+   */
+  /**
+   * SecretEntity.ALL_CONTAIN_OPTIONS
+   * @returns {object} all contain options that can be used in toDto()
+   */
+  static get ALL_CONTAIN_OPTIONS() {
+    return {data: true};
+  }
 }
 
 export default SecretEntity;

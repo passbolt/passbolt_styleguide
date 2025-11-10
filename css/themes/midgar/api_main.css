@@ -2821,9 +2821,9 @@ input[type=file] {
 .slider input[type=range] {
   -webkit-appearance: none;
   width: 100%;
-  height: 1px;
+  height: 0.2rem;
   border-radius: 5px;
-  background: #424242;
+  background: var(--Loading-bar-Loading-bar-background);
   outline: 0;
   flex-grow: 1;
 }
@@ -2835,25 +2835,34 @@ input[type=file] {
   appearance: none;
   width: 1.6rem;
   height: 1.6rem;
-  box-shadow: inset 0 0 0 0.1rem #424242;
+  box-shadow: inset 0 0 0 0.1rem var(--Primary-button-Primary-button-background);
   border-radius: 50%;
-  background: #7A7A7A;
+  background: var(--Primary-button-Primary-button-background);
   cursor: pointer;
 }
 .slider input[type=range]::-webkit-slider-thumb:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 0.1rem #424242;
+  box-shadow: inset 0.1rem 0.1rem 0 var(--States-Hover-Highlight), 0.1rem 0.1rem 0 var(--States-Hover-Shadow), inset 0 0 0 0.1rem var(--Primary-button-Primary-button-background);
+}
+.slider input[type=range]::-webkit-slider-thumb:active {
+  box-shadow: inset -0.1rem -0.1rem 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 var(--States-Active-Shadow), inset 0 0 0 0.1rem var(--Primary-button-Primary-button-background);
 }
 .slider input[type=range]::-moz-range-thumb {
   width: 1.6rem;
   height: 1.6rem;
-  box-shadow: inset 0 0 0 0.1rem #424242;
+  box-shadow: inset 0 0 0 0.1rem var(--Primary-button-Primary-button-background);
   border: none;
   border-radius: 50%;
-  background: #7A7A7A;
+  background: var(--Primary-button-Primary-button-background);
   cursor: pointer;
 }
 .slider input[type=range]::-moz-range-thumb:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 0.1rem #424242;
+  box-shadow: inset 0.1rem 0.1rem 0 var(--States-Hover-Highlight), 0.1rem 0.1rem 0 var(--States-Hover-Shadow), inset 0 0 0 0.1rem var(--Primary-button-Primary-button-background);
+}
+.slider input[type=range]::-moz-range-thumb:active {
+  box-shadow: inset -0.1rem -0.1rem 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 var(--States-Active-Shadow), inset 0 0 0 0.1rem var(--Primary-button-Primary-button-background);
+}
+.slider input[type=range]::-moz-range-progress {
+  background: var(--Primary-button-Primary-button-background);
 }
 .slider input[type=number] {
   margin-left: 1.6rem;
@@ -7019,6 +7028,9 @@ html.launching .launching-screen p {
 }
 .ldap-simulate-synchronize-dialog.dialog-wrapper textarea.full_report {
   max-height: 25rem;
+}
+.ldap-simulate-synchronize-dialog.dialog-wrapper button.link {
+  margin-top: 0.5rem;
 }
 .ldap-simulate-synchronize-dialog.dialog-wrapper a.button + button.primary {
   margin-left: auto;

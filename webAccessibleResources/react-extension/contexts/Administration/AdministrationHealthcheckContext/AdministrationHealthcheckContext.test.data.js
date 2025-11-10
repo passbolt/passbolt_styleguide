@@ -148,6 +148,13 @@ export const mockHealthcheckData = {
   },
   "sso": {
     "sslHostVerification": true
+  },
+  "metadata": {
+    "canDecryptMetadataPrivateKey": true,
+    "canValidatePrivateMetadataKey": true,
+    "isServerHasAccessToMetadataKey": true,
+    "noActiveMetadataKey": true,
+    "isServerMetadataKeyAccessInZeroKnowledgeMode": false
   }
 };
 
@@ -367,6 +374,13 @@ export const mockHealthcheckDataAllChecksFail = {
   },
   "sso": {
     "sslHostVerification": false
+  },
+  "metadata": {
+    "canDecryptMetadataPrivateKey": false,
+    "canValidatePrivateMetadataKey": false,
+    "isServerHasAccessToMetadataKey": false,
+    "noActiveMetadataKey": false,
+    "isServerMetadataKeyAccessInZeroKnowledgeMode": false
   }
 };
 
@@ -476,5 +490,12 @@ export const mockHealthcheckAirGappedEnvironment = {
   },
   "sso": {
     "sslHostVerification": false
+  },
+  "metadata": {
+    "canDecryptMetadataPrivateKey": true,
+    "canValidatePrivateMetadataKey": true,
+    "isServerHasAccessToMetadataKey": true,
+    "noActiveMetadataKey": true,
+    "isServerMetadataKeyAccessInZeroKnowledgeMode": false
   }
 };

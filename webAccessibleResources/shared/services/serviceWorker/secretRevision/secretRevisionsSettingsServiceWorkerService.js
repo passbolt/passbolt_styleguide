@@ -16,6 +16,7 @@ import SecretRevisionsSettingsEntity from "../../../models/entity/secretRevision
 
 export const SECRET_REVISIONS_FIND_SETTINGS = "passbolt.secret-revisions.find-settings";
 export const SECRET_REVISIONS_SAVE_SETTINGS = "passbolt.secret-revisions.save-settings";
+export const SECRET_REVISIONS_DELETE_SETTINGS = "passbolt.secret-revisions.delete-settings";
 
 export default class SecretRevisionsSettingsServiceWorkerService {
   /**
@@ -38,11 +39,21 @@ export default class SecretRevisionsSettingsServiceWorkerService {
   /**
    * Save the secret revision settings on the API.
    * @param {SecretRevisionsSettingsEntity} secretRevisionSettingsEntity
+   * @returns {Promise<SecretRevisionsSettingsEntity>}
    */
   async saveSettings(secretRevisionSettingsEntity) {
     if (!(secretRevisionSettingsEntity instanceof SecretRevisionsSettingsEntity)) {
       throw new TypeError("The parameter `secretRevisionSettingsEntity` should be of type SecretRevisionsSettingsEntity.");
     }
-    await this.port.request(SECRET_REVISIONS_SAVE_SETTINGS, secretRevisionSettingsEntity);
+    const settings = await this.port.request(SECRET_REVISIONS_SAVE_SETTINGS, secretRevisionSettingsEntity);
+    return new SecretRevisionsSettingsEntity(settings);
+  }
+
+  /**
+   * Delete the current secret revisions settings from the API.
+   * @returns {Promise<void>}
+   */
+  async deleteSettings() {
+    await this.port.request(SECRET_REVISIONS_DELETE_SETTINGS);
   }
 }

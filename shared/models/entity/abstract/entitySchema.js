@@ -562,8 +562,6 @@ class EntitySchema {
        * Not in json-schema but needed by passbolt
        * cowboy style section 🤠
        */
-      case 'x-url':
-        return Validator.isURL(prop, {require_tld: false});
       case 'x-hex-color':
         return Validator.isHexColor(prop);
       case 'x-base64':

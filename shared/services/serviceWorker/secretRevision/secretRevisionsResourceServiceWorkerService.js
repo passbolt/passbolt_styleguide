@@ -34,6 +34,7 @@ export default class SecretRevisionsResourceServiceWorkerService {
   async findAllByResourceIdForDisplay(resourceId) {
     assertString(resourceId);
     const secretRevisionsCollection = await this.port.request(SECRET_REVISIONS_FIND_ALL_BY_RESOURCE_ID_FOR_DISPLAY, resourceId);
-    return new ResourceSecretRevisionsCollection(secretRevisionsCollection);
+    // TODO: remove validate false when the data in the Secret entity will be able to handle string and decrypted object
+    return new ResourceSecretRevisionsCollection(secretRevisionsCollection, {validate: false});
   }
 }

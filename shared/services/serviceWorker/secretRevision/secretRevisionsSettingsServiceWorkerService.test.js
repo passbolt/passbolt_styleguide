@@ -47,7 +47,7 @@ describe("SecretRevisionsSettingsServiceWorkerService", () => {
 
       const port = new MockPort();
       port.addRequestListener(event, () => {});
-      jest.spyOn(port, "request");
+      jest.spyOn(port, "request").mockImplementationOnce(() => entity.toDto());
 
       const service = new SecretRevisionsSettingsServiceWorkerService(port);
       await service.saveSettings(entity);
@@ -63,6 +63,24 @@ describe("SecretRevisionsSettingsServiceWorkerService", () => {
 
       const service = new SecretRevisionsSettingsServiceWorkerService(port);
       await expect(() => service.saveSettings(wrongEntity)).rejects.toThrowError();
+    });
+  });
+
+  describe("::deleteSettings", () => {
+    it("should call for the right service worker event and return the right entity", async() => {
+      expect.assertions(2);
+      const event = "passbolt.secret-revisions.delete-settings";
+      const secretRevisions = defaultSecretRevisionsSettingsDto();
+
+      const port = new MockPort();
+      port.addRequestListener(event, () => {});
+      jest.spyOn(port, "request");
+
+      const service = new SecretRevisionsSettingsServiceWorkerService(port);
+      await service.deleteSettings(secretRevisions.id);
+
+      expect(port.request).toHaveBeenCalledTimes(1);
+      expect(port.request).toHaveBeenCalledWith(event);
     });
   });
 });

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.1.0
  */
-import UserEntity from "./userEntity";
+import UserEntity, {USER_STATUS} from "./userEntity";
 import EntitySchema from "../abstract/entitySchema";
 import {defaultUserDto} from "../user/userEntity.test.data";
 import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
@@ -137,6 +137,52 @@ describe("UserEntity", () => {
       expect(dtoWithContain.role.name).toEqual('user');
       expect(dtoWithContain.profile.first_name).toEqual(dto.profile.first_name);
       expect(dtoWithContain.gpgkey.armored_key.startsWith('-----BEGIN PGP PUBLIC KEY BLOCK-----')).toBe(true);
+    });
+  });
+
+  describe("UserEntity::getUserFormattedName", () => {
+    it("should return a user formatted name", () => {
+      const dto = defaultUserDto({});
+      const entity = new UserEntity(dto);
+
+      expect(entity.getUserFormattedName()).toEqual(`${dto.profile.first_name} ${dto.profile.last_name}`);
+    });
+
+    it("should return a user formatted name with username", () => {
+      const dto = defaultUserDto({});
+      const entity = new UserEntity(dto);
+
+      expect(entity.getUserFormattedName(text => text, {withUsername: true})).toEqual(`${dto.profile.first_name} ${dto.profile.last_name} (${dto.username})`);
+    });
+
+    it("should return unknown", () => {
+      const dto = defaultUserDto({profile: {}});
+      const entity = new UserEntity(dto, {validate: false});
+
+      expect(entity.getUserFormattedName()).toEqual("Unknown user");
+    });
+  });
+
+  describe("UserEntity::status", () => {
+    it("should return a active status", () => {
+      const dto = defaultUserDto({});
+      const entity = new UserEntity(dto);
+
+      expect(entity.status).toEqual(USER_STATUS.ACTIVE);
+    });
+
+    it("should return a suspended status", () => {
+      const dto = defaultUserDto({disabled: "2025-10-10T18:59:11+00:00"});
+      const entity = new UserEntity(dto);
+
+      expect(entity.status).toEqual(USER_STATUS.SUSPENDED);
+    });
+
+    it("should return a suspended status", () => {
+      const dto = defaultUserDto({deleted: true});
+      const entity = new UserEntity(dto);
+
+      expect(entity.status).toEqual(USER_STATUS.DELETED);
     });
   });
 

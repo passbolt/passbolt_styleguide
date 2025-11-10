@@ -48,6 +48,9 @@ import {
 import ActionAbortedMissingMetadataKeys
   from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 import {v4 as uuidv4} from "uuid";
+import DisplayResourceSecretHistory from "../../SecretHistory/DisplayResourceSecretHistory";
+import SecretRevisionsSettingsEntity
+  from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 
 beforeEach(() => {
   jest.resetModules();
@@ -183,6 +186,12 @@ describe("DisplayResourcesListContextualMenu", () => {
       });
       expect(props.hide).toHaveBeenCalled();
     });
+
+    it('As LU I can start to display a resource secret history', async() => {
+      await page.displaySecretHistory();
+      expect(props.dialogContext.open).toHaveBeenCalledWith(DisplayResourceSecretHistory, {resource: props.resource});
+      expect(props.hide).toHaveBeenCalled();
+    });
   });
 
   describe('As LU I should be able to access all the offered capabilities on totp resources I have owner access', () => {
@@ -195,7 +204,7 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     /**
      * Given an organization with 1 resource
-     * Then I should see the 10 menu
+     * Then I should see the 11 menu
      */
     it('As LU I should see all menu name', () => {
       expect(page.copyUsernameItem).not.toBeNull();
@@ -220,6 +229,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.setExpiryDateItem).not.toBeNull();
       expect(page.setExpiryDateItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.secretHistoryItem).not.toBeNull();
+      expect(page.secretHistoryItem.hasAttribute("disabled")).toBeFalsy();
     });
 
     it('As LU I can start to copy the totp of a resource', async() => {
@@ -376,6 +387,23 @@ describe("DisplayResourcesListContextualMenu", () => {
       page = new DisplayResourcesListContextualMenuPage(props);
       expect(page.markAsExpiredItem).toBeNull();
       expect(page.setExpiryDateItem).toBeNull();
+    });
+  });
+
+  describe('As LU I should not see secret history feature items', () => {
+    it("when the feature flag is disabled", () => {
+      const props = propsResourceWithUpdatePermission();
+      props.secretRevisionsSettings = SecretRevisionsSettingsEntity.createFromDefault();
+      jest.spyOn(props.context.siteSettings, "canIUse").mockImplementation(plugin => plugin !== "secretRevisions");
+      page = new DisplayResourcesListContextualMenuPage(props);
+      expect(page.secretHistoryItem).toBeNull();
+    });
+
+    it("when the feature flag is enabled but the settings are set to disabled", () => {
+      const props = propsResourceWithUpdatePermission();
+      props.secretRevisionsSettings = SecretRevisionsSettingsEntity.createFromDefault();
+      page = new DisplayResourcesListContextualMenuPage(props);
+      expect(page.secretHistoryItem).toBeNull();
     });
   });
 

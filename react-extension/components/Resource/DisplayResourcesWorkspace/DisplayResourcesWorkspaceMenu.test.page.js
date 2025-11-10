@@ -134,6 +134,14 @@ class DisplayMenuPageObject {
   }
 
   /**
+   * Returns the "secret history" menu element of the password workspace menu
+   * @returns {HTMLElement}
+   */
+  get dropdownMenuSecretHistory() {
+    return this._container.querySelector('#secret_history_action');
+  }
+
+  /**
    * Returns the permalink menu elements of password workspace menu
    * @returns {HTMLElement}
    */

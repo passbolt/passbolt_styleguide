@@ -66,6 +66,8 @@ import WorkspaceSwitcher, {WORKSPACE_ENUM} from "../Common/Navigation/WorkspaceS
 import DisplayAdministrationMetadataGettingStarted from "./DisplayAdministrationMetadataGettingStarted/DisplayAdministrationMetadataGettingStarted.js";
 import DisplayScimSettingsAdministration from "./DisplayScimSettingsAdministration/DisplayScimSettingsAdministration.js";
 import DisplayScimAdministrationTeasing from "./DisplayScimAdministrationTeasing/DisplayScimAdministrationTeasing.js";
+import DisplaySecretHistoryAdministration
+  from "./DisplaySecretHistoryAdministration/DisplaySecretHistoryAdministration";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -263,6 +265,14 @@ class AdministrationWorkspace extends Component {
   }
 
   /**
+   * If secret history is selected
+   * @returns {boolean}
+   */
+  isSecretHistorySelected() {
+    return AdministrationWorkspaceMenuTypes.SECRET_HISTORY === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
    * Handle go back to resource workspace
    */
   handleGoBack() {
@@ -404,13 +414,17 @@ class AdministrationWorkspace extends Component {
                       (this.isCommunityEdition() ? <DisplayScimAdministrationTeasing/> : <DisplayScimSettingsAdministration/>)
 
                     }
+                    {
+                      this.isSecretHistorySelected() &&
+                      <DisplaySecretHistoryAdministration/>
+                    }
                   </div>
                 </div>
                 <Switch>
                   <Route exact path={[
                     "/app/administration",
-                    "/app/administration/user-provisionning/scim", // to be removed when documentation will be written
-                    "/app/administration/scim-teasing"
+                    "/app/administration/scim-teasing",
+                    "/app/administration/secret-history"
                   ]}/>
                   <Route>
                     <div className="help-panel">

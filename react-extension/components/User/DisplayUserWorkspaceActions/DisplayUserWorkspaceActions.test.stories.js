@@ -15,6 +15,7 @@
 import React from "react";
 import DisplayUserWorkspaceActions from "./DisplayUserWorkspaceActions";
 import {
+  propsGroupSelected,
   propsUserRole, propsWithMyselfAsSelectedUser,
   propsWithSelectedUser
 } from "./DisplayUserWorkspaceActions.test.data";
@@ -52,4 +53,8 @@ export const AdminSelected = {
 
 export const User = {
   args: propsUserRole()
+};
+
+export const GroupSelected = {
+  args: propsGroupSelected()
 };

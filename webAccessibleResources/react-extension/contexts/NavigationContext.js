@@ -43,6 +43,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user wants to navigate to the administration workspace sso
   onGoToAdministrationPasswordPoliciesRequested: () => {
   }, // Whenever the user wants to navigate to the administration workspace password policies settings
+  onGoToAdministrationSecretHistoryRequested: () => {
+  }, // Whenever the user wants to navigate to the administration workspace secret history settings
   onGoToAdministrationUserPassphrasePoliciesRequested: () => {
   }, // Whenever the user wants to navigate to the administration workspace user passphrase policies
   onGoToAdministrationPasswordExpirySettingsRequested: () => {
@@ -140,6 +142,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationSsoRequested: this.onGoToAdministrationSsoRequested.bind(this), // Whenever the user wants to navigate to the administration workspace sso
       onGoToAdministrationMfaPolicyRequested: this.onGoToAdministrationMfaPolicyRequested.bind(this), // Whenever the user wants to navigate to the administration workspace internationalization
       onGoToAdministrationPasswordPoliciesRequested: this.onGoToAdministrationPasswordPoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password policies
+      onGoToAdministrationSecretHistoryRequested: this.onGoToAdministrationSecretHistoryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace secret history
       onGoToAdministrationUserPassphrasePoliciesRequested: this.onGoToAdministrationUserPassphrasePoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace user passphrase policies
       onGoToAdministrationPasswordExpirySettingsRequested: this.onGoToAdministrationPasswordExpirySettingsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password expiry settings
       onGoToAdministrationHealthcheckRequested: this.onGoToAdministrationHealthcheckRequested.bind(this),
@@ -237,6 +240,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationPasswordPoliciesRequested() {
     await this.goTo("browser-extension", "/app/administration/password-policies");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace secret history.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationSecretHistoryRequested() {
+    await this.goTo("browser-extension", "/app/administration/secret-history");
   }
 
   /**

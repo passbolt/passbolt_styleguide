@@ -39,7 +39,6 @@ import {
   schemaValidateFormatUuid,
   schemaValidateFormatXBase64,
   schemaValidateFormatXHexColor,
-  schemaValidateFormatXUrl,
   schemaValidateMaxLength,
   schemaValidateMinLength,
   schemaValidateMinimumIntegerValue,
@@ -655,44 +654,6 @@ describe("EntitySchema", () => {
             expect.assertions(1);
             const testObject = {"property": scenario.data};
             expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatEmail)).not.toThrow();
-          });
-        });
-      });
-
-      describe("::format::x-url", () => {
-        each([
-          {label: "//localhost", data: "//localhost"},
-          {label: "//www.passbolt.test", data: "//www.passbolt.test"},
-          {label: "mailto://test@passbolt.com", data: "mailto://test@passbolt.com"},
-          {label: "tel://123456789", data: "tel://123456789"},
-          {
-            label: "moz-extension://134c1a66-c6e3-1343-a5d4-63c511465c17/test.png",
-            data: "moz-extension://134c1a66-c6e3-1343-a5d4-63c511465c17/test.png"
-          },
-        ]).describe("throws an EntityValidationError if the property is not valid.", scenario => {
-          it(`scenario: ${scenario.label}`, async() => {
-            expect.assertions(1);
-            const testObject = {"property": scenario.data};
-            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatXUrl)).toThrowEntityValidationError("property", "format");
-          });
-        });
-
-        each([
-          {label: "https://localhost", data: "https://localhost"},
-          {label: "https://localhost:8080", data: "https://localhost:8080"},
-          {label: "http://localhost", data: "http://localhost"},
-          {label: "http://localhost:8080", data: "http://localhost:8080"},
-          {label: "https://passbolt.test", data: "https://passbolt.test"},
-          {label: "https://passbolt.test:8080", data: "https://passbolt.test:8080"},
-          {label: "https://www.passbolt.test", data: "https://www.passbolt.test"},
-          {label: "https://www.passbolt.test:8080", data: "https://www.passbolt.test:8080"},
-          {label: "https://passbolt.test/img/test.png", data: "https://passbolt.test/img/test.png"},
-          {label: "https://passbolt.test:8080/img/test.png", data: "https://passbolt.test:8080/img/test.png"},
-        ]).describe("validates if the property is valid.", scenario => {
-          it(`scenario: ${scenario.label}`, async() => {
-            expect.assertions(1);
-            const testObject = {"property": scenario.data};
-            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatXUrl)).not.toThrow();
           });
         });
       });

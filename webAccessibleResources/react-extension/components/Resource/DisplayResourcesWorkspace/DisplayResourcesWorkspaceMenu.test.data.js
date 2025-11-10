@@ -37,6 +37,11 @@ import {
 import {
   TEST_RESOURCE_TYPE_V5_DEFAULT
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import SecretRevisionsSettingsEntity
+  from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
+import {
+  defaultSecretRevisionsSettingsDto
+} from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -66,6 +71,7 @@ const defaultProps = (data = {}) => ({
   dialogContext: defaultDialogContext(),
   clipboardContext: defaultClipboardContext(),
   metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()),
+  secretRevisionsSettings: new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto()),
   ...data,
 });
 

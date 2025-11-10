@@ -44,10 +44,10 @@ class ExtAppContextProvider extends React.Component {
     this.initLocale();
     this.getResources();
     this.getFolders();
+    await this.getAccount();
     this.getGroups();
     this.getUsers();
     this.getRoles();
-    this.getAccount();
     const skeleton = document.getElementById("temporary-skeleton");
     if (skeleton) {
       skeleton.remove();
@@ -242,9 +242,10 @@ class ExtAppContextProvider extends React.Component {
    * Returns the list of all groups
    */
   async getGroups() {
-    const storageData = await this.props.storage.local.get(["groups"]);
-    if (storageData.groups) {
-      const groups = storageData.groups;
+    const storageKey = `groups-${this.state.account.id}`;
+    const storageData = await this.props.storage.local.get(storageKey);
+    if (storageData[storageKey]) {
+      const groups = storageData[storageKey];
       this.setState({groups: groups});
     }
   }
@@ -365,8 +366,9 @@ class ExtAppContextProvider extends React.Component {
       const users = changes.users.newValue;
       this.setState({users});
     }
-    if (changes.groups && changes.groups.newValue) {
-      const groups = changes.groups.newValue;
+    const storageKey = `groups-${this.state.account.id}`;
+    if (changes[storageKey] && changes[storageKey].newValue) {
+      const groups = changes[storageKey].newValue;
       this.setState({groups});
     }
     if (changes.roles && changes.roles.newValue) {

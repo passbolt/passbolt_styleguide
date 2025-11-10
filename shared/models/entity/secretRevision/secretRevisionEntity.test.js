@@ -148,8 +148,6 @@ describe("SecretRevision", () => {
       expect.assertions(1);
       const dto = defaultSecretRevisionDto({}, {withCreator: true, withSecrets: true});
       const entity = new SecretRevisionEntity(dto);
-      delete dto.creator;
-      delete dto.secrets;
 
       expect(entity.toDto()).toEqual(dto);
     });

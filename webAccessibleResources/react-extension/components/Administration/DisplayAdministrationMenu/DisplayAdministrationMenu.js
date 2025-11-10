@@ -48,7 +48,7 @@ class DisplayAdministrationMenu extends React.Component {
   get defaultState() {
     return {
       isContentTypesOpened: true,
-      isPasswordConfigurationOpened: true,
+      isResourceConfigurationOpened: true,
       isAuthenticationOpened: true,
       isUserProvisionningOpened: true,
       isEmailsOpened: true,
@@ -162,6 +162,14 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Can I use the secret revisions plugin
+   * @returns {boolean}
+   */
+  get canIUseSecretHistory() {
+    return this.canIUse('secretRevisions');
+  }
+
+  /**
    * Can I use the RBACS plugin
    * @returns {boolean}
    */
@@ -226,6 +234,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleMfaPolicyClick = this.handleMfaPolicyClick.bind(this);
     this.handleRbacsClick = this.handleRbacsClick.bind(this);
     this.handlePasswordPoliciesClick = this.handlePasswordPoliciesClick.bind(this);
+    this.handleSecretHistoryClick = this.handleSecretHistoryClick.bind(this);
     this.handleUserPassphrasePoliciesClick = this.handleUserPassphrasePoliciesClick.bind(this);
     this.handlePasswordExpirySettingsClick = this.handlePasswordExpirySettingsClick.bind(this);
     this.handleHealthcheckClick = this.handleHealthcheckClick.bind(this);
@@ -341,6 +350,13 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Handle when the user click on the secret history settings menu
+   */
+  handleSecretHistoryClick() {
+    this.props.navigationContext.onGoToAdministrationSecretHistoryRequested();
+  }
+
+  /**
    * Handle when the user click on the User Passphrase Policies menu
    */
   handleUserPassphrasePoliciesClick() {
@@ -434,6 +450,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isPasswordPoliciesSelected() {
     return AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If secret history menu is selected
+   * @returns {boolean}
+   */
+  isSecretHistorySelected() {
+    return AdministrationWorkspaceMenuTypes.SECRET_HISTORY === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -581,12 +605,13 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
-   * Should display password configuration section.
+   * Should display resource configuration section.
    * @returns {boolean}
    */
-  canSeePasswordConfiguration() {
+  canSeeResourceConfiguration() {
     return this.canIUsePasswordExpiry
-      || this.canIUsePasswordPolicies;
+      || this.canIUsePasswordPolicies
+      || this.canIUseSecretHistory;
   }
 
   /**
@@ -758,19 +783,19 @@ class DisplayAdministrationMenu extends React.Component {
                   }
                 </li>
               }
-              {this.canSeePasswordConfiguration() &&
+              {this.canSeeResourceConfiguration() &&
                 <li id="password-configuration" className="accordion-header">
                   <div className="row">
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
-                        <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isPasswordConfigurationOpened")}>
-                          {this.state.isPasswordConfigurationOpened ? <CaretDownSVG /> : <CaretRightSVG />}
-                          <span><Trans>Password configuration</Trans></span>
+                        <button className="link no-border" type="button" onClick={() => this.handleSubmenuClick("isResourceConfigurationOpened")}>
+                          {this.state.isResourceConfigurationOpened ? <CaretDownSVG /> : <CaretRightSVG />}
+                          <span><Trans>Resource policies</Trans></span>
                         </button>
                       </div>
                     </div>
                   </div>
-                  {this.state.isPasswordConfigurationOpened &&
+                  {this.state.isResourceConfigurationOpened &&
                     <ul>
                       {this.canIUsePasswordExpiry &&
                         <li id="password_expiry_menu">
@@ -795,6 +820,20 @@ class DisplayAdministrationMenu extends React.Component {
                               </div>
                             </div>
                           </li>
+                      }
+                      {this.canIUseSecretHistory &&
+                        <li id="secret_history_menu">
+                          <div className={`row ${this.isSecretHistorySelected() ? "selected" : ""}`}>
+                            <div className="main-cell-wrapper">
+                              <div className="main-cell">
+                                <button className="link no-border" type="button" onClick={this.handleSecretHistoryClick}>
+                                  <span><Trans>Secret history</Trans></span>
+                                  {this.isBeta("secretRevisions") && <span className="chips beta">beta</span>}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
                       }
                     </ul>
                   }

@@ -302,8 +302,11 @@ class FilterResourcesByFolders extends React.Component {
 
   /**
    * Handle fold/unfold root folder icon click
+   * @param {Event} event
    */
-  handleSectionTitleClickCaretEvent() {
+  handleSectionTitleClickCaretEvent(event) {
+    // Stop propagation to not continue the event and select the root folder
+    event?.stopPropagation();
     const open = !this.state.open;
     this.setState({open});
   }
@@ -522,7 +525,7 @@ class FilterResourcesByFolders extends React.Component {
                         onDrop={this.handleDropTitle}
                         onClick={this.handleClickOnTitle}
                         onContextMenu={this.handleTitleContextualMenuEvent}>
-                        <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()}>
+                        <div className="toggle-folder" onClick={event => this.handleSectionTitleClickCaretEvent(event)}>
                           {isOpen
                             ? <CaretDownSVG />
                             : <CaretRightSVG />

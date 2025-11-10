@@ -49,7 +49,7 @@ describe("SecretRevisionsSettings", () => {
       delete dto.id;
       const entity = new SecretRevisionsSettingsEntity(dto);
 
-      expect(entity._props.max_revisions).toStrictEqual(2);
+      expect(entity._props.max_revisions).toStrictEqual(dto.max_revisions);
       expect(entity._props.allow_sharing_revisions).toBeFalsy();
     });
 
@@ -59,7 +59,7 @@ describe("SecretRevisionsSettings", () => {
       const entity = new SecretRevisionsSettingsEntity(dto);
 
       expect(entity._props.id).toStrictEqual(dto.id);
-      expect(entity._props.max_revisions).toStrictEqual(2);
+      expect(entity._props.max_revisions).toStrictEqual(dto.max_revisions);
       expect(entity._props.allow_sharing_revisions).toBeFalsy();
     });
   });
@@ -86,10 +86,8 @@ describe("SecretRevisionsSettings", () => {
 
   describe("::maxRevisions", () => {
     it("get max_revisions property value", () => {
-      expect.assertions(2);
-      let entity = new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto());
-      expect(entity.maxRevisions).toStrictEqual(2);
-      entity = new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto({max_revisions: 10}));
+      expect.assertions(1);
+      const entity = new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto({max_revisions: 10}));
       expect(entity.maxRevisions).toStrictEqual(10);
     });
   });
@@ -101,6 +99,16 @@ describe("SecretRevisionsSettings", () => {
       expect(entity.allowSharingRevisions).toBeFalsy();
       entity = new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto({allow_sharing_revisions: true}));
       expect(entity.allowSharingRevisions).toBeTruthy();
+    });
+  });
+
+  describe("::isFeatureEnabled", () => {
+    it("get isFeatureEnabled property value", () => {
+      expect.assertions(2);
+      let entity = new SecretRevisionsSettingsEntity(defaultSecretRevisionsSettingsDto());
+      expect(entity.isFeatureEnabled).toBeTruthy();
+      entity = new SecretRevisionsSettingsEntity.createFromDefault();
+      expect(entity.isFeatureEnabled).toBeFalsy();
     });
   });
 });

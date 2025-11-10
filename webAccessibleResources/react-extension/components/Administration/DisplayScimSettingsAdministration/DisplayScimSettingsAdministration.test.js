@@ -80,12 +80,6 @@ describe('DisplayScimSettingsAdministration', () => {
     expect(page.isCopySecretTokenButtonDisabled).toBeTruthy();
   });
 
-  it('should display warning to inform user about changing secret if compromised', async() => {
-    expect.assertions(1);
-
-    expect(page.warning.textContent).toEqual("Warning: if you think the secret has been compromised please regenerate and update it in your provider settings.");
-  });
-
   it('should allow copying SCIM URL', async() => {
     expect.assertions(1);
 

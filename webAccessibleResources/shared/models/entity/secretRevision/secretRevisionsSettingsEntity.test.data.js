@@ -12,8 +12,6 @@
  * @since         5.7.0
  */
 
-import {v4 as uuidv4} from "uuid";
-
 /**
  * Build default secret revisions settings.
  * @param {object} [data={}] Data to override
@@ -21,8 +19,7 @@ import {v4 as uuidv4} from "uuid";
  */
 export const defaultSecretRevisionsSettingsDto = (data = {}) => {
   const defaultData = {
-    id: uuidv4(),
-    max_revisions: 2,
+    max_revisions: 3,
     allow_sharing_revisions: false,
   };
 

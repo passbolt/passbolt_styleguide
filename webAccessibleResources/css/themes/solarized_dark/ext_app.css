@@ -2821,9 +2821,9 @@ input[type=file] {
 .slider input[type=range] {
   -webkit-appearance: none;
   width: 100%;
-  height: 1px;
+  height: 0.2rem;
   border-radius: 5px;
-  background: hsl(194, 14%, 35%);
+  background: var(--Loading-bar-Loading-bar-background);
   outline: 0;
   flex-grow: 1;
 }
@@ -2835,25 +2835,34 @@ input[type=file] {
   appearance: none;
   width: 1.6rem;
   height: 1.6rem;
-  box-shadow: inset 0 0 0 0.1rem hsl(194, 14%, 35%);
+  box-shadow: inset 0 0 0 0.1rem var(--Primary-button-Primary-button-background);
   border-radius: 50%;
-  background: hsl(194, 14%, 46%);
+  background: var(--Primary-button-Primary-button-background);
   cursor: pointer;
 }
 .slider input[type=range]::-webkit-slider-thumb:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 0.1rem hsl(194, 14%, 35%);
+  box-shadow: inset 0.1rem 0.1rem 0 var(--States-Hover-Highlight), 0.1rem 0.1rem 0 var(--States-Hover-Shadow), inset 0 0 0 0.1rem var(--Primary-button-Primary-button-background);
+}
+.slider input[type=range]::-webkit-slider-thumb:active {
+  box-shadow: inset -0.1rem -0.1rem 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 var(--States-Active-Shadow), inset 0 0 0 0.1rem var(--Primary-button-Primary-button-background);
 }
 .slider input[type=range]::-moz-range-thumb {
   width: 1.6rem;
   height: 1.6rem;
-  box-shadow: inset 0 0 0 0.1rem hsl(194, 14%, 35%);
+  box-shadow: inset 0 0 0 0.1rem var(--Primary-button-Primary-button-background);
   border: none;
   border-radius: 50%;
-  background: hsl(194, 14%, 46%);
+  background: var(--Primary-button-Primary-button-background);
   cursor: pointer;
 }
 .slider input[type=range]::-moz-range-thumb:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 0.1rem hsl(194, 14%, 35%);
+  box-shadow: inset 0.1rem 0.1rem 0 var(--States-Hover-Highlight), 0.1rem 0.1rem 0 var(--States-Hover-Shadow), inset 0 0 0 0.1rem var(--Primary-button-Primary-button-background);
+}
+.slider input[type=range]::-moz-range-thumb:active {
+  box-shadow: inset -0.1rem -0.1rem 0 var(--States-Active-Highlight), inset 0.1rem 0.1rem 0 var(--States-Active-Shadow), inset 0 0 0 0.1rem var(--Primary-button-Primary-button-background);
+}
+.slider input[type=range]::-moz-range-progress {
+  background: var(--Primary-button-Primary-button-background);
 }
 .slider input[type=number] {
   margin-left: 1.6rem;
@@ -6428,6 +6437,7 @@ iframe.cachette {
   align-items: flex-start;
   flex: 1 0 0;
   align-self: stretch;
+  min-width: 0;
 }
 .share-dialog .dialog .dialog-content .share-form .form-content {
   padding: 0;
@@ -8504,7 +8514,7 @@ svg .section-card .card .title:first-child {
 .edit-group-dialog .dialog {
   padding: 0;
   max-width: 70rem;
-  min-width: 50rem;
+  min-width: 53rem;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -9876,6 +9886,352 @@ svg .section-card .card .title:first-child {
   bottom: 0;
   left: 0;
 }
+.import-resources-result .dialog {
+  max-width: 70rem;
+  min-width: 50rem;
+}
+.import-resources-result .dialog .import-dialog-summary.form-content {
+  padding: 0;
+  max-height: 65rem;
+  overflow-y: auto;
+}
+.import-resources-result .dialog .import-dialog-summary.form-content h2 {
+  margin: 0;
+  padding: 1.6rem;
+}
+.import-resources-result .dialog .import-dialog-summary.form-content h2:not(:first-child) {
+  border-top: 1px solid var(--Action-button-Action-button-border);
+}
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 0 1.6rem;
+}
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section textarea,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section textarea {
+  opacity: 0.5;
+}
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section,
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section.accordion.accordion-section,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section.accordion.accordion-section {
+  padding: 0.8rem 0;
+  border-radius: var(--Menu-radius);
+  border-top: none;
+}
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section .summary-header,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section .summary-header,
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section.accordion.accordion-section .summary-header,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section.accordion.accordion-section .summary-header {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+}
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section .summary-header button,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section .summary-header button,
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section.accordion.accordion-section .summary-header button,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section.accordion.accordion-section .summary-header button {
+  justify-content: space-between;
+}
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section .summary-header .state-icon,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section .summary-header .state-icon,
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section.accordion.accordion-section .summary-header .state-icon,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section.accordion.accordion-section .summary-header .state-icon {
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--Button-border-radius);
+}
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section .summary-header .state-icon.success-state,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section .summary-header .state-icon.success-state,
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section.accordion.accordion-section .summary-header .state-icon.success-state,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section.accordion.accordion-section .summary-header .state-icon.success-state {
+  padding: 0.8rem 0.8rem 0.4rem 0.8rem;
+  background: var(--Healthcheck-Healthcheck-Success);
+}
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section .summary-header .state-icon.warning-state,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section .summary-header .state-icon.warning-state,
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section.accordion.accordion-section .summary-header .state-icon.warning-state,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section.accordion.accordion-section .summary-header .state-icon.warning-state {
+  padding: 0.8rem 0.8rem 0.4rem 0.8rem;
+  background: var(--Healthcheck-Healthcheck-Warning);
+}
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section .summary-header .state-icon.fail-state,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section .summary-header .state-icon.fail-state,
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section.accordion.accordion-section .summary-header .state-icon.fail-state,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section.accordion.accordion-section .summary-header .state-icon.fail-state {
+  padding: 0.8rem 0.8rem 0.4rem 0.8rem;
+  background: var(--Healthcheck-Healthcheck-Error);
+}
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section .summary-header .summary-content,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section .summary-header .summary-content,
+.import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section.accordion.accordion-section .summary-header .summary-content,
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section.accordion.accordion-section .summary-header .summary-content {
+  width: 100%;
+}
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section {
+  padding-bottom: 1.6rem;
+}
+/* Resource secret history dialog */
+.resource-secret-history {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 6.4rem 19rem;
+  min-width: 128rem;
+  min-height: 76.8rem;
+  /* dialog wrapper */
+  /* header */
+}
+.resource-secret-history .dialog {
+  padding: 0;
+  max-width: 100rem;
+  min-width: 90rem;
+  max-height: 80rem;
+  min-height: 64rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 0;
+  width: 100%;
+  align-self: center;
+}
+.resource-secret-history .dialog-header {
+  padding: 2.4rem;
+}
+.resource-secret-history .dialog-header .dialog-title-wrapper h2 {
+  font-size: 2.4rem;
+}
+.resource-secret-history .dialog-content {
+  display: flex;
+  padding-right: 1.6rem;
+  align-items: center;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+.resource-secret-history .dialog-content .left-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.6rem;
+  align-self: stretch;
+  width: 30%;
+  min-width: 30rem;
+  max-width: 47rem;
+  min-height: 0;
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.8rem;
+  align-self: stretch;
+  flex: 1 0 0;
+  padding: 0 1.6rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--Workspace-Elevator) transparent;
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.4rem;
+  align-self: stretch;
+  border-radius: var(--Button-border-radius);
+  padding: 1.2rem 0.8rem 1.2rem 1.6rem;
+  min-width: 0;
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button .creator {
+  display: flex;
+  align-self: stretch;
+  gap: 1.6rem;
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button .creator .avatar svg,
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button .creator .avatar img {
+  width: 4.2rem;
+  height: 4.2rem;
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button .creator .profile {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  align-items: flex-start;
+  gap: 0.2rem;
+  min-width: 0;
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button .creator .profile .name {
+  display: flex;
+  align-self: stretch;
+  gap: 0.8rem;
+  line-height: 2rem;
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button .creator .profile .name .tooltip-portal span {
+  display: flex;
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button .creator .profile .username {
+  width: fit-content;
+  max-width: 100%;
+  font-size: 1.1rem;
+  line-height: 1.5rem;
+  color: var(--Text-and-icons-Secondary-text);
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button .additional-information {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  align-items: flex-start;
+  gap: 0.8rem;
+  margin-left: 5.8rem;
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button .additional-information .status {
+  font-size: 1.1rem;
+  line-height: 1.5rem;
+  padding: 0.1rem 0.8rem 0.2rem 0.8rem;
+  border-radius: var(--Button-border-radius);
+  width: fit-content;
+  max-width: calc(100% - 1.6rem);
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button .additional-information .status.suspended {
+  background-color: var(--Status-and-role-pills-Status-pill-suspended-background);
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button .additional-information .status.deleted {
+  background-color: var(--Status-and-role-pills-Status-pill-deleted-background);
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button .additional-information .updated-date {
+  width: fit-content;
+  max-width: 100%;
+  font-size: 1.2rem;
+  line-height: 1.6rem;
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button .additional-information .updated-date span {
+  color: var(--Text-and-icons-Secondary-text);
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content:hover,
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content:focus-visible,
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content:focus,
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content.selected {
+  background: var(--Sections-Filter-selected);
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content.disabled {
+  background: none;
+}
+.resource-secret-history .dialog-content .grid-and-footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+.resource-secret-history .dialog-content .grid-and-footer .grid {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.6rem;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+.resource-secret-history .dialog-content .grid-and-footer .submit-wrapper {
+  display: flex;
+  padding: 1.6rem 0;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2.4rem;
+  align-self: stretch;
+}
+/* Resource secret history dialog workspace */
+.resource-secret-history .resource-secret-history-workspace {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+  border-radius: var(--Section-border-radius);
+  background: var(--Workspace-Panels-background);
+  /* HEADER TITLE */
+  /* CONTENT */
+}
+.resource-secret-history .resource-secret-history-workspace .title {
+  display: flex;
+  padding: 1.6rem;
+  align-items: center;
+  align-self: stretch;
+  border-bottom: 1px solid var(--Workspace-Dividers);
+}
+.resource-secret-history .resource-secret-history-workspace .title h2 {
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin: 0;
+}
+.resource-secret-history .resource-secret-history-workspace .title h2 .subtitle {
+  margin-left: 1rem;
+  font-size: 1.4rem;
+  line-height: normal;
+  font-weight: 400;
+  color: var(--Text-and-icons-Secondary-text);
+}
+.resource-secret-history .resource-secret-history-workspace .content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0;
+  align-self: stretch;
+  padding: 1.6rem 0;
+  isolation: isolate;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--Workspace-Elevator) transparent;
+  /* PASSWORD FIELDS LAYOUT*/
+}
+.resource-secret-history .resource-secret-history-workspace .content .secret-history-fields {
+  display: flex;
+  height: 100%;
+  padding: 0 1.6rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.6rem;
+  align-self: stretch;
+}
+.resource-secret-history .resource-secret-history-workspace .content .secret-history-fields pre {
+  height: 100%;
+  white-space: pre-wrap;
+  margin: 0;
+}
+.resource-secret-history .resource-secret-history-workspace .content .secret-history-fields pre code {
+  display: block;
+  height: 100%;
+  max-height: 100%;
+}
+.resource-secret-history .resource-secret-history-workspace .content .secret-history-fields pre code.json-object {
+  font-family: 'Inconsolata', 'Open Sans', Verdana, sans-serif;
+  font-size: 1.8rem;
+}
+.resource-secret-history .resource-secret-history-workspace .content .secret-history-fields .empty-content {
+  font-size: 1.8rem;
+}
+.resource-secret-history .resource-secret-history-workspace .message {
+  display: flex;
+  padding: 0.8rem 1.6rem 1.2rem 1.6rem;
+  align-items: center;
+  gap: 1rem;
+  align-self: stretch;
+}
+.resource-secret-history .resource-secret-history-workspace .message .text {
+  flex: 1 0 0;
+  align-self: stretch;
+}
 /*
  * Password workspace
  */
@@ -11166,4 +11522,7 @@ svg .section-card .card .title:first-child {
 }
 #scim-settings .section .toggle-switch {
   margin-bottom: unset;
+}
+#secret-history p.description {
+  padding: 0.8rem 0;
 }

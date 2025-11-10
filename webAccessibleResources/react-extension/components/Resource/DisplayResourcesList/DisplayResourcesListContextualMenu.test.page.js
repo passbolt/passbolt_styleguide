@@ -128,6 +128,14 @@ export default class DisplayResourcesListContextualMenuPage {
     return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#set-expiry-date');
   }
 
+  /**
+   * Returns the item.
+   * @return {HTMLElement}
+   */
+  get secretHistoryItem() {
+    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#secret-history');
+  }
+
   /** Click on the component */
   async click(component)  {
     const leftClick = {button: 0};
@@ -210,5 +218,12 @@ export default class DisplayResourcesListContextualMenuPage {
    */
   async setExpiryDate() {
     await this.click(this.setExpiryDateItem);
+  }
+
+  /**
+   * Click on the menu secret-history
+   */
+  async displaySecretHistory() {
+    await this.click(this.secretHistoryItem);
   }
 }
