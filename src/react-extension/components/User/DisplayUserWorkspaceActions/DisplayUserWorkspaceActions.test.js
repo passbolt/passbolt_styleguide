@@ -16,6 +16,9 @@
  * Unit tests on DisplayUserWorkspace in regard of specifications
  */
 import {
+  propsGroupSelected,
+  propsSoleManagerSelected,
+  propsSoleMemberSelected,
   propsUserRole,
   propsWithMyselfAsSelectedUser,
   propsWithSelectedActiveUser,
@@ -30,6 +33,7 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import ConfirmDisableUserMFA from "../ConfirmDisableUserMFA/ConfirmDisableUserMFA";
 import HandleReviewAccountRecoveryRequestWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
 import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/ConfirmShareMissingMetadataKeys";
+import RemoveUserFromGroup from "../../UserGroup/RemoveUserFromGroup/RemoveUserFromGroup";
 
 beforeEach(() => {
   jest.resetModules();
@@ -279,6 +283,50 @@ describe("Display User Workspace Actions", () => {
     await waitFor(() => {});
 
     expect(page.canShareMissingMetadataKeys).toBeFalsy();
+  });
+
+  it('As AD without any selected group I cannot see the remove from group button', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsWithSelectedUser());
+    await waitFor(() => {});
+    expect(page.canRemoveFromGroup).toBeFalsy();
+  });
+
+  it('As AD with a selected user from a group I can see the remove from group button', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsGroupSelected());
+    await waitFor(() => {});
+    expect(page.canRemoveFromGroup).toBeTruthy();
+  });
+
+  it('As AD with a sole member selected I cannot see the remove from group button', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsSoleMemberSelected());
+    await waitFor(() => {});
+    expect(page.canRemoveFromGroup).toBeFalsy();
+  });
+
+  it('As AD with the last group manager selected I cannot see the remove from group button', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsSoleManagerSelected());
+    await waitFor(() => {});
+    expect(page.canRemoveFromGroup).toBeFalsy();
+  });
+
+  it('As AD I can click to remove user from group', async() => {
+    expect.assertions(2);
+    const props = propsGroupSelected();
+    page = new DisplayUserWorkspaceActionsPage(props);
+    await waitFor(() => {});
+    await page.removeFromGroup();
+
+    expect(props.context.setContext).toHaveBeenCalledWith({
+      removeUserFromGroupDialogProps: {
+        user: props.userWorkspaceContext.selectedUsers[0],
+        group: props.userWorkspaceContext.filter.payload.group
+      }
+    });
+    expect(props.dialogContext.open).toHaveBeenCalledWith(RemoveUserFromGroup);
   });
 });
 

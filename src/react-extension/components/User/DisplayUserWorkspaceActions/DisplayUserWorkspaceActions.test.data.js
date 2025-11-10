@@ -16,6 +16,9 @@ export function propsWithSelectedUser(props) {
       details: {
         locked: true
       },
+      filter: {
+        type: "ALL"
+      },
       selectedUsers: [
         {
           "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
@@ -79,6 +82,87 @@ export function propsWithSelectedUser(props) {
 
 
 /**
+ * Props with group selected
+ */
+export function propsGroupSelected() {
+  const context = defaultAppContext();
+  return propsWithSelectedUser({
+    context,
+    userWorkspaceContext: {
+      details: {
+        locked: true
+      },
+      filter: {
+        type: "FILTER-BY-GROUP",
+        payload: {
+          group: {
+            groups_users: [{}, {}] // At least two users needed in the group
+          },
+        }
+      },
+      selectedUsers: [{}] // At least on user selected
+    }
+  });
+}
+
+/**
+ * Props with group selected
+ */
+export function propsSoleMemberSelected() {
+  const context = defaultAppContext();
+  return propsWithSelectedUser({
+    context,
+    userWorkspaceContext: {
+      details: {
+        locked: true
+      },
+      filter: {
+        type: "FILTER-BY-GROUP",
+        payload: {
+          group: {
+            groups_users: [{}] // At least two users needed in the group
+          },
+        }
+      },
+      selectedUsers: [{}] // At least on user selected
+    }
+  });
+}
+
+/**
+ * Props with group selected
+ */
+export function propsSoleManagerSelected() {
+  const context = defaultAppContext();
+  return propsWithSelectedUser({
+    context,
+    userWorkspaceContext: {
+      details: {
+        locked: true
+      },
+      filter: {
+        type: "FILTER-BY-GROUP",
+        payload: {
+          group: {
+            groups_users: [{
+              user_id: context.loggedInUser.id,
+              is_admin: true
+            },
+            {}
+            ]
+          },
+        }
+      },
+      selectedUsers: [
+        {
+          id: context.loggedInUser.id,
+        }
+      ]
+    }
+  });
+}
+
+/**
  * Props with user Role
  */
 export function propsUserRole() {
@@ -97,6 +181,9 @@ export function propsWithMyselfAsSelectedUser() {
     userWorkspaceContext: {
       details: {
         locked: true
+      },
+      filter: {
+        type: "ALL"
       },
       selectedUsers: [
         {
