@@ -14,7 +14,7 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import DisplayUsersWorkspaceFilterBar from "./DisplayUsersWorkspaceFilterBar";
-import {defaultProps, propsFilterBySuspended} from "./DisplayUsersWorkspaceFilterBar.test.data";
+import {defaultProps, propsFilterBySuspended, propsWithAttentionFilter, propsWithUsersFilteredByAccountRecovery, propsWithUsersFilteredByMissingMetadata} from "./DisplayUsersWorkspaceFilterBar.test.data";
 
 /**
  * DisplayUsersWorkspaceFilterBar stories
@@ -43,4 +43,16 @@ export const FilterResources = {
 
 export const FilterBySuspended = {
   args: propsFilterBySuspended()
+};
+
+export const AttentionRequiredFilter = {
+  args: propsWithAttentionFilter()
+};
+
+export const FilteredByAccountRecoveryRequest = {
+  args: propsWithUsersFilteredByAccountRecovery()
+};
+
+export const FilteredByMissingMetadataKey = {
+  args: propsWithUsersFilteredByMissingMetadata()
 };

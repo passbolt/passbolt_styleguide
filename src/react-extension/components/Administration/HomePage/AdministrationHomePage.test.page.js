@@ -184,6 +184,13 @@ export default class AdministrationHomePagePage {
   }
 
   /**
+   * Returns the secret history settings.
+   */
+  get secretHistorySettings() {
+    return this._page.container.querySelector('button.card span.title[title="Secret history"]');
+  }
+
+  /**
    * Return the pro teasing icon element
    * @returns {{select: select}}
    */
@@ -255,6 +262,11 @@ export default class AdministrationHomePagePage {
   /** Click on the SCIM settings element */
   async goToscimSettings() {
     await this.click(this.scimSettings);
+  }
+
+  /** Click on the secret history settings element */
+  async goToSecretHistorySettings() {
+    await this.click(this.secretHistorySettings);
   }
 
   /** Click on the SSO settings element */

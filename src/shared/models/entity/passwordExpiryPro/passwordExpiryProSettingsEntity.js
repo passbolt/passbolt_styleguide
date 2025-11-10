@@ -14,6 +14,7 @@
 
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
+import {DateTime} from "luxon";
 
 const ENTITY_NAME = 'passwordExpiryProSettingsEntity';
 
@@ -79,6 +80,28 @@ class PasswordExpiryProSettingsEntity extends Entity {
         },
       }
     };
+  }
+
+  /**
+   * Calculate the default expiry date for new resources based on the configured expiry period.
+   * @returns {string} ISO formatted expiry date, or undefined if not applicable
+   */
+  calculateDefaultResourceExpiryDate() {
+    if (!this.isFeatureEnabled || !this._props.default_expiry_period) {
+      return null;
+    }
+
+    return DateTime.utc().plus({days: this._props.default_expiry_period}).toISO();
+  }
+
+  /*
+   * ==================================================
+   * Dynamic properties getters
+   * ==================================================
+   */
+
+  get isFeatureEnabled() {
+    return Boolean(this._props.id);
   }
 
   /*

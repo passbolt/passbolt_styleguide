@@ -13,7 +13,7 @@
  */
 
 import {defaultUserDto} from "../models/entity/user/userEntity.test.data";
-import {USER_STATUS, getUserFormattedName, getUserStatus, isUserSuspended} from "./userUtils";
+import {USER_STATUS, getUserFormattedName, getUserStatus, isUserSuspended, isAccountRecoveryRequested, isMissingMetadataKey} from "./userUtils";
 
 describe("userUtils", () => {
   beforeEach(() => {
@@ -137,6 +137,59 @@ describe("userUtils", () => {
       expect(getUserFormattedName(user, mockTranslation)).toStrictEqual("Unknown user");
       expect(mockTranslation).toHaveBeenCalledTimes(1);
       expect(mockTranslation).toHaveBeenCalledWith("Unknown user");
+    });
+  });
+
+  describe("::isAccountRecoveryRequested", () => {
+    it("should return false if the user is not defined", () => {
+      expect.assertions(1);
+      const user = undefined;
+      expect(isAccountRecoveryRequested(user)).toStrictEqual(false);
+    });
+
+    it("should return false if the user has no `pending_account_recovery_request` property", () => {
+      expect.assertions(1);
+      const user = {
+        id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+      };
+      expect(isAccountRecoveryRequested(user)).toStrictEqual(false);
+    });
+
+    it("should return true if the user has `pending_account_recovery_request` property", () => {
+      expect.assertions(1);
+      const user = {
+        id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+        pending_account_recovery_request: {"status": "pending"}
+      };
+      expect(isAccountRecoveryRequested(user)).toStrictEqual(true);
+    });
+  });
+
+  describe("::isMissingMetadataKey", () => {
+    it("should return false if the user is not defined", () => {
+      expect.assertions(1);
+      const user = undefined;
+      expect(isMissingMetadataKey(user)).toStrictEqual(false);
+    });
+
+    it("should return false if the user has no `missing_metadata_key_ids` length is 0", () => {
+      expect.assertions(1);
+      const user = {
+        id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+        missing_metadata_key_ids: [],
+      };
+      expect(isMissingMetadataKey(user)).toStrictEqual(false);
+    });
+
+    it("should return true if the user has `missing_metadata_key_ids` length is greater than 0", () => {
+      expect.assertions(1);
+      const user = {
+        id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+        missing_metadata_key_ids: [
+          '1234',
+        ]
+      };
+      expect(isMissingMetadataKey(user)).toStrictEqual(true);
     });
   });
 });

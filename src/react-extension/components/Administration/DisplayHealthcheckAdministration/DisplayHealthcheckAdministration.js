@@ -42,22 +42,40 @@ class DisplayHealthcheckAdministration extends Component {
     this.state = this.defaultState;
   }
 
+  /**
+   * Returns the default state
+   * @returns {Object}
+   */
   get defaultState() {
     return {
       data: null,
     };
   }
 
+  /**
+   * Invoked immediately after component is mounted.
+   * Sets the administration workspace action and loads healthcheck data.
+   * @returns {Promise<void>}
+   */
   async componentDidMount() {
     this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationHealthcheckActions);
     await this.props.adminHealthcheckContext.loadHealthcheckData();
   }
 
+  /**
+   * Invoked immediately before component is unmounted.
+   * Resets the administration workspace action and clears the healthcheck context.
+   * @returns {void}
+   */
   componentWillUnmount() {
     this.props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction();
     this.props.adminHealthcheckContext.clearContext();
   }
 
+  /**
+   * Returns the healthcheck data
+   * @returns {Object}
+   */
   get healthCheckData() {
     return this.props.adminHealthcheckContext.healthcheckData;
   }
@@ -98,9 +116,12 @@ class DisplayHealthcheckAdministration extends Component {
     return this.canIUse('metadata') && Boolean(this.healthCheckData.metadata);
   }
 
+  /**
+   * Renders the component
+   * @returns {JSX.Element}
+   */
   render() {
     const healthcheckData = this.healthCheckData;
-
     /*
      * SSL VALIDATION
      */
@@ -1223,7 +1244,7 @@ class DisplayHealthcheckAdministration extends Component {
       }
     };
 
-    const isMetadataEncryptionWorking = () => {
+    const isMetadataPrivateKeyDecryptionWorking = () => {
       if (healthcheckData.metadata.canDecryptMetadataPrivateKey === true) {
         return (
           <span className='healthcheck-success'>
@@ -1233,14 +1254,99 @@ class DisplayHealthcheckAdministration extends Component {
         );
       } else {
         return (
-          <span className='healthcheck-warning'>
-            <TriangleAlertSVG />
+          <span className='healthcheck-fail'>
+            <HealthcheckErrorSVG />
             <Trans>Unable to decrypt the metadata private key.</Trans>
             {/* wait PB-43710 for clearer definition of metadata healthcheck */}
             <Tooltip message={this.props.t("For more information, please run the health check from the command line on the server.")}>
               <InfoSVG className="baseline svg-icon"/>
             </Tooltip>
           </span>
+        );
+      }
+    };
+
+    const isMetadataKeyValidated = () => {
+      if (healthcheckData.metadata.canValidatePrivateMetadataKey === true) {
+        return (
+          <span className='healthcheck-success'>
+            <HealthcheckSuccessSVG />
+            <Trans>The server metadata private key is valid.</Trans>
+          </span>
+        );
+      } else {
+        return (
+          <span className='healthcheck-fail'>
+            <HealthcheckErrorSVG />
+            <Trans>The server metadata private key is not valid.</Trans>
+            {/* wait PB-43710 for clearer definition of metadata healthcheck */}
+            <Tooltip message={this.props.t("For more information, please run the health check from the command line on the server.")}>
+              <InfoSVG className="baseline svg-icon"/>
+            </Tooltip>
+          </span>
+        );
+      }
+    };
+
+    const isServerHasAccessToMetadataKey = () => {
+      if (healthcheckData.metadata.isServerHasAccessToMetadataKey === true) {
+        return (
+          <span className='healthcheck-success'>
+            <HealthcheckSuccessSVG />
+            <Trans>The server has access to the metadata keys or does not require access to it.</Trans>
+          </span>
+        );
+      } else {
+        return (
+          <span className='healthcheck-fail'>
+            <HealthcheckErrorSVG />
+            <Trans>The server does not have access to metadata key.</Trans>
+            <Tooltip message={this.props.t("When zero-knowledge mode is off, the server must have access to the metadata key. Without having access, the server won\'t be able to share the metadata private key with the users.")}>
+              <InfoSVG className="baseline svg-icon"/>
+            </Tooltip>
+          </span>
+        );
+      }
+    };
+
+    const hasNoActiveMetadataKey = () => {
+      if (healthcheckData.metadata.noActiveMetadataKey === true) {
+        return (
+          <span className='healthcheck-success'>
+            <HealthcheckSuccessSVG />
+            <Trans>Active metadata key found or not required.</Trans>
+          </span>
+        );
+      } else {
+        return (
+          <span className='healthcheck-fail'>
+            <HealthcheckErrorSVG />
+            <Trans>No active metadata key found.</Trans>
+            {/* wait PB-43710 for clearer definition of metadata healthcheck */}
+            <Tooltip message={this.props.t("For more information, please run the health check from the command line on the server.")}>
+              <InfoSVG className="baseline svg-icon"/>
+            </Tooltip>
+          </span>
+        );
+      }
+    };
+
+    const renderMetadataHealthcheck = () => {
+      if (healthcheckData.metadata.isServerMetadataKeyAccessInZeroKnowledgeMode === true) {
+        return (
+          <span className='healthcheck-success'>
+            <HealthcheckSuccessSVG />
+            <Trans>The server does not have access to the server metadata private key in Zero-knowledge mode.</Trans>
+          </span>
+        );
+      } else {
+        return (
+          <>
+            <div>{isMetadataPrivateKeyDecryptionWorking()}</div>
+            <div>{isMetadataKeyValidated()}</div>
+            <div>{isServerHasAccessToMetadataKey()}</div>
+            <div>{hasNoActiveMetadataKey()}</div>
+          </>
         );
       }
     };
@@ -1356,7 +1462,7 @@ class DisplayHealthcheckAdministration extends Component {
               <>
                 <h4><Trans>Metadata</Trans></h4>
                 <div className="healthcheck-metadata-section">
-                  <div>{isMetadataEncryptionWorking()}</div>
+                  {renderMetadataHealthcheck()}
                 </div>
               </>
             }

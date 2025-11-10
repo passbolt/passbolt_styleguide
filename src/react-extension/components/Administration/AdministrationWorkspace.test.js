@@ -27,6 +27,7 @@ jest.mock("./DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorks
 
 jest.mock("./DisplayMfaAdministration/DisplayMfaAdministration", () => () => <span className="mfa-details"></span>);
 jest.mock("./DisplayPasswordPoliciesAdministration/DisplayPasswordPoliciesAdministration", () => () => <span className="password-policies-details"></span>);
+jest.mock("./DisplaySecretHistoryAdministration/DisplaySecretHistoryAdministration", () => () => <span className="secret-history-details"></span>);
 jest.mock("./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration", () => () => <span className="user-directory-details"></span>);
 jest.mock("./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration", () => () => <span className="email-notifications-details"></span>);
 jest.mock("./DisplaySubscriptionKey/DisplaySubscriptionKey", () => () => <span className="subscription-key-details"></span>);
@@ -76,6 +77,7 @@ const scenarios = [
   {selectedMenu: AdministrationWorkspaceMenuTypes.ALLOW_CONTENT_TYPES, field: "isAllowedContentTypesSelected"},
   {selectedMenu: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED, field: "isGetStartedMetadataSelected"},
   {selectedMenu: AdministrationWorkspaceMenuTypes.SCIM, field: "isScimSelected"},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.SECRET_HISTORY, field: "isSecretHistorySelected"},
 ];
 
 const ceScenarios = [

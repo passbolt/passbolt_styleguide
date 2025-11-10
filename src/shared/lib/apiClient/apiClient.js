@@ -46,8 +46,8 @@ export class ApiClient {
       }
       this.baseUrl = `${rawBaseUrl}/${resourceName}`;
       this.baseUrl = new URL(this.baseUrl);
-    } catch (typeError) {
-      throw new TypeError('ApiClient constructor error: b.');
+    } catch (error) {
+      throw new TypeError('ApiClient constructor error: b.', {cause: error});
     }
 
     this.apiVersion = 'api-version=v2';

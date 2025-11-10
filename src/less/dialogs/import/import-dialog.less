@@ -1,0 +1,75 @@
+.import-resources-result {
+    .dialog {
+        max-width: 70rem;
+        min-width: 50rem;
+        .import-dialog-summary.form-content {
+            padding: 0;
+            max-height: 65rem;
+            overflow-y: auto;
+            h2 {
+                margin: 0;
+                padding: 1.6rem;
+                &:not(:first-child) {
+                    border-top: 1px solid var(--Action-button-Action-button-border);
+                }
+            }
+
+            .resources-section, .folder-section {
+                display: flex;
+                flex-direction: column;
+                gap: .8rem;
+                padding: 0 1.6rem;
+
+                textarea {
+                    opacity: 0.5;
+                }
+
+                .summary-section,
+                .summary-section.accordion.accordion-section {
+                    padding: .8rem 0;
+                    border-radius: var(--Menu-radius);
+                    border-top: none;
+
+                    .summary-header {
+                        display: flex;
+                        gap: 1.2rem;
+                        align-items: center;
+
+                        button {
+                            justify-content: space-between;
+                        }
+
+                        .state-icon {
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: var(--Button-border-radius);
+
+                            &.success-state {
+                                padding: .8rem .8rem .4rem .8rem;
+                                background: var(--Healthcheck-Healthcheck-Success);
+                            }
+
+                            &.warning-state {
+                                padding: .8rem .8rem .4rem .8rem;
+                                background: var(--Healthcheck-Healthcheck-Warning);
+                            }
+
+                            &.fail-state {
+                                padding: .8rem .8rem .4rem .8rem;
+                                background: var(--Healthcheck-Healthcheck-Error);
+                            }
+                        }
+
+                        .summary-content {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+
+            .folder-section {
+                padding-bottom: 1.6rem;
+            }
+        }
+    }
+}

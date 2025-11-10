@@ -135,6 +135,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
     try {
       return DateTime.fromJSDate(new Date(data)).setLocale(this.props.context.locale).toLocaleString(DateTime.DATETIME_FULL);
     } catch (error) {
+      console.error(`Failed to format date "${data}":`, error);
       return "";
     }
   }

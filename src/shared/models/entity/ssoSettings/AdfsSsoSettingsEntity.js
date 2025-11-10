@@ -89,7 +89,7 @@ class AdfsSsoSettingsEntity extends Entity {
     try {
       url = new URL(value);
     } catch (error) {
-      throw new Error('The url should be a valid url.');
+      throw new Error('The url should be a valid url.', {cause: error});
     }
 
     if (url.protocol !== "https:") {

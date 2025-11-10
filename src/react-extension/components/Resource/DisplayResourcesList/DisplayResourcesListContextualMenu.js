@@ -49,6 +49,7 @@ import ClockIcon from "../../../../img/svg/clock.svg";
 import CalendarIcon from "../../../../img/svg/calendar.svg";
 import TotpIcon from "../../../../img/svg/totp.svg";
 import GoIcon from "../../../../img/svg/go.svg";
+import HistoryIcon from "../../../../img/svg/history.svg";
 import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import ActionAbortedMissingMetadataKeys
   from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
@@ -56,6 +57,13 @@ import {
   withMetadataKeysSettingsLocalStorage
 } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
+import Logger from "../../../../shared/utils/logger";
+import {
+  withSecretRevisionsSettings
+} from "../../../../shared/context/SecretRevisionSettingsContext/SecretRevisionsSettingsContext";
+import SecretRevisionsSettingsEntity
+  from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
+import DisplayResourceSecretHistory from "../../SecretHistory/DisplayResourceSecretHistory";
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -82,6 +90,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
     this.handleSetExpiryDateClick = this.handleSetExpiryDateClick.bind(this);
     this.handleMarkAsExpiredClick = this.handleMarkAsExpiredClick.bind(this);
+    this.handleSecretHistoryClickEvent = this.handleSecretHistoryClickEvent.bind(this);
   }
 
   /**
@@ -131,6 +140,14 @@ class DisplayResourcesListContextualMenu extends React.Component {
     } else {
       this.displayActionAborted();
     }
+    this.props.hide();
+  }
+
+  /**
+   * handle secret history
+   */
+  handleSecretHistoryClickEvent() {
+    this.props.dialogContext.open(DisplayResourceSecretHistory, {resource: this.resource});
     this.props.hide();
   }
 
@@ -254,6 +271,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     try {
       code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
     } catch (error) {
+      Logger.error(error);
       await this.props.actionFeedbackContext.displayError(this.translate("Unable to copy the TOTP"));
       return;
     }
@@ -288,6 +306,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
       // a count: 1 is used to minimize the translation file as a singular/plural version already exist.
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been marked as expired.", {count: 1}));
     } catch (error) {
+      Logger.error(error);
       await this.props.actionFeedbackContext.displayError(this.translate("Unable to mark the resource as expired.", {count: 1}));
     } finally {
       this.props.hide();
@@ -417,6 +436,15 @@ class DisplayResourcesListContextualMenu extends React.Component {
   get canUsePasswordExpiry() {
     const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
     return this.props.passwordExpiryContext.isFeatureEnabled() && passwordExpirySettings?.policy_override;
+  }
+
+  /**
+   * Can use secret history
+   * @return {boolean}
+   */
+  get canUseSecretHistory() {
+    const isFeatureEnabled = this.props.context.siteSettings.canIUse('secretRevisions');
+    return isFeatureEnabled && this.props.secretRevisionsSettings?.isFeatureEnabled;
   }
 
   /**
@@ -568,6 +596,20 @@ class DisplayResourcesListContextualMenu extends React.Component {
             </div>
           </li>
         }
+        {this.canUseSecretHistory &&
+          <li key="option-secret_history" className="ready">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button
+                    type="button"
+                    id="secret-history" className="link no-border"
+                    onClick={this.handleSecretHistoryClickEvent}><HistoryIcon/><span><Trans>Secret history</Trans></span></button>
+                </div>
+              </div>
+            </div>
+          </li>
+        }
         {
           this.canShare() && <li key="option-delete-resource" className="ready">
             <div className="row">
@@ -603,7 +645,8 @@ DisplayResourcesListContextualMenu.propTypes = {
   passwordExpiryContext: PropTypes.object, // The password expiry context
   clipboardContext: PropTypes.object, // the clipboard service provider
   metadataKeysSettings: PropTypes.instanceOf(MetadataKeysSettingsEntity), // The metadata key settings
+  secretRevisionsSettings: PropTypes.instanceOf(SecretRevisionsSettingsEntity), // The secret revision settings
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withMetadataKeysSettingsLocalStorage(withClipboard(withRbac(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withDialog(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu)))))))))));
+export default withAppContext(withMetadataKeysSettingsLocalStorage(withClipboard(withRbac(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withSecretRevisionsSettings(withDialog(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu))))))))))));

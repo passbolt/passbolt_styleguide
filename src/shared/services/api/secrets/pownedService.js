@@ -40,7 +40,7 @@ class PownedService {
 
     try {
       inDictionary = await this.checkIfPasswordPowned(secret);
-    } catch (error) {
+    } catch {
       inDictionary = false;
       isPwnedServiceAvailable = false;
     }

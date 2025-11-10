@@ -228,7 +228,7 @@ class ManageAccountRecoveryUserSettings extends Component {
                     </TooltipPortal>
                     <span className="name"><Trans>requested this operation</Trans></span>
                     <div className="subinfo light">
-                      <span className="dateTimeAgo">{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</span>
+                      <span className="dateTimeAgo" title={this.date}>{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</span>
                       <span className="chips-group">
                         <span className={`chips user-status ${requestorStatus}`}>{this.props.t(requestorStatus)}</span>
                         <span className={`chips user-role ${this.requestorRole}`}>{this.requestorRole}</span>

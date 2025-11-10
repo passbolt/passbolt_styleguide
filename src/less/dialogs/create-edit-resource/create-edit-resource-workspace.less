@@ -269,11 +269,6 @@
           display: flex;
         }
 
-        textarea {
-          height: 14rem;
-          max-height: 40rem;
-        }
-
         &.input-password-wrapper {
           margin-bottom: 0;
 
@@ -312,14 +307,15 @@
         }
       }
 
-      .note-fields {
+      .note-fields, .description-fields {
         height: 100%;
 
         .input {
           height: 100%;
 
           textarea {
-            height: 40rem;
+            height: 100%;
+            max-height: 100%;
           }
         }
       }

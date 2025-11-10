@@ -169,7 +169,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> created folder <span className="item">{{folderName}}</span>
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo light" title={activity.created}>{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
@@ -196,7 +196,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
                 <span className="creator">{{activityCreatorName}}</span> updated folder <span className="item">{{folderName}}</span>
               </Trans>
             </div>
-            <div className="subinfo light">{activityFormattedDate}</div>
+            <div className="subinfo light" title={activity.created}>{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
@@ -255,7 +255,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
               {activity.data.permissions.updated.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "updated"))}
               {activity.data.permissions.removed.map(permission => this.renderSharedActivityPermissionChangeItem(permission, "removed"))}
             </ul>
-            <div className="subinfo third-level light">{activityFormattedDate}</div>
+            <div className="subinfo third-level light" title={activity.created}>{activityFormattedDate}</div>
           </div>
         </div>
         <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>

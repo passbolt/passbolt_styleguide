@@ -94,6 +94,8 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("Getting started");
       case AdministrationWorkspaceMenuTypes.SCIM:
         return this.translate("SCIM");
+      case AdministrationWorkspaceMenuTypes.SECRET_HISTORY:
+        return this.translate("Secret history");
       default:
         return "";
     }

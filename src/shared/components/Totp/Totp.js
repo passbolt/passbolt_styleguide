@@ -17,6 +17,7 @@ import TimerSVG from "../../../img/svg/timer.svg";
 import {TotpCodeGeneratorService} from "../../services/otp/TotpCodeGeneratorService";
 import {withTranslation} from "react-i18next";
 import {withActionFeedback} from "../../../react-extension/contexts/ActionFeedbackContext";
+import Logger from "../../utils/logger";
 
 const DEFAULT_TOTP_PERIOD = 30;
 
@@ -96,6 +97,7 @@ class Totp extends Component {
     try {
       return TotpCodeGeneratorService.generate(this.props.totp);
     } catch (error) {
+      Logger.error(error);
       this.props.actionFeedbackContext.displayError(this.props.t("Unable to preview the TOTP"));
       return "";
     }

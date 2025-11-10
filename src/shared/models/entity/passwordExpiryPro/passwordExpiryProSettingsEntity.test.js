@@ -13,7 +13,7 @@
  */
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import PasswordExpiryProSettingsEntity from "./passwordExpiryProSettingsEntity";
-import {defaultPasswordExpiryProSettingsDto} from "../passwordExpiry/passwordExpirySettingsEntity.test.data";
+import {defaultPasswordExpiryProSettingsDto, defaultPasswordExpirySettingsDto, defaultPasswordExpirySettingsDtoFromApi} from "../passwordExpiry/passwordExpirySettingsEntity.test.data";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 
 describe("passwordExpiryProSettings entity", () => {
@@ -106,5 +106,74 @@ describe("passwordExpiryProSettings entity", () => {
 
     const entity = PasswordExpiryProSettingsEntity.createFromDefault(expectedDto);
     expect(entity.toDto()).toStrictEqual(expectedDto);
+  });
+
+  describe("::isFeatureEnabled", () => {
+    it("should return true when id is set", () => {
+      expect.assertions(1);
+
+      const dto = defaultPasswordExpirySettingsDtoFromApi();
+      const entity = new PasswordExpiryProSettingsEntity(dto);
+
+      expect(entity.isFeatureEnabled).toStrictEqual(true);
+    });
+
+    it("should return false when id is not set", () => {
+      expect.assertions(1);
+
+      const dto = defaultPasswordExpirySettingsDto();
+
+      const entity = new PasswordExpiryProSettingsEntity(dto);
+
+      expect(entity.isFeatureEnabled).toStrictEqual(false);
+    });
+  });
+
+  describe("::calculateDefaultResourceExpiryDate", () => {
+    it("should return null when feature is not enabled (no id)", () => {
+      expect.assertions(1);
+
+      const dto = defaultPasswordExpirySettingsDto({
+        automatic_update: true,
+        automatic_expiry: true,
+        default_expiry_period: 30
+      });
+      delete dto.id;
+      const entity = new PasswordExpiryProSettingsEntity(dto);
+
+      expect(entity.calculateDefaultResourceExpiryDate()).toBeNull();
+    });
+
+    it("should return null when default_expiry_period is null", () => {
+      expect.assertions(1);
+
+      const dto = defaultPasswordExpirySettingsDto({
+        id: "10801423-4151-42a4-99d1-86e66145a08c",
+        automatic_update: true,
+        automatic_expiry: true,
+        default_expiry_period: null
+      });
+      const entity = new PasswordExpiryProSettingsEntity(dto);
+
+      expect(entity.calculateDefaultResourceExpiryDate()).toBeNull();
+    });
+
+    it("should calculate expiry date when feature is enabled and period is set", () => {
+      expect.assertions(3);
+
+      const dto = defaultPasswordExpirySettingsDto({
+        id: "10801423-4151-42a4-99d1-86e66145a08c",
+        automatic_update: true,
+        automatic_expiry: true,
+        default_expiry_period: 30
+      });
+      const entity = new PasswordExpiryProSettingsEntity(dto);
+
+      const result = entity.calculateDefaultResourceExpiryDate();
+
+      expect(result).not.toBeNull();
+      expect(typeof result).toStrictEqual("string");
+      expect(result).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
+    });
   });
 });

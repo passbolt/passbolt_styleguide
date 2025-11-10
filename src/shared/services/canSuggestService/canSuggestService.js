@@ -60,6 +60,7 @@ class CanSuggestService {
        * Only valid uri are accepted by this function.
        * This information should come from the browser tab uri, and so should be valid.
        */
+      console.error(`Invalid URI "${uri}":`, error);
       return false;
     }
 
@@ -135,7 +136,7 @@ class CanSuggestService {
 
     try {
       suggestedUriObject = new URL(suggestedUri);
-    } catch (error) {
+    } catch {
       return false;
     }
 

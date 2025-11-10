@@ -194,7 +194,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
                       </tr>
                       <tr className="expires">
                         <td className="label"><Trans>Expires</Trans></td>
-                        <td className="value">{formatDateTimeAgo(this.props.keyInfo.expires, this.props.t, this.props.context.locale)}</td>
+                        <td className="value" title={this.props.keyInfo.expires}>{formatDateTimeAgo(this.props.keyInfo.expires, this.props.t, this.props.context.locale)}</td>
                       </tr>
                     </tbody>
                   </table>

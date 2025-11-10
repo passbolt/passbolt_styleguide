@@ -82,6 +82,13 @@ import {
 import {defaultMetadataKeyDto} from "../../src/shared/models/entity/metadata/metadataKeyEntity.test.data";
 import {pgpKeys} from "../fixture/pgpKeys/keys";
 import mockRequestFindResourcesByIds from "./request/mockRequestFindResourcesByIds";
+import {
+  defaultSecretRevisionsSettingsDto
+} from "../../src/shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
+import SecretRevisionsSettingsEntity from "../../src/shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
+import {
+  secretRevisionsDtos
+} from "../../src/react-extension/components/SecretHistory/DisplayResourceSecretHistory.test.data";
 
 export default storage => {
   const mockPort = new MockPort(storage);
@@ -148,6 +155,9 @@ export default storage => {
   mockPort.addRequestListener("passbolt.keyring.get-key-info", () => ed25519ExternalPublicGpgKeyEntityDto());
   mockPort.addRequestListener("passbolt.metadata.generate-metadata-key", () => ({public_key: ed25519ExternalPublicGpgKeyEntityDto(),
     private_key: ed25519ExternalPrivateGpgKeyEntityDto()}));
+  mockPort.addRequestListener("passbolt.secret-revisions.find-settings", () => defaultSecretRevisionsSettingsDto());
+  mockPort.addRequestListener("passbolt.secret-revisions.save-settings", settings => new SecretRevisionsSettingsEntity(settings.toDto()));
+  mockPort.addRequestListener("passbolt.secret-revisions.find-all-by-resource-id-for-display", resourceId => secretRevisionsDtos(resourceId));
 
   // Deprecated events
   const deprecatedEvent = () => { throw new Error(`This event is deprecated.`); };

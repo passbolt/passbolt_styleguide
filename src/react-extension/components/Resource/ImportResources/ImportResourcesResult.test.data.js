@@ -30,7 +30,7 @@ export function defaultProps() {
         },
         references: {
           folder: {
-            id: "1"
+            id: "imported-123"
           }
         },
         errors: {
@@ -43,6 +43,14 @@ export function defaultProps() {
           folders: [{
             name: "folder1"
           }]
+        },
+        warnings: {
+          resources: [{
+            name: "resource1"
+          },
+          {
+            name: "resource2"
+          }],
         }
       }
     }

@@ -118,6 +118,7 @@ class InputPassphrase extends Component {
     try {
       await this.props.context.port.request("passbolt.keyring.private.checkpassphrase", this.state.passphrase);
     } catch (error) {
+      console.error(`Invalid passphrase:`, error);
       return false;
     }
     return true;
@@ -270,10 +271,10 @@ class InputPassphrase extends Component {
                   preview={true}
                   securityToken={this.props.context.userSettings.getSecurityToken()}
                 />
+                {this.state.passphraseError &&
+                  <div className="error-message">{this.state.passphraseError}</div>
+                }
               </div>
-              {this.state.passphraseError &&
-                <div className="error-message">{this.state.passphraseError}</div>
-              }
               {hasRememberMeOptions &&
                 <div className="remember-me">
                   <div className="input checkbox">

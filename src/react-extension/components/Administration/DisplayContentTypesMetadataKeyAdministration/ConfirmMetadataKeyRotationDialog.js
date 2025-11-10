@@ -97,7 +97,7 @@ class ConfirmMetadataKeyRotationDialog extends React.Component {
                 <tr className="created">
                   <td className="label"><Trans>Created</Trans></td>
                   {this.props.metadataKeyInfo.created &&
-                    <td className="value">{formatDateTimeAgo(this.props.metadataKeyInfo.created, this.props.t, this.props.context.locale)}</td>
+                    <td className="value" title={this.props.metadataKeyInfo.created}>{formatDateTimeAgo(this.props.metadataKeyInfo.created, this.props.t, this.props.context.locale)}</td>
                   }
                   {!this.props.metadataKeyInfo.created &&
                     <td className="empty-value"><Trans>Pending</Trans></td>

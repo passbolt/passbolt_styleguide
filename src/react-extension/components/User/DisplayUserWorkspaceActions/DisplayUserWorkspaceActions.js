@@ -43,8 +43,10 @@ import KeySVG from "../../../../img/svg/key.svg";
 import DeleteSVG from "../../../../img/svg/delete.svg";
 import EditSVG from "../../../../img/svg/edit.svg";
 import MetadataKeySVG from "../../../../img/svg/metadata_key.svg";
+import RemoveUserSVG from "../../../../img/svg/user_minus.svg";
 import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/ConfirmShareMissingMetadataKeys";
 import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import RemoveUserFromGroup from "../../UserGroup/RemoveUserFromGroup/RemoveUserFromGroup";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -73,6 +75,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     this.handleReviewRecoveryRequestEvent = this.handleReviewRecoveryRequestEvent.bind(this);
     this.handleClearSelectionClick = this.handleClearSelectionClick.bind(this);
     this.handleShareMissingMetadataKeysEvent = this.handleShareMissingMetadataKeysEvent.bind(this);
+    this.handleRemoveUserClickEvent = this.handleRemoveUserClickEvent.bind(this);
   }
 
   /**
@@ -80,6 +83,35 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   get canDelete() {
     return  this.selectedUser && this.props.context.loggedInUser.id !== this.selectedUser.id;
+  }
+
+  /**
+   * Returns true if the current user can remove the current selected user from group
+   */
+  get canRemoveFromGroup() {
+    const selectedUser = this.selectedUser;
+    /*
+     * Avoid displaying the button if the user list is not filtered by group
+     * or if no user was selected
+     */
+    if (this.props.userWorkspaceContext.filter.type !== "FILTER-BY-GROUP" || !selectedUser) {
+      return false;
+    }
+
+    const group = this.props.userWorkspaceContext.filter.payload.group;
+
+    // Don't show the button if there is only one user in the group
+    const soleMember = group.groups_users.length === 1;
+    if (soleMember) {
+      return false;
+    }
+
+    // Don't show the button if the selected user is the last manager of the selected group
+    const groupManagers = group.groups_users.filter(user => user.is_admin);
+    if (groupManagers.length === 1 && this.selectedUser.id === groupManagers[0].user_id) {
+      return false;
+    }
+    return group;
   }
 
   /**
@@ -136,6 +168,18 @@ class DisplayUserWorkspaceActions extends React.Component {
         this.handleError(error);
       }
     }
+  }
+
+  /**
+   * Handle remove user click event
+   */
+  async handleRemoveUserClickEvent() {
+    const removeUserFromGroupDialogProps = {
+      user: this.selectedUser,
+      group: this.props.userWorkspaceContext.filter.payload.group
+    };
+    this.props.context.setContext({removeUserFromGroupDialogProps});
+    this.props.dialogContext.open(RemoveUserFromGroup);
   }
 
   /**
@@ -369,6 +413,19 @@ class DisplayUserWorkspaceActions extends React.Component {
                     <button id="edit-user" type="button" className="button-action-contextual" onClick={this.handleEditClickEvent}>
                       <EditSVG/>
                       <span><Trans>Edit</Trans></span>
+                    </button>
+                  </li>
+                }
+                {this.canRemoveFromGroup &&
+                  <li>
+                    <button
+                      id="remove-user-from-group"
+                      type="button"
+                      className="button-action-contextual"
+                      onClick={this.handleRemoveUserClickEvent}
+                    >
+                      <RemoveUserSVG />
+                      <span><Trans>Remove from group</Trans></span>
                     </button>
                   </li>
                 }

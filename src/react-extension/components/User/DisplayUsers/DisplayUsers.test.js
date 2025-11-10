@@ -18,6 +18,9 @@
 
 import {
   defaultProps, propsWithFirstUserAttentionRequired,
+  propsWithNoUsersAccountRecoveryRequestFilter,
+  propsWithNoUsersMissingMetadataKeyFilter,
+  propsWithNoUsersWithAllStatusesFilter,
   propsWithNoUsersWithTextSearch,
   propsWithNullUsers
 } from "./DisplayUsers.test.data";
@@ -43,6 +46,24 @@ describe("Display Users", () => {
       page = new DisplayUsersPage(propsWithNoUsersWithTextSearch());
       await waitFor(() => {});
       expect(page.hasEmptyContentWithTextSearch).toBeTruthy();
+    });
+
+    it('As LU, I should see an empty content when there are no users filtered by all statuses filter', async() => {
+      page = new DisplayUsersPage(propsWithNoUsersWithAllStatusesFilter());
+      await waitFor(() => {});
+      expect(page.hasEmptyContentWithFilterApplied).toBeTruthy();
+    });
+
+    it('As LU, I should see an empty content when there are no users filtered by attention required filter', async() => {
+      page = new DisplayUsersPage(propsWithNoUsersAccountRecoveryRequestFilter());
+      await waitFor(() => {});
+      expect(page.hasEmptyContentWithFilterApplied).toBeTruthy();
+    });
+
+    it('As LU, I should see an empty content when there are no users filtered by missing metadata keys filter', async() => {
+      page = new DisplayUsersPage(propsWithNoUsersMissingMetadataKeyFilter());
+      await waitFor(() => {});
+      expect(page.hasEmptyContentWithFilterApplied).toBeTruthy();
     });
 
     it('AS LU, I should see the appropriate filtered list of users', async() => {
