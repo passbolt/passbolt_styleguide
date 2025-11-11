@@ -7633,6 +7633,7 @@ table.table-info.horizontal tbody tr:hover {
   flex-direction: column;
   align-items: flex-start;
   flex: 1 0 0;
+  min-height: 0;
 }
 .tabs .tabs-active-content {
   align-self: stretch;
@@ -9969,9 +9970,6 @@ svg .section-card .card .title:first-child {
 .import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section.accordion.accordion-section .summary-header .summary-content,
 .import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section.accordion.accordion-section .summary-header .summary-content {
   width: 100%;
-}
-.import-resources-result .dialog .import-dialog-summary.form-content .folder-section {
-  padding-bottom: 1.6rem;
 }
 /* Resource secret history dialog */
 .resource-secret-history {
