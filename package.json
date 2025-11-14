@@ -20,14 +20,15 @@
     "@babel/preset-react": "^7.22.5",
     "@babel/runtime": "^7.27.0",
     "@babel/runtime-corejs3": "^7.26.10",
-    "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.37.0",
+    "@storybook/test": "^8.6.14",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/dom": "^8.11.3",
     "@testing-library/react": "^12.1.4",
     "babel-jest": "^29.6.2",
     "babel-loader": "^9.1.3",
     "eslint": "^9.37.0",
+    "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jest": "^29.0.1",
     "eslint-plugin-no-unsanitized": "^4.1.4",
@@ -56,6 +57,7 @@
   },
   "dependencies": {
     "debounce-promise": "^3.1.2",
+    "downloadjs": "^1.4.7",
     "grapheme-splitter": "^1.0.4",
     "html5-qrcode": "^2.3.8",
     "i18next": "^25.4.0",
@@ -77,8 +79,7 @@
     "uuid": "^8.3.0",
     "validator": "^13.9.0",
     "webextension-polyfill": "^0.10.0",
-    "xregexp": "^5.1.2",
-    "downloadjs": "^1.4.7"
+    "xregexp": "^5.1.2"
   },
   "overrides": {
     "i18next-parser": {
@@ -98,8 +99,8 @@
     "test:ci:coverage": "npm run test:coverage -- --runInBand",
     "lint": "npm run lint:lockfile && npm run lint:eslint",
     "lint:lockfile": "lockfile-lint --path package-lock.json --allowed-hosts npm github.com --allowed-schemes \"https:\" \"git+ssh:\" --empty-hostname false",
-    "lint:eslint": "eslint --ext js --ext jsx src/react-extension src/react-quickaccess src/react-web-integration src/shared  --max-warnings 0",
-    "lint:eslint-fix": "eslint --ext js --ext jsx --fix src/react-extension src/react-quickaccess src/react-web-integration src/shared",
+    "lint:eslint": "eslint --ext js --ext jsx src --max-warnings 0",
+    "lint:eslint-fix": "eslint --ext js --ext jsx --fix src",
     "i18n:externalize": "i18next -c ./i18next-parser.config.js",
     "deploy-storybook": "storybook-to-ghpages --remote github",
     "dev:build:custom-theme": "npx grunt build_custom_theme",

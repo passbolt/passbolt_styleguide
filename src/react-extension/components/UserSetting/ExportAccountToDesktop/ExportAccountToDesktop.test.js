@@ -12,7 +12,7 @@
  * @since         4.3.0
  */
 
-import ExportAccountToDesktopPage from "./ExportAccountToDesktop.page";
+import ExportAccountToDesktopPage from "./ExportAccountToDesktop.test.page";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultProps} from "./ExportAccountToDesktop.data";
 /**
