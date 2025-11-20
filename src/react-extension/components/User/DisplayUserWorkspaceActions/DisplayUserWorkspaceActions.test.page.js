@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -24,8 +23,8 @@ import MockTranslationProvider from "../../../test/mock/components/International
  */
 export default class DisplayUserWorkspaceActionsPage {
   /**
-   * Default constructor
-   * @param props Props to attach
+   * Creates an instance of DisplayUserWorkspaceActionsPage.
+   * @param {Object} props - The properties to attach to the component
    */
   constructor(props) {
     this._page = render(
@@ -36,7 +35,8 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Returns true if one can copy a user
+   * Checks if user can be copied
+   * @returns {boolean} True if copy action is available
    */
   get canCopy() {
     const element = this._page.container.querySelector('#copy-action');
@@ -44,7 +44,54 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Returns true if one can edit a user
+   * Helper method to find the more actions dropdown
+   * @returns {HTMLElement|null} The dropdown element or null if not found
+   */
+  get _getMoreActionsDropdown() {
+    return this._page.container.querySelector('.more.button-action-contextual');
+  }
+
+  /**
+   * Helper method to check if an action is available in the more actions dropdown
+   * @param {string} selector - The selector for the action button
+   * @returns {Promise<boolean>} True if the action is available
+   */
+  async _canPerformAction(selector) {
+  // First check if the more actions dropdown exists
+    if (!this.hasMoreActionsDropdown) {
+      return false;
+    }
+    // Open the dropdown
+    await this.openMoreActionsDropdown();
+    // Now check for the action button
+    const element = this._page.container.querySelector(selector);
+    return Boolean(element);
+  }
+
+  /**
+   * Checks if more actions dropdown exists
+   * @returns {boolean} True if dropdown exists
+   */
+  get hasMoreActionsDropdown() {
+    return Boolean(this._getMoreActionsDropdown);
+  }
+
+  /**
+   * Opens the more actions dropdown
+   * @returns {Promise<void>}
+   */
+  async openMoreActionsDropdown() {
+    const dropdown = this._getMoreActionsDropdown;
+    if (dropdown) {
+      const leftClick = {button: 0};
+      fireEvent.click(dropdown, leftClick);
+      await waitFor(() => {});
+    }
+  }
+
+  /**
+   * Checks if user can be edited
+   * @returns {boolean} True if edit action is available
    */
   get canEdit() {
     const element = this._page.container.querySelector('#edit-user');
@@ -52,15 +99,16 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Returns true if one can delete a user
+   * Checks if user can be deleted
+   * @returns {Promise<boolean>} True if delete action is available
    */
-  get canDelete() {
-    const element = this._page.container.querySelector('#delete-user');
-    return Boolean(element);
+  async canDelete() {
+    return this._canPerformAction('#delete-user');
   }
 
   /**
-   * Returns true if one can copy permalink of a user
+   * Checks if user permalink can be copied
+   * @returns {boolean} True if copy permalink action is available
    */
   get canCopyPermalink() {
     const element = this._page.container.querySelector('#copy-user-permalink');
@@ -68,7 +116,8 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Returns true if one can copy email of a user
+   * Checks if user email can be copied
+   * @returns {boolean} True if copy email action is available
    */
   get canCopyUserEmail() {
     const element = this._page.container.querySelector('#copy-user-email');
@@ -76,7 +125,8 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Returns true if one can copy public key of a user
+   * Checks if user public key can be copied
+   * @returns {boolean} True if copy public key action is available
    */
   get canCopyUserPublicKey() {
     const element = this._page.container.querySelector('#copy-user-public-key');
@@ -84,7 +134,8 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Returns true if one can resend an invite to a user
+   * Checks if invite can be resent
+   * @returns {boolean} True if resend invite action is available
    */
   get canResendInvite() {
     const element = this._page.container.querySelector('#resend-invite-user');
@@ -92,15 +143,16 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Returns true if one can disable user MFA
+   * Determines whether the option to disable MFA is present in the more actions dropdown
+   * @returns {Promise<boolean>} True if disable MFA action is available
    */
-  get canDisableMFA() {
-    const element = this._page.container.querySelector('#disable-mfa-action');
-    return Boolean(element);
+  async canDisableMFA() {
+    return this._canPerformAction('#disable-mfa-action');
   }
 
   /**
-   * Returns true if one can review account recovery of a user
+   * Checks if account recovery can be reviewed
+   * @returns {boolean} True if review recovery action is available
    */
   get canReviewAccountRecovery() {
     const element = this._page.container.querySelector('#review-recovery');
@@ -108,7 +160,8 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Returns true if one can share missing metadata keys with a user
+   * Checks if metadata keys can be shared
+   * @returns {boolean} True if share metadata keys action is available
    */
   get canShareMissingMetadataKeys() {
     const element = this._page.container.querySelector('#share-metadata-keys');
@@ -116,17 +169,26 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Returns true if one can share missing metadata keys with a user
+   * Checks if user can be removed from group
+   * @returns {boolean} True if remove from group action is available
    */
   get canRemoveFromGroup() {
     const element = this._page.container.querySelector('#remove-user-from-group');
     return Boolean(element);
   }
 
+  /**
+   * Gets the remove from group button
+   * @returns {HTMLElement|null} The button element or null if not found
+   */
   get removeFromGroupButton() {
     return this._page.container.querySelector('#remove-user-from-group');
   }
 
+  /**
+   * Removes user from group
+   * @returns {Promise<void>}
+   */
   async removeFromGroup() {
     const button = this.removeFromGroupButton;
     const leftClick = {button: 0};
@@ -135,7 +197,8 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Asks for copy actions through the dropdown
+   * Opens copy actions dropdown
+   * @returns {Promise<void>}
    */
   async copyActions() {
     const element = this._page.container.querySelector('#copy-action .dropdown button');
@@ -143,7 +206,8 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Copy permalink
+   * Copies user permalink
+   * @returns {Promise<void>}
    */
   async copyPermalink() {
     const element = this._page.container.querySelector('#copy-user-permalink');
@@ -151,7 +215,8 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Copy email address
+   * Copies user email address
+   * @returns {Promise<void>}
    */
   async copyEmailAddress() {
     const element = this._page.container.querySelector('#copy-user-email');
@@ -159,7 +224,8 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Copy public key
+   * Copies user public key
+   * @returns {Promise<void>}
    */
   async copyPublicKey() {
     const element = this._page.container.querySelector('#copy-user-public-key');
@@ -167,7 +233,8 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Resend invite
+   * Resends invite to user
+   * @returns {Promise<void>}
    */
   async resendInvite() {
     const element = this._page.container.querySelector('#resend-invite-user');
@@ -175,15 +242,18 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * disable MFA
+   * Disables MFA for user
+   * @returns {Promise<void>}
    */
   async disableMfa() {
+    await this.openMoreActionsDropdown();
     const element = this._page.container.querySelector('#disable-mfa-action');
     await this.click(element);
   }
 
   /**
-   * Review account recovery
+   * Reviews account recovery for user
+   * @returns {Promise<void>}
    */
   async reviewAccountRecovery() {
     const element = this._page.container.querySelector('#review-recovery');
@@ -191,7 +261,8 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
-   * Share metadata keys with user
+   * Shares metadata keys with user
+   * @returns {Promise<void>}
    */
   async shareMetadataKeys() {
     const element = this._page.container.querySelector('#share-metadata-keys');
@@ -200,8 +271,9 @@ export default class DisplayUserWorkspaceActionsPage {
 
 
   /**
-   * click on element
-   * @param element
+   * Clicks on an element
+   * @param {HTMLElement} element - The element to click
+   * @returns {Promise<void>}
    */
   async click(element) {
     const leftClick = {button: 0};
@@ -209,4 +281,3 @@ export default class DisplayUserWorkspaceActionsPage {
     await waitFor(() => {});
   }
 }
-
