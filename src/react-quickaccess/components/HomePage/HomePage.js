@@ -135,33 +135,100 @@ class HomePage extends React.Component {
 
     const suggestedResources = [];
 
+    // Collect ALL suggested resources (no limit yet)
     for (const i in resources) {
       const resource = resources[i];
       if (this.isPasswordResource(resource.resource_type_id) && CanSuggestService.canSuggestUris(activeTabUrl, resource.metadata.uris)) {
         suggestedResources.push(resource);
-        if (suggestedResources.length === SUGGESTED_RESOURCES_LIMIT) {
-          break;
-        }
       }
     }
 
-    // Sort the resources by uri lengths, the greater on top.
-    return suggestedResources.sort((a, b) => {
+    // Sort resources by priority
+    suggestedResources.sort((a, b) => {
+      // Priority 1: Favorites first
+      const aIsFavorite = a.favorite !== null;
+      const bIsFavorite = b.favorite !== null;
+      if (aIsFavorite !== bIsFavorite) {
+        return aIsFavorite ? -1 : 1;
+      }
+
+      // Priority 2: URI length (longer URIs first)
       const aUrisLength = a.metadata.uris[0].length || 0;
       const bUrisLength = b.metadata.uris[0].length || 0;
-      return bUrisLength - aUrisLength;
+      if (bUrisLength !== aUrisLength) {
+        return bUrisLength - aUrisLength;
+      }
+
+      // Priority 3: Sort alphabetically by name
+      const aName = a.metadata.name.toUpperCase();
+      const bName = b.metadata.name.toUpperCase();
+      return aName.localeCompare(bName);
     });
+
+    // Apply limit AFTER sorting
+    return suggestedResources.slice(0, SUGGESTED_RESOURCES_LIMIT);
   });
 
   /**
    * Get the resources for the browse section.
    * @param {array} resources The list of resources to filter.
    * @param {string} search the current search to apply
+   * @param {string} activeTabUrl the active tab url for prioritizing suggestions
    * @returns {Array<Object>} The list of resources.
    */
-  filterSearchedResources =  memoize((resources, search) => {
+  filterSearchedResources =  memoize((resources, search, activeTabUrl) => {
     if (search && resources) {
-      return filterResourcesBySearch(resources, search, BROWSED_RESOURCES_LIMIT);
+      // First, filter by search text
+      const filtered = filterResourcesBySearch(resources, search, Number.MAX_SAFE_INTEGER);
+
+      // Sort by priority
+      filtered.sort((a, b) => {
+        // If we have an active tab URL, sort by priority
+        if (activeTabUrl) {
+          // Determine if each resource is suggested for the current page
+          const aIsSuggested = this.isPasswordResource(a.resource_type_id) && CanSuggestService.canSuggestUris(activeTabUrl, a.metadata.uris);
+          const bIsSuggested = this.isPasswordResource(b.resource_type_id) && CanSuggestService.canSuggestUris(activeTabUrl, b.metadata.uris);
+
+          // Priority 1: Suggested resources first
+          if (aIsSuggested !== bIsSuggested) {
+            return aIsSuggested ? -1 : 1;
+          }
+
+          // Priority 2: Favorites first (within the same suggested/not-suggested group)
+          const aIsFavorite = a.favorite !== null;
+          const bIsFavorite = b.favorite !== null;
+          if (aIsFavorite !== bIsFavorite) {
+            return aIsFavorite ? -1 : 1;
+          }
+
+          // Priority 3: Sort based on group type
+          if (aIsSuggested) {
+            // For suggested resources: sort by URI length (longer/more specific URIs first)
+            const aUrisLength = a.metadata.uris[0]?.length || 0;
+            const bUrisLength = b.metadata.uris[0]?.length || 0;
+            return bUrisLength - aUrisLength;
+          } else {
+            // For non-suggested resources: sort alphabetically by name
+            const aName = a.metadata.name.toUpperCase();
+            const bName = b.metadata.name.toUpperCase();
+            return aName.localeCompare(bName);
+          }
+        }
+
+        // No active tab URL, sort by favorites first, then alphabetically by name
+        const aIsFavorite = a.favorite !== null;
+        const bIsFavorite = b.favorite !== null;
+        if (aIsFavorite !== bIsFavorite) {
+          return aIsFavorite ? -1 : 1;
+        }
+
+        const aName = a.metadata.name.toUpperCase();
+        const bName = b.metadata.name.toUpperCase();
+        return aName.localeCompare(bName);
+      });
+
+      // Apply limit
+      return filtered.slice(0, BROWSED_RESOURCES_LIMIT);
     }
     return [];
   });
@@ -248,7 +315,7 @@ class HomePage extends React.Component {
     let browsedResources, suggestedResources;
 
     if (isReady) {
-      browsedResources = this.filterSearchedResources(this.props.resources, this.props.context.search);
+      browsedResources = this.filterSearchedResources(this.props.resources, this.props.context.search, this.state.activeTabUrl);
       suggestedResources = this.filterSuggestedResources(this.props.resources, this.state.activeTabUrl);
     }
 
