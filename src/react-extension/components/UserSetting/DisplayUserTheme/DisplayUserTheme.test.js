@@ -69,7 +69,7 @@ describe("Display user theme", () => {
       await page.theme(2).select();
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.themes.change", "midgar");
       expect(props.context.port.request).toHaveBeenCalledTimes(1);
-      const result = await page.theme(2).select();
+      await page.theme(2).select();
       await waitFor(() => {});
       expect(props.context.port.request).toHaveBeenCalledTimes(1);
     });
