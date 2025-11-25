@@ -1,3 +1,4 @@
+import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
 import {defaultAppContext, defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";

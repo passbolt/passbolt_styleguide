@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.1.0
  */
-import {adminRoleDto, userRoleDto} from "./role.test.data";
+import {adminRoleDto, userRoleDto} from "./roleEntity.test.data";
 
 export const rolesCollectionData = [
   userRoleDto(),

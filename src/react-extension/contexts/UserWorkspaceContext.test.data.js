@@ -4,7 +4,7 @@
  * @returns {any}
  */
 import MockPort from "../test/mock/MockPort";
-import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../shared/models/entity/role/role.test.data";
+import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../shared/models/entity/role/roleEntity.test.data";
 import {UserWorkspaceFilterTypes} from "./UserWorkspaceContext";
 
 export function defaultAppContext(appContext) {
