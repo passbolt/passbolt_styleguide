@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../src/shared/models/entity/role/role.test.data";
+import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../src/shared/models/entity/role/roleEntity.test.data";
 
 export default (groupId) => {
   if(groupId === "516c2db6-0aed-52d8-854f-b3f3499995e7") {

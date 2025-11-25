@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 
-import {TEST_ROLE_USER_ID} from "../../../src/shared/models/entity/role/role.test.data";
+import {TEST_ROLE_USER_ID} from "../../../src/shared/models/entity/role/roleEntity.test.data";
 
 export default () => {
   return [{

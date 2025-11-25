@@ -14,7 +14,7 @@
 import {defaultRbacWithUiActionData, denyRbacWithUiActionData} from "./rbacEntity.test.data";
 import {defaultUiActionData} from "./uiActionEntity.test.data";
 import {uiActions} from "../../../services/rbacs/uiActionEnumeration";
-import {TEST_ROLE_USER_ID} from "../role/role.test.data";
+import {TEST_ROLE_USER_ID} from "../role/roleEntity.test.data";
 
 export const defaultSettingsRbacsCollectionData = [
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.RESOURCES_EXPORT})}),

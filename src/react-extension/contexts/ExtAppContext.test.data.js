@@ -19,7 +19,7 @@ import siteSettingsFixture from "../test/fixture/Settings/siteSettings";
 import MockPort from "../test/mock/MockPort";
 import MockStorage from "../test/mock/MockStorage";
 import {defaultAdminUserDto, defaultUserDto} from "../../shared/models/entity/user/userEntity.test.data";
-import {adminRoleDto, TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID, userRoleDto} from "../../shared/models/entity/role/role.test.data";
+import {adminRoleDto, TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID, userRoleDto} from "../../shared/models/entity/role/roleEntity.test.data";
 import {defaultAccountDto} from "../../shared/models/entity/account/accountEntity.test.data";
 import AccountEntity from "../../shared/models/entity/account/accountEntity";
 import {defaultCeSiteSettings} from "../test/fixture/Settings/siteSettings.test.data";

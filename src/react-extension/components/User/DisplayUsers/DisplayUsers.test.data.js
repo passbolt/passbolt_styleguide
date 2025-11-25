@@ -17,7 +17,7 @@ import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {
   defaultAccountRecoveryUserContext,
 } from "../../../contexts/AccountRecoveryUserContext.test.data";
-import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
+import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
 import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContext.test.data";
 
 /**
