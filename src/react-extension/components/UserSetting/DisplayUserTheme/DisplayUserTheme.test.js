@@ -59,8 +59,8 @@ describe("Display user theme", () => {
       expect(props.loadingContext.remove).toHaveBeenCalledTimes(2);
     });
 
-    it('As LU, I click a selected theme and nothing happens', async() => {
-      expect.assertions(2);
+    it('As LU selecting the already selected theme should not trigger a change', async() => {
+      expect.assertions(3);
 
       jest.spyOn(props.context.port, "request");
 
@@ -68,9 +68,10 @@ describe("Display user theme", () => {
 
       await page.theme(2).select();
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.themes.change", "midgar");
+      expect(props.context.port.request).toHaveBeenCalledTimes(1);
       const result = await page.theme(2).select();
       await waitFor(() => {});
-      expect(result).toBeUndefined();
+      expect(props.context.port.request).toHaveBeenCalledTimes(1);
     });
 
     it('As LU, I should select a theme with failure', async() => {
