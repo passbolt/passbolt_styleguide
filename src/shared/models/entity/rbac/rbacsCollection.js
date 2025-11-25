@@ -13,40 +13,23 @@
  */
 
 import RbacEntity from "./rbacEntity";
-import EntityCollection from "../abstract/entityCollection";
-import EntitySchema from "../abstract/entitySchema";
 import RoleEntity from "../role/roleEntity";
+import EntityV2Collection from "../abstract/entityV2Collection";
 
-const ENTITY_NAME = 'Rbacs';
-const RULE_UNIQUE_ID = 'unique_id';
-
-class RbacsCollection extends EntityCollection {
+class RbacsCollection extends EntityV2Collection {
   /**
    * @inheritDoc
    */
-  constructor(collectionDto, excludeInvalid = false) {
-    super(EntitySchema.validate(
-      RbacsCollection.ENTITY_NAME,
-      collectionDto,
-      RbacsCollection.getSchema()
-    ));
+  get entityClass() {
+    return RbacEntity;
+  }
 
-    /*
-     * Directly push into the private property _items[]
-     * Do not add if excludeInvalid is true and control function are not allow
-     */
-    this._props.forEach(dto => {
-      try {
-        this._items.push(new RbacEntity(dto));
-      } catch (e) {
-        if (!excludeInvalid) {
-          throw e;
-        }
-      }
-    });
-
-    // We do not keep original props
-    this._props = null;
+  /**
+   * @inheritDoc
+   * @throws {EntityCollectionError} Build Rule: Ensure all items with an ID in the collection has a unique ID.
+   */
+  constructor(dtos = [], options = {}) {
+    super(dtos, options);
   }
 
   /**
@@ -62,11 +45,12 @@ class RbacsCollection extends EntityCollection {
   }
 
   /**
-   * Get the array of entity
-   * @returns {Array<RbacEntity>}
+   * @inheritDoc
+   * @param {Set} [options.uniqueIdsSetCache] A set of unique ids.
+   * @throws {EntityValidationError} If a metadata key already exists with the same id.
    */
-  get rbacs() {
-    return this._items;
+  validateBuildRules(item, options = {}) {
+    this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
   }
 
   /*
@@ -106,7 +90,7 @@ class RbacsCollection extends EntityCollection {
       throw new Error('The name parameter should be a valid string.');
     }
 
-    return this.rbacs.find(rbac => rbac.roleId === role.id && rbac.uiAction?.name === name);
+    return this.items.find(rbac => rbac.roleId === role.id && rbac.uiAction?.name === name);
   }
 
   /**
@@ -115,12 +99,45 @@ class RbacsCollection extends EntityCollection {
    * @returns {RbacEntity}
    * @throws {Error} If the name parameter is not a string
    */
+  findRbacByUiActionName(name) {
+    if (typeof name !== 'string' && !(name instanceof String)) {
+      throw new Error('The name parameter should be a valid string.');
+    }
+
+    return this.items.find(rbac => rbac.uiAction?.name === name);
+  }
+
+  /**
+   * Find the first rbac matching the given role identifier and action name.
+   * @param {RoleEntity} role The role
+   * @param {string} name The action name
+   * @returns {RbacEntity}
+   * @throws {Error} If the role parameter is not a role entity
+   * @throws {Error} If the name parameter is not a string
+   */
+  findRbacByRoleAndActionName(role, name) {
+    if (!(role instanceof RoleEntity)) {
+      throw new Error('The role parameter should be a role entity.');
+    }
+    if (typeof name !== 'string' && !(name instanceof String)) {
+      throw new Error('The name parameter should be a valid string.');
+    }
+
+    return this.items.find(rbac => rbac.roleId === role.id && rbac.action?.name === name);
+  }
+
+  /**
+   * Find the first rbac matching the given action name.
+   * @param {string} name The action name
+   * @returns {RbacEntity}
+   * @throws {Error} If the name parameter is not a string
+   */
   findRbacByActionName(name) {
     if (typeof name !== 'string' && !(name instanceof String)) {
       throw new Error('The name parameter should be a valid string.');
     }
 
-    return this.rbacs.find(rbac => rbac.uiAction?.name === name);
+    return this.items.find(rbac => rbac.action?.name === name);
   }
 
   /*
@@ -128,34 +145,22 @@ class RbacsCollection extends EntityCollection {
    * Setters
    * ==================================================
    */
-
   /**
-   * Push a copy of the item to the collection
-   * @param {object} dto A Dto or an entity type managed by the collection
+   * @inheritDoc
    */
-  push(dto) {
-    if (!dto || typeof dto !== 'object') {
-      throw new TypeError('The function expect an object as parameter');
-    }
-    if (dto instanceof RbacEntity) {
-      dto = dto.toDto(RbacEntity.ALL_CONTAIN_OPTIONS); // deep clone
-    }
-    const entity = new RbacEntity(dto); // validate
+  pushMany(data, entityOptions = {}, options = {}) {
+    const uniqueIdsSetCache = new Set(this.extract("id"));
+    const onItemPushed = item => {
+      uniqueIdsSetCache.add(item._props.id);
+    };
 
-    super.push(entity);
-  }
+    options = {
+      onItemPushed: onItemPushed,
+      validateBuildRules: {...options?.validateBuildRules, uniqueIdsSetCache},
+      ...options
+    };
 
-  /**
-   * Add or replace an existing rbac entity.
-   * @param {RbacEntity} rbac The rbac entity to add or replace.
-   */
-  addOrReplace(rbac) {
-    const index = this.items.findIndex(existingRbac => existingRbac.id === rbac.id);
-    if (index > -1) {
-      this._items[index] = rbac;
-    } else {
-      this.push(rbac);
-    }
+    super.pushMany(data, entityOptions, options);
   }
 
   /**
@@ -172,27 +177,6 @@ class RbacsCollection extends EntityCollection {
         return;
       }
     }
-  }
-
-  /*
-   * ==================================================
-   * Static getters
-   * ==================================================
-   */
-  /**
-   * RbacsCollection.ENTITY_NAME
-   * @returns {string}
-   */
-  static get ENTITY_NAME() {
-    return ENTITY_NAME;
-  }
-
-  /**
-   * RbacsCollection.RULE_UNIQUE_ID
-   * @returns {string}
-   */
-  static get RULE_UNIQUE_ID() {
-    return RULE_UNIQUE_ID;
   }
 }
 

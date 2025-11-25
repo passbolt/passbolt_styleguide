@@ -106,7 +106,7 @@ export class AdminRbacContextProvider extends React.Component {
    * @returns {Boolean}
    */
   hasSettingsChanges() {
-    return this.state.rbacsUpdated.rbacs.length > 0;
+    return this.state.rbacsUpdated.items.length > 0;
   }
 
   /**
@@ -130,7 +130,7 @@ export class AdminRbacContextProvider extends React.Component {
 
       const rbacsUpdatedResultDto = await this.rbacService.updateAll(rbacsUpdatedDto, {ui_action: true, action: true});
       const rbacs = this.state.rbacs;
-      rbacsUpdatedResultDto.forEach(rbacUpdatedResultDto => rbacs.addOrReplace(new RbacEntity(rbacUpdatedResultDto)));
+      rbacsUpdatedResultDto.forEach(rbacUpdatedResultDto => rbacs.pushOrReplace(new RbacEntity(rbacUpdatedResultDto)));
       const rbacsUpdated = new RbacsCollection([]);
       this.setState({rbacs, rbacsUpdated});
     } finally {

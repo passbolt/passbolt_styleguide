@@ -56,13 +56,13 @@ describe("CanUseService", () => {
       expect.assertions(3);
       global.window.chrome = {webview: true};
 
-      jest.spyOn(rbacs, "findRbacByActionName");
+      jest.spyOn(rbacs, "findRbacByUiActionName");
       jest.spyOn(GetControlFunctionService, "getByRbac");
 
       const result = CanUse.canRoleUseUiAction(user, rbacs, uiActions.RESOURCES_EXPORT);
 
       expect(result).toBe(true);
-      expect(rbacs.findRbacByActionName).toHaveBeenCalledWith(uiActions.RESOURCES_EXPORT);
+      expect(rbacs.findRbacByUiActionName).toHaveBeenCalledWith(uiActions.RESOURCES_EXPORT);
       expect(GetControlFunctionService.getByRbac).toHaveBeenCalled();
     });
 

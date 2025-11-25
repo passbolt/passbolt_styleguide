@@ -26,7 +26,7 @@ export default class CanUse {
   static canRoleUseUiAction(user, rbacs, actionName) {
     // Desktop action should always be driven by rbac
     if (window.chrome?.webview) {
-      const rbac = rbacs.findRbacByActionName(actionName);
+      const rbac = rbacs.findRbacByUiActionName(actionName);
       return this.getByRbacOrDefault(rbac, actionName, user);
     }
 
