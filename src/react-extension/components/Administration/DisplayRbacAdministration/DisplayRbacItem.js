@@ -77,7 +77,7 @@ class DisplayRbacItem extends React.Component {
    * @return {boolean}
    */
   hasChanged() {
-    if (this.props.rbacsUpdated.findRbacByActionName(this.props.actionName)) {
+    if (this.props.rbacsUpdated.findRbacByUiActionName(this.props.actionName)) {
       return true;
     }
     return false;

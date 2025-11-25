@@ -119,7 +119,7 @@ class DisplayRbacAdministration extends React.Component {
       // If the control function is not the rbac to the list of changes.
       const clonedRbac = new RbacEntity(rbac.toDto({ui_action: true, action: true}));
       clonedRbac.controlFunction = controlFunction;
-      rbacsUpdated.addOrReplace(clonedRbac);
+      rbacsUpdated.pushOrReplace(clonedRbac);
     }
 
     this.props.adminRbacContext.setRbacsUpdated(rbacsUpdated);
