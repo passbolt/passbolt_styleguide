@@ -11,10 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.1.0
  */
+import PassboltResponseEntity from "../../../models/entity/apiService/PassboltResponseEntity";
 import {rolesCollectionDto} from "../../../models/entity/role/rolesCollection.test.data";
 
 export class DefaultRoleService {
   findAll() {
-    return rolesCollectionDto;
+    return new PassboltResponseEntity({header: {}, body: rolesCollectionDto});
   }
 }
