@@ -17,7 +17,6 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
 import RbacService from "../../../../shared/services/api/rbac/rbacService";
-import RoleService from "../../../../shared/services/api/role/roleService";
 import RbacEntity from "../../../../shared/models/entity/rbac/rbacEntity";
 
 /**
@@ -45,7 +44,6 @@ export class AdminRbacContextProvider extends React.Component {
     this.state = this.defaultState;
     const apiClientOptions = props.context.getApiClientOptions();
     this.rbacService = new RbacService(apiClientOptions);
-    this.roleService = new RoleService(apiClientOptions);
   }
 
   /**
