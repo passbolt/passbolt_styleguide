@@ -14,7 +14,7 @@
 
 import MockPort from "../../../../react-extension/test/mock/MockPort";
 import RolesCollection from "../../../models/entity/role/rolesCollection";
-import {rolesCollectionData} from "../../../models/entity/role/rolesCollection.test.data";
+import {rolesCollectionDto} from "../../../models/entity/role/rolesCollection.test.data";
 import RoleServiceWorkerService from "./roleServiceWorkerService";
 
 describe("RoleServiceWorkerService", () => {
@@ -23,7 +23,7 @@ describe("RoleServiceWorkerService", () => {
       expect.assertions(4);
 
       const event = "passbolt.role.get-all";
-      const dto = rolesCollectionData;
+      const dto = rolesCollectionDto;
 
       const port = new MockPort();
       port.addRequestListener(event, () => dto);

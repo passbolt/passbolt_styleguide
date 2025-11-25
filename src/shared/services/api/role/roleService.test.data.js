@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.1.0
  */
-import {rolesCollectionData} from "../../../models/entity/role/rolesCollection.test.data";
+import {rolesCollectionDto} from "../../../models/entity/role/rolesCollection.test.data";
 
 export class DefaultRoleService {
   findAll() {
-    return rolesCollectionData;
+    return rolesCollectionDto;
   }
 }

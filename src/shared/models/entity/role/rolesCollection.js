@@ -12,39 +12,35 @@
  * @since         2.13.0
  */
 import RoleEntity from "./roleEntity";
-import EntityCollection from "../abstract/entityCollection";
-import EntitySchema from "../abstract/entitySchema";
-import EntityCollectionError from "../abstract/entityCollectionError";
+import EntityV2Collection from "../abstract/entityV2Collection";
 
 const ENTITY_NAME = 'Roles';
-const RULE_UNIQUE_ID = 'unique_id';
 
-class RolesCollection extends EntityCollection {
+class RolesCollection extends EntityV2Collection {
   /**
    * @inheritDoc
-   * @throws {EntityCollectionError} Build Rule: Ensure all items in the collection are unique by ID.
    */
-  constructor(rolesCollectionDto, options = {}) {
-    super(EntitySchema.validate(
-      RolesCollection.ENTITY_NAME,
-      rolesCollectionDto,
-      RolesCollection.getSchema()
-    ), options);
-
-    /*
-     * Note: there is no "multi-item" validation
-     * Collection validation will fail at the first item that doesn't validate
-     */
-    this._props.forEach(role => {
-      this.push(new RoleEntity(role, {clone: false}));
-    });
-
-    // We do not keep original props
-    this._props = null;
+  get entityClass() {
+    return RoleEntity;
   }
 
   /**
-   * Get collection entity schema
+   * @inheritDoc
+   * @throws {EntityCollectionError} Build Rule: Ensure all items in the collection are unique by ID.
+   * @throws {EntityCollectionError} Build Rule: Ensure the total content do not exceed the maximum allowed.
+   */
+  constructor(dtos = [], options = {}) {
+    super(dtos, options);
+  }
+
+  /*
+   * ==================================================
+   * Validation
+   * ==================================================
+   */
+
+  /**
+   * Get metadata private keys collection schema
    *
    * @returns {Object} schema
    */
@@ -52,73 +48,47 @@ class RolesCollection extends EntityCollection {
     return {
       "type": "array",
       "items": RoleEntity.getSchema(),
+      "maxItems": 7,
     };
   }
 
   /**
-   * Get roles types
-   * @returns {Array<RoleEntity>}
+   * @inheritDoc
+   * @param {Set} [options.uniqueIdsSetCache] A set of unique ids.
+   * @throws {EntityValidationError} If a role already exists with the same id.
    */
-  get roles() {
-    return this._items;
+  validateBuildRules(item, options = {}) {
+    this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
+    this.assertNotExist("name", item._props.name, {haystackSet: options?.uniqueNamesSetCache});
   }
 
   /**
-   * Get all the ids of the roles in the collection
-   *
-   * @returns {Array<RoleEntity>}
+   * @inheritDoc
    */
-  get ids() {
-    return this._items.map(r => r.id);
+  pushMany(data, entityOptions = {}, options = {}) {
+    const uniqueIdsSetCache = new Set(this.extract("id"));
+    const uniqueNamesSetCache = new Set(this.extract("name"));
+
+    const onItemPushed = item => {
+      uniqueIdsSetCache.add(item._props.id);
+      uniqueNamesSetCache.add(item._props.name);
+    };
+
+    options = {
+      onItemPushed: onItemPushed,
+      validateBuildRules: {...options?.validateBuildRules, uniqueIdsSetCache, uniqueNamesSetCache},
+      ...options
+    };
+
+    super.pushMany(data, entityOptions, options);
   }
 
-  /*
-   * ==================================================
-   * Assertions
-   * ==================================================
-   */
   /**
-   * Assert there is no other role with the same id in the collection
-   *
-   * @param {RoleEntity} role entity
-   * @throws {EntityValidationError} if a role with the same id already exist
+   * Removes from the collection all the roles that are reserved roles: (admin, user and guest)
+   * @return {void} The function alters the collection itself.
    */
-  assertUniqueId(role) {
-    if (!role.id) {
-      return;
-    }
-    const length = this.roles.length;
-    let i = 0;
-    for (; i < length; i++) {
-      const existingRole = this.roles[i];
-      if (existingRole.id && existingRole.id === role.id) {
-        throw new EntityCollectionError(i, RolesCollection.RULE_UNIQUE_ID, `Role id ${role.id} already exists.`);
-      }
-    }
-  }
-
-  /*
-   * ==================================================
-   * Setters
-   * ==================================================
-   */
-  /**
-   * Push a copy of the role to the list
-   * @param {object} role DTO or RoleEntity
-   */
-  push(role) {
-    if (!role || typeof role !== 'object') {
-      throw new TypeError(`RolesCollection push parameter should be an object.`);
-    }
-    if (role instanceof RoleEntity) {
-      role = role.toDto(); // deep clone
-    }
-    const roleEntity = new RoleEntity(role); // validate
-
-    // Build rules
-    this.assertUniqueId(roleEntity);
-
-    super.push(roleEntity);
+  filterByCustomRole() {
+    this.filterByCallback(role => !role.isAReservedRole());
   }
 
   /*
@@ -132,14 +102,6 @@ class RolesCollection extends EntityCollection {
    */
   static get ENTITY_NAME() {
     return ENTITY_NAME;
-  }
-
-  /**
-   * RolesCollection.RULE_UNIQUE_ID
-   * @returns {string}
-   */
-  static get RULE_UNIQUE_ID() {
-    return RULE_UNIQUE_ID;
   }
 }
 
