@@ -112,7 +112,7 @@ class DisplayRbacAdministration extends React.Component {
    */
   updateRbacControlFunction(role, actionName, controlFunction) {
     const rbacsUpdated = this.props.adminRbacContext.rbacsUpdated;
-    const rbac = this.props.adminRbacContext.rbacs.findRbacByRoleAndUiActionName(role, actionName);
+    const rbac = this.props.adminRbacContext.rbacs.findRbacByRoleAndActionName(role, actionName);
     // If the function is has the original one, remove it from the list of changes.
     if (rbac.controlFunction === controlFunction) {
       rbacsUpdated.remove(rbac);

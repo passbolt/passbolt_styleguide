@@ -19,60 +19,99 @@ import {defaultSettingsRbacsCollectionData, settingsRbacsCollectionData} from ".
 import RoleEntity from "../../models/entity/role/roleEntity";
 import {defaultAdminUserDto} from "../../models/entity/user/userEntity.test.data";
 import CanUse from "./canUseService";
-import DenyControlFunction from "./controlFunctions/denyControlFunction";
 import GetControlFunctionService from "./getControlFunctionService";
 import {uiActions} from "./uiActionEnumeration";
+import {actions} from "./actionEnumeration";
+import {defaultRbacData} from "../../models/entity/rbac/rbacEntity.test.data";
+import {controlFunctions} from "./controlFunctionEnumeration";
 
 describe("CanUseService", () => {
   const user = defaultLoggedInUser();
   let rbacs = new RbacsCollection(defaultSettingsRbacsCollectionData);
 
-  describe('::getDefaultForAdminAndUiAction', () => {
-    it('should return true for admin user with admin control function', () => {
+  describe('::canRoleUseAction', () => {
+    it('should return true for admin user with admin control function for ui action', () => {
       expect.assertions(2);
-      jest.spyOn(GetControlFunctionService, "getDefaultForAdminAndUiAction");
+      jest.spyOn(GetControlFunctionService, "getDefaultForAdminAndAction");
 
-      const result = CanUse.canRoleUseUiAction(defaultAdminUserDto(),  new RbacsCollection(defaultSettingsRbacsCollectionData), uiActions.RESOURCES_EXPORT);
+      const result = CanUse.canRoleUseAction(defaultAdminUserDto(),  new RbacsCollection(defaultSettingsRbacsCollectionData), uiActions.RESOURCES_EXPORT);
 
       expect(result).toBeTruthy();
-      expect(GetControlFunctionService.getDefaultForAdminAndUiAction).toHaveBeenCalledWith(uiActions.RESOURCES_EXPORT);
+      expect(GetControlFunctionService.getDefaultForAdminAndAction).toHaveBeenCalledWith(uiActions.RESOURCES_EXPORT);
     });
 
-    it('should return true for a non-admin user with RBAC control function', () => {
+    it('should return true for a non-admin user with RBAC control function for ui action', () => {
       expect.assertions(3);
 
-      jest.spyOn(rbacs, "findRbacByRoleAndUiActionName");
+      jest.spyOn(rbacs, "findRbacByRoleAndActionName");
       jest.spyOn(GetControlFunctionService, "getByRbac");
       jest.spyOn(CanUse, "getByRbacOrDefault");
 
-      const result = CanUse.canRoleUseUiAction(user, rbacs, uiActions.RESOURCES_EXPORT);
+      const result = CanUse.canRoleUseAction(user, rbacs, uiActions.RESOURCES_EXPORT);
 
       expect(result).toBe(true);
-      expect(rbacs.findRbacByRoleAndUiActionName).toHaveBeenCalledWith(new RoleEntity(user.role), uiActions.RESOURCES_EXPORT);
+      expect(rbacs.findRbacByRoleAndActionName).toHaveBeenCalledWith(new RoleEntity(user.role), uiActions.RESOURCES_EXPORT);
       expect(CanUse.getByRbacOrDefault).toHaveBeenCalled();
     });
 
-    it('should return true for desktop action with RBAC control function', () => {
+    it('should return true for desktop action with RBAC control function for ui action', () => {
       expect.assertions(3);
       global.window.chrome = {webview: true};
 
-      jest.spyOn(rbacs, "findRbacByUiActionName");
+      jest.spyOn(rbacs, "findRbacByActionName");
       jest.spyOn(GetControlFunctionService, "getByRbac");
 
-      const result = CanUse.canRoleUseUiAction(user, rbacs, uiActions.RESOURCES_EXPORT);
+      const result = CanUse.canRoleUseAction(user, rbacs, uiActions.RESOURCES_EXPORT);
+
+      // Delete to avoid other test running inn desktop app mode
+      delete global.window.chrome;
 
       expect(result).toBe(true);
-      expect(rbacs.findRbacByUiActionName).toHaveBeenCalledWith(uiActions.RESOURCES_EXPORT);
+      expect(rbacs.findRbacByActionName).toHaveBeenCalledWith(uiActions.RESOURCES_EXPORT);
       expect(GetControlFunctionService.getByRbac).toHaveBeenCalled();
     });
 
-    it('should return false if rbac is Deny', () => {
+    it('should return false if rbac is Deny for ui action', () => {
       expect.assertions(1);
 
       rbacs = new RbacsCollection(settingsRbacsCollectionData());
-      jest.spyOn(rbacs, "findRbacByRoleAndUiActionName").mockImplementation(() =>  DenyControlFunction);
+      jest.spyOn(rbacs, "findRbacByRoleAndActionName").mockImplementationOnce(() => new RbacEntity(defaultRbacData({control_function: controlFunctions.DENY})));
 
-      const result = CanUse.canRoleUseUiAction(user, rbacs, uiActions.RESOURCES_IMPORT);
+      const result = CanUse.canRoleUseAction(user, rbacs, uiActions.RESOURCES_IMPORT);
+
+      expect(result).toBeFalsy();
+    });
+
+    it('should return true for admin user with admin control function for action', () => {
+      expect.assertions(1);
+      jest.spyOn(GetControlFunctionService, "getDefaultForAdminAndAction");
+
+      const result = CanUse.canRoleUseAction(defaultAdminUserDto(),  new RbacsCollection(defaultSettingsRbacsCollectionData), actions.GROUPS_ADD);
+
+      expect(result).toBeTruthy();
+    });
+
+    it('should return true for a non-admin user with RBAC control function for action', () => {
+      expect.assertions(3);
+
+      jest.spyOn(rbacs, "findRbacByRoleAndActionName");
+      jest.spyOn(GetControlFunctionService, "getByRbac");
+      jest.spyOn(CanUse, "getByRbacOrDefault");
+
+      const result = CanUse.canRoleUseAction(user, rbacs, actions.ACCOUNT_RECOVERY_RESPONSE_CREATE);
+
+      expect(result).toBeTruthy();
+      expect(rbacs.findRbacByRoleAndActionName).toHaveBeenCalledWith(new RoleEntity(user.role), actions.ACCOUNT_RECOVERY_RESPONSE_CREATE);
+      expect(CanUse.getByRbacOrDefault).toHaveBeenCalled();
+    });
+
+    it('should return false if rbac is Deny for action', () => {
+      expect.assertions(1);
+
+      rbacs = new RbacsCollection(settingsRbacsCollectionData());
+      jest.spyOn(rbacs, "findRbacByRoleAndActionName").mockImplementationOnce(() => new RbacEntity(defaultRbacData({control_function: controlFunctions.DENY})));
+
+      const result = CanUse.canRoleUseAction(user, rbacs, actions.GROUPS_ADD);
 
       expect(result).toBeFalsy();
     });
@@ -93,11 +132,11 @@ describe("CanUseService", () => {
     it('should return the fallback control function and execute it when rbac is not defined', () => {
       expect.assertions(2);
 
-      jest.spyOn(GetControlFunctionService, "getDefaultForUserAndUiAction");
+      jest.spyOn(GetControlFunctionService, "getDefaultForUserAndAction");
       const result = CanUse.getByRbacOrDefault(null, uiActions.RESOURCES_EXPORT, user);
 
       expect(result).toBeTruthy();
-      expect(GetControlFunctionService.getDefaultForUserAndUiAction).toHaveBeenCalledWith(uiActions.RESOURCES_EXPORT);
+      expect(GetControlFunctionService.getDefaultForUserAndAction).toHaveBeenCalledWith(uiActions.RESOURCES_EXPORT);
     });
   });
 });

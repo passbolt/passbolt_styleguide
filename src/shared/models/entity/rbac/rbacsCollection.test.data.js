@@ -11,10 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.1.0
  */
-import {defaultRbacWithUiActionData, denyRbacWithUiActionData} from "./rbacEntity.test.data";
+import {
+  defaultRbacWithActionData,
+  defaultRbacWithUiActionData,
+  denyRbacWithUiActionData
+} from "./rbacEntity.test.data";
 import {defaultUiActionData} from "./uiActionEntity.test.data";
 import {uiActions} from "../../../services/rbacs/uiActionEnumeration";
 import {TEST_ROLE_USER_ID} from "../role/roleEntity.test.data";
+import {actions} from "../../../services/rbacs/actionEnumeration";
+import {defaultActionData} from "./actionEntity.test.data";
 
 export const defaultSettingsRbacsCollectionData = [
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.RESOURCES_EXPORT})}),
@@ -30,6 +36,10 @@ export const defaultSettingsRbacsCollectionData = [
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.MOBILE_TRANSFER})}),
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.DESKTOP_TRANSFER})}),
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.SHARE_FOLDER})}),
+  defaultRbacWithActionData({action: defaultActionData({name: actions.GROUPS_ADD})}),
+  defaultRbacWithActionData({action: defaultActionData({name: actions.ACCOUNT_RECOVERY_REQUEST_VIEW})}),
+  defaultRbacWithActionData({action: defaultActionData({name: actions.ACCOUNT_RECOVERY_REQUEST_INDEX})}),
+  defaultRbacWithActionData({action: defaultActionData({name: actions.ACCOUNT_RECOVERY_RESPONSE_CREATE})}),
 ];
 
 export const userSettingsRbacsCollectionData = () => defaultSettingsRbacsCollectionData.filter(rbac => rbac.role_id === TEST_ROLE_USER_ID);
@@ -48,4 +58,8 @@ export const settingsRbacsCollectionData = () => [
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.MOBILE_TRANSFER})}),
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.DESKTOP_TRANSFER})}),
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.SHARE_FOLDER})}),
+  defaultRbacWithActionData({action: defaultActionData({name: actions.GROUPS_ADD})}),
+  defaultRbacWithActionData({action: defaultActionData({name: actions.ACCOUNT_RECOVERY_REQUEST_VIEW})}),
+  defaultRbacWithActionData({action: defaultActionData({name: actions.ACCOUNT_RECOVERY_REQUEST_INDEX})}),
+  defaultRbacWithActionData({action: defaultActionData({name: actions.ACCOUNT_RECOVERY_RESPONSE_CREATE})}),
 ];

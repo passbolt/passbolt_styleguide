@@ -73,26 +73,6 @@ class RbacsCollection extends EntityV2Collection {
    * Finders
    * ==================================================
    */
-
-  /**
-   * Find the first rbac matching the given role identifier and ui action name.
-   * @param {RoleEntity} role The role
-   * @param {string} name The ui action name
-   * @returns {RbacEntity}
-   * @throws {Error} If the role parameter is not a role entity
-   * @throws {Error} If the name parameter is not a string
-   */
-  findRbacByRoleAndUiActionName(role, name) {
-    if (!(role instanceof RoleEntity)) {
-      throw new Error('The role parameter should be a role entity.');
-    }
-    if (typeof name !== 'string' && !(name instanceof String)) {
-      throw new Error('The name parameter should be a valid string.');
-    }
-
-    return this.items.find(rbac => rbac.roleId === role.id && rbac.uiAction?.name === name);
-  }
-
   /**
    * Find the first rbac matching the given ui action name.
    * @param {string} name The ui action name
@@ -123,7 +103,7 @@ class RbacsCollection extends EntityV2Collection {
       throw new Error('The name parameter should be a valid string.');
     }
 
-    return this.items.find(rbac => rbac.roleId === role.id && rbac.action?.name === name);
+    return this.items.find(rbac => rbac.roleId === role.id && (rbac.uiAction?.name === name || rbac.action?.name === name));
   }
 
   /**
