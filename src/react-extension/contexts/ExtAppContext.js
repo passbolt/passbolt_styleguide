@@ -20,6 +20,7 @@ import UserSettings from "../../shared/lib/Settings/UserSettings";
 import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
 import AccountEntity from "../../shared/models/entity/account/accountEntity";
 import RoleServiceWorkerService from "../../shared/services/serviceWorker/role/roleServiceWorkerService";
+import RbacServiceWorkerService from "../../shared/services/serviceWorker/rbac/rbacServiceWorkerService";
 
 /**
  * The ExtApp context provider
@@ -33,6 +34,7 @@ class ExtAppContextProvider extends React.Component {
     super(props);
     this.state = this.getDefaultState(props);
     this.roleServiceWorkerService = new RoleServiceWorkerService(props.port);
+    this.rbacServiceWorkerService = new RbacServiceWorkerService(props.port);
     this.bindCallbacks();
     this.initEventHandlers();
     this.hierarchyFolderCache = {}; // A cache of the last known list of folders hierarchy by ID from the App context
@@ -190,7 +192,7 @@ class ExtAppContextProvider extends React.Component {
   async getLoggedInUser() {
     const canIUseRbac = this.state.siteSettings.canIUse('rbacs');
     const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
-    const rbacsDto = canIUseRbac ? await this.props.port.request("passbolt.rbacs.find-me") : [];
+    const rbacsDto = canIUseRbac ? await this.rbacServiceWorkerService.findMe() : [];
     const rbacs = new RbacsCollection(rbacsDto);
     this.setState({loggedInUser, rbacs});
   }
