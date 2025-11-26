@@ -24,8 +24,8 @@ import {
   defaultAdministrationRbacContext,
   populatedAdministrationRbacContext
 } from "../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext.test.data";
-import {DefaultRoleService} from "../../../../shared/services/api/role/roleApiService.test.data";
-import {DefaultRbacService} from "../../../../shared/services/api/rbac/rbacService.test.data";
+import {DefaultRoleApiService} from "../../../../shared/services/api/role/roleApiService.test.data";
+import {DefaultRbacApiService} from "../../../../shared/services/api/rbac/rbacApiService.test.data";
 
 export function defaultProps(props = {}) {
   return {
@@ -33,8 +33,8 @@ export function defaultProps(props = {}) {
     adminRbacContext: defaultAdministrationRbacContext(),
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext(),
     actionFeedbackContext: defaultActionFeedbackContext(),
-    RoleApiService: DefaultRoleService,
-    RbacService: DefaultRbacService,
+    RoleApiService: DefaultRoleApiService,
+    RbacApiService: DefaultRbacApiService,
     ...props
   };
 }

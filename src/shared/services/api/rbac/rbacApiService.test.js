@@ -13,7 +13,7 @@
  */
 
 import {enableFetchMocks} from "jest-fetch-mock";
-import RbacService from "./rbacService";
+import RbacApiService from "./rbacApiService";
 import {defaultApiClientOptions} from "../../../lib/apiClient/apiClientOptions.test.data";
 import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
 import {defaultSettingsRbacsCollectionData, userSettingsRbacsCollectionData} from "../../../models/entity/rbac/rbacsCollection.test.data";
@@ -26,20 +26,19 @@ beforeEach(() => {
 
 describe('RbacApiService', () => {
   const apiClientOptions = defaultApiClientOptions();
-  const rbacService = new RbacService(apiClientOptions);
-
+  const rbacApiService = new RbacApiService(apiClientOptions);
 
   describe('static methods', () => {
     it('should return the ressource name', () => {
       expect.assertions(1);
 
-      expect(RbacService.RESOURCE_NAME).toEqual("/rbacs");
+      expect(RbacApiService.RESOURCE_NAME).toEqual("/rbacs");
     });
 
     it('should return the supported contain options', () => {
       expect.assertions(1);
 
-      expect(RbacService.getSupportedContainOptions()).toEqual(["action", "ui_action"]);
+      expect(RbacApiService.getSupportedContainOptions()).toEqual(["action", "ui_action"]);
     });
   });
 
@@ -52,7 +51,7 @@ describe('RbacApiService', () => {
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacService.findAll();
+      const result = await rbacApiService.findAll();
 
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
@@ -66,7 +65,7 @@ describe('RbacApiService', () => {
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacService.findAll({
+      const result = await rbacApiService.findAll({
         action: true,
       });
 
@@ -82,7 +81,7 @@ describe('RbacApiService', () => {
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacService.findAll({
+      const result = await rbacApiService.findAll({
         ui_action: true,
       });
 
@@ -98,7 +97,7 @@ describe('RbacApiService', () => {
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacService.findAll({unsupported: true});
+      const result = await rbacApiService.findAll({unsupported: true});
 
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
@@ -110,7 +109,7 @@ describe('RbacApiService', () => {
       const error = {message: "The service is unavailable"};
       fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, () => Promise.reject(error));
 
-      expect(async() => await rbacService.findAll()).rejects.toThrowError(PassboltServiceUnavailableError);
+      expect(async() => await rbacApiService.findAll()).rejects.toThrowError(PassboltServiceUnavailableError);
     });
   });
 
@@ -123,7 +122,7 @@ describe('RbacApiService', () => {
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacService.updateAll(userSettingsRbacsCollectionData);
+      const result = await rbacApiService.updateAll(userSettingsRbacsCollectionData);
 
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
@@ -137,7 +136,7 @@ describe('RbacApiService', () => {
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacService.updateAll(userSettingsRbacsCollectionData, {
+      const result = await rbacApiService.updateAll(userSettingsRbacsCollectionData, {
         action: true,
       });
 
@@ -153,7 +152,7 @@ describe('RbacApiService', () => {
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacService.updateAll(userSettingsRbacsCollectionData, {
+      const result = await rbacApiService.updateAll(userSettingsRbacsCollectionData, {
         ui_action: true,
       });
 
@@ -169,7 +168,7 @@ describe('RbacApiService', () => {
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacService.updateAll({unsupported: true});
+      const result = await rbacApiService.updateAll({unsupported: true});
 
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
@@ -181,7 +180,7 @@ describe('RbacApiService', () => {
       const error = {message: "The service is unavailable"};
       fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, () => Promise.reject(error));
 
-      expect(async() => await rbacService.updateAll()).rejects.toThrowError(PassboltServiceUnavailableError);
+      expect(async() => await rbacApiService.updateAll()).rejects.toThrowError(PassboltServiceUnavailableError);
     });
   });
 
@@ -194,7 +193,7 @@ describe('RbacApiService', () => {
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacService.findMe();
+      const result = await rbacApiService.findMe();
 
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
@@ -208,7 +207,7 @@ describe('RbacApiService', () => {
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacService.findMe({
+      const result = await rbacApiService.findMe({
         action: true,
       });
 
@@ -224,7 +223,7 @@ describe('RbacApiService', () => {
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacService.findMe({ui_action: true});
+      const result = await rbacApiService.findMe({ui_action: true});
 
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
@@ -238,7 +237,7 @@ describe('RbacApiService', () => {
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacService.findMe({unsupported: true});
+      const result = await rbacApiService.findMe({unsupported: true});
 
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
@@ -249,7 +248,7 @@ describe('RbacApiService', () => {
       const error = {message: "The service is unavailable"};
       fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, () => Promise.reject(error));
 
-      expect(async() => await rbacService.findMe()).rejects.toThrowError(PassboltServiceUnavailableError);
+      expect(async() => await rbacApiService.findMe()).rejects.toThrowError(PassboltServiceUnavailableError);
     });
   });
 });

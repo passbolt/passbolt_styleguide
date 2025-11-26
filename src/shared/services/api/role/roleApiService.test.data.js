@@ -14,7 +14,7 @@
 import PassboltResponseEntity from "../../../models/entity/apiService/PassboltResponseEntity";
 import {rolesCollectionDto} from "../../../models/entity/role/rolesCollection.test.data";
 
-export class DefaultRoleService {
+export class DefaultRoleApiService {
   findAll() {
     return new PassboltResponseEntity({header: {}, body: rolesCollectionDto});
   }
