@@ -45,6 +45,7 @@ import MetadataTrustedKeyEntity from "../shared/models/entity/metadata/metadataT
 import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import ActionAbortedMissingMetadataKeysPage
   from "./components/ActionAbortedMissingMetadataKeysPage/ActionAbortedMissingMetadataKeysPage";
+import RbacServiceWorkerService from "../shared/services/serviceWorker/rbac/rbacServiceWorkerService";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/webAccessibleResources/quickaccess/home',
@@ -73,6 +74,7 @@ class ExtQuickAccess extends React.Component {
     this.createRefs();
     this.bindCallbacks();
     this.state = this.getDefaultState(props);
+    this.rbacServiceWorkerService = new RbacServiceWorkerService(props.port);
     this.getAccount();
   }
 
@@ -248,7 +250,7 @@ class ExtQuickAccess extends React.Component {
   async getLoggedInUser() {
     const canIUseRbac = this.state.siteSettings.canIUse('rbacs');
     const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
-    const rbacsDto = canIUseRbac ? await this.props.port.request("passbolt.rbacs.find-me") : [];
+    const rbacsDto = canIUseRbac ? await this.rbacServiceWorkerService.findMe() : [];
     const rbacs = new RbacsCollection(rbacsDto);
     this.setState({loggedInUser, rbacs});
   }
