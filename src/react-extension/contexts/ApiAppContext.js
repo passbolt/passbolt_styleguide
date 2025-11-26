@@ -19,9 +19,9 @@ import {ApiClientOptions} from "../../shared/lib/apiClient/apiClientOptions";
 import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
 import PassboltSubscriptionError from "../lib/Error/PassboltSubscriptionError";
-import RbacMeService from "../../shared/services/api/rbac/rbacMeService";
 import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
 import AuthLogoutService from "../../shared/services/api/auth/AuthLogoutService";
+import RbacApiService from "../../shared/services/api/rbac/rbacService";
 
 const IS_AUTHENTICATED_CHECK_PERIOD = 60000;
 
@@ -151,7 +151,7 @@ class ApiAppContextProvider extends React.Component {
     let rbacsDto = [];
     if (canIUseRbac) {
       const apiClientOptions = this.getApiClientOptions();
-      const rbacService = new RbacMeService(apiClientOptions);
+      const rbacService = new RbacApiService(apiClientOptions);
       rbacsDto = await rbacService.findMe({ui_action: true});
     }
     const rbacs = new RbacsCollection(rbacsDto, true);
