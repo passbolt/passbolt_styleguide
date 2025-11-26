@@ -24,7 +24,7 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-describe('RbacService', () => {
+describe('RbacApiService', () => {
   const apiClientOptions = defaultApiClientOptions();
   const rbacService = new RbacService(apiClientOptions);
 
@@ -43,7 +43,7 @@ describe('RbacService', () => {
     });
   });
 
-  describe('findAll', () => {
+  describe('::findAll', () => {
     it('should call the API to retrieve all rbacs', async() => {
       expect.assertions(2);
 
@@ -54,7 +54,7 @@ describe('RbacService', () => {
 
       const result = await rbacService.findAll();
 
-      expect(result).toEqual(defaultSettingsRbacsCollectionData);
+      expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
     it('should call the API to retrieve all rbacs with contain options <action>', async() => {
@@ -70,7 +70,7 @@ describe('RbacService', () => {
         action: true,
       });
 
-      expect(result).toEqual(defaultSettingsRbacsCollectionData);
+      expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
     it('should call the API to retrieve all rbacs with contain options <ui_action>', async() => {
@@ -86,7 +86,7 @@ describe('RbacService', () => {
         ui_action: true,
       });
 
-      expect(result).toEqual(defaultSettingsRbacsCollectionData);
+      expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
     it('should call the API to retrieve all rbacs with without contain options if it is unsupported', async() => {
@@ -100,7 +100,7 @@ describe('RbacService', () => {
 
       const result = await rbacService.findAll({unsupported: true});
 
-      expect(result).toEqual(defaultSettingsRbacsCollectionData);
+      expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
 
@@ -114,7 +114,7 @@ describe('RbacService', () => {
     });
   });
 
-  describe('updateAll', () => {
+  describe('::updateAll', () => {
     it('should call the API to update all rbacs', async() => {
       expect.assertions(2);
 
@@ -125,7 +125,7 @@ describe('RbacService', () => {
 
       const result = await rbacService.updateAll(userSettingsRbacsCollectionData);
 
-      expect(result).toEqual(defaultSettingsRbacsCollectionData);
+      expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
     it('should call the API to uptade all rbacs with contain options <action>', async() => {
@@ -141,7 +141,7 @@ describe('RbacService', () => {
         action: true,
       });
 
-      expect(result).toEqual(defaultSettingsRbacsCollectionData);
+      expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
     it('should call the API to uptade all rbacs with contain options <ui_action>', async() => {
@@ -157,7 +157,7 @@ describe('RbacService', () => {
         ui_action: true,
       });
 
-      expect(result).toEqual(defaultSettingsRbacsCollectionData);
+      expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
     it('should not call the API to update all rbacs with without contain options if it is unsupported', async() => {
@@ -171,7 +171,7 @@ describe('RbacService', () => {
 
       const result = await rbacService.updateAll({unsupported: true});
 
-      expect(result).toEqual(defaultSettingsRbacsCollectionData);
+      expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
 
@@ -182,6 +182,74 @@ describe('RbacService', () => {
       fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, () => Promise.reject(error));
 
       expect(async() => await rbacService.updateAll()).rejects.toThrowError(PassboltServiceUnavailableError);
+    });
+  });
+
+  describe('::findMe', () => {
+    it('should call the API to retrieve all rbacs', async() => {
+      expect.assertions(2);
+
+      fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, async req => {
+        expect(req.method).toStrictEqual("GET");
+        return mockApiResponse(defaultSettingsRbacsCollectionData);
+      });
+
+      const result = await rbacService.findMe();
+
+      expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
+    });
+
+    it('should call the API to retrieve all rbacs with contain options <action>', async() => {
+      expect.assertions(3);
+
+      fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, async req => {
+        expect(req.method).toStrictEqual("GET");
+        expect(req.url.endsWith("contain%5Baction%5D=1")).toBeTruthy();
+        return mockApiResponse(defaultSettingsRbacsCollectionData);
+      });
+
+      const result = await rbacService.findMe({
+        action: true,
+      });
+
+      expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
+    });
+
+    it('should call the API to retrieve all rbacs with contain options <ui_action>', async() => {
+      expect.assertions(3);
+
+      fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, async req => {
+        expect(req.method).toStrictEqual("GET");
+        expect(req.url.endsWith("contain%5Bui_action%5D=1")).toBeTruthy();
+        return mockApiResponse(defaultSettingsRbacsCollectionData);
+      });
+
+      const result = await rbacService.findMe({ui_action: true});
+
+      expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
+    });
+
+    it('should not call the API to retrieve all rbacs with without contain options if it is unsupported', async() => {
+      expect.assertions(3);
+
+      fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, async req => {
+        expect(req.method).toStrictEqual("GET");
+        expect(req.url.includes("contain")).toBeFalsy();
+        return mockApiResponse(defaultSettingsRbacsCollectionData);
+      });
+
+      const result = await rbacService.findMe({unsupported: true});
+
+      expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
+    });
+
+    it('should raise an error in case an API error occured', async() => {
+      expect.assertions(1);
+
+      const error = {message: "The service is unavailable"};
+      fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, () => Promise.reject(error));
+
+      expect(async() => await rbacService.findMe()).rejects.toThrowError(PassboltServiceUnavailableError);
     });
   });
 });

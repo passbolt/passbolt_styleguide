@@ -126,7 +126,8 @@ export class AdminRbacContextProvider extends React.Component {
         return;
       }
 
-      const rbacsUpdatedResultDto = await this.rbacService.updateAll(rbacsUpdatedDto, {ui_action: true, action: true});
+      const response = await this.rbacService.updateAll(rbacsUpdatedDto, {ui_action: true, action: true});
+      const rbacsUpdatedResultDto = response.body;
       const rbacs = this.state.rbacs;
       rbacsUpdatedResultDto.forEach(rbacUpdatedResultDto => rbacs.pushOrReplace(new RbacEntity(rbacUpdatedResultDto)));
       const rbacsUpdated = new RbacsCollection([]);
