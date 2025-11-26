@@ -67,8 +67,8 @@ class DisplayRbacItem extends React.Component {
    * @return {string|null}
    */
   getCtlFunctionForRole(role) {
-    const rbac = this.props.rbacsUpdated?.findRbacByRoleAndUiActionName(role, this.props.actionName)
-      || this.props.rbacs?.findRbacByRoleAndUiActionName(role, this.props.actionName);
+    const rbac = this.props.rbacsUpdated?.findRbacByRoleAndActionName(role, this.props.actionName)
+      || this.props.rbacs?.findRbacByRoleAndActionName(role, this.props.actionName);
     return rbac?.controlFunction || null;
   }
 

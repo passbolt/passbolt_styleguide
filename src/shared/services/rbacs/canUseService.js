@@ -17,27 +17,27 @@ import RoleEntity from "../../../shared/models/entity/role/roleEntity";
 
 export default class CanUse {
   /**
-   * Check if a role can use a UI action
+   * Check if a role can use a action
    * @param {object} user The logged in user.
    * @param {RbacsCollection} rbacs The collection of rbacs
    * @param {string} actionName The action name to check the control function
    * @returns {boolean}
    */
-  static canRoleUseUiAction(user, rbacs, actionName) {
+  static canRoleUseAction(user, rbacs, actionName) {
     // Desktop action should always be driven by rbac
     if (window.chrome?.webview) {
-      const rbac = rbacs.findRbacByUiActionName(actionName);
+      const rbac = rbacs.findRbacByActionName(actionName);
       return this.getByRbacOrDefault(rbac, actionName, user);
     }
 
     const role =  new RoleEntity(user.role);
     // Administrator action are not controlled by rbac.
     if (role.isAdmin()) {
-      const adminControlFunction = GetControlFunctionService.getDefaultForAdminAndUiAction(actionName);
+      const adminControlFunction = GetControlFunctionService.getDefaultForAdminAndAction(actionName);
       return adminControlFunction.execute();
     }
     // If the action is controlled by rbac for the given role.
-    const rbac = rbacs.findRbacByRoleAndUiActionName(role, actionName);
+    const rbac = rbacs.findRbacByRoleAndActionName(role, actionName);
 
     return this.getByRbacOrDefault(rbac, actionName, user);
   }
@@ -56,7 +56,7 @@ export default class CanUse {
     }
 
     // Fallback on user default.
-    const fallbackControlFunction = GetControlFunctionService.getDefaultForUserAndUiAction(actionName);
+    const fallbackControlFunction = GetControlFunctionService.getDefaultForUserAndAction(actionName);
     return fallbackControlFunction.execute();
   }
 }
