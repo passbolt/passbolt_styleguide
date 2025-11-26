@@ -25,7 +25,7 @@ import DisplayRbacItem from "./DisplayRbacItem";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 import RoleApiService from "../../../../shared/services/api/role/roleApiService";
-import RbacService from "../../../../shared/services/api/rbac/rbacService";
+import RbacApiService from "../../../../shared/services/api/rbac/rbacApiService";
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
 import RbacEntity from "../../../../shared/models/entity/rbac/rbacEntity";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
@@ -68,7 +68,7 @@ class DisplayRbacAdministration extends React.Component {
    */
   async componentDidMount() {
     this.findAndLoadRoles(this.props.RoleApiService);
-    this.findAndLoadRbacSettings(this.props.RbacService);
+    this.findAndLoadRbacSettings(this.props.RbacApiService);
   }
 
   /**
@@ -98,8 +98,8 @@ class DisplayRbacAdministration extends React.Component {
    */
   async findAndLoadRbacSettings() {
     const apiClientOptions = this.props.context.getApiClientOptions();
-    const rbacService = new this.props.RbacService(apiClientOptions);
-    const rbacsDto = await rbacService.findAll({ui_action: true});
+    const rbacApiService = new this.props.RbacApiService(apiClientOptions);
+    const rbacsDto = await rbacApiService.findAll({ui_action: true, action: true});
     const rbacs = new RbacsCollection(rbacsDto, true);
     this.props.adminRbacContext.setRbacs(rbacs);
   }
@@ -367,7 +367,7 @@ class DisplayRbacAdministration extends React.Component {
 
 DisplayRbacAdministration.defaultProps = {
   RoleApiService: RoleApiService,
-  RbacService: RbacService
+  RbacApiService: RbacApiService
 };
 
 DisplayRbacAdministration.propTypes = {
@@ -375,7 +375,7 @@ DisplayRbacAdministration.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   adminRbacContext: PropTypes.object, // The administration rbac context
   RoleApiService: PropTypes.func, // The role service to inject
-  RbacService: PropTypes.func, // The rbac service to inject
+  RbacApiService: PropTypes.func, // The rbac service to inject
   t: PropTypes.func, // The translation function
 };
 

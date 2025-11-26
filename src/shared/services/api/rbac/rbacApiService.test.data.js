@@ -13,7 +13,7 @@
  */
 import {defaultSettingsRbacsCollectionData} from "../../../models/entity/rbac/rbacsCollection.test.data";
 
-export class DefaultRbacService {
+export class DefaultRbacApiService {
   findAll() {
     return defaultSettingsRbacsCollectionData;
   }
