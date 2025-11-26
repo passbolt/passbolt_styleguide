@@ -11,13 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import DisplayEmailNotificationsAdministration from "./DisplayEmailNotificationsAdministration";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import {AdminEmailNotificationContextProvider} from "../../../contexts/Administration/AdministrationEmailNotification/AdministrationEmailNotificationContext";
 import DisplayAdministrationEmailNotificationActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationEmailNotificationActions/DisplayAdministrationEmailNotificationActions";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DisplayEmailNotificationsAdministration component represented as a page
@@ -37,8 +38,11 @@ export default class DisplayEmailNotificationsAdministrationPage {
             <DisplayEmailNotificationsAdministration {...props}/>
           </AdminEmailNotificationContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -317,10 +321,7 @@ export default class DisplayEmailNotificationsAdministrationPage {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await this.user.click(element);
   }
 
   /**

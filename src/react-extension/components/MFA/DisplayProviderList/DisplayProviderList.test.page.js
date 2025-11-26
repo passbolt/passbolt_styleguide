@@ -29,7 +29,8 @@ export default class DisplayProviderListPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayProviderList {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

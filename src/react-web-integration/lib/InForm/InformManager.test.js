@@ -67,7 +67,7 @@ import {
 import InformManagerPage from "./InformManager.test.page";
 import InFormManager from "./InFormManager";
 import DomUtils from "../Dom/DomUtils";
-import {waitFor} from "@testing-library/react";
+import {act} from "react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -106,8 +106,10 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -127,8 +129,10 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeEmail; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -148,8 +152,10 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeLogin; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -169,8 +175,10 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeLogto; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -191,8 +199,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeBenutzerkennung; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -212,8 +223,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeBenutzername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -233,8 +247,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeBenutzernameAndPasswordAttributePasswort; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -254,8 +271,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndNameAttributeUsername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -275,8 +295,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndNameAttributeEmail; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -296,8 +319,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndNameAttributeLogin; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -317,8 +343,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndNameAttributeBenutzerkennung; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -338,8 +367,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndNameAttributeBenutzername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -359,8 +391,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithIdAttributeUsername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -380,8 +415,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithIdAttributeEmail; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -401,8 +439,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithIdAttributeLogin; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -422,8 +463,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithIdAttributeLogto; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -443,8 +487,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithIdAttributeBenutzerkennung; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -464,8 +511,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithIdAttributeBenutzername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -485,8 +535,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndIdAttributeUsername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -506,8 +559,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndIdAttributeEmail; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -527,8 +583,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndIdAttributeLogin; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -548,8 +607,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndIdAttributeBenutzerkennung; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -569,8 +631,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndIdAttributeBenutzername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -590,8 +655,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithAutocompleteAttributeUsername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -611,8 +679,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithAutocompleteAttributeEmail; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -632,8 +703,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndAutocompleteAttributeUsername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -653,8 +727,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndAutocompleteAttributeEmail; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -674,8 +751,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithPlaceHolderAttributeUsername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -695,8 +775,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithPlaceHolderAttributeEmail; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -716,8 +799,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithPlaceHolderAttributeE_mail; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -737,8 +823,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndPlaceHolderAttributeUsername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -758,8 +847,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndPlaceHolderAttributeEmail; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -779,8 +871,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndPlaceHolderAttributeE_mail; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -800,8 +895,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithClassUsername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -821,8 +919,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithClassEmail; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -842,8 +943,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithClassCreateAccount; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -863,8 +967,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndClassUsername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -884,8 +991,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndClassEmail; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -905,8 +1015,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndClassCreateAccount; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -926,8 +1039,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -950,8 +1066,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementOnlyPassword; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnPassword();
     expect(informManager.iframesLength).toBe(1);
@@ -964,8 +1083,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementOnlyUsername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -979,8 +1101,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -1013,8 +1138,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementWithMultipleLogin; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -1041,8 +1169,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithSubmitButton; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     await informManager.clickOnInformCallToAction();
     await informManager.autofillPassword('password');
     expect(informManager.password.value).toBe('password');
@@ -1061,8 +1192,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginOnlyPasswordWithSubmitButton; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     await informManager.clickOnInformCallToAction();
     await informManager.autofillPassword('password');
     expect(informManager.password.value).toBe('password');
@@ -1081,8 +1215,11 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementWithNoUsernamePassword; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnSearch();
     expect(informManager.iframesLength).toBe(0);
@@ -1096,8 +1233,11 @@ describe("InformManager", () => {
     // Set up document shadowRoot
     // eslint-disable-next-line no-unsanitized/property
     shadowRoot.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -1121,8 +1261,11 @@ describe("InformManager", () => {
     document.body.appendChild(iframe);
     // eslint-disable-next-line no-unsanitized/property
     iframe.contentDocument.body.innerHTML = domElementLoginWithIdAttributeLogin;
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsernameIframe();
     expect(informManager.iframesLength).toBe(1);
@@ -1144,8 +1287,11 @@ describe("InformManager", () => {
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
     jest.spyOn(InFormManager, 'destroy');
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -1160,8 +1306,11 @@ describe("InformManager", () => {
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
     jest.spyOn(InFormManager, 'destroy');
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -1178,8 +1327,11 @@ describe("InformManager", () => {
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
     jest.spyOn(InFormManager, 'destroy');
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);
@@ -1196,8 +1348,11 @@ describe("InformManager", () => {
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
     jest.spyOn(InFormManager, 'destroy');
-    const informManager = new InformManagerPage();
-    await waitFor(() => {});
+    let informManager;
+    await act(
+      async() => informManager = new InformManagerPage()
+    );
+
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
     expect(informManager.iframesLength).toBe(1);

@@ -48,9 +48,6 @@ describe("See the Create Dialog User", () => {
 
     it('As AD I see a success toaster message after editing a user with success', async() => {
       expect.assertions(9);
-      //ensure the date returned is always the same to make sure the unit test doesn't randomly failed due to execution durationjest
-      jest.useFakeTimers()
-        .setSystemTime(new Date());
 
       expect(page.editUser.exists()).toBeTruthy();
       // edit user
@@ -107,7 +104,7 @@ describe("See the Create Dialog User", () => {
 
       // Mock the request function to make it the expected result
       mockContextRequest(context, requestMockImpl);
-      page.editUser.clickWithoutWaitFor(page.editUser.saveButton);
+      await page.editUser.click(page.editUser.saveButton);
       // API calls are made on submit, wait they are resolved.
       await waitForTrue(() => page.editUser.firstName.getAttribute("disabled") !== null);
 

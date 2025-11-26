@@ -29,7 +29,8 @@ export default class DisplayUnexpectedErrorTestPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayUnexpectedError {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

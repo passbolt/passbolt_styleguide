@@ -33,7 +33,8 @@ export default class DisplayInFormMenuTestPage {
         <MockTranslationProvider>
           <DisplayInFormMenu {...props}/>
         </MockTranslationProvider>
-      </AppContext.Provider>
+      </AppContext.Provider>,
+      {legacyRoot: true}
     );
   }
 

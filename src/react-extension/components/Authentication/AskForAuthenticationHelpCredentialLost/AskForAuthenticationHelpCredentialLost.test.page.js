@@ -28,7 +28,8 @@ export default class AskForAuthenticationHelpCredentialLostTestPage {
     this._page = render(
       <MockTranslationProvider>
         <AskForAuthenticationHelpCredentialLost {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

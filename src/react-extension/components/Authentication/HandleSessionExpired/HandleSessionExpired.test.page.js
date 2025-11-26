@@ -32,7 +32,8 @@ export default class HandleSessionExpiredPage {
         <Router>
           <HandleSessionExpired {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 }

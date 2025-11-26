@@ -28,7 +28,8 @@ export default class ImportGpgKeyPage {
     this._page = render(
       <MockTranslationProvider>
         <ImportGpgKey {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

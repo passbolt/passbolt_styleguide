@@ -28,7 +28,8 @@ export default class AutocompletePage {
     this._page = render(
       <MockTranslationProvider>
         <Autocomplete {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

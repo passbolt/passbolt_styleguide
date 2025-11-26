@@ -29,7 +29,8 @@ export default class SelectPage {
     this._page = render(
       <MockTranslationProvider>
         <Select {...props}></Select>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

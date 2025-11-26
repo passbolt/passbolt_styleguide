@@ -26,7 +26,7 @@ import {
   defaultMetadataKeysSettingsDto
 } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {waitFor} from "@testing-library/react";
+import {screen, waitFor} from "@testing-library/react";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultAdminUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
@@ -35,6 +35,7 @@ import expect from "expect";
 import ConfirmMetadataKeyRotationDialog from "./ConfirmMetadataKeyRotationDialog";
 import {defaultMetadataKeyDto} from "../../../../shared/models/entity/metadata/metadataKeyEntity.test.data";
 import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
+import {act} from "react";
 
 describe("DisplayContentTypesMetadataKeyAdministration", () => {
   beforeEach(() => {
@@ -67,8 +68,10 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect.assertions(12);
       const props = defaultSettingsAndSingleActiveKeyProps();
 
-      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
+      );
 
       expect(page.title.textContent).toBe("Metadata key");
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(true);
@@ -95,8 +98,10 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
 
       jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
       jest.spyOn(props.metadataKeysServiceWorkerService, "rotate");
-      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
+      );
 
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, '$& '));
@@ -109,7 +114,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
 
       jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
 
-      await page.clickOnRotateKeyButton();
+      await page.click(page.rotateKeyButton);
 
       expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmMetadataKeyRotationDialog, expect.anything());
       expect(props.metadataKeysServiceWorkerService.rotate).toHaveBeenCalled();
@@ -122,9 +127,10 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect.assertions(15);
       const props = defaultSettingsAndMultipleActiveKeysProps();
 
-      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
-      await waitForTrue(() => page.exists());
-
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
+      );
       expect(page.title.textContent).toBe("Metadata key");
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(true);
       expect(page.disallowUsageOfPersonalKeysInput.checked).toBe(false);
@@ -152,8 +158,10 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       })];
 
       jest.spyOn(props.metadataKeysServiceWorkerService, "resumeRotation");
-      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
+      );
 
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, '$& '));
@@ -169,7 +177,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
 
       jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
 
-      await page.clickOnRotateKeyButton();
+      await page.click(page.rotateKeyButton);
 
       expect(props.metadataKeysServiceWorkerService.resumeRotation).toHaveBeenCalled();
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.betty.fingerprint.replace(/.{4}/g, '$& '));
@@ -181,8 +189,10 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect.assertions(24);
       const props = defaultSettingsAndMultipleKeysProps();
 
-      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
+      );
 
       expect(page.title.textContent).toBe("Metadata key");
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(true);
@@ -233,8 +243,10 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
 
       jest.spyOn(props.metadataKeysServiceWorkerService, "resumeRotation");
       jest.spyOn(props.metadataKeysServiceWorkerService, "rotate");
-      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
+      );
 
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.ada.fingerprint.replace(/.{4}/g, '$& '));
@@ -260,17 +272,17 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
 
       jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
 
-      await page.clickOnRotateKeyButton();
+      await page.click(page.rotateKeyButton);
 
       metadataKeysDto.splice(1, 1);
       jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
 
-      await page.clickOnResumeRotateKeyButton();
+      await page.click(page.resumeRotateKeyButton);
 
       metadataKeysDto.splice(1, 1);
       jest.spyOn(props.metadataKeysServiceWorkerService, "findAll").mockImplementationOnce(() => new MetadataKeysCollection(metadataKeysDto));
 
-      await page.clickOnResumeRotateKeyButton();
+      await page.click(page.resumeRotateKeyButton);
 
       expect(props.metadataKeysServiceWorkerService.resumeRotation).toHaveBeenCalledTimes(3);
       expect(props.metadataKeysServiceWorkerService.rotate).toHaveBeenCalledTimes(0);
@@ -287,7 +299,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
 
       const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
       await waitForTrue(() => page.exists());
-      await page.clickOnDisallowUsageOfPersonalKeysInput();
+      await page.click(page.disallowUsageOfPersonalKeysInput);
       expect(page.formBanner).not.toBeNull();
       expect(page.formBanner.textContent).toEqual("Warning: Don't forget to save your settings to apply your modification.");
     });
@@ -304,23 +316,23 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
 
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(true);
       expect(page.disallowUsageOfPersonalKeysInput.checked).toBe(false);
-      await page.clickOnDisallowUsageOfPersonalKeysInput();
+      await page.click(page.disallowUsageOfPersonalKeysInput);
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(true);
       expect(page.disallowUsageOfPersonalKeysInput.checked).toBe(false);
 
       expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(true);
       expect(page.enableZeroKnowledgeKeyShareInput.checked).toBe(false);
-      await page.clickOnAllowZeroKnowledgeInput();
+      await page.click(page.enableZeroKnowledgeKeyShareInput);
       expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(true);
       expect(page.enableZeroKnowledgeKeyShareInput.checked).toBe(false);
 
       requestGetPromiseResolver(new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto()));
       await waitFor(() => {});
 
-      await page.clickOnDisallowUsageOfPersonalKeysInput();
+      await page.click(page.disallowUsageOfPersonalKeysInput);
       expect(page.allowUsageOfPersonalKeysInput.checked).toBe(false);
       expect(page.disallowUsageOfPersonalKeysInput.checked).toBe(true);
-      await page.clickOnAllowZeroKnowledgeInput();
+      await page.click(page.enableZeroKnowledgeKeyShareInput);
       expect(page.disableZeroKnowledgeKeyShareInput.checked).toBe(false);
       expect(page.enableZeroKnowledgeKeyShareInput.checked).toBe(true);
     });
@@ -333,7 +345,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
 
       const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
       await waitForTrue(() => page.exists());
-      await page.clickOnGenerateKeyButton();
+      await page.click(page.generateKeyButton);
       expect(page.formBanner).not.toBeNull();
       expect(page.formBanner.textContent).toEqual("Warning: Don't forget to save your settings to apply your modification.");
     });
@@ -344,7 +356,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
 
       const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
       await waitForTrue(() => page.exists());
-      await page.clickOnGenerateKeyButton();
+      await page.click(page.generateKeyButton);
 
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
       expect(page.metadataActiveKeysWrapper.textContent).toContain(pgpKeys.eddsa_ed25519.fingerprint.replace(/.{4}/g, '$& '));
@@ -365,7 +377,7 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
 
       const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
       await waitForTrue(() => page.exists());
-      await page.clickOnGenerateKeyButton();
+      await page.click(page.generateKeyButton);
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
     });
 
@@ -373,8 +385,10 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       expect.assertions(1);
       const props = defaultSettingsAndSingleActiveKeyProps();
 
-      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
+      );
       expect(page.noMetadataActiveKeysWrapper).toBeNull();
     });
   });
@@ -383,9 +397,12 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
     it("displays error messages when there is no active keys and I did not generate one", async() => {
       expect.assertions(5);
       const props = defaultProps();
-      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
-      await waitForTrue(() => page.exists());
-      await page.submitForm();
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
+      );
+      const saveButton = await screen.findByRole("button", {name: /save/i});
+      await page.click(saveButton);
       expect(page.errorMessagesCount).toBe(1);
       expect(page.requiredSharedMetadataKeyError).not.toBeNull();
       expect(page.requiredSharedMetadataKeyError.textContent).toContain("A shared metadata key is required.");
@@ -411,10 +428,13 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
     it("saves a newly generated key", async() => {
       expect.assertions(10);
       const props = defaultProps();
-      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
-      await waitForTrue(() => page.exists());
-      await page.clickOnGenerateKeyButton();
-      await page.submitForm();
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
+      );
+      await page.click(page.generateKeyButton);
+      const saveButton = await screen.findByRole("button", {name: /save/i});
+      await page.click(saveButton);
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The metadata key settings were updated.");
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
@@ -430,9 +450,12 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
     it("saves again the original settings", async() => {
       expect.assertions(10);
       const props = defaultSettingsAndSingleActiveKeyProps();
-      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
-      await waitForTrue(() => page.exists());
-      await page.submitForm();
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
+      );
+      const saveButton = await screen.findByRole("button", {name: /save/i});
+      await page.click(saveButton);
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The metadata key settings were updated.");
       expect(page.metadataActiveKeysWrapper).not.toBeNull();
@@ -452,9 +475,12 @@ describe("DisplayContentTypesMetadataKeyAdministration", () => {
       jest.spyOn(props.metadataSettingsServiceWorkerService, "saveKeysSettings").mockImplementation(() => {
         throw error;
       });
-      const page = new DisplayContentTypesMetadataKeyAdministrationPage(props);
-      await waitForTrue(() => page.exists());
-      await page.submitForm();
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesMetadataKeyAdministrationPage(props)
+      );
+      const saveButton = await screen.findByRole("button", {name: /save/i});
+      await page.click(saveButton);
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
     });
   });

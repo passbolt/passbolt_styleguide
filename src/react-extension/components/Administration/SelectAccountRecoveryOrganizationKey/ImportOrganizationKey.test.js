@@ -16,7 +16,6 @@
  * Unit tests on ConfirmSaveAccountRecoverySettings in regard of specifications
  */
 import "../../../../../test/mocks/mockClipboard";
-import {waitFor} from "@testing-library/react";
 import SelectAccountRecoveryOrganizationKeyPage from "./SelectAccountRecoveryOrganizationKey.test.page";
 import MockPort from "../../../test/mock/MockPort";
 
@@ -64,7 +63,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
     it('As a logged in administrator on the account recovery settings in the administration workspace, I can open a dialog to import an Organization Recovery Key', async() => {
       expect.assertions(11);
       page = new SelectAccountRecoveryOrganizationKeyPage();
-      await waitFor(() => { });
+
       // Dialog title exists and correct
       expect(page.exists()).toBeTruthy();
       expect(page.title.textContent).toBe("Organization Recovery Key");
@@ -106,14 +105,12 @@ describe("See the Confirm Save Account Recovery Settings", () => {
     it('As a logged in administrator on the account recovery settings in the administration workspace, I can copy/paste an OpenPGP Public key in the Organization Recovery Key dialog', async() => {
       expect.assertions(1);
       page = new SelectAccountRecoveryOrganizationKeyPage();
-      await waitFor(() => { });
+
 
       //pick a text doesn't have to be a real key
       const expectedText = "a fake pasted key";
-      navigator.clipboard.writeText(expectedText);
-
-      page.importKeyTextArea.select();
-      navigator.clipboard.readText();
+      await navigator.clipboard.writeText(expectedText);
+      await page.user.paste(expectedText, page.importKeyTextArea);
 
       expect(page.importKeyTextArea.value).toBe(expectedText);
     });
@@ -130,7 +127,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
      */
     it('As a logged in administrator in the administration workspace, I can import an OpenPGP Public key in the Organization Recovery Key dialog', async() => {
       page = new SelectAccountRecoveryOrganizationKeyPage();
-      await waitFor(() => { });
+
 
       const fileContent = '(⌐□_□)';
       const waitForFileReadCallback = () => expect(page.importKeyTextArea.value).toBe(fileContent);
@@ -165,8 +162,6 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       const errorMessage = "The key is already used.";
       const mockValidateKey = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
       mockValidateKey(jest.fn(() => Promise.reject(new Error(errorMessage))));
-
-      await waitFor(() => { });
 
       const waitForFileReadCallback = () => expect(page.importKeyTextArea.value).not.toBe("");
       await page.userHasSelectedAFile('Key already used!', waitForFileReadCallback);

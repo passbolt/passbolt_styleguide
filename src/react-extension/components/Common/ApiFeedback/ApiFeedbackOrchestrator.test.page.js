@@ -40,7 +40,8 @@ export default class ApiErrorPage {
             </div>
           }
         </>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

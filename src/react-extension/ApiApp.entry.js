@@ -20,4 +20,13 @@ import ApiApp from "./ApiApp";
  */
 const appDomElement = document.createElement("div");
 document.body.appendChild(appDomElement);
-ReactDOM.render(<ApiApp/>, appDomElement);
+
+/*
+ * TODO: React18 - enable when ready
+ * const root = ReactDOM.createRoot(appDomElement);
+ */
+/* eslint-disable react/no-deprecated */
+ReactDOM.render(
+  <ApiApp/>,
+  appDomElement
+);

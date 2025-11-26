@@ -29,7 +29,8 @@ export default class DisplayRbacAdministrationPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayRbacAdministration {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

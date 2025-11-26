@@ -12,12 +12,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render, waitFor} from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import DisplayResourceDetailsActivity from "./DisplayResourceDetailsActivity";
 import {BrowserRouter as Router} from 'react-router-dom';
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The PasswordSidebarActivitySection component represented as a page
@@ -36,7 +37,8 @@ export default class PasswordSidebarActivitySectionPage {
             <DisplayResourceDetailsActivity {...props}/>
           </AppContext.Provider>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }
@@ -63,6 +65,7 @@ class DisplayActivityPageObject {
    */
   constructor(container) {
     this._container = container;
+    this.user = userEvent.setup();
   }
 
   /**
@@ -138,9 +141,7 @@ class DisplayActivityPageObject {
 
   /** Click on the more button */
   async moreButtonClick()  {
-    const leftClick = {button: 0};
-    fireEvent.click(this.moreButton, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.moreButton);
   }
 }
 

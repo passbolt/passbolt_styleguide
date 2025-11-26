@@ -33,7 +33,8 @@ export default class DisplayUserDetailsInformationPage {
         <UserWorkspaceContext.Provider value={props.userWorkspaceContext}>
           <DisplayUserDetailsInformation {...props}/>
         </UserWorkspaceContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

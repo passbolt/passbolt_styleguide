@@ -29,7 +29,8 @@ export default class HandleSaveAccountRecoveryOrganizationPolicyWorkflowPage {
     this._page = render(
       <MockTranslationProvider>
         <HandleSaveAccountRecovery {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 }

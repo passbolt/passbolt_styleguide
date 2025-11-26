@@ -29,7 +29,8 @@ export default class ChooseSecurityTokenPage {
     this._page = render(
       <MockTranslationProvider>
         <ChooseSecurityToken {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

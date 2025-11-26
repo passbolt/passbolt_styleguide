@@ -13,13 +13,14 @@
  */
 
 import React from "react";
-import {fireEvent, render} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayAdministrationUserPassphrasePoliciesActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationUserPassphrasePoliciesActions/DisplayAdministrationUserPassphrasePoliciesActions";
 import AdministrationUserPassphrasePoliciesContextProvider from "../../../contexts/Administration/AdministrationUserPassphrasePoliciesContext/AdministrationUserPassphrasePoliciesContext";
 import DisplayAdministrationUserPassphrasePolicies from "./DisplayAdministrationUserPassphrasePolicies";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DisplayPasswordPoliciesAdministration component represented as a page
@@ -39,8 +40,11 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
             <DisplayAdministrationUserPassphrasePolicies {...props}/>
           </AdministrationUserPassphrasePoliciesContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -141,7 +145,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
    */
   async clickOnExternalDictionaryCheck() {
     const isChecked = this.externalDictionaryCheck.checked;
-    this.clickOn(this.externalDictionaryCheck);
+    await this.clickOn(this.externalDictionaryCheck);
     await waitForTrue(() => isChecked !== this.externalDictionaryCheck.checked);
   }
 
@@ -152,7 +156,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
    */
   async clickOnEntropyLabel(elementIndex) {
     const entropyLabel = this.entropyLabel(elementIndex);
-    this.clickOn(entropyLabel);
+    await this.clickOn(entropyLabel);
     await waitForTrue(() => entropyLabel.classList.contains('range-option--active'));
   }
 
@@ -161,7 +165,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
    * @returns {Promise<void>}
    */
   async clickOnSave() {
-    this.clickOn(this.saveSettingsButton);
+    await this.clickOn(this.saveSettingsButton);
     await waitForTrue(() => !this.saveSettingsButton.getAttribute('disabled'));
   }
 
@@ -170,8 +174,7 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
    * @param {HTMLElement} element The HTML element onto simulate the click
    * @returns {Promise<void>}
    */
-  clickOn(element) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
+  async clickOn(element) {
+    await this.user.click(element);
   }
 }

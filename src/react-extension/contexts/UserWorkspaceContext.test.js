@@ -20,7 +20,7 @@
 import {defaultAppContext, defaultProps} from "./UserWorkspaceContext.test.data";
 import UserWorkspaceContextPage from "./UserWorkspaceContext.test.page";
 import {UserWorkspaceFilterTypes} from "./UserWorkspaceContext";
-import {waitFor} from "@testing-library/dom";
+import {waitForTrue} from "../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -158,6 +158,7 @@ describe("User Workspace Context", () => {
     it("As LU, I should detail a user when a user is selected", async() => {
       const user = context.users[0];
       await page.select(user);
+      await waitForTrue(() => page.details?.user !== null);
       expect(page.details.user).toBe(user);
       expect(page.lockDisplayDetail).toBeTruthy();
     });
@@ -166,6 +167,7 @@ describe("User Workspace Context", () => {
       const user = context.users[0];
       await page.toggleLockDetails();
       await page.select(user);
+      await waitForTrue(() => page.details?.user !== null);
       expect(page.details.user).toBe(user);
       expect(page.lockDisplayDetail).toBeFalsy();
     });
@@ -178,6 +180,8 @@ describe("User Workspace Context", () => {
 
       const group = context.groups[0];
       await page.updateDetails({group});
+
+      await waitForTrue(() => page.details?.user !== null);
       expect(page.details.group).toBe(group);
       expect(page.details.user).toBeUndefined();
     });
@@ -191,7 +195,6 @@ describe("User Workspace Context", () => {
         },
       });
       new UserWorkspaceContextPage(context, props);
-      await waitFor(() => {});
 
       expect(props.loadingContext.add).not.toHaveBeenCalled();
     });
@@ -203,7 +206,6 @@ describe("User Workspace Context", () => {
         },
       });
       new UserWorkspaceContextPage(context, props);
-      await waitFor(() => {});
 
       expect(props.loadingContext.add).toHaveBeenCalledTimes(1);
     });

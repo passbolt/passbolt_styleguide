@@ -1,7 +1,8 @@
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render, waitFor} from "@testing-library/react";
 import React from "react";
 import EditSubscriptionKey from "./EditSubscriptionKey";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The EditSubscriptionKey component represented as a page
@@ -15,8 +16,10 @@ export default class EditSubscriptionKeyPage {
     this._page = render(
       <MockTranslationProvider>
         <EditSubscriptionKey {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+    this.user = userEvent.setup();
   }
 
   /**
@@ -89,8 +92,8 @@ export default class EditSubscriptionKeyPage {
    * @param subscriptionKey The new passphrase
    */
   async fill(subscriptionKey) {
-    fireEvent.change(this.subscriptionKeyInput, {target: {value: subscriptionKey}});
-    await waitFor(() => {});
+    await this.user.clear(this.subscriptionKeyInput);
+    await this.user.type(this.subscriptionKeyInput, subscriptionKey);
   }
 
   /**
@@ -98,8 +101,7 @@ export default class EditSubscriptionKeyPage {
    * @param inProgressFn Function called while the generation
    */
   async updateKey(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
-    fireEvent.click(this.saveButton, leftClick);
+    await this.user.click(this.saveButton);
     await waitFor(inProgressFn);
   }
 }

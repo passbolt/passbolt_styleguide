@@ -29,7 +29,8 @@ export default class ConfirmMigrateMetadataDialogPage {
     this._page = render(
       <MockTranslationProvider>
         <ConfirmMigrateMetadataDialog {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

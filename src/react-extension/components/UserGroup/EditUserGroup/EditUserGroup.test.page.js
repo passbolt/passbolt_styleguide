@@ -19,6 +19,7 @@ import DialogContextProvider from "../../../contexts/DialogContext";
 import EditUserGroup from "./EditUserGroup";
 import {BrowserRouter as Router} from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The EsitUserGroupTestPage component represented as a page
@@ -40,8 +41,11 @@ export default class EditUserGroupTestPage {
             </DialogContextProvider>
           </AppContext.Provider>
         </MockTranslationProvider>
-      </Router>
+      </Router>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
   }
 
   /**
@@ -173,44 +177,28 @@ export default class EditUserGroupTestPage {
    */
   async removeGroupMember(index) {
     const element = this._page.container.querySelectorAll('.permissions.groups_users .row')[index - 1].querySelector('.remove-item');
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /**
    * Saves the change on the group
    */
   async save() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.saveButton, leftClick);
-    await waitFor(() => {});
-  }
-
-  /**
-   * Saves the change on the group without waiting for React stability
-   */
-  saveWithoutWaitFor() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.saveButton, leftClick);
+    await this.user.click(this.saveButton);
   }
 
   /**
    * Cancels the user's MFA disable
    */
   async cancel() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.cancelButton, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.cancelButton);
   }
 
   /**
    * Close the dialog
    */
   async close() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.closeButton, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.closeButton);
   }
 
   async type(text, element) {
@@ -239,8 +227,6 @@ export default class EditUserGroupTestPage {
   }
 
   async click(element) {
-    const event = {button: 0};
-    fireEvent.click(element, event);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 }

@@ -34,7 +34,8 @@ export default class DisplayHealthcheckAdministrationPage {
           <DisplayAdministrationHealthcheckActions {...props} />
           <DisplayHealthcheckAdministration {...props}/>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

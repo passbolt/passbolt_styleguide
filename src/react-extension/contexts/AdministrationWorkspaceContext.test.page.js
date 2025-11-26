@@ -339,7 +339,8 @@ export default class AdministrationWorkspaceContextPage {
             <a className="healthcheck"></a>
           </NavLink>
         </Router>
-      </AppContext.Provider>
+      </AppContext.Provider>,
+      {legacyRoot: true}
     );
   }
 }

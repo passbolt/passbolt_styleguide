@@ -26,7 +26,8 @@ export default class CreateGpgKeyPage {
    * @param {object} props Props to attach
    */
   constructor(props) {
-    this._page = render(this.jsx(props));
+    this._page = render(this.jsx(props),
+      {legacyRoot: true});
   }
 
   /**

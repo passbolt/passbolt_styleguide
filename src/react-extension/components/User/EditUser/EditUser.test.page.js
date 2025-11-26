@@ -11,13 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import EditUser from "./EditUser";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The EditUser component represented as a page
@@ -37,7 +38,8 @@ export default class EditUserPage {
             <EditUser {...props}/>
           </DialogContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }
@@ -92,6 +94,7 @@ class EditUserPageObject {
    */
   constructor(container) {
     this._container = container;
+    this.user = userEvent.setup();
   }
 
   /**
@@ -216,15 +219,7 @@ class EditUserPageObject {
 
   /** Click on the element */
   async click(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
-  }
-
-  /** Click without wait for on the element */
-  clickWithoutWaitFor(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
+    await this.user.click(element);
   }
 
   /** Click without wait for on the element */

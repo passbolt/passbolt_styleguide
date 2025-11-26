@@ -21,4 +21,13 @@ import ApiFeedbackOrchestrator from "./components/Common/ApiFeedback/ApiFeedback
 
 const appDomElement = document.createElement("div");
 document.body.appendChild(appDomElement);
-ReactDOM.render(<ApiFeedbackOrchestrator/>, appDomElement);
+
+/*
+ * TODO: React18 - enable when ready
+ * const root = ReactDOM.createRoot(appDomElement);
+ */
+/* eslint-disable react/no-deprecated */
+ReactDOM.render(
+  <ApiFeedbackOrchestrator/>,
+  appDomElement
+);

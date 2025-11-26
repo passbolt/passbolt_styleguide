@@ -19,6 +19,7 @@ import MockTranslationProvider from "../../../test/mock/components/International
 import DisplayAdministrationSelfRegistrationActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSelfRegistrationActions/DisplayAdministrationSelfRegistrationActions";
 import DisplaySelfRegistrationAdministration from "./DisplaySelfRegistrationAdministration";
 import {AdminSelfRegistrationContextProvider} from "../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DisplaySelfRegistrationAdministration component represented as a page
@@ -38,8 +39,11 @@ export default class DisplaySelfRegistrationAdministrationPage {
             <DisplaySelfRegistrationAdministration {...props}/>
           </AdminSelfRegistrationContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
   }
 
   /**
@@ -211,10 +215,7 @@ export default class DisplaySelfRegistrationAdministrationPage {
    *
    */
   async click(element) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await this.user.click(element);
   }
 
   /** fill the input element with data */

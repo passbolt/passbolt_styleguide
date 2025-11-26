@@ -30,7 +30,8 @@ export default class IdentifyWithSsoPage {
     this._page = render(
       <MockTranslationProvider>
         <IdentifyWithSso {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 
