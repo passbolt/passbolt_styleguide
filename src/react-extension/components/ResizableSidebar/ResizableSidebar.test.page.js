@@ -25,7 +25,8 @@ export default class ResizableSidebarPage {
       </ResizableSidebarContextProvider>
     );
 
-    this._page = render(<Wrapper />);
+    this._page = render(<Wrapper />,
+      {legacyRoot: true});
 
     const container = this._page.container.querySelector('.resizable-sidebar-container');
     const sidebar = this._page.container.querySelector('.resizable-sidebar');

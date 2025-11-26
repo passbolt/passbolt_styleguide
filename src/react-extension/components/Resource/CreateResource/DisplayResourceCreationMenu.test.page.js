@@ -28,7 +28,8 @@ export default class DisplayResourceCreationMenuPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayResourceCreationMenu {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

@@ -38,7 +38,8 @@ export default class FilterUsersByTextPage {
             <FilterUsersByText.WrappedComponent {...props}/>
           </Router>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

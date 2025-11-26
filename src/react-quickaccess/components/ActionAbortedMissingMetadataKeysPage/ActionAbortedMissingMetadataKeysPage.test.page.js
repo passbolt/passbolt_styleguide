@@ -34,7 +34,8 @@ export default class ActionAbortedMissingMetadataKeysPagePage {
         <Router history={props.history || createMemoryHistory()}>
           <ActionAbortedMissingMetadataKeysPage {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

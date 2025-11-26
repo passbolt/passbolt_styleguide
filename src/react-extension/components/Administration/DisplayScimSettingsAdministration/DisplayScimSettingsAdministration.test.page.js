@@ -25,7 +25,8 @@ export default class DisplayScimSettingsAdministrationPage {
         <AppContext.Provider value={props.context}>
           <DisplayScimSettingsAdministration {...props}/>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

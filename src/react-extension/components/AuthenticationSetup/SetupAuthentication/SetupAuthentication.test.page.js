@@ -29,7 +29,8 @@ export default class SetupAuthenticationPage {
     this._page = render(
       <MockTranslationProvider>
         <SetupAuthentication {...props}></SetupAuthentication>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

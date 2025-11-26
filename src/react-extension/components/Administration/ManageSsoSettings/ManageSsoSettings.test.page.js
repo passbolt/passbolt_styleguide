@@ -52,7 +52,8 @@ export default class ManageSsoSettingsPage {
           </AdminSsoContextProvider>
         </DialogContextProvider>
       </AppContext.Provider>
-    </MockTranslationProvider>);
+    </MockTranslationProvider>,
+    {legacyRoot: true});
   }
 
   /**

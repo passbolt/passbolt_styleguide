@@ -31,7 +31,8 @@ export default class HandleReviewAccountRecoveryRequestRouteTestPage {
         <Router>
           <HandleReviewAccountRecoveryRequestRoute {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 }

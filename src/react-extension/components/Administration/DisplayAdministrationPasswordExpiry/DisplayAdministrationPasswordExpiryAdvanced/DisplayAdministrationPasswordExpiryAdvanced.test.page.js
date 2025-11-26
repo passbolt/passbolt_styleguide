@@ -37,7 +37,8 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
             <DisplayAdministrationPasswordExpiryAdvanced {...props}/>
           </AdministrationPasswordExpiryContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

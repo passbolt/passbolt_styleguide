@@ -30,7 +30,8 @@ export default class EnterNewPassphrasePage {
     this._page = render(
       <MockTranslationProvider>
         <EnterNewPassphrase {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

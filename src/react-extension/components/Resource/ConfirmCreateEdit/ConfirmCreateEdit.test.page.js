@@ -27,7 +27,8 @@ export default class ConfirmCreateEditPage {
     this._page = render(
       <MockTranslationProvider>
         <ConfirmCreateEdit {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

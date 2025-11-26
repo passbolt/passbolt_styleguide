@@ -35,7 +35,8 @@ export default class DisplayAccountRecoveryUserSettingsPage {
             <DisplayAccountRecoveryUserSettings {...props}/>
           </Router>
         </MockTranslationProvider>
-      </AccountRecoveryUserContextProvider>
+      </AccountRecoveryUserContextProvider>,
+      {legacyRoot: true}
     );
   }
 

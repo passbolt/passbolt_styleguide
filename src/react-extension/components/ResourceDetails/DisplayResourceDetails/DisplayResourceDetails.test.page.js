@@ -11,11 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import React from "react";
 import {BrowserRouter as Router} from 'react-router-dom';
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourceDetails from "./DisplayResourceDetails";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DisplayResourceDetails component represented as a page
@@ -31,8 +32,11 @@ export default class DisplayResourceDetailsPage {
         <Router>
           <DisplayResourceDetails {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -164,9 +168,7 @@ export default class DisplayResourceDetailsPage {
 
   /** Click on the component */
   async click(component)  {
-    const leftClick = {button: 0};
-    fireEvent.click(component, leftClick);
-    await waitFor(() => {});
+    await this.user.click(component);
   }
 
   /** Click on the permalink */

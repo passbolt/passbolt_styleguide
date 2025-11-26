@@ -16,7 +16,7 @@
  * Unit tests on ReviewAccountRecoveryRequest in regard of specifications
  */
 import ReviewAccountRecoveryRequestPage from "./ReviewAccountRecoveryRequest.test.page";
-import {waitFor} from "@testing-library/react";
+import {screen} from "@testing-library/react";
 import {defaultProps} from "./ReviewAccountRecoveryRequest.test.data";
 
 beforeEach(() => {
@@ -28,7 +28,7 @@ describe("ReviewAccountRecoveryRequest", () => {
 
   it('As AD I can approve an account recovery', async() => {
     const page = new ReviewAccountRecoveryRequestPage(props);
-    await waitFor(() => { });
+
 
     await page.selectReview(page.acceptCheckbox);
     expect(page.acceptCheckbox.checked).toBeTruthy();
@@ -39,12 +39,14 @@ describe("ReviewAccountRecoveryRequest", () => {
     const status = 'approved';
 
     expect(props.onSubmit).toHaveBeenCalledWith(status);
+
+    await screen.findByRole("button", {name: /close/i});
     expect(props.onClose).toHaveBeenCalled();
   });
 
   it('As AD I can reject an account recovery', async() => {
     const page = new ReviewAccountRecoveryRequestPage(props);
-    await waitFor(() => { });
+
 
     expect(page.rejectCheckbox.checked).toBeTruthy();
     expect(page.acceptCheckbox.checked).toBeFalsy();
@@ -52,28 +54,31 @@ describe("ReviewAccountRecoveryRequest", () => {
     const status = 'rejected';
 
     expect(props.onSubmit).toHaveBeenCalledWith(status);
+    await screen.findByRole("button", {name: /close/i});
     expect(props.onClose).toHaveBeenCalled();
   });
 
   it('As AD I can cancel a review of an account recovery', async() => {
     const page = new ReviewAccountRecoveryRequestPage(props);
-    await waitFor(() => { });
+
 
     expect(page.rejectCheckbox.checked).toBeTruthy();
     expect(page.acceptCheckbox.checked).toBeFalsy();
     await page.cancel();
     expect(props.onCancel).toHaveBeenCalled();
+    await screen.findByRole("button", {name: /close/i});
     expect(props.onClose).toHaveBeenCalled();
   });
 
   it('As AD I can close a review of an account recovery', async() => {
     const page = new ReviewAccountRecoveryRequestPage(props);
-    await waitFor(() => { });
+
 
     expect(page.rejectCheckbox.checked).toBeTruthy();
     expect(page.acceptCheckbox.checked).toBeFalsy();
     await page.close();
     expect(props.onCancel).toHaveBeenCalled();
+    await screen.findByRole("button", {name: /close/i});
     expect(props.onClose).toHaveBeenCalled();
   });
 });

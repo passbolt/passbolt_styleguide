@@ -24,6 +24,7 @@ import PropTypes from "prop-types";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The PasswordSidebarCommentSection component represented as a page
@@ -43,7 +44,8 @@ export default class PasswordSidebarCommentSectionPage {
             <DisplayResourceDetailsComment {...props}/>
           </DialogContextProvider>
         </AppContextProvider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }
@@ -133,6 +135,7 @@ class AddIconPageObject {
    */
   constructor(container) {
     this._container = container;
+    this.user = userEvent.setup();
   }
 
   /**
@@ -155,9 +158,7 @@ class AddIconPageObject {
    */
   async click() {
     this.icon.focus();
-    const leftClick = {button: 0};
-    fireEvent.click(this.icon, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.icon);
   }
 }
 

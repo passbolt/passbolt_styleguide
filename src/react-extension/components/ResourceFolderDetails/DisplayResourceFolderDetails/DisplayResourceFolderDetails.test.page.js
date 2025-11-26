@@ -36,7 +36,8 @@ export default class DisplayResourceFolderDetailsPage {
             <DisplayResourceFolderDetails {...props}/>
           </AppContext.Provider>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

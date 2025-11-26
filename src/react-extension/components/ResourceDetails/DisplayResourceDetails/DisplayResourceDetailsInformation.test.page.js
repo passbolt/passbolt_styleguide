@@ -31,7 +31,8 @@ export default class PasswordSidebarInformationSectionPage {
         <Router>
           <DisplayResourceDetailsInformation {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

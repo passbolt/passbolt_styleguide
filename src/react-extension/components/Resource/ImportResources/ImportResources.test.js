@@ -23,6 +23,8 @@ import ImportResourcesKeyUnlock from "./ImportResourcesResult";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import ImportResourcesPage from "./ImportResources.test.page";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {act} from "react";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -38,15 +40,17 @@ describe("ImportResources", () => {
     /**
      * I should see the password import dialog
      */
-    beforeEach(() => {
-      page = new ImportResourcesPage(props);
+    beforeEach(async() => {
+      await act(
+        async() => page = new ImportResourcesPage(props)
+      );
     });
 
     it('As LU I see a success dialog after importing a file with success', async() => {
       expect.assertions(9);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Import passwords");
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
+      const file = new File(['test'], 'import.csv', {type: 'text/csv'});
       // check fields in the form
       await page.selectImportFile(file);
       expect(page.importFolder.checked).toBeTruthy();
@@ -59,12 +63,14 @@ describe("ImportResources", () => {
       mockContextRequest(requestMockImpl);
 
       await page.submitImport();
-      await waitFor(() => {});
 
       const base64Content = "dABlAHMAdAA=";
       const extension = 'csv';
       const options = {credentials: {password: null, keyFile: null}, folders: false, tags: false};
 
+      await waitForTrue(() =>
+        props.context.port.request.mock.calls.length > 0
+      );
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.import-resources.import-file", extension, base64Content, options);
       expect(props.resourceWorkspaceContext.onResourceFileImportResult).toHaveBeenCalled();
       expect(props.resourceWorkspaceContext.onResourceFileToImport).toHaveBeenCalled();
@@ -73,7 +79,7 @@ describe("ImportResources", () => {
     });
 
     it('As LU I cannot update the form fields and I should see a processing feedback while submitting the form', async() => {
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
+      const file = new File(['test'], 'import.csv', {type: 'text/csv'});
       // check fields in the form
       await page.selectImportFile(file);
       // Mock the request function to make it the expected result
@@ -82,7 +88,7 @@ describe("ImportResources", () => {
         updateResolve = resolve;
       }));
       mockContextRequest(requestMockImpl);
-      await page.submitImportWithoutWaiting();
+      await page.submitImport();
 
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
@@ -100,7 +106,7 @@ describe("ImportResources", () => {
 
     it('As LU I shouldn’t be able to submit the form if there is an error', async() => {
       expect.assertions(1);
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
+      const file = new File(['test'], 'import.csv', {type: 'text/csv'});
       // check fields in the form
       await page.selectImportFile(file);
       const error = {name: "FileFormatError", message: "error"};
@@ -110,10 +116,14 @@ describe("ImportResources", () => {
         throw error;
       });
 
-      await page.submitImport();
-      await waitFor(() => {});
+      await act(async() => {
+        await page.submitImport();
+      });
 
-      // Throw error message
+      /*
+       * API calls are made on submit, wait they are resolved.
+       * Throw error message
+       */
       expect(page.errorMessage).toBe(error.message);
     });
 
@@ -130,7 +140,6 @@ describe("ImportResources", () => {
       });
 
       await page.submitImport();
-      await waitFor(() => {});
 
       const resourceFileToImport = {
         b64FileContent: "dGVzdA==",
@@ -140,7 +149,13 @@ describe("ImportResources", () => {
           tags: true
         }
       };
-      // Throw error message
+
+      await waitForTrue(() =>
+        props.resourceWorkspaceContext.onResourceFileToImport.mock.calls.some(
+          call => JSON.stringify(call[0]) === JSON.stringify(resourceFileToImport)
+        )
+      );
+
       expect(props.resourceWorkspaceContext.onResourceFileToImport).toHaveBeenCalledWith(resourceFileToImport);
       expect(props.dialogContext.open).toHaveBeenCalledWith(ImportResourcesKeyUnlock);
     });
@@ -165,7 +180,7 @@ describe("ImportResources", () => {
 
     it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
       expect.assertions(1);
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
+      const file = new File(['test'], 'import.csv', {type: 'text/csv'});
       // check fields in the form
       await page.selectImportFile(file);
       // Mock the request function to make it return an error.
@@ -174,10 +189,15 @@ describe("ImportResources", () => {
         throw error;
       });
 
-      await page.submitImport();
-      await waitFor(() => {});
+      await act(async() => {
+        await page.submitImport();
+      });
 
-      // Throw dialog general error message
+      await waitForTrue(() =>
+        props.dialogContext.open.mock.calls.length > 0
+      );
+
+      // API calls are made on submit, wait they are resolved.
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
   });
@@ -187,13 +207,18 @@ describe("ImportResources", () => {
       expect.assertions(3);
       const props = defaultProps(); // The props to pass
       jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
+      let page;
+      await act(
+        async() => page = new ImportResourcesPage(props)
+      );
 
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
+      const file = new File(['test'], 'import.csv', {type: 'text/csv'});
       await page.selectImportFile(file);
       await page.submitImport();
-      await waitFor(() => {});
 
+      await waitForTrue(() =>
+        props.context.port.request.mock.calls.length > 0
+      );
       expect(page.importFolder).not.toBeNull();
       expect(page.importFolder.checked).toBeTruthy();
       expect(props.context.port.request).toHaveBeenCalledWith(
@@ -210,14 +235,19 @@ describe("ImportResources", () => {
       expect.assertions(3);
       const props = defaultProps(); // The props to pass
       jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
+      let page;
+      await act(
+        async() => page = new ImportResourcesPage(props)
+      );
 
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
+      const file = new File(['test'], 'import.csv', {type: 'text/csv'});
       await page.selectImportFile(file);
       await page.checkImportFolder();
       await page.submitImport();
-      await waitFor(() => {});
 
+      await waitForTrue(() =>
+        props.context.port.request.mock.calls.length > 0
+      );
       expect(page.importFolder).not.toBeNull();
       expect(page.importFolder.checked).toBeFalsy();
       expect(props.context.port.request).toHaveBeenCalledWith(
@@ -240,13 +270,18 @@ describe("ImportResources", () => {
       const context = defaultUserAppContext(appContext); // The applicative context
       const props = defaultProps({context});
       jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
+      let page;
+      await act(
+        async() => page = new ImportResourcesPage(props)
+      );
 
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
+      const file = new File(['test'], 'import.csv', {type: 'text/csv'});
       await page.selectImportFile(file);
       await page.submitImport();
-      await waitFor(() => {});
 
+      await waitForTrue(() =>
+        props.context.port.request.mock.calls.length > 0
+      );
       expect(page.importFolder).toBeNull();
       expect(props.context.port.request).toHaveBeenCalledWith(
         "passbolt.import-resources.import-file",
@@ -259,15 +294,21 @@ describe("ImportResources", () => {
     });
 
     it('As LU I cannot import resources with folders if denied by RBAC', async() => {
+      expect.assertions(2);
       const props = propsWithDenyUiAction();
       jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
+      let page;
+      await act(
+        async() => page = new ImportResourcesPage(props)
+      );
 
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
+      const file = new File(['test'], 'import.csv', {type: 'text/csv'});
       await page.selectImportFile(file);
       await page.submitImport();
-      await waitFor(() => {});
 
+      await waitForTrue(() =>
+        props.context.port.request.mock.calls.length > 0
+      );
       expect(page.importFolder).toBeNull();
       expect(props.context.port.request).toHaveBeenCalledWith(
         "passbolt.import-resources.import-file",
@@ -285,13 +326,17 @@ describe("ImportResources", () => {
       expect.assertions(3);
       const props = defaultProps(); // The props to pass
       jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
-
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
+      let page;
+      await act(
+        async() => page = new ImportResourcesPage(props)
+      );
+      const file = new File(['test'], 'import.csv', {type: 'text/csv'});
       await page.selectImportFile(file);
       await page.submitImport();
-      await waitFor(() => {});
 
+      await waitForTrue(() =>
+        props.context.port.request.mock.calls.length > 0
+      );
       expect(page.importTag).not.toBeNull();
       expect(page.importTag.checked).toBeTruthy();
       expect(props.context.port.request).toHaveBeenCalledWith(
@@ -308,16 +353,23 @@ describe("ImportResources", () => {
       expect.assertions(3);
       const props = defaultProps(); // The props to pass
       jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
+      let page;
+      await act(
+        async() => page = new ImportResourcesPage(props)
+      );
 
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
+      const file = new File(['test'], 'import.csv', {type: 'text/csv'});
       await page.selectImportFile(file);
       await page.checkImportTag();
       await page.submitImport();
-      await waitFor(() => {});
 
+
+      // API calls are made on submit, wait they are resolved.
       expect(page.importTag).not.toBeNull();
       expect(page.importTag.checked).toBeFalsy();
+      await waitForTrue(() =>
+        props.context.port.request.mock.calls.length > 0
+      );
       expect(props.context.port.request).toHaveBeenCalledWith(
         "passbolt.import-resources.import-file",
         expect.any(String),
@@ -338,13 +390,18 @@ describe("ImportResources", () => {
       const context = defaultUserAppContext(appContext); // The applicative context
       const props = defaultProps({context});
       jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
+      let page;
+      await act(
+        async() => page = new ImportResourcesPage(props)
+      );
 
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
+      const file = new File(['test'], 'import.csv', {type: 'text/csv'});
       await page.selectImportFile(file);
       await page.submitImport();
-      await waitFor(() => {});
 
+      await waitForTrue(() =>
+        props.context.port.request.mock.calls.length > 0
+      );
       expect(page.importTag).toBeNull();
       expect(props.context.port.request).toHaveBeenCalledWith(
         "passbolt.import-resources.import-file",
@@ -357,15 +414,22 @@ describe("ImportResources", () => {
     });
 
     it('As LU I cannot import resources and tag them if denied by RBAC', async() => {
+      expect.assertions(2);
       const props = propsWithDenyUiAction();
       jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
+      let page;
+      await act(
+        async() => page = new ImportResourcesPage(props)
+      );
 
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
+      const file = new File(['test'], 'import.csv', {type: 'text/csv'});
       await page.selectImportFile(file);
       await page.submitImport();
-      await waitFor(() => {});
 
+
+      await waitForTrue(() =>
+        props.context.port.request.mock.calls.length > 0
+      );
       expect(page.importTag).toBeNull();
       expect(props.context.port.request).toHaveBeenCalledWith(
         "passbolt.import-resources.import-file",

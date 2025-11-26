@@ -28,7 +28,8 @@ export default class DisplayResourceDetailsPasswordPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayResourceDetailsPassword {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

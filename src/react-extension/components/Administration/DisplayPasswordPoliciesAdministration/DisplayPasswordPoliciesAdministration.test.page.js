@@ -13,13 +13,13 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render, screen} from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import {AdminPasswordPoliciesContextProvider} from "../../../contexts/Administration/AdministrationPasswordPoliciesContext/AdministrationPasswordPoliciesContext";
 import DisplayAdministrationPasswordPoliciesActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationPasswordPoliciesActions/DisplayAdministrationPasswordPoliciesActions";
 import DisplayPasswordPoliciesAdministration from './DisplayPasswordPoliciesAdministration';
-import {waitForTrue} from "../../../../../test/utils/waitFor";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DisplayPasswordPoliciesAdministration component represented as a page
@@ -39,8 +39,11 @@ export default class DisplayPasswordPoliciesAdministrationPage {
             <DisplayPasswordPoliciesAdministration {...props}/>
           </AdminPasswordPoliciesContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -191,7 +194,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get externalDictionaryCheck() {
-    return this._page.container.querySelector("#passphrase-policy-external-services-toggle-button");
+    return screen.getByRole("checkbox", {name: /external services/i});
   }
 
   /**
@@ -342,9 +345,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    *
    */
   async click(element) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /**
@@ -355,9 +356,9 @@ export default class DisplayPasswordPoliciesAdministrationPage {
   async setFormWith(formData) {
     let key;
     for (key in formData) {
-      fireEvent.input(this[key], {target: {value: formData[key]}});
+      await this.user.clear(this[key]);
+      await this.user.type(this[key], String(formData[key]));
     }
-    await waitForTrue(() => this[key].value === formData[key].toString());
   }
 
   /**
@@ -365,10 +366,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {Promise<void>}
    */
   async togglePasswordPanel() {
-    const leftClick = {button: 0};
-    const isOpened = Boolean(this.passwordPanel);
-    fireEvent.click(this.passwordPanelButton, leftClick);
-    await waitForTrue(() => isOpened !== Boolean(this.passwordPanel));
+    await this.user.click(this.passwordPanelButton);
   }
 
   /**
@@ -376,10 +374,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {Promise<void>}
    */
   async togglePassphrasePanel() {
-    const leftClick = {button: 0};
-    const isOpened = Boolean(this.passphrasePanel);
-    fireEvent.click(this.passphrasePanelButton, leftClick);
-    await waitForTrue(() => isOpened !== Boolean(this.passphrasePanel));
+    await this.user.click(this.passphrasePanelButton);
   }
 
   /**
@@ -388,7 +383,6 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    */
   async choosePassphraseAsDefaultGenerator() {
     await this.click(this.defaultGeneratorSelect);
-    await waitForTrue(() => Boolean(this.defaultGeneratorSelectOptionPassphrase));
     await this.click(this.defaultGeneratorSelectOptionPassphrase);
   }
 
@@ -397,9 +391,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {Promise<void>}
    */
   async clickOnExternalDictionaryCheck() {
-    const isChecked = this.externalDictionaryCheck.checked;
     await this.click(this.externalDictionaryCheck);
-    await waitForTrue(() => this.externalDictionaryCheck.checked !== isChecked);
   }
 
   /**
@@ -407,8 +399,6 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {Promise<void>}
    */
   async clickOnMaskButton(maskButton) {
-    const isChecked = maskButton.classList.contains('selected');
     await this.click(maskButton);
-    await waitForTrue(() => maskButton.classList.contains('selected') !== isChecked);
   }
 }

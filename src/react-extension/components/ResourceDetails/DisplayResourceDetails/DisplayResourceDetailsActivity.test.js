@@ -24,7 +24,7 @@ import {
 } from "./DisplayResourceDetailsActivity.test.data";
 import DisplayResourceDetailsActivityPage from "./DisplayResourceDetailsActivity.test.page";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
-import {waitFor} from "@testing-library/react";
+import {act} from "react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -142,9 +142,10 @@ describe("See activities", () => {
       const error = {message: "Unable to reach the server, an unexpected error occurred"};
       const mockRequest = jest.fn(() => Promise.reject(error));
       mockContextRequest(mockRequest);
-      page = new DisplayResourceDetailsActivityPage(context, props);
+      await act(
+        async() => page = new DisplayResourceDetailsActivityPage(context, props)
+      );
 
-      await waitFor(() => {});
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalledTimes(1);
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith(error.message);
       expect(page.displayActivityList.moreButtonExists()).toBeTruthy();
@@ -188,7 +189,6 @@ describe("See activities", () => {
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalled();
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith(error.message);
       expect(page.displayActivityList.moreButtonExists()).toBeTruthy();
-      await waitFor(() => {});
 
       // click on more button again after error display
       await page.displayActivityList.moreButtonClick();

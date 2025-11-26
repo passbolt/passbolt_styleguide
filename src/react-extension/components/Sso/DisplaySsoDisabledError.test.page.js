@@ -28,7 +28,8 @@ export default class DisplaySsoDisabledErrorPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplaySsoDisabledError {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

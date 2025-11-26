@@ -24,6 +24,7 @@ import {enableFetchMocks} from 'jest-fetch-mock';
 import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
 import DisplaySynchronizeUserDirectoryAdministration from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration";
 import DisplaySimulateSynchronizeUserDirectoryAdministration from "../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministration";
+import {act} from "react";
 
 beforeEach(() => {
   enableFetchMocks();
@@ -45,8 +46,7 @@ describe("As AD I should see the user directory settings", () => {
      */
     beforeEach(async() => {
       mockApiCalls();
-      page = new DisplayUserDirectoryAdministrationPage(props);
-      await waitFor(() => {});
+      await act(async() => page = new DisplayUserDirectoryAdministrationPage(props));
     });
 
     it('As AD I should see if the User Directory is enabled on my Passbolt instance', async() => {
@@ -324,8 +324,8 @@ describe("As AD I should see the user directory settings", () => {
       mockResult.source = "db";
       mockApiCalls(mockResult);
 
-      const page = new DisplayUserDirectoryAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async() => page = new DisplayUserDirectoryAdministrationPage(props));
 
       expect(page.settingsSource.textContent).toStrictEqual("This current configuration source is: database.");
     });
@@ -337,8 +337,8 @@ describe("As AD I should see the user directory settings", () => {
       mockResult.source = "file";
       mockApiCalls(mockResult);
 
-      const page = new DisplayUserDirectoryAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async() => page = new DisplayUserDirectoryAdministrationPage(props));
 
       expect(page.settingsSource.textContent).toStrictEqual("This current configuration source is: file.");
     });
@@ -350,8 +350,8 @@ describe("As AD I should see the user directory settings", () => {
       mockResult.source = "env";
       mockApiCalls(mockResult);
 
-      const page = new DisplayUserDirectoryAdministrationPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(async() => page = new DisplayUserDirectoryAdministrationPage(props));
 
       expect(page.settingsSource.textContent).toStrictEqual("This current configuration source is: environment variables.");
     });
@@ -364,7 +364,6 @@ describe("As AD I should see the user directory settings", () => {
       mockApiCalls(mockResult);
 
       const page = new DisplayUserDirectoryAdministrationPage(props);
-      await waitFor(() => {});
 
       expect(page.settingsSource.textContent).toStrictEqual("This current configuration source is: unknown.");
     });

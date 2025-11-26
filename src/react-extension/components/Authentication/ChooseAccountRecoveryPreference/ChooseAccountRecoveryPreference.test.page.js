@@ -28,7 +28,8 @@ export default class ChooseAccountRecoveryPreferencePage {
     this._page = render(
       <MockTranslationProvider>
         <ChooseAccountRecoveryPreference {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

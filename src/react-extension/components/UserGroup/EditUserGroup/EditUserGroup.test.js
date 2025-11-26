@@ -17,7 +17,7 @@
  */
 import {defaultAppContext, defaultProps, mockGpgKey} from "./EditUserGroup.test.data";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
-import {waitFor} from "@testing-library/react";
+import {screen, waitFor} from "@testing-library/react";
 import EditUserGroupTestPage from "./EditUserGroup.test.page";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
@@ -97,14 +97,15 @@ describe("See the Edit User Group", () => {
       const propsWithGroupManager = defaultProps();
       propsWithGroupManager.userWorkspaceContext.groupToEdit.groups_users[0].user_id = context.loggedInUser.id;
       page = new EditUserGroupTestPage(context, propsWithGroupManager);
-      await waitFor(() => {});
+
 
       expect(page.canAdd).toBeTruthy();
 
       await page.type('dame', page.usernameInput);
       jest.runOnlyPendingTimers();
-      await waitFor(() => {});
-      await page.click(page.getAutocompleteItem(0));
+
+      const option = await screen.findByRole("button", {name: /Dame Steve Shirley/i});
+      await page.click(option);
 
       expect(page.groupMembersCount).toBe(3);
       expect(page.groupMember(3).name).toBe("Dame Steve Shirley");
@@ -123,7 +124,7 @@ describe("See the Edit User Group", () => {
       }));
       mockContextRequest(context, requestMockImpl);
 
-      page.saveWithoutWaitFor();
+      await page.save();
 
       await waitFor(() => {
         expect(page.saveButton.hasAttribute("disabled")).toBeTruthy();
@@ -176,7 +177,7 @@ describe("See the Edit User Group", () => {
       expect.assertions(2);
       page.groupMember(1).role = 1;
       page.groupMember(2).role = 1;
-      await waitFor(() => {});
+
       expect(page.hasNoManager).toBeTruthy();
       expect(page.warningMessageCannotAddUser).toBeFalsy();
     });

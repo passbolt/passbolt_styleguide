@@ -30,7 +30,8 @@ export default class InstallExtensionTestPage {
     this._page = render(
       <MockTranslationProvider>
         <InstallExtension {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

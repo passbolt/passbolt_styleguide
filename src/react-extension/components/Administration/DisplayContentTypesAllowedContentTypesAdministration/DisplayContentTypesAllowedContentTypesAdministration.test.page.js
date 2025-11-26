@@ -16,6 +16,7 @@ import React from "react";
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayContentTypesAllowedContentTypesAdministration from "./DisplayContentTypesAllowedContentTypesAdministration";
+import userEvent from "@testing-library/user-event";
 
 export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
   /**
@@ -26,8 +27,11 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayContentTypesAllowedContentTypesAdministration {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -220,63 +224,8 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
    * @param {HTMLElement} element The HTML element onto simulate the click
    * @returns {Promise<void>}
    */
-  clickOn(element) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-  }
-
-  /**
-   * Returns the form element
-   * @returns {Promise<void>}
-   */
-  async clickOnPasswordV4() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.passwordV4Checkbox, leftClick);
-  }
-
-  /**
-   * Returns the form element
-   * @returns {Promise<void>}
-   */
-  async clickOnTotpV4() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.totpV4Checkbox, leftClick);
-  }
-
-  /**
-   * Returns the form element
-   * @returns {Promise<void>}
-   */
-  async clickOnPasswordV5() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.passwordV5Checkbox, leftClick);
-  }
-
-  /**
-   * Returns the form element
-   * @returns {Promise<void>}
-   */
-  async clickOnTotpV5() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.totpV5Checkbox, leftClick);
-  }
-
-  /**
-   * Click on the custom fields checkbox
-   * @returns {Promise<void>}
-   */
-  async clickOnCustomFieldsV5() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.customFieldsV5Checkbox, leftClick);
-  }
-
-  /**
-   * Click on the note checkbox
-   * @returns {Promise<void>}
-   */
-  async clickOnNoteV5() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.noteV5Checkbox, leftClick);
+  async clickOn(element) {
+    await this.user.click(element);
   }
 
   /**

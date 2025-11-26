@@ -29,7 +29,8 @@ export default class PasswordSidebarPermissionSectionPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayResourceDetailsPermission {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

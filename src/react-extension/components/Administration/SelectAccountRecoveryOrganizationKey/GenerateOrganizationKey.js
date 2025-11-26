@@ -374,7 +374,7 @@ class GenerateOrganizationKey extends React.Component {
     }
 
     const key = await this.generateKey();
-    this.props.onUpdateOrganizationKey(key.public_key.armored_key, key.private_key.armored_key);
+    this.props.onUpdateOrganizationKey(key?.public_key?.armored_key, key?.private_key?.armored_key);
   }
 
   /**

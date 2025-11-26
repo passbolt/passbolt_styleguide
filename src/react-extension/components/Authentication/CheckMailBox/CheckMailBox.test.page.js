@@ -30,7 +30,8 @@ export default class CheckMailBoxTestPage {
     this._page = render(
       <MockTranslationProvider>
         <CheckMailBox/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

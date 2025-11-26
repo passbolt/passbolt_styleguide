@@ -30,7 +30,8 @@ export default class DisplayUserWorkspaceActionsPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayUserWorkspaceActions {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

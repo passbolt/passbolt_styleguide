@@ -25,7 +25,8 @@ export default class DisplayResourceUrisBadgePage {
    */
   constructor(props) {
     this._page = render(
-      <DisplayResourceUrisBadge {...props} />
+      <DisplayResourceUrisBadge {...props} />,
+      {legacyRoot: true}
     );
   }
   /**

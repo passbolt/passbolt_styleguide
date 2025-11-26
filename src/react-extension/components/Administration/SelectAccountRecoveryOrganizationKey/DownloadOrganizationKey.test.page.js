@@ -30,7 +30,8 @@ export default class DownloadOrganizationKeyPage {
     this._page = render(
       <MockTranslationProvider>
         <DownloadOrganizationKey {...props} />
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

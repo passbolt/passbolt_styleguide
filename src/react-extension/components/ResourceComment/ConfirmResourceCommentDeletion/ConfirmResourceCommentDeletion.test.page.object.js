@@ -13,7 +13,7 @@
  * @since         2.11.0
  */
 
-import {fireEvent, waitFor} from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 /**
  * Page object for the ConfirmResourceCommentDeletion component
@@ -25,6 +25,7 @@ export default class ConfirmResourceCommentDeletionPageObject {
    */
   constructor(container) {
     this._container = container;
+    this.user = userEvent.setup();
   }
 
   /**
@@ -52,8 +53,6 @@ export default class ConfirmResourceCommentDeletionPageObject {
    * Confirm the deletion of the comment
    */
   async confirm() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.confirmButton, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.confirmButton);
   }
 }

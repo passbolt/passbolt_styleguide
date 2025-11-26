@@ -20,4 +20,14 @@ import ApiRecover from "./ApiRecover";
  */
 const appDomElement = document.createElement("div");
 document.body.appendChild(appDomElement);
-ReactDOM.render(<ApiRecover/>, appDomElement);
+
+/*
+ * TODO: React18 - enable when ready
+ * const root = ReactDOM.createRoot(appDomElement);
+ */
+/* eslint-disable react/no-deprecated */
+ReactDOM.render(
+  <ApiRecover/>,
+  appDomElement
+);
+

@@ -16,6 +16,8 @@ import {defaultAppContext, defaultProps, tooLongComment} from "./AddResourceComm
 import DisplayResourceDetailsCommentPage from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetailsComment.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {defaultCommentCollectionDto} from "../../../../shared/models/entity/comment/commentEntityCollection.test.data";
+import {screen} from "@testing-library/react";
+// import '@testing-library/jest-dom';
 
 /**
  * Unit tests on AddComponent in regard of specifications
@@ -136,13 +138,16 @@ describe("Add comments", () => {
     });
 
     it('the adding operation should be stopped', async() => {
+      expect.assertions(2);
       // Since there's a refresh fetch after adding a comment, just need to check if the refresh fetch call is done
       await page.title.click();
       await page.addIcon.click();
+      expect(await screen.queryByPlaceholderText("Add a comment")).not.toBeNull();
+
       await page.addComment.write("I'm writing a valid comment");
       await page.addComment.escape();
 
-      expect(page.addComment.exists()).toBeFalsy();
+      expect(await screen.queryByPlaceholderText("add a comment")).toBeNull();
     });
   });
 
@@ -195,12 +200,15 @@ describe("Add comments", () => {
     });
 
     it("the adding operation should be stopped", async() => {
+      expect.assertions(2);
       await page.title.click();
       await page.addIcon.click();
+      expect(await screen.queryByPlaceholderText("Add a comment")).not.toBeNull();
+
       await page.addComment.write("I’m writing a new comment");
       await page.addComment.cancel();
 
-      expect(page.addComment.exists()).toBeFalsy();
+      expect(await screen.queryByPlaceholderText("Add a comment")).toBeNull();
     });
   });
 
@@ -229,8 +237,11 @@ describe("Add comments", () => {
     });
 
     it("the adding operation should be stopped", async() => {
+      expect.assertions(3);
       await page.title.click();
       await page.addIcon.click();
+      expect(await screen.queryByPlaceholderText("Add a comment")).not.toBeNull();
+
       await page.addComment.write("I'm writing a valid comment");
 
       const inProgressFn = () => {
@@ -239,7 +250,8 @@ describe("Add comments", () => {
       };
 
       await page.addComment.save(inProgressFn);
-      expect(page.addComment.isDisabled()).toBeFalsy();
+      const textarea = screen.getByPlaceholderText("Add a comment");
+      expect(textarea.disabled).toBe(true);
     });
   });
 
@@ -430,8 +442,8 @@ describe("Add comments", () => {
 
     beforeEach(() => {
       jest.resetModules();
-      page = new DisplayResourceDetailsCommentPage(context, Object.assign(props));
       mockContextRequest(requestsMockImpl).mockClear();
+      page = new DisplayResourceDetailsCommentPage(context, Object.assign(props));
     });
 
     it(' I should see an error message', async() => {
@@ -444,6 +456,7 @@ describe("Add comments", () => {
       };
 
       await page.addComment.save(inProgressFn);
+      await screen.findByText(saveError.message);
 
       expect(context.port.request).toHaveBeenCalledTimes(2);
       expect(page.addComment.hasTechnicalError(saveError.message)).toBeTruthy();
