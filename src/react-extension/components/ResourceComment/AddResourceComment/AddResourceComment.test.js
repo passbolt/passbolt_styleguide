@@ -17,7 +17,6 @@ import DisplayResourceDetailsCommentPage from "../../ResourceDetails/DisplayReso
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {defaultCommentCollectionDto} from "../../../../shared/models/entity/comment/commentEntityCollection.test.data";
 import {screen} from "@testing-library/react";
-// import '@testing-library/jest-dom';
 
 /**
  * Unit tests on AddComponent in regard of specifications
