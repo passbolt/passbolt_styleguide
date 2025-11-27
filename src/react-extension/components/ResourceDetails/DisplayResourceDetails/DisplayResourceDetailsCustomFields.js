@@ -226,8 +226,8 @@ class DisplayResourceDetailsCustomFields extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
-    const canPreviewSecret = this.props.context.siteSettings?.canIUse("previewPassword") && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
+    const canCopySecret = this.props.rbacContext.canIUseAction(uiActions.SECRETS_COPY);
+    const canPreviewSecret = this.props.context.siteSettings?.canIUse("previewPassword") && this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW);
 
     return (
       <div className="detailed-information accordion sidebar-section custom-fields">

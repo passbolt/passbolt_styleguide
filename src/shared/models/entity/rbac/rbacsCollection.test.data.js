@@ -13,7 +13,7 @@
  */
 import {
   defaultRbacWithActionData,
-  defaultRbacWithUiActionData,
+  defaultRbacWithUiActionData, denyRbacWithActionData,
   denyRbacWithUiActionData
 } from "./rbacEntity.test.data";
 import {defaultUiActionData} from "./uiActionEntity.test.data";
@@ -58,8 +58,8 @@ export const settingsRbacsCollectionData = () => [
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.MOBILE_TRANSFER})}),
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.DESKTOP_TRANSFER})}),
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.SHARE_FOLDER})}),
-  defaultRbacWithActionData({action: defaultActionData({name: actions.GROUPS_ADD})}),
-  defaultRbacWithActionData({action: defaultActionData({name: actions.ACCOUNT_RECOVERY_REQUEST_VIEW})}),
-  defaultRbacWithActionData({action: defaultActionData({name: actions.ACCOUNT_RECOVERY_REQUEST_INDEX})}),
-  defaultRbacWithActionData({action: defaultActionData({name: actions.ACCOUNT_RECOVERY_RESPONSE_CREATE})}),
+  denyRbacWithActionData({action: defaultActionData({name: actions.GROUPS_ADD})}),
+  denyRbacWithActionData({action: defaultActionData({name: actions.ACCOUNT_RECOVERY_REQUEST_VIEW})}),
+  denyRbacWithActionData({action: defaultActionData({name: actions.ACCOUNT_RECOVERY_REQUEST_INDEX})}),
+  denyRbacWithActionData({action: defaultActionData({name: actions.ACCOUNT_RECOVERY_RESPONSE_CREATE})}),
 ];

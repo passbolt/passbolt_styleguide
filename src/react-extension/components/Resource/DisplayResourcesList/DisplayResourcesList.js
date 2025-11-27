@@ -251,7 +251,7 @@ class DisplayResourcesList extends React.Component {
    */
   get canUseFolders() {
     return this.props.context.siteSettings.canIUse("folders")
-      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
+      && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
   }
 
   /**
@@ -813,7 +813,7 @@ class DisplayResourcesList extends React.Component {
    */
   get canPreviewSecret() {
     return this.props.context.siteSettings.canIUse('previewPassword')
-    && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
+    && this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW);
   }
 
   /**
@@ -821,7 +821,7 @@ class DisplayResourcesList extends React.Component {
    * @return {boolean}
    */
   get canCopySecret() {
-    return this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
+    return this.props.rbacContext.canIUseAction(uiActions.SECRETS_COPY);
   }
 
   /**

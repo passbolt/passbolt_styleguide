@@ -460,8 +460,8 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
-    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
+    const canCopySecret = this.props.rbacContext.canIUseAction(uiActions.SECRETS_COPY);
+    const canViewShare = this.props.rbacContext.canIUseAction(uiActions.SHARE_VIEW_LIST);
 
     return (
       <ContextualMenuWrapper

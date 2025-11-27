@@ -18,7 +18,6 @@ import {withAppContext} from "../AppContext/AppContext";
 import CanUse from "../../services/rbacs/canUseService";
 
 export const RbacContext = React.createContext({
-  canIUseUiAction: () => {},
   canIUseAction: () => {}
 });
 
@@ -39,7 +38,7 @@ export class RbacContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      canIUseUiAction: this.canIUseUiAction.bind(this)
+      canIUseAction: this.canIUseAction.bind(this)
     };
   }
 
@@ -48,7 +47,7 @@ export class RbacContextProvider extends React.Component {
    * @param {string} actionName The name of the UI action to check for.
    * @return {boolean}
    */
-  canIUseUiAction(actionName) {
+  canIUseAction(actionName) {
     return CanUse.canRoleUseAction(this.props.context.loggedInUser, this.props.context.rbacs, actionName);
   }
 

@@ -26,7 +26,7 @@ export function defaultAppContext(appContext) {
 export function defaultProps(data = {}) {
   return {
     rbacContext: {
-      canIUseUiAction: () => true,
+      canIUseAction: () => true,
     },
     loadingContext: {
       add: jest.fn(),

@@ -14,6 +14,19 @@
 
 import {defaultGroupUser} from "../../models/entity/groupUser/groupUserEntity.test.data";
 import {defaultUserDto} from "../../models/entity/user/userEntity.test.data";
+import {defaultUserAppContext} from "../../../react-extension/contexts/ExtAppContext.test.data";
+
+/**
+ * Default props.
+ * @returns {object}
+ * @param data
+ */
+export function defaultProps(data = {}) {
+  const defaultProps = {
+    context: defaultUserAppContext(data?.context),
+  };
+  return Object.assign(defaultProps, data);
+}
 
 /**
  * Returns the default administrator rbac context for the unit test.
@@ -22,7 +35,7 @@ import {defaultUserDto} from "../../models/entity/user/userEntity.test.data";
  */
 export function defaultAdministratorRbacContext(data = {}) {
   return {
-    canIUseUiAction: () => true,
+    canIUseAction: () => true,
     ...data
   };
 }
@@ -34,7 +47,7 @@ export function defaultAdministratorRbacContext(data = {}) {
  */
 export function defaultUserRbacContext(data = {}) {
   return {
-    canIUseUiAction: () => true,
+    canIUseAction: () => true,
     ...data
   };
 }
@@ -46,7 +59,7 @@ export function defaultUserRbacContext(data = {}) {
  */
 export function denyRbacContext(data = {}) {
   return {
-    canIUseUiAction: () => false,
+    canIUseAction: () => false,
     ...data
   };
 }
