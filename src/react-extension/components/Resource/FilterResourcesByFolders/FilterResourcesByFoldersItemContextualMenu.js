@@ -146,7 +146,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   canExport() {
     return this.props.context.siteSettings.canIUse("export")
-      && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_EXPORT);
+      && this.props.rbacContext.canIUseAction(uiActions.RESOURCES_EXPORT);
   }
 
   /**
@@ -166,7 +166,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
     const canUpdate = this.canUpdate();
     const canShare = this.canShare();
     const canExport = this.canExport();
-    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_FOLDER);
+    const canViewShare = this.props.rbacContext.canIUseAction(uiActions.SHARE_FOLDER);
 
     return (
       <ContextualMenuWrapper

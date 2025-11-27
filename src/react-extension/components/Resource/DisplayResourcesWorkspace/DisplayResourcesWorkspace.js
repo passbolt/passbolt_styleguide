@@ -181,7 +181,7 @@ class Workspace extends Component {
    */
   get isUserAdmin() {
     const loggedInUser = this.props.context.loggedInUser;
-    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN && this.props.rbacContext.canIUseUiAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE);
+    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN && this.props.rbacContext.canIUseAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE);
   }
 
   /**
@@ -189,7 +189,7 @@ class Workspace extends Component {
    * @returns {boolean}
    */
   get isUserWorkspaceVisible() {
-    return this.props.rbacContext.canIUseUiAction(uiActions.USERS_VIEW_WORKSPACE);
+    return this.props.rbacContext.canIUseAction(uiActions.USERS_VIEW_WORKSPACE);
   }
 
   /**
@@ -232,9 +232,9 @@ class Workspace extends Component {
    */
   render() {
     const canUseFolders = this.props.context.siteSettings.canIUse("folders")
-      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
+      && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
     const canUseTags = this.props.context.siteSettings.canIUse("tags")
-      && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
+      && this.props.rbacContext.canIUseAction(uiActions.TAGS_USE);
 
     const rowsSetting = this.props.resourceWorkspaceContext.rowsSetting;
 

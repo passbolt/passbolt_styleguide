@@ -94,6 +94,7 @@ describe("CanUseService", () => {
     it('should return true for a non-admin user with RBAC control function for action', () => {
       expect.assertions(3);
 
+      rbacs = new RbacsCollection(defaultSettingsRbacsCollectionData);
       jest.spyOn(rbacs, "findRbacByRoleAndActionName");
       jest.spyOn(GetControlFunctionService, "getByRbac");
       jest.spyOn(CanUse, "getByRbacOrDefault");

@@ -349,9 +349,9 @@ class DisplayResourceDetails extends React.Component {
    */
   renderResourceDetail() {
     const canUseTags = this.props.context.siteSettings.canIUse("tags")
-      && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
-    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
-    const canSeeComments = this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_COMMENTS);
+      && this.props.rbacContext.canIUseAction(uiActions.TAGS_USE);
+    const canViewShare = this.props.rbacContext.canIUseAction(uiActions.SHARE_VIEW_LIST);
+    const canSeeComments = this.props.rbacContext.canIUseAction(uiActions.RESOURCES_SEE_COMMENTS);
 
     return (
       <>
@@ -394,7 +394,7 @@ class DisplayResourceDetails extends React.Component {
   render() {
     const canUseAuditLog = (this.props.context.siteSettings.canIUse("auditLog")
       || this.props.context.siteSettings.canIUse("audit_log")) // @deprecated remove with v4
-      && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_ACTIVITIES);
+      && this.props.rbacContext.canIUseAction(uiActions.RESOURCES_SEE_ACTIVITIES);
 
     return (
       <div className="sidebar resource">

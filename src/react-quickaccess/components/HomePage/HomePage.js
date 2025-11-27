@@ -244,7 +244,7 @@ class HomePage extends React.Component {
     const showSuggestedSection = !hasSearch;
     const showBrowsedResourcesSection = hasSearch;
     const showFiltersSection = !hasSearch;
-    const canUseTag = this.props.context.siteSettings.canIUse('tags') && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
+    const canUseTag = this.props.context.siteSettings.canIUse('tags') && this.props.rbacContext.canIUseAction(uiActions.TAGS_USE);
     let browsedResources, suggestedResources;
 
     if (isReady) {

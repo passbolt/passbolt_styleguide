@@ -83,7 +83,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseMobileTransferCapability() {
-    const canViewMobileTransfer = this.props.rbacContext.canIUseUiAction(uiActions.MOBILE_TRANSFER);
+    const canViewMobileTransfer = this.props.rbacContext.canIUseAction(uiActions.MOBILE_TRANSFER);
     return canViewMobileTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
   }
 
@@ -92,7 +92,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseDesktopExportCapability() {
-    const canViewDesktopTransfer = this.props.rbacContext.canIUseUiAction(uiActions.DESKTOP_TRANSFER);
+    const canViewDesktopTransfer = this.props.rbacContext.canIUseAction(uiActions.DESKTOP_TRANSFER);
     return canViewDesktopTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
   }
 
@@ -101,7 +101,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseAccountRecoveryCapability() {
-    const canViewAccountRecovery = this.props.rbacContext.canIUseUiAction(uiActions.PROFIL_ACCOUNT_RECOVERY);
+    const canViewAccountRecovery = this.props.rbacContext.canIUseAction(uiActions.PROFIL_ACCOUNT_RECOVERY);
     return canViewAccountRecovery && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountRecovery');
   }
 
@@ -119,7 +119,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
    */
   get isUserAdmin() {
     const loggedInUser = this.props.context.loggedInUser;
-    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN && this.props.rbacContext.canIUseUiAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE);
+    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN && this.props.rbacContext.canIUseAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE);
   }
 
   /**
@@ -127,7 +127,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
    * @returns {boolean}
    */
   get isUserWorkspaceVisible() {
-    return this.props.rbacContext.canIUseUiAction(uiActions.USERS_VIEW_WORKSPACE);
+    return this.props.rbacContext.canIUseAction(uiActions.USERS_VIEW_WORKSPACE);
   }
 
   /**

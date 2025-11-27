@@ -277,8 +277,8 @@ class DisplayResourceDetailsPassword extends React.Component {
    */
   render() {
     const canPreviewSecret = this.props.context.siteSettings.canIUse("previewPassword")
-      && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
-    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
+      && this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW);
+    const canCopySecret = this.props.rbacContext.canIUseAction(uiActions.SECRETS_COPY);
     const isPasswordPreviewed = this.state.isSecretPreviewed;
 
     return (

@@ -66,6 +66,15 @@ export const denyRbacWithUiActionData = (data = {}) => {
   return defaultRbacWithUiActionData(defaultData);
 };
 
+export const denyRbacWithActionData = (data = {}) => {
+  const defaultData = {
+    "control_function": controlFunctions.DENY,
+    ...data
+  };
+
+  return defaultRbacWithActionData(defaultData);
+};
+
 export const defaultRbacWithAllAssociationData = (data = {}) => {
   const foreignId = data?.foreign_id || data?.action?.id || data?.ui_action?.id || uuidv4();
   const defaultData = {
