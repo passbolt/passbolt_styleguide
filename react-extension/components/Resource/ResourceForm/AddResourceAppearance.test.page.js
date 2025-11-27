@@ -27,7 +27,8 @@ export default class AddResourceAppearancePage {
     this._page = render(
       <MockTranslationProvider>
         <AddResourceAppearance {...props} />
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

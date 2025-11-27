@@ -7632,7 +7632,6 @@ table.table-info.horizontal tbody tr:hover {
   flex-direction: column;
   align-items: flex-start;
   flex: 1 0 0;
-  min-height: 0;
 }
 .tabs .tabs-active-content {
   align-self: stretch;
@@ -9970,6 +9969,9 @@ svg .section-card .card .title:first-child {
 .import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section.accordion.accordion-section .summary-header .summary-content {
   width: 100%;
 }
+.import-resources-result .dialog .import-dialog-summary.form-content .folder-section {
+  padding-bottom: 1.6rem;
+}
 /* Resource secret history dialog */
 .resource-secret-history {
   display: flex;
@@ -10113,14 +10115,17 @@ svg .section-card .card .title:first-child {
 .resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button .additional-information .updated-date span {
   color: var(--Text-and-icons-Secondary-text);
 }
-.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content:hover,
-.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content:focus-visible,
-.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content:focus,
-.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content.selected {
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button:hover,
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button:focus-visible,
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button:focus,
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button.selected {
   background: var(--Sections-Filter-selected);
 }
-.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content.disabled {
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content button:disabled {
   background: none;
+}
+.resource-secret-history .dialog-content .left-sidebar .sidebar-content-sections .section-content:last-child {
+  margin-bottom: 1.6rem;
 }
 .resource-secret-history .dialog-content .grid-and-footer {
   display: flex;

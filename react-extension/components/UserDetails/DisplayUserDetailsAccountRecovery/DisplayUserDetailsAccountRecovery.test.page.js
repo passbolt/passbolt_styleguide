@@ -29,7 +29,8 @@ export default class DisplayUserDetailsAccountRecoveryPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayUserDetailsAccountRecovery {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

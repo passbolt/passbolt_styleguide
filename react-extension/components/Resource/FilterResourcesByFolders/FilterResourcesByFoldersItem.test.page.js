@@ -37,7 +37,8 @@ export default class FilterResourcesByFoldersItemPage {
             <FilterResourcesByFoldersItem.WrappedComponent {...props}/>
           </DragContext.Provider>
         </Router>
-      </AppContext.Provider>
+      </AppContext.Provider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

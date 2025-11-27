@@ -12,10 +12,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render, waitFor} from "@testing-library/react";
 import React from "react";
 import EnterUsernameForm from "./EnterUsernameForm";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The EnterUsernameForm component represented as a page
@@ -30,8 +31,11 @@ export default class EnterUsernameFormPage {
     this._page = render(
       <MockTranslationProvider>
         <EnterUsernameForm {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -99,26 +103,23 @@ export default class EnterUsernameFormPage {
 
   /** Click on the element */
   async click(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /** Click without wait for on the element */
-  clickWithoutWaitFor(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
+  async clickWithoutWaitFor(element)  {
+    await this.user.click(element);
   }
 
   /** fill the input element with data */
-  fillInput(element, data)  {
-    const dataInputEvent = {target: {value: data}};
-    fireEvent.change(element, dataInputEvent);
+  async fillInput(element, data)  {
+    await userEvent.clear(element);
+    await userEvent.type(element, data);
   }
 
   /** fill the username input element with data */
-  insertUsername(data)  {
-    this.fillInput(this.username, data);
+  async insertUsername(data)  {
+    await this.fillInput(this.username, data);
   }
 
   /** check the agreed terms */

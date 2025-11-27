@@ -12,7 +12,7 @@
  * @since         4.9.4
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import React from "react";
 import {Router} from "react-router-dom";
 import MockTranslationProvider
@@ -20,6 +20,7 @@ import MockTranslationProvider
 import ResourceCreatePage from "./ResourceCreatePage";
 import {waitForTrue} from "../../../../test/utils/waitFor";
 import {createMemoryHistory} from "history";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The ResourceCreatePage component represented as a page
@@ -37,8 +38,11 @@ export default class ResourceCreatePagePage {
           <ResourceCreatePage {...props} debug/>
           {/*</PrepareResourceContextProvider>*/}
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
   }
 
   /**
@@ -162,8 +166,7 @@ export default class ResourceCreatePagePage {
    * @returns {Promise<void>}
    */
   async submitForm() {
-    fireEvent.click(this.submitButton, {button: 0});
-    await waitFor(() => {});
+    await this.user.click(this.submitButton);
   }
 
   /**
@@ -171,7 +174,6 @@ export default class ResourceCreatePagePage {
    * @returns {Promise<void>}
    */
   async clickOnBackButton() {
-    fireEvent.click(this.backButton, {button: 0});
-    await waitFor(() => {});
+    await this.user.click(this.backButton);
   }
 }

@@ -18,6 +18,7 @@ import React from "react";
 import {BrowserRouter as Router} from 'react-router-dom';
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import CreateResourceFolder from "./CreateResourceFolder";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The CreateResourceFolderPage component represented as a page
@@ -33,8 +34,11 @@ export default class CreateResourceFolderPage {
         <Router>
           <CreateResourceFolder.WrappedComponent {...props}></CreateResourceFolder.WrappedComponent>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -121,8 +125,7 @@ export default class CreateResourceFolderPage {
    */
   async create(folder, inProgressFn = () => {}) {
     this.name = folder.name;
-    const leftClick = {button: 0};
-    fireEvent.click(this.saveButton, leftClick);
+    await this.user.click(this.saveButton);
     await waitFor(inProgressFn);
   }
 
@@ -141,9 +144,7 @@ export default class CreateResourceFolderPage {
    * Cancels the create operation
    */
   async cancel() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.cancelButton, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.cancelButton);
   }
 
 
@@ -151,8 +152,6 @@ export default class CreateResourceFolderPage {
    * Close the create operation
    */
   async close() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.closeButton, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.closeButton);
   }
 }

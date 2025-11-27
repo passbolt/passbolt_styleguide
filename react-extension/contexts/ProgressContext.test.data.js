@@ -65,9 +65,9 @@ export function infiniteProgressBarProgressContext(context = {}) {
 export function progressiveProgressBarProgressContext(context = {}) {
   return defaultProgressContext({
     progressDialogProps: {
-      title: "Progress dialog test title",
+      title: "Progress dialog &#x2F; test title",
       goals: 2,
-      message: "Step 0",
+      message: "Step &#x2F; 0",
       completed: 0
     },
     ...context

@@ -28,7 +28,8 @@ export default class DisplayRequireInvitationErrorPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayError/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

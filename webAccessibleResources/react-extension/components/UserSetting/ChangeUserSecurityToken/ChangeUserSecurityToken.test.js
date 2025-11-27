@@ -41,7 +41,7 @@ describe("Display change user security token", () => {
   });
 
   it('As LU I cannot update the form fields while submitting the form', async() => {
-    expect.assertions(4);
+    expect.assertions(2);
     let saveResolve = null;
     const requestMockImpl = jest.fn(() => new Promise(resolve => saveResolve = resolve));
     jest.spyOn(props.userSettingsContext, 'onUpdateSecurityTokenRequested').mockImplementationOnce(requestMockImpl);
@@ -55,7 +55,7 @@ describe("Display change user security token", () => {
   });
 
   it('As LU I should see a processing feedback while submitting the form', async() => {
-    expect.assertions(5);
+    expect.assertions(3);
     let saveResolve = null;
     const requestMockImpl = jest.fn(() => new Promise(resolve => saveResolve = resolve));
     jest.spyOn(props.userSettingsContext, 'onUpdateSecurityTokenRequested').mockImplementationOnce(requestMockImpl);

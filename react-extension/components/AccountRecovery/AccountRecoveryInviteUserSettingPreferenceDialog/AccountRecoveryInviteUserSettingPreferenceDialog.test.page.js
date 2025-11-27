@@ -33,7 +33,8 @@ export default class AccountRecoveryInviteUserSettingPreferenceDialogPage {
         <Router history={history}>
           <AccountRecoveryInviteUserSettingPreferenceDialog {...props} />
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

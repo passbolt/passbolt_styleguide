@@ -31,7 +31,8 @@ export default class SelectResourceFormPage {
     this._page = render(
       <MockTranslationProvider>
         <SelectResourceForm {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

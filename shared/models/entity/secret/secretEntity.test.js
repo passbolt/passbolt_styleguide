@@ -51,7 +51,6 @@ describe("SecretEntity", () => {
       assertEntityProperty.string(SecretEntity, "secret_revision_id");
       assertEntityProperty.uuid(SecretEntity, "secret_revision_id");
       assertEntityProperty.notRequired(SecretEntity, "secret_revision_id");
-      assertEntityProperty.nullable(SecretEntity, "secret_revision_id");
     });
 
     it("validates data property", () => {

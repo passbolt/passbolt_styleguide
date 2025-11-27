@@ -45,7 +45,8 @@ export default class FilterUsersByGroupPage {
             </ContextualMenuContextProvider>
           </Router>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

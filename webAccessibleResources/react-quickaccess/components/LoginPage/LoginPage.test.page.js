@@ -31,7 +31,8 @@ export default class LoginPageTest {
         <Router>
           <LoginPage {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

@@ -29,7 +29,8 @@ export default class DisplayAdministrationAccountRecoveryActionsPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayAdministrationAccountRecoveryActions {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

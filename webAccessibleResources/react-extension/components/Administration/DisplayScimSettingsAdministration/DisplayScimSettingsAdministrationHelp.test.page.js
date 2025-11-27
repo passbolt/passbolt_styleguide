@@ -29,7 +29,8 @@ export default class DisplayScimSettingsAdministrationHelpPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayScimSettingsAdministrationHelp {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

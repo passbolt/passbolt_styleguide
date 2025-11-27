@@ -42,7 +42,8 @@ export default class AddResourceNamePage {
             </ResourceWorkspaceContext.Provider>
           </ResourceTypesLocalStorageContext.Provider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

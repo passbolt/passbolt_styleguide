@@ -34,7 +34,8 @@ export default class FilterResourcesByFavoritePagePage {
         <Router history={props.history || createMemoryHistory()}>
           <FilterResourcesByFavoritePage {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

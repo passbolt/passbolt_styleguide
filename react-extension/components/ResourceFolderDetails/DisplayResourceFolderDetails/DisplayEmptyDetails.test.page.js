@@ -28,7 +28,8 @@ export default class DisplayEmptyDetailsPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayEmptyDetails/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

@@ -13,11 +13,12 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render, waitFor} from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DefineResourceFolderMoveStrategy from "./DefineResourceFolderMoveStrategy";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DefineResourceFolderMoveStrategyPage component represented as a page
@@ -34,15 +35,17 @@ export default class DefineResourceFolderMoveStrategyPage {
         <AppContext.Provider  value={appContext}>
           <DefineResourceFolderMoveStrategy {...props}></DefineResourceFolderMoveStrategy>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+    this.user = userEvent.setup();
   }
 
   /**
    * Set the move option
    * @param value The option value
    */
-  set option(value) {
+  async setOption(value) {
     let element;
     if (value === 'change') {
       element = this._page.container.querySelector('#moveOptionChange');
@@ -51,8 +54,7 @@ export default class DefineResourceFolderMoveStrategyPage {
     }
 
     if (element) {
-      const leftClick = {button: 0};
-      fireEvent.click(element, leftClick);
+      await this.user.click(element);
     }
   }
 
@@ -114,10 +116,8 @@ export default class DefineResourceFolderMoveStrategyPage {
    * @param inProgressFn Function called during the move operation
    */
   async move(option, inProgressFn = () => {}) {
-    this.option = option;
-    await waitFor(() => {});
-    const leftClick = {button: 0};
-    fireEvent.click(this.moveButton, leftClick);
+    await this.setOption(option);
+    await this.user.click(this.moveButton);
     await waitFor(inProgressFn);
   }
 
@@ -126,9 +126,7 @@ export default class DefineResourceFolderMoveStrategyPage {
    * Cancels the create operation
    */
   async cancel() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.cancelButton, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.cancelButton);
   }
 
 
@@ -136,8 +134,6 @@ export default class DefineResourceFolderMoveStrategyPage {
    * Close the create operation
    */
   async close() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.closeButton, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.closeButton);
   }
 }

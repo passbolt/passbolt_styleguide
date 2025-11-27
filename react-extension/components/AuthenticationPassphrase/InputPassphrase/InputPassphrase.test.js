@@ -23,6 +23,7 @@ import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import InputPassphrase from "./InputPassphrase";
+import userEvent from "@testing-library/user-event";
 
 beforeEach(() => {
   jest.resetModules();
@@ -48,7 +49,8 @@ const renderInputPassphrase = function(appContext, props) {
       <AppContext.Provider value={appContext}>
         <InputPassphrase debug t={text => text} onClose={props.onClose || jest.fn()}/>
       </AppContext.Provider>
-    </MockTranslationProvider>
+    </MockTranslationProvider>,
+    {legacyRoot: true}
   );
 };
 
@@ -226,11 +228,8 @@ describe("InputPassphrase", () => {
 
     // Submit.
     const submitButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
-    const leftClick = {button: 0};
-    fireEvent.click(submitButton, leftClick);
 
-    await waitFor(() => {
-    });
+    await userEvent.click(submitButton);
 
     // Label changed
     const dialogLabel = container.querySelector(".dialog-content label");

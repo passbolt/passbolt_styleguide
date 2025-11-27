@@ -29,7 +29,8 @@ export default class ImportAccountKitPage {
     this._page = render(
       <MockTranslationProvider>
         <ImportAccountKit {...props} />
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

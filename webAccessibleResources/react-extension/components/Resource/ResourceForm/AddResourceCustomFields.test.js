@@ -47,7 +47,7 @@ describe("AddResourceCustomFields", () => {
       expect(page.addCustomField.hasAttribute("disabled")).toBeFalsy();
     });
 
-    it.only('As LU I can see the custom fields form empty.', () => {
+    it('As LU I can see the custom fields form empty.', () => {
       expect.assertions(5);
 
       const secret = minimalSecretDataV5StandaloneCustomFieldsCollectionDtos();

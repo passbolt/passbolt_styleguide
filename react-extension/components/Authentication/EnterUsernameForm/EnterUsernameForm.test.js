@@ -38,7 +38,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
       expect(page.title).toBe('Please enter your email to continue.');
 
       // Fill the form
-      page.insertUsername("admin@passbolt.com");
+      await page.insertUsername("admin@passbolt.com");
       await page.checkAgreedTerms();
       await page.next();
       expect(props.apiTriageContext.onTriageRequested).toHaveBeenCalledWith("admin@passbolt.com");
@@ -57,7 +57,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
       await page.isReady();
 
       // Fill the form
-      page.insertUsername("admin@passbolt.com");
+      await page.insertUsername("admin@passbolt.com");
       await page.next();
       expect(props.apiTriageContext.onTriageRequested).toHaveBeenCalledWith("admin@passbolt.com");
     });
@@ -67,7 +67,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
       page = new EnterUsernameFormPage(props);
 
       // Fill the form
-      page.insertUsername("admin@passbolt.com");
+      await page.insertUsername("admin@passbolt.com");
       await page.checkAgreedTerms();
 
       page.nextWithoutWaitFor();
@@ -90,7 +90,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
       // Throw error message
       expect(page.usernameErrorMessage).toBe("A username is required.");
 
-      page.insertUsername("admin");
+      await page.insertUsername("admin");
       await page.next();
       expect(page.usernameErrorMessage).toBe("Please enter a valid email address.");
     });

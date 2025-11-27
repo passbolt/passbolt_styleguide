@@ -139,7 +139,7 @@ class UserWorkspaceContextProvider extends React.Component {
    * @returns {boolean}
    */
   isAccessAllowed() {
-    return this.props.rbacContext.canIUseUiAction(uiActions.USERS_VIEW_WORKSPACE);
+    return this.props.rbacContext.canIUseAction(uiActions.USERS_VIEW_WORKSPACE);
   }
 
   /**

@@ -31,7 +31,8 @@ export default class ConfigurePassphraseGeneratorPage {
     this._page = render(
       <MockTranslationProvider>
         <ConfigurePassphraseGenerator {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

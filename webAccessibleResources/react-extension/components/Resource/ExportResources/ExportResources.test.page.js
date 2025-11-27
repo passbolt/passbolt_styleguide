@@ -33,7 +33,8 @@ export default class ExportResourcesPage {
         <AppContext.Provider value={appContext}>
           <ExportResources {...props}/>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

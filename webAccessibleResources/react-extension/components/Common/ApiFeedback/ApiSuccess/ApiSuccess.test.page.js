@@ -29,7 +29,8 @@ export default class ApiSuccessPage {
     this._page = render(
       <MockTranslationProvider>
         <ApiSuccess {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

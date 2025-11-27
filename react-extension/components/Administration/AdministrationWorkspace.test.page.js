@@ -39,7 +39,8 @@ export default class AdministrationWorkspacePage {
             <AdministrationWorkspace {...props}/>
           </Router>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

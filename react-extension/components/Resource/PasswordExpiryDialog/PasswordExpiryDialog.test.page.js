@@ -37,7 +37,8 @@ export default class PasswordExpiryDialogPage {
   render(props) {
     this._page = render(<MockTranslationProvider>
       <PasswordExpiryDialog {...props}/>
-    </MockTranslationProvider>);
+    </MockTranslationProvider>,
+    {legacyRoot: true});
   }
 
   /**

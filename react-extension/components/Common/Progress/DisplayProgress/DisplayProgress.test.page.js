@@ -29,7 +29,8 @@ export default class DisplayProgressTestPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayProgress {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

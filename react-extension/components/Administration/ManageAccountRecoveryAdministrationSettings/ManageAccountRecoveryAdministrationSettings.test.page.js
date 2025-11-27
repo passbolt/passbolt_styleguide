@@ -30,7 +30,8 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
     this._page = render(
       <MockTranslationProvider>
         <ManageAccountRecoveryAdministrationSettings {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

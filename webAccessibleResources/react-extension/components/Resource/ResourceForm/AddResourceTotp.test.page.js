@@ -45,7 +45,8 @@ export default class AddResourceTotpPage {
             </ResourceWorkspaceContext.Provider>
           </ResourceTypesLocalStorageContext.Provider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

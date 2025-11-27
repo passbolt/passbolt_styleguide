@@ -268,7 +268,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    */
   render() {
     const canUseFolders = this.props.context.siteSettings.canIUse("folders")
-      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
+      && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
     const canUsePasswordExpiry = this.props.passwordExpiryContext.isFeatureEnabled();
 
     const creatorUsername = this.state.creator?.username || "";

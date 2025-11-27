@@ -20,6 +20,7 @@ import {
   withOnlyTotpV5Enabled,
   withoutMetadataKeys,
 } from "./DisplayContentTypesAllowedContentTypesAdministration.test.data";
+import {act} from 'react';
 
 describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
   beforeEach(() => {
@@ -43,10 +44,12 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
       expect.assertions(2);
       const props = defaultProps();
 
-      const page = new DisplayContentTypesAllowedContentTypesAdministration(props);
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesAllowedContentTypesAdministration(props)
+      );
 
-      await page.clickOnPasswordV4();
+      await page.clickOn(page.passwordV4Checkbox);
 
       expect(page.formBanner).not.toBeNull();
       expect(page.formBanner.textContent).toStrictEqual("Warning: Don't forget to save your settings to apply your modification.");
@@ -55,8 +58,10 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
     it("displays warning on v4 fields if creation is allowed but there is not content types available", async() => {
       expect.assertions(7);
 
-      const page = new DisplayContentTypesAllowedContentTypesAdministration(withOnlyTotpV5Enabled());
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesAllowedContentTypesAdministration(withOnlyTotpV5Enabled())
+      );
 
       expect(page.passwordV4Warning).not.toBeNull();
       expect(page.passwordV4Warning.textContent).toStrictEqual("Creation of content type v4 is allowed but all content types having passwords are deleted.");
@@ -64,8 +69,8 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
       expect(page.totpV4Warning).not.toBeNull();
       expect(page.totpV4Warning.textContent).toStrictEqual("Creation of content type v4 is allowed but all content types having totp are deleted.");
 
-      await page.clickOnPasswordV4();
-      await page.clickOnTotpV5();
+      await page.clickOn(page.passwordV4Checkbox);
+      await page.clickOn(page.totpV5Checkbox);
 
       expect(page.totpV5Warning).toBeNull();
       expect(page.passwordV5Warning).toBeNull();
@@ -75,8 +80,10 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
     it("displays warning on v5 fields if creation is allowed but there is not content types available", async() => {
       expect.assertions(10);
 
-      const page = new DisplayContentTypesAllowedContentTypesAdministration(withOnlyTotpV4Enabled());
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesAllowedContentTypesAdministration(withOnlyTotpV4Enabled())
+      );
 
       expect(page.passwordV5Warning).not.toBeNull();
       expect(page.passwordV5Warning.textContent).toStrictEqual("Creation of content type v5 is allowed but all content types having passwords are deleted.");
@@ -90,8 +97,8 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
       expect(page.noteV5Warning).not.toBeNull();
       expect(page.noteV5Warning.textContent).toStrictEqual("Creation of content type v5 is allowed but note resource type is deleted.");
 
-      await page.clickOnPasswordV5();
-      await page.clickOnTotpV4();
+      await page.clickOn(page.passwordV5Checkbox);
+      await page.clickOn(page.totpV4Checkbox);
 
       expect(page.totpV4Warning).toBeNull();
       expect(page.passwordV4Warning).toBeNull();
@@ -100,8 +107,10 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
     it("displays error on fields if v5 is enabled but there is no metadata key set", async() => {
       expect.assertions(8);
 
-      const page = new DisplayContentTypesAllowedContentTypesAdministration(withoutMetadataKeys());
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesAllowedContentTypesAdministration(withoutMetadataKeys())
+      );
 
       expect(page.passwordV5Warning).not.toBeNull();
       expect(page.totpV5Warning).not.toBeNull();
@@ -118,14 +127,16 @@ describe("DisplayContentTypesAllowedContentTypesAdministration", () => {
     it("displays error on fields if no resource types is selected and admin tries to save", async() => {
       expect.assertions(11);
 
-      const page = new DisplayContentTypesAllowedContentTypesAdministration(defaultProps());
-      await waitForTrue(() => page.exists());
+      let page;
+      await act(
+        async() => page = new DisplayContentTypesAllowedContentTypesAdministration(defaultProps())
+      );
 
-      await page.clickOnPasswordV4();
-      await page.clickOnTotpV4();
-      await page.clickOnPasswordV5();
-      await page.clickOnTotpV5();
-      await page.clickOnNoteV5();
+      await page.clickOn(page.passwordV4Checkbox);
+      await page.clickOn(page.totpV4Checkbox);
+      await page.clickOn(page.passwordV5Checkbox);
+      await page.clickOn(page.totpV5Checkbox);
+      await page.clickOn(page.noteV5Checkbox);
 
       await page.save();
 

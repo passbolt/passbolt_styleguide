@@ -34,7 +34,8 @@ export default class HomePagePage {
         <Router history={props.history || createMemoryHistory()}>
           <HomePage {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

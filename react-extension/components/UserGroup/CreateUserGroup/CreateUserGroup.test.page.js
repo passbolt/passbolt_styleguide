@@ -11,13 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import CreateUserGroup from "./CreateUserGroup";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The CreateUserGroup component represented as a page
@@ -37,7 +38,8 @@ export default class CreateUserGroupPage {
             <CreateUserGroup {...props}/>
           </DialogContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }
@@ -92,6 +94,7 @@ class CreateGroupPageObject {
    */
   constructor(container) {
     this._container = container;
+    this.user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
   }
 
   /**
@@ -273,9 +276,7 @@ class CreateGroupPageObject {
 
   /** Click on the element */
   async click(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /**
@@ -283,8 +284,7 @@ class CreateGroupPageObject {
    * @returns {Promise<void>}
    */
   async focus(element) {
-    fireEvent.focus(element);
-    await waitFor(() => {});
+    element.focus();
   }
 
   /**
@@ -292,9 +292,7 @@ class CreateGroupPageObject {
    * @returns {Promise<void>}
    */
   async hover(element) {
-    const event = new MouseEvent("hover");
-    fireEvent(element, event);
-    await waitFor(() => {});
+    await this.user.hover(element);
   }
 
   /**
@@ -304,12 +302,6 @@ class CreateGroupPageObject {
   async hoverAutocompleteItemInformationIcon() {
     const informationIcon = this.userAutocomplete?.querySelector(".tooltip-portal");
     await this.hover(informationIcon);
-  }
-
-  /** Click without wait for on the element */
-  clickWithoutWaitFor(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
   }
 
   /** Click without wait for on the element */

@@ -19,7 +19,7 @@ import CreateUserGroupPage from "./CreateUserGroup.test.page";
 import {defaultAppContext, defaultProps, mockGpgKey, mockUsers} from "./CreateUserGroup.test.data";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
-import {waitFor} from "@testing-library/react";
+import {screen, waitFor} from "@testing-library/react";
 
 const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
 
@@ -62,12 +62,12 @@ describe("See the Create Dialog Group", () => {
       jest.runOnlyPendingTimers();
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", mockUsers[1].id);
-      await waitFor(() => {});
-      await page.createGroup.click(page.createGroup.userAutocomplete);
+
+      const option = await screen.findByRole("button", {name: /Ada Lovelace/i});
+      await page.createGroup.click(option);
 
       await page.createGroup.selectFirstItem(2);
       await page.createGroup.focus(page.createGroup.userInformationIcon(2));
-
       expect(page.createGroup.warningMessage).toBe('You need to click save for the changes to take place.');
 
       expect(page.createGroup.count()).toBe(2);
@@ -103,7 +103,7 @@ describe("See the Create Dialog Group", () => {
       jest.runOnlyPendingTimers();
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", mockUsers[1].id);
-      await waitFor(() => {});
+
       await page.createGroup.click(page.createGroup.userAutocomplete);
 
       // Mock the request function to make it the expected result
@@ -114,7 +114,7 @@ describe("See the Create Dialog Group", () => {
 
       // Mock the request function to make it the expected result
       mockContextRequest(context, requestMockImpl);
-      page.createGroup.clickWithoutWaitFor(page.createGroup.saveButton);
+      await page.createGroup.click(page.createGroup.saveButton);
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
         expect(page.createGroup.name.getAttribute("disabled")).not.toBeNull();
@@ -137,7 +137,7 @@ describe("See the Create Dialog Group", () => {
       jest.runOnlyPendingTimers();
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", mockUsers[1].id);
-      await waitFor(() => {});
+
 
       await page.createGroup.click(page.createGroup.userAutocomplete);
       await page.createGroup.click(page.createGroup.saveButton);
@@ -173,12 +173,12 @@ describe("See the Create Dialog Group", () => {
       page.createGroup.fillInput(page.createGroup.usernameInput, "ada");
 
       jest.runOnlyPendingTimers();
-      await waitFor(() => {});
+
 
       await page.createGroup.hoverAutocompleteItemInformationIcon();
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", mockUsers[1].id);
-      await waitFor(() => {});
+
       await page.createGroup.click(page.createGroup.userAutocomplete);
 
       // Mock the request function to make it return an error.
@@ -203,7 +203,7 @@ describe("See the Create Dialog Group", () => {
       jest.runOnlyPendingTimers();
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", mockUsers[1].id);
-      await waitFor(() => {});
+
       await page.createGroup.click(page.createGroup.userAutocomplete);
 
       const data = {

@@ -24,8 +24,8 @@ import DisplayRbacSection from "./DisplayRbacSection";
 import DisplayRbacItem from "./DisplayRbacItem";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
-import RoleService from "../../../../shared/services/api/role/roleService";
-import RbacService from "../../../../shared/services/api/rbac/rbacService";
+import RoleApiService from "../../../../shared/services/api/role/roleApiService";
+import RbacApiService from "../../../../shared/services/api/rbac/rbacApiService";
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
 import RbacEntity from "../../../../shared/models/entity/rbac/rbacEntity";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
@@ -67,8 +67,8 @@ class DisplayRbacAdministration extends React.Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.findAndLoadRoles(this.props.RoleService);
-    this.findAndLoadRbacSettings(this.props.RbacService);
+    this.findAndLoadRoles(this.props.RoleApiService);
+    this.findAndLoadRbacSettings(this.props.RbacApiService);
   }
 
   /**
@@ -85,8 +85,9 @@ class DisplayRbacAdministration extends React.Component {
    */
   async findAndLoadRoles() {
     const apiClientOptions = this.props.context.getApiClientOptions();
-    const roleService = new this.props.RoleService(apiClientOptions);
-    const rolesDto = await roleService.findAll();
+    const roleApiService = new this.props.RoleApiService(apiClientOptions);
+    const apiResponse = await roleApiService.findAll();
+    const rolesDto = apiResponse.body;
     const roles = new RolesCollection(rolesDto);
     this.setState({roles});
   }
@@ -97,8 +98,8 @@ class DisplayRbacAdministration extends React.Component {
    */
   async findAndLoadRbacSettings() {
     const apiClientOptions = this.props.context.getApiClientOptions();
-    const rbacService = new this.props.RbacService(apiClientOptions);
-    const rbacsDto = await rbacService.findAll({ui_action: true});
+    const rbacApiService = new this.props.RbacApiService(apiClientOptions);
+    const rbacsDto = await rbacApiService.findAll({ui_action: true, action: true});
     const rbacs = new RbacsCollection(rbacsDto, true);
     this.props.adminRbacContext.setRbacs(rbacs);
   }
@@ -111,7 +112,7 @@ class DisplayRbacAdministration extends React.Component {
    */
   updateRbacControlFunction(role, actionName, controlFunction) {
     const rbacsUpdated = this.props.adminRbacContext.rbacsUpdated;
-    const rbac = this.props.adminRbacContext.rbacs.findRbacByRoleAndUiActionName(role, actionName);
+    const rbac = this.props.adminRbacContext.rbacs.findRbacByRoleAndActionName(role, actionName);
     // If the function is has the original one, remove it from the list of changes.
     if (rbac.controlFunction === controlFunction) {
       rbacsUpdated.remove(rbac);
@@ -119,7 +120,7 @@ class DisplayRbacAdministration extends React.Component {
       // If the control function is not the rbac to the list of changes.
       const clonedRbac = new RbacEntity(rbac.toDto({ui_action: true, action: true}));
       clonedRbac.controlFunction = controlFunction;
-      rbacsUpdated.addOrReplace(clonedRbac);
+      rbacsUpdated.pushOrReplace(clonedRbac);
     }
 
     this.props.adminRbacContext.setRbacsUpdated(rbacsUpdated);
@@ -365,16 +366,16 @@ class DisplayRbacAdministration extends React.Component {
 }
 
 DisplayRbacAdministration.defaultProps = {
-  RoleService: RoleService,
-  RbacService: RbacService
+  RoleApiService: RoleApiService,
+  RbacApiService: RbacApiService
 };
 
 DisplayRbacAdministration.propTypes = {
   context: PropTypes.object, // The application context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   adminRbacContext: PropTypes.object, // The administration rbac context
-  RoleService: PropTypes.func, // The role service to inject
-  RbacService: PropTypes.func, // The rbac service to inject
+  RoleApiService: PropTypes.func, // The role service to inject
+  RbacApiService: PropTypes.func, // The rbac service to inject
   t: PropTypes.func, // The translation function
 };
 

@@ -16,6 +16,7 @@ import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ImportResourcesKeyUnlock from "./ImportResourcesKeyUnlock";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The ImportResourcesKeyUnlock component represented as a page
@@ -32,8 +33,11 @@ export default class ImportResourcesKeyUnlockPage {
         <AppContext.Provider value={appContext}>
           <ImportResourcesKeyUnlock {...props}/>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -115,9 +119,7 @@ export default class ImportResourcesKeyUnlockPage {
 
   /** Click on the element */
   async click(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /** Click without wait for on the element */
@@ -140,31 +142,5 @@ export default class ImportResourcesKeyUnlockPage {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(this.password, dataInputEvent);
     await waitFor(() => {});
-  }
-
-  /** Click on continue import button */
-  async selectContinueImport() {
-    await this.click(this.continueImportButton);
-  }
-
-  /** Click on save button */
-  submitUnlockKeypassWithoutWaiting() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.continueImportButton, leftClick);
-  }
-
-  /** Click on cancel button */
-  async cancelUnlockKeypass() {
-    await this.click(this.cancelButton);
-  }
-
-  /** Click on close dialog button */
-  async closeDialog() {
-    await this.click(this.dialogClose);
-  }
-
-  /** Click on password view button */
-  async showPassword() {
-    await this.click(this.passwordView);
   }
 }

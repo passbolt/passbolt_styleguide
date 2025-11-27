@@ -35,7 +35,8 @@ export default class ImportResourcesResultPage {
             <ImportResourcesResult.WrappedComponent {...props}/>
           </AppContext.Provider>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

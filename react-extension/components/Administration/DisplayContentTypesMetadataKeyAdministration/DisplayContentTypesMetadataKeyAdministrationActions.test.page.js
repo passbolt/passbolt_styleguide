@@ -29,7 +29,8 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationActionsPa
     this._page = render(
       <MockTranslationProvider>
         <DisplayContentTypesMetadataKeyAdministrationActions {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

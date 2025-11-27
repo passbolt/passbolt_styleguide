@@ -18,6 +18,7 @@ import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import RenameResourceFolder from "./RenameResourceFolder";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The RenameResourceFolderPage component represented as a page
@@ -34,8 +35,10 @@ export default class RenameResourceFolderPage {
         <AppContext.Provider  value={appContext}>
           <RenameResourceFolder {...props}></RenameResourceFolder>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+    this.user = userEvent.setup();
   }
 
   /**
@@ -122,8 +125,7 @@ export default class RenameResourceFolderPage {
    */
   async rename(folder, inProgressFn = () => {}) {
     this.name = folder.name;
-    const leftClick = {button: 0};
-    fireEvent.click(this.saveButton, leftClick);
+    await this.user.click(this.saveButton);
     await waitFor(inProgressFn);
   }
 

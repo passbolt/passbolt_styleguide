@@ -13,7 +13,6 @@
  */
 const {pgpKeys} = require("../../../../../test/fixture/pgpKeys/keys");
 
-// eslint-disable-next-line no-undef
 exports.ExternalGpgKeyEntityFixtures = {
   minimal_dto: {
     armored_key: pgpKeys.ada.public,

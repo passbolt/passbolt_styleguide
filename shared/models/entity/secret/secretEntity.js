@@ -50,8 +50,7 @@ class SecretEntity extends EntityV2 {
         },
         "secret_revision_id": {
           "type": "string",
-          "format": "uuid",
-          "nullable": true,
+          "format": "uuid"
         },
         "data": {
           "type": "string",

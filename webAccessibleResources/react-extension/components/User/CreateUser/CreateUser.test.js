@@ -91,7 +91,7 @@ describe("See the Create Dialog User", () => {
 
       // Mock the request function to make it the expected result
       mockContextRequest(context, requestMockImpl);
-      page.createUser.clickWithoutWaitFor(page.createUser.saveButton);
+      await page.createUser.click(page.createUser.saveButton);
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
         expect(page.createUser.firstName.getAttribute("disabled")).not.toBeNull();

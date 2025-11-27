@@ -13,12 +13,13 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import {AdminMfaPolicyContextProvider} from "../../../contexts/Administration/AdministrationMfaPolicy/AdministrationMfaPolicyContext";
 import DisplayAdministrationMfaPolicyActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationMfaPolicyActions/DisplayAdministrationMfaPolicyActions";
 import DisplayMfaPolicyAdministration from './DisplayMfaPolicyAdministration';
+import userEvent from "@testing-library/user-event";
 /**
  * The DisplayMfaPolicyAdministration component represented as a page
  */
@@ -37,8 +38,11 @@ export default class DisplayMfaPolicyAdministrationPage {
             <DisplayMfaPolicyAdministration {...props}/>
           </AdminMfaPolicyContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -214,9 +218,6 @@ export default class DisplayMfaPolicyAdministrationPage {
    *
    */
   async click(element) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await this.user.click(element);
   }
 }

@@ -29,7 +29,8 @@ export default class ScanTotpCodePage {
     this._page = render(
       <MockTranslationProvider>
         <ScanTotpCode {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

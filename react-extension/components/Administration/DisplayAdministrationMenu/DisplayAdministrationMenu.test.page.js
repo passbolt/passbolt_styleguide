@@ -36,7 +36,8 @@ export default class DisplayAdministrationMenuPage {
             <DisplayAdministrationMenu.WrappedComponent {...props}/>
           </AppContext.Provider>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

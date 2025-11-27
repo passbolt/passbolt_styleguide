@@ -24,6 +24,7 @@ import {MemoryRouter} from "react-router-dom";
 import TranslationProvider from "../../Common/Internationalisation/TranslationProvider";
 import DisplayAdministrationWorkspaceBreadcrumb
   from "../DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
+import {waitFor} from "@testing-library/react";
 
 export default {
   title: 'Components/Administration/DisplayContentTypesMetadataKeyAdministration',
@@ -81,7 +82,7 @@ export const WithValidationError = {
   // Trigger the form validation.
   play: async({canvasElement}) => {
     const canvas = within(canvasElement);
-    const form = canvas.getByTestId("submit-form");
+    const form = await waitFor(() => canvas.getByTestId("submit-form"));
     form.requestSubmit();
   }
 };
@@ -91,7 +92,7 @@ export const GeneratedMetadataKey = {
   // Trigger a key generation.
   play: async({canvasElement}) => {
     const canvas = within(canvasElement);
-    const form = canvas.getByTestId("generate-key-buton");
+    const form = await waitFor(() => canvas.getByTestId("generate-key-buton"));
     form.click();
   }
 };

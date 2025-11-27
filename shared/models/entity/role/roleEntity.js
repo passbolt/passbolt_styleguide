@@ -17,10 +17,10 @@ const ENTITY_NAME = 'Role';
 const ROLE_ADMIN = 'admin';
 const ROLE_USER = 'user';
 const ROLE_GUEST = 'guest';
-const ROLE_ROOT = 'root';
 const ROLE_NAME_MAX_LENGTH = 255;
+const ROLE_DESCRIPTION_MAX_LENGTH = 255;
 
-class RoleEntity extends EntityV2 {
+export default class RoleEntity extends EntityV2 {
   /**
    * Get role entity schema
    * @returns {Object} schema
@@ -29,7 +29,6 @@ class RoleEntity extends EntityV2 {
     return {
       "type": "object",
       "required": [
-        "id",
         "name",
       ],
       "properties": {
@@ -39,11 +38,11 @@ class RoleEntity extends EntityV2 {
         },
         "name": {
           "type": "string",
-          "enum": [RoleEntity.ROLE_ADMIN, RoleEntity.ROLE_USER, RoleEntity.ROLE_GUEST, RoleEntity.ROLE_ROOT]
+          "maxLength": ROLE_NAME_MAX_LENGTH
         },
         "description": {
           "type": "string",
-          "maxLength": ROLE_NAME_MAX_LENGTH
+          "maxLength": ROLE_DESCRIPTION_MAX_LENGTH
         },
         "created": {
           "type": "string",
@@ -64,10 +63,10 @@ class RoleEntity extends EntityV2 {
    */
   /**
    * Get role id
-   * @returns {string} uuid
+   * @returns {string|null} uuid
    */
   get id() {
-    return this._props.id;
+    return this._props.id || null;
   }
 
   /**
@@ -76,30 +75,6 @@ class RoleEntity extends EntityV2 {
    */
   get name() {
     return this._props.name;
-  }
-
-  /**
-   * Get role description
-   * @returns {(string|null)} description
-   */
-  get description() {
-    return this._props.description || null;
-  }
-
-  /**
-   * Get created date
-   * @returns {(string|null)} date
-   */
-  get created() {
-    return this._props.created || null;
-  }
-
-  /**
-   * Get modified date
-   * @returns {(string|null)} date
-   */
-  get modified() {
-    return this._props.modified || null;
   }
 
   /*
@@ -113,6 +88,33 @@ class RoleEntity extends EntityV2 {
    */
   isAdmin() {
     return this.name === RoleEntity.ROLE_ADMIN;
+  }
+
+  /**
+   * Check if the role correspond to the user role.
+   * @returns {boolean}
+   */
+  isUser() {
+    return this.name === RoleEntity.ROLE_USER;
+  }
+
+  /**
+   * Check if the role correspond to the guest role.
+   * @returns {boolean}
+   */
+  isGuest() {
+    return this.name === RoleEntity.ROLE_GUEST;
+  }
+
+  /**
+   * Returns true if the role is not a custom role.
+   * Reserved roles are: admin, user ang guest
+   * @returns {boolean}
+   */
+  isAReservedRole() {
+    return this.isAdmin()
+      || this.isUser()
+      || this.isGuest();
   }
 
   /*
@@ -151,14 +153,4 @@ class RoleEntity extends EntityV2 {
   static get ROLE_GUEST() {
     return ROLE_GUEST;
   }
-
-  /**
-   * RoleEntity.ROLE_ROOT
-   * @returns {string} user
-   */
-  static get ROLE_ROOT() {
-    return ROLE_ROOT;
-  }
 }
-
-export default RoleEntity;

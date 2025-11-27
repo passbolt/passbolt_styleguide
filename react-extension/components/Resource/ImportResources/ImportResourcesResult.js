@@ -427,9 +427,12 @@ class ImportResourcesResult extends Component {
               </div>
               }
             </div>
-            {this.canIUseFolders && this.resultCreatedFoldersCount > 0 && <>
+            {this.canIUseFolders && <>
               <h2>Folders</h2>
+
               <div className="folder-section">
+                {
+                  this.resultCreatedFoldersCount > 0 &&
                 <div className="summary-section">
                   <div className="summary-header">
                     <div className="state-icon success-state">
@@ -443,63 +446,64 @@ class ImportResourcesResult extends Component {
                     </span>
                   </div>
                 </div>
-                {this.resultHasErrorsFolders &&
-                  <div className="summary-section accordion accordion-section">
-                    <div className="summary-header accordion-header" onClick={this.handleErrorFoldersDetailsToggle}>
-                      <div className="state-icon fail-state">
-                        <HealthcheckErrorSVG />
-                      </div>
-                      <button type="button" className="summary-content link no-border">
-                        <span>
-                          <Trans
-                            count={this.resultErrorsFolders.length}
-                          >
-                            <strong>{{count: this.resultErrorsFolders.length}}</strong> folder was not imported.
-                          </Trans>
-                        </span>
-                        {this.state.showErrorFoldersDetails
-                          ? <CaretDownSVG className="baseline svg-icon" />
-                          : <CaretRightSVG className="baseline svg-icon" />
-                        }
-                      </button>
+                }
+                {
+                  this.resultHasErrorsFolders &&
+                <div className="summary-section accordion accordion-section">
+                  <div className="summary-header accordion-header" onClick={this.handleErrorFoldersDetailsToggle}>
+                    <div className="state-icon fail-state">
+                      <HealthcheckErrorSVG />
                     </div>
-                    {this.state.showErrorFoldersDetails &&
-                      <div className="accordion-content">
-                        <div className="input text">
-                          <label
-                            htmlFor="js_field_folders_debug"
-                            className="visuallyhidden">
-                            <Trans>Error details</Trans>
-                          </label>
-                          <textarea
-                            id="js_field_folders_debug"
-                            defaultValue={`${this.stackTraceFoldersErrors}`}
-                            readOnly />
-                        </div>
-                      </div>
-                    }
+                    <button type="button" className="summary-content link no-border">
+                      <span>
+                        <Trans
+                          count={this.resultErrorsFolders.length}
+                        >
+                          <strong>{{count: this.resultErrorsFolders.length}}</strong> folder was not imported.
+                        </Trans>
+                      </span>
+                      {this.state.showErrorFoldersDetails
+                        ? <CaretDownSVG className="baseline svg-icon" />
+                        : <CaretRightSVG className="baseline svg-icon" />
+                      }
+                    </button>
                   </div>
+
+                  {this.state.showErrorFoldersDetails &&
+                    <div className="accordion-content">
+                      <div className="input text">
+                        <label
+                          htmlFor="js_field_folders_debug"
+                          className="visuallyhidden">
+                          <Trans>Error details</Trans>
+                        </label>
+                        <textarea
+                          id="js_field_folders_debug"
+                          defaultValue={`${this.stackTraceFoldersErrors}`}
+                          readOnly />
+                      </div>
+                    </div>
+                  }
+                </div>
                 }
               </div>
             </>
             }
-            {(this.resultReferenceFolder || this.resultReferenceTag) &&
-              <div className="notice message">
-                {this.canIUseFolders && this.resultReferenceFolder &&
-                  <p>
-                    <Trans>
-                      You can find these newly imported passwords in the folder <button type="button" className="link inline no-border" onClick={this.handleReferenceFolderClick}>{{folderName: this.resultReferenceFolder.name}}</button>.
-                    </Trans>
-                  </p>
-                }
-                {this.canIUseTags && !this.resultReferenceFolder && this.resultReferenceTag &&
-                  <p>
-                    <Trans>
-                      You can find these newly imported passwords under the tag <button type="button" className="link inline no-border" onClick={this.handleReferenceTagClick}>{{tagName: this.resultReferenceTag.slug}}</button>.
-                    </Trans>
-                  </p>
-                }
-              </div>
+          </div>
+          <div className="notice message no-margin">
+            {this.canIUseFolders && this.resultReferenceFolder &&
+              <p>
+                <Trans>
+                  You can find these newly imported passwords in the folder <button type="button" className="link inline no-border" onClick={this.handleReferenceFolderClick}>{{folderName: this.resultReferenceFolder.name}}</button>.
+                </Trans>
+              </p>
+            }
+            {this.canIUseTags && !this.resultReferenceFolder && this.resultReferenceTag &&
+              <p>
+                <Trans>
+                  You can find these newly imported passwords under the tag <button type="button" className="link inline no-border" onClick={this.handleReferenceTagClick}>{{tagName: this.resultReferenceTag.slug}}</button>.
+                </Trans>
+              </p>
             }
           </div>
           <div className="submit-wrapper clearfix">

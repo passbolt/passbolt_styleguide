@@ -36,7 +36,8 @@ export default class DisplaySubscriptionKeyPage {
             <div id="administration-help-panel"></div>
           </AdminSubscriptionContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

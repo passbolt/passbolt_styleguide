@@ -24,7 +24,8 @@ export default class ConfirmDisableUserMFATestPage {
             <ConfirmDisableUserMFA {...props}/>
           </DialogContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

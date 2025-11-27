@@ -21,6 +21,8 @@ import ImportResourcesKeyUnlockPage from "./ImportResourcesKeyUnlock.test.page";
 import {defaultAppContext, defaultProps} from "./ImportResourcesKeyUnlock.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import ImportResourcesResult from "./ImportResourcesResult";
+import {act} from "react";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -37,8 +39,10 @@ describe("As LU I should see the password unlock Keypass dialog", () => {
     /**
      * I should see the password unlock Keypass dialog
      */
-    beforeEach(() => {
-      page = new ImportResourcesKeyUnlockPage(context, props);
+    beforeEach(async() => {
+      await act(
+        async() => page = new ImportResourcesKeyUnlockPage(context, props)
+      );
     });
 
     it('As LU I see a success dialog after unlocking keypass file with success', async() => {
@@ -47,19 +51,19 @@ describe("As LU I should see the password unlock Keypass dialog", () => {
       expect(page.title).toBe("Enter the password and/or key file");
       const file = new File(['test'], 'keyfile.txt', {type: 'txt'});
       await page.fillPassword("test");
-      await page.showPassword();
+      await page.click(page.passwordView);
       expect(page.password.type).toBe('text');
       await page.selectUnlockKeypassFile(file);
 
       const requestMockImpl = jest.fn((message, data) => data);
       mockContextRequest(requestMockImpl);
 
-      await page.selectContinueImport();
-      await waitFor(() => {});
+      await page.click(page.continueImportButton);
 
       const base64Content = "dGVzdA==";
       const extension = 'kdbx';
       const options = {credentials: {password: 'test', keyfile: base64Content}};
+      await waitForTrue(() => context.port.request.mock.calls.length > 0);
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.import-resources.import-file", extension, base64Content, options);
       expect(props.resourceWorkspaceContext.onResourceFileImportResult).toHaveBeenCalled();
@@ -79,7 +83,11 @@ describe("As LU I should see the password unlock Keypass dialog", () => {
         updateResolve = resolve;
       }));
       mockContextRequest(requestMockImpl);
-      await page.submitUnlockKeypassWithoutWaiting();
+      await page.click(page.continueImportButton);
+
+      await waitForTrue(() =>
+        page.importFile?.getAttribute("disabled") !== null
+      );
 
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
@@ -106,22 +114,22 @@ describe("As LU I should see the password unlock Keypass dialog", () => {
         throw error;
       });
 
-      await page.selectContinueImport();
-      await waitFor(() => {});
+      await act(async() => {
+        await page.click(page.continueImportButton);
+      });
 
-      // Throw error message
       expect(page.errorMessage).toBe("Cannot decrypt the file, invalid credentials.");
     });
 
     it('As LU I can stop importing passwords by clicking on the cancel button', async() => {
       expect.assertions(1);
-      await page.cancelUnlockKeypass();
+      await page.click(page.cancelButton);
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I can stop importing passwords by closing the dialog', async() => {
       expect.assertions(1);
-      await page.closeDialog();
+      await page.click(page.dialogClose);
       expect(props.onClose).toBeCalled();
     });
 
@@ -149,10 +157,9 @@ describe("As LU I should see the password unlock Keypass dialog", () => {
         throw error;
       });
 
-      await page.selectContinueImport();
-      await waitFor(() => {});
-
-      // Throw dialog general error message
+      await act(async() => {
+        await page.click(page.continueImportButton);
+      });
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
   });

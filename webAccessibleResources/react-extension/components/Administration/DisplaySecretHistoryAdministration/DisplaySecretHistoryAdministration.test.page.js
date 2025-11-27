@@ -13,9 +13,10 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {fireEvent, render, screen} from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplaySecretHistoryAdministration from "./DisplaySecretHistoryAdministration";
+import userEvent from "@testing-library/user-event";
 
 export default class DisplaySecretHistoryAdministrationPage {
   /**
@@ -26,8 +27,10 @@ export default class DisplaySecretHistoryAdministrationPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplaySecretHistoryAdministration {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+    this.user = userEvent.setup();
   }
 
   /**
@@ -109,9 +112,8 @@ export default class DisplaySecretHistoryAdministrationPage {
    * @param {HTMLElement} element The HTML element onto simulate the click
    * @returns {Promise<void>}
    */
-  clickOn(element) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
+  async clickOn(element) {
+    await this.user.click(element);
   }
 
   /**
@@ -119,8 +121,7 @@ export default class DisplaySecretHistoryAdministrationPage {
    * @returns {Promise<void>}
    */
   async clickOnFeature() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.titleToggle, leftClick);
+    await this.user.click(this.titleToggle);
   }
 
   /**
@@ -128,7 +129,7 @@ export default class DisplaySecretHistoryAdministrationPage {
    * @returns {Promise<void>}
    */
   async save() {
-    fireEvent.submit(this.form);
-    await waitFor(() => {});
+    const saveButton = await screen.findByRole("button", {name: /save/i});
+    await this.user.click(saveButton);
   }
 }

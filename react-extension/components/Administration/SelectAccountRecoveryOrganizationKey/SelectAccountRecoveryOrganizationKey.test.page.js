@@ -17,6 +17,7 @@ import React from "react";
 import SelectAccountRecoveryOrganizationKey from "./SelectAccountRecoveryOrganizationKey";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
+import userEvent from "@testing-library/user-event";
 
 const GENERATE_TAB_INDEX = 1;
 
@@ -33,8 +34,11 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
     this._page = render(
       <MockTranslationProvider>
         <SelectAccountRecoveryOrganizationKey {...props} />
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -309,43 +313,26 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
   }
 
   /**
-   * Simulates a click on the "Apply" button
-   * @param {function} waitForCallback
+   * Simulates a click on the element passed
    */
-  async applyChanges(waitForCallback) {
-    const leftClick = {button: 0};
-    fireEvent.click(this.applyButton, leftClick);
-
-    await waitFor(waitForCallback);
+  async applyChanges() {
+    await this.user.click(this.applyButton);
   }
 
   async clickOnGenerateTab() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.generateTab, leftClick);
-
-    await waitForTrue(() => this.isGenerateTabSeletect());
+    await this.user.click(this.generateTab);
   }
 
   async toggleShowPassword() {
-    const leftClick = {button: 0};
-    const fieldType = this.passphraseField.getAttribute("type");
-    fireEvent.click(this.showPassphraseButton, leftClick);
-
-    await waitForTrue(() => this.passphraseField.getAttribute("type") !== fieldType);
+    await this.user.click(this.showPassphraseButton);
   }
 
   async toggleShowPasswordConfirmation() {
-    const leftClick = {button: 0};
-    const fieldType = this.passphraseConfirmationField.getAttribute("type");
-    fireEvent.click(this.showPassphraseConfirmationButton, leftClick);
-
-    await waitForTrue(() => this.passphraseConfirmationField.getAttribute("type") !== fieldType);
+    await this.user.click(this.showPassphraseConfirmationButton);
   }
 
   async clickOnGenerateButton(waitForCallback) {
-    const leftClick = {button: 0};
-    fireEvent.click(this.generateButton, leftClick);
-
+    await this.user.click(this.generateButton);
     await waitFor(waitForCallback);
   }
 
@@ -357,6 +344,5 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
     });
 
     await waitForTrue(() => element.value === text);
-    jest.runAllTimers();
   }
 }

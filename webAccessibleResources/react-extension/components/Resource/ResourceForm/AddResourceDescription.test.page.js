@@ -28,7 +28,8 @@ export default class AddResourceDescriptionPage {
     this._page = render(
       <MockTranslationProvider>
         <AddResourceDescription {...props} />
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
   /**

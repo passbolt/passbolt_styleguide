@@ -17,7 +17,7 @@ import RbacEntity from "./rbacEntity";
 import {defaultActionData} from "./actionEntity.test.data";
 import {defaultUiActionData} from "./uiActionEntity.test.data";
 import {controlFunctions} from "../../../services/rbacs/controlFunctionEnumeration";
-import {TEST_ROLE_USER_ID} from "../role/role.test.data";
+import {TEST_ROLE_USER_ID} from "../role/roleEntity.test.data";
 import {uiActions} from "../../../services/rbacs/uiActionEnumeration";
 
 export const defaultRbacData = (data = {}) => {
@@ -64,6 +64,15 @@ export const denyRbacWithUiActionData = (data = {}) => {
   };
 
   return defaultRbacWithUiActionData(defaultData);
+};
+
+export const denyRbacWithActionData = (data = {}) => {
+  const defaultData = {
+    "control_function": controlFunctions.DENY,
+    ...data
+  };
+
+  return defaultRbacWithActionData(defaultData);
 };
 
 export const defaultRbacWithAllAssociationData = (data = {}) => {

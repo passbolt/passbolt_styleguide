@@ -14,65 +14,110 @@
 import RoleEntity from "./roleEntity";
 import EntityValidationError from "../abstract/entityValidationError";
 import EntitySchema from "../abstract/entitySchema";
-import {TEST_ROLE_USER_ID} from "./role.test.data";
+import {adminRoleDto, guestRoleDto, userRoleDto, customRoleDto} from "./roleEntity.test.data";
+import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 
 describe("Role entity", () => {
-  it("schema must validate", () => {
-    EntitySchema.validateSchema(RoleEntity.ENTITY_NAME, RoleEntity.getSchema());
+  describe("ResourceEntity::getSchema", () => {
+    it("schema must validate", () => {
+      EntitySchema.validateSchema(RoleEntity.ENTITY_NAME, RoleEntity.getSchema());
+    });
+
+    it("validates id property", () => {
+      assertEntityProperty.string(RoleEntity, "id");
+      assertEntityProperty.uuid(RoleEntity, "id");
+      assertEntityProperty.notRequired(RoleEntity, "id");
+    });
+
+    it("validates name property", () => {
+      assertEntityProperty.string(RoleEntity, "name");
+      assertEntityProperty.maxLength(RoleEntity, "name", 255);
+      assertEntityProperty.required(RoleEntity, "name");
+    });
+
+    it("validates description property", () => {
+      assertEntityProperty.string(RoleEntity, "description");
+      assertEntityProperty.maxLength(RoleEntity, "description", 255);
+      assertEntityProperty.notRequired(RoleEntity, "description");
+    });
+
+    it("validates created property", () => {
+      assertEntityProperty.string(RoleEntity, "created");
+      assertEntityProperty.dateTime(RoleEntity, "created");
+      assertEntityProperty.notRequired(RoleEntity, "created");
+    });
+
+    it("validates modified property", () => {
+      assertEntityProperty.string(RoleEntity, "modified");
+      assertEntityProperty.dateTime(RoleEntity, "modified");
+      assertEntityProperty.notRequired(RoleEntity, "modified");
+    });
   });
 
-  it("constructor works if valid minimal DTO is provided", () => {
-    const dto = {
-      "id": TEST_ROLE_USER_ID,
-      "name": "user",
-      "description": "Logged in user",
-      "created": "2012-07-04T13:39:25+00:00",
-      "modified": "2012-07-04T13:39:25+00:00"
-    };
-    const entity = new RoleEntity(dto);
-    expect(entity.toDto()).toEqual(dto);
+  describe("::constructor", () => {
+    it("constructor works if valid minimal DTO is provided", () => {
+      expect.assertions(1);
+
+      const dto = {name: "test"};
+      const entity = new RoleEntity(dto);
+      expect(entity.toDto()).toEqual(dto);
+    });
+
+    it("constructor works if full valid DTO is provided", () => {
+      expect.assertions(1);
+
+      const dto = adminRoleDto({
+        'created': '2020-04-25 12:52:00',
+        'modified': '2020-04-25 12:52:01',
+      });
+      const entity = new RoleEntity(dto);
+      expect(entity.toDto()).toEqual(dto);
+    });
+
+    it("constructor returns validation error if dto required fields are missing", () => {
+      expect.assertions(1);
+      expect(() => new RoleEntity({})).toThrow(EntityValidationError);
+    });
   });
 
-  it("constructor works if valid DTO is provided with optional and non supported fields", () => {
-    const dto = {
-      'id': '7f077753-0835-4054-92ee-556660ea04f1',
-      'name': RoleEntity.ROLE_ADMIN,
-      'description': 'role description',
-      'created': '2020-04-25 12:52:00',
-      'modified': '2020-04-25 12:52:01',
-      '_type': 'none'
-    };
-    const filtered = {
-      'id': '7f077753-0835-4054-92ee-556660ea04f1',
-      'name': RoleEntity.ROLE_ADMIN,
-      'description': 'role description',
-      'created': '2020-04-25 12:52:00',
-      'modified': '2020-04-25 12:52:01',
-    };
-    const roleEntity = new RoleEntity(dto);
-    expect(roleEntity.toDto()).toEqual(filtered);
+  describe("::getters", () => {
+    it("should return the right data", () => {
+      expect.assertions(2);
+      const dto = userRoleDto();
+      const entity = new RoleEntity(dto);
 
-    // test getters
-    expect(roleEntity.id).toEqual('7f077753-0835-4054-92ee-556660ea04f1');
-    expect(roleEntity.name).toEqual(RoleEntity.ROLE_ADMIN);
-    expect(roleEntity.description).toEqual('role description');
-    expect(roleEntity.created).toEqual('2020-04-25 12:52:00');
-    expect(roleEntity.modified).toEqual('2020-04-25 12:52:01');
+      expect(entity.id).toStrictEqual(dto.id);
+      expect(entity.name).toStrictEqual(dto.name);
+    });
   });
 
-  it("constructor returns validation error if dto required fields are missing", () => {
-    let t = () => { new RoleEntity({'name': 'test'}); };
-    expect(t).toThrow(EntityValidationError);
-    t = () => { new RoleEntity({'id': '7f077753-0835-4054-92ee-556660ea04f1'}); };
-    expect(t).toThrow(EntityValidationError);
-  });
+  describe("::helpers", () => {
+    it("should return the right data", () => {
+      expect.assertions(16);
+      const adminRole = new RoleEntity(adminRoleDto());
+      const userRole = new RoleEntity(userRoleDto());
+      const guestRole = new RoleEntity(guestRoleDto());
+      const customRole = new RoleEntity(customRoleDto());
 
-  it("constructor returns validation error if dto fields are invalid", () => {
-    let t = () => { new RoleEntity({'id': 'nope', 'name': 'test'}); };
-    expect(t).toThrow(EntityValidationError);
-    t = () => { new RoleEntity({'id': 'nope', 'name': Array(51).join("a")}); };
-    expect(t).toThrow(EntityValidationError);
-    t = () => { new RoleEntity({'id': '7f077753-0835-4054-92ee-556660ea04f1', 'name': 'user', 'description': Array(257).join("a")}); };
-    expect(t).toThrow(EntityValidationError);
+      expect(adminRole.isAdmin()).toStrictEqual(true);
+      expect(userRole.isAdmin()).toStrictEqual(false);
+      expect(guestRole.isAdmin()).toStrictEqual(false);
+      expect(customRole.isAdmin()).toStrictEqual(false);
+
+      expect(adminRole.isUser()).toStrictEqual(false);
+      expect(userRole.isUser()).toStrictEqual(true);
+      expect(guestRole.isUser()).toStrictEqual(false);
+      expect(customRole.isUser()).toStrictEqual(false);
+
+      expect(adminRole.isGuest()).toStrictEqual(false);
+      expect(userRole.isGuest()).toStrictEqual(false);
+      expect(guestRole.isGuest()).toStrictEqual(true);
+      expect(customRole.isGuest()).toStrictEqual(false);
+
+      expect(adminRole.isAReservedRole()).toStrictEqual(true);
+      expect(userRole.isAReservedRole()).toStrictEqual(true);
+      expect(guestRole.isAReservedRole()).toStrictEqual(true);
+      expect(customRole.isAReservedRole()).toStrictEqual(false);
+    });
   });
 });

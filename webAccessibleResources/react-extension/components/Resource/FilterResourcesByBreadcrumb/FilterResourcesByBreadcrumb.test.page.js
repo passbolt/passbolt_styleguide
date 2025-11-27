@@ -39,7 +39,8 @@ export default class FilterResourcesByBreadcrumbPage {
             </ResourceWorkspaceContext.Provider>
           </AppContext.Provider>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

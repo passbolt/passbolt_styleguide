@@ -25,7 +25,8 @@ export default class DisplayAroNamePage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayAroName {...props} />
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

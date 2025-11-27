@@ -29,7 +29,8 @@ export default class ConfirmSaveAccountRecoverySettingsPage {
     this._page = render(
       <MockTranslationProvider>
         <ConfirmSaveAccountRecoverySettings {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

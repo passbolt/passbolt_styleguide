@@ -221,7 +221,7 @@ describe("DisplayRbacAdministration", () => {
       expect.assertions(3);
       const props = propsWithUpdatedRbacs();
       jest.spyOn(props.adminRbacContext.rbacsUpdated, "remove");
-      jest.spyOn(props.adminRbacContext.rbacs, "findRbacByRoleAndUiActionName").mockImplementation(() => ({controlFunction: controlFunctions.DENY}));
+      jest.spyOn(props.adminRbacContext.rbacs, "findRbacByRoleAndActionName").mockImplementation(() => ({controlFunction: controlFunctions.DENY}));
 
       const page = new DisplayRbacAdministrationPage(props);
       await waitFor(() => {});

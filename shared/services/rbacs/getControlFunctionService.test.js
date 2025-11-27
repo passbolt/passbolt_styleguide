@@ -37,11 +37,11 @@ describe('GetControlFunctionService', () => {
     });
   });
 
-  describe('::getDefaultForAdminAndUiAction', () => {
+  describe('::getDefaultForAdminAndAction', () => {
     it('should return AllowControlFunction for an unknown ui action', () => {
       expect.assertions(1);
 
-      const result = GetControlFunctionService.getDefaultForAdminAndUiAction(defaultUnknownRbac());
+      const result = GetControlFunctionService.getDefaultForAdminAndAction(defaultUnknownRbac());
 
       expect(result).toEqual(AllowControlFunction);
     });
@@ -49,17 +49,17 @@ describe('GetControlFunctionService', () => {
     it('should return the correct control function for a known ui action', () => {
       expect.assertions(1);
 
-      const result = GetControlFunctionService.getDefaultForAdminAndUiAction(defaultRbacData());
+      const result = GetControlFunctionService.getDefaultForAdminAndAction(defaultRbacData());
 
       expect(result).toEqual(AllowControlFunction);
     });
   });
 
-  describe('::getDefaultForUserAndUiAction', () => {
+  describe('::getDefaultForUserAndAction', () => {
     it('should return AllowControlFunction for an unknown ui action', () => {
       expect.assertions(1);
 
-      const result = GetControlFunctionService.getDefaultForUserAndUiAction(defaultUnknownRbac());
+      const result = GetControlFunctionService.getDefaultForUserAndAction(defaultUnknownRbac());
 
       expect(result).toEqual(AllowControlFunction);
     });
@@ -67,7 +67,7 @@ describe('GetControlFunctionService', () => {
     it('should return the correct control function for a known ui action', () => {
       expect.assertions(1);
 
-      const result = GetControlFunctionService.getDefaultForUserAndUiAction(defaultRbacData());
+      const result = GetControlFunctionService.getDefaultForUserAndAction(defaultRbacData());
 
       expect(result).toEqual(AllowControlFunction);
     });

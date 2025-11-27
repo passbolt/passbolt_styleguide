@@ -15,7 +15,7 @@
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
 import {settingsRbacsCollectionData} from "../../../../shared/models/entity/rbac/rbacsCollection.test.data";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
-import {rolesCollectionData} from "../../../../shared/models/entity/role/rolesCollection.test.data";
+import {rolesCollectionDto} from "../../../../shared/models/entity/role/rolesCollection.test.data";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 /**
@@ -27,7 +27,7 @@ export function defaultProps(props = {}) {
   return {
     label: "ui action test",
     level: 1,
-    roles: new RolesCollection(rolesCollectionData),
+    roles: new RolesCollection(rolesCollectionDto),
     actionName: uiActions.DESKTOP_TRANSFER,
     onChange: jest.fn(),
     rbacs: new RbacsCollection(settingsRbacsCollectionData()),

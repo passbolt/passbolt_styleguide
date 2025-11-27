@@ -29,7 +29,8 @@ export default class SearchBarTestPage {
     this._page = render(
       <MockTranslationProvider>
         <SearchBar  {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

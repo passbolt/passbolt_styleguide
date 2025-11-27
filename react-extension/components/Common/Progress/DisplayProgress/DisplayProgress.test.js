@@ -37,10 +37,10 @@ describe("DisplayProgress", () => {
     const props = propsWithProgressiveProgressBar();
     const page = new DisplayProgressTestPage(props);
 
-    expect(page.title?.textContent).toBe("Progress dialog test title");
+    expect(page.title?.textContent).toBe("Progress dialog / test title");
     expect(page.label?.textContent).toBe("Take a deep breath and enjoy being in the present moment...");
     expect(page.progressBarComputedWidth).toBe("0%");
-    expect(page.progressStepLabel?.textContent).toBe("Step 0");
+    expect(page.progressStepLabel?.textContent).toBe("Step / 0");
     expect(page.progressPercent?.textContent).toBe("0%");
     expect(page.progressDetails).not.toBeNull();
   });

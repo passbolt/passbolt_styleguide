@@ -14,7 +14,7 @@
 
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
-import {rolesCollectionData} from "../../../../shared/models/entity/role/rolesCollection.test.data";
+import {rolesCollectionDto} from "../../../../shared/models/entity/role/rolesCollection.test.data";
 import {settingsRbacsCollectionData} from "../../../../shared/models/entity/rbac/rbacsCollection.test.data";
 import {defaultAppContext} from "../../ApiAppContext.test.data";
 
@@ -60,7 +60,7 @@ export function defaultAdministrationRbacContext(context = {}) {
 export function populatedAdministrationRbacContext(context = {}) {
   return defaultAdministrationRbacContext({
     rbacs: new RbacsCollection(settingsRbacsCollectionData()),
-    roles: new RolesCollection(rolesCollectionData),
+    roles: new RolesCollection(rolesCollectionDto),
     ...context
   });
 }

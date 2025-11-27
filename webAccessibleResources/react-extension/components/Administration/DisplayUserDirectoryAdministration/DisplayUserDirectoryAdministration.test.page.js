@@ -11,12 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import React from "react";
 import DisplayUserDirectoryAdministration from "./DisplayUserDirectoryAdministration";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayAdministrationUserDirectoryActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationUserDirectoryActions/DisplayAdministrationUserDirectoryActions";
 import {AdminUserDirectoryContextProvider} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DisplayUserDirectoryAdministration component represented as a page
@@ -33,8 +34,11 @@ export default class DisplayUserDirectoryAdministrationPage {
           <DisplayAdministrationUserDirectoryActions {...props}/>
           <DisplayUserDirectoryAdministration {...props}/>
         </AdminUserDirectoryContextProvider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -449,10 +453,7 @@ export default class DisplayUserDirectoryAdministrationPage {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await this.user.click(element);
   }
 
   /** fill the input element with data */

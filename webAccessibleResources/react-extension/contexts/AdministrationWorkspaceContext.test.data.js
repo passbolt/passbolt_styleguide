@@ -18,7 +18,7 @@
 export function defaultProps(data = {}) {
   return {
     rbacContext: {
-      canIUseUiAction: () => true
+      canIUseAction: () => true
     },
     ...data,
   };

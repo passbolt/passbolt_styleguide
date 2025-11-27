@@ -36,12 +36,8 @@ beforeAll(() => {
 
 beforeEach(() => {
   jest.resetModules();
-  jest.useFakeTimers();
 });
 
-afterEach(() => {
-  jest.clearAllTimers();
-});
 
 describe("As Lu I should see the share dialog", () => {
   let page; // The page to test against
@@ -83,7 +79,6 @@ describe("As Lu I should see the share dialog", () => {
 
       mockContextRequest(requestBextMockImpl);
       await page.searchName("adm");
-      jest.runOnlyPendingTimers();
       await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
       await page.selectUserOrGroup(1);
 
@@ -133,7 +128,6 @@ describe("As Lu I should see the share dialog", () => {
       };
       mockContextRequest(requestBextMockImpl);
       await page.searchName("adm");
-      jest.runOnlyPendingTimers();
       await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
       await page.selectUserOrGroup(1);
 
@@ -145,7 +139,7 @@ describe("As Lu I should see the share dialog", () => {
 
       // Mock the request function to make it the expected result
       mockContextRequest(requestMockImpl);
-      page.savePermissionsWithoutWait();
+      await page.savePermissionsWithoutWait();
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
         expect(page.shareNameInput.getAttribute("disabled")).not.toBeNull();
@@ -231,7 +225,6 @@ describe("As Lu I should see the share dialog", () => {
       };
       mockContextRequest(requestBextMockImpl);
       await page.searchName("adm");
-      jest.runOnlyPendingTimers();
       await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
       await page.selectUserOrGroup(1);
 
@@ -278,7 +271,6 @@ describe("As Lu I should see the share dialog", () => {
       };
       mockContextRequest(requestBextMockImpl);
       await page.searchName("adm");
-      jest.runOnlyPendingTimers();
       await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
       await page.selectUserOrGroup(1);
 
@@ -342,7 +334,6 @@ describe("As Lu I should see the share dialog", () => {
       mockContextRequest(requestBextMockImpl);
 
       await page.searchName("ad");
-      jest.runOnlyPendingTimers();
       await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
       await page.selectUserOrGroup(2);
 
@@ -394,7 +385,6 @@ describe("As Lu I should see the share dialog", () => {
       };
       mockContextRequest(requestBextMockImpl);
       await page.searchName("adm");
-      jest.runOnlyPendingTimers();
       await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
       await page.selectUserOrGroup(1);
 

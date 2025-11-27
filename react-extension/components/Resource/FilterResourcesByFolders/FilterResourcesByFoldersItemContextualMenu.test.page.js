@@ -28,7 +28,8 @@ export default class FilterResourcesByFoldersItemContextualMenuPage {
     this._page = render(
       <MockTranslationProvider>
         <FilterResourcesByFoldersItemContextualMenu {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

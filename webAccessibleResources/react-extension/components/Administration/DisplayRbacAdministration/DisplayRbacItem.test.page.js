@@ -29,7 +29,8 @@ export default class DisplayRbacItemPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayRbacItem {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

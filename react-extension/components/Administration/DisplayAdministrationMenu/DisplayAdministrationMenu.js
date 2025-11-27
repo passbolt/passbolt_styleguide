@@ -647,7 +647,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get shouldShowGettingStartedMenu() {
-    return this.metadataGettingStartedSettings.enabled === true && !this.isBeta("metadata");
+    return this.metadataGettingStartedSettings?.enabled === true && !this.isBeta("metadata");
   }
 
   /**

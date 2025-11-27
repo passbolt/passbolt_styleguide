@@ -18,7 +18,6 @@
 
 import DisplayCreatorSecretRevisionPage from "./DisplayCreatorSecretRevision.test.page";
 import {defaultProps} from "./DisplayCreatorSecretRevision.test.data";
-import {waitFor} from "@testing-library/dom";
 import SecretRevisionEntity from "../../../shared/models/entity/secretRevision/secretRevisionEntity";
 import {defaultSecretRevisionDto} from "../../../shared/models/entity/secretRevision/secretRevisionEntity.test.data";
 import {defaultUserDto} from "../../../shared/models/entity/user/userEntity.test.data";
@@ -39,7 +38,7 @@ describe("DisplayCreatorSecretRevision", () => {
       expect.assertions(2);
       const props = defaultProps();
       page = new DisplayCreatorSecretRevisionPage(props);
-      await waitFor(() => {});
+
 
       expect(page.exists()).toBeTruthy();
 
@@ -52,7 +51,7 @@ describe("DisplayCreatorSecretRevision", () => {
       expect.assertions(4);
       const props = defaultProps();
       page = new DisplayCreatorSecretRevisionPage(props);
-      await waitFor(() => {});
+
 
       expect(page.exists()).toBeTruthy();
 
@@ -64,7 +63,7 @@ describe("DisplayCreatorSecretRevision", () => {
     it('As LU I can see the creator disabled.', async() => {
       const props = defaultProps({disabled: true});
       page = new DisplayCreatorSecretRevisionPage(props);
-      await waitFor(() => {});
+
 
       expect(page.exists()).toBeTruthy();
 
@@ -82,7 +81,7 @@ describe("DisplayCreatorSecretRevision", () => {
       });
       const props = defaultProps({secretRevision: new SecretRevisionEntity(defaultSecretRevisionDto({creator}))});
       page = new DisplayCreatorSecretRevisionPage(props);
-      await waitFor(() => {});
+
 
       expect(page.exists()).toBeTruthy();
 
@@ -100,7 +99,7 @@ describe("DisplayCreatorSecretRevision", () => {
       });
       const props = defaultProps({secretRevision: new SecretRevisionEntity(defaultSecretRevisionDto({creator}))});
       page = new DisplayCreatorSecretRevisionPage(props);
-      await waitFor(() => {});
+
 
       expect(page.exists()).toBeTruthy();
 
@@ -113,7 +112,7 @@ describe("DisplayCreatorSecretRevision", () => {
       const gpgKey = defaultGpgkeyDto();
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => gpgKey);
       page = new DisplayCreatorSecretRevisionPage(props);
-      await waitFor(() => {});
+
 
       expect(page.exists()).toBeTruthy();
 
@@ -136,7 +135,7 @@ describe("DisplayCreatorSecretRevision", () => {
       const props = defaultProps({secretRevision: new SecretRevisionEntity(defaultSecretRevisionDto({creator}))});
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => { throw new Error("User key not found"); });
       page = new DisplayCreatorSecretRevisionPage(props);
-      await waitFor(() => {});
+
 
       expect(page.exists()).toBeTruthy();
 

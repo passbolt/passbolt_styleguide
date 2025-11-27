@@ -44,7 +44,8 @@ export default class OAuth2SsoProviderFormPage {
     if (this._page) {
       this._page.rerender(contentToRender);
     } else {
-      this._page = render(contentToRender);
+      this._page = render(contentToRender,
+        {legacyRoot: true});
     }
   }
 

@@ -35,7 +35,8 @@ export default class FilterResourcesByTextPage {
             <FilterResourcesByText.WrappedComponent {...props}/>
           </AppContext.Provider>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

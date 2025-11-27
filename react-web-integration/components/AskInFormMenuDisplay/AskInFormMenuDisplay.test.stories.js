@@ -14,7 +14,7 @@
 
 import React, {useEffect} from "react";
 import AskInFormMenuDisplay from "./AskInFormMenuDisplay";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 import MockPort from "../../../react-extension/test/mock/MockPort";
 import PropTypes from "prop-types";
@@ -46,7 +46,11 @@ const InFormAnchor = ({context}) => {
           </div>
         </div>
       </AppContext.Provider>;
-    ReactDOM.render(<InForm/>, anchor);
+
+    const root = ReactDOM.createRoot(anchor);
+    root.render(
+      <InForm/>
+    );
   }, []);
   return (<></>);
 };

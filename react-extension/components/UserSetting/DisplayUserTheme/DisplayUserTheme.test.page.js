@@ -12,10 +12,11 @@
  * @since         4.3.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayUserTheme from "./DisplayUserTheme";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DisplayUserThemePage component represented as a page
@@ -29,8 +30,10 @@ export default class DisplayUserThemePage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayUserTheme {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+    this.user = userEvent.setup();
   }
 
   /**
@@ -46,14 +49,13 @@ export default class DisplayUserThemePage {
    */
   theme(index) {
     const element = this._page.container.querySelectorAll('.themes button')[index - 1];
+    const self = this;
     return {
       get name() {
         return element.querySelector(".theme-desc").textContent;
       },
       async select() {
-        const leftClick = {button: 0};
-        fireEvent.click(element, leftClick);
-        await waitFor(() => {});
+        await self.user.click(element);
       }
     };
   }

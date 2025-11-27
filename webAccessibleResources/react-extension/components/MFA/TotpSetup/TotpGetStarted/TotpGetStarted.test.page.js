@@ -29,7 +29,8 @@ export default class TotpGetStartedPage {
     this._page = render(
       <MockTranslationProvider>
         <TotpGetStarted {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

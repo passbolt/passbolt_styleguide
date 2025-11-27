@@ -34,7 +34,8 @@ export default class FilterResourcesByGroupsPage {
         <Router>
           <FilterResourcesByGroups.WrappedComponent {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

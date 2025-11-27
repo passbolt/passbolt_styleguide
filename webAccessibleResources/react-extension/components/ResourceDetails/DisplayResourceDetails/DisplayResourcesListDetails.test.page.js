@@ -31,7 +31,8 @@ export default class DisplayResourcesListDetailsPage {
         <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
           <DisplayResourcesListDetails {...props}/>
         </ResourceWorkspaceContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

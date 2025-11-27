@@ -21,6 +21,7 @@ import ExportResourcesCredentialsPage from "./ExportResourcesCredentials.test.pa
 import {defaultAppContext, defaultProps} from "./ExportResourcesCredentials.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -56,7 +57,6 @@ describe("As LU I should see the export resources credentials dialog", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       await page.selectExport();
-      await waitFor(() => {});
 
       const exportDto = {
         format: props.format,
@@ -64,6 +64,10 @@ describe("As LU I should see the export resources credentials dialog", () => {
         resources_ids: props.resourceWorkspaceContext.resourcesToExport.resourcesIds,
         options: {credentials: {password: 'test', keyfile: "dGVzdA=="}}
       };
+
+      await waitForTrue(() =>
+        context.port.request.mock.calls.length > 0
+      );
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.export-resources.export-to-file", exportDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The passwords have been exported successfully");
@@ -126,10 +130,15 @@ describe("As LU I should see the export resources credentials dialog", () => {
       });
 
       await page.selectExport();
-      await waitFor(() => {});
 
-      // Throw dialog general error message
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
+      await waitForTrue(() =>
+        props.dialogContext.open.mock.calls.length > 0
+      );
+
+      await waitFor(() => {
+        // Throw dialog general error message
+        expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
+      });
     });
   });
 });

@@ -34,7 +34,8 @@ export default class FilterResourcesByGroupPagePage {
         <Router history={props.history || createMemoryHistory()}>
           <FilterResourcesByGroupPage {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

@@ -34,7 +34,8 @@ export default class FilterResourcesByItemsIOwnPagePage {
         <Router history={props.history || createMemoryHistory()}>
           <FilterResourcesByItemsIOwnPage {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

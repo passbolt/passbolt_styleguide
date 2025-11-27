@@ -13,7 +13,7 @@
  */
 
 import {defaultProps, defaultScimSettingsConfiguredProps, defaultScimSettingsDisabledProps} from './DisplayScimSettingsAdministration.test.data';
-import DisplayScimSettingsAdministrationPage from './DisplayScimSettingsAdministration.page';
+import DisplayScimSettingsAdministrationPage from './DisplayScimSettingsAdministration.test.page';
 import {waitFor} from '@testing-library/dom';
 
 describe('DisplayScimSettingsAdministration', () => {

@@ -11,11 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.4.0
  */
-
-import {waitFor} from "@testing-library/dom";
 import {defaultProps} from "./ScanTotpCode.test.data";
 import ScanTotpCodePage from "./ScanTotpCode.test.page";
 import QRCode from 'qrcode';
+import {act} from "react";
 
 /**
  * Unit tests on ScanTotpCode in regard of specifications
@@ -48,8 +47,10 @@ describe("ScanTotpCode", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.resolve(uri));
       jest.spyOn(QRCode, "toDataURL");
 
-      page = new ScanTotpCodePage(props);
-      await waitFor(() => {});
+      await act(async() => {
+        page = new ScanTotpCodePage(props);
+      });
+
 
       expect(QRCode.toDataURL).toHaveBeenCalledWith(expect.arrayContaining(
         [expect.objectContaining({

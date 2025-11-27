@@ -47,6 +47,7 @@ import RemoveUserSVG from "../../../../img/svg/user_minus.svg";
 import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/ConfirmShareMissingMetadataKeys";
 import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import RemoveUserFromGroup from "../../UserGroup/RemoveUserFromGroup/RemoveUserFromGroup";
+import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -80,13 +81,15 @@ class DisplayUserWorkspaceActions extends React.Component {
 
   /**
    * Returns true if the current user can delete the current selected user
+   * @returns {boolean}
    */
   get canDelete() {
-    return  this.selectedUser && this.props.context.loggedInUser.id !== this.selectedUser.id;
+    return this.isLoggedInUserAdmin() && this.selectedUser && this.props.context.loggedInUser.id !== this.selectedUser.id;
   }
 
   /**
    * Returns true if the current user can remove the current selected user from group
+   * @returns {boolean}
    */
   get canRemoveFromGroup() {
     const selectedUser = this.selectedUser;
@@ -123,6 +126,7 @@ class DisplayUserWorkspaceActions extends React.Component {
 
   /**
    * Handle the will of copying the user email address
+   * @returns {Promise<void>}
    */
   async handleCopyEmailClickEvent() {
     await this.props.clipboardContext.copy(this.selectedUser.username, this.translate("The email address has been copied to clipboard."));
@@ -130,6 +134,7 @@ class DisplayUserWorkspaceActions extends React.Component {
 
   /**
    * Handle the will of copying the user public key
+   * @returns {Promise<void>}
    */
   async handleCopyPublicKeyEvent() {
     const gpgKeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.selectedUser.id);
@@ -156,6 +161,7 @@ class DisplayUserWorkspaceActions extends React.Component {
 
   /**
    * Handle delete click event
+   * @returns {Promise<void>}
    */
   async handleDeleteClickEvent() {
     try {
@@ -172,6 +178,7 @@ class DisplayUserWorkspaceActions extends React.Component {
 
   /**
    * Handle remove user click event
+   * @returns {Promise<void>}
    */
   async handleRemoveUserClickEvent() {
     const removeUserFromGroupDialogProps = {
@@ -194,7 +201,8 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
-   * Display delete user dialog when there is conflict to solve.
+   * Display delete user dialog when there is conflict to solve
+   * @param {Object} errors - The errors to display
    */
   displayDeleteUserWithConflictsDialog(errors) {
     const deleteUserWithConflictsDialogProps = {
@@ -207,7 +215,7 @@ class DisplayUserWorkspaceActions extends React.Component {
 
   /**
    * Display error dialog
-   * @param error
+   * @param {Error} error - The error to display
    */
   handleError(error) {
     const errorDialogProps = {
@@ -243,30 +251,34 @@ class DisplayUserWorkspaceActions extends React.Component {
 
   /**
    * Get selected user
-   * @returns {user|null}
+   * @returns {User|null} The selected user or null
    */
   get selectedUser() {
     return this.props.userWorkspaceContext.selectedUsers[0];
   }
 
   /**
-   * Returns true if the more actions are available
+   * Returns true if more actions are available
+   * @returns {boolean}
    */
   get hasMoreActionAllowed() {
-    return this.hasOneUserSelected();
+    return this.hasOneUserSelected() && (this.canDelete || this.canIUseMfa);
   }
 
   /**
-   * Can the logged in user use the mfa capability.
+   * Check if the logged in user can use the MFA capability
+   * @returns {boolean}
    */
   get canIUseMfa() {
-    return this.hasOneUserSelected()
+    return this.isLoggedInUserAdmin()
+      && this.hasOneUserSelected()
       && this.props.context.siteSettings.canIUse("multiFactorAuthentication")
       && this.selectedUser.is_mfa_enabled;
   }
 
   /**
-   * Returns true if the logged in user can use the resend capability.
+   * Returns true if the logged in user can use the resend capability
+   * @returns {boolean}
    */
   get canIUseResend() {
     return !this.isActiveUser;
@@ -274,13 +286,15 @@ class DisplayUserWorkspaceActions extends React.Component {
 
   /**
    * Returns true if the selected user is active
+   * @returns {boolean}
    */
   get isActiveUser() {
     return this.selectedUser?.active;
   }
 
   /**
-   * Check if the user can use the review recovery request capability.
+   * Check if the user can use the review account recovery request capability
+   * @returns {boolean}
    */
   get canIReviewAccountRecoveryRequest() {
     return this.hasOneUserSelected()
@@ -289,7 +303,8 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
-   * Check if the user can use the share missing data key capability.
+   * Check if the user can use the share missing data key capability
+   * @returns {boolean}
    */
   get canIShareMissingMetadataKeys() {
     return this.hasOneUserSelected()
@@ -299,15 +314,15 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
-   * Check if the users workspace has one user selected.
-   * @return {boolean}
+   * Check if the users workspace has one user selected
+   * @returns {boolean}
    */
   hasOneUserSelected() {
     return this.props.userWorkspaceContext.selectedUsers.length === 1;
   }
 
   /**
-   * Can update the resource
+   * Check if the logged in user is an admin
    * @returns {boolean}
    */
   isLoggedInUserAdmin() {
@@ -323,6 +338,7 @@ class DisplayUserWorkspaceActions extends React.Component {
 
   /**
    * Copy the user permalink
+   * @returns {Promise<void>}
    */
   async copyPermalink() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
@@ -347,7 +363,7 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
-   * Handle the event on the 'close' icon to clear the current selection.
+   * Handle the event on the 'close' icon to clear the current selection
    * @returns {Promise<void>}
    */
   async handleClearSelectionClick() {
@@ -356,7 +372,7 @@ class DisplayUserWorkspaceActions extends React.Component {
 
   /**
    * Get the translate function
-   * @returns {function(...[*]=)}
+   * @returns {Function} The translation function
    */
   get translate() {
     return this.props.t;
@@ -364,7 +380,7 @@ class DisplayUserWorkspaceActions extends React.Component {
 
   /**
    * Render the component
-   * @returns {JSX}
+   * @returns {JSX.Element} The rendered component
    */
   render() {
     const count = this.props.userWorkspaceContext.selectedUsers?.length;
@@ -429,27 +445,11 @@ class DisplayUserWorkspaceActions extends React.Component {
                     </button>
                   </li>
                 }
-                {this.canDelete &&
-                  <li>
-                    <button id="delete-user" type="button" className="button-action-contextual" onClick={this.handleDeleteClickEvent}>
-                      <DeleteSVG/>
-                      <span><Trans>Delete</Trans></span>
-                    </button>
-                  </li>
-                }
                 {this.canIUseResend &&
                   <li>
                     <button id="resend-invite-user" className="button-action-contextual" type="button" onClick={this.handleResendInviteClickEvent}>
                       <SendSVG/>
                       <span><Trans>Resend invite</Trans></span>
-                    </button>
-                  </li>
-                }
-                {this.canIUseMfa &&
-                  <li>
-                    <button id="disable-mfa-action" className="button-action-contextual" type="button" onClick={this.handleDisableMfaEvent}>
-                      <FingerprintDisabledSVG/>
-                      <span><Trans>Disable MFA</Trans></span>
                     </button>
                   </li>
                 }
@@ -467,6 +467,33 @@ class DisplayUserWorkspaceActions extends React.Component {
                       <MetadataKeySVG/>
                       <span><Trans>Share metadata keys</Trans></span>
                     </button>
+                  </li>
+                }
+                {this.hasMoreActionAllowed &&
+                  <li>
+                    <Dropdown>
+                      <DropdownButton className="more button-action-contextual button-action-icon">
+                        <MoreHorizontalSVG/>
+                      </DropdownButton>
+                      <DropdownMenu className="menu-action-contextual">
+                        {this.canDelete &&
+                          <DropdownMenuItem>
+                            <button id="delete-user" type="button" className="no-border" onClick={this.handleDeleteClickEvent} aria-label="Delete user">
+                              <DeleteSVG/>
+                              <span><Trans>Delete</Trans></span>
+                            </button>
+                          </DropdownMenuItem>
+                        }
+                        {this.canIUseMfa &&
+                          <DropdownMenuItem>
+                            <button id="disable-mfa-action" className="no-border" type="button" onClick={this.handleDisableMfaEvent} aria-label="Diable MFA">
+                              <FingerprintDisabledSVG/>
+                              <span><Trans>Disable MFA</Trans></span>
+                            </button>
+                          </DropdownMenuItem>
+                        }
+                      </DropdownMenu>
+                    </Dropdown>
                   </li>
                 }
               </>
