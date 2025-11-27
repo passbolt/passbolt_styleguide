@@ -14,7 +14,6 @@
 import {defaultProps} from "./ScanTotpCode.test.data";
 import ScanTotpCodePage from "./ScanTotpCode.test.page";
 import QRCode from 'qrcode';
-import '@testing-library/jest-dom';
 import {act} from "react";
 
 /**
