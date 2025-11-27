@@ -114,6 +114,10 @@ class ResizableSidebar extends React.Component {
 
     document.addEventListener("mousemove", this.handleMouseMove);
     document.addEventListener("mouseup", this.handleMouseUp);
+
+    //to stop resizing when mouse leaves document or window loses focus
+    document.addEventListener("mouseleave", this.handleMouseUp);
+    window.addEventListener("blur", this.handleMouseUp);
   }
 
   /**
@@ -163,6 +167,8 @@ class ResizableSidebar extends React.Component {
   removeEventListeners() {
     document.removeEventListener("mousemove", this.handleMouseMove);
     document.removeEventListener("mouseup", this.handleMouseUp);
+    document.removeEventListener("mouseleave", this.handleMouseUp);
+    window.removeEventListener("blur", this.handleMouseUp);
   }
 
   render() {
