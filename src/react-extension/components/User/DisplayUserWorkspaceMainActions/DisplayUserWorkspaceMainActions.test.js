@@ -18,6 +18,7 @@
 
 import DisplayUserWorkspaceMainActionsTestPage from "./DisplayUserWorkspaceMainActions.test.page";
 import {defaultAppContext, defaultProps} from "./DisplayUserWorkspaceMainActions.test.data";
+import {denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -50,6 +51,7 @@ describe("See Workspace Main Menu", () => {
     });
 
     it('As AD I can adding a user via the create menu', async() => {
+      expect.assertions(3);
       expect(page.displayUserWorkspaceMainActions.exists()).toBeTruthy();
       expect(page.displayUserWorkspaceMainActions.createMenu).not.toBeNull();
       await page.displayUserWorkspaceMainActions.clickOnMenu(page.displayUserWorkspaceMainActions.createMenu);
@@ -57,6 +59,7 @@ describe("See Workspace Main Menu", () => {
     });
 
     it('As AD I can adding a group via the create menu', async() => {
+      expect.assertions(3);
       expect(page.displayUserWorkspaceMainActions.exists()).toBeTruthy();
       expect(page.displayUserWorkspaceMainActions.createMenu).not.toBeNull();
       await page.displayUserWorkspaceMainActions.clickOnMenu(page.displayUserWorkspaceMainActions.createMenu);
@@ -72,11 +75,33 @@ describe("See Workspace Main Menu", () => {
 
     beforeEach(() => {
       context.setContext({loggedInUser: user});
+      const props = defaultProps({rbacContext: denyRbacContext()});
       page = new DisplayUserWorkspaceMainActionsTestPage(context, props);
     });
 
     it('As LU I cannot start adding a user via the workspace create menu', () => {
+      expect.assertions(1);
       expect(page.displayUserWorkspaceMainActions.exists()).toBeFalsy();
+    });
+  });
+
+  describe('As LU I can see the workspace create menu with only group', () => {
+    /**
+     * Given a LU
+     * Then I should see the create resource menu with group
+     */
+
+    beforeEach(() => {
+      context.setContext({loggedInUser: user});
+      page = new DisplayUserWorkspaceMainActionsTestPage(context, props);
+    });
+
+    it('As LU I cannot start adding a user via the workspace create menu', async() => {
+      expect.assertions(3);
+      expect(page.displayUserWorkspaceMainActions.exists()).toBeTruthy();
+      await page.displayUserWorkspaceMainActions.clickOnMenu(page.displayUserWorkspaceMainActions.createMenu);
+      expect(page.displayUserWorkspaceMainActions.newGroupMenu).not.toBeNull();
+      expect(page.displayUserWorkspaceMainActions.newUserMenu).toBeNull();
     });
   });
 });
