@@ -60,17 +60,17 @@ describe("Display user theme", () => {
     });
 
     it('As LU selecting the already selected theme should not trigger a change', async() => {
-      expect.assertions(3);
+      expect.assertions(4);
 
       jest.spyOn(props.context.port, "request");
 
-      await waitForTrue(() => page.themesCount > 0);
+      const themeButtons = await screen.findAllByRole('button');
+      expect(themeButtons.length).toBeGreaterThan(0);
 
       await page.theme(2).select();
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.themes.change", "midgar");
       expect(props.context.port.request).toHaveBeenCalledTimes(1);
       await page.theme(2).select();
-      await waitFor(() => {});
       expect(props.context.port.request).toHaveBeenCalledTimes(1);
     });
 
