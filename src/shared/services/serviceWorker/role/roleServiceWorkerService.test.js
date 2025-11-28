@@ -38,4 +38,22 @@ describe("RoleServiceWorkerService", () => {
       expect(collection.toDto()).toStrictEqual(dto);
     });
   });
+
+  describe("::updateResourceLocalStorage", () => {
+    it("should call for the right service worker event", async() => {
+      expect.assertions(2);
+
+      const event = "passbolt.role.update-local-storage";
+
+      const port = new MockPort();
+      port.addRequestListener(event, () => {});
+      jest.spyOn(port, "request");
+
+      const service = new RoleServiceWorkerService(port);
+      await service.updateResourceLocalStorage();
+
+      expect(port.request).toHaveBeenCalledTimes(1);
+      expect(port.request).toHaveBeenCalledWith(event);
+    });
+  });
 });
