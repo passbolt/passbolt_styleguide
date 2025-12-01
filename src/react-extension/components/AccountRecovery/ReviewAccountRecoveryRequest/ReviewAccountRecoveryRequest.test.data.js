@@ -17,7 +17,7 @@ import {defaultRoleContext} from "../../../contexts/RoleContext.test.data";
 
 export function defaultProps(data = {}) {
   const roleContext = defaultRoleContext(data.roleContext);
-  const roles = data.roles || roleContext.roles;
+  const roles = data.roles || roleContext.getAllRoles();
   return {
     context: defaultAdministratorAppContext(),
     accountRecoveryRequest: {
