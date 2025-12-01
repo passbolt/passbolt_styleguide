@@ -39,7 +39,7 @@ describe("RoleContextProvider", () => {
       expect(context.state).toMatchObject({
         getAllRoles: expect.any(Function),
         getRole: expect.any(Function),
-        rolesCollection: new RolesCollection(),
+        rolesCollection: null,
       });
     });
   });
@@ -115,36 +115,35 @@ describe("RoleContextProvider", () => {
       expect.assertions(2);
 
       const roleData = rolesCollectionDto;
-      const defaultProps = {context: defaultAppContext()};
+      const props = {context: defaultAppContext()};
 
-      const context = new RoleContextProvider(defaultProps);
-      jest.spyOn(context.roleServiceWorkerService, "updateResourceLocalStorage").mockImplementation(async() => { await defaultProps.context.storage.local.set({roles: roleData}); });
-
+      const context = new RoleContextProvider(props);
       mockComponentSetState(context);
-      await context.componentDidMount();
+      jest.spyOn(context.roleServiceWorkerService, "updateResourceLocalStorage").mockImplementation(async() => {});
+
+      context.handleStorageChange({
+        roles: {newValue: roleData}
+      });
 
       const role = await context.getRole(roleData[3].id);
 
       expect(role).toStrictEqual(new RoleEntity(roleData[3]));
-      expect(context.roleServiceWorkerService.updateResourceLocalStorage).toHaveBeenCalledTimes(1); // 1 as componentDidMount calls it automatically
+      expect(context.roleServiceWorkerService.updateResourceLocalStorage).not.toHaveBeenCalled();
     });
 
     it("should return the role given its id and refresh the local storage", async() => {
       expect.assertions(2);
 
-      const roleData = rolesCollectionDto;
-      const defaultProps = {context: defaultAppContext()};
-
-      const context = new RoleContextProvider(defaultProps);
-      jest.spyOn(context.roleServiceWorkerService, "updateResourceLocalStorage").mockImplementation(async() => { await defaultProps.context.storage.local.set({roles: roleData}); });
+      const props = {context: defaultAppContext()};
+      const context = new RoleContextProvider(props);
+      jest.spyOn(context.roleServiceWorkerService, "updateResourceLocalStorage").mockImplementation(async() => {});
 
       mockComponentSetState(context);
-      await context.componentDidMount();
 
       const role = await context.getRole(uuidv4());
 
       expect(role).toBeNull();
-      expect(context.roleServiceWorkerService.updateResourceLocalStorage).toHaveBeenCalledTimes(2); // 2 as getRole + componentDidMount called it
+      expect(context.roleServiceWorkerService.updateResourceLocalStorage).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -156,7 +155,12 @@ describe("RoleContextProvider", () => {
       const props = defaultAppContext({roles: roleData});
 
       const context = new RoleContextProvider({context: props});
+      mockComponentSetState(context);
       jest.spyOn(context.roleServiceWorkerService, "updateResourceLocalStorage").mockImplementation(() => {});
+
+      context.handleStorageChange({
+        roles: {newValue: roleData}
+      });
 
       const allRoles = context.getAllRoles();
 
@@ -170,12 +174,14 @@ describe("RoleContextProvider", () => {
       const props = defaultAppContext({roles: null});
 
       const context = new RoleContextProvider({context: props});
+      mockComponentSetState(context);
+
       jest.spyOn(context.roleServiceWorkerService, "updateResourceLocalStorage").mockImplementation(() => {});
 
       const allRoles = context.getAllRoles();
 
-      expect(allRoles).toStrictEqual(new RolesCollection());
-      expect(context.roleServiceWorkerService.updateResourceLocalStorage).not.toHaveBeenCalled();
+      expect(allRoles).toBeNull();
+      expect(context.roleServiceWorkerService.updateResourceLocalStorage).toHaveBeenCalledTimes(1);
     });
   });
 
