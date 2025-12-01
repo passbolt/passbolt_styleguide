@@ -124,8 +124,9 @@ class FilterUsersByGroup extends React.Component {
   handleContextualMenuEvent(event, group) {
     // Prevent the browser contextual menu to pop up.
     event.preventDefault();
-    // No operation available if not admin user
-    if (this.isCurrentUserAdmin) {
+    const isGroupManager = group.my_group_user && group.my_group_user.is_admin;
+    // No operation available if user is not a group manager or an admin
+    if (this.isCurrentUserAdmin || isGroupManager) {
       const top = event.pageY;
       const left = event.pageX;
       const contextualMenuProps = {group, left, top};
