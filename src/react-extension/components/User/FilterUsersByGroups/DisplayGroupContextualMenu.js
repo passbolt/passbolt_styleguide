@@ -53,13 +53,6 @@ class DisplayGroupContextualMenu extends React.Component {
   }
 
   /**
-   * Returns true if the current user is admin
-   */
-  get isCurrentUserAdmin() {
-    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
-  }
-
-  /**
    * Handle delete click event
    */
   async handleDeleteClickEvent() {
@@ -158,24 +151,22 @@ class DisplayGroupContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        {this.isCurrentUserAdmin &&
-          <li key="option-delete-group" className="ready closed">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button
-                    type="button"
-                    className="link no-border"
-                    id="delete-group"
-                    onClick={this.handleDeleteClickEvent}>
-                    <DeleteSVG />
-                    <span><Trans>Delete</Trans></span>
-                  </button>
-                </div>
+        <li key="option-delete-group" className="ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <button
+                  type="button"
+                  className="link no-border"
+                  id="delete-group"
+                  onClick={this.handleDeleteClickEvent}>
+                  <DeleteSVG />
+                  <span><Trans>Delete</Trans></span>
+                </button>
               </div>
             </div>
-          </li>
-        }
+          </div>
+        </li>
       </ContextualMenuWrapper>
     );
   }

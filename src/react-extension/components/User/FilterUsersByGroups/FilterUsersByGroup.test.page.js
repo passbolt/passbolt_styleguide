@@ -220,4 +220,11 @@ class DisplayGroupPageObject {
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }
+
+  /** Right-click on the component */
+  async rightClick(component)  {
+    const rightClick = {button: 0};
+    fireEvent.contextMenu(component, rightClick);
+    await waitFor(() => {});
+  }
 }
