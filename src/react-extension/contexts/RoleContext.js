@@ -38,7 +38,7 @@ export class RoleContextProvider extends React.Component {
    */
   defaultState() {
     return {
-      rolesCollection: new RolesCollection(),
+      rolesCollection: null,
       getRole: this.getRole.bind(this),
       getAllRoles: this.getAllRoles.bind(this),
       refreshRoles: this.refreshRoles.bind(this),
@@ -50,7 +50,6 @@ export class RoleContextProvider extends React.Component {
    */
   async componentDidMount() {
     this.props.context.storage.onChanged.addListener(this.handleStorageChange);
-    await this.refreshRoles();
   }
 
   /**
@@ -91,9 +90,9 @@ export class RoleContextProvider extends React.Component {
    * Get a role given its id.
    * If the role is not find, returns null and triggers a refresh of the local storage
    * @param {string} roleId
-   * @returns {Promise<RoleEntity|null>}
+   * @returns {RoleEntity|null}
    */
-  async getRole(roleId) {
+  getRole(roleId) {
     const role = this.state.rolesCollection?.getById(roleId);
     if (!role) {
       this.refreshRoles();
@@ -105,9 +104,14 @@ export class RoleContextProvider extends React.Component {
 
   /**
    * Returns all known roles.
-   * @returns {RolesCollection}
+   * @returns {RolesCollection|null}
    */
   getAllRoles() {
+    if (!this.state.rolesCollection) {
+      this.refreshRoles();
+      return null;
+    }
+
     return this.state.rolesCollection;
   }
 
@@ -156,9 +160,10 @@ export function withRoles(WrappedComponent) {
     render() {
       return (
         <RoleContext.Consumer>
-          {context => <WrappedComponent {...this.props}
+          {context => <WrappedComponent
             roleContext={context}
             roles={context.getAllRoles()}
+            {...this.props}
           />}
         </RoleContext.Consumer>
       );
