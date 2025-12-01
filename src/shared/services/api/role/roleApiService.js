@@ -13,7 +13,7 @@
  */
 import PassboltResponseEntity from "../../../models/entity/apiService/PassboltResponseEntity";
 import AbstractService from "../abstract/abstractService";
-import {assertUuid} from "../../../utils/assertions";
+import {isValidUuid} from "../../../utils/assertions";
 import assertString from "validator/es/lib/util/assertString";
 
 const ROLES_API_SERVICE_RESOURCE_NAME = 'roles';
@@ -85,7 +85,7 @@ export default class RoleApiService extends AbstractService {
       throw new TypeError("Role update failed, invalid role data.");
     }
 
-    assertUuid(roleDto.id);
+    isValidUuid(roleDto.id);
     assertString(roleDto.name);
     const response = await this.apiClient.update(roleDto.id, roleDto);
 
@@ -100,7 +100,7 @@ export default class RoleApiService extends AbstractService {
    * @throws {TypeError} if roleId is not a valid uuid
    */
   async delete(roleid) {
-    assertUuid(roleid);
+    isValidUuid(roleid);
 
     const response = await this.apiClient.delete(roleid);
     return new PassboltResponseEntity(response);

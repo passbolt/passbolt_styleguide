@@ -16,6 +16,7 @@ import RoleEntity from "./roleEntity";
 import RolesCollection from "./rolesCollection";
 import {rolesCollectionDto} from "./rolesCollection.test.data";
 import {adminRoleDto, customRoleDto, guestRoleDto, userRoleDto} from "./roleEntity.test.data";
+import {v4 as uuidv4} from "uuid";
 
 describe("RolesCollections", () => {
   it("schema must validate", () => {
@@ -139,6 +140,28 @@ describe("RolesCollections", () => {
       expect(rolesCollection).toHaveLength(2);
       expect(rolesCollection.items[0].toDto()).toStrictEqual(collectionDto[3]);
       expect(rolesCollection.items[1].toDto()).toStrictEqual(collectionDto[4]);
+    });
+  });
+
+  describe("::getById", () => {
+    it("should return the role given its id", () => {
+      expect.assertions(1);
+
+      const collectionDto = [adminRoleDto(), userRoleDto(), guestRoleDto(), customRoleDto(), customRoleDto({name: "other-name"})];
+      const rolesCollection = new RolesCollection(collectionDto);
+
+      const roleEntity = rolesCollection.getById(collectionDto[3].id);
+      expect(roleEntity.toDto()).toStrictEqual(collectionDto[3]);
+    });
+
+    it("should return null if the role id is not in the collection", () => {
+      expect.assertions(1);
+
+      const collectionDto = [adminRoleDto(), userRoleDto(), guestRoleDto(), customRoleDto(), customRoleDto({name: "other-name"})];
+      const rolesCollection = new RolesCollection(collectionDto);
+
+      const roleEntity = rolesCollection.getById(uuidv4());
+      expect(roleEntity).toBeNull();
     });
   });
 });

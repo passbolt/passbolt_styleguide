@@ -91,6 +91,15 @@ class RolesCollection extends EntityV2Collection {
     this.filterByCallback(role => !role.isAReservedRole());
   }
 
+  /**
+   * Get a role given its id
+   * @param {string} id
+   * @return {RoleEntity|null}
+   */
+  getById(id) {
+    return this._items.find(role => role.id === id) || null;
+  }
+
   /*
    * ==================================================
    * Static getters
