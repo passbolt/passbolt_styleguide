@@ -13,8 +13,11 @@
  */
 import {users} from "../../../../shared/models/entity/user/userEntity.test.data";
 import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultRoleContext} from "../../../contexts/RoleContext.test.data";
 
-export function defaultProps() {
+export function defaultProps(data = {}) {
+  const roleContext = defaultRoleContext(data.roleContext);
+  const roles = data.roles || roleContext.roles;
   return {
     context: defaultAdministratorAppContext(),
     accountRecoveryRequest: {
@@ -27,6 +30,9 @@ export function defaultProps() {
     onClose: jest.fn(),
     onCancel: jest.fn(),
     onSubmit: jest.fn(),
-    onError: jest.fn()
+    onError: jest.fn(),
+    ...data,
+    roleContext: roleContext,
+    roles: roles
   };
 }
