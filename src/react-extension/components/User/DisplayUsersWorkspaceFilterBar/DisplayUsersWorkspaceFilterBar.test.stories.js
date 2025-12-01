@@ -20,7 +20,7 @@ import {defaultProps, propsFilterBySuspended, propsWithAttentionFilter, propsWit
  * DisplayUsersWorkspaceFilterBar stories
  */
 export default {
-  title: 'Components/Resource/DisplayUsersWorkspaceFilterBar',
+  title: 'Components/User/DisplayUsersWorkspaceFilterBar',
   decorators: [
     Story => (
       <MemoryRouter initialEntries={['/']}>

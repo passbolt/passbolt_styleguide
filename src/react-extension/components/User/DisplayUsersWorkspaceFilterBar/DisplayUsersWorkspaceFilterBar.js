@@ -31,6 +31,8 @@ import BuoySVG from "../../../../img/svg/buoy.svg";
 import MetadataKeySVG from "../../../../img/svg/metadata_key.svg";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {isAccountRecoveryRequested, isMissingMetadataKey} from "../../../../shared/utils/userUtils";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
 
 
 /**
@@ -131,13 +133,30 @@ class DisplayUsersWorkspaceFilterBar extends React.Component {
   }
 
   /**
+   * Has at least one user has missing metadata key
+   * @returns {boolean}
+   */
+  get hasUserMissingMetadataKeys() {
+    const users = this.props.context.users;
+    return users?.some(user => isMissingMetadataKey(user));
+  }
+
+  /**
+   * Has at least one user having an account recovery request
+   * @returns {boolean}
+   */
+  get hasUserAccountRecoveryRequested() {
+    const users = this.props.context.users;
+    return users?.some(user => isAccountRecoveryRequested(user));
+  }
+
+  /**
    * Check if Missing Metadata Key option should be displayed
    * in the Attention Required Filter
    * @returns {boolean}
    */
-  get displayMissingMetadataKeysFilter() {
-    const users = this.props.context.users;
-    return users?.some(user => isMissingMetadataKey(user));
+  get shouldDisplayMissingMetadataKeyDropDown() {
+    return this.isAdmin && this.hasUserMissingMetadataKeys;
   }
 
   /**
@@ -145,9 +164,8 @@ class DisplayUsersWorkspaceFilterBar extends React.Component {
    * in the Attention Required Filter
    * @returns {boolean}
    */
-  get displayAccountRecoveryFilter() {
-    const users = this.props.context.users;
-    return users?.some(user => isAccountRecoveryRequested(user));
+  get shouldDisplayAccountRecoveryDropDown() {
+    return this.canUseAccountRecovery && this.hasUserAccountRecoveryRequested;
   }
 
   /**
@@ -159,6 +177,14 @@ class DisplayUsersWorkspaceFilterBar extends React.Component {
   }
 
   /**
+   * Check if User can view account recovery
+   * @returns {boolean}
+   */
+  get canUseAccountRecovery() {
+    return this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_VIEW);
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -167,13 +193,13 @@ class DisplayUsersWorkspaceFilterBar extends React.Component {
     const isFilterApplied = this.isFilterApplied;
 
     /** If any user is in either of the attention required states */
-    const hasAttentionRequiredState = this.displayAccountRecoveryFilter || this.displayMissingMetadataKeysFilter;
+    const hasAttentionRequiredState = this.hasUserAccountRecoveryRequested || this.hasUserMissingMetadataKeys;
 
     /** Display All status dropdown if neither suspended users filter nor attention required filters are applied */
     const shouldDisplayAllStatusDropdown = !isFilterApplied;
 
     /** Display the Attention Required dropdown if - atleast one user in list has atleast one attention state && if none of the filters are applied && logged in user is an admin */
-    const shouldDisplayAttentionRequiredDropDown =  hasAttentionRequiredState && !isFilterApplied && this.isAdmin;
+    const shouldDisplayAttentionRequiredDropDown =  hasAttentionRequiredState && !isFilterApplied && (this.isAdmin || this.canUseAccountRecovery);
 
     return (
       <div className="actions-filter" ref={this.props.actionsFilterRef}>
@@ -202,28 +228,28 @@ class DisplayUsersWorkspaceFilterBar extends React.Component {
               <CaretDownSVG/>
             </DropdownButton>
             <DropdownMenu>
-              <DropdownMenuItem>
-                {this.displayAccountRecoveryFilter && (
+              {this.shouldDisplayAccountRecoveryDropDown && (
+                <DropdownMenuItem>
                   <button
                     type="button"
                     className="no-border"
-                    onClick={this.handleAccountRecoveryRequestClick}
-                  >
+                    onClick={this.handleAccountRecoveryRequestClick}>
                     <BuoySVG />
                     <span><Trans>Account Recovery Requests</Trans></span>
                   </button>
-                )}
-                {this.displayMissingMetadataKeysFilter && (
+                </DropdownMenuItem>
+              )}
+              {this.shouldDisplayMissingMetadataKeyDropDown && (
+                <DropdownMenuItem>
                   <button
                     type="button"
                     className="no-border"
-                    onClick={this.handleMissingMetadataKeyClick}
-                  >
+                    onClick={this.handleMissingMetadataKeyClick}>
                     <MetadataKeySVG />
                     <span><Trans>Missing Metadata Key</Trans></span>
                   </button>
-                )}
-              </DropdownMenuItem>
+                </DropdownMenuItem>
+              )}
             </DropdownMenu>
           </Dropdown>
         }
@@ -248,7 +274,8 @@ DisplayUsersWorkspaceFilterBar.propTypes = {
   passwordExpiryContext: PropTypes.object, // the password expiry context
   history: PropTypes.object, // The history property
   userWorkspaceContext: PropTypes.any, // the resource workspace context
+  rbacContext: PropTypes.any, // The rbac context
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withAppContext(withUserWorkspace(withTranslation('common')(DisplayUsersWorkspaceFilterBar))));
+export default withRouter(withAppContext(withRbac(withUserWorkspace(withTranslation('common')(DisplayUsersWorkspaceFilterBar)))));
