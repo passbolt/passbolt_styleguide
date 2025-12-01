@@ -26,7 +26,7 @@ import {optOutOrganizationPolicy} from "../HandleAccountRecoveryUserSettingsRout
  */
 export function defaultProps(data = {}) {
   const roleContext = defaultRoleContext(data.roleContext);
-  const roles = data.roles || roleContext.roles;
+  const roles = data.roles || roleContext.getAllRoles();
   return {
     context: defaultUserAppContext(),
     accountRecoveryContext: defaultAccountRecoveryUserContext(),

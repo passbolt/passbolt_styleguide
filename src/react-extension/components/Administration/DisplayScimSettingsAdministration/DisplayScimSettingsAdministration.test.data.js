@@ -20,13 +20,16 @@ import {mockUsers} from "../DisplayUserDirectoryAdministration/DisplayUserDirect
 import {v4 as uuidv4} from "uuid";
 import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 import {defaultScimSettingsDto, scimSettingsWithoutSecretTokenDto} from "../../../../shared/services/serviceWorker/scim/scimSettingsServiceWorkerService.test.data";
+import {defaultRoleContext} from "../../../contexts/RoleContext.test.data";
 
 /**
  * Default props.
  * @param {Object} props The props to override
  * @returns {object}
  */
-export function defaultProps(props = {}) {
+export function defaultProps(data = {}) {
+  const roleContext = defaultRoleContext(data.roleContext);
+  const roles = data.roles || roleContext.getAllRoles();
   return {
     context: defaultAdministratorAppContext({
       users: mockUsers
@@ -45,7 +48,9 @@ export function defaultProps(props = {}) {
     },
     createPortal: jest.fn,
     t: text => text,
-    ...props
+    ...data,
+    roleContext: roleContext,
+    roles: roles
   };
 }
 
