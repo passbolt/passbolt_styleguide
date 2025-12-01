@@ -17,12 +17,15 @@ import {defaultAccountRecoveryUserContext} from "../../../contexts/AccountRecove
 import {TEST_ROLE_ADMIN_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
 import {v4 as uuidv4} from "uuid";
 import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import {defaultRoleContext} from "../../../contexts/RoleContext.test.data";
 
 /**
  * Default props
  * @returns {any}
  */
-export function defaultProps() {
+export const defaultProps = (data = {}) => {
+  const roleContext = defaultRoleContext(data.roleContext);
+  const roles = data.roles || roleContext.getAllRoles();
   return {
     context: defaultAppContext(),
     accountRecoveryContext: defaultAccountRecoveryUserContext(),
@@ -76,9 +79,12 @@ export function defaultProps() {
           is_mfa_enabled: false
         }
       }
-    }
+    },
+    ...data,
+    roleContext: roleContext,
+    roles: roles
   };
-}
+};
 
 export function defaultWithMissingMetadataKeysProps(props = {}) {
   const withMissingMetadataKeysProps = defaultProps();
