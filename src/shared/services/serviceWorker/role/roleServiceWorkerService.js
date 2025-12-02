@@ -14,6 +14,7 @@
 import RolesCollection from "../../../models/entity/role/rolesCollection";
 
 export const ROLE_FIND_ALL = "passbolt.role.get-all";
+export const ROLE_UPDATE_LOCAL_STORAGE = "passbolt.role.update-local-storage";
 
 export default class RoleServiceWorkerService {
   /**
@@ -31,5 +32,13 @@ export default class RoleServiceWorkerService {
   async findAll() {
     const rolesCollection = await this.port.request(ROLE_FIND_ALL);
     return new RolesCollection(rolesCollection);
+  }
+
+  /**
+   * Find all roles from the API and triggers an update of the role local storage.
+   * @returns {Promise<void>}
+   */
+  async updateResourceLocalStorage() {
+    await this.port.request(ROLE_UPDATE_LOCAL_STORAGE);
   }
 }
