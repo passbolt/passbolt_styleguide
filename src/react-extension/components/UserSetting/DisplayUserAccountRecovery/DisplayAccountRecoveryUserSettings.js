@@ -88,7 +88,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
 
   /**
    * Get the user requesting the current user to subscribe to the account recovery program.
-   * @returns {object|void}
+   * @returns {object|undefined}
    */
   get requestor() {
     return this.props.accountRecoveryContext.getRequestor();
@@ -96,11 +96,11 @@ class DisplayAccountRecoveryUserSettings extends Component {
 
   /**
    * Get the user role who initiated the account recovery request.
-   * @returns {object}
+   * @returns {string}
    */
-  get requestorRole() {
-    const roleName = this.props.context.roles.find(role => role.id === this.requestor.role_id).name;
-    return roleName;
+  get requestorRoleName() {
+    const role = this.props.roleContext.getRole(this.requestor.role_id);
+    return role?.name || "";
   }
 
   /**
@@ -174,6 +174,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
    */
   render() {
     const requestorStatus = getUserStatus(this.requestor);
+    const requestorRole = this.requestorRoleName;
     return (
       <>
         {this.props.context.loggedInUser && this.props.accountRecoveryContext.getOrganizationPolicy() &&
@@ -212,7 +213,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
                             <span className="dateTimeAgo" title={this.requestedDate}>{formatDateTimeAgo(this.requestedDate, this.props.t, this.props.context.locale)}</span>
                             <span className="chips-group">
                               <span className={`chips user-status ${requestorStatus}`}>{this.props.t(requestorStatus)}</span>
-                              <span className={`chips user-role ${this.requestorRole}`}>{this.requestorRole}</span>
+                              <span className={`chips user-role ${requestorRole}`}>{requestorRole}</span>
                             </span>
                           </div>
                         </div>

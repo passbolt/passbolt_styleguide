@@ -16,7 +16,7 @@
  * Unit tests on EnterNewPassphrase in regard of specifications
  */
 import DisplayAccountRecoveryUserSettingsPage from "./DisplayAccountRecoveryUserSettings.test.page";
-import {defaultProps, defaultAccountRecoveryPolicyDto, getAccountRecoveryUserService} from "./DisplayAccountRecoveryUserSettings.test.data";
+import {defaultProps, defaultAccountRecoveryPolicyDto} from "./DisplayAccountRecoveryUserSettings.test.data";
 import {waitFor} from "@testing-library/react";
 import ManageAccountRecoveryUserSettings from "../../AccountRecovery/ManageAccountRecoveryUserSettings/ManageAccountRecoveryUserSettings";
 import {formatDateTimeAgo} from "../../../../../test/utils/dateUtils";
@@ -34,9 +34,8 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    */
   it('As a logged in user I can see my account recovery settings', async() => {
     const accountRecoveryPolicyDto = defaultAccountRecoveryPolicyDto();
-    const mockedAccountRecoveryUserService = getAccountRecoveryUserService(accountRecoveryPolicyDto);
-    const props = defaultProps({status: "pending"});
-    const page = new DisplayAccountRecoveryUserSettingsPage(props, mockedAccountRecoveryUserService);
+    const props = defaultProps();
+    const page = new DisplayAccountRecoveryUserSettingsPage(props);
     await waitFor(() => {});
 
     expect(page.exists()).toBeTruthy();
@@ -52,9 +51,15 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    * Then I can’t see the account recovery section on the left sidebar
    */
   it('As a logged in user I cannot see my account recovery settings if the account recovery organization policy is disabled', async() => {
-    const mockedAccountRecoveryUserService = getAccountRecoveryUserService({policy: "disabled"});
-    const props = defaultProps({status: "disabled"});
-    const page = new DisplayAccountRecoveryUserSettingsPage(props, mockedAccountRecoveryUserService);
+    const props = defaultProps({
+      accountRecoveryContext: {
+        status: "disabled",
+        policy: {
+          policy: "disabled"
+        }
+      }
+    });
+    const page = new DisplayAccountRecoveryUserSettingsPage(props);
     await waitFor(() => {});
 
     expect(page.exists()).toBeTruthy();
@@ -71,9 +76,12 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    * Then	I see the account recovery dialog prompt
    */
   it('As a logged in user who has rejected the account recovery program, I can change my choice from my settings workspace', async() => {
-    const mockedAccountRecoveryUserService = getAccountRecoveryUserService(defaultAccountRecoveryPolicyDto());
-    const props = defaultProps({status: "disabled"});
-    const page = new DisplayAccountRecoveryUserSettingsPage(props, mockedAccountRecoveryUserService);
+    const props = defaultProps({
+      accountRecoveryContext: {
+        status: "disabled",
+      }
+    });
+    const page = new DisplayAccountRecoveryUserSettingsPage(props);
     await waitFor(() => {});
 
     expect(page.exists()).toBeTruthy();
@@ -94,16 +102,19 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    */
   it('As a logged in user I can update my account recovery choice when my review is pending for the Opt-in, Mandatory and Opt-out policies', async() => {
     const accountRecoveryPoliciesDto = defaultAccountRecoveryPolicyDto();
-    const mockedAccountRecoveryUserService = getAccountRecoveryUserService(accountRecoveryPoliciesDto);
-    const props = defaultProps({status: "disabled"});
-    const page = new DisplayAccountRecoveryUserSettingsPage(props, mockedAccountRecoveryUserService);
+    const props = defaultProps({
+      accountRecoveryContext: {
+        status: "disabled",
+      }
+    });
+    const page = new DisplayAccountRecoveryUserSettingsPage(props);
     await waitFor(() => {});
 
     expect(page.exists()).toBeTruthy();
     await page.clickOnReview();
 
     expect(props.dialogContext.open).toHaveBeenCalledWith(ManageAccountRecoveryUserSettings, {
-      organizationPolicy: accountRecoveryPoliciesDto
+      organizationPolicy: accountRecoveryPoliciesDto.policy
     });
   });
 });

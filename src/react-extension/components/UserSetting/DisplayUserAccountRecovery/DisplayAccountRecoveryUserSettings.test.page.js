@@ -17,7 +17,6 @@ import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayAccountRecoveryUserSettings from "./DisplayAccountRecoveryUserSettings";
-import AccountRecoveryUserContextProvider from "../../../contexts/AccountRecoveryUserContext";
 /**
  * The DisplayAccountRecoveryUserSettingsPage component represented as a page
  */
@@ -27,15 +26,13 @@ export default class DisplayAccountRecoveryUserSettingsPage {
    * @param context Context value
    * @param props Props to attach
    */
-  constructor(props, mockedAccountRecoveryUserService) {
+  constructor(props) {
     this._page = render(
-      <AccountRecoveryUserContextProvider accountRecoveryUserService={mockedAccountRecoveryUserService} context={props.context}>
-        <MockTranslationProvider>
-          <Router>
-            <DisplayAccountRecoveryUserSettings {...props}/>
-          </Router>
-        </MockTranslationProvider>
-      </AccountRecoveryUserContextProvider>,
+      <MockTranslationProvider>
+        <Router>
+          <DisplayAccountRecoveryUserSettings {...props}/>
+        </Router>
+      </MockTranslationProvider>,
       {legacyRoot: true}
     );
   }
