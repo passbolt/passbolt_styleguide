@@ -13,7 +13,9 @@
  */
 
 import {users} from "../../../../shared/models/entity/user/userEntity.test.data";
+import {defaultAccountRecoveryUserContext} from "../../../contexts/AccountRecoveryUserContext.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultRoleContext} from "../../../contexts/RoleContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -21,14 +23,27 @@ import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
  * @returns {any}
  */
 export function defaultProps(data = {}) {
-  const defaultProps = {
+  const roleContext = data.roleContext || defaultRoleContext();
+  const roles = data.roles || roleContext.getAllRoles();
+  const defaultPolicy = defaultAccountRecoveryPolicyDto(data.accountRecoveryContext);
+  return {
     context: defaultAppContext(data?.context),
     dialogContext: {
       open: jest.fn()
-    }
+    },
+    ...data,
+    roleContext: roleContext,
+    roles: roles,
+    accountRecoveryContext: defaultAccountRecoveryUserContext({
+      status: "pending",
+      getRequestor: () => defaultPolicy.creator,
+      getOrganizationPolicy: () => defaultPolicy.policy,
+      isReady: () => true,
+      getPolicy: () => defaultPolicy.policy.policy,
+      getRequestedDate: () => defaultPolicy.modified,
+      ...data.accountRecoveryContext,
+    }),
   };
-  delete data.context;
-  return Object.assign(defaultProps, data);
 }
 
 export const defaultAccountRecoveryPolicyDto = data => ({
@@ -47,6 +62,6 @@ export const defaultAccountRecoveryPolicyDto = data => ({
 
 export function getAccountRecoveryUserService(mockedData) {
   return {
-    getOrganizationAccountRecoverySettings: () => mockedData
+    getOrganizationAccountRecoverySettings: async() => mockedData
   };
 }
