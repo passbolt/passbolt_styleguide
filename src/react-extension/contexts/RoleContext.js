@@ -156,9 +156,10 @@ export function withRoles(WrappedComponent) {
     render() {
       return (
         <RoleContext.Consumer>
-          {context => <WrappedComponent {...this.props}
+          {context => <WrappedComponent
             roleContext={context}
             roles={context.getAllRoles()}
+            {...this.props}
           />}
         </RoleContext.Consumer>
       );
