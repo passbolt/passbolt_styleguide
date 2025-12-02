@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {snakeCaseToCamelCase} from "./stringUtils";
+import {capitalizeFirstLetter, snakeCaseToCamelCase} from "./stringUtils";
 
 describe("stringUtils", () => {
   describe('::snakeCaseToCamelCase', () => {
@@ -29,6 +29,21 @@ describe("stringUtils", () => {
     it("should not crash if null is given", () => {
       expect.assertions(1);
       expect(() => snakeCaseToCamelCase(null)).not.toThrow();
+    });
+  });
+
+  describe('::capitalizeFirstLetter', () => {
+    it("should transform string to capitalize the first letter", () => {
+      expect.assertions(4);
+      expect(capitalizeFirstLetter("")).toStrictEqual("");
+      expect(capitalizeFirstLetter("admin")).toStrictEqual("Admin");
+      expect(capitalizeFirstLetter('User')).toBe('User');
+      expect(capitalizeFirstLetter('group manager')).toBe('Group manager');
+    });
+
+    it("should not crash if null is given", () => {
+      expect.assertions(1);
+      expect(() => capitalizeFirstLetter(null)).not.toThrow();
     });
   });
 });
