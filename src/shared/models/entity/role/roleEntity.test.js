@@ -31,6 +31,7 @@ describe("Role entity", () => {
 
     it("validates name property", () => {
       assertEntityProperty.string(RoleEntity, "name");
+      assertEntityProperty.minLength(RoleEntity, "name", 1);
       assertEntityProperty.maxLength(RoleEntity, "name", 255);
       assertEntityProperty.required(RoleEntity, "name");
     });

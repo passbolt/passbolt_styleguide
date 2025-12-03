@@ -12,6 +12,7 @@
  * @since         2.13.0
  */
 import EntityV2 from "../abstract/entityV2";
+import EntityValidationError from "../abstract/entityValidationError";
 
 const ENTITY_NAME = 'Role';
 const ROLE_ADMIN = 'admin';
@@ -38,6 +39,7 @@ export default class RoleEntity extends EntityV2 {
         },
         "name": {
           "type": "string",
+          "minLength": 1,
           "maxLength": ROLE_NAME_MAX_LENGTH
         },
         "description": {
@@ -115,6 +117,23 @@ export default class RoleEntity extends EntityV2 {
     return this.isAdmin()
       || this.isUser()
       || this.isGuest();
+  }
+
+  /**
+   * Get warnings of the entity property fields
+   * @return {null|EntityValidationError}
+   */
+  verifyHealth() {
+    let error = null;
+    if (this.name.length === ROLE_NAME_MAX_LENGTH) {
+      error = new EntityValidationError();
+      error.addError(
+        `name`,
+        "maxLength",
+        `name reached maximum length limit`
+      );
+    }
+    return error;
   }
 
   /*
