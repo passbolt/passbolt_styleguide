@@ -48,7 +48,7 @@ describe("See the healthCheck settings", () => {
     });
 
     it('should display all the healthcheck sections', () => {
-      expect.assertions(10);
+      expect.assertions(11);
       expect(page.healthCheckEnvironment).not.toBeNull();
       expect(page.healthCheckApp).not.toBeNull();
       expect(page.healthCheckGPG).not.toBeNull();
@@ -59,10 +59,11 @@ describe("See the healthCheck settings", () => {
       expect(page.healthCheckCore).not.toBeNull();
       expect(page.healthcheckDirectorySync).not.toBeNull();
       expect(page.healthcheckSso).not.toBeNull();
+      expect(page.healthcheckMetadata).not.toBeNull();
     });
 
     it('should display all subssections success status', () => {
-      expect.assertions(20);
+      expect.assertions(22);
       expect(page.isAllHealthcheckSubSectionEnvironmentSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionConfigFilesSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionCoreSuccess).toBeTruthy();
@@ -73,6 +74,7 @@ describe("See the healthCheck settings", () => {
       expect(page.isAllHealthcheckSubSectionSMTPSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionDirectorySyncSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionSsoSuccess).toBeTruthy();
+      expect(page.isAllHealthcheckSubSectionMetadataSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionEnvironmentFailed).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionConfigFilesWarned).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionCoreFailed).toBeFalsy();
@@ -83,6 +85,7 @@ describe("See the healthCheck settings", () => {
       expect(page.isAllHealthcheckSubSectionSMTPFailed).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionDirectorySyncWarned).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionSsoWarned).toBeFalsy();
+      expect(page.isAllHealthcheckSubSectionMetadataFailed).toBeFalsy();
     });
   });
 
@@ -94,7 +97,7 @@ describe("See the healthCheck settings", () => {
       page = new DisplayHealthcheckAdministrationPage(props);
     });
     it('should display all subssections fail status', async() => {
-      expect.assertions(20);
+      expect.assertions(22);
       expect(page.isAllHealthcheckSubSectionEnvironmentFailed).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionConfigFilesWarned).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionCoreFailed).toBeTruthy();
@@ -105,6 +108,7 @@ describe("See the healthCheck settings", () => {
       expect(page.isAllHealthcheckSubSectionSMTPFailed).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionDirectorySyncWarned).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionSsoWarned).toBeTruthy();
+      expect(page.isAllHealthcheckSubSectionMetadataFailed).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionEnvironmentSuccess).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionConfigFilesSuccess).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionCoreSuccess).toBeFalsy();
@@ -115,6 +119,7 @@ describe("See the healthCheck settings", () => {
       expect(page.isAllHealthcheckSubSectionSMTPSuccess).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionDirectorySyncSuccess).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionSsoSuccess).toBeFalsy();
+      expect(page.isAllHealthcheckSubSectionMetadataSuccess).toBeFalsy();
     });
   });
 
@@ -225,6 +230,30 @@ describe("See the healthCheck settings", () => {
       expect(page.healthCheckCore).not.toBeNull();
       expect(page.healthcheckDirectorySync).toBeNull();
       expect(page.healthcheckSso).toBeNull();
+    });
+  });
+
+  describe('As AD, I am not able to see the metadata section if it is disabled', () => {
+    let page, props;
+
+    beforeEach(() => {
+      props = defaultProps({context: {siteSettings: {canIUse: plugins => plugins !== "metadata"}}});
+      page = new DisplayHealthcheckAdministrationPage(props);
+    });
+
+    it('should display all the healthcheck sections except the metadata', () => {
+      expect.assertions(11);
+      expect(page.healthCheckEnvironment).not.toBeNull();
+      expect(page.healthCheckApp).not.toBeNull();
+      expect(page.healthCheckGPG).not.toBeNull();
+      expect(page.healthCheckConfigurationFiles).not.toBeNull();
+      expect(page.healthCheckDatabase).not.toBeNull();
+      expect(page.healthCheckSmtp).not.toBeNull();
+      expect(page.healthCheckSSL).not.toBeNull();
+      expect(page.healthCheckCore).not.toBeNull();
+      expect(page.healthcheckDirectorySync).not.toBeNull();
+      expect(page.healthcheckSso).not.toBeNull();
+      expect(page.healthcheckMetadata).toBeNull();
     });
   });
 });

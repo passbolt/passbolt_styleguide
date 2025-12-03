@@ -61,10 +61,19 @@ describe("User Workspace Context", () => {
       await page.goToText("some text");
       expect(page.filter.type).toBe(UserWorkspaceFilterTypes.TEXT);
     });
-
     it("AS LU I should have an GROUP filter when I went to /app/users with such a filter", async() => {
       await page.goToGroup({id: '516c2db6-0aed-52d8-854f-b3f3499995e7'});
       expect(page.filter.type).toBe(UserWorkspaceFilterTypes.GROUP);
+    });
+
+    it("AS LU I should have an ACCOUNT_RECOVERY_REQUEST filter when I go to /app/users with such a filter", async() => {
+      await page.goToAccountRecoveryRequestUsers();
+      expect(page.filter.type).toBe(UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST);
+    });
+
+    it("AS LU I should have an MISSING_METADATA_KEY filter when I go to /app/users with such a filter", async() => {
+      await page.goToMissingMetadataKeysUsers();
+      expect(page.filter.type).toBe(UserWorkspaceFilterTypes.MISSING_METADATA_KEY);
     });
   });
 
@@ -124,6 +133,18 @@ describe("User Workspace Context", () => {
       page.select(userToSelect);
       expect(page.selectedUsers).toHaveLength(0);
     });
+
+    it("Should remove selected users not in filtered users", async() => {
+      const userToRemove = context.users[5];
+
+      await page.goToAllUsers();
+      await page.select(userToRemove);
+      await page.goToMissingMetadataKeysUsers();
+
+      await page.unselectUsersNotFiltered();
+
+      expect(page.selectedUsers).toHaveLength(0);
+    });
   });
 
   describe("As LU I should have the appropriate details at any time", () => {
@@ -147,6 +168,18 @@ describe("User Workspace Context", () => {
       await page.select(user);
       expect(page.details.user).toBe(user);
       expect(page.lockDisplayDetail).toBeFalsy();
+    });
+
+    it("As LU, I should be able to update the details of the user", async() => {
+      const user = context.users[1];
+      await page.updateDetails({user});
+      expect(page.details.user).toBe(user);
+      expect(page.details.group).toBeUndefined();
+
+      const group = context.groups[0];
+      await page.updateDetails({group});
+      expect(page.details.group).toBe(group);
+      expect(page.details.user).toBeUndefined();
     });
   });
 

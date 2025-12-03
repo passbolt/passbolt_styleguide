@@ -116,6 +116,25 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
+   * Returns true if one can share missing metadata keys with a user
+   */
+  get canRemoveFromGroup() {
+    const element = this._page.container.querySelector('#remove-user-from-group');
+    return Boolean(element);
+  }
+
+  get removeFromGroupButton() {
+    return this._page.container.querySelector('#remove-user-from-group');
+  }
+
+  async removeFromGroup() {
+    const button = this.removeFromGroupButton;
+    const leftClick = {button: 0};
+    fireEvent.click(button, leftClick);
+    await waitFor(() => {});
+  }
+
+  /**
    * Asks for copy actions through the dropdown
    */
   async copyActions() {

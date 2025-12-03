@@ -48,6 +48,7 @@ class HandleReviewAccountRecoveryRequestRoute extends React.Component {
     try {
       accountRecoveryRequest = await this.props.context.port.request("passbolt.account-recovery.get-request", accountRecoveryRequestId);
     } catch (error) {
+      console.error(`Error during account recovery:`, error);
       this.handleAccountRecoveryRequestNotFound();
       return;
     }

@@ -161,6 +161,13 @@ export default class DisplayAdministrationMenuPage {
   }
 
   /**
+   * Returns the secret history menu
+   */
+  get secretHistorySettings() {
+    return this._page.container.querySelector('#secret_history_menu .row .main-cell-wrapper .main-cell button');
+  }
+
+  /**
    * Returns the Content Types Encrypted Metadata.
    */
   get contentTypesEncryptedMetadata() {
@@ -291,6 +298,11 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the Password Policy settings element */
   async gotoPasswordPolicySettings() {
     await this.click(this.passwordPolicySettings);
+  }
+
+  /** Click on the secret history settings element */
+  async gotoSecretHistorySettings() {
+    await this.click(this.secretHistorySettings);
   }
 
   /** Click on the Content Types Encrypted Metadata element */

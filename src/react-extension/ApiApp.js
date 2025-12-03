@@ -97,6 +97,7 @@ class ApiApp extends Component {
                                     "/app/administration/password-policies-teasing",
                                     "/app/administration/user-passphrase-policies-teasing",
                                     "/app/administration/scim-teasing",
+                                    "/app/administration/secret-history",
                                   ]}/>
                                   <Route path="/app/administration">
                                     <AdministrationWorkspaceContextProvider>

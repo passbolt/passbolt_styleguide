@@ -142,6 +142,20 @@ export default class UserWorkspaceContextPage {
   }
 
   /**
+   * Go to the Attention Required Account Recovery search filter route
+   */
+  async goToAccountRecoveryRequestUsers() {
+    await this.goToLink('.account-recovery-request-users');
+  }
+
+  /**
+   * Go to the Attention Required Missing metadata keys search filter route
+   */
+  async goToMissingMetadataKeysUsers() {
+    await this.goToLink('.missing-metadata-keys-users');
+  }
+
+  /**
    * Go to the Text search filter route
    * @param text A specific text search filter
    */
@@ -176,6 +190,38 @@ export default class UserWorkspaceContextPage {
     await this.userWorkspaceContext.onDetailsLocked();
     await waitFor(() => {});
   }
+
+  /**
+   * Update details of user or group
+   * @param user A specific user
+   * @pram group A group
+   */
+  updateDetails({user, group}) {
+    this.userWorkspaceContext.details = {
+      user,
+      group,
+      locked: true,
+    };
+  }
+
+  /**
+   * Remove from the selected users those which are not present in regard of the current displayed list
+   */
+  unselectUsersNotFiltered() {
+    const matchId = selectedUser => user => user.id === selectedUser.id;
+
+    const filtered = this.selectedUsers.filter(selectedUser =>
+      this.filteredUsers.some(matchId(selectedUser))
+    );
+
+    if (filtered.length === 1) {
+      this.userWorkspaceContext.onUserSelected.single(filtered[0]);
+    } else {
+      this.userWorkspaceContext.onUserSelected.none();
+    }
+  }
+
+
 
   /**
    * Returns the rendering of  the page
@@ -216,6 +262,14 @@ export default class UserWorkspaceContextPage {
           <NavLink
             to={{pathname: "/app/users", state: {filter: {type: UserWorkspaceFilterTypes.RECENTLY_MODIFIED}}}}>
             <a className="recently-modified"></a>
+          </NavLink>
+          <NavLink
+            to={{pathname: "/app/users", state: {filter: {type: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST}}}}>
+            <a className="account-recovery-request-users"></a>
+          </NavLink>
+          <NavLink
+            to={{pathname: "/app/users", state: {filter: {type: UserWorkspaceFilterTypes.MISSING_METADATA_KEY}}}}>
+            <a className="missing-metadata-keys-users"></a>
           </NavLink>
           <NavLink
             to={{pathname: "/app/users", state: {filter: {type: UserWorkspaceFilterTypes.SUSPENDED_USER}}}}>

@@ -29,6 +29,7 @@ function formatDate(data) {
   try {
     return DateTime.fromJSDate(new Date(data)).setLocale("en-US").toLocaleString(DateTime.DATETIME_FULL);
   } catch (error) {
+    console.error(`Failed to format date "${data}":`, error);
     return "";
   }
 }

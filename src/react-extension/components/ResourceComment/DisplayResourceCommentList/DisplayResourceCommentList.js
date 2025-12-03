@@ -163,7 +163,7 @@ class DisplayResourceCommentList extends React.Component {
                         <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
                     }
                     <span
-                      className="modified">{formatDateTimeAgo(comment.created, this.props.t, this.props.context.locale)}
+                      className="modified" title={comment.created}>{formatDateTimeAgo(comment.created, this.props.t, this.props.context.locale)}
                     </span>
                     {this.canDeleteComment(comment) &&
                       <div className="actions">

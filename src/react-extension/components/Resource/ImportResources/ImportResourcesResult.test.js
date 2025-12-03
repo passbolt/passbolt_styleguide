@@ -33,42 +33,87 @@ describe("As LU I should see the password import result dialog", () => {
      * I should see the password import result dialog
      */
     it('As LU I see a success import result dialog with no errors', async() => {
+      expect.assertions(8);
       const props = defaultPropsWithNoError(); // The props to pass
       page = new ImportResourcesResultPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      expect(page.title).toBe("Import success!");
 
-      expect(page.result(1)).toBe("10 passwords have been imported successfully.");
-      expect(page.result(2)).toBe("5 folders have been imported successfully.");
+      expect(page.exists()).toBeTruthy();
+      expect(page.title).toBe("Import summary");
+      expect(page.hasResourcesSection).toBeTruthy();
+      expect(page.hasFoldersSection).toBeTruthy();
+      expect(page.hasWarningsResourcesSection).toBeFalsy();
+      expect(page.hasErrorsResourcesSection).toBeFalsy();
+      expect(page.hasErrorsFoldersSection).toBeFalsy();
 
       await page.acceptResult();
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I see a success import result dialog with some errors', async() => {
-      const props = defaultProps(); // The props to pass
+    it('As LU I see the import result dialog with warnings and errors', async() => {
+      expect.assertions(8);
+      const props = defaultProps();
       page = new ImportResourcesResultPage(context, props);
+
       expect(page.exists()).toBeTruthy();
-      expect(page.title).toBe("Something went wrong!");
+      expect(page.title).toBe("Import summary");
+      expect(page.hasResourcesSection).toBeTruthy();
+      expect(page.hasFoldersSection).toBeTruthy();
+      expect(page.hasWarningsResourcesSection).toBeTruthy();
+      expect(page.hasErrorsResourcesSection).toBeTruthy();
+      expect(page.hasErrorsFoldersSection).toBeTruthy();
 
-      expect(page.result(1)).toBe("10 out of 12");
-      expect(page.result(2)).toBe("5 out of 6");
-      expect(page.errorMessage(1)).toBe("There was an issue while importing passwords:");
-      expect(page.errorMessage(2)).toBe("There was an issue while importing folders:");
-      await page.openErrorDetails();
-
-      const errorDebugValue = "----------------------------\nResources errors\n----------------------------\n" +
-        "[\n    {\n        \"name\": \"resource1\"\n    },\n    {\n        \"name\": \"resource2\"\n    }\n" +
-        "]\n\n----------------------------\nFolder errors\n----------------------------\n[\n    {\n" +
-        "        \"name\": \"folder1\"\n    }\n]";
-
-      expect(page.errorDebug).toBe(errorDebugValue);
       await page.acceptResult();
       expect(props.onClose).toBeCalled();
+    });
+
+    it('As LU I can open and see warnings resources details', async() => {
+      expect.assertions(2);
+      const props = defaultProps();
+      page = new ImportResourcesResultPage(context, props);
+
+      expect(page.hasWarningsResourcesSection).toBeTruthy();
+
+      await page.openWarningResourcesDetails();
+
+      const expectedWarningDebug = "----------------------------\nResources warnings\n----------------------------\n" +
+        "[\n    {\n        \"name\": \"resource1\"\n    },\n    {\n        \"name\": \"resource2\"\n    }\n]";
+
+      expect(page.warningResourcesDebug).toBe(expectedWarningDebug);
+    });
+
+    it('As LU I can open and see errors resources details', async() => {
+      expect.assertions(2);
+      const props = defaultProps();
+      page = new ImportResourcesResultPage(context, props);
+
+      expect(page.hasErrorsResourcesSection).toBeTruthy();
+
+      await page.openErrorResourcesDetails();
+
+      const expectedErrorDebug = "----------------------------\nResources errors\n----------------------------\n" +
+        "[\n    {\n        \"name\": \"resource1\"\n    },\n    {\n        \"name\": \"resource2\"\n    }\n]";
+
+      expect(page.errorResourcesDebug).toBe(expectedErrorDebug);
+    });
+
+    it('As LU I can open and see errors folders details', async() => {
+      expect.assertions(2);
+      const props = defaultProps();
+      page = new ImportResourcesResultPage(context, props);
+
+      expect(page.hasErrorsFoldersSection).toBeTruthy();
+
+      await page.openErrorFoldersDetails();
+
+      const expectedFolderErrorDebug = "----------------------------\nFolder errors\n----------------------------\n" +
+        "[\n    {\n        \"name\": \"folder1\"\n    }\n]";
+
+      expect(page.errorFoldersDebug).toBe(expectedFolderErrorDebug);
     });
 
     it('As LU I can filter by tag', async() => {
-      const props = defaultPropsWithNoError(); // The props to pass
+      expect.assertions(1);
+      const props = defaultPropsWithNoError();
       page = new ImportResourcesResultPage(context, props);
       await page.filterByReference();
       const filter = {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag: {slug: "tag"}}};
@@ -76,21 +121,24 @@ describe("As LU I should see the password import result dialog", () => {
     });
 
     it('As LU I can filter by folder', async() => {
-      const props = defaultProps(); // The props to pass
+      expect.assertions(1);
+      const props = defaultProps();
       page = new ImportResourcesResultPage(context, props);
       await page.filterByReference();
       expect(props.history.push).toBeCalledWith(`/app/folders/view/${props.resourceWorkspaceContext.resourceFileImportResult.references.folder.id}`);
     });
 
     it('As LU I can close the dialog', async() => {
-      const props = defaultProps(); // The props to pass
+      expect.assertions(1);
+      const props = defaultProps();
       page = new ImportResourcesResultPage(context, props);
       await page.closeDialog();
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I can stop to see the import result dialog with the keyboard (escape)', async() => {
-      const props = defaultProps(); // The props to pass
+      expect.assertions(1);
+      const props = defaultProps();
       page = new ImportResourcesResultPage(context, props);
       await page.escapeKey();
       expect(props.onClose).toBeCalled();

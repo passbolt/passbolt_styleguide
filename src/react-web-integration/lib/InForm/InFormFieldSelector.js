@@ -12,6 +12,8 @@
  * @since         3.3.0
  */
 
+import {UsernameFieldSelectorException} from "./InFormFieldSelectorException";
+
 /**
  * All the possible in-form fields DOM selectors
  */
@@ -23,7 +25,8 @@ export default {
    * The selector benutzername is also for somes german websites
    * The selector utilisateur is for french website
    */
-  USERNAME_FIELD_SELECTOR: `input[type='text' i][name*='user' i]:not([hidden]):not([disabled]),
+  USERNAME_FIELD_SELECTOR: `${Object.values(UsernameFieldSelectorException).join(",")},
+  input[type='text' i][name*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='login' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='benutzerkennung' i]:not([hidden]):not([disabled]),
@@ -45,6 +48,7 @@ export default {
   input[type='text' i][placeholder*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][placeholder*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][placeholder*='e-mail' i]:not([hidden]):not([disabled]),
+  input[type='text' i][placeholder*='utilisateur' i]:not([hidden]):not([disabled]),
   input[type='email' i]:not([hidden]):not([disabled]),
   input[name*='user' i]:not([type]):not([hidden]):not([disabled]),
   input[name*='email' i]:not([type]):not([hidden]):not([disabled]),
@@ -65,7 +69,8 @@ export default {
   input[autocomplete*='email' i]:not([type]):not([hidden]):not([disabled]),
   input[placeholder*='user' i]:not([type]):not([hidden]):not([disabled]),
   input[placeholder*='email' i]:not([type]):not([hidden]):not([disabled]),
-  input[placeholder*='e-mail' i]:not([type]):not([hidden]):not([disabled])`,
+  input[placeholder*='e-mail' i]:not([type]):not([hidden]):not([disabled]),
+  input[placeholder*='utilisateur' i]:not([type]):not([hidden]):not([disabled])`,
   /** Selectors to detect password inputs (input type password or type text with id or class or name contain password) */
   PASSWORD_FIELD_SELECTOR: `input[type='password' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='password' i]:not([hidden]):not([disabled]),

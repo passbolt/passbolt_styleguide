@@ -114,6 +114,13 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPageObject {
   }
 
   /**
+   * Returns the nothing to synchronize message
+   */
+  get noReportMessage() {
+    return this._container.querySelector('#no-report-message').textContent;
+  }
+
+  /**
    * Returns the no resource element
    */
   get noResource() {
@@ -153,6 +160,13 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPageObject {
    */
   get cancel() {
     return this._container.querySelector('.submit-wrapper .cancel');
+  }
+
+  /**
+   * Returns the Download the Full Report link
+   */
+  get downloadReportLink() {
+    return this._container.querySelector('button.link.download-full-report');
   }
 
   /**

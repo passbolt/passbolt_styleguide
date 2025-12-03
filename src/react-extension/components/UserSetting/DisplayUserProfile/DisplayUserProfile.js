@@ -105,11 +105,11 @@ class DisplayUserProfile extends React.Component {
                   </tr>
                   <tr className="modified">
                     <td className="label"><Trans>Modified</Trans></td>
-                    <td className="value">{formatDateTimeAgo(this.user.modified, this.props.t, this.props.context.locale)}</td>
+                    <td className="value" title={this.user.modified}>{formatDateTimeAgo(this.user.modified, this.props.t, this.props.context.locale)}</td>
                   </tr>
                   <tr className="created">
                     <td className="label"><Trans>Created</Trans></td>
-                    <td className="value">{formatDateTimeAgo(this.user.created, this.props.t, this.props.context.locale)}</td>
+                    <td className="value" title={this.user.created}>{formatDateTimeAgo(this.user.created, this.props.t, this.props.context.locale)}</td>
                   </tr>
                 </tbody>
               </table>

@@ -237,17 +237,6 @@ export const schemaValidateFormatEmail = {
   }
 };
 
-export const schemaValidateFormatXUrl = {
-  "type": "object",
-  "required": [],
-  "properties": {
-    "property": {
-      "type": "string",
-      "format": "x-url"
-    }
-  }
-};
-
 export const schemaValidateFormatXHexColor = {
   "type": "object",
   "required": [],

@@ -8,6 +8,12 @@
     align-self: stretch;
     min-width: 0;
 
+    svg.attention-required {
+        --icon-exclamation-color: var(--Alert-Alert-icon);
+        --icon-exclamation-background-color: var(--Alert-Alert-background);
+        --icon-exclamation-border-color: var(--Alert-Alert-background);
+    }
+
     &.icon-only {
       .actions, .actions-filter, .actions-secondary {
         li > button, .dropdown > button, .button-action-filtered {
@@ -65,6 +71,7 @@
         align-items: center;
         padding: .4rem 0 .4rem 1.6rem;
         align-self: stretch;
+        gap: 0.8rem;
       }
 
       &-secondary {

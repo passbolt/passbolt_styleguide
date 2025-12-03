@@ -21,6 +21,7 @@ import {Trans, withTranslation} from "react-i18next";
 import {withAdminUserDirectory} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
+import download from "downloadjs";
 
 class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
   /**
@@ -55,6 +56,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
     this.handleFullReportClicked = this.handleFullReportClicked.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSynchronize = this.handleSynchronize.bind(this);
+    this.handleDownloadFullReport = this.handleDownloadFullReport.bind(this);
   }
 
   /**
@@ -118,7 +120,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get users() {
-    return this.state.userDirectorySimulateSynchronizeResult.users;
+    return this.state.userDirectorySimulateSynchronizeResult?.users;
   }
 
   /**
@@ -126,7 +128,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get groups() {
-    return this.state.userDirectorySimulateSynchronizeResult.groups;
+    return this.state.userDirectorySimulateSynchronizeResult?.groups;
   }
 
   /**
@@ -251,6 +253,27 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
   }
 
   /**
+   * Handle download of the full report
+   * @param {Event} event The html event triggering the download.
+   * @param {String} fullReport The full report text generated
+   */
+  handleDownloadFullReport(e, fullReport) {
+    e.preventDefault();
+    /**
+     * Timestamp safe for filename
+     * slice - trim off milliseconds and Z (UTC timezone indicator)
+     * replace - replace T (indicator for Time) with _
+     * replace - replace all : to - because : is not supported in file names
+     *
+     */
+
+    const now = new Date().toISOString().slice(0, 19).replace('T', '_').replace(/:/g, '-');
+    const filename = `passbolt-user-directory-simulate-synchronization-report-${now}.txt`;
+
+    download(fullReport, filename, "text/plain");
+  }
+
+  /**
    * get the full users report
    * @returns {string}
    */
@@ -337,6 +360,8 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {JSX}
    */
   render() {
+    const fullReportText = this.users ? String(this.getFullReport()) : '';
+
     return (
       <div>
         {this.isLoading() &&
@@ -349,7 +374,9 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
             <p>
               <strong><Trans>The operation was successful.</Trans></strong>
             </p>
-            {this.hasSuccessResource() &&
+            {fullReportText &&
+            <>
+              {this.hasSuccessResource() &&
               <p id="resources-synchronize">
                 {this.hasSuccessUserResource() &&
                   <>{this.props.t("{{count}} user will be synchronized.", {count: this.usersSuccess.length})}</>
@@ -359,26 +386,34 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
                   <>{this.props.t("{{count}} group will be synchronized.", {count: this.groupsSuccess.length})}</>
                 }
               </p>
-            }
-            {!this.hasSuccessResource() &&
+              }
+              {!this.hasSuccessResource() &&
             <p id="no-resources"> <Trans>No resources will be synchronized.</Trans> </p>
-            }
-            <div className={`accordion operation-details ${this.state.openFullReport ? "" : "closed"}`}>
-              <div className="accordion-header" onClick={this.handleFullReportClicked}>
-                <button type="button" className="link no-border">
-                  <span><Trans>Full report</Trans></span>
-                  {this.state.openFullReport
-                    ? <CaretDownSVG className="baseline svg-icon"/>
-                    : <CaretRightSVG className="baseline svg-icon"/>
-                  }
+              }
+              <div className={`accordion operation-details ${this.state.openFullReport ? "" : "closed"}`}>
+                <div className="accordion-header" onClick={this.handleFullReportClicked}>
+                  <button type="button" className="link no-border">
+                    <span><Trans>Full report</Trans></span>
+                    {this.state.openFullReport
+                      ? <CaretDownSVG className="baseline svg-icon"/>
+                      : <CaretRightSVG className="baseline svg-icon"/>
+                    }
+                  </button>
+                </div>
+                <div className="accordion-content">
+                  <div className="input text">
+                    <textarea className="full_report" readOnly={true} value={fullReportText}/>
+                  </div>
+                </div>
+                <button type="button" className="link download-full-report" onClick={event => this.handleDownloadFullReport(event, fullReportText)}>
+                  <Trans>Download the Full Report</Trans>
                 </button>
               </div>
-              <div className="accordion-content">
-                <div className="input text">
-                  <textarea className="full_report" readOnly={true} value={this.getFullReport()}/>
-                </div>
-              </div>
-            </div>
+            </>
+            }
+            {
+              !fullReportText && <p id="no-report-message"><span><Trans>There is nothing to synchronize</Trans></span></p>
+            }
             {this.hasErrorOrIgnoreResource() &&
               <div className="warning message no-margin">
                 <p>
@@ -389,8 +424,15 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
           </div>
           <div className="submit-wrapper clearfix">
             <a className="button" target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/docs/admin/user-provisioning/users-directory/advanced-directory-options/" > <span><Trans>Read the documentation</Trans></span></a>
-            <FormCancelButton disabled={this.isLoading()} onClick={this.handleClose}/>
-            <button type="submit" disabled={this.isLoading()} className="primary button form" onClick={this.handleSynchronize}><Trans>Synchronize</Trans></button>
+            { fullReportText &&
+              <>
+                <FormCancelButton disabled={this.isLoading()} onClick={this.handleClose}/>
+                <button type="submit" disabled={this.isLoading()} className="primary button form" onClick={this.handleSynchronize}><Trans>Synchronize</Trans></button>
+              </>
+            }
+            { !fullReportText &&
+              <button disabled={this.isLoading()} className="primary button form" type="button" onClick={this.handleClose}><Trans>Ok</Trans></button>
+            }
           </div>
         </DialogWrapper>
         }

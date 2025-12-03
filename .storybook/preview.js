@@ -46,13 +46,13 @@ export const globalTypes = {
   locale: {
     name: 'Locale',
     description: 'Internationalization locale',
-    defaultValue: 'en-UK',
+    defaultValue: 'en-GB',
     toolbar: {
       icon: 'globe',
       items: [
         //TODO: this might be improve to dynamically generate the language list
         { value: 'de-DE', right: '🇩🇪', title: 'Deutsch' },
-        { value: 'en-UK', right: '🇬🇧', title: 'English' },
+        { value: 'en-GB', right: '🇬🇧', title: 'English' },
         { value: 'es-ES', right: '🇪🇸', title: 'Español' },
         { value: 'fr-FR', right: '🇫🇷', title: 'Français' },
         { value: 'it-IT', right: '🇮🇹', title: 'Italiano (beta)' },

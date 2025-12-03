@@ -304,7 +304,7 @@ class DisplayInFormMenu extends React.Component {
         disabled={this.state.resourceIdProcessing === resource.id}
         title={resource.metadata.name}
         description={resource.metadata?.username}
-        icon={<ResourceIcon resource={resource} resourceTypes={this.props.resourceTypes}/>}
+        icon={<ResourceIcon resource={resource}/>}
       />
     ]), []);
   }

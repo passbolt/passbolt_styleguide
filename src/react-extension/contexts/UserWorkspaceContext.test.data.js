@@ -1098,6 +1098,320 @@ export const users = [{
   is_mfa_enabled: false
 }];
 
+export const usersWithAttentionRequiredStates = [{
+  "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+  "role_id": TEST_ROLE_USER_ID,
+  "username": "carol@passbolt.com",
+  "active": true,
+  "deleted": false,
+  "created": "2020-05-11T09:32:49+00:00",
+  "modified": "2020-05-12T09:32:49+00:00",
+  "pending_account_recovery_request": true,
+  "profile": {
+    "id": "48bcd9ac-a520-53e0-b3a4-9da7e57b91aa",
+    "user_id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+    "first_name": "Carol",
+    "last_name": "Shaw",
+    "created": "2020-05-13T09:32:49+00:00",
+    "modified": "2020-05-13T09:32:49+00:00",
+    "avatar": {
+      "id": "0f769127-3053-45e4-bd8e-75e766bb4d52",
+      "user_id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+      "foreign_key": "48bcd9ac-a520-53e0-b3a4-9da7e57b91aa",
+      "model": "Avatar",
+      "filename": "carol.png",
+      "filesize": 733439,
+      "mime_type": "image\/png",
+      "extension": "png",
+      "hash": "7445a736df60a1ac1bfdab8fc5b842a95c495aec",
+      "path": "Avatar\/73\/09\/19\/0f769127305345e4bd8e75e766bb4d52\/0f769127305345e4bd8e75e766bb4d52.png",
+      "adapter": "Local",
+      "created": "2020-05-13T09:32:51+00:00",
+      "modified": "2020-05-13T09:32:51+00:00",
+      "url": {
+        "medium": "img\/public\/Avatar\/73\/09\/19\/0f769127305345e4bd8e75e766bb4d52\/0f769127305345e4bd8e75e766bb4d52.a99472d5.png",
+        "small": "img\/public\/Avatar\/73\/09\/19\/0f769127305345e4bd8e75e766bb4d52\/0f769127305345e4bd8e75e766bb4d52.65a0ba70.png"
+      }
+    }
+  },
+  "__placeholder_last_logged_in__": "",
+  "last_logged_in": "",
+  is_mfa_enabled: false
+}, {
+  "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
+  "role_id": TEST_ROLE_USER_ID,
+  "username": "dame@passbolt.com",
+  "active": true,
+  "deleted": false,
+  "created": "2020-05-13T07:32:49+00:00",
+  "modified": "2020-05-13T08:32:49+00:00",
+  "missing_metadata_key_ids": ['64c6278e-f844-5fda-91ff-3e946b18d995'],
+  "profile": {
+    "id": "2766ff6b-87f1-53a9-98fd-72cd32a3df69",
+    "user_id": "54c6278e-f824-5fda-91ff-3e946b18d994",
+    "first_name": "Dame Steve",
+    "last_name": "Shirley",
+    "created": "2020-05-13T09:32:49+00:00",
+    "modified": "2020-05-13T09:32:49+00:00",
+    "avatar": {
+      "id": "81100609-d60d-4dc8-a8c8-de45522eee1b",
+      "user_id": "54c6278e-f824-5fda-91ff-3e946b18d994",
+      "foreign_key": "2766ff6b-87f1-53a9-98fd-72cd32a3df69",
+      "model": "Avatar",
+      "filename": "dame steve.png",
+      "filesize": 20676,
+      "mime_type": "image\/png",
+      "extension": "png",
+      "hash": "f2695972b9009970ac85aae95f907693268cd249",
+      "path": "Avatar\/1b\/9d\/80\/81100609d60d4dc8a8c8de45522eee1b\/81100609d60d4dc8a8c8de45522eee1b.png",
+      "adapter": "Local",
+      "created": "2020-05-13T09:32:51+00:00",
+      "modified": "2020-05-13T09:32:51+00:00",
+      "url": {
+        "medium": "img\/public\/Avatar\/1b\/9d\/80\/81100609d60d4dc8a8c8de45522eee1b\/81100609d60d4dc8a8c8de45522eee1b.a99472d5.png",
+        "small": "img\/public\/Avatar\/1b\/9d\/80\/81100609d60d4dc8a8c8de45522eee1b\/81100609d60d4dc8a8c8de45522eee1b.65a0ba70.png"
+      }
+    }
+  },
+  "__placeholder_last_logged_in__": "",
+  "last_logged_in": "",
+  is_mfa_enabled: false
+}, {
+  "id": "1ebc0060-9274-5451-aa12-ad0f31bc29dd",
+  "role_id": TEST_ROLE_USER_ID,
+  "username": "edith@passbolt.com",
+  "active": true,
+  "deleted": false,
+  "created": "2020-05-13T09:30:49+00:00",
+  "modified": "2020-05-13T09:31:49+00:00",
+  "pending_account_recovery_request": true,
+  "missing_metadata_key_ids": ['64c6278e-f844-5fda-91ff-3e946b18d998'],
+  "profile": {
+    "id": "08710a74-8996-5f60-b5db-ffabfa85bfe6",
+    "user_id": "1ebc0060-9274-5451-aa12-ad0f31bc29dd",
+    "first_name": "Edith",
+    "last_name": "Clarke",
+    "created": "2020-05-13T09:32:49+00:00",
+    "modified": "2020-05-13T09:32:49+00:00",
+    "avatar": {
+      "id": "9bdfae1c-8c4c-4c39-8025-9f4b064397e6",
+      "user_id": "1ebc0060-9274-5451-aa12-ad0f31bc29dd",
+      "foreign_key": "08710a74-8996-5f60-b5db-ffabfa85bfe6",
+      "model": "Avatar",
+      "filename": "edith.png",
+      "filesize": 20462,
+      "mime_type": "image\/png",
+      "extension": "png",
+      "hash": "6a508422b1765eaa13c28f4611340414622f9cf9",
+      "path": "Avatar\/38\/5a\/fe\/9bdfae1c8c4c4c3980259f4b064397e6\/9bdfae1c8c4c4c3980259f4b064397e6.png",
+      "adapter": "Local",
+      "created": "2020-05-13T09:32:50+00:00",
+      "modified": "2020-05-13T09:32:50+00:00",
+      "url": {
+        "medium": "img\/public\/Avatar\/38\/5a\/fe\/9bdfae1c8c4c4c3980259f4b064397e6\/9bdfae1c8c4c4c3980259f4b064397e6.a99472d5.png",
+        "small": "img\/public\/Avatar\/38\/5a\/fe\/9bdfae1c8c4c4c3980259f4b064397e6\/9bdfae1c8c4c4c3980259f4b064397e6.65a0ba70.png"
+      }
+    }
+  },
+  "__placeholder_last_logged_in__": "",
+  "last_logged_in": "",
+  is_mfa_enabled: false
+}, {
+  "id": "e97b14ba-8957-57c9-a357-f78a6e1e1a46",
+  "role_id": TEST_ROLE_USER_ID,
+  "username": "betty@passbolt.com",
+  "active": true,
+  "deleted": false,
+  "created": "2020-04-29T09:32:49+00:00",
+  "modified": "2020-05-06T09:32:49+00:00",
+  "profile": {
+    "id": "cbce5d22-46c1-51d1-b851-36b174e40611",
+    "user_id": "e97b14ba-8957-57c9-a357-f78a6e1e1a46",
+    "first_name": "Betty",
+    "last_name": "Holberton",
+    "created": "2020-05-13T09:32:49+00:00",
+    "modified": "2020-05-13T09:32:49+00:00",
+    "avatar": {
+      "id": "a8c648a9-ee7f-416d-9ad1-322e8ef28c0b",
+      "user_id": "e97b14ba-8957-57c9-a357-f78a6e1e1a46",
+      "foreign_key": "cbce5d22-46c1-51d1-b851-36b174e40611",
+      "model": "Avatar",
+      "filename": "betty.png",
+      "filesize": 115942,
+      "mime_type": "image\/png",
+      "extension": "png",
+      "hash": "820a0cb765217a0e765f3a0abbb2e98b62ddecc1",
+      "path": "Avatar\/c2\/6f\/26\/a8c648a9ee7f416d9ad1322e8ef28c0b\/a8c648a9ee7f416d9ad1322e8ef28c0b.png",
+      "adapter": "Local",
+      "created": "2020-05-13T09:32:52+00:00",
+      "modified": "2020-05-13T09:32:52+00:00",
+      "url": {
+        "medium": "img\/public\/Avatar\/c2\/6f\/26\/a8c648a9ee7f416d9ad1322e8ef28c0b\/a8c648a9ee7f416d9ad1322e8ef28c0b.a99472d5.png",
+        "small": "img\/public\/Avatar\/c2\/6f\/26\/a8c648a9ee7f416d9ad1322e8ef28c0b\/a8c648a9ee7f416d9ad1322e8ef28c0b.65a0ba70.png"
+      }
+    }
+  },
+  "__placeholder_last_logged_in__": "",
+  "last_logged_in": "",
+  is_mfa_enabled: true
+}, {
+  "id": "f848277c-5398-58f8-a82a-72397af2d450",
+  "role_id": TEST_ROLE_USER_ID,
+  "username": "ada@passbolt.com",
+  "active": true,
+  "deleted": false,
+  "created": "2020-03-13T09:32:49+00:00",
+  "modified": "2020-04-13T09:32:49+00:00",
+  "profile": {
+    "id": "99522cc9-0acc-5ae2-b996-d03bded3c0a6",
+    "user_id": "f848277c-5398-58f8-a82a-72397af2d450",
+    "first_name": "Ada",
+    "last_name": "Lovelace",
+    "created": "2020-05-13T09:32:49+00:00",
+    "modified": "2020-05-13T09:32:49+00:00",
+    "avatar": {
+      "id": "b5e7a332-595f-4e52-9591-79df27f8a978",
+      "user_id": "f848277c-5398-58f8-a82a-72397af2d450",
+      "foreign_key": "99522cc9-0acc-5ae2-b996-d03bded3c0a6",
+      "model": "Avatar",
+      "filename": "ada.png",
+      "filesize": 170049,
+      "mime_type": "image\/png",
+      "extension": "png",
+      "hash": "97e36ab6528e26e3b9f988444ef490f125f49a39",
+      "path": "Avatar\/ef\/71\/ed\/b5e7a332595f4e52959179df27f8a978\/b5e7a332595f4e52959179df27f8a978.png",
+      "adapter": "Local",
+      "created": "2020-05-13T09:32:52+00:00",
+      "modified": "2020-05-13T09:32:52+00:00",
+      "url": {
+        "medium": "img\/public\/Avatar\/ef\/71\/ed\/b5e7a332595f4e52959179df27f8a978\/b5e7a332595f4e52959179df27f8a978.a99472d5.png",
+        "small": "img\/public\/Avatar\/ef\/71\/ed\/b5e7a332595f4e52959179df27f8a978\/b5e7a332595f4e52959179df27f8a978.65a0ba70.png"
+      }
+    },
+  },
+  "__placeholder_last_logged_in__": "2020-05-12T15:56:49+00:00",
+  "last_logged_in": "2020-08-12T15:56:49+00:00"
+}, {
+  "id": "e1ebc592-b90d-5e22-9f40-50e52911673b",
+  "role_id": TEST_ROLE_USER_ID,
+  "username": "marlyn@passbolt.com",
+  "active": true,
+  "deleted": false,
+  "created": "2020-05-13T09:32:49+00:00",
+  "modified": "2020-05-13T09:32:49+00:00",
+  "profile": {
+    "id": "c1c1552b-486a-504f-a317-7efa0973384d",
+    "user_id": "e1ebc592-b90d-5e22-9f40-50e52911673b",
+    "first_name": "Marlyn",
+    "last_name": "Wescoff",
+    "created": "2020-05-13T09:32:49+00:00",
+    "modified": "2020-05-13T09:32:49+00:00",
+    "avatar": {"url": {"medium": "img\/avatar\/user_medium.png", "small": "img\/avatar\/user.png"}}
+  },
+  "__placeholder_last_logged_in__": "",
+  "last_logged_in": "",
+  is_mfa_enabled: false
+}, {
+  "id": "af5e1f70-a0ee-5b76-935b-c846f8a6a190",
+  "role_id": TEST_ROLE_USER_ID,
+  "username": "adele@passbolt.com",
+  "active": true,
+  "deleted": false,
+  "created": "2020-03-13T09:32:49+00:00",
+  "modified": "2020-04-13T09:32:49+00:00",
+  "profile": {
+    "id": "c219edf1-e104-55dc-ac80-cefdaffc943a",
+    "user_id": "af5e1f70-a0ee-5b76-935b-c846f8a6a190",
+    "first_name": "Adele",
+    "last_name": "Goldstine",
+    "created": "2020-05-13T09:32:49+00:00",
+    "modified": "2020-05-13T09:32:49+00:00",
+    "avatar": {"url": {"medium": "img\/avatar\/user_medium.png", "small": "img\/avatar\/user.png"}}
+  },
+  "__placeholder_last_logged_in__": "",
+  "last_logged_in": "",
+  is_mfa_enabled: false
+}, {
+  "id": "904bcd9f-ff51-5cfd-9de8-d2c876ade498",
+  "role_id": TEST_ROLE_USER_ID,
+  "username": "irene@passbolt.com",
+  "active": true,
+  "deleted": false,
+  "created": "2020-05-13T09:32:49+00:00",
+  "modified": "2020-05-13T09:32:49+00:00",
+  "profile": {
+    "id": "c551fc12-59b4-51ad-ae73-1659812e9ba5",
+    "user_id": "904bcd9f-ff51-5cfd-9de8-d2c876ade498",
+    "first_name": "Irene",
+    "last_name": "Greif",
+    "created": "2020-05-13T09:32:49+00:00",
+    "modified": "2020-05-13T09:32:49+00:00",
+    "avatar": {"url": {"medium": "img\/avatar\/user_medium.png", "small": "img\/avatar\/user.png"}}
+  },
+  "__placeholder_last_logged_in__": "",
+  "last_logged_in": ""
+}, {
+  "id": "c92a1885-1644-5bdb-8486-12d751b976ff",
+  "role_id": TEST_ROLE_USER_ID,
+  "username": "thelma@passbolt.com",
+  "active": true,
+  "deleted": false,
+  "created": "2020-05-13T09:32:49+00:00",
+  "modified": "2020-05-13T09:32:49+00:00",
+  "profile": {
+    "id": "c6b23ff3-b8e3-52b8-bf76-2cd57e8c701d",
+    "user_id": "c92a1885-1644-5bdb-8486-12d751b976ff",
+    "first_name": "Thelma",
+    "last_name": "Estrin",
+    "created": "2020-05-13T09:32:49+00:00",
+    "modified": "2020-05-13T09:32:49+00:00",
+    "avatar": {"url": {"medium": "img\/avatar\/user_medium.png", "small": "img\/avatar\/user.png"}}
+  },
+  "__placeholder_last_logged_in__": "",
+  "last_logged_in": "",
+  is_mfa_enabled: false
+},
+{
+  "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+  "role_id": TEST_ROLE_USER_ID,
+  "username": "carol+suspended@passbolt.com",
+  "active": true,
+  "deleted": false,
+  "created": "2020-05-11T09:32:49+00:00",
+  "modified": "2020-05-12T09:32:49+00:00",
+  "disabled": "2020-05-11T09:32:49+00:00",
+  "profile": {
+    "id": "48bcd9ac-a520-53e0-b3a4-9da7e57b91aa",
+    "user_id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+    "first_name": "Carol",
+    "last_name": "Shaw",
+    "created": "2020-05-13T09:32:49+00:00",
+    "modified": "2020-05-13T09:32:49+00:00",
+    "avatar": {
+      "id": "0f769127-3053-45e4-bd8e-75e766bb4d52",
+      "user_id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+      "foreign_key": "48bcd9ac-a520-53e0-b3a4-9da7e57b91aa",
+      "model": "Avatar",
+      "filename": "carol.png",
+      "filesize": 733439,
+      "mime_type": "image\/png",
+      "extension": "png",
+      "hash": "7445a736df60a1ac1bfdab8fc5b842a95c495aec",
+      "path": "Avatar\/73\/09\/19\/0f769127305345e4bd8e75e766bb4d52\/0f769127305345e4bd8e75e766bb4d52.png",
+      "adapter": "Local",
+      "created": "2020-05-13T09:32:51+00:00",
+      "modified": "2020-05-13T09:32:51+00:00",
+      "url": {
+        "medium": "img\/public\/Avatar\/73\/09\/19\/0f769127305345e4bd8e75e766bb4d52\/0f769127305345e4bd8e75e766bb4d52.a99472d5.png",
+        "small": "img\/public\/Avatar\/73\/09\/19\/0f769127305345e4bd8e75e766bb4d52\/0f769127305345e4bd8e75e766bb4d52.65a0ba70.png"
+      }
+    }
+  },
+  "__placeholder_last_logged_in__": "",
+  "last_logged_in": "",
+  is_mfa_enabled: false
+}];
+
 export const groups = [
   {
     "id": "516c2db6-0aed-52d8-854f-b3f3499995e7",
