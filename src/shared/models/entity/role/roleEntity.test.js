@@ -119,5 +119,57 @@ describe("Role entity", () => {
       expect(guestRole.isAReservedRole()).toStrictEqual(true);
       expect(customRole.isAReservedRole()).toStrictEqual(false);
     });
+
+    it("should not be bypassed using capital letters", () => {
+      expect.assertions(12);
+      const role1 = new RoleEntity(customRoleDto({name: "Admin"}));
+      const role2 = new RoleEntity(customRoleDto({name: "adMiN"}));
+      const role3 = new RoleEntity(customRoleDto({name: "User"}));
+      const role4 = new RoleEntity(customRoleDto({name: "usER"}));
+      const role5 = new RoleEntity(customRoleDto({name: "Guest"}));
+      const role6 = new RoleEntity(customRoleDto({name: "guESt"}));
+
+      expect(role1.isAdmin()).toStrictEqual(true);
+      expect(role2.isAdmin()).toStrictEqual(true);
+
+      expect(role3.isUser()).toStrictEqual(true);
+      expect(role4.isUser()).toStrictEqual(true);
+
+      expect(role5.isGuest()).toStrictEqual(true);
+      expect(role6.isGuest()).toStrictEqual(true);
+
+      expect(role1.isAReservedRole()).toStrictEqual(true);
+      expect(role2.isAReservedRole()).toStrictEqual(true);
+      expect(role3.isAReservedRole()).toStrictEqual(true);
+      expect(role4.isAReservedRole()).toStrictEqual(true);
+      expect(role5.isAReservedRole()).toStrictEqual(true);
+      expect(role6.isAReservedRole()).toStrictEqual(true);
+    });
+
+    it("should not be bypassed using capital letters or special characters", () => {
+      expect.assertions(12);
+      const role1 = new RoleEntity(customRoleDto({name: "Admİn"}));
+      const role2 = new RoleEntity(customRoleDto({name: "adMi̇N"}));
+      const role3 = new RoleEntity(customRoleDto({name: "Usér"}));
+      const role4 = new RoleEntity(customRoleDto({name: "usÈR"}));
+      const role5 = new RoleEntity(customRoleDto({name: "Gùest"}));
+      const role6 = new RoleEntity(customRoleDto({name: "gũESt"}));
+
+      expect(role1.isAdmin()).toStrictEqual(false);
+      expect(role2.isAdmin()).toStrictEqual(false);
+
+      expect(role3.isUser()).toStrictEqual(false);
+      expect(role4.isUser()).toStrictEqual(false);
+
+      expect(role5.isGuest()).toStrictEqual(false);
+      expect(role6.isGuest()).toStrictEqual(false);
+
+      expect(role1.isAReservedRole()).toStrictEqual(false);
+      expect(role2.isAReservedRole()).toStrictEqual(false);
+      expect(role3.isAReservedRole()).toStrictEqual(false);
+      expect(role4.isAReservedRole()).toStrictEqual(false);
+      expect(role5.isAReservedRole()).toStrictEqual(false);
+      expect(role6.isAReservedRole()).toStrictEqual(false);
+    });
   });
 });
