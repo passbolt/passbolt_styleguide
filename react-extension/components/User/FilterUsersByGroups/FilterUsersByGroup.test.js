@@ -157,7 +157,34 @@ describe("See groups", () => {
     });
   });
 
-  describe('As ALU I shouldn’t be able to start deleting a group', () => {
+  describe('As LU I should be able to start deleting a group if I am the group manager', () => {
+    const appContext = {
+      port: new MockPort(),
+      groups: groupsMock,
+      loggedInUser: {
+        role: {
+          name: 'user'
+        }
+      }
+    };
+    const context = defaultAppContext(appContext); // The applicative context
+    /**
+     * Given the groups section
+     * And the logged-in user is not AD but group manager
+     * Then I should see the delete group menu
+     */
+
+    beforeEach(() => {
+      page = new FilterUsersByGroupPage(context, props);
+    });
+
+    it('As a group manager I should be able to start deleting a group', async() => {
+      await page.displayGroupList.click(page.displayGroupList.moreButton);
+      expect(page.displayGroupContextualMenu.deleteGroupContextualMenu).not.toBeNull();
+    });
+  });
+
+  describe('As LU I shouldn’t be able to start deleting a group', () => {
     const appContext = {
       port: new MockPort(),
       groups: groupsMock,
@@ -179,7 +206,7 @@ describe("See groups", () => {
     });
 
     it('As NOT_AD I shouldn’t be able to start deleting a group', async() => {
-      await page.displayGroupList.click(page.displayGroupList.moreButton);
+      await page.displayGroupList.rightClick(page.displayGroupList.group(2));
       expect(page.displayGroupContextualMenu.deleteGroupContextualMenu).toBeNull();
     });
   });

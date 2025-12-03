@@ -55,7 +55,6 @@ export const defaultAdminActionControlResolution = {
 export const defaultUserActionControlResolution = {
   [uiActions.ADMINSTRATION_VIEW_WORKSPACE]: controlFunctionResolutions[controlFunctions.DENY],
   [actions.GROUPS_ADD]: controlFunctionResolutions[controlFunctions.DENY],
-  [actions.ACCOUNT_RECOVERY_REQUEST_INDEX]: controlFunctionResolutions[controlFunctions.DENY],
   [actions.ACCOUNT_RECOVERY_REQUEST_VIEW]: controlFunctionResolutions[controlFunctions.DENY],
   [actions.ACCOUNT_RECOVERY_RESPONSE_CREATE]: controlFunctionResolutions[controlFunctions.DENY],
 };

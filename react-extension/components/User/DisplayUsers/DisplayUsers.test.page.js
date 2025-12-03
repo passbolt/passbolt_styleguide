@@ -75,6 +75,28 @@ export default class DisplayUsersPage {
   }
 
   /**
+   * Returns the number of column
+   * @return {number}
+   */
+  get columnCount() {
+    return this._page.container.querySelectorAll('table thead th').length;
+  }
+
+  /**
+   * Get the column at the index specified in paramenter
+   * @param {number} index The index of the column
+   * @return {{readonly name: string|*}|string|*}
+   */
+  column(index) {
+    const element = this._page.container.querySelectorAll('table thead th')[index - 1];
+    return {
+      get name() {
+        return element.querySelector('.cell-header .cell-header-text').textContent;
+      }
+    };
+  }
+
+  /**
    * Returns the index-th user with useful accessors
    * @index The user index
    */

@@ -154,10 +154,25 @@ class CreateUserPageObject {
   }
 
   /**
-   * Returns the is admin checkbox element
+   * Returns the select role element
    */
-  get isAdmin() {
-    return this._container.querySelector('#is_admin_checkbox');
+  get selectRole() {
+    return this._container.querySelector('#select_role');
+  }
+
+  /**
+   * Returns the role selected input element
+   * @return {string}
+   */
+  get roleSelected() {
+    return this._container.querySelector('#select_role .value').textContent;
+  }
+
+  /**
+   * Returns the role input element
+   */
+  getRoleList(index) {
+    return this._container.querySelectorAll('#select_role .option')[index - 1];
   }
 
   /**

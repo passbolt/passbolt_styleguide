@@ -50,13 +50,16 @@ describe("See the Create Dialog User", () => {
           last_name: "admin",
         },
         username: "   admin@passbolt.com   ",
-        is_admin: true,
       };
       // Fill the form
       page.createUser.fillInput(page.createUser.firstName, userMeta.profile.first_name);
       page.createUser.fillInput(page.createUser.lastName, userMeta.profile.last_name);
       page.createUser.fillInput(page.createUser.username, userMeta.username);
-      await page.createUser.click(page.createUser.isAdmin);
+
+      expect(page.createUser.roleSelected).toStrictEqual("User");
+      await page.createUser.click(page.createUser.selectRole);
+      await page.createUser.click(page.createUser.getRoleList(1));
+      expect(page.createUser.roleSelected).toStrictEqual("Admin");
 
       const requestMockImpl = jest.fn((message, data) => data);
       mockContextRequest(context, requestMockImpl);
@@ -68,7 +71,7 @@ describe("See the Create Dialog User", () => {
           last_name: "admin",
         },
         username: "admin@passbolt.com",
-        role_id: context.roles[0].id,
+        role_id: props.roles.getFirst("name", "admin").id,
       };
       await page.createUser.click(page.createUser.saveButton);
 

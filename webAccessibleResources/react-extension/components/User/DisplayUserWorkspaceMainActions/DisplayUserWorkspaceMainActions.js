@@ -27,6 +27,8 @@ import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
 import UserAddSVG from "../../../../img/svg/user_add.svg";
 import GroupAddSVG from "../../../../img/svg/users.svg";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -82,7 +84,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
    * @returns {boolean}
    */
   canIUseCreate() {
-    return this.isLoggedInUserAdmin();
+    return this.isLoggedInUserAdmin() || this.canIUseCreateGroup();
   }
 
   /**
@@ -91,6 +93,14 @@ class DisplayUserWorkspaceMainActions extends React.Component {
    */
   isLoggedInUserAdmin() {
     return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
+  }
+
+  /**
+   * Can I use create group
+   * @return {boolean}
+   */
+  canIUseCreateGroup() {
+    return this.props.rbacContext.canIUseAction(actions.GROUPS_ADD);
   }
 
   /**
@@ -108,18 +118,22 @@ class DisplayUserWorkspaceMainActions extends React.Component {
             <CaretDownSVG/>
           </DropdownButton>
           <DropdownMenu className="menu-create-primary">
-            <DropdownMenuItem>
-              <button id="user_action" type="button" className="no-border" onClick={this.handleCreateMenuUserClickEvent}>
-                <UserAddSVG/>
-                <span><Trans>User</Trans></span>
-              </button>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <button id="group_action" type="button" className="no-border" onClick={this.handleCreateMenuGroupClickEvent}>
-                <GroupAddSVG/>
-                <span><Trans>Group</Trans></span>
-              </button>
-            </DropdownMenuItem>
+            {this.isLoggedInUserAdmin() &&
+              <DropdownMenuItem>
+                <button id="user_action" type="button" className="no-border" onClick={this.handleCreateMenuUserClickEvent}>
+                  <UserAddSVG/>
+                  <span><Trans>User</Trans></span>
+                </button>
+              </DropdownMenuItem>
+            }
+            {this.canIUseCreateGroup() &&
+              <DropdownMenuItem>
+                <button id="group_action" type="button" className="no-border" onClick={this.handleCreateMenuGroupClickEvent}>
+                  <GroupAddSVG/>
+                  <span><Trans>Group</Trans></span>
+                </button>
+              </DropdownMenuItem>
+            }
           </DropdownMenu>
         </Dropdown>
         }
@@ -131,6 +145,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
 DisplayUserWorkspaceMainActions.propTypes = {
   context: PropTypes.any, // The application context
   dialogContext: PropTypes.any, // the dialog context
+  rbacContext: PropTypes.any, // the rbac context
 };
 
-export default withAppContext(withDialog(withTranslation("common")(DisplayUserWorkspaceMainActions)));
+export default withAppContext(withDialog(withRbac(withTranslation("common")(DisplayUserWorkspaceMainActions))));

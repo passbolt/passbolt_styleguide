@@ -12,9 +12,11 @@
  * @since         2.11.0
  */
 
-import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
+import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
 import {defaultAppContext as defaultExtAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {v4 as uuidv4} from "uuid";
+import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
+import {rolesCollectionDto} from "../../../../shared/models/entity/role/rolesCollection.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -23,16 +25,6 @@ import {v4 as uuidv4} from "uuid";
  */
 export function defaultAppContext(appContext) {
   const defaultAppContext = defaultExtAppContext({
-    roles: [
-      {
-        id: TEST_ROLE_ADMIN_ID,
-        name: "admin"
-      },
-      {
-        id: TEST_ROLE_USER_ID,
-        name: "user"
-      }
-    ],
     users: [
       {
         id: uuidv4(),
@@ -58,6 +50,7 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
+    roles: new RolesCollection(rolesCollectionDto),
     onClose: jest.fn()
   };
 }

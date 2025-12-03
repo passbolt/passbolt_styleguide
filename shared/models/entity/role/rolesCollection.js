@@ -91,6 +91,23 @@ class RolesCollection extends EntityV2Collection {
     this.filterByCallback(role => !role.isAReservedRole());
   }
 
+  /**
+   * Removes the guest role from the collection.
+   * @return {void} The function alters the collection itself.
+   */
+  filterOutGuestRole() {
+    this.filterByCallback(role => !role.isGuest());
+  }
+
+  /**
+   * Get a role given its id
+   * @param {string} id
+   * @return {RoleEntity|null}
+   */
+  getById(id) {
+    return this._items.find(role => role.id === id) || null;
+  }
+
   /*
    * ==================================================
    * Static getters

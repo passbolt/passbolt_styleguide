@@ -15,15 +15,14 @@
 import {actions} from "./actionEnumeration";
 
 
-describe('uiActions', () => {
-  it('should have the expected UI action keys', () => {
-    expect.assertions(5);
+describe('actions', () => {
+  it('should have the expected action keys', () => {
+    expect.assertions(4);
 
 
-    expect(Object.keys(actions).length).toEqual(4);
-    expect(actions['GROUPS_ADD']).toEqual("Groups.GroupsAdd");
-    expect(actions['ACCOUNT_RECOVERY_REQUEST_INDEX']).toEqual("AccountRecoveryRequests.AccountRecoveryRequestsIndex");
-    expect(actions['ACCOUNT_RECOVERY_REQUEST_VIEW']).toEqual("AccountRecoveryRequests.AccountRecoveryRequestsView");
-    expect(actions['ACCOUNT_RECOVERY_RESPONSE_CREATE']).toEqual("AccountRecoveryResponses.AccountRecoveryResponsesCreate");
+    expect(Object.keys(actions).length).toEqual(3);
+    expect(actions['GROUPS_ADD']).toEqual("GroupsAdd.addPost");
+    expect(actions['ACCOUNT_RECOVERY_REQUEST_VIEW']).toEqual("AccountRecoveryRequestsView.view");
+    expect(actions['ACCOUNT_RECOVERY_RESPONSE_CREATE']).toEqual("AccountRecoveryResponsesCreate.post");
   });
 });

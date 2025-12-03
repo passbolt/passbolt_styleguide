@@ -19,6 +19,7 @@ import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultAccountRecoveryPolicyDto} from "./DisplayAccountRecoveryUserSettings.test.data";
 import DisplayAccountRecoveryUserSettingsHelp from "./DisplayAccountRecoveryUserSettingsHelp";
 import {MemoryRouter} from "react-router-dom";
+import {defaultRoleContext} from "../../../contexts/RoleContext.test.data";
 
 export default {
   title: "Components/UserSetting/DisplayAccountRecoveryUserSettings",
@@ -78,10 +79,15 @@ const accountRecoveryContext = props => (
   }
 );
 
+const roleContext = defaultRoleContext();
+const roles = roleContext.getAllRoles();
+
 export const Enabled = {
   args: {
     context: defaultAppContext(),
     accountRecoveryContext: accountRecoveryContext(),
+    roleContext: roleContext,
+    roles: roles,
   }
 };
 
@@ -89,6 +95,8 @@ export const Pending = {
   args: {
     context: defaultAppContext(),
     accountRecoveryContext: accountRecoveryContext({status: "pending"}),
+    roleContext: roleContext,
+    roles: roles,
   }
 };
 
@@ -96,5 +104,7 @@ export const Disabled = {
   args: {
     context: defaultAppContext(),
     accountRecoveryContext: accountRecoveryContext({status: "rejected"}),
+    roleContext: roleContext,
+    roles: roles,
   }
 };

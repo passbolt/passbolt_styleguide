@@ -27,6 +27,10 @@ import Tooltip from "../../Common/Tooltip/Tooltip";
 import {DateTime} from "luxon";
 import AttentionSVG from "../../../../img/svg/attention.svg";
 import InfoSVG from "../../../../img/svg/info.svg";
+import Select from "../../Common/Select/Select";
+import {capitalizeFirstLetter} from "../../../../shared/utils/stringUtils";
+import {withRoles} from "../../../contexts/RoleContext";
+import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 
 class EditUser extends Component {
   /**
@@ -46,7 +50,6 @@ class EditUser extends Component {
    */
   get defaultState() {
     const user = this.props.context.users.find(user => user.id === this.props.context.editUserDialogProps.id);
-    const role = this.props.context.roles.find(role => role.id === user.role_id);
     const disabled = user.disabled ? new Date(user.disabled) : null;
     return {
       // Dialog states
@@ -62,8 +65,8 @@ class EditUser extends Component {
       last_nameWarning: "",
       username: user.username,
       disabled: disabled,
-      is_admin: role.name === 'admin',
-      hasAlreadyBeenValidated: false // True if the form has alreadt been submitted once
+      role_id: user.role_id,
+      hasAlreadyBeenValidated: false // True if the form has already been submitted once
     };
   }
 
@@ -73,6 +76,7 @@ class EditUser extends Component {
    * @return {void}
    */
   componentDidMount() {
+    this.props.roleContext.refreshRoles();
     this.setState({loading: false}, () => {
       this.firstNameRef.current.focus();
     });
@@ -274,7 +278,6 @@ class EditUser extends Component {
    * @returns {Promise<Object>} User entity or Error
    */
   async updateUser() {
-    const role = this.props.context.roles.find(role => this.state.is_admin ? role.name === 'admin' : role.name === 'user');
     const userDto = {
       id: this.props.context.editUserDialogProps.id,
       username: this.state.username,
@@ -282,7 +285,7 @@ class EditUser extends Component {
         first_name: this.state.first_name,
         last_name: this.state.last_name
       },
-      role_id: role.id,
+      role_id: this.state.role_id,
     };
     if (this.isSuspendedUserFeatureEnabled()) {
       userDto.disabled = this.getFormattedDate(this.state.disabled);
@@ -382,7 +385,7 @@ class EditUser extends Component {
    * @returns {boolean}
    */
   hasAllInputDisabled() {
-    return this.state.processing || this.state.loading;
+    return this.state.processing || this.state.loading || !this.props.roles;
   }
 
   /**
@@ -412,6 +415,19 @@ class EditUser extends Component {
     const s = formatNumber(date.getUTCSeconds());
 
     return `${Y}-${M}-${D}T${h}:${m}:${s}`;
+  }
+
+  /**
+   * Get the role list
+   * @return {*[]}
+   */
+  get rolesList() {
+    if (this.props.roles) {
+      return this.props.roles.items.map(role => role.isAReservedRole()
+        ? ({value: role.id, label: capitalizeFirstLetter(this.translate(role.name))})
+        : ({value: role.id, label: role.name}));
+    }
+    return [];
   }
 
   /**
@@ -482,41 +498,27 @@ class EditUser extends Component {
                 autoComplete='off' autoFocus={true}
               />
             </div>
-            <div className={`input checkbox-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label><Trans>Role</Trans></label>
-              <span className="input toggle-switch form-element ready">
+            <div className={`input select-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+              <label htmlFor="select_role"><Trans>Role</Trans></label>
+              <Select id="select_role" disabled={this.isLoggedInUserAsEditing || this.hasAllInputDisabled()} name="role_id" items={this.rolesList} value={this.state.role_id} onChange={this.handleInputChange}/>
+            </div>
+            {this.isSuspendedUserFeatureEnabled() &&
+              <div className="input toggle-switch form-element ready">
                 <input
-                  id="is_admin_checkbox"
-                  name="is_admin"
+                  id="is_suspended_checkbox"
+                  name="disabled"
                   disabled={this.isLoggedInUserAsEditing || this.hasAllInputDisabled()}
-                  onChange={this.handleCheckboxClick}
-                  className="toggle-switch-checkbox checkbox"
-                  checked={this.state.is_admin}
+                  onChange={this.handleIsSuspendedCheckboxClick}
+                  checked={isUserSuspended}
                   type="checkbox"
+                  className="toggle-switch-checkbox checkbox"
                 />
-                <label htmlFor="is_admin_checkbox"><Trans>This user is an administrator</Trans></label>
-                <Tooltip message={this.translate("Administrators can add and delete users. They can also create groups and assign group managers. By default they can not see all passwords.")}>
+                <label htmlFor="is_suspended_checkbox"> <Trans>Suspend this user</Trans></label>
+                <Tooltip message={this.translate("This user will not be able to sign in to passbolt and receive email notifications. Other users can share resource with it and add this user to a group.")}>
                   <InfoSVG/>
                 </Tooltip>
-              </span>
-              {this.isSuspendedUserFeatureEnabled() &&
-                <span className="input toggle-switch form-element ready">
-                  <input
-                    id="is_suspended_checkbox"
-                    name="disabled"
-                    disabled={this.isLoggedInUserAsEditing || this.hasAllInputDisabled()}
-                    onChange={this.handleIsSuspendedCheckboxClick}
-                    checked={isUserSuspended}
-                    type="checkbox"
-                    className="toggle-switch-checkbox checkbox"
-                  />
-                  <label htmlFor="is_suspended_checkbox"> <Trans>Suspend this user</Trans></label>
-                  <Tooltip message={this.translate("This user will not be able to sign in to passbolt and receive email notifications. Other users can share resource with it and add this user to a group.")}>
-                    <InfoSVG/>
-                  </Tooltip>
-                </span>
-              }
-            </div>
+              </div>
+            }
             {!isUserSuspended && this.state.disabled &&
               <div className="message warning no-margin">
                 <Trans><b>Warning:</b> Suspension is scheduled for the {{suspendedDate}}</Trans>
@@ -535,10 +537,12 @@ class EditUser extends Component {
 
 EditUser.propTypes = {
   context: PropTypes.any, // The application context
+  roleContext: PropTypes.any, // The roles context
+  roles: PropTypes.instanceOf(RolesCollection), // The roles collection
   actionFeedbackContext: PropTypes.any, // The action feedback context
   onClose: PropTypes.func,
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(EditUser))));
+export default withAppContext(withActionFeedback(withRoles(withDialog(withTranslation('common')(EditUser)))));

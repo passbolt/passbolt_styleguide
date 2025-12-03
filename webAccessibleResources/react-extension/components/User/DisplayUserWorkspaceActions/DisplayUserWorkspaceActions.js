@@ -48,6 +48,8 @@ import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/
 import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import RemoveUserFromGroup from "../../UserGroup/RemoveUserFromGroup/RemoveUserFromGroup";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -102,6 +104,12 @@ class DisplayUserWorkspaceActions extends React.Component {
     }
 
     const group = this.props.userWorkspaceContext.filter.payload.group;
+    const isGroupManager = group.my_group_user && group.my_group_user.is_admin;
+
+    // Don't show the button if the user is not an administrator or the group manager
+    if (!this.isLoggedInUserAdmin() && !isGroupManager) {
+      return false;
+    }
 
     // Don't show the button if there is only one user in the group
     const soleMember = group.groups_users.length === 1;
@@ -262,7 +270,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   get hasMoreActionAllowed() {
-    return this.hasOneUserSelected() && (this.canDelete || this.canIUseMfa);
+    return this.isLoggedInUserAdmin() && this.hasOneUserSelected() && (this.canDelete || this.canIUseMfa);
   }
 
   /**
@@ -281,7 +289,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   get canIUseResend() {
-    return !this.isActiveUser;
+    return this.isLoggedInUserAdmin() && !this.isActiveUser;
   }
 
   /**
@@ -297,7 +305,8 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   get canIReviewAccountRecoveryRequest() {
-    return this.hasOneUserSelected()
+    return this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE)
+      && this.hasOneUserSelected()
       && this.props.context.siteSettings.canIUse("accountRecovery")
       && Boolean(this.selectedUser.pending_account_recovery_request);
   }
@@ -307,7 +316,8 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   get canIShareMissingMetadataKeys() {
-    return this.hasOneUserSelected()
+    return this.isLoggedInUserAdmin()
+      && this.hasOneUserSelected()
       && this.props.context.siteSettings.canIUse("metadata")
       && this.selectedUser.missing_metadata_key_ids?.length > 0
       && this.props.context.loggedInUser.id !== this.selectedUser.id;
@@ -390,41 +400,39 @@ class DisplayUserWorkspaceActions extends React.Component {
         <div className="actions-wrapper">
           <ul>
             {this.hasOneUserSelected() &&
-              <li id="copy-action">
-                <Dropdown>
-                  <DropdownButton className="button-action-contextual">
-                    <CopySVG/>
-                    <span><Trans>Copy</Trans></span>
-                    <CaretDownSVG/>
-                  </DropdownButton>
-                  <DropdownMenu className="menu-action-contextual">
-                    <DropdownMenuItem>
-                      <button id="copy-user-email" type="button" className="no-border" onClick={this.handleCopyEmailClickEvent}>
-                        <EmailSVG/>
-                        <span><Trans>Copy email address</Trans></span>
-                      </button>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <button id="copy-user-permalink" type="button" className="no-border" onClick={this.handleCopyPermalinkEvent}>
-                        <LinkSVG/>
-                        <span><Trans>Copy permalink</Trans></span>
-                      </button>
-                    </DropdownMenuItem>
-                    {this.isActiveUser &&
+              <>
+                <li id="copy-action">
+                  <Dropdown>
+                    <DropdownButton className="button-action-contextual">
+                      <CopySVG/>
+                      <span><Trans>Copy</Trans></span>
+                      <CaretDownSVG/>
+                    </DropdownButton>
+                    <DropdownMenu className="menu-action-contextual">
                       <DropdownMenuItem>
-                        <button id="copy-user-public-key" type="button" className="no-border" onClick={this.handleCopyPublicKeyEvent}>
-                          <KeySVG/>
-                          <span><Trans>Copy public key</Trans></span>
+                        <button id="copy-user-email" type="button" className="no-border" onClick={this.handleCopyEmailClickEvent}>
+                          <EmailSVG/>
+                          <span><Trans>Copy email address</Trans></span>
                         </button>
                       </DropdownMenuItem>
-                    }
-                  </DropdownMenu>
-                </Dropdown>
-              </li>
-            }
-            {this.isLoggedInUserAdmin() &&
-              <>
-                {this.hasOneUserSelected() &&
+                      <DropdownMenuItem>
+                        <button id="copy-user-permalink" type="button" className="no-border" onClick={this.handleCopyPermalinkEvent}>
+                          <LinkSVG/>
+                          <span><Trans>Copy permalink</Trans></span>
+                        </button>
+                      </DropdownMenuItem>
+                      {this.isActiveUser &&
+                        <DropdownMenuItem>
+                          <button id="copy-user-public-key" type="button" className="no-border" onClick={this.handleCopyPublicKeyEvent}>
+                            <KeySVG/>
+                            <span><Trans>Copy public key</Trans></span>
+                          </button>
+                        </DropdownMenuItem>
+                      }
+                    </DropdownMenu>
+                  </Dropdown>
+                </li>
+                {this.isLoggedInUserAdmin() &&
                   <li>
                     <button id="edit-user" type="button" className="button-action-contextual" onClick={this.handleEditClickEvent}>
                       <EditSVG/>
@@ -432,71 +440,71 @@ class DisplayUserWorkspaceActions extends React.Component {
                     </button>
                   </li>
                 }
-                {this.canRemoveFromGroup &&
-                  <li>
-                    <button
-                      id="remove-user-from-group"
-                      type="button"
-                      className="button-action-contextual"
-                      onClick={this.handleRemoveUserClickEvent}
-                    >
-                      <RemoveUserSVG />
-                      <span><Trans>Remove from group</Trans></span>
-                    </button>
-                  </li>
-                }
-                {this.canIUseResend &&
-                  <li>
-                    <button id="resend-invite-user" className="button-action-contextual" type="button" onClick={this.handleResendInviteClickEvent}>
-                      <SendSVG/>
-                      <span><Trans>Resend invite</Trans></span>
-                    </button>
-                  </li>
-                }
-                {this.canIReviewAccountRecoveryRequest &&
-                  <li>
-                    <button id="review-recovery" className="button-action-contextual" type="button" onClick={this.handleReviewRecoveryRequestEvent}>
-                      <BuoySVG/>
-                      <span><Trans>Review recovery request</Trans></span>
-                    </button>
-                  </li>
-                }
-                {this.canIShareMissingMetadataKeys &&
-                  <li>
-                    <button id="share-metadata-keys" className="button-action-contextual" type="button" onClick={this.handleShareMissingMetadataKeysEvent}>
-                      <MetadataKeySVG/>
-                      <span><Trans>Share metadata keys</Trans></span>
-                    </button>
-                  </li>
-                }
-                {this.hasMoreActionAllowed &&
-                  <li>
-                    <Dropdown>
-                      <DropdownButton className="more button-action-contextual button-action-icon">
-                        <MoreHorizontalSVG/>
-                      </DropdownButton>
-                      <DropdownMenu className="menu-action-contextual">
-                        {this.canDelete &&
-                          <DropdownMenuItem>
-                            <button id="delete-user" type="button" className="no-border" onClick={this.handleDeleteClickEvent} aria-label="Delete user">
-                              <DeleteSVG/>
-                              <span><Trans>Delete</Trans></span>
-                            </button>
-                          </DropdownMenuItem>
-                        }
-                        {this.canIUseMfa &&
-                          <DropdownMenuItem>
-                            <button id="disable-mfa-action" className="no-border" type="button" onClick={this.handleDisableMfaEvent} aria-label="Diable MFA">
-                              <FingerprintDisabledSVG/>
-                              <span><Trans>Disable MFA</Trans></span>
-                            </button>
-                          </DropdownMenuItem>
-                        }
-                      </DropdownMenu>
-                    </Dropdown>
-                  </li>
-                }
               </>
+            }
+            {this.canRemoveFromGroup &&
+              <li>
+                <button
+                  id="remove-user-from-group"
+                  type="button"
+                  className="button-action-contextual"
+                  onClick={this.handleRemoveUserClickEvent}
+                >
+                  <RemoveUserSVG />
+                  <span><Trans>Remove from group</Trans></span>
+                </button>
+              </li>
+            }
+            {this.canIUseResend &&
+              <li>
+                <button id="resend-invite-user" className="button-action-contextual" type="button" onClick={this.handleResendInviteClickEvent}>
+                  <SendSVG/>
+                  <span><Trans>Resend invite</Trans></span>
+                </button>
+              </li>
+            }
+            {this.canIReviewAccountRecoveryRequest &&
+              <li>
+                <button id="review-recovery" className="button-action-contextual" type="button" onClick={this.handleReviewRecoveryRequestEvent}>
+                  <BuoySVG/>
+                  <span><Trans>Review recovery request</Trans></span>
+                </button>
+              </li>
+            }
+            {this.canIShareMissingMetadataKeys &&
+              <li>
+                <button id="share-metadata-keys" className="button-action-contextual" type="button" onClick={this.handleShareMissingMetadataKeysEvent}>
+                  <MetadataKeySVG/>
+                  <span><Trans>Share metadata keys</Trans></span>
+                </button>
+              </li>
+            }
+            {this.hasMoreActionAllowed &&
+              <li>
+                <Dropdown>
+                  <DropdownButton className="more button-action-contextual button-action-icon">
+                    <MoreHorizontalSVG/>
+                  </DropdownButton>
+                  <DropdownMenu className="menu-action-contextual">
+                    {this.canDelete &&
+                      <DropdownMenuItem>
+                        <button id="delete-user" type="button" className="no-border" onClick={this.handleDeleteClickEvent} aria-label="Delete user">
+                          <DeleteSVG/>
+                          <span><Trans>Delete</Trans></span>
+                        </button>
+                      </DropdownMenuItem>
+                    }
+                    {this.canIUseMfa &&
+                      <DropdownMenuItem>
+                        <button id="disable-mfa-action" className="no-border" type="button" onClick={this.handleDisableMfaEvent} aria-label="Diable MFA">
+                          <FingerprintDisabledSVG/>
+                          <span><Trans>Disable MFA</Trans></span>
+                        </button>
+                      </DropdownMenuItem>
+                    }
+                  </DropdownMenu>
+                </Dropdown>
+              </li>
             }
           </ul>
           <span className="counter"><Trans count={count}>{{count}} selected</Trans></span>
@@ -515,9 +523,10 @@ DisplayUserWorkspaceActions.propTypes = {
   userWorkspaceContext: PropTypes.any, // the user workspace context
   workflowContext: PropTypes.any, // the workflow context
   dialogContext: PropTypes.any, // the dialog context
+  rbacContext: PropTypes.any, // the rbac context
   actionFeedbackContext: PropTypes.object, // the action feeedback context
   clipboardContext: PropTypes.object, // the clipboard service
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withWorkflow(withDialog(withUserWorkspace(withClipboard(withTranslation('common')(DisplayUserWorkspaceActions)))))));
+export default withAppContext(withActionFeedback(withRbac(withWorkflow(withDialog(withUserWorkspace(withClipboard(withTranslation('common')(DisplayUserWorkspaceActions))))))));

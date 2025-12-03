@@ -87,7 +87,7 @@ export default class RoleEntity extends EntityV2 {
    * @returns {boolean}
    */
   isAdmin() {
-    return this.name === RoleEntity.ROLE_ADMIN;
+    return this.name.toLowerCase() === RoleEntity.ROLE_ADMIN;
   }
 
   /**
@@ -95,7 +95,7 @@ export default class RoleEntity extends EntityV2 {
    * @returns {boolean}
    */
   isUser() {
-    return this.name === RoleEntity.ROLE_USER;
+    return this.name.toLowerCase() === RoleEntity.ROLE_USER;
   }
 
   /**
@@ -103,7 +103,7 @@ export default class RoleEntity extends EntityV2 {
    * @returns {boolean}
    */
   isGuest() {
-    return this.name === RoleEntity.ROLE_GUEST;
+    return this.name.toLowerCase() === RoleEntity.ROLE_GUEST;
   }
 
   /**

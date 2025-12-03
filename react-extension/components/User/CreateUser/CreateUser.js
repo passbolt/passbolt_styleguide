@@ -24,9 +24,12 @@ import {Trans, withTranslation} from "react-i18next";
 import {maxSizeValidation} from "../../../lib/Error/InputValidator";
 import {USER_INPUT_MAX_LENGTH} from "../../../../shared/constants/inputs.const";
 import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
-import Tooltip from "../../Common/Tooltip/Tooltip";
 import AttentionSVG from "../../../../img/svg/attention.svg";
-import InfoSVG from "../../../../img/svg/info.svg";
+import Select from "../../Common/Select/Select";
+import {capitalizeFirstLetter} from "../../../../shared/utils/stringUtils";
+import {withRoles} from "../../../contexts/RoleContext";
+import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
+import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 
 class CreateUser extends Component {
   /**
@@ -46,9 +49,22 @@ class CreateUser extends Component {
    * @return {void}
    */
   componentDidMount() {
+    this.props.roleContext.refreshRoles();
     this.setState({loading: false}, () => {
       this.firstNameRef.current.focus();
     });
+  }
+
+  /**
+   * ComponentDidUpdate
+   * Invoked immediately after state or props changed
+   * @return {void}
+   */
+  componentDidUpdate() {
+    // Set the role id if not in case of the lazy loading of roles
+    if (this.state.role_id == null && this.props.roles?.items.length > 0) {
+      this.setState({role_id: this.props.roles.getFirst("name", RoleEntity.ROLE_USER)?.id});
+    }
   }
 
   /**
@@ -71,7 +87,7 @@ class CreateUser extends Component {
       username: "",
       usernameError: null,
       usernameWarning: "",
-      is_admin: false,
+      role_id: this.props.roles?.getFirst("name", RoleEntity.ROLE_USER)?.id, // Get the user role id
       hasAlreadyBeenValidated: false // True if the form has already been submitted once
     };
   }
@@ -275,14 +291,13 @@ class CreateUser extends Component {
    * @returns {Promise<Object>} User entity or Error
    */
   async createUser() {
-    const role = this.props.context.roles.find(role => this.state.is_admin ? role.name === "admin" : role.name === "user");
     const userDto = {
       profile: {
         first_name: this.state.first_name,
         last_name: this.state.last_name
       },
       username: this.state.username.trim(),
-      role_id: role.id
+      role_id: this.state.role_id
     };
     return await this.props.context.port.request("passbolt.users.create", userDto);
   }
@@ -355,7 +370,20 @@ class CreateUser extends Component {
    * @returns {boolean}
    */
   hasAllInputDisabled() {
-    return this.state.processing || this.state.loading;
+    return this.state.processing || this.state.loading || !this.props.roles;
+  }
+
+  /**
+   * Get the role list
+   * @return {*[]}
+   */
+  get rolesList() {
+    if (this.props.roles) {
+      return this.props.roles.items.map(role => role.isAReservedRole()
+        ? ({value: role.id, label: capitalizeFirstLetter(this.translate(role.name))})
+        : ({value: role.id, label: role.name}));
+    }
+    return [];
   }
 
   /**
@@ -438,23 +466,9 @@ class CreateUser extends Component {
                 </div>
               )}
             </div>
-            <div className={`input checkbox-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label><Trans>Role</Trans></label>
-              <span className="input toggle-switch form-element ready">
-                <input
-                  id="is_admin_checkbox"
-                  name="is_admin"
-                  disabled={this.isLoggedInUserAsEditing || this.hasAllInputDisabled()}
-                  onChange={this.handleCheckboxClick}
-                  className="toggle-switch-checkbox checkbox"
-                  checked={this.state.is_admin}
-                  type="checkbox"
-                />
-                <label htmlFor="is_admin_checkbox"><Trans>This user is an administrator</Trans></label>
-                <Tooltip message={this.translate("Administrators can add and delete users. They can also create groups and assign group managers. By default they can not see all passwords.")}>
-                  <InfoSVG/>
-                </Tooltip>
-              </span>
+            <div className={`input select-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+              <label htmlFor="select_role"><Trans>Role</Trans></label>
+              <Select id="select_role" disabled={this.isLoggedInUserAsEditing || this.hasAllInputDisabled()} name="role_id" items={this.rolesList} value={this.state.role_id} onChange={this.handleInputChange}/>
             </div>
           </div>
           <div className="submit-wrapper clearfix">
@@ -470,9 +484,11 @@ class CreateUser extends Component {
 CreateUser.propTypes = {
   context: PropTypes.any, // The application context
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  roleContext: PropTypes.any, // The roles context
+  roles: PropTypes.instanceOf(RolesCollection), // The roles collection
   onClose: PropTypes.func,
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(CreateUser))));
+export default withAppContext(withActionFeedback(withRoles(withDialog(withTranslation('common')(CreateUser)))));

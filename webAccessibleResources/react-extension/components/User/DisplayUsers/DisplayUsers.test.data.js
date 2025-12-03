@@ -19,6 +19,7 @@ import {
 } from "../../../contexts/AccountRecoveryUserContext.test.data";
 import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
 import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContext.test.data";
+import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * Default props
@@ -27,6 +28,7 @@ import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContex
 export function defaultProps(props) {
   return {
     context: defaultAppContext(),
+    rbacContext: defaultAdministratorRbacContext(),
     accountRecoveryContext: defaultAccountRecoveryUserContext(),
     userWorkspaceContext: defaultUserWorkspaceContext({
       onUserScrolled: () => {},

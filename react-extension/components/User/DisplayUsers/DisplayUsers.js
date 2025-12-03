@@ -44,6 +44,8 @@ import CellUserAccountRecovery from "../../../../shared/components/Table/CellUse
 import ColumnsUserSettingCollection from "../../../../shared/models/entity/user/columnsUserSettingCollection";
 import ColumnModel from "../../../../shared/models/column/ColumnModel";
 import CircleOffSVG from "../../../../img/svg/circle_off.svg";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
 
 /**
  * This component allows to display the filtered users into a grid
@@ -293,11 +295,14 @@ class DisplayUsers extends React.Component {
   }
 
   /**
-   * Returns true if the accountRecovery feature is enabled and if the logged in user is an admin.
+   * Returns true if
+   *  - accountRecovery feature is enabled and the user has account recovery request view allowed
+   *  or
+   *  - metadata feature is enabled and the logged-in user is an admin.
    * @returns {boolean}
    */
   get hasAttentionRequiredColumn() {
-    return (this.props.context.siteSettings.canIUse("accountRecovery") || this.props.context.siteSettings.canIUse("metadata")) && this.isLoggedInUserAdmin;
+    return (this.props.context.siteSettings.canIUse("accountRecovery") && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_VIEW)) || (this.props.context.siteSettings.canIUse("metadata") && this.isLoggedInUserAdmin);
   }
 
   /**
@@ -322,7 +327,7 @@ class DisplayUsers extends React.Component {
    */
   get hasAccountRecoveryColumn() {
     return this.props.context.siteSettings.canIUse("accountRecovery")
-      && this.isLoggedInUserAdmin
+      && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_VIEW)
       && this.props.accountRecoveryContext.isPolicyEnabled();
   }
 
@@ -422,6 +427,7 @@ class DisplayUsers extends React.Component {
 
 DisplayUsers.propTypes = {
   context: PropTypes.any, // The application context
+  rbacContext: PropTypes.any, // The rbac context
   userWorkspaceContext: PropTypes.any, // The user workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
@@ -429,4 +435,4 @@ DisplayUsers.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withAccountRecovery(withTranslation('common')(DisplayUsers)))))));
+export default withAppContext(withRbac(withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withAccountRecovery(withTranslation('common')(DisplayUsers))))))));

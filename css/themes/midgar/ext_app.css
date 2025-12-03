@@ -8605,10 +8605,10 @@ svg .section-card .card .title:first-child {
   padding: 0.5em 1.25em;
   overflow: hidden;
 }
-.checkbox-wrapper span label {
+.toggle-switch label {
   font-weight: normal;
 }
-.checkbox-wrapper .tooltip {
+.toggle-switch .tooltip {
   margin-left: 0.8rem;
   line-height: 1rem;
 }
