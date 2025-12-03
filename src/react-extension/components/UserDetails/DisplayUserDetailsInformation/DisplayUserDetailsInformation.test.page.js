@@ -18,6 +18,7 @@ import React from "react";
 import {UserWorkspaceContext} from "../../../contexts/UserWorkspaceContext";
 import DisplayUserDetailsInformation from "./DisplayUserDetailsInformation";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import {RoleContext} from "../../../contexts/RoleContext";
 
 /**
  * The DisplayUserDetailsInformationPage component represented as a page
@@ -31,7 +32,9 @@ export default class DisplayUserDetailsInformationPage {
     this._page = render(
       <MockTranslationProvider>
         <UserWorkspaceContext.Provider value={props.userWorkspaceContext}>
-          <DisplayUserDetailsInformation {...props}/>
+          <RoleContext.Provider value={props.roleContext}>
+            <DisplayUserDetailsInformation {...props}/>
+          </RoleContext.Provider>
         </UserWorkspaceContext.Provider>
       </MockTranslationProvider>,
       {legacyRoot: true}
