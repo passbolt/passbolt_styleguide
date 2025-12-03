@@ -25,6 +25,7 @@ import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {getUserStatus} from "../../../../shared/utils/userUtils";
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
 import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
+import {withRoles} from "../../../contexts/RoleContext";
 
 class ReviewAccountRecoveryRequest extends Component {
   constructor(props) {
@@ -122,11 +123,11 @@ class ReviewAccountRecoveryRequest extends Component {
 
   /**
    * Get the user role who initiated the account recovery request.
-   * @returns {object}
+   * @returns {string}
    */
-  get creatorRole() {
-    const roleName = this.props.context.roles.find(role => role.id === this.creator.role_id).name;
-    return roleName;
+  get creatorRoleName() {
+    const role = this.props.roleContext.getRole(this.creator.role_id);
+    return role?.name || "";
   }
 
   /**
@@ -176,6 +177,7 @@ class ReviewAccountRecoveryRequest extends Component {
   render() {
     const creatorStatus = getUserStatus(this.creator);
     const creatorName = this.creatorName;
+    const creatorRole = this.creatorRoleName;
     return (
       <DialogWrapper
         title={this.translate("Review account recovery request")}
@@ -198,7 +200,7 @@ class ReviewAccountRecoveryRequest extends Component {
                       <span className="dateTimeAgo" title={this.date}>{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</span>
                       <span className="chips-group">
                         <span className={`chips user-status ${creatorStatus}`}>{this.props.t(creatorStatus)}</span>
-                        <span className={`chips user-role ${this.creatorRole}`}>{this.creatorRole}</span>
+                        <span className={`chips user-role ${creatorRole}`}>{creatorRole}</span>
                       </span>
                     </div>
                   </div>
@@ -269,9 +271,10 @@ ReviewAccountRecoveryRequest.propTypes = {
   context: PropTypes.any.isRequired, // The application context
   accountRecoveryRequest: PropTypes.object.isRequired, // The account recovery request to review.
   dialogContext: PropTypes.object, // The dialog handler
+  roleContext: PropTypes.object, // The role context
   onClose: PropTypes.func, // The close callback
   onCancel: PropTypes.func, // The cancel callback
   onSubmit: PropTypes.func, // The review submit requested callback
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withDialog(withTranslation("common")(ReviewAccountRecoveryRequest)));
+export default withAppContext(withDialog(withRoles(withTranslation("common")(ReviewAccountRecoveryRequest))));
