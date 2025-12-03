@@ -1,6 +1,6 @@
 import CreateUser from "./CreateUser";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-
+import {defaultProps} from "./CreateUser.test.data";
 
 export default {
   title: 'Components/User/CreateUser',
@@ -12,6 +12,14 @@ export default {
 
 export const Initial = {
   args: {
-    context: defaultAppContext()
+    context: defaultAppContext(),
+    ...defaultProps()
+  }
+};
+
+export const Loading = {
+  args: {
+    context: defaultAppContext(),
+    roles: null,
   }
 };
