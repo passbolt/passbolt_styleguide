@@ -143,6 +143,34 @@ describe("RolesCollections", () => {
     });
   });
 
+  describe("::filterOutGuestRole", () => {
+    it("should return the full collection with the guest role removed", () => {
+      expect.assertions(3);
+
+      const guestRole = guestRoleDto();
+      const collectionDto = [adminRoleDto(), userRoleDto(), guestRole, customRoleDto(), customRoleDto({name: "other-name"})];
+      const rolesCollection = new RolesCollection(collectionDto);
+      const expectedCollection = new RolesCollection(collectionDto);
+      expectedCollection.items.splice(2, 1);
+
+      rolesCollection.filterOutGuestRole();
+      expect(rolesCollection).toHaveLength(collectionDto.length - 1);
+      expect(rolesCollection.getById(guestRole.id)).toBeNull();
+      expect(rolesCollection).toStrictEqual(expectedCollection);
+    });
+
+    it("should not modify the collection and not crash if there are no guest role", () => {
+      expect.assertions(2);
+
+      const collectionDto = [adminRoleDto(), userRoleDto(), customRoleDto(), customRoleDto({name: "other-name"})];
+      const rolesCollection = new RolesCollection(collectionDto);
+
+      rolesCollection.filterOutGuestRole();
+      expect(rolesCollection).toHaveLength(collectionDto.length);
+      expect(rolesCollection).toStrictEqual(new RolesCollection(collectionDto));
+    });
+  });
+
   describe("::getById", () => {
     it("should return the role given its id", () => {
       expect.assertions(1);
