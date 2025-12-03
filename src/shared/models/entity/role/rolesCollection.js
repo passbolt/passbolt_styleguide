@@ -92,6 +92,14 @@ class RolesCollection extends EntityV2Collection {
   }
 
   /**
+   * Removes the guest role from the collection.
+   * @return {void} The function alters the collection itself.
+   */
+  filterOutGuestRole() {
+    this.filterByCallback(role => !role.isGuest());
+  }
+
+  /**
    * Get a role given its id
    * @param {string} id
    * @return {RoleEntity|null}
