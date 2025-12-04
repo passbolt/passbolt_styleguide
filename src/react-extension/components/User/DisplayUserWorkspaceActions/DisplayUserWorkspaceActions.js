@@ -92,29 +92,39 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   get canRemoveFromGroup() {
+    const {filter} = this.props.userWorkspaceContext;
     const selectedUser = this.selectedUser;
-    /*
-     * Avoid displaying the button if the user list is not filtered by group
-     * or if no user was selected
-     */
-    if (this.props.userWorkspaceContext.filter.type !== "FILTER-BY-GROUP" || !selectedUser) {
+
+    // Only show remove option when viewing a specific group's members
+    if (filter.type !== "FILTER-BY-GROUP" || !selectedUser) {
       return false;
     }
 
-    const group = this.props.userWorkspaceContext.filter.payload.group;
+    const group = filter.payload.group;
+    const groupUsers = group.groups_users;
 
-    // Don't show the button if there is only one user in the group
-    const soleMember = group.groups_users.length === 1;
-    if (soleMember) {
+    // Can't remove the only member of a group
+    if (groupUsers.length === 1) {
       return false;
     }
 
-    // Don't show the button if the selected user is the last manager of the selected group
-    const groupManagers = group.groups_users.filter(user => user.is_admin);
-    if (groupManagers.length === 1 && this.selectedUser.id === groupManagers[0].user_id) {
+    // Only admins or group managers can remove members
+    const isAdmin = this.isLoggedInUserAdmin();
+    if (!isAdmin) {
+      const loggedInUserId = this.props.context.loggedInUser.id;
+      const isManager = groupUsers.some(u => u.is_admin && u.user_id === loggedInUserId);
+      if (!isManager) {
+        return false;
+      }
+    }
+
+    // Don't allow removing the last manager from the group
+    const managers = groupUsers.filter(u => u.is_admin);
+    if (managers.length === 1 && managers[0].user_id === selectedUser.id) {
       return false;
     }
-    return group;
+
+    return true;
   }
 
   /**
@@ -432,19 +442,23 @@ class DisplayUserWorkspaceActions extends React.Component {
                     </button>
                   </li>
                 }
-                {this.canRemoveFromGroup &&
-                  <li>
-                    <button
-                      id="remove-user-from-group"
-                      type="button"
-                      className="button-action-contextual"
-                      onClick={this.handleRemoveUserClickEvent}
-                    >
-                      <RemoveUserSVG />
-                      <span><Trans>Remove from group</Trans></span>
-                    </button>
-                  </li>
-                }
+              </>
+            }
+            {this.canRemoveFromGroup &&
+              <li>
+                <button
+                  id="remove-user-from-group"
+                  type="button"
+                  className="button-action-contextual"
+                  onClick={this.handleRemoveUserClickEvent}
+                >
+                  <RemoveUserSVG />
+                  <span><Trans>Remove from group</Trans></span>
+                </button>
+              </li>
+            }
+            {this.isLoggedInUserAdmin() &&
+              <>
                 {this.canIUseResend &&
                   <li>
                     <button id="resend-invite-user" className="button-action-contextual" type="button" onClick={this.handleResendInviteClickEvent}>
