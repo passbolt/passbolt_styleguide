@@ -23,6 +23,8 @@ import {
 import DisplayRbacAdministrationPage from "./DisplayRbacAdministration.test.page";
 import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctionEnumeration";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import CreateRole from "../CreateRole/CreateRole.js";
+import {RoleApiServiceWithTooManyRoles} from "../../../../shared/services/api/role/roleApiService.test.data.js";
 
 /**
  * Unit tests on DisplayRbacAdministration in regard of specifications
@@ -236,6 +238,32 @@ describe("DisplayRbacAdministration", () => {
       await page.clickToSelectFirstItem('user', uiActions.FOLDERS_USE);
 
       expect(props.adminRbacContext.rbacsUpdated.remove).toHaveBeenCalledWith({"controlFunction": "Deny"});
+    });
+
+    it('As a logged in administrator I can open the role creation dialog', async() => {
+      expect.assertions(3);
+
+      const props = defaultProps();
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+
+      expect(page.createRoleButton).toBeDefined();
+      await page.click(page.createRoleButton);
+
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateRole, {onSubmit: expect.any(Function)});
+    });
+
+    it('As a logged in administrator I cannot open the role creation dialog if there are too many roles', async() => {
+      expect.assertions(1);
+
+      const props = defaultProps({RoleApiService: RoleApiServiceWithTooManyRoles});
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.createRoleButton);
+
+      expect(props.dialogContext.open).not.toHaveBeenCalled();
     });
   });
 });

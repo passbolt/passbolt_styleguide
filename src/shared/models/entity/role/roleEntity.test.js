@@ -40,6 +40,7 @@ describe("Role entity", () => {
       assertEntityProperty.string(RoleEntity, "description");
       assertEntityProperty.maxLength(RoleEntity, "description", 255);
       assertEntityProperty.notRequired(RoleEntity, "description");
+      assertEntityProperty.nullable(RoleEntity, "description");
     });
 
     it("validates created property", () => {

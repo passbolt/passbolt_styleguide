@@ -123,6 +123,14 @@ export default class DisplayRbacAdministrationPage {
   }
 
   /**
+   * Returns the create role button.
+   * @returns {HTMLElement}
+   */
+  get createRoleButton() {
+    return this._page.container.querySelector('.main-content button');
+  }
+
+  /**
    * Click on the element
    * @param {HTMLElement} element
    */

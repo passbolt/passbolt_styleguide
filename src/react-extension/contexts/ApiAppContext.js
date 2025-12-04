@@ -144,16 +144,19 @@ class ApiAppContextProvider extends React.Component {
 
   /**
    * Retrieve the rbacs.
-   * @returns {Promise<object>}
+   * @returns {Promise<void>}
    */
   async getRbacs() {
     const canIUseRbac = this.state.siteSettings.canIUse('rbacs');
-    let rbacsDto = [];
-    if (canIUseRbac) {
-      const apiClientOptions = this.getApiClientOptions();
-      const rbacApiService = new RbacApiService(apiClientOptions);
-      rbacsDto = await rbacApiService.findMe({ui_action: true, action: true});
+    if (!canIUseRbac) {
+      this.setState({rbacs: new RbacsCollection()});
+      return;
     }
+
+    const apiClientOptions = this.getApiClientOptions();
+    const rbacApiService = new RbacApiService(apiClientOptions);
+    const apiResponse = await rbacApiService.findMe({ui_action: true, action: true});
+    const rbacsDto = apiResponse.body;
     const rbacs = new RbacsCollection(rbacsDto, true);
     this.setState({rbacs});
   }

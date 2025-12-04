@@ -44,7 +44,8 @@ export default class RoleEntity extends EntityV2 {
         },
         "description": {
           "type": "string",
-          "maxLength": ROLE_DESCRIPTION_MAX_LENGTH
+          "maxLength": ROLE_DESCRIPTION_MAX_LENGTH,
+          "nullable": true,
         },
         "created": {
           "type": "string",

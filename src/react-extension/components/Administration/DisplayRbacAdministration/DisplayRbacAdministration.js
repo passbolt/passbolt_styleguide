@@ -30,6 +30,10 @@ import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollecti
 import RbacEntity from "../../../../shared/models/entity/rbac/rbacEntity";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
 import {createSafePortal} from "../../../../shared/utils/portals";
+import UserAddSVG from "../../../../img/svg/user_add.svg";
+import CreateRole from "../CreateRole/CreateRole";
+import {withDialog} from "../../../contexts/DialogContext";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 
 /**
@@ -43,6 +47,10 @@ class DisplayRbacAdministration extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.bindCallbacks();
+
+    const apiClientOptions = this.props.context.getApiClientOptions();
+    this.roleApiService = new this.props.RoleApiService(apiClientOptions);
+    this.rbacApiService = new this.props.RbacApiService(apiClientOptions);
   }
 
   /**
@@ -59,6 +67,8 @@ class DisplayRbacAdministration extends React.Component {
    */
   bindCallbacks() {
     this.updateRbacControlFunction = this.updateRbacControlFunction.bind(this);
+    this.handleAddRoleClick = this.handleAddRoleClick.bind(this);
+    this.createNewRole = this.createNewRole.bind(this);
   }
 
   /**
@@ -67,8 +77,7 @@ class DisplayRbacAdministration extends React.Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.findAndLoadRoles(this.props.RoleApiService);
-    this.findAndLoadRbacSettings(this.props.RbacApiService);
+    this.findAndLoadData();
   }
 
   /**
@@ -80,13 +89,19 @@ class DisplayRbacAdministration extends React.Component {
   }
 
   /**
+   * Loads all the necessary roles and all Rbac information.
+   */
+  findAndLoadData() {
+    this.findAndLoadRoles();
+    this.findAndLoadRbacSettings();
+  }
+
+  /**
    * Find and load the roles
    * @returns {Promise<void>}
    */
   async findAndLoadRoles() {
-    const apiClientOptions = this.props.context.getApiClientOptions();
-    const roleApiService = new this.props.RoleApiService(apiClientOptions);
-    const apiResponse = await roleApiService.findAll();
+    const apiResponse = await this.roleApiService.findAll();
     const rolesDto = apiResponse.body;
     const roles = new RolesCollection(rolesDto);
     this.setState({roles});
@@ -97,9 +112,8 @@ class DisplayRbacAdministration extends React.Component {
    * @returns {Promise<void>}
    */
   async findAndLoadRbacSettings() {
-    const apiClientOptions = this.props.context.getApiClientOptions();
-    const rbacApiService = new this.props.RbacApiService(apiClientOptions);
-    const rbacsDto = await rbacApiService.findAll({ui_action: true, action: true});
+    const apiResponse = await this.rbacApiService.findAll({ui_action: true, action: true});
+    const rbacsDto = apiResponse.body;
     const rbacs = new RbacsCollection(rbacsDto, true);
     this.props.adminRbacContext.setRbacs(rbacs);
   }
@@ -124,6 +138,25 @@ class DisplayRbacAdministration extends React.Component {
     }
 
     this.props.adminRbacContext.setRbacsUpdated(rbacsUpdated);
+  }
+
+  /**
+   * Handles the click on the "Add role" button
+   * @param {React.Event} event
+   */
+  handleAddRoleClick(event) {
+    event.preventDefault();
+    this.props.dialogContext.open(CreateRole, {onSubmit: this.createNewRole});
+  }
+
+  /**
+   * Creates a new role on the API.
+   * @param {RoleEntity} roleEntity
+   */
+  async createNewRole(roleEntity) {
+    await this.roleApiService.create(roleEntity.toDto());
+    this.findAndLoadData();
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been created successfully."));
   }
 
   /**
@@ -191,6 +224,15 @@ class DisplayRbacAdministration extends React.Component {
   }
 
   /**
+   * Returns true if a new role can be added.
+   * @returns {boolean}
+   */
+  get canAddNewRole() {
+    const schema = RolesCollection.getSchema();
+    return this.state.roles !== null && this.state.roles.length < schema.maxItems;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -201,7 +243,10 @@ class DisplayRbacAdministration extends React.Component {
         <div className="rbac-settings main-column">
           <div className="main-content">
             <h3><Trans>Role-Based Access Control</Trans></h3>
-            <p><Trans>In this section you can define access controls for each user role.</Trans></p>
+            <div>
+              <p><Trans>In this section you can define access controls for each user role.</Trans></p>
+              <button type="button" className="button secondary" onClick={this.handleAddRoleClick} disabled={!this.canAddNewRole}><UserAddSVG /> <Trans>Add role</Trans></button>
+            </div>
             <form className="form">
               <div className="flex-container outer">
                 <div className="flex-container inner header-flex">
@@ -374,9 +419,10 @@ DisplayRbacAdministration.propTypes = {
   context: PropTypes.object, // The application context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   adminRbacContext: PropTypes.object, // The administration rbac context
+  dialogContext: PropTypes.object, // the dialog context
   RoleApiService: PropTypes.func, // The role service to inject
   RbacApiService: PropTypes.func, // The rbac service to inject
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withAdminRbac(withAdministrationWorkspace(withTranslation('common')(DisplayRbacAdministration))));
+export default withAppContext(withAdminRbac(withAdministrationWorkspace(withDialog(withActionFeedback(withTranslation('common')(DisplayRbacAdministration))))));

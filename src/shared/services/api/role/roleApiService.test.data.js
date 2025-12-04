@@ -12,10 +12,18 @@
  * @since         4.1.0
  */
 import PassboltResponseEntity from "../../../models/entity/apiService/PassboltResponseEntity";
+import {adminRoleDto, customRoleDto, userRoleDto} from "../../../models/entity/role/roleEntity.test.data";
 import {rolesCollectionDto} from "../../../models/entity/role/rolesCollection.test.data";
 
 export class DefaultRoleApiService {
   findAll() {
     return new PassboltResponseEntity({header: {}, body: rolesCollectionDto});
+  }
+}
+
+export class RoleApiServiceWithTooManyRoles {
+  findAll() {
+    const roles = [adminRoleDto(), userRoleDto(), customRoleDto({name: "c-role-1"}), customRoleDto({name: "c-role-2"}), customRoleDto({name: "c-role-3"})];
+    return new PassboltResponseEntity({header: {}, body: roles});
   }
 }
