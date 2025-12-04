@@ -16,12 +16,12 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import userEvent from "@testing-library/user-event";
-import CreateRole from "./CreateRole";
+import EditRole from "./EditRole";
 
 /**
- * The CreateRole component represented as a page
+ * The EditRole component represented as a page
  */
-export default class CreateRolePage {
+export default class EditRolePage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -29,7 +29,7 @@ export default class CreateRolePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <CreateRole {...props}></CreateRole>
+        <EditRole {...props}></EditRole>
       </MockTranslationProvider>,
       {legacyRoot: true}
     );
@@ -81,7 +81,7 @@ export default class CreateRolePage {
   }
 
   /**
-   * Returns true if one can submit the create operation
+   * Returns true if one can submit the edit operation
    */
   get canSubmit() {
     return !this._page.container.querySelector('button[type="submit"]').hasAttribute('disabled');
@@ -123,10 +123,10 @@ export default class CreateRolePage {
   }
 
   /**
-   * Create a role with the given information
+   * Edit a role with the given information
    * @param inProgressFn Function called while we wait for React stability
    */
-  async create(inProgressFn = () => {}) {
+  async edit(inProgressFn = () => {}) {
     await this.user.click(this.saveButton);
     await waitFor(inProgressFn);
   }
@@ -138,14 +138,14 @@ export default class CreateRolePage {
   }
 
   /**
-   * Cancels the create operation
+   * Cancels the edit operation
    */
   async cancel() {
     await this.user.click(this.cancelButton);
   }
 
   /**
-   * Close the create operation
+   * Close the edit operation
    */
   async close() {
     await this.user.click(this.closeButton);

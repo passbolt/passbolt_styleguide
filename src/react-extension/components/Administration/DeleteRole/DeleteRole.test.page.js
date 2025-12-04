@@ -12,16 +12,16 @@
  * @since         5.8.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render, waitFor} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import userEvent from "@testing-library/user-event";
-import CreateRole from "./CreateRole";
+import DeleteRole from "./DeleteRole";
 
 /**
- * The CreateRole component represented as a page
+ * The DeleteRolePage component represented as a page
  */
-export default class CreateRolePage {
+export default class DeleteRolePage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -29,41 +29,12 @@ export default class CreateRolePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <CreateRole {...props}></CreateRole>
+        <DeleteRole {...props}></DeleteRole>
       </MockTranslationProvider>,
       {legacyRoot: true}
     );
 
     this.user = userEvent.setup();
-  }
-
-  /**
-   * Get the role name input
-   */
-  get inputName() {
-    return this._page.container.querySelector('#role-name-input');
-  }
-
-  /**
-   * Set a name to the role name input
-   */
-  set name(value) {
-    fireEvent.change(this.inputName, {target: {value}});
-  }
-
-  /**
-   * Returns true if the role name is invalid
-   */
-  get hasInvalidName() {
-    return Boolean(this._page.container.querySelector('.error-message'));
-  }
-
-  /**
-   * Get the error message
-   * @return {string}
-   */
-  get errorMessage() {
-    return this._page.container.querySelector('.error-message').textContent;
   }
 
   /**
@@ -81,24 +52,17 @@ export default class CreateRolePage {
   }
 
   /**
-   * Returns true if one can submit the create operation
+   * Returns true if one can submit the edit operation
    */
   get canSubmit() {
     return !this._page.container.querySelector('button[type="submit"]').hasAttribute('disabled');
   }
 
   /**
-   * Returns true if one can change the data
+   * Returns the delete button element
    */
-  get canChangeData() {
-    return !this._page.container.querySelector('#role-name-input').hasAttribute('disabled');
-  }
-
-  /**
-   * Returns the save button element
-   */
-  get saveButton() {
-    return this._page.container.querySelector('button[type=\"submit\"]');
+  get deleteButton() {
+    return this._page.container.querySelector('button[type="submit"]');
   }
 
   /**
@@ -116,36 +80,23 @@ export default class CreateRolePage {
   }
 
   /**
-   * Returns the name warning message input element
-   */
-  get nameWarningMessage() {
-    return this._page.container.querySelector('.name.warning-message');
-  }
-
-  /**
-   * Create a role with the given information
+   * Delete a role with the given information
    * @param inProgressFn Function called while we wait for React stability
    */
-  async create(inProgressFn = () => {}) {
-    await this.user.click(this.saveButton);
+  async delete(inProgressFn = () => {}) {
+    await this.user.click(this.deleteButton);
     await waitFor(inProgressFn);
   }
 
-  /** fill the input element with data */
-  fillInput(element, data) {
-    const dataInputEvent = {target: {value: data}};
-    fireEvent.change(element, dataInputEvent);
-  }
-
   /**
-   * Cancels the create operation
+   * Cancels the delete operation
    */
   async cancel() {
     await this.user.click(this.cancelButton);
   }
 
   /**
-   * Close the create operation
+   * Close the delete operation
    */
   async close() {
     await this.user.click(this.closeButton);

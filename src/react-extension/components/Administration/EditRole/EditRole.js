@@ -21,14 +21,14 @@ import AttentionSVG from "../../../../img/svg/attention.svg";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 import memoize from "memoize-one";
 
-class CreateRole extends Component {
+class EditRole extends Component {
   /**
    * Constructor
    * @param {Object} props
    */
   constructor(props) {
     super(props);
-    this.roleEntity = new RoleEntity({name: ""}, {validate: false});
+    this.roleEntity = new RoleEntity(props.role);
     this.state = this.defaultState;
     this.createInputRefs();
     this.bindEventHandlers();
@@ -42,7 +42,7 @@ class CreateRole extends Component {
     return {
       // Dialog states
       processing: false,
-      role: this.roleEntity.toDto(), // The role to create
+      role: this.roleEntity.toDto(), // The role to edit
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once.
     };
   }
@@ -74,8 +74,8 @@ class CreateRole extends Component {
   validateForm = memoize(roleDto => this.roleEntity.validate(roleDto));
 
   /**
-   * Verify the data health. This intends for user, to inform if data form has invalid size
-   * @param {object} _roleDto The form role entity dto settings dto store in state, not used but required to ensure the memoized
+   * Verify the data health. This intends for user, to inform if data form has invalid fields
+   * @param {object} _roleDto The form role entity dto store in state, not used but required to ensure the memoized
    *   function is only triggered when the form is updated.
    * @return {EntityValidationError}
    */
@@ -177,9 +177,9 @@ class CreateRole extends Component {
     const hasNameReservedError = this.state.hasAlreadyBeenValidated && this.roleEntity.isAReservedRole();
 
     return (
-      <DialogWrapper className='role-create-dialog' title={this.translate("Create role")}
+      <DialogWrapper className='role-edit-dialog' title={this.translate("Rename role")}
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
-        <form className="role-create-form" onSubmit={this.handleFormSubmit} noValidate>
+        <form className="role-edit-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${errors?.hasError("name") || hasNameReservedError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="role-name-input"><Trans>Role name</Trans>{warnings?.hasErrors() &&
@@ -188,7 +188,6 @@ class CreateRole extends Component {
               <input id="role-name-input" name="name"
                 ref={this.nameRef}
                 type="text" value={this.state.role.name}
-                placeholder={this.props.t("New role")}
                 maxLength="255"
                 disabled={this.hasAllInputDisabled()}
                 onChange={this.handleInputChange}
@@ -203,9 +202,6 @@ class CreateRole extends Component {
                     <Trans>A name is required.</Trans>
                   }
                 </div>
-              }
-              {errors?.hasError("name", "maxLength") &&
-                <div className="error-message"><Trans>A name can not be more than 255 char in length.</Trans></div>
               }
               {hasNameReservedError &&
                 <div className="error-message"><Trans>This name is reserved by the system.</Trans></div>
@@ -227,10 +223,11 @@ class CreateRole extends Component {
   }
 }
 
-CreateRole.propTypes = {
+EditRole.propTypes = {
   onClose: PropTypes.func,
   onSubmit: PropTypes.func.isRequired,
+  role: PropTypes.instanceOf(RoleEntity).isRequired,
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(CreateRole);
+export default withTranslation('common')(EditRole);

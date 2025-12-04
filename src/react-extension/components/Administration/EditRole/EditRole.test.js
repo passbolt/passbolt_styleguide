@@ -13,10 +13,10 @@
  */
 
 /**
- * Unit tests on CreateRole in regard of specifications
+ * Unit tests on EditRole in regard of specifications
  */
-import {defaultProps} from "./CreateRole.test.data";
-import CreateRolePage from "./CreateRole.test.page";
+import {defaultProps} from "./EditRole.test.data";
+import EditRolePage from "./EditRole.test.page";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 import each from "jest-each";
 
@@ -24,21 +24,28 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-describe("Create role", () => {
+describe("Edit role", () => {
   let page; // The page to test against
   let props = null; // The page props
 
   beforeEach(() => {
     props = defaultProps(); // The props to pass
-    page = new CreateRolePage(props);
+    page = new EditRolePage(props);
   });
 
-  describe('As AD I should create a role', () => {
-    it('As AD I should send a create request', async() => {
+  describe('As AD I should edit a role', () => {
+    it('As AD I should submit an edit request with a name updated', async() => {
       expect.assertions(2);
       await page.fillInput(page.inputName, "role");
-      await page.create();
-      expect(props.onSubmit).toHaveBeenCalledWith(new RoleEntity({name: "role"}));
+      await page.edit();
+      expect(props.onSubmit).toHaveBeenCalledWith(new RoleEntity({...props.role.toDto(), name: "role"}));
+      expect(props.onClose).toHaveBeenCalled();
+    });
+
+    it('As AD I should submit an edit request with nothing updated', async() => {
+      expect.assertions(2);
+      await page.edit();
+      expect(props.onSubmit).toHaveBeenCalledWith(props.role);
       expect(props.onClose).toHaveBeenCalled();
     });
   });
@@ -46,15 +53,16 @@ describe("Create role", () => {
   describe('As AD I should see error if name is invalid', () => {
     it('AS AD I should not fill an empty role name', async() => {
       expect.assertions(2);
-      await page.create();
+      await page.edit();
+      await page.fillInput(page.inputName, "");
       expect(page.hasInvalidName).toBeTruthy();
       expect(page.errorMessage).toStrictEqual("A name is required.");
     });
 
-    it('AS AD I should not fill a role name longer than 255 characters', async() => {
+    it('AS AD I should not fill a edit name longer than 255 characters', async() => {
       expect.assertions(2);
       await page.fillInput(page.inputName, 'a'.repeat(256));
-      await page.create();
+      await page.edit();
       expect(page.hasInvalidName).toBeTruthy();
       expect(page.errorMessage).toStrictEqual("A name can not be more than 255 char in length.");
     });
@@ -67,7 +75,7 @@ describe("Create role", () => {
       it(`AS AD I should not fill a role name that is reserved: ${test.scenario}`, async() => {
         expect.assertions(2);
         await page.fillInput(page.inputName, test.value);
-        await page.create();
+        await page.edit();
         expect(page.hasInvalidName).toBeTruthy();
         expect(page.errorMessage).toStrictEqual("This name is reserved by the system.");
       });
@@ -96,8 +104,8 @@ describe("Create role", () => {
     });
   });
 
-  describe('AS AD I should not perform actions during the role creation', () => {
-    it('AS AD I should not cancel, submit or change data during the role creation', async() => {
+  describe('AS AD I should not perform actions during the role edition', () => {
+    it('AS AD I should not cancel, submit or change data during the role edition', async() => {
       expect.assertions(4);
       await page.fillInput(page.inputName, "role");
       const inProgressFn = () => {
@@ -106,7 +114,7 @@ describe("Create role", () => {
         expect(page.canChangeData).toBeFalsy();
         expect(page.canSubmit).toBeFalsy();
       };
-      await page.create(inProgressFn);
+      await page.edit(inProgressFn);
     });
   });
 });
