@@ -100,13 +100,14 @@ class DisplayRbacItem extends React.Component {
           </div>
           <div className="flex-item">
             <Select
-              className={`medium admin`}
+              className={`admin inline`}
               items={this.allowedCtlFunctions}
               value={controlFunctions.ALLOW}
               disabled={true}/>
           </div>
           {customizableRoles.map(role => <div key={`${this.props.actionName}-${role.id}`} className="flex-item input">
             <Select
+              className="inline"
               items={this.allowedCtlFunctions}
               value={this.getCtlFunctionForRole(role)}
               disabled={!(this.props.rbacs?.length > 0) || !this.getCtlFunctionForRole(role)}

@@ -31,6 +31,7 @@ import {RbacApiServiceWithCustomRolesSet} from "../../../../shared/services/api/
 import DeleteRole from "../DeleteRole/DeleteRole.js";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity.js";
 import EditRole from "../EditRole/EditRole.js";
+import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
 
 /**
  * Unit tests on DisplayRbacAdministration in regard of specifications
@@ -68,9 +69,15 @@ describe("DisplayRbacAdministration", () => {
       const props = propsWithPopulatedRbacContext();
       const page = new DisplayRbacAdministrationPage(props);
       await waitFor(() => {});
-      expect.assertions(25);
+      expect.assertions(31);
 
-      expect(page.getAllSelectsByRole(adminRoleIndex).length).toEqual(13);
+      expect(page.getAllSelectsByRole(adminRoleIndex).length).toEqual(16);
+      expect(page.select(adminRoleIndex, actions.GROUPS_ADD).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(adminRoleIndex, actions.GROUPS_ADD).className).toContain('disabled');
+      expect(page.select(adminRoleIndex, actions.ACCOUNT_RECOVERY_REQUEST_VIEW).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(adminRoleIndex, actions.ACCOUNT_RECOVERY_REQUEST_VIEW).className).toContain('disabled');
+      expect(page.select(adminRoleIndex, actions.ACCOUNT_RECOVERY_RESPONSE_CREATE).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(adminRoleIndex, actions.ACCOUNT_RECOVERY_RESPONSE_CREATE).className).toContain('disabled');
       expect(page.select(adminRoleIndex, uiActions.RESOURCES_IMPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
       expect(page.select(adminRoleIndex, uiActions.RESOURCES_IMPORT).className).toContain('disabled');
       expect(page.select(adminRoleIndex, uiActions.RESOURCES_EXPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
@@ -101,9 +108,12 @@ describe("DisplayRbacAdministration", () => {
       const props = propsWithPopulatedRbacContext();
       const page = new DisplayRbacAdministrationPage(props);
       await waitFor(() => {});
-      expect.assertions(14);
+      expect.assertions(17);
 
-      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(13);
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(16);
+      expect(page.select(userRoleIndex, actions.GROUPS_ADD).textContent).toStrictEqual(controlFunctions.DENY);
+      expect(page.select(userRoleIndex, actions.ACCOUNT_RECOVERY_REQUEST_VIEW).textContent).toStrictEqual(controlFunctions.DENY);
+      expect(page.select(userRoleIndex, actions.ACCOUNT_RECOVERY_RESPONSE_CREATE).textContent).toStrictEqual(controlFunctions.DENY);
       expect(page.select(userRoleIndex, uiActions.RESOURCES_IMPORT).textContent).toStrictEqual(controlFunctions.DENY);
       expect(page.select(userRoleIndex, uiActions.RESOURCES_EXPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
       expect(page.select(userRoleIndex, uiActions.SECRETS_PREVIEW).textContent).toStrictEqual(controlFunctions.DENY);
@@ -125,7 +135,7 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(12);
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(15);
       expect(page.select(userRoleIndex, uiActions.RESOURCES_IMPORT)).toBeUndefined();
     });
 
@@ -135,7 +145,7 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(12);
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(15);
       expect(page.select(userRoleIndex, uiActions.RESOURCES_EXPORT)).toBeUndefined();
     });
 
@@ -145,7 +155,7 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(12);
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(15);
       expect(page.select(userRoleIndex, uiActions.SECRETS_PREVIEW)).toBeUndefined();
     });
 
@@ -155,7 +165,7 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(12);
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(15);
       expect(page.select(userRoleIndex, uiActions.TAGS_USE)).toBeUndefined();
     });
 
@@ -165,7 +175,7 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(12);
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(15);
       expect(page.select(userRoleIndex, uiActions.FOLDERS_USE)).toBeUndefined();
     });
   });
@@ -202,7 +212,7 @@ describe("DisplayRbacAdministration", () => {
       expect.assertions(2);
 
 
-      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(12);
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(15);
       expect(page.select(userRoleIndex, uiActions.MOBILE_TRANSFER)).toBeUndefined();
     });
 
@@ -213,7 +223,7 @@ describe("DisplayRbacAdministration", () => {
       expect.assertions(2);
 
 
-      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(12);
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(15);
       expect(page.select(userRoleIndex, uiActions.DESKTOP_TRANSFER)).toBeUndefined();
     });
 
@@ -224,7 +234,7 @@ describe("DisplayRbacAdministration", () => {
       expect.assertions(3);
 
 
-      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(11);
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(14);
       expect(page.select(userRoleIndex, uiActions.DESKTOP_TRANSFER)).toBeUndefined();
       expect(page.select(userRoleIndex, uiActions.MOBILE_TRANSFER)).toBeUndefined();
     });
@@ -300,7 +310,7 @@ describe("DisplayRbacAdministration", () => {
       const page = new DisplayRbacAdministrationPage(props);
       await waitFor(() => {});
 
-      expect(page.getAllSelectsByRole(customRoleIndex).length).toEqual(13);
+      expect(page.getAllSelectsByRole(customRoleIndex).length).toEqual(16);
       expect(page.select(customRoleIndex, uiActions.RESOURCES_IMPORT).textContent).toStrictEqual(controlFunctions.DENY);
       expect(page.select(customRoleIndex, uiActions.RESOURCES_EXPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
       expect(page.select(customRoleIndex, uiActions.SECRETS_PREVIEW).textContent).toStrictEqual(controlFunctions.DENY);
