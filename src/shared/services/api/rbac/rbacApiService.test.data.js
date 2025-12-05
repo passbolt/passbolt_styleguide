@@ -11,10 +11,19 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.1.0
  */
-import {defaultSettingsRbacsCollectionData} from "../../../models/entity/rbac/rbacsCollection.test.data";
+import PassboltResponseEntity from "../../../models/entity/apiService/PassboltResponseEntity";
+import {defaultSettingsRbacsCollectionData, settingsRbacsCollectionFromRoleCollectionData} from "../../../models/entity/rbac/rbacsCollection.test.data";
+import {rolesCollectionDto} from "../../../models/entity/role/rolesCollection.test.data";
 
 export class DefaultRbacApiService {
   findAll() {
-    return defaultSettingsRbacsCollectionData;
+    return new PassboltResponseEntity({body: defaultSettingsRbacsCollectionData, header: {}});
+  }
+}
+
+export class RbacApiServiceWithCustomRolesSet {
+  findAll() {
+    const rbacsCollectionsDto = settingsRbacsCollectionFromRoleCollectionData(rolesCollectionDto);
+    return new PassboltResponseEntity({body: rbacsCollectionsDto, header: {}});
   }
 }

@@ -34,6 +34,7 @@ import UserAddSVG from "../../../../img/svg/user_add.svg";
 import CreateRole from "../CreateRole/CreateRole";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {capitalizeFirstLetter} from "../../../../shared/utils/stringUtils";
 
 
 /**
@@ -104,6 +105,7 @@ class DisplayRbacAdministration extends React.Component {
     const apiResponse = await this.roleApiService.findAll();
     const rolesDto = apiResponse.body;
     const roles = new RolesCollection(rolesDto);
+    roles.filterOutGuestRole();
     this.setState({roles});
   }
 
@@ -233,17 +235,31 @@ class DisplayRbacAdministration extends React.Component {
   }
 
   /**
+   * Returns the role name translated if it is a reserved role name.
+   * @param {RoleEntity} roleEntity
+   * @returns {string}
+   */
+  getTranslatedRoleName(roleEntity) {
+    if (!roleEntity.isAReservedRole()) {
+      return roleEntity.name;
+    }
+
+    return this.props.t(roleEntity.name);
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     const hasSaveWarning = this.props.adminRbacContext.hasSettingsChanges();
+    const customizableRoles = this.state.roles?.items.filter(role => !role.isAdmin()) || [];
     return (
       <div className="row">
         <div className="rbac-settings main-column">
           <div className="main-content">
             <h3><Trans>Role-Based Access Control</Trans></h3>
-            <div>
+            <div className="text-with-button">
               <p><Trans>In this section you can define access controls for each user role.</Trans></p>
               <button type="button" className="button secondary" onClick={this.handleAddRoleClick} disabled={!this.canAddNewRole}><UserAddSVG /> <Trans>Add role</Trans></button>
             </div>
@@ -256,9 +272,11 @@ class DisplayRbacAdministration extends React.Component {
                   <div className="flex-item centered">
                     <label><Trans>Admin</Trans></label>
                   </div>
-                  <div className="flex-item centered">
-                    <label><Trans>User</Trans></label>
-                  </div>
+                  {customizableRoles.map(r => (
+                    <div className="flex-item centered" key={r.id}>
+                      <label>{capitalizeFirstLetter(this.getTranslatedRoleName(r))}</label>
+                    </div>
+                  ))}
                 </div>
                 {this.isReady &&
                   <>

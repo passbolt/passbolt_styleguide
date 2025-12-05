@@ -89,7 +89,7 @@ class DisplayRbacItem extends React.Component {
   render() {
     let customizableRoles = [];
     if (this.props.roles) {
-      customizableRoles = this.props.roles.items.filter(role => role.name === 'user');
+      customizableRoles = this.props.roles.items.filter(role => !role.isAdmin());
     }
 
     return (
@@ -107,7 +107,6 @@ class DisplayRbacItem extends React.Component {
           </div>
           {customizableRoles.map(role => <div key={`${this.props.actionName}-${role.id}`} className="flex-item input">
             <Select
-              className={`${role.name}`}
               items={this.allowedCtlFunctions}
               value={this.getCtlFunctionForRole(role)}
               disabled={!(this.props.rbacs?.length > 0) || !this.getCtlFunctionForRole(role)}

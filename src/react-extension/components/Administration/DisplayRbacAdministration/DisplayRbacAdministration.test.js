@@ -25,12 +25,18 @@ import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctio
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import CreateRole from "../CreateRole/CreateRole.js";
 import {RoleApiServiceWithTooManyRoles} from "../../../../shared/services/api/role/roleApiService.test.data.js";
+import {defaultApiClientOptions} from "../../../../shared/lib/apiClient/apiClientOptions.test.data.js";
+import RolesCollection from "../../../../shared/models/entity/role/rolesCollection.js";
+import {RbacApiServiceWithCustomRolesSet} from "../../../../shared/services/api/rbac/rbacApiService.test.data.js";
 
 /**
  * Unit tests on DisplayRbacAdministration in regard of specifications
  */
 
 describe("DisplayRbacAdministration", () => {
+  const adminRoleIndex = 2;
+  const userRoleIndex = 3;
+
   beforeEach(() => {
     enableFetchMocks();
     jest.resetModules();
@@ -60,31 +66,31 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(25);
 
-      expect(page.getAllSelectsByRole('admin').length).toEqual(13);
-      expect(page.select('admin', uiActions.RESOURCES_IMPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('admin', uiActions.RESOURCES_IMPORT).className).toContain('disabled');
-      expect(page.select('admin', uiActions.RESOURCES_EXPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('admin', uiActions.RESOURCES_EXPORT).className).toContain('disabled');
-      expect(page.select('admin', uiActions.SECRETS_PREVIEW).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('admin', uiActions.SECRETS_PREVIEW).className).toContain('disabled');
-      expect(page.select('admin', uiActions.SECRETS_COPY).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('admin', uiActions.SECRETS_COPY).className).toContain('disabled');
-      expect(page.select('admin', uiActions.RESOURCES_SEE_ACTIVITIES).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('admin', uiActions.RESOURCES_SEE_ACTIVITIES).className).toContain('disabled');
-      expect(page.select('admin', uiActions.RESOURCES_SEE_COMMENTS).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('admin', uiActions.RESOURCES_SEE_COMMENTS).className).toContain('disabled');
-      expect(page.select('admin', uiActions.FOLDERS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('admin', uiActions.FOLDERS_USE).className).toContain('disabled');
-      expect(page.select('admin', uiActions.TAGS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('admin', uiActions.TAGS_USE).className).toContain('disabled');
-      expect(page.select('admin', uiActions.SHARE_VIEW_LIST).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('admin', uiActions.SHARE_VIEW_LIST).className).toContain('disabled');
-      expect(page.select('admin', uiActions.USERS_VIEW_WORKSPACE).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('admin', uiActions.USERS_VIEW_WORKSPACE).className).toContain('disabled');
-      expect(page.select('admin', uiActions.MOBILE_TRANSFER).className).toContain('disabled');
-      expect(page.select('admin', uiActions.DESKTOP_TRANSFER).className).toContain('disabled');
-      expect(page.select('admin', uiActions.SHARE_FOLDER).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('admin', uiActions.SHARE_FOLDER).className).toContain('disabled');
+      expect(page.getAllSelectsByRole(adminRoleIndex).length).toEqual(13);
+      expect(page.select(adminRoleIndex, uiActions.RESOURCES_IMPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(adminRoleIndex, uiActions.RESOURCES_IMPORT).className).toContain('disabled');
+      expect(page.select(adminRoleIndex, uiActions.RESOURCES_EXPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(adminRoleIndex, uiActions.RESOURCES_EXPORT).className).toContain('disabled');
+      expect(page.select(adminRoleIndex, uiActions.SECRETS_PREVIEW).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(adminRoleIndex, uiActions.SECRETS_PREVIEW).className).toContain('disabled');
+      expect(page.select(adminRoleIndex, uiActions.SECRETS_COPY).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(adminRoleIndex, uiActions.SECRETS_COPY).className).toContain('disabled');
+      expect(page.select(adminRoleIndex, uiActions.RESOURCES_SEE_ACTIVITIES).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(adminRoleIndex, uiActions.RESOURCES_SEE_ACTIVITIES).className).toContain('disabled');
+      expect(page.select(adminRoleIndex, uiActions.RESOURCES_SEE_COMMENTS).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(adminRoleIndex, uiActions.RESOURCES_SEE_COMMENTS).className).toContain('disabled');
+      expect(page.select(adminRoleIndex, uiActions.FOLDERS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(adminRoleIndex, uiActions.FOLDERS_USE).className).toContain('disabled');
+      expect(page.select(adminRoleIndex, uiActions.TAGS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(adminRoleIndex, uiActions.TAGS_USE).className).toContain('disabled');
+      expect(page.select(adminRoleIndex, uiActions.SHARE_VIEW_LIST).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(adminRoleIndex, uiActions.SHARE_VIEW_LIST).className).toContain('disabled');
+      expect(page.select(adminRoleIndex, uiActions.USERS_VIEW_WORKSPACE).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(adminRoleIndex, uiActions.USERS_VIEW_WORKSPACE).className).toContain('disabled');
+      expect(page.select(adminRoleIndex, uiActions.MOBILE_TRANSFER).className).toContain('disabled');
+      expect(page.select(adminRoleIndex, uiActions.DESKTOP_TRANSFER).className).toContain('disabled');
+      expect(page.select(adminRoleIndex, uiActions.SHARE_FOLDER).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(adminRoleIndex, uiActions.SHARE_FOLDER).className).toContain('disabled');
     });
 
     it('As a logged in administrator I can see all rbac settings relative to the user role', async() => {
@@ -93,20 +99,20 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(14);
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(13);
-      expect(page.select('user', uiActions.RESOURCES_IMPORT).textContent).toStrictEqual(controlFunctions.DENY);
-      expect(page.select('user', uiActions.RESOURCES_EXPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('user', uiActions.SECRETS_PREVIEW).textContent).toStrictEqual(controlFunctions.DENY);
-      expect(page.select('user', uiActions.SECRETS_COPY).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('user', uiActions.RESOURCES_SEE_ACTIVITIES).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('user', uiActions.RESOURCES_SEE_COMMENTS).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('user', uiActions.FOLDERS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('user', uiActions.TAGS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('user', uiActions.SHARE_VIEW_LIST).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select('user', uiActions.USERS_VIEW_WORKSPACE).textContent).toStrictEqual(controlFunctions.DENY);
-      expect(page.select('user', uiActions.MOBILE_TRANSFER).textContent).toContain(controlFunctions.ALLOW);
-      expect(page.select('user', uiActions.DESKTOP_TRANSFER).textContent).toContain(controlFunctions.ALLOW);
-      expect(page.select('user', uiActions.SHARE_FOLDER).textContent).toContain(controlFunctions.ALLOW);
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(13);
+      expect(page.select(userRoleIndex, uiActions.RESOURCES_IMPORT).textContent).toStrictEqual(controlFunctions.DENY);
+      expect(page.select(userRoleIndex, uiActions.RESOURCES_EXPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(userRoleIndex, uiActions.SECRETS_PREVIEW).textContent).toStrictEqual(controlFunctions.DENY);
+      expect(page.select(userRoleIndex, uiActions.SECRETS_COPY).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(userRoleIndex, uiActions.RESOURCES_SEE_ACTIVITIES).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(userRoleIndex, uiActions.RESOURCES_SEE_COMMENTS).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(userRoleIndex, uiActions.FOLDERS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(userRoleIndex, uiActions.TAGS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(userRoleIndex, uiActions.SHARE_VIEW_LIST).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(userRoleIndex, uiActions.USERS_VIEW_WORKSPACE).textContent).toStrictEqual(controlFunctions.DENY);
+      expect(page.select(userRoleIndex, uiActions.MOBILE_TRANSFER).textContent).toContain(controlFunctions.ALLOW);
+      expect(page.select(userRoleIndex, uiActions.DESKTOP_TRANSFER).textContent).toContain(controlFunctions.ALLOW);
+      expect(page.select(userRoleIndex, uiActions.SHARE_FOLDER).textContent).toContain(controlFunctions.ALLOW);
     });
 
     it('As a logged in administrator I should not see the rbac settings relative to import if disabled by feature flag', async() => {
@@ -115,8 +121,8 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(12);
-      expect(page.select('user', uiActions.RESOURCES_IMPORT)).toBeUndefined();
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(12);
+      expect(page.select(userRoleIndex, uiActions.RESOURCES_IMPORT)).toBeUndefined();
     });
 
     it('As a logged in administrator I should not see the rbac settings relative to export if disabled by feature flag', async() => {
@@ -125,8 +131,8 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(12);
-      expect(page.select('user', uiActions.RESOURCES_EXPORT)).toBeUndefined();
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(12);
+      expect(page.select(userRoleIndex, uiActions.RESOURCES_EXPORT)).toBeUndefined();
     });
 
     it('As a logged in administrator I should not see the rbac settings relative to preview password if disabled by feature flag', async() => {
@@ -135,8 +141,8 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(12);
-      expect(page.select('user', uiActions.SECRETS_PREVIEW)).toBeUndefined();
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(12);
+      expect(page.select(userRoleIndex, uiActions.SECRETS_PREVIEW)).toBeUndefined();
     });
 
     it('As a logged in administrator I should not see the rbac settings relative to tags if disabled by feature flag', async() => {
@@ -145,8 +151,8 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(12);
-      expect(page.select('user', uiActions.TAGS_USE)).toBeUndefined();
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(12);
+      expect(page.select(userRoleIndex, uiActions.TAGS_USE)).toBeUndefined();
     });
 
     it('As a logged in administrator I should not see the rbac settings relative to folders if disabled by feature flag', async() => {
@@ -155,8 +161,8 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(12);
-      expect(page.select('user', uiActions.FOLDERS_USE)).toBeUndefined();
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(12);
+      expect(page.select(userRoleIndex, uiActions.FOLDERS_USE)).toBeUndefined();
     });
   });
 
@@ -167,8 +173,8 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(1);
 
-      await page.click(page.select('user', uiActions.RESOURCES_EXPORT));
-      await page.click(page.selectFirstItem('user', uiActions.RESOURCES_EXPORT));
+      await page.click(page.select(userRoleIndex, uiActions.RESOURCES_EXPORT));
+      await page.click(page.selectFirstItem(userRoleIndex, uiActions.RESOURCES_EXPORT));
 
       expect(props.adminRbacContext.setRbacsUpdated).toHaveBeenCalled();
     });
@@ -192,8 +198,8 @@ describe("DisplayRbacAdministration", () => {
       expect.assertions(2);
 
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(12);
-      expect(page.select('user', uiActions.MOBILE_TRANSFER)).toBeUndefined();
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(12);
+      expect(page.select(userRoleIndex, uiActions.MOBILE_TRANSFER)).toBeUndefined();
     });
 
     it('As a logged in administrator I should not see the rbac for desktop if plugin is disabled', async() => {
@@ -203,8 +209,8 @@ describe("DisplayRbacAdministration", () => {
       expect.assertions(2);
 
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(12);
-      expect(page.select('user', uiActions.DESKTOP_TRANSFER)).toBeUndefined();
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(12);
+      expect(page.select(userRoleIndex, uiActions.DESKTOP_TRANSFER)).toBeUndefined();
     });
 
     it('As a logged in administrator I should not see the rbac user setting if mobile and desktop are not enabled', async() => {
@@ -214,9 +220,9 @@ describe("DisplayRbacAdministration", () => {
       expect.assertions(3);
 
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(11);
-      expect(page.select('user', uiActions.DESKTOP_TRANSFER)).toBeUndefined();
-      expect(page.select('user', uiActions.MOBILE_TRANSFER)).toBeUndefined();
+      expect(page.getAllSelectsByRole(userRoleIndex).length).toEqual(11);
+      expect(page.select(userRoleIndex, uiActions.DESKTOP_TRANSFER)).toBeUndefined();
+      expect(page.select(userRoleIndex, uiActions.MOBILE_TRANSFER)).toBeUndefined();
     });
 
     it('As a logged in administrator I should not see the selected rbac function into the list of choices from the select', async() => {
@@ -229,13 +235,13 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
 
       //Click to open the select
-      await page.click(page.select('user', uiActions.FOLDERS_USE));
+      await page.click(page.select(userRoleIndex, uiActions.FOLDERS_USE));
       //Expect have the unselected value
-      expect(page.selectItems('user', uiActions.FOLDERS_USE).children.length).toEqual(1);
-      expect(page.selectItems('user', uiActions.FOLDERS_USE).textContent).toEqual(controlFunctions.DENY);
+      expect(page.selectItems(userRoleIndex, uiActions.FOLDERS_USE).children.length).toEqual(1);
+      expect(page.selectItems(userRoleIndex, uiActions.FOLDERS_USE).textContent).toEqual(controlFunctions.DENY);
 
       //Change the value and expect Deny to not be present anymore
-      await page.clickToSelectFirstItem('user', uiActions.FOLDERS_USE);
+      await page.clickToSelectFirstItem(userRoleIndex, uiActions.FOLDERS_USE);
 
       expect(props.adminRbacContext.rbacsUpdated.remove).toHaveBeenCalledWith({"controlFunction": "Deny"});
     });
@@ -264,6 +270,48 @@ describe("DisplayRbacAdministration", () => {
       await page.click(page.createRoleButton);
 
       expect(props.dialogContext.open).not.toHaveBeenCalled();
+    });
+
+    it('As a logged in administrator I should see all customisable roles', async() => {
+      expect.assertions(1);
+
+      const roleApiService = RoleApiServiceWithTooManyRoles;
+      const roles = (new roleApiService(defaultApiClientOptions())).findAll();
+      const customisableRoles = new RolesCollection(roles.body);
+      customisableRoles.filterOutGuestRole();
+
+      const props = defaultProps({RoleApiService: roleApiService});
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+
+      expect(page.displayedRoleCount).toStrictEqual(customisableRoles.length);
+    });
+
+    it('As a logged in administrator I can see all rbac settings relative to a custom user role', async() => {
+      expect.assertions(14);
+
+      const props = propsWithPopulatedRbacContext({
+        RbacApiService: RbacApiServiceWithCustomRolesSet
+      });
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+
+      const customRoleIndex = 4;
+
+      expect(page.getAllSelectsByRole(customRoleIndex).length).toEqual(13);
+      expect(page.select(customRoleIndex, uiActions.RESOURCES_IMPORT).textContent).toStrictEqual(controlFunctions.DENY);
+      expect(page.select(customRoleIndex, uiActions.RESOURCES_EXPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(customRoleIndex, uiActions.SECRETS_PREVIEW).textContent).toStrictEqual(controlFunctions.DENY);
+      expect(page.select(customRoleIndex, uiActions.SECRETS_COPY).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(customRoleIndex, uiActions.RESOURCES_SEE_ACTIVITIES).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(customRoleIndex, uiActions.RESOURCES_SEE_COMMENTS).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(customRoleIndex, uiActions.FOLDERS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(customRoleIndex, uiActions.TAGS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(customRoleIndex, uiActions.SHARE_VIEW_LIST).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select(customRoleIndex, uiActions.USERS_VIEW_WORKSPACE).textContent).toStrictEqual(controlFunctions.DENY);
+      expect(page.select(customRoleIndex, uiActions.MOBILE_TRANSFER).textContent).toContain(controlFunctions.ALLOW);
+      expect(page.select(customRoleIndex, uiActions.DESKTOP_TRANSFER).textContent).toContain(controlFunctions.ALLOW);
+      expect(page.select(customRoleIndex, uiActions.SHARE_FOLDER).textContent).toContain(controlFunctions.ALLOW);
     });
   });
 });

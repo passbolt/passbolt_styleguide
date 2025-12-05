@@ -22,7 +22,8 @@ import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackCont
 import {
   administrationRbacContextWithUpdatedRbac,
   defaultAdministrationRbacContext,
-  populatedAdministrationRbacContext
+  populatedAdministrationRbacContext,
+  populatedAdministrationWithMissingRbacContext
 } from "../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext.test.data";
 import {DefaultRoleApiService} from "../../../../shared/services/api/role/roleApiService.test.data";
 import {DefaultRbacApiService} from "../../../../shared/services/api/rbac/rbacApiService.test.data";
@@ -44,6 +45,13 @@ export function defaultProps(props = {}) {
 export function propsWithPopulatedRbacContext(props = {}) {
   return defaultProps({
     adminRbacContext: populatedAdministrationRbacContext(),
+    ...props
+  });
+}
+
+export function propsWithMissingRbacContext(props = {}) {
+  return defaultProps({
+    adminRbacContext: populatedAdministrationWithMissingRbacContext(),
     ...props
   });
 }
