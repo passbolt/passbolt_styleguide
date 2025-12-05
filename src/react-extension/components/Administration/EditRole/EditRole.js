@@ -188,7 +188,7 @@ class EditRole extends Component {
               <input id="role-name-input" name="name"
                 ref={this.nameRef}
                 type="text" value={this.state.role.name}
-                maxLength="255"
+                maxLength={RoleEntity.ROLE_NAME_MAX_LENGTH}
                 disabled={this.hasAllInputDisabled()}
                 onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}

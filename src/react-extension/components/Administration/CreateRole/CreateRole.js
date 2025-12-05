@@ -189,7 +189,7 @@ class CreateRole extends Component {
                 ref={this.nameRef}
                 type="text" value={this.state.role.name}
                 placeholder={this.props.t("New role")}
-                maxLength="255"
+                maxLength={RoleEntity.ROLE_NAME_MAX_LENGTH}
                 disabled={this.hasAllInputDisabled()}
                 onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}

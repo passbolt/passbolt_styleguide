@@ -85,7 +85,7 @@ describe("Edit role", () => {
   describe('As AD I should see warning if name has reached the maximum length', () => {
     it("As a user I should see a feedback when name field content is truncated by a field limit", async() => {
       expect.assertions(1);
-      await page.fillInput(page.inputName, 'a'.repeat(255));
+      await page.fillInput(page.inputName, 'a'.repeat(50));
       expect(page.nameWarningMessage.textContent).toEqual("Warning: this is the maximum size for this field, make sure your data was not truncated.");
     });
   });

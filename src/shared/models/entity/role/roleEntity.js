@@ -18,7 +18,7 @@ const ENTITY_NAME = 'Role';
 const ROLE_ADMIN = 'admin';
 const ROLE_USER = 'user';
 const ROLE_GUEST = 'guest';
-const ROLE_NAME_MAX_LENGTH = 255;
+const ROLE_NAME_MAX_LENGTH = 50;
 const ROLE_DESCRIPTION_MAX_LENGTH = 255;
 
 export default class RoleEntity extends EntityV2 {
@@ -172,5 +172,13 @@ export default class RoleEntity extends EntityV2 {
    */
   static get ROLE_GUEST() {
     return ROLE_GUEST;
+  }
+
+  /**
+   * RoleEntity.ROLE_NAME_MAX_LENGTH
+   * @returns {int}
+   */
+  static get ROLE_NAME_MAX_LENGTH() {
+    return ROLE_NAME_MAX_LENGTH;
   }
 }
