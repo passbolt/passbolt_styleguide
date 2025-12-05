@@ -28,6 +28,8 @@ import {RoleApiServiceWithTooManyRoles} from "../../../../shared/services/api/ro
 import {defaultApiClientOptions} from "../../../../shared/lib/apiClient/apiClientOptions.test.data.js";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection.js";
 import {RbacApiServiceWithCustomRolesSet} from "../../../../shared/services/api/rbac/rbacApiService.test.data.js";
+import DeleteRole from "../DeleteRole/DeleteRole.js";
+import RoleEntity from "../../../../shared/models/entity/role/roleEntity.js";
 
 /**
  * Unit tests on DisplayRbacAdministration in regard of specifications
@@ -36,6 +38,7 @@ import {RbacApiServiceWithCustomRolesSet} from "../../../../shared/services/api/
 describe("DisplayRbacAdministration", () => {
   const adminRoleIndex = 2;
   const userRoleIndex = 3;
+  const customRoleIndex = 4;
 
   beforeEach(() => {
     enableFetchMocks();
@@ -296,8 +299,6 @@ describe("DisplayRbacAdministration", () => {
       const page = new DisplayRbacAdministrationPage(props);
       await waitFor(() => {});
 
-      const customRoleIndex = 4;
-
       expect(page.getAllSelectsByRole(customRoleIndex).length).toEqual(13);
       expect(page.select(customRoleIndex, uiActions.RESOURCES_IMPORT).textContent).toStrictEqual(controlFunctions.DENY);
       expect(page.select(customRoleIndex, uiActions.RESOURCES_EXPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
@@ -312,6 +313,39 @@ describe("DisplayRbacAdministration", () => {
       expect(page.select(customRoleIndex, uiActions.MOBILE_TRANSFER).textContent).toContain(controlFunctions.ALLOW);
       expect(page.select(customRoleIndex, uiActions.DESKTOP_TRANSFER).textContent).toContain(controlFunctions.ALLOW);
       expect(page.select(customRoleIndex, uiActions.SHARE_FOLDER).textContent).toContain(controlFunctions.ALLOW);
+    });
+
+    it('As a logged in administrator I should see the more button for customisable roles', async() => {
+      expect.assertions(3);
+
+      const props = propsWithPopulatedRbacContext({
+        RbacApiService: RbacApiServiceWithCustomRolesSet
+      });
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+
+      expect(page.getMoreButton(customRoleIndex)).toBeDefined();
+      expect(page.getMoreButton(adminRoleIndex)).toBeNull();
+      expect(page.getMoreButton(userRoleIndex)).toBeNull();
+    });
+
+    it('As a logged in administrator I be able to delete a custom role', async() => {
+      expect.assertions(2);
+
+      const props = propsWithPopulatedRbacContext({
+        RbacApiService: RbacApiServiceWithCustomRolesSet
+      });
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+
+      const moreButton = page.getMoreButton(customRoleIndex);
+      await page.click(moreButton); //open the menu of the custom role
+
+      const deleteRoleButton = page.getDeleteRoleButton(customRoleIndex);
+      await page.click(deleteRoleButton);
+
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteRole, {role: expect.any(RoleEntity), onSubmit: expect.any(Function)});
     });
   });
 });

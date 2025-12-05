@@ -31,10 +31,17 @@ import RbacEntity from "../../../../shared/models/entity/rbac/rbacEntity";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
 import {createSafePortal} from "../../../../shared/utils/portals";
 import UserAddSVG from "../../../../img/svg/user_add.svg";
+import MoreVerticalSVG from "../../../../img/svg/more_vertical.svg";
+import DeleteSVG from "../../../../img/svg/delete.svg";
 import CreateRole from "../CreateRole/CreateRole";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {capitalizeFirstLetter} from "../../../../shared/utils/stringUtils";
+import Dropdown from "../../Common/Dropdown/Dropdown";
+import DropdownButton from "../../Common/Dropdown/DropdownButton";
+import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
+import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
+import DeleteRole from "../DeleteRole/DeleteRole";
 
 
 /**
@@ -70,6 +77,8 @@ class DisplayRbacAdministration extends React.Component {
     this.updateRbacControlFunction = this.updateRbacControlFunction.bind(this);
     this.handleAddRoleClick = this.handleAddRoleClick.bind(this);
     this.createNewRole = this.createNewRole.bind(this);
+    this.handleDeleteRoleClick = this.handleDeleteRoleClick.bind(this);
+    this.deleteRole = this.deleteRole.bind(this);
   }
 
   /**
@@ -159,6 +168,26 @@ class DisplayRbacAdministration extends React.Component {
     await this.roleApiService.create(roleEntity.toDto());
     this.findAndLoadData();
     await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been created successfully."));
+  }
+
+  /**
+   * Handle role delete click event
+   * @param {React.Event} event
+   * @param {RoleEntity} role
+   */
+  async handleDeleteRoleClick(event, role) {
+    event.preventDefault();
+    this.props.dialogContext.open(DeleteRole, {role: role, onSubmit: this.deleteRole});
+  }
+
+  /**
+   * Deletes the given role from the API
+   * @param {RoleEntity} roleEntity
+   */
+  async deleteRole(roleEntity) {
+    await this.roleApiService.delete(roleEntity.id);
+    this.findAndLoadData();
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been deleted successfully."));
   }
 
   /**
@@ -275,6 +304,21 @@ class DisplayRbacAdministration extends React.Component {
                   {customizableRoles.map(r => (
                     <div className="flex-item centered" key={r.id}>
                       <label>{capitalizeFirstLetter(this.getTranslatedRoleName(r))}</label>
+                      {!r.isAReservedRole() &&
+                      <Dropdown>
+                        <DropdownButton className="more button-action-icon link no-border">
+                          <MoreVerticalSVG/>
+                        </DropdownButton>
+                        <DropdownMenu className="menu-action-contextual" direction="left">
+                          <DropdownMenuItem>
+                            <button id="delete_role_action" type="button" className="no-border" onClick={e => this.handleDeleteRoleClick(e, r)}>
+                              <DeleteSVG/>
+                              <span><Trans>Delete</Trans></span>
+                            </button>
+                          </DropdownMenuItem>
+                        </DropdownMenu>
+                      </Dropdown>
+                      }
                     </div>
                   ))}
                 </div>

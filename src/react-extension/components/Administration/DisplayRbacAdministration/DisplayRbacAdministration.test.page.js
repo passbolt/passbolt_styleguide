@@ -119,6 +119,22 @@ export default class DisplayRbacAdministrationPage {
   }
 
   /**
+   * Returns the more button of a role given its index or null if there is no button
+   * @param roleIndex
+   */
+  getMoreButton(roleIndex) {
+    return this._page.container.querySelector(`.header-flex .flex-item:nth-child(${roleIndex}) .dropdown > button`);
+  }
+
+  /**
+   * Returns the delete role button of a role given its index or null if there is no button
+   * @param roleIndex
+   */
+  getDeleteRoleButton(roleIndex) {
+    return this._page.container.querySelector(`.header-flex .flex-item:nth-child(${roleIndex}) .dropdown #delete_role_action`);
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {

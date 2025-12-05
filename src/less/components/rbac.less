@@ -87,10 +87,38 @@
   }
 }
 
-.rbac-settings .text-with-button {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: -0.8rem;
+.rbac-settings {
+  .text-with-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: -0.8rem;
+}
+
+  .header-flex {
+    .flex-item {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    .dropdown {
+      position: absolute;
+      right: 0;
+
+      & > button {
+        height: 2.4rem;
+        width: 2.4rem;
+        padding: .4rem;
+      }
+
+      .dropdown-content.menu-action-contextual {
+        border: 1px solid var(--Action-button-Action-button-border);
+      }
+    }
+  }
 }

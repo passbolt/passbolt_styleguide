@@ -1501,6 +1501,7 @@
   "The resource has been marked as expired._other": "The resources have been marked as expired.",
   "The resource has been updated successfully": "The resource has been updated successfully",
   "The role has been created successfully.": "The role has been created successfully.",
+  "The role has been deleted successfully.": "The role has been deleted successfully.",
   "The role-based access control settings were updated.": "The role-based access control settings were updated.",
   "The SCIM secret token has been copied to the clipboard.": "The SCIM secret token has been copied to the clipboard.",
   "The SCIM settings were updated.": "The SCIM settings were updated.",
