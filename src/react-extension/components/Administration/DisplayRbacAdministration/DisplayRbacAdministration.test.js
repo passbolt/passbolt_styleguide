@@ -30,6 +30,7 @@ import RolesCollection from "../../../../shared/models/entity/role/rolesCollecti
 import {RbacApiServiceWithCustomRolesSet} from "../../../../shared/services/api/rbac/rbacApiService.test.data.js";
 import DeleteRole from "../DeleteRole/DeleteRole.js";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity.js";
+import EditRole from "../EditRole/EditRole.js";
 
 /**
  * Unit tests on DisplayRbacAdministration in regard of specifications
@@ -346,6 +347,25 @@ describe("DisplayRbacAdministration", () => {
 
       expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
       expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteRole, {role: expect.any(RoleEntity), onSubmit: expect.any(Function)});
+    });
+
+    it('As a logged in administrator I be able to rename a custom role', async() => {
+      expect.assertions(2);
+
+      const props = propsWithPopulatedRbacContext({
+        RbacApiService: RbacApiServiceWithCustomRolesSet
+      });
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+
+      const moreButton = page.getMoreButton(customRoleIndex);
+      await page.click(moreButton); //open the menu of the custom role
+
+      const renameRoleButton = page.getRenameRoleButton(customRoleIndex);
+      await page.click(renameRoleButton);
+
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(EditRole, {role: expect.any(RoleEntity), onSubmit: expect.any(Function)});
     });
   });
 });

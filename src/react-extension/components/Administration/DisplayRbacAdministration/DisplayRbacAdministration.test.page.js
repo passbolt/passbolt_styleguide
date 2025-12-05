@@ -135,6 +135,14 @@ export default class DisplayRbacAdministrationPage {
   }
 
   /**
+   * Returns the rename role button of a role given its index or null if there is no button
+   * @param roleIndex
+   */
+  getRenameRoleButton(roleIndex) {
+    return this._page.container.querySelector(`.header-flex .flex-item:nth-child(${roleIndex}) .dropdown #rename_role_action`);
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {

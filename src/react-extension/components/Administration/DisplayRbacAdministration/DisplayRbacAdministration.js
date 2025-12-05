@@ -33,6 +33,7 @@ import {createSafePortal} from "../../../../shared/utils/portals";
 import UserAddSVG from "../../../../img/svg/user_add.svg";
 import MoreVerticalSVG from "../../../../img/svg/more_vertical.svg";
 import DeleteSVG from "../../../../img/svg/delete.svg";
+import EditSVG from "../../../../img/svg/edit.svg";
 import CreateRole from "../CreateRole/CreateRole";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
@@ -42,7 +43,7 @@ import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
 import DeleteRole from "../DeleteRole/DeleteRole";
-
+import EditRole from "../EditRole/EditRole";
 
 /**
  * This component allows to display the internationalisation for the administration
@@ -79,6 +80,8 @@ class DisplayRbacAdministration extends React.Component {
     this.createNewRole = this.createNewRole.bind(this);
     this.handleDeleteRoleClick = this.handleDeleteRoleClick.bind(this);
     this.deleteRole = this.deleteRole.bind(this);
+    this.handleRenameRoleClick = this.handleRenameRoleClick.bind(this);
+    this.renameRole = this.renameRole.bind(this);
   }
 
   /**
@@ -188,6 +191,26 @@ class DisplayRbacAdministration extends React.Component {
     await this.roleApiService.delete(roleEntity.id);
     this.findAndLoadData();
     await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been deleted successfully."));
+  }
+
+  /**
+   * Handle role rename click event
+   * @param {React.Event} event
+   * @param {RoleEntity} role
+   */
+  async handleRenameRoleClick(event, role) {
+    event.preventDefault();
+    this.props.dialogContext.open(EditRole, {role: role, onSubmit: this.renameRole});
+  }
+
+  /**
+   * Rename the given role on the API
+   * @param {RoleEntity} roleEntity
+   */
+  async renameRole(roleEntity) {
+    await this.roleApiService.update(roleEntity.toDto());
+    this.findAndLoadData();
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been updated successfully."));
   }
 
   /**
@@ -310,6 +333,12 @@ class DisplayRbacAdministration extends React.Component {
                           <MoreVerticalSVG/>
                         </DropdownButton>
                         <DropdownMenu className="menu-action-contextual" direction="left">
+                          <DropdownMenuItem>
+                            <button id="rename_role_action" type="button" className="no-border" onClick={e => this.handleRenameRoleClick(e, r)}>
+                              <EditSVG/>
+                              <span><Trans>Rename</Trans></span>
+                            </button>
+                          </DropdownMenuItem>
                           <DropdownMenuItem>
                             <button id="delete_role_action" type="button" className="no-border" onClick={e => this.handleDeleteRoleClick(e, r)}>
                               <DeleteSVG/>
