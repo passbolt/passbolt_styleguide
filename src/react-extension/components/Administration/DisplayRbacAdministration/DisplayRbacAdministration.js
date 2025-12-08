@@ -306,7 +306,8 @@ class DisplayRbacAdministration extends React.Component {
    */
   get canAddNewRole() {
     const schema = RolesCollection.getSchema();
-    return this.state.roles !== null && this.state.roles.length < schema.maxItems;
+    const maxRoleCount = schema.maxItems - 1; // -1 as guest role is not part of this component collections but is counted on the API.
+    return this.state.roles !== null && this.state.roles.length < maxRoleCount;
   }
 
   /**
