@@ -90,7 +90,7 @@ class DisplayRbacItem extends React.Component {
   render() {
     let customizableRoles = [];
     if (this.props.roles) {
-      customizableRoles = this.props.roles.items.filter(role => !role.isAdmin());
+      customizableRoles = this.props.roles;
     }
 
     return (
@@ -106,7 +106,7 @@ class DisplayRbacItem extends React.Component {
               value={controlFunctions.ALLOW}
               disabled={true}/>
           </div>
-          {customizableRoles.map(role => <div key={`${this.props.actionName}-${role.id}`} className="flex-item input">
+          {customizableRoles.items.map(role => <div key={`${this.props.actionName}-${role.id}`} className="flex-item input">
             <Select
               className="inline"
               items={this.allowedCtlFunctions}
