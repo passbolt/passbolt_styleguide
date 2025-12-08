@@ -45,7 +45,9 @@ import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
 import DeleteRole from "../DeleteRole/DeleteRole";
 import EditRole from "../EditRole/EditRole";
 import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
-
+import UserService from "../../../../shared/services/api/user/userService";
+import DeleteRoleNotAllowed from "../DeleteRole/DeleteRoleNotAllowed";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 /**
  * This component allows to display the internationalisation for the administration
@@ -62,6 +64,7 @@ class DisplayRbacAdministration extends React.Component {
     const apiClientOptions = this.props.context.getApiClientOptions();
     this.roleApiService = new this.props.RoleApiService(apiClientOptions);
     this.rbacApiService = new this.props.RbacApiService(apiClientOptions);
+    this.userApiService = new this.props.UserApiService(apiClientOptions);
   }
 
   /**
@@ -182,7 +185,13 @@ class DisplayRbacAdministration extends React.Component {
    */
   async handleDeleteRoleClick(event, role) {
     event.preventDefault();
-    this.props.dialogContext.open(DeleteRole, {role: role, onSubmit: this.deleteRole});
+    const apiResponse = await this.userApiService.findByRoleId(role.id);
+    const usersDto = apiResponse.body;
+    if (usersDto.length > 0) {
+      this.props.dialogContext.open(DeleteRoleNotAllowed, {role: role, usersCount: usersDto.length});
+    } else {
+      this.props.dialogContext.open(DeleteRole, {role: role, onSubmit: this.deleteRole});
+    }
   }
 
   /**
@@ -190,9 +199,13 @@ class DisplayRbacAdministration extends React.Component {
    * @param {RoleEntity} roleEntity
    */
   async deleteRole(roleEntity) {
-    await this.roleApiService.delete(roleEntity.id);
-    this.findAndLoadData();
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been deleted successfully."));
+    try {
+      await this.roleApiService.delete(roleEntity.id);
+      this.findAndLoadData();
+      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been deleted successfully."));
+    } catch (error) {
+      this.props.dialogContext.open(NotifyError, {error});
+    };
   }
 
   /**
@@ -557,7 +570,8 @@ class DisplayRbacAdministration extends React.Component {
 
 DisplayRbacAdministration.defaultProps = {
   RoleApiService: RoleApiService,
-  RbacApiService: RbacApiService
+  RbacApiService: RbacApiService,
+  UserApiService: UserService
 };
 
 DisplayRbacAdministration.propTypes = {
@@ -567,6 +581,7 @@ DisplayRbacAdministration.propTypes = {
   dialogContext: PropTypes.object, // the dialog context
   RoleApiService: PropTypes.func, // The role service to inject
   RbacApiService: PropTypes.func, // The rbac service to inject
+  UserApiService: PropTypes.func, // The user service to inject
   t: PropTypes.func, // The translation function
 };
 

@@ -32,6 +32,11 @@ import DeleteRole from "../DeleteRole/DeleteRole.js";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity.js";
 import EditRole from "../EditRole/EditRole.js";
 import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
+import {UserApiServiceWithUsersHavingCustomRoles} from "../../../../shared/services/api/user/userService.test.data";
+import DeleteRoleNotAllowed from "../DeleteRole/DeleteRoleNotAllowed";
+import PassboltApiFetchError from "../../../../shared/error/passboltApiFetchError";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import expect from "expect";
 
 /**
  * Unit tests on DisplayRbacAdministration in regard of specifications
@@ -340,7 +345,7 @@ describe("DisplayRbacAdministration", () => {
       expect(page.getMoreButton(userRoleIndex)).toBeNull();
     });
 
-    it('As a logged in administrator I be able to delete a custom role', async() => {
+    it('As a logged in administrator I should be able to delete a custom role', async() => {
       expect.assertions(2);
 
       const props = propsWithPopulatedRbacContext({
@@ -359,7 +364,51 @@ describe("DisplayRbacAdministration", () => {
       expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteRole, {role: expect.any(RoleEntity), onSubmit: expect.any(Function)});
     });
 
-    it('As a logged in administrator I be able to rename a custom role', async() => {
+    it('As a logged in administrator I should be see unexpected error on deletion of a custom role', async() => {
+      expect.assertions(3);
+
+      const props = propsWithPopulatedRbacContext({
+        RbacApiService: RbacApiServiceWithCustomRolesSet
+      });
+      const apiFetchError = new PassboltApiFetchError("ERROR");
+      jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onSubmit(props.role));
+      jest.spyOn(props.RoleApiService.prototype, "delete").mockImplementationOnce(() => { throw apiFetchError; });
+
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+
+      const moreButton = page.getMoreButton(customRoleIndex);
+      await page.click(moreButton); //open the menu of the custom role
+
+      const deleteRoleButton = page.getDeleteRoleButton(customRoleIndex);
+      await page.click(deleteRoleButton);
+
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(2);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteRole, {role: expect.any(RoleEntity), onSubmit: expect.any(Function)});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: apiFetchError});
+    });
+
+    it('As a logged in administrator I should not be able to delete a custom role if some users have this role', async() => {
+      expect.assertions(2);
+
+      const props = propsWithPopulatedRbacContext({
+        RbacApiService: RbacApiServiceWithCustomRolesSet,
+        UserApiService: UserApiServiceWithUsersHavingCustomRoles
+      });
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+
+      const moreButton = page.getMoreButton(customRoleIndex);
+      await page.click(moreButton); //open the menu of the custom role
+
+      const deleteRoleButton = page.getDeleteRoleButton(customRoleIndex);
+      await page.click(deleteRoleButton);
+
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteRoleNotAllowed, {role: expect.any(RoleEntity), usersCount: 1});
+    });
+
+    it('As a logged in administrator I should be able to rename a custom role', async() => {
       expect.assertions(2);
 
       const props = propsWithPopulatedRbacContext({

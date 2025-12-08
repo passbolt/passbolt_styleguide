@@ -19,11 +19,17 @@ export class DefaultRoleApiService {
   findAll() {
     return new PassboltResponseEntity({header: {}, body: rolesCollectionDto});
   }
+  delete() {
+    return new PassboltResponseEntity({});
+  }
 }
 
 export class RoleApiServiceWithTooManyRoles {
   findAll() {
     const roles = [adminRoleDto(), userRoleDto(), customRoleDto({name: "c-role-1"}), customRoleDto({name: "c-role-2"}), customRoleDto({name: "c-role-3"})];
     return new PassboltResponseEntity({header: {}, body: roles});
+  }
+  delete() {
+    return new PassboltResponseEntity({});
   }
 }
