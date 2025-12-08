@@ -44,6 +44,8 @@ import CellUserAccountRecovery from "../../../../shared/components/Table/CellUse
 import ColumnsUserSettingCollection from "../../../../shared/models/entity/user/columnsUserSettingCollection";
 import ColumnModel from "../../../../shared/models/column/ColumnModel";
 import CircleOffSVG from "../../../../img/svg/circle_off.svg";
+import DisplayDragUser from "./DisplayDragUser";
+import {withDrag} from "../../../contexts/DragContext";
 
 /**
  * This component allows to display the filtered users into a grid
@@ -79,7 +81,10 @@ class DisplayUsers extends React.Component {
     this.handleUserRightClick = this.handleUserRightClick.bind(this);
     this.handleCheckboxWrapperClick = this.handleCheckboxWrapperClick.bind(this);
     this.handleSortByColumnClick = this.handleSortByColumnClick.bind(this);
+    this.handleUserDragStartEvent = this.handleUserDragStartEvent.bind(this);
+    this.handleDragEndEvent = this.handleDragEndEvent.bind(this);
     this.isRowInactive = this.isRowInactive.bind(this);
+    this.getDisabledGroupIds = this.getDisabledGroupIds.bind(this);
   }
 
   /**
@@ -200,6 +205,34 @@ class DisplayUsers extends React.Component {
   }
 
   /**
+   * Handle the drag start on the selected user
+   * @param event The DOM event
+   * @param user The selected user
+   * @param isSelected is user selected
+   * @returns {Promise<void>}
+   */
+  async handleUserDragStartEvent(event, user, isSelected) {
+    if (!isSelected) {
+      await this.props.userWorkspaceContext.onUserSelected.single(user);
+    }
+
+    const draggedItems = {
+      users: this.props.userWorkspaceContext.selectedUsers,
+      groups: [],
+      disabledGroupIds: this.getDisabledGroupIds(this.props.userWorkspaceContext.selectedUsers)
+    };
+
+    this.props.dragContext.onDragStart(event, DisplayDragUser, draggedItems);
+  }
+
+  /**
+   * Handle when the user stop dragging content.
+   */
+  handleDragEndEvent() {
+    this.props.dragContext.onDragEnd();
+  }
+
+  /**
    * Returns the current list of filtered users to display
    */
   get users() {
@@ -219,6 +252,34 @@ class DisplayUsers extends React.Component {
    */
   get columnsUserSetting() {
     return ColumnsUserSettingCollection.DEFAULT;
+  }
+
+  /**
+   * Get the list of group IDs where the logged-in user is not an admin or any of the selected users are already members
+   * @param {Array} selectedUsers - Array of selected user objects
+   * @returns {string[]} Array of group IDs to disable
+   */
+  getDisabledGroupIds(selectedUsers) {
+    const groups = this.props.context.groups;
+    const currentUserId = this.props.context.loggedInUser?.id;
+
+    if (!groups || !currentUserId) {
+      return [];
+    }
+
+    return groups
+      .filter(group => {
+        const isAdmin = group.groups_users.some(
+          gu => gu.user_id === currentUserId && gu.is_admin
+        );
+        if (!isAdmin) {
+          return true;
+        }
+        return selectedUsers.some(selectedUser =>
+          group.groups_users.some(gu => gu.user_id === selectedUser.id)
+        );
+      })
+      .map(group => group.id);
   }
 
   /**
@@ -410,6 +471,8 @@ class DisplayUsers extends React.Component {
             onSortChange={this.handleSortByColumnClick}
             onRowClick={this.handleUserSelected}
             onRowContextMenu={this.handleUserRightClick}
+            onRowDragStart={this.handleUserDragStartEvent}
+            onRowDragEnd={this.handleDragEndEvent}
             selectedRowsIds={this.selectedUsersIds}
             isRowInactive={this.isRowInactive}
             rowsRef={this.listRef}>
@@ -426,7 +489,8 @@ DisplayUsers.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
   accountRecoveryContext: PropTypes.object, // The account recovery context
+  dragContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withAccountRecovery(withTranslation('common')(DisplayUsers)))))));
+export default withAppContext(withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withAccountRecovery(withDrag(withTranslation('common')(DisplayUsers))))))));
