@@ -19,8 +19,17 @@ export class DefaultRoleApiService {
   findAll() {
     return new PassboltResponseEntity({header: {}, body: rolesCollectionDto});
   }
+
   delete() {
     return new PassboltResponseEntity({});
+  }
+
+  update(roleDto) {
+    return new PassboltResponseEntity({header: {}, body: roleDto});
+  }
+
+  create(roleDto) {
+    return new PassboltResponseEntity({header: {}, body: roleDto});
   }
 }
 

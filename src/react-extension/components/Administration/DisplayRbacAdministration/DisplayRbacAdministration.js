@@ -173,9 +173,13 @@ class DisplayRbacAdministration extends React.Component {
    * @param {RoleEntity} roleEntity
    */
   async createNewRole(roleEntity) {
-    await this.roleApiService.create(roleEntity.toDto());
-    this.findAndLoadData();
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been created successfully."));
+    try {
+      await this.roleApiService.create(roleEntity.toDto());
+      this.findAndLoadData();
+      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been created successfully."));
+    } catch (error) {
+      this.props.dialogContext.open(NotifyError, {error});
+    }
   }
 
   /**
@@ -205,7 +209,7 @@ class DisplayRbacAdministration extends React.Component {
       await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been deleted successfully."));
     } catch (error) {
       this.props.dialogContext.open(NotifyError, {error});
-    };
+    }
   }
 
   /**
@@ -223,9 +227,13 @@ class DisplayRbacAdministration extends React.Component {
    * @param {RoleEntity} roleEntity
    */
   async renameRole(roleEntity) {
-    await this.roleApiService.update(roleEntity.toDto());
-    this.findAndLoadData();
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been updated successfully."));
+    try {
+      await this.roleApiService.update(roleEntity.toDto());
+      this.findAndLoadData();
+      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been updated successfully."));
+    } catch (error) {
+      this.props.dialogContext.open(NotifyError, {error});
+    }
   }
 
   /**

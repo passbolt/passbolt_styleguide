@@ -36,7 +36,7 @@ import {UserApiServiceWithUsersHavingCustomRoles} from "../../../../shared/servi
 import DeleteRoleNotAllowed from "../DeleteRole/DeleteRoleNotAllowed";
 import PassboltApiFetchError from "../../../../shared/error/passboltApiFetchError";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import expect from "expect";
+import {customRoleDto} from "../../../../shared/models/entity/role/roleEntity.test.data.js";
 
 /**
  * Unit tests on DisplayRbacAdministration in regard of specifications
@@ -425,6 +425,89 @@ describe("DisplayRbacAdministration", () => {
 
       expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
       expect(props.dialogContext.open).toHaveBeenCalledWith(EditRole, {role: expect.any(RoleEntity), onSubmit: expect.any(Function)});
+    });
+
+    it('As a logged in administrator I should see an unexpected error dialog if role deletion goes wrong', async() => {
+      expect.assertions(2);
+
+      const props = propsWithPopulatedRbacContext({RbacApiService: RbacApiServiceWithCustomRolesSet});
+      const apiResponse = (new props.RoleApiService).findAll();
+      const rolesCollection = new RolesCollection(apiResponse.body);
+      const roleToDelete = rolesCollection.items[customRoleIndex - 1];
+
+      const error = new Error("wrong");
+      jest.spyOn(props.RoleApiService.prototype, "delete").mockImplementation(() => { throw error; });
+      jest.spyOn(props.dialogContext, "open").mockImplementation((_, props) => {
+        if (props.onSubmit) {  //It's the first dialog we force the submit to observe the callback
+          props.onSubmit(roleToDelete);
+        }
+      });
+
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+
+      const moreButton = page.getMoreButton(customRoleIndex);
+      await page.click(moreButton); //open the menu of the custom role
+
+      const deleteRoleButton = page.getDeleteRoleButton(customRoleIndex);
+      await page.click(deleteRoleButton);
+
+      await waitFor(() => {});
+
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(2);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
+    });
+
+    it('As a logged in administrator I should see an unexpected error dialog if role renaming goes wrong', async() => {
+      expect.assertions(2);
+
+      const props = propsWithPopulatedRbacContext({RbacApiService: RbacApiServiceWithCustomRolesSet});
+      const apiResponse = (new props.RoleApiService).findAll();
+      const rolesCollection = new RolesCollection(apiResponse.body);
+      const roleToRename = rolesCollection.items[customRoleIndex - 1];
+
+      const error = new Error("wrong");
+      jest.spyOn(props.RoleApiService.prototype, "update").mockImplementation(() => { throw error; });
+      jest.spyOn(props.dialogContext, "open").mockImplementation((_, props) => {
+        if (props.onSubmit) {  //It's the first dialog we force the submit to observe the callback
+          props.onSubmit(roleToRename);
+        }
+      });
+
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+
+      const moreButton = page.getMoreButton(customRoleIndex);
+      await page.click(moreButton); //open the menu of the custom role
+
+      const renameRoleButton = page.getRenameRoleButton(customRoleIndex);
+      await page.click(renameRoleButton);
+
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(2);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
+    });
+
+    it('As a logged in administrator I should see an unexpected error dialog if role creation goes wrong', async() => {
+      expect.assertions(2);
+
+      const props = defaultProps({RbacApiService: RbacApiServiceWithCustomRolesSet});
+      const newRoleEntity = new RoleEntity(customRoleDto());
+
+      const error = new Error("wrong");
+      jest.spyOn(props.RoleApiService.prototype, "create").mockImplementation(() => { throw error; });
+      jest.spyOn(props.dialogContext, "open").mockImplementation((_, props) => {
+        if (props.onSubmit) {  //It's the first dialog we force the submit to observe the callback
+          props.onSubmit(newRoleEntity);
+        }
+      });
+
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+
+      await page.click(page.createRoleButton); //open the menu of the custom role
+
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(2);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
     });
   });
 });
