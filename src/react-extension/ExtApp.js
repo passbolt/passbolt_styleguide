@@ -191,13 +191,15 @@ class ExtApp extends Component {
                                                 <ManageWorkflows/>
                                                 <ManageContextualMenu/>
                                                 <ManageAnnouncements/>
-                                                <ResizableSidebarContextProvider>
-                                                  <div id="container" className="page user">
-                                                    <div id="app" className="app" tabIndex="1000">
-                                                      <DisplayUserWorkspace/>
+                                                <DragContextProvider>
+                                                  <ResizableSidebarContextProvider>
+                                                    <div id="container" className="page user">
+                                                      <div id="app" className="app" tabIndex="1000">
+                                                        <DisplayUserWorkspace/>
+                                                      </div>
                                                     </div>
-                                                  </div>
-                                                </ResizableSidebarContextProvider>
+                                                  </ResizableSidebarContextProvider>
+                                                </DragContextProvider>
                                               </UserWorkspaceContextProvider>
                                             </Route>
                                             {/* User settings workspace */}
