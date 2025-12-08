@@ -32,6 +32,7 @@ import {getUserFormattedName} from "../../../../shared/utils/userUtils";
 import {createSafePortal} from "../../../../shared/utils/portals";
 import DisplayScimSettingsAdministrationHelp from "./DisplayScimSettingsAdministrationHelp";
 import {withRoles} from "../../../contexts/RoleContext";
+import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 
 /**
  * This component allows to display the SCIM settings for the administration
@@ -493,7 +494,7 @@ DisplayScimSettingsAdministration.propTypes = {
   actionFeedbackContext: PropTypes.object, // The action feedback context
   dialogContext: PropTypes.object, // The dialog context
   roleContext: PropTypes.object, // The role context
-  roles: PropTypes.object, // The RolesCollection
+  roles: PropTypes.instanceOf(RolesCollection), // The roles collection
   clipboardContext: PropTypes.object, // the clipboard service provider
   administrationWorkspaceContext: PropTypes.object,
   scimSettingsServiceWorkerService: PropTypes.object,

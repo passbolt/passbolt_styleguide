@@ -18,6 +18,7 @@ import {withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
 import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctionEnumeration";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 
 class DisplayRbacItem extends React.Component {
   /**
@@ -130,7 +131,7 @@ DisplayRbacItem.propTypes = {
   actionName: PropTypes.string.isRequired, // The action name.
   rbacs: PropTypes.object, // The collection of rbacs.
   rbacsUpdated: PropTypes.object, // The collection of updated rbacs.
-  roles: PropTypes.object.isRequired, // The collection of role.
+  roles: PropTypes.instanceOf(RolesCollection).isRequired, // The roles collection
   onChange: PropTypes.func.isRequired, // The translation function.
   t: PropTypes.func, // The translation function.
 };
