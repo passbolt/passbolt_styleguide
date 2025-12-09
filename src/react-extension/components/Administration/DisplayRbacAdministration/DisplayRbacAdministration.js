@@ -189,8 +189,9 @@ class DisplayRbacAdministration extends React.Component {
    */
   async handleDeleteRoleClick(event, role) {
     event.preventDefault();
-    const apiResponse = await this.userApiService.findByRoleId(role.id);
-    const usersDto = apiResponse.body;
+    // TODO: use findByRoleId when it's implemented on the API
+    const apiResponse = await this.userApiService.findAll();
+    const usersDto = apiResponse.body.filter(user => user.role_id === role.id);
     if (usersDto.length > 0) {
       this.props.dialogContext.open(DeleteRoleNotAllowed, {role: role, usersCount: usersDto.length});
     } else {

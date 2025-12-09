@@ -81,6 +81,7 @@ class UserService extends AbstractService {
   }
 
   /**
+   * NOT READY YET TO BE USED LATER
    * Find users by role id
    * @param {string} roleId The role id
    * @return {Promise<PassboltResponseEntity>}

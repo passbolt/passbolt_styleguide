@@ -24,7 +24,9 @@ import DisplayRbacAdministrationPage from "./DisplayRbacAdministration.test.page
 import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctionEnumeration";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import CreateRole from "../CreateRole/CreateRole.js";
-import {RoleApiServiceWithTooManyRoles} from "../../../../shared/services/api/role/roleApiService.test.data.js";
+import {
+  RoleApiServiceWithTooManyRoles
+} from "../../../../shared/services/api/role/roleApiService.test.data.js";
 import {defaultApiClientOptions} from "../../../../shared/lib/apiClient/apiClientOptions.test.data.js";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection.js";
 import {RbacApiServiceWithCustomRolesSet} from "../../../../shared/services/api/rbac/rbacApiService.test.data.js";
@@ -37,6 +39,9 @@ import DeleteRoleNotAllowed from "../DeleteRole/DeleteRoleNotAllowed";
 import PassboltApiFetchError from "../../../../shared/error/passboltApiFetchError";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {customRoleDto} from "../../../../shared/models/entity/role/roleEntity.test.data.js";
+import PassboltResponseEntity from "../../../../shared/models/entity/apiService/PassboltResponseEntity";
+import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import {rolesCollectionDto} from "../../../../shared/models/entity/role/rolesCollection.test.data";
 
 /**
  * Unit tests on DisplayRbacAdministration in regard of specifications
@@ -395,6 +400,9 @@ describe("DisplayRbacAdministration", () => {
         RbacApiService: RbacApiServiceWithCustomRolesSet,
         UserApiService: UserApiServiceWithUsersHavingCustomRoles
       });
+      // TODO Update test when user service can call findByRoleId
+      const roleCustomId = rolesCollectionDto[2].id;
+      jest.spyOn(props.UserApiService.prototype, "findAll").mockImplementationOnce(() => new PassboltResponseEntity({body: [defaultUserDto({role_id: roleCustomId})], header: {}}));
       const page = new DisplayRbacAdministrationPage(props);
       await waitFor(() => {});
 
