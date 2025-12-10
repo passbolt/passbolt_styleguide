@@ -46,6 +46,7 @@ import ColumnModel from "../../../../shared/models/column/ColumnModel";
 import CircleOffSVG from "../../../../img/svg/circle_off.svg";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
+import {withRoles} from "../../../contexts/RoleContext";
 import DisplayDragUser from "./DisplayDragUser";
 import {withDrag} from "../../../contexts/DragContext";
 
@@ -121,7 +122,7 @@ class DisplayUsers extends React.Component {
     this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {disabled: true}}}));
     this.defaultColumns.push(new ColumnUserProfileModel({cellRenderer: {component: CellUserProfile, props: {hasAttentionRequiredFeature: this.hasAttentionRequiredColumn}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
     this.defaultColumns.push(new ColumnUserUsernameModel({headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Username")}}}));
-    this.defaultColumns.push(new ColumnUserRoleModel({cellRenderer: {component: CellUserRole}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Role")}}}));
+    this.defaultColumns.push(new ColumnUserRoleModel({getValue: user => this.props.userWorkspaceContext.getTranslatedRoleName(user.role_id), cellRenderer: {component: CellUserRole}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Role")}}}));
     if (this.hasSuspendedColumn) {
       this.defaultColumns.push(new ColumnUserSuspendedModel({cellRenderer: {component: CellUserSuspended}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Suspended")}}}));
     }
@@ -491,6 +492,7 @@ class DisplayUsers extends React.Component {
 DisplayUsers.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The rbac context
+  roleContext: PropTypes.object, // The role context
   userWorkspaceContext: PropTypes.any, // The user workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
@@ -499,4 +501,4 @@ DisplayUsers.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withAccountRecovery(withDrag(withTranslation('common')(DisplayUsers))))))));
+export default withAppContext(withRbac(withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withRoles(withAccountRecovery(withDrag(withTranslation('common')(DisplayUsers))))))))));
