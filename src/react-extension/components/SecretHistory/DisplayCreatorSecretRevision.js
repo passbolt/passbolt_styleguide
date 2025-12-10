@@ -80,6 +80,25 @@ class DisplayCreatorSecretRevision extends Component {
   }
 
   /**
+   * Get the creator of the secret revision
+   * Returns a default unknown user if creator is null
+   * @returns {UserEntity}
+   */
+  get creator() {
+    if (!this.props.secretRevision.creator) {
+      return new UserEntity({
+        username: "Unknown user",
+        profile: {
+          first_name: "Unknown",
+          last_name: "user"
+        },
+        status: USER_STATUS.DELETED
+      });
+    }
+    return this.props.secretRevision.creator;
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -97,28 +116,30 @@ class DisplayCreatorSecretRevision extends Component {
       <button type="button" className="no-border" disabled={this.props.disabled}
         onClick={this.handleSelectSecretRevision}>
         <div className="creator">
-          <UserAvatar user={this.props.secretRevision.creator.toDto(UserEntity.ALL_CONTAIN_OPTIONS)} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+          <UserAvatar user={this.creator.toDto(UserEntity.ALL_CONTAIN_OPTIONS)} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
           <div className="profile">
             <div className="name">
-              <span className="ellipsis">{this.props.secretRevision.creator.getUserFormattedName(this.translate)}</span>
-              <TooltipPortal
-                message={this.state.tooltipFingerprintMessage || <TooltipMessageFingerprintLoading />}
-                onMouseHover={() => this.onTooltipFingerprintMouseHover(this.props.secretRevision.creator?.id)}>
-                <FingerprintSVG/>
-              </TooltipPortal>
+              <span className="ellipsis">{this.creator.getUserFormattedName(this.translate)}</span>
+              {
+                this.creator?.id && <TooltipPortal
+                  message={this.state.tooltipFingerprintMessage || <TooltipMessageFingerprintLoading />}
+                  onMouseHover={() => this.onTooltipFingerprintMouseHover(this.creator?.id)}>
+                  <FingerprintSVG/>
+                </TooltipPortal>
+              }
             </div>
             <div className="username ellipsis">
-              {this.props.secretRevision.creator.username}
+              {this.creator.username}
             </div>
           </div>
         </div>
         <div className="additional-information">
-          {this.props.secretRevision.creator.status === USER_STATUS.SUSPENDED &&
+          {this.creator.status === USER_STATUS.SUSPENDED &&
             <div className="status suspended ellipsis">
               <Trans>Suspended</Trans>
             </div>
           }
-          {this.props.secretRevision.creator.status === USER_STATUS.DELETED &&
+          {this.creator.status === USER_STATUS.DELETED &&
             <div className="status deleted ellipsis">
               <Trans>Deleted</Trans>
             </div>
