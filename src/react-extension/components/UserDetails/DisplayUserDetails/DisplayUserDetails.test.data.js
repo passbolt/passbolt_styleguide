@@ -21,6 +21,7 @@ import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/roleEntit
 import {defaultAccountRecoveryUserContext} from "../../../contexts/AccountRecoveryUserContext.test.data";
 import {v4 as uuidv4} from "uuid";
 import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -1430,6 +1431,7 @@ export function defaultProps() {
       displaySuccess: jest.fn(),
     },
     accountRecoveryContext: defaultAccountRecoveryUserContext(),
+    rbacContext: defaultAdministratorRbacContext(),
     clipboardContext: defaultClipboardContext(),
   };
 }
