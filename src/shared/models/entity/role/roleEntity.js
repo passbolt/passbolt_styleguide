@@ -59,6 +59,14 @@ export default class RoleEntity extends EntityV2 {
     };
   }
 
+  /**
+   * @inheritDoc
+   * @throws {EntityValidationError} If the role name contains trailing spaces.
+   */
+  validateBuildRules() {
+    this.assertNoTrailingSpaces("name", this._props.name);
+  }
+
   /*
    * ==================================================
    * Dynamic properties getters
@@ -135,6 +143,22 @@ export default class RoleEntity extends EntityV2 {
       );
     }
     return error;
+  }
+
+  /**
+   * Assert that the given prop does not have trailing spaces.
+   *
+   * @param {string} propName The property name for checking value uniqueness.
+   * @param {string} propValue The property value for checking value uniqueness.
+   * @throw {EntityValidationError} If another item already has the given value for the given property.
+   */
+  assertNoTrailingSpaces(propName, propValue) {
+    const trimmedPropValue = propValue.trim();
+    if (trimmedPropValue !== propValue) {
+      const error = new EntityValidationError();
+      error.addError(propName, 'trailing-spaces', `The property (${propName}) contains forbidden trailing spaces.`);
+      throw error;
+    }
   }
 
   /*

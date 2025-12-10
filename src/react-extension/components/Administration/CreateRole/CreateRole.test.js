@@ -53,10 +53,34 @@ describe("Create role", () => {
 
     it('AS AD I should not fill a role name longer than 255 characters', async() => {
       expect.assertions(2);
-      await page.fillInput(page.inputName, 'a'.repeat(256));
+      await page.fillInput(page.inputName, 'a'.repeat(51));
       await page.create();
       expect(page.hasInvalidName).toBeTruthy();
-      expect(page.errorMessage).toStrictEqual("A name can not be more than 255 char in length.");
+      expect(page.errorMessage).toStrictEqual("A name can not be more than 50 char in length.");
+    });
+
+    it('AS AD I should not fill a name having prefix spaces', async() => {
+      expect.assertions(2);
+      await page.fillInput(page.inputName, ' a');
+      await page.create();
+      expect(page.hasInvalidName).toBeTruthy();
+      expect(page.errorMessage).toStrictEqual("The name contains forbidden trailing spaces.");
+    });
+
+    it('AS AD I should not fill a name having sufix spaces', async() => {
+      expect.assertions(2);
+      await page.fillInput(page.inputName, 'a ');
+      await page.create();
+      expect(page.hasInvalidName).toBeTruthy();
+      expect(page.errorMessage).toStrictEqual("The name contains forbidden trailing spaces.");
+    });
+
+    it('AS AD I should not fill a name having trailing spaces', async() => {
+      expect.assertions(2);
+      await page.fillInput(page.inputName, ' a ');
+      await page.create();
+      expect(page.hasInvalidName).toBeTruthy();
+      expect(page.errorMessage).toStrictEqual("The name contains forbidden trailing spaces.");
     });
 
     each([

@@ -196,10 +196,13 @@ class EditRole extends Component {
               {errors?.hasErrors() &&
                 <div className="error-message">
                   {errors?.hasError("name", "maxLength") &&
-                    <Trans>A name can not be more than 255 char in length.</Trans>
+                    <Trans>A name can not be more than 50 char in length.</Trans>
                   }
                   {errors?.hasError("name", "minLength") &&
                     <Trans>A name is required.</Trans>
+                  }
+                  {errors?.hasError("name", "trailing-spaces") &&
+                    <Trans>The name contains forbidden trailing spaces.</Trans>
                   }
                 </div>
               }
