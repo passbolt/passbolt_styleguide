@@ -370,7 +370,7 @@ class DisplayRbacAdministration extends React.Component {
             <h3 className="title"><Trans>Role-Based Access Control</Trans></h3>
             <div className="section-header">
               <p><Trans>In this section you can define access controls for each user role.</Trans></p>
-              <button type="button" className="button secondary" onClick={this.handleAddRoleClick} disabled={!this.canAddNewRole}><UserAddSVG /> <Trans>Add role</Trans></button>
+              <button type="button" className="button secondary" onClick={this.handleAddRoleClick} disabled={!this.canAddNewRole} title={!this.canAddNewRole ? this.props.t("Maximum number of roles reached") : ""}><UserAddSVG /> <Trans>Add role</Trans></button>
             </div>
             <form className="form">
               <div className="flex-container outer">
@@ -379,25 +379,25 @@ class DisplayRbacAdministration extends React.Component {
                     &nbsp;
                   </div>
                   <div className="flex-item centered">
-                    <span className="ellipsis"><Trans>Admin</Trans></span>
+                    <span className="ellipsis" title={this.props.t("Admin")}><Trans>Admin</Trans></span>
                   </div>
-                  {customizableRoles.items.map(r => (
-                    <div className="flex-item centered" key={r.id}>
-                      <span className="ellipsis">{capitalizeFirstLetter(this.getTranslatedRoleName(r))}</span>
-                      {!r.isAReservedRole() &&
+                  {customizableRoles.items.map(role => (
+                    <div className="flex-item centered" key={role.id}>
+                      <span className="ellipsis" title={capitalizeFirstLetter(this.getTranslatedRoleName(role))}>{capitalizeFirstLetter(this.getTranslatedRoleName(role))}</span>
+                      {!role.isAReservedRole() &&
                       <Dropdown>
                         <DropdownButton className="more button-action-icon link no-border">
                           <MoreVerticalSVG/>
                         </DropdownButton>
                         <DropdownMenu className="menu-action-contextual" direction="left">
                           <DropdownMenuItem>
-                            <button id="rename_role_action" type="button" className="no-border" onClick={e => this.handleRenameRoleClick(e, r)}>
+                            <button id="rename_role_action" type="button" className="no-border" onClick={event => this.handleRenameRoleClick(event, role)}>
                               <EditSVG/>
                               <span><Trans>Rename</Trans></span>
                             </button>
                           </DropdownMenuItem>
                           <DropdownMenuItem>
-                            <button id="delete_role_action" type="button" className="no-border" onClick={e => this.handleDeleteRoleClick(e, r)}>
+                            <button id="delete_role_action" type="button" className="no-border" onClick={event => this.handleDeleteRoleClick(event, role)}>
                               <DeleteSVG/>
                               <span><Trans>Delete</Trans></span>
                             </button>

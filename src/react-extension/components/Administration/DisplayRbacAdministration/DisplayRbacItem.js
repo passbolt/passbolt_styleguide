@@ -49,7 +49,7 @@ class DisplayRbacItem extends React.Component {
     ];
 
     if (this.props.actionName === uiActions.USERS_VIEW_WORKSPACE) {
-      controls.push({value: controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP, label: this.props.t('Allow group manager')});
+      controls.push({value: controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP, label: this.props.t('Allow group manager'), title: this.props.t('Allow group manager')});
     }
     return controls;
   }
