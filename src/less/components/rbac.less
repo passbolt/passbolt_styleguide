@@ -57,8 +57,8 @@
 
   .flex-item {
     box-sizing: border-box;
-    min-width: 25%;
-    max-width: 25%;
+    min-width: 30%;
+    max-width: 30%;
     align-self: stretch;
     min-height: 4.4rem;
     padding: .6rem 1.6rem;
@@ -70,8 +70,8 @@
     }
 
     &.first {
-      min-width: 50%;
-      max-width: 50%;
+      min-width: 40%;
+      max-width: 40%;
     }
     &.full-width{
       width: 100%;
@@ -104,5 +104,9 @@
 
   form {
     overflow: auto;
+    overscroll-behavior-y: contain;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--Workspace-Elevator) transparent;
   }
 }

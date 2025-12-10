@@ -531,7 +531,7 @@ class DisplayRbacAdministration extends React.Component {
                     </DisplayRbacSection>
                     <DisplayRbacSection label={this.props.t('Users')} level={1} rolesCount={rolesCount}>
                       <DisplayRbacItem label={this.props.t('Can see users workspace')}
-                        actionName={uiActions.USERS_VIEW_WORKSPACE} level={3}
+                        actionName={uiActions.USERS_VIEW_WORKSPACE} level={2}
                         rbacs={this.props.adminRbacContext.rbacs}
                         rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                         roles={customizableRoles}
@@ -542,7 +542,7 @@ class DisplayRbacAdministration extends React.Component {
                       <DisplayRbacSection label={this.props.t('User settings')} level={1} rolesCount={rolesCount}>
                         {
                           this.canIUseMobile && <DisplayRbacItem label={this.props.t('Can see mobile setup')}
-                            actionName={uiActions.MOBILE_TRANSFER} level={3}
+                            actionName={uiActions.MOBILE_TRANSFER} level={2}
                             rbacs={this.props.adminRbacContext.rbacs}
                             rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                             roles={customizableRoles}
@@ -551,7 +551,7 @@ class DisplayRbacAdministration extends React.Component {
                         {
                           this.canIUseDesktop &&
                           <DisplayRbacItem label={this.props.t('Can see desktop application setup')}
-                            actionName={uiActions.DESKTOP_TRANSFER} level={3}
+                            actionName={uiActions.DESKTOP_TRANSFER} level={2}
                             rbacs={this.props.adminRbacContext.rbacs}
                             rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                             roles={customizableRoles}
