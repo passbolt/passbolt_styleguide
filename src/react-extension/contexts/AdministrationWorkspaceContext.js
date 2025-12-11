@@ -168,7 +168,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       },
     };
 
-    if (!this.props.rbacContext.canIUseUiAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE)) {
+    if (!this.props.rbacContext.canIUseAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE)) {
       newState.selectedAdministration = AdministrationWorkspaceMenuTypes.HTTP_403_ACCESS_DENIED;
       this.setState(newState);
       return;

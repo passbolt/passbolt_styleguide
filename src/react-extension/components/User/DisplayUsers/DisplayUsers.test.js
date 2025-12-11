@@ -29,6 +29,8 @@ import {
 } from "./DisplayUsers.test.data";
 import DisplayUsersPage from "./DisplayUsers.test.page";
 import {waitFor} from "@testing-library/dom";
+import {denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import DisplayUsersContextualMenu from "../DisplayUsersContextualMenu/DisplayUsersContextualMenu";
 
 beforeEach(() => {
@@ -151,6 +153,41 @@ describe("Display Users", () => {
     it('As LU, I should sort the users by account recovery status', async() => {
       await page.sortByAccountRecoveryStatus();
       expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('account_recovery_user_setting.status');
+    });
+  });
+
+  describe('As LU, I should not see suspended, mfa and account recovery column for users', () => {
+    beforeEach(() => {
+      const props = defaultProps({rbacContext: denyRbacContext(), context: defaultUserAppContext()});
+      page = new DisplayUsersPage(props);
+    });
+
+    it('As LU, I should see 6 column', async() => {
+      expect(page.columnCount).toStrictEqual(6);
+      // The first column is the checkbox
+      expect(page.column(2).name).toStrictEqual("Name");
+      expect(page.column(3).name).toStrictEqual("Username");
+      expect(page.column(4).name).toStrictEqual("Role");
+      expect(page.column(5).name).toStrictEqual("Modified");
+      expect(page.column(6).name).toStrictEqual("Last logged in");
+    });
+  });
+
+  describe('As LU having account recovery view allowed, I should not see suspended, mfa column for users', () => {
+    beforeEach(() => {
+      const props = defaultProps({context: defaultUserAppContext()});
+      page = new DisplayUsersPage(props);
+    });
+
+    it('As LU, I should see 6 column', async() => {
+      expect(page.columnCount).toStrictEqual(7);
+      // The first column is the checkbox
+      expect(page.column(2).name).toStrictEqual("Name");
+      expect(page.column(3).name).toStrictEqual("Username");
+      expect(page.column(4).name).toStrictEqual("Role");
+      expect(page.column(5).name).toStrictEqual("Modified");
+      expect(page.column(6).name).toStrictEqual("Last logged in");
+      expect(page.column(7).name).toStrictEqual("Account recovery");
     });
   });
 

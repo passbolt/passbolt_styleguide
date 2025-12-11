@@ -3,6 +3,10 @@ import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.dat
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import {
+  defaultAdministratorRbacContext,
+  defaultUserRbacContext
+} from "../../../../shared/context/Rbac/RbacContext.test.data";
 import {defaultGroupDto} from "../../../../shared/models/entity/group/groupEntity.test.data";
 import {minimumGroupUserDto} from "../../../../shared/models/entity/groupUser/groupUserEntity.test.data";
 import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
@@ -42,6 +46,7 @@ export function propsWithSelectedUser(props) {
     },
     workflowContext: defaultWorkflowContext(),
     dialogContext: defaultDialogContext(),
+    rbacContext: defaultAdministratorRbacContext(),
     actionFeedbackContext: defaultActionFeedbackContext(),
     clipboardContext: defaultClipboardContext(),
     ...props
@@ -123,11 +128,40 @@ export function propsSoleManagerSelected() {
 }
 
 /**
+ * Props user is group manager with group selected
+ */
+export function propsUserGroupManagerWithGroupSelected() {
+  const context = defaultUserAppContext();
+  return propsWithSelectedUser({
+    context: context,
+    rbacContext: defaultUserRbacContext(),
+    userWorkspaceContext: {
+      details: {
+        locked: true
+      },
+      filter: {
+        type: "FILTER-BY-GROUP",
+        payload: {
+          group: {
+            groups_users: [{}, {}], // At least two users needed in the group
+            my_group_user: {
+              is_admin: true
+            }
+          },
+        }
+      },
+      selectedUsers: [{}] // At least on user selected
+    }
+  });
+}
+
+/**
  * Props with user Role
  */
 export function propsUserRole() {
   return propsWithSelectedUser({
     context: defaultUserAppContext(),
+    rbacContext: defaultUserRbacContext()
   });
 }
 

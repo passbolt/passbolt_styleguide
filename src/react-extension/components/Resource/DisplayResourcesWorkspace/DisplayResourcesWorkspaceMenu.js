@@ -372,7 +372,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   canExport() {
     return this.props.context.siteSettings.canIUse("export")
-      && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_EXPORT);
+      && this.props.rbacContext.canIUseAction(uiActions.RESOURCES_EXPORT);
   }
 
   /**
@@ -492,8 +492,8 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     const canShare = this.canShare();
     const canUpdate = this.canUpdate();
 
-    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
-    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST) && canShare;
+    const canCopySecret = this.props.rbacContext.canIUseAction(uiActions.SECRETS_COPY);
+    const canViewShare = this.props.rbacContext.canIUseAction(uiActions.SHARE_VIEW_LIST) && canShare;
     const canViewCopy = hasOneResourceSelected;
     const canViewEdit = hasOneResourceSelected && canUpdate;
     const canViewDelete = canUpdate;

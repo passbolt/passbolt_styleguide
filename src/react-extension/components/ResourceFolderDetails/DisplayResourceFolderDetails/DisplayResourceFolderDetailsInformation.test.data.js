@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
+import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 

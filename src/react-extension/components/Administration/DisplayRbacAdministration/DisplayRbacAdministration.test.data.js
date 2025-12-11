@@ -22,10 +22,13 @@ import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackCont
 import {
   administrationRbacContextWithUpdatedRbac,
   defaultAdministrationRbacContext,
-  populatedAdministrationRbacContext
+  populatedAdministrationRbacContext,
+  populatedAdministrationWithMissingRbacContext
 } from "../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext.test.data";
-import {DefaultRoleService} from "../../../../shared/services/api/role/roleService.test.data";
-import {DefaultRbacService} from "../../../../shared/services/api/rbac/rbacService.test.data";
+import {DefaultRoleApiService} from "../../../../shared/services/api/role/roleApiService.test.data";
+import {DefaultRbacApiService} from "../../../../shared/services/api/rbac/rbacApiService.test.data";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import {DefaultUserApiService} from "../../../../shared/services/api/user/userService.test.data";
 
 export function defaultProps(props = {}) {
   return {
@@ -33,8 +36,10 @@ export function defaultProps(props = {}) {
     adminRbacContext: defaultAdministrationRbacContext(),
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext(),
     actionFeedbackContext: defaultActionFeedbackContext(),
-    RoleService: DefaultRoleService,
-    RbacService: DefaultRbacService,
+    RoleApiService: DefaultRoleApiService,
+    RbacApiService: DefaultRbacApiService,
+    UserApiService: DefaultUserApiService,
+    dialogContext: defaultDialogContext(),
     ...props
   };
 }
@@ -42,6 +47,13 @@ export function defaultProps(props = {}) {
 export function propsWithPopulatedRbacContext(props = {}) {
   return defaultProps({
     adminRbacContext: populatedAdministrationRbacContext(),
+    ...props
+  });
+}
+
+export function propsWithMissingRbacContext(props = {}) {
+  return defaultProps({
+    adminRbacContext: populatedAdministrationWithMissingRbacContext(),
     ...props
   });
 }

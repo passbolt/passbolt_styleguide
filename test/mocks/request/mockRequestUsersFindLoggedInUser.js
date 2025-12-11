@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 
-import {TEST_ROLE_ADMIN_ID} from "../../../src/shared/models/entity/role/role.test.data";
+import {TEST_ROLE_ADMIN_ID} from "../../../src/shared/models/entity/role/roleEntity.test.data";
 
 export default () => ({
   "id": "f848277c-5398-58f8-a82a-72397af2d450",

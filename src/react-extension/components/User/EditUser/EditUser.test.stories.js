@@ -14,6 +14,7 @@
 
 import EditUser from "./EditUser";
 import {defaultAppContext} from "./EditUser.test.data";
+import {defaultProps} from "../CreateUser/CreateUser.test.data";
 
 export default {
   title: 'Components/User/EditUser',
@@ -26,7 +27,7 @@ context.editUserDialogProps = {id: context.users[0].id};
 export const Initial = {
   args: {
     context: context,
-    onClose: () => {}
+    ...defaultProps()
   }
 };
 
@@ -36,6 +37,6 @@ contextWithScheduledSuspension.editUserDialogProps = {id: contextWithScheduledSu
 export const WithScheduledSuspension = {
   args: {
     context: contextWithScheduledSuspension,
-    onClose: () => {}
+    ...defaultProps()
   }
 };

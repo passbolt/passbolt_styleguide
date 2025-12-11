@@ -108,7 +108,7 @@ class DisplayProviderList extends Component {
    * @returns {bool}
    */
   get canUseDuoProvider() {
-    return this.props.rbacContext.canIUseUiAction(uiActions.DUO_CONFIGURATION);
+    return this.props.rbacContext.canIUseAction(uiActions.DUO_CONFIGURATION);
   }
 
   /**

@@ -26,6 +26,7 @@ import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {getUserStatus} from "../../../../shared/utils/userUtils";
 import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
+import {withRoles} from "../../../contexts/RoleContext";
 
 class DisplayAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -88,7 +89,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
 
   /**
    * Get the user requesting the current user to subscribe to the account recovery program.
-   * @returns {object|void}
+   * @returns {object|undefined}
    */
   get requestor() {
     return this.props.accountRecoveryContext.getRequestor();
@@ -96,11 +97,14 @@ class DisplayAccountRecoveryUserSettings extends Component {
 
   /**
    * Get the user role who initiated the account recovery request.
-   * @returns {object}
+   * @returns {string}
    */
-  get requestorRole() {
-    const roleName = this.props.context.roles.find(role => role.id === this.requestor.role_id).name;
-    return roleName;
+  get requestorRoleName() {
+    if (!this.requestor) {
+      return "";
+    }
+    const role = this.props.roleContext.getRole(this.requestor.role_id);
+    return role?.name || "";
   }
 
   /**
@@ -174,6 +178,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
    */
   render() {
     const requestorStatus = getUserStatus(this.requestor);
+    const requestorRole = this.requestorRoleName;
     return (
       <>
         {this.props.context.loggedInUser && this.props.accountRecoveryContext.getOrganizationPolicy() &&
@@ -212,7 +217,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
                             <span className="dateTimeAgo" title={this.requestedDate}>{formatDateTimeAgo(this.requestedDate, this.props.t, this.props.context.locale)}</span>
                             <span className="chips-group">
                               <span className={`chips user-status ${requestorStatus}`}>{this.props.t(requestorStatus)}</span>
-                              <span className={`chips user-role ${this.requestorRole}`}>{this.requestorRole}</span>
+                              <span className={`chips user-role ${requestorRole}`}>{requestorRole}</span>
                             </span>
                           </div>
                         </div>
@@ -250,6 +255,7 @@ DisplayAccountRecoveryUserSettings.propTypes = {
   accountRecoveryContext: PropTypes.any, // The account recovery context
   date: PropTypes.string, // The date of the request
   t: PropTypes.func, // The translation function
+  roleContext: PropTypes.object, // The role context
   dialogContext: PropTypes.object, // The dialog context
 };
-export default withAppContext(withAccountRecovery(withDialog(withTranslation('common')(DisplayAccountRecoveryUserSettings))));
+export default withAppContext(withAccountRecovery(withDialog(withRoles(withTranslation('common')(DisplayAccountRecoveryUserSettings)))));

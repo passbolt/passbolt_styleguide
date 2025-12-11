@@ -14,6 +14,12 @@
 import {defaultAppContext, defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {UserWorkspaceFilterTypes} from "../../../contexts/UserWorkspaceContext";
 import {defaultUserWorkspaceContext, users, usersWithAttentionRequiredStates} from "../../../contexts/UserWorkspaceContext.test.data";
+import {
+  defaultAdministratorRbacContext,
+  defaultUserRbacContext,
+  denyRbacContext
+} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
 
 /**
  * Default component props.
@@ -23,6 +29,7 @@ import {defaultUserWorkspaceContext, users, usersWithAttentionRequiredStates} fr
 export function defaultProps(data = {}) {
   return {
     userWorkspaceContext: defaultUserWorkspaceContext(),
+    rbacContext: new RbacsCollection([]),
     history: {
       push: jest.fn(),
     },
@@ -48,6 +55,7 @@ export function defaultPropsWithoutAttentionRequiredUsers(data = {}) {
     context: defaultAppContext({
       users: users
     }),
+    rbacContext: denyRbacContext(),
     history: {
       push: jest.fn(),
     },
@@ -61,6 +69,7 @@ export function defaultPropsWithAttentionRequiredUsers(data = {}) {
     context: defaultAppContext({
       users: usersWithAttentionRequiredStates
     }),
+    rbacContext: defaultAdministratorRbacContext(),
     history: {
       push: jest.fn(),
     },
@@ -74,6 +83,7 @@ export function propsWithAttentionFilter(data = {}) {
     context: defaultAppContext({
       users: usersWithAttentionRequiredStates
     }),
+    rbacContext: defaultAdministratorRbacContext(),
     history: {
       push: jest.fn(),
     },
@@ -87,6 +97,21 @@ export function propsWithAttentionRequiredUsersNotAdmin(data = {}) {
     context: defaultUserAppContext({
       users: usersWithAttentionRequiredStates,
     }),
+    rbacContext: denyRbacContext(),
+    history: {
+      push: jest.fn(),
+    },
+    ...data
+  };
+}
+
+export function propsWithAttentionRequiredUsersNotAdminWithRbacAllowed(data = {}) {
+  return {
+    userWorkspaceContext: defaultUserWorkspaceContext(),
+    context: defaultUserAppContext({
+      users: usersWithAttentionRequiredStates,
+    }),
+    rbacContext: defaultUserRbacContext(),
     history: {
       push: jest.fn(),
     },
@@ -100,6 +125,7 @@ export function propsWithUsersFilteredByAccountRecovery(data = {}) {
     context: defaultAppContext({
       users: usersWithAttentionRequiredStates
     }),
+    rbacContext: defaultUserRbacContext(),
     history: {
       push: jest.fn(),
     },
@@ -113,6 +139,7 @@ export function propsWithUsersFilteredByMissingMetadata(data = {}) {
     context: defaultAppContext({
       users: usersWithAttentionRequiredStates
     }),
+    rbacContext: defaultAdministratorRbacContext(),
     history: {
       push: jest.fn(),
     },

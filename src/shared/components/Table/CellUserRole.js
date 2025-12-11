@@ -13,29 +13,20 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withUserWorkspace} from "../../../react-extension/contexts/UserWorkspaceContext";
 
 /**
  * This component represents a table cell user role name
  */
 class CellUserRole extends Component {
   /**
-   * Get the name
-   * @return {Object}
-   */
-  get roleName() {
-    return this.props.userWorkspaceContext.getTranslatedRoleName(this.props.value);
-  }
-
-  /**
    * Render the component
    * @return {JSX}
    */
   render() {
     return (
-      <div title={this.roleName}>
+      <div title={this.props.value}>
         <span>
-          {this.roleName}
+          {this.props.value}
         </span>
       </div>
     );
@@ -47,4 +38,4 @@ CellUserRole.propTypes = {
   userWorkspaceContext: PropTypes.any, // The user workspace context
 };
 
-export default withUserWorkspace(CellUserRole);
+export default CellUserRole;

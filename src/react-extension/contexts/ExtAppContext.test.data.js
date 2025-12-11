@@ -19,10 +19,12 @@ import siteSettingsFixture from "../test/fixture/Settings/siteSettings";
 import MockPort from "../test/mock/MockPort";
 import MockStorage from "../test/mock/MockStorage";
 import {defaultAdminUserDto, defaultUserDto} from "../../shared/models/entity/user/userEntity.test.data";
-import {adminRoleDto, TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID, userRoleDto} from "../../shared/models/entity/role/role.test.data";
+import {adminRoleDto, TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID, userRoleDto} from "../../shared/models/entity/role/roleEntity.test.data";
 import {defaultAccountDto} from "../../shared/models/entity/account/accountEntity.test.data";
 import AccountEntity from "../../shared/models/entity/account/accountEntity";
 import {defaultCeSiteSettings} from "../test/fixture/Settings/siteSettings.test.data";
+import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
+import {settingsRbacsCollectionData} from "../../shared/models/entity/rbac/rbacsCollection.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -54,6 +56,7 @@ export function defaultAppContext(appContext = {}, isCommunityEdition = false) {
       id: TEST_ROLE_USER_ID,
       name: 'user'
     }],
+    rbacs: new RbacsCollection([]),
     setContext: jest.fn(),
     foldersMapById: [],
     getHierarchyFolderCache: jest.fn(() => []),
@@ -81,6 +84,7 @@ export const defaultUserAppContext = (data = {}) => {
     resources: [],
     folders: [],
     setContext: jest.fn(),
+    rbacs: new RbacsCollection(settingsRbacsCollectionData()),
     foldersMapById: [],
     getHierarchyFolderCache: jest.fn(() => []),
     ...data

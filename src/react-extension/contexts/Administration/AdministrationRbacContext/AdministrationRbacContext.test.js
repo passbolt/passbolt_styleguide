@@ -19,7 +19,7 @@ import {defaultSettingsRbacsCollectionData, settingsRbacsCollectionData} from '.
 import {AdminRbacContextProvider} from './AdministrationRbacContext';
 import RbacsCollection from '../../../../shared/models/entity/rbac/rbacsCollection';
 import PassboltServiceUnavailableError from '../../../../shared/lib/Error/PassboltServiceUnavailableError';
-import RbacService from '../../../../shared/services/api/rbac/rbacService';
+import RbacApiService from '../../../../shared/services/api/rbac/rbacApiService';
 
 describe("AdministrationRbacContext", () => {
   let adminRbacContext; // The adminRbacContextProvider to test
@@ -116,10 +116,10 @@ describe("AdministrationRbacContext", () => {
 
       adminRbacContext.setRbacs(new RbacsCollection(defaultSettingsRbacsCollectionData));
 
-      jest.spyOn(RbacService.prototype, "updateAll");
+      jest.spyOn(RbacApiService.prototype, "updateAll");
       await adminRbacContext.save();
 
-      expect(RbacService.prototype.updateAll).not.toHaveBeenCalled();
+      expect(RbacApiService.prototype.updateAll).not.toHaveBeenCalled();
     });
   });
 });

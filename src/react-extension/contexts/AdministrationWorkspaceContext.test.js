@@ -51,7 +51,7 @@ describe("Administration Workspace Context", () => {
       expect.assertions(1);
       const props = defaultProps({
         rbacContext: {
-          canIUseUiAction: () => false
+          canIUseAction: () => false
         }
       });
       const page = new AdministrationWorkspaceContextPage(context, props);
@@ -178,7 +178,7 @@ describe("Administration Workspace Context", () => {
           key: "unique-key"
         },
         rbacContext: {
-          canIUseUiAction: () => true
+          canIUseAction: () => true
         },
         context: {
           ...context,
@@ -202,7 +202,7 @@ describe("Administration Workspace Context", () => {
           key: "unique-key"
         },
         rbacContext: {
-          canIUseUiAction: () => true
+          canIUseAction: () => true
         },
         context: {
           ...context,
@@ -226,7 +226,7 @@ describe("Administration Workspace Context", () => {
           key: "unique-key"
         },
         rbacContext: {
-          canIUseUiAction: () => true
+          canIUseAction: () => true
         },
         context: {
           ...context,
@@ -250,7 +250,7 @@ describe("Administration Workspace Context", () => {
           key: "unique-key"
         },
         rbacContext: {
-          canIUseUiAction: () => true
+          canIUseAction: () => true
         },
         context: {
           ...context,
@@ -274,7 +274,7 @@ describe("Administration Workspace Context", () => {
           key: "unique-key"
         },
         rbacContext: {
-          canIUseUiAction: () => true
+          canIUseAction: () => true
         },
         context: {
           ...context,
@@ -298,7 +298,7 @@ describe("Administration Workspace Context", () => {
           key: "unique-key"
         },
         rbacContext: {
-          canIUseUiAction: () => true
+          canIUseAction: () => true
         },
         context: {
           ...context,
@@ -321,7 +321,7 @@ describe("Administration Workspace Context", () => {
           pathname: "/app/administration/sso-teasing",
         },
         rbacContext: {
-          canIUseUiAction: () => true
+          canIUseAction: () => true
         },
         context: {
           ...context,

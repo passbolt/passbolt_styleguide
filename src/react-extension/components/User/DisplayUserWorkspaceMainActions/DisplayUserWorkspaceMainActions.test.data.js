@@ -1,4 +1,7 @@
 import MockPort from "../../../test/mock/MockPort";
+import {
+  defaultUserRbacContext,
+} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -30,7 +33,9 @@ export function defaultAppContext(appContext) {
  * Default props one selected resource owned
  * @returns {{resourceWorkspaceContext}}
  */
-export function defaultProps() {
+export function defaultProps(data = {}) {
   return {
+    rbacContext: defaultUserRbacContext(),
+    ...data
   };
 }

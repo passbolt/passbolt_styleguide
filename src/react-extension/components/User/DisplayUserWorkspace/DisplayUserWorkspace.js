@@ -167,7 +167,7 @@ class DisplayUserWorkspace extends React.Component {
    */
   get isUserAdmin() {
     const loggedInUser = this.props.context.loggedInUser;
-    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN && this.props.rbacContext.canIUseUiAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE);
+    return loggedInUser?.role?.name === RoleEntity.ROLE_ADMIN && this.props.rbacContext.canIUseAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE);
   }
 
   /**

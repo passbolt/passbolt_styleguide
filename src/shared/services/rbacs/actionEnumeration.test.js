@@ -9,11 +9,20 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.1.0
+ * @since         4.6.0
  */
-import {userSettingsRbacsCollectionData} from "../../../models/entity/rbac/rbacsCollection.test.data";
 
-export const defaultRbacMeService = props => jest.fn().mockImplementation(() => ({
-  findMe: () => userSettingsRbacsCollectionData(),
-  ...props
-}));
+import {actions} from "./actionEnumeration";
+
+
+describe('actions', () => {
+  it('should have the expected action keys', () => {
+    expect.assertions(4);
+
+
+    expect(Object.keys(actions).length).toEqual(3);
+    expect(actions['GROUPS_ADD']).toEqual("GroupsAdd.addPost");
+    expect(actions['ACCOUNT_RECOVERY_REQUEST_VIEW']).toEqual("AccountRecoveryRequestsView.view");
+    expect(actions['ACCOUNT_RECOVERY_RESPONSE_CREATE']).toEqual("AccountRecoveryResponsesCreate.post");
+  });
+});

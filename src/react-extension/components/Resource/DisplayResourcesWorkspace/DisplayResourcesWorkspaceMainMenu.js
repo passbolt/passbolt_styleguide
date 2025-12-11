@@ -344,9 +344,9 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    */
   render() {
     const canImport = this.props.context.siteSettings.canIUse("import")
-      && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_IMPORT);
+      && this.props.rbacContext.canIUseAction(uiActions.RESOURCES_IMPORT);
     const canUseFolders = this.props.context.siteSettings.canIUse("folders")
-      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
+      && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
     const canUseTotp = this.props.context.siteSettings.canIUse('totpResourceTypes');
     const canSeeOther = this.canSeeOther();
 

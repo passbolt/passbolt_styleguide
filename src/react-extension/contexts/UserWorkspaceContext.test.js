@@ -191,7 +191,7 @@ describe("User Workspace Context", () => {
     it("As LU, I can't access the User Workspace if RBAC denies me", async() => {
       const props = defaultProps({
         rbacContext: {
-          canIUseUiAction: () => false,
+          canIUseAction: () => false,
         },
       });
       new UserWorkspaceContextPage(context, props);
@@ -202,7 +202,7 @@ describe("User Workspace Context", () => {
     it("As LU, I can access the User Workspace if RBAC allow me", async() => {
       const props = defaultProps({
         rbacContext: {
-          canIUseUiAction: () => true
+          canIUseAction: () => true
         },
       });
       new UserWorkspaceContextPage(context, props);

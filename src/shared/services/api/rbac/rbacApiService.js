@@ -12,11 +12,12 @@
  * @since         4.1.0
  */
 
+import PassboltResponseEntity from "../../../models/entity/apiService/PassboltResponseEntity";
 import AbstractService from "../abstract/abstractService";
 
 const RBAC_SERVICE_RESOURCE_NAME = '/rbacs';
 
-class RbacService extends AbstractService {
+export default class RbacApiService extends AbstractService {
   /**
    * Constructor
    *
@@ -24,7 +25,7 @@ class RbacService extends AbstractService {
    * @public
    */
   constructor(apiClientOptions) {
-    super(apiClientOptions, RbacService.RESOURCE_NAME);
+    super(apiClientOptions, RbacApiService.RESOURCE_NAME);
   }
 
   /**
@@ -49,25 +50,34 @@ class RbacService extends AbstractService {
   /**
    * Find all
    * @param {object} contains
-   * @returns {object}
+   * @returns {Promise<PassboltResponseEntity>}
    */
   async findAll(contains) {
-    const options = contains ? this.formatContainOptions(contains, RbacService.getSupportedContainOptions()) : null;
+    const options = contains ? this.formatContainOptions(contains, RbacApiService.getSupportedContainOptions()) : null;
     const response = await this.apiClient.findAll(options);
-    return response.body;
+    return new PassboltResponseEntity(response);
+  }
+
+  /**
+   * Find all Rbacs for the current logged in user.
+   * @param {object} contains
+   * @returns {Promise<PassboltResponseEntity>}
+   */
+  async findMe(contains) {
+    const options = contains ? this.formatContainOptions(contains, RbacApiService.getSupportedContainOptions()) : null;
+    const response = await this.apiClient.get("me", options);
+    return new PassboltResponseEntity(response);
   }
 
   /**
    * Update all the given rbacs.
    * @param {array} rbacsUpdatedDto A list of update rbacs dto.
    * @param {object} contains
-   * @returns {object}
+   * @returns {Promise<PassboltResponseEntity>}
    */
   async updateAll(rbacsUpdatedDto, contains = {}) {
-    const options = contains ? this.formatContainOptions(contains, RbacService.getSupportedContainOptions()) : null;
+    const options = contains ? this.formatContainOptions(contains, RbacApiService.getSupportedContainOptions()) : null;
     const response = await this.apiClient.updateAll(rbacsUpdatedDto, options);
-    return response.body;
+    return new PassboltResponseEntity(response);
   }
 }
-
-export default RbacService;
