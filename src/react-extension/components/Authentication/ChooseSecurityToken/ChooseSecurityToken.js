@@ -348,7 +348,7 @@ class ChooseSecurityToken extends Component {
             <Trans>This security token will be displayed when your passphrase is requested, so you can quickly verify the form is coming from passbolt.</Trans>
             &nbsp;
             <Trans>
-              This will help protect you from <a href="https://en.wikipedia.org/wiki/Phishing" target="_blank" rel="noopener noreferrer">
+              This will help protect you from <a href="https://en.wikipedia.org/wiki/Phishing" target="_blank" rel="noopener noreferrer" data-testid="phishingLink">
                 phishing attacks</a>.
             </Trans>
           </p>
@@ -359,6 +359,9 @@ class ChooseSecurityToken extends Component {
               disabled={this.isProcessing}>
               <Trans>Next</Trans>
             </button>
+            <a href="https://www.passbolt.com/docs/user/settings/browser/security-token/" target="_blank" rel="noopener noreferrer" data-testid="tokenDocumentationLink">
+              <Trans>Learn more</Trans>
+            </a>
           </div>
         </form>
       </div>

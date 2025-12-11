@@ -63,6 +63,20 @@ export default class ChooseSecurityTokenPage {
   }
 
   /**
+   * Returns the phishing definition link
+   */
+  get phishingDefinitionLink() {
+    return this._page.container.querySelector('a[data-testid=phishingLink]');
+  }
+
+  /**
+   * Returns the security token documentation link
+   */
+  get tokenDocumentationLink() {
+    return this._page.container.querySelector('a[data-testid=tokenDocumentationLink]');
+  }
+
+  /**
    * Returns the next button element
    */
   get nextButton() {

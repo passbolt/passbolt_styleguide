@@ -13,7 +13,7 @@
  */
 
 /**
- * Unit tests on CreateGpgKey in regard of specifications
+ * Unit tests on ChooseSecurityToken in regard of specifications
  */
 import {defaultProps} from "./ChooseSecurityToken.test.data";
 import ChooseSecurityTokenPage from "./ChooseSecurityToken.test.page";
@@ -91,6 +91,20 @@ describe("Choose security token", () => {
     await page.save(inProgressFn);
     expect(props.onComplete).toHaveBeenCalled();
     expect(saveResolve).toBeDefined();
+  });
+
+  it('As AN I should see a link redirecting me to phising attacks definition', async() => {
+    page = new ChooseSecurityTokenPage(props);
+    expect(page.phishingDefinitionLink.getAttribute('target')).toEqual('_blank');
+    expect(page.phishingDefinitionLink.getAttribute('rel')).toEqual('noopener noreferrer');
+    expect(page.phishingDefinitionLink.getAttribute('href')).toEqual('https://en.wikipedia.org/wiki/Phishing');
+  });
+
+  it('As AN I should see a link redirecting me to security token documentation', async() => {
+    page = new ChooseSecurityTokenPage(props);
+    expect(page.tokenDocumentationLink.getAttribute('target')).toEqual('_blank');
+    expect(page.tokenDocumentationLink.getAttribute('rel')).toEqual('noopener noreferrer');
+    expect(page.tokenDocumentationLink.getAttribute('href')).toEqual('https://www.passbolt.com/docs/user/settings/browser/security-token/');
   });
 
   it('As AN I should see an error if the security token is empty after submitting the form (first validation)', async() => {
