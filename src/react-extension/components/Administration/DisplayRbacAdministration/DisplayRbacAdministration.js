@@ -378,7 +378,7 @@ class DisplayRbacAdministration extends React.Component {
             <h3 className="title"><Trans>Role-Based Access Control</Trans></h3>
             <div className="section-header">
               <p><Trans>In this section you can define access controls for each user role.</Trans></p>
-              <button type="button" className="button secondary" onClick={this.handleAddRoleClick} disabled={!this.canAddNewRole} title={!this.canAddNewRole ? this.props.t("Maximum number of roles reached") : ""}><UserAddSVG /> <Trans>Add role</Trans></button>
+              <button type="button" className="button" onClick={this.handleAddRoleClick} disabled={!this.canAddNewRole} title={!this.canAddNewRole ? this.props.t("Maximum number of roles reached") : ""}><UserAddSVG /> <Trans>Add role</Trans></button>
             </div>
             <form className="form">
               <div className="flex-container outer">
