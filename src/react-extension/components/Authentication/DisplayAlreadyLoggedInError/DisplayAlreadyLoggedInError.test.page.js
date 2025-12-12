@@ -29,7 +29,8 @@ export default class DisplayAlreadyLoggedInErrorPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayAlreadyLoggedInError {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

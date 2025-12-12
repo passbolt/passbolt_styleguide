@@ -40,7 +40,8 @@ export default class EditResourceTagPage {
             </Router>
           </DialogContextProvider>
         </MockTranslationProvider>
-      </AppContext.Provider>
+      </AppContext.Provider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

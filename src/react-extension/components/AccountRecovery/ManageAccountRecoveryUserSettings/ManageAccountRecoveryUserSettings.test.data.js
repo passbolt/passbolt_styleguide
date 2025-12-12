@@ -16,6 +16,7 @@ import {defaultAccountRecoveryUserContext} from "../../../contexts/AccountRecove
 import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultRoleContext} from "../../../contexts/RoleContext.test.data";
 import {optOutOrganizationPolicy} from "../HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute.test.data";
 
 /**
@@ -24,6 +25,8 @@ import {optOutOrganizationPolicy} from "../HandleAccountRecoveryUserSettingsRout
  * @returns {object}
  */
 export function defaultProps(data = {}) {
+  const roleContext = defaultRoleContext(data.roleContext);
+  const roles = data.roles || roleContext.getAllRoles();
   return {
     context: defaultUserAppContext(),
     accountRecoveryContext: defaultAccountRecoveryUserContext(),
@@ -31,6 +34,8 @@ export function defaultProps(data = {}) {
     dialogContext: defaultDialogContext(),
     onClose: jest.fn(),
     organizationPolicy: optOutOrganizationPolicy(),
-    ...data
+    ...data,
+    roleContext: roleContext,
+    roles: roles,
   };
 }

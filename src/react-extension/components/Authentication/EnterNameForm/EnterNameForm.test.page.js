@@ -31,7 +31,8 @@ export default class EnterNameFormPage {
         <Router>
           <EnterNameForm {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

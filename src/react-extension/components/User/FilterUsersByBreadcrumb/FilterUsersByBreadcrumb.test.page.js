@@ -22,7 +22,8 @@ export default class FilterUsersByBreadcrumbPage {
             <FilterUsersByBreadcrumb {...props}/>
           </Router>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

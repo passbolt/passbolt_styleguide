@@ -32,7 +32,8 @@ export default class DisplayTestUserDirectoryAdministrationPage {
         <AppContext.Provider value={appContext}>
           <DisplayTestUserDirectoryAdministration {...props}/>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

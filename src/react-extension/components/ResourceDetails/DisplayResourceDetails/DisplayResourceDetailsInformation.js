@@ -222,7 +222,7 @@ class DisplayResourceDetailsInformation extends React.Component {
   }
 
   /**
-   * Returns true if the current resource is expired or about to expire.
+   * Returns true if the current resource is expired.
    * @returns {boolean}
    */
   get isAttentionRequiredOnExpiryDate() {
@@ -268,7 +268,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    */
   render() {
     const canUseFolders = this.props.context.siteSettings.canIUse("folders")
-      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
+      && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
     const canUsePasswordExpiry = this.props.passwordExpiryContext.isFeatureEnabled();
 
     const creatorUsername = this.state.creator?.username || "";

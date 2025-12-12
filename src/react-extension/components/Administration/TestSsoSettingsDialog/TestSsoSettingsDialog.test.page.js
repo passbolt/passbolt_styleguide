@@ -41,7 +41,8 @@ export default class TestSsoSettingsDialogPage {
       <AdminSsoContextProvider {...props}>
         <TestSsoSettingsDialog {...props}/>
       </AdminSsoContextProvider>
-    </MockTranslationProvider>);
+    </MockTranslationProvider>,
+    {legacyRoot: true});
   }
 
   /**

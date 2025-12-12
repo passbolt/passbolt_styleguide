@@ -31,7 +31,8 @@ export default class DisplayHttpErrorPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayHttpError errorCode={errorCode}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

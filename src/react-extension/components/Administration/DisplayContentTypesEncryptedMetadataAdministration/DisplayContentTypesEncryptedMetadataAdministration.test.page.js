@@ -29,7 +29,8 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
         <AppContext.Provider value={props.context}>
           <DisplayContentTypesEncryptedMetadataAdministration {...props}/>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

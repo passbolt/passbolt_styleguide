@@ -26,6 +26,8 @@ import {withTranslation} from "react-i18next";
 import {isUserSuspended, isAccountRecoveryRequested, isMissingMetadataKey} from "../../shared/utils/userUtils";
 import {withRbac} from "../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../shared/services/rbacs/uiActionEnumeration";
+import {withRoles} from "./RoleContext";
+import RolesCollection from "../../shared/models/entity/role/rolesCollection";
 
 /**
  * Context related to users ( filter, current selections, etc.)
@@ -139,7 +141,7 @@ class UserWorkspaceContextProvider extends React.Component {
    * @returns {boolean}
    */
   isAccessAllowed() {
-    return this.props.rbacContext.canIUseUiAction(uiActions.USERS_VIEW_WORKSPACE);
+    return this.props.rbacContext.canIUseAction(uiActions.USERS_VIEW_WORKSPACE);
   }
 
   /**
@@ -756,21 +758,20 @@ class UserWorkspaceContextProvider extends React.Component {
    * @return {string}
    */
   getTranslatedRoleName(id) {
-    if (!this.props.context.roles?.find) {
+    const role = this.props.roleContext.getRole(id);
+    if (!role) {
       return "";
     }
 
-    const role = this.props.context.roles.find(role => role.id === id);
-    if (role) {
-      /*
-       * The i18n parser can't find the translation for passwordStrength.label
-       * To fix that we can use it in comment
-       * this.translate("admin")
-       * this.translate("user")
-       */
-      return this.props.t(role.name);
-    }
-    return "";
+    /*
+     * The i18n parser can't find the translation for default role names.
+     * To fix that we can use it in comment
+     * this.translate("admin")
+     * this.translate("user")
+     */
+    return role.isAReservedRole()
+      ? this.props.t(role.name)
+      : role.name; //it is a custom role, we do not handle translation
   }
 
   /**
@@ -805,10 +806,12 @@ UserWorkspaceContextProvider.propTypes = {
   loadingContext: PropTypes.object, // The loading context
   dialogContext: PropTypes.any, // The dialog context
   rbacContext: PropTypes.object, // The Rbac context
+  roleContext: PropTypes.object, // The role context
+  roles: PropTypes.instanceOf(RolesCollection), // The roles collection
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withRbac(withDialog(withActionFeedback(withLoading(withTranslation('common')(UserWorkspaceContextProvider)))))));
+export default withAppContext(withRouter(withRbac(withDialog(withActionFeedback(withLoading(withRoles(withTranslation('common')(UserWorkspaceContextProvider))))))));
 
 /**
  * User Workspace Context Consumer HOC

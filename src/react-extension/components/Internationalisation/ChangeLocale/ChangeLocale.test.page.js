@@ -30,7 +30,8 @@ export default class ChangeLocalePage {
     this._page = render(
       <MockTranslationProvider>
         <ChangeLocale {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

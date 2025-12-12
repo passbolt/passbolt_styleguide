@@ -12,7 +12,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
@@ -27,6 +27,7 @@ import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import {MemoryRouter} from "react-router-dom";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import {ManagedClipboardServiceContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import userEvent from "@testing-library/user-event";
 /**
  * The Edit Resource component represented as a page
  */
@@ -60,8 +61,11 @@ export default class EditResourcePage {
             </DialogContextProvider>
           </AppContext.Provider>
         </MemoryRouter>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -625,9 +629,7 @@ export default class EditResourcePage {
 
   /** Click on the element */
   async click(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /** Click without wait for on the element */
@@ -638,7 +640,7 @@ export default class EditResourcePage {
   }
 
   /** fill the input element with data */
-  fillInput(element, data)  {
+  async fillInput(element, data)  {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
   }

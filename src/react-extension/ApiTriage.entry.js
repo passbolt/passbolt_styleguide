@@ -20,4 +20,13 @@ import ApiTriage from "./ApiTriage";
  */
 const appDomElement = document.createElement("div");
 document.body.appendChild(appDomElement);
-ReactDOM.render(<ApiTriage/>, appDomElement);
+
+/*
+ * TODO: React18 - enable when ready
+ * const root = ReactDOM.createRoot(appDomElement);
+ */
+/* eslint-disable react/no-deprecated */
+ReactDOM.render(
+  <ApiTriage/>,
+  appDomElement
+);

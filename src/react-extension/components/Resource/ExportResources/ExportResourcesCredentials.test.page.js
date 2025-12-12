@@ -12,11 +12,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import ExportResourcesCredentials from "./ExportResourcesCredentials";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The ExportResourcesCredentials component represented as a page
@@ -33,8 +34,10 @@ export default class ExportResourcesCredentialsPage {
         <AppContext.Provider value={appContext}>
           <ExportResourcesCredentials {...props}/>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+    this.user = userEvent.setup();
   }
 
   /**
@@ -110,42 +113,33 @@ export default class ExportResourcesCredentialsPage {
 
   /** Click on the element */
   async click(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /** Click without wait for on the element */
-  escapeKey()  {
-    // Escape key down event
-    const escapeKeyDown = {keyCode: 27};
-    fireEvent.keyDown(this.dialog, escapeKeyDown);
+  async escapeKey()  {
+    await this.user.keyboard('{Escape}');
   }
 
   /** Click to import file */
   async selectKeypassFile(file) {
-    await this.click(this.importFile);
-    const data = {target: {files: [file]}};
-    fireEvent.change(this.inputFile, data);
-    await waitFor(() => {});
+    await this.user.upload(this.inputFile, file);
   }
 
   /** checked import tag */
-  async fillPassword(data) {
-    const dataInputEvent = {target: {value: data}};
-    fireEvent.change(this.password, dataInputEvent);
-    await waitFor(() => {});
+  async fillPassword(value) {
+    await this.user.clear(this.password);
+    await this.user.type(this.password, value);
   }
 
   /** Click on continue import button */
   async selectExport() {
-    await this.click(this.exportButton);
+    await this.user.click(this.exportButton);
   }
 
   /** Click on save button */
-  submitExportWithoutWaiting() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.exportButton, leftClick);
+  async submitExportWithoutWaiting() {
+    await this.user.click(this.exportButton);
   }
 
   /** Click on cancel button */

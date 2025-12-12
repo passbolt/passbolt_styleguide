@@ -30,7 +30,8 @@ export default class DisplayResourceDetailsNotePage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayResourceDetailsNote {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

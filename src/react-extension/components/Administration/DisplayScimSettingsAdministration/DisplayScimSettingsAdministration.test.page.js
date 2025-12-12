@@ -17,15 +17,19 @@ import {fireEvent, render} from '@testing-library/react';
 import DisplayScimSettingsAdministration from './DisplayScimSettingsAdministration';
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import {RoleContext} from "../../../contexts/RoleContext";
 
 export default class DisplayScimSettingsAdministrationPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={props.context}>
-          <DisplayScimSettingsAdministration {...props}/>
+          <RoleContext.Provider value={props.roleContext}>
+            <DisplayScimSettingsAdministration {...props}/>
+          </RoleContext.Provider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

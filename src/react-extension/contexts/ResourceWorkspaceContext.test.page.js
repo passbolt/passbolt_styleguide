@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render, waitFor} from "@testing-library/react";
 import React from "react";
 import ResourceWorkspaceContextProvider, {
   ResourceWorkspaceContext,
@@ -21,6 +21,7 @@ import AppContext from "../../shared/context/AppContext/AppContext";
 import {Router, NavLink, Route, Switch} from "react-router-dom";
 import {createMemoryHistory} from "history";
 import {waitForTrue} from "../../../test/utils/waitFor";
+import userEvent from "@testing-library/user-event";
 
 
 /**
@@ -36,6 +37,7 @@ export default class ResourceWorkspaceContextPage {
     this.context = context;
     this.props = props;
     this.setup(context, props);
+    this.user = userEvent.setup();
   }
 
 
@@ -98,8 +100,7 @@ export default class ResourceWorkspaceContextPage {
   async goToLink(linkCssSelector) {
     const oldFilter = this.filter;
     const element = this._page.container.querySelector(linkCssSelector);
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
+    await this.user.click(element);
     /*
      * We ensure that the filter is applied properly before ending the promise.
      * Without that, some unit tests may fail because they don't have the right context to run.
@@ -207,7 +208,6 @@ export default class ResourceWorkspaceContextPage {
    */
   async selectAll() {
     await this.resourceWorkspaceContext.onResourceSelected.all();
-    await waitFor(() => {});
   }
 
   /**
@@ -215,7 +215,6 @@ export default class ResourceWorkspaceContextPage {
    */
   async selectNone() {
     await this.resourceWorkspaceContext.onResourceSelected.none();
-    await waitFor(() => {});
   }
 
   /**
@@ -223,8 +222,9 @@ export default class ResourceWorkspaceContextPage {
    * @param resource A specific resource
    */
   async select(resource) {
-    await this.resourceWorkspaceContext.onResourceSelected.single(resource);
-    await waitFor(() => {});
+    await waitFor(() => {
+      this.resourceWorkspaceContext.onResourceSelected.single(resource);
+    });
   }
 
   /**
@@ -233,8 +233,9 @@ export default class ResourceWorkspaceContextPage {
    */
   async selectMultiple(resources = []) {
     for (let index = 0; index < resources.length; index++) {
-      await this.resourceWorkspaceContext.onResourceSelected.multiple(resources[index]);
-      await waitFor(() => {});
+      await waitFor(() => {
+        this.resourceWorkspaceContext.onResourceSelected.multiple(resources[index]);
+      });
     }
   }
 
@@ -244,9 +245,7 @@ export default class ResourceWorkspaceContextPage {
    */
   async selectRange([startResource, endResource]) {
     await this.resourceWorkspaceContext.onResourceSelected.range(startResource);
-    await waitFor(() => {});
     await this.resourceWorkspaceContext.onResourceSelected.range(endResource);
-    await waitFor(() => {});
   }
 
   /**
@@ -254,7 +253,6 @@ export default class ResourceWorkspaceContextPage {
    */
   async toggleLockDetails() {
     await this.resourceWorkspaceContext.onLockDetail();
-    await waitFor(() => {});
   }
 
   /**
@@ -379,7 +377,8 @@ export default class ResourceWorkspaceContextPage {
             <a className="root-folder"></a>
           </NavLink>
         </Router>
-      </AppContext.Provider>
+      </AppContext.Provider>,
+      {legacyRoot: true}
     );
   }
 }

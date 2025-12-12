@@ -27,7 +27,8 @@ export default class DisplayResourceDetailsTotpPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayResourceDetailsTotp {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

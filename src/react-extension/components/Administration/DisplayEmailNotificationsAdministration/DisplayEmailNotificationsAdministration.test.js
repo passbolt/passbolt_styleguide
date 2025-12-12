@@ -21,12 +21,12 @@ import {
   defaultProps,
 } from "./DisplayEmailNotificationsAdministration.test.data";
 import DisplayEmailNotificationsAdministrationPage from "./DisplayEmailNotificationsAdministration.test.page";
-import {waitFor} from "@testing-library/react";
 import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
 import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
 import {enableFetchMocks} from "jest-fetch-mock";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
+import {act} from "react";
 
 beforeEach(() => {
   enableFetchMocks();
@@ -49,7 +49,7 @@ describe("See the Email Notifications Settings", () => {
 
     it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
       expect.assertions(36);
-      await waitFor(() => {});
+
       expect(page.exists()).toBeTruthy();
       //passwords
       expect(page.passwordCreate.checked).toBeTruthy();
@@ -124,7 +124,7 @@ describe("See the Email Notifications Settings", () => {
       await page.checkCommentAdd();
       await page.saveSettings();
 
-      await waitFor(() => {});
+
 
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The email notification settings were updated.");
       // We expect the button to be disable
@@ -144,7 +144,7 @@ describe("See the Email Notifications Settings", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
       await page.saveSettings();
 
-      await waitFor(() => {});
+
       // Throw general error message
       expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(error.message);
     });
@@ -241,8 +241,10 @@ describe("See the Email Notifications Settings", () => {
 
       const context = defaultAppContext(); // The applicative context
       const props = defaultProps(); // The props to pass
-      const page = new DisplayEmailNotificationsAdministrationPage(context, props);
-      await waitForTrue(() => Boolean(page.settingsSource));
+      let page;
+      await act(
+        async() => page = new DisplayEmailNotificationsAdministrationPage(context, props)
+      );
 
       expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: database.');
     });
@@ -258,8 +260,9 @@ describe("See the Email Notifications Settings", () => {
 
       const context = defaultAppContext(); // The applicative context
       const props = defaultProps(); // The props to pass
-      const page = new DisplayEmailNotificationsAdministrationPage(context, props);
-      await waitForTrue(() => Boolean(page.settingsSource));
+      await act(
+        async() => page = new DisplayEmailNotificationsAdministrationPage(context, props)
+      );
 
       expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: file.');
     });

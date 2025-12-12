@@ -11,13 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import CreateUser from "./CreateUser";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The CreateUser component represented as a page
@@ -37,7 +38,8 @@ export default class CreateUserPage {
             <CreateUser {...props}/>
           </DialogContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }
@@ -92,6 +94,7 @@ class CreateUserPageObject {
    */
   constructor(container) {
     this._container = container;
+    this.user = userEvent.setup();
   }
 
   /**
@@ -151,10 +154,25 @@ class CreateUserPageObject {
   }
 
   /**
-   * Returns the is admin checkbox element
+   * Returns the select role element
    */
-  get isAdmin() {
-    return this._container.querySelector('#is_admin_checkbox');
+  get selectRole() {
+    return this._container.querySelector('#select_role');
+  }
+
+  /**
+   * Returns the role selected input element
+   * @return {string}
+   */
+  get roleSelected() {
+    return this._container.querySelector('#select_role .value').textContent;
+  }
+
+  /**
+   * Returns the role input element
+   */
+  getRoleList(index) {
+    return this._container.querySelectorAll('#select_role .option')[index - 1];
   }
 
   /**
@@ -216,15 +234,7 @@ class CreateUserPageObject {
 
   /** Click on the element */
   async click(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
-  }
-
-  /** Click without wait for on the element */
-  clickWithoutWaitFor(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
+    await this.user.click(element);
   }
 
   /** Click without wait for on the element */

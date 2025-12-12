@@ -31,7 +31,8 @@ import Select from "../../Common/Select/Select";
 import {getUserFormattedName} from "../../../../shared/utils/userUtils";
 import {createSafePortal} from "../../../../shared/utils/portals";
 import DisplayScimSettingsAdministrationHelp from "./DisplayScimSettingsAdministrationHelp";
-
+import {withRoles} from "../../../contexts/RoleContext";
+import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 
 /**
  * This component allows to display the SCIM settings for the administration
@@ -64,7 +65,6 @@ class DisplayScimSettingsAdministration extends Component {
     this.state = this.defaultState;
     this.bindCallbacks();
     this.scimSettingsService = props.scimSettingsServiceWorkerService ?? new ScimSettingsServiceWorkerService(this.props.context.port);
-    this.handleToggleEnabled = this.handleToggleEnabled.bind(this);
   }
 
   /**
@@ -119,7 +119,8 @@ class DisplayScimSettingsAdministration extends Component {
    * @returns {Array} Array of active admin users
    */
   get adminUsers() {
-    const adminRole = this.props.context.roles.find(role => role.name === "admin");
+    const adminRole = this.props.roles.items.filter(r => r.isAdmin())?.[0] || null;
+
     const users = this.props.context.users;
 
     if (users !== null && adminRole) {
@@ -158,6 +159,14 @@ class DisplayScimSettingsAdministration extends Component {
       this.setDefaultSettings();
     }
     this.setState({isProcessing: false});
+  }
+
+  /**
+   * Set SCIM form with default settings.
+   */
+  setDefaultSettings() {
+    this.formSettings = ScimSettingsFormEntity.createFromDefault(this.adminUsers[0].id);
+    this.setState({settings: this.formSettings.toDto()});
   }
 
   /**
@@ -484,6 +493,8 @@ DisplayScimSettingsAdministration.propTypes = {
   context: PropTypes.object, // The application context
   actionFeedbackContext: PropTypes.object, // The action feedback context
   dialogContext: PropTypes.object, // The dialog context
+  roleContext: PropTypes.object, // The role context
+  roles: PropTypes.instanceOf(RolesCollection), // The roles collection
   clipboardContext: PropTypes.object, // the clipboard service provider
   administrationWorkspaceContext: PropTypes.object,
   scimSettingsServiceWorkerService: PropTypes.object,
@@ -495,7 +506,9 @@ export default withAdministrationWorkspace(
     withActionFeedback(
       withClipboard(
         withAppContext(
-          withTranslation('common')(DisplayScimSettingsAdministration)
+          withRoles(
+            withTranslation('common')(DisplayScimSettingsAdministration)
+          )
         )
       )
     )

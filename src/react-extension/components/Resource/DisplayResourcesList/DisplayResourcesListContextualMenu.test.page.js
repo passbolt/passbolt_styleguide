@@ -28,7 +28,8 @@ export default class DisplayResourcesListContextualMenuPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayResourcesListContextualMenu {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

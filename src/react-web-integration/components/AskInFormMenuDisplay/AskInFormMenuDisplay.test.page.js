@@ -29,7 +29,8 @@ export default class AskInFormMenuDisplayTestPage {
     this._page = render(
       <AppContext.Provider value={appContext}>
         <AskInFormMenuDisplay/>
-      </AppContext.Provider>
+      </AppContext.Provider>,
+      {legacyRoot: true}
     );
   }
 

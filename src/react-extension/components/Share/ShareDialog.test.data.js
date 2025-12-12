@@ -2,7 +2,7 @@ import UserSettings from "../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../test/fixture/Settings/userSettings";
 import {users, groups} from "../../contexts/UserWorkspaceContext.test.data";
 import MockPort from "../../test/mock/MockPort";
-import {TEST_ROLE_USER_ID} from "../../../shared/models/entity/role/role.test.data";
+import {TEST_ROLE_USER_ID} from "../../../shared/models/entity/role/roleEntity.test.data";
 import SiteSettings from "../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../test/fixture/Settings/siteSettings";
 import {ownerGroupPermissionDto, ownerPermissionDto, readGroupPermissionDto, readPermissionDto, updateGroupPermissionDto, updatePermissionDto} from "../../../shared/models/entity/permission/permissionEntity.test.data";

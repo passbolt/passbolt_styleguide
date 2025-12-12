@@ -69,7 +69,6 @@ export const rejectedAccountRecoveryResponseDto = data => {
   return Object.assign(defaultData, data || {});
 };
 
-// eslint-disable-next-line no-undef
 exports.AccountRecoveryRequestEntityTestData = {
   "default": {
     "id": "d4c0e643-3967-443b-93b3-102d902c4510",

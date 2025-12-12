@@ -29,6 +29,7 @@ export function defaultProps(props = {}) {
     passwordPoliciesContext: defaultPasswordPoliciesContext(),
     dialogContext: defaultDialogContext(),
     onClose: jest.fn(),
+    handleUpdateOrganizationKey: jest.fn(),
     ...props
   };
 }

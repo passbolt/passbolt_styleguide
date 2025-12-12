@@ -48,9 +48,6 @@ describe("See the Create Dialog User", () => {
 
     it('As AD I see a success toaster message after editing a user with success', async() => {
       expect.assertions(9);
-      //ensure the date returned is always the same to make sure the unit test doesn't randomly failed due to execution durationjest
-      jest.useFakeTimers()
-        .setSystemTime(new Date());
 
       expect(page.editUser.exists()).toBeTruthy();
       // edit user
@@ -60,19 +57,20 @@ describe("See the Create Dialog User", () => {
           first_name: "user",
           last_name: "admin",
         },
-        is_admin: true,
+        role_id: props.roles.getFirst("name", "user").id,
       };
 
       // check fields in the form
       expect(page.editUser.firstName.value).toBe(context.users[0].profile.first_name);
       expect(page.editUser.lastName.value).toBe(context.users[0].profile.last_name);
       expect(page.editUser.email.value).toBe(context.users[0].username);
-      expect(page.editUser.isAdmin.checked).toBe(false);
+      expect(page.editUser.roleSelected).toStrictEqual("User");
       expect(page.editUser.isSuspended.checked).toBe(false);
       // Fill the form
       page.editUser.fillInput(page.editUser.firstName, userMeta.profile.first_name);
       page.editUser.fillInput(page.editUser.lastName, userMeta.profile.last_name);
-      await page.editUser.click(page.editUser.isAdmin);
+      await page.editUser.click(page.editUser.selectRole);
+      await page.editUser.click(page.editUser.getRoleList(1));
       await page.editUser.click(page.editUser.isSuspended);
 
       const requestMockImpl = jest.fn((message, data) => data);
@@ -86,7 +84,7 @@ describe("See the Create Dialog User", () => {
           first_name: "user",
           last_name: "admin",
         },
-        role_id: context.roles[0].id,
+        role_id: props.roles.getFirst("name", "admin").id,
         disabled: new Date().toISOString().split('.')[0],
       };
 
@@ -107,7 +105,7 @@ describe("See the Create Dialog User", () => {
 
       // Mock the request function to make it the expected result
       mockContextRequest(context, requestMockImpl);
-      page.editUser.clickWithoutWaitFor(page.editUser.saveButton);
+      await page.editUser.click(page.editUser.saveButton);
       // API calls are made on submit, wait they are resolved.
       await waitForTrue(() => page.editUser.firstName.getAttribute("disabled") !== null);
 

@@ -18,6 +18,7 @@ import React from "react";
 import MockTranslationProvider from "../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayCreatorSecretHistory from "./DisplayCreatorSecretRevision";
 import {waitFor} from "@testing-library/dom";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The SelectSecretHistoryPage component represented as a page
@@ -31,8 +32,11 @@ export default class SelectSecretHistoryPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayCreatorSecretHistory {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -104,9 +108,7 @@ export default class SelectSecretHistoryPage {
    * @param {Element} element
    */
   async click(element) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /** Mouse over on the fingerprint element */

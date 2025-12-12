@@ -9,22 +9,13 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.1.0
+ * @since         5.8.0
  */
 
-import {v4 as uuidv4} from "uuid";
+export const actions = {
+  GROUPS_ADD: "GroupsAdd.addPost",
+  ACCOUNT_RECOVERY_REQUEST_VIEW: "AccountRecoveryRequestsView.view",
+  ACCOUNT_RECOVERY_RESPONSE_CREATE: "AccountRecoveryResponsesCreate.post"
+};
 
-export const TEST_ROLE_USER_ID = uuidv4();
-export const TEST_ROLE_ADMIN_ID = uuidv4();
 
-export const userRoleDto = data => ({
-  "id": TEST_ROLE_USER_ID,
-  "name": "user",
-  ...data,
-});
-
-export const adminRoleDto = data => ({
-  "id": TEST_ROLE_ADMIN_ID,
-  "name": "admin",
-  ...data,
-});

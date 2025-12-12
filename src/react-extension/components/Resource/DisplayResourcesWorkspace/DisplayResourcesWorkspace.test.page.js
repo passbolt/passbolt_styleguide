@@ -33,7 +33,8 @@ export default class DisplayResourcesWorkspacePage {
         <Router>
           <DisplayResourcesWorkspace {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

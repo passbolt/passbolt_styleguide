@@ -45,6 +45,7 @@ afterEach(() => {
   cleanup();
   delete window.passbolt;
   jest.clearAllTimers();
+  jest.useRealTimers();
 });
 
 describe("ResourceCreatePage", () => {
@@ -123,7 +124,7 @@ describe("ResourceCreatePage", () => {
           uris: ["https://passbolt-browser-extension/test"],
           username: "test@passbolt.com",
         },
-        expired: fakeNow.plus({days: 30}).plus({milliseconds: 150}).toJSDate().toISOString(),
+        expired: fakeNow.plus({days: 30}).plus({milliseconds: 300}).toJSDate().toISOString(),
       };
 
       const expectedSecretDto = {
@@ -181,7 +182,7 @@ describe("ResourceCreatePage", () => {
           uris: ["https://passbolt-browser-extension/test"],
           username: "test@passbolt.com",
         },
-        expired: fakeNow.plus({days: 30}).plus({milliseconds: 150}).toJSDate().toISOString(),
+        expired: fakeNow.plus({days: 30}).plus({milliseconds: 300}).toJSDate().toISOString(),
       };
 
       const expectedSecretDto = {
@@ -253,7 +254,7 @@ describe("ResourceCreatePage", () => {
       expect(page.complexityText).toBe("Very weak Entropy: 18.8 bits");
 
       await page.submitForm();
-      await waitFor(() => {});
+
       await waitForTrue(() => props.history.location.pathname.toString() !== "/");
 
       const expectedPageProps = {
@@ -293,7 +294,7 @@ describe("ResourceCreatePage", () => {
       expect(page.complexityText).toBe("Strong Entropy: 112.9 bits");
 
       await page.submitForm();
-      await waitFor(() => {});
+
       await waitForTrue(() => props.history.location.pathname.toString() !== "/");
 
       const expectedPageProps = {
@@ -320,7 +321,7 @@ describe("ResourceCreatePage", () => {
           uris: ["https://passbolt-browser-extension/test"],
           username: "test@passbolt.com",
         },
-        expired: fakeNow.plus({days: 30}).plus({milliseconds: 150}).toJSDate().toISOString(),
+        expired: fakeNow.plus({days: 30}).plus({milliseconds: 300}).toJSDate().toISOString(),
       };
 
       const expectedSecretDto = {
@@ -478,7 +479,6 @@ describe("ResourceCreatePage", () => {
       await waitFor(() => {});
 
       await page.submitForm();
-      await waitFor(() => {});
 
       expect(page.isSubmitting).toStrictEqual(true);
 
@@ -523,10 +523,8 @@ describe("ResourceCreatePage", () => {
 
       const page = new ResourceCreatePagePage(props);
       await waitForTrue(() => page.name.value === expectedValues.name);
-      await waitFor(() => {});
 
       await page.submitForm();
-      await waitFor(() => {});
 
       expect(page.isSubmitting).toStrictEqual(true);
 
@@ -558,7 +556,6 @@ describe("ResourceCreatePage", () => {
       props.history.goBack();
 
       const page = new ResourceCreatePagePage(props);
-      await waitFor(() => {});
 
       await page.clickOnBackButton();
       await waitForTrue(() => props.history.location.pathname !== initialPath);

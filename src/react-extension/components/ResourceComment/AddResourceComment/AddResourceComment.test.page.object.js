@@ -14,6 +14,7 @@
  */
 
 import {fireEvent, waitFor} from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 /**
  * Page object for the AddResourceComment component
@@ -25,6 +26,7 @@ export default class AddResourceCommentPageObject {
    */
   constructor(container) {
     this._container = container;
+    this.user = userEvent.setup();
   }
 
   /**
@@ -124,8 +126,7 @@ export default class AddResourceCommentPageObject {
    */
 
   async save(inProgressFn) {
-    const leftClick = {button: 0};
-    fireEvent.click(this.saveButton, leftClick);
+    await this.user.click(this.saveButton);
     await waitFor(inProgressFn || (() => {}));
   }
 
@@ -133,18 +134,14 @@ export default class AddResourceCommentPageObject {
    * Cancels the add operation
    */
   async cancel() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.cancelButton, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.cancelButton);
   }
 
   /**
    * Press the escape key
    */
   async escape() {
-    const escapeKeyPressed = {keyCode: 27};
     this.textarea.focus();
-    fireEvent.keyDown(this.textarea, escapeKeyPressed);
-    await waitFor(() => {});
+    await userEvent.keyboard('{Escape}');
   }
 }

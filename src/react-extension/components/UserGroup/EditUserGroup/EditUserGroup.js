@@ -182,11 +182,13 @@ class EditUserGroup extends Component {
   }
 
   /**
-   * Is the logged in user admin
+   * Can edit group name
    * @returns {boolean}
    */
-  isLoggedInUserAdmin() {
-    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
+  canEditGroupName() {
+    const isGroupManager = this.groupToEdit.my_group_user && this.groupToEdit.my_group_user.is_admin;
+    const isAdmin = this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
+    return isAdmin || isGroupManager;
   }
 
   /**
@@ -731,7 +733,7 @@ class EditUserGroup extends Component {
           noValidate>
 
           <div className="form-content">
-            <div className={`input text required ${this.hasErrors("name") ? "error" : ""} ${!this.areActionsAllowed || !this.isLoggedInUserAdmin() ? 'disabled' : ''}`}>
+            <div className={`input text required ${this.hasErrors("name") ? "error" : ""} ${!this.areActionsAllowed || !this.canEditGroupName() ? 'disabled' : ''}`}>
               <label htmlFor="js_field_name"><Trans>Group name</Trans></label>
               <input
                 id="group-name-input"
@@ -742,7 +744,7 @@ class EditUserGroup extends Component {
                 type="text"
                 placeholder={this.translate("group name")}
                 onChange={this.handleNameChange}
-                disabled={!this.areActionsAllowed || !this.isLoggedInUserAdmin()}/>
+                disabled={!this.areActionsAllowed || !this.canEditGroupName()}/>
               {this.hasErrors("name", "empty") &&
               <div className="name error-message">
                 <Trans>A name is required.</Trans>

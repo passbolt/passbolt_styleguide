@@ -38,7 +38,8 @@ export default class NavigateIntoUserSettingsWorkspacePage {
             <NavigateIntoUserSettingsWorkspace {...props}/>
           </Router>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

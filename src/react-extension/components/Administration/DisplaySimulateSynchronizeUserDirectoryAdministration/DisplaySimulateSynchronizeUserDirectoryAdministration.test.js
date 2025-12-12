@@ -25,8 +25,8 @@ import DisplaySimulateSynchronizeUserDirectoryAdministrationPage
 import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
 import {enableFetchMocks} from 'jest-fetch-mock';
 import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
-import {waitFor} from '@testing-library/react';
 import {mockResult} from '../DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data';
+import {act} from 'react';
 
 beforeEach(() => {
   enableFetchMocks();
@@ -44,9 +44,10 @@ describe("See the simulate synchronize user directory administration dialog", ()
       fetch.doMockOnceIf(/directorysync*/, () => mockApiResponse(mockSimulateSynchronizeBody));
       fetch.doMockOnceIf(/directorysync\/synchronize*/, () => mockApiResponse(mockResult));
       const props = defaultProps();
-      const page = new DisplaySimulateSynchronizeUserDirectoryAdministrationPage(defaultAppContext(), props);
-
-      await waitFor(() => {});
+      let page;
+      await act(
+        async() => page = new DisplaySimulateSynchronizeUserDirectoryAdministrationPage(defaultAppContext(), props)
+      );
 
       expect(page.title.hyperlink.textContent).toBe("Synchronize simulation report");
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.exists()).toBeTruthy();
@@ -67,9 +68,10 @@ describe("See the simulate synchronize user directory administration dialog", ()
         "groups": []
       }));
       const props = defaultProps();
-      const page = new DisplaySimulateSynchronizeUserDirectoryAdministrationPage(defaultAppContext(), props);
-
-      await waitFor(() => {});
+      let page;
+      await act(
+        async() => page = new DisplaySimulateSynchronizeUserDirectoryAdministrationPage(defaultAppContext(), props)
+      );
 
       expect(page.title.hyperlink.textContent).toBe("Synchronize simulation report");
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.exists()).toBeTruthy();
@@ -106,8 +108,11 @@ describe("See the simulate synchronize user directory administration dialog", ()
     it('As AD I can click the "Download the Full Report" link to trigger the downlaod action', async() => {
       fetch.doMockOnceIf(/directorysync*/, () => mockApiResponse(mockSimulateSynchronizeBody));
       const props = defaultProps();
-      const page = new DisplaySimulateSynchronizeUserDirectoryAdministrationPage(defaultAppContext(), props);
-      await waitFor(() => {});
+      let page;
+      await act(
+        async() => page = new DisplaySimulateSynchronizeUserDirectoryAdministrationPage(defaultAppContext(), props)
+      );
+
       expect(page.title.hyperlink.textContent).toBe("Synchronize simulation report");
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.resourceSynchronize).toBe('2 users will be synchronized.60 groups will be synchronized.');
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.error).toBe('Some resources will not be synchronized and will require your attention, see the full report.');
@@ -116,7 +121,7 @@ describe("See the simulate synchronize user directory administration dialog", ()
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.textareaReport).not.toBeNull();
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.downloadReportLink).not.toBeNull();
       await page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.click(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.downloadReportLink);
-      await waitFor(() => {});
+
       expect(download).toHaveBeenCalledTimes(1);
       const [content, filename, mimeType] = download.mock.calls[0];
       expect(typeof content).toBe("string");

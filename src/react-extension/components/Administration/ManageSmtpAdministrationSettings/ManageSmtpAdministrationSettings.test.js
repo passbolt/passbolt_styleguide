@@ -19,7 +19,6 @@ import "../../../../../test/mocks/mockPortal.js";
 import SmtpProviders from "./SmtpProviders.data";
 import {ManageSmtpAdministrationSettings} from "./ManageSmtpAdministrationSettings";
 import ManageSmtpAdministrationSettingsPage from "./ManageSmtpAdministrationSettings.test.page";
-import {waitFor} from "@testing-library/react";
 import {defaultProps} from "./ManageSmtpAdministrationSettings.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
@@ -35,6 +34,8 @@ import {
 import {enableFetchMocks} from "jest-fetch-mock";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
+import {act} from "react";
+import {waitFor} from "@testing-library/react";
 
 beforeEach(() => {
   enableFetchMocks();
@@ -47,9 +48,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect.assertions(4);
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withoutSmtpSettings()));
 
-      const page = new ManageSmtpAdministrationSettingsPage(defaultProps());
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(defaultProps())
+      );
 
-      await waitFor(() => {});
+
 
       expect(page.exists()).toBeTruthy();
       expect(page.title.textContent).toBe("Email server");
@@ -61,9 +65,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect.assertions(10);
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withoutSmtpSettings()));
 
-      const page = new ManageSmtpAdministrationSettingsPage(defaultProps());
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(defaultProps())
+      );
 
-      await waitFor(() => {});
+
 
       const otherSmtpProviderIndex = SmtpProviders.findIndex(provider => provider.id === "other");
       await page.selectProvider(otherSmtpProviderIndex);
@@ -97,9 +104,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect.assertions(2);
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withoutSmtpSettings()));
 
-      const page = new ManageSmtpAdministrationSettingsPage(defaultProps());
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(defaultProps())
+      );
 
-      await waitFor(() => {});
+
 
       const providerIndex = 0;
       await page.selectProvider(providerIndex);
@@ -115,9 +125,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect.assertions(2);
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withoutSmtpSettings()));
 
-      const page = new ManageSmtpAdministrationSettingsPage(defaultProps());
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(defaultProps())
+      );
 
-      await waitFor(() => {});
+
 
       const providerIndex = 0;
       await page.selectProvider(providerIndex);
@@ -130,9 +143,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect.assertions(6);
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withoutSmtpSettings()));
 
-      const page = new ManageSmtpAdministrationSettingsPage(defaultProps());
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(defaultProps())
+      );
 
-      await waitFor(() => {});
+
 
       const otherSmtpProviderIndex = SmtpProviders.findIndex(provider => provider.id === "other");
       await page.selectProvider(otherSmtpProviderIndex);
@@ -157,9 +173,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       const props = defaultProps();
       const smtpSettings = withExistingSmtpSettings({client: "passbolt.dev", source: "file"});
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
-      const page = new ManageSmtpAdministrationSettingsPage(props);
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
 
-      await waitFor(() => {});
+
 
       expect(page.username.value).toBe(smtpSettings.username);
       expect(page.password.value).toBe(smtpSettings.password);
@@ -176,9 +195,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       const props = defaultProps();
       const smtpSettings = withExistingSmtpSettings({source: "file"});
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
-      const page = new ManageSmtpAdministrationSettingsPage(props);
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
 
-      await waitFor(() => {});
+
 
       expect(page.settingsFromFileWarningMessage).toBeFalsy();
 
@@ -192,9 +214,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       const props = defaultProps();
       const smtpSettings = withExistingSmtpSettings({source: "env"});
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
-      const page = new ManageSmtpAdministrationSettingsPage(props);
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
 
-      await waitFor(() => {});
+
 
       expect(page.settingsFromFileWarningMessage).toBeFalsy();
 
@@ -208,9 +233,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       const props = defaultProps();
       const smtpSettings = withExistingSmtpSettings({source: "db"});
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
-      const page = new ManageSmtpAdministrationSettingsPage(props);
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
 
-      await waitFor(() => {});
+
 
       expect(page.settingsFromFileWarningMessage).toBeFalsy();
 
@@ -224,9 +252,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       const props = defaultProps();
       const smtpSettings = withAwsSesSmtpSettings();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
-      const page = new ManageSmtpAdministrationSettingsPage(props);
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
 
-      await waitFor(() => {});
+
 
       const awsSesProvider = SmtpProviders.find(provider => provider.id === "aws-ses");
       const otherProvider = SmtpProviders.find(provider => provider.id === "other");
@@ -247,9 +278,12 @@ describe("ManageSmtpAdministrationSettings", () => {
         port: 587
       });
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
-      const page = new ManageSmtpAdministrationSettingsPage(props);
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
 
-      await waitFor(() => {});
+
 
       const awsSesProvider = SmtpProviders.find(provider => provider.id === "aws-ses");
       const otherProvider = SmtpProviders.find(provider => provider.id === "other");
@@ -280,9 +314,11 @@ describe("ManageSmtpAdministrationSettings", () => {
         }
       });
       fetch.doMockOnceIf(/smtp\/settings.json/, () => { throw expectedError; });
-      new ManageSmtpAdministrationSettingsPage(props);
+      await act(
+        async() => new ManageSmtpAdministrationSettingsPage(props)
+      );
 
-      await waitFor(() => {});
+
 
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {
         error: expectedError
@@ -294,9 +330,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       const props = defaultProps();
       const smtpSettings = withExistingSmtpSettings();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
-      const page = new ManageSmtpAdministrationSettingsPage(props);
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
 
-      await waitFor(() => {});
+
 
       expect(page.authenticationMethodValue).toBe(ManageSmtpAdministrationSettings.AUTHENTICATION_METHOD_USERNAME_PASSWORD);
       expect(page.username.value).toBe(smtpSettings.username);
@@ -308,9 +347,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       const props = defaultProps();
       const smtpSettings = withUsernameAuthenticationMethod();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
-      const page = new ManageSmtpAdministrationSettingsPage(props);
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
 
-      await waitFor(() => {});
+
 
       expect(page.authenticationMethodValue).toBe(ManageSmtpAdministrationSettings.AUTHENTICATION_METHOD_USERNAME);
       expect(page.username.value).toBe(smtpSettings.username);
@@ -322,9 +364,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       const props = defaultProps();
       const smtpSettings = withNoAuthenticationMethod();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
-      const page = new ManageSmtpAdministrationSettingsPage(props);
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
 
-      await waitFor(() => {});
+
 
       expect(page.authenticationMethodValue).toBe(ManageSmtpAdministrationSettings.AUTHENTICATION_METHOD_NONE);
       expect(page.isUsernameVisible).toBeFalsy();
@@ -338,9 +383,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       const props = defaultProps();
       const smtpSettings = withExistingSmtpSettings();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
-      const page = new ManageSmtpAdministrationSettingsPage(props);
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
 
-      await waitFor(() => {});
+
 
       expect(page.passboltHelpPage).toBeTruthy();
     });
@@ -350,9 +398,12 @@ describe("ManageSmtpAdministrationSettings", () => {
       const props = defaultProps();
       const smtpSettings = withExistingSmtpSettings();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
-      const page = new ManageSmtpAdministrationSettingsPage(props);
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
 
-      await waitFor(() => {});
+
 
       const awsSesSmtpProviderIndex = SmtpProviders.findIndex(provider => provider.id === "aws-ses");
       await page.selectProviderInSelectField(awsSesSmtpProviderIndex);
@@ -370,9 +421,12 @@ describe("ManageSmtpAdministrationSettings", () => {
 
       expect.assertions(4);
       const props = defaultProps();
-      const page = new ManageSmtpAdministrationSettingsPage(props);
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
 
-      await waitFor(() => {});
+
 
       expect(page.passboltHelpPage).toBeTruthy();
       expect(page.smtpProviderHelpPage).toBeTruthy();
@@ -390,9 +444,12 @@ describe("ManageSmtpAdministrationSettings", () => {
 
       expect.assertions(14);
       const props = defaultProps();
-      const page = new ManageSmtpAdministrationSettingsPage(props);
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
 
-      await waitFor(() => {});
+
 
       const emptyFields = {
         username: "",
@@ -425,6 +482,8 @@ describe("ManageSmtpAdministrationSettings", () => {
       };
       await page.setFormWith(withFieldErroneous);
 
+      await waitForTrue(() => page.client_error.textContent === "SMTP client should be a valid domain or IP address");
+
       expect(page.username_error).toBeFalsy();
       expect(page.password_error).toBeFalsy();
       expect(page.sender_email_error.textContent).toBe("Sender email must be a valid email");
@@ -442,9 +501,10 @@ describe("ManageSmtpAdministrationSettings", () => {
 
       expect.assertions(1);
       const props = defaultProps();
-      const page = new ManageSmtpAdministrationSettingsPage(props);
-
-      await waitFor(() => {});
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
 
       expect(page.isSaveButtonEnabled()).toBeFalsy();
     });
@@ -476,21 +536,28 @@ describe("ManageSmtpAdministrationSettings", () => {
       }));
 
       const props = defaultProps();
-      const page = new ManageSmtpAdministrationSettingsPage(props);
-      await waitFor(() => {});
+      let page;
 
-      expect(page.username.disabled).toBe(false);
+      await act(async() => {
+        page = new ManageSmtpAdministrationSettingsPage(props);
+      });
+
+      await waitFor(() => {
+        expect(page.username.disabled).toBe(false);
+      });
 
       await page.setFormWith(formToSave);
-      expect(page.isSaveButtonEnabled()).toBe(true);
+      await waitFor(() => {
+        expect(page.isSaveButtonEnabled()).toBe(true);
+      });
 
       await page.saveSettings();
-      expect(page.isSaveButtonEnabled()).toBe(false);
+      await waitFor(() => {
+        expect(page.isSaveButtonEnabled()).toBe(false);
+      });
 
       expect(page.username.disabled).toBe(true);
-      promiseResolution(mockApiResponse(expectedSettingsToSave));
-
-      await waitFor(() => {});
+      await act(() => promiseResolution(mockApiResponse(expectedSettingsToSave)));
 
       expect(page.isSaveButtonEnabled()).toBe(true);
 
@@ -519,14 +586,19 @@ describe("ManageSmtpAdministrationSettings", () => {
       }));
 
       const props = defaultProps();
-      const page = new ManageSmtpAdministrationSettingsPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
+
 
       await page.setFormWith(formToSave);
       await page.saveSettings();
 
-      promiseResolution();
-      await waitFor(() => {});
+      await act(
+        async() => promiseResolution()
+      );
+
 
       expect(page.username.disabled).toBe(false);
     });
@@ -552,14 +624,18 @@ describe("ManageSmtpAdministrationSettings", () => {
       }));
 
       const props = defaultProps();
-      const page = new ManageSmtpAdministrationSettingsPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
+
 
       await page.setFormWith(formToSave);
       await page.saveSettings();
+      await act(
+        async() => promiseRejection()
+      );
 
-      promiseRejection();
-      await waitFor(() => {});
 
       expect(page.username.disabled).toBe(false);
     });
@@ -586,8 +662,11 @@ describe("ManageSmtpAdministrationSettings", () => {
       }));
 
       const props = defaultProps();
-      const page = new ManageSmtpAdministrationSettingsPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
+
 
       await page.selectAuthenticationMethod(0);
 
@@ -596,8 +675,10 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect(page.isPasswordVisible).toBe(false);
 
       await page.saveSettings();
-      promiseResolution(mockApiResponse(expectedSettingsToSave));
-      await waitFor(() => {});
+      await act(
+        async() => promiseResolution(mockApiResponse(expectedSettingsToSave))
+      );
+
 
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The SMTP settings have been saved successfully");
@@ -625,8 +706,11 @@ describe("ManageSmtpAdministrationSettings", () => {
       }));
 
       const props = defaultProps();
-      const page = new ManageSmtpAdministrationSettingsPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
+
 
       await page.selectAuthenticationMethod(1);
 
@@ -636,8 +720,9 @@ describe("ManageSmtpAdministrationSettings", () => {
 
       await page.setFormWith({username: expectedSettingsToSave.username});
       await page.saveSettings();
-      promiseResolution(mockApiResponse(expectedSettingsToSave));
-      await waitFor(() => {});
+      await act(
+        async() => promiseResolution(mockApiResponse(expectedSettingsToSave))
+      );
 
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The SMTP settings have been saved successfully");
@@ -669,8 +754,11 @@ describe("ManageSmtpAdministrationSettings", () => {
       });
 
       const props = defaultProps();
-      const page = new ManageSmtpAdministrationSettingsPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
+
 
       await page.setFormWith({sender_email: ""});
 
@@ -698,21 +786,26 @@ describe("ManageSmtpAdministrationSettings", () => {
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
 
       const props = defaultProps();
-      const page = new ManageSmtpAdministrationSettingsPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
+
 
       await page.setFormWith(newData);
 
       page.unmountManagerComponent();
-      await waitFor(() => {});
+
 
       expect(page.username).toBeNull();
       expect(page.password).toBeNull();
       expect(page.sender_name).toBeNull();
       expect(page.sender_email).toBeNull();
 
-      page.remountManagerComponent();
-      await waitFor(() => {});
+      await act(
+        async() => page.remountManagerComponent()
+      );
+
 
       expect(page.username.value).toBe(smtpSettings.username);
       expect(page.password.value).toBe(smtpSettings.password);
@@ -726,8 +819,11 @@ describe("ManageSmtpAdministrationSettings", () => {
       const smtpSettings = defaultSmtpSettings();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
 
-      const page = new ManageSmtpAdministrationSettingsPage(defaultProps());
-      await waitFor(() => {});
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(defaultProps())
+      );
+
 
       expect(page.exists).toBeTruthy();
       expect(page.toolbarActionsTestButton.hasAttribute("disabled")).toBeTruthy();
@@ -738,16 +834,20 @@ describe("ManageSmtpAdministrationSettings", () => {
       const sender_email = "sender@passbolt.com";
       const smtpSettings = withKnownProviderSmtpSettings();
 
+
       //first call is a GET call for the settings
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
-
-      const page = new ManageSmtpAdministrationSettingsPage(defaultProps());
-      await waitFor(() => {});
-
+      let page;
+      await act(
+        async() => {
+          page = new ManageSmtpAdministrationSettingsPage(defaultProps());
+        }
+      );
       await page.setFormWith({sender_email: ""});
 
       // equivalent of `await page.saveSettings()` without the check of form change state is it shouldn't change.
       await page.clickOn(page.toolbarActionsTestButton, () => true);
+
       expect(page.sender_email_error.textContent).toBe("Sender email is required");
 
       await page.setFormWith({sender_email});
@@ -777,8 +877,11 @@ describe("ManageSmtpAdministrationSettings", () => {
         return mockApiResponse(debugLog);
       });
 
-      const page = new ManageSmtpAdministrationSettingsPage(props);
-      await waitFor(() => {});
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(props)
+      );
+
 
       // equivalent of `await page.saveSettings()` without the check of form change state is it shouldn't change.
       await page.clickOn(page.toolbarActionsTestButton, () => true);
@@ -801,7 +904,10 @@ describe("ManageSmtpAdministrationSettings", () => {
         source: 'db'
       })));
 
-      const page = new ManageSmtpAdministrationSettingsPage(defaultProps());
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(defaultProps())
+      );
       await waitForTrue(() => Boolean(page.settingsSource));
 
       expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: database.');
@@ -813,7 +919,10 @@ describe("ManageSmtpAdministrationSettings", () => {
         source: 'file'
       })));
 
-      const page = new ManageSmtpAdministrationSettingsPage(defaultProps());
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(defaultProps())
+      );
       await waitForTrue(() => Boolean(page.settingsSource));
 
       expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: file.');
@@ -825,7 +934,10 @@ describe("ManageSmtpAdministrationSettings", () => {
         source: 'env'
       })));
 
-      const page = new ManageSmtpAdministrationSettingsPage(defaultProps());
+      let page;
+      await act(
+        async() => page = new ManageSmtpAdministrationSettingsPage(defaultProps())
+      );
       await waitForTrue(() => Boolean(page.settingsSource));
 
       expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: environment variables.');

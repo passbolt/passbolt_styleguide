@@ -18,7 +18,16 @@
 
 import {UserWorkspaceFilterTypes} from "../../../contexts/UserWorkspaceContext";
 import DisplayUsersWorkspaceFilterBarPage from "./DisplayUsersWorkspaceFilterBar.test.page";
-import {defaultProps, defaultPropsWithAttentionRequiredUsers, defaultPropsWithoutAttentionRequiredUsers, propsFilterBySuspended, propsWithAttentionRequiredUsersNotAdmin, propsWithUsersFilteredByAccountRecovery, propsWithUsersFilteredByMissingMetadata} from "./DisplayUsersWorkspaceFilterBar.test.data";
+import {
+  defaultProps,
+  defaultPropsWithAttentionRequiredUsers,
+  defaultPropsWithoutAttentionRequiredUsers,
+  propsFilterBySuspended,
+  propsWithAttentionRequiredUsersNotAdmin,
+  propsWithAttentionRequiredUsersNotAdminWithRbacAllowed,
+  propsWithUsersFilteredByAccountRecovery,
+  propsWithUsersFilteredByMissingMetadata
+} from "./DisplayUsersWorkspaceFilterBar.test.data";
 import each from "jest-each";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
 
@@ -67,6 +76,22 @@ describe("As a signed-in users I can see filters", () => {
       expect(page.attentionRequiredFilterButton).toBeUndefined();
       expect(page.filterSelected).toBeUndefined();
     });
+
+    it('As LU I can see the attention required request filter if I am a user having rbac permission', async() => {
+      expect.assertions(6);
+      const props = propsWithAttentionRequiredUsersNotAdminWithRbacAllowed();
+      const page = new DisplayUsersWorkspaceFilterBarPage(props);
+      await waitForTrue(() => page.exists());
+      await page.openAttentionRequiredFilterButton();
+      expect(page.exists()).toBeTruthy();
+      expect(page.dropdownFilterButton.textContent).toBe("All statuses");
+      expect(page.attentionRequiredFilterButton.textContent).toBe("Attention Required");
+      expect(page.filterSelected).toBeUndefined();
+      // checking the filter options
+      expect(page.attentionFilterOptions.length).toBe(1);
+      expect(page.attentionFilterOptions[0].textContent).toBe("Account Recovery Requests");
+    });
+
     it('As LU I do not see the attention required request filter if I am not an admin user', async() => {
       expect.assertions(4);
       const props = propsWithAttentionRequiredUsersNotAdmin();
@@ -108,7 +133,8 @@ describe("As a signed-in users I can see filters", () => {
 
   each([
     {filter: UserWorkspaceFilterTypes.SUSPENDED_USER, itemSelected: "Suspended", itemIndex: 1, props: defaultProps(), button: 'openDropdownFilterButton'},
-    {filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST, itemSelected: "Account Recovery Requests", itemIndex: 1, props: defaultPropsWithAttentionRequiredUsers(), button: 'openAttentionRequiredFilterButton'}, // For Admins only
+    {filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST, itemSelected: "Account Recovery Requests", itemIndex: 1, props: defaultPropsWithAttentionRequiredUsers(), button: 'openAttentionRequiredFilterButton'}, // For Admins and user having rbac allowed only
+    {filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST, itemSelected: "Account Recovery Requests", itemIndex: 1, props: propsWithAttentionRequiredUsersNotAdminWithRbacAllowed(), button: 'openAttentionRequiredFilterButton'}, // For Admins and user having rbac allowed only
     {filter: UserWorkspaceFilterTypes.MISSING_METADATA_KEY, itemSelected: "Missing Metadata Key", itemIndex: 2, props: defaultPropsWithAttentionRequiredUsers(), button: 'openAttentionRequiredFilterButton'}, // For Admins only
   ]).describe("as LU I should be able to filter", scenario => {
     it(`for: ${scenario.filter}`, async() => {
@@ -133,7 +159,8 @@ describe("As a signed-in users I can see filters", () => {
   each([
     {filter: UserWorkspaceFilterTypes.SUSPENDED_USER, itemSelected: "Suspended", props: defaultProps},
     {filter: UserWorkspaceFilterTypes.MISSING_METADATA_KEY, itemSelected: "Missing Metadata Key", props: defaultPropsWithAttentionRequiredUsers}, // For Admins only
-    {filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST, itemSelected: "Account Recovery Requests", props: defaultPropsWithAttentionRequiredUsers}, // For Admins only
+    {filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST, itemSelected: "Account Recovery Requests", props: defaultPropsWithAttentionRequiredUsers}, // For Admins and user having rbac allowed only
+    {filter: UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST, itemSelected: "Account Recovery Requests", props: propsWithAttentionRequiredUsersNotAdminWithRbacAllowed}, // For Admins and user having rbac allowed only
   ]).describe("As LU I should be able to identify the filters", scenario => {
     it(`for: ${scenario.filter}`, async() => {
       expect.assertions(3);

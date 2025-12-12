@@ -29,7 +29,8 @@ export default class DisplayRbacItemPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayRbacItem {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 
@@ -66,11 +67,11 @@ export default class DisplayRbacItemPage {
 
   /**
    * Return the select based on the role component.
-   * @param roleName
+   * @param roleIndex
    * @returns {string}
    */
-  selectRole(roleName) {
-    return this._page.container.querySelector(`.${roleName}`);
+  selectRole(roleIndex) {
+    return this._page.container.querySelector(`.rbac-row .flex-item:nth-child(${roleIndex})`);
   }
 
   /**
@@ -83,29 +84,29 @@ export default class DisplayRbacItemPage {
 
   /**
    * Select the option of the select
-   * @param roleName
+   * @param roleIndex
    * @returns {Element}
    */
-  selectedRoleOption(roleName) {
-    return this._page.container.querySelector(`.${roleName} .selected-value`);
+  selectedRoleOption(roleIndex) {
+    return this._page.container.querySelector(`.rbac-row .flex-item:nth-child(${roleIndex}) .selected-value`);
   }
 
   /**
    * Select the option of the select
-   * @param roleName
+   * @param roleIndex
    * @param option
    * @returns {Element}
    */
-  getRoleOption(roleName, option) {
-    return this._page.container.querySelector(`.${roleName} .option.${option}`);
+  getRoleOption(roleIndex, option) {
+    return this._page.container.querySelector(`.rbac-row .flex-item:nth-child(${roleIndex}) .option.${option}`);
   }
 
   /**
    * click on select item to open/close it
-   * @param roleName
+   * @param roleIndex
    */
-  async clickOnSelect(roleName) {
-    await this.click(this.selectedRoleOption(roleName));
+  async clickOnSelect(roleIndex) {
+    await this.click(this.selectedRoleOption(roleIndex));
   }
   /**
    * Click on the element

@@ -9,12 +9,18 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.1.0
+ * @since         5.8.0
  */
-import {rolesCollectionData} from "../../../models/entity/role/rolesCollection.test.data";
+import {defaultProps} from "./EditRole.test.data";
+import EditRole from "./EditRole";
 
-export class DefaultRoleService {
-  findAll() {
-    return rolesCollectionData;
-  }
-}
+
+export default {
+  title: 'Components/Administration/EditRole',
+  component: EditRole
+};
+
+
+export const Initial = {
+  args: defaultProps()
+};

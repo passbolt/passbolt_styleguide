@@ -22,6 +22,8 @@ import {defaultProps, propsWithDenyUiAction, withNestedFoldersProps} from "./Dis
 import DisplayResourceDetailsInformationPage from "./DisplayResourceDetailsInformation.test.page";
 import {waitFor} from "@testing-library/dom";
 import {DateTime} from "luxon";
+import '@testing-library/jest-dom';
+
 
 describe("DisplayResourceDetailsInformation", () => {
   let page, props;
@@ -123,6 +125,48 @@ describe("DisplayResourceDetailsInformation", () => {
       expect.assertions(1);
       await page.title.click();
       expect(page.displayInformationList.expiry).toBeNull();
+    });
+  });
+
+  describe("Given the ResourceExpiryFeature is enabled, and Resource is expired", () => {
+    const props = defaultProps({
+      passwordExpiryContext: {
+        isFeatureEnabled: () => true
+      }
+    });
+    props.resourceWorkspaceContext.details.resource.expired = "2024-02-25T15:06:49+00:00";
+
+    describe("AttentionRequired SVG icon should be visible", () => {
+      it("By Default", () => {
+        expect.assertions(2);
+
+        page = new DisplayResourceDetailsInformationPage(props);
+
+        expect(page.displayInformationList.expiryAttentionRequiredIcon).toBeInTheDocument();
+        expect(page.displayInformationList.expiryAttentionRequiredIcon).toBeVisible();
+      });
+
+      it("when Information State is opened", async() => {
+        expect.assertions(3);
+
+        page = new DisplayResourceDetailsInformationPage(props);
+        await page.title.click();
+
+        expect(page.displayInformationList.expiryLabel).toBe("Expiry");
+        expect(page.displayInformationList.expiryAttentionRequiredIcon).toBeInTheDocument();
+        expect(page.displayInformationList.expiryAttentionRequiredIcon).toBeVisible();
+      });
+
+      it("when Information State is closed", async() => {
+        expect.assertions(2);
+
+        page = new DisplayResourceDetailsInformationPage(props);
+        await page.title.click();
+        await page.title.click();
+
+        expect(page.displayInformationList.expiryAttentionRequiredIcon).toBeVisible();
+        expect(page.displayInformationList.expiryAttentionRequiredIcon).toBeInTheDocument();
+      });
     });
   });
 });

@@ -17,7 +17,7 @@
  */
 import EnterNameFormPage from "./EnterNameForm.test.page";
 import {defaultProps} from "./EnterNameForm.test.data";
-import {waitFor} from "@testing-library/react";
+import {screen, waitFor} from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -47,6 +47,7 @@ describe("As AN I should see the Enter Name Form Page", () => {
       page.insertLastname("lastname");
       jest.spyOn(props.apiTriageContext, 'onRegistrationRequested').mockImplementation(() => {});
       await page.register();
+      await screen.findByRole("button", {name: /sign up/i});
       expect(props.apiTriageContext.onRegistrationRequested).toHaveBeenCalledWith("firstname", "lastname");
     });
 

@@ -29,7 +29,8 @@ export default class ProvideAccountRecoveryOrganizationKeyPage {
     this._page = render(
       <MockTranslationProvider>
         <ProvideAccountRecoveryOrganizationKey {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
 
     this.bindFunctions();

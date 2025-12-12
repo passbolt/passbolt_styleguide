@@ -29,7 +29,8 @@ export default class DisplayMigrateMetadataAdministrationPage {
         <AppContext.Provider value={props.context}>
           <DisplayMigrateMetadataAdministration {...props}/>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

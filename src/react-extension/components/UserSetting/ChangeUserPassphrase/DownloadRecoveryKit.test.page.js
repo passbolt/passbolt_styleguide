@@ -29,7 +29,8 @@ export default class DownloadRecoveryKitPage {
     this._page = render(
       <MockTranslationProvider>
         <DownloadRecoveryKit {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

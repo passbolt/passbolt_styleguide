@@ -34,7 +34,8 @@ export default class HandleStatusCheckPage {
             <HandleStatusCheck {...props}/>
           </Router>
         </MockTranslationProvider>
-      </AccountRecoveryUserContextProvider>
+      </AccountRecoveryUserContextProvider>,
+      {legacyRoot: true}
     );
   }
 }

@@ -13,18 +13,18 @@
  */
 
 import {defaultProps, defaultScimSettingsConfiguredProps, defaultScimSettingsDisabledProps} from './DisplayScimSettingsAdministration.test.data';
-import DisplayScimSettingsAdministrationPage from './DisplayScimSettingsAdministration.page';
+import DisplayScimSettingsAdministrationPage from './DisplayScimSettingsAdministration.test.page';
 import {waitFor} from '@testing-library/dom';
 
 describe('DisplayScimSettingsAdministration', () => {
   let page, props;
 
   beforeEach(() => {
-    props = new defaultProps();
+    props = defaultProps();
     page = new DisplayScimSettingsAdministrationPage(props);
   });
 
-  it('should display the title and description', () => {
+  it('should display the title and description', async() => {
     expect.assertions(2);
     expect(page.title).toBe('SCIM');
     expect(page.description).toBe('SCIM is a standard protocol that automates user provisioning and deprovisioning with identity providers.');

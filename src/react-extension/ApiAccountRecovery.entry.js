@@ -22,4 +22,13 @@ import ApiAccountRecovery from "./ApiAccountRecovery";
  */
 const appDomElement = document.createElement("div");
 document.body.appendChild(appDomElement);
-ReactDOM.render(<ApiAccountRecovery/>, appDomElement);
+
+/*
+ * TODO: React18 - enable when ready
+ * const root = ReactDOM.createRoot(appDomElement);
+ */
+/* eslint-disable react/no-deprecated */
+ReactDOM.render(
+  <ApiAccountRecovery/>,
+  appDomElement
+);

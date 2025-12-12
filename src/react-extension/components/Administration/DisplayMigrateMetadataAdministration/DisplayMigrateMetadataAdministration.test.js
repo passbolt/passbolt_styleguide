@@ -19,13 +19,17 @@ import DisplayMigrateMetadataAdministrationPage
 import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultAdminUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
 import {v4 as uuidv4} from "uuid";
+import {act} from "react";
 
 describe("DisplayMigrateMetadataAdministration as per the specifications", () => {
   it("As a signed-in administrator I can see migration metadata form", async() => {
     expect.assertions(6);
     const props = defaultProps();
 
-    const page = new DisplayMigrateMetadataAdministrationPage(props);
+    let page;
+    await act(
+      async() => page = new DisplayMigrateMetadataAdministrationPage(props)
+    );
     await waitForTrue(() => page.exists());
 
     expect(page.exists()).toStrictEqual(true);
@@ -65,7 +69,10 @@ describe("DisplayMigrateMetadataAdministration as per the specifications", () =>
     expect.assertions(4);
     const props = withMigrationFullyDone();
 
-    const page = new DisplayMigrateMetadataAdministrationPage(props);
+    let page;
+    await act(
+      async() => page = new DisplayMigrateMetadataAdministrationPage(props)
+    );
     await waitForTrue(() => page.exists());
 
     expect(page.migrationState.textContent).toBe("Done");

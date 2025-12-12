@@ -638,7 +638,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   get canUseFolders() {
     return this.props.context.siteSettings.canIUse("folders")
-      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
+      && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
   }
 
   /**

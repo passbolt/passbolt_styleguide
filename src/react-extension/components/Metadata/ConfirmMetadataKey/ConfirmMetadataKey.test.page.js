@@ -28,7 +28,8 @@ export default class ConfirmMetadataKeyPage {
     this._page = render(
       <MockTranslationProvider>
         <ConfirmMetadataKey {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

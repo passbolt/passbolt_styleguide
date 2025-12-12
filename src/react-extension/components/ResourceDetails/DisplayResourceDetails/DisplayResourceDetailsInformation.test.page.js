@@ -31,7 +31,8 @@ export default class PasswordSidebarInformationSectionPage {
         <Router>
           <DisplayResourceDetailsInformation {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }
@@ -187,6 +188,12 @@ class DisplayInformationPageObject {
     return this._container.querySelector('.expiry.label').textContent;
   }
 
+  /**
+   * Returns the Attention Required SVG element of information
+   */
+  get expiryAttentionRequiredIcon() {
+    return this._container.querySelector('.attention-required');
+  }
   /**
    * Returns true if the page object exists in the container
    */

@@ -66,7 +66,7 @@ describe("See the Create Resource - save resource", () => {
     jest.spyOn(window, 'close').mockImplementation(jest.fn());
     // process
     const page = new SaveResourcePage(props);
-    await waitFor(() => {});
+
     await page.save();
     // expected data
     const resourceTypeId = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG).id;

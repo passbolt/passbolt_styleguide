@@ -46,7 +46,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseMobileCapability() {
-    const canViewMobileTransfer = this.props.rbacContext.canIUseUiAction(uiActions.MOBILE_TRANSFER);
+    const canViewMobileTransfer = this.props.rbacContext.canIUseAction(uiActions.MOBILE_TRANSFER);
     return canViewMobileTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
   }
 
@@ -55,7 +55,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseDesktopCapability() {
-    const canViewDesktopTransfer = this.props.rbacContext.canIUseUiAction(uiActions.DESKTOP_TRANSFER);
+    const canViewDesktopTransfer = this.props.rbacContext.canIUseAction(uiActions.DESKTOP_TRANSFER);
     return canViewDesktopTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
   }
 
@@ -64,7 +64,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    * @return {bool} true if the plugin is enabled and if an admin enabled the feature.
    */
   get canIUseAccountRecoveryCapability() {
-    const canViewAccountRecovery = this.props.rbacContext.canIUseUiAction(uiActions.PROFIL_ACCOUNT_RECOVERY);
+    const canViewAccountRecovery = this.props.rbacContext.canIUseAction(uiActions.PROFIL_ACCOUNT_RECOVERY);
     return canViewAccountRecovery && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountRecovery');
   }
 
