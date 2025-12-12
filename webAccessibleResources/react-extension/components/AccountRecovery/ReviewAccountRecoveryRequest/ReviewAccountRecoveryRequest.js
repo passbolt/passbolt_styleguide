@@ -131,6 +131,15 @@ class ReviewAccountRecoveryRequest extends Component {
   }
 
   /**
+   * Check if the creator is an admin.
+   * @returns {boolean}
+   */
+  get isRoleAdmin() {
+    const role = this.props.roleContext.getRole(this.creator.role_id);
+    return role?.isAdmin() || false;
+  }
+
+  /**
    * Get the user who initiated the account recovery request.
    * @returns {object}
    */
@@ -200,7 +209,7 @@ class ReviewAccountRecoveryRequest extends Component {
                       <span className="dateTimeAgo" title={this.date}>{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</span>
                       <span className="chips-group">
                         <span className={`chips user-status ${creatorStatus}`}>{this.props.t(creatorStatus)}</span>
-                        <span className={`chips user-role ${creatorRole}`}>{creatorRole}</span>
+                        <span className={`chips user-role ${this.isRoleAdmin ? "admin" : "user"}`}>{creatorRole}</span>
                       </span>
                     </div>
                   </div>

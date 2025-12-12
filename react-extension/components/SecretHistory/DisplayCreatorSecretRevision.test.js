@@ -144,5 +144,17 @@ describe("DisplayCreatorSecretRevision", () => {
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", props.secretRevision.creator.id);
       expect(page.tooltipText).toStrictEqual("User key not found");
     });
+
+    it('As LU I can see unknown user when creator is null.', async() => {
+      expect.assertions(4);
+      const props = defaultProps({secretRevision: new SecretRevisionEntity(defaultSecretRevisionDto({creator: null}))});
+      page = new DisplayCreatorSecretRevisionPage(props);
+
+      expect(page.exists()).toBeTruthy();
+
+      expect(page.name.textContent).toStrictEqual("Unknown user");
+      expect(page.username.textContent).toStrictEqual("Unknown user");
+      expect(page.fingerprint).toBeNull();
+    });
   });
 });

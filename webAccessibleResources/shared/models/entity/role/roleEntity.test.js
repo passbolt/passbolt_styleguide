@@ -31,7 +31,8 @@ describe("Role entity", () => {
 
     it("validates name property", () => {
       assertEntityProperty.string(RoleEntity, "name");
-      assertEntityProperty.maxLength(RoleEntity, "name", 255);
+      assertEntityProperty.minLength(RoleEntity, "name", 1);
+      assertEntityProperty.maxLength(RoleEntity, "name", 50);
       assertEntityProperty.required(RoleEntity, "name");
     });
 
@@ -39,6 +40,7 @@ describe("Role entity", () => {
       assertEntityProperty.string(RoleEntity, "description");
       assertEntityProperty.maxLength(RoleEntity, "description", 255);
       assertEntityProperty.notRequired(RoleEntity, "description");
+      assertEntityProperty.nullable(RoleEntity, "description");
     });
 
     it("validates created property", () => {
@@ -77,6 +79,23 @@ describe("Role entity", () => {
     it("constructor returns validation error if dto required fields are missing", () => {
       expect.assertions(1);
       expect(() => new RoleEntity({})).toThrow(EntityValidationError);
+    });
+
+    it("validateBuildRules: should throw an error if the name has trailing spaces", () => {
+      expect.assertions(5);
+      const dto1 = customRoleDto({name: " before"});
+      const dto2 = customRoleDto({name: "after "});
+      const dto3 = customRoleDto({name: " both "});
+      const dto4 = customRoleDto({name: "carriage return\n"});
+      const dto5 = customRoleDto({name: "null byte\0 "});
+
+      const expectedError = new EntityValidationError();
+      expectedError.addError("name", 'trailing-spaces', `The property (name) contains forbidden trailing spaces.`);
+      expect(() => new RoleEntity(dto1)).toThrow(expectedError);
+      expect(() => new RoleEntity(dto2)).toThrow(expectedError);
+      expect(() => new RoleEntity(dto3)).toThrow(expectedError);
+      expect(() => new RoleEntity(dto4)).toThrow(expectedError);
+      expect(() => new RoleEntity(dto5)).toThrow(expectedError);
     });
   });
 

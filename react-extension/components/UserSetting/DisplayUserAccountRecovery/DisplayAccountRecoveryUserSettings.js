@@ -26,6 +26,7 @@ import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {getUserStatus} from "../../../../shared/utils/userUtils";
 import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
+import {withRoles} from "../../../contexts/RoleContext";
 
 class DisplayAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -99,6 +100,9 @@ class DisplayAccountRecoveryUserSettings extends Component {
    * @returns {string}
    */
   get requestorRoleName() {
+    if (!this.requestor) {
+      return "";
+    }
     const role = this.props.roleContext.getRole(this.requestor.role_id);
     return role?.name || "";
   }
@@ -251,6 +255,7 @@ DisplayAccountRecoveryUserSettings.propTypes = {
   accountRecoveryContext: PropTypes.any, // The account recovery context
   date: PropTypes.string, // The date of the request
   t: PropTypes.func, // The translation function
+  roleContext: PropTypes.object, // The role context
   dialogContext: PropTypes.object, // The dialog context
 };
-export default withAppContext(withAccountRecovery(withDialog(withTranslation('common')(DisplayAccountRecoveryUserSettings))));
+export default withAppContext(withAccountRecovery(withDialog(withRoles(withTranslation('common')(DisplayAccountRecoveryUserSettings)))));

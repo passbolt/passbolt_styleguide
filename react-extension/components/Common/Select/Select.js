@@ -405,7 +405,7 @@ class Select extends Component {
             <ul ref={this.itemsRef} className="items">
               {this.hasFilteredItems() &&
                 this.listItemsFiltered.map(item =>
-                  <li tabIndex={item.disabled ? -1 : 0} key={item.value} className={`option ${item.value}`} onKeyDown={event => this.handleItemKeyDown(event, item)} onClick={() => this.handleItemClick(item)}>
+                  <li tabIndex={item.disabled ? -1 : 0} key={item.value} title={item.title} className={`option ${item.value}`} onKeyDown={event => this.handleItemKeyDown(event, item)} onClick={() => this.handleItemClick(item)}>
                     {item.label}
                   </li>
                 )

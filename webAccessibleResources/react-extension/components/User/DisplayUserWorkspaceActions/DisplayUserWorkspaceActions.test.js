@@ -20,6 +20,7 @@ import {
   propsSoleManagerSelected,
   propsSoleMemberSelected, propsUserGroupManagerWithGroupSelected,
   propsUserRole,
+  propsUserRoleGroupSelectedNotManager,
   propsWithMyselfAsSelectedUser,
   propsWithSelectedActiveUser,
   propsWithSelectedMFADisabledUser,
@@ -349,5 +350,12 @@ describe("Display User Workspace Actions", () => {
       }
     });
     expect(props.dialogContext.open).toHaveBeenCalledWith(RemoveUserFromGroup);
+  });
+
+  it('As LU who is not a group manager I cannot see the remove from group button', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsUserRoleGroupSelectedNotManager());
+    await waitFor(() => {});
+    expect(page.canRemoveFromGroup).toBeFalsy();
   });
 });

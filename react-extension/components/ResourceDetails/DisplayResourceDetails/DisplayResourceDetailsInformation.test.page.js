@@ -189,6 +189,12 @@ class DisplayInformationPageObject {
   }
 
   /**
+   * Returns the Attention Required SVG element of information
+   */
+  get expiryAttentionRequiredIcon() {
+    return this._container.querySelector('.attention-required');
+  }
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {

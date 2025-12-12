@@ -318,11 +318,6 @@ class EntitySchema {
         validationError = EntitySchema.handlePropertyValidationError(propName, 'format', `The ${propName} is not a valid ${propSchema.format}.`, validationError);
       }
     }
-    if (propSchema.notEmpty) {
-      if (!EntitySchema.isValidStringNotEmpty(prop)) {
-        validationError = EntitySchema.handlePropertyValidationError(propName, 'notEmpty', `The ${propName} should be not empty`, validationError);
-      }
-    }
     if (propSchema.length) {
       if (!EntitySchema.isValidStringLength(prop, propSchema.length, propSchema.length)) {
         validationError = EntitySchema.handlePropertyValidationError(propName, 'length', `The ${propName} should be ${propSchema.length} character in length.`, validationError);
@@ -571,15 +566,6 @@ class EntitySchema {
       default:
         throw new TypeError(`EntitySchema string validation format ${format} is not supported.`);
     }
-  }
-
-  /**
-   * Validate if a string is not empty
-   * @param {string} str
-   * @return {*}
-   */
-  static isValidStringNotEmpty(str) {
-    return !Validator.isEmpty(str, {ignore_whitespace: true});
   }
 
   /**

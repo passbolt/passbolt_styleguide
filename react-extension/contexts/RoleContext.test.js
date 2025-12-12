@@ -19,6 +19,7 @@ import {defaultAppContext} from "./ExtAppContext.test.data";
 import {RoleContextProvider} from "./RoleContext";
 import {v4 as uuidv4} from "uuid";
 import mockComponentSetState from "../test/mock/components/React/mockSetState";
+import {waitFor} from "@testing-library/react";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -168,8 +169,8 @@ describe("RoleContextProvider", () => {
       expect(context.roleServiceWorkerService.updateResourceLocalStorage).not.toHaveBeenCalled();
     });
 
-    it("should return an empty collection of roles in the context is not initialised yet", () => {
-      expect.assertions(2);
+    it("should read data from the local storage if the context is not initialised yet", async() => {
+      expect.assertions(3);
 
       const props = defaultAppContext({roles: null});
 
@@ -177,11 +178,33 @@ describe("RoleContextProvider", () => {
       mockComponentSetState(context);
 
       jest.spyOn(context.roleServiceWorkerService, "updateResourceLocalStorage").mockImplementation(() => {});
+      jest.spyOn(props.storage.local, "get").mockImplementation(() => ({}));
 
       const allRoles = context.getAllRoles();
+      await waitFor(() => {});
 
       expect(allRoles).toBeNull();
+      expect(props.storage.local.get).toHaveBeenCalledTimes(1);
       expect(context.roleServiceWorkerService.updateResourceLocalStorage).toHaveBeenCalledTimes(1);
+    });
+
+    it("should not call the API to refresh the data if it exist in the local storage", async() => {
+      expect.assertions(3);
+
+      const props = defaultAppContext({roles: null});
+
+      const context = new RoleContextProvider({context: props});
+      mockComponentSetState(context);
+
+      jest.spyOn(context.roleServiceWorkerService, "updateResourceLocalStorage").mockImplementation(() => {});
+      jest.spyOn(props.storage.local, "get").mockImplementation(() => ({roles: rolesCollectionDto}));
+
+      const allRoles = context.getAllRoles();
+      await waitFor(() => {});
+
+      expect(allRoles).toBeNull();
+      expect(props.storage.local.get).toHaveBeenCalledTimes(1);
+      expect(context.roleServiceWorkerService.updateResourceLocalStorage).not.toHaveBeenCalled();
     });
   });
 

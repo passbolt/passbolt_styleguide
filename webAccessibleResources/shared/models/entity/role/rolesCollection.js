@@ -48,7 +48,7 @@ class RolesCollection extends EntityV2Collection {
     return {
       "type": "array",
       "items": RoleEntity.getSchema(),
-      "maxItems": 7,
+      "maxItems": 5,
     };
   }
 

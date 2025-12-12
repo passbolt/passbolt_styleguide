@@ -1,4 +1,3 @@
-import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
 import {defaultAppContext, defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
@@ -8,6 +7,26 @@ import {
   defaultAdministratorRbacContext,
   defaultUserRbacContext
 } from "../../../../shared/context/Rbac/RbacContext.test.data";
+import {defaultGroupDto} from "../../../../shared/models/entity/group/groupEntity.test.data";
+import {minimumGroupUserDto} from "../../../../shared/models/entity/groupUser/groupUserEntity.test.data";
+import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+
+/**
+ * Default selected user for workspace actions tests
+ * @param {Object} data The data to override
+ * @returns {object}
+ */
+const defaultSelectedUserDto = (data = {}) => defaultUserDto({
+  id: "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+  username: "carol@passbolt.com",
+  active: false,
+  is_mfa_enabled: true,
+  missing_metadata_key_ids: ["f848277c-5398-58f8-a82a-72397af2d450"],
+  ...data
+}, {
+  withRole: true,
+  withPendingAccountRecoveryUserRequest: true
+});
 
 /**
  * Props with selected user
@@ -23,58 +42,7 @@ export function propsWithSelectedUser(props) {
       filter: {
         type: "ALL"
       },
-      selectedUsers: [
-        {
-          "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-          "role_id": TEST_ROLE_USER_ID,
-          "role": {
-            "created": "2012-07-04T13:39:25+00:00",
-            "description": "Logged in user",
-            "id": TEST_ROLE_USER_ID,
-            "modified": "2012-07-04T13:39:25+00:00",
-            "name": "user"
-          },
-          "username": "carol@passbolt.com",
-          "active": false,
-          "deleted": false,
-          "created": "2020-05-11T09:32:49+00:00",
-          "modified": "2020-05-12T09:32:49+00:00",
-          "profile": {
-            "id": "48bcd9ac-a520-53e0-b3a4-9da7e57b91aa",
-            "user_id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-            "first_name": "Carol",
-            "last_name": "Shaw",
-            "created": "2020-05-13T09:32:49+00:00",
-            "modified": "2020-05-13T09:32:49+00:00",
-            "avatar": {
-              "id": "0f769127-3053-45e4-bd8e-75e766bb4d52",
-              "user_id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-              "foreign_key": "48bcd9ac-a520-53e0-b3a4-9da7e57b91aa",
-              "model": "Avatar",
-              "filename": "carol.png",
-              "filesize": 733439,
-              "mime_type": "image\/png",
-              "extension": "png",
-              "hash": "7445a736df60a1ac1bfdab8fc5b842a95c495aec",
-              "path": "Avatar\/73\/09\/19\/0f769127305345e4bd8e75e766bb4d52\/0f769127305345e4bd8e75e766bb4d52.png",
-              "adapter": "Local",
-              "created": "2020-05-13T09:32:51+00:00",
-              "modified": "2020-05-13T09:32:51+00:00",
-              "url": {
-                "medium": "img\/public\/Avatar\/73\/09\/19\/0f769127305345e4bd8e75e766bb4d52\/0f769127305345e4bd8e75e766bb4d52.a99472d5.png",
-                "small": "img\/public\/Avatar\/73\/09\/19\/0f769127305345e4bd8e75e766bb4d52\/0f769127305345e4bd8e75e766bb4d52.65a0ba70.png"
-              }
-            }
-          },
-          "__placeholder_last_logged_in__": "",
-          "last_logged_in": "",
-          is_mfa_enabled: true,
-          missing_metadata_key_ids: ["f848277c-5398-58f8-a82a-72397af2d450"],
-          pending_account_recovery_request: {
-            id: "54c6278e-f824-5fda-91ff-3e946b18d997"
-          },
-        }
-      ]
+      selectedUsers: [defaultSelectedUserDto()]
     },
     workflowContext: defaultWorkflowContext(),
     dialogContext: defaultDialogContext(),
@@ -100,18 +68,16 @@ export function propsGroupSelected() {
       filter: {
         type: "FILTER-BY-GROUP",
         payload: {
-          group: {
-            groups_users: [{}, {}] // At least two users needed in the group
-          },
+          group: defaultGroupDto({}, {withGroupsUsers: 2})
         }
       },
-      selectedUsers: [{}] // At least on user selected
+      selectedUsers: [defaultUserDto()]
     }
   });
 }
 
 /**
- * Props with sole member selected
+ * Props with sole member selected in group
  */
 export function propsSoleMemberSelected() {
   const context = defaultAppContext();
@@ -124,18 +90,16 @@ export function propsSoleMemberSelected() {
       filter: {
         type: "FILTER-BY-GROUP",
         payload: {
-          group: {
-            groups_users: [{}] // At least two users needed in the group
-          },
+          group: defaultGroupDto({}, {withGroupsUsers: 1})
         }
       },
-      selectedUsers: [{}] // At least on user selected
+      selectedUsers: [defaultUserDto()]
     }
   });
 }
 
 /**
- * Props with sole manager selected
+ * Props with sole manager selected in group
  */
 export function propsSoleManagerSelected() {
   const context = defaultAppContext();
@@ -148,20 +112,16 @@ export function propsSoleManagerSelected() {
       filter: {
         type: "FILTER-BY-GROUP",
         payload: {
-          group: {
-            groups_users: [{
-              user_id: context.loggedInUser.id,
-              is_admin: true
-            },
-            {}
+          group: defaultGroupDto({
+            groups_users: [
+              minimumGroupUserDto({user_id: context.loggedInUser.id, is_admin: true}),
+              minimumGroupUserDto()
             ]
-          },
+          })
         }
       },
       selectedUsers: [
-        {
-          id: context.loggedInUser.id,
-        }
+        defaultUserDto({id: context.loggedInUser.id})
       ]
     }
   });
@@ -220,15 +180,12 @@ export function propsWithMyselfAsSelectedUser() {
         type: "ALL"
       },
       selectedUsers: [
-        {
+        defaultUserDto({
           id: context.loggedInUser.id,
-          role: {
-            name: "admin"
-          },
           active: true,
           is_mfa_enabled: true,
           missing_metadata_key_ids: ["f848277c-5398-58f8-a82a-72397af2d450"],
-        }
+        }, {withRole: true})
       ]
     }
   });
@@ -259,4 +216,31 @@ export function propsWithSelectedUserTemporaryHasPendingAccountRecovery() {
   const props = propsWithSelectedUser();
   props.userWorkspaceContext.selectedUsers[0].pending_account_recovery_request = true;
   return props;
+}
+
+/**
+ * Props with user role and group selected (user is not a manager)
+ */
+export function propsUserRoleGroupSelectedNotManager() {
+  const context = defaultUserAppContext();
+  return propsWithSelectedUser({
+    context,
+    userWorkspaceContext: {
+      details: {
+        locked: true
+      },
+      filter: {
+        type: "FILTER-BY-GROUP",
+        payload: {
+          group: defaultGroupDto({
+            groups_users: [
+              minimumGroupUserDto({user_id: "other-user-id", is_admin: true}),
+              minimumGroupUserDto()
+            ]
+          })
+        }
+      },
+      selectedUsers: [defaultUserDto()]
+    }
+  });
 }

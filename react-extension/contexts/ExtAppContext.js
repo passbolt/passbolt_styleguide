@@ -51,7 +51,6 @@ class ExtAppContextProvider extends React.Component {
     await this.getAccount();
     this.getGroups();
     this.getUsers();
-    this.getRoles();
     const skeleton = document.getElementById("temporary-skeleton");
     if (skeleton) {
       skeleton.remove();
@@ -266,14 +265,6 @@ class ExtAppContextProvider extends React.Component {
   }
 
   /**
-   * Get the list of roles from local storage and set it in the state
-   */
-  async getRoles() {
-    const roles = this.roleServiceWorkerService.findAll();
-    this.setState({roles});
-  }
-
-  /**
    * Get the list of user settings from local storage and set it in the state
    * Using UserSettings
    */
@@ -374,10 +365,6 @@ class ExtAppContextProvider extends React.Component {
     if (changes[storageKey] && changes[storageKey].newValue) {
       const groups = changes[storageKey].newValue;
       this.setState({groups});
-    }
-    if (changes.roles && changes.roles.newValue) {
-      const roles = changes.roles.newValue;
-      this.setState({roles});
     }
   }
 

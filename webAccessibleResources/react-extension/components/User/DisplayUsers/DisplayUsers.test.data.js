@@ -30,8 +30,16 @@ export function defaultProps(props) {
     context: defaultAppContext(),
     rbacContext: defaultAdministratorRbacContext(),
     accountRecoveryContext: defaultAccountRecoveryUserContext(),
+    dragContext: {
+      onDragStart: jest.fn(),
+      onDragEnd: jest.fn()
+    },
+    contextualMenuContext: {
+      show: jest.fn(),
+      hide: jest.fn()
+    },
     userWorkspaceContext: defaultUserWorkspaceContext({
-      onUserScrolled: () => {},
+      onUserScrolled: jest.fn(),
       scrollTo: {
         user: {
           "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
@@ -80,12 +88,13 @@ export function defaultProps(props) {
           is_mfa_enabled: false
         }
       },
-      onSorterChanged: () => {},
+      onSorterChanged: jest.fn(),
       onUserSelected: {
-        single: () => {}
+        single: jest.fn()
       },
       sorter: {
-        propertyName: 'modified'
+        propertyName: 'modified',
+        asc: true
       },
       selectedUsers: [],
       filteredUsers: [{
@@ -261,4 +270,53 @@ export function propsWithFirstUserAttentionRequired() {
   props.userWorkspaceContext.filteredUsers[0].pending_account_recovery_request = true;
   props.userWorkspaceContext.filteredUsers[1].missing_metadata_key_ids = ["81100609-d60d-4dc8-a8c8-de45522eee1b"];
   return props;
+}
+
+/**
+ * Props with specific group configurations for testing getDisabledGroupIds
+ * @param {Object} options Configuration options
+ * @param {Array|null} options.groups The groups to set in context
+ * @param {string|null} options.loggedInUserId The logged in user ID (null to unset loggedInUser)
+ * @param {Array} options.selectedUsers The selected users for drag operation
+ * @returns {Object} Props configured for testing
+ */
+export function propsWithGroups({groups = [], loggedInUserId = null, selectedUsers = []} = {}) {
+  const props = defaultProps();
+  props.context.groups = groups;
+  if (loggedInUserId === null) {
+    props.context.loggedInUser = null;
+  } else {
+    props.context.loggedInUser = {...props.context.loggedInUser, id: loggedInUserId};
+  }
+  props.userWorkspaceContext.selectedUsers = selectedUsers;
+  if (selectedUsers.length > 0) {
+    props.userWorkspaceContext.filteredUsers = selectedUsers;
+  }
+  return props;
+}
+
+/**
+ * Helper to create a group with specific configuration for testing
+ * @param {Object} options Group configuration
+ * @param {string} options.id Group ID
+ * @param {Array} options.members Array of {userId, isAdmin} objects
+ * @returns {Object} Group object
+ */
+export function createGroup({id, members = []}) {
+  return {
+    id,
+    groups_users: members.map(member => ({
+      user_id: member.userId,
+      is_admin: member.isAdmin || false
+    }))
+  };
+}
+
+/**
+ * Helper to create a minimal user object for testing
+ * @param {string} id User ID
+ * @returns {Object} User object
+ */
+export function createUser(id) {
+  return {id};
 }

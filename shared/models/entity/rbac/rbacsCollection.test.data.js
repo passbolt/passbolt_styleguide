@@ -61,3 +61,33 @@ export const settingsRbacsCollectionData = () => [
   denyRbacWithActionData({action: defaultActionData({name: actions.ACCOUNT_RECOVERY_REQUEST_VIEW})}),
   denyRbacWithActionData({action: defaultActionData({name: actions.ACCOUNT_RECOVERY_RESPONSE_CREATE})}),
 ];
+
+export const settingsRbacsCollectionFromRoleCollectionData = rolesCollectionDto => {
+  let rbacsCollectionDto = [];
+
+  const availableRoles = rolesCollectionDto.filter(r => r.name !== "admin" && r.name !== "guest");
+
+  for (let i = 0; i < availableRoles.length; i++) {
+    const roleId = availableRoles[i].id;
+    rbacsCollectionDto = rbacsCollectionDto.concat([
+      defaultRbacWithUiActionData({role_id: roleId, ui_action: defaultUiActionData({name: uiActions.RESOURCES_EXPORT})}),
+      denyRbacWithUiActionData({role_id: roleId, ui_action: defaultUiActionData({name: uiActions.RESOURCES_IMPORT})}),
+      defaultRbacWithUiActionData({role_id: roleId, ui_action: defaultUiActionData({name: uiActions.TAGS_USE})}),
+      defaultRbacWithUiActionData({role_id: roleId, ui_action: defaultUiActionData({name: uiActions.FOLDERS_USE})}),
+      defaultRbacWithUiActionData({role_id: roleId, ui_action: defaultUiActionData({name: uiActions.RESOURCES_SEE_ACTIVITIES})}),
+      defaultRbacWithUiActionData({role_id: roleId, ui_action: defaultUiActionData({name: uiActions.RESOURCES_SEE_COMMENTS})}),
+      denyRbacWithUiActionData({role_id: roleId, ui_action: defaultUiActionData({name: uiActions.SECRETS_PREVIEW})}),
+      defaultRbacWithUiActionData({role_id: roleId, ui_action: defaultUiActionData({name: uiActions.SECRETS_COPY})}),
+      defaultRbacWithUiActionData({role_id: roleId, ui_action: defaultUiActionData({name: uiActions.SHARE_VIEW_LIST})}),
+      denyRbacWithUiActionData({role_id: roleId, ui_action: defaultUiActionData({name: uiActions.USERS_VIEW_WORKSPACE})}),
+      defaultRbacWithUiActionData({role_id: roleId, ui_action: defaultUiActionData({name: uiActions.MOBILE_TRANSFER})}),
+      defaultRbacWithUiActionData({role_id: roleId, ui_action: defaultUiActionData({name: uiActions.DESKTOP_TRANSFER})}),
+      defaultRbacWithUiActionData({role_id: roleId, ui_action: defaultUiActionData({name: uiActions.SHARE_FOLDER})}),
+      denyRbacWithActionData({role_id: roleId, action: defaultActionData({name: actions.GROUPS_ADD})}),
+      denyRbacWithActionData({role_id: roleId, action: defaultActionData({name: actions.ACCOUNT_RECOVERY_REQUEST_VIEW})}),
+      denyRbacWithActionData({role_id: roleId, action: defaultActionData({name: actions.ACCOUNT_RECOVERY_RESPONSE_CREATE})}),
+    ]);
+  }
+
+  return rbacsCollectionDto;
+};

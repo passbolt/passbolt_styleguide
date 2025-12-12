@@ -48,7 +48,7 @@ export class RoleContextProvider extends React.Component {
   /**
    * @inheritdoc
    */
-  async componentDidMount() {
+  componentDidMount() {
     this.props.context.storage.onChanged.addListener(this.handleStorageChange);
   }
 
@@ -74,8 +74,17 @@ export class RoleContextProvider extends React.Component {
       return;
     }
 
-    const rolesCollectionDto = changes[this.storageKey].newValue;
-    this.setState({rolesCollection: new RolesCollection(rolesCollectionDto)});
+    this.set(changes[this.storageKey].newValue);
+  }
+
+  /**
+   * Set roles from dto.
+   * @param {Array} rolesCollectionDto The roles collection dto to set.
+   * @private
+   */
+  set(rolesCollectionDto) {
+    const rolesCollection = new RolesCollection(rolesCollectionDto);
+    this.setState({rolesCollection});
   }
 
   /**
@@ -103,12 +112,29 @@ export class RoleContextProvider extends React.Component {
   }
 
   /**
+   * Load the roles from the local storage if it is available.
+   * If the local storage is not yet initialised, then it asks for its initialisation.
+   * @returns {Promise<void>}
+   * @private
+   */
+  async loadLocalStorage() {
+    const storageData = await this.props.context.storage.local.get([this.storageKey]);
+    if (!storageData[this.storageKey]) {
+      this.refreshRoles();
+      return;
+    }
+
+    this.set(storageData[this.storageKey]);
+  }
+
+
+  /**
    * Returns all known roles.
    * @returns {RolesCollection|null}
    */
   getAllRoles() {
     if (!this.state.rolesCollection) {
-      this.refreshRoles();
+      this.loadLocalStorage();
       return null;
     }
 
@@ -144,6 +170,7 @@ export class RoleContextProvider extends React.Component {
 }
 
 RoleContextProvider.propTypes = {
+  context: PropTypes.any, // The application context
   children: PropTypes.any, // The children component
 };
 

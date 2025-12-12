@@ -94,35 +94,37 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   get canRemoveFromGroup() {
+    const {filter} = this.props.userWorkspaceContext;
     const selectedUser = this.selectedUser;
-    /*
-     * Avoid displaying the button if the user list is not filtered by group
-     * or if no user was selected
-     */
-    if (this.props.userWorkspaceContext.filter.type !== "FILTER-BY-GROUP" || !selectedUser) {
+
+    // Only show remove option when viewing a specific group's members
+    if (filter.type !== "FILTER-BY-GROUP" || !selectedUser) {
       return false;
     }
 
-    const group = this.props.userWorkspaceContext.filter.payload.group;
-    const isGroupManager = group.my_group_user && group.my_group_user.is_admin;
+    const group = filter.payload.group;
 
-    // Don't show the button if the user is not an administrator or the group manager
-    if (!this.isLoggedInUserAdmin() && !isGroupManager) {
+    // Only admins or group managers can remove members
+    const isAdmin = this.isLoggedInUserAdmin();
+    if (!isAdmin) {
+      const isManager = group.my_group_user && group.my_group_user.is_admin;
+      if (!isManager) {
+        return false;
+      }
+    }
+
+    const groupUsers = group.groups_users;
+    // Can't remove the only member of a group
+    if (groupUsers.length === 1) {
+      return false;
+    }
+    // Don't allow removing the last manager from the group
+    const managers = groupUsers.filter(u => u.is_admin);
+    if (managers.length === 1 && managers[0].user_id === selectedUser.id) {
       return false;
     }
 
-    // Don't show the button if there is only one user in the group
-    const soleMember = group.groups_users.length === 1;
-    if (soleMember) {
-      return false;
-    }
-
-    // Don't show the button if the selected user is the last manager of the selected group
-    const groupManagers = group.groups_users.filter(user => user.is_admin);
-    if (groupManagers.length === 1 && this.selectedUser.id === groupManagers[0].user_id) {
-      return false;
-    }
-    return group;
+    return true;
   }
 
   /**

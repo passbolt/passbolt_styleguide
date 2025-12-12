@@ -99,10 +99,10 @@ export default class RoleApiService extends AbstractService {
    * @returns {Promise<PassboltResponseEntity>} Response body
    * @throws {TypeError} if roleId is not a valid uuid
    */
-  async delete(roleid) {
-    isValidUuid(roleid);
+  async delete(roleId) {
+    isValidUuid(roleId);
 
-    const response = await this.apiClient.delete(roleid);
+    const response = await this.apiClient.delete(roleId);
     return new PassboltResponseEntity(response);
   }
 }

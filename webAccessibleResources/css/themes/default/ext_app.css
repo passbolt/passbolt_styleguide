@@ -4224,6 +4224,28 @@ html {
   --icon-color: var(--Text-and-icons-Main-text);
   margin-top: 0.1rem;
 }
+.drag-and-drop-wrapper .drag-and-drop .drag-image .default-avatar {
+  position: relative;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.drag-and-drop-wrapper .drag-and-drop .drag-image .default-avatar svg,
+.drag-and-drop-wrapper .drag-and-drop .drag-image .default-avatar img {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+.drag-and-drop-wrapper .drag-and-drop .drag-image .default-avatar img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  z-index: 2;
+}
+.drag-and-drop-wrapper .drag-and-drop .drag-image .default-avatar img[src]:not([src=""]) ~ svg {
+  display: none;
+}
 .drag-and-drop-wrapper .drag-and-drop span.message {
   color: var(--Text-and-icons-Main-text);
   font-size: 1.5rem;
@@ -5435,6 +5457,12 @@ iframe.cachette {
   font-size: 1.1rem;
   line-height: normal;
   background-color: var(--Action-button-Menu-action-button-background);
+  max-width: 16rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
 }
 .chips.beta {
   background: var(--Palette-Contrast-2);
@@ -6630,6 +6658,7 @@ iframe.cachette {
   align-self: stretch;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 .sidebar .section-card {
   padding: 0 1.6rem 1.6rem 1.6rem;
@@ -7909,6 +7938,7 @@ table.table-info.horizontal tbody tr:hover {
 }
 .usercard-col-2 .content-wrapper .content .subinfo .chips-group {
   float: right;
+  display: flex;
 }
 .usercard-col-2 .content-wrapper .content .subinfo .chips-group .chips {
   font-size: 1.2rem;
@@ -8060,6 +8090,7 @@ table.table-info.horizontal tbody tr:hover {
 }
 .usercard-detailed-col-2 .content-wrapper .content .subinfo .chips-group {
   float: right;
+  display: flex;
 }
 .usercard-detailed-col-2 .content-wrapper .content .subinfo .chips-group .chips {
   font-size: 1.2rem;
@@ -9968,9 +9999,6 @@ svg .section-card .card .title:first-child {
 .import-resources-result .dialog .import-dialog-summary.form-content .resources-section .summary-section.accordion.accordion-section .summary-header .summary-content,
 .import-resources-result .dialog .import-dialog-summary.form-content .folder-section .summary-section.accordion.accordion-section .summary-header .summary-content {
   width: 100%;
-}
-.import-resources-result .dialog .import-dialog-summary.form-content .folder-section {
-  padding-bottom: 1.6rem;
 }
 /* Resource secret history dialog */
 .resource-secret-history {

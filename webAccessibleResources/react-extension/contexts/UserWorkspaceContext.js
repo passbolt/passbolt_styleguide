@@ -26,6 +26,8 @@ import {withTranslation} from "react-i18next";
 import {isUserSuspended, isAccountRecoveryRequested, isMissingMetadataKey} from "../../shared/utils/userUtils";
 import {withRbac} from "../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../shared/services/rbacs/uiActionEnumeration";
+import {withRoles} from "./RoleContext";
+import RolesCollection from "../../shared/models/entity/role/rolesCollection";
 
 /**
  * Context related to users ( filter, current selections, etc.)
@@ -804,10 +806,12 @@ UserWorkspaceContextProvider.propTypes = {
   loadingContext: PropTypes.object, // The loading context
   dialogContext: PropTypes.any, // The dialog context
   rbacContext: PropTypes.object, // The Rbac context
+  roleContext: PropTypes.object, // The role context
+  roles: PropTypes.instanceOf(RolesCollection), // The roles collection
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withRbac(withDialog(withActionFeedback(withLoading(withTranslation('common')(UserWorkspaceContextProvider)))))));
+export default withAppContext(withRouter(withRbac(withDialog(withActionFeedback(withLoading(withRoles(withTranslation('common')(UserWorkspaceContextProvider))))))));
 
 /**
  * User Workspace Context Consumer HOC

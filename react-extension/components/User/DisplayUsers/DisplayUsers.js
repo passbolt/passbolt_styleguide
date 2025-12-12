@@ -46,6 +46,9 @@ import ColumnModel from "../../../../shared/models/column/ColumnModel";
 import CircleOffSVG from "../../../../img/svg/circle_off.svg";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
+import {withRoles} from "../../../contexts/RoleContext";
+import DisplayDragUser from "./DisplayDragUser";
+import {withDrag} from "../../../contexts/DragContext";
 
 /**
  * This component allows to display the filtered users into a grid
@@ -81,7 +84,10 @@ class DisplayUsers extends React.Component {
     this.handleUserRightClick = this.handleUserRightClick.bind(this);
     this.handleCheckboxWrapperClick = this.handleCheckboxWrapperClick.bind(this);
     this.handleSortByColumnClick = this.handleSortByColumnClick.bind(this);
+    this.handleUserDragStartEvent = this.handleUserDragStartEvent.bind(this);
+    this.handleDragEndEvent = this.handleDragEndEvent.bind(this);
     this.isRowInactive = this.isRowInactive.bind(this);
+    this.getDisabledGroupIds = this.getDisabledGroupIds.bind(this);
   }
 
   /**
@@ -116,7 +122,7 @@ class DisplayUsers extends React.Component {
     this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {disabled: true}}}));
     this.defaultColumns.push(new ColumnUserProfileModel({cellRenderer: {component: CellUserProfile, props: {hasAttentionRequiredFeature: this.hasAttentionRequiredColumn}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
     this.defaultColumns.push(new ColumnUserUsernameModel({headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Username")}}}));
-    this.defaultColumns.push(new ColumnUserRoleModel({cellRenderer: {component: CellUserRole}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Role")}}}));
+    this.defaultColumns.push(new ColumnUserRoleModel({getValue: user => this.props.userWorkspaceContext.getTranslatedRoleName(user.role_id), cellRenderer: {component: CellUserRole}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Role")}}}));
     if (this.hasSuspendedColumn) {
       this.defaultColumns.push(new ColumnUserSuspendedModel({cellRenderer: {component: CellUserSuspended}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Suspended")}}}));
     }
@@ -202,6 +208,34 @@ class DisplayUsers extends React.Component {
   }
 
   /**
+   * Handle the drag start on the selected user
+   * @param event The DOM event
+   * @param user The selected user
+   * @param isSelected is user selected
+   * @returns {Promise<void>}
+   */
+  async handleUserDragStartEvent(event, user, isSelected) {
+    if (!isSelected) {
+      await this.props.userWorkspaceContext.onUserSelected.single(user);
+    }
+
+    const draggedItems = {
+      users: this.props.userWorkspaceContext.selectedUsers,
+      groups: [],
+      disabledGroupIds: this.getDisabledGroupIds(this.props.userWorkspaceContext.selectedUsers)
+    };
+
+    this.props.dragContext.onDragStart(event, DisplayDragUser, draggedItems);
+  }
+
+  /**
+   * Handle when the user stop dragging content.
+   */
+  handleDragEndEvent() {
+    this.props.dragContext.onDragEnd();
+  }
+
+  /**
    * Returns the current list of filtered users to display
    */
   get users() {
@@ -221,6 +255,34 @@ class DisplayUsers extends React.Component {
    */
   get columnsUserSetting() {
     return ColumnsUserSettingCollection.DEFAULT;
+  }
+
+  /**
+   * Get the list of group IDs where the logged-in user is not an admin or any of the selected users are already members
+   * @param {Array} selectedUsers - Array of selected user objects
+   * @returns {string[]} Array of group IDs to disable
+   */
+  getDisabledGroupIds(selectedUsers) {
+    const groups = this.props.context.groups;
+    const currentUserId = this.props.context.loggedInUser?.id;
+
+    if (!groups || !currentUserId) {
+      return [];
+    }
+
+    return groups
+      .filter(group => {
+        const isAdmin = group.groups_users.some(
+          gu => gu.user_id === currentUserId && gu.is_admin
+        );
+        if (!isAdmin) {
+          return true;
+        }
+        return selectedUsers.some(selectedUser =>
+          group.groups_users.some(gu => gu.user_id === selectedUser.id)
+        );
+      })
+      .map(group => group.id);
   }
 
   /**
@@ -415,6 +477,8 @@ class DisplayUsers extends React.Component {
             onSortChange={this.handleSortByColumnClick}
             onRowClick={this.handleUserSelected}
             onRowContextMenu={this.handleUserRightClick}
+            onRowDragStart={this.handleUserDragStartEvent}
+            onRowDragEnd={this.handleDragEndEvent}
             selectedRowsIds={this.selectedUsersIds}
             isRowInactive={this.isRowInactive}
             rowsRef={this.listRef}>
@@ -428,11 +492,13 @@ class DisplayUsers extends React.Component {
 DisplayUsers.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The rbac context
+  roleContext: PropTypes.object, // The role context
   userWorkspaceContext: PropTypes.any, // The user workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
   accountRecoveryContext: PropTypes.object, // The account recovery context
+  dragContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withAccountRecovery(withTranslation('common')(DisplayUsers))))))));
+export default withAppContext(withRbac(withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withRoles(withAccountRecovery(withDrag(withTranslation('common')(DisplayUsers))))))))));

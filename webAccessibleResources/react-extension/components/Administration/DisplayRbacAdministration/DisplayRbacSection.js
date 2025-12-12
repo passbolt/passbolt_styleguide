@@ -19,6 +19,21 @@ import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 
 class DisplayRbacSection extends React.Component {
   /**
+   * Return a blank section
+   * @return {React.JSX.Element}
+   */
+  blankColumnSectionForRoles() {
+    const rows = [];
+    for (let i = 0; i < this.props.rolesCount; i++) {
+      rows.push(
+        <div className="flex-item" key={i}>
+          &nbsp;
+        </div>
+      );
+    }
+    return <>{rows}</>;
+  }
+  /**
    * @inheritDoc
    */
   render() {
@@ -28,12 +43,7 @@ class DisplayRbacSection extends React.Component {
           <div className="flex-item first">
             <span><CaretDownSVG className="caret-down"/>&nbsp;&nbsp;{this.props.label}</span>
           </div>
-          <div className="flex-item">
-            &nbsp;
-          </div>
-          <div className="flex-item">
-            &nbsp;
-          </div>
+          {this.blankColumnSectionForRoles()}
         </div>
         {this.props.children}
       </>
@@ -41,9 +51,14 @@ class DisplayRbacSection extends React.Component {
   }
 }
 
+DisplayRbacSection.defaultProps = {
+  rolesCount: 0,
+};
+
 DisplayRbacSection.propTypes = {
   label: PropTypes.string, // The section label.
   level: PropTypes.number, // The section level
+  rolesCount: PropTypes.number, // The number of roles
   t: PropTypes.func, // The translation function
   children: PropTypes.any, // The component children
 };

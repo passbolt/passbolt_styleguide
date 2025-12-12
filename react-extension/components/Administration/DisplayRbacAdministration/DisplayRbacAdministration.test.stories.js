@@ -14,7 +14,7 @@
 
 import React from "react";
 import DisplayRbacAdministration from "./DisplayRbacAdministration";
-import {propsWithPopulatedRbacContext} from "./DisplayRbacAdministration.test.data";
+import {propsWithMissingRbacContext, propsWithPopulatedRbacContext} from "./DisplayRbacAdministration.test.data";
 import {AdminRbacContext} from "../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
 import {MemoryRouter} from "react-router-dom";
 import TranslationProvider from "../../Common/Internationalisation/TranslationProvider";
@@ -78,3 +78,9 @@ export const Initial = {
   args: propsWithPopulatedRbacContext(),
   parameters: parameters
 };
+
+export const WithMissingRbac = {
+  args: propsWithMissingRbacContext(),
+  parameters: parameters
+};
+
