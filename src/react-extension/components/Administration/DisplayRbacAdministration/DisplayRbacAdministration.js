@@ -294,6 +294,14 @@ class DisplayRbacAdministration extends React.Component {
   }
 
   /**
+   * Is the user allowed to use account recovery capability.
+   * @returns {boolean}
+   */
+  get canIUseAccountRecovery() {
+    return this.props.context.siteSettings.canIUse("accountRecovery");
+  }
+
+  /**
    * Check if the component is ready to display its rows.
    * @returns {boolean}
    */
@@ -424,20 +432,24 @@ class DisplayRbacAdministration extends React.Component {
                         roles={customizableRoles}
                         onChange={this.updateRbacControlFunction}/>
                     </DisplayRbacSection>
-                    <DisplayRbacSection label={this.props.t('Account recovery request')} level={1} rolesCount={rolesCount}>
-                      <DisplayRbacItem label={this.props.t('Account recovery request view')}
-                        actionName={actions.ACCOUNT_RECOVERY_REQUEST_VIEW} level={2}
-                        rbacs={this.props.adminRbacContext.rbacs}
-                        rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                        roles={customizableRoles}
-                        onChange={this.updateRbacControlFunction}/>
-                      <DisplayRbacItem label={this.props.t('Account recovery request review')}
-                        actionName={actions.ACCOUNT_RECOVERY_RESPONSE_CREATE} level={2}
-                        rbacs={this.props.adminRbacContext.rbacs}
-                        rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                        roles={customizableRoles}
-                        onChange={this.updateRbacControlFunction}/>
-                    </DisplayRbacSection>
+                    {this.canIUseAccountRecovery &&
+                      <>
+                        <DisplayRbacSection label={this.props.t('Account recovery request')} level={1} rolesCount={rolesCount}>
+                          <DisplayRbacItem label={this.props.t('Account recovery request view')}
+                            actionName={actions.ACCOUNT_RECOVERY_REQUEST_VIEW} level={2}
+                            rbacs={this.props.adminRbacContext.rbacs}
+                            rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                            roles={customizableRoles}
+                            onChange={this.updateRbacControlFunction}/>
+                          <DisplayRbacItem label={this.props.t('Account recovery request review')}
+                            actionName={actions.ACCOUNT_RECOVERY_RESPONSE_CREATE} level={2}
+                            rbacs={this.props.adminRbacContext.rbacs}
+                            rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                            roles={customizableRoles}
+                            onChange={this.updateRbacControlFunction}/>
+                        </DisplayRbacSection>
+                      </>
+                    }
                     <div className="flex-container inner header-flex">
                       <div className="flex-item first">
                         <label><Trans>UI Permissions</Trans></label>
