@@ -36,7 +36,8 @@ export default class DisplayUserDetailsActivityPage {
             <DisplayUserDetailsActivity {...props}/>
           </Router>
         </MockTranslationProvider>
-      </AppContext.Provider>
+      </AppContext.Provider>,
+      {legacyRoot: true}
     );
   }
 

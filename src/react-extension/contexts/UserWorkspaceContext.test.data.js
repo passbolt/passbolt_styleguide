@@ -4,8 +4,9 @@
  * @returns {any}
  */
 import MockPort from "../test/mock/MockPort";
-import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../shared/models/entity/role/role.test.data";
+import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../shared/models/entity/role/roleEntity.test.data";
 import {UserWorkspaceFilterTypes} from "./UserWorkspaceContext";
+import {defaultRoleContext} from "./RoleContext.test.data";
 
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
@@ -24,15 +25,20 @@ export function defaultAppContext(appContext) {
  * Default props
  */
 export function defaultProps(data = {}) {
+  const roleContext = data.roleContext || defaultRoleContext();
+  const roles = data.roles || roleContext.getAllRoles();
+
   return {
     rbacContext: {
-      canIUseUiAction: () => true,
+      canIUseAction: () => true,
     },
     loadingContext: {
       add: jest.fn(),
       remove: jest.fn(),
     },
     ...data,
+    roleContext: roleContext,
+    roles: roles,
   };
 }
 

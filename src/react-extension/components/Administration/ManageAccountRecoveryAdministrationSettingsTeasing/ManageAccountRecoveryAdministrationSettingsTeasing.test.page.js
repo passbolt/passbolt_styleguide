@@ -32,7 +32,8 @@ export default class ManageAccountRecoveryAdministrationSettingsTeasingPage {
         <AppContext.Provider value={appContext}>
           <ManageAccountRecoveryAdministrationSettingsTeasing {...props}/>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

@@ -14,8 +14,8 @@
 
 import {
   controlFunctionResolutions,
-  defaultAdminUiActionControlResolution,
-  defaultUserUiActionControlResolution
+  defaultAdminActionControlResolution,
+  defaultUserActionControlResolution
 } from "./controlFunctionEnumeration";
 import DenyControlFunction from "./controlFunctions/denyControlFunction";
 import AllowControlFunction from "./controlFunctions/allowControlFunction";
@@ -40,19 +40,19 @@ export default class GetControlFunctionService {
 
   /**
    * Get the default control function for an admin for a given ui action.
-   * @param {string} uiActionName The ui action name to get the control function for.
+   * @param {string} actionName The action name to get the control function for.
    * @returns {ControlFunction}
    */
-  static getDefaultForAdminAndUiAction(uiActionName) {
-    return defaultAdminUiActionControlResolution[uiActionName] || AllowControlFunction;
+  static getDefaultForAdminAndAction(actionName) {
+    return defaultAdminActionControlResolution[actionName] || AllowControlFunction;
   }
 
   /**
    * Get the default control function for a user and for a given ui aciton
-   * @param {string} uiActionName The ui action name to get the control function for.
+   * @param {string} actionName The action name to get the control function for.
    * @returns {ControlFunction}
    */
-  static getDefaultForUserAndUiAction(uiActionName) {
-    return defaultUserUiActionControlResolution[uiActionName] || AllowControlFunction;
+  static getDefaultForUserAndAction(actionName) {
+    return defaultUserActionControlResolution[actionName] || AllowControlFunction;
   }
 }

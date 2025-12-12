@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -41,7 +40,8 @@ export default class DisplayUsersPage {
             </Router>
           </UserWorkspaceContext.Provider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 
@@ -74,6 +74,28 @@ export default class DisplayUsersPage {
   }
 
   /**
+   * Returns the number of column
+   * @return {number}
+   */
+  get columnCount() {
+    return this._page.container.querySelectorAll('table thead th').length;
+  }
+
+  /**
+   * Get the column at the index specified in paramenter
+   * @param {number} index The index of the column
+   * @return {{readonly name: string|*}|string|*}
+   */
+  column(index) {
+    const element = this._page.container.querySelectorAll('table thead th')[index - 1];
+    return {
+      get name() {
+        return element.querySelector('.cell-header .cell-header-text').textContent;
+      }
+    };
+  }
+
+  /**
    * Returns the index-th user with useful accessors
    * @index The user index
    */
@@ -90,6 +112,41 @@ export default class DisplayUsersPage {
         const leftClick = {button: 0};
         fireEvent.click(element, leftClick);
         await waitFor(() => {});
+      },
+      async rightClick() {
+        const rect = element.getBoundingClientRect();
+        fireEvent.contextMenu(element, {
+          button: 2,
+          pageX: rect.left + rect.width / 2,
+          pageY: rect.top + rect.height / 2,
+          preventDefault: () => {}
+        });
+        await waitFor(() => {});
+      },
+      async dragStart() {
+        fireEvent.dragStart(element, {
+          dataTransfer: {
+            effectAllowed: '',
+            setDragImage: () => {}
+          }
+        });
+        await waitFor(() => {});
+      },
+      async dragEnd() {
+        fireEvent.dragEnd(element);
+        await waitFor(() => {});
+      },
+      get checkboxElement() {
+        return element.querySelector('.cell-checkbox');
+      },
+      async clickCheckbox() {
+        const checkbox = element.querySelector('.cell-checkbox');
+        if (checkbox) {
+          fireEvent.click(checkbox, {
+            stopPropagation: () => {}
+          });
+          await waitFor(() => {});
+        }
       }
     };
   }

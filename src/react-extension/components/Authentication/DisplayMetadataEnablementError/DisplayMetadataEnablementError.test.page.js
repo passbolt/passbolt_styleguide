@@ -29,7 +29,8 @@ export default class DisplayMetadataEnablementErrorPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayMetadataEnablementError {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

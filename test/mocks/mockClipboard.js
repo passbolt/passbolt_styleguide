@@ -32,12 +32,18 @@ class MockedClipboard {
   }
 }
 
-const originalClipboard = global.navigator.clipboard;
+let originalClipboard;
 
 beforeEach(() => {
-  global.navigator.clipboard = new MockedClipboard();
+  originalClipboard = Object.getOwnPropertyDescriptor(navigator, 'clipboard');
+
+  // Replace clipboard with mock
+  Object.defineProperty(navigator, 'clipboard', {
+    value: new MockedClipboard(),
+    configurable: true,
+  });
 });
 
 afterEach(() => {
-  global.navigator.clipboard = originalClipboard;
+    Object.defineProperty(navigator, 'clipboard', originalClipboard || { configurable: true, value: undefined});
 });

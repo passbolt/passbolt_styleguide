@@ -12,13 +12,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.7.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 import DisplayResourceSecretHistory from "./DisplayResourceSecretHistory";
 import ManageDialogs from "../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../contexts/DialogContext";
+import userEvent from "@testing-library/user-event";
 /**
  * The Display Resource Secret History component represented as a page
  */
@@ -36,8 +37,11 @@ export default class DisplayResourceSecretHistoryPage {
             <DisplayResourceSecretHistory {...props}/>
           </DialogContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -150,9 +154,7 @@ export default class DisplayResourceSecretHistoryPage {
 
   /** Click on the element */
   async click(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /** Click without wait for on the element */

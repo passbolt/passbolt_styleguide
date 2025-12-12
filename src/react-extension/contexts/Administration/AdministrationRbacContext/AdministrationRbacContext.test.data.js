@@ -14,8 +14,8 @@
 
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
-import {rolesCollectionData} from "../../../../shared/models/entity/role/rolesCollection.test.data";
-import {settingsRbacsCollectionData} from "../../../../shared/models/entity/rbac/rbacsCollection.test.data";
+import {rolesCollectionDto} from "../../../../shared/models/entity/role/rolesCollection.test.data";
+import {settingsRbacsCollectionData, settingsRbacsCollectionFromRoleCollectionData} from "../../../../shared/models/entity/rbac/rbacsCollection.test.data";
 import {defaultAppContext} from "../../ApiAppContext.test.data";
 
 /**
@@ -58,9 +58,23 @@ export function defaultAdministrationRbacContext(context = {}) {
  * @returns {object}
  */
 export function populatedAdministrationRbacContext(context = {}) {
+  const rolesCollection = rolesCollectionDto;
+  return defaultAdministrationRbacContext({
+    rbacs: new RbacsCollection(settingsRbacsCollectionFromRoleCollectionData(rolesCollection)),
+    roles: new RolesCollection(rolesCollection),
+    ...context
+  });
+}
+
+/**
+ * Returns a populated version of administration rbac context with missing Rbac elements for the unit test
+ * @param context An existing administration context
+ * @returns {object}
+ */
+export function populatedAdministrationWithMissingRbacContext(context = {}) {
   return defaultAdministrationRbacContext({
     rbacs: new RbacsCollection(settingsRbacsCollectionData()),
-    roles: new RolesCollection(rolesCollectionData),
+    roles: new RolesCollection(rolesCollectionDto),
     ...context
   });
 }

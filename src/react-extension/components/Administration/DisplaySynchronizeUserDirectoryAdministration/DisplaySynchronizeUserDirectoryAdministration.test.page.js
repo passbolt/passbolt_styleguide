@@ -35,7 +35,8 @@ export default class DisplaySynchronizeUserDirectoryAdministrationPage {
             <DisplaySynchronizeUserDirectoryAdministration {...props}/>
           </AdminUserDirectoryContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

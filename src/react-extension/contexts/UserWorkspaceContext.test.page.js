@@ -284,7 +284,8 @@ export default class UserWorkspaceContextPage {
             <a className="group"></a>
           </NavLink>x
         </Router>
-      </AppContext.Provider>
+      </AppContext.Provider>,
+      {legacyRoot: true}
     );
   }
 }

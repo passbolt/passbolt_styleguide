@@ -33,7 +33,8 @@ export default class ResourceViewPagePage {
         <MemoryRouter initialEntries={[props.initialEntries]}>
           <Route path="/:id" component={routerProps => <ResourceViewPage {...props} {...routerProps}/>}/>
         </MemoryRouter>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

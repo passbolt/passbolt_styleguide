@@ -29,7 +29,8 @@ export default class AcceptLoginServerKeyChangePage {
     this._page = render(
       <MockTranslationProvider>
         <AcceptLoginServerKeyChange {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

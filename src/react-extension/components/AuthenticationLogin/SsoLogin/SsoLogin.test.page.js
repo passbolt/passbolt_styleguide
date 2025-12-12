@@ -32,7 +32,8 @@ export default class LoginPage {
         <Router>
           <SsoLogin {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

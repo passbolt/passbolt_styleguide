@@ -18,11 +18,10 @@ import {defaultProps} from "./GenerateOrganizationKey.test.data";
 
 beforeEach(() => {
   jest.resetModules();
-  jest.useFakeTimers();
 });
 
 afterEach(() => {
-  jest.clearAllTimers();
+  jest.restoreAllMocks();
 });
 
 describe('As AD I can generate an ORK', () => {
@@ -111,7 +110,7 @@ describe('As AD I can generate an ORK', () => {
   it("As a logged in administrator in the administration workspace, I can show or hide the content of the “Organization key passphrase” text field in the Organization Recovery Key dialog", async() => {
     expect.assertions(4);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
-    await waitFor(() => {});
+
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
 
@@ -130,7 +129,7 @@ describe('As AD I can generate an ORK', () => {
   it("As a logged in administrator in the administration workspace, I can show or hide the content of the “Organization key passphrase confirmation” text field in the Organization Recovery Key dialog", async() => {
     expect.assertions(4);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
-    await waitFor(() => {});
+
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
 
@@ -184,7 +183,7 @@ describe('As AD I can generate an ORK', () => {
   it("As a logged in administrator in the administration workspace, I cannot generate OpenPGP Public key in the Organization Recovery Key settings without a strong passphrase", async() => {
     expect.assertions(5);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
-    await waitFor(() => {});
+
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
     await page.clickOnGenerateTab();
@@ -206,7 +205,7 @@ describe('As AD I can generate an ORK', () => {
   });
 
   it("As a logged in administrator in the administration workspace, I can generate OpenPGP Public key when the form validates", async() => {
-    expect.assertions(5);
+    expect.assertions(6);
     const props = defaultProps();
 
     const expectedDto = {
@@ -223,7 +222,7 @@ describe('As AD I can generate an ORK', () => {
     });
 
     const page = new SelectAccountRecoveryOrganizationKeyPage(props);
-    await waitFor(() => {});
+
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
     await page.clickOnGenerateTab();
@@ -246,7 +245,6 @@ describe('As AD I can generate an ORK', () => {
     const props = defaultProps();
     jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.reject());
     const page = new SelectAccountRecoveryOrganizationKeyPage(props);
-    await waitFor(() => {});
 
     await page.clickOnGenerateTab();
 
@@ -265,9 +263,10 @@ describe('As AD I can generate an ORK', () => {
   it("As an administrator I want to know if the weak passphrase I am entering to generate an organization recovery key has been pwned when submit", async() => {
     expect.assertions(5);
     const props = defaultProps();
-    jest.spyOn(props.context.port, "request").mockImplementation(() => Promise.resolve(2));
+
+    props.context.port.addRequestListener('passbolt.secrets.powned-password', () => 2); ;
+
     const page = new SelectAccountRecoveryOrganizationKeyPage(props);
-    await waitFor(() => {});
 
     await page.clickOnGenerateTab();
 
@@ -275,8 +274,6 @@ describe('As AD I can generate an ORK', () => {
     await page.type("admin@passbolt.com",  page.emailField);
     await page.type("azertyazertyazerty", page.passphraseField);
     await page.type("azertyazertyazerty", page.passphraseConfirmationField);
-
-    await waitFor(() => {});
 
     expect(page.passphraseFieldError).toBeNull();
 
@@ -295,7 +292,7 @@ describe('As AD I can generate an ORK', () => {
     expect.assertions(1);
     const props = defaultProps();
     const page = new SelectAccountRecoveryOrganizationKeyPage(props);
-    await waitFor(() => {});
+
 
     await page.clickOnGenerateTab();
 
@@ -305,7 +302,7 @@ describe('As AD I can generate an ORK', () => {
   it("As an administrator generating an account recovery organization key, I should see a complexity as Quality if the passphrase is empty", async() => {
     expect.assertions(3);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
-    await waitFor(() => {});
+
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
     await page.clickOnGenerateTab();

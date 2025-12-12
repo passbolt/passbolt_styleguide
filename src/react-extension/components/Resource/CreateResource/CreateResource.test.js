@@ -51,12 +51,8 @@ describe("See the Create Resource", () => {
   beforeEach(() => {
     jest.resetModules();
     jest.clearAllMocks();
-    jest.useFakeTimers();
   });
 
-  afterEach(() => {
-    jest.clearAllTimers();
-  });
 
   describe('As LU I can start adding a resource', () => {
     describe('Styleguide', () => {
@@ -64,7 +60,6 @@ describe("See the Create Resource", () => {
         expect.assertions(18);
         const props = defaultProps(); // The props to pass
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
         // Dialog title exists and correct
         expect(page.exists()).toBeTruthy();
         expect(page.header.textContent).toBe("Create a resource");
@@ -111,7 +106,7 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         expect(page.exists()).toBeTruthy();
         expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
@@ -128,7 +123,7 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         expect(page.exists()).toBeTruthy();
         expect(page.sectionItemSelected.textContent).toStrictEqual("Passwords");
@@ -147,7 +142,7 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         await page.click(page.addSecret);
         await page.click(page.addSecretNote);
@@ -162,7 +157,7 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         await page.click(page.addSecret);
         await page.click(page.addSecretTotp);
@@ -177,7 +172,7 @@ describe("See the Create Resource", () => {
 
         const props = defaultTotpProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         await page.click(page.addSecret);
         await page.click(page.addSecretPassword);
@@ -192,7 +187,7 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto()),});
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         await page.click(page.addSecret);
         await page.click(page.addSecretTotp);
@@ -209,7 +204,7 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         await page.click(page.addSecret);
         await page.click(page.addSecretNote);
@@ -228,7 +223,7 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         await page.click(page.addSecret);
         await page.click(page.addSecretTotp);
@@ -249,7 +244,7 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto()),});
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         await page.click(page.addSecret);
         await page.click(page.addSecretTotp);
@@ -270,7 +265,6 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
 
         expect(page.exists()).toBeTruthy();
 
@@ -284,9 +278,8 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
 
-        page.fillInput(page.uri, "a".repeat(1024));
+        await page.fillInput(page.uri, "a".repeat(1024));
 
         // expectations
         expect(page.uri.value).toEqual("a".repeat(1024));
@@ -299,10 +292,10 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         page.uri.setAttribute("maxLength", 1025);
-        page.fillInput(page.uri, "a".repeat(1025));
+        await page.fillInput(page.uri, "a".repeat(1025));
 
         // expectations
         expect(page.uri.value).toEqual("a".repeat(1025));
@@ -320,7 +313,7 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         expect(page.exists()).toBeTruthy();
 
@@ -334,9 +327,9 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
 
-        page.fillInput(page.username, "a".repeat(255));
+
+        await page.fillInput(page.username, "a".repeat(255));
 
         // expectations
         expect(page.username.value).toEqual("a".repeat(255));
@@ -349,10 +342,10 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         page.username.setAttribute("maxLength", 256);
-        page.fillInput(page.username, "a".repeat(256));
+        await page.fillInput(page.username, "a".repeat(256));
 
         // expectations
         expect(page.username.value).toEqual("a".repeat(256));
@@ -369,7 +362,7 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         expect(page.exists()).toBeTruthy();
 
@@ -383,9 +376,8 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
 
-        page.fillInput(page.password, "a".repeat(4096));
+        await page.fillInput(page.password, "a".repeat(4096));
 
         // expectations
         expect(page.password.value).toEqual("a".repeat(4096));
@@ -398,10 +390,11 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         page.password.setAttribute("maxLength", 4097);
-        page.fillInput(page.password, "a".repeat(4097));
+
+        await page.fillInput(page.password, "a".repeat(4097));
 
         // expectations
         expect(page.password.value).toEqual("a".repeat(4097));
@@ -419,7 +412,7 @@ describe("See the Create Resource", () => {
         const props = defaultProps();
         const page = new CreateResourcePage(props);
         jest.spyOn(SecretGenerator, "generate").mockImplementation(() => "generate-password");
-        await waitFor(() => {});
+
 
         expect(page.exists()).toBeTruthy();
         expect(page.password.value).toBe("");
@@ -452,7 +445,7 @@ describe("See the Create Resource", () => {
 
       it('As a signed-in user I should be aware about the name maxLength', async() => {
         expect.assertions(3);
-        page.fillInput(page.name, "a".repeat(255));
+        await page.fillInput(page.name, "a".repeat(255));
 
         // expectations
         expect(page.name.value).toEqual("a".repeat(255));
@@ -464,7 +457,7 @@ describe("See the Create Resource", () => {
         expect.assertions(5);
 
         page.name.setAttribute("maxLength", 256);
-        page.fillInput(page.name, "a".repeat(256));
+        await page.fillInput(page.name, "a".repeat(256));
 
         // expectations
         expect(page.name.value).toEqual("a".repeat(256));
@@ -500,7 +493,7 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be aware about the description maxLength', async() => {
         expect.assertions(3);
 
-        page.fillInput(page.description, "a".repeat(10000));
+        await page.fillInput(page.description, "a".repeat(10000));
 
         // expectations
         expect(page.description.value).toEqual("a".repeat(10000));
@@ -512,7 +505,7 @@ describe("See the Create Resource", () => {
         expect.assertions(5);
 
         page.description.setAttribute("maxLength", 10001);
-        page.fillInput(page.description, "a".repeat(10001));
+        await page.fillInput(page.description, "a".repeat(10001));
 
         // expectations
         expect(page.description.value).toEqual("a".repeat(10001));
@@ -531,7 +524,7 @@ describe("See the Create Resource", () => {
         const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto())});
 
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         await page.click(page.menuDescription);
         await page.fillInput(page.description, "description");
@@ -561,7 +554,7 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be aware about the URI maxLength', async() => {
         expect.assertions(3);
 
-        page.fillInput(page.uri, "a".repeat(1024));
+        await page.fillInput(page.uri, "a".repeat(1024));
 
         // expectations
         expect(page.uri.value).toEqual("a".repeat(1024));
@@ -572,7 +565,7 @@ describe("See the Create Resource", () => {
       it('As a signed-in user I should be blocked if I exceed the URI maxLength', async() => {
         expect.assertions(5);
 
-        page.fillInput(page.uri, "a".repeat(1025));
+        await page.fillInput(page.uri, "a".repeat(1025));
 
         // expectations
         expect(page.uri.value).toEqual("a".repeat(1025));
@@ -716,7 +709,7 @@ describe("See the Create Resource", () => {
 
         await page.fillInput(page.resourceTotpKey, "key");
         await page.click(page.resourceTotpCode);
-        await waitFor(() => {});
+
         // expectations
         expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledTimes(1);
       });
@@ -885,7 +878,7 @@ describe("See the Create Resource", () => {
         const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto())});
 
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         await page.click(page.getSectionItem(2));
         await page.fillInput(page.note, "note");
@@ -995,15 +988,14 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
 
         expect(page.exists()).toBeTruthy();
 
-        page.fillInput(page.password, "test");
-        await waitFor(() => {});
+        await page.fillInput(page.password, "test");
 
-        page.click(page.saveButton);
-        await waitFor(() => {});
+
+        await page.click(page.saveButton);
+
 
         const confirmDialogProps = {
           resourceName: "",
@@ -1022,19 +1014,19 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         expect(page.exists()).toBeTruthy();
 
-        page.fillInput(page.password, "test");
-        await waitFor(() => {});
+        await page.fillInput(page.password, "test");
+
 
         const error = new UserAbortsOperationError();
         jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
         jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
 
-        page.click(page.saveButton);
-        await waitFor(() => {});
+        await page.click(page.saveButton);
+
 
         const confirmDialogProps = {
           resourceName: "",
@@ -1053,19 +1045,17 @@ describe("See the Create Resource", () => {
 
         const props = defaultProps();
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
 
         expect(page.exists()).toBeTruthy();
 
         page.fillInput(page.password, "test");
-        await waitFor(() => {});
 
         const error = new Error("unexpected error");
         jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
         jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
 
-        page.click(page.saveButton);
-        await waitFor(() => {});
+        await page.click(page.saveButton);
+
 
         const confirmDialogProps = {
           resourceName: "",
@@ -1089,15 +1079,15 @@ describe("See the Create Resource", () => {
           passwordPoliciesContext: defaultPasswordPoliciesContext(),
         });
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         expect(page.exists()).toBeTruthy();
 
-        page.fillInput(page.password, "Az12./RTY2346");
-        await waitFor(() => {});
+        await page.fillInput(page.password, "Az12./RTY2346");
 
-        page.click(page.saveButton);
-        await waitFor(() => {});
+
+        await page.click(page.saveButton);
+
 
         const confirmDialogProps = {
           resourceName: "",
@@ -1120,19 +1110,19 @@ describe("See the Create Resource", () => {
           passwordPoliciesContext: defaultPasswordPoliciesContext(),
         });
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         expect(page.exists()).toBeTruthy();
 
-        page.fillInput(page.password, "Az12./RTY2346");
-        await waitFor(() => {});
+        await page.fillInput(page.password, "Az12./RTY2346");
+
 
         const error = new UserAbortsOperationError();
         jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
         jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
 
-        page.click(page.saveButton);
-        await waitFor(() => {});
+        await page.click(page.saveButton);
+
 
         const confirmDialogProps = {
           resourceName: "",
@@ -1155,19 +1145,19 @@ describe("See the Create Resource", () => {
           passwordPoliciesContext: defaultPasswordPoliciesContext(),
         });
         const page = new CreateResourcePage(props);
-        await waitFor(() => {});
+
 
         expect(page.exists()).toBeTruthy();
 
-        page.fillInput(page.password, "Az12./RTY2346");
-        await waitFor(() => {});
+        await page.fillInput(page.password, "Az12./RTY2346");
+
 
         const error = new Error("unexpected error");
         jest.spyOn(props.dialogContext, "open").mockImplementationOnce((component, props) => props.onConfirm());
         jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
 
-        page.click(page.saveButton);
-        await waitFor(() => {});
+        await page.click(page.saveButton);
+
 
         const confirmDialogProps = {
           resourceName: "",
@@ -1189,7 +1179,7 @@ describe("See the Create Resource", () => {
       expect.assertions(2);
       const props = defaultProps(); // The props to pass
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
+
       expect(page.exists()).toBeTruthy();
       await page.click(page.cancelButton);
       expect(props.onClose).toHaveBeenCalled();
@@ -1199,7 +1189,7 @@ describe("See the Create Resource", () => {
       expect.assertions(2);
       const props = defaultProps(); // The props to pass
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
+
       expect(page.exists()).toBeTruthy();
       await page.click(page.dialogClose);
       expect(props.onClose).toHaveBeenCalled();
@@ -1209,7 +1199,7 @@ describe("See the Create Resource", () => {
       expect.assertions(2);
       const props = defaultProps(); // The props to pass
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
+
       expect(page.exists()).toBeTruthy();
       await page.escapeKey(page.dialogClose);
       expect(props.onClose).toHaveBeenCalled();
@@ -1224,11 +1214,11 @@ describe("See the Create Resource", () => {
         default_expiry_period: expirationPeriod
       });
 
-      const fakeNow = new Date('2023-01-01T00:00:00.000Z');
+      const fakeNow = DateTime.fromISO("2023-01-01T00:00:00.000Z", {zone: 'utc'});
+      jest.spyOn(DateTime, "utc").mockImplementation(() => fakeNow);
 
-      jest.useFakeTimers().setSystemTime(fakeNow);
+      const expectedExpiryDate = fakeNow.plus({days: expirationPeriod});
 
-      const expectedExpiryDate = DateTime.utc().plus({days: expirationPeriod});
 
       const props = defaultProps({
         passwordExpiryContext: defaultPasswordExpirySettingsContext({
@@ -1239,7 +1229,6 @@ describe("See the Create Resource", () => {
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
 
       await page.click(page.saveButton);
 
@@ -1276,7 +1265,7 @@ describe("See the Create Resource", () => {
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
+
 
       await page.fillInput(page.password, "RN9n8XuECN3");
 
@@ -1323,7 +1312,7 @@ describe("See the Create Resource", () => {
       const mockRequests = jest.fn(async(message, arg1) => Object.assign(customFields, arg1.metadata.custom_fields));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
+
 
       await page.fillInput(page.password, "RN9n8XuECN3");
 
@@ -1402,7 +1391,7 @@ describe("See the Create Resource", () => {
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
+
 
       await page.fillInput(page.password, "RN9n8XuECN3");
 
@@ -1459,7 +1448,7 @@ describe("See the Create Resource", () => {
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
+
 
       await page.fillInput(page.password, "RN9n8XuECN3");
 
@@ -1515,7 +1504,7 @@ describe("See the Create Resource", () => {
       const mockRequests = jest.fn(async(message, arg1) => Object.assign(customFields, arg1.metadata.custom_fields));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
+
 
       await page.fillInput(page.getCustomFieldKey(0), "PASSBOLT");
       await page.fillInput(page.getCustomFieldValue(0), "This is a secret");
@@ -1576,7 +1565,7 @@ describe("See the Create Resource", () => {
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
+
 
       await page.fillInput(page.password, "RN9n8XuECN3");
 
@@ -1621,7 +1610,7 @@ describe("See the Create Resource", () => {
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
+
 
       await page.fillInput(page.password, "RN9n8XuECN3");
 
@@ -1672,7 +1661,7 @@ describe("See the Create Resource", () => {
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
+
 
       await page.fillInput(page.password, "RN9n8XuECN3");
 
@@ -1721,7 +1710,7 @@ describe("See the Create Resource", () => {
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
+
 
       await page.click(page.addSecret);
       await page.click(page.addSecretTotp);
@@ -1765,7 +1754,7 @@ describe("See the Create Resource", () => {
       const mockRequests = jest.fn(async(message, arg1) => Object.assign({id: createdResourceId}, arg1));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
+
 
       await page.fillInput(page.password, "RN9n8XuECN3");
 
@@ -1805,7 +1794,7 @@ describe("See the Create Resource", () => {
       expect.assertions(1);
       const props = defaultProps(); // The props to pass
       const page = new CreateResourcePage(props);
-      await waitFor(() => {});
+
 
       const error = new PassboltApiFetchError("Jest simulate API error.");
       jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });

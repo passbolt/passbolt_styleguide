@@ -40,7 +40,8 @@ export default class DeleteResourceTagPage {
             </Router>
           </DialogContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

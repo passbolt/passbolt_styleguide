@@ -39,7 +39,8 @@ export default class DisplayUserBadgeMenuPage {
             <DisplayUserBadgeMenu {...props}/>
           </Router>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

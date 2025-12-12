@@ -18,6 +18,7 @@ import {defaultProps} from './DisplayPasswordPoliciesAdministration.test.data';
 import DisplayPasswordPoliciesAdministrationPage from './DisplayPasswordPoliciesAdministration.test.page';
 import {waitFor} from '@testing-library/dom';
 import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
+import {screen} from "@testing-library/react";
 
 async function waitForTrue(callback) {
   return waitFor(() => {
@@ -71,7 +72,6 @@ describe("DisplayPasswordPoliciesAdministration", () => {
 
       expect(page.settingsChangedBanner).toBeNull();
       await page.togglePasswordPanel();
-      await waitFor(() => {});
 
       await page.setFormWith({
         passwordLengthInput: 20
@@ -248,6 +248,11 @@ describe("DisplayPasswordPoliciesAdministration", () => {
     it("As a logged in administrator I can toggle the external dictionary check", async() => {
       expect.assertions(1);
 
+      await screen.findByRole("checkbox", {
+        name: /external services/i,
+        checked: true,
+      });
+
       const currentToggleState = page.externalDictionaryCheck.checked;
       await page.clickOnExternalDictionaryCheck();
 
@@ -273,7 +278,6 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect.assertions(1);
 
       await page.togglePasswordPanel();
-      await waitFor(() => {});
 
       const maskButtons = page.activeMaskButtons;
 
@@ -298,7 +302,6 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       });
 
       await page.clickOnSave();
-      await waitFor(() => {});
 
       expect(page.passwordLengthError).not.toBeNull();
       expect(page.passphraseLengthError).not.toBeNull();
@@ -335,7 +338,6 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       props.context.port.addRequestListener("passbolt.password-policies.get-admin-settings", () => currentSettings);
       const page = new DisplayPasswordPoliciesAdministrationPage(context, props);
 
-      await waitFor(() => {});
 
       expect(page.sourceChangingBanner).toBeNull();
     });
@@ -348,7 +350,6 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       props.context.port.addRequestListener("passbolt.password-policies.get-admin-settings", () => currentSettings);
       const page = new DisplayPasswordPoliciesAdministrationPage(context, props);
 
-      await waitFor(() => {});
 
       expect(page.sourceChangingBanner).toBeNull();
     });

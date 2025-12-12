@@ -19,6 +19,7 @@
 import {defaultProps, defaultAppContext} from "./ResourceWorkspaceContext.test.data";
 import ResourceWorkspaceContextPage from "./ResourceWorkspaceContext.test.page";
 import {ResourceWorkspaceFilterTypes} from "./ResourceWorkspaceContext";
+import {waitFor} from "@testing-library/react";
 import {waitForTrue} from "../../../test/utils/waitFor";
 
 describe("Resource Workspace Context", () => {
@@ -50,61 +51,51 @@ describe("Resource Workspace Context", () => {
 
     it("AS LU I should have an SHARED-WITH-ME filter when I went to /app/passwords with such a filter", async() => {
       await page.goToShareWithMe();
-      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL && page.filter.type !== ResourceWorkspaceFilterTypes.NONE);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.SHARED_WITH_ME);
     });
 
     it("AS LU I should have an EXPIRED filter when I went to /app/passwords/filter/expried with such a filter", async() => {
       await page.goToExpired();
-      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL && page.filter.type !== ResourceWorkspaceFilterTypes.NONE);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.EXPIRED);
     });
 
     it("AS LU I should have an ITEMS-I-OWN filter when I went to /app/passwords with such a filter", async() => {
       await page.goToItemsIOwn();
-      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL && page.filter.type !== ResourceWorkspaceFilterTypes.NONE);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.ITEMS_I_OWN);
     });
 
     it("AS LU I should have an PRIVATE filter when I went to /app/passwords with such a filter", async() => {
       await page.goToPrivate();
-      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL && page.filter.type !== ResourceWorkspaceFilterTypes.NONE);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.PRIVATE);
     });
 
     it("AS LU I should have an FAVORITE filter when I went to /app/passwords with such a filter", async() => {
       await page.goToFavorite();
-      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL && page.filter.type !== ResourceWorkspaceFilterTypes.NONE);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.FAVORITE);
     });
 
     it("AS LU I should have an TEXT filter when I went to /app/passwords with such a filter", async() => {
       await page.goToText("some text");
-      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL && page.filter.type !== ResourceWorkspaceFilterTypes.NONE);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.TEXT);
     });
 
     it("AS LU I should have an GROUP filter when I went to /app/passwords with such a filter", async() => {
       await page.goToGroup({group: {id: 'some group id'}});
-      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL && page.filter.type !== ResourceWorkspaceFilterTypes.NONE);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.GROUP);
     });
 
     it("AS LU I should have an TAG filter when I went to /app/passwords with such a filter", async() => {
       await page.goToTag({tag: {id: 'some tag id'}});
-      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL && page.filter.type !== ResourceWorkspaceFilterTypes.NONE);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.TAG);
     });
 
     it("AS LU I should have an FOLDER filter when I went to /app/folders/{folder-id} with such a filter", async() => {
       await page.goToFolder(context.folders[0]);
-      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL && page.filter.type !== ResourceWorkspaceFilterTypes.NONE);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.FOLDER);
     });
 
     it("AS LU I should have an ROOT-FOLDER filter when I went to /app/folders/{folder-id} with such a filter", async() => {
       await page.goToRootFolder();
-      await waitForTrue(() => page.filter.type !== ResourceWorkspaceFilterTypes.ALL && page.filter.type !== ResourceWorkspaceFilterTypes.NONE);
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.ROOT_FOLDER);
     });
   });
@@ -156,6 +147,7 @@ describe("Resource Workspace Context", () => {
     });
 
     it("AS LU I should have resources belonged to a group when the filter is GROUP", async() => {
+      expect.hasAssertions();
       const mockGroupResources = context.resources.slice(0, 3);
       const expectedResourcesCount = mockGroupResources.length;
       const leadershipTeamGroup = {group: {id: "516c2db6-0aed-52d8-854f-b3f3499995e7"}};
@@ -168,16 +160,15 @@ describe("Resource Workspace Context", () => {
       });
 
       await page.goToAllItems();
-      await waitForTrue(() => page.filter.type === ResourceWorkspaceFilterTypes.ALL);
       await page.goToGroup(leadershipTeamGroup);
-      await waitForTrue(() => page.filter.type === ResourceWorkspaceFilterTypes.GROUP);
-      expect(page.filteredResources).toHaveLength(expectedResourcesCount);
+      await waitFor(() => {
+        expect(page.filteredResources).toHaveLength(expectedResourcesCount);
+      });
     });
 
     it("AS LU I should have resources with a specific tag when the filter is TAG", async() => {
       const expectedResourcesCount = 1;
       await page.goToTag({tag: context.resources[2].tags[0]});
-      await waitForTrue(() => page.filteredResources.length !== totalResourcesCount);
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
     });
 
@@ -190,7 +181,6 @@ describe("Resource Workspace Context", () => {
       jest.spyOn(context.port, "request");
 
       await page.goToFolder(context.folders[0]);
-      await waitForTrue(() => page.filteredResources.length !== totalResourcesCount);
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
       expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update-local-storage-by-folder-parent-id", context.folders[0].id);
     });
@@ -198,7 +188,6 @@ describe("Resource Workspace Context", () => {
     it("AS LU I should have resources belonged to a root folder the filter is ROOT-FOLDER", async() => {
       const expectedResourcesCount = 10;
       await page.goToRootFolder();
-      await waitForTrue(() => page.filteredResources.length !== totalResourcesCount);
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
     });
   });
@@ -211,24 +200,19 @@ describe("Resource Workspace Context", () => {
 
     it("As LU I should have all resources as selected when the All Selection event has been fired", async() => {
       await page.goToAllItems();
-      await waitForTrue(() => page.filteredResources.length === totalResourcesCount);
       await page.selectAll();
-      await waitForTrue(() => page.filteredResources.length > 0);
       expect(page.selectedResources).toHaveLength(context.resources.length);
     });
 
     it("As LU I should have none resources as selected when the None Selection event has been fired", async() => {
       await page.goToAllItems();
-      await waitForTrue(() => page.filteredResources.length === totalResourcesCount);
       await page.selectAll();
-      await waitForTrue(() => page.filteredResources.length > 0);
       await page.selectNone();
       expect(page.selectedResources).toHaveLength(0);
     });
 
     it("As LU I should have one selected resource when the Single Selection event has been fired", async() => {
       await page.goToAllItems();
-      await waitForTrue(() => page.filteredResources.length === totalResourcesCount);
       const resourceToSelect = context.resources[0];
       page.select(resourceToSelect);
       expect(page.selectedResources).toHaveLength(1);
@@ -236,10 +220,12 @@ describe("Resource Workspace Context", () => {
     });
 
     it("As LU I should have multiple resources as selected when the Multiple Selection event has been fired", async() => {
+      expect.assertions(3);
       await page.goToAllItems();
-      await waitForTrue(() => page.filteredResources.length === totalResourcesCount);
       const resourcesToSelect = [context.resources[0], context.resources[3]];
       await page.selectMultiple(resourcesToSelect);
+
+      await waitFor(() => page.selectedResources.length === 2);
       expect(page.selectedResources).toHaveLength(2);
       expect(page.selectedResources[0]).toBe(context.resources[0]);
       expect(page.selectedResources[1]).toBe(context.resources[3]);
@@ -247,7 +233,6 @@ describe("Resource Workspace Context", () => {
 
     it("As LU I should have a range of selected resources when the Range Selection event has been fired", async() => {
       await page.goToAllItems();
-      await waitForTrue(() => page.filteredResources.length === totalResourcesCount);
       const resourcesToSelect = [context.resources[0], context.resources[3]];
       await page.selectRange(resourcesToSelect);
       const expectResourceMatch = (resource, index) => expect(resource).toBe(context.resources[index]);
@@ -260,32 +245,34 @@ describe("Resource Workspace Context", () => {
     it("As LU, I should detail a folder when a folder is selected as filter", async() => {
       const folder = context.folders[0];
       await page.goToFolder(folder);
-      await waitForTrue(() => page.filteredResources.length !== totalResourcesCount);
       expect(page.details.folder).toBe(folder);
       expect(page.lockDisplayDetail).toBeTruthy();
     });
 
     it("As LU, I should detail a resource when a resource is selected", async() => {
+      expect.assertions(2);
       const resource = context.resources[0];
       await page.goToAllItems();
-      await waitForTrue(() => page.filteredResources.length === totalResourcesCount);
       await page.select(resource);
-      await waitForTrue(() => page.selectedResources.length > 0);
-      expect(page.details.resource).toBe(resource);
+
+      await waitForTrue(() => page.details?.resource !== null);
+      expect(page.details.resource).toEqual(resource);
       expect(page.lockDisplayDetail).toBeTruthy();
     });
 
     it("As LU, I should detail nothing when the detail visibility lock is removed", async() => {
+      expect.assertions(2);
       const resource = context.resources[0];
       await page.toggleLockDetails();
       await page.select(resource);
-      expect(page.details.resource).toBe(resource);
+      await waitForTrue(() => page.details?.resource !== null);
+
+      expect(page.details.resource).toEqual(resource);
       expect(page.lockDisplayDetail).toBeFalsy();
     });
 
     it("As LU, I should detail nothing when several resources are selected", async() => {
       await page.goToAllItems();
-      await waitForTrue(() => page.filteredResources.length === totalResourcesCount);
       await page.selectAll();
       expect(page.details.folder).toBeNull();
       expect(page.details.resource).toBeNull();

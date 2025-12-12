@@ -14,6 +14,11 @@
 
 import DisplayUserWorkspaceMainActions from "./DisplayUserWorkspaceMainActions";
 import {defaultAppContext, defaultProps} from "./DisplayUserWorkspaceMainActions.test.data";
+import {
+  defaultAdministratorRbacContext,
+  defaultUserRbacContext,
+  denyRbacContext
+} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 
 export default {
@@ -30,7 +35,7 @@ const adminRole = {
 };
 
 export const Admin = {
-  args: Object.assign(defaultProps(), {context: defaultAppContext(adminRole)})
+  args: defaultProps({context: defaultAppContext(adminRole), rbacContext: defaultAdministratorRbacContext()})
 };
 
 const userRole = {
@@ -41,6 +46,10 @@ const userRole = {
   },
 };
 
+export const UserWithGroupPermission = {
+  args: defaultProps({context: defaultAppContext(userRole), rbacContext: defaultUserRbacContext()})
+};
+
 export const User = {
-  args: Object.assign(defaultProps(), {context: defaultAppContext(userRole)})
+  args: defaultProps({context: defaultAppContext(userRole), rbacContext: denyRbacContext()})
 };

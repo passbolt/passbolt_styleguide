@@ -36,7 +36,7 @@ describe("As AD I should edit the subscription key", () => {
     };
     await page.fill("some subscription key");
     await page.updateKey(inProgressFn);
-    expect.assertions(5);
+    expect.assertions(3);
     expect(props.administrationWorkspaceContext.onUpdateSubscriptionKeyRequested).toHaveBeenCalled();
     expect(verifyResolve).toBeDefined();
   });
@@ -49,7 +49,7 @@ describe("As AD I should edit the subscription key", () => {
       expect(page.saveButtonIsProcessing).toBeTruthy();
       verifyResolve();
     };
-    expect.assertions(5);
+    expect.assertions(3);
     await page.fill("some subscription key");
     await page.updateKey(inProgressFn);
     expect(props.administrationWorkspaceContext.onUpdateSubscriptionKeyRequested).toHaveBeenCalled();

@@ -28,7 +28,8 @@ export default class DisplayRestartFromScratchErrorPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayRestartFromScratchError/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

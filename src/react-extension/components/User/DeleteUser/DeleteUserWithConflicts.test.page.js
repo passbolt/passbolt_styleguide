@@ -39,7 +39,8 @@ export default class DeleteUserWithConflictsPage {
             <DeleteUserWithConflicts {...props}/>
           </DialogContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

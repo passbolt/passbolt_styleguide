@@ -14,6 +14,7 @@
 
 import {fireEvent, waitFor} from "@testing-library/react";
 import ResizableSidebarPage from "./ResizableSidebar.test.page";
+import {waitForTrue} from "../../../../test/utils/waitFor";
 
 describe("ResizableSidebar", () => {
   let props;
@@ -30,7 +31,6 @@ describe("ResizableSidebar", () => {
       maxWidth: "30%",
     };
     const page = new ResizableSidebarPage(props);
-    await waitFor(() => {});
     expect(page.container).toBeTruthy();
   });
 
@@ -143,5 +143,61 @@ describe("ResizableSidebar", () => {
       const widthPx = page.getWidthOf(page.container);
       expect(widthPx).toBeCloseTo(20); //initial set to 20% (200) in test page
     });
+  });
+
+  it("Stops resizing if mouse is moved outside app and brought back", async() => {
+    expect.assertions(4);
+    props = {
+      resizable: true,
+      gutterLeft: false, // left sidebar
+      minWidth: "20%",
+      maxWidth: "30%"
+    };
+    const page = new ResizableSidebarPage(props);
+
+    await waitForTrue(() => page.getWidthOf(page.container) === 20);
+
+    expect(page.gutter).toBeTruthy();
+    expect(page.getWidthOf(page.container)).toBe(20);
+
+    fireEvent.mouseDown(page.gutter, {clientX: 200});
+    fireEvent.mouseMove(document, {clientX: 240});
+    await waitForTrue(() => page.getWidthOf(page.container) === 24);
+
+    expect(page.getWidthOf(page.container)).toBeCloseTo(24);
+
+    fireEvent.mouseLeave(document); // leave document
+
+    fireEvent.mouseMove(document, {clientX: 300}); // resizing again but mouse is outside doc
+
+    expect(page.getWidthOf(page.container)).toBeCloseTo(24); // same as before leave
+  });
+
+  it("Stops resizing if window loses focus and mouse is moved back", async() => {
+    expect.assertions(4);
+    props = {
+      resizable: true,
+      gutterLeft: false, // left sidebar
+      minWidth: "20%",
+      maxWidth: "30%"
+    };
+    const page = new ResizableSidebarPage(props);
+
+    await waitForTrue(() => page.getWidthOf(page.container) === 20);
+
+    expect(page.gutter).toBeTruthy();
+    expect(page.getWidthOf(page.container)).toBe(20);
+
+    fireEvent.mouseDown(page.gutter, {clientX: 200});
+    fireEvent.mouseMove(document, {clientX: 240});
+    await waitForTrue(() => page.getWidthOf(page.container) === 24);
+
+    expect(page.getWidthOf(page.container)).toBeCloseTo(24);
+
+    fireEvent.blur(window); // window loses focus like tab switch etc
+
+    fireEvent.mouseMove(document, {clientX: 300}); // resizing again but mouse is outside doc
+
+    expect(page.getWidthOf(page.container)).toBeCloseTo(24); // Width should not change after blur
   });
 });

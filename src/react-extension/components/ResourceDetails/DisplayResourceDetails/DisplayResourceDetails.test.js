@@ -39,7 +39,6 @@ import {
   defaultResourceWorkspaceContext,
 } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {TEST_RESOURCE_TYPE_V5_DEFAULT} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
-import {waitFor} from "@testing-library/react";
 import ResourceMetadataEntity from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity";
 import {SECRET_DATA_OBJECT_TYPE} from "../../../../shared/models/entity/secretData/secretDataEntity";
 import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
@@ -243,7 +242,7 @@ describe("DisplayResourceDetails", () => {
       const props = defaultProps();
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: "RN9n8XuECN3", description: "description"}));
       const page = new DisplayResourceDetailsPage(props);
-      await waitFor(() => {});
+
 
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(jest.fn());
 
@@ -280,7 +279,7 @@ describe("DisplayResourceDetails", () => {
       const props = defaultProps();
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: "RN9n8XuECN3", description: "description"}));
       const page = new DisplayResourceDetailsPage(props);
-      await waitFor(() => {});
+
 
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => { throw new Error("Error"); });
 
@@ -321,7 +320,7 @@ describe("DisplayResourceDetails", () => {
       })});
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: "RN9n8XuECN3", description: "description"}));
       const page = new DisplayResourceDetailsPage(props);
-      await waitFor(() => {});
+
 
       // expectations
       expect(page.upgradeButton).toBeNull();
@@ -332,7 +331,7 @@ describe("DisplayResourceDetails", () => {
       const props = defaultProps();
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => { throw new UserAbortsOperationError("Error"); });
       const page = new DisplayResourceDetailsPage(props);
-      await waitFor(() => {});
+
 
       await page.click(page.upgradeButton);
 
@@ -348,7 +347,7 @@ describe("DisplayResourceDetails", () => {
         loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})
       })});
       const page = new DisplayResourceDetailsPage(props);
-      await waitFor(() => {});
+
 
       await page.click(page.upgradeButton);
 
@@ -363,7 +362,7 @@ describe("DisplayResourceDetails", () => {
         metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({allow_usage_of_personal_keys: false})),
       });
       const page = new DisplayResourceDetailsPage(props);
-      await waitFor(() => {});
+
 
       await page.click(page.upgradeButton);
 
@@ -420,7 +419,7 @@ describe("DisplayResourceDetails", () => {
         })});
 
       const page = new DisplayResourceDetailsPage(props);
-      await waitFor(() => {});
+
 
       expect(page.customField).toBeNull();
     });
@@ -455,7 +454,7 @@ describe("DisplayResourceDetails", () => {
         })});
 
       const page = new DisplayResourceDetailsPage(props);
-      await waitFor(() => {});
+
 
       expect(page.customField).toBeNull();
     });

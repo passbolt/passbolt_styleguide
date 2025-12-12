@@ -16,8 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
-import RbacService from "../../../../shared/services/api/rbac/rbacService";
-import RoleService from "../../../../shared/services/api/role/roleService";
+import RbacApiService from "../../../../shared/services/api/rbac/rbacApiService";
 import RbacEntity from "../../../../shared/models/entity/rbac/rbacEntity";
 
 /**
@@ -44,8 +43,7 @@ export class AdminRbacContextProvider extends React.Component {
     super(props);
     this.state = this.defaultState;
     const apiClientOptions = props.context.getApiClientOptions();
-    this.rbacService = new RbacService(apiClientOptions);
-    this.roleService = new RoleService(apiClientOptions);
+    this.rbacApiService = new RbacApiService(apiClientOptions);
   }
 
   /**
@@ -106,7 +104,7 @@ export class AdminRbacContextProvider extends React.Component {
    * @returns {Boolean}
    */
   hasSettingsChanges() {
-    return this.state.rbacsUpdated.rbacs.length > 0;
+    return this.state.rbacsUpdated.items.length > 0;
   }
 
   /**
@@ -128,9 +126,10 @@ export class AdminRbacContextProvider extends React.Component {
         return;
       }
 
-      const rbacsUpdatedResultDto = await this.rbacService.updateAll(rbacsUpdatedDto, {ui_action: true, action: true});
+      const response = await this.rbacApiService.updateAll(rbacsUpdatedDto, {ui_action: true, action: true});
+      const rbacsUpdatedResultDto = response.body;
       const rbacs = this.state.rbacs;
-      rbacsUpdatedResultDto.forEach(rbacUpdatedResultDto => rbacs.addOrReplace(new RbacEntity(rbacUpdatedResultDto)));
+      rbacsUpdatedResultDto.forEach(rbacUpdatedResultDto => rbacs.pushOrReplace(new RbacEntity(rbacUpdatedResultDto)));
       const rbacsUpdated = new RbacsCollection([]);
       this.setState({rbacs, rbacsUpdated});
     } finally {

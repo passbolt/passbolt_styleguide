@@ -29,7 +29,8 @@ export default class GetStartedDesktopPage {
     this._page = render(
       <MockTranslationProvider>
         <GetStartedDesktop {...props} />
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

@@ -26,7 +26,8 @@ export default class TotpTestPage {
     this._page = render(
       <MockTranslationProvider>
         <Totp {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

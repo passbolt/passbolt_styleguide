@@ -11,10 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ImportResources from "./ImportResources";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The ImportResources component represented as a page
@@ -28,8 +29,11 @@ export default class ImportResourcesPage {
     this._page = render(
       <MockTranslationProvider>
         <ImportResources {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -111,24 +115,18 @@ export default class ImportResourcesPage {
 
   /** Click on the element */
   async click(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /** Click without wait for on the element */
-  escapeKey()  {
-    // Escape key down event
-    const escapeKeyDown = {keyCode: 27};
-    fireEvent.keyDown(this.dialog, escapeKeyDown);
+  async escapeKey()  {
+    await this.user.keyboard('{Escape}');
   }
 
   /** Click to import file */
   async selectImportFile(file) {
-    await this.click(this.importFile);
-    const data = {target: {files: [file]}};
-    fireEvent.change(this.inputFile, data);
-    await waitFor(() => {});
+    await this.user.click(this.importFile);
+    await this.user.upload(this.inputFile, file);
   }
 
   /** checked import tag */
@@ -144,12 +142,6 @@ export default class ImportResourcesPage {
   /** Click on save button */
   async submitImport() {
     await this.click(this.saveButton);
-  }
-
-  /** Click on save button */
-  submitImportWithoutWaiting() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.saveButton, leftClick);
   }
 
   /** Click on cancel button */

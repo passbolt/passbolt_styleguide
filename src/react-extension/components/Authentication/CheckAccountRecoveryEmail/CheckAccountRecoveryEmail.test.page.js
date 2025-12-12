@@ -28,7 +28,8 @@ export default class CheckAccountRecoveryEmailTestPage {
     this._page = render(
       <MockTranslationProvider>
         <CheckMailBox/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

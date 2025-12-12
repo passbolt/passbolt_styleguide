@@ -29,7 +29,8 @@ export default class YubikeySetupPage {
     this._page = render(
       <MockTranslationProvider>
         <YubikeySetup {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

@@ -40,7 +40,8 @@ export default class PasswordSidebarTagSectionPage {
             <DisplayResourceDetailsTag  {...props}/>
           </Router>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

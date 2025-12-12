@@ -23,6 +23,7 @@ import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext"
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {isUserSuspended} from "../../../../shared/utils/userUtils";
 import AttentionSVG from "../../../../img/svg/attention.svg";
+import {withRoles} from "../../../contexts/RoleContext";
 
 /**
  * This component displays the user details about information
@@ -74,11 +75,8 @@ class DisplayUserDetailsInformation extends React.Component {
    * Get user role name
    */
   getRoleName() {
-    if (this.props.context.roles) {
-      const role = this.props.context.roles.find(role => role.id === this.user.role_id);
-      return role ? role.name : "";
-    }
-    return "";
+    const role = this.props.roleContext.getRole(this.user.role_id);
+    return role?.name || "";
   }
 
   /**
@@ -227,7 +225,8 @@ DisplayUserDetailsInformation.propTypes = {
   context: PropTypes.any, // The application context
   userWorkspaceContext: PropTypes.object, // The user workspace context
   accountRecoveryContext: PropTypes.object, // The account recovery context
+  roleContext: PropTypes.object, // The role context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withUserWorkspace(withAccountRecovery(withTranslation('common')(DisplayUserDetailsInformation))));
+export default withAppContext(withUserWorkspace(withAccountRecovery(withRoles(withTranslation('common')(DisplayUserDetailsInformation)))));

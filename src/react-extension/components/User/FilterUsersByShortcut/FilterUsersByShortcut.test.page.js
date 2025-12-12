@@ -38,7 +38,8 @@ export default class FilterUsersByShortcutPage {
             <FilterUsersByShortcut.WrappedComponent {...props}/>
           </Router>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

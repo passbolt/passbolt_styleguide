@@ -18,11 +18,11 @@ import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
 import {defaultAppContext} from '../../../contexts/ApiAppContext.test.data';
 import DisplaySelfRegistrationAdministrationPage from './DisplaySelfRegistrationAdministration.test.page';
 import {defaultProps, domains, mockResult} from './DisplaySelfRegistrationAdministration.test.data';
-import {waitFor} from '@testing-library/react';
 import * as uuid from 'uuid';
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import ConfirmSaveSelfRegistrationSettings from './ConfirmSaveSelfRegistrationSettings/ConfirmSaveSelfRegistrationSettings';
 import ConfirmDeletionSelfRegistrationSettings from './ConfirmDeletionSelfRegistrationSettings/ConfirmDeletionSelfRegistrationSettings';
+import {act} from "react";
 
 jest.mock('uuid');
 
@@ -53,7 +53,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
     it('As a logged in administrator when the User self registration is not configured, I can access the User self registration settings page', async() => {
       fetch.doMockOnceIf(/self-registration\/settings*/, () => mockApiResponse(mockResult(null, false)));
       page = new DisplaySelfRegistrationAdministrationPage(context, props);
-      await waitFor(() => {});
+
       expect.assertions(7);
 
       expect(page.exists()).toBeTruthy();
@@ -69,7 +69,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
     it('As a logged in administrator I can enable the User self registration setting', async() => {
       fetch.doMockOnceIf(/self-registration\/settings*/, () => mockApiResponse(mockResult([])));
       page = new DisplaySelfRegistrationAdministrationPage(context, props);
-      await waitFor(() => {});
+
       expect.assertions(3);
 
       expect(page.helpBoxButton).toBeDefined();
@@ -79,8 +79,10 @@ describe("DisplaySelfRegistrationAdministration", () => {
 
     it('As a logged in administrator I can enable the User self registration setting', async() => {
       fetch.doMockOnceIf(/self-registration\/settings*/, () => mockApiResponse(mockResult([])));
-      page = new DisplaySelfRegistrationAdministrationPage(context, props);
-      await waitFor(() => {});
+      await act(
+        async() => page = new DisplaySelfRegistrationAdministrationPage(context, props)
+      );
+
       expect.assertions(5);
 
       await page.clickOnToggle();
@@ -102,11 +104,14 @@ describe("DisplaySelfRegistrationAdministration", () => {
         }
       });
       fetch.doMockOnceIf(/self-registration\/settings*/, () => mockApiResponse(mockResult([])));
-      page = new DisplaySelfRegistrationAdministrationPage(context, defaultProps({
-        context: contextWithPublicDomain
-      }));
 
-      await waitFor(() => {});
+      await act(
+        async() => page = new DisplaySelfRegistrationAdministrationPage(context, defaultProps({
+          context: contextWithPublicDomain
+        }))
+      );
+
+
       await page.clickOnToggle();
       expect(page.toggle.checked).toBeTruthy();
       expect(page.enabledLabel).toBeDefined();
@@ -179,9 +184,11 @@ describe("DisplaySelfRegistrationAdministration", () => {
       //Mock API calls
       fetch.doMockIf(/self-registration\/settings*/, () => mockApiResponse(mockResult([])));
 
-      page = new DisplaySelfRegistrationAdministrationPage(context, props);
+      await act(
+        async() => page = new DisplaySelfRegistrationAdministrationPage(context, props)
+      );
 
-      await waitFor(() => {});
+
       await page.clickOnToggle();
       await page.clickOnSave();
 
@@ -195,9 +202,11 @@ describe("DisplaySelfRegistrationAdministration", () => {
       //Mock get all
       fetch.doMockIf(/self-registration\/settings*/, () => mockApiResponse(mockResult()));
 
-      page = new DisplaySelfRegistrationAdministrationPage(context, props);
+      await act(
+        async() => page = new DisplaySelfRegistrationAdministrationPage(context, props)
+      );
 
-      await waitFor(() => {});
+
       await page.addDomain();
       // fill with non profession domain
       await page.fillInput(page.inputByIndex(3), gmailDomain);
@@ -212,9 +221,11 @@ describe("DisplaySelfRegistrationAdministration", () => {
       //Mock API calls
       fetch.doMockIf(/self-registration\/settings*/, () => mockApiResponse(mockResult()));
 
-      page = new DisplaySelfRegistrationAdministrationPage(context, props);
+      await act(
+        async() => page = new DisplaySelfRegistrationAdministrationPage(context, props)
+      );
 
-      await waitFor(() => {});
+
       jest.spyOn(page.inputByIndex(1), 'focus');
 
       // fill with non profession domain
@@ -243,9 +254,11 @@ describe("DisplaySelfRegistrationAdministration", () => {
       //Mock API calls
       fetch.doMockIf(/self-registration\/settings*/, () => mockApiResponse(mockResult()));
 
-      page = new DisplaySelfRegistrationAdministrationPage(context, props);
+      await act(
+        async() => page = new DisplaySelfRegistrationAdministrationPage(context, props)
+      );
 
-      await waitFor(() => {});
+
       jest.spyOn(page.inputByIndex(1), 'focus');
 
       // fill with non profession domain

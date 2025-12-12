@@ -13,4 +13,5 @@
  */
 export const UsernameFieldSelectorException = {
   "ovh.com": "input[type='text' i][id='account'][class*='ovh-field-input']:not([hidden]):not([disabled])",
+  "cisecurity.com": "form[action*='cisecurity.org/login'] input[type='login'][name='login']"
 };

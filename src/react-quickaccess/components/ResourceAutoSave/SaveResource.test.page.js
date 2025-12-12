@@ -13,12 +13,13 @@
  *
  */
 import React from "react";
-import {render, waitFor} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import {BrowserRouter as Router} from "react-router-dom";
 import MockTranslationProvider from '../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider';
 import {fireEvent} from '@testing-library/react';
 import SaveResource from "./SaveResource";
 import {waitForTrue} from "../../../../test/utils/waitFor";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The SaveResource component represented as a page
@@ -34,8 +35,11 @@ export default class SaveResourcePage {
         <Router>
           <SaveResource {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -103,9 +107,7 @@ export default class SaveResourcePage {
 
   /** Click on the element */
   async click(element)  {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /** Submit teh form */

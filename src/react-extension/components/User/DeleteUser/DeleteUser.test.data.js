@@ -1,5 +1,5 @@
 import MockPort from "../../../test/mock/MockPort";
-import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
+import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
 
 /**
  * Returns the default app context for the unit test

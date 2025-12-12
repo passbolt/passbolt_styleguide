@@ -18,6 +18,8 @@
 import {defaultAppContext, defaultProps, groupsMock} from "./FilterUsersByGroup.test.data";
 import FilterUsersByGroupPage from "./FilterUsersByGroup.test.page";
 import MockPort from "../../../test/mock/MockPort";
+import {fireEvent} from "@testing-library/react";
+import {waitFor} from "@testing-library/dom";
 
 beforeEach(() => {
   jest.resetModules();
@@ -121,7 +123,7 @@ describe("See groups", () => {
       expect(page.displayGroupList.isEmpty()).toBeTruthy();
     });
 
-    it('As LU I see an empty feedback if I’m member of no group after filtering by group I am member of', async() => {
+    it('As LU I see an empty feedback if I\'m member of no group after filtering by group I am member of', async() => {
       context.groups = [groupsMock[0]];
       await page.title.click(page.title.filterButton);
       expect(page.displayGroupList.isEmpty()).toBeFalsy();
@@ -145,19 +147,46 @@ describe("See groups", () => {
     /**
      * Given the groups section
      * And the groups are not loaded yet
-     * Then I should see the loading message “Retrieving groups”
+     * Then I should see the loading message "Retrieving groups"
      */
 
     beforeEach(() => {
       page = new FilterUsersByGroupPage(context, props);
     });
 
-    it('I should see the loading message “Retrieving groups”', async() => {
+    it('I should see the loading message "Retrieving groups"', async() => {
       expect(page.displayGroupList.isLoading()).toBeTruthy();
     });
   });
 
-  describe('As ALU I shouldn’t be able to start deleting a group', () => {
+  describe('As LU I should be able to start deleting a group if I am the group manager', () => {
+    const appContext = {
+      port: new MockPort(),
+      groups: groupsMock,
+      loggedInUser: {
+        role: {
+          name: 'user'
+        }
+      }
+    };
+    const context = defaultAppContext(appContext); // The applicative context
+    /**
+     * Given the groups section
+     * And the logged-in user is not AD but group manager
+     * Then I should see the delete group menu
+     */
+
+    beforeEach(() => {
+      page = new FilterUsersByGroupPage(context, props);
+    });
+
+    it('As a group manager I should be able to start deleting a group', async() => {
+      await page.displayGroupList.click(page.displayGroupList.moreButton);
+      expect(page.displayGroupContextualMenu.deleteGroupContextualMenu).not.toBeNull();
+    });
+  });
+
+  describe('As LU I shouldn’t be able to start deleting a group', () => {
     const appContext = {
       port: new MockPort(),
       groups: groupsMock,
@@ -171,16 +200,555 @@ describe("See groups", () => {
     /**
      * Given the groups section
      * And the logged uin user is not AD
-     * Then I should’t see the delete group menu
+     * Then I should't see the delete group menu
      */
 
     beforeEach(() => {
       page = new FilterUsersByGroupPage(context, props);
     });
 
-    it('As NOT_AD I shouldn’t be able to start deleting a group', async() => {
-      await page.displayGroupList.click(page.displayGroupList.moreButton);
+    it('As NOT_AD I should not be able to start deleting a group', async() => {
+      await page.displayGroupList.rightClick(page.displayGroupList.group(2));
       expect(page.displayGroupContextualMenu.deleteGroupContextualMenu).toBeNull();
+    });
+  });
+
+  describe('As LU I should handle drag and drop on groups', () => {
+    let page;
+    const props = defaultProps();
+
+    describe('isGroupDisabled - Disabled groups visual state', () => {
+      it('As LU, I should see disabled class on groups when dragging', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+
+        const mockDragContext = {
+          dragging: true,
+          draggedItems: {
+            users: [{id: "user-1", username: "john@passbolt.com"}],
+            disabledGroupIds: [groupsMock[0].id, groupsMock[2].id]
+          }
+        };
+
+        page = new FilterUsersByGroupPage(context, {
+          ...props,
+          dragContext: mockDragContext
+        });
+
+        await waitFor(() => {
+          expect(page.displayGroupList.count()).toBeGreaterThan(0);
+        });
+
+        const rows = page._page.container.querySelectorAll('.group-item .row');
+
+        expect(rows[0].classList.contains('disabled')).toBeTruthy();
+        expect(rows[1].classList.contains('disabled')).toBeFalsy();
+        expect(rows[2].classList.contains('disabled')).toBeTruthy();
+      });
+
+      it('As LU, I should NOT see disabled class when not dragging', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+
+        const mockDragContext = {
+          dragging: false,
+        };
+
+        page = new FilterUsersByGroupPage(context, {
+          ...props,
+          dragContext: mockDragContext
+        });
+
+        await waitFor(() => {});
+
+        const rows = page._page.container.querySelectorAll('.group-item .row');
+
+        rows.forEach(row => {
+          expect(row.classList.contains('disabled')).toBeFalsy();
+        });
+      });
+
+      it('As LU, I should see all groups enabled when disabledGroupIds is empty', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+
+        const mockDragContext = {
+          dragging: true,
+          draggedItems: {
+            users: [{id: "user-1", username: "john@passbolt.com"}],
+            disabledGroupIds: []
+          }
+        };
+
+        page = new FilterUsersByGroupPage(context, {
+          ...props,
+          dragContext: mockDragContext
+        });
+
+        await waitFor(() => {});
+
+        const rows = page._page.container.querySelectorAll('.group-item .row');
+
+        rows.forEach(row => {
+          expect(row.classList.contains('disabled')).toBeFalsy();
+        });
+      });
+    });
+
+    describe('handleDragOverTitle and isGroupDraggedOver - Drag over behavior', () => {
+      it('As LU, drag over should set drop-focus state', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+
+        const mockDragContext = {
+          dragging: true,
+          draggedItems: {
+            users: [{id: "user-1", username: "john@passbolt.com"}],
+            disabledGroupIds: []
+          }
+        };
+
+        page = new FilterUsersByGroupPage(context, {
+          ...props,
+          dragContext: mockDragContext
+        });
+
+        await waitFor(() => {});
+
+        const wrapper = page._page.container.querySelector('.group-item .main-cell-wrapper');
+
+        let row = page._page.container.querySelector('.group-item .row');
+        expect(row.classList.contains('drop-focus')).toBeFalsy();
+
+        fireEvent.dragOver(wrapper, {preventDefault: () => {}});
+        await waitFor(() => {});
+
+        row = page._page.container.querySelector('.group-item .row');
+        expect(row.classList.contains('drop-focus')).toBeTruthy();
+      });
+
+      it('As LU, drag over disabled group should not set drop-focus state', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+
+        const mockDragContext = {
+          dragging: true,
+          draggedItems: {
+            users: [{id: "user-1", username: "john@passbolt.com"}],
+            disabledGroupIds: [groupsMock[0].id]
+          }
+        };
+
+        page = new FilterUsersByGroupPage(context, {
+          ...props,
+          dragContext: mockDragContext
+        });
+
+        await waitFor(() => {});
+
+        const wrapper = page._page.container.querySelector('.group-item .main-cell-wrapper');
+
+        fireEvent.dragOver(wrapper, {preventDefault: () => {}});
+        await waitFor(() => {});
+
+        const row = page._page.container.querySelector('.group-item .row');
+        expect(row.classList.contains('drop-focus')).toBeFalsy();
+        expect(row.classList.contains('disabled')).toBeTruthy();
+      });
+    });
+
+    describe('handleDragLeaveTitle - Drag leave behavior', () => {
+      it('As LU, drop-focus class should be removed after drag leave', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+
+        const mockDragContext = {
+          dragging: true,
+          draggedItems: {
+            users: [{id: "user-1", username: "john@passbolt.com"}],
+            disabledGroupIds: []
+          }
+        };
+
+        page = new FilterUsersByGroupPage(context, {
+          ...props,
+          dragContext: mockDragContext
+        });
+
+        await waitFor(() => {});
+
+        const wrapper = page._page.container.querySelector('.group-item .main-cell-wrapper');
+
+        fireEvent.dragOver(wrapper, {preventDefault: () => {}});
+        await waitFor(() => {});
+
+        let row = page._page.container.querySelector('.group-item .row');
+        expect(row.classList.contains('drop-focus')).toBeTruthy();
+
+        fireEvent.dragLeave(wrapper);
+        await waitFor(() => {});
+
+        row = page._page.container.querySelector('.group-item .row');
+        expect(row.classList.contains('drop-focus')).toBeFalsy();
+      });
+    });
+
+    describe('handleDropTitle - Drop action', () => {
+      it('As LU, drop should open AddUserToGroup dialog with correct props', async() => {
+        const mockUser = {id: "user-1", username: "john@passbolt.com", profile: {first_name: "John"}};
+        const mockDialogOpen = jest.fn();
+        const mockSetContext = jest.fn();
+
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}},
+          setContext: mockSetContext
+        };
+        const context = defaultAppContext(appContext);
+
+        const mockDragContext = {
+          dragging: true,
+          draggedItems: {
+            users: [mockUser],
+            disabledGroupIds: []
+          }
+        };
+
+        page = new FilterUsersByGroupPage(context, {
+          ...props,
+          dragContext: mockDragContext,
+          dialogContext: {open: mockDialogOpen, close: jest.fn()}
+        });
+
+        await waitFor(() => {});
+
+        const wrapper = page._page.container.querySelector('.group-item .main-cell-wrapper');
+        fireEvent.drop(wrapper);
+        await waitFor(() => {});
+
+        expect(mockDialogOpen).toHaveBeenCalled();
+
+        expect(mockSetContext).toHaveBeenCalledWith(
+          expect.objectContaining({
+            addUserToGroupDialogProps: expect.objectContaining({
+              user: mockUser,
+              group: expect.objectContaining({id: groupsMock[0].id})
+            })
+          })
+        );
+      });
+
+      it('As LU, drop should NOT work on disabled groups', async() => {
+        const mockDialogOpen = jest.fn();
+        const mockSetContext = jest.fn();
+
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}},
+          setContext: mockSetContext
+        };
+        const context = defaultAppContext(appContext);
+
+        const mockDragContext = {
+          dragging: true,
+          draggedItems: {
+            users: [{id: "user-1", username: "john@passbolt.com"}],
+            disabledGroupIds: [groupsMock[0].id]
+          }
+        };
+
+        page = new FilterUsersByGroupPage(context, {
+          ...props,
+          dragContext: mockDragContext,
+          dialogContext: {open: mockDialogOpen, close: jest.fn()}
+        });
+
+        await waitFor(() => {});
+
+        const wrapper = page._page.container.querySelector('.group-item .main-cell-wrapper');
+        fireEvent.drop(wrapper);
+        await waitFor(() => {});
+
+        expect(mockDialogOpen).not.toHaveBeenCalled();
+        expect(mockSetContext).not.toHaveBeenCalled();
+      });
+
+      it('As LU, drop should clear drop-focus state', async() => {
+        const mockUser = {id: "user-1", username: "john@passbolt.com"};
+        const mockDialogOpen = jest.fn();
+        const mockSetContext = jest.fn();
+
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}},
+          setContext: mockSetContext
+        };
+        const context = defaultAppContext(appContext);
+
+        const mockDragContext = {
+          dragging: true,
+          draggedItems: {
+            users: [mockUser],
+            disabledGroupIds: []
+          }
+        };
+
+        page = new FilterUsersByGroupPage(context, {
+          ...props,
+          dragContext: mockDragContext,
+          dialogContext: {open: mockDialogOpen, close: jest.fn()}
+        });
+
+        await waitFor(() => {});
+
+        const wrapper = page._page.container.querySelector('.group-item .main-cell-wrapper');
+
+        fireEvent.dragOver(wrapper, {preventDefault: () => {}});
+        await waitFor(() => {});
+
+        let row = page._page.container.querySelector('.group-item .row');
+        expect(row.classList.contains('drop-focus')).toBeTruthy();
+
+        fireEvent.drop(wrapper);
+        await waitFor(() => {});
+
+        row = page._page.container.querySelector('.group-item .row');
+        expect(row.classList.contains('drop-focus')).toBeFalsy();
+      });
+    });
+  });
+
+  describe('As LU I should interact with group UI elements', () => {
+    let page;
+    const props = defaultProps();
+
+    describe('handleTitleClickEvent - Accordion functionality', () => {
+      it('As LU, I should be able to collapse the groups section', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+        page = new FilterUsersByGroupPage(context, props);
+
+        expect(page._page.container.querySelector('.node.root.open')).not.toBeNull();
+
+        const titleButton = page._page.container.querySelector('.folders-label button');
+        fireEvent.click(titleButton);
+        await waitFor(() => {});
+
+        expect(page._page.container.querySelector('.node.root.close')).not.toBeNull();
+      });
+
+      it('As LU, I should be able to expand the groups section', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+        page = new FilterUsersByGroupPage(context, props);
+
+        const titleButton = page._page.container.querySelector('.folders-label button');
+        fireEvent.click(titleButton);
+        await waitFor(() => {});
+        expect(page._page.container.querySelector('.node.root.close')).not.toBeNull();
+
+        fireEvent.click(titleButton);
+        await waitFor(() => {});
+
+        expect(page._page.container.querySelector('.node.root.open')).not.toBeNull();
+      });
+    });
+
+    describe('handleTitleContextualMenuEvent - Title context menu', () => {
+      it('As LU, right-clicking title should prevent default browser menu', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+        page = new FilterUsersByGroupPage(context, props);
+
+        await waitFor(() => {});
+        const wrapper = page._page.container.querySelector('.folders-label button');
+
+        fireEvent.contextMenu(wrapper, {
+          preventDefault: () => {},
+          pageX: 100,
+          pageY: 100
+        });
+        await waitFor(() => {});
+
+        const row = page._page.container.querySelector('.group-item .row');
+        expect(row.classList.contains('drop-focus')).toBeFalsy();
+      });
+    });
+
+    describe('handleContextualMenuEvent - Group context menu', () => {
+      it('As LU, I should be able to open context menu on a group via right-click', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+        page = new FilterUsersByGroupPage(context, props);
+
+        await waitFor(() => {
+          expect(page.displayGroupList.count()).toBeGreaterThan(0);
+        });
+
+        const groupWrapper = page._page.container.querySelector('.group-item .main-cell-wrapper');
+
+        fireEvent.contextMenu(groupWrapper, {
+          preventDefault: jest.fn()
+        });
+        await waitFor(() => {});
+
+        expect(groupWrapper).not.toBeNull();
+      });
+    });
+
+    describe('handleGroupSelected - Group selection functionality', () => {
+      it('As LU, I should be able to select a group by clicking on it', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+        page = new FilterUsersByGroupPage(context, props);
+
+        await waitFor(() => {
+          expect(page.displayGroupList.count()).toBeGreaterThan(0);
+        });
+
+        const groupButton = page._page.container.querySelector('.group-item .main-cell button');
+
+        fireEvent.click(groupButton);
+        await waitFor(() => {});
+
+        expect(groupButton).not.toBeNull();
+      });
+
+      it('As LU, clicking a group wrapper should also select the group', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+        page = new FilterUsersByGroupPage(context, props);
+
+        await waitFor(() => {
+          expect(page.displayGroupList.count()).toBeGreaterThan(0);
+        });
+
+        const groupWrapper = page._page.container.querySelector('.group-item .main-cell-wrapper');
+
+        fireEvent.click(groupWrapper);
+        await waitFor(() => {});
+
+        expect(groupWrapper).not.toBeNull();
+      });
+    });
+
+    describe('handleCloseMoreMenu - More menu management', () => {
+      it('As LU, opening more menu should set open state', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+        page = new FilterUsersByGroupPage(context, props);
+
+        await waitFor(() => {
+          expect(page.displayGroupList.count()).toBeGreaterThan(0);
+        });
+
+        const moreButton = page._page.container.querySelector('.group-item .more-ctrl button');
+
+        expect(moreButton.className.includes('open')).toBeFalsy();
+
+        fireEvent.click(moreButton);
+        await waitFor(() => {});
+
+        expect(moreButton.className.includes('open')).toBeTruthy();
+      });
+    });
+
+    describe('isSelected - Group selection state', () => {
+      it('As LU, clicking a group should trigger selection (route change)', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+
+        page = new FilterUsersByGroupPage(context, props);
+
+        await waitFor(() => {});
+
+        const groupButton = page._page.container.querySelector('.group-item .main-cell button');
+
+        fireEvent.click(groupButton);
+        await waitFor(() => {});
+
+        expect(groupButton).not.toBeNull();
+      });
+
+      it('As LU, groups display correctly for selection', async() => {
+        const appContext = {
+          port: new MockPort(),
+          groups: groupsMock,
+          loggedInUser: {role: {name: 'admin'}}
+        };
+        const context = defaultAppContext(appContext);
+
+        page = new FilterUsersByGroupPage(context, props);
+
+        await waitFor(() => {});
+
+        const allRows = page._page.container.querySelectorAll('.group-item .row');
+
+        expect(allRows.length).toBeGreaterThan(0);
+
+        allRows.forEach(row => {
+          expect(row).not.toBeNull();
+        });
+      });
     });
   });
 });

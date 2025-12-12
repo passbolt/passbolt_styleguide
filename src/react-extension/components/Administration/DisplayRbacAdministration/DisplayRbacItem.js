@@ -18,6 +18,7 @@ import {withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
 import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctionEnumeration";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 
 class DisplayRbacItem extends React.Component {
   /**
@@ -48,7 +49,7 @@ class DisplayRbacItem extends React.Component {
     ];
 
     if (this.props.actionName === uiActions.USERS_VIEW_WORKSPACE) {
-      controls.push({value: controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP, label: this.props.t('Allow group manager')});
+      controls.push({value: controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP, label: this.props.t('Allow group manager'), title: this.props.t('Allow group manager')});
     }
     return controls;
   }
@@ -67,8 +68,8 @@ class DisplayRbacItem extends React.Component {
    * @return {string|null}
    */
   getCtlFunctionForRole(role) {
-    const rbac = this.props.rbacsUpdated?.findRbacByRoleAndUiActionName(role, this.props.actionName)
-      || this.props.rbacs?.findRbacByRoleAndUiActionName(role, this.props.actionName);
+    const rbac = this.props.rbacsUpdated?.findRbacByRoleAndActionName(role, this.props.actionName)
+      || this.props.rbacs?.findRbacByRoleAndActionName(role, this.props.actionName);
     return rbac?.controlFunction || null;
   }
 
@@ -77,7 +78,7 @@ class DisplayRbacItem extends React.Component {
    * @return {boolean}
    */
   hasChanged() {
-    if (this.props.rbacsUpdated.findRbacByActionName(this.props.actionName)) {
+    if (this.props.rbacsUpdated.findRbacByUiActionName(this.props.actionName)) {
       return true;
     }
     return false;
@@ -89,7 +90,7 @@ class DisplayRbacItem extends React.Component {
   render() {
     let customizableRoles = [];
     if (this.props.roles) {
-      customizableRoles = this.props.roles.items.filter(role => role.name === 'user');
+      customizableRoles = this.props.roles;
     }
 
     return (
@@ -100,14 +101,14 @@ class DisplayRbacItem extends React.Component {
           </div>
           <div className="flex-item">
             <Select
-              className={`medium admin`}
+              className={`admin inline`}
               items={this.allowedCtlFunctions}
               value={controlFunctions.ALLOW}
               disabled={true}/>
           </div>
-          {customizableRoles.map(role => <div key={`${this.props.actionName}-${role.id}`} className="flex-item input">
+          {customizableRoles.items.map(role => <div key={`${this.props.actionName}-${role.id}`} className="flex-item input">
             <Select
-              className={`${role.name}`}
+              className="inline"
               items={this.allowedCtlFunctions}
               value={this.getCtlFunctionForRole(role)}
               disabled={!(this.props.rbacs?.length > 0) || !this.getCtlFunctionForRole(role)}
@@ -130,7 +131,7 @@ DisplayRbacItem.propTypes = {
   actionName: PropTypes.string.isRequired, // The action name.
   rbacs: PropTypes.object, // The collection of rbacs.
   rbacsUpdated: PropTypes.object, // The collection of updated rbacs.
-  roles: PropTypes.object.isRequired, // The collection of role.
+  roles: PropTypes.instanceOf(RolesCollection).isRequired, // The roles collection
   onChange: PropTypes.func.isRequired, // The translation function.
   t: PropTypes.func, // The translation function.
 };

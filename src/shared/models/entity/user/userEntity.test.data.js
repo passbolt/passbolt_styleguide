@@ -14,7 +14,7 @@
 
 import {v4 as uuid} from "uuid";
 import {defaultProfileDto} from "../profile/ProfileEntity.test.data";
-import {adminRoleDto, TEST_ROLE_USER_ID, userRoleDto} from "../role/role.test.data";
+import {adminRoleDto, TEST_ROLE_USER_ID, userRoleDto} from "../role/roleEntity.test.data";
 import {defaultGroupUser} from "../groupUser/groupUserEntity.test.data";
 import {defaultGpgkeyDto} from "../gpgkey/gpgkeyEntity.test.data";
 import {

@@ -13,13 +13,14 @@
  */
 
 import React from "react";
-import {fireEvent, render} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
 import AdministrationPasswordExpiryContextProvider from "../../../contexts/Administration/AdministrationPaswordExpiryContext/AdministrationPaswordExpiryContext";
 import DisplayAdministrationPasswordExpiryActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationPasswordExpiryActions/DisplayAdministrationPasswordExpiryActions";
 import DisplayAdministrationPasswordExpiry from "./DisplayAdministrationPasswordExpiry";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DisplayAdministrationPasswordExpirySettings component represented as a page
@@ -40,8 +41,11 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
             <div id="administration-help-panel"></div>
           </AdministrationPasswordExpiryContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -123,7 +127,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    */
   async clickOnFeatureToggle() {
     const isChecked = this.featureToggle.checked;
-    this.clickOn(this.featureToggle);
+    await this.clickOn(this.featureToggle);
     await waitForTrue(() => isChecked !== this.featureToggle.checked);
   }
 
@@ -132,7 +136,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @returns {Promise<void>}
    */
   async clickOnSave() {
-    this.clickOn(this.saveSettingsButton);
+    await this.clickOn(this.saveSettingsButton);
     await waitForTrue(() => !this.saveSettingsButton.getAttribute('disabled'));
   }
 
@@ -141,8 +145,7 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    * @param {HTMLElement} element The HTML element onto simulate the click
    * @returns {Promise<void>}
    */
-  clickOn(element) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
+  async clickOn(element) {
+    await this.user.click(element);
   }
 }

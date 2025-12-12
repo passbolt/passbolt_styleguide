@@ -475,7 +475,7 @@ class CreateUserGroup extends Component {
    */
   renderContainer(items, ref) {
     return (
-      <ul className="permissions groups_users" ref={ref}>
+      <ul className="permissions groups_users" data-testid="groups_users" ref={ref}>
         {items}
       </ul>
     );

@@ -4,7 +4,7 @@ import AppContext from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import UploadUserProfileAvatar from "./UploadUserProfileAvatar";
 import MockPort from "../../../test/mock/MockPort";
-import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
+import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
 
 
 export default {

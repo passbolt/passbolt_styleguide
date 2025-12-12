@@ -34,7 +34,8 @@ export default class FilterResourcesBySharedWithMePagePage {
         <Router history={props.history || createMemoryHistory()}>
           <FilterResourcesBySharedWithMePage {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

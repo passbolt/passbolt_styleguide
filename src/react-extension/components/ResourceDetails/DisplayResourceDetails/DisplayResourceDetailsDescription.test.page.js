@@ -31,7 +31,8 @@ export default class PasswordSidebarDescriptionSectionPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayResourceDetailsDescription  {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }
