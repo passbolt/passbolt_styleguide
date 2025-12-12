@@ -5798,6 +5798,8 @@ svg .section-card .card .title:first-child {
 .rbac-settings .inner {
   display: flex;
   align-self: stretch;
+  min-width: fit-content;
+  border-top: 0.1rem solid var(--Workspace-Dividers);
 }
 .rbac-settings .inner.highlighted {
   background: var(--Grid-Grid-selected-row);
@@ -5814,7 +5816,6 @@ svg .section-card .card .title:first-child {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 0.4rem;
 }
 .rbac-settings .inner.header-flex .flex-item.first {
   justify-content: flex-start;
@@ -5829,20 +5830,22 @@ svg .section-card .card .title:first-child {
 }
 .rbac-settings .flex-item {
   box-sizing: border-box;
-  min-width: 30%;
-  max-width: 30%;
+  min-width: 22rem;
+  width: 20%;
+  max-width: 40rem;
   align-self: stretch;
   min-height: 4.4rem;
-  padding: 0.6rem 1.6rem;
+  padding: 0.6rem 0.8rem;
   align-content: center;
-  border-top: 0.1rem solid var(--Workspace-Dividers);
 }
 .rbac-settings .flex-item:not(:first-of-type) > label {
   text-align: center;
 }
 .rbac-settings .flex-item.first {
-  min-width: 40%;
-  max-width: 40%;
+  min-width: 30rem;
+  width: 25%;
+  max-width: 50rem;
+  padding: 0.6rem 1.6rem;
 }
 .rbac-settings .flex-item.full-width {
   width: 100%;
