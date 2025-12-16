@@ -229,7 +229,7 @@ class DisplayRbacAdministration extends React.Component {
    */
   async renameRole(roleEntity) {
     try {
-      await this.roleApiService.update(roleEntity.toDto());
+      await this.roleApiService.update(roleEntity.id, roleEntity.toUpdateDto());
       this.findAndLoadData();
       await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been updated successfully."));
     } catch (error) {
