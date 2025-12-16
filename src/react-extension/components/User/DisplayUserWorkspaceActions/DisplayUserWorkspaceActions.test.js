@@ -248,7 +248,7 @@ describe("Display User Workspace Actions", () => {
   });
 
   it('As a user having account recovery response create permission I can click to review account recovery request if a user is selected', async() => {
-    expect.assertions(2);
+    expect.assertions(3);
     const props = propsUserRole();
     jest.spyOn(props.rbacContext, "canIUseAction");
     page = new DisplayUserWorkspaceActionsPage(props);
@@ -257,6 +257,7 @@ describe("Display User Workspace Actions", () => {
 
     expect(props.workflowContext.start).toHaveBeenCalledWith(HandleReviewAccountRecoveryRequestWorkflow, {accountRecoveryRequestId: props.userWorkspaceContext.selectedUsers[0].pending_account_recovery_request.id});
     expect(props.rbacContext.canIUseAction).toHaveBeenCalledWith(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE);
+    expect(props.rbacContext.canIUseAction).toHaveBeenCalledWith(actions.ACCOUNT_RECOVERY_REQUEST_INDEX);
   });
 
   it('As LU I should not disable a review account recovery request with user role', async() => {
