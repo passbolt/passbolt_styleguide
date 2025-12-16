@@ -160,14 +160,6 @@ describe("Administration Workspace Context", () => {
       expect(page.mustEditSubscriptionKey).toBeFalsy();
       expect(page.mustRefreshSubscriptionKey).toBeFalsy();
     });
-
-    it("As AD I should update the subscription", async() => {
-      expect.assertions(1);
-      jest.spyOn(context.port, 'request').mockImplementation(jest.fn());
-      const keyDto = {data: "key"};
-      await page.onUpdateSubscriptionKeyRequested(keyDto);
-      expect(context.port.request).toBeCalledWith("passbolt.subscription.update", keyDto);
-    });
   });
 
   describe("handleAdministrationMenuRouteChange logic", () => {

@@ -23,6 +23,7 @@ import FormCancelButton from "../../../../react-extension/components/Common/Inpu
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withAdminSubscription} from "../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription";
+import SubscriptionKeyServiceWorkerService from '../../../../shared/services/api/subscriptionKey/SubscriptionKeyServiceWorkerService';
 
 /**
  * Component allows the user to edit the subscription key from a dialog
@@ -33,6 +34,7 @@ class EditSubscriptionKey extends Component {
     this.state = this.getDefaultState();
     this.initEventHandlers();
     this.createInputRef();
+    this.subscriptionKeyService = new SubscriptionKeyServiceWorkerService(props.context.port);
   }
 
   getDefaultState() {
@@ -174,12 +176,8 @@ class EditSubscriptionKey extends Component {
       return;
     }
 
-    const keyDto = {
-      data: this.state.key,
-    };
-
     try {
-      await this.props.administrationWorkspaceContext.onUpdateSubscriptionKeyRequested(keyDto);
+      await this.subscriptionKeyService.updateOrganizationSubscriptionKey(this.state.key);
       await this.handleSaveSuccess();
       await this.props.adminSubscriptionContext.findSubscriptionKey();
     } catch (error) {
