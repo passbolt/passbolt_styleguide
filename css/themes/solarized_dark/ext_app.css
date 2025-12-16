@@ -10238,6 +10238,7 @@ svg .section-card .card .title:first-child {
 .resource-secret-history .resource-secret-history-workspace .content .secret-history-fields pre {
   height: 100%;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
   margin: 0;
 }
 .resource-secret-history .resource-secret-history-workspace .content .secret-history-fields pre code {

@@ -229,7 +229,7 @@ class DisplayRbacAdministration extends React.Component {
    */
   async renameRole(roleEntity) {
     try {
-      await this.roleApiService.update(roleEntity.toDto());
+      await this.roleApiService.update(roleEntity.id, roleEntity.toUpdateDto());
       this.findAndLoadData();
       await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been updated successfully."));
     } catch (error) {
@@ -437,6 +437,12 @@ class DisplayRbacAdministration extends React.Component {
                         <DisplayRbacSection label={this.props.t('Account recovery request')} level={1} rolesCount={rolesCount}>
                           <DisplayRbacItem label={this.props.t('Account recovery request view')}
                             actionName={actions.ACCOUNT_RECOVERY_REQUEST_VIEW} level={2}
+                            rbacs={this.props.adminRbacContext.rbacs}
+                            rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                            roles={customizableRoles}
+                            onChange={this.updateRbacControlFunction}/>
+                          <DisplayRbacItem label={this.props.t('Account recovery request index')}
+                            actionName={actions.ACCOUNT_RECOVERY_REQUEST_INDEX} level={2}
                             rbacs={this.props.adminRbacContext.rbacs}
                             rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                             roles={customizableRoles}

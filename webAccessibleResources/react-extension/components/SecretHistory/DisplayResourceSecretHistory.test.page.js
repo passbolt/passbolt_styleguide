@@ -114,7 +114,7 @@ export default class DisplayResourceSecretHistoryPage {
    * @returns {{readonly name: string|string|*, readonly username: string|string|*, readonly status: string|string|*}|*|string|string}
    */
   get secretRevisionCreatorItemSelected() {
-    const element = this._page.container.querySelector('.left-sidebar .sidebar-content-sections .section-content.selected');
+    const element = this._page.container.querySelector('.left-sidebar .sidebar-content-sections .section-content .selected');
 
     return {
       get name() {

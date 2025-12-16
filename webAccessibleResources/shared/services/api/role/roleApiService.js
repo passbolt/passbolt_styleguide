@@ -76,18 +76,22 @@ export default class RoleApiService extends AbstractService {
   /**
    * Update a role using Passbolt API
    *
-   * @param {Object} roleDto
+   * @param {string} id The role id
+   * @param {Object} roleDto The role data containing only the name
    * @returns {Promise<PassboltResponseEntity>}
-   * @throw {TypeError} if role dto is invalid or incomplete
+   * @throw {TypeError} if role id or dto is invalid or incomplete
    */
-  async update(roleDto) {
-    if (!roleDto || !roleDto.id || !roleDto.name) {
+  async update(id, roleDto) {
+    if (!id) {
+      throw new TypeError("Role update failed, role id is required.");
+    }
+    if (!roleDto || !roleDto.name) {
       throw new TypeError("Role update failed, invalid role data.");
     }
 
-    isValidUuid(roleDto.id);
+    isValidUuid(id);
     assertString(roleDto.name);
-    const response = await this.apiClient.update(roleDto.id, roleDto);
+    const response = await this.apiClient.update(id, roleDto);
 
     return new PassboltResponseEntity(response);
   }
