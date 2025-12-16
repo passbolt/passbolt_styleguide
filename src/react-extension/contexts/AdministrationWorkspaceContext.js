@@ -72,7 +72,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       administrationWorkspaceAction: () => <></>, // Class of the component to display the actions of the users
       setDisplayAdministrationWorkspaceAction: this.setDisplayAdministrationWorkspaceAction.bind(this), // Whenever the component to display workspace action is requested
       resetDisplayAdministrationWorkspaceAction: this.resetDisplayAdministrationWorkspaceAction.bind(this), // Whenever the reset of the display workspace action is requested
-      onUpdateSubscriptionKeyRequested: this.onUpdateSubscriptionKeyRequested.bind(this), // Whenever the user update the subscription key
       onSaveEnabled: this.handleSaveEnabled.bind(this), // Whenever a user change settings
       onMustSaveSettings: this.handleMustSaveSettings.bind(this), // Whenever a user wants save settings
       onMustEditSubscriptionKey: this.handleMustEditSubscriptionKey.bind(this), // Whenever a user wants edit the susbcription key
@@ -287,15 +286,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    */
   resetDisplayAdministrationWorkspaceAction() {
     this.setState({administrationWorkspaceAction: () => <></>});
-  }
-
-  /**
-   * Whenever the update of the subscription is requested.
-   * @param keyDto The new subscription key
-   * @return {Promise<object>}
-   */
-  onUpdateSubscriptionKeyRequested(keyDto) {
-    return this.props.context.port.request("passbolt.subscription.update", keyDto);
   }
 
   /**

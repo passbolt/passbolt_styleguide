@@ -262,14 +262,6 @@ export default class AdministrationWorkspaceContextPage {
   }
 
   /**
-   * on update subscription requested
-   */
-  async onUpdateSubscriptionKeyRequested(keyDto) {
-    await this.administrationWorkspaceContext.onUpdateSubscriptionKeyRequested(keyDto);
-    await waitFor(() => {});
-  }
-
-  /**
    * Returns the rendering of  the page
    * @param appContext a app context
    * @param text a specific text search filter

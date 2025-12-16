@@ -21,6 +21,7 @@ import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
 import AccountEntity from "../../shared/models/entity/account/accountEntity";
 import RoleServiceWorkerService from "../../shared/services/serviceWorker/role/roleServiceWorkerService";
 import RbacServiceWorkerService from "../../shared/services/serviceWorker/rbac/rbacServiceWorkerService";
+import SubscriptionKeyServiceWorkerService from '../../shared/services/api/subscriptionKey/SubscriptionKeyServiceWorkerService';
 
 /**
  * The ExtApp context provider
@@ -38,6 +39,7 @@ class ExtAppContextProvider extends React.Component {
     this.bindCallbacks();
     this.initEventHandlers();
     this.hierarchyFolderCache = {}; // A cache of the last known list of folders hierarchy by ID from the App context
+    this.subscriptionKeyService = new SubscriptionKeyServiceWorkerService(props.port);
   }
 
   async componentDidMount() {
@@ -396,7 +398,7 @@ class ExtAppContextProvider extends React.Component {
    * Whenever the subscription key is requested
    */
   async onGetSubscriptionKeyRequested() {
-    return await this.props.port.request("passbolt.subscription.get");
+    return this.subscriptionKeyService.findOrganizationSubscriptionKey();
   }
 
   /**
