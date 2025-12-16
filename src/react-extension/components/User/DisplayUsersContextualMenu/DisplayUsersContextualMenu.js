@@ -245,7 +245,9 @@ class DisplayUsersContextualMenu extends React.Component {
    * Check if the user can use the review recovery request capability.
    */
   canIReviewAccountRecoveryRequest() {
-    return this.props.context.siteSettings.canIUse("accountRecovery") && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE);
+    return this.props.context.siteSettings.canIUse("accountRecovery")
+      && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE)
+      && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_INDEX);
   }
 
   /**

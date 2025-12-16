@@ -441,6 +441,12 @@ class DisplayRbacAdministration extends React.Component {
                             rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                             roles={customizableRoles}
                             onChange={this.updateRbacControlFunction}/>
+                          <DisplayRbacItem label={this.props.t('Account recovery request index')}
+                            actionName={actions.ACCOUNT_RECOVERY_REQUEST_INDEX} level={2}
+                            rbacs={this.props.adminRbacContext.rbacs}
+                            rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                            roles={customizableRoles}
+                            onChange={this.updateRbacControlFunction}/>
                           <DisplayRbacItem label={this.props.t('Account recovery request review')}
                             actionName={actions.ACCOUNT_RECOVERY_RESPONSE_CREATE} level={2}
                             rbacs={this.props.adminRbacContext.rbacs}
