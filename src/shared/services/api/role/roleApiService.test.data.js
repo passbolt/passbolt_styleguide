@@ -1,0 +1,44 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         4.1.0
+ */
+import PassboltResponseEntity from "../../../models/entity/apiService/PassboltResponseEntity";
+import {adminRoleDto, customRoleDto, userRoleDto} from "../../../models/entity/role/roleEntity.test.data";
+import {rolesCollectionDto} from "../../../models/entity/role/rolesCollection.test.data";
+
+export class DefaultRoleApiService {
+  findAll() {
+    return new PassboltResponseEntity({header: {}, body: rolesCollectionDto});
+  }
+
+  delete() {
+    return new PassboltResponseEntity({});
+  }
+
+  update(roleDto) {
+    return new PassboltResponseEntity({header: {}, body: roleDto});
+  }
+
+  create(roleDto) {
+    return new PassboltResponseEntity({header: {}, body: roleDto});
+  }
+}
+
+export class RoleApiServiceWithTooManyRoles {
+  findAll() {
+    const roles = [adminRoleDto(), userRoleDto(), customRoleDto({name: "c-role-1"}), customRoleDto({name: "c-role-2"}), customRoleDto({name: "c-role-3"})];
+    return new PassboltResponseEntity({header: {}, body: roles});
+  }
+  delete() {
+    return new PassboltResponseEntity({});
+  }
+}

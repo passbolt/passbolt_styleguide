@@ -19,7 +19,6 @@ import "../../../../../test/mocks/mockPortal.js";
 import {defaultProps, mockMfaSettings} from "./DisplayMfaAdministration.test.data";
 import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
 import DisplayMfaAdministrationPage from "./DisplayMfaAdministration.test.page";
-import {waitFor} from "@testing-library/react";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
 import {enableFetchMocks} from 'jest-fetch-mock';
@@ -44,8 +43,6 @@ describe("See the MFA settings", () => {
     });
 
     it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
-      await waitFor(() => {});
-
       expect.assertions(9);
 
       expect(page.exists()).toBeTruthy();
@@ -86,8 +83,6 @@ describe("See the MFA settings", () => {
       await page.checkYubikey();
       await page.saveSettings();
 
-      await waitFor(() => {});
-
       expect.assertions(3);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The multi factor authentication settings for the organization were updated.");
       // We expect the button to be disable
@@ -107,8 +102,6 @@ describe("See the MFA settings", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
       await page.saveSettings();
 
-      await waitFor(() => {});
-
       expect.assertions(2);
       // Throw general error message
       expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(error.message);
@@ -124,8 +117,6 @@ describe("See the MFA settings", () => {
       page.fillDuoHostname("");
 
       await page.saveSettings();
-
-      await waitFor(() => {});
 
       expect.assertions(6);
       // Throw general error message

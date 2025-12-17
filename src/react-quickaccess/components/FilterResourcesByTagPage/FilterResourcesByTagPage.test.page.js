@@ -34,7 +34,8 @@ export default class FilterResourcesByTagPagePage {
         <Router history={props.history || createMemoryHistory()}>
           <FilterResourcesByTagPage {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

@@ -29,7 +29,8 @@ export default class DisplayChangePassphraseIntroductionPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayChangePassphraseIntroduction {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

@@ -28,7 +28,8 @@ export default class DisplayUserWorkspaceEmptyDetailsPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayUserWorkspaceEmptyDetails/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

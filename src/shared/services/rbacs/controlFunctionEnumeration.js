@@ -16,6 +16,7 @@ import AllowControlFunction from "./controlFunctions/allowControlFunction";
 import AllowIfGroupManagerInOneGroupFunction from "./controlFunctions/allowIfGroupManagerInOneGroupFunction";
 import DenyControlFunction from "./controlFunctions/denyControlFunction";
 import {uiActions} from "./uiActionEnumeration";
+import {actions} from "./actionEnumeration";
 
 /**
  * The supported control functions labels.
@@ -42,7 +43,7 @@ export const controlFunctionResolutions = {
  * By default, the system makes it always ALLOW, but some action are more complex than allow and deny.
  * @type {object}
  */
-export const defaultAdminUiActionControlResolution = {
+export const defaultAdminActionControlResolution = {
   [uiActions.FOLDERS_USE]: controlFunctionResolutions[controlFunctions.ALLOW] // Default example, to be removed when the placeholder won't be necessary anymore to explain the dat structure
 };
 
@@ -51,6 +52,10 @@ export const defaultAdminUiActionControlResolution = {
  * By default, the system makes it always ALLOW, but some action are restricted by default
  * @type {object}
  */
-export const defaultUserUiActionControlResolution = {
+export const defaultUserActionControlResolution = {
   [uiActions.ADMINSTRATION_VIEW_WORKSPACE]: controlFunctionResolutions[controlFunctions.DENY],
+  [actions.GROUPS_ADD]: controlFunctionResolutions[controlFunctions.DENY],
+  [actions.ACCOUNT_RECOVERY_REQUEST_VIEW]: controlFunctionResolutions[controlFunctions.DENY],
+  [actions.ACCOUNT_RECOVERY_REQUEST_INDEX]: controlFunctionResolutions[controlFunctions.DENY],
+  [actions.ACCOUNT_RECOVERY_RESPONSE_CREATE]: controlFunctionResolutions[controlFunctions.DENY],
 };

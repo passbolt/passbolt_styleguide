@@ -475,7 +475,7 @@ class ResourceViewPage extends React.Component {
    * @returns {boolean}
    */
   get canPreviewSecret() {
-    return this.props.context.siteSettings.canIUse('previewPassword') && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
+    return this.props.context.siteSettings.canIUse('previewPassword') && this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW);
   }
 
   /**
@@ -499,7 +499,7 @@ class ResourceViewPage extends React.Component {
     const additionalUris = this.state.resource.metadata?.uris?.slice(1);
     const isPasswordPreviewed = this.isPasswordPreviewed();
     const isTotpPreviewed = this.isTotpPreviewed();
-    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
+    const canCopySecret = this.props.rbacContext.canIUseAction(uiActions.SECRETS_COPY);
 
     return (
       <div className="resource item-browse">

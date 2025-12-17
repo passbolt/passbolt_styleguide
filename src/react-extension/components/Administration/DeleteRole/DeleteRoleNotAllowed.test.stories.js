@@ -9,12 +9,22 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.1.0
+ * @since         5.8.0
  */
-import {defaultSettingsRbacsCollectionData} from "../../../models/entity/rbac/rbacsCollection.test.data";
+import {defaultProps} from "./DeleteRoleNotAllowed.test.data";
+import DeleteRoleNotAllowed from "./DeleteRoleNotAllowed";
 
-export class DefaultRbacService {
-  findAll() {
-    return defaultSettingsRbacsCollectionData;
-  }
-}
+
+export default {
+  title: 'Components/Administration/DeleteRoleNotAllowed',
+  component: DeleteRoleNotAllowed
+};
+
+
+export const Initial = {
+  args: defaultProps()
+};
+
+export const OneUser = {
+  args: defaultProps({usersCount: 1})
+};

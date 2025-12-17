@@ -28,7 +28,8 @@ export default class ActionAbortedMissingMetadataKeysPage {
     this._page = render(
       <MockTranslationProvider>
         <ActionAbortedMissingMetadataKeys {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

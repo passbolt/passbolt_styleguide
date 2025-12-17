@@ -34,7 +34,8 @@ export default class MoreFiltersPagePage {
         <Router history={props.history || createMemoryHistory()}>
           <MoreFiltersPage {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

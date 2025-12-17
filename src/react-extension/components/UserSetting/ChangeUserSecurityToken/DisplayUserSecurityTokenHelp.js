@@ -30,9 +30,12 @@ class DisplayUserGpgInformationHelp extends React.Component {
         <p>
           <Trans>This security token will be displayed when your passphrase is requested,
             so you can verify quickly the form is coming from passbolt.</Trans>&nbsp;
-          <Trans>This will help protect you from <a href="https://en.wikipedia.org/wiki/Phishing" target="_blank" rel="noopener noreferrer">
+          <Trans>This will help protect you from <a href="https://en.wikipedia.org/wiki/Phishing" target="_blank" rel="noopener noreferrer" data-testid="phishingLink">
           phishing attacks</a>.</Trans>
         </p>
+        <a className="button" href="https://www.passbolt.com/docs/user/settings/browser/security-token/" target="_blank" rel="noopener noreferrer">
+          <Trans>Learn more</Trans>
+        </a>
       </div>
     );
   }

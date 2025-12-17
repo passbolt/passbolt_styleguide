@@ -29,7 +29,8 @@ export default class DisplayRbacAdministrationPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayRbacAdministration {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 
@@ -52,8 +53,8 @@ export default class DisplayRbacAdministrationPage {
   /**
    * Get all the select by role
    */
-  getAllSelectsByRole(roleName) {
-    return this._page.container.querySelectorAll(`.select-container.${roleName}`);
+  getAllSelectsByRole(roleIndex) {
+    return this._page.container.querySelectorAll(`.rbac-row .flex-item:nth-child(${roleIndex}) .select-container`);
   }
 
   /**
@@ -67,22 +68,22 @@ export default class DisplayRbacAdministrationPage {
 
   /**
    * Returns the toggle settings
-   * @param roleName
+   * @param roleIndex
    * @param actionName
    * @returns {Element}
    */
-  select(roleName, actionName) {
-    return this.row(actionName)?.querySelector(`.select-container.${roleName} .selected-value`);
+  select(roleIndex, actionName) {
+    return this.row(actionName)?.querySelector(`.rbac-row .flex-item:nth-child(${roleIndex}) .select-container .selected-value`);
   }
 
   /**
    * Select the first item of the select
-   * @param roleName
+   * @param roleIndex
    * @param actionName
    * @returns {Element}
    */
-  selectFirstItem(roleName, actionName) {
-    return this.row(actionName)?.querySelector(`.select-container.${roleName} .option`);
+  selectFirstItem(roleIndex, actionName) {
+    return this.row(actionName)?.querySelector(`.rbac-row .flex-item:nth-child(${roleIndex}) .select-container .option`);
   }
 
   /**
@@ -101,17 +102,44 @@ export default class DisplayRbacAdministrationPage {
 
   /**
    * Returns the opened item list
-   * @param {string} id
+   * @param roleIndex
+   * @param actionName
    */
-  selectItems(roleName, actionName) {
-    return this.row(actionName)?.querySelector(`.select-container.${roleName} .items`);
+  selectItems(roleIndex, actionName) {
+    return this.row(actionName)?.querySelector(`.rbac-row .flex-item:nth-child(${roleIndex}) .select-container .items`);
   }
 
   /**
    * Returns the first item from the option list
+   * @param roleIndex
+   * @param actionName
    */
-  selectFirstItemList(roleName, actionName) {
-    return this.row(actionName)?.querySelector(`.select-container.${roleName} .option[tabindex = "0"]`);
+  selectFirstItemList(roleIndex, actionName) {
+    return this.row(actionName)?.querySelector(`.rbac-row .flex-item:nth-child(${roleIndex}) .select-container .option[tabindex = "0"]`);
+  }
+
+  /**
+   * Returns the more button of a role given its index or null if there is no button
+   * @param roleIndex
+   */
+  getMoreButton(roleIndex) {
+    return this._page.container.querySelector(`.header-flex .flex-item:nth-child(${roleIndex}) .dropdown > button`);
+  }
+
+  /**
+   * Returns the delete role button of a role given its index or null if there is no button
+   * @param roleIndex
+   */
+  getDeleteRoleButton(roleIndex) {
+    return this._page.container.querySelector(`.header-flex .flex-item:nth-child(${roleIndex}) .dropdown #delete_role_action`);
+  }
+
+  /**
+   * Returns the rename role button of a role given its index or null if there is no button
+   * @param roleIndex
+   */
+  getRenameRoleButton(roleIndex) {
+    return this._page.container.querySelector(`.header-flex .flex-item:nth-child(${roleIndex}) .dropdown #rename_role_action`);
   }
 
   /**
@@ -119,6 +147,21 @@ export default class DisplayRbacAdministrationPage {
    */
   exists() {
     return this.Rbac !== null;
+  }
+
+  /**
+   * Returns the create role button.
+   * @returns {HTMLElement}
+   */
+  get createRoleButton() {
+    return this._page.container.querySelector('.main-content button');
+  }
+
+  /**
+   * Returns the count of roles displayed on screen
+   */
+  get displayedRoleCount() {
+    return this._page.container.querySelectorAll('.flex-container.header-flex .flex-item.centered').length;
   }
 
   /**

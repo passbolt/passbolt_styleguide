@@ -11,13 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.2.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import React from "react";
 import {AdminInternationalizationContextProvider} from "../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayAdministrationInternationalisationActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationInternationalisationActions/DisplayAdministrationInternationalisationActions";
 import DisplayInternationalizationAdministration from "./DisplayInternationalizationAdministration";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DisplayInternationalizationAdministration component represented as a page
@@ -37,8 +38,11 @@ export default class DisplayInternationalizationAdministrationPage {
             <DisplayInternationalizationAdministration {...props}/>
           </AdminInternationalizationContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
   /**
    * Returns the totp input element
@@ -128,9 +132,7 @@ export default class DisplayInternationalizationAdministrationPage {
 
   /** click on the element */
   async click(element) {
-    fireEvent.click(element);
-    await waitFor(() => {
-    });
+    await this.user.click(element);
   }
 
   /**

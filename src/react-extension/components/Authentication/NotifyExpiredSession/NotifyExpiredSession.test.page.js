@@ -31,7 +31,8 @@ export default class NotifyExpiredSessionPage {
         <Router>
           <NotifyExpiredSession {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

@@ -28,7 +28,8 @@ export default class MfaInviteUserSettingsPreferenceDialogPage {
     this._page = render(
       <MockTranslationProvider>
         <MfaInviteUserSettingsPreferenceDialog {...props} />
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

@@ -69,7 +69,7 @@ class DisplayUserProfileHelp extends React.Component {
    * @returns {bool}
    */
   get canIUseUploadAvatarCapability() {
-    return this.props.rbacContext.canIUseUiAction(uiActions.AVATAR_UPLOAD);
+    return this.props.rbacContext.canIUseAction(uiActions.AVATAR_UPLOAD);
   }
 
 

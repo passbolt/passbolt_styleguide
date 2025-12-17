@@ -29,7 +29,8 @@ export default class ApiErrorPage {
     this._page = render(
       <MockTranslationProvider>
         <ApiError {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

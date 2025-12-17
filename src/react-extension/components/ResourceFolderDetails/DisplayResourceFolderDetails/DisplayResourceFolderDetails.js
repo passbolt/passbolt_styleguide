@@ -67,7 +67,7 @@ class DisplayResourceFolderDetails extends React.Component {
    * @returns {JSX}
    */
   renderFolderDetail() {
-    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
+    const canViewShare = this.props.rbacContext.canIUseAction(uiActions.SHARE_VIEW_LIST);
 
     return (
       <>
@@ -86,7 +86,7 @@ class DisplayResourceFolderDetails extends React.Component {
   render() {
     const canUseAuditLog = (this.props.context.siteSettings.canIUse("auditLog")
     || this.props.context.siteSettings.canIUse("audit_log")) // @deprecated remove with v4
-    && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_ACTIVITIES);
+    && this.props.rbacContext.canIUseAction(uiActions.RESOURCES_SEE_ACTIVITIES);
 
     return (
       <div className="sidebar resource">

@@ -12,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
+import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
 import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 /**

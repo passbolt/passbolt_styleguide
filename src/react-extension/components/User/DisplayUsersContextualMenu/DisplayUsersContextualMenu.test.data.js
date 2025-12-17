@@ -16,6 +16,9 @@ import MockPort from "../../../test/mock/MockPort";
 import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
 import {v4 as uuid} from 'uuid';
 import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import {
+  defaultAdministratorRbacContext,
+} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -90,6 +93,7 @@ export function defaultProps(data = {}) {
     dialogContext: {
       open: jest.fn()
     },
+    rbacContext: defaultAdministratorRbacContext(),
     hide: jest.fn(),
     workflowContext: {
       start: jest.fn()

@@ -29,7 +29,8 @@ export default class IntroduceExtensionTestPage {
     this._page = render(
       <MockTranslationProvider>
         <IntroduceExtension {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

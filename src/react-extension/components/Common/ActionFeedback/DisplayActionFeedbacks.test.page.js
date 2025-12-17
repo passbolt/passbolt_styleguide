@@ -30,7 +30,8 @@ export default class DisplayActionFeedbacksPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayActionFeedbacks {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

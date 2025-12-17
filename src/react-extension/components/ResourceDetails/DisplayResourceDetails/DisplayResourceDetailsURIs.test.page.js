@@ -29,7 +29,8 @@ export default class DisplayResourceDetailsURIsPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayResourceDetailsURIs {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

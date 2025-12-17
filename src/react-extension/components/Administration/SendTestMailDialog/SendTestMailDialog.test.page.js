@@ -30,7 +30,8 @@ export default class SendTestMailDialogPage {
     this._page = render(
       <MockTranslationProvider>
         <SendTestMailDialog {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

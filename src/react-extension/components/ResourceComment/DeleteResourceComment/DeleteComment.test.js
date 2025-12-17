@@ -76,10 +76,10 @@ describe("Delete comments", () => {
       });
 
       it('the comment should be removed from the comments list', async() => {
+        expect.assertions(3);
         await page.title.click();
         await page.displayCommentList.delete(1);
         expect(page.confirmDeleteComment.exists()).toBeTruthy();
-
         await page.confirmDeleteComment.confirm();
 
         const requestName = requestMock.mock.calls[requestMock.mock.calls.length - 2][0];
@@ -106,6 +106,7 @@ describe("Delete comments", () => {
       });
 
       it('I should prompt to insert a new comment', async() => {
+        expect.assertions(1);
         await page.title.click();
         await page.displayCommentList.delete(1);
 

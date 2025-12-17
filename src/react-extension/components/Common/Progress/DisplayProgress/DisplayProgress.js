@@ -129,6 +129,23 @@ class DisplayProgress extends Component {
   }
 
   /**
+   * Decode html characters
+   * @param {string} text with html encoded characters
+   * @return {string}
+   */
+  decodedHtmlCharacters(text) {
+    if (text) {
+      try {
+        const doc = new DOMParser().parseFromString(text, 'text/html');
+        return doc.documentElement.textContent;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    return text;
+  }
+
+  /**
    * Render
    * @returns {JSX.Element}
    */
@@ -141,7 +158,7 @@ class DisplayProgress extends Component {
         <div className="dialog">
           <div className="dialog-header">
             <span className="dialog-title-wrapper">
-              <h2>{this.props.progressContext.progressDialogProps.title || <Trans>Please wait...</Trans>}</h2>
+              <h2>{this.decodedHtmlCharacters(this.props.progressContext.progressDialogProps.title) || <Trans>Please wait...</Trans>}</h2>
             </span>
           </div>
           <div className="dialog-content">
@@ -153,7 +170,7 @@ class DisplayProgress extends Component {
                 </span>
                 {!this.isInfiniteProgressMode() &&
                   <div className="progress-details">
-                    <span className="progress-step-label">{this.props.progressContext.progressDialogProps.message || <Trans>Please wait...</Trans>}</span>
+                    <span className="progress-step-label">{this.decodedHtmlCharacters(this.props.progressContext.progressDialogProps.message) || <Trans>Please wait...</Trans>}</span>
                     <span className="progress-percent">{progress}%</span>
                   </div>
                 }

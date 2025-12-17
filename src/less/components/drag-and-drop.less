@@ -18,6 +18,36 @@
       margin-top: .1rem;
     }
 
+    // Avatar container
+    .drag-image {
+      .default-avatar {
+        position: relative;
+        width: 2.4rem;
+        height: 2.4rem;
+        border-radius: 50%;
+        overflow: hidden;
+
+        svg,
+        img {
+          width: 2.4rem;
+          height: 2.4rem;
+        }
+
+        img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          object-fit: cover;
+          z-index: 2;
+          
+          // Hide SVG when image is present
+          &[src]:not([src=""]) ~ svg {
+            display: none;
+          }
+        }
+      }
+    }
+
     span.message {
       color: var(--Text-and-icons-Main-text);
       font-size: 1.5rem;

@@ -1,7 +1,7 @@
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import MockPort from "../../../test/mock/MockPort";
-import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
+import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
 import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 /**

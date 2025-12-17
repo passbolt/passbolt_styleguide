@@ -36,6 +36,8 @@ import BuoySVG from '../../../../img/svg/buoy.svg';
 import MetadataKeySVG from "../../../../img/svg/metadata_key.svg";
 import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/ConfirmShareMissingMetadataKeys";
 import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 
 class DisplayUsersContextualMenu extends React.Component {
   /**
@@ -243,7 +245,9 @@ class DisplayUsersContextualMenu extends React.Component {
    * Check if the user can use the review recovery request capability.
    */
   canIReviewAccountRecoveryRequest() {
-    return this.props.context.siteSettings.canIUse("accountRecovery") && this.isLoggedInUserAdmin();
+    return this.props.context.siteSettings.canIUse("accountRecovery")
+      && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE)
+      && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_INDEX);
   }
 
   /**
@@ -490,11 +494,12 @@ DisplayUsersContextualMenu.propTypes = {
   top: PropTypes.number, // top position in px of the page
   workflowContext: PropTypes.any, // the workflow context
   dialogContext: PropTypes.any, // the dialog context
+  rbacContext: PropTypes.any, // the rbac context
   user: PropTypes.object, // user selected
   actionFeedbackContext: PropTypes.any, // The action feedback context
   clipboardContext: PropTypes.object, // the clipboard service
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withWorkflow(withDialog(withClipboard(withActionFeedback(withTranslation('common')(DisplayUsersContextualMenu))))));
+export default withAppContext(withWorkflow(withRbac(withDialog(withClipboard(withActionFeedback(withTranslation('common')(DisplayUsersContextualMenu)))))));
 

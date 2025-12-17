@@ -16,6 +16,7 @@
  * Unit tests on DisplayUserDetailsInformation in regard of specifications
  */
 
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 import {defaultProps, defaultUserProps, defaultWithMissingMetadataKeysProps} from "./DisplayUserDetailsInformation.test.data";
 import DisplayUserDetailsInformationPage from "./DisplayUserDetailsInformation.test.page";
 
@@ -43,7 +44,8 @@ describe("Display User Details Information", () => {
     expect(page.isCollapsed).toBeFalsy();
   });
 
-  it('As LU I should see the detailed user role', () => {
+  it('As LU I should see the detailed user role', async() => {
+    await waitForTrue(() => page.role !== "");
     expect(page.role).toBe('admin');
   });
 

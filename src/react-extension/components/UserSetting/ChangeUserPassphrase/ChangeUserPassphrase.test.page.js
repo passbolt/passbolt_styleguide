@@ -26,7 +26,8 @@ export default class ChangeUserPassphrasePage {
    */
   constructor(props) {
     this._page = render(
-      <ChangeUserPassphrase {...props}/>
+      <ChangeUserPassphrase {...props}/>,
+      {legacyRoot: true}
     );
   }
 

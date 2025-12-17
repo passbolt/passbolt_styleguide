@@ -39,7 +39,8 @@ export default class DeleteUserPage {
             <DeleteUser {...props}/>
           </DialogContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

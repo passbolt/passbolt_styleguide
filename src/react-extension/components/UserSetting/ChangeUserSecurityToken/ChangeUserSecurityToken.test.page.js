@@ -1,7 +1,8 @@
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render, waitFor} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ChangeUserSecurityToken from "./ChangeUserSecurityToken";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The ChangeUserSecurityTokenPage component represented as a page
@@ -16,8 +17,11 @@ export default class ChangeUserSecurityTokenPage {
     this._page = render(
       <MockTranslationProvider>
         <ChangeUserSecurityToken {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -68,7 +72,7 @@ export default class ChangeUserSecurityTokenPage {
    * Returns true if one is processing
    */
   get isProcessing() {
-    return this.updateButton.getAttribute('class').indexOf('processing') > -1;
+    return this.updateButton.classList.contains('processing');
   }
 
   /**
@@ -99,9 +103,7 @@ export default class ChangeUserSecurityTokenPage {
    */
   async selectColor(color) {
     const element = this._page.container.querySelector(`div[title="${color}"]`);
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await this.user.click(element);
   }
 
   /**
@@ -109,17 +111,18 @@ export default class ChangeUserSecurityTokenPage {
    * @param code The token code
    */
   async fillCode(code) {
-    fireEvent.change(this.codeInput, {target: {value: code}});
-    await waitFor(() => {});
+    await this.user.clear(this.codeInput);
+
+    if (code.length > 0) {
+      await this.user.type(this.codeInput, code);
+    }
   }
 
   /**
    * Randomize a token code
    */
   async randomize() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.randomizeLink, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.randomizeLink); // replaced fireEvent.click
   }
 
   /**
@@ -127,8 +130,7 @@ export default class ChangeUserSecurityTokenPage {
    * @param inProgressFn The function called while saving
    */
   async save(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
-    fireEvent.click(this.updateButton, leftClick);
-    await waitFor(inProgressFn);
+    await this.user.click(this.updateButton); // replaced fireEvent.click
+    await waitFor(inProgressFn); // wait for any async side effects
   }
 }

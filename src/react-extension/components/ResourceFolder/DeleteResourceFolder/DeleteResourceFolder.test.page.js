@@ -13,11 +13,12 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render, waitFor} from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DeleteResourceFolder from "./DeleteResourceFolder";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The DeleteResourceFolderPage component represented as a page
@@ -34,8 +35,11 @@ export default class DeleteResourceFolderPage {
         <AppContext.Provider  value={appContext}>
           <DeleteResourceFolder {...props}></DeleteResourceFolder>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
 
@@ -66,16 +70,21 @@ export default class DeleteResourceFolderPage {
   get canChangeData() {
     return !this._page.container.querySelector('#delete-cascade').hasAttribute('disabled');
   }
-
   /**
-   * Set the flag that determines whether the subfolders must be deleted
-   * @param value
+   * Toggles flag that determines whether the subfolders must be deleted
+   * @param {boolean} value
    */
-  set mustDeleteSubfolders(value) {
+  async toggleMustDeleteSubfolders(value) {
     const input = this._page.container.querySelector('#delete-cascade');
-    const leftClick = {button: 0};
-    fireEvent.click(input, leftClick);
+
+    if (value !== input.checked) {
+      await this.user.click(input);
+      await waitFor(() => {
+        expect(input.checked).toBe(value);
+      });
+    }
   }
+
   /**
    * Returns the delete button element
    */
@@ -111,11 +120,9 @@ export default class DeleteResourceFolderPage {
    */
   async delete(mustDeleteSubfolders, inProgressFn = () => {}) {
     if (mustDeleteSubfolders) {
-      this.mustDeleteSubfolders = mustDeleteSubfolders;
-      await waitFor(() => {});
+      await this.toggleMustDeleteSubfolders(true);
     }
-    const leftClick = {button: 0};
-    fireEvent.click(this.deleteButton, leftClick);
+    await this.user.click(this.deleteButton);
     await waitFor(inProgressFn);
   }
 
@@ -124,9 +131,7 @@ export default class DeleteResourceFolderPage {
    * Cancels the create operation
    */
   async cancel() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.cancelButton, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.cancelButton);
   }
 
 
@@ -134,8 +139,6 @@ export default class DeleteResourceFolderPage {
    * Close the create operation
    */
   async close() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.closeButton, leftClick);
-    await waitFor(() => {});
+    await this.user.click(this.closeButton);
   }
 }

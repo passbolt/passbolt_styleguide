@@ -29,7 +29,8 @@ export default class ChooseSecurityTokenPage {
     this._page = render(
       <MockTranslationProvider>
         <ChooseSecurityToken {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 
@@ -59,6 +60,20 @@ export default class ChooseSecurityTokenPage {
    */
   get randomizeLink() {
     return this._page.container.querySelector('.randomize-button-wrapper button');
+  }
+
+  /**
+   * Returns the phishing definition link
+   */
+  get phishingDefinitionLink() {
+    return this._page.container.querySelector('a[data-testid=phishingLink]');
+  }
+
+  /**
+   * Returns the security token documentation link
+   */
+  get tokenDocumentationLink() {
+    return this._page.container.querySelector('a[data-testid=tokenDocumentationLink]');
   }
 
   /**

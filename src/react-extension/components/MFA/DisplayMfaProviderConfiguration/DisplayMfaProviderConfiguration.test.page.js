@@ -29,7 +29,8 @@ export default class DisplayMfaProviderConfigurationPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayMfaProviderConfiguration {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

@@ -19,6 +19,9 @@ import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctio
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 describe("DisplayRbacItem", () => {
+  const adminRoleIndex = 2;
+  const userRoleIndex = 3;
+
   it("displays the select input for each role", async() => {
     expect.assertions(3);
 
@@ -28,7 +31,7 @@ describe("DisplayRbacItem", () => {
 
     expect(page.label.textContent).toEqual(props.label);
     expect(page.selectAdmin).not.toBeNull();
-    expect(page.selectRole("user")).not.toBeNull();
+    expect(page.selectRole(userRoleIndex)).not.toBeNull();
   });
 
   it("should disable admin select by default", async() => {
@@ -38,7 +41,7 @@ describe("DisplayRbacItem", () => {
     const page = new DisplayRbacItemPage(props);
     await waitFor(() => {});
 
-    expect(page.selectedRoleOption("admin").classList.contains('disabled')).toBeTruthy();
+    expect(page.selectedRoleOption(adminRoleIndex).classList.contains('disabled')).toBeTruthy();
   });
 
   it("should disable all select if not rbacs are defined", async() => {
@@ -50,8 +53,8 @@ describe("DisplayRbacItem", () => {
     const page = new DisplayRbacItemPage(props);
     await waitFor(() => {});
 
-    expect(page.selectedRoleOption("user").classList.contains('disabled')).toBeTruthy();
-    expect(page.selectedRoleOption("admin").classList.contains('disabled')).toBeTruthy();
+    expect(page.selectedRoleOption(userRoleIndex).classList.contains('disabled')).toBeTruthy();
+    expect(page.selectedRoleOption(adminRoleIndex).classList.contains('disabled')).toBeTruthy();
   });
 
   it("should display the default value for role other than admin", async() => {
@@ -61,11 +64,11 @@ describe("DisplayRbacItem", () => {
     const page = new DisplayRbacItemPage(props);
     await waitFor(() => {});
     //Click on select to open dropdown
-    await page.clickOnSelect("user");
+    await page.clickOnSelect(userRoleIndex);
 
-    expect(page.selectedRoleOption("user").classList.contains('disabled')).toBeFalsy();
-    expect(page.getRoleOption("user", controlFunctions.DENY)).not.toBeNull();
-    expect(page.getRoleOption("user", controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP)).toBeNull();
+    expect(page.selectedRoleOption(userRoleIndex).classList.contains('disabled')).toBeFalsy();
+    expect(page.getRoleOption(userRoleIndex, controlFunctions.DENY)).not.toBeNull();
+    expect(page.getRoleOption(userRoleIndex, controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP)).toBeNull();
   });
 
   it("should display the an extra option for group manager when ", async() => {
@@ -77,10 +80,10 @@ describe("DisplayRbacItem", () => {
     const page = new DisplayRbacItemPage(props);
     await waitFor(() => {});
     //Click on select to open dropdown
-    await page.clickOnSelect("user");
+    await page.clickOnSelect(userRoleIndex);
 
-    expect(page.selectedRoleOption("user").classList.contains('disabled')).toBeFalsy();
-    expect(page.getRoleOption("user", controlFunctions.ALLOW)).not.toBeNull();
-    expect(page.getRoleOption("user", controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP)).not.toBeNull();
+    expect(page.selectedRoleOption(userRoleIndex).classList.contains('disabled')).toBeFalsy();
+    expect(page.getRoleOption(userRoleIndex, controlFunctions.ALLOW)).not.toBeNull();
+    expect(page.getRoleOption(userRoleIndex, controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP)).not.toBeNull();
   });
 });

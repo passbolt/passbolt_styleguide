@@ -28,6 +28,7 @@ import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {getUserStatus} from "../../../../shared/utils/userUtils";
 import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
 import Fingerprint from "../../Common/Fingerprint/Fingerprint";
+import {withRoles} from "../../../contexts/RoleContext";
 
 class ManageAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -148,11 +149,11 @@ class ManageAccountRecoveryUserSettings extends Component {
 
   /**
    * Get the user role who initiated the account recovery request.
-   * @returns {object}
+   * @returns {string}
    */
-  get requestorRole() {
-    const roleName = this.props.context.roles.find(role => role.id === this.requestor.role_id).name;
-    return roleName;
+  get requestorRoleName() {
+    const role = this.props.roleContext.getRole(this.requestor.role_id);
+    return role?.name || "";
   }
 
   /**
@@ -207,6 +208,7 @@ class ManageAccountRecoveryUserSettings extends Component {
    */
   render() {
     const requestorStatus = getUserStatus(this.requestor);
+    const requestorRole = this.requestorRoleName;
     return (
       <DialogWrapper
         title={`${this.translate("Recovery")} (${this.type})`}
@@ -231,7 +233,7 @@ class ManageAccountRecoveryUserSettings extends Component {
                       <span className="dateTimeAgo" title={this.date}>{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</span>
                       <span className="chips-group">
                         <span className={`chips user-status ${requestorStatus}`}>{this.props.t(requestorStatus)}</span>
-                        <span className={`chips user-role ${this.requestorRole}`}>{this.requestorRole}</span>
+                        <span className={`chips user-role ${requestorRole}`}>{requestorRole}</span>
                       </span>
                     </div>
                   </div>
@@ -302,9 +304,10 @@ ManageAccountRecoveryUserSettings.propTypes = {
   dialogContext: PropTypes.object, // The dialog handler context
   organizationPolicy: PropTypes.object, // The organization policy details
   actionFeedbackContext: PropTypes.object, // The action feedback context handler
+  roleContext: PropTypes.object, // the role context
   onClose: PropTypes.func, // The close callback
   history: PropTypes.object, // The navigation history
   location: PropTypes.object, // The current page location
   t: PropTypes.func, // The translation function
 };
-export default withRouter(withAppContext(withActionFeedback(withAccountRecovery(withDialog(withTranslation("common")(ManageAccountRecoveryUserSettings))))));
+export default withRouter(withAppContext(withActionFeedback(withAccountRecovery(withRoles(withDialog(withTranslation("common")(ManageAccountRecoveryUserSettings)))))));

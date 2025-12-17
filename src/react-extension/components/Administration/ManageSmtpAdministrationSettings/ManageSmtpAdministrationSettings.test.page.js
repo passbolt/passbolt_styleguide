@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import React from "react";
 import ManageSmtpAdministrationSettings from "./ManageSmtpAdministrationSettings";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -20,6 +20,7 @@ import AdminSmtpSettingsContextProvider from "../../../contexts/AdminSmtpSetting
 import DisplayAdministrationSmtpSettingsActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSmtpSettingsActions/DisplayAdministrationSmtpSettingsActions";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import SendTestMailDialog from "../SendTestMailDialog/SendTestMailDialog";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The ManageSmtpAdministrationSettings component represented as a page
@@ -55,8 +56,11 @@ export default class ManageSmtpAdministrationSettingsPage {
     if (this._page) {
       this._page.rerender(contentToRender);
     } else {
-      this._page = render(contentToRender);
+      this._page = render(contentToRender,
+        {legacyRoot: true});
     }
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -153,14 +157,8 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @param {function} callback The callback to be used in the waitFor method to ensure the click is done (returns true when it's done)
    * @returns {Promise<void>}
    */
-  async clickOn(element, callback) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {
-      if (!callback()) {
-        throw new Error("Page didn't react yet on the event.");
-      }
-    });
+  async clickOn(element) {
+    await this.user.click(element);
   }
 
   /**
@@ -209,11 +207,6 @@ export default class ManageSmtpAdministrationSettingsPage {
     for (key in formData) {
       fireEvent.input(this[key], {target: {value: formData[key]}});
     }
-    await waitFor(() => {
-      if (this[key].value !== formData[key].toString()) {
-        throw new Error("Form is not udpated yet.");
-      }
-    });
   }
 
   /**

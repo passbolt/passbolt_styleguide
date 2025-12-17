@@ -28,7 +28,8 @@ export default class RequestAccountRecoveryPage {
     this._page = render(
       <MockTranslationProvider>
         <RequestAccountRecovery {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

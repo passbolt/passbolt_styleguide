@@ -67,7 +67,7 @@ class ImportResources extends Component {
    */
   get canUseFolders() {
     return this.props.context.siteSettings.canIUse("folders")
-      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
+      && this.props.rbacContext.canIUseAction(uiActions.FOLDERS_USE);
   }
 
   /**
@@ -76,7 +76,7 @@ class ImportResources extends Component {
    */
   get canUseTags() {
     return this.props.context.siteSettings.canIUse("tags")
-      && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
+      && this.props.rbacContext.canIUseAction(uiActions.TAGS_USE);
   }
 
   /**

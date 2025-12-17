@@ -31,7 +31,8 @@ export default class HandleReviewAccountRecoveryRequestWorkflowTestPage {
         <HandleReviewAccountRecoveryRequestWorkflow {...props} ref={node => {
           this._instance = node;
         }}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 }

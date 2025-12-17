@@ -25,6 +25,9 @@ import CarretDownSVG from "../../../../img/svg/caret_down.svg";
 import CarretRightSVG from "../../../../img/svg/caret_right.svg";
 import UsersSVG from "../../../../img/svg/users.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
+import {withDrag} from "../../../contexts/DragContext";
+import AddUserToGroup from "../../UserGroup/AddUserToGroupDialog/AddUserToGroupDialog";
+import {withDialog} from "../../../contexts/DialogContext";
 
 /**
  * This component display groups to filter the users
@@ -50,7 +53,8 @@ class FilterUsersByGroup extends React.Component {
       title: this.translate("All groups"), // title of the section
       filterType: null, // type of the filter selected
       moreTitleMenuOpen: false, // more title menu open
-      moreMenuOpenGroupId: null // more menu open for a group with the id
+      moreMenuOpenGroupId: null, // more menu open for a group with the id
+      dragOverGroupId: null // ID of the group currently being dragged over
     };
   }
 
@@ -67,6 +71,11 @@ class FilterUsersByGroup extends React.Component {
     this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
     this.handleCloseMoreMenu = this.handleCloseMoreMenu.bind(this);
     this.handleContextualMenuEvent = this.handleContextualMenuEvent.bind(this);
+    this.handleDragLeaveTitle = this.handleDragLeaveTitle.bind(this);
+    this.handleDragOverTitle = this.handleDragOverTitle.bind(this);
+    this.handleDropTitle = this.handleDropTitle.bind(this);
+    this.isGroupDisabled = this.isGroupDisabled.bind(this);
+    this.isGroupDraggedOver = this.isGroupDraggedOver.bind(this);
   }
 
   /**
@@ -115,8 +124,9 @@ class FilterUsersByGroup extends React.Component {
   handleContextualMenuEvent(event, group) {
     // Prevent the browser contextual menu to pop up.
     event.preventDefault();
-    // No operation available if not admin user
-    if (this.isCurrentUserAdmin) {
+    const isGroupManager = group.my_group_user && group.my_group_user.is_admin;
+    // No operation available if user is not a group manager or an admin
+    if (this.isCurrentUserAdmin || isGroupManager) {
       const top = event.pageY;
       const left = event.pageX;
       const contextualMenuProps = {group, left, top};
@@ -172,6 +182,64 @@ class FilterUsersByGroup extends React.Component {
     if (this.state.moreMenuOpenGroupId === id) {
       this.setState({moreMenuOpenGroupId: null});
     }
+  }
+
+  /**
+   * Handle when the user is not dragging over the section title anymore.
+   * @param {ReactEvent} event The event
+   * @param {Object} group The group
+   */
+  handleDragLeaveTitle(event, group) {
+  // Clear the drag over state for this group
+    if (this.state.dragOverGroupId === group.id) {
+      this.setState({dragOverGroupId: null});
+    }
+  }
+
+  /**
+   * Handle when the user is dragging content over the section title.
+   * @param {ReactEvent} event The event
+   * @param {Object} group The group being dragged over
+   */
+  handleDragOverTitle(event, group) {
+  // Prevent drop on disabled groups
+    if (this.isGroupDisabled(group)) {
+      return;
+    }
+
+    /*
+     * If you want to allow a drop, you must prevent the default handling by cancelling both the dragenter and dragover events.
+     * see: https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations#droptargets
+     */
+    event.preventDefault();
+
+    // Set the drag over state for this group
+    if (this.state.dragOverGroupId !== group.id) {
+      this.setState({dragOverGroupId: group.id});
+    }
+  }
+
+  /**
+   * Handle when the user is dropping the content on the title.
+   * @param event The DOM event
+   * @param group An user group
+   */
+  async handleDropTitle(event, group) {
+  // Prevent drop on disabled groups
+    if (this.isGroupDisabled(group)) {
+      return;
+    }
+
+    // Clear the drag over state
+    this.setState({dragOverGroupId: null});
+    const users = this.props.dragContext.draggedItems.users;
+
+    const addUserToGroupDialogProps = {
+      user: users[0],
+      group: group
+    };
+    this.props.context.setContext({addUserToGroupDialogProps});
+    this.props.dialogContext.open(AddUserToGroup);
   }
 
   // Zero conditional statements
@@ -269,8 +337,6 @@ class FilterUsersByGroup extends React.Component {
     return this.filteredGroups.length > 0;
   }
 
-
-
   /**
    * Returns true if the given group is selected
    * @param group A group
@@ -290,6 +356,26 @@ class FilterUsersByGroup extends React.Component {
   canShowMore(group) {
     const isGroupManager = group.my_group_user && group.my_group_user.is_admin;
     return this.isCurrentUserAdmin || isGroupManager;
+  }
+
+  /**
+   * Check if a group should be disabled during drag
+   * @param {Object} group The group to check
+   * @returns {boolean} True if the group should be disabled
+   */
+  isGroupDisabled(group) {
+    const {dragging, draggedItems} = this.props.dragContext;
+    const disabledGroupIds = draggedItems?.disabledGroupIds;
+    return dragging && disabledGroupIds && disabledGroupIds.includes(group.id);
+  }
+
+  /**
+   * Check if a group is currently being dragged over
+   * @param {Object} group The group to check
+   * @returns {boolean} True if the group is being dragged over
+   */
+  isGroupDraggedOver(group) {
+    return this.state.dragOverGroupId === group.id;
   }
 
   /**
@@ -351,10 +437,16 @@ class FilterUsersByGroup extends React.Component {
           <ul className="navigation-secondary-tree ready">
             {this.filteredGroups.map(group =>
               <li className="open node root group-item" key={group.id}>
-                <div className={`row  ${this.isSelected(group) ? "selected" : ""}`}>
+                <div
+                  className={`row ${this.isSelected(group) ? "selected" : ""} ${this.isGroupDisabled(group) ? "disabled" : ""} ${this.isGroupDraggedOver(group) ? "drop-focus" : ""}`}
+                >
                   <div className="main-cell-wrapper"
                     onClick={event => this.handleGroupSelected(event, group)}
-                    onContextMenu={event => this.handleContextualMenuEvent(event, group)}>
+                    onContextMenu={event => this.handleContextualMenuEvent(event, group)}
+                    onDragOver={event => this.handleDragOverTitle(event, group)}
+                    onDragLeave={event => this.handleDragLeaveTitle(event, group)}
+                    onDrop={event => this.handleDropTitle(event, group)}
+                  >
                     <div className="main-cell">
                       <button
                         type="button"
@@ -392,10 +484,12 @@ FilterUsersByGroup.propTypes = {
   userWorkspaceContext: PropTypes.any, // user workspace context
   history: PropTypes.object,
   contextualMenuContext: PropTypes.any, // The contextual menu context
+  dragContext: PropTypes.any,
+  dialogContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withUserWorkspace(withContextualMenu(withTranslation('common')(FilterUsersByGroup)))));
+export default withAppContext(withRouter(withUserWorkspace(withContextualMenu(withDrag(withDialog(withTranslation('common')(FilterUsersByGroup)))))));
 
 export const filterByGroupsOptions = {
   all: "all",

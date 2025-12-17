@@ -29,7 +29,8 @@ export default class DisplayResourceDetailsCustomFieldsPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayResourceDetailsCustomFields {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

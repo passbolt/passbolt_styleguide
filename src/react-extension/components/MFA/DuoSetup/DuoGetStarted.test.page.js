@@ -29,7 +29,8 @@ export default class DuoGetStartedPage {
     this._page = render(
       <MockTranslationProvider>
         <DuoGetStarted {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

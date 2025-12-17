@@ -18,8 +18,9 @@
 import {
   propsGroupSelected,
   propsSoleManagerSelected,
-  propsSoleMemberSelected,
+  propsSoleMemberSelected, propsUserGroupManagerWithGroupSelected,
   propsUserRole,
+  propsUserRoleGroupSelectedNotManager,
   propsWithMyselfAsSelectedUser,
   propsWithSelectedActiveUser,
   propsWithSelectedMFADisabledUser,
@@ -34,6 +35,7 @@ import ConfirmDisableUserMFA from "../ConfirmDisableUserMFA/ConfirmDisableUserMF
 import HandleReviewAccountRecoveryRequestWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
 import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/ConfirmShareMissingMetadataKeys";
 import RemoveUserFromGroup from "../../UserGroup/RemoveUserFromGroup/RemoveUserFromGroup";
+import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
 
 beforeEach(() => {
   jest.resetModules();
@@ -60,21 +62,21 @@ describe("Display User Workspace Actions", () => {
     expect.assertions(1);
     page = new DisplayUserWorkspaceActionsPage(propsWithSelectedUser());
     await waitFor(() => {});
-    expect(page.canDelete).toBeTruthy();
+    expect(await page.canDelete()).toBeTruthy();
   });
 
   it('As LU I should not delete an user with user role', async() => {
     expect.assertions(1);
     page = new DisplayUserWorkspaceActionsPage(propsUserRole());
     await waitFor(() => {});
-    expect(page.canDelete).toBeFalsy();
+    expect(await page.canDelete()).toBeFalsy();
   });
 
   it('As AD I should not delete a selected user if this user is myself', async() => {
     expect.assertions(1);
     page = new DisplayUserWorkspaceActionsPage(propsWithMyselfAsSelectedUser());
     await waitFor(() => {});
-    expect(page.canDelete).toBeFalsy();
+    expect(await page.canDelete()).toBeFalsy();
   });
 
   it('As AD I should copy a selected user permalink', async() => {
@@ -201,7 +203,7 @@ describe("Display User Workspace Actions", () => {
     expect.assertions(1);
     page = new DisplayUserWorkspaceActionsPage(propsWithSelectedUser());
     await waitFor(() => {});
-    expect(page.canDisableMFA).toBeTruthy();
+    expect(await page.canDisableMFA()).toBeTruthy();
   });
 
   it('As AD I can click to disable an enabled user MFA', async() => {
@@ -218,14 +220,14 @@ describe("Display User Workspace Actions", () => {
     expect.assertions(1);
     page = new DisplayUserWorkspaceActionsPage(propsUserRole());
     await waitFor(() => {});
-    expect(page.canDisableMFA).toBeFalsy();
+    expect(await page.canDisableMFA()).toBeFalsy();
   });
 
   it('As AD I should not disable an already disabled user MFA', async() => {
     expect.assertions(1);
     page = new DisplayUserWorkspaceActionsPage(propsWithSelectedMFADisabledUser());
     await waitFor(() => {});
-    expect(page.canDisableMFA).toBeFalsy();
+    expect(await page.canDisableMFA()).toBeFalsy();
   });
 
   it('As AD I should not disable a review account recovery request if a user is selected', async() => {
@@ -245,9 +247,24 @@ describe("Display User Workspace Actions", () => {
     expect(props.workflowContext.start).toHaveBeenCalledWith(HandleReviewAccountRecoveryRequestWorkflow, {accountRecoveryRequestId: props.userWorkspaceContext.selectedUsers[0].pending_account_recovery_request.id});
   });
 
+  it('As a user having account recovery response create permission I can click to review account recovery request if a user is selected', async() => {
+    expect.assertions(3);
+    const props = propsUserRole();
+    jest.spyOn(props.rbacContext, "canIUseAction");
+    page = new DisplayUserWorkspaceActionsPage(props);
+    await waitFor(() => {});
+    await page.reviewAccountRecovery();
+
+    expect(props.workflowContext.start).toHaveBeenCalledWith(HandleReviewAccountRecoveryRequestWorkflow, {accountRecoveryRequestId: props.userWorkspaceContext.selectedUsers[0].pending_account_recovery_request.id});
+    expect(props.rbacContext.canIUseAction).toHaveBeenCalledWith(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE);
+    expect(props.rbacContext.canIUseAction).toHaveBeenCalledWith(actions.ACCOUNT_RECOVERY_REQUEST_INDEX);
+  });
+
   it('As LU I should not disable a review account recovery request with user role', async() => {
     expect.assertions(1);
-    page = new DisplayUserWorkspaceActionsPage(propsUserRole());
+    const props = propsWithSelectedUser();
+    jest.spyOn(props.rbacContext, "canIUseAction").mockImplementationOnce(() => false);
+    page = new DisplayUserWorkspaceActionsPage(props);
     await waitFor(() => {});
     expect(page.canReviewAccountRecovery).toBeFalsy();
   });
@@ -299,6 +316,13 @@ describe("Display User Workspace Actions", () => {
     expect(page.canRemoveFromGroup).toBeTruthy();
   });
 
+  it('As a group manager with a selected user from a group I can see the remove from group button', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsUserGroupManagerWithGroupSelected());
+    await waitFor(() => {});
+    expect(page.canRemoveFromGroup).toBeTruthy();
+  });
+
   it('As AD with a sole member selected I cannot see the remove from group button', async() => {
     expect.assertions(1);
     page = new DisplayUserWorkspaceActionsPage(propsSoleMemberSelected());
@@ -328,6 +352,11 @@ describe("Display User Workspace Actions", () => {
     });
     expect(props.dialogContext.open).toHaveBeenCalledWith(RemoveUserFromGroup);
   });
+
+  it('As LU who is not a group manager I cannot see the remove from group button', async() => {
+    expect.assertions(1);
+    page = new DisplayUserWorkspaceActionsPage(propsUserRoleGroupSelectedNotManager());
+    await waitFor(() => {});
+    expect(page.canRemoveFromGroup).toBeFalsy();
+  });
 });
-
-

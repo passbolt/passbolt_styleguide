@@ -29,7 +29,8 @@ export default class CheckPassphrasePage {
     this._page = render(
       <MockTranslationProvider>
         <CheckPassphrase {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

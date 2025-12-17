@@ -76,7 +76,7 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
    */
   canExport() {
     return this.props.context.siteSettings.canIUse("export")
-      && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_EXPORT);
+      && this.props.rbacContext.canIUseAction(uiActions.RESOURCES_EXPORT);
   }
 
   /**

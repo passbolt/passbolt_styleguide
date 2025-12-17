@@ -28,7 +28,8 @@ export default class DisplaySsoProviderMismatchErrorPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplaySsoProviderMismatchError {...props}/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

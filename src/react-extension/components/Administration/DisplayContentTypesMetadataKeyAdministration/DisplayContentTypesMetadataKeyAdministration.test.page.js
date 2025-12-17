@@ -13,10 +13,11 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayContentTypesMetadataKeyAdministration from "./DisplayContentTypesMetadataKeyAdministration";
+import userEvent from "@testing-library/user-event";
 
 export default class DisplayContentTypesMetadataKeyAdministrationPage {
   /**
@@ -29,8 +30,11 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
         <AppContext.Provider value={props.context}>
           <DisplayContentTypesMetadataKeyAdministration {...props}/>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -163,56 +167,6 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
   }
 
   /**
-   * Allow or disallow v4 resources creation
-   * @returns {Promise<void>}
-   */
-  async clickOnDisallowUsageOfPersonalKeysInput() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.disallowUsageOfPersonalKeysInput, leftClick);
-    await waitFor(() => {});
-  }
-
-  /**
-   * Allow zero knowledge
-   * @returns {Promise<void>}
-   */
-  async clickOnAllowZeroKnowledgeInput() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.enableZeroKnowledgeKeyShareInput, leftClick);
-    await waitFor(() => {});
-  }
-
-  /**
-   * Generate a new shared metadata key
-   * @returns {Promise<void>}
-   */
-  async clickOnGenerateKeyButton() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.generateKeyButton, leftClick);
-    await waitFor(() => {});
-  }
-
-  /**
-   * Rotate a new shared metadata key
-   * @returns {Promise<void>}
-   */
-  async clickOnRotateKeyButton() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.rotateKeyButton, leftClick);
-    await waitFor(() => {});
-  }
-
-  /**
-   * Resume rotate a new shared metadata key
-   * @returns {Promise<void>}
-   */
-  async clickOnResumeRotateKeyButton() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.resumeRotateKeyButton, leftClick);
-    await waitFor(() => {});
-  }
-
-  /**
    * Returns the form element
    * @returns {HTMLElement}
    */
@@ -224,8 +178,7 @@ export default class DisplayContentTypesMetadataKeyAdministrationPage {
    * Submit the form.
    * @returns {Promise<void>}
    */
-  async submitForm() {
-    fireEvent.submit(this.form);
-    await waitFor(() => {});
+  async click(element) {
+    await this.user.click(element);
   }
 }

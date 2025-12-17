@@ -19,7 +19,6 @@
  */
 export function defaultProps(data = {}) {
   const defaultProps = {
-    // eslint-disable-next-line no-undef
     baseUrl: process.env.ORIGIN_URL,
     id: "test",
     label: "label",

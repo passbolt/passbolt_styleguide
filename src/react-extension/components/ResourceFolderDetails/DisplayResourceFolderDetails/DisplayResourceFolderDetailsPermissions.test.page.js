@@ -32,7 +32,8 @@ export default class DisplayResourceFolderDetailsPermissionsPage {
         <AppContext.Provider value={appContext}>
           <DisplayResourceFolderDetailsPermissions {...props}/>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
     this.setupPageObjects();
   }

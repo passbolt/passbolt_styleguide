@@ -31,7 +31,8 @@ export default class ManageAccountRecoveryUserSettingsPage {
         <Router>
           <ManageAccountRecoveryUserSettings {...props}/>
         </Router>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

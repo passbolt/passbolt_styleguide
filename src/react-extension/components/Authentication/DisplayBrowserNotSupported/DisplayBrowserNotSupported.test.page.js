@@ -28,7 +28,8 @@ export default class DisplayBrowserNotSupportedPage {
     this._page = render(
       <MockTranslationProvider>
         <DisplayBrowserNotSupported/>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
 

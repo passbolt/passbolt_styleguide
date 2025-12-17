@@ -26,6 +26,8 @@ import {withTranslation, Trans} from "react-i18next";
 import DisplayUserDetailsAccountRecovery from "../DisplayUserDetailsAccountRecovery/DisplayUserDetailsAccountRecovery";
 import {isUserSuspended} from "../../../../shared/utils/userUtils";
 import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 
 class DisplayUserDetails extends React.Component {
   /**
@@ -93,6 +95,15 @@ class DisplayUserDetails extends React.Component {
    */
   isLoggedInUserAdmin() {
     return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
+  }
+
+  /**
+   * Can see account recovery details
+   * @return {boolean}
+   */
+  canSeeAccountRecoveryDetails() {
+    return this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_INDEX)
+      && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE);
   }
 
   /**
@@ -168,7 +179,7 @@ class DisplayUserDetails extends React.Component {
           <DisplayUserDetailsInformation/>
           {this.user.active && <DisplayUserDetailsGroups/>}
           {this.user.active && <DisplayUserDetailsPublicKey/>}
-          {this.isAccountRecoveryEnabled() && this.user.active && this.isLoggedInUserAdmin() && <DisplayUserDetailsAccountRecovery/>}
+          {this.isAccountRecoveryEnabled() && this.user.active && this.canSeeAccountRecoveryDetails() && <DisplayUserDetailsAccountRecovery/>}
         </div>
       </div>
     );
@@ -179,9 +190,10 @@ DisplayUserDetails.propTypes = {
   context: PropTypes.any, // The application context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   userWorkspaceContext: PropTypes.any, // The user workspace context
+  rbacContext: PropTypes.any, // the rbac context
   accountRecoveryContext: PropTypes.object, // The account recovery context
   clipboardContext: PropTypes.object, // the clipboard service
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withAccountRecovery(withUserWorkspace(withActionFeedback(withClipboard(withTranslation('common')(DisplayUserDetails))))));
+export default withAppContext(withAccountRecovery(withRbac(withUserWorkspace(withActionFeedback(withClipboard(withTranslation('common')(DisplayUserDetails)))))));

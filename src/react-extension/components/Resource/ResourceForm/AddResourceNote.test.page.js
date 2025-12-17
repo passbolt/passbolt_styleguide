@@ -28,7 +28,8 @@ export default class AddResourceNotePage {
     this._page = render(
       <MockTranslationProvider>
         <AddResourceNote {...props} />
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
+      {legacyRoot: true}
     );
   }
   /**

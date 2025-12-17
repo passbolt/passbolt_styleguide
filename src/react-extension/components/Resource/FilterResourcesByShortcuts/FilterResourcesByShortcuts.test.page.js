@@ -36,7 +36,8 @@ export default class FilterResourcesByShortcutsPage {
             <FilterResourcesByShortcuts.WrappedComponent {...props}/>
           </MockTranslationProvider>
         </AppContext.Provider>
-      </Router>
+      </Router>,
+      {legacyRoot: true}
     );
   }
 

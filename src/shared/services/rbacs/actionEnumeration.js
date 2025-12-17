@@ -9,11 +9,14 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.1.0
+ * @since         5.8.0
  */
-import {userSettingsRbacsCollectionData} from "../../../models/entity/rbac/rbacsCollection.test.data";
 
-export const defaultRbacMeService = props => jest.fn().mockImplementation(() => ({
-  findMe: () => userSettingsRbacsCollectionData(),
-  ...props
-}));
+export const actions = {
+  GROUPS_ADD: "GroupsAdd.addPost",
+  ACCOUNT_RECOVERY_REQUEST_VIEW: "AccountRecoveryRequestsView.view",
+  ACCOUNT_RECOVERY_REQUEST_INDEX: "AccountRecoveryRequestsIndex.index",
+  ACCOUNT_RECOVERY_RESPONSE_CREATE: "AccountRecoveryResponsesCreate.post"
+};
+
+
