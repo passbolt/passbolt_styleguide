@@ -29,7 +29,6 @@ export default class PasswordPage {
       <MockTranslationProvider>
         <Password {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

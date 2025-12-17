@@ -29,7 +29,6 @@ export default class DisplaySsoProviderMismatchErrorPage {
       <MockTranslationProvider>
         <DisplaySsoProviderMismatchError {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

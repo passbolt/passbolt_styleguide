@@ -29,7 +29,6 @@ export default class DisplaySsoDisabledErrorPage {
       <MockTranslationProvider>
         <DisplaySsoDisabledError {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

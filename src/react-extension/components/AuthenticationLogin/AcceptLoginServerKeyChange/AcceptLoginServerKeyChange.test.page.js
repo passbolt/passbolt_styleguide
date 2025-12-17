@@ -30,7 +30,6 @@ export default class AcceptLoginServerKeyChangePage {
       <MockTranslationProvider>
         <AcceptLoginServerKeyChange {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

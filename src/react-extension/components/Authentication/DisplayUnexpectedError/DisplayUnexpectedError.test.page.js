@@ -30,7 +30,6 @@ export default class DisplayUnexpectedErrorTestPage {
       <MockTranslationProvider>
         <DisplayUnexpectedError {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 
