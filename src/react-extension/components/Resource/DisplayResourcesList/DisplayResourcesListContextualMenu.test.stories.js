@@ -12,14 +12,20 @@
  * @since         5.0.0
  */
 import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextualMenu";
-import {defaultProps, propsDenyUIActions, propsResourceStandaloneTotp, propsResourceWithReadOnlyPermission, propsResourceWithUpdatePermission} from "./DisplayResourcesListContextualMenu.test.data";
+import {
+  defaultProps,
+  propsDenyUIActions,
+  propsResourceStandaloneTotp,
+  propsResourceWithReadOnlyPermission,
+  propsResourceWithUpdatePermission,
+} from "./DisplayResourcesListContextualMenu.test.data";
 
 /**
  * DisplayResourcesListContextualMenu stories
  */
 export default {
-  title: 'Components/Resource/DisplayResourcesListContextualMenu',
-  component: DisplayResourcesListContextualMenu
+  title: "Components/Resource/DisplayResourcesListContextualMenu",
+  component: DisplayResourcesListContextualMenu,
 };
 
 export const Default = {

@@ -15,22 +15,19 @@
 /**
  * Unit tests on DisplayResourceDetailsNote in regard of specifications
  */
-import {waitFor} from "@testing-library/dom";
-import {
-  defaultProps,
-  resourceWithDescriptionMock,
-} from "./DisplayResourceDetailsNote.test.data";
+import { waitFor } from "@testing-library/dom";
+import { defaultProps, resourceWithDescriptionMock } from "./DisplayResourceDetailsNote.test.data";
 import DisplayResourceDetailsNotePage from "./DisplayResourceDetailsNote.test.page";
-import {waitForTrue} from "../../../../../test/utils/waitFor";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
 
 describe("See secure note", () => {
   let props;
   beforeEach(() => {
     jest.clearAllMocks();
-    props = defaultProps({resourceWorkspaceContext: {details: {resource: resourceWithDescriptionMock}}});
+    props = defaultProps({ resourceWorkspaceContext: { details: { resource: resourceWithDescriptionMock } } });
   });
 
-  it('As LU I see the encrypted secure note of my resources', async() => {
+  it("As LU I see the encrypted secure note of my resources", async () => {
     expect.assertions(6);
 
     const page = new DisplayResourceDetailsNotePage(props);
@@ -49,11 +46,14 @@ describe("See secure note", () => {
     expect(page.errorMessage).toBeNull();
   });
 
-  it('See the decrypted description when clicking on the "show" button', async() => {
+  it('See the decrypted description when clicking on the "show" button', async () => {
     expect.assertions(5);
 
     let resolvedPromise;
-    props.context.port.addRequestListener("passbolt.secret.find-by-resource-id", () => new Promise(resolve => resolvedPromise = resolve));
+    props.context.port.addRequestListener(
+      "passbolt.secret.find-by-resource-id",
+      () => new Promise((resolve) => (resolvedPromise = resolve)),
+    );
 
     const page = new DisplayResourceDetailsNotePage(props);
 
@@ -64,7 +64,7 @@ describe("See secure note", () => {
     expect(page.isLoading()).toStrictEqual(true);
 
     const descriptionMessage = "This is a description";
-    resolvedPromise({description: descriptionMessage});
+    resolvedPromise({ description: descriptionMessage });
 
     await waitForTrue(() => !page.isLoading());
 
@@ -74,11 +74,13 @@ describe("See secure note", () => {
     expect(page.hideButton).not.toBeNull();
   });
 
-  it('Should hide the decrypted description when clicking on the "hide" button', async() => {
+  it('Should hide the decrypted description when clicking on the "hide" button', async () => {
     expect.assertions(4);
 
     const descriptionMessage = "This is a description";
-    props.context.port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({description: descriptionMessage}));
+    props.context.port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({
+      description: descriptionMessage,
+    }));
 
     const page = new DisplayResourceDetailsNotePage(props);
 
@@ -95,11 +97,13 @@ describe("See secure note", () => {
     expect(page.description).toBeNull();
   });
 
-  it('Should not run the decryption a second time', async() => {
+  it("Should not run the decryption a second time", async () => {
     expect.assertions(4);
 
-    jest.spyOn(props.context.port, 'request');
-    props.context.port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({description: "This is a description"}));
+    jest.spyOn(props.context.port, "request");
+    props.context.port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({
+      description: "This is a description",
+    }));
 
     const page = new DisplayResourceDetailsNotePage(props);
 
@@ -122,9 +126,9 @@ describe("See secure note", () => {
     expect(props.context.port.request).toHaveBeenCalledTimes(1);
   });
 
-  it('See an empty message if the resource has no secure note', async() => {
+  it("See an empty message if the resource has no secure note", async () => {
     expect.assertions(2);
-    props.context.port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({description: ""}));
+    props.context.port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({ description: "" }));
 
     const page = new DisplayResourceDetailsNotePage(props);
 
@@ -136,10 +140,12 @@ describe("See secure note", () => {
     expect(page.emptyMessage.textContent).toBe("There is no note.");
   });
 
-  it('As LU I should see an error message in the description section when the decryption fails', async() => {
+  it("As LU I should see an error message in the description section when the decryption fails", async () => {
     expect.assertions(2);
 
-    props.context.port.addRequestListener("passbolt.secret.find-by-resource-id", () => { throw new Error("Something went wrong!"); });
+    props.context.port.addRequestListener("passbolt.secret.find-by-resource-id", () => {
+      throw new Error("Something went wrong!");
+    });
 
     const page = new DisplayResourceDetailsNotePage(props);
 

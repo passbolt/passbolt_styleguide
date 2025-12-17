@@ -19,13 +19,13 @@ import {
   defaultAppContext,
   defaultProps,
   defaultResourceWorkspaceContext,
-  tagsMock
+  tagsMock,
 } from "./FilterResourcesByTags.test.data";
 import FilterResourcesByTags from "./FilterResourcesByTags.test.page";
 import MockPort from "../../../test/mock/MockPort";
-import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
-import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import expect from "expect";
 
 beforeEach(() => {
@@ -37,10 +37,8 @@ describe("See tags", () => {
     resources, // The resources handled
     props; // The props to pass
 
-  describe('As LU I see the tags of my resources', () => {
-    resources = [
-      defaultResourceDto({tags: tagsMock}),
-    ];
+  describe("As LU I see the tags of my resources", () => {
+    resources = [defaultResourceDto({ tags: tagsMock })];
     props = defaultProps(resources);
     const appContext = {
       port: new MockPort(),
@@ -49,7 +47,8 @@ describe("See tags", () => {
     const context = defaultAppContext(appContext); // The applicative context
     const resourceWorkspaceContext = defaultResourceWorkspaceContext();
     const requestMockImpl = jest.fn((message, data) => data);
-    const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+    const mockContextRequest = (context, implementation) =>
+      jest.spyOn(context.port, "request").mockImplementation(implementation);
     mockContextRequest(context, requestMockImpl);
 
     /**
@@ -63,37 +62,40 @@ describe("See tags", () => {
       page = new FilterResourcesByTags(context, props, resourceWorkspaceContext);
     });
 
-    it('As LU I should see the 5 tags made on the resource', () => {
+    it("As LU I should see the 5 tags made on the resource", () => {
       expect(page.sidebarTagFilterSection.exists()).toBeTruthy();
       expect(page.sidebarTagFilterSection.count()).toBe(5);
     });
 
-    it('As LU I should be able to identify each tag name', () => {
-      expect(page.sidebarTagFilterSection.name(1)).toBe('#git');
-      expect(page.sidebarTagFilterSection.name(2)).toBe('gpg');
-      expect(page.sidebarTagFilterSection.name(3)).toBe('slug');
-      expect(page.sidebarTagFilterSection.name(4)).toBe('test');
-      expect(page.sidebarTagFilterSection.name(5)).toBe('there’s always something to look at if you open your eyes!');
+    it("As LU I should be able to identify each tag name", () => {
+      expect(page.sidebarTagFilterSection.name(1)).toBe("#git");
+      expect(page.sidebarTagFilterSection.name(2)).toBe("gpg");
+      expect(page.sidebarTagFilterSection.name(3)).toBe("slug");
+      expect(page.sidebarTagFilterSection.name(4)).toBe("test");
+      expect(page.sidebarTagFilterSection.name(5)).toBe("there’s always something to look at if you open your eyes!");
     });
 
-    it('As LU I should be able to drop a resource on tag', async() => {
+    it("As LU I should be able to drop a resource on tag", async () => {
       await page.sidebarTagFilterSection.onDropTag(3);
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.add-resources-tag", {"resources": [resources[0].id], "tag": tagsMock[1]});
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.add-resources-tag", {
+        resources: [resources[0].id],
+        tag: tagsMock[1],
+      });
     });
 
-    it('As LU I should see tags disabled if a resource I am not owner is dragging on a shared tag', async() => {
+    it("As LU I should see tags disabled if a resource I am not owner is dragging on a shared tag", async () => {
       resources[0].permission.type = 1;
       await page.sidebarTagFilterSection.onDropTag(3);
-      expect(page.sidebarTagFilterSection.tagClassname(1)).toBe('row  disabled');
-      expect(page.sidebarTagFilterSection.tagClassname(2)).toBe('row');
-      expect(page.sidebarTagFilterSection.tagClassname(3)).toBe('row');
-      expect(page.sidebarTagFilterSection.tagClassname(4)).toBe('row selected');
-      expect(page.sidebarTagFilterSection.tagClassname(5)).toBe('row');
+      expect(page.sidebarTagFilterSection.tagClassname(1)).toBe("row  disabled");
+      expect(page.sidebarTagFilterSection.tagClassname(2)).toBe("row");
+      expect(page.sidebarTagFilterSection.tagClassname(3)).toBe("row");
+      expect(page.sidebarTagFilterSection.tagClassname(4)).toBe("row selected");
+      expect(page.sidebarTagFilterSection.tagClassname(5)).toBe("row");
     });
 
-    it('As LU I should see an error dialog if the drop operation fails for an unexpected reason', async() => {
+    it("As LU I should see an error dialog if the drop operation fails for an unexpected reason", async () => {
       // Mock the request function to make it return an error.
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(context.port, "request").mockImplementationOnce(() => {
         throw new PassboltApiFetchError("Jest simulate API error.");
       });
 
@@ -104,15 +106,17 @@ describe("See tags", () => {
       expect(page.sidebarTagFilterSection.errorDialogExist).toBeTruthy();
     });
 
-    it('As LU I filter the tags in the resources workspace primary sidebar by personal tag', async() => {
+    it("As LU I filter the tags in the resources workspace primary sidebar by personal tag", async () => {
       await page.title.click(page.title.filterButton);
       expect(page.sidebarTagFilterSectionsContextualMenu.personalTagMenu.textContent).toBe("My tags");
-      await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.personalTagMenu);
+      await page.sidebarTagFilterSectionsContextualMenu.click(
+        page.sidebarTagFilterSectionsContextualMenu.personalTagMenu,
+      );
       expect(page.title.hyperlink.textContent).toBe("My tags");
       expect(page.sidebarTagFilterSection.count()).toBe(4);
     });
 
-    it('As LU I filter the tags in the resources workspace primary sidebar by all tags', async() => {
+    it("As LU I filter the tags in the resources workspace primary sidebar by all tags", async () => {
       await page.title.click(page.title.filterButton);
       expect(page.sidebarTagFilterSectionsContextualMenu.allTagMenu.textContent).toBe("All tags");
       await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.allTagMenu);
@@ -120,55 +124,59 @@ describe("See tags", () => {
       expect(page.sidebarTagFilterSection.count()).toBe(5);
     });
 
-    it('As LU I filter the tags in the resources workspace primary sidebar by shared tag', async() => {
+    it("As LU I filter the tags in the resources workspace primary sidebar by shared tag", async () => {
       await page.title.click(page.title.filterButton);
       expect(page.sidebarTagFilterSectionsContextualMenu.sharedTagMenu.textContent).toBe("Shared tags");
-      await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.sharedTagMenu);
+      await page.sidebarTagFilterSectionsContextualMenu.click(
+        page.sidebarTagFilterSectionsContextualMenu.sharedTagMenu,
+      );
       expect(page.title.hyperlink.textContent).toBe("Shared tags");
       expect(page.sidebarTagFilterSection.count()).toBe(1);
     });
 
-    it('As LU I should be able to start deleting a tag', async() => {
+    it("As LU I should be able to start deleting a tag", async () => {
       await page.sidebarTagFilterSection.click(page.sidebarTagFilterSection.moreButton);
       expect(page.displayTagListContextualMenu.deleteTagContextualMenu).not.toBeNull();
       await page.sidebarTagFilterSection.click(page.displayTagListContextualMenu.deleteTagContextualMenu);
     });
 
-    it('As LU I should be able to start editing a tag', async() => {
+    it("As LU I should be able to start editing a tag", async () => {
       await page.sidebarTagFilterSection.rightClick(page.sidebarTagFilterSection.tag(2));
       expect(page.displayTagListContextualMenu.editTagContextualMenu).not.toBeNull();
       await page.sidebarTagFilterSection.click(page.displayTagListContextualMenu.editTagContextualMenu);
     });
 
-    it('As LU I can select a tag in a resource’s tags', async() => {
+    it("As LU I can select a tag in a resource’s tags", async () => {
       await page.sidebarTagFilterSection.click(page.sidebarTagFilterSection.tag(3));
       expect(props.history.push).toHaveBeenCalled();
     });
 
-    it('Filter my resources tags by shared tags should filter my resources by Home if it was previously filtered with a personal tag', async() => {
+    it("Filter my resources tags by shared tags should filter my resources by Home if it was previously filtered with a personal tag", async () => {
       expect(page.sidebarTagFilterSection.tagSelected).not.toBeNull();
       await page.title.click(page.title.filterButton);
-      await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.sharedTagMenu);
-      const pathname = '/app/passwords';
+      await page.sidebarTagFilterSectionsContextualMenu.click(
+        page.sidebarTagFilterSectionsContextualMenu.sharedTagMenu,
+      );
+      const pathname = "/app/passwords";
       const state = {
         filter: {
           type: ResourceWorkspaceFilterTypes.ALL,
-        }
+        },
       };
-      expect(props.history.push).toBeCalledWith({pathname, state});
+      expect(props.history.push).toBeCalledWith({ pathname, state });
     });
   });
 
-  describe('As LU I should filter by personal tag if it was previously filtered with a shared tag', () => {
+  describe("As LU I should filter by personal tag if it was previously filtered with a shared tag", () => {
     const appContext = {
       port: new MockPort(),
       resources: [
         {
-          tags: tagsMock
+          tags: tagsMock,
         },
         {
-          tags: tagsMock
-        }
+          tags: tagsMock,
+        },
       ],
     };
     const resourceWorkspaceContext = {
@@ -176,10 +184,10 @@ describe("See tags", () => {
         type: ResourceWorkspaceFilterTypes.TAG,
         payload: {
           tag: {
-            id: "3"
-          }
-        }
-      }
+            id: "3",
+          },
+        },
+      },
     };
     const context = defaultAppContext(appContext); // The applicative context
     const contextResource = defaultResourceWorkspaceContext(resourceWorkspaceContext); // The applicative context
@@ -192,28 +200,30 @@ describe("See tags", () => {
       page = new FilterResourcesByTags(context, props, contextResource);
     });
 
-    it('Filter my resources tags by personal tags should filter my resources by Home if it was previously filtered with a shared tag', async() => {
+    it("Filter my resources tags by personal tags should filter my resources by Home if it was previously filtered with a shared tag", async () => {
       expect(page.sidebarTagFilterSection.tagSelected).not.toBeNull();
       await page.sidebarTagFilterSection.click(page.title.filterButton);
-      await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.personalTagMenu);
-      const pathname = '/app/passwords';
+      await page.sidebarTagFilterSectionsContextualMenu.click(
+        page.sidebarTagFilterSectionsContextualMenu.personalTagMenu,
+      );
+      const pathname = "/app/passwords";
       const state = {
         filter: {
           type: ResourceWorkspaceFilterTypes.ALL,
-        }
+        },
       };
-      expect(props.history.push).toBeCalledWith({pathname, state});
+      expect(props.history.push).toBeCalledWith({ pathname, state });
     });
   });
 
-  describe('As LU I should see the tag section empty', () => {
+  describe("As LU I should see the tag section empty", () => {
     const appContext = {
       port: new MockPort(),
       resources: [
         {
-          tags: []
-        }
-      ]
+          tags: [],
+        },
+      ],
     };
     const context = defaultAppContext(appContext); // The applicative context
     const resourceWorkspaceContext = defaultResourceWorkspaceContext();
@@ -226,30 +236,34 @@ describe("See tags", () => {
       page = new FilterResourcesByTags(context, props, resourceWorkspaceContext);
     });
 
-    it('I should see the tags section empty', () => {
+    it("I should see the tags section empty", () => {
       expect(page.sidebarTagFilterSection.isEmpty()).toBeTruthy();
     });
 
-    it('As LU I see an empty feedback if I’m member of no tag after filtering by personal tag', async() => {
+    it("As LU I see an empty feedback if I’m member of no tag after filtering by personal tag", async () => {
       context.resources[0].tags = [tagsMock[2]];
       await page.title.click(page.title.filterButton);
       expect(page.sidebarTagFilterSection.isEmpty()).toBeFalsy();
-      await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.personalTagMenu);
+      await page.sidebarTagFilterSectionsContextualMenu.click(
+        page.sidebarTagFilterSectionsContextualMenu.personalTagMenu,
+      );
       expect(page.title.hyperlink.textContent).toBe("My tags");
       expect(page.sidebarTagFilterSection.isEmpty()).toBeTruthy();
     });
 
-    it('As LU I see an empty feedback if I manage no tag after filtering by shared tag', async() => {
+    it("As LU I see an empty feedback if I manage no tag after filtering by shared tag", async () => {
       context.resources[0].tags = [tagsMock[1]];
       await page.title.click(page.title.filterButton);
       expect(page.sidebarTagFilterSection.isEmpty()).toBeFalsy();
-      await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.sharedTagMenu);
+      await page.sidebarTagFilterSectionsContextualMenu.click(
+        page.sidebarTagFilterSectionsContextualMenu.sharedTagMenu,
+      );
       expect(page.title.hyperlink.textContent).toBe("Shared tags");
       expect(page.sidebarTagFilterSection.isEmpty()).toBeTruthy();
     });
   });
 
-  describe('As LU I see a loading feedback in the section when the tags are not yet fetched', () => {
+  describe("As LU I see a loading feedback in the section when the tags are not yet fetched", () => {
     const context = defaultAppContext(); // The applicative context
     /**
      * Given the tags section
@@ -261,19 +275,19 @@ describe("See tags", () => {
       page = new FilterResourcesByTags(context, props);
     });
 
-    it('I should see the loading message “Retrieving tags”', async() => {
+    it("I should see the loading message “Retrieving tags”", async () => {
       expect(page.sidebarTagFilterSection.isLoading()).toBeTruthy();
     });
   });
 
-  describe('As LU I shouldn’t be able to start deleting a shared tag', () => {
+  describe("As LU I shouldn’t be able to start deleting a shared tag", () => {
     const appContext = {
       port: new MockPort(),
       resources: [
         {
-          tags: [tagsMock[2]]
-        }
-      ]
+          tags: [tagsMock[2]],
+        },
+      ],
     };
     const context = defaultAppContext(appContext); // The applicative context
     const resourceWorkspaceContext = defaultResourceWorkspaceContext();
@@ -286,7 +300,7 @@ describe("See tags", () => {
       page = new FilterResourcesByTags(context, props, resourceWorkspaceContext);
     });
 
-    it('As LU I shouldn’t be able to start deleting a shared tag', async() => {
+    it("As LU I shouldn’t be able to start deleting a shared tag", async () => {
       expect(page.sidebarTagFilterSection.moreButton).toBeNull();
     });
   });

@@ -12,24 +12,26 @@
  * @since         4.9.4
  */
 
-import {v4 as uuid} from "uuid";
-import {defaultTotpViewModelDto} from "../entity/totp/totpDto.test.data";
+import { v4 as uuid } from "uuid";
+import { defaultTotpViewModelDto } from "../entity/totp/totpDto.test.data";
 
 export const minimalResourceViewModelDto = (data = {}) => ({
   name: "Resource view model name",
   password: "Here a password",
   resource_type_id: uuid(),
-  ...data
-});
-
-export const defaultResourceViewModelDto = (data = {}) => minimalResourceViewModelDto({
-  uri: "https://www.passbolt.com",
-  username: "ada@passbolt.com",
-  description: "This is a description",
   ...data,
 });
 
-export const defaultResourcePasswordDescriptionTotpViewModelDto = (data = {}) => defaultResourceViewModelDto({
-  totp: defaultTotpViewModelDto(),
-  ...data
-});
+export const defaultResourceViewModelDto = (data = {}) =>
+  minimalResourceViewModelDto({
+    uri: "https://www.passbolt.com",
+    username: "ada@passbolt.com",
+    description: "This is a description",
+    ...data,
+  });
+
+export const defaultResourcePasswordDescriptionTotpViewModelDto = (data = {}) =>
+  defaultResourceViewModelDto({
+    totp: defaultTotpViewModelDto(),
+    ...data,
+  });

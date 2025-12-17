@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplayAdministrationAccountRecoveryActions from "./DisplayAdministrationAccountRecoveryActions";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -28,9 +28,9 @@ export default class DisplayAdministrationAccountRecoveryActionsPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayAdministrationAccountRecoveryActions {...props}/>
+        <DisplayAdministrationAccountRecoveryActions {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,28 +38,28 @@ export default class DisplayAdministrationAccountRecoveryActionsPage {
    * Returns the workspace action
    */
   get workspaceAction() {
-    return this._page.container.querySelector('.actions-wrapper');
+    return this._page.container.querySelector(".actions-wrapper");
   }
 
   /**
    * Returns the number of actions
    */
   get count() {
-    return this._page.container.querySelectorAll('button').length;
+    return this._page.container.querySelectorAll("button").length;
   }
 
   /**
    * Returns the save button
    */
   get saveButton() {
-    return this._page.container.querySelectorAll('button')[1];
+    return this._page.container.querySelectorAll("button")[1];
   }
 
   /**
    * Returns the reset button
    */
   get resetButton() {
-    return this._page.container.querySelectorAll('button')[0];
+    return this._page.container.querySelectorAll("button")[0];
   }
 
   /**
@@ -71,10 +71,9 @@ export default class DisplayAdministrationAccountRecoveryActionsPage {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   }
 
   /** Click on the save element */
@@ -87,8 +86,3 @@ export default class DisplayAdministrationAccountRecoveryActionsPage {
     await this.click(this.resetButton);
   }
 }
-
-
-
-
-

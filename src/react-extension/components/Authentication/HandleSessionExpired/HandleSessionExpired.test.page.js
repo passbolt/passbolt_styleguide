@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.3.1
  */
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import HandleSessionExpired from "./HandleSessionExpired";
 
@@ -30,10 +29,10 @@ export default class HandleSessionExpiredPage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <HandleSessionExpired {...props}/>
+          <HandleSessionExpired {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 }

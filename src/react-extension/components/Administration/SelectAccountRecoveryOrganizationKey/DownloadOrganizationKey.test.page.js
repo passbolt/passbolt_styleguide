@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import DownloadOrganizationKey from "./DownloadOrganizationKey";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -31,7 +31,7 @@ export default class DownloadOrganizationKeyPage {
       <MockTranslationProvider>
         <DownloadOrganizationKey {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -43,35 +43,43 @@ export default class DownloadOrganizationKeyPage {
    * Returns the dialog close element
    */
   get closeButton() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.organization-recover-key-download-dialog.dialog-wrapper .dialog-header-title');
+    return this._page.container.querySelector(
+      ".organization-recover-key-download-dialog.dialog-wrapper .dialog-header-title",
+    );
   }
 
   /**
    * Get the description text in body of the dialog
    */
   get description() {
-    return this._page.container.querySelector('.organization-recover-key-download-dialog.dialog-wrapper .dialog-body p');
+    return this._page.container.querySelector(
+      ".organization-recover-key-download-dialog.dialog-wrapper .dialog-body p",
+    );
   }
 
   /**
    * Get the "Ok" button
    */
   get okButton() {
-    return this._page.container.querySelector('.organization-recover-key-download-dialog.dialog-wrapper .dialog-footer button.primary');
+    return this._page.container.querySelector(
+      ".organization-recover-key-download-dialog.dialog-wrapper .dialog-footer button.primary",
+    );
   }
 
   /**
    * Get the "Download again" button
    */
   get downloadAgainButton() {
-    return this._page.container.querySelector('.organization-recover-key-download-dialog.dialog-wrapper .dialog-footer button.button-left');
+    return this._page.container.querySelector(
+      ".organization-recover-key-download-dialog.dialog-wrapper .dialog-footer button.button-left",
+    );
   }
 
   /**

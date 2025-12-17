@@ -12,7 +12,7 @@
  * @since         3.9.0
  */
 
-import useDynamicRefs from './DynamicRef';
+import useDynamicRefs from "./DynamicRef";
 
 describe("DynamicRef", () => {
   const dynamicRefs = useDynamicRefs();

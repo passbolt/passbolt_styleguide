@@ -13,7 +13,7 @@
  */
 
 import DisplaySecretHistoryAdministrationHelp from "./DisplaySecretHistoryAdministrationHelp.test.page";
-import {waitFor} from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 
 describe("DisplaySecretHistoryAdministrationHelp", () => {
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe("DisplaySecretHistoryAdministrationHelp", () => {
   });
 
   describe("As a signed-in administrator I can see the secret history settings help page", () => {
-    it("As a signed-in administrator I can see the help documentation", async() => {
+    it("As a signed-in administrator I can see the help documentation", async () => {
       expect.assertions(1);
 
       const page = new DisplaySecretHistoryAdministrationHelp();
@@ -32,14 +32,16 @@ describe("DisplaySecretHistoryAdministrationHelp", () => {
   });
 
   describe("As a signed-in administrator, I can go to the help documentation page", () => {
-    it("Redirect to the help page secret revision settings", async() => {
+    it("Redirect to the help page secret revision settings", async () => {
       expect.assertions(2);
 
       const page = new DisplaySecretHistoryAdministrationHelp();
       await waitFor(() => {});
 
-      expect(page.readDocumentation.getAttribute('rel')).toStrictEqual("noopener noreferrer");
-      expect(page.readDocumentation.getAttribute('href')).toStrictEqual("https://passbolt.com/docs/admin/secret-history");
+      expect(page.readDocumentation.getAttribute("rel")).toStrictEqual("noopener noreferrer");
+      expect(page.readDocumentation.getAttribute("href")).toStrictEqual(
+        "https://passbolt.com/docs/admin/secret-history",
+      );
     });
   });
 });

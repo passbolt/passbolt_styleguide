@@ -11,19 +11,15 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.7.4
  */
-import {defaultAppContext} from "../../contexts/AppContext.test.data";
-import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultAppContext } from "../../contexts/AppContext.test.data";
+import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { resourceTypesCollectionDto } from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
-import {
-  defaultMetadataTypesSettingsV4Dto
-} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
-import {updatePermissionDto} from "../../../shared/models/entity/permission/permissionEntity.test.data";
+import { defaultMetadataTypesSettingsV4Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import { updatePermissionDto } from "../../../shared/models/entity/permission/permissionEntity.test.data";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 /**
  * Default component props
@@ -61,24 +57,30 @@ export const noFilteredResourcesProps = (data = {}) => ({
 export const withFilteredResourcesProps = (data = {}) => ({
   context: defaultAppContext(data.context),
   resources: [
-    defaultResourceDto({
-      permission: updatePermissionDto(),
-      metadata: {
-        name: "apache",
-        username: "www-data",
-        uris: ["http://www.apache.org/", "http://www.apache.org/projects"],
-        description: "Apache is the world's most used web server software.",
-      }
-    }, {withFavorite: true}),
-    defaultResourceDto({
-      permission: updatePermissionDto(),
-      metadata: {
-        name: "esaie",
-        username: "test",
-        uris: ["http://www.essaie.org/"],
-        description: "",
-      }
-    }, {withFavorite: true}),
+    defaultResourceDto(
+      {
+        permission: updatePermissionDto(),
+        metadata: {
+          name: "apache",
+          username: "www-data",
+          uris: ["http://www.apache.org/", "http://www.apache.org/projects"],
+          description: "Apache is the world's most used web server software.",
+        },
+      },
+      { withFavorite: true },
+    ),
+    defaultResourceDto(
+      {
+        permission: updatePermissionDto(),
+        metadata: {
+          name: "esaie",
+          username: "test",
+          uris: ["http://www.essaie.org/"],
+          description: "",
+        },
+      },
+      { withFavorite: true },
+    ),
   ],
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),

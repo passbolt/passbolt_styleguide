@@ -14,21 +14,21 @@
 
 import React from "react";
 import DisplayResourceDetailsPermission from "./DisplayResourceDetailsPermission";
-import {defaultProps, permissionMock} from "./DisplayResourceDetailsPermission.test.data";
+import { defaultProps, permissionMock } from "./DisplayResourceDetailsPermission.test.data";
 
 /**
  * DisplayResourceDetailsPermission stories
  */
 export default {
-  title: 'Components/ResourceDetails/DisplayResourceDetailsPermission',
+  title: "Components/ResourceDetails/DisplayResourceDetailsPermission",
   component: DisplayResourceDetailsPermission,
   decorators: [
-    (Story, {args}) => (
+    (Story, { args }) => (
       <div className="page">
-        <div className="app" style={{margin: "-1rem"}}>
+        <div className="app" style={{ margin: "-1rem" }}>
           <div className="panel main">
             <div className="panel middle">
-              <div className="middle-right" style={{display: "flex", justifyContent: "flex-end"}}>
+              <div className="middle-right" style={{ display: "flex", justifyContent: "flex-end" }}>
                 <div className="panel aside">
                   <div className="sidebar resource">
                     <div className="sidebar-content">
@@ -41,13 +41,13 @@ export default {
           </div>
         </div>
       </div>
-    )
-  ]
+    ),
+  ],
 };
 
 const props = defaultProps();
 props.context.port.addRequestListener("passbolt.permissions.find-aco-permissions-for-display", () => permissionMock);
 
 export const Default = {
-  args: props
+  args: props,
 };

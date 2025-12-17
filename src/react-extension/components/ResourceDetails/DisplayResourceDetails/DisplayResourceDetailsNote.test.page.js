@@ -12,7 +12,7 @@
  * @since         5.0.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplayResourceDetailsNote from "./DisplayResourceDetailsNote";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -29,9 +29,9 @@ export default class DisplayResourceDetailsNotePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayResourceDetailsNote {...props}/>
+        <DisplayResourceDetailsNote {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -46,28 +46,28 @@ export default class DisplayResourceDetailsNotePage {
    * Return the page object of the title header
    */
   get title() {
-    return this._page.container.querySelector('.accordion-header button');
+    return this._page.container.querySelector(".accordion-header button");
   }
 
   /**
    * Returns the page object of display groups
    */
   get secureNoteSection() {
-    return this._page.container.querySelector('.accordion-content');
+    return this._page.container.querySelector(".accordion-content");
   }
 
   /**
    * Returns the description editor element
    */
   get description() {
-    return this._page.container.querySelector('.description-content');
+    return this._page.container.querySelector(".description-content");
   }
 
   /**
    * Returns the error message content
    */
   get errorMessage() {
-    return this._page.container.querySelector('.error-message');
+    return this._page.container.querySelector(".error-message");
   }
 
   /**
@@ -81,21 +81,21 @@ export default class DisplayResourceDetailsNotePage {
    * Returns the content elements of description
    */
   get encryptedDescription() {
-    return this._page.container.querySelector('.encrypted-description');
+    return this._page.container.querySelector(".encrypted-description");
   }
 
   /**
    * Returns the "show" button
    */
   get showButton() {
-    return this._page.container.querySelector('.encrypted-description + button');
+    return this._page.container.querySelector(".encrypted-description + button");
   }
 
   /**
    * Returns the "hide" button
    */
   get hideButton() {
-    return this._page.container.querySelector('.description-content + button');
+    return this._page.container.querySelector(".description-content + button");
   }
 
   /**
@@ -106,8 +106,8 @@ export default class DisplayResourceDetailsNotePage {
   }
 
   /** Click on the component */
-  async clickOn(component)  {
-    const leftClick = {button: 0};
+  async clickOn(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }

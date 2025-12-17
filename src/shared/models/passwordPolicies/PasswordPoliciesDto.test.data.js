@@ -12,9 +12,9 @@
  * @since         4.2.0
  */
 
-import {v4 as uuid} from "uuid";
-import {defaultPasswordGeneratorSettingsDto} from "./PasswordGeneratorSettingsDto.test.data";
-import {defaultPassphraseGeneratorSettingsDto} from "./PassphraseGeneratorSettingsDto.test.data";
+import { v4 as uuid } from "uuid";
+import { defaultPasswordGeneratorSettingsDto } from "./PasswordGeneratorSettingsDto.test.data";
+import { defaultPassphraseGeneratorSettingsDto } from "./PassphraseGeneratorSettingsDto.test.data";
 
 /**
  * The default password policies DTO
@@ -35,11 +35,12 @@ export const defaultPasswordPoliciesDto = (data = {}) => ({
  * @param {Object} data The data to override
  * @returns {Object}
  */
-export const configuredPasswordPoliciesDto = (data = {}) => defaultPasswordPoliciesDto({
-  id: uuid(),
-  created: "2023-07-01T13:59:11+00:00",
-  created_by: uuid(),
-  modified: "2023-08-01T13:59:11+00:00",
-  modified_by: uuid(),
-  ...data
-});
+export const configuredPasswordPoliciesDto = (data = {}) =>
+  defaultPasswordPoliciesDto({
+    id: uuid(),
+    created: "2023-07-01T13:59:11+00:00",
+    created_by: uuid(),
+    modified: "2023-08-01T13:59:11+00:00",
+    modified_by: uuid(),
+    ...data,
+  });

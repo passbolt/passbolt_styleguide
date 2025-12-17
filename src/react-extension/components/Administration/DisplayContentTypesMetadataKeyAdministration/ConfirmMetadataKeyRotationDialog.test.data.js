@@ -13,9 +13,7 @@
  */
 
 import ExternalGpgKeyEntity from "../../../../shared/models/entity/gpgkey/externalGpgKeyEntity";
-import {
-  ed25519ExternalPublicGpgKeyEntityDto
-} from "../../../../shared/models/entity/gpgkey/externalGpgKeyEntity.test.data";
+import { ed25519ExternalPublicGpgKeyEntityDto } from "../../../../shared/models/entity/gpgkey/externalGpgKeyEntity.test.data";
 
 /**
  * Default props.
@@ -27,6 +25,6 @@ export function defaultProps(props = {}) {
     metadataKeyInfo: new ExternalGpgKeyEntity(ed25519ExternalPublicGpgKeyEntityDto()),
     onConfirm: jest.fn(),
     onClose: jest.fn(),
-    ...props
+    ...props,
   };
 }

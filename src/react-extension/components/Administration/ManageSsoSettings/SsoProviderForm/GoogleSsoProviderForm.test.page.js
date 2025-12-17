@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.5.0
  */
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {waitForTrue} from "../../../../../../test/utils/waitFor";
+import { waitForTrue } from "../../../../../../test/utils/waitFor";
 import GoogleSsoProviderForm from "./GoogleSsoProviderForm";
 
 /**
@@ -37,15 +37,16 @@ export default class GoogleSsoProviderFormPage {
    * @param {object} props the props of the components
    */
   render(props) {
-    const contentToRender = <MockTranslationProvider>
-      <GoogleSsoProviderForm {...props}/>
-    </MockTranslationProvider>;
+    const contentToRender = (
+      <MockTranslationProvider>
+        <GoogleSsoProviderForm {...props} />
+      </MockTranslationProvider>
+    );
 
     if (this._page) {
       this._page.rerender(contentToRender);
     } else {
-      this._page = render(contentToRender,
-        {legacyRoot: true});
+      this._page = render(contentToRender, { legacyRoot: true });
     }
   }
 
@@ -74,7 +75,7 @@ export default class GoogleSsoProviderFormPage {
    * @returns {Promise<void>}
    */
   async clickOn(element, callback) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitForTrue(() => callback());
   }

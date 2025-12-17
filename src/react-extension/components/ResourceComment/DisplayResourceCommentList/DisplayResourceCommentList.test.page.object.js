@@ -12,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {fireEvent, waitFor} from "@testing-library/react";
+import { fireEvent, waitFor } from "@testing-library/react";
 
 /**
  * Page object for the DisplayResourceCommentList component
@@ -30,14 +30,14 @@ export default class DisplayResourceCommentListPageObject {
    * Returns the list elements of comments
    */
   get list() {
-    return this._container.querySelectorAll('.comment');
+    return this._container.querySelectorAll(".comment");
   }
 
   /**
    * Returns the loading element
    */
   get loadingMessage() {
-    return this._container.querySelector('.processing-text');
+    return this._container.querySelector(".processing-text");
   }
 
   /**
@@ -51,7 +51,7 @@ export default class DisplayResourceCommentListPageObject {
    * Returns true
    */
   isLoading() {
-    return this.loadingMessage !== null && this.loadingMessage.innerHTML === 'Retrieving comments';
+    return this.loadingMessage !== null && this.loadingMessage.innerHTML === "Retrieving comments";
   }
 
   /**
@@ -66,7 +66,7 @@ export default class DisplayResourceCommentListPageObject {
    * @param index The display rank of author's comment
    */
   author(index) {
-    return this.list[index - 1].querySelector('.author.username').textContent;
+    return this.list[index - 1].querySelector(".author.username").textContent;
   }
 
   /**
@@ -74,7 +74,7 @@ export default class DisplayResourceCommentListPageObject {
    * @param index The display rank of comment
    */
   creationTime(index) {
-    return this.list[index - 1].querySelector('.metadata .modified').textContent;
+    return this.list[index - 1].querySelector(".metadata .modified").textContent;
   }
 
   /**
@@ -91,8 +91,8 @@ export default class DisplayResourceCommentListPageObject {
    * @param index The rank of the comment
    */
   async delete(index) {
-    const deleteButton = this._container.querySelectorAll('.delete-comment')[index - 1];
-    const leftClick = {button: 0};
+    const deleteButton = this._container.querySelectorAll(".delete-comment")[index - 1];
+    const leftClick = { button: 0 };
     fireEvent.click(deleteButton, leftClick);
     await waitFor(() => {});
   }
@@ -102,6 +102,6 @@ export default class DisplayResourceCommentListPageObject {
    * @param index The rank of the comment
    */
   canDelete(index) {
-    return typeof this._container.querySelectorAll('.delete-comment')[index - 1] !== 'undefined';
+    return typeof this._container.querySelectorAll(".delete-comment")[index - 1] !== "undefined";
   }
 }

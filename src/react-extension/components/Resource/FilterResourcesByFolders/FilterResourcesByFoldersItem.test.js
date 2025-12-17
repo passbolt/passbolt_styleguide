@@ -15,10 +15,7 @@
 /**
  * Unit tests on FoldersTreeItem in regard of specifications
  */
-import {
-  defaultProps,
-  foldersMock,
-} from "./FilterResourcesByFoldersItem.test.data";
+import { defaultProps, foldersMock } from "./FilterResourcesByFoldersItem.test.data";
 import FilterResourcesByFoldersItemPage from "./FilterResourcesByFoldersItem.test.page";
 import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFoldersItemContextualMenu";
 
@@ -30,10 +27,11 @@ describe("As LU I should see each folders", () => {
   let page; // The page to test against
   const props = defaultProps(); // The props to pass
   const requestMockImpl = jest.fn((message, data) => data);
-  const mockContextRequest = (context, implementation) => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (context, implementation) =>
+    jest.spyOn(props.context.port, "request").mockImplementation(implementation);
   mockContextRequest(props.context, requestMockImpl);
 
-  describe('As LU I should see and identify each folders open', () => {
+  describe("As LU I should see and identify each folders open", () => {
     /**
      * Given an organization with 4 Folders
      * Then I should see the 4 Folders
@@ -45,7 +43,7 @@ describe("As LU I should see each folders", () => {
       page = new FilterResourcesByFoldersItemPage(props);
     });
 
-    it('As LU I should see the folders name and open it', async() => {
+    it("As LU I should see the folders name and open it", async () => {
       expect.assertions(4);
       expect(page.filterResourcesByFoldersItem.exists()).toBeTruthy();
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
@@ -54,7 +52,7 @@ describe("As LU I should see each folders", () => {
       expect(props.toggleCloseFolder).not.toHaveBeenCalled();
     });
 
-    it('As LU I should see the folders name and close it', async() => {
+    it("As LU I should see the folders name and close it", async () => {
       expect.assertions(3);
       expect(page.filterResourcesByFoldersItem.exists()).toBeTruthy();
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
@@ -63,19 +61,27 @@ describe("As LU I should see each folders", () => {
       expect(props.toggleCloseFolder).toHaveBeenCalled();
     });
 
-    it('As LU I should filter by folder', async() => {
+    it("As LU I should filter by folder", async () => {
       await page.filterResourcesByFoldersItem.filter(1);
-      expect(props.history.push).toHaveBeenCalledWith('/app/folders/view/3ed65efd-7c41-5906-9c02-71e2d95951da');
+      expect(props.history.push).toHaveBeenCalledWith("/app/folders/view/3ed65efd-7c41-5906-9c02-71e2d95951da");
     });
 
-    it('As LU I should be able to open a contextual menu for a folder with the more button', async() => {
+    it("As LU I should be able to open a contextual menu for a folder with the more button", async () => {
       await page.filterResourcesByFoldersItem.openContextualMenuWithButton(1);
-      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {folder: foldersMock[0], className: 'right', left: 0, top: 19, onBeforeHide: expect.any(Function)});
+      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {
+        folder: foldersMock[0],
+        className: "right",
+        left: 0,
+        top: 19,
+        onBeforeHide: expect.any(Function),
+      });
     });
 
-    it('As LU I should be able to open a contextual menu for a folder with right click on parent folder', async() => {
+    it("As LU I should be able to open a contextual menu for a folder with right click on parent folder", async () => {
       await page.filterResourcesByFoldersItem.openContextualMenuWithRightClick(1);
-      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {folder: foldersMock[0]});
+      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {
+        folder: foldersMock[0],
+      });
     });
   });
 });

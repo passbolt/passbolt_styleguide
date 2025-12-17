@@ -16,10 +16,10 @@
  * Unit tests on DeleteUserDialog in regard of specifications
  */
 
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import {fireEvent, waitFor} from "@testing-library/react";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
+import { fireEvent, waitFor } from "@testing-library/react";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
-import {defaultAppContext, defaultProps, mockGroup} from "./DeleteUserGroup.test.data";
+import { defaultAppContext, defaultProps, mockGroup } from "./DeleteUserGroup.test.data";
 import DeleteUserGroupPage from "./DeleteUserGroup.test.page";
 
 beforeEach(() => {
@@ -32,9 +32,10 @@ describe("See Delete Group Dialog", () => {
   const props = defaultProps(); // The props to pass
   const group = mockGroup();
 
-  const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (context, implementation) =>
+    jest.spyOn(context.port, "request").mockImplementation(implementation);
 
-  describe('As AD I can delete a group', () => {
+  describe("As AD I can delete a group", () => {
     /**
      * Given a selected group
      * Then I should see the name of the group I can delete
@@ -43,13 +44,15 @@ describe("See Delete Group Dialog", () => {
      */
 
     beforeEach(() => {
-      context.setContext({deleteGroupDialogProps: {
-        group
-      }});
+      context.setContext({
+        deleteGroupDialogProps: {
+          group,
+        },
+      });
       page = new DeleteUserGroupPage(context, props);
     });
 
-    it('As AD I should know what group I am deleting', () => {
+    it("As AD I should know what group I am deleting", () => {
       expect(page.displayDeleteGroupDialog.exists()).toBeTruthy();
       // title
       expect(page.displayDeleteGroupDialog.dialogTitle).not.toBeNull();
@@ -58,33 +61,35 @@ describe("See Delete Group Dialog", () => {
       expect(page.displayDeleteGroupDialog.closeButton).not.toBeNull();
       // submit button
       expect(page.displayDeleteGroupDialog.saveButton).not.toBeNull();
-      expect(page.displayDeleteGroupDialog.saveButton.textContent).toBe('Delete');
+      expect(page.displayDeleteGroupDialog.saveButton.textContent).toBe("Delete");
       // cancel button
       expect(page.displayDeleteGroupDialog.cancelButton).not.toBeNull();
-      expect(page.displayDeleteGroupDialog.cancelButton.textContent).toBe('Cancel');
+      expect(page.displayDeleteGroupDialog.cancelButton.textContent).toBe("Cancel");
       // user name
       expect(page.displayDeleteGroupDialog.groupName.textContent).toBe(`${group.name}`);
     });
 
-    it('As AD I should see a toaster message after deleting a group', async() => {
+    it("As AD I should see a toaster message after deleting a group", async () => {
       const submitButton = page.displayDeleteGroupDialog.saveButton;
       // Mock the request function to make it the expected result
       const requestMockImpl = jest.fn((message, data) => data);
       mockContextRequest(context, requestMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
-      });
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       await page.displayDeleteGroupDialog.click(submitButton);
       expect(context.port.request).toHaveBeenCalledWith("passbolt.groups.delete", group.id);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
-    it('As AD I should see a processing feedback while submitting the form', async() => {
+    it("As AD I should see a processing feedback while submitting the form", async () => {
       // Mock the request function to make it the expected result
       let updateResolve;
-      const requestMockImpl = jest.fn(() => new Promise(resolve => {
-        updateResolve = resolve;
-      }));
+      const requestMockImpl = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            updateResolve = resolve;
+          }),
+      );
 
       // Mock the request function to make it the expected result
       mockContextRequest(context, requestMockImpl);
@@ -98,32 +103,32 @@ describe("See Delete Group Dialog", () => {
       });
     });
 
-    it('As AD I should be able to cancel the operation by clicking on the close button', async() => {
+    it("As AD I should be able to cancel the operation by clicking on the close button", async () => {
       const closeButton = page.displayDeleteGroupDialog.closeButton;
 
       await page.displayDeleteGroupDialog.click(closeButton);
       expect(props.onClose).toBeCalled();
     });
 
-    it('As AD I should be able to cancel the operation by clicking on the cancel button', async() => {
+    it("As AD I should be able to cancel the operation by clicking on the cancel button", async () => {
       const cancelButton = page.displayDeleteGroupDialog.cancelButton;
 
       await page.displayDeleteGroupDialog.click(cancelButton);
       expect(props.onClose).toBeCalled();
     });
 
-    it('As AD I should be able to cancel the edition with the keyboard (escape)', () => {
+    it("As AD I should be able to cancel the edition with the keyboard (escape)", () => {
       // Escape key pressed event
-      const escapeKeyDown = {keyCode: 27};
+      const escapeKeyDown = { keyCode: 27 };
       fireEvent.keyDown(page.displayDeleteGroupDialog.dialogTitle, escapeKeyDown);
 
       expect(props.onClose).toBeCalled();
     });
 
-    it('Displays an error when the API call fail', async() => {
+    it("Displays an error when the API call fail", async () => {
       const submitButton = page.displayDeleteGroupDialog.saveButton;
       // Mock the request function to make it return an error.
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(context.port, "request").mockImplementationOnce(() => {
         throw new PassboltApiFetchError("Jest simulate API error.");
       });
 
@@ -134,7 +139,7 @@ describe("See Delete Group Dialog", () => {
       expect(page.displayDeleteGroupDialog.errorDialogMessage).not.toBeNull();
     });
 
-    it('As LU I want to see a long  resource/tag/folders name fitting its delete dialog', async() => {
+    it("As LU I want to see a long  resource/tag/folders name fitting its delete dialog", async () => {
       expect(page.displayDeleteGroupDialog.tagName.classList.contains("dialog-variable")).toBeTruthy();
     });
   });

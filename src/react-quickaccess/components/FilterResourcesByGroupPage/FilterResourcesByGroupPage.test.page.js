@@ -12,12 +12,11 @@
  * @since         4.9.4
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {Router} from "react-router-dom";
-import MockTranslationProvider
-  from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
-import {createMemoryHistory} from "history";
+import { Router } from "react-router-dom";
+import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import { createMemoryHistory } from "history";
 import FilterResourcesByGroupPage from "./FilterResourcesByGroupPage";
 
 /**
@@ -32,10 +31,10 @@ export default class FilterResourcesByGroupPagePage {
     this._page = render(
       <MockTranslationProvider>
         <Router history={props.history || createMemoryHistory()}>
-          <FilterResourcesByGroupPage {...props}/>
+          <FilterResourcesByGroupPage {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -94,7 +93,7 @@ export default class FilterResourcesByGroupPagePage {
    * @returns {HTMLElement}
    */
   get createButton() {
-    return this._page.container.querySelector('.submit-wrapper #popupAction');
+    return this._page.container.querySelector(".submit-wrapper #popupAction");
   }
 
   get processingText() {
@@ -115,7 +114,7 @@ export default class FilterResourcesByGroupPagePage {
    */
   async clickOnResource(index) {
     const element = this.getResource(index)?.querySelector(".inline-resource-entry");
-    fireEvent.click(element, {button: 0});
+    fireEvent.click(element, { button: 0 });
     await waitFor(() => {});
   }
 
@@ -125,7 +124,7 @@ export default class FilterResourcesByGroupPagePage {
    */
   async clickOnGroup(index) {
     const element = this.getGroup(index)?.querySelector(".filter");
-    fireEvent.click(element, {button: 0});
+    fireEvent.click(element, { button: 0 });
     await waitFor(() => {});
   }
 
@@ -134,7 +133,7 @@ export default class FilterResourcesByGroupPagePage {
    * @returns {Promise<void>}
    */
   async clickOnBackButton() {
-    fireEvent.click(this.backButton, {button: 0});
+    fireEvent.click(this.backButton, { button: 0 });
     await waitFor(() => {});
   }
 
@@ -143,7 +142,7 @@ export default class FilterResourcesByGroupPagePage {
    * @returns {Promise<void>}
    */
   async clickOnCreateButton() {
-    fireEvent.click(this.createButton, {button: 0});
+    fireEvent.click(this.createButton, { button: 0 });
     await waitFor(() => {});
   }
 }

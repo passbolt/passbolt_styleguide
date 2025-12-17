@@ -12,7 +12,7 @@
  * @since         3.8.3
  */
 
-import MapObject from './MapObject';
+import MapObject from "./MapObject";
 
 describe("MapObject", () => {
   describe("MapObject::clone", () => {
@@ -20,9 +20,9 @@ describe("MapObject", () => {
       expect.assertions(2);
 
       const map1 = new Map();
-      map1.set('a', 1);
+      map1.set("a", 1);
       const clonedMap = MapObject.clone(map1);
-      clonedMap.set('a', 2);
+      clonedMap.set("a", 2);
 
       expect(clonedMap.get("a")).toEqual(2);
       expect(map1.get("a")).toEqual(1);
@@ -34,8 +34,8 @@ describe("MapObject", () => {
       expect.assertions(1);
 
       const map1 = new Map();
-      map1.set('a', 1);
-      map1.set('b', 2);
+      map1.set("a", 1);
+      map1.set("b", 2);
 
       expect(MapObject.iterators(map1)).toEqual(["a", "b"]);
     });

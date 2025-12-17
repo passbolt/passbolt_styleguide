@@ -12,7 +12,7 @@
  * @since         5.5.0
  */
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ManageSsoSettingsTeasing from "./ManageSsoSettingsTeasing";
@@ -30,10 +30,10 @@ export default class ManageSsoSettingsTeasingPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <ManageSsoSettingsTeasing {...props}/>
+          <ManageSsoSettingsTeasing {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -42,7 +42,7 @@ export default class ManageSsoSettingsTeasingPage {
    * @returns {HTMLElement}
    */
   get ssoSettings() {
-    return this._page.container.querySelector('.third-party-provider-settings-teasing');
+    return this._page.container.querySelector(".third-party-provider-settings-teasing");
   }
 
   /**
@@ -50,7 +50,7 @@ export default class ManageSsoSettingsTeasingPage {
    * @returns {HTMLElement}
    */
   get title() {
-    return this._page.container.querySelector('#third-party-provider-settings-title').textContent;
+    return this._page.container.querySelector("#third-party-provider-settings-title").textContent;
   }
 
   /**
@@ -58,7 +58,7 @@ export default class ManageSsoSettingsTeasingPage {
    * @returns {HTMLElement}
    */
   get ssoPageFirstLine() {
-    return this._page.container.querySelector('.third-party-provider-settings-teasing .main-content > p').textContent;
+    return this._page.container.querySelector(".third-party-provider-settings-teasing .main-content > p").textContent;
   }
 
   /**
@@ -66,7 +66,7 @@ export default class ManageSsoSettingsTeasingPage {
    * @returns {HTMLElement}
    */
   get helpBox() {
-    return this._page.container.querySelector('.sidebar-help-section');
+    return this._page.container.querySelector(".sidebar-help-section");
   }
 
   /**
@@ -74,7 +74,7 @@ export default class ManageSsoSettingsTeasingPage {
    * @returns {HTMLElement}
    */
   get helpBoxTitle() {
-    return this.helpBox.querySelector('h3').textContent;
+    return this.helpBox.querySelector("h3").textContent;
   }
 
   /**
@@ -82,7 +82,7 @@ export default class ManageSsoSettingsTeasingPage {
    * @returns {HTMLElement}
    */
   get helpBoxDescription() {
-    return this.helpBox.querySelector('p').textContent;
+    return this.helpBox.querySelector("p").textContent;
   }
 
   /**
@@ -90,7 +90,7 @@ export default class ManageSsoSettingsTeasingPage {
    * @returns {HTMLElement}
    */
   get helpBoxButton() {
-    return this.helpBox.querySelector('.button');
+    return this.helpBox.querySelector(".button");
   }
 
   /**
@@ -105,7 +105,9 @@ export default class ManageSsoSettingsTeasingPage {
    * Returns all li elements
    */
   get ssoSettingsDescription() {
-    return this._page.container.querySelectorAll(".third-party-provider-settings-info > .third-party-provider-settings-description > li");
+    return this._page.container.querySelectorAll(
+      ".third-party-provider-settings-info > .third-party-provider-settings-description > li",
+    );
   }
 
   /**
@@ -129,7 +131,7 @@ export default class ManageSsoSettingsTeasingPage {
    *
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

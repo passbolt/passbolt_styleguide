@@ -16,30 +16,30 @@ import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import React from "react";
 import ManageSsoSettings from "./ManageSsoSettings";
 import AdminSsoSettingsContextProvider from "../../../contexts/AdminSsoContext";
-import {defaultProps, disabledSso, azureConfiguredSso} from "./ManageSsoSettings.test.data";
+import { defaultProps, disabledSso, azureConfiguredSso } from "./ManageSsoSettings.test.data";
 import DisplayActionFeedbacks from "../../Common/ActionFeedback/DisplayActionFeedbacks";
 import ActionFeedbackContextProvider from "../../../contexts/ActionFeedbackContext";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 
 export default {
-  title: 'Components/Administration/ManageSsoSettings',
-  component: ManageSsoSettings
+  title: "Components/Administration/ManageSsoSettings",
+  component: ManageSsoSettings,
 };
 
-const Template = args =>
+const Template = (args) => (
   <AppContext.Provider value={args.context}>
     <DialogContextProvider>
-      <ManageDialogs/>
+      <ManageDialogs />
       <ActionFeedbackContextProvider>
-        <DisplayActionFeedbacks/>
+        <DisplayActionFeedbacks />
         <AdminSsoSettingsContextProvider {...args}>
           <div className="page administration">
-            <div className="app" >
+            <div className="app">
               <div className="panel main">
                 <div className="panel middle">
                   <div className="middle-right">
                     <div className="main-page">
-                      <ManageSsoSettings {...args}/>
+                      <ManageSsoSettings {...args} />
                     </div>
                   </div>
                 </div>
@@ -49,7 +49,8 @@ const Template = args =>
         </AdminSsoSettingsContextProvider>
       </ActionFeedbackContextProvider>
     </DialogContextProvider>
-  </AppContext.Provider>;
+  </AppContext.Provider>
+);
 
 export const Default = Template.bind({});
 Default.args = defaultProps();
@@ -63,4 +64,6 @@ export const ErrorFromTheServer = Template.bind({});
 const props = defaultProps();
 delete props.dialogContext; //making sure that this prop is not overriden and avoid a bug where the dialog doesn't display
 ErrorFromTheServer.args = props;
-ErrorFromTheServer.args.context.port.addRequestListener("passbolt.sso.get-current", () => { throw new Error("Something went wrong"); });
+ErrorFromTheServer.args.context.port.addRequestListener("passbolt.sso.get-current", () => {
+  throw new Error("Something went wrong");
+});

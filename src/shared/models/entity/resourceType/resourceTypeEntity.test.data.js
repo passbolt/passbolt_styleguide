@@ -12,8 +12,8 @@
  * @since         4.3.0
  */
 
-import {v4 as uuidv4} from "uuid";
-import {ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET} from "../resource/metadata/IconEntity";
+import { v4 as uuidv4 } from "uuid";
+import { ICON_TYPE_KEEPASS_ICON_SET, ICON_TYPE_PASSBOLT_ICON_SET } from "../resource/metadata/IconEntity";
 export const TEST_RESOURCE_TYPE_PASSWORD_STRING = uuidv4();
 export const TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION = uuidv4();
 export const TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP = uuidv4();
@@ -41,7 +41,7 @@ export const resourceTypePasswordStringDto = (data = {}) => ({
       properties: {
         name: {
           type: "string",
-          maxLength: 255
+          maxLength: 255,
         },
         username: {
           type: "string",
@@ -58,14 +58,14 @@ export const resourceTypePasswordStringDto = (data = {}) => ({
           maxLength: 10000,
           nullable: true,
         },
-      }
+      },
     },
     secret: {
       type: "string",
-      maxLength: 4096
-    }
+      maxLength: 4096,
+    },
   },
-  ...data
+  ...data,
 });
 
 /**
@@ -84,7 +84,7 @@ export const resourceTypePasswordAndDescriptionDto = (data = {}) => ({
       properties: {
         name: {
           type: "string",
-          maxLength: 255
+          maxLength: 255,
         },
         username: {
           type: "string",
@@ -96,7 +96,7 @@ export const resourceTypePasswordAndDescriptionDto = (data = {}) => ({
           maxLength: 1024,
           nullable: true,
         },
-      }
+      },
     },
     secret: {
       type: "object",
@@ -104,7 +104,7 @@ export const resourceTypePasswordAndDescriptionDto = (data = {}) => ({
       properties: {
         password: {
           type: "string",
-          maxLength: 4096
+          maxLength: 4096,
         },
         description: {
           type: "string",
@@ -112,9 +112,9 @@ export const resourceTypePasswordAndDescriptionDto = (data = {}) => ({
           nullable: true,
         },
       },
-    }
+    },
   },
-  ...data
+  ...data,
 });
 
 /**
@@ -133,7 +133,7 @@ export const resourceTypePasswordDescriptionTotpDto = (data = {}) => ({
       properties: {
         name: {
           type: "string",
-          maxLength: 255
+          maxLength: 255,
         },
         username: {
           type: "string",
@@ -145,7 +145,7 @@ export const resourceTypePasswordDescriptionTotpDto = (data = {}) => ({
           maxLength: 1024,
           nullable: true,
         },
-      }
+      },
     },
     secret: {
       type: "object",
@@ -153,7 +153,7 @@ export const resourceTypePasswordDescriptionTotpDto = (data = {}) => ({
       properties: {
         password: {
           type: "string",
-          maxLength: 4096
+          maxLength: 4096,
         },
         description: {
           type: "string",
@@ -162,20 +162,16 @@ export const resourceTypePasswordDescriptionTotpDto = (data = {}) => ({
         },
         totp: {
           type: "object",
-          required: [
-            "secret_key",
-            "digits",
-            "algorithm"
-          ],
+          required: ["secret_key", "digits", "algorithm"],
           properties: {
             algorithm: {
               type: "string",
               minLength: 4,
-              maxLength: 6
+              maxLength: 6,
             },
             secret_key: {
               type: "string",
-              maxLength: 1024
+              maxLength: 1024,
             },
             digits: {
               type: "number",
@@ -183,14 +179,14 @@ export const resourceTypePasswordDescriptionTotpDto = (data = {}) => ({
               maximum: 8,
             },
             period: {
-              type: "number"
-            }
-          }
-        }
+              type: "number",
+            },
+          },
+        },
       },
-    }
+    },
   },
-  ...data
+  ...data,
 });
 
 /**
@@ -209,14 +205,14 @@ export const resourceTypeTotpDto = (data = {}) => ({
       properties: {
         name: {
           type: "string",
-          maxLength: 255
+          maxLength: 255,
         },
         uri: {
           type: "string",
           maxLength: 1024,
           nullable: true,
         },
-      }
+      },
     },
     secret: {
       type: "object",
@@ -224,20 +220,16 @@ export const resourceTypeTotpDto = (data = {}) => ({
       properties: {
         totp: {
           type: "object",
-          required: [
-            "secret_key",
-            "digits",
-            "algorithm"
-          ],
+          required: ["secret_key", "digits", "algorithm"],
           properties: {
             algorithm: {
               type: "string",
               minLength: 4,
-              maxLength: 6
+              maxLength: 6,
             },
             secret_key: {
               type: "string",
-              maxLength: 1024
+              maxLength: 1024,
             },
             digits: {
               type: "number",
@@ -245,14 +237,14 @@ export const resourceTypeTotpDto = (data = {}) => ({
               maximum: 8,
             },
             period: {
-              type: "number"
-            }
-          }
-        }
+              type: "number",
+            },
+          },
+        },
       },
-    }
+    },
   },
-  ...data
+  ...data,
 });
 
 /**
@@ -271,17 +263,17 @@ export const resourceTypeWithoutSecretDefinitionDto = (data = {}) => ({
       properties: {
         name: {
           type: "string",
-          maxLength: 255
+          maxLength: 255,
         },
         uri: {
           type: "string",
           maxLength: 1024,
           nullable: true,
         },
-      }
+      },
     },
   },
-  ...data
+  ...data,
 });
 
 /**
@@ -300,7 +292,7 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
       properties: {
         name: {
           type: "string",
-          maxLength: 255
+          maxLength: 255,
         },
         username: {
           type: "string",
@@ -312,7 +304,7 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
           items: {
             type: "string",
             maxLength: 1024,
-            nullable: true
+            nullable: true,
           },
           maxItems: 32,
         },
@@ -332,13 +324,13 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
             value: {
               type: "number",
               minimum: 0,
-              nullable: true
+              nullable: true,
             },
             background_color: {
               type: "string",
               nullable: true,
             },
-          }
+          },
         },
         custom_fields: {
           type: "array",
@@ -349,29 +341,25 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
             properties: {
               id: {
                 type: "string",
-                format: "uuid"
+                format: "uuid",
               },
               type: {
                 type: "string",
-                enum: ["text", "password", "boolean", "number", "uri"]
+                enum: ["text", "password", "boolean", "number", "uri"],
               },
               metadata_key: {
                 type: "string",
                 maxLength: 255,
-                nullable: true
+                nullable: true,
               },
               metadata_value: {
-                anyOf: [
-                  {type: "string", maxLength: 20000},
-                  {type: "number"},
-                  {type: "boolean"}
-                ],
-                nullable: true
+                anyOf: [{ type: "string", maxLength: 20000 }, { type: "number" }, { type: "boolean" }],
+                nullable: true,
               },
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     },
     secret: {
       type: "object",
@@ -379,7 +367,7 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
       properties: {
         object_type: {
           type: "string",
-          enum: ['PASSBOLT_SECRET_DATA'],
+          enum: ["PASSBOLT_SECRET_DATA"],
         },
         password: {
           type: "string",
@@ -400,32 +388,28 @@ export const resourceTypeV5DefaultDto = (data = {}) => ({
             properties: {
               id: {
                 type: "string",
-                format: "uuid"
+                format: "uuid",
               },
               type: {
                 type: "string",
-                enum: ["text", "password", "boolean", "number", "uri"]
+                enum: ["text", "password", "boolean", "number", "uri"],
               },
               secret_key: {
                 type: "string",
                 maxLength: 255,
-                nullable: true
+                nullable: true,
               },
               secret_value: {
-                anyOf: [
-                  {type: "string", maxLength: 20000},
-                  {type: "number"},
-                  {type: "boolean"}
-                ],
-                nullable: true
-              }
-            }
-          }
-        }
+                anyOf: [{ type: "string", maxLength: 20000 }, { type: "number" }, { type: "boolean" }],
+                nullable: true,
+              },
+            },
+          },
+        },
       },
-    }
+    },
   },
-  ...data
+  ...data,
 });
 
 /**
@@ -444,7 +428,7 @@ export const resourceTypeV5PasswordStringDto = (data = {}) => ({
       properties: {
         name: {
           type: "string",
-          maxLength: 255
+          maxLength: 255,
         },
         username: {
           type: "string",
@@ -456,7 +440,7 @@ export const resourceTypeV5PasswordStringDto = (data = {}) => ({
           items: {
             type: "string",
             maxLength: 1024,
-            nullable: true
+            nullable: true,
           },
           maxItems: 32,
         },
@@ -476,22 +460,22 @@ export const resourceTypeV5PasswordStringDto = (data = {}) => ({
             value: {
               type: "number",
               minimum: 0,
-              nullable: true
+              nullable: true,
             },
             background_color: {
               type: "string",
               nullable: true,
             },
-          }
-        }
-      }
+          },
+        },
+      },
     },
     secret: {
       type: "string",
-      maxLength: 4096
-    }
+      maxLength: 4096,
+    },
   },
-  ...data
+  ...data,
 });
 
 /**
@@ -510,7 +494,7 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
       properties: {
         name: {
           type: "string",
-          maxLength: 255
+          maxLength: 255,
         },
         username: {
           type: "string",
@@ -522,7 +506,7 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
           items: {
             type: "string",
             maxLength: 1024,
-            nullable: true
+            nullable: true,
           },
           maxItems: 32,
         },
@@ -542,13 +526,13 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
             value: {
               type: "number",
               minimum: 0,
-              nullable: true
+              nullable: true,
             },
             background_color: {
               type: "string",
               nullable: true,
             },
-          }
+          },
         },
         custom_fields: {
           type: "array",
@@ -559,29 +543,25 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
             properties: {
               id: {
                 type: "string",
-                format: "uuid"
+                format: "uuid",
               },
               type: {
                 type: "string",
-                enum: ["text", "password", "boolean", "number", "uri"]
+                enum: ["text", "password", "boolean", "number", "uri"],
               },
               metadata_key: {
                 type: "string",
                 maxLength: 255,
-                nullable: true
+                nullable: true,
               },
               metadata_value: {
-                anyOf: [
-                  {type: "string", maxLength: 20000},
-                  {type: "number"},
-                  {type: "boolean"}
-                ],
-                nullable: true
+                anyOf: [{ type: "string", maxLength: 20000 }, { type: "number" }, { type: "boolean" }],
+                nullable: true,
               },
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     },
     secret: {
       type: "object",
@@ -589,7 +569,7 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
       properties: {
         object_type: {
           type: "string",
-          enum: ['PASSBOLT_SECRET_DATA'],
+          enum: ["PASSBOLT_SECRET_DATA"],
         },
         password: {
           type: "string",
@@ -603,20 +583,16 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
         },
         totp: {
           type: "object",
-          required: [
-            "secret_key",
-            "digits",
-            "algorithm"
-          ],
+          required: ["secret_key", "digits", "algorithm"],
           properties: {
             algorithm: {
               type: "string",
               minLength: 4,
-              maxLength: 6
+              maxLength: 6,
             },
             secret_key: {
               type: "string",
-              maxLength: 1024
+              maxLength: 1024,
             },
             digits: {
               type: "number",
@@ -624,9 +600,9 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
               maximum: 8,
             },
             period: {
-              type: "number"
-            }
-          }
+              type: "number",
+            },
+          },
         },
         custom_fields: {
           type: "array",
@@ -637,32 +613,28 @@ export const resourceTypeV5DefaultTotpDto = (data = {}) => ({
             properties: {
               id: {
                 type: "string",
-                format: "uuid"
+                format: "uuid",
               },
               type: {
                 type: "string",
-                enum: ["text", "password", "boolean", "number", "uri"]
+                enum: ["text", "password", "boolean", "number", "uri"],
               },
               secret_key: {
                 type: "string",
                 maxLength: 255,
-                nullable: true
+                nullable: true,
               },
               secret_value: {
-                anyOf: [
-                  {type: "string", maxLength: 20000},
-                  {type: "number"},
-                  {type: "boolean"}
-                ],
-                nullable: true
-              }
-            }
-          }
-        }
+                anyOf: [{ type: "string", maxLength: 20000 }, { type: "number" }, { type: "boolean" }],
+                nullable: true,
+              },
+            },
+          },
+        },
       },
-    }
+    },
   },
-  ...data
+  ...data,
 });
 
 /**
@@ -681,14 +653,14 @@ export const resourceTypeV5TotpDto = (data = {}) => ({
       properties: {
         name: {
           type: "string",
-          maxLength: 255
+          maxLength: 255,
         },
         uris: {
           type: "array",
           items: {
             type: "string",
             maxLength: 1024,
-            nullable: true
+            nullable: true,
           },
           maxItems: 32,
         },
@@ -708,15 +680,15 @@ export const resourceTypeV5TotpDto = (data = {}) => ({
             value: {
               type: "number",
               minimum: 0,
-              nullable: true
+              nullable: true,
             },
             background_color: {
               type: "string",
               nullable: true,
             },
-          }
-        }
-      }
+          },
+        },
+      },
     },
     secret: {
       type: "object",
@@ -724,24 +696,20 @@ export const resourceTypeV5TotpDto = (data = {}) => ({
       properties: {
         object_type: {
           type: "string",
-          enum: ['PASSBOLT_SECRET_DATA'],
+          enum: ["PASSBOLT_SECRET_DATA"],
         },
         totp: {
           type: "object",
-          required: [
-            "secret_key",
-            "digits",
-            "algorithm"
-          ],
+          required: ["secret_key", "digits", "algorithm"],
           properties: {
             algorithm: {
               type: "string",
               minLength: 4,
-              maxLength: 6
+              maxLength: 6,
             },
             secret_key: {
               type: "string",
-              maxLength: 1024
+              maxLength: 1024,
             },
             digits: {
               type: "number",
@@ -749,14 +717,14 @@ export const resourceTypeV5TotpDto = (data = {}) => ({
               maximum: 8,
             },
             period: {
-              type: "number"
-            }
-          }
-        }
+              type: "number",
+            },
+          },
+        },
       },
-    }
+    },
   },
-  ...data
+  ...data,
 });
 
 /**
@@ -775,19 +743,19 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
       properties: {
         name: {
           type: "string",
-          maxLength: 255
+          maxLength: 255,
         },
         username: {
           type: "string",
           maxLength: 255,
-          nullable: true
+          nullable: true,
         },
         uris: {
           type: "array",
           items: {
             type: "string",
             maxLength: 1024,
-            nullable: true
+            nullable: true,
           },
           maxItems: 32,
         },
@@ -807,13 +775,13 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
             value: {
               type: "number",
               minimum: 0,
-              nullable: true
+              nullable: true,
             },
             background_color: {
               type: "string",
               nullable: true,
             },
-          }
+          },
         },
         custom_fields: {
           type: "array",
@@ -824,28 +792,24 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
             properties: {
               id: {
                 type: "string",
-                format: "uuid"
+                format: "uuid",
               },
               type: {
                 type: "string",
-                enum: ["text", "password", "boolean", "number", "uri"]
+                enum: ["text", "password", "boolean", "number", "uri"],
               },
               metadata_key: {
                 type: "string",
                 maxLength: 255,
-                nullable: true
+                nullable: true,
               },
               metadata_value: {
-                anyOf: [
-                  {type: "string", maxLength: 20000},
-                  {type: "number"},
-                  {type: "boolean"}
-                ],
-                nullable: true
+                anyOf: [{ type: "string", maxLength: 20000 }, { type: "number" }, { type: "boolean" }],
+                nullable: true,
               },
-            }
-          }
-        }
+            },
+          },
+        },
       },
     },
     secret: {
@@ -854,7 +818,7 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
       properties: {
         object_type: {
           type: "string",
-          enum: ['PASSBOLT_SECRET_DATA'],
+          enum: ["PASSBOLT_SECRET_DATA"],
         },
         custom_fields: {
           type: "array",
@@ -865,32 +829,28 @@ export const resourceTypeV5CustomFieldsDto = (data = {}) => ({
             properties: {
               id: {
                 type: "string",
-                format: "uuid"
+                format: "uuid",
               },
               type: {
                 type: "string",
-                enum: ["text", "password", "boolean", "number", "uri"]
+                enum: ["text", "password", "boolean", "number", "uri"],
               },
               secret_key: {
                 type: "string",
                 maxLength: 255,
-                nullable: true
+                nullable: true,
               },
               secret_value: {
-                anyOf: [
-                  {type: "string", maxLength: 20000},
-                  {type: "number"},
-                  {type: "boolean"}
-                ],
-                nullable: true
-              }
-            }
-          }
-        }
+                anyOf: [{ type: "string", maxLength: 20000 }, { type: "number" }, { type: "boolean" }],
+                nullable: true,
+              },
+            },
+          },
+        },
       },
-    }
+    },
   },
-  ...data
+  ...data,
 });
 
 /**
@@ -909,14 +869,14 @@ export const resourceTypeV5StandaloneNoteDto = (data = {}) => ({
       properties: {
         name: {
           type: "string",
-          maxLength: 255
+          maxLength: 255,
         },
         uris: {
           type: "array",
           items: {
             type: "string",
             maxLength: 1024,
-            nullable: true
+            nullable: true,
           },
           maxItems: 32,
         },
@@ -936,15 +896,15 @@ export const resourceTypeV5StandaloneNoteDto = (data = {}) => ({
             value: {
               type: "number",
               minimum: 0,
-              nullable: true
+              nullable: true,
             },
             background_color: {
               type: "string",
               nullable: true,
             },
-          }
-        }
-      }
+          },
+        },
+      },
     },
     secret: {
       type: "object",
@@ -952,14 +912,14 @@ export const resourceTypeV5StandaloneNoteDto = (data = {}) => ({
       properties: {
         object_type: {
           type: "string",
-          enum: ['PASSBOLT_SECRET_DATA'],
+          enum: ["PASSBOLT_SECRET_DATA"],
         },
         description: {
           type: "string",
           maxLength: 50000,
         },
       },
-    }
+    },
   },
-  ...data
+  ...data,
 });

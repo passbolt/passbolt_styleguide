@@ -16,8 +16,8 @@
  * Default props
  * @returns {*}
  */
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultNavigationContext} from "../../../contexts/NavigationContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultNavigationContext } from "../../../contexts/NavigationContext.test.data";
 import MockPort from "../../../test/mock/MockPort";
 
 /**

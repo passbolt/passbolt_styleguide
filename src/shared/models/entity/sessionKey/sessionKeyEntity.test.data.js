@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.10.1
  */
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Returns a DTO object suitable for the SessionKeyEntity
@@ -23,7 +23,7 @@ export const defaultSessionKeyDto = (data = {}) => {
     foreign_model: "Resource",
     foreign_id: uuidv4(),
     session_key: "9:901D6ED579AFF935F9F157A5198BCE48B50AD87345DEADBA06F42C5D018C78CC",
-    modified: (new Date()).toISOString(),
+    modified: new Date().toISOString(),
     ...data,
   };
 

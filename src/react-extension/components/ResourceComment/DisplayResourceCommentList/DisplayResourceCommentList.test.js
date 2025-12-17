@@ -16,9 +16,9 @@
  * Unit tests on DisplayComments in regard of specifications
  */
 
-import {commentsMock, defaultAppContext, defaultProps} from "./DisplayResourceCommentList.test.data";
+import { commentsMock, defaultAppContext, defaultProps } from "./DisplayResourceCommentList.test.data";
 import DisplayResourceCommentListPage from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetailsComment.test.page";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -29,10 +29,10 @@ describe("See comments", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (implementation) => jest.spyOn(context.port, "request").mockImplementation(implementation);
   const commentsFoundRequestMockImpl = jest.fn(() => Promise.resolve(commentsMock));
 
-  describe(' As LU I can see the comments of a resource with at least one comment', () => {
+  describe(" As LU I can see the comments of a resource with at least one comment", () => {
     /**
      * Given a selected resource having 3 comments
      * When I open the “Comments” section of the secondary sidebar
@@ -47,30 +47,30 @@ describe("See comments", () => {
       mockContextRequest(commentsFoundRequestMockImpl);
     });
 
-    it('I should see the 3 comments made on the resource', async() => {
+    it("I should see the 3 comments made on the resource", async () => {
       await page.title.click();
 
       expect(page.displayCommentList.exists()).toBeTruthy();
       expect(page.displayCommentList.count()).toBe(3);
     });
 
-    it('I should see the comments sorted from the most recent to the oldest', async() => {
+    it("I should see the comments sorted from the most recent to the oldest", async () => {
       await page.title.click();
 
-      expect(page.displayCommentList.author(1)).toBe('Carol Shaw');
-      expect(page.displayCommentList.author(2)).toBe('Betty Holberton');
-      expect(page.displayCommentList.author(3)).toBe('Ada Lovelace');
+      expect(page.displayCommentList.author(1)).toBe("Carol Shaw");
+      expect(page.displayCommentList.author(2)).toBe("Betty Holberton");
+      expect(page.displayCommentList.author(3)).toBe("Ada Lovelace");
     });
 
-    it('I should be able to identify each comments authors', async() => {
+    it("I should be able to identify each comments authors", async () => {
       await page.title.click();
 
-      expect(page.displayCommentList.author(1)).toBe('Carol Shaw');
-      expect(page.displayCommentList.author(2)).toBe('Betty Holberton');
-      expect(page.displayCommentList.author(3)).toBe('Ada Lovelace');
+      expect(page.displayCommentList.author(1)).toBe("Carol Shaw");
+      expect(page.displayCommentList.author(2)).toBe("Betty Holberton");
+      expect(page.displayCommentList.author(3)).toBe("Ada Lovelace");
     });
 
-    it('I should be able to see each comments timestamps', async() => {
+    it("I should be able to see each comments timestamps", async () => {
       await page.title.click();
 
       expect(page.displayCommentList.creationTime(1)).toBeDefined();
@@ -79,7 +79,7 @@ describe("See comments", () => {
     });
   });
 
-  describe(' As LU I see a loading state when the comments are not loaded\n', () => {
+  describe(" As LU I see a loading state when the comments are not loaded\n", () => {
     /**
      * Given a selected resource having 3 comments
      * When I open the “Comments” section of the secondary sidebar
@@ -88,14 +88,19 @@ describe("See comments", () => {
      */
 
     let findResolve;
-    const loadingFindMockImpl = jest.fn(() => new Promise(resolve => { findResolve = resolve; }));
+    const loadingFindMockImpl = jest.fn(
+      () =>
+        new Promise((resolve) => {
+          findResolve = resolve;
+        }),
+    );
 
     beforeEach(() => {
       page = new DisplayResourceCommentListPage(context, props);
       mockContextRequest(loadingFindMockImpl);
     });
 
-    it('I should see the loading message “Retrieving comments”', async() => {
+    it("I should see the loading message “Retrieving comments”", async () => {
       await page.title.click();
 
       const inProgressFn = () => {
@@ -107,18 +112,18 @@ describe("See comments", () => {
     });
   });
 
-  describe('As a logged in user, I should see an error displayed when there is an unexpected error', () => {
+  describe("As a logged in user, I should see an error displayed when there is an unexpected error", () => {
     /**
      * When I open the Comments section of the secondary sidebar
      * And the comments are not loaded due to an unexpected error
      * Then I should see an appropriate error message.
      */
-    it('I should see an error toaster if the comments do not load due to an unexpected error', async() => {
+    it("I should see an error toaster if the comments do not load due to an unexpected error", async () => {
       expect.assertions(1);
 
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displayError").mockImplementation(() => {});
 
-      const error = {message: "Unable to reach the server, an unexpected error occurred"};
+      const error = { message: "Unable to reach the server, an unexpected error occurred" };
       mockContextRequest(() => Promise.reject(error));
       page = new DisplayResourceCommentListPage(context, props);
 

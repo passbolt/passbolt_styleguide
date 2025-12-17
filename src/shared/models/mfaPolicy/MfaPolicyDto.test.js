@@ -12,7 +12,7 @@
  * @since         3.10.0
  */
 
-import {MfaPolicyEnumerationTypes} from "./MfaPolicyEnumeration";
+import { MfaPolicyEnumerationTypes } from "./MfaPolicyEnumeration";
 import MfaPolicyDto from "./MfaPolicyDto";
 
 describe("MfaPolicyDto", () => {

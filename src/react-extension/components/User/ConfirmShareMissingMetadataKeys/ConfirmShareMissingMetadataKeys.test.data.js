@@ -13,13 +13,13 @@
  */
 
 import MetadataKeysCollection from "../../../../shared/models/entity/metadata/metadataKeysCollection";
-import {defaultMetadataKeysDtos} from "../../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
-import {defaultProfileDto} from "../../../../shared/models/entity/profile/ProfileEntity.test.data";
-import {TEST_ROLE_ADMIN_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
-import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {v4 as uuidv4} from "uuid";
+import { defaultMetadataKeysDtos } from "../../../../shared/models/entity/metadata/metadataKeysCollection.test.data";
+import { defaultProfileDto } from "../../../../shared/models/entity/profile/ProfileEntity.test.data";
+import { TEST_ROLE_ADMIN_ID } from "../../../../shared/models/entity/role/roleEntity.test.data";
+import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Default props
@@ -27,7 +27,7 @@ import {v4 as uuidv4} from "uuid";
  */
 export function defaultProps(props = {}) {
   const metadataKeys = props.metadataKeys || defaultMetadataKeysDtos();
-  const missingMetadataKeys = props.missingMetadataKeys || metadataKeys.map(metadata => metadata.id);
+  const missingMetadataKeys = props.missingMetadataKeys || metadataKeys.map((metadata) => metadata.id);
   const missingAdminMetadataKeys = props.missingAdminMetadataKeys || [];
 
   return {
@@ -36,10 +36,10 @@ export function defaultProps(props = {}) {
         id: uuidv4(),
         role: {
           id: TEST_ROLE_ADMIN_ID,
-          name: 'admin'
+          name: "admin",
         },
         missing_metadata_key_ids: missingAdminMetadataKeys,
-      }
+      },
     }),
     onClose: jest.fn(),
     actionFeedbackContext: defaultActionFeedbackContext(),
@@ -49,33 +49,32 @@ export function defaultProps(props = {}) {
       username: "ada@passbolt.com",
       profile: defaultProfileDto({
         first_name: "Ada",
-        last_name: "Lovelace"
+        last_name: "Lovelace",
       }),
       missing_metadata_key_ids: missingMetadataKeys,
     }),
     dialogContext: {
-      open: () => {}
-    }
+      open: () => {},
+    },
   };
 }
 
-
 export function ownedPartiallyMisingMetadataKeysProps(props = {}) {
   const metadataKeys = props.metadataKeys || defaultMetadataKeysDtos();
-  const missingMetadataKeys = props.missingMetadataKeys || metadataKeys.map(metadata => metadata.id);
+  const missingMetadataKeys = props.missingMetadataKeys || metadataKeys.map((metadata) => metadata.id);
 
   return defaultProps({
     missingAdminMetadataKeys: [metadataKeys[0].id],
-    missingMetadataKeys: missingMetadataKeys
+    missingMetadataKeys: missingMetadataKeys,
   });
 }
 
 export function notOwnedAllMisingMetadataKeysProps(props = {}) {
   const metadataKeys = props.metadataKeys || defaultMetadataKeysDtos();
-  const missingMetadataKeys = props.missingMetadataKeys || metadataKeys.map(metadata => metadata.id);
+  const missingMetadataKeys = props.missingMetadataKeys || metadataKeys.map((metadata) => metadata.id);
 
   return defaultProps({
     missingAdminMetadataKeys: missingMetadataKeys,
-    missingMetadataKeys: missingMetadataKeys
+    missingMetadataKeys: missingMetadataKeys,
   });
 }

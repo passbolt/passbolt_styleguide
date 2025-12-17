@@ -1,13 +1,12 @@
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockPort from "../../../test/mock/MockPort";
 import AddResourceComment from "./AddResourceComment";
 
-
 export default {
-  title: 'Components/ResourceComment/AddComment',
-  component: AddResourceComment
+  title: "Components/ResourceComment/AddComment",
+  component: AddResourceComment,
 };
 
 const context = {
@@ -15,36 +14,33 @@ const context = {
     canIUse: () => true,
     settings: {
       app: {
-        url: (new URL(window.location.href)).origin
-      }
-    }
+        url: new URL(window.location.href).origin,
+      },
+    },
   },
-  loggedInUser: {
-
-  },
-  port: new MockPort()
+  loggedInUser: {},
+  port: new MockPort(),
 };
 
-
-const Template = args =>
+const Template = (args) => (
   <AppContext.Provider value={args.context}>
-    <MemoryRouter initialEntries={['/']}>
+    <MemoryRouter initialEntries={["/"]}>
       <div className="panel aside">
         <div className="comments accordion sidebar-section">
           <div className="accordion-content">
-            <Route component={routerProps => <AddResourceComment {...args} {...routerProps}/>}></Route>
+            <Route component={(routerProps) => <AddResourceComment {...args} {...routerProps} />}></Route>
           </div>
         </div>
       </div>
     </MemoryRouter>
-  </AppContext.Provider>;
-
+  </AppContext.Provider>
+);
 
 export const Initial = Template.bind({});
 Initial.args = {
   context: context,
   resource: {
-    id: "test"
+    id: "test",
   },
-  onAdd: () => {}
+  onAdd: () => {},
 };

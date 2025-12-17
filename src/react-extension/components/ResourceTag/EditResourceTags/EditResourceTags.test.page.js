@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -29,70 +28,70 @@ export default class EditResourceTagsPageObject {
    * Returns the tag editor element
    */
   get component() {
-    return this._container.querySelector('.tag-editor-input');
+    return this._container.querySelector(".tag-editor-input");
   }
 
   /**
    * Returns the notice message element
    */
   get noticeMessage() {
-    return this._container.querySelector('.message.notice');
+    return this._container.querySelector(".message.notice");
   }
 
   /**
    * Returns the error message content
    */
   get errorMessage() {
-    return this._container.querySelector('.error-message').textContent;
+    return this._container.querySelector(".error-message").textContent;
   }
 
   /**
    * Returns the delete icon tag element
    */
   get deleteTag() {
-    return this._container.querySelector('.tag-delete');
+    return this._container.querySelector(".tag-delete");
   }
 
   /**
    * Returns the autocomplete content element
    */
   get autocompleteContent() {
-    return this._container.querySelector('.autocomplete-content');
+    return this._container.querySelector(".autocomplete-content");
   }
 
   /**
    * Returns the autocomplete tag element for the 'index' one
    */
   autocompleteItem(index) {
-    return this._container.querySelectorAll('.autocomplete-item')[index - 1];
+    return this._container.querySelectorAll(".autocomplete-item")[index - 1];
   }
 
   /**
    * Returns the autocomplete tag name element for the 'index' one
    */
   autocompleteItemName(index) {
-    return this._container.querySelectorAll('.autocomplete-item')[index - 1].querySelector('.name');
+    return this._container.querySelectorAll(".autocomplete-item")[index - 1].querySelector(".name");
   }
 
   /**
    * Returns the save button element
    */
   get saveButton() {
-    return this._container.querySelector('.tag-editor-submit');
+    return this._container.querySelector(".tag-editor-submit");
   }
 
   /**
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._container.querySelector('.tag-editor-cancel');
+    return this._container.querySelector(".tag-editor-cancel");
   }
 
   /**
    * Returns the number of displayed tags
    */
   count() {
-    return this._container.querySelectorAll('.tag-content').length;
+    return this._container.querySelectorAll(".tag-content").length;
   }
 
   /**
@@ -100,6 +99,6 @@ export default class EditResourceTagsPageObject {
    * @param index The display rank of name's tag
    */
   name(index) {
-    return this._container.querySelectorAll('.tag-content')[index - 1].textContent;
+    return this._container.querySelectorAll(".tag-content")[index - 1].textContent;
   }
 }

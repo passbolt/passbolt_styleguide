@@ -13,41 +13,46 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
-import Login, {LoginVariations} from "./Login";
-import {defaultProps, defaultPropsWithAccount} from "./Login.test.data";
+import { MemoryRouter, Route } from "react-router-dom";
+import Login, { LoginVariations } from "./Login";
+import { defaultProps, defaultPropsWithAccount } from "./Login.test.data";
 
 export default {
-  title: 'Components/AuthenticationLogin/Login',
-  component: Login
+  title: "Components/AuthenticationLogin/Login",
+  component: Login,
 };
 
-const Template = args =>
+const Template = (args) => (
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
-        <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <Login {...args} {...routerProps}/>}/>
+        <MemoryRouter initialEntries={["/"]}>
+          <Route component={(routerProps) => <Login {...args} {...routerProps} />} />
         </MemoryRouter>
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 const defaultParameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };
 
 export const Initial = Template.bind({});
 Initial.args = defaultProps({
   displayAs: LoginVariations.SIGN_IN,
-  onSignIn: async() => { console.log("onSignIn called"); }
+  onSignIn: async () => {
+    console.log("onSignIn called");
+  },
 });
 Initial.parameters = defaultParameters;
 
 export const CompleteRecovery = Template.bind({});
 CompleteRecovery.args = defaultPropsWithAccount({
   displayAs: LoginVariations.ACCOUNT_RECOVERY,
-  onSignIn: async() => { console.log("onSignIn called"); }
+  onSignIn: async () => {
+    console.log("onSignIn called");
+  },
 });
 CompleteRecovery.parameters = defaultParameters;
 
@@ -57,7 +62,11 @@ export const LoginWithSsoEnabled = Template.bind({});
 LoginWithSsoEnabled.args = defaultPropsWithAccount({
   displayAs: LoginVariations.SIGN_IN,
   isSsoAvailable: true,
-  onCheckPassphrase: () => { throw passwordError; },
-  onSignIn: async() => { console.log("onSignIn called"); }
+  onCheckPassphrase: () => {
+    throw passwordError;
+  },
+  onSignIn: async () => {
+    console.log("onSignIn called");
+  },
 });
 LoginWithSsoEnabled.parameters = defaultParameters;

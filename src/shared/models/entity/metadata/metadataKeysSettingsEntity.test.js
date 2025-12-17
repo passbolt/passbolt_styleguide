@@ -14,9 +14,9 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {defaultMetadataKeysSettingsDto} from "./metadataKeysSettingsEntity.test.data";
+import { defaultMetadataKeysSettingsDto } from "./metadataKeysSettingsEntity.test.data";
 import MetadataKeysSettingsEntity from "./metadataKeysSettingsEntity";
-import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
+import { defaultMetadataPrivateKeyDto } from "./metadataPrivateKeyEntity.test.data";
 import ShareMetadataPrivateKeysCollection from "./shareMetadataPrivateKeysCollection";
 
 describe("MetadataKeysSettings", () => {
@@ -37,13 +37,15 @@ describe("MetadataKeysSettings", () => {
 
     it("validates metadata_private_keys property", () => {
       const metadataKeysSettingsDto = defaultMetadataKeysSettingsDto();
-      const successScenarios = [
-        {scenario: "a valid option", value: [defaultMetadataPrivateKeyDto()]},
-      ];
-      const failScenarios = [
-        {scenario: "with invalid metadata private key build rule", value: [{}]},
-      ];
-      assertEntityProperty.assertAssociation(MetadataKeysSettingsEntity, "metadata_private_keys", metadataKeysSettingsDto, successScenarios, failScenarios);
+      const successScenarios = [{ scenario: "a valid option", value: [defaultMetadataPrivateKeyDto()] }];
+      const failScenarios = [{ scenario: "with invalid metadata private key build rule", value: [{}] }];
+      assertEntityProperty.assertAssociation(
+        MetadataKeysSettingsEntity,
+        "metadata_private_keys",
+        metadataKeysSettingsDto,
+        successScenarios,
+        failScenarios,
+      );
     });
   });
 
@@ -59,18 +61,23 @@ describe("MetadataKeysSettings", () => {
 
     it("constructor works if valid DTO is provided", () => {
       expect.assertions(3);
-      const dto = defaultMetadataKeysSettingsDto({}, {withMetadataPrivateKeys: true});
+      const dto = defaultMetadataKeysSettingsDto({}, { withMetadataPrivateKeys: true });
       const entity = new MetadataKeysSettingsEntity(dto);
 
       expect(entity._props.allow_usage_of_personal_keys).toBeTruthy();
       expect(entity._props.zero_knowledge_key_share).toBeFalsy();
-      expect(entity._metadataPrivateKeys).toStrictEqual(new ShareMetadataPrivateKeysCollection(dto.metadata_private_keys));
+      expect(entity._metadataPrivateKeys).toStrictEqual(
+        new ShareMetadataPrivateKeysCollection(dto.metadata_private_keys),
+      );
     });
 
     it("constructor throw an error if the zero knowledge is true and the private metadata key is defined", () => {
       expect.assertions(1);
-      const dto = defaultMetadataKeysSettingsDto({zero_knowledge_key_share: true}, {withMetadataPrivateKeys: true});
-      expect(() => new MetadataKeysSettingsEntity(dto)).toThrowEntityValidationError("metadata_private_keys", "not_defined_for_zero_knowledge");
+      const dto = defaultMetadataKeysSettingsDto({ zero_knowledge_key_share: true }, { withMetadataPrivateKeys: true });
+      expect(() => new MetadataKeysSettingsEntity(dto)).toThrowEntityValidationError(
+        "metadata_private_keys",
+        "not_defined_for_zero_knowledge",
+      );
     });
   });
 
@@ -85,7 +92,10 @@ describe("MetadataKeysSettings", () => {
 
     it("creates from default metadata keys settings with data overridden", () => {
       expect.assertions(2);
-      const entity = MetadataKeysSettingsEntity.createFromDefault({allow_usage_of_personal_keys: false, zero_knowledge_key_share: true});
+      const entity = MetadataKeysSettingsEntity.createFromDefault({
+        allow_usage_of_personal_keys: false,
+        zero_knowledge_key_share: true,
+      });
 
       expect(entity._props.allow_usage_of_personal_keys).toBeFalsy();
       expect(entity._props.zero_knowledge_key_share).toBeTruthy();
@@ -97,7 +107,7 @@ describe("MetadataKeysSettings", () => {
       expect.assertions(2);
       let entity = new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto());
       expect(entity.allowUsageOfPersonalKeys).toBeTruthy();
-      entity = new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({allow_usage_of_personal_keys: false}));
+      entity = new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({ allow_usage_of_personal_keys: false }));
       expect(entity.allowUsageOfPersonalKeys).toBeFalsy();
     });
   });
@@ -107,7 +117,7 @@ describe("MetadataKeysSettings", () => {
       expect.assertions(2);
       let entity = new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto());
       expect(entity.zeroKnowledgeKeyShare).toBeFalsy();
-      entity = new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({zero_knowledge_key_share: true}));
+      entity = new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({ zero_knowledge_key_share: true }));
       expect(entity.zeroKnowledgeKeyShare).toBeTruthy();
     });
   });

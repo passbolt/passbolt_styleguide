@@ -12,9 +12,9 @@
  * @since         3.6.0
  */
 
-import {LoginVariations} from "./Login";
+import { LoginVariations } from "./Login";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props
@@ -26,16 +26,16 @@ export function defaultProps(props = {}) {
     "user.settings.securityToken.code": "TST",
     "user.settings.securityToken.color": "#f44336",
     "user.settings.securityToken.textColor": "#ffffff",
-    "user.settings.trustedDomain": (new URL(window.location.href)).origin,
+    "user.settings.trustedDomain": new URL(window.location.href).origin,
     "user.id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
     "user.username": "admin@passbolt.com",
     "user.firstname": "Admin",
     "user.lastname": "User",
-    "user.settings.locale": "fr-FR"
+    "user.settings.locale": "fr-FR",
   });
   const defaultProps = {
     displayAs: LoginVariations.SIGN_IN,
-    context: defaultAppContext({userSettings}),
+    context: defaultAppContext({ userSettings }),
     userSettings: userSettings,
     onSignIn: jest.fn(() => Promise.resolve()),
     onCheckPassphrase: jest.fn(() => Promise.resolve()),
@@ -53,18 +53,18 @@ export function defaultPropsWithAccount(data = {}) {
   const defaultData = defaultProps({
     userSettings: null,
     account: {
-      "domain": (new URL(window.location.href)).origin,
-      "user_id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-      "username": "admin@passbolt.com",
-      "first_name": "Admin",
-      "last_name": "User",
-      "locale": "fr-FR",
-      "security_token": {
-        "code": "HGA",
-        "color": "#8bc34a",
-        "textcolor": "#000000",
+      domain: new URL(window.location.href).origin,
+      user_id: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+      username: "admin@passbolt.com",
+      first_name: "Admin",
+      last_name: "User",
+      locale: "fr-FR",
+      security_token: {
+        code: "HGA",
+        color: "#8bc34a",
+        textcolor: "#000000",
       },
-    }
+    },
   });
   return Object.assign(defaultData, data);
 }

@@ -12,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import DisplayError from "./DisplayRequireInvitationError";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -27,9 +27,9 @@ export default class DisplayRequireInvitationErrorPage {
   constructor() {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayError/>
+        <DisplayError />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -37,21 +37,21 @@ export default class DisplayRequireInvitationErrorPage {
    * Returns the title
    */
   get title() {
-    return this._page.container.querySelector('.setup-error h1').textContent;
+    return this._page.container.querySelector(".setup-error h1").textContent;
   }
 
   /**
    * Returns the message
    */
   get message() {
-    return this._page.container.querySelector('.setup-error p').textContent;
+    return this._page.container.querySelector(".setup-error p").textContent;
   }
 
   /**
    * Returns the download button
    */
   get linkToRetrySetup() {
-    return this._page.container.querySelector('.setup-error .form-actions .button.primary.big').textContent;
+    return this._page.container.querySelector(".setup-error .form-actions .button.primary.big").textContent;
   }
 
   /**

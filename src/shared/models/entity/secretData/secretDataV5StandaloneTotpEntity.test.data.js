@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.3.0
  */
-import {defaultTotpDto} from "../totp/totpDto.test.data";
-import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import { defaultTotpDto } from "../totp/totpDto.test.data";
+import { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 
 /**
  * Returns a default DTO object suitable for the SecretDataV5StandaloneTotpEntity

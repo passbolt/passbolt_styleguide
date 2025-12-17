@@ -12,14 +12,11 @@
  * @since         4.2.0
  */
 
-import PasswordPoliciesDto from './PasswordPoliciesDto';
-import {
-  defaultPasswordPoliciesDto,
-  configuredPasswordPoliciesDto
-} from './PasswordPoliciesDto.test.data';
-import {defaultPasswordPoliciesViewModel} from './PasswordPoliciesViewModel.test.data';
+import PasswordPoliciesDto from "./PasswordPoliciesDto";
+import { defaultPasswordPoliciesDto, configuredPasswordPoliciesDto } from "./PasswordPoliciesDto.test.data";
+import { defaultPasswordPoliciesViewModel } from "./PasswordPoliciesViewModel.test.data";
 
-const asJSON = data => JSON.parse(JSON.stringify(data));
+const asJSON = (data) => JSON.parse(JSON.stringify(data));
 
 /**
  * @todo Skip for now.

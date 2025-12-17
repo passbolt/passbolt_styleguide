@@ -14,8 +14,8 @@
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import SessionKeysBundleDataEntity from "./sessionKeysBundleDataEntity";
-import {defaultSessionKeysBundleDataDto} from "./sessionKeysBundleDataEntity.test.data";
-import {sharedResourcesSessionKeys} from "./sessionKeysCollection.test.data";
+import { defaultSessionKeysBundleDataDto } from "./sessionKeysBundleDataEntity.test.data";
+import { sharedResourcesSessionKeys } from "./sessionKeysCollection.test.data";
 import SessionKeysCollection from "./sessionKeysCollection";
 
 describe("SessionKeysBundleDataEntity", () => {
@@ -27,25 +27,37 @@ describe("SessionKeysBundleDataEntity", () => {
     it("validates object_type property", () => {
       assertEntityProperty.string(SessionKeysBundleDataEntity, "object_type");
       assertEntityProperty.required(SessionKeysBundleDataEntity, "object_type");
-      assertEntityProperty.enumeration(SessionKeysBundleDataEntity, "object_type", ["PASSBOLT_SESSION_KEYS"], ["any other values"]);
+      assertEntityProperty.enumeration(
+        SessionKeysBundleDataEntity,
+        "object_type",
+        ["PASSBOLT_SESSION_KEYS"],
+        ["any other values"],
+      );
     });
 
     it("validates session_keys property", () => {
       const sessionKeysBundleDto = defaultSessionKeysBundleDataDto();
-      const successScenarios = [
-        {scenario: "a valid option", value: sharedResourcesSessionKeys()},
-      ];
+      const successScenarios = [{ scenario: "a valid option", value: sharedResourcesSessionKeys() }];
       const failScenarios = [
-        {scenario: "with invalid session private key build rule", value: sharedResourcesSessionKeys({session_key: "fail"})},
+        {
+          scenario: "with invalid session private key build rule",
+          value: sharedResourcesSessionKeys({ session_key: "fail" }),
+        },
       ];
-      assertEntityProperty.assertAssociation(SessionKeysBundleDataEntity, "session_keys", sessionKeysBundleDto, successScenarios, failScenarios);
+      assertEntityProperty.assertAssociation(
+        SessionKeysBundleDataEntity,
+        "session_keys",
+        sessionKeysBundleDto,
+        successScenarios,
+        failScenarios,
+      );
     });
   });
 
   describe("::constructor", () => {
     it("constructor works if valid minimal DTO is provided", () => {
       expect.assertions(2);
-      const dto = defaultSessionKeysBundleDataDto({session_keys: []});
+      const dto = defaultSessionKeysBundleDataDto({ session_keys: [] });
       const entity = new SessionKeysBundleDataEntity(dto);
 
       expect(entity._props.object_type).toStrictEqual("PASSBOLT_SESSION_KEYS");
@@ -75,9 +87,15 @@ describe("SessionKeysBundleDataEntity", () => {
 
     it("throws if sessionKeys parameter is not valid", () => {
       expect.assertions(3);
-      expect(() => SessionKeysBundleDataEntity.createFromSessionKeys(42)).toThrow("The parameter \"sessionKey\" should be a SessionKeysCollection.");
-      expect(() => SessionKeysBundleDataEntity.createFromSessionKeys()).toThrow("The parameter \"sessionKey\" should be a SessionKeysCollection.");
-      expect(() => SessionKeysBundleDataEntity.createFromSessionKeys(null)).toThrow("The parameter \"sessionKey\" should be a SessionKeysCollection.");
+      expect(() => SessionKeysBundleDataEntity.createFromSessionKeys(42)).toThrow(
+        'The parameter "sessionKey" should be a SessionKeysCollection.',
+      );
+      expect(() => SessionKeysBundleDataEntity.createFromSessionKeys()).toThrow(
+        'The parameter "sessionKey" should be a SessionKeysCollection.',
+      );
+      expect(() => SessionKeysBundleDataEntity.createFromSessionKeys(null)).toThrow(
+        'The parameter "sessionKey" should be a SessionKeysCollection.',
+      );
     });
   });
 

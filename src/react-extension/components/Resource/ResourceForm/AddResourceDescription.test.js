@@ -16,10 +16,10 @@
  * Unit tests on AddResourceDescription in regard of specifications
  */
 
-import {defaultProps} from './AddResourceDescription.test.data';
-import AddResourceDescriptionPage from './AddResourceDescription.test.page';
+import { defaultProps } from "./AddResourceDescription.test.data";
+import AddResourceDescriptionPage from "./AddResourceDescription.test.page";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
-import {resourceTypePasswordStringDto} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import { resourceTypePasswordStringDto } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 beforeEach(() => {
@@ -29,11 +29,11 @@ beforeEach(() => {
 describe("AddResourceDescription", () => {
   let page; // The page to test against
 
-  describe('As LU I can see the description form.', () => {
-    it('As LU I can see the description password form.', () => {
+  describe("As LU I can see the description form.", () => {
+    it("As LU I can see the description password form.", () => {
       expect.assertions(3);
 
-      const props = defaultProps({resource: {metadata: {description: ""}}});
+      const props = defaultProps({ resource: { metadata: { description: "" } } });
       page = new AddResourceDescriptionPage(props);
 
       expect(page.exists).toBeTruthy();
@@ -42,14 +42,13 @@ describe("AddResourceDescription", () => {
     });
   });
 
-  describe('Fill form description', () => {
-    it('Enter description should call callback function.', async() => {
+  describe("Fill form description", () => {
+    it("Enter description should call callback function.", async () => {
       expect.assertions(3);
 
-      let name,
-        value;
+      let name, value;
       const props = defaultProps();
-      jest.spyOn(props, "onChange").mockImplementation(event => {
+      jest.spyOn(props, "onChange").mockImplementation((event) => {
         name = event.target.name;
         value = event.target.value;
       });
@@ -62,27 +61,30 @@ describe("AddResourceDescription", () => {
     });
   });
 
-  describe('As LU I can convert the description to note.', () => {
-    it('As LU I can convert the description form.', async() => {
+  describe("As LU I can convert the description to note.", () => {
+    it("As LU I can convert the description form.", async () => {
       expect.assertions(1);
 
-      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto())});
+      const props = defaultProps({ resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto()) });
       page = new AddResourceDescriptionPage(props);
 
       await page.click(page.convertToNote);
       expect(props.onConvertToNote).toHaveBeenCalled();
     });
 
-    it('As LU I cannot convert the description form if there is no resource type v4 default.', async() => {
+    it("As LU I cannot convert the description form if there is no resource type v4 default.", async () => {
       expect.assertions(1);
       const resourceTypes = new ResourceTypesCollection([resourceTypePasswordStringDto()]);
-      const props = defaultProps({resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto()), resourceTypes});
+      const props = defaultProps({
+        resourceType: new ResourceTypeEntity(resourceTypePasswordStringDto()),
+        resourceTypes,
+      });
       page = new AddResourceDescriptionPage(props);
 
       expect(page.convertToNote).toBeNull();
     });
 
-    it('As LU I should not see convert the description form if the resource type is not v4 password string.', async() => {
+    it("As LU I should not see convert the description form if the resource type is not v4 password string.", async () => {
       expect.assertions(1);
       const props = defaultProps();
       page = new AddResourceDescriptionPage(props);
@@ -91,11 +93,11 @@ describe("AddResourceDescription", () => {
     });
   });
 
-  describe('As LU I should see the description disabled.', () => {
-    it('As LU I can see the description form disabled.', async() => {
+  describe("As LU I should see the description disabled.", () => {
+    it("As LU I can see the description form disabled.", async () => {
       expect.assertions(1);
 
-      const props = defaultProps({disabled: true});
+      const props = defaultProps({ disabled: true });
       page = new AddResourceDescriptionPage(props);
 
       expect(page.description.hasAttribute("disabled")).toBeTruthy();

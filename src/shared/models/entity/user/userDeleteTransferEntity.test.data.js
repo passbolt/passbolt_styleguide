@@ -12,8 +12,8 @@
  * @since         4.9.3
  */
 
-import {defaultPermissionTransferDto} from "../permission/permissionTransferEntity.test.data";
-import {defaultUserTransferDto} from "../group/groupTransfer.test.data";
+import { defaultPermissionTransferDto } from "../permission/permissionTransferEntity.test.data";
+import { defaultUserTransferDto } from "../group/groupTransfer.test.data";
 
 /**
  * Build default user delete transfer dto.
@@ -21,10 +21,6 @@ import {defaultUserTransferDto} from "../group/groupTransfer.test.data";
  * @returns {object}
  */
 export const defaultUserDeleteTransferDto = (data = {}) => ({
-  owners: [
-    defaultPermissionTransferDto(data)
-  ],
-  managers: [
-    defaultUserTransferDto(data)
-  ]
+  owners: [defaultPermissionTransferDto(data)],
+  managers: [defaultUserTransferDto(data)],
 });

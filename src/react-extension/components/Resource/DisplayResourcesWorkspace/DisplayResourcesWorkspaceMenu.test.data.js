@@ -15,33 +15,27 @@
 import MockPort from "../../../test/mock/MockPort";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
-import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultAdministratorRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import {
-  defaultResourceDto, resourceStandaloneTotpDto,
-  resourceWithFavoriteDto, resourceWithReadPermissionDto, resourceWithTotpDto,
+  defaultResourceDto,
+  resourceStandaloneTotpDto,
+  resourceWithFavoriteDto,
+  resourceWithReadPermissionDto,
+  resourceWithTotpDto,
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import { defaultPasswordExpirySettingsContext } from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  resourceTypesCollectionDto
-} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { defaultClipboardContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
-import {
-  TEST_RESOURCE_TYPE_V5_DEFAULT
-} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
-import SecretRevisionsSettingsEntity
-  from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
-import {
-  defaultSecretRevisionsSettingsDto
-} from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
+import { defaultMetadataKeysSettingsDto } from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
+import { defaultSecretRevisionsSettingsDto } from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -79,20 +73,21 @@ const defaultProps = (data = {}) => ({
  * Default props one selected resource owned
  * @returns {{resourceWorkspaceContext}}
  */
-export const defaultPropsOneResourceOwned = (data = {}) => defaultProps({
-  resourceWorkspaceContext: defaultResourceWorkspaceContext({
-    selectedResources: [resourcesMock[0]],
-    lockDisplayDetail: true,
-  }),
-  ...data,
-});
+export const defaultPropsOneResourceOwned = (data = {}) =>
+  defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [resourcesMock[0]],
+      lockDisplayDetail: true,
+    }),
+    ...data,
+  });
 
 /**
  * Default props one selected resource private
  * @returns {object}
  */
 export const defaultPropsOneResourceV5Private = (data = {}) => {
-  const resource = defaultResourceDto({personal: true, resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT});
+  const resource = defaultResourceDto({ personal: true, resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT });
   return defaultProps({
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       selectedResources: [resource],
@@ -107,7 +102,7 @@ export const defaultPropsOneResourceV5Private = (data = {}) => {
  * @returns {object}
  */
 export const defaultPropsOneResourceV5Shared = (data = {}) => {
-  const resource = defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT});
+  const resource = defaultResourceDto({ resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT });
   return defaultProps({
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       selectedResources: [resource],
@@ -121,60 +116,65 @@ export const defaultPropsOneResourceV5Shared = (data = {}) => {
  * Default props one selected totp resource owned
  * @returns {{resourceWorkspaceContext}}
  */
-export const defaultPropsOneTotpResourceOwned = (data = {}) => defaultProps({
-  resourceWorkspaceContext: defaultResourceWorkspaceContext({
-    selectedResources: [resourcesMock[3]],
-    lockDisplayDetail: true,
-  }),
-  ...data
-});
+export const defaultPropsOneTotpResourceOwned = (data = {}) =>
+  defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [resourcesMock[3]],
+      lockDisplayDetail: true,
+    }),
+    ...data,
+  });
 
 /**
  * Default props one selected totp resource owned
  * @returns {{resourceWorkspaceContext}}
  */
-export const defaultPropsOneStandaloneTotpResourceOwned = (data = {}) => defaultProps({
-  resourceWorkspaceContext: defaultResourceWorkspaceContext({
-    selectedResources: [resourcesMock[4]],
-    lockDisplayDetail: true,
-  }),
-  ...data,
-});
+export const defaultPropsOneStandaloneTotpResourceOwned = (data = {}) =>
+  defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [resourcesMock[4]],
+      lockDisplayDetail: true,
+    }),
+    ...data,
+  });
 
 /**
  * Default props one selected resource owned
  * @returns {{resourceWorkspaceContext}}
  */
-export const defaultPropsOneResourceNotOwned = (data = {}) => defaultProps({
-  resourceWorkspaceContext: defaultResourceWorkspaceContext({
-    selectedResources: [resourcesMock[2]],
-    lockDisplayDetail: false
-  }),
-  ...data,
-});
+export const defaultPropsOneResourceNotOwned = (data = {}) =>
+  defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [resourcesMock[2]],
+      lockDisplayDetail: false,
+    }),
+    ...data,
+  });
 
 /**
  * Default props one selected resource owned
  * @returns {{resourceWorkspaceContext}}
  */
-export const defaultPropsNoResource = (data = {}) => defaultProps({
-  resourceWorkspaceContext: defaultResourceWorkspaceContext({
-    lockDisplayDetail: true
-  }),
-  ...data,
-});
+export const defaultPropsNoResource = (data = {}) =>
+  defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      lockDisplayDetail: true,
+    }),
+    ...data,
+  });
 
 /**
  * Default props multiple selected resource
  * @returns {{resourceWorkspaceContext}}
  */
-export const defaultPropsMultipleResource = (data = {}) => defaultProps({
-  resourceWorkspaceContext: defaultResourceWorkspaceContext({
-    selectedResources: resourcesMock,
-    lockDisplayDetail: true
-  }),
-  ...data,
-});
+export const defaultPropsMultipleResource = (data = {}) =>
+  defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: resourcesMock,
+      lockDisplayDetail: true,
+    }),
+    ...data,
+  });
 
 /**
  * Default props multiple selected resource can update
@@ -185,10 +185,10 @@ export const defaultPropsMultipleResourceUpdateRights = (data = {}) => {
   return defaultProps({
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       selectedResources,
-      lockDisplayDetail: true
+      lockDisplayDetail: true,
     }),
-    passwordExpiryContext: defaultPasswordExpirySettingsContext({policy_override: true}),
-    ...data
+    passwordExpiryContext: defaultPasswordExpirySettingsContext({ policy_override: true }),
+    ...data,
   });
 };
 
@@ -196,9 +196,9 @@ export const defaultPropsMultipleResourceUpdateRights = (data = {}) => {
  * Mocked list of resources
  */
 export const resourcesMock = [
-  resourceWithFavoriteDto({name: 'apache'}),
-  defaultResourceDto({name: 'bower'}),
-  resourceWithReadPermissionDto({name: 'test'}),
-  resourceWithTotpDto({name: 'totp'}),
-  resourceStandaloneTotpDto({name: 'standalone totp'}),
+  resourceWithFavoriteDto({ name: "apache" }),
+  defaultResourceDto({ name: "bower" }),
+  resourceWithReadPermissionDto({ name: "test" }),
+  resourceWithTotpDto({ name: "totp" }),
+  resourceStandaloneTotpDto({ name: "standalone totp" }),
 ];

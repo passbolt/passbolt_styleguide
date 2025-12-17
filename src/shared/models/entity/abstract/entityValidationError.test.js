@@ -17,7 +17,7 @@ describe("EntityValidationError", () => {
   describe("::addError", () => {
     it("throws exception if property is not a string", () => {
       const t = () => {
-        const e = new EntityValidationError('placeholder message');
+        const e = new EntityValidationError("placeholder message");
         e.addError(null, null, null);
       };
       expect(t).toThrow(TypeError);
@@ -25,49 +25,49 @@ describe("EntityValidationError", () => {
 
     it("throws exception if rule is not a string", () => {
       const t = () => {
-        const e = new EntityValidationError('placeholder message');
-        e.addError('prop', null, null);
+        const e = new EntityValidationError("placeholder message");
+        e.addError("prop", null, null);
       };
       expect(t).toThrow(TypeError);
     });
 
     it("throws exception if message is not a string", () => {
       const t = () => {
-        const e = new EntityValidationError('placeholder message');
-        e.addError('prop', 'rule', null);
+        const e = new EntityValidationError("placeholder message");
+        e.addError("prop", "rule", null);
       };
       expect(t).toThrow(TypeError);
     });
 
     it("addErrors add exception details", () => {
-      const e = new EntityValidationError('placeholder message');
-      e.addError('prop1', 'rule1', 'message1');
-      e.addError('prop2', 'rule1', 'message1');
-      e.addError('prop1', 'rule2', 'message2');
+      const e = new EntityValidationError("placeholder message");
+      e.addError("prop1", "rule1", "message1");
+      e.addError("prop2", "rule1", "message1");
+      e.addError("prop1", "rule2", "message2");
       expect(e.details).toEqual({
-        'prop1': {
-          'rule1': 'message1',
-          'rule2': 'message2'
+        prop1: {
+          rule1: "message1",
+          rule2: "message2",
         },
-        'prop2': {
-          'rule1': 'message1'
-        }
+        prop2: {
+          rule1: "message1",
+        },
       });
 
-      expect(e.hasError('prop1')).toBe(true);
-      expect(e.hasError('prop2')).toBe(true);
-      expect(e.hasError('prop3')).toBe(false);
-      expect(e.hasError('prop1', 'rule1')).toBe(true);
-      expect(e.hasError('prop1', 'rule2')).toBe(true);
-      expect(e.hasError('prop2', 'rule1')).toBe(true);
-      expect(e.hasError('prop2', 'rule2')).toBe(false);
+      expect(e.hasError("prop1")).toBe(true);
+      expect(e.hasError("prop2")).toBe(true);
+      expect(e.hasError("prop3")).toBe(false);
+      expect(e.hasError("prop1", "rule1")).toBe(true);
+      expect(e.hasError("prop1", "rule2")).toBe(true);
+      expect(e.hasError("prop2", "rule1")).toBe(true);
+      expect(e.hasError("prop2", "rule2")).toBe(false);
     });
   });
 
   describe("::addAssociationError", () => {
     it("throws exception if associationName is not a string", () => {
       const t = () => {
-        const e = new EntityValidationError('placeholder message');
+        const e = new EntityValidationError("placeholder message");
         e.addAssociationError(null, null);
       };
       expect(t).toThrow(TypeError);
@@ -75,26 +75,26 @@ describe("EntityValidationError", () => {
 
     it("throws exception if error is not an instance of EntityValidationError", () => {
       const t = () => {
-        const e = new EntityValidationError('placeholder message');
-        e.addAssociationError('associationName', null);
+        const e = new EntityValidationError("placeholder message");
+        e.addAssociationError("associationName", null);
       };
       expect(t).toThrow(TypeError);
     });
 
     it("addAssociationError add exception details", () => {
-      const e = new EntityValidationError('placeholder message');
-      const e2 = new EntityValidationError('placeholder message');
-      e2.addError('prop1', 'rule1', 'message1');
-      e.addAssociationError('association', e2);
+      const e = new EntityValidationError("placeholder message");
+      const e2 = new EntityValidationError("placeholder message");
+      e2.addError("prop1", "rule1", "message1");
+      e.addAssociationError("association", e2);
       expect(e.details.association.details).toEqual({
-        'prop1': {
-          'rule1': 'message1'
-        }
+        prop1: {
+          rule1: "message1",
+        },
       });
 
-      expect(e.hasError('association')).toBe(true);
-      expect(e.hasError('prop1', 'rule1')).toBe(false);
-      expect(e.details.association.hasError('prop1', 'rule1')).toBe(true);
+      expect(e.hasError("association")).toBe(true);
+      expect(e.hasError("prop1", "rule1")).toBe(false);
+      expect(e.details.association.hasError("prop1", "rule1")).toBe(true);
     });
   });
 
@@ -109,13 +109,13 @@ describe("EntityValidationError", () => {
 
       const field1Error = eve.getError("field-1");
       const expectedField1Errors = {
-        required:  "the field is required"
+        required: "the field is required",
       };
       expect(field1Error).toStrictEqual(expectedField1Errors);
 
       const field2Error = eve.getError("field-2");
       const expectedField2Errors = {
-        type: "the type of the field is wrong"
+        type: "the type of the field is wrong",
       };
       expect(field2Error).toStrictEqual(expectedField2Errors);
     });

@@ -12,13 +12,12 @@
  * @since         4.1.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {Router} from "react-router-dom";
+import { Router } from "react-router-dom";
 import HomePage from "./HomePage";
-import MockTranslationProvider
-  from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
-import {createMemoryHistory} from "history";
+import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import { createMemoryHistory } from "history";
 
 /**
  * The HomePage component represented as a page
@@ -32,10 +31,10 @@ export default class HomePagePage {
     this._page = render(
       <MockTranslationProvider>
         <Router history={props.history || createMemoryHistory()}>
-          <HomePage {...props}/>
+          <HomePage {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -116,7 +115,7 @@ export default class HomePagePage {
    * @returns {HTMLElement}
    */
   get filtersSection() {
-    return this.browserEntries[0].querySelector('.filter-title');
+    return this.browserEntries[0].querySelector(".filter-title");
   }
 
   /**
@@ -124,7 +123,7 @@ export default class HomePagePage {
    * @returns {HTMLElement}
    */
   get groupsSection() {
-    return this.browserEntries[1].querySelector('.filter-title');
+    return this.browserEntries[1].querySelector(".filter-title");
   }
 
   /**
@@ -132,7 +131,7 @@ export default class HomePagePage {
    * @returns {HTMLElement}
    */
   get tagsSection() {
-    return this.browserEntries[2].querySelector('.filter-title');
+    return this.browserEntries[2].querySelector(".filter-title");
   }
 
   /**
@@ -140,7 +139,7 @@ export default class HomePagePage {
    * @returns {HTMLElement}
    */
   get createButton() {
-    return this._page.container.querySelector('.submit-wrapper #popupAction');
+    return this._page.container.querySelector(".submit-wrapper #popupAction");
   }
 
   /**
@@ -157,7 +156,7 @@ export default class HomePagePage {
    */
   async clickOnSuggestedResource(index) {
     const element = this.getSuggestedResourceItem(index)?.querySelector("button");
-    fireEvent.click(element, {button: 0});
+    fireEvent.click(element, { button: 0 });
     await waitFor(() => {});
   }
 
@@ -167,7 +166,7 @@ export default class HomePagePage {
    */
   async clickOnBrowsedResource(index) {
     const element = this.getBrowsedResourceItem(index)?.querySelector(".inline-resource-entry");
-    fireEvent.click(element, {button: 0});
+    fireEvent.click(element, { button: 0 });
     await waitFor(() => {});
   }
 
@@ -176,7 +175,7 @@ export default class HomePagePage {
    * @returns {Promise<void>}
    */
   async clickOnCreateButton() {
-    fireEvent.click(this.createButton, {button: 0});
+    fireEvent.click(this.createButton, { button: 0 });
     await waitFor(() => {});
   }
 }

@@ -12,12 +12,12 @@
  * @since         3.6.0
  */
 
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import {
   bettyAccountRecoveryPrivateKeyPasswordDto,
-  defaultAccountRecoveryPrivateKeyPasswordDto
+  defaultAccountRecoveryPrivateKeyPasswordDto,
 } from "./accountRecoveryPrivateKeyPasswordEntity.test.data";
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
 
 export const defaultAccountRecoveryPrivateKeyDto = (data = {}) => {
   /**
@@ -39,8 +39,8 @@ export const defaultAccountRecoveryPrivateKeyDto = (data = {}) => {
   data.account_recovery_private_key_passwords = [
     defaultAccountRecoveryPrivateKeyPasswordDto({
       private_key_id: data.id,
-      ...(data?.account_recovery_private_key_passwords ? data?.account_recovery_private_key_passwords[0] : {})
-    })
+      ...(data?.account_recovery_private_key_passwords ? data?.account_recovery_private_key_passwords[0] : {}),
+    }),
   ];
 
   return data;
@@ -66,11 +66,9 @@ export const bettyAccountRecoveryPrivateKeyDto = (data = {}) => {
   data.account_recovery_private_key_passwords = [
     bettyAccountRecoveryPrivateKeyPasswordDto({
       private_key_id: data.id,
-      ...(data?.account_recovery_private_key_passwords ? data?.account_recovery_private_key_passwords[0] : {})
-    })
+      ...(data?.account_recovery_private_key_passwords ? data?.account_recovery_private_key_passwords[0] : {}),
+    }),
   ];
 
   return data;
 };
-
-

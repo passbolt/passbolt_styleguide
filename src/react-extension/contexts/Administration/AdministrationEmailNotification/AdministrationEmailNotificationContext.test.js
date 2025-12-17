@@ -12,21 +12,23 @@
  * @since         3.8.0
  */
 
-import {defaultEmailNotificationSettings, defaultProps, withoutSourceNotificationSettings} from "../../../components/Administration/DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration.test.data";
-import {AdminEmailNotificationContextProvider} from "./AdministrationEmailNotificationContext";
-import {enableFetchMocks} from "jest-fetch-mock";
-import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
+import {
+  defaultEmailNotificationSettings,
+  defaultProps,
+  withoutSourceNotificationSettings,
+} from "../../../components/Administration/DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration.test.data";
+import { AdminEmailNotificationContextProvider } from "./AdministrationEmailNotificationContext";
+import { enableFetchMocks } from "jest-fetch-mock";
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
 import EmailNotificationModel from "../../../../shared/models/emailNotification/EmailNotificationModel";
 import EmailNotificationDTO from "../../../../shared/models/emailNotification/EmailNotificationDTO";
-
-
 
 describe("AdminEmailNotificationContext", () => {
   let adminEmailNotificationContext; // The adminEmailNotificationContext to text
   const props = defaultProps(); // The props to pass
 
   //Initialize context by default
-  const initContext = async() => {
+  const initContext = async () => {
     const settings = defaultEmailNotificationSettings();
     fetch.doMock(() => mockApiResponse(settings));
     await adminEmailNotificationContext.findEmailNotificationSettings();
@@ -35,15 +37,18 @@ describe("AdminEmailNotificationContext", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     adminEmailNotificationContext = new AdminEmailNotificationContextProvider(props);
-    const setStateMock = state => adminEmailNotificationContext.state = Object.assign(adminEmailNotificationContext.state, state);
+    const setStateMock = (state) =>
+      (adminEmailNotificationContext.state = Object.assign(adminEmailNotificationContext.state, state));
     jest.spyOn(adminEmailNotificationContext, "setState").mockImplementation(setStateMock);
     enableFetchMocks();
   });
 
   describe("AdminEmailNotificationContext::findEmailNotificationSettings", () => {
-    it("should get the current settings and store it in its state", async() => {
+    it("should get the current settings and store it in its state", async () => {
       // Mock the call to API
-      const mockApiSettingsFetch = fetch.doMockOnceIf(/settings\/emails\/notifications\.json/, () => mockApiResponse(defaultEmailNotificationSettings()));
+      const mockApiSettingsFetch = fetch.doMockOnceIf(/settings\/emails\/notifications\.json/, () =>
+        mockApiResponse(defaultEmailNotificationSettings()),
+      );
       const expectedResult = new EmailNotificationModel(defaultEmailNotificationSettings());
       await adminEmailNotificationContext.findEmailNotificationSettings();
 
@@ -55,9 +60,11 @@ describe("AdminEmailNotificationContext", () => {
       expect(adminEmailNotificationContext.isProcessing()).toBeFalsy();
     });
 
-    it("should initialize with default value if object is empty", async() => {
+    it("should initialize with default value if object is empty", async () => {
       // Mock the call to API
-      const mockApiSettingsFetch = fetch.doMockOnceIf(/settings\/emails\/notifications\.json/, () => mockApiResponse({}));
+      const mockApiSettingsFetch = fetch.doMockOnceIf(/settings\/emails\/notifications\.json/, () =>
+        mockApiResponse({}),
+      );
       const expectedResult = new EmailNotificationModel(withoutSourceNotificationSettings());
       await adminEmailNotificationContext.findEmailNotificationSettings();
 
@@ -69,7 +76,7 @@ describe("AdminEmailNotificationContext", () => {
       expect(adminEmailNotificationContext.isProcessing()).toBeFalsy();
     });
 
-    it("should set processing to true when loading settings", async() => {
+    it("should set processing to true when loading settings", async () => {
       adminEmailNotificationContext.setProcessing(false);
       try {
         await adminEmailNotificationContext.findEmailNotificationSettings();
@@ -80,7 +87,7 @@ describe("AdminEmailNotificationContext", () => {
   });
 
   describe("AdminEmailNotificationContext::hasSettingsChanges", () => {
-    beforeEach(async() => {
+    beforeEach(async () => {
       await initContext();
     });
     it("should return true if settings is different then current setting", () => {
@@ -101,9 +108,8 @@ describe("AdminEmailNotificationContext", () => {
     });
   });
 
-
   describe("AdminEmailNotificationContext::clearContext", () => {
-    beforeEach(async() => {
+    beforeEach(async () => {
       await initContext();
     });
     it("should clear the context and set it by default", () => {
@@ -120,9 +126,11 @@ describe("AdminEmailNotificationContext", () => {
   });
 
   describe("AdminEmailNotificationContext::save", () => {
-    it("should save settings and call findEmailNotificationSettings", async() => {
+    it("should save settings and call findEmailNotificationSettings", async () => {
       fetch.doMockOnceIf(/settings\/emails\/notifications\.json/, () => mockApiResponse({}));
-      const findEmailNotificationSettings = jest.spyOn(adminEmailNotificationContext, "findEmailNotificationSettings").mockImplementation();
+      const findEmailNotificationSettings = jest
+        .spyOn(adminEmailNotificationContext, "findEmailNotificationSettings")
+        .mockImplementation();
 
       await adminEmailNotificationContext.save();
 
@@ -135,7 +143,7 @@ describe("AdminEmailNotificationContext", () => {
   });
 
   describe("AdminEmailNotificationContext::setSettings", () => {
-    it("should update settings object and not the current object", async() => {
+    it("should update settings object and not the current object", async () => {
       await initContext();
       adminEmailNotificationContext.setSettings("passwordUpdate", false);
 

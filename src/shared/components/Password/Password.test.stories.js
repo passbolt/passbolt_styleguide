@@ -12,20 +12,17 @@
  * @since         3.6.0
  */
 import Password from "./Password";
-import {defaultProps} from "./Password.test.data";
+import { defaultProps } from "./Password.test.data";
 
 export default {
-  title: 'Foundations/Password',
-  component: Password
+  title: "Foundations/Password",
+  component: Password,
 };
 
-
-export const InputPassphrase =  {
+export const InputPassphrase = {
   args: defaultProps(),
 };
 
 export const InputPassword = {
-  args: defaultProps({placeholder: "Password", securityToken: null}),
+  args: defaultProps({ placeholder: "Password", securityToken: null }),
 };
-
-

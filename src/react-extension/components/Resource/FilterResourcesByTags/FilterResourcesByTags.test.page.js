@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,19 +12,18 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import ManageContextualMenu from "../../Common/ContextualMenu/ManageContextualMenu";
 import ContextualMenuContextProvider from "../../../contexts/ContextualMenuContext";
 import FilterResourcesByTagsContextualMenuPageObject from "./FilterResourcesByTagsContextualMenu.test.page";
 import FilterResourcesByTagsListContextualMenuPageObject from "./FilterResourcesByTagsListContextualMenu.test.page";
-import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
+import { ResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import FilterResourcesByTags from "./FilterResourcesByTags";
-import {DragContext} from "../../../contexts/DragContext";
+import { DragContext } from "../../../contexts/DragContext";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import ManageDialogs from "../../../components/Common/Dialog/ManageDialogs/ManageDialogs";
 
@@ -44,12 +42,12 @@ export default class FilterResourcesByTagsPage {
         <AppContext.Provider value={appContext}>
           <DialogContextProvider>
             <Router>
-              <ManageDialogs/>
+              <ManageDialogs />
               <ResourceWorkspaceContext.Provider value={resourceWorkspaceContext}>
                 <ContextualMenuContextProvider>
-                  <ManageContextualMenu/>
+                  <ManageContextualMenu />
                   <DragContext.Provider value={props.dragContext}>
-                    <FilterResourcesByTags.WrappedComponent {...props}/>
+                    <FilterResourcesByTags.WrappedComponent {...props} />
                   </DragContext.Provider>
                 </ContextualMenuContextProvider>
               </ResourceWorkspaceContext.Provider>
@@ -57,7 +55,7 @@ export default class FilterResourcesByTagsPage {
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -68,7 +66,9 @@ export default class FilterResourcesByTagsPage {
   setupPageObjects() {
     this._titleHeader = new TitleHeaderPageObject(this._page.container);
     this._sidebarTagFilterSection = new SidebarTagFilterSectionPageObject(this._page.container);
-    this._sidebarTagFilterSectionsContextualMenu = new FilterResourcesByTagsContextualMenuPageObject(this._page.container);
+    this._sidebarTagFilterSectionsContextualMenu = new FilterResourcesByTagsContextualMenuPageObject(
+      this._page.container,
+    );
     this._displayTagListContextualMenu = new FilterResourcesByTagsListContextualMenuPageObject(this._page.container);
   }
 
@@ -124,12 +124,12 @@ class TitleHeaderPageObject {
    * Returns the clickable area of the filter
    */
   get filterButton() {
-    return this._container.querySelector('.row.title .dropdown.right-cell.more-ctrl button');
+    return this._container.querySelector(".row.title .dropdown.right-cell.more-ctrl button");
   }
 
   /** Click on the component */
-  async click(component)  {
-    const leftClick = {button: 0};
+  async click(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }
@@ -148,28 +148,28 @@ class SidebarTagFilterSectionPageObject {
    * Returns the list elements of activities
    */
   get list() {
-    return this._container.querySelector('.accordion-content');
+    return this._container.querySelector(".accordion-content");
   }
 
   /**
    * Returns the loading element
    */
   get loadingMessage() {
-    return this._container.querySelector('.processing-text');
+    return this._container.querySelector(".processing-text");
   }
 
   /**
    * Returns the empty content element
    */
   get emptyContent() {
-    return this._container.querySelector('.empty-content');
+    return this._container.querySelector(".empty-content");
   }
 
   /**
    * Returns the clickable area of the more tag
    */
   get moreButton() {
-    return this._container.querySelector('.tag-item .dropdown.right-cell.more-ctrl button');
+    return this._container.querySelector(".tag-item .dropdown.right-cell.more-ctrl button");
   }
 
   /**
@@ -183,21 +183,21 @@ class SidebarTagFilterSectionPageObject {
    * Returns true
    */
   isLoading() {
-    return this.loadingMessage !== null && this.loadingMessage.innerHTML === 'Retrieving tags';
+    return this.loadingMessage !== null && this.loadingMessage.innerHTML === "Retrieving tags";
   }
 
   /**
    * Returns true
    */
   isEmpty() {
-    return this.emptyContent !== null && this.emptyContent.innerHTML === 'empty';
+    return this.emptyContent !== null && this.emptyContent.innerHTML === "empty";
   }
 
   /**
    * Returns the number of displayed tags
    */
   count() {
-    return this.list.querySelectorAll('.tag-item').length;
+    return this.list.querySelectorAll(".tag-item").length;
   }
 
   /**
@@ -205,7 +205,7 @@ class SidebarTagFilterSectionPageObject {
    * @param index
    */
   get tagSelected() {
-    return this.list.querySelector('.tag-item .row.selected .main-cell-wrapper .main-cell button');
+    return this.list.querySelector(".tag-item .row.selected .main-cell-wrapper .main-cell button");
   }
 
   /**
@@ -213,7 +213,9 @@ class SidebarTagFilterSectionPageObject {
    * @param index
    */
   tag(index) {
-    return this.list.querySelectorAll('.tag-item')[index - 1].querySelector('.row .main-cell-wrapper .main-cell button');
+    return this.list
+      .querySelectorAll(".tag-item")
+      [index - 1].querySelector(".row .main-cell-wrapper .main-cell button");
   }
 
   /**
@@ -221,7 +223,7 @@ class SidebarTagFilterSectionPageObject {
    * @param index
    */
   tagClassname(index) {
-    return this.list.querySelectorAll('.tag-item')[index - 1].querySelector('.row').className.trim();
+    return this.list.querySelectorAll(".tag-item")[index - 1].querySelector(".row").className.trim();
   }
 
   /**
@@ -229,15 +231,15 @@ class SidebarTagFilterSectionPageObject {
    * @param index The display rank of name's tag
    */
   name(index) {
-    return this.list.querySelectorAll('.tag-item')[index - 1].querySelector('.tag-name').textContent;
+    return this.list.querySelectorAll(".tag-item")[index - 1].querySelector(".tag-name").textContent;
   }
 
   get errorDialogExist() {
-    return this._container.querySelector('.error-dialog') !== null;
+    return this._container.querySelector(".error-dialog") !== null;
   }
 
   get errorDialogMessageExist() {
-    return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content') !== null;
+    return this._container.querySelector(".error-dialog .dialog .dialog-content .form-content") !== null;
   }
 
   /**
@@ -248,20 +250,20 @@ class SidebarTagFilterSectionPageObject {
   }
 
   /** Click on the component */
-  async click(component)  {
-    const leftClick = {button: 0};
+  async click(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }
 
   /** Right click on the component */
-  async rightClick(component)  {
+  async rightClick(component) {
     fireEvent.contextMenu(component);
     await waitFor(() => {});
   }
 
   /** Drop on the component */
-  async drop(component)  {
+  async drop(component) {
     fireEvent.drop(component);
     await waitFor(() => {});
   }

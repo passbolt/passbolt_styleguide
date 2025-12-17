@@ -15,12 +15,12 @@
 /**
  * Unit tests on ConfirmMigrateMetadataDialog in regard of specifications
  */
-import {waitFor} from "@testing-library/react";
-import {defaultProps} from "./ConfirmMigrateMetadataDialog.test.data";
+import { waitFor } from "@testing-library/react";
+import { defaultProps } from "./ConfirmMigrateMetadataDialog.test.data";
 import ConfirmMigrateMetadataDialogPage from "./ConfirmMigrateMetadataDialog.test.page";
 
 describe("ConfirmMigrateMetadataDialog", () => {
-  it('should display the dialog', async() => {
+  it("should display the dialog", async () => {
     expect.assertions(1);
     const props = defaultProps(); // The props to pass
     const page = new ConfirmMigrateMetadataDialogPage(props);
@@ -29,7 +29,7 @@ describe("ConfirmMigrateMetadataDialog", () => {
     expect(page.exists()).toBeTruthy();
   });
 
-  it('should confirm the migration', async() => {
+  it("should confirm the migration", async () => {
     expect.assertions(2);
     const props = defaultProps(); // The props to pass
     const page = new ConfirmMigrateMetadataDialogPage(props);
@@ -41,7 +41,7 @@ describe("ConfirmMigrateMetadataDialog", () => {
     expect(props.onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('should cancel the migration', async() => {
+  it("should cancel the migration", async () => {
     expect.assertions(2);
     const props = defaultProps(); // The props to pass
     const page = new ConfirmMigrateMetadataDialogPage(props);
@@ -53,7 +53,7 @@ describe("ConfirmMigrateMetadataDialog", () => {
     expect(props.onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('should close the dialog', async() => {
+  it("should close the dialog", async () => {
     expect.assertions(2);
     const props = defaultProps(); // The props to pass
     const page = new ConfirmMigrateMetadataDialogPage(props);

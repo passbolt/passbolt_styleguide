@@ -12,13 +12,15 @@
  * @since         4.3.0
  */
 
-import {defaultAccountKit, defaultImportAccountKitContext, defaultProps} from "../../../contexts/Desktop/ImportAccountKitContext.test.data";
-
+import {
+  defaultAccountKit,
+  defaultImportAccountKitContext,
+  defaultProps,
+} from "../../../contexts/Desktop/ImportAccountKitContext.test.data";
 
 export function defaultContextProps(props = {}) {
   return defaultProps({
-    importAccountKitContext: defaultImportAccountKitContext({accountKit: defaultAccountKit()}),
-    ...props
+    importAccountKitContext: defaultImportAccountKitContext({ accountKit: defaultAccountKit() }),
+    ...props,
   });
 }
-

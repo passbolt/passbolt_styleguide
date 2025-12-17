@@ -12,7 +12,7 @@
  * @since         3.3.0
  */
 
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import AskInFormMenuDisplay from "./AskInFormMenuDisplay";
 import AppContext from "../../../shared/context/AppContext/AppContext";
@@ -28,9 +28,9 @@ export default class AskInFormMenuDisplayTestPage {
   constructor(appContext) {
     this._page = render(
       <AppContext.Provider value={appContext}>
-        <AskInFormMenuDisplay/>
+        <AskInFormMenuDisplay />
       </AppContext.Provider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,6 +38,6 @@ export default class AskInFormMenuDisplayTestPage {
    * Returns true if the in-form icon is in an active mode
    */
   get isActive() {
-    return this._page.container.querySelector('.in-form-icon-logo.inactive') === null;
+    return this._page.container.querySelector(".in-form-icon-logo.inactive") === null;
   }
 }

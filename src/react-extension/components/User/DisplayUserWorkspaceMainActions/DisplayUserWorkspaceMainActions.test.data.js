@@ -1,7 +1,5 @@
 import MockPort from "../../../test/mock/MockPort";
-import {
-  defaultUserRbacContext,
-} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultUserRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -14,14 +12,14 @@ export function defaultAppContext(appContext) {
     roles: [
       {
         id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
-        name: "admin"
+        name: "admin",
       },
       {
         id: "8e3874ae-4b40-590b-968a-418f704b9d9b",
-        name: "user"
-      }
+        name: "user",
+      },
     ],
-    setContext: function(newContext) {
+    setContext: function (newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
     },
@@ -36,6 +34,6 @@ export function defaultAppContext(appContext) {
 export function defaultProps(data = {}) {
   return {
     rbacContext: defaultUserRbacContext(),
-    ...data
+    ...data,
   };
 }

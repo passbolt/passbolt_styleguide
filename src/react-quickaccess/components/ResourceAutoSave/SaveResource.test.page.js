@@ -13,12 +13,12 @@
  *
  */
 import React from "react";
-import {render} from "@testing-library/react";
-import {BrowserRouter as Router} from "react-router-dom";
-import MockTranslationProvider from '../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider';
-import {fireEvent} from '@testing-library/react';
+import { render } from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
+import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import { fireEvent } from "@testing-library/react";
 import SaveResource from "./SaveResource";
-import {waitForTrue} from "../../../../test/utils/waitFor";
+import { waitForTrue } from "../../../../test/utils/waitFor";
 import userEvent from "@testing-library/user-event";
 
 /**
@@ -33,10 +33,10 @@ export default class SaveResourcePage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <SaveResource {...props}/>
+          <SaveResource {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -46,56 +46,56 @@ export default class SaveResourcePage {
    * Returns the name input element
    */
   get name() {
-    return this._page.container.querySelector('#name');
+    return this._page.container.querySelector("#name");
   }
 
   /**
    * Returns the username input element
    */
   get username() {
-    return this._page.container.querySelector('#username');
+    return this._page.container.querySelector("#username");
   }
 
   /**
    * Returns the uri input element
    */
   get uri() {
-    return this._page.container.querySelector('#uri');
+    return this._page.container.querySelector("#uri");
   }
 
   /**
    * Returns the password input element
    */
   get password() {
-    return this._page.container.querySelector('#password');
+    return this._page.container.querySelector("#password");
   }
 
   /**
    * Returns the name input element
    */
   get nameError() {
-    return this._page.container.querySelector('#name + .error-message');
+    return this._page.container.querySelector("#name + .error-message");
   }
 
   /**
    * Returns the username input element
    */
   get usernameError() {
-    return this._page.container.querySelector('#username + .error-message');
+    return this._page.container.querySelector("#username + .error-message");
   }
 
   /**
    * Returns the uri input element
    */
   get uriError() {
-    return this._page.container.querySelector('#uri + .error-message');
+    return this._page.container.querySelector("#uri + .error-message");
   }
 
   /**
    * Returns the password input element
    */
   get passwordError() {
-    return this._page.container.querySelector('.input-password-wrapper .error-message');
+    return this._page.container.querySelector(".input-password-wrapper .error-message");
   }
 
   /**
@@ -106,12 +106,12 @@ export default class SaveResourcePage {
   }
 
   /** Click on the element */
-  async click(element)  {
+  async click(element) {
     await this.user.click(element);
   }
 
   /** Submit teh form */
-  async save()  {
+  async save() {
     await this.click(this.saveButton);
   }
 
@@ -123,7 +123,7 @@ export default class SaveResourcePage {
   async setFormWith(formData) {
     let key;
     for (key in formData) {
-      fireEvent.input(this[key], {target: {value: formData[key]}});
+      fireEvent.input(this[key], { target: { value: formData[key] } });
       await waitForTrue(() => this[key].value === formData[key].toString());
     }
   }

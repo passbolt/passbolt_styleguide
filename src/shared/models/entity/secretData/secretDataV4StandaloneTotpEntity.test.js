@@ -16,7 +16,7 @@ import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import SecretDataV4StandaloneTotpEntity from "./secretDataV4StandaloneTotpEntity";
 import TotpEntity from "../totp/totpEntity";
-import {defaultTotpDto} from "../totp/totpDto.test.data";
+import { defaultTotpDto } from "../totp/totpDto.test.data";
 
 describe("SecretDataV4StandaloneEntity", () => {
   describe("::getSchema", () => {
@@ -27,15 +27,22 @@ describe("SecretDataV4StandaloneEntity", () => {
     it("validates totp property", () => {
       expect.assertions(3);
 
-      const successScenario = [
-        {scenario: "a valid totp", value: defaultTotpDto()},
-      ];
+      const successScenario = [{ scenario: "a valid totp", value: defaultTotpDto() }];
       const failScenario = [
-        {scenario: "The totp validation should failed.", value: defaultTotpDto({
-          algorithm: "not an algorithm"
-        })},
+        {
+          scenario: "The totp validation should failed.",
+          value: defaultTotpDto({
+            algorithm: "not an algorithm",
+          }),
+        },
       ];
-      assertEntityProperty.assertAssociation(SecretDataV4StandaloneTotpEntity, "totp", {}, successScenario, failScenario);
+      assertEntityProperty.assertAssociation(
+        SecretDataV4StandaloneTotpEntity,
+        "totp",
+        {},
+        successScenario,
+        failScenario,
+      );
       assertEntityProperty.required(SecretDataV4StandaloneTotpEntity, "totp");
     });
   });
@@ -43,7 +50,7 @@ describe("SecretDataV4StandaloneEntity", () => {
   describe("::associations", () => {
     it("associations should have totp in associations", () => {
       expect.assertions(1);
-      expect(SecretDataV4StandaloneTotpEntity.associations).toStrictEqual({totp: TotpEntity});
+      expect(SecretDataV4StandaloneTotpEntity.associations).toStrictEqual({ totp: TotpEntity });
     });
   });
 
@@ -64,9 +71,9 @@ describe("SecretDataV4StandaloneEntity", () => {
     it("create with no data provided", () => {
       expect.assertions(1);
       const dto = {
-        totp: defaultTotpDto({secret_key: ""})
+        totp: defaultTotpDto({ secret_key: "" }),
       };
-      const entity = SecretDataV4StandaloneTotpEntity.createFromDefault({}, {validate: false});
+      const entity = SecretDataV4StandaloneTotpEntity.createFromDefault({}, { validate: false });
 
       expect(entity.totp.toDto()).toStrictEqual(dto.totp);
     });
@@ -74,7 +81,7 @@ describe("SecretDataV4StandaloneEntity", () => {
     it("create with data provided", () => {
       expect.assertions(1);
       const dto = {
-        totp: defaultTotpDto()
+        totp: defaultTotpDto(),
       };
       const entity = SecretDataV4StandaloneTotpEntity.createFromDefault(dto);
 
@@ -85,7 +92,9 @@ describe("SecretDataV4StandaloneEntity", () => {
   describe("::getDefaultProp", () => {
     it("get default totp", () => {
       expect.assertions(1);
-      expect(SecretDataV4StandaloneTotpEntity.getDefaultProp("totp")).toStrictEqual(TotpEntity.createFromDefault({}, {validate: false}).toDto());
+      expect(SecretDataV4StandaloneTotpEntity.getDefaultProp("totp")).toStrictEqual(
+        TotpEntity.createFromDefault({}, { validate: false }).toDto(),
+      );
     });
 
     it("get default unknown", () => {

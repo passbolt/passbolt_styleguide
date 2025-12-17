@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import ManageAccountRecoveryAdministrationSettings from "./ManageAccountRecoveryAdministrationSettings";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -29,9 +29,9 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ManageAccountRecoveryAdministrationSettings {...props}/>
+        <ManageAccountRecoveryAdministrationSettings {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -43,31 +43,35 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
    * Returns the account recovery settings element
    */
   get accountRecoverySettings() {
-    return this._page.container.querySelector('.recover-account-settings');
+    return this._page.container.querySelector(".recover-account-settings");
   }
 
   /**
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.recover-account-settings h3').textContent;
+    return this._page.container.querySelector(".recover-account-settings h3").textContent;
   }
 
   /**
    * Returns the account recovery policy title element
    */
   get accountRecoveryPolicyTitle() {
-    return this._page.container.querySelector('.recover-account-settings .form h4').textContent;
+    return this._page.container.querySelector(".recover-account-settings .form h4").textContent;
   }
 
   /**
    * Returns the mandatory radio button element
    */
   get mandatoryRadioButton() {
-    const element = this._page.container.querySelector('#accountRecoveryPolicyMandatory');
+    const element = this._page.container.querySelector("#accountRecoveryPolicyMandatory");
     return {
-      get element() { return element; },
-      get isChecked()  { return element.checked; }
+      get element() {
+        return element;
+      },
+      get isChecked() {
+        return element.checked;
+      },
     };
   }
 
@@ -75,10 +79,14 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
    * Returns the opt-out radio button element
    */
   get optOutRadioButton() {
-    const element = this._page.container.querySelector('#accountRecoveryPolicyOptOut');
+    const element = this._page.container.querySelector("#accountRecoveryPolicyOptOut");
     return {
-      get element() { return element; },
-      get isChecked()  { return element.checked; }
+      get element() {
+        return element;
+      },
+      get isChecked() {
+        return element.checked;
+      },
     };
   }
 
@@ -86,10 +94,14 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
    * Returns the opt-in radio button element
    */
   get optInRadioButton() {
-    const element =  this._page.container.querySelector('#accountRecoveryPolicyOptIn');
+    const element = this._page.container.querySelector("#accountRecoveryPolicyOptIn");
     return {
-      get element() { return element; },
-      get isChecked()  { return element.checked; }
+      get element() {
+        return element;
+      },
+      get isChecked() {
+        return element.checked;
+      },
     };
   }
 
@@ -97,10 +109,14 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
    * Returns the disable radio button element
    */
   get disableRadioButton() {
-    const element =  this._page.container.querySelector('#accountRecoveryPolicyDisable');
+    const element = this._page.container.querySelector("#accountRecoveryPolicyDisable");
     return {
-      get element() { return element; },
-      get isChecked()  { return element.checked; }
+      get element() {
+        return element;
+      },
+      get isChecked() {
+        return element.checked;
+      },
     };
   }
 
@@ -108,28 +124,28 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
    * Returns the recovery key toggle button element
    */
   get recoveryKeyToggleButton() {
-    return this._page.container.querySelector('#recovery-key-toggle-button');
+    return this._page.container.querySelector("#recovery-key-toggle-button");
   }
 
   /**
    * Returns the warning message element
    */
   get warningMessage() {
-    return this._page.container.querySelector('.warning.message').textContent;
+    return this._page.container.querySelector(".warning.message").textContent;
   }
 
   /**
    * Returns the help element
    */
   get help() {
-    return this._page.container.querySelector('.sidebar-help-section') !== null;
+    return this._page.container.querySelector(".sidebar-help-section") !== null;
   }
 
   /**
    * Returns the help read documentation element
    */
   get helpReadDocumentation() {
-    return this._page.container.querySelector('.sidebar-help-section a');
+    return this._page.container.querySelector(".sidebar-help-section a");
   }
 
   /**
@@ -143,8 +159,8 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
    * Click on "opt-in" radio button and wait for the component to be updated.
    */
   async clickOnOptInPolicyButton() {
-    const leftClick = {button: 0};
-    const element = this._page.container.querySelector('#accountRecoveryPolicyOptIn');
+    const leftClick = { button: 0 };
+    const element = this._page.container.querySelector("#accountRecoveryPolicyOptIn");
     fireEvent.click(element, leftClick);
     element.checked = true;
   }
@@ -153,7 +169,7 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
    * update key
    */
   async toggleRecoveryKey() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.recoveryKeyToggleButton, leftClick);
     await waitFor(() => {});
   }

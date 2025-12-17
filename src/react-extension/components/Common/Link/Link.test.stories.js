@@ -14,26 +14,28 @@
 import React from "react";
 
 export default {
-  title: 'Foundations/Link',
-  component: "Link"
+  title: "Foundations/Link",
+  component: "Link",
 };
 
-
-const Template = () =>
-  <div style={{display: "flex", flexWrap: "wrap"}}>
-    <div style={{width: "25%"}}>
+const Template = () => (
+  <div style={{ display: "flex", flexWrap: "wrap" }}>
+    <div style={{ width: "25%" }}>
       <a>admin@passbolt.com</a>
     </div>
-    <div style={{width: "25%"}}>
+    <div style={{ width: "25%" }}>
       <a className="disabled">admin@passbolt.com</a>
     </div>
-    <div style={{width: "25%"}}>
-      <button type="button" className="link">admin@passbolt.com</button>
+    <div style={{ width: "25%" }}>
+      <button type="button" className="link">
+        admin@passbolt.com
+      </button>
     </div>
-    <div style={{width: "25%"}}>
-      <button type="button" className="link" disabled>admin@passbolt.com</button>
+    <div style={{ width: "25%" }}>
+      <button type="button" className="link" disabled>
+        admin@passbolt.com
+      </button>
     </div>
   </div>
-  ;
-
+);
 export const Default = Template.bind({});

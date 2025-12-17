@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import DisplayResourcesWorkspace from "./DisplayResourcesWorkspace";
 import ManageContextualMenu from "../../Common/ContextualMenu/ManageContextualMenu";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
@@ -26,26 +26,26 @@ import NavigationContextProvider from "../../../contexts/NavigationContext";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import mockPort from "../../../../../test/mocks/mockPort";
 import mockStorage from "../../../../../test/mocks/mockStorage";
-import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
+import { siteSettingsCe } from "../../../test/fixture/Settings/siteSettings";
 import RbacContextProvider from "../../../../shared/context/Rbac/RbacContext";
 import MetadataTypesSettingsLocalStorageContextProvider from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import ResourceTypesLocalStorageContextProvider from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import WorkflowContextProvider from "../../../contexts/WorkflowContext";
 import ManageWorkflows from "../../Common/Workflow/ManageWorkflows/ManageWorkflows";
 import PasswordExpirySettingsContextProvider from "../../../contexts/PasswordExpirySettingsContext";
-import {ResizableSidebarContextProvider} from "../../../contexts/ResizeSidebar/ResizeSidebarContext";
+import { ResizableSidebarContextProvider } from "../../../contexts/ResizeSidebar/ResizeSidebarContext";
 import SecretRevisionsSettingsContextProvider from "../../../../shared/context/SecretRevisionSettingsContext/SecretRevisionsSettingsContext";
 
 /**
  * DisplayResourcesWorkspace stories
  */
 export default {
-  title: 'Workspaces/Resource',
-  component: DisplayResourcesWorkspace
+  title: "Workspaces/Resource",
+  component: DisplayResourcesWorkspace,
 };
 
-const ExtApp = ({...args}) =>
-  <MemoryRouter initialEntries={['/app/passwords']}>
+const ExtApp = ({ ...args }) => (
+  <MemoryRouter initialEntries={["/app/passwords"]}>
     <ExtAppContextProvider storage={args.storage} port={args.port}>
       <RbacContextProvider>
         <WorkflowContextProvider>
@@ -53,25 +53,27 @@ const ExtApp = ({...args}) =>
             <ResizableSidebarContextProvider>
               <NavigationContextProvider>
                 <ContextualMenuContextProvider>
-                  <Route path={[
-                    "/app/folders/view/:filterByFolderId",
-                    "/app/passwords/view/:selectedResourceId",
-                    "/app/passwords/filter/:filterType",
-                    "/app/passwords",
-                  ]}>
+                  <Route
+                    path={[
+                      "/app/folders/view/:filterByFolderId",
+                      "/app/passwords/view/:selectedResourceId",
+                      "/app/passwords/filter/:filterType",
+                      "/app/passwords",
+                    ]}
+                  >
                     <PasswordExpirySettingsContextProvider>
                       <ResourceWorkspaceContextProvider>
                         <MetadataTypesSettingsLocalStorageContextProvider>
                           <ResourceTypesLocalStorageContextProvider>
                             <SecretRevisionsSettingsContextProvider>
                               <ResourcePasswordGeneratorContextProvider>
-                                <ManageContextualMenu/>
-                                <ManageDialogs/>
-                                <ManageWorkflows/>
+                                <ManageContextualMenu />
+                                <ManageDialogs />
+                                <ManageWorkflows />
                                 <DragContextProvider>
                                   <div id="container" className="page password">
-                                    <div id="app" className="app ready" tabIndex="1000" style={{margin: "-1rem"}}>
-                                      <DisplayResourcesWorkspace {...args}/>
+                                    <div id="app" className="app ready" tabIndex="1000" style={{ margin: "-1rem" }}>
+                                      <DisplayResourcesWorkspace {...args} />
                                     </div>
                                   </div>
                                 </DragContextProvider>
@@ -89,7 +91,8 @@ const ExtApp = ({...args}) =>
         </WorkflowContextProvider>
       </RbacContextProvider>
     </ExtAppContextProvider>
-  </MemoryRouter>;
+  </MemoryRouter>
+);
 
 const storage = mockStorage();
 const port = mockPort(storage);
@@ -97,9 +100,9 @@ const port = mockPort(storage);
 export const proVersion = {
   args: {
     port: port,
-    storage: storage
+    storage: storage,
   },
-  render: ExtApp
+  render: ExtApp,
 };
 
 const ceStorage = mockStorage();
@@ -108,7 +111,7 @@ cePort.addRequestListener("passbolt.organization-settings.get", () => siteSettin
 export const ceVersion = {
   args: {
     port: cePort,
-    storage: ceStorage
+    storage: ceStorage,
   },
-  render: ExtApp
+  render: ExtApp,
 };

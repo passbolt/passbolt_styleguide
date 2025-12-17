@@ -13,26 +13,26 @@
  */
 
 import React from "react";
-import {renderIntoDocument} from 'react-dom/test-utils';
-import {AccountRecoveryUserContextProvider} from "./AccountRecoveryUserContext";
-import {defaultOrganizationAccountRecoveryPolicy, defaultProps} from "./AccountRecoveryUserContext.test.data";
+import { renderIntoDocument } from "react-dom/test-utils";
+import { AccountRecoveryUserContextProvider } from "./AccountRecoveryUserContext";
+import { defaultOrganizationAccountRecoveryPolicy, defaultProps } from "./AccountRecoveryUserContext.test.data";
 
 describe("AccountRecoveryUser Context", () => {
   const organizationAccountRecoveryPolicy = defaultOrganizationAccountRecoveryPolicy();
 
-  it('should called the given accountRecoveryUserService and be able to give back the data to the context consumers', async() => {
+  it("should called the given accountRecoveryUserService and be able to give back the data to the context consumers", async () => {
     const props = defaultProps({
       context: {
         loggedInUser: {
           account_recovery_user_setting: {
-            status: "rejected"
-          }
-        }
-      }
+            status: "rejected",
+          },
+        },
+      },
     });
 
     //Using renderIntoDocument allows us to call the component methods and the component to have a working (react) state
-    const component = renderIntoDocument(<AccountRecoveryUserContextProvider {...props}/>);
+    const component = renderIntoDocument(<AccountRecoveryUserContextProvider {...props} />);
     await component.loadAccountRecoveryPolicy();
 
     expect.assertions(6);
@@ -44,11 +44,11 @@ describe("AccountRecoveryUser Context", () => {
     expect(component.isAccountRecoveryChoiceRequired()).toBe(false);
   });
 
-  it('should assume the account recovery user settings status is "pending" by default when the data is not set on the logged in user', async() => {
+  it('should assume the account recovery user settings status is "pending" by default when the data is not set on the logged in user', async () => {
     const props = defaultProps();
 
     //Using renderIntoDocument allows us to call the component methods and the component to have a working (react) state
-    const component = renderIntoDocument(<AccountRecoveryUserContextProvider {...props}/>);
+    const component = renderIntoDocument(<AccountRecoveryUserContextProvider {...props} />);
     await component.loadAccountRecoveryPolicy();
 
     expect.assertions(2);

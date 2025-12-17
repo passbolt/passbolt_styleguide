@@ -11,11 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.10.0
  */
-import {
-  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
-} from "../../resourceType/resourceTypeEntity.test.data";
-import {defaultIconDto} from "./iconEntity.test.data";
-import {defaultCustomFieldsCollection} from "../../customField/customFieldsCollection.test.data";
+import { TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION } from "../../resourceType/resourceTypeEntity.test.data";
+import { defaultIconDto } from "./iconEntity.test.data";
+import { defaultCustomFieldsCollection } from "../../customField/customFieldsCollection.test.data";
 import ResourceMetadataEntity from "./resourceMetadataEntity";
 
 /**
@@ -27,7 +25,7 @@ export const minimalResourceMetadataDto = (data = {}) => {
   const metadataDto = {
     name: "Passbolt",
     resource_type_id: data?.resource_type_id || TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
-    ...data
+    ...data,
   };
   return metadataDto;
 };
@@ -43,12 +41,12 @@ export const minimalResourceMetadataDto = (data = {}) => {
 export const defaultResourceMetadataDto = (data = {}, options = {}) => {
   const metadataDto = {
     object_type: ResourceMetadataEntity.METADATA_OBJECT_TYPE,
-    resource_type_id:  data?.resource_type_id || TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+    resource_type_id: data?.resource_type_id || TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
     name: "Passbolt",
     username: "admin@passbolt.com",
     uris: ["https://passbolt.com"],
     description: "Description",
-    ...data
+    ...data,
   };
 
   if (options?.withIcon && !data.icon) {

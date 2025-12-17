@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         3.10.0
  */
 
-import {defaultUserRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultUserRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * Default props
@@ -24,14 +23,12 @@ export function defaultProps(props) {
     hasPendingAccountRecoveryChoice: false,
     hasPendingMfaChoice: false,
     context: {
-      onLogoutRequested: () => {
-      },
+      onLogoutRequested: () => {},
       siteSettings: {
-        canIUse: () => true
-      }
+        canIUse: () => true,
+      },
     },
-    rbacContext: defaultUserRbacContext()
+    rbacContext: defaultUserRbacContext(),
   };
   return Object.assign(defaultProps, props || {});
 }
-

@@ -16,11 +16,7 @@
  * Unit tests on FolderSidebarPermissionSection in regard of specifications
  */
 
-
-import {
-  defaultAppContext,
-  defaultProps, permissionMock,
-} from "./DisplayResourceFolderDetailsPermissions.test.data";
+import { defaultAppContext, defaultProps, permissionMock } from "./DisplayResourceFolderDetailsPermissions.test.data";
 import DisplayResourceFolderDetailsPermissionsPage from "./DisplayResourceFolderDetailsPermissions.test.page";
 
 beforeEach(() => {
@@ -32,10 +28,10 @@ describe("See permissions", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (implementation) => jest.spyOn(context.port, "request").mockImplementation(implementation);
   const permissionFoundRequestMockImpl = jest.fn(() => Promise.resolve(permissionMock));
 
-  describe(' As LU I can see permissions of a resource with at least one permission', () => {
+  describe(" As LU I can see permissions of a resource with at least one permission", () => {
     /**
      * Given a selected resource having 1 permission
      * When I open the “Permission” section of the secondary sidebar
@@ -49,7 +45,7 @@ describe("See permissions", () => {
       mockContextRequest(permissionFoundRequestMockImpl);
     });
 
-    it('I should see the 4 permissions made on the resource', async() => {
+    it("I should see the 4 permissions made on the resource", async () => {
       await page.title.click();
       expect(page.title.hyperlink.textContent).toBe("Shared with");
 
@@ -57,27 +53,31 @@ describe("See permissions", () => {
       expect(page.displayPermissionList.count()).toBe(5);
     });
 
-    it('I should be able to identify each permission name', async() => {
+    it("I should be able to identify each permission name", async () => {
       await page.title.click();
-      expect(page.displayPermissionList.name(1)).toBe('Ada Lovelace');
-      expect(page.displayPermissionList.name(2)).toBe('Admin User');
-      expect(page.displayPermissionList.name(3)).toBe('Admin User2');
-      expect(page.displayPermissionList.name(4)).toBe('Marketing');
-      expect(page.displayPermissionList.name(5)).toBe('Accounting');
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.permissions.find-aco-permissions-for-display", props.resourceWorkspaceContext.details.folder.id, "Folder");
+      expect(page.displayPermissionList.name(1)).toBe("Ada Lovelace");
+      expect(page.displayPermissionList.name(2)).toBe("Admin User");
+      expect(page.displayPermissionList.name(3)).toBe("Admin User2");
+      expect(page.displayPermissionList.name(4)).toBe("Marketing");
+      expect(page.displayPermissionList.name(5)).toBe("Accounting");
+      expect(context.port.request).toHaveBeenCalledWith(
+        "passbolt.permissions.find-aco-permissions-for-display",
+        props.resourceWorkspaceContext.details.folder.id,
+        "Folder",
+      );
     });
 
-    it('I should be able to see each permission type', async() => {
+    it("I should be able to see each permission type", async () => {
       await page.title.click();
-      expect(page.displayPermissionList.type(1)).toBe('can read');
-      expect(page.displayPermissionList.type(2)).toBe('is owner');
-      expect(page.displayPermissionList.type(3)).toBe('is owner');
-      expect(page.displayPermissionList.type(4)).toBe('can update');
-      expect(page.displayPermissionList.type(5)).toBe('can update');
+      expect(page.displayPermissionList.type(1)).toBe("can read");
+      expect(page.displayPermissionList.type(2)).toBe("is owner");
+      expect(page.displayPermissionList.type(3)).toBe("is owner");
+      expect(page.displayPermissionList.type(4)).toBe("can update");
+      expect(page.displayPermissionList.type(5)).toBe("can update");
     });
   });
 
-  describe(' As LU I see a loading state when the permission are not loaded', () => {
+  describe(" As LU I see a loading state when the permission are not loaded", () => {
     /**
      * Given a selected resource having permissions
      * When I open the “Permission” section of the secondary sidebar
@@ -86,16 +86,19 @@ describe("See permissions", () => {
      */
 
     let findResolve;
-    const loadingFindMockImpl = jest.fn(() => new Promise(resolve => {
-      findResolve = resolve;
-    }));
+    const loadingFindMockImpl = jest.fn(
+      () =>
+        new Promise((resolve) => {
+          findResolve = resolve;
+        }),
+    );
 
     beforeEach(() => {
       mockContextRequest(loadingFindMockImpl);
       page = new DisplayResourceFolderDetailsPermissionsPage(context, props);
     });
 
-    it('I should see the loading message “Retrieving permissions”', async() => {
+    it("I should see the loading message “Retrieving permissions”", async () => {
       await page.title.click();
 
       const inProgressFn = () => {

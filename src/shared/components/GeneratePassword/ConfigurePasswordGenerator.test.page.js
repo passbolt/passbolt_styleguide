@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,10 +12,9 @@
  * @since         3.3.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import MockTranslationProvider
-  from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import ConfigurePasswordGenerator from "./ConfigurePasswordGenerator";
 
 /**
@@ -30,17 +28,17 @@ export default class ConfigurePasswordGeneratorPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ConfigurePasswordGenerator {...props}/>
+        <ConfigurePasswordGenerator {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
   rerender(props) {
     this._page.rerender(
       <MockTranslationProvider>
-        <ConfigurePasswordGenerator {...props}/>
-      </MockTranslationProvider>
+        <ConfigurePasswordGenerator {...props} />
+      </MockTranslationProvider>,
     );
   }
 
@@ -62,28 +60,28 @@ export default class ConfigurePasswordGeneratorPage {
    * Get the mask button following the index
    */
   maskButton(index) {
-    return this._page.container.querySelectorAll('.button-group .button')[index - 1];
+    return this._page.container.querySelectorAll(".button-group .button")[index - 1];
   }
 
   /**
    * Get the look alike
    */
   get lookAlike() {
-    return this._page.container.querySelector('#configure-password-generator-form-exclude-look-alike');
+    return this._page.container.querySelector("#configure-password-generator-form-exclude-look-alike");
   }
 
   /**
    * Get the look alike
    */
   get isCheckedLookAlike() {
-    return this._page.container.querySelector('#configure-password-generator-form-exclude-look-alike').checked;
+    return this._page.container.querySelector("#configure-password-generator-form-exclude-look-alike").checked;
   }
 
   /**
    * Get the number of active mask
    */
   get numberOfActiveMask() {
-    return this._page.container.querySelectorAll('.button-group .button.selected').length;
+    return this._page.container.querySelectorAll(".button-group .button.selected").length;
   }
 
   /**
@@ -92,7 +90,7 @@ export default class ConfigurePasswordGeneratorPage {
    * @returns {Promise<void>}
    */
   async changeRangeLength(data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(this.rangeLength, dataInputEvent);
     await waitFor(() => {});
   }
@@ -103,7 +101,7 @@ export default class ConfigurePasswordGeneratorPage {
    * @returns {Promise<void>}
    */
   async changeLength(data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(this.length, dataInputEvent);
     await waitFor(() => {});
   }
@@ -113,7 +111,7 @@ export default class ConfigurePasswordGeneratorPage {
    * @returns {Promise<void>}
    */
   async selectMask(index) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.maskButton(index), leftClick);
     await waitFor(() => {});
   }
@@ -123,7 +121,7 @@ export default class ConfigurePasswordGeneratorPage {
    * @returns {Promise<void>}
    */
   async changeLookAlike() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.lookAlike, leftClick);
     await waitFor(() => {});
   }

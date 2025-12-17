@@ -16,10 +16,10 @@ import {
   adfsSsoSettingsEntityDtoFromApi,
   azureSsoSettingsEntityDtoFromApi,
   googleSsoSettingsEntityDtoFromApi,
-  oAuth2SsoSettingsEntityDtoFromApi
+  oAuth2SsoSettingsEntityDtoFromApi,
 } from "../../../../../shared/models/ssoSettings/SsoSettingsViewModel.test.data";
-import {defaultClipboardContext} from "../../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
-import {defaultAppContext} from "../../../../contexts/ExtAppContext.test.data";
+import { defaultClipboardContext } from "../../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import { defaultAppContext } from "../../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props.
@@ -45,7 +45,7 @@ export function defaultAzureProps(data = {}) {
     },
     actionFeedbackContext: {
       displaySuccess: jest.fn(),
-    }
+    },
   });
   return Object.assign(defaultData, data);
 }
@@ -60,7 +60,7 @@ export function defaultGoogleProps(data = {}) {
     },
     actionFeedbackContext: {
       displaySuccess: jest.fn(),
-    }
+    },
   });
   return Object.assign(defaultData, data);
 }
@@ -75,7 +75,7 @@ export function defaultOAuth2Props(data = {}) {
     },
     actionFeedbackContext: {
       displaySuccess: jest.fn(),
-    }
+    },
   });
   return Object.assign(defaultData, data);
 }
@@ -90,7 +90,7 @@ export function defaultAdfsProps(data = {}) {
     },
     actionFeedbackContext: {
       displaySuccess: jest.fn(),
-    }
+    },
   });
   return Object.assign(defaultData, data);
 }

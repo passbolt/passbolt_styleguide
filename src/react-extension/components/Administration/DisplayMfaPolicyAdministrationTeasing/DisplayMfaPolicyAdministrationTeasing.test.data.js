@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.5.0
  */
-import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props.

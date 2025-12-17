@@ -33,7 +33,7 @@ export function defaultAppContext(context) {
 export function defaultProps(props) {
   const defaultProps = {
     context: defaultAppContext,
-    onClose: jest.fn()
+    onClose: jest.fn(),
   };
   return Object.assign(defaultProps, props || {});
 }

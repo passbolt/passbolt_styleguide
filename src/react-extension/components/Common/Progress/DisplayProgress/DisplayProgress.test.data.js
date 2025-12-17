@@ -12,7 +12,10 @@
  * @since         4.3.0
  */
 
-import {infiniteProgressBarProgressContext, progressiveProgressBarProgressContext} from "../../../../contexts/ProgressContext.test.data";
+import {
+  infiniteProgressBarProgressContext,
+  progressiveProgressBarProgressContext,
+} from "../../../../contexts/ProgressContext.test.data";
 
 /**
  * Returns the default props for the unit test
@@ -22,7 +25,7 @@ import {infiniteProgressBarProgressContext, progressiveProgressBarProgressContex
 export function defaultProps(props = {}) {
   return {
     progressContext: infiniteProgressBarProgressContext(),
-    ...props
+    ...props,
   };
 }
 
@@ -34,6 +37,6 @@ export function defaultProps(props = {}) {
 export function propsWithProgressiveProgressBar(props = {}) {
   return defaultProps({
     progressContext: progressiveProgressBarProgressContext(),
-    ...props
+    ...props,
   });
 }

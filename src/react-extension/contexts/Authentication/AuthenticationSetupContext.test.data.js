@@ -12,9 +12,9 @@
  * @since         3.6.0
  */
 
-import {defaultAppContext} from "../ExtAppContext.test.data";
+import { defaultAppContext } from "../ExtAppContext.test.data";
 import MockPort from "../../test/mock/MockPort";
-import {defaultMetadataSetupSettingsDto} from "../../../shared/models/entity/metadata/metadataSetupSettingsEntity.test.data";
+import { defaultMetadataSetupSettingsDto } from "../../../shared/models/entity/metadata/metadataSetupSettingsEntity.test.data";
 
 /**
  * Default app context for authentication setup context.
@@ -23,22 +23,58 @@ import {defaultMetadataSetupSettingsDto} from "../../../shared/models/entity/met
  */
 export function defaultAuthenticationSetupAppContext(appContext) {
   const port = new MockPort();
-  port.addRequestListener("passbolt.setup.start", jest.fn(() => ({locale: "fr-FR"})));
-  port.addRequestListener("passbolt.setup.is-first-install", jest.fn(() => Promise.resolve(false)));
-  port.addRequestListener("passbolt.setup.generate-key", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.setup.download-recovery-kit", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.setup.import-key", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.setup.verify-passphrase", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.setup.set-account-recovery-user-setting", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.setup.set-security-token", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.setup.complete", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.setup.sign-in", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.metadata.find-setup-settings", jest.fn(async() => defaultMetadataSetupSettingsDto()));
-  port.addRequestListener("passbolt.metadata.enable.", jest.fn(() => Promise.resolve()));
+  port.addRequestListener(
+    "passbolt.setup.start",
+    jest.fn(() => ({ locale: "fr-FR" })),
+  );
+  port.addRequestListener(
+    "passbolt.setup.is-first-install",
+    jest.fn(() => Promise.resolve(false)),
+  );
+  port.addRequestListener(
+    "passbolt.setup.generate-key",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.setup.download-recovery-kit",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.setup.import-key",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.setup.verify-passphrase",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.setup.set-account-recovery-user-setting",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.setup.set-security-token",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.setup.complete",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.setup.sign-in",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.metadata.find-setup-settings",
+    jest.fn(async () => defaultMetadataSetupSettingsDto()),
+  );
+  port.addRequestListener(
+    "passbolt.metadata.enable.",
+    jest.fn(() => Promise.resolve()),
+  );
   port._port = {
     onDisconnect: {
-      addListener: jest.fn()
-    }
+      addListener: jest.fn(),
+    },
   };
 
   const defaultAuthenticationSetupAppContext = {
@@ -66,8 +102,10 @@ export function defaultProps(props) {
  */
 export function withAccountRecoveryEnabled(props) {
   const accountRecoveryOrganizationPolicy = {
-    policy: "opt-in"
+    policy: "opt-in",
   };
-  props.context.port.addRequestListener("passbolt.setup.get-account-recovery-organization-policy", () => Promise.resolve(accountRecoveryOrganizationPolicy));
+  props.context.port.addRequestListener("passbolt.setup.get-account-recovery-organization-policy", () =>
+    Promise.resolve(accountRecoveryOrganizationPolicy),
+  );
   return props;
 }

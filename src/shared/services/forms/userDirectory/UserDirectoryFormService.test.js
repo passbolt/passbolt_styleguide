@@ -13,10 +13,10 @@
  * @since         3.8.0
  */
 
-import {defaultProps} from "../../../../react-extension/components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
-import {enableFetchMocks} from 'jest-fetch-mock';
-import {AdminUserDirectoryContextProvider} from "../../../../react-extension/contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
-import UserDirectoryFormService from '../userDirectory/UserDirectoryFormService';
+import { defaultProps } from "../../../../react-extension/components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
+import { enableFetchMocks } from "jest-fetch-mock";
+import { AdminUserDirectoryContextProvider } from "../../../../react-extension/contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
+import UserDirectoryFormService from "../userDirectory/UserDirectoryFormService";
 
 beforeEach(() => {
   jest.resetModules();
@@ -25,13 +25,13 @@ beforeEach(() => {
 describe("UserDirectoryFormService", () => {
   let userDirectoryContext, // The userDirectoryContext to test
     userDirectoryFormService;
-  const translation = message => message;
+  const translation = (message) => message;
   const props = defaultProps(); // The props to pass
 
   beforeEach(() => {
     jest.resetAllMocks();
     userDirectoryContext = new AdminUserDirectoryContextProvider(props);
-    const setStateMock = state => userDirectoryContext.state = Object.assign(userDirectoryContext.state, state);
+    const setStateMock = (state) => (userDirectoryContext.state = Object.assign(userDirectoryContext.state, state));
     jest.spyOn(userDirectoryContext, "setState").mockImplementation(setStateMock);
     UserDirectoryFormService.killInstance();
     userDirectoryFormService = UserDirectoryFormService.getInstance(userDirectoryContext, translation);
@@ -51,13 +51,12 @@ describe("UserDirectoryFormService", () => {
     });
   });
 
-
   describe("UserDirectoryFormService::killInstance", () => {
     it("should kill the instance and create a new one", () => {
       expect.assertions(1);
       UserDirectoryFormService.killInstance();
       userDirectoryFormService = UserDirectoryFormService.getInstance(null, null);
-      expect(userDirectoryFormService).toEqual({"context": null, "translate": null});
+      expect(userDirectoryFormService).toEqual({ context: null, translate: null });
     });
   });
 
@@ -207,5 +206,3 @@ describe("UserDirectoryFormService", () => {
     });
   });
 });
-
-

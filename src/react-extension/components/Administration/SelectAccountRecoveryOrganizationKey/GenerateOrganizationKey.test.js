@@ -12,9 +12,9 @@
  * @since         3.6.0
  */
 
-import {waitFor} from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 import SelectAccountRecoveryOrganizationKeyPage from "./SelectAccountRecoveryOrganizationKey.test.page";
-import {defaultProps} from "./GenerateOrganizationKey.test.data";
+import { defaultProps } from "./GenerateOrganizationKey.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -24,7 +24,7 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-describe('As AD I can generate an ORK', () => {
+describe("As AD I can generate an ORK", () => {
   /**
    * Given  that I am a logged in administrator in the administration workspace
    * And    I am on Account recovery settings page
@@ -41,10 +41,10 @@ describe('As AD I can generate an ORK', () => {
    * And    I see a “Cancel” button to go back to the Account recovery settings page
    * And    I see an “Generate & Apply” button
    */
-  it("As a logged in administrator on the account recovery settings in the administration workspace, I can open a dialog to generate an Organization Recovery Key", async() => {
+  it("As a logged in administrator on the account recovery settings in the administration workspace, I can open a dialog to generate an Organization Recovery Key", async () => {
     expect.assertions(13);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
-    await waitFor(() => { });
+    await waitFor(() => {});
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
 
@@ -79,10 +79,10 @@ describe('As AD I can generate an ORK', () => {
    * Then   I do not see a list of available key sizes
    * And    I see a tooltip telling me that this setting is disable and safe
    */
-  it("As a logged in administrator in the administration workspace, I can not select the algorithm type of the Organization Recovery Key generator", async() => {
+  it("As a logged in administrator in the administration workspace, I can not select the algorithm type of the Organization Recovery Key generator", async () => {
     expect.assertions(5);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
-    await waitFor(() => { });
+    await waitFor(() => {});
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
 
@@ -107,7 +107,7 @@ describe('As AD I can generate an ORK', () => {
    * When   I click on the hide icon
    * Then   the characters are replaced with symbols
    */
-  it("As a logged in administrator in the administration workspace, I can show or hide the content of the “Organization key passphrase” text field in the Organization Recovery Key dialog", async() => {
+  it("As a logged in administrator in the administration workspace, I can show or hide the content of the “Organization key passphrase” text field in the Organization Recovery Key dialog", async () => {
     expect.assertions(4);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
 
@@ -126,7 +126,7 @@ describe('As AD I can generate an ORK', () => {
     expect(page.passphraseField.getAttribute("type")).toBe("password");
   });
 
-  it("As a logged in administrator in the administration workspace, I can show or hide the content of the “Organization key passphrase confirmation” text field in the Organization Recovery Key dialog", async() => {
+  it("As a logged in administrator in the administration workspace, I can show or hide the content of the “Organization key passphrase confirmation” text field in the Organization Recovery Key dialog", async () => {
     expect.assertions(4);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
 
@@ -153,10 +153,10 @@ describe('As AD I can generate an ORK', () => {
    * Then   I see several error message in @red below the mandatory fields
    * And    I see the empty mandatory field label in @red
    */
-  it("As a logged in administrator in the administration workspace, I cannot generate OpenPGP Public key in the Organization Recovery Key settings without a valid email and name", async() => {
+  it("As a logged in administrator in the administration workspace, I cannot generate OpenPGP Public key in the Organization Recovery Key settings without a valid email and name", async () => {
     expect.assertions(4);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
-    await waitFor(() => { });
+    await waitFor(() => {});
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
     await page.clickOnGenerateTab();
@@ -180,7 +180,7 @@ describe('As AD I can generate an ORK', () => {
    * When   I click on the “Generate & Apply” button
    * Then   I see an error message below the passphrase telling me to use a strong passphrase instead
    */
-  it("As a logged in administrator in the administration workspace, I cannot generate OpenPGP Public key in the Organization Recovery Key settings without a strong passphrase", async() => {
+  it("As a logged in administrator in the administration workspace, I cannot generate OpenPGP Public key in the Organization Recovery Key settings without a strong passphrase", async () => {
     expect.assertions(5);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
 
@@ -199,12 +199,14 @@ describe('As AD I can generate an ORK', () => {
     });
 
     expect(page.passphraseFieldError).not.toBeNull();
-    expect(page.passphraseFieldError.textContent).toBe(`A strong passphrase is required. The minimum complexity must be 'fair'.`);
+    expect(page.passphraseFieldError.textContent).toBe(
+      `A strong passphrase is required. The minimum complexity must be 'fair'.`,
+    );
     expect(page.passphraseConfirmationFieldError).not.toBeNull();
     expect(page.passphraseConfirmationFieldError.textContent).toBe(`The passphrase confirmation is required.`);
   });
 
-  it("As a logged in administrator in the administration workspace, I can generate OpenPGP Public key when the form validates", async() => {
+  it("As a logged in administrator in the administration workspace, I can generate OpenPGP Public key when the form validates", async () => {
     expect.assertions(6);
     const props = defaultProps();
 
@@ -216,7 +218,7 @@ describe('As AD I can generate an ORK', () => {
       passphrase: "Kinda fair passphrase",
     };
 
-    props.context.port.addRequestListener('passbolt.account-recovery.generate-organization-key', generateKeyDto => {
+    props.context.port.addRequestListener("passbolt.account-recovery.generate-organization-key", (generateKeyDto) => {
       expect(generateKeyDto).toStrictEqual(expectedDto);
       return "FAKE ARMORED KEY";
     });
@@ -240,7 +242,7 @@ describe('As AD I can generate an ORK', () => {
     expect(page.passphraseConfirmationFieldError.textContent).toStrictEqual("");
   });
 
-  it('As AD I should not be blocked if the powned password service is unavailable', async() => {
+  it("As AD I should not be blocked if the powned password service is unavailable", async () => {
     expect.assertions(1);
     const props = defaultProps();
     jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.reject());
@@ -249,7 +251,7 @@ describe('As AD I can generate an ORK', () => {
     await page.clickOnGenerateTab();
 
     await page.type("passbolt", page.nameField);
-    await page.type("admin@passbolt.com",  page.emailField);
+    await page.type("admin@passbolt.com", page.emailField);
     await page.type("This a strong passphrase to test a service not working", page.passphraseField);
     await page.type("This a strong passphrase to test a service not working", page.passphraseConfirmationField);
 
@@ -260,18 +262,18 @@ describe('As AD I can generate an ORK', () => {
     expect(page.passphraseFieldError.textContent).toBe("");
   });
 
-  it("As an administrator I want to know if the weak passphrase I am entering to generate an organization recovery key has been pwned when submit", async() => {
+  it("As an administrator I want to know if the weak passphrase I am entering to generate an organization recovery key has been pwned when submit", async () => {
     expect.assertions(5);
     const props = defaultProps();
 
-    props.context.port.addRequestListener('passbolt.secrets.powned-password', () => 2); ;
+    props.context.port.addRequestListener("passbolt.secrets.powned-password", () => 2);
 
     const page = new SelectAccountRecoveryOrganizationKeyPage(props);
 
     await page.clickOnGenerateTab();
 
     await page.type("azerty", page.nameField);
-    await page.type("admin@passbolt.com",  page.emailField);
+    await page.type("admin@passbolt.com", page.emailField);
     await page.type("azertyazertyazerty", page.passphraseField);
     await page.type("azertyazertyazerty", page.passphraseConfirmationField);
 
@@ -285,21 +287,24 @@ describe('As AD I can generate an ORK', () => {
 
     //Typing new password should remove the powned service error
     await page.type("new password", page.passphraseField);
-    expect(page.passphraseFieldError.textContent).toBe("A strong passphrase is required. The minimum complexity must be 'fair'.");
+    expect(page.passphraseFieldError.textContent).toBe(
+      "A strong passphrase is required. The minimum complexity must be 'fair'.",
+    );
   });
 
-  it("As an administrator generating an account recovery organization key, I should see the warning banner after submiting the form", async() => {
+  it("As an administrator generating an account recovery organization key, I should see the warning banner after submiting the form", async () => {
     expect.assertions(1);
     const props = defaultProps();
     const page = new SelectAccountRecoveryOrganizationKeyPage(props);
 
-
     await page.clickOnGenerateTab();
 
-    expect(page.warningImportInstead.textContent).toBe("Warning, we encourage you to generate your OpenPGP Organization Recovery Key separately. Make sure you keep a backup in a safe place.");
+    expect(page.warningImportInstead.textContent).toBe(
+      "Warning, we encourage you to generate your OpenPGP Organization Recovery Key separately. Make sure you keep a backup in a safe place.",
+    );
   });
 
-  it("As an administrator generating an account recovery organization key, I should see a complexity as Quality if the passphrase is empty", async() => {
+  it("As an administrator generating an account recovery organization key, I should see a complexity as Quality if the passphrase is empty", async () => {
     expect.assertions(3);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
 

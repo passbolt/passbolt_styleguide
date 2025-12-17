@@ -16,8 +16,12 @@
  * Unit tests on DisplayUserDetailsInformation in regard of specifications
  */
 
-import {waitForTrue} from "../../../../../test/utils/waitFor";
-import {defaultProps, defaultUserProps, defaultWithMissingMetadataKeysProps} from "./DisplayUserDetailsInformation.test.data";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
+import {
+  defaultProps,
+  defaultUserProps,
+  defaultWithMissingMetadataKeysProps,
+} from "./DisplayUserDetailsInformation.test.data";
 import DisplayUserDetailsInformationPage from "./DisplayUserDetailsInformation.test.page";
 
 beforeEach(() => {
@@ -32,11 +36,11 @@ describe("Display User Details Information", () => {
     page = new DisplayUserDetailsInformationPage(props);
   });
 
-  it('As LU I should initially see the information area as expanded', () => {
+  it("As LU I should initially see the information area as expanded", () => {
     expect(page.isCollapsed).toBeFalsy();
   });
 
-  it('As LU I should not see the information area when I collapse the area', async() => {
+  it("As LU I should not see the information area when I collapse the area", async () => {
     await page.toggleCollapse();
     expect(page.isCollapsed).toBeTruthy();
 
@@ -44,36 +48,36 @@ describe("Display User Details Information", () => {
     expect(page.isCollapsed).toBeFalsy();
   });
 
-  it('As LU I should see the detailed user role', async() => {
+  it("As LU I should see the detailed user role", async () => {
     await waitForTrue(() => page.role !== "");
-    expect(page.role).toBe('admin');
+    expect(page.role).toBe("admin");
   });
 
-  it('As LU I should see the detailed user status', () => {
-    expect(page.status).toBe('Activated');
+  it("As LU I should see the detailed user status", () => {
+    expect(page.status).toBe("Activated");
   });
 
-  it('As LU I should see the detailed account recovery status', () => {
-    expect(page.accountRecoveryStatus).toBe('Pending');
+  it("As LU I should see the detailed account recovery status", () => {
+    expect(page.accountRecoveryStatus).toBe("Pending");
   });
 
-  it('As LU I should see the detailed mfa status', () => {
-    expect(page.mfaStatus).toBe('Disabled');
+  it("As LU I should see the detailed mfa status", () => {
+    expect(page.mfaStatus).toBe("Disabled");
   });
 
-  it('As LU I not should see the detailed missing metadata key ids status', () => {
+  it("As LU I not should see the detailed missing metadata key ids status", () => {
     const props = defaultUserProps();
     page = new DisplayUserDetailsInformationPage(props);
-    expect(page.mfaStatus).toBe('Disabled');
+    expect(page.mfaStatus).toBe("Disabled");
   });
 
-  it('As AD I should see the detailed metadata key status when missing metadata keys', () => {
+  it("As AD I should see the detailed metadata key status when missing metadata keys", () => {
     const props = defaultWithMissingMetadataKeysProps();
     page = new DisplayUserDetailsInformationPage(props);
-    expect(page.metadataKeysStatus).toBe('Missing');
+    expect(page.metadataKeysStatus).toBe("Missing");
   });
 
-  it('As AD I should see the detailed metadata key status when having all metadata keys', () => {
-    expect(page.metadataKeysStatus).toBe('All');
+  it("As AD I should see the detailed metadata key status when having all metadata keys", () => {
+    expect(page.metadataKeysStatus).toBe("All");
   });
 });

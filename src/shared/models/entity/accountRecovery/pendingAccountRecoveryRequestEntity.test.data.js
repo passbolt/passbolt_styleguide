@@ -12,7 +12,7 @@
  * @since         4.7.0
  */
 
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 export const pendingAccountRecoveryRequestDto = (data = {}) => ({
   id: uuidv4(),
@@ -21,5 +21,5 @@ export const pendingAccountRecoveryRequestDto = (data = {}) => ({
   modified: "2020-05-04T20:31:45+00:00",
   created_by: uuidv4(),
   modified_by: uuidv4(),
-  ...data
+  ...data,
 });

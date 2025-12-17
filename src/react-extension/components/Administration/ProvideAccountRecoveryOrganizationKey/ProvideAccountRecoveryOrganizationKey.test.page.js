@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ProvideAccountRecoveryOrganizationKey from "./ProvideAccountRecoveryOrganizationKey";
@@ -28,9 +28,9 @@ export default class ProvideAccountRecoveryOrganizationKeyPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ProvideAccountRecoveryOrganizationKey {...props}/>
+        <ProvideAccountRecoveryOrganizationKey {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.bindFunctions();
@@ -57,7 +57,7 @@ export default class ProvideAccountRecoveryOrganizationKeyPage {
    * @returns {HTMLElement}
    */
   get title() {
-    return this.selector('.dialog .dialog-header .dialog-header-title');
+    return this.selector(".dialog .dialog-header .dialog-header-title");
   }
 
   /**
@@ -65,7 +65,7 @@ export default class ProvideAccountRecoveryOrganizationKeyPage {
    * @returns {HTMLElement}
    */
   get orkField() {
-    return this.selector('#organization-recover-form-key');
+    return this.selector("#organization-recover-form-key");
   }
 
   /**
@@ -73,7 +73,7 @@ export default class ProvideAccountRecoveryOrganizationKeyPage {
    * @returns {HTMLElement}
    */
   get passwordField() {
-    return this.selector('#generate-organization-key-form-password');
+    return this.selector("#generate-organization-key-form-password");
   }
 
   /**
@@ -81,7 +81,7 @@ export default class ProvideAccountRecoveryOrganizationKeyPage {
    * @returns {HTMLElement}
    */
   get fileUploadField() {
-    return this.selector('.input-file-inline input');
+    return this.selector(".input-file-inline input");
   }
 
   /**
@@ -89,7 +89,7 @@ export default class ProvideAccountRecoveryOrganizationKeyPage {
    * @returns {HTMLElement}
    */
   get browseInput() {
-    return this.selector('.provide-organization-recover-key-dialog .input.file input');
+    return this.selector(".provide-organization-recover-key-dialog .input.file input");
   }
 
   /**
@@ -105,7 +105,7 @@ export default class ProvideAccountRecoveryOrganizationKeyPage {
    * @returns {HTMLElement}
    */
   get orkFieldError() {
-    return this.selector('.provide-organization-recover-key-dialog .key.error-message');
+    return this.selector(".provide-organization-recover-key-dialog .key.error-message");
   }
 
   /**
@@ -113,7 +113,7 @@ export default class ProvideAccountRecoveryOrganizationKeyPage {
    * @returns {HTMLElement}
    */
   get passwordFieldError() {
-    return this.selector('.provide-organization-recover-key-dialog .password.error-message');
+    return this.selector(".provide-organization-recover-key-dialog .password.error-message");
   }
 
   /**
@@ -121,11 +121,11 @@ export default class ProvideAccountRecoveryOrganizationKeyPage {
    * @returns {Promise<void>}
    */
   async chooseFile(fileData) {
-    const file =  new File([fileData.content], fileData.fileName, {type: fileData.contentType});
+    const file = new File([fileData.content], fileData.fileName, { type: fileData.contentType });
     fireEvent.change(this.browseInput, {
       target: {
-        files: [file]
-      }
+        files: [file],
+      },
     });
     await waitFor(() => this.checkFieldIsNotEmpty(this.orkField));
   }
@@ -135,7 +135,7 @@ export default class ProvideAccountRecoveryOrganizationKeyPage {
    * @returns {Promise<void>}
    */
   async setPassword(password) {
-    fireEvent.change(this.passwordField, {target: {value: password}});
+    fireEvent.change(this.passwordField, { target: { value: password } });
     await waitFor(() => this.checkFieldIsNotEmpty(this.passwordField));
   }
 
@@ -144,7 +144,7 @@ export default class ProvideAccountRecoveryOrganizationKeyPage {
    * @returns {Promise<void>}
    */
   async submitForm(waitForCallback) {
-    fireEvent.click(this.submitButton, {button: 0});
+    fireEvent.click(this.submitButton, { button: 0 });
     await waitFor(() => waitForCallback());
   }
 

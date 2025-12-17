@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.2.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplayResourceUrisBadge from "./DisplayResourceUrisBadge";
 /**
@@ -24,10 +23,7 @@ export default class DisplayResourceUrisBadgePage {
    * @param props Props to attach
    */
   constructor(props) {
-    this._page = render(
-      <DisplayResourceUrisBadge {...props} />,
-      {legacyRoot: true}
-    );
+    this._page = render(<DisplayResourceUrisBadge {...props} />, { legacyRoot: true });
   }
   /**
    * Returns the badge
@@ -39,21 +35,21 @@ export default class DisplayResourceUrisBadgePage {
    * Returns the count element
    */
   get count() {
-    return this._page.container.querySelector('.count');
+    return this._page.container.querySelector(".count");
   }
 
   /**
    * Returns the tooltip which count the number of uris
    */
   get tooltip() {
-    return this._page.container.querySelector('.tooltip-portal span');
+    return this._page.container.querySelector(".tooltip-portal span");
   }
 
   /**
    * Returns the uris list element
    */
   get listUris() {
-    return document.body.querySelector('.list-uris');
+    return document.body.querySelector(".list-uris");
   }
 
   /**

@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -13,11 +12,11 @@
  * @since         5.0.0
  */
 
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import SelectResourceForm from "./SelectResourceForm";
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 
 /**
  * The SelectResourceFormPage component represented as a page
@@ -30,9 +29,9 @@ export default class SelectResourceFormPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <SelectResourceForm {...props}/>
+        <SelectResourceForm {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -41,7 +40,7 @@ export default class SelectResourceFormPage {
    * @returns {Element}
    */
   get selectResourceForm() {
-    return this._page.container.querySelector('.left-sidebar');
+    return this._page.container.querySelector(".left-sidebar");
   }
 
   /**
@@ -84,7 +83,6 @@ export default class SelectResourceFormPage {
     return this._page.container.querySelector("#delete-totp");
   }
 
-
   /**
    * Returns the add secret custom fields
    * @returns {Element}
@@ -122,7 +120,7 @@ export default class SelectResourceFormPage {
    * @returns {Element}
    */
   get sidebarSectionsSecret() {
-    return this._page.container.querySelector('.sidebar-content-sections').querySelectorAll(".section-header")[0];
+    return this._page.container.querySelector(".sidebar-content-sections").querySelectorAll(".section-header")[0];
   }
 
   /**
@@ -130,7 +128,7 @@ export default class SelectResourceFormPage {
    * @returns {Element}
    */
   get sidebarSectionMetadata() {
-    return this._page.container.querySelector('.sidebar-content-sections').querySelectorAll(".section-header")[1];
+    return this._page.container.querySelector(".sidebar-content-sections").querySelectorAll(".section-header")[1];
   }
 
   /**
@@ -139,7 +137,10 @@ export default class SelectResourceFormPage {
    * @returns {Element}
    */
   getSectionItem(index) {
-    return this._page.container.querySelector('.sidebar-content-sections').querySelectorAll('.section-content')[index - 1]?.querySelector("button.no-border");
+    return this._page.container
+      .querySelector(".sidebar-content-sections")
+      .querySelectorAll(".section-content")
+      [index - 1]?.querySelector("button.no-border");
   }
 
   /**
@@ -147,7 +148,7 @@ export default class SelectResourceFormPage {
    * @returns {Element}
    */
   get sectionItemSelected() {
-    return this._page.container.querySelector('.sidebar-content-sections .section-content.selected');
+    return this._page.container.querySelector(".sidebar-content-sections .section-content.selected");
   }
 
   /**
@@ -155,7 +156,7 @@ export default class SelectResourceFormPage {
    * @return {Element}
    */
   get menuDescription() {
-    return this._page.container.querySelector('#menu-description');
+    return this._page.container.querySelector("#menu-description");
   }
 
   /**
@@ -163,7 +164,7 @@ export default class SelectResourceFormPage {
    * @return {Element}
    */
   get menuUris() {
-    return this._page.container.querySelector('#menu-uris');
+    return this._page.container.querySelector("#menu-uris");
   }
 
   /**
@@ -171,7 +172,7 @@ export default class SelectResourceFormPage {
    * @return {Element}
    */
   get upgradeCard() {
-    return this._page.container.querySelector('.section-card .card');
+    return this._page.container.querySelector(".section-card .card");
   }
 
   /**
@@ -179,7 +180,7 @@ export default class SelectResourceFormPage {
    * @return {Element}
    */
   get upgradeButton() {
-    return this._page.container.querySelector('.section-card .card .content button');
+    return this._page.container.querySelector(".section-card .card .content button");
   }
 
   /**
@@ -194,7 +195,7 @@ export default class SelectResourceFormPage {
    * @param {Element} element
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

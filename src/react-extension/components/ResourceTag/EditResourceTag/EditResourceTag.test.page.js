@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../contexts/DialogContext";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import EditResourceTag from "./EditResourceTag";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -35,13 +35,13 @@ export default class EditResourceTagPage {
         <MockTranslationProvider>
           <DialogContextProvider>
             <Router>
-              <ManageDialogs/>
-              <EditResourceTag {...props}/>
+              <ManageDialogs />
+              <EditResourceTag {...props} />
             </Router>
           </DialogContextProvider>
         </MockTranslationProvider>
       </AppContext.Provider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -102,28 +102,28 @@ class TagEditPageObject {
    * Returns the dialog element
    */
   get dialog() {
-    return this._container.querySelector('.edit-tag-dialog');
+    return this._container.querySelector(".edit-tag-dialog");
   }
 
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._container.querySelector('.dialog-close');
+    return this._container.querySelector(".dialog-close");
   }
 
   /**
    * Returns the tag name input element
    */
   get tagName() {
-    return this._container.querySelector('#edit-tag-form-name');
+    return this._container.querySelector("#edit-tag-form-name");
   }
 
   /**
    * Returns the tag name error mesage element
    */
   get tagNameErrorMessage() {
-    return this._container.querySelector('.name.error-message');
+    return this._container.querySelector(".name.error-message");
   }
 
   /**
@@ -144,22 +144,22 @@ class TagEditPageObject {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._container.querySelector('.submit-wrapper .cancel');
+    return this._container.querySelector(".submit-wrapper .cancel");
   }
 
   get errorDialog() {
-    return this._container.querySelector('.error-dialog');
+    return this._container.querySelector(".error-dialog");
   }
 
   get errorDialogMessage() {
-    return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content');
+    return this._container.querySelector(".error-dialog .dialog .dialog-content .form-content");
   }
 
   /**
    * Returns the name warning mesage input element
    */
   get nameWarningMessage() {
-    return this._container.querySelector('.name.warning-message');
+    return this._container.querySelector(".name.warning-message");
   }
 
   /**
@@ -170,33 +170,33 @@ class TagEditPageObject {
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
 
   /** Click without wait for on the element */
-  clickWithoutWaitFor(element)  {
-    const leftClick = {button: 0};
+  clickWithoutWaitFor(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
   }
 
   /** Click without wait for on the element */
-  escapeKey()  {
+  escapeKey() {
     // Escape key down event
-    const escapeKeyDown = {keyCode: 27};
+    const escapeKeyDown = { keyCode: 27 };
     fireEvent.keyDown(this.dialog, escapeKeyDown);
   }
 
   /** fill the input element with data */
-  fillInput(element, data)  {
-    const dataInputEvent = {target: {value: data}};
+  fillInput(element, data) {
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
   }
 
   /** on keypup element */
-  keyUpInput(component)  {
-    fireEvent.keyUp(component, {keyCode: 38});
+  keyUpInput(component) {
+    fireEvent.keyUp(component, { keyCode: 38 });
   }
 }

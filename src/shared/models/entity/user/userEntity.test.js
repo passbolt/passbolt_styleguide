@@ -11,14 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.1.0
  */
-import UserEntity, {USER_STATUS} from "./userEntity";
+import UserEntity, { USER_STATUS } from "./userEntity";
 import EntitySchema from "../abstract/entitySchema";
-import {defaultUserDto} from "../user/userEntity.test.data";
+import { defaultUserDto } from "../user/userEntity.test.data";
 import * as assertEntityProperty from "passbolt-styleguide/test/assert/assertEntityProperty";
 import RoleEntity from "../role/roleEntity";
 import ProfileEntity from "../profile/profileEntity";
 import GpgkeyEntity from "../gpgkey/gpgkeyEntity";
-import {v4 as uuid} from "uuid";
+import { v4 as uuid } from "uuid";
 
 /**
  * These tests are duplicata and adaptation from the UserEntity of the Bext.
@@ -88,7 +88,7 @@ describe("UserEntity", () => {
   describe("UserEntity::constructor", () => {
     it("works if valid minimal DTO is provided", () => {
       const dto = {
-        "username": "ada@passbolt.com",
+        username: "ada@passbolt.com",
       };
       const entity = new UserEntity(dto);
       expect(entity.toDto()).toEqual(dto);
@@ -104,10 +104,13 @@ describe("UserEntity", () => {
     });
 
     it("works if valid DTO with associated entity data is provided", () => {
-      const dto = defaultUserDto({}, {
-        withRole: true,
-        withGpgkey: true,
-      });
+      const dto = defaultUserDto(
+        {},
+        {
+          withRole: true,
+          withGpgkey: true,
+        },
+      );
       const filtered = {
         id: dto.id,
         role_id: dto.role_id,
@@ -126,17 +129,17 @@ describe("UserEntity", () => {
       expect(entity.role).toBeInstanceOf(RoleEntity);
       expect(entity.profile).toBeInstanceOf(ProfileEntity);
       expect(entity.gpgkey).toBeInstanceOf(GpgkeyEntity);
-      expect(entity.role.name).toEqual('user');
-      expect(entity.gpgkey.armoredKey.startsWith('-----BEGIN PGP PUBLIC KEY BLOCK-----')).toBe(true);
+      expect(entity.role.name).toEqual("user");
+      expect(entity.gpgkey.armoredKey.startsWith("-----BEGIN PGP PUBLIC KEY BLOCK-----")).toBe(true);
 
       const dtoWithContain = entity.toDto({
         role: true,
         profile: true,
         gpgkey: true,
       });
-      expect(dtoWithContain.role.name).toEqual('user');
+      expect(dtoWithContain.role.name).toEqual("user");
       expect(dtoWithContain.profile.first_name).toEqual(dto.profile.first_name);
-      expect(dtoWithContain.gpgkey.armored_key.startsWith('-----BEGIN PGP PUBLIC KEY BLOCK-----')).toBe(true);
+      expect(dtoWithContain.gpgkey.armored_key.startsWith("-----BEGIN PGP PUBLIC KEY BLOCK-----")).toBe(true);
     });
   });
 
@@ -152,12 +155,14 @@ describe("UserEntity", () => {
       const dto = defaultUserDto({});
       const entity = new UserEntity(dto);
 
-      expect(entity.getUserFormattedName(text => text, {withUsername: true})).toEqual(`${dto.profile.first_name} ${dto.profile.last_name} (${dto.username})`);
+      expect(entity.getUserFormattedName((text) => text, { withUsername: true })).toEqual(
+        `${dto.profile.first_name} ${dto.profile.last_name} (${dto.username})`,
+      );
     });
 
     it("should return unknown", () => {
-      const dto = defaultUserDto({profile: {}});
-      const entity = new UserEntity(dto, {validate: false});
+      const dto = defaultUserDto({ profile: {} });
+      const entity = new UserEntity(dto, { validate: false });
 
       expect(entity.getUserFormattedName()).toEqual("Unknown user");
     });
@@ -172,14 +177,14 @@ describe("UserEntity", () => {
     });
 
     it("should return a suspended status", () => {
-      const dto = defaultUserDto({disabled: "2025-10-10T18:59:11+00:00"});
+      const dto = defaultUserDto({ disabled: "2025-10-10T18:59:11+00:00" });
       const entity = new UserEntity(dto);
 
       expect(entity.status).toEqual(USER_STATUS.SUSPENDED);
     });
 
     it("should return a suspended status", () => {
-      const dto = defaultUserDto({deleted: true});
+      const dto = defaultUserDto({ deleted: true });
       const entity = new UserEntity(dto);
 
       expect(entity.status).toEqual(USER_STATUS.DELETED);
@@ -188,10 +193,13 @@ describe("UserEntity", () => {
 
   describe("UserEntity::toDto", () => {
     it("serialization works with full object inside collection", () => {
-      const dto = defaultUserDto({}, {
-        withRole: true,
-        withGpgkey: true,
-      });
+      const dto = defaultUserDto(
+        {},
+        {
+          withRole: true,
+          withGpgkey: true,
+        },
+      );
       const entity = new UserEntity(dto);
 
       //todo: put back when UserEntity is fully migrated
@@ -206,10 +214,13 @@ describe("UserEntity", () => {
     it("should return an empty array if missing_metadata_key_ids is not defined", () => {
       expect.assertions(1);
 
-      const dto = defaultUserDto({}, {
-        withRole: true,
-        withGpgkey: true,
-      });
+      const dto = defaultUserDto(
+        {},
+        {
+          withRole: true,
+          withGpgkey: true,
+        },
+      );
       const entity = new UserEntity(dto);
 
       expect(entity.missingMetadataKeysIds).toEqual([]);
@@ -219,44 +230,37 @@ describe("UserEntity", () => {
       const uuid1 = uuid();
       const uuid2 = uuid();
 
-      const dto = defaultUserDto({
-        missing_metadata_key_ids: [
-          uuid1,
-          uuid2
-        ]
-      }, {
-        withRole: true,
-        withGpgkey: true,
-      });
+      const dto = defaultUserDto(
+        {
+          missing_metadata_key_ids: [uuid1, uuid2],
+        },
+        {
+          withRole: true,
+          withGpgkey: true,
+        },
+      );
       const entity = new UserEntity(dto);
 
-      expect(entity.missingMetadataKeysIds).toEqual([
-        uuid1,
-        uuid2
-      ]);
+      expect(entity.missingMetadataKeysIds).toEqual([uuid1, uuid2]);
     });
-
 
     it("should set the missing_metadata_key_ids", () => {
       expect.assertions(1);
       const uuid1 = uuid();
       const uuid2 = uuid();
 
-      const dto = defaultUserDto({
-        missing_metadata_key_ids: []
-      }, {
-        withRole: true,
-        withGpgkey: true,
-      });
+      const dto = defaultUserDto(
+        {
+          missing_metadata_key_ids: [],
+        },
+        {
+          withRole: true,
+          withGpgkey: true,
+        },
+      );
       const entity = new UserEntity(dto);
-      entity.missingMetadataKeysIds = [
-        uuid1,
-        uuid2
-      ];
-      expect(entity.missingMetadataKeysIds).toEqual([
-        uuid1,
-        uuid2
-      ]);
+      entity.missingMetadataKeysIds = [uuid1, uuid2];
+      expect(entity.missingMetadataKeysIds).toEqual([uuid1, uuid2]);
     });
   });
 });

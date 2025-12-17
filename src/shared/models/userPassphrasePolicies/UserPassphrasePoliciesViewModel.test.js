@@ -15,7 +15,7 @@ import each from "jest-each";
 import {
   defaultUserPassphrasePoliciesEntityDto,
   defaultUserPassphrasePoliciesViewModelDto,
-  userPassphrasePoliciesEntityDtoFromApi
+  userPassphrasePoliciesEntityDtoFromApi,
 } from "./UserPassphrasePoliciesDto.test.data";
 import UserPassphrasePoliciesViewModel from "./UserPassphrasePoliciesViewModel";
 
@@ -63,10 +63,10 @@ describe("UserPassphrasePoliciesViewModel", () => {
 
   describe("::isDataDifferent", () => {
     each([
-      {entropy_minimum: 150},
-      {external_dictionary_check: false},
-      {external_dictionary_check: false, entropy_minimum: 200},
-    ]).describe("should return true if at least 1 difference is found between 2 ViewModel", scenario => {
+      { entropy_minimum: 150 },
+      { external_dictionary_check: false },
+      { external_dictionary_check: false, entropy_minimum: 200 },
+    ]).describe("should return true if at least 1 difference is found between 2 ViewModel", (scenario) => {
       it(`for: ${JSON.stringify(scenario)}`, () => {
         expect.assertions(1);
 
@@ -124,49 +124,49 @@ describe("UserPassphrasePoliciesViewModel", () => {
   });
 
   describe("::validate", () => {
-    each([
-      "entropy_minimum",
-      "external_dictionary_check"
-    ]).describe("should validates the required field", requiredField => {
-      it(`for: ${requiredField}`, () => {
-        expect.assertions(2);
-        const viewModel = new UserPassphrasePoliciesViewModel();
-        delete viewModel[requiredField];
+    each(["entropy_minimum", "external_dictionary_check"]).describe(
+      "should validates the required field",
+      (requiredField) => {
+        it(`for: ${requiredField}`, () => {
+          expect.assertions(2);
+          const viewModel = new UserPassphrasePoliciesViewModel();
+          delete viewModel[requiredField];
 
-        const validationErrors = viewModel.validate();
-        expect(validationErrors.hasErrors(requiredField)).toStrictEqual(true);
-        expect(validationErrors.getError(requiredField, "required")).toBeTruthy();
-      });
-    });
+          const validationErrors = viewModel.validate();
+          expect(validationErrors.hasErrors(requiredField)).toStrictEqual(true);
+          expect(validationErrors.getError(requiredField, "required")).toBeTruthy();
+        });
+      },
+    );
 
     each([
       {
         dto: {
           entropy_minimum: "string",
-          external_dictionary_check: "string"
+          external_dictionary_check: "string",
         },
         expectedErrors: {
-          entropy_minimum: {type: "The entropy_minimum is not a valid integer."},
-          external_dictionary_check: {type: "The external_dictionary_check is not a valid boolean."}
-        }
+          entropy_minimum: { type: "The entropy_minimum is not a valid integer." },
+          external_dictionary_check: { type: "The external_dictionary_check is not a valid boolean." },
+        },
       },
       {
         dto: {
           entropy_minimum: 30,
         },
         expectedErrors: {
-          entropy_minimum: {minimum: "The entropy_minimum should be greater or equal to 50."},
-        }
+          entropy_minimum: { minimum: "The entropy_minimum should be greater or equal to 50." },
+        },
       },
       {
         dto: {
           entropy_minimum: 250,
         },
         expectedErrors: {
-          entropy_minimum: {maximum: "The entropy_minimum should be lesser or equal to 224."},
-        }
-      }
-    ]).describe("should validate the current data set", scenario => {
+          entropy_minimum: { maximum: "The entropy_minimum should be lesser or equal to 224." },
+        },
+      },
+    ]).describe("should validate the current data set", (scenario) => {
       it(`for: ${JSON.stringify(scenario.dto)}`, () => {
         const expectedErroneousField = Object.keys(scenario.expectedErrors);
         const expectedErroneousFieldCount = expectedErroneousField.length;

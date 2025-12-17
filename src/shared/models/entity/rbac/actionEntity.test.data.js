@@ -12,12 +12,12 @@
  * @since         4.1.0
  */
 
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 export const defaultActionData = (data = {}) => {
   const defaultData = {
-    "id": uuidv4(),
-    "name": "Resources.add"
+    id: uuidv4(),
+    name: "Resources.add",
   };
 
   return Object.assign(defaultData, data);

@@ -11,17 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.10.0
  */
-import {v4 as uuidv4} from "uuid";
-import {defaultMetadataPrivateKeyDto, minimalMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
-import {defaultMetadataPrivateKeyDataDto} from "./metadataPrivateKeyDataEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultMetadataPrivateKeyDto, minimalMetadataPrivateKeyDto } from "./metadataPrivateKeyEntity.test.data";
+import { defaultMetadataPrivateKeyDataDto } from "./metadataPrivateKeyDataEntity.test.data";
 
 export const defaultMetadataPrivateKeysDtos = (count = 2, data = {}) => {
   const metadata_key_id = uuidv4();
 
   const dtos = [];
   for (let i = 0; i < count; i += 2) {
-    const dto1 = defaultMetadataPrivateKeyDto({metadata_key_id, ...data});
-    const dto2 = defaultMetadataPrivateKeyDto({metadata_key_id, data: defaultMetadataPrivateKeyDataDto(), ...data});
+    const dto1 = defaultMetadataPrivateKeyDto({ metadata_key_id, ...data });
+    const dto2 = defaultMetadataPrivateKeyDto({ metadata_key_id, data: defaultMetadataPrivateKeyDataDto(), ...data });
     dtos.push(dto1, dto2);
   }
 
@@ -33,8 +33,8 @@ export const defaultMinimalMetadataPrivateKeysDtos = (count = 2, data = {}) => {
 
   const dtos = [];
   for (let i = 0; i < count; i += 2) {
-    const dto1 = minimalMetadataPrivateKeyDto({metadata_key_id, ...data});
-    const dto2 = minimalMetadataPrivateKeyDto({metadata_key_id, data: defaultMetadataPrivateKeyDataDto(), ...data});
+    const dto1 = minimalMetadataPrivateKeyDto({ metadata_key_id, ...data });
+    const dto2 = minimalMetadataPrivateKeyDto({ metadata_key_id, data: defaultMetadataPrivateKeyDataDto(), ...data });
     dtos.push(dto1, dto2);
   }
 

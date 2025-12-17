@@ -15,29 +15,29 @@ import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import mockPort from "../../../../../test/mocks/mockPort";
 import mockStorage from "../../../../../test/mocks/mockStorage";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
-import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
+import { ResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext";
+import { siteSettingsCe } from "../../../test/fixture/Settings/siteSettings";
 import DisplayResourcesListDetails from "./DisplayResourcesListDetails";
-import {defaultProps} from "./DisplayResourcesListDetails.test.data";
+import { defaultProps } from "./DisplayResourcesListDetails.test.data";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 /**
  * DisplayResourceDetails stories
  */
 export default {
-  title: 'Components/ResourceDetails/DisplayResourcesListDetails',
+  title: "Components/ResourceDetails/DisplayResourcesListDetails",
   component: DisplayResourcesListDetails,
   decorators: [
-    (Story, {args}) => (
+    (Story, { args }) => (
       <Router>
         <AppContext.Provider value={args.context}>
           <ResourceWorkspaceContext.Provider value={args.resourceWorkspaceContext}>
             <div className="page">
-              <div className="app" style={{margin: "-1rem"}}>
+              <div className="app" style={{ margin: "-1rem" }}>
                 <div className="panel main">
                   <div className="panel middle">
-                    <div className="middle-right" style={{display: "flex", justifyContent: "flex-end"}}>
+                    <div className="middle-right" style={{ display: "flex", justifyContent: "flex-end" }}>
                       <div className="panel aside">
                         <Story {...args} />
                       </div>
@@ -49,19 +49,19 @@ export default {
           </ResourceWorkspaceContext.Provider>
         </AppContext.Provider>
       </Router>
-    )
-  ]
+    ),
+  ],
 };
 
 const storage = mockStorage();
 const port = mockPort(storage);
 
 port.addRequestListener("passbolt.organization-settings.get", () => siteSettingsCe);
-port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({description: "This is a secure note."}));
+port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({ description: "This is a secure note." }));
 
 export const Default = {
   args: {
-    ...defaultProps({context: {port}}),
+    ...defaultProps({ context: { port } }),
     storage: storage,
-  }
+  },
 };

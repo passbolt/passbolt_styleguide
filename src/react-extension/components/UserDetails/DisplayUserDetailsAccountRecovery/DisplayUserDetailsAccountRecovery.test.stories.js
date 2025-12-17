@@ -12,36 +12,41 @@
  * @since         3.6.0
  */
 
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayUserDetailsAccountRecovery from "./DisplayUserDetailsAccountRecovery";
 import {
-  defaultProps, oneUserAccountRequestsApproved, oneUserAccountRequestsPending,
-  userAccountRequestsApproved, userAccountRequestsApprovedWithPending,
-  userAccountRequestsRejected, userAccountRequestsRejectedWithPending
+  defaultProps,
+  oneUserAccountRequestsApproved,
+  oneUserAccountRequestsPending,
+  userAccountRequestsApproved,
+  userAccountRequestsApprovedWithPending,
+  userAccountRequestsRejected,
+  userAccountRequestsRejectedWithPending,
 } from "./DisplayUserDetailsAccountRecovery.test.data";
 
 export default {
-  title: 'Components/UserDetails/DisplayUserDetailsAccountRecovery',
-  component: DisplayUserDetailsAccountRecovery
+  title: "Components/UserDetails/DisplayUserDetailsAccountRecovery",
+  component: DisplayUserDetailsAccountRecovery,
 };
 
-const Template = args =>
+const Template = (args) => (
   <MockTranslationProvider>
     <div className="panel aside">
       <div className="detailed-information">
-        <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <DisplayUserDetailsAccountRecovery {...args} {...routerProps}/>}></Route>
+        <MemoryRouter initialEntries={["/"]}>
+          <Route component={(routerProps) => <DisplayUserDetailsAccountRecovery {...args} {...routerProps} />}></Route>
         </MemoryRouter>
       </div>
     </div>
-  </MockTranslationProvider>;
+  </MockTranslationProvider>
+);
 
 const contextWithLoadingRequest = {
   context: {
-    port: {}
-  }
+    port: {},
+  },
 };
 export const Loading = Template.bind({});
 Loading.args = defaultProps(contextWithLoadingRequest);
@@ -49,9 +54,9 @@ Loading.args = defaultProps(contextWithLoadingRequest);
 const contextWithNoAccountRecoveryRequest = {
   context: {
     port: {
-      request: () => []
-    }
-  }
+      request: () => [],
+    },
+  },
 };
 export const NoAccountRecovery = Template.bind({});
 NoAccountRecovery.args = defaultProps(contextWithNoAccountRecoveryRequest);
@@ -59,9 +64,9 @@ NoAccountRecovery.args = defaultProps(contextWithNoAccountRecoveryRequest);
 const contextWithPreviousApproved = {
   context: {
     port: {
-      request: () => userAccountRequestsApproved
-    }
-  }
+      request: () => userAccountRequestsApproved,
+    },
+  },
 };
 export const AccountRecoveryApproved = Template.bind({});
 AccountRecoveryApproved.args = defaultProps(contextWithPreviousApproved);
@@ -69,9 +74,9 @@ AccountRecoveryApproved.args = defaultProps(contextWithPreviousApproved);
 const contextWithPreviousRejected = {
   context: {
     port: {
-      request: () => userAccountRequestsRejected
-    }
-  }
+      request: () => userAccountRequestsRejected,
+    },
+  },
 };
 export const AccountRecoveryRejected = Template.bind({});
 AccountRecoveryRejected.args = defaultProps(contextWithPreviousRejected);
@@ -79,17 +84,17 @@ AccountRecoveryRejected.args = defaultProps(contextWithPreviousRejected);
 const contextWithPreviousApprovedAndPending = {
   context: {
     port: {
-      request: () => userAccountRequestsApprovedWithPending
-    }
+      request: () => userAccountRequestsApprovedWithPending,
+    },
   },
   userWorkspaceContext: {
     details: {
       user: {
         id: "54c6278e-f824-5fda-91ff-3e946b18d994",
-        pending_account_recovery_request: {"status": "pending"}
-      }
-    }
-  }
+        pending_account_recovery_request: { status: "pending" },
+      },
+    },
+  },
 };
 export const AccountRecoveryApprovedWithPending = Template.bind({});
 AccountRecoveryApprovedWithPending.args = defaultProps(contextWithPreviousApprovedAndPending);
@@ -97,17 +102,17 @@ AccountRecoveryApprovedWithPending.args = defaultProps(contextWithPreviousApprov
 const contextWithPreviousRejectedAndPending = {
   context: {
     port: {
-      request: () => userAccountRequestsRejectedWithPending
-    }
+      request: () => userAccountRequestsRejectedWithPending,
+    },
   },
   userWorkspaceContext: {
     details: {
       user: {
         id: "54c6278e-f824-5fda-91ff-3e946b18d994",
-        pending_account_recovery_request: {"status": "pending"}
-      }
-    }
-  }
+        pending_account_recovery_request: { status: "pending" },
+      },
+    },
+  },
 };
 export const AccountRecoveryRejectedWithPending = Template.bind({});
 AccountRecoveryRejectedWithPending.args = defaultProps(contextWithPreviousRejectedAndPending);
@@ -115,17 +120,17 @@ AccountRecoveryRejectedWithPending.args = defaultProps(contextWithPreviousReject
 const contextWithOnePending = {
   context: {
     port: {
-      request: () => oneUserAccountRequestsPending
-    }
+      request: () => oneUserAccountRequestsPending,
+    },
   },
   userWorkspaceContext: {
     details: {
       user: {
         id: "54c6278e-f824-5fda-91ff-3e946b18d994",
-        pending_account_recovery_request: {"status": "pending"}
-      }
-    }
-  }
+        pending_account_recovery_request: { status: "pending" },
+      },
+    },
+  },
 };
 export const AccountRecoveryWithOneRequestPending = Template.bind({});
 AccountRecoveryWithOneRequestPending.args = defaultProps(contextWithOnePending);
@@ -133,10 +138,9 @@ AccountRecoveryWithOneRequestPending.args = defaultProps(contextWithOnePending);
 const contextWithOneRequest = {
   context: {
     port: {
-      request: () => oneUserAccountRequestsApproved
-    }
-  }
+      request: () => oneUserAccountRequestsApproved,
+    },
+  },
 };
 export const AccountRecoveryWithOneRequest = Template.bind({});
 AccountRecoveryWithOneRequest.args = defaultProps(contextWithOneRequest);
-

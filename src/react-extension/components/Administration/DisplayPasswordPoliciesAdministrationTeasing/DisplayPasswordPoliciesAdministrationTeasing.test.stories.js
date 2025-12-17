@@ -13,25 +13,27 @@
  */
 import React from "react";
 import DisplayPasswordPoliciesAdministrationTeasing from "./DisplayPasswordPoliciesAdministrationTeasing";
-import {defaultProps} from "./DisplayPasswordPoliciesAdministrationTeasing.test.data";
+import { defaultProps } from "./DisplayPasswordPoliciesAdministrationTeasing.test.data";
 
 export default {
-  title: 'Components/Administration/DisplayPasswordPoliciesAdministrationTeasing',
+  title: "Components/Administration/DisplayPasswordPoliciesAdministrationTeasing",
   component: DisplayPasswordPoliciesAdministrationTeasing,
-  decorators: [(Story, {args}) =>
-    <div className="page administration">
-      <div className="app" >
-        <div className="panel main">
-          <div className="panel middle">
-            <div className="middle-right">
-              <div className="main-page password-policies-settings">
-                <Story {...args}/>
+  decorators: [
+    (Story, { args }) => (
+      <div className="page administration">
+        <div className="app">
+          <div className="panel main">
+            <div className="panel middle">
+              <div className="middle-right">
+                <div className="main-page password-policies-settings">
+                  <Story {...args} />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    ),
   ],
 };
 

@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import DisplayMfaAdministration from "./DisplayMfaAdministration";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {AdminMfaContextProvider} from "../../../contexts/Administration/AdministrationMfa/AdministrationMfaContext";
+import { AdminMfaContextProvider } from "../../../contexts/Administration/AdministrationMfa/AdministrationMfaContext";
 import DisplayAdministrationMfaActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationMfaActions/DisplayAdministrationMfaActions";
 import userEvent from "@testing-library/user-event";
 
@@ -33,13 +33,13 @@ export default class DisplayMfaAdministrationPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <AdminMfaContextProvider  {...props}>
+          <AdminMfaContextProvider {...props}>
             <DisplayAdministrationMfaActions />
-            <DisplayMfaAdministration {...props}/>
+            <DisplayMfaAdministration {...props} />
           </AdminMfaContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -49,7 +49,7 @@ export default class DisplayMfaAdministrationPage {
    * Returns the totp input element
    */
   get mfaSettings() {
-    return this._page.container.querySelector('.mfa-settings');
+    return this._page.container.querySelector(".mfa-settings");
   }
 
   /**
@@ -63,106 +63,105 @@ export default class DisplayMfaAdministrationPage {
    * Returns the totp input element
    */
   get totp() {
-    return this._page.container.querySelector('#totp-provider-toggle-button');
+    return this._page.container.querySelector("#totp-provider-toggle-button");
   }
 
   /**
    * Returns the yubikey input element
    */
   get yubikey() {
-    return this._page.container.querySelector('#yubikey-provider-toggle-button');
+    return this._page.container.querySelector("#yubikey-provider-toggle-button");
   }
 
   /**
    * Returns the yubikey client identifier input element
    */
   get yubikeyClientIdentifier() {
-    return this._page.container.querySelector('#yubikeyClientIdentifier');
+    return this._page.container.querySelector("#yubikeyClientIdentifier");
   }
 
   /**
    * Returns the yubikey client identifier input element
    */
   get yubikeySecretKey() {
-    return this._page.container.querySelector('#yubikeySecretKey');
+    return this._page.container.querySelector("#yubikeySecretKey");
   }
 
   /**
    * Returns the duo input element
    */
   get duo() {
-    return this._page.container.querySelector('#duo-provider-toggle-button');
+    return this._page.container.querySelector("#duo-provider-toggle-button");
   }
 
   /**
    * Returns the duo hostname input element
    */
   get duoHostname() {
-    return this._page.container.querySelector('#duoHostname');
+    return this._page.container.querySelector("#duoHostname");
   }
 
   /**
    * Returns the duo client id input element
    */
   get duoClientId() {
-    return this._page.container.querySelector('#duoClientId');
+    return this._page.container.querySelector("#duoClientId");
   }
 
   /**
    * Returns the duo client secret input element
    */
   get duoClientSecret() {
-    return this._page.container.querySelector('#duoClientSecret');
+    return this._page.container.querySelector("#duoClientSecret");
   }
-
 
   /**
    * Returns the eye button for duoClientSecret
    */
   get duoClientSecretButton() {
-    return this._page.container.querySelectorAll('.password-view .svg-icon')[1];
+    return this._page.container.querySelectorAll(".password-view .svg-icon")[1];
   }
 
   /**
    * Returns the yubikey client identifier error mesage input element
    */
   get yubikeyClientIdentifierErrorMessage() {
-    return this._page.container.querySelector('.yubikey_client_identifier.error-message').textContent;
+    return this._page.container.querySelector(".yubikey_client_identifier.error-message").textContent;
   }
 
   /**
    * Returns the yubikey client identifier error mesage input element
    */
   get yubikeySecretKeyErrorMessage() {
-    return this._page.container.querySelector('.yubikey_secret_key.error-message').textContent;
+    return this._page.container.querySelector(".yubikey_secret_key.error-message").textContent;
   }
 
   /**
    * Returns the eye button for yubikeySecretKey
    */
   get yubikeySecretKeyButton() {
-    return this._page.container.querySelectorAll('.password-view .svg-icon')[0];
+    return this._page.container.querySelectorAll(".password-view .svg-icon")[0];
   }
 
   /**
    * Returns the duo hostname error mesage input element
    */
   get duoHostnameErrorMessage() {
-    return this._page.container.querySelector('.duo_hostname.error-message').textContent;
+    return this._page.container.querySelector(".duo_hostname.error-message").textContent;
   }
 
   /**
    * Returns the duo integration key error mesage input element
    */
   get duoClientIdErrorMessage() {
-    return this._page.container.querySelector('.duo_client_id.error-message').textContent;
+    return this._page.container.querySelector(".duo_client_id.error-message").textContent;
   }
 
   /**
    * Returns the duo secret key error mesage input element
    */
   get duoClientSecretErrorMessage() {
-    return this._page.container.querySelector('.duo_client_secret.error-message').textContent;
+    return this._page.container.querySelector(".duo_client_secret.error-message").textContent;
   }
 
   /**
@@ -187,7 +186,7 @@ export default class DisplayMfaAdministrationPage {
 
   /** fill the input element with data */
   fillInput(element, data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
   }
 
@@ -200,7 +199,6 @@ export default class DisplayMfaAdministrationPage {
   fillYubikeySecret(data) {
     this.fillInput(this.yubikeySecretKey, data);
   }
-
 
   /** fill the duo hostname element with data */
   fillDuoHostname(data) {
@@ -237,7 +235,7 @@ export default class DisplayMfaAdministrationPage {
    * Returns true if the component is in an obfuscated mode
    */
   isObfuscated(component) {
-    return component.getAttribute('type') === "password";
+    return component.getAttribute("type") === "password";
   }
 
   /**
@@ -252,28 +250,28 @@ export default class DisplayMfaAdministrationPage {
    * Returns the help box
    */
   get helpBox() {
-    return this._page.container.querySelectorAll('.sidebar-help-section')[0];
+    return this._page.container.querySelectorAll(".sidebar-help-section")[0];
   }
 
   /**
    * Returns the help box title
    */
   get helpBoxTitle() {
-    return this.helpBox.querySelector('h3');
+    return this.helpBox.querySelector("h3");
   }
 
   /**
    * Returns the help box description
    */
   get helpBoxDescription() {
-    return this.helpBox.querySelector('p');
+    return this.helpBox.querySelector("p");
   }
 
   /**
    * Returns the help box button
    */
   get helpBoxButton() {
-    return this.helpBox.querySelector('.button');
+    return this.helpBox.querySelector(".button");
   }
 
   /**

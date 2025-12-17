@@ -14,13 +14,17 @@
 
 import EntitySchema from "../entity/abstract/entitySchema";
 import ResourcePasswordDescriptionTotpViewModel from "./ResourcePasswordDescriptionTotpViewModel";
-import {v4 as uuid} from "uuid";
-import {defaultResourcePasswordDescriptionTotpViewModelDto, defaultResourceViewModelDto, minimalResourceViewModelDto} from "./resourceViewModel.test.data";
-import {TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP} from "../entity/resourceType/resourceTypeEntity.test.data";
-import {DateTime} from "luxon";
-import {defaultResourceDto} from "../entity/resource/resourceEntity.test.data";
+import { v4 as uuid } from "uuid";
+import {
+  defaultResourcePasswordDescriptionTotpViewModelDto,
+  defaultResourceViewModelDto,
+  minimalResourceViewModelDto,
+} from "./resourceViewModel.test.data";
+import { TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP } from "../entity/resourceType/resourceTypeEntity.test.data";
+import { DateTime } from "luxon";
+import { defaultResourceDto } from "../entity/resource/resourceEntity.test.data";
 import ResourceViewModel from "./ResourceViewModel";
-import {defaultTotpViewModelDto} from "../entity/totp/totpDto.test.data";
+import { defaultTotpViewModelDto } from "../entity/totp/totpDto.test.data";
 
 describe("ResourcePasswordDescriptionTotpViewModel", () => {
   describe("::createFromEntity", () => {
@@ -49,7 +53,10 @@ describe("ResourcePasswordDescriptionTotpViewModel", () => {
 
   describe("::getSchema", () => {
     it("schema must validate", () => {
-      EntitySchema.validateSchema(ResourcePasswordDescriptionTotpViewModel.name, ResourcePasswordDescriptionTotpViewModel.getSchema());
+      EntitySchema.validateSchema(
+        ResourcePasswordDescriptionTotpViewModel.name,
+        ResourcePasswordDescriptionTotpViewModel.getSchema(),
+      );
     });
 
     it("schema not have 'id' field set as required in CREATE_MODE", () => {
@@ -89,7 +96,7 @@ describe("ResourcePasswordDescriptionTotpViewModel", () => {
         description: "another description as well",
         totp: defaultTotpViewModelDto({
           secret_key: "a new totp secret key",
-        })
+        }),
       };
 
       const newViewModel = viewModel.updateSecret(secretDto);
@@ -170,7 +177,7 @@ describe("ResourcePasswordDescriptionTotpViewModel", () => {
 
     it("should return a dto with an id if it is set", () => {
       expect.assertions(1);
-      const dto = minimalResourceViewModelDto({id: uuid()});
+      const dto = minimalResourceViewModelDto({ id: uuid() });
       const viewModel = new ResourcePasswordDescriptionTotpViewModel(dto);
       const resultDto = viewModel.toResourceDto();
 
@@ -189,7 +196,8 @@ describe("ResourcePasswordDescriptionTotpViewModel", () => {
         password: "this is the expected password",
         description: "The description",
         totp: expectedTotp,
-        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP};
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
+      };
 
       const viewModel = new ResourcePasswordDescriptionTotpViewModel(expectedSecret);
       const secretDto = viewModel.toSecretDto();
@@ -277,7 +285,7 @@ describe("ResourcePasswordDescriptionTotpViewModel", () => {
         password: "test",
         description: "a description",
         totp: defaultTotpViewModelDto({
-          secret_key: "it's dangerous to go alone"
+          secret_key: "it's dangerous to go alone",
         }),
       };
       const otherDto = {

@@ -14,22 +14,22 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
-import MockFetch from '../../../test/mock/MockFetch';
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import MockFetch from "../../../test/mock/MockFetch";
 import DisplayMfaPolicyAdministration from "./DisplayMfaPolicyAdministration";
-import {defaultProps, settingDto} from "./DisplayMfaPolicyAdministration.test.data";
-import {AdminMfaPolicyContextProvider} from "../../../contexts/Administration/AdministrationMfaPolicy/AdministrationMfaPolicyContext";
+import { defaultProps, settingDto } from "./DisplayMfaPolicyAdministration.test.data";
+import { AdminMfaPolicyContextProvider } from "../../../contexts/Administration/AdministrationMfaPolicy/AdministrationMfaPolicyContext";
 
 export default {
-  title: 'Components/Administration/DisplayMfaPolicyAdministration',
-  component: DisplayMfaPolicyAdministration
+  title: "Components/Administration/DisplayMfaPolicyAdministration",
+  component: DisplayMfaPolicyAdministration,
 };
 
 let currentStory = null;
 const mockFetch = new MockFetch();
-mockFetch.addGetFetchRequest(/mfa-policies\/settings\.json/, async() => {
+mockFetch.addGetFetchRequest(/mfa-policies\/settings\.json/, async () => {
   switch (currentStory) {
-    case 'components-administration-displaymfapolicyadministration--default': {
+    case "components-administration-displaymfapolicyadministration--default": {
       return mockApiResponse(settingDto);
     }
   }
@@ -39,20 +39,23 @@ mockFetch.addGetFetchRequest(/mfa-policies\/settings\.json/, async() => {
 const decorators = [
   (Story, context) => {
     currentStory = context.id;
-    return <>
-      <Story/>
-    </>;
-  }
+    return (
+      <>
+        <Story />
+      </>
+    );
+  },
 ];
 
-const Template = args =>
+const Template = (args) => (
   <AdminMfaPolicyContextProvider {...args}>
     <div className="panel middle">
       <div className="grid grid-responsive-12">
-        <DisplayMfaPolicyAdministration {...args}/>
+        <DisplayMfaPolicyAdministration {...args} />
       </div>
     </div>
-  </AdminMfaPolicyContextProvider>;
+  </AdminMfaPolicyContextProvider>
+);
 
 Template.propTypes = {
   context: PropTypes.object,

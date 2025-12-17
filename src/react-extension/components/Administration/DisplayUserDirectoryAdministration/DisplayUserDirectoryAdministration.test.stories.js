@@ -14,36 +14,38 @@
 
 import React from "react";
 import DisplayUserDirectoryAdministration from "./DisplayUserDirectoryAdministration";
-import {defaultProps, mockUsers, mockResult} from "./DisplayUserDirectoryAdministration.test.data";
-import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
-import MockFetch from '../../../test/mock/MockFetch';
-import {AdminUserDirectoryContextProvider} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
+import { defaultProps, mockUsers, mockResult } from "./DisplayUserDirectoryAdministration.test.data";
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import MockFetch from "../../../test/mock/MockFetch";
+import { AdminUserDirectoryContextProvider } from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
 
 const mockFetch = new MockFetch();
-mockFetch.addGetFetchRequest(/directorysync\/settings.json/, async() => mockApiResponse(mockResult));
-mockFetch.addGetFetchRequest(/users*/, async() => mockApiResponse(mockUsers));
+mockFetch.addGetFetchRequest(/directorysync\/settings.json/, async () => mockApiResponse(mockResult));
+mockFetch.addGetFetchRequest(/users*/, async () => mockApiResponse(mockUsers));
 
 export default {
-  title: 'Components/Administration/DisplayUserDirectoryAdministration',
+  title: "Components/Administration/DisplayUserDirectoryAdministration",
   component: DisplayUserDirectoryAdministration,
-  decorators: [(Story, {args}) =>
-    <div id="container" className="page administration">
-      <div id="app" className="app" tabIndex="1000">
-        <div className="panel main">
-          <div className="panel middle">
-            <div className="middle-right">
-              <div className="breadcrumbs-and-grid">
-                <div className="main-page">
-                  <AdminUserDirectoryContextProvider {...args}>
-                    <Story {...args}/>
-                  </AdminUserDirectoryContextProvider>
+  decorators: [
+    (Story, { args }) => (
+      <div id="container" className="page administration">
+        <div id="app" className="app" tabIndex="1000">
+          <div className="panel main">
+            <div className="panel middle">
+              <div className="middle-right">
+                <div className="breadcrumbs-and-grid">
+                  <div className="main-page">
+                    <AdminUserDirectoryContextProvider {...args}>
+                      <Story {...args} />
+                    </AdminUserDirectoryContextProvider>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    ),
   ],
   parameters: {
     css: "api_main",

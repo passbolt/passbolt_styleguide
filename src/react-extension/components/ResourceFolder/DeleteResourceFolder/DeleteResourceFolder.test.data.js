@@ -11,14 +11,14 @@ export function defaultAppContext(appContext) {
     setContext: jest.fn(),
     folder: {
       id: "some folder id",
-      name: "some name folder"
+      name: "some name folder",
     },
     folders: [
       {
         id: "some folder id",
-        name: "some name folder"
-      }
-    ]
+        name: "some name folder",
+      },
+    ],
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
@@ -30,11 +30,11 @@ export function defaultAppContext(appContext) {
 export function defaultProps() {
   return {
     actionFeedbackContext: {
-      displaySuccess: jest.fn()
+      displaySuccess: jest.fn(),
     },
     dialogContext: {
-      open: jest.fn()
+      open: jest.fn(),
     },
-    onClose: jest.fn()
+    onClose: jest.fn(),
   };
 }

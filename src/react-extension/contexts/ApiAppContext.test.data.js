@@ -13,7 +13,7 @@
  */
 import SiteSettings from "../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../test/fixture/Settings/siteSettings";
-import {ApiClientOptions} from "../../shared/lib/apiClient/apiClientOptions";
+import { ApiClientOptions } from "../../shared/lib/apiClient/apiClientOptions";
 import MockPort from "../test/mock/MockPort";
 import UserSettings from "../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../test/fixture/Settings/userSettings";
@@ -27,7 +27,7 @@ export function defaultAppContext(appContext = {}) {
   const userSettings = new UserSettings(userSettingsFixture);
   const siteSettings = new SiteSettings(siteSettingsFixture);
   const defaultAppContext = {
-    locale: 'en-UK',
+    locale: "en-UK",
     onRefreshLocaleRequested: jest.fn(),
     userSettings,
     siteSettings,
@@ -36,14 +36,13 @@ export function defaultAppContext(appContext = {}) {
       id: userSettings.id,
       username: "user@passbolt.com",
       role: {
-        name: 'admin'
-      }
+        name: "admin",
+      },
     },
     port: new MockPort(),
     setContext: jest.fn(),
     baseUrl: "https://localhost:6006",
-    getApiClientOptions: () => new ApiClientOptions()
-      .setBaseUrl("https://localhost:6006")
+    getApiClientOptions: () => new ApiClientOptions().setBaseUrl("https://localhost:6006"),
   };
   return Object.assign(defaultAppContext, appContext);
 }

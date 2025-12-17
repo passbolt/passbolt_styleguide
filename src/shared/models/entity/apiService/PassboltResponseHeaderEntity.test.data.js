@@ -12,7 +12,7 @@
  * @since         4.12.0
  */
 
-import {defaultPassboltResponsePaginationHeaderDto} from "./PassboltResponsePaginationHeaderEntity.test.data";
+import { defaultPassboltResponsePaginationHeaderDto } from "./PassboltResponsePaginationHeaderEntity.test.data";
 
 export const defaultPassboltResponseHeaderDto = (data = {}) => ({
   ...data,

@@ -13,53 +13,54 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import DisplayResourceFolderDetailsActivity from "./DisplayResourceFolderDetailsActivity";
-import {defaultFolderDto} from "../../../../shared/models/entity/folder/folderEntity.test.data";
+import { defaultFolderDto } from "../../../../shared/models/entity/folder/folderEntity.test.data";
 
 export default {
-  title: 'Components/ResourceFolderDetails/DisplayResourceFolderDetailsActivity',
-  component: DisplayResourceFolderDetailsActivity
+  title: "Components/ResourceFolderDetails/DisplayResourceFolderDetailsActivity",
+  component: DisplayResourceFolderDetailsActivity,
 };
 
 const context = {
   siteSettings: {
-    getServerTimezone: () => new Date().toDateString()
+    getServerTimezone: () => new Date().toDateString(),
   },
   userSettings: new UserSettings(userSettingsFixture),
   port: {
     request: () => [
       {
-        "action_log_id": "6aada140-fe8b-5e69-a90f-ae0cec6d3dcf",
-        "type": "Folders.created",
-        "creator": {
-          "profile": {
-            "first_name": "Ada",
-            "last_name": "Lovelace"
-          }
-        }
-      }
-    ]
-  }
+        action_log_id: "6aada140-fe8b-5e69-a90f-ae0cec6d3dcf",
+        type: "Folders.created",
+        creator: {
+          profile: {
+            first_name: "Ada",
+            last_name: "Lovelace",
+          },
+        },
+      },
+    ],
+  },
 };
 
-const Template = args =>
+const Template = (args) => (
   <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
+    <MemoryRouter initialEntries={["/"]}>
       <div className="panel aside">
-        <Route component={routerProps => <DisplayResourceFolderDetailsActivity {...args} {...routerProps}/>}></Route>
+        <Route component={(routerProps) => <DisplayResourceFolderDetailsActivity {...args} {...routerProps} />}></Route>
       </div>
     </MemoryRouter>
-  </AppContext.Provider>;
+  </AppContext.Provider>
+);
 
 export const Initial = Template.bind({});
 Initial.args = {
   resourceWorkspaceContext: {
     details: {
       folder: defaultFolderDto(),
-    }
-  }
+    },
+  },
 };

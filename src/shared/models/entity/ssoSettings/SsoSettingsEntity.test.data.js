@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.5.0
  */
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from "uuid";
 import AzureSsoSettingsEntity from "./AzureSsoSettingsEntity";
 import GoogleSsoSettingsEntity from "./GoogleSsoSettingsEntity";
 import OAuth2SsoSettingsEntity from "./OAuth2SsoSettingsEntity";
 import SsoSettingsEntity from "./SsoSettingsEntity";
-import AdfsSsoSettingsEntity from './AdfsSsoSettingsEntity';
+import AdfsSsoSettingsEntity from "./AdfsSsoSettingsEntity";
 
 export function defaultSsoSettings(data = {}) {
   const defaultData = {

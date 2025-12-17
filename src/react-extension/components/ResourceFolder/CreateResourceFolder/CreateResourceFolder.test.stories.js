@@ -15,30 +15,31 @@
 import React from "react";
 import MockPort from "../../../test/mock/MockPort";
 import CreateResourceFolder from "./CreateResourceFolder";
-import {MemoryRouter} from "react-router-dom";
-
+import { MemoryRouter } from "react-router-dom";
 
 export default {
-  title: 'Components/ResourceFolder/CreateResourceFolder',
+  title: "Components/ResourceFolder/CreateResourceFolder",
   component: CreateResourceFolder,
-  decorators: [Story => (
-    <MemoryRouter initialEntries={["/"]}>
-      <Story/>
-    </MemoryRouter>
-  )]
+  decorators: [
+    (Story) => (
+      <MemoryRouter initialEntries={["/"]}>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
 };
 
 const mockedPort = new MockPort();
-mockedPort.addRequestListener("passbolt.folders.create", data => data);
+mockedPort.addRequestListener("passbolt.folders.create", (data) => data);
 
 export const Initial = {
   args: {
     onClose: () => {},
     context: {
       folderCreateDialogProps: {
-        folderParentId: "test"
+        folderParentId: "test",
       },
-      port: mockedPort
-    }
-  }
+      port: mockedPort,
+    },
+  },
 };

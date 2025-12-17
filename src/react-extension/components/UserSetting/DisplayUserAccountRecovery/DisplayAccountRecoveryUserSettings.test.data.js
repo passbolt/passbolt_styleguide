@@ -12,10 +12,10 @@
  * @since         3.6.0
  */
 
-import {users} from "../../../../shared/models/entity/user/userEntity.test.data";
-import {defaultAccountRecoveryUserContext} from "../../../contexts/AccountRecoveryUserContext.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultRoleContext} from "../../../contexts/RoleContext.test.data";
+import { users } from "../../../../shared/models/entity/user/userEntity.test.data";
+import { defaultAccountRecoveryUserContext } from "../../../contexts/AccountRecoveryUserContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultRoleContext } from "../../../contexts/RoleContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -29,7 +29,7 @@ export function defaultProps(data = {}) {
   return {
     context: defaultAppContext(data?.context),
     dialogContext: {
-      open: jest.fn()
+      open: jest.fn(),
     },
     ...data,
     roleContext: roleContext,
@@ -46,22 +46,22 @@ export function defaultProps(data = {}) {
   };
 }
 
-export const defaultAccountRecoveryPolicyDto = data => ({
+export const defaultAccountRecoveryPolicyDto = (data) => ({
   policy: {
-    policy: "opt-out"
+    policy: "opt-out",
   },
   creator: {
     ...users.ada,
     gpgkey: {
-      fingerprint: "848E95CC7493129AD862583129B81CA8936023DD"
+      fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
     },
   },
   modified: "2022-01-13T15:27:26.301Z",
-  ...data
+  ...data,
 });
 
 export function getAccountRecoveryUserService(mockedData) {
   return {
-    getOrganizationAccountRecoverySettings: async() => mockedData
+    getOrganizationAccountRecoverySettings: async () => mockedData,
   };
 }

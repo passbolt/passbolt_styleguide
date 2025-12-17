@@ -17,12 +17,12 @@
  */
 import "../../../../test/mocks/mockClipboard";
 import "../../../react-extension/test/lib/crypto/cryptoGetRandomvalues";
-import {defaultProps, withLastGeneratedPasswordProps} from "./GeneratePasswordPage.test.data";
+import { defaultProps, withLastGeneratedPasswordProps } from "./GeneratePasswordPage.test.data";
 import GeneratePasswordTestPage from "./GeneratePasswordPage.test.page";
-import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
-import {waitForTrue} from "../../../../test/utils/waitFor";
-import {configuredPasswordPoliciesDto} from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
-import {defaultPrepareResourceContext} from "../../contexts/PrepareResourceContext.test.data";
+import { SecretGenerator } from "../../../shared/lib/SecretGenerator/SecretGenerator";
+import { waitForTrue } from "../../../../test/utils/waitFor";
+import { configuredPasswordPoliciesDto } from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
+import { defaultPrepareResourceContext } from "../../contexts/PrepareResourceContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -39,22 +39,24 @@ describe("Generate password", () => {
     page = new GeneratePasswordTestPage(props);
   });
 
-  describe('As LU I should generate a password', () => {
-    it('As LU I should apply a generated password', async() => {
+  describe("As LU I should generate a password", () => {
+    it("As LU I should apply a generated password", async () => {
       expect.assertions(3);
-      jest.spyOn(SecretGenerator, "generate").mockImplementation(() => props.prepareResourceContext.lastGeneratedPassword);
+      jest
+        .spyOn(SecretGenerator, "generate")
+        .mockImplementation(() => props.prepareResourceContext.lastGeneratedPassword);
 
       const props = withLastGeneratedPasswordProps(); // The props to pass
       const page = new GeneratePasswordTestPage(props);
       jest.runAllTimers();
 
-      expect(page.title).toBe('Generate password');
-      expect(page.complexityText).toBe('Fair Entropy: 111.4 bits');
+      expect(page.title).toBe("Generate password");
+      expect(page.complexityText).toBe("Fair Entropy: 111.4 bits");
       await page.applyGeneratePassword();
       expect(props.history.goBack).toHaveBeenCalledTimes(1);
     });
 
-    it('As LU I should generate a new password', async() => {
+    it("As LU I should generate a new password", async () => {
       expect.assertions(1);
       const password = page.password;
       await page.generatePassword();
@@ -62,7 +64,7 @@ describe("Generate password", () => {
       expect(password === page.password).toBeTruthy();
     });
 
-    it('As LU I should copy a password', async() => {
+    it("As LU I should copy a password", async () => {
       expect.assertions(1);
       const props = withLastGeneratedPasswordProps(); // The props to pass
       const page = new GeneratePasswordTestPage(props);
@@ -71,13 +73,14 @@ describe("Generate password", () => {
 
       await page.copyPassword();
 
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy-temporarily', page.password);
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy-temporarily", page.password);
     });
 
-    it('As LU I can change the password generator configuration', async() => {
+    it("As LU I can change the password generator configuration", async () => {
       expect.assertions(4);
 
-      const currentExcludeLookAlikeCharsState = props.passwordPoliciesContext.policies.password_generator_settings.exclude_look_alike_chars;
+      const currentExcludeLookAlikeCharsState =
+        props.passwordPoliciesContext.policies.password_generator_settings.exclude_look_alike_chars;
       const expectedPasswordGeneratorSettings = {
         length: 10,
         mask_upper: false,
@@ -93,21 +96,22 @@ describe("Generate password", () => {
       });
       await page.clickOnExcludeLookAlikeChars();
 
-      expect(page.maskUpper.classList.contains('selected')).toStrictEqual(expectedPasswordGeneratorSettings.mask_upper);
-      expect(page.maskEmoji.classList.contains('selected')).toStrictEqual(expectedPasswordGeneratorSettings.mask_emoji);
+      expect(page.maskUpper.classList.contains("selected")).toStrictEqual(expectedPasswordGeneratorSettings.mask_upper);
+      expect(page.maskEmoji.classList.contains("selected")).toStrictEqual(expectedPasswordGeneratorSettings.mask_emoji);
       expect(page.passwordLengthInput.value).toStrictEqual(expectedPasswordGeneratorSettings.length.toString());
       expect(page.excludeLookAlikeChars.checked).not.toBe(currentExcludeLookAlikeCharsState);
     });
 
-    it('As LU I can change the password generator configuration', async() => {
+    it("As LU I can change the password generator configuration", async () => {
       expect.assertions(3);
 
       const props = defaultProps({
         prepareResourceContext: defaultPrepareResourceContext({
-          getSettings: () => configuredPasswordPoliciesDto({
-            default_generator: "passphrase",
-          }),
-        })
+          getSettings: () =>
+            configuredPasswordPoliciesDto({
+              default_generator: "passphrase",
+            }),
+        }),
       });
 
       const page = new GeneratePasswordTestPage(props);
@@ -125,22 +129,26 @@ describe("Generate password", () => {
       await page.setWordSeparator(expectedPassphraseGeneratorSettings.words_separator);
       await page.setWordCase(expectedPassphraseGeneratorSettings.word_case);
 
-      expect(page.passphraseWordsSeparatorInput.value).toStrictEqual(expectedPassphraseGeneratorSettings.words_separator);
-      expect(page.passphraseLengthInput.value).toStrictEqual(expectedPassphraseGeneratorSettings.words_count.toString());
+      expect(page.passphraseWordsSeparatorInput.value).toStrictEqual(
+        expectedPassphraseGeneratorSettings.words_separator,
+      );
+      expect(page.passphraseLengthInput.value).toStrictEqual(
+        expectedPassphraseGeneratorSettings.words_count.toString(),
+      );
       expect(page.wordCaseSelectInput.textContent).toStrictEqual(expectedPassphraseGeneratorSettings.word_case);
     });
   });
 
-  describe('As LU I should choose to use password configuration', () => {
-    it('AS LU I should be able to use password configuration', async() => {
+  describe("As LU I should choose to use password configuration", () => {
+    it("AS LU I should be able to use password configuration", async () => {
       expect.assertions(1);
       await page.usePasswordGenerator();
-      expect(page.activeTab).toBe('password');
+      expect(page.activeTab).toBe("password");
     });
   });
 
-  describe('AS LU I should not perform actions during the apply password', () => {
-    it('AS LU I should not re-submit during the apply password', async() => {
+  describe("AS LU I should not perform actions during the apply password", () => {
+    it("AS LU I should not re-submit during the apply password", async () => {
       expect.assertions(1);
       const inProgressFn = () => {
         expect(page.canSubmit).toBeFalsy();

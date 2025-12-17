@@ -12,31 +12,32 @@
  * @since         3.6.0
  */
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import RequestAccountRecovery from "./RequestAccountRecovery";
-import {defaultProps} from "./RequestAccountRecovery.test.data";
+import { defaultProps } from "./RequestAccountRecovery.test.data";
 
 export default {
-  title: 'Components/Authentication/InitiateRecoverAccount',
-  component: RequestAccountRecovery
+  title: "Components/Authentication/InitiateRecoverAccount",
+  component: RequestAccountRecovery,
 };
 
-const Template = args =>
+const Template = (args) => (
   <MockTranslationProvider>
     <div id="container" className="container page login">
       <div className="content">
         <div className="login-form">
-          <MemoryRouter initialEntries={['/']}>
-            <Route component={routerProps => <RequestAccountRecovery {...args} {...routerProps}/>}/>
+          <MemoryRouter initialEntries={["/"]}>
+            <Route component={(routerProps) => <RequestAccountRecovery {...args} {...routerProps} />} />
           </MemoryRouter>
         </div>
       </div>
     </div>
-  </MockTranslationProvider>;
+  </MockTranslationProvider>
+);
 
 const defaultParameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };
 
 export const Initial = Template.bind({});

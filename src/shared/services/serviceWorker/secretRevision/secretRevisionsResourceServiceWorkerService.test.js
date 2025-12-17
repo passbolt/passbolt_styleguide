@@ -14,13 +14,13 @@
 
 import MockPort from "../../../../react-extension/test/mock/MockPort";
 import ResourceSecretRevisionsCollection from "../../../models/entity/secretRevision/resourceSecretRevisionsCollection";
-import {defaultResourceSecretRevisionsDtos} from "../../../models/entity/secretRevision/resourceSecretRevisionsCollection.test.data";
+import { defaultResourceSecretRevisionsDtos } from "../../../models/entity/secretRevision/resourceSecretRevisionsCollection.test.data";
 import SecretRevisionsResourceServiceWorkerService from "./secretRevisionsResourceServiceWorkerService";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 describe("SecretRevisionsResourceServiceWorkerService", () => {
   describe("::findAllByResourceIdForDisplay", () => {
-    it("should call for the right service worker event and return the right collection", async() => {
+    it("should call for the right service worker event and return the right collection", async () => {
       expect.assertions(4);
 
       const event = "passbolt.secret-revisions.find-all-by-resource-id-for-display";
@@ -40,7 +40,7 @@ describe("SecretRevisionsResourceServiceWorkerService", () => {
       expect(collection.toDto()).toStrictEqual(dto);
     });
 
-    it("should assert its parameters", async() => {
+    it("should assert its parameters", async () => {
       expect.assertions(1);
       const port = new MockPort();
 

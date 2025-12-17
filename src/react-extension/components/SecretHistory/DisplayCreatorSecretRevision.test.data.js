@@ -13,8 +13,8 @@
  */
 
 import SecretRevisionEntity from "../../../shared/models/entity/secretRevision/secretRevisionEntity";
-import {defaultSecretRevisionDto} from "../../../shared/models/entity/secretRevision/secretRevisionEntity.test.data";
-import {defaultAppContext} from "../../contexts/ExtAppContext.test.data";
+import { defaultSecretRevisionDto } from "../../../shared/models/entity/secretRevision/secretRevisionEntity.test.data";
+import { defaultAppContext } from "../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props
@@ -23,7 +23,7 @@ import {defaultAppContext} from "../../contexts/ExtAppContext.test.data";
 export function defaultProps(data = {}) {
   const defaultData = {
     context: defaultAppContext(),
-    secretRevision: new SecretRevisionEntity(defaultSecretRevisionDto({}, {withCreator: true})),
+    secretRevision: new SecretRevisionEntity(defaultSecretRevisionDto({}, { withCreator: true })),
     disabled: false,
     onSelectSecretRevision: jest.fn(),
   };

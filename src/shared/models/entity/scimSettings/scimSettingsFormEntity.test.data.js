@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.5.0
  */
-import {defaultScimSettingsDto} from './scimSettingsEntity.test.data';
-import {v4 as uuidv4} from "uuid";
+import { defaultScimSettingsDto } from "./scimSettingsEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
 
 export const defaultScimSettingsFormDto = (data = {}) => {
   const defaultData = defaultScimSettingsDto(data);

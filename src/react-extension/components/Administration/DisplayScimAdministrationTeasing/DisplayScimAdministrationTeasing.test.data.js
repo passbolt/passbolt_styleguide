@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.5.0
  */
-import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultAdministratorAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props.
@@ -21,7 +21,7 @@ import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.te
 export function defaultProps(props = {}) {
   return {
     context: defaultAdministratorAppContext({}, true),
-    t: text => text,
-    ...props
+    t: (text) => text,
+    ...props,
   };
 }

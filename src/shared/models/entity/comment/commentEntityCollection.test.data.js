@@ -11,16 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.9.3
  */
-import {defaultUserDto, users} from "../user/userEntity.test.data";
-import {defaultCommentDto} from "./commentEntity.test.data";
-import {v4 as uuidv4} from "uuid";
+import { defaultUserDto, users } from "../user/userEntity.test.data";
+import { defaultCommentDto } from "./commentEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Build default comment collection dto.
  * @param {object} data The data to override the default dto.
  * @returns {object}
  */
-export const defaultCommentCollectionDto = (data = {}) => ([
+export const defaultCommentCollectionDto = (data = {}) => [
   //First row can be customized
   defaultCommentDto(data, {
     withCreator: true,
@@ -28,30 +28,39 @@ export const defaultCommentCollectionDto = (data = {}) => ([
   }),
 
   //Creator Carol Shaw
-  defaultCommentDto({
-    creator: defaultUserDto(users[1]),
-  }, {
-    withCreator: true,
-    withModifier: true,
-  }),
+  defaultCommentDto(
+    {
+      creator: defaultUserDto(users[1]),
+    },
+    {
+      withCreator: true,
+      withModifier: true,
+    },
+  ),
 
   //Betty Holberton Shaw
-  defaultCommentDto({
-    creator: defaultUserDto(users[2]),
-  }, {
-    withCreator: true,
-    withModifier: true,
-  }),
+  defaultCommentDto(
+    {
+      creator: defaultUserDto(users[2]),
+    },
+    {
+      withCreator: true,
+      withModifier: true,
+    },
+  ),
 
   //Not owned
-  defaultCommentDto({
-    creator: users[0],
-    created_by: uuidv4()
-  }, {
-    withCreator: true,
-    withModifier: true,
-  })
-]);
+  defaultCommentDto(
+    {
+      creator: users[0],
+      created_by: uuidv4(),
+    },
+    {
+      withCreator: true,
+      withModifier: true,
+    },
+  ),
+];
 
 /**
  * Build comments dtos.
@@ -64,7 +73,7 @@ export const defaultCommentCollectionDto = (data = {}) => ([
 export const buildDefineNumberOfCommentsDtos = (commentsCount = 10, options = {}) => {
   const dtos = [];
   for (let i = 0; i < commentsCount; i++) {
-    const dto = defaultCommentDto({content: `comment${i}`}, options);
+    const dto = defaultCommentDto({ content: `comment${i}` }, options);
     dtos.push(dto);
   }
   return dtos;

@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import React from "react";
 import DownloadOrganizationKey from "./DownloadOrganizationKey";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
@@ -20,29 +20,34 @@ import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 
 export default {
-  title: 'Components/Administration/DownloadOrganizationKey',
-  component: DownloadOrganizationKey
+  title: "Components/Administration/DownloadOrganizationKey",
+  component: DownloadOrganizationKey,
 };
 
 const context = {
   userSettings: new UserSettings(userSettingsFixture),
 };
 
-const Template = args =>
+const Template = (args) => (
   <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
+    <MemoryRouter initialEntries={["/"]}>
       <div className="panel main">
         <div className="panel middle">
           <div className="grid grid-responsive-12">
-            <Route component={routerProps => <DownloadOrganizationKey {...args} {...routerProps} />}></Route>
+            <Route component={(routerProps) => <DownloadOrganizationKey {...args} {...routerProps} />}></Route>
           </div>
         </div>
       </div>
     </MemoryRouter>
-  </AppContext.Provider>;
+  </AppContext.Provider>
+);
 
 export const Default = Template.bind({});
 Default.args = {
-  onClose: () => { console.log("onClose call"); },
-  handleDownloadAgain: () => { console.log("handleDownloadAgain call"); }
+  onClose: () => {
+    console.log("onClose call");
+  },
+  handleDownloadAgain: () => {
+    console.log("handleDownloadAgain call");
+  },
 };

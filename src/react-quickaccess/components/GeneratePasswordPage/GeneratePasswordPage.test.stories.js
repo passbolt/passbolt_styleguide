@@ -12,23 +12,28 @@
  * @since         3.2.0
  */
 
-import {MemoryRouter} from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import React from "react";
 import GeneratePasswordPage from "./GeneratePasswordPage";
-import {defaultPrepareResourceContext} from "../../contexts/PrepareResourceContext.test.data";
+import { defaultPrepareResourceContext } from "../../contexts/PrepareResourceContext.test.data";
 import AppContext from "../../../shared/context/AppContext/AppContext";
-import {defaultAppContext} from "../../contexts/AppContext.test.data";
+import { defaultAppContext } from "../../contexts/AppContext.test.data";
 
 export default {
-  title: 'Components/QuickAccess/GeneratePasswordPage',
+  title: "Components/QuickAccess/GeneratePasswordPage",
   component: GeneratePasswordPage,
   decorators: [
-    (Story, {args}) =>
+    (Story, { args }) => (
       <AppContext.Provider value={args.context}>
-        <MemoryRouter initialEntries={['/']}>
-          <div className="container quickaccess"> <Story {...args}/></div>
-        </MemoryRouter>;
+        <MemoryRouter initialEntries={["/"]}>
+          <div className="container quickaccess">
+            {" "}
+            <Story {...args} />
+          </div>
+        </MemoryRouter>
+        ;
       </AppContext.Provider>
+    ),
   ],
 };
 
@@ -37,9 +42,9 @@ export const Initial = {
     prepareResourceContext: defaultPrepareResourceContext(),
     context: defaultAppContext(),
     onClose: () => {},
-    t: text => text
+    t: (text) => text,
   },
   parameters: {
-    css: "ext_quickaccess"
-  }
+    css: "ext_quickaccess",
+  },
 };

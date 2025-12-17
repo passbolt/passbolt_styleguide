@@ -12,11 +12,11 @@
  * @since         5.4.0
  */
 
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {defaultAdministrationEncryptedMetadataGettingStartedContext} from "../../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext.test.data";
-import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
-import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultAdministrationEncryptedMetadataGettingStartedContext } from "../../../contexts/Administration/AdministrationEncryptedMetadataGettingStartedContext/AdministrationEncryptedMetadataGettingStartedContext.test.data";
+import { AdministrationWorkspaceMenuTypes } from "../../../contexts/AdministrationWorkspaceContext";
+import { defaultAdministrationWorkspaceContext } from "../../../contexts/AdministrationWorkspaceContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props.
@@ -27,16 +27,16 @@ export function defaultProps(data = {}) {
   const defaultData = {
     context: defaultAppContext(),
     administrationEncryptedMetadataGettingStartedContext: defaultAdministrationEncryptedMetadataGettingStartedContext(),
-    metadataGettingStartedSettings: {enabled: true},
+    metadataGettingStartedSettings: { enabled: true },
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext({
-      selectedAdministration:  AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED
+      selectedAdministration: AdministrationWorkspaceMenuTypes.METADATA_GETTING_STARTED,
     }),
     actionFeedbackContext: defaultActionFeedbackContext(),
     history: {
       push: jest.fn(),
     },
     createPortal: jest.fn,
-    t: text => text,
+    t: (text) => text,
   };
   defaultData.context.siteSettings.canIUse = () => true;
   return Object.assign(defaultData, data);
@@ -51,6 +51,6 @@ export function defaultDisabledProps(data = {}) {
   return defaultProps({
     ...data,
     administrationEncryptedMetadataGettingStartedContext: defaultAdministrationEncryptedMetadataGettingStartedContext(),
-    metadataGettingStartedSettings: {enabled: false},
+    metadataGettingStartedSettings: { enabled: false },
   });
 }

@@ -17,8 +17,9 @@
  */
 
 import {
-  domElementWithExtensionSignIn, domElementWithNoExtensionSignIn,
-  initializeWindow
+  domElementWithExtensionSignIn,
+  domElementWithNoExtensionSignIn,
+  initializeWindow,
 } from "./SignInManager.test.data";
 import SignInManagerPage from "./SignInManager.test.page";
 import SignInManager from "./SignInManager";
@@ -31,13 +32,13 @@ describe("SignInManager", () => {
   // Mock port in window
   initializeWindow();
   // Spy on port request
-  jest.spyOn(port, 'request').mockImplementation(() => "");
+  jest.spyOn(port, "request").mockImplementation(() => "");
 
   afterEach(() => {
     SignInManager.destroy();
   });
 
-  it("As AN I should not be redirected if I click on other button", async() => {
+  it("As AN I should not be redirected if I click on other button", async () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementWithNoExtensionSignIn; // The Dom
@@ -46,7 +47,7 @@ describe("SignInManager", () => {
     expect(port.request).not.toHaveBeenCalled();
   });
 
-  it("As AN I should be redirected if I click on sign in", async() => {
+  it("As AN I should be redirected if I click on sign in", async () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementWithExtensionSignIn; // The Dom
@@ -56,4 +57,3 @@ describe("SignInManager", () => {
     expect(port.request).toHaveBeenCalledWith("passbolt.extension.sign-in-url");
   });
 });
-

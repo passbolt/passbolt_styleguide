@@ -12,10 +12,10 @@
  * @since         2.11.0
  */
 
-import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContext.test.data";
-import {defaultNavigationContext} from "../../../contexts/NavigationContext.test.data";
+import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultUserWorkspaceContext } from "../../../contexts/UserWorkspaceContext.test.data";
+import { defaultNavigationContext } from "../../../contexts/NavigationContext.test.data";
 
 /**
  * Props with user details
@@ -25,8 +25,8 @@ export function propsWithUserDetails() {
     context: defaultAppContext(),
     userWorkspaceContext: defaultUserWorkspaceContext({
       details: {
-        user: 'some user',
-        locked: true
+        user: "some user",
+        locked: true,
       },
       isAccessAllowed: () => true,
     }),
@@ -43,8 +43,8 @@ export function propsWithSelecteUser() {
     context: defaultAppContext(),
     userWorkspaceContext: defaultUserWorkspaceContext({
       details: {
-        user: 'some user',
-        locked: true
+        user: "some user",
+        locked: true,
       },
       selectedUsers: [user],
       filteredUsers: [user],
@@ -62,14 +62,13 @@ export function propsWithGroupDetails() {
     context: defaultAppContext(),
     userWorkspaceContext: defaultUserWorkspaceContext({
       details: {
-        group: 'some group',
-        locked: true
+        group: "some group",
+        locked: true,
       },
       isAccessAllowed: () => true,
-    })
+    }),
   };
 }
-
 
 /**
  * Props with user details locked to false
@@ -79,10 +78,9 @@ export function propsWithoutLock() {
     context: defaultAppContext(),
     userWorkspaceContext: defaultUserWorkspaceContext({
       details: {
-        locked: false
+        locked: false,
       },
       isAccessAllowed: () => true,
-    })
+    }),
   };
 }
-

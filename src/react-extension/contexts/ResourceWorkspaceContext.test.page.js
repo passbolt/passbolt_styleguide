@@ -11,18 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {render, waitFor} from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import React from "react";
 import ResourceWorkspaceContextProvider, {
   ResourceWorkspaceContext,
-  ResourceWorkspaceFilterTypes
+  ResourceWorkspaceFilterTypes,
 } from "./ResourceWorkspaceContext";
 import AppContext from "../../shared/context/AppContext/AppContext";
-import {Router, NavLink, Route, Switch} from "react-router-dom";
-import {createMemoryHistory} from "history";
-import {waitForTrue} from "../../../test/utils/waitFor";
+import { Router, NavLink, Route, Switch } from "react-router-dom";
+import { createMemoryHistory } from "history";
+import { waitForTrue } from "../../../test/utils/waitFor";
 import userEvent from "@testing-library/user-event";
-
 
 /**
  * The ResourceWorkspaceContextPage component represented as a page
@@ -39,7 +38,6 @@ export default class ResourceWorkspaceContextPage {
     this.setup(context, props);
     this.user = userEvent.setup();
   }
-
 
   /**
    * Returns the contextual filter
@@ -113,42 +111,42 @@ export default class ResourceWorkspaceContextPage {
    */
   async goToAllItems() {
     this.setup(this.context, this.props);
-    await this.goToLink('.all');
+    await this.goToLink(".all");
   }
 
   /**
    * Go to the Recently Modified search filter route
    */
   async goToRecentlyModified() {
-    await this.goToLink('.recently-modified');
+    await this.goToLink(".recently-modified");
   }
 
   /**
    * Go to the Shared With Me search filter route
    */
   async goToShareWithMe() {
-    await this.goToLink('.shared-with-me');
+    await this.goToLink(".shared-with-me");
   }
 
   /**
    * Go to the Items I own Me search filter route
    */
   async goToItemsIOwn() {
-    await this.goToLink('.items-i-own');
+    await this.goToLink(".items-i-own");
   }
 
   /**
    * Go to the Private search filter route
    */
   async goToPrivate() {
-    await this.goToLink('.private');
+    await this.goToLink(".private");
   }
 
   /**
    * Go to the Favorite search filter route
    */
   async goToFavorite() {
-    await this.goToLink('.favorite');
+    await this.goToLink(".favorite");
   }
 
   /**
@@ -156,8 +154,8 @@ export default class ResourceWorkspaceContextPage {
    * @param text A specific text search filter
    */
   async goToText(text) {
-    this.setup(this.context, this.props, {text});
-    await this.goToLink('.text');
+    this.setup(this.context, this.props, { text });
+    await this.goToLink(".text");
   }
 
   /**
@@ -165,8 +163,8 @@ export default class ResourceWorkspaceContextPage {
    * @param group A specific group search filter
    */
   async goToGroup(group) {
-    this.setup(this.context, this.props, {group});
-    await this.goToLink('.group');
+    this.setup(this.context, this.props, { group });
+    await this.goToLink(".group");
   }
 
   /**
@@ -174,8 +172,8 @@ export default class ResourceWorkspaceContextPage {
    * @param tag A specific tag search filter
    */
   async goToTag(tag) {
-    this.setup(this.context, this.props, {tag});
-    await this.goToLink('.tag');
+    this.setup(this.context, this.props, { tag });
+    await this.goToLink(".tag");
   }
 
   /**
@@ -183,8 +181,8 @@ export default class ResourceWorkspaceContextPage {
    * @param folder A specific folder search filter
    */
   async goToFolder(folder) {
-    this.setup(this.context, this.props, {folder});
-    await this.goToLink('.folder');
+    this.setup(this.context, this.props, { folder });
+    await this.goToLink(".folder");
   }
 
   /**
@@ -192,7 +190,7 @@ export default class ResourceWorkspaceContextPage {
    */
   async goToRootFolder() {
     this.setup(this.context, this.props);
-    await this.goToLink('.root-folder');
+    await this.goToLink(".root-folder");
   }
 
   /**
@@ -200,7 +198,7 @@ export default class ResourceWorkspaceContextPage {
    */
   async goToExpired() {
     this.setup(this.context, this.props);
-    await this.goToLink('.expired');
+    await this.goToLink(".expired");
   }
 
   /**
@@ -303,82 +301,117 @@ export default class ResourceWorkspaceContextPage {
   setup(context, props, args = {}) {
     this._page = render(
       <AppContext.Provider value={context}>
-        <Router history={createMemoryHistory({initialEntries: [
-          "/app/folders/view/:filterByFolderId",
-          "/app/passwords/view/:selectedResourceId",
-          "/app/passwords/filter/:filterType",
-          "/app/passwords",
-        ]})}>
-          <Switch>
-            <Route path={[
+        <Router
+          history={createMemoryHistory({
+            initialEntries: [
               "/app/folders/view/:filterByFolderId",
               "/app/passwords/view/:selectedResourceId",
               "/app/passwords/filter/:filterType",
               "/app/passwords",
-            ]}>
+            ],
+          })}
+        >
+          <Switch>
+            <Route
+              path={[
+                "/app/folders/view/:filterByFolderId",
+                "/app/passwords/view/:selectedResourceId",
+                "/app/passwords/filter/:filterType",
+                "/app/passwords",
+              ]}
+            >
               <ResourceWorkspaceContextProvider {...props}>
                 <ResourceWorkspaceContext.Consumer>
-                  {
-                    ResourceWorkspaceContext => {
-                      this.resourceWorkspaceContext = ResourceWorkspaceContext;
-                      return (<></>);
-                    }
-                  }
+                  {(ResourceWorkspaceContext) => {
+                    this.resourceWorkspaceContext = ResourceWorkspaceContext;
+                    return <></>;
+                  }}
                 </ResourceWorkspaceContext.Consumer>
               </ResourceWorkspaceContextProvider>
             </Route>
           </Switch>
-          <NavLink
-            to="/app/passwords">
+          <NavLink to="/app/passwords">
             <a className="all"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/passwords", state: {filter: {type: ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED}}}}>
+            to={{
+              pathname: "/app/passwords",
+              state: { filter: { type: ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED } },
+            }}
+          >
             <a className="recently-modified"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/passwords", state: {filter: {type: ResourceWorkspaceFilterTypes.SHARED_WITH_ME}}}}>
+            to={{
+              pathname: "/app/passwords",
+              state: { filter: { type: ResourceWorkspaceFilterTypes.SHARED_WITH_ME } },
+            }}
+          >
             <a className="shared-with-me"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/passwords/filter/expired", state: {filter: {type: ResourceWorkspaceFilterTypes.EXPIRED}}}}>
+            to={{
+              pathname: "/app/passwords/filter/expired",
+              state: { filter: { type: ResourceWorkspaceFilterTypes.EXPIRED } },
+            }}
+          >
             <a className="expired"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/passwords", state: {filter: {type: ResourceWorkspaceFilterTypes.ITEMS_I_OWN}}}}>
+            to={{ pathname: "/app/passwords", state: { filter: { type: ResourceWorkspaceFilterTypes.ITEMS_I_OWN } } }}
+          >
             <a className="items-i-own"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/passwords", state: {filter: {type: ResourceWorkspaceFilterTypes.PRIVATE}}}}>
+            to={{ pathname: "/app/passwords", state: { filter: { type: ResourceWorkspaceFilterTypes.PRIVATE } } }}
+          >
             <a className="private"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/passwords", state: {filter: {type: ResourceWorkspaceFilterTypes.FAVORITE}}}}>
+            to={{ pathname: "/app/passwords", state: { filter: { type: ResourceWorkspaceFilterTypes.FAVORITE } } }}
+          >
             <a className="favorite"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/passwords", state: {filter: {type: ResourceWorkspaceFilterTypes.TEXT, payload: args.text}}}}>
+            to={{
+              pathname: "/app/passwords",
+              state: { filter: { type: ResourceWorkspaceFilterTypes.TEXT, payload: args.text } },
+            }}
+          >
             <a className="text"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/passwords", state: {filter: {type: ResourceWorkspaceFilterTypes.TAG, payload: args.tag}}}}>
+            to={{
+              pathname: "/app/passwords",
+              state: { filter: { type: ResourceWorkspaceFilterTypes.TAG, payload: args.tag } },
+            }}
+          >
             <a className="tag"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/passwords", state: {filter: {type: ResourceWorkspaceFilterTypes.GROUP, payload: args.group}}}}>
+            to={{
+              pathname: "/app/passwords",
+              state: { filter: { type: ResourceWorkspaceFilterTypes.GROUP, payload: args.group } },
+            }}
+          >
             <a className="group"></a>
           </NavLink>
           <NavLink
-            to={{pathname: `/app/folders/view/${(args.folder ? args.folder.id : "")}`, state: {filter: {type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder: args.folder}}}}}>
+            to={{
+              pathname: `/app/folders/view/${args.folder ? args.folder.id : ""}`,
+              state: { filter: { type: ResourceWorkspaceFilterTypes.FOLDER, payload: { folder: args.folder } } },
+            }}
+          >
             <a className="folder"></a>
           </NavLink>
           <NavLink
-            to={{pathname: "/app/passwords", state: {filter: {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER}}}}>
+            to={{ pathname: "/app/passwords", state: { filter: { type: ResourceWorkspaceFilterTypes.ROOT_FOLDER } } }}
+          >
             <a className="root-folder"></a>
           </NavLink>
         </Router>
       </AppContext.Provider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 }

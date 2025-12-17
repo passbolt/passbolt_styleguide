@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ApiSuccess from "./ApiSuccess";
 
@@ -28,9 +28,9 @@ export default class ApiSuccessPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ApiSuccess {...props}/>
+        <ApiSuccess {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -57,6 +57,6 @@ export default class ApiSuccessPage {
    * @return {HTMLElement}
    */
   get message() {
-    return this.select('.api-feedback-card p');
+    return this.select(".api-feedback-card p");
   }
 }

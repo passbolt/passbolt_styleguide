@@ -12,13 +12,11 @@
  * @since         5.7.0
  */
 
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 import mockComponentSetState from "../../../react-extension/test/mock/components/React/mockSetState";
-import {defaultProps} from "./SecretRevisionsSettingsContext.test.data";
-import {SecretRevisionsSettingsContextProvider} from "./SecretRevisionsSettingsContext";
-import {
-  defaultSecretRevisionsSettingsDto
-} from "../../models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
+import { defaultProps } from "./SecretRevisionsSettingsContext.test.data";
+import { SecretRevisionsSettingsContextProvider } from "./SecretRevisionsSettingsContext";
+import { defaultSecretRevisionsSettingsDto } from "../../models/entity/secretRevision/secretRevisionsSettingsEntity.test.data";
 import SecretRevisionsSettingsEntity from "../../models/entity/secretRevision/secretRevisionsSettingsEntity";
 
 beforeEach(() => {
@@ -43,7 +41,7 @@ describe("SecretRevisionsSettingsContext", () => {
   });
 
   describe("::get", () => {
-    it("should return the secret revisions settings when the state have been updated", async() => {
+    it("should return the secret revisions settings when the state have been updated", async () => {
       expect.assertions(2);
 
       const props = defaultProps();
@@ -51,7 +49,10 @@ describe("SecretRevisionsSettingsContext", () => {
       mockComponentSetState(contextProvider);
 
       const expectedSecretRevisionsSettings = defaultSecretRevisionsSettingsDto();
-      props.context.port.addRequestListener("passbolt.secret-revisions.find-settings", async() => expectedSecretRevisionsSettings);
+      props.context.port.addRequestListener(
+        "passbolt.secret-revisions.find-settings",
+        async () => expectedSecretRevisionsSettings,
+      );
 
       contextProvider.get();
       expect(contextProvider.get()).toStrictEqual(null);
@@ -61,11 +62,13 @@ describe("SecretRevisionsSettingsContext", () => {
       expect(contextProvider.get().toDto()).toStrictEqual(expectedSecretRevisionsSettings);
     });
 
-    it("should return null if the state hasn't been initialized yet and set a blocking promise while the init occurs", async() => {
+    it("should return null if the state hasn't been initialized yet and set a blocking promise while the init occurs", async () => {
       expect.assertions(4);
 
       const props = defaultProps();
-      props.context.port.addRequestListener("passbolt.secret-revisions.find-settings", async() => defaultSecretRevisionsSettingsDto());
+      props.context.port.addRequestListener("passbolt.secret-revisions.find-settings", async () =>
+        defaultSecretRevisionsSettingsDto(),
+      );
       const contextProvider = new SecretRevisionsSettingsContextProvider(props);
 
       mockComponentSetState(contextProvider);
@@ -100,7 +103,6 @@ describe("SecretRevisionsSettingsContext", () => {
     it("should throw an error if the secret revisions settings is not valid", () => {
       expect.assertions(2);
 
-
       const contextProvider = new SecretRevisionsSettingsContextProvider(defaultProps());
       mockComponentSetState(contextProvider);
 
@@ -111,13 +113,15 @@ describe("SecretRevisionsSettingsContext", () => {
   });
 
   describe("::updateSettings", () => {
-    it("should call the service worker with the right event to trigger the local storage update.", async() => {
+    it("should call the service worker with the right event to trigger the local storage update.", async () => {
       expect.assertions(2);
 
       const props = defaultProps();
       const contextProvider = new SecretRevisionsSettingsContextProvider(props);
 
-      props.context.port.addRequestListener("passbolt.secret-revisions.find-settings", async() => defaultSecretRevisionsSettingsDto());
+      props.context.port.addRequestListener("passbolt.secret-revisions.find-settings", async () =>
+        defaultSecretRevisionsSettingsDto(),
+      );
 
       const spyOnRequest = jest.spyOn(props.context.port, "request");
 
@@ -129,14 +133,14 @@ describe("SecretRevisionsSettingsContext", () => {
       expect(spyOnRequest).toHaveBeenCalledWith("passbolt.secret-revisions.find-settings");
     });
 
-    it("should not call the service worker twice if a pending promise is running.", async() => {
+    it("should not call the service worker twice if a pending promise is running.", async () => {
       expect.assertions(4);
 
       const props = defaultProps();
       let resolveUpdatePromise;
-      const spyOnRequest = jest.spyOn(props.context.port, "request").mockImplementation(
-        () => new Promise(resolve => resolveUpdatePromise = resolve)
-      );
+      const spyOnRequest = jest
+        .spyOn(props.context.port, "request")
+        .mockImplementation(() => new Promise((resolve) => (resolveUpdatePromise = resolve)));
 
       const contextProvider = new SecretRevisionsSettingsContextProvider(props);
       mockComponentSetState(contextProvider);
@@ -161,11 +165,13 @@ describe("SecretRevisionsSettingsContext", () => {
       await waitFor(() => {});
     });
 
-    it("should call the service worker again if the promise has been resolved.", async() => {
+    it("should call the service worker again if the promise has been resolved.", async () => {
       expect.assertions(5);
 
       const props = defaultProps();
-      props.context.port.addRequestListener("passbolt.secret-revisions.find-settings", async() => defaultSecretRevisionsSettingsDto());
+      props.context.port.addRequestListener("passbolt.secret-revisions.find-settings", async () =>
+        defaultSecretRevisionsSettingsDto(),
+      );
 
       const spyOnRequest = jest.spyOn(props.context.port, "request");
 

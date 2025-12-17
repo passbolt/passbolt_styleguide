@@ -16,8 +16,8 @@
  * Default props
  * @returns {*}
  */
-import {DateTime} from "luxon";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { DateTime } from "luxon";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props.
@@ -48,19 +48,22 @@ export function hasChangedPolicyProps(props = {}) {
     context: defaultAppContext(),
     policy: "mandatory",
     keyInfo: {
-      user_ids: [{
-        name: "ada",
-        email: "ada@passbolt.com"
-      }, {
-        name: "betty",
-        email: "betty@passbolt.com"
-      }],
+      user_ids: [
+        {
+          name: "ada",
+          email: "ada@passbolt.com",
+        },
+        {
+          name: "betty",
+          email: "betty@passbolt.com",
+        },
+      ],
       fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
       algorithm: "RSA",
       length: "4096",
       created: "2020-09-01T13:11:08+00:00",
-      expires: "Infinity"
-    }
+      expires: "Infinity",
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }
@@ -94,8 +97,8 @@ export function mandatoryPolicyPropsWithOrganisationKey(props = {}) {
       algorithm: "RSA",
       length: "4096",
       created: "2020-09-01T13:11:08+00:00",
-      expires: "Infinity"
-    }
+      expires: "Infinity",
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }
@@ -113,8 +116,8 @@ export function optInPolicyPropsWithOrganisationKey(props = {}) {
       algorithm: "RSA",
       length: "4096",
       created: "2020-09-01T13:11:08+00:00",
-      expires: "Infinity"
-    }
+      expires: "Infinity",
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }
@@ -132,8 +135,8 @@ export function optOutPolicyPropsWithOrganisationKey(props = {}) {
       algorithm: "RSA",
       length: "4096",
       created: "2020-09-01T13:11:08+00:00",
-      expires: "Infinity"
-    }
+      expires: "Infinity",
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }

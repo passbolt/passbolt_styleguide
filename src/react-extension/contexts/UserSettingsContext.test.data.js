@@ -8,7 +8,7 @@ export function defaultProps() {
   const props = {
     context: {
       port: new MockPort(),
-    }
+    },
   };
 
   return props;

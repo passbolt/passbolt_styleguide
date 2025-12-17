@@ -12,11 +12,14 @@
  * @since         4.6.0
  */
 
-import {enableFetchMocks} from "jest-fetch-mock";
+import { enableFetchMocks } from "jest-fetch-mock";
 import RbacApiService from "./rbacApiService";
-import {defaultApiClientOptions} from "../../../lib/apiClient/apiClientOptions.test.data";
-import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
-import {defaultSettingsRbacsCollectionData, userSettingsRbacsCollectionData} from "../../../models/entity/rbac/rbacsCollection.test.data";
+import { defaultApiClientOptions } from "../../../lib/apiClient/apiClientOptions.test.data";
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import {
+  defaultSettingsRbacsCollectionData,
+  userSettingsRbacsCollectionData,
+} from "../../../models/entity/rbac/rbacsCollection.test.data";
 import PassboltServiceUnavailableError from "../../../lib/Error/PassboltServiceUnavailableError";
 
 beforeEach(() => {
@@ -24,29 +27,29 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-describe('RbacApiService', () => {
+describe("RbacApiService", () => {
   const apiClientOptions = defaultApiClientOptions();
   const rbacApiService = new RbacApiService(apiClientOptions);
 
-  describe('static methods', () => {
-    it('should return the ressource name', () => {
+  describe("static methods", () => {
+    it("should return the ressource name", () => {
       expect.assertions(1);
 
       expect(RbacApiService.RESOURCE_NAME).toEqual("/rbacs");
     });
 
-    it('should return the supported contain options', () => {
+    it("should return the supported contain options", () => {
       expect.assertions(1);
 
       expect(RbacApiService.getSupportedContainOptions()).toEqual(["action", "ui_action"]);
     });
   });
 
-  describe('::findAll', () => {
-    it('should call the API to retrieve all rbacs', async() => {
+  describe("::findAll", () => {
+    it("should call the API to retrieve all rbacs", async () => {
       expect.assertions(2);
 
-      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("GET");
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
@@ -56,10 +59,10 @@ describe('RbacApiService', () => {
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
-    it('should call the API to retrieve all rbacs with contain options <action>', async() => {
+    it("should call the API to retrieve all rbacs with contain options <action>", async () => {
       expect.assertions(3);
 
-      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("GET");
         expect(req.url.endsWith("contain%5Baction%5D=1")).toBeTruthy();
         return mockApiResponse(defaultSettingsRbacsCollectionData);
@@ -72,10 +75,10 @@ describe('RbacApiService', () => {
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
-    it('should call the API to retrieve all rbacs with contain options <ui_action>', async() => {
+    it("should call the API to retrieve all rbacs with contain options <ui_action>", async () => {
       expect.assertions(3);
 
-      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("GET");
         expect(req.url.endsWith("contain%5Bui_action%5D=1")).toBeTruthy();
         return mockApiResponse(defaultSettingsRbacsCollectionData);
@@ -88,36 +91,35 @@ describe('RbacApiService', () => {
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
-    it('should call the API to retrieve all rbacs with without contain options if it is unsupported', async() => {
+    it("should call the API to retrieve all rbacs with without contain options if it is unsupported", async () => {
       expect.assertions(3);
 
-      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("GET");
         expect(req.url.includes("contain")).toBeFalsy();
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacApiService.findAll({unsupported: true});
+      const result = await rbacApiService.findAll({ unsupported: true });
 
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
-
-    it('should raise an error in case an API error occured', async() => {
+    it("should raise an error in case an API error occured", async () => {
       expect.assertions(1);
 
-      const error = {message: "The service is unavailable"};
+      const error = { message: "The service is unavailable" };
       fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, () => Promise.reject(error));
 
-      expect(async() => await rbacApiService.findAll()).rejects.toThrowError(PassboltServiceUnavailableError);
+      expect(async () => await rbacApiService.findAll()).rejects.toThrowError(PassboltServiceUnavailableError);
     });
   });
 
-  describe('::updateAll', () => {
-    it('should call the API to update all rbacs', async() => {
+  describe("::updateAll", () => {
+    it("should call the API to update all rbacs", async () => {
       expect.assertions(2);
 
-      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("PUT");
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
@@ -127,10 +129,10 @@ describe('RbacApiService', () => {
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
-    it('should call the API to uptade all rbacs with contain options <action>', async() => {
+    it("should call the API to uptade all rbacs with contain options <action>", async () => {
       expect.assertions(3);
 
-      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("PUT");
         expect(req.url.endsWith("contain%5Baction%5D=1")).toBeTruthy();
         return mockApiResponse(defaultSettingsRbacsCollectionData);
@@ -143,10 +145,10 @@ describe('RbacApiService', () => {
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
-    it('should call the API to uptade all rbacs with contain options <ui_action>', async() => {
+    it("should call the API to uptade all rbacs with contain options <ui_action>", async () => {
       expect.assertions(3);
 
-      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("PUT");
         expect(req.url.endsWith("contain%5Bui_action%5D=1")).toBeTruthy();
         return mockApiResponse(defaultSettingsRbacsCollectionData);
@@ -159,36 +161,35 @@ describe('RbacApiService', () => {
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
-    it('should not call the API to update all rbacs with without contain options if it is unsupported', async() => {
+    it("should not call the API to update all rbacs with without contain options if it is unsupported", async () => {
       expect.assertions(3);
 
-      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("PUT");
         expect(req.url.includes("contain")).toBeFalsy();
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacApiService.updateAll({unsupported: true});
+      const result = await rbacApiService.updateAll({ unsupported: true });
 
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
-
-    it('should raise an error in case an API error occured', async() => {
+    it("should raise an error in case an API error occured", async () => {
       expect.assertions(1);
 
-      const error = {message: "The service is unavailable"};
+      const error = { message: "The service is unavailable" };
       fetch.doMockOnceIf(/rbacs\.json\?api-version=v2/, () => Promise.reject(error));
 
-      expect(async() => await rbacApiService.updateAll()).rejects.toThrowError(PassboltServiceUnavailableError);
+      expect(async () => await rbacApiService.updateAll()).rejects.toThrowError(PassboltServiceUnavailableError);
     });
   });
 
-  describe('::findMe', () => {
-    it('should call the API to retrieve all rbacs', async() => {
+  describe("::findMe", () => {
+    it("should call the API to retrieve all rbacs", async () => {
       expect.assertions(2);
 
-      fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("GET");
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
@@ -198,10 +199,10 @@ describe('RbacApiService', () => {
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
-    it('should call the API to retrieve all rbacs with contain options <action>', async() => {
+    it("should call the API to retrieve all rbacs with contain options <action>", async () => {
       expect.assertions(3);
 
-      fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("GET");
         expect(req.url.endsWith("contain%5Baction%5D=1")).toBeTruthy();
         return mockApiResponse(defaultSettingsRbacsCollectionData);
@@ -214,41 +215,41 @@ describe('RbacApiService', () => {
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
-    it('should call the API to retrieve all rbacs with contain options <ui_action>', async() => {
+    it("should call the API to retrieve all rbacs with contain options <ui_action>", async () => {
       expect.assertions(3);
 
-      fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("GET");
         expect(req.url.endsWith("contain%5Bui_action%5D=1")).toBeTruthy();
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacApiService.findMe({ui_action: true});
+      const result = await rbacApiService.findMe({ ui_action: true });
 
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
-    it('should not call the API to retrieve all rbacs with without contain options if it is unsupported', async() => {
+    it("should not call the API to retrieve all rbacs with without contain options if it is unsupported", async () => {
       expect.assertions(3);
 
-      fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, async req => {
+      fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, async (req) => {
         expect(req.method).toStrictEqual("GET");
         expect(req.url.includes("contain")).toBeFalsy();
         return mockApiResponse(defaultSettingsRbacsCollectionData);
       });
 
-      const result = await rbacApiService.findMe({unsupported: true});
+      const result = await rbacApiService.findMe({ unsupported: true });
 
       expect(result.body).toEqual(defaultSettingsRbacsCollectionData);
     });
 
-    it('should raise an error in case an API error occured', async() => {
+    it("should raise an error in case an API error occured", async () => {
       expect.assertions(1);
 
-      const error = {message: "The service is unavailable"};
+      const error = { message: "The service is unavailable" };
       fetch.doMockOnceIf(/rbacs\/me\.json\?api-version=v2/, () => Promise.reject(error));
 
-      expect(async() => await rbacApiService.findMe()).rejects.toThrowError(PassboltServiceUnavailableError);
+      expect(async () => await rbacApiService.findMe()).rejects.toThrowError(PassboltServiceUnavailableError);
     });
   });
 });

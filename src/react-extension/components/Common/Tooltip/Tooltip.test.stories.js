@@ -21,13 +21,13 @@ import TooltipPortal from "./TooltipPortal";
 import InfoSVG from "../../../../img/svg/info.svg";
 
 export default {
-  title: 'Foundations/Tooltip',
-  component: Tooltip
+  title: "Foundations/Tooltip",
+  component: Tooltip,
 };
 
 export const DefaultTooltip = {
-  render: () =>
-    <div style={{marginLeft: "auto", marginTop: "20rem", textAlign: "center"}}>
+  render: () => (
+    <div style={{ marginLeft: "auto", marginTop: "20rem", textAlign: "center" }}>
       <div>Put the mouse below</div>
       <Tooltip message="Tool tip placeholder" direction="top">
         <Tooltip message="Tool tip placeholder" direction="right">
@@ -38,26 +38,27 @@ export const DefaultTooltip = {
           </Tooltip>
         </Tooltip>
       </Tooltip>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
+      <br />
+      <br />
+      <br />
+      <br />
       <Tooltip message="Tool tip placeholder" direction="top">
         <Tooltip message="Tool tip placeholder" direction="right">
           <Tooltip message="Tool tip placeholder" direction="bottom">
             <Tooltip message="Tool tip placeholder" direction="left">
-              <InfoSVG/>
+              <InfoSVG />
             </Tooltip>
           </Tooltip>
         </Tooltip>
       </Tooltip>
     </div>
+  ),
 };
 
-
 export const PortalTooltip = {
-  render: () =>
+  render: () => (
     <TooltipPortal message="Tool tip placeholder">
-      <InfoSVG/>
+      <InfoSVG />
     </TooltipPortal>
+  ),
 };

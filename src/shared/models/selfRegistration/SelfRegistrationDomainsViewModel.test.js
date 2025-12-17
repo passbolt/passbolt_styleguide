@@ -12,7 +12,7 @@
  * @since         3.9.0
  */
 
-import SelfRegistrationDomainsViewModel from './SelfRegistrationDomainsViewModel';
+import SelfRegistrationDomainsViewModel from "./SelfRegistrationDomainsViewModel";
 
 describe("SelfRegistrationDomainsViewModel", () => {
   describe("SelfRegistrationDomainsViewModel::construstor", () => {
@@ -20,7 +20,7 @@ describe("SelfRegistrationDomainsViewModel", () => {
       expect.assertions(2);
 
       const domains = ["passbolt.com", "passbolt.io"];
-      const viewModel = new SelfRegistrationDomainsViewModel({data: {allowed_domains: domains}});
+      const viewModel = new SelfRegistrationDomainsViewModel({ data: { allowed_domains: domains } });
       const iterators = viewModel.allowedDomains.values();
       expect(iterators.next().value).toEqual("passbolt.com");
       expect(iterators.next().value).toEqual("passbolt.io");
@@ -28,10 +28,8 @@ describe("SelfRegistrationDomainsViewModel", () => {
     it("should map allow_domains array to empty array if no allowed_domains is null", () => {
       expect.assertions(1);
 
-      const viewModel = new SelfRegistrationDomainsViewModel({data: {allowed_domains: null}});
+      const viewModel = new SelfRegistrationDomainsViewModel({ data: { allowed_domains: null } });
       expect(viewModel.allowedDomains.size).toEqual(0);
     });
   });
 });
-
-

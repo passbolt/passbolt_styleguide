@@ -12,10 +12,10 @@
  * @since        3.6.0
  */
 
-import {v4 as uuidv4} from "uuid";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContext.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultUserWorkspaceContext } from "../../../contexts/UserWorkspaceContext.test.data";
 
 /**
  * Default props
@@ -23,16 +23,16 @@ import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContex
  * @returns {Object}
  */
 export function defaultProps(props = {}) {
-  const users = [{id: uuidv4()}];
+  const users = [{ id: uuidv4() }];
   const defaultProps = {
     actionFeedbackContext: defaultActionFeedbackContext(props?.actionFeedbackContext),
-    context: defaultAppContext({users, ...props?.context}),
+    context: defaultAppContext({ users, ...props?.context }),
     match: {
       params: {
-        accountRecoveryRequestId: uuidv4()
-      }
+        accountRecoveryRequestId: uuidv4(),
+      },
     },
-    userWorkspaceContext: defaultUserWorkspaceContext()
+    userWorkspaceContext: defaultUserWorkspaceContext(),
   };
   delete props.context; // treated in default props.
   delete props.actionFeedbackContext; // treated in default props.
@@ -46,10 +46,10 @@ export function defaultProps(props = {}) {
  */
 export function pendingAccountRecoveryRequest(data = {}) {
   const _default = {
-    "id": uuidv4(),
-    "user_id": uuidv4(),
-    "status": "pending",
-    "created": "2020-05-04T20:31:45+00:00",
+    id: uuidv4(),
+    user_id: uuidv4(),
+    status: "pending",
+    created: "2020-05-04T20:31:45+00:00",
   };
 
   return Object.assign(_default, data);

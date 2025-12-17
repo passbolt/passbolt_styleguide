@@ -12,15 +12,15 @@
  * @since         4.4.0
  */
 
-import {defaultUserRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {allProviders, mfaDefined, noMfaDefined} from "../../../contexts/MFAContext.test.data";
+import { defaultUserRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { allProviders, mfaDefined, noMfaDefined } from "../../../contexts/MFAContext.test.data";
 
 export function defaultProps(props = {}) {
   return {
     context: defaultAppContext(props.appContext),
     mfaContext: mockMfaContext(props.mfaContext),
-    rbacContext: defaultUserRbacContext()
+    rbacContext: defaultUserRbacContext(),
   };
 }
 
@@ -35,18 +35,18 @@ export function mockMfaContext(props = {}) {
     validateYubikeyCode: jest.fn(),
     goToProviderList: jest.fn(),
     navigate: jest.fn(),
-    ...props
+    ...props,
   };
 }
 
 export const httpsTrustedDomain = {
   userSettings: {
-    getTrustedDomain: () => "https://localhost:6006"
-  }
+    getTrustedDomain: () => "https://localhost:6006",
+  },
 };
 
 export function propsWithMfaProviders(props = {}) {
-  const propsWithProviders =  defaultProps({
+  const propsWithProviders = defaultProps({
     appContext: httpsTrustedDomain,
     mfaContext: {
       hasMfaOrganisationSettings: () => true,
@@ -54,19 +54,19 @@ export function propsWithMfaProviders(props = {}) {
       getMfaUserSettings: () => mfaDefined,
       setProvider: jest.fn(),
       navigate: jest.fn(),
-    }
+    },
   });
   return Object.assign(propsWithProviders, props);
 }
 
 export function propsWithoutMfaProviders(props = {}) {
-  const propsWithoutProviders =  defaultProps({
+  const propsWithoutProviders = defaultProps({
     appContext: httpsTrustedDomain,
     mfaContext: {
       getMfaOrganisationSettings: () => noMfaDefined,
       getMfaUserSettings: () => noMfaDefined,
       hasMfaOrganisationSettings: () => false,
-    }
+    },
   });
   return Object.assign(propsWithoutProviders, props);
 }

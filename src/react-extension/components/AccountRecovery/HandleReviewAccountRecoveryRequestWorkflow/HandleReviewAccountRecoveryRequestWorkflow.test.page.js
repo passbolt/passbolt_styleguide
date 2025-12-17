@@ -12,10 +12,10 @@
  * @since         3.6.0
  */
 
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {HandleReviewAccountRecoveryRequestWorkflow} from "./HandleReviewAccountRecoveryRequestWorkflow";
+import { HandleReviewAccountRecoveryRequestWorkflow } from "./HandleReviewAccountRecoveryRequestWorkflow";
 
 /**
  * The HandleSaveAccountRecovery component represented as a page
@@ -28,11 +28,14 @@ export default class HandleReviewAccountRecoveryRequestWorkflowTestPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <HandleReviewAccountRecoveryRequestWorkflow {...props} ref={node => {
-          this._instance = node;
-        }}/>
+        <HandleReviewAccountRecoveryRequestWorkflow
+          {...props}
+          ref={(node) => {
+            this._instance = node;
+          }}
+        />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 }

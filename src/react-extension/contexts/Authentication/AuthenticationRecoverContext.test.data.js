@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {defaultAppContext} from "../ExtAppContext.test.data";
+import { defaultAppContext } from "../ExtAppContext.test.data";
 import MockPort from "../../test/mock/MockPort";
 
 /**
@@ -22,24 +22,63 @@ import MockPort from "../../test/mock/MockPort";
  */
 export function defaultAuthenticationRecoverAppContext(appContext) {
   const port = new MockPort();
-  port.addRequestListener("passbolt.recover.start", jest.fn(() => ({locale: "fr-FR"})));
-  port.addRequestListener("passbolt.recover.first-install", jest.fn(() => Promise.resolve(false)));
-  port.addRequestListener("passbolt.recover.import-key", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.recover.verify-passphrase", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.recover.set-security-token", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.recover.complete", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.recover.sign-in", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.recover.generate-account-recovery-request-key", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.recover.request-account-recovery", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.recover.request-help-credentials-lost", jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.recover.has-user-enabled-account-recovery", jest.fn(() => Promise.resolve(true)));
-  port.addRequestListener("passbolt.recover.lost-passphrase-case", jest.fn(() => Promise.resolve(false)));
-  port.addRequestListener("passbolt.auth.post-login-redirect", jest.fn(() => Promise.resolve()));
+  port.addRequestListener(
+    "passbolt.recover.start",
+    jest.fn(() => ({ locale: "fr-FR" })),
+  );
+  port.addRequestListener(
+    "passbolt.recover.first-install",
+    jest.fn(() => Promise.resolve(false)),
+  );
+  port.addRequestListener(
+    "passbolt.recover.import-key",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.recover.verify-passphrase",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.recover.set-security-token",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.recover.complete",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.recover.sign-in",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.recover.generate-account-recovery-request-key",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.recover.request-account-recovery",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.recover.request-help-credentials-lost",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.recover.has-user-enabled-account-recovery",
+    jest.fn(() => Promise.resolve(true)),
+  );
+  port.addRequestListener(
+    "passbolt.recover.lost-passphrase-case",
+    jest.fn(() => Promise.resolve(false)),
+  );
+  port.addRequestListener(
+    "passbolt.auth.post-login-redirect",
+    jest.fn(() => Promise.resolve()),
+  );
 
   port._port = {
     onDisconnect: {
-      addListener: jest.fn()
-    }
+      addListener: jest.fn(),
+    },
   };
 
   const defaultAuthenticationRecover = {
@@ -67,6 +106,8 @@ export function defaultProps(props) {
  * @returns {object}
  */
 export function withAccountRecoveryEnabled(props) {
-  props.context.port.addRequestListener("passbolt.recover.has-user-enabled-account-recovery", () => Promise.resolve(true));
+  props.context.port.addRequestListener("passbolt.recover.has-user-enabled-account-recovery", () =>
+    Promise.resolve(true),
+  );
   return props;
 }

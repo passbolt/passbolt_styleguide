@@ -13,12 +13,10 @@
  */
 
 import MockPort from "../../../test/mock/MockPort";
-import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
-import {v4 as uuid} from 'uuid';
-import {defaultClipboardContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
-import {
-  defaultAdministratorRbacContext,
-} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
+import { v4 as uuid } from "uuid";
+import { defaultClipboardContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import { defaultAdministratorRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -29,18 +27,18 @@ export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
     siteSettings: {
-      canIUse: () => true
+      canIUse: () => true,
     },
     userSettings: {
-      getTrustedDomain: () => (new URL(window.location.href)).origin
+      getTrustedDomain: () => new URL(window.location.href).origin,
     },
     loggedInUser: {
       id: uuid(),
       role: {
-        name: 'admin'
-      }
+        name: "admin",
+      },
     },
-    setContext: jest.fn()
+    setContext: jest.fn(),
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
@@ -52,8 +50,8 @@ export function contextWithoutEdit() {
   const context = defaultAppContext();
   context.loggedInUser = {
     role: {
-      name: 'member'
-    }
+      name: "member",
+    },
   };
   return context;
 }
@@ -74,12 +72,11 @@ export function contextWithoutDelete() {
   const context = defaultAppContext();
   context.loggedInUser = {
     role: {
-      name: 'member'
-    }
+      name: "member",
+    },
   };
   return context;
 }
-
 
 /**
  * Default props
@@ -88,15 +85,15 @@ export function contextWithoutDelete() {
 export function defaultProps(data = {}) {
   return {
     actionFeedbackContext: {
-      displaySuccess: jest.fn()
+      displaySuccess: jest.fn(),
     },
     dialogContext: {
-      open: jest.fn()
+      open: jest.fn(),
     },
     rbacContext: defaultAdministratorRbacContext(),
     hide: jest.fn(),
     workflowContext: {
-      start: jest.fn()
+      start: jest.fn(),
     },
     user: defaultUserDto({
       pending_account_recovery_request: false,
@@ -114,13 +111,12 @@ export function propsWithUserTemporaryHasPendingAccountRecovery(data = {}) {
   return defaultProps({
     user: {
       pending_account_recovery_request: {
-        id: "54c6278e-f824-5fda-91ff-3e946b18d997"
-      }
+        id: "54c6278e-f824-5fda-91ff-3e946b18d997",
+      },
     },
     ...data,
   });
 }
-
 
 /**
  * Props with user having missing metadata keys
@@ -129,7 +125,7 @@ export function propsWithUserMissingMetadataKeys(data = {}) {
   return defaultProps({
     user: {
       id: data.id,
-      missing_metadata_key_ids: ["54c6278e-f824-5fda-91ff-3e946b18d997"]
+      missing_metadata_key_ids: ["54c6278e-f824-5fda-91ff-3e946b18d997"],
     },
   });
 }

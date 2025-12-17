@@ -12,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DisplayBrowserNotSupported from "./DisplayBrowserNotSupported";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -27,9 +27,9 @@ export default class DisplayBrowserNotSupportedPage {
   constructor() {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayBrowserNotSupported/>
+        <DisplayBrowserNotSupported />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -37,28 +37,30 @@ export default class DisplayBrowserNotSupportedPage {
    * Returns the title
    */
   get title() {
-    return this._page.container.querySelector('.browser-not-supported h1').textContent;
+    return this._page.container.querySelector(".browser-not-supported h1").textContent;
   }
 
   /**
    * Returns the message
    */
   get message() {
-    return this._page.container.querySelector('.browser-not-supported p').textContent;
+    return this._page.container.querySelector(".browser-not-supported p").textContent;
   }
 
   /**
    * Returns the download button
    */
   get downloadButton() {
-    return this._page.container.querySelector('.browser-not-supported .form-actions .button.primary.big').textContent;
+    return this._page.container.querySelector(".browser-not-supported .form-actions .button.primary.big").textContent;
   }
 
   /**
    * Returns the current link on the download button
    */
   get downloadLink() {
-    return this._page.container.querySelector('.browser-not-supported .form-actions .button.primary.big').getAttribute('href');
+    return this._page.container
+      .querySelector(".browser-not-supported .form-actions .button.primary.big")
+      .getAttribute("href");
   }
 
   /**
@@ -66,8 +68,10 @@ export default class DisplayBrowserNotSupportedPage {
    * @param {number} buttonIndex
    */
   async clickOnBrowserButton(buttonIndex) {
-    const button = this._page.container.querySelectorAll('.browser-not-supported .browser-button-list button')[buttonIndex];
-    fireEvent.click(button, {button: 0});
+    const button = this._page.container.querySelectorAll(".browser-not-supported .browser-button-list button")[
+      buttonIndex
+    ];
+    fireEvent.click(button, { button: 0 });
     await waitFor(() => {});
   }
 

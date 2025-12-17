@@ -12,10 +12,8 @@
  * @since         4.6.0
  */
 
-import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
-import {
-  defaultAdministrationHealthcheckContext
-} from "../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext.test.data";
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
+import { defaultAdministrationHealthcheckContext } from "../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext.test.data";
 
 export function defaultProps(data = {}) {
   const defaultProps = {

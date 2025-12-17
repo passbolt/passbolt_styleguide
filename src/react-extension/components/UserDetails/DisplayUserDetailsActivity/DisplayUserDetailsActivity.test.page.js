@@ -12,11 +12,11 @@
  * @since         3.6.0
  */
 
-import {render, fireEvent, waitFor} from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import DisplayUserDetailsActivity from "./DisplayUserDetailsActivity";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -33,11 +33,11 @@ export default class DisplayUserDetailsActivityPage {
       <AppContext.Provider value={appContext}>
         <MockTranslationProvider>
           <Router>
-            <DisplayUserDetailsActivity {...props}/>
+            <DisplayUserDetailsActivity {...props} />
           </Router>
         </MockTranslationProvider>
       </AppContext.Provider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -76,11 +76,11 @@ export default class DisplayUserDetailsActivityPage {
    */
   link(index) {
     const displayedActivity = this.displayActivityList[index];
-    return displayedActivity && displayedActivity.querySelector('a');
+    return displayedActivity && displayedActivity.querySelector("a");
   }
 
   get moreButton() {
-    return this._page.container.querySelector('.accordion-content button.action-logs-load-more');
+    return this._page.container.querySelector(".accordion-content button.action-logs-load-more");
   }
 
   get progressionText() {
@@ -97,11 +97,11 @@ export default class DisplayUserDetailsActivityPage {
   }
 
   clickOn(element) {
-    fireEvent.click(element, {button: 0});
+    fireEvent.click(element, { button: 0 });
   }
 
   async moreButtonClick(targetActivityCount) {
-    fireEvent.click(this.moreButton, {button: 0});
+    fireEvent.click(this.moreButton, { button: 0 });
     await waitFor(() => {
       if (this.displayActivityList.length < targetActivityCount) {
         throw new Error("Activity list is still loading.");

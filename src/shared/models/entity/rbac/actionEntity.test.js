@@ -14,10 +14,10 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import ActionEntity from "./actionEntity";
-import {defaultActionData} from "./actionEntity.test.data";
+import { defaultActionData } from "./actionEntity.test.data";
 import each from "jest-each";
 import EntityValidationError from "../abstract/entityValidationError";
-import {v4 as uuid} from "uuid";
+import { v4 as uuid } from "uuid";
 
 describe("ActionEntity", () => {
   describe("ActionEntity:constructor", () => {
@@ -36,40 +36,40 @@ describe("ActionEntity", () => {
     });
 
     each([
-      {scenario: 'required', rule: 'type'},
-      {scenario: 'not null', rule: 'type', value: null},
-      {scenario: 'valid uuid', rule: 'format', value: 'invalid-id'},
-    ]).describe("Should validate the id", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+      { scenario: "required", rule: "type" },
+      { scenario: "not null", rule: "type", value: null },
+      { scenario: "valid uuid", rule: "format", value: "invalid-id" },
+    ]).describe("Should validate the id", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultActionData({
-          id: test.value
+          id: test.value,
         });
         try {
           new ActionEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('id', test.rule)).toBeTruthy();
+          expect(error.hasError("id", test.rule)).toBeTruthy();
         }
       });
     });
 
     each([
-      {scenario: 'required', rule: 'type'},
-      {scenario: 'not null', rule: 'type', value: null},
-      {scenario: 'max length', rule: 'maxLength', value: "a".repeat(256)},
-    ]).describe("Should validate the name", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+      { scenario: "required", rule: "type" },
+      { scenario: "not null", rule: "type", value: null },
+      { scenario: "max length", rule: "maxLength", value: "a".repeat(256) },
+    ]).describe("Should validate the name", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultActionData({
           id: uuid(),
-          name: test.value
+          name: test.value,
         });
         try {
           new ActionEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('name', test.rule)).toBeTruthy();
+          expect(error.hasError("name", test.rule)).toBeTruthy();
         }
       });
     });
@@ -78,10 +78,7 @@ describe("ActionEntity", () => {
   describe("ActionEntity:toDto", () => {
     it("should return the expected properties.", () => {
       expect.assertions(2);
-      const expectedKeys = [
-        'id',
-        'name'
-      ];
+      const expectedKeys = ["id", "name"];
 
       const dto = defaultActionData();
       const entity = new ActionEntity(dto);

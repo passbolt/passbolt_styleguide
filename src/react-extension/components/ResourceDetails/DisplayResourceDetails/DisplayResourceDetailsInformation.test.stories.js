@@ -14,30 +14,28 @@
 
 import React from "react";
 import DisplayResourceDetailsInformation from "./DisplayResourceDetailsInformation";
-import {defaultProps, propsWithDenyUiAction} from "./DisplayResourceDetailsInformation.test.data";
-import {MemoryRouter} from "react-router-dom";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {
-  resourceExpiredDto,
-} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultProps, propsWithDenyUiAction } from "./DisplayResourceDetailsInformation.test.data";
+import { MemoryRouter } from "react-router-dom";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { resourceExpiredDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 
 /**
  * DisplayResourceDetailsInformation stories
  */
 export default {
-  title: 'Components/ResourceDetails/DisplayResourceDetailsInformation',
+  title: "Components/ResourceDetails/DisplayResourceDetailsInformation",
   component: DisplayResourceDetailsInformation,
   decorators: [
-    (Story, {args}) => (
+    (Story, { args }) => (
       <div className="page">
-        <div className="app" style={{margin: "-1rem"}}>
+        <div className="app" style={{ margin: "-1rem" }}>
           <div className="panel main">
             <div className="panel middle">
-              <div className="middle-right" style={{display: "flex", justifyContent: "flex-end"}}>
+              <div className="middle-right" style={{ display: "flex", justifyContent: "flex-end" }}>
                 <div className="panel aside">
                   <div className="sidebar resource">
                     <div className="sidebar-content">
-                      <MemoryRouter initialEntries={['/']}>
+                      <MemoryRouter initialEntries={["/"]}>
                         <Story {...args} />
                       </MemoryRouter>
                     </div>
@@ -48,38 +46,46 @@ export default {
           </div>
         </div>
       </div>
-    )
-  ]
+    ),
+  ],
 };
 
 const props = defaultProps();
 const user = props.context.users[0];
-const resource = Object.assign({}, props.resourceWorkspaceContext.details.resource, {creator: user, modifier: user});
-props.context.port.addRequestListener("passbolt.resources.find-details", async() => resource);
+const resource = Object.assign({}, props.resourceWorkspaceContext.details.resource, { creator: user, modifier: user });
+props.context.port.addRequestListener("passbolt.resources.find-details", async () => resource);
 
 export const Default = {
-  args: props
+  args: props,
 };
 
 const denyProps = propsWithDenyUiAction();
-const resourceDenyProps = Object.assign({}, denyProps.resourceWorkspaceContext.details.resource, {creator: user, modifier: user});
-denyProps.context.port.addRequestListener("passbolt.resources.find-details", async() => resourceDenyProps);
+const resourceDenyProps = Object.assign({}, denyProps.resourceWorkspaceContext.details.resource, {
+  creator: user,
+  modifier: user,
+});
+denyProps.context.port.addRequestListener("passbolt.resources.find-details", async () => resourceDenyProps);
 
 export const DenyActions = {
-  args: denyProps
+  args: denyProps,
 };
 
-const propsResourceExpired = defaultProps({resourceWorkspaceContext: defaultResourceWorkspaceContext({
-  details: {
-    resource: resourceExpiredDto({
-      created_by: user.id,
-      modified_by: user.id,
-    }),
-  }
-})});
-const resourceExpired = Object.assign({}, propsResourceExpired.resourceWorkspaceContext.details.resource, {creator: user, modifier: user});
-propsResourceExpired.context.port.addRequestListener("passbolt.resources.find-details", async() => resourceExpired);
+const propsResourceExpired = defaultProps({
+  resourceWorkspaceContext: defaultResourceWorkspaceContext({
+    details: {
+      resource: resourceExpiredDto({
+        created_by: user.id,
+        modified_by: user.id,
+      }),
+    },
+  }),
+});
+const resourceExpired = Object.assign({}, propsResourceExpired.resourceWorkspaceContext.details.resource, {
+  creator: user,
+  modifier: user,
+});
+propsResourceExpired.context.port.addRequestListener("passbolt.resources.find-details", async () => resourceExpired);
 
 export const ResourceExpired = {
-  args: propsResourceExpired
+  args: propsResourceExpired,
 };

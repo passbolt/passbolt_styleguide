@@ -15,7 +15,7 @@
 /**
  * Unit tests on DeleteRoleNotAllowed in regard of specifications
  */
-import {defaultProps} from "./DeleteRoleNotAllowed.test.data";
+import { defaultProps } from "./DeleteRoleNotAllowed.test.data";
 import DeleteRoleNotAllowedPage from "./DeleteRoleNotAllowed.test.page";
 
 beforeEach(() => {
@@ -31,30 +31,30 @@ describe("Delete role not allowed", () => {
     page = new DeleteRoleNotAllowedPage(props);
   });
 
-  describe('As AD I should delete a role', () => {
-    it('As AD I should submit an delete request with nothing updated', async() => {
+  describe("As AD I should delete a role", () => {
+    it("As AD I should submit an delete request with nothing updated", async () => {
       expect.assertions(1);
       await page.submit();
       expect(props.onClose).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe('AS AD I should cancel the operation', () => {
-    it('AS AD I should cancel the operation by closing the dialog', async() => {
+  describe("AS AD I should cancel the operation", () => {
+    it("AS AD I should cancel the operation by closing the dialog", async () => {
       expect.assertions(1);
       await page.close();
       expect(props.onClose).toHaveBeenCalledTimes(1);
     });
 
-    it('AS AD I should cancel the operation by explicitly cancelling', async() => {
+    it("AS AD I should cancel the operation by explicitly cancelling", async () => {
       expect.assertions(1);
       await page.cancel();
       expect(props.onClose).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe('AS AD I should not perform actions during the role deletion not allowed', () => {
-    it('AS AD I should not cancel, submit or change data during the role deletion not allowed', async() => {
+  describe("AS AD I should not perform actions during the role deletion not allowed", () => {
+    it("AS AD I should not cancel, submit or change data during the role deletion not allowed", async () => {
       expect.assertions(3);
       const inProgressFn = () => {
         expect(page.canCancel).toBeFalsy();

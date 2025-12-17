@@ -12,7 +12,7 @@
  * @since         4.1.0
  */
 
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Minimal profile dto.
@@ -22,9 +22,9 @@ import {v4 as uuidv4} from 'uuid';
 export const minimalAvatarDto = (data = {}) => ({
   url: {
     medium: "img\/avatar\/user_medium.png",
-    small: "img\/avatar\/user.png"
+    small: "img\/avatar\/user.png",
   },
-  ...data
+  ...data,
 });
 
 /**
@@ -36,11 +36,11 @@ export const defaultAvatarDto = (data = {}) => ({
   id: uuidv4(),
   url: {
     medium: "/avatars/view/e6927385-195c-4c7f-a107-a202ea86de40/medium.jpg",
-    small: "/avatars/view/e6927385-195c-4c7f-a107-a202ea86de40/small.jpg"
+    small: "/avatars/view/e6927385-195c-4c7f-a107-a202ea86de40/small.jpg",
   },
   created: "2023-06-03T12:03:46+00:00",
   modified: "2023-06-03T12:03:46+00:00",
-  ...data
+  ...data,
 });
 
 export const defaultFullAvatarDto = (data = {}) => ({
@@ -58,8 +58,10 @@ export const defaultFullAvatarDto = (data = {}) => ({
   path: "Avatar\/60\/6d\/93\/0519d40b29b94c79a68c8f933896c80d\/0519d40b29b94c79a68c8f933896c80d.png",
   adapter: "Local",
   url: {
-    medium: "img\/public\/Avatar\/60\/6d\/93\/0519d40b29b94c79a68c8f933896c80d\/0519d40b29b94c79a68c8f933896c80d.a99472d5.png",
-    small: "img\/public\/Avatar\/60\/6d\/93\/0519d40b29b94c79a68c8f933896c80d\/0519d40b29b94c79a68c8f933896c80d.65a0ba70.png"
+    medium:
+      "img\/public\/Avatar\/60\/6d\/93\/0519d40b29b94c79a68c8f933896c80d\/0519d40b29b94c79a68c8f933896c80d.a99472d5.png",
+    small:
+      "img\/public\/Avatar\/60\/6d\/93\/0519d40b29b94c79a68c8f933896c80d\/0519d40b29b94c79a68c8f933896c80d.65a0ba70.png",
   },
   ...data,
 });

@@ -12,7 +12,6 @@
  * @since         5.2.0
  */
 
-
 /**
  * Default props
  * @param {object} data Override the default props.
@@ -21,7 +20,7 @@
 export function defaultProps(data = {}) {
   return {
     additionalUris: ["https://passbolt.com", "ftp://not_a_safe_link", "ssh://127.0.0.1:8080"],
-    ...data
+    ...data,
   };
 }
 
@@ -31,13 +30,19 @@ export function defaultProps(data = {}) {
  * @returns {any}
  */
 export function propsWithLargeAmountOfUris(data = {}) {
-  const uris = ["https://passbolt.com", "https://community.passbolt.com", "https://www.passbolt.com/docs", "https://www.passbolt.com/blog", "https://www.passbolt.com/security"];
+  const uris = [
+    "https://passbolt.com",
+    "https://community.passbolt.com",
+    "https://www.passbolt.com/docs",
+    "https://www.passbolt.com/blog",
+    "https://www.passbolt.com/security",
+  ];
   for (let i = 0; i < 100; i++) {
     const uri = uris[i % 4];
     uris.push(uri);
   }
   return {
     additionalUris: uris,
-    ...data
+    ...data,
   };
 }

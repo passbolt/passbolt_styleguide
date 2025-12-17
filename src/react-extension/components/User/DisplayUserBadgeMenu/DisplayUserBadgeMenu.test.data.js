@@ -12,8 +12,8 @@
  * @since         3.6.0
  */
 
-import {defaultUserRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import { defaultUserRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 
 /**
  * Default props
@@ -21,30 +21,29 @@ import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
  */
 export function defaultProps(props) {
   const defaultProps = {
-    baseUrl: (new URL(window.location.href)).origin,
+    baseUrl: new URL(window.location.href).origin,
     user: {
-      "username": "carol@passbolt.com",
-      "profile": {
-        "first_name": "Carol",
-        "last_name": "Shaw"
-      }
+      username: "carol@passbolt.com",
+      profile: {
+        first_name: "Carol",
+        last_name: "Shaw",
+      },
     },
     mfaContext: {
       checkMfaChoiceRequired: jest.fn(),
-      isMfaChoiceRequired: jest.fn()
+      isMfaChoiceRequired: jest.fn(),
     },
     accountRecoveryContext: {
-      isAccountRecoveryChoiceRequired: jest.fn()
+      isAccountRecoveryChoiceRequired: jest.fn(),
     },
     context: {
-      onLogoutRequested: () => {
-      },
+      onLogoutRequested: () => {},
       siteSettings: {
-        canIUse: () => true
-      }
+        canIUse: () => true,
+      },
     },
     rbacContext: defaultUserRbacContext(),
-    dialogContext: defaultDialogContext()
+    dialogContext: defaultDialogContext(),
   };
   return Object.assign(defaultProps, props || {});
 }

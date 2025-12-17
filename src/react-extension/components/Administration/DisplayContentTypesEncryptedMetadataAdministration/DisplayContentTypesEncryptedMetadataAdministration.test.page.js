@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayContentTypesEncryptedMetadataAdministration from "./DisplayContentTypesEncryptedMetadataAdministration";
@@ -27,10 +27,10 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={props.context}>
-          <DisplayContentTypesEncryptedMetadataAdministration {...props}/>
+          <DisplayContentTypesEncryptedMetadataAdministration {...props} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -123,7 +123,6 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
     return this.allowCreationOfV4ResourcesInput.parentElement.querySelector("div .error-message");
   }
 
-
   /**
    * Returns the allow creation of v4 resources associated warning element
    * @returns {HTMLElement}
@@ -179,7 +178,6 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
   get defaultResourceTypesV4Warning() {
     return this.defaultResourceTypesV4Input.parentElement.querySelector("div .warning-message");
   }
-
 
   /**
    * Returns the allow v4 to v5 upgrade toggle element
@@ -251,7 +249,7 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
    * @returns {Promise<void>}
    */
   async clickOnAllowCreationOfV4ResourcesInput() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.allowCreationOfV4ResourcesInput, leftClick);
     await waitFor(() => {});
   }
@@ -261,7 +259,7 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
    * @returns {Promise<void>}
    */
   async clickOnAllowCreationOfV5ResourcesInput() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.allowCreationOfV5ResourcesInput, leftClick);
     await waitFor(() => {});
   }
@@ -271,7 +269,7 @@ export default class DisplayContentTypesEncryptedMetadataAdministrationPage {
    * @returns {Promise<void>}
    */
   async clickOnDefaultResourceTypesV5Input() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.defaultResourceTypesV5Input, leftClick);
     await waitFor(() => {});
   }

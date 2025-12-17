@@ -12,17 +12,15 @@
  * @since         4.6.0
  */
 
-import {actions} from "./actionEnumeration";
+import { actions } from "./actionEnumeration";
 
-
-describe('actions', () => {
-  it('should have the expected action keys', () => {
+describe("actions", () => {
+  it("should have the expected action keys", () => {
     expect.assertions(4);
 
-
     expect(Object.keys(actions).length).toEqual(3);
-    expect(actions['GROUPS_ADD']).toEqual("GroupsAdd.addPost");
-    expect(actions['ACCOUNT_RECOVERY_REQUEST_VIEW']).toEqual("AccountRecoveryRequestsView.view");
-    expect(actions['ACCOUNT_RECOVERY_RESPONSE_CREATE']).toEqual("AccountRecoveryResponsesCreate.post");
+    expect(actions["GROUPS_ADD"]).toEqual("GroupsAdd.addPost");
+    expect(actions["ACCOUNT_RECOVERY_REQUEST_VIEW"]).toEqual("AccountRecoveryRequestsView.view");
+    expect(actions["ACCOUNT_RECOVERY_RESPONSE_CREATE"]).toEqual("AccountRecoveryResponsesCreate.post");
   });
 });

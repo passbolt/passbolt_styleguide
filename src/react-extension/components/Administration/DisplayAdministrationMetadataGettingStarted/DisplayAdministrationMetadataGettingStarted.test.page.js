@@ -13,11 +13,11 @@
  */
 
 import React from "react";
-import {fireEvent, render} from '@testing-library/react';
-import DisplayAdministrationMetadataGettingStarted from './DisplayAdministrationMetadataGettingStarted';
-import AppContext from '../../../../shared/context/AppContext/AppContext';
-import MockTranslationProvider from '../../../test/mock/components/Internationalisation/MockTranslationProvider';
-import {BrowserRouter as Router} from "react-router-dom";
+import { fireEvent, render } from "@testing-library/react";
+import DisplayAdministrationMetadataGettingStarted from "./DisplayAdministrationMetadataGettingStarted";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import { BrowserRouter as Router } from "react-router-dom";
 
 class DisplayAdministrationMetadataGettingStartedPage {
   constructor(props) {
@@ -25,11 +25,11 @@ class DisplayAdministrationMetadataGettingStartedPage {
       <MockTranslationProvider>
         <Router>
           <AppContext.Provider value={props.context}>
-            <DisplayAdministrationMetadataGettingStarted {...props}/>
+            <DisplayAdministrationMetadataGettingStarted {...props} />
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -94,33 +94,33 @@ class DisplayAdministrationMetadataGettingStartedPage {
    * Returns the help box
    */
   get helpBox() {
-    return this.select('.sidebar-help-section');
+    return this.select(".sidebar-help-section");
   }
 
   /**
    * Returns the help box title
    */
   get helpBoxTitle() {
-    return this.helpBox.querySelector('h3');
+    return this.helpBox.querySelector("h3");
   }
 
   /**
    * Returns the help box description
    */
   get helpBoxDescription() {
-    return this.helpBox.querySelector('p');
+    return this.helpBox.querySelector("p");
   }
 
   /**
    * Returns the help box button
    */
   get helpBoxButton() {
-    return this.helpBox.querySelector('.button');
+    return this.helpBox.querySelector(".button");
   }
 
   /** Click on the element */
   click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
   }
 

@@ -38,7 +38,7 @@ class MockApiAppContextProvider extends ApiAppContextProvider {
    * @returns {Promise<object>}
    */
   async getRbacs() {
-    this.setState({rbacs: new RbacsCollection([], true)});
+    this.setState({ rbacs: new RbacsCollection([], true) });
   }
 }
 export default MockApiAppContextProvider;

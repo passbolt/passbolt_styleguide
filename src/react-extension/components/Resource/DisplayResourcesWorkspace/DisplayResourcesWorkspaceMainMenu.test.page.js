@@ -12,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourcesWorkspaceMainMenu from "./DisplayResourcesWorkspaceMainMenu";
@@ -28,9 +28,9 @@ export default class DisplayResourcesWorkspaceMainMenuPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayResourcesWorkspaceMainMenu {...props}/>
+        <DisplayResourcesWorkspaceMainMenu {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -66,14 +66,14 @@ class DisplayMainMenuPageObject {
    * Returns the menu elements of password workspace menu
    */
   get menu() {
-    return this._container.querySelector('.dropdown');
+    return this._container.querySelector(".dropdown");
   }
 
   /**
    * Returns the create menu elements of password workspace menu
    */
   get createMenu() {
-    return this._container.querySelector('.dropdown button.create.primary');
+    return this._container.querySelector(".dropdown button.create.primary");
   }
 
   /**
@@ -87,28 +87,28 @@ class DisplayMainMenuPageObject {
    * Returns the import menu elements of password workspace menu
    */
   get importMenu() {
-    return this._container.querySelector('#import_action');
+    return this._container.querySelector("#import_action");
   }
 
   /**
    * Returns the new password menu elements of password workspace menu
    */
   get newPasswordMenu() {
-    return this._container.querySelector('#password_action');
+    return this._container.querySelector("#password_action");
   }
 
   /**
    * Returns the new folder menu elements of password workspace menu
    */
   get newFolderMenu() {
-    return this._container.querySelector('#folder_action');
+    return this._container.querySelector("#folder_action");
   }
 
   /**
    * Returns the new totp menu elements of password workspace menu
    */
   get newTotpMenu() {
-    return this._container.querySelector('#totp_action');
+    return this._container.querySelector("#totp_action");
   }
 
   /**
@@ -116,7 +116,7 @@ class DisplayMainMenuPageObject {
    * @return {HTMLElement}
    */
   get newCustomFieldsMenu() {
-    return this._container.querySelector('#custom_fields_action');
+    return this._container.querySelector("#custom_fields_action");
   }
 
   /**
@@ -124,14 +124,14 @@ class DisplayMainMenuPageObject {
    * @return {HTMLElement}
    */
   get newStandaloneNoteMenu() {
-    return this._container.querySelector('#standalone_note_action');
+    return this._container.querySelector("#standalone_note_action");
   }
 
   /**
    * Returns the new other menu elements of password workspace menu
    */
   get newOtherMenu() {
-    return this._container.querySelector('#other_action');
+    return this._container.querySelector("#other_action");
   }
 
   /**
@@ -142,8 +142,8 @@ class DisplayMainMenuPageObject {
   }
 
   /** Click on the action menu */
-  async clickOnMenu(element)  {
-    const leftClick = {button: 0};
+  async clickOnMenu(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

@@ -12,12 +12,9 @@
  * @since         5.3.0
  */
 
-
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
-import {
-  defaultSecretDataV5StandaloneCustomFieldsCollectionDtos
-} from "../../../../shared/models/entity/secretData/secretDataV5StandaloneCustomFieldsCollection.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultResourceFormDto } from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
+import { defaultSecretDataV5StandaloneCustomFieldsCollectionDtos } from "../../../../shared/models/entity/secretData/secretDataV5StandaloneCustomFieldsCollection.test.data";
 
 /**
  * Default props
@@ -28,8 +25,8 @@ export function defaultProps(data = {}) {
     context: defaultAppContext(),
     onChange: jest.fn(),
     resource: defaultResourceFormDto({
-      secret: defaultSecretDataV5StandaloneCustomFieldsCollectionDtos()
-    })
+      secret: defaultSecretDataV5StandaloneCustomFieldsCollectionDtos(),
+    }),
   };
   return Object.assign(defaultData, data);
 }

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.9.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import ConfirmCreateEdit from "./ConfirmCreateEdit";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -26,9 +26,9 @@ export default class ConfirmCreateEditPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ConfirmCreateEdit {...props}/>
+        <ConfirmCreateEdit {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -43,28 +43,28 @@ export default class ConfirmCreateEditPage {
    * Returns the dialog element
    */
   get dialog() {
-    return this._page.container.querySelector('.confirm-create-edit-password-dialog');
+    return this._page.container.querySelector(".confirm-create-edit-password-dialog");
   }
 
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
    * Returns the rule element
    */
   get rule() {
-    return this._page.container.querySelectorAll('.form-content p')[0].textContent;
+    return this._page.container.querySelectorAll(".form-content p")[0].textContent;
   }
 
   /**
    * Returns the operation element
    */
   get operation() {
-    return this._page.container.querySelectorAll('.confirm-create-edit-password-dialog .form-content p')[1].textContent;
+    return this._page.container.querySelectorAll(".confirm-create-edit-password-dialog .form-content p")[1].textContent;
   }
 
   /**
@@ -78,7 +78,7 @@ export default class ConfirmCreateEditPage {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
@@ -89,16 +89,16 @@ export default class ConfirmCreateEditPage {
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
 
   /** Click without wait for on the element */
-  escapeKey()  {
+  escapeKey() {
     // Escape key down event
-    const escapeKeyDown = {keyCode: 27};
+    const escapeKeyDown = { keyCode: 27 };
     fireEvent.keyDown(this.dialog, escapeKeyDown);
   }
 
@@ -109,7 +109,7 @@ export default class ConfirmCreateEditPage {
 
   /** Click on save button */
   saveWithoutWaiting() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.saveButton, leftClick);
   }
 

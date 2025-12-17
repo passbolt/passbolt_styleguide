@@ -14,14 +14,15 @@
 
 import RoleEntity from "../../shared/models/entity/role/roleEntity";
 import RolesCollection from "../../shared/models/entity/role/rolesCollection";
-import {rolesCollectionDto} from "../../shared/models/entity/role/rolesCollection.test.data";
+import { rolesCollectionDto } from "../../shared/models/entity/role/rolesCollection.test.data";
 
 export const defaultRoleContext = (data = {}) => ({
   refreshRoles: () => {},
   getAllRoles: () => new RolesCollection(rolesCollectionDto),
-  getRole: roleId => rolesCollectionDto
-    .filter(r => roleId === r.id)
-    .map(roleDto => new RoleEntity(roleDto))
-    .at(0) || null,
-  ...data
+  getRole: (roleId) =>
+    rolesCollectionDto
+      .filter((r) => roleId === r.id)
+      .map((roleDto) => new RoleEntity(roleDto))
+      .at(0) || null,
+  ...data,
 });

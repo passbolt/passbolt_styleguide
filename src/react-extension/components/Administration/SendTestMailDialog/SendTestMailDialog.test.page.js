@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import SendTestMailDialog from "./SendTestMailDialog";
@@ -29,9 +29,9 @@ export default class SendTestMailDialogPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <SendTestMailDialog {...props}/>
+        <SendTestMailDialog {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -79,7 +79,7 @@ export default class SendTestMailDialogPage {
    * @returns {Promise<void>}
    */
   async clickOn(element, callback) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {
       if (!callback()) {
@@ -96,7 +96,7 @@ export default class SendTestMailDialogPage {
   async setFormWith(formData) {
     let key;
     for (key in formData) {
-      fireEvent.input(this[key], {target: {value: formData[key]}});
+      fireEvent.input(this[key], { target: { value: formData[key] } });
     }
     await waitFor(() => {
       if (this[key].value !== formData[key].toString()) {

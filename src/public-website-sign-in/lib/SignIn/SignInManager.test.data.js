@@ -18,19 +18,13 @@ import MockPort from "../../../react-extension/test/mock/MockPort";
  * Create button for sign-in in DOM
  * @type {string}
  */
-export const domElementWithExtensionSignIn =
-  '<div>' +
-  '  <button type="button" id="extension-sign-in"/>' +
-  '</div>';
+export const domElementWithExtensionSignIn = "<div>" + '  <button type="button" id="extension-sign-in"/>' + "</div>";
 
 /**
  * Create one buttons for sign-in in DOM
  * @type {string}
  */
-export const domElementWithNoExtensionSignIn =
-  '<div>' +
-  '  <button type="button" id="other-button"/>' +
-  '</div>';
+export const domElementWithNoExtensionSignIn = "<div>" + '  <button type="button" id="other-button"/>' + "</div>";
 
 /**
  * Mock global variable in window
@@ -39,7 +33,7 @@ export const initializeWindow = () => {
   window.port = new MockPort();
   window.port._port = {
     onDisconnect: {
-      addListener: () => {}
-    }
+      addListener: () => {},
+    },
   };
 };

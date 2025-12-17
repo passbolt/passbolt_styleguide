@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -14,25 +13,27 @@
  */
 import React from "react";
 import DisplayUserDirectoryAdministrationTeasing from "./DisplayUserDirectoryAdministrationTeasing";
-import {defaultProps} from "./DisplayUserDirectoryAdministrationTeasing.test.data";
+import { defaultProps } from "./DisplayUserDirectoryAdministrationTeasing.test.data";
 
 export default {
-  title: 'Components/Administration/DisplayUserDirectoryAdministrationTeasing',
+  title: "Components/Administration/DisplayUserDirectoryAdministrationTeasing",
   component: DisplayUserDirectoryAdministrationTeasing,
-  decorators: [(Story, {args}) =>
-    <div className="page administration">
-      <div className="app" >
-        <div className="panel main">
-          <div className="panel middle">
-            <div className="middle-right">
-              <div className="main-page ldap-settings-teasing">
-                <Story {...args}/>
+  decorators: [
+    (Story, { args }) => (
+      <div className="page administration">
+        <div className="app">
+          <div className="panel main">
+            <div className="panel middle">
+              <div className="middle-right">
+                <div className="main-page ldap-settings-teasing">
+                  <Story {...args} />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    ),
   ],
 };
 

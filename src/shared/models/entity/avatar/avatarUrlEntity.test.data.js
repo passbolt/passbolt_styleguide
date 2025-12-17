@@ -18,7 +18,7 @@
  * @returns {object}
  */
 export const defaultAvatarUrlDto = (data = {}) => ({
-  "medium": "img\/avatar\/user_medium.png",
-  "small": "img\/avatar\/user.png",
-  ...data
+  medium: "img\/avatar\/user_medium.png",
+  small: "img\/avatar\/user.png",
+  ...data,
 });

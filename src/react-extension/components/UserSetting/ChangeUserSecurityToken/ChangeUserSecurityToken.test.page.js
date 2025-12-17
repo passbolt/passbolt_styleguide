@@ -1,4 +1,4 @@
-import {render, waitFor} from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ChangeUserSecurityToken from "./ChangeUserSecurityToken";
@@ -16,9 +16,9 @@ export default class ChangeUserSecurityTokenPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ChangeUserSecurityToken {...props}/>
+        <ChangeUserSecurityToken {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -35,7 +35,7 @@ export default class ChangeUserSecurityTokenPage {
    * REturns token code input
    */
   get codeInput() {
-    return  this._page.container.querySelector('#security-token-text');
+    return this._page.container.querySelector("#security-token-text");
   }
 
   /**
@@ -49,52 +49,49 @@ export default class ChangeUserSecurityTokenPage {
    * Returns the randomize link element
    */
   get randomizeLink() {
-    return this._page.container.querySelector('.randomize-button-wrapper button');
+    return this._page.container.querySelector(".randomize-button-wrapper button");
   }
-
 
   /**
    * Returns the next button element
    */
   get updateButton() {
-    return this._page.container.querySelector('.actions-wrapper button');
+    return this._page.container.querySelector(".actions-wrapper button");
   }
-
 
   /**
    * Returns true if the user can change something like the token code
    */
   get canChange() {
-    return !this.codeInput.hasAttribute('disabled');
+    return !this.codeInput.hasAttribute("disabled");
   }
 
   /**
    * Returns true if one is processing
    */
   get isProcessing() {
-    return this.updateButton.classList.contains('processing');
+    return this.updateButton.classList.contains("processing");
   }
 
   /**
    * Returns true if the empty error message is displayed
    */
   get hasEmptyCodeError() {
-    return Boolean(this._page.container.querySelector('.empty-code'));
+    return Boolean(this._page.container.querySelector(".empty-code"));
   }
-
 
   /**
    * Returns true if the not good code length error message is displayed
    */
   get hasNotGoodLengthCode() {
-    return Boolean(this._page.container.querySelector('.not-good-length-code'));
+    return Boolean(this._page.container.querySelector(".not-good-length-code"));
   }
 
   /**
    * Returns true if the not good code regex error message is displayed
    */
   get hasNotGoodRegexCode() {
-    return Boolean(this._page.container.querySelector('.not-good-regex-code'));
+    return Boolean(this._page.container.querySelector(".not-good-regex-code"));
   }
 
   /**

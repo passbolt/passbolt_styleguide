@@ -16,7 +16,7 @@
  * Unit tests on SessionExpired in regard of specifications
  */
 import NotifyExpiredSessionPage from "./NotifyExpiredSession.test.page";
-import {defaultProps} from "./NotifyExpiredSession.test.data";
+import { defaultProps } from "./NotifyExpiredSession.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -26,7 +26,7 @@ describe("As LU I should see the session expired dialog", () => {
   let page; // The page to test against
   const props = defaultProps(); // The props to pass
 
-  describe('As LU I can start go to login', () => {
+  describe("As LU I can start go to login", () => {
     /**
      * I should see the session expired dialog
      */
@@ -34,7 +34,7 @@ describe("As LU I should see the session expired dialog", () => {
       page = new NotifyExpiredSessionPage(props);
     });
 
-    it('matches the styleguide', async() => {
+    it("matches the styleguide", async () => {
       // Dialog title exists and correct
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Session Expired");
@@ -46,18 +46,18 @@ describe("As LU I should see the session expired dialog", () => {
       expect(page.loginButton.textContent).toBe("Sign in");
     });
 
-    it.skip('As LU I should go to login page by clicking on the login button', async() => {
+    it.skip("As LU I should go to login page by clicking on the login button", async () => {
       // @todo test the hyperlink
       await page.goToLogin();
     });
 
-    it.skip('As LU I can go to login page by closing the dialog', async() => {
+    it.skip("As LU I can go to login page by closing the dialog", async () => {
       // @todo test the hyperlink
       await page.closeDialog();
       expect(props.onClose).toBeCalled();
     });
 
-    it.skip('As LU I can go to login page with the keyboard (escape)', async() => {
+    it.skip("As LU I can go to login page with the keyboard (escape)", async () => {
       // @todo test the hyperlink
       await page.escapeKey();
       expect(props.onClose).toBeCalled();

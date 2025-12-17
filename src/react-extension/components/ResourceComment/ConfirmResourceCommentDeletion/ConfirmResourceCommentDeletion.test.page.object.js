@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -32,14 +31,14 @@ export default class ConfirmResourceCommentDeletionPageObject {
    * Returns the dialog wrapper element
    */
   get dialog() {
-    return this._container.querySelector('.comment-delete-dialog');
+    return this._container.querySelector(".comment-delete-dialog");
   }
 
   /**
    * Returns the confirm button
    */
   get confirmButton() {
-    return this._container.querySelector('.button.primary');
+    return this._container.querySelector(".button.primary");
   }
 
   /**

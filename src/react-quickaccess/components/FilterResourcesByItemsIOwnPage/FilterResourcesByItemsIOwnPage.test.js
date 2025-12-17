@@ -11,33 +11,29 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.9.4
  */
-import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultAppContext} from "../../contexts/AppContext.test.data";
-import {defaultProps, noFilteredResourcesProps} from "./FilterResourcesByItemsIOwnPage.test.data";
+import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultAppContext } from "../../contexts/AppContext.test.data";
+import { defaultProps, noFilteredResourcesProps } from "./FilterResourcesByItemsIOwnPage.test.data";
 import FilterResourcesByItemsIOwnPagePage from "./FilterResourcesByItemsIOwnPage.test.page";
-import {createMemoryHistory} from "history";
-import {waitForTrue} from "../../../../test/utils/waitFor";
-import {updatePermissionDto} from "../../../shared/models/entity/permission/permissionEntity.test.data";
-import {
-  defaultResourceMetadataDto
-} from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import { createMemoryHistory } from "history";
+import { waitForTrue } from "../../../../test/utils/waitFor";
+import { updatePermissionDto } from "../../../shared/models/entity/permission/permissionEntity.test.data";
+import { defaultResourceMetadataDto } from "../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 import expect from "expect";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   defaultMetadataTypesSettingsV50FreshDto,
-  defaultMetadataTypesSettingsV6Dto
+  defaultMetadataTypesSettingsV6Dto,
 } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {
   resourceTypesV4CollectionDto,
-  resourceTypesV5CollectionDto
+  resourceTypesV5CollectionDto,
 } from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import {defaultUserDto} from "../../../shared/models/entity/user/userEntity.test.data";
-import {v4 as uuidv4} from "uuid";
+import { defaultUserDto } from "../../../shared/models/entity/user/userEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {
-  defaultMetadataKeysSettingsDto
-} from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -55,31 +51,43 @@ describe("FilterResourcesByItemsIOwnPage", () => {
     it("should display all the owned resources if there is no search", () => {
       expect.assertions(3);
       const resource1 = defaultResourceDto();
-      const resource2 = defaultResourceDto({permission: updatePermissionDto()});
+      const resource2 = defaultResourceDto({ permission: updatePermissionDto() });
       const resource3 = defaultResourceDto();
-      const resource4 = defaultResourceDto({permission: updatePermissionDto()});
+      const resource4 = defaultResourceDto({ permission: updatePermissionDto() });
       const resources = [resource1, resource2, resource3, resource4];
 
-      const page = new FilterResourcesByItemsIOwnPagePage(defaultProps({resources}));
+      const page = new FilterResourcesByItemsIOwnPagePage(defaultProps({ resources }));
 
       expect(page.resources?.length).toStrictEqual(2);
-      expect(page.getResource(0).textContent).toStrictEqual(`${resource1.metadata.name} (${resource1.metadata.username})${resource1.metadata.uris[0]}`);
-      expect(page.getResource(0).textContent).toStrictEqual(`${resource2.metadata.name} (${resource2.metadata.username})${resource2.metadata.uris[0]}`);
+      expect(page.getResource(0).textContent).toStrictEqual(
+        `${resource1.metadata.name} (${resource1.metadata.username})${resource1.metadata.uris[0]}`,
+      );
+      expect(page.getResource(0).textContent).toStrictEqual(
+        `${resource2.metadata.name} (${resource2.metadata.username})${resource2.metadata.uris[0]}`,
+      );
     });
 
     it("should display a message saying that there is no owned resources yet", () => {
       expect.assertions(1);
 
       const page = new FilterResourcesByItemsIOwnPagePage(noFilteredResourcesProps());
-      expect(page.displayedMainMessage).toStrictEqual("You do not own any passwords yet. It does feel a bit empty here, create your first password.");
+      expect(page.displayedMainMessage).toStrictEqual(
+        "You do not own any passwords yet. It does feel a bit empty here, create your first password.",
+      );
     });
 
     it("should display owned resources filtered by the search", () => {
       expect.assertions(1);
-      const resource1 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "Match search"})});
-      const resource2 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "No match"}), permission: updatePermissionDto()});
-      const resource3 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "No match"})});
-      const resource4 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "Match search"}), permission: updatePermissionDto()});
+      const resource1 = defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "Match search" }) });
+      const resource2 = defaultResourceDto({
+        metadata: defaultResourceMetadataDto({ name: "No match" }),
+        permission: updatePermissionDto(),
+      });
+      const resource3 = defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "No match" }) });
+      const resource4 = defaultResourceDto({
+        metadata: defaultResourceMetadataDto({ name: "Match search" }),
+        permission: updatePermissionDto(),
+      });
       const resources = [resource1, resource2, resource3, resource4];
 
       const props = defaultProps({
@@ -89,13 +97,15 @@ describe("FilterResourcesByItemsIOwnPage", () => {
         resources: resources,
       });
       const page = new FilterResourcesByItemsIOwnPagePage(props);
-      expect(page.getResource(0).textContent).toStrictEqual(`${resource1.metadata.name} (${resource1.metadata.username})${resource1.metadata.uris[0]}`);
+      expect(page.getResource(0).textContent).toStrictEqual(
+        `${resource1.metadata.name} (${resource1.metadata.username})${resource1.metadata.uris[0]}`,
+      );
     });
 
     it("should display a message saying that the search leads to an empty result", () => {
       expect.assertions(1);
-      const resource1 = defaultResourceDto({metadata: {name: "No match"}});
-      const resource2 = defaultResourceDto({metadata: {name: "No match "}});
+      const resource1 = defaultResourceDto({ metadata: { name: "No match" } });
+      const resource2 = defaultResourceDto({ metadata: { name: "No match " } });
       const resources = [resource1, resource2];
 
       const props = defaultProps({
@@ -110,7 +120,7 @@ describe("FilterResourcesByItemsIOwnPage", () => {
   });
 
   describe("As LU I can navigate from the 'resources I own' page", () => {
-    it("should allow to go back on the previous page", async() => {
+    it("should allow to go back on the previous page", async () => {
       expect.assertions(3);
 
       const props = defaultProps({
@@ -120,10 +130,7 @@ describe("FilterResourcesByItemsIOwnPage", () => {
       });
 
       props.history = createMemoryHistory({
-        initialEntries: [
-          "/home",
-          "/test"
-        ],
+        initialEntries: ["/home", "/test"],
         initialIndex: 1,
       });
 
@@ -140,7 +147,7 @@ describe("FilterResourcesByItemsIOwnPage", () => {
       expect(props.context.updateSearch).toHaveBeenCalledWith("");
     });
 
-    it("should allow to navigate to a selected resource page", async() => {
+    it("should allow to navigate to a selected resource page", async () => {
       expect.assertions(4);
 
       const resource = defaultResourceDto();
@@ -152,7 +159,7 @@ describe("FilterResourcesByItemsIOwnPage", () => {
           searchHistory: {},
           search: "Passbolt",
         }),
-        resources: resources
+        resources: resources,
       });
       props.history = createMemoryHistory();
 
@@ -163,13 +170,15 @@ describe("FilterResourcesByItemsIOwnPage", () => {
       await page.clickOnResource(0);
       await waitForTrue(() => props.history.location.pathname !== initialPath);
 
-      expect(props.history.location.pathname).toStrictEqual(`/webAccessibleResources/quickaccess/resources/view/${resource.id}`);
+      expect(props.history.location.pathname).toStrictEqual(
+        `/webAccessibleResources/quickaccess/resources/view/${resource.id}`,
+      );
       expect(props.context.updateSearch).toHaveBeenCalledTimes(1);
       expect(props.context.updateSearch).toHaveBeenCalledWith("");
-      expect(props.context.searchHistory).toStrictEqual({'/': "Passbolt"});
+      expect(props.context.searchHistory).toStrictEqual({ "/": "Passbolt" });
     });
 
-    it("should initialised search from history", async() => {
+    it("should initialised search from history", async () => {
       expect.assertions(2);
 
       const props = defaultProps({
@@ -177,14 +186,12 @@ describe("FilterResourcesByItemsIOwnPage", () => {
           updateSearch: jest.fn(),
           searchHistory: {
             "/webAccessibleResources/quickaccess/resources/owned-by-me": "test",
-          }
+          },
         }),
       });
 
       props.history = createMemoryHistory({
-        initialEntries: [
-          "/webAccessibleResources/quickaccess/resources/owned-by-me",
-        ],
+        initialEntries: ["/webAccessibleResources/quickaccess/resources/owned-by-me"],
       });
 
       props.history.goBack();
@@ -206,18 +213,22 @@ describe("FilterResourcesByItemsIOwnPage", () => {
 
     it("should display the button if metadata type settings and resource types are loaded for v5", () => {
       const metadataTypeSettingEntity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto());
-      const props = defaultProps({metadataTypeSettings: metadataTypeSettingEntity});
+      const props = defaultProps({ metadataTypeSettings: metadataTypeSettingEntity });
       const page = new FilterResourcesByItemsIOwnPagePage(props);
       expect(page.createButton).toBeDefined();
     });
 
-    it("should display action aborted missing metadata keys if share metadata key is enforced and user has missing keys", async() => {
+    it("should display action aborted missing metadata keys if share metadata key is enforced and user has missing keys", async () => {
       expect.assertions(2);
 
       const props = defaultProps({
-        context: defaultAppContext({loggedInUser: defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true})}),
+        context: defaultAppContext({
+          loggedInUser: defaultUserDto({ missing_metadata_key_ids: [uuidv4()] }, { withRole: true }),
+        }),
         metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto()),
-        metadataKeysSettings: new MetadataKeysSettingsEntity(defaultMetadataKeysSettingsDto({allow_usage_of_personal_keys: false})),
+        metadataKeysSettings: new MetadataKeysSettingsEntity(
+          defaultMetadataKeysSettingsDto({ allow_usage_of_personal_keys: false }),
+        ),
       });
       props.history = createMemoryHistory();
 
@@ -229,17 +240,19 @@ describe("FilterResourcesByItemsIOwnPage", () => {
       await page.clickOnCreateButton();
       await waitForTrue(() => props.history.location.pathname !== initialPath);
 
-      expect(props.history.location.pathname).toStrictEqual(`/webAccessibleResources/quickaccess/resources/action-aborted-missing-metadata-keys`);
+      expect(props.history.location.pathname).toStrictEqual(
+        `/webAccessibleResources/quickaccess/resources/action-aborted-missing-metadata-keys`,
+      );
     });
 
     it("should not display the button if metadata type settings are not loaded", () => {
-      const props = defaultProps({metadataTypeSettings: null});
+      const props = defaultProps({ metadataTypeSettings: null });
       const page = new FilterResourcesByItemsIOwnPagePage(props);
       expect(page.createButton).toBeNull();
     });
 
     it("should not display the button if resource types are not loaded", () => {
-      const props = defaultProps({resourceTypes: null});
+      const props = defaultProps({ resourceTypes: null });
       const page = new FilterResourcesByItemsIOwnPagePage(props);
       expect(page.createButton).toBeNull();
     });
@@ -247,14 +260,17 @@ describe("FilterResourcesByItemsIOwnPage", () => {
     it("should not display the button if metadata type settings default is v5 and only v4 resource types is available", () => {
       const metadataTypeSettingEntity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto());
       const resourceTypesCollection = new ResourceTypesCollection(resourceTypesV4CollectionDto());
-      const props = defaultProps({metadataTypeSettings: metadataTypeSettingEntity, resourceTypes: resourceTypesCollection});
+      const props = defaultProps({
+        metadataTypeSettings: metadataTypeSettingEntity,
+        resourceTypes: resourceTypesCollection,
+      });
       const page = new FilterResourcesByItemsIOwnPagePage(props);
       expect(page.createButton).toBeNull();
     });
 
     it("should not display the button if metadata type settings default is v4 and only v5 resource types is available", () => {
       const resourceTypesCollection = new ResourceTypesCollection(resourceTypesV5CollectionDto());
-      const props = defaultProps({resourceTypes: resourceTypesCollection});
+      const props = defaultProps({ resourceTypes: resourceTypesCollection });
       const page = new FilterResourcesByItemsIOwnPagePage(props);
       expect(page.createButton).toBeNull();
     });

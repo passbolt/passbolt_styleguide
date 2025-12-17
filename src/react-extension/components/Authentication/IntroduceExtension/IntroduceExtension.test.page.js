@@ -12,7 +12,7 @@
  * @since         3.3.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import IntroduceExtension from "./IntroduceExtension";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -28,9 +28,9 @@ export default class IntroduceExtensionTestPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <IntroduceExtension {...props}/>
+        <IntroduceExtension {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,28 +38,28 @@ export default class IntroduceExtensionTestPage {
    * Returns the title
    */
   get title() {
-    return this._page.container.querySelector('.introduce-setup-extension h1').textContent;
+    return this._page.container.querySelector(".introduce-setup-extension h1").textContent;
   }
 
   /**
    * Returns the browser extension div
    */
   get browser() {
-    return this._page.container.querySelector('.introduce-setup-extension .animated-setup-introduction');
+    return this._page.container.querySelector(".introduce-setup-extension .animated-setup-introduction");
   }
 
   /**
    * Returns the next button
    */
   get nextButton() {
-    return this._page.container.querySelector('.introduce-setup-extension .form-actions .button.primary.big');
+    return this._page.container.querySelector(".introduce-setup-extension .form-actions .button.primary.big");
   }
 
   /**
    * next page
    */
   async next() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.nextButton, leftClick);
     await waitFor(() => {});
   }

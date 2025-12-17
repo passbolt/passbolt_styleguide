@@ -12,7 +12,7 @@
  * @since         4.11.0
  */
 
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
 
 /**
  * Build default metadata keys settings form dto.
@@ -38,12 +38,12 @@ export const metadataKeysSettingsFormWithGeneratedKeyDto = (data = {}) => {
     zero_knowledge_key_share: false,
     generated_metadata_key: {
       private_key: {
-        armored_key: pgpKeys.eddsa_ed25519.private
+        armored_key: pgpKeys.eddsa_ed25519.private,
       },
       public_key: {
-        armored_key: pgpKeys.eddsa_ed25519.public
+        armored_key: pgpKeys.eddsa_ed25519.public,
       },
-    }
+    },
   };
   return Object.assign(defaultData, data);
 };

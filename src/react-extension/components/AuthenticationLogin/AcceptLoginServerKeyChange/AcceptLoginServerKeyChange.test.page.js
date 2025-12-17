@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AcceptLoginServerKeyChange from "./AcceptLoginServerKeyChange";
@@ -28,9 +28,9 @@ export default class AcceptLoginServerKeyChangePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AcceptLoginServerKeyChange {...props}/>
+        <AcceptLoginServerKeyChange {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,35 +38,35 @@ export default class AcceptLoginServerKeyChangePage {
    * Returns the check input
    */
   get serverKeyFingerprint() {
-    return this._page.container.querySelector('pre')?.textContent;
+    return this._page.container.querySelector("pre")?.textContent;
   }
 
   /**
    * Returns the input container
    */
   get inputContainer() {
-    return this._page.container.querySelector('.input.checkbox');
+    return this._page.container.querySelector(".input.checkbox");
   }
 
   /**
    * Returns the check input
    */
   get checkedInput() {
-    return this._page.container.querySelector('#accept-new-key');
+    return this._page.container.querySelector("#accept-new-key");
   }
 
   /**
    * Returns the accept button element
    */
   get acceptButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * Toggle the checked flag value
    */
   async toggleChecked() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.checkedInput, leftClick);
     await waitFor(() => {});
   }
@@ -76,7 +76,7 @@ export default class AcceptLoginServerKeyChangePage {
    * @param inProgressFn The function called while saving
    */
   async accept(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.acceptButton, leftClick);
     await waitFor(inProgressFn);
   }

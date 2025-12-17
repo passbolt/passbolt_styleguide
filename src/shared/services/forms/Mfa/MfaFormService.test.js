@@ -12,11 +12,14 @@
  * @since         3.8.0
  */
 
-import {AdminMfaContextProvider} from "../../../../react-extension/contexts/Administration/AdministrationMfa/AdministrationMfaContext";
-import {defaultProps, mockDuoError} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
-import {enableFetchMocks} from 'jest-fetch-mock';
-import MfaFormService from './MfaFormService';
-import {mockYubikeyError} from '../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data';
+import { AdminMfaContextProvider } from "../../../../react-extension/contexts/Administration/AdministrationMfa/AdministrationMfaContext";
+import {
+  defaultProps,
+  mockDuoError,
+} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
+import { enableFetchMocks } from "jest-fetch-mock";
+import MfaFormService from "./MfaFormService";
+import { mockYubikeyError } from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -25,13 +28,13 @@ beforeEach(() => {
 describe("MfaFormService", () => {
   let adminMfaContext, // The adminMfaContext to test
     mfaFormService;
-  const translation = message => message;
+  const translation = (message) => message;
   const props = defaultProps(); // The props to pass
 
   beforeEach(() => {
     jest.resetAllMocks();
     adminMfaContext = new AdminMfaContextProvider(props);
-    const setStateMock = state => adminMfaContext.state = Object.assign(adminMfaContext.state, state);
+    const setStateMock = (state) => (adminMfaContext.state = Object.assign(adminMfaContext.state, state));
     jest.spyOn(adminMfaContext, "setState").mockImplementation(setStateMock);
     MfaFormService.killInstance();
     mfaFormService = MfaFormService.getInstance(adminMfaContext, translation);
@@ -51,13 +54,12 @@ describe("MfaFormService", () => {
     });
   });
 
-
   describe("MfaFormService::killInstance", () => {
     it("should kill the instance and create a new one", () => {
       MfaFormService.killInstance();
       mfaFormService = MfaFormService.getInstance(null, null);
       expect.assertions(1);
-      expect(mfaFormService).toEqual({"context": null, "translation": null});
+      expect(mfaFormService).toEqual({ context: null, translation: null });
     });
   });
 
@@ -243,7 +245,6 @@ describe("MfaFormService", () => {
       const result = mfaFormService.validateDuoInputs();
       const settings = adminMfaContext.getSettings();
 
-
       expect(mfaFormService.validateDuoHostname).toHaveBeenCalledWith(settings.duoHostname);
       expect(mfaFormService.validateDuoClientId).toHaveBeenCalledWith(settings.duoClientId);
       expect(mfaFormService.validateDuoClientSecret).toHaveBeenCalledWith(settings.duoClientSecret);
@@ -278,7 +279,7 @@ describe("MfaFormService", () => {
   });
 
   describe("MfaFormService::validate", () => {
-    it("should return false if there are some validation issues", async() => {
+    it("should return false if there are some validation issues", async () => {
       adminMfaContext.setSettings("yubikeyToggle", true);
       adminMfaContext.setSettings("duoToggle", true);
 
@@ -294,7 +295,7 @@ describe("MfaFormService", () => {
       expect(errors).toEqual(Object.assign(mockYubikeyError(), mockDuoError()));
       expect.assertions(4);
     });
-    it("should return true if validation succeed", async() => {
+    it("should return true if validation succeed", async () => {
       jest.spyOn(mfaFormService, "validateYubikeyInputs");
       jest.spyOn(mfaFormService, "validateDuoInputs");
 
@@ -307,4 +308,3 @@ describe("MfaFormService", () => {
     });
   });
 });
-

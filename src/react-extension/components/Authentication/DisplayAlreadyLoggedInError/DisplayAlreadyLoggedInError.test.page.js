@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayAlreadyLoggedInError from "./DisplayAlreadyLoggedInError";
@@ -28,9 +28,9 @@ export default class DisplayAlreadyLoggedInErrorPage {
   constructor(props = {}) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayAlreadyLoggedInError {...props}/>
+        <DisplayAlreadyLoggedInError {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,28 +38,28 @@ export default class DisplayAlreadyLoggedInErrorPage {
    * Returns the title text
    */
   get title() {
-    return this._page.container.querySelector('.setup-error h1').textContent;
+    return this._page.container.querySelector(".setup-error h1").textContent;
   }
 
   /**
    * Returns the description text
    */
   get description() {
-    return this._page.container.querySelector('.setup-error p').textContent;
+    return this._page.container.querySelector(".setup-error p").textContent;
   }
 
   /**
    * Returns the log out HTML element.
    */
   get logoutButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * Clicks on the log out button in the page.
    */
   async logout() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.logoutButton, leftClick);
   }
 }

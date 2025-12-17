@@ -16,10 +16,9 @@
  * Unit tests on DisplayComments in regard of specifications
  */
 
-
-import {defaultPropsOneResource, defaultPropsMultipleResource} from "./DeleteResource.test.data";
+import { defaultPropsOneResource, defaultPropsMultipleResource } from "./DeleteResource.test.data";
 import DeleteResourcePage from "./DeleteResource.test.page";
-import {fireEvent} from "@testing-library/react";
+import { fireEvent } from "@testing-library/react";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 
 beforeEach(() => {
@@ -30,7 +29,7 @@ beforeEach(() => {
 describe("See Password Delete Dialog", () => {
   let page; // The page to test against
 
-  describe('As LU I can delete one resource', () => {
+  describe("As LU I can delete one resource", () => {
     let propsOneResource;
 
     /**
@@ -45,7 +44,7 @@ describe("See Password Delete Dialog", () => {
       page = new DeleteResourcePage(propsOneResource);
     });
 
-    it('As LU I should know what resource I am deleting', () => {
+    it("As LU I should know what resource I am deleting", () => {
       expect.assertions(9);
       expect(page.deleteResourcePageObject.exists()).toBeTruthy();
       // title
@@ -55,30 +54,30 @@ describe("See Password Delete Dialog", () => {
       expect(page.deleteResourcePageObject.closeButton).not.toBeNull();
       // submit button
       expect(page.deleteResourcePageObject.saveButton).not.toBeNull();
-      expect(page.deleteResourcePageObject.saveButton.textContent).toBe('Delete');
+      expect(page.deleteResourcePageObject.saveButton.textContent).toBe("Delete");
       // cancel button
       expect(page.deleteResourcePageObject.cancelButton).not.toBeNull();
-      expect(page.deleteResourcePageObject.cancelButton.textContent).toBe('Cancel');
+      expect(page.deleteResourcePageObject.cancelButton.textContent).toBe("Cancel");
       // resource name
       expect(page.deleteResourcePageObject.resourceName).not.toBeNull();
     });
 
-    it('As LU I should see a toaster message after deleting a resource', async() => {
+    it("As LU I should see a toaster message after deleting a resource", async () => {
       const submitButton = page.deleteResourcePageObject.saveButton;
       expect.assertions(3);
       // Mock the request function to make it the expected result
-      jest.spyOn(propsOneResource.actionFeedbackContext, 'displaySuccess');
-      jest.spyOn(propsOneResource.context.port, 'request').mockImplementationOnce(() => jest.fn());
+      jest.spyOn(propsOneResource.actionFeedbackContext, "displaySuccess");
+      jest.spyOn(propsOneResource.context.port, "request").mockImplementationOnce(() => jest.fn());
 
       await page.deleteResourcePageObject.click(submitButton);
 
-      const resourceIds = propsOneResource.resources.map(resource => resource.id);
+      const resourceIds = propsOneResource.resources.map((resource) => resource.id);
       expect(propsOneResource.context.port.request).toHaveBeenCalledWith("passbolt.resources.delete-all", resourceIds);
       expect(propsOneResource.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
       expect(propsOneResource.onClose).toHaveBeenCalledTimes(1);
     });
 
-    it('As LU I should be able to cancel the operation by clicking on the cancel button', async() => {
+    it("As LU I should be able to cancel the operation by clicking on the cancel button", async () => {
       const cancelButton = page.deleteResourcePageObject.cancelButton;
 
       await page.deleteResourcePageObject.click(cancelButton);
@@ -87,19 +86,19 @@ describe("See Password Delete Dialog", () => {
       expect(propsOneResource.onClose).toHaveBeenCalledTimes(1);
     });
 
-    it('As LU I should be able to cancel the edition with the keyboard (escape)', () => {
+    it("As LU I should be able to cancel the edition with the keyboard (escape)", () => {
       // Escape key pressed event
-      const escapeKeyDown = {keyCode: 27};
+      const escapeKeyDown = { keyCode: 27 };
       fireEvent.keyDown(page.deleteResourcePageObject.dialogTitle, escapeKeyDown);
 
       expect.assertions(1);
       expect(propsOneResource.onClose).toHaveBeenCalledTimes(1);
     });
 
-    it('Displays an error when the API call fail', async() => {
+    it("Displays an error when the API call fail", async () => {
       const submitButton = page.deleteResourcePageObject.saveButton;
       // Mock the request function to make it return an error.
-      jest.spyOn(propsOneResource.context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(propsOneResource.context.port, "request").mockImplementationOnce(() => {
         throw new PassboltApiFetchError("Jest simulate API error.");
       });
 
@@ -111,12 +110,12 @@ describe("See Password Delete Dialog", () => {
       expect(page.deleteResourcePageObject.errorDialogMessage).not.toBeNull();
     });
 
-    it('As LU I want to see a long  resource/tag/folders name fitting its delete dialog', async() => {
+    it("As LU I want to see a long  resource/tag/folders name fitting its delete dialog", async () => {
       expect(page.deleteResourcePageObject.tagName.classList.contains("dialog-variable")).toBeTruthy();
     });
   });
 
-  describe('As LU I can delete multiple resources', () => {
+  describe("As LU I can delete multiple resources", () => {
     const propsMultipleResource = defaultPropsMultipleResource(); // The props to pass
 
     /**
@@ -129,16 +128,19 @@ describe("See Password Delete Dialog", () => {
       page = new DeleteResourcePage(propsMultipleResource);
     });
 
-    it('As LU I should see a toaster message after deleting multiple resource', async() => {
+    it("As LU I should see a toaster message after deleting multiple resource", async () => {
       const submitButton = page.deleteResourcePageObject.saveButton;
       // Mock the request function to make it the expected result
-      jest.spyOn(propsMultipleResource.actionFeedbackContext, 'displaySuccess');
-      jest.spyOn(propsMultipleResource.context.port, 'request').mockImplementationOnce(() => jest.fn());
+      jest.spyOn(propsMultipleResource.actionFeedbackContext, "displaySuccess");
+      jest.spyOn(propsMultipleResource.context.port, "request").mockImplementationOnce(() => jest.fn());
 
       await page.deleteResourcePageObject.click(submitButton);
-      const resourceIds = propsMultipleResource.resources.map(resource => resource.id);
+      const resourceIds = propsMultipleResource.resources.map((resource) => resource.id);
       expect.assertions(2);
-      expect(propsMultipleResource.context.port.request).toHaveBeenCalledWith("passbolt.resources.delete-all", resourceIds);
+      expect(propsMultipleResource.context.port.request).toHaveBeenCalledWith(
+        "passbolt.resources.delete-all",
+        resourceIds,
+      );
       expect(propsMultipleResource.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
     });
   });

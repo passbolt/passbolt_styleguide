@@ -18,7 +18,7 @@ import MockPort from "../../react-extension/test/mock/MockPort";
 import MockStorage from "../../react-extension/test/mock/MockStorage";
 import UserSettings from "../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../react-extension/test/fixture/Settings/userSettings";
-import {defaultUserDto} from "../../shared/models/entity/user/userEntity.test.data";
+import { defaultUserDto } from "../../shared/models/entity/user/userEntity.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -29,7 +29,7 @@ export function defaultAppContext(data = {}) {
   const siteSettings = new SiteSettings(siteSettingsFixture);
 
   return {
-    locale: 'en-UK',
+    locale: "en-UK",
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: siteSettings,
     port: new MockPort(),
@@ -42,6 +42,6 @@ export function defaultAppContext(data = {}) {
     getOpenerTabId: () => 1,
     search: "",
     searchHistory: {},
-    ...data
+    ...data,
   };
 }

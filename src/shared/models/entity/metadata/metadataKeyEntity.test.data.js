@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.10.0
  */
-import {v4 as uuidv4} from "uuid";
-import {defaultArmoredPublicKey} from "../../../../../test/assert/assertEntityProperty.test.data";
-import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
-import {defaultUserDto} from "../user/userEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultArmoredPublicKey } from "../../../../../test/assert/assertEntityProperty.test.data";
+import { defaultMetadataPrivateKeyDto } from "./metadataPrivateKeyEntity.test.data";
+import { defaultUserDto } from "../user/userEntity.test.data";
 
 /**
  * Returns a minimal DTO metadata key dto object.
@@ -26,13 +26,19 @@ import {defaultUserDto} from "../user/userEntity.test.data";
  */
 export const minimalMetadataKeyDto = (data = {}, options = {}) => {
   const defaultData = {
-    fingerprint: Array.from({length: 40}, () => Math.floor(Math.random() * 16).toString(16).toUpperCase()).join(''),
+    fingerprint: Array.from({ length: 40 }, () =>
+      Math.floor(Math.random() * 16)
+        .toString(16)
+        .toUpperCase(),
+    ).join(""),
     armored_key: defaultArmoredPublicKey(),
-    ...data
+    ...data,
   };
 
   if (!defaultData.metadata_private_keys && options?.withMetadataPrivateKeys) {
-    defaultData.metadata_private_keys = [defaultMetadataPrivateKeyDto({metadata_key_id: defaultData.id}, options?.withMetadataPrivateKeys)];
+    defaultData.metadata_private_keys = [
+      defaultMetadataPrivateKeyDto({ metadata_key_id: defaultData.id }, options?.withMetadataPrivateKeys),
+    ];
   }
 
   if (!defaultData.creator && options?.withCreator) {
@@ -74,9 +80,11 @@ export const defaultMetadataKeyDto = (data = {}, options = {}) => {
  */
 export const metadataKeyWithSignedMetadataPrivateKeyDataDto = (data = {}, options = {}) => {
   const id = data.id || uuidv4();
-  const signedDate = (new Date()).toISOString();
-  const metadataPrivateKeyDto = {metadata_key_id: id, data_signed_by_current_user: signedDate};
-  const metadataPrivateKeysDto = [defaultMetadataPrivateKeyDto(metadataPrivateKeyDto, options?.withMetadataPrivateKeys)];
+  const signedDate = new Date().toISOString();
+  const metadataPrivateKeyDto = { metadata_key_id: id, data_signed_by_current_user: signedDate };
+  const metadataPrivateKeysDto = [
+    defaultMetadataPrivateKeyDto(metadataPrivateKeyDto, options?.withMetadataPrivateKeys),
+  ];
   const defaultData = {
     ...data,
     id: id,

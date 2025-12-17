@@ -14,7 +14,7 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import SorterEntity from "./sorterEntity";
-import {defaultSorterData} from "./sorterEntity.test.data";
+import { defaultSorterData } from "./sorterEntity.test.data";
 import each from "jest-each";
 import EntityValidationError from "../abstract/entityValidationError";
 
@@ -35,38 +35,38 @@ describe("SorterEntity", () => {
     });
 
     each([
-      {scenario: 'required', rule: 'type'},
-      {scenario: 'not null', rule: 'type', value: null},
-    ]).describe("Should validate the propertyName", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+      { scenario: "required", rule: "type" },
+      { scenario: "not null", rule: "type", value: null },
+    ]).describe("Should validate the propertyName", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultSorterData({
-          propertyName: test.value
+          propertyName: test.value,
         });
         try {
           new SorterEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('propertyName', test.rule)).toBeTruthy();
+          expect(error.hasError("propertyName", test.rule)).toBeTruthy();
         }
       });
     });
 
     each([
-      {scenario: 'required', rule: 'type'},
-      {scenario: 'not null', rule: 'type', value: null},
-    ]).describe("Should validate the asc", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+      { scenario: "required", rule: "type" },
+      { scenario: "not null", rule: "type", value: null },
+    ]).describe("Should validate the asc", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultSorterData({
           propertyName: "name",
-          asc: test.value
+          asc: test.value,
         });
         try {
           new SorterEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('asc', test.rule)).toBeTruthy();
+          expect(error.hasError("asc", test.rule)).toBeTruthy();
         }
       });
     });
@@ -75,10 +75,7 @@ describe("SorterEntity", () => {
   describe("SorterEntity:toDto", () => {
     it("should return the expected properties.", () => {
       expect.assertions(2);
-      const expectedKeys = [
-        'propertyName',
-        'asc'
-      ];
+      const expectedKeys = ["propertyName", "asc"];
 
       const dto = defaultSorterData();
       const entity = new SorterEntity(dto);

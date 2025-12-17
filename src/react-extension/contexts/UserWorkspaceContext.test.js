@@ -16,11 +16,10 @@
  * Unit tests on UserWorkspaceContext in regard of specifications
  */
 
-
-import {defaultAppContext, defaultProps} from "./UserWorkspaceContext.test.data";
+import { defaultAppContext, defaultProps } from "./UserWorkspaceContext.test.data";
 import UserWorkspaceContextPage from "./UserWorkspaceContext.test.page";
-import {UserWorkspaceFilterTypes} from "./UserWorkspaceContext";
-import {waitForTrue} from "../../../test/utils/waitFor";
+import { UserWorkspaceFilterTypes } from "./UserWorkspaceContext";
+import { waitForTrue } from "../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -42,61 +41,61 @@ describe("User Workspace Context", () => {
       expect(page.filter.type).toBe(UserWorkspaceFilterTypes.NONE);
     });
 
-    it("AS LU I should have an ALL ITEMS filter when I went to /app/users without filter", async() => {
+    it("AS LU I should have an ALL ITEMS filter when I went to /app/users without filter", async () => {
       await page.goToAllUsers();
       expect(page.filter.type).toBe(UserWorkspaceFilterTypes.ALL);
     });
 
-    it("AS LU I should have an RECENTLY-MODIFIED filter when I went to /app/users with such a filter", async() => {
+    it("AS LU I should have an RECENTLY-MODIFIED filter when I went to /app/users with such a filter", async () => {
       await page.goToRecentlyModified();
       expect(page.filter.type).toBe(UserWorkspaceFilterTypes.RECENTLY_MODIFIED);
     });
 
-    it("AS LU I should have an SUSPENDED-USER filter when I went to /app/users with such a filter", async() => {
+    it("AS LU I should have an SUSPENDED-USER filter when I went to /app/users with such a filter", async () => {
       await page.goToSuspendedUsers();
       expect(page.filter.type).toBe(UserWorkspaceFilterTypes.SUSPENDED_USER);
     });
 
-    it("AS LU I should have an TEXT filter when I went to /app/users with such a filter", async() => {
+    it("AS LU I should have an TEXT filter when I went to /app/users with such a filter", async () => {
       await page.goToText("some text");
       expect(page.filter.type).toBe(UserWorkspaceFilterTypes.TEXT);
     });
-    it("AS LU I should have an GROUP filter when I went to /app/users with such a filter", async() => {
-      await page.goToGroup({id: '516c2db6-0aed-52d8-854f-b3f3499995e7'});
+    it("AS LU I should have an GROUP filter when I went to /app/users with such a filter", async () => {
+      await page.goToGroup({ id: "516c2db6-0aed-52d8-854f-b3f3499995e7" });
       expect(page.filter.type).toBe(UserWorkspaceFilterTypes.GROUP);
     });
 
-    it("AS LU I should have an ACCOUNT_RECOVERY_REQUEST filter when I go to /app/users with such a filter", async() => {
+    it("AS LU I should have an ACCOUNT_RECOVERY_REQUEST filter when I go to /app/users with such a filter", async () => {
       await page.goToAccountRecoveryRequestUsers();
       expect(page.filter.type).toBe(UserWorkspaceFilterTypes.ACCOUNT_RECOVERY_REQUEST);
     });
 
-    it("AS LU I should have an MISSING_METADATA_KEY filter when I go to /app/users with such a filter", async() => {
+    it("AS LU I should have an MISSING_METADATA_KEY filter when I go to /app/users with such a filter", async () => {
       await page.goToMissingMetadataKeysUsers();
       expect(page.filter.type).toBe(UserWorkspaceFilterTypes.MISSING_METADATA_KEY);
     });
   });
 
   describe("As LU I should have the appropriate search filtered results at any time", () => {
-    it("AS LU I should have all users when the filter is ALL-ITEMS", async() => {
+    it("AS LU I should have all users when the filter is ALL-ITEMS", async () => {
       await page.goToAllUsers();
       expect(page.filteredUsers).toBe(context.users);
     });
 
-    it("AS LU I should have all resources all users when the filter is RECENTLY-MODIFIED", async() => {
+    it("AS LU I should have all resources all users when the filter is RECENTLY-MODIFIED", async () => {
       await page.goToRecentlyModified();
       expect(page.filteredUsers).toBe(context.users);
     });
 
-    it("AS LU I should have all suspended users when the filter is SUSPENDED-USERS", async() => {
+    it("AS LU I should have all suspended users when the filter is SUSPENDED-USERS", async () => {
       await page.goToSuspendedUsers();
-      const expectedUsers = context.users.filter(user => Boolean(user.disabled));
+      const expectedUsers = context.users.filter((user) => Boolean(user.disabled));
       expect(page.filteredUsers).toStrictEqual(expectedUsers);
     });
 
     it.todo("AS LU I should have the most recent created resource when the filter is RECENTLY-MODIFIED");
 
-    it("AS LU I should have users matching a text when the filter is TEXT", async() => {
+    it("AS LU I should have users matching a text when the filter is TEXT", async () => {
       const expectedResourcesCount = 1;
       await page.goToText("frances");
       expect(page.filteredUsers).toHaveLength(expectedResourcesCount);
@@ -104,9 +103,9 @@ describe("User Workspace Context", () => {
       expect(page.filteredUsers[0].profile.last_name).toBe("Allen");
     });
 
-    it("AS LU I should have users belonged to a group when the filter is GROUP", async() => {
+    it("AS LU I should have users belonged to a group when the filter is GROUP", async () => {
       const expectedResourcesCount = 2;
-      const leadershipTeamGroup = {id: "516c2db6-0aed-52d8-854f-b3f3499995e7"};
+      const leadershipTeamGroup = { id: "516c2db6-0aed-52d8-854f-b3f3499995e7" };
       await page.goToGroup(leadershipTeamGroup);
       expect(page.filteredUsers).toHaveLength(expectedResourcesCount);
     });
@@ -118,7 +117,7 @@ describe("User Workspace Context", () => {
       expect(page.selectedUsers).toHaveLength(0);
     });
 
-    it("As LU I should have one selected user when the Single Selection event has been fired", async() => {
+    it("As LU I should have one selected user when the Single Selection event has been fired", async () => {
       await page.goToAllUsers();
       const userToSelect = context.users[0];
       page.select(userToSelect);
@@ -126,7 +125,7 @@ describe("User Workspace Context", () => {
       expect(page.selectedUsers[0]).toBe(userToSelect);
     });
 
-    it("As LU I should have none selected user when the Single Selection event has been fired on a selected user", async() => {
+    it("As LU I should have none selected user when the Single Selection event has been fired on a selected user", async () => {
       await page.goToAllUsers();
       const userToSelect = context.users[0];
       page.select(userToSelect);
@@ -134,7 +133,7 @@ describe("User Workspace Context", () => {
       expect(page.selectedUsers).toHaveLength(0);
     });
 
-    it("Should remove selected users not in filtered users", async() => {
+    it("Should remove selected users not in filtered users", async () => {
       const userToRemove = context.users[5];
 
       await page.goToAllUsers();
@@ -148,14 +147,14 @@ describe("User Workspace Context", () => {
   });
 
   describe("As LU I should have the appropriate details at any time", () => {
-    it("As LU, I should detail a group when a group is selected as filter", async() => {
+    it("As LU, I should detail a group when a group is selected as filter", async () => {
       const group = context.groups[0];
       await page.goToGroup(group);
       expect(page.details.group).toBe(group);
       expect(page.lockDisplayDetail).toBeTruthy();
     });
 
-    it("As LU, I should detail a user when a user is selected", async() => {
+    it("As LU, I should detail a user when a user is selected", async () => {
       const user = context.users[0];
       await page.select(user);
       await waitForTrue(() => page.details?.user !== null);
@@ -163,7 +162,7 @@ describe("User Workspace Context", () => {
       expect(page.lockDisplayDetail).toBeTruthy();
     });
 
-    it("As LU, I should detail nothing when the detail visibility lock is removed", async() => {
+    it("As LU, I should detail nothing when the detail visibility lock is removed", async () => {
       const user = context.users[0];
       await page.toggleLockDetails();
       await page.select(user);
@@ -172,14 +171,14 @@ describe("User Workspace Context", () => {
       expect(page.lockDisplayDetail).toBeFalsy();
     });
 
-    it("As LU, I should be able to update the details of the user", async() => {
+    it("As LU, I should be able to update the details of the user", async () => {
       const user = context.users[1];
-      await page.updateDetails({user});
+      await page.updateDetails({ user });
       expect(page.details.user).toBe(user);
       expect(page.details.group).toBeUndefined();
 
       const group = context.groups[0];
-      await page.updateDetails({group});
+      await page.updateDetails({ group });
 
       await waitForTrue(() => page.details?.user !== null);
       expect(page.details.group).toBe(group);
@@ -188,7 +187,7 @@ describe("User Workspace Context", () => {
   });
 
   describe("As LU my access should be check by RBAC", () => {
-    it("As LU, I can't access the User Workspace if RBAC denies me", async() => {
+    it("As LU, I can't access the User Workspace if RBAC denies me", async () => {
       const props = defaultProps({
         rbacContext: {
           canIUseAction: () => false,
@@ -199,10 +198,10 @@ describe("User Workspace Context", () => {
       expect(props.loadingContext.add).not.toHaveBeenCalled();
     });
 
-    it("As LU, I can access the User Workspace if RBAC allow me", async() => {
+    it("As LU, I can access the User Workspace if RBAC allow me", async () => {
       const props = defaultProps({
         rbacContext: {
-          canIUseAction: () => true
+          canIUseAction: () => true,
         },
       });
       new UserWorkspaceContextPage(context, props);

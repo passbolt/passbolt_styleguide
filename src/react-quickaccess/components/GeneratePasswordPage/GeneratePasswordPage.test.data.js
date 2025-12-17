@@ -3,10 +3,10 @@
  * @returns {*}
  */
 
-import {defaultAppContext} from "../../contexts/AppContext.test.data";
-import {defaultPasswordPoliciesContext} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
-import {defaultPrepareResourceContext} from "../../contexts/PrepareResourceContext.test.data";
-import {defaultClipboardContext} from "../../../react-extension/contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
+import { defaultAppContext } from "../../contexts/AppContext.test.data";
+import { defaultPasswordPoliciesContext } from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
+import { defaultPrepareResourceContext } from "../../contexts/PrepareResourceContext.test.data";
+import { defaultClipboardContext } from "../../../react-extension/contexts/Clipboard/ManagedClipboardServiceProvider.test.data";
 
 /**
  * Default props
@@ -19,10 +19,10 @@ export const defaultProps = (props = {}) => ({
   prepareResourceContext: defaultPrepareResourceContext(),
   history: {
     push: jest.fn(),
-    goBack: jest.fn()
+    goBack: jest.fn(),
   },
   clipboardContext: defaultClipboardContext(),
-  ...props
+  ...props,
 });
 
 /**
@@ -30,9 +30,10 @@ export const defaultProps = (props = {}) => ({
  * @param {object} props The props to override
  * @return {object}
  */
-export const withLastGeneratedPasswordProps = (props = {}) => defaultProps({
-  prepareResourceContext: defaultPrepareResourceContext({
-    lastGeneratedPassword: "aBcD10-é??????????",
-  }),
-  ...props
-});
+export const withLastGeneratedPasswordProps = (props = {}) =>
+  defaultProps({
+    prepareResourceContext: defaultPrepareResourceContext({
+      lastGeneratedPassword: "aBcD10-é??????????",
+    }),
+    ...props,
+  });

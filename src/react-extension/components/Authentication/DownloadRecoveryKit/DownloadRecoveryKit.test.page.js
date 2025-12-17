@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import DownloadRecoveryKit from "./DownloadRecoveryKit";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -30,7 +30,7 @@ export default class DownloadRecoveryKitPage {
       <MockTranslationProvider>
         <DownloadRecoveryKit {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,28 +38,28 @@ export default class DownloadRecoveryKitPage {
    * Returns the next button element
    */
   get checkboxStoredRecoveryKit() {
-    return this._page.container.querySelector('#checkbox-recovery-kit');
+    return this._page.container.querySelector("#checkbox-recovery-kit");
   }
 
   /**
    * Returns the next button element
    */
   get nextButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * Returns the download link element
    */
   get downloadLink() {
-    return this._page.container.querySelector('#download-kit');
+    return this._page.container.querySelector("#download-kit");
   }
 
   /**
    * Downloads the recovery kit
    */
   async download() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.downloadLink, leftClick);
     await waitFor(() => {});
   }
@@ -68,7 +68,7 @@ export default class DownloadRecoveryKitPage {
    * Continue the process
    */
   async checkStoredRecoveryKit() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.checkboxStoredRecoveryKit, leftClick);
     await waitFor(() => {});
   }
@@ -77,7 +77,7 @@ export default class DownloadRecoveryKitPage {
    * Continue the process
    */
   async next() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.nextButton, leftClick);
     await waitFor(() => {});
   }

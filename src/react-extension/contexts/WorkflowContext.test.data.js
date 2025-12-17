@@ -21,7 +21,7 @@ export function defaultWorkflowContext(context = {}) {
   const defaultContext = {
     workflows: [],
     start: jest.fn(),
-    stop: jest.fn()
+    stop: jest.fn(),
   };
   return Object.assign(defaultContext, context);
 }

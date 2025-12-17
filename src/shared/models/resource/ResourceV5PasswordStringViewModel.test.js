@@ -14,11 +14,11 @@
 
 import EntitySchema from "../entity/abstract/entitySchema";
 import ResourceV5PasswordStringViewModel from "./ResourceV5PasswordStringViewModel";
-import {v4 as uuid} from "uuid";
-import {defaultResourceViewModelDto, minimalResourceViewModelDto} from "./resourceViewModel.test.data";
-import {defaultResourceDto} from "../entity/resource/resourceEntity.test.data";
-import {TEST_RESOURCE_TYPE_V5_PASSWORD_STRING} from "../entity/resourceType/resourceTypeEntity.test.data";
-import {DateTime} from "luxon";
+import { v4 as uuid } from "uuid";
+import { defaultResourceViewModelDto, minimalResourceViewModelDto } from "./resourceViewModel.test.data";
+import { defaultResourceDto } from "../entity/resource/resourceEntity.test.data";
+import { TEST_RESOURCE_TYPE_V5_PASSWORD_STRING } from "../entity/resourceType/resourceTypeEntity.test.data";
+import { DateTime } from "luxon";
 import ResourceViewModel from "./ResourceViewModel";
 
 describe("ResourceV5PasswordStringViewModel", () => {
@@ -48,7 +48,10 @@ describe("ResourceV5PasswordStringViewModel", () => {
 
   describe("::getSchema", () => {
     it("schema must validate", () => {
-      EntitySchema.validateSchema(ResourceV5PasswordStringViewModel.name, ResourceV5PasswordStringViewModel.getSchema());
+      EntitySchema.validateSchema(
+        ResourceV5PasswordStringViewModel.name,
+        ResourceV5PasswordStringViewModel.getSchema(),
+      );
     });
 
     it("schema not have 'id' field set as required in CREATE_MODE", () => {
@@ -167,7 +170,7 @@ describe("ResourceV5PasswordStringViewModel", () => {
 
     it("should return a dto with an id if it is set", () => {
       expect.assertions(1);
-      const dto = minimalResourceViewModelDto({id: uuid()});
+      const dto = minimalResourceViewModelDto({ id: uuid() });
       const viewModel = new ResourceV5PasswordStringViewModel(dto);
       const resultDto = viewModel.toResourceDto();
 
@@ -179,7 +182,7 @@ describe("ResourceV5PasswordStringViewModel", () => {
     it("should return the password as a pure string", () => {
       expect.assertions(1);
       const expectedPassword = "this is the expected password";
-      const viewModel = new ResourceV5PasswordStringViewModel({password: expectedPassword});
+      const viewModel = new ResourceV5PasswordStringViewModel({ password: expectedPassword });
       expect(viewModel.toSecretDto()).toStrictEqual(expectedPassword);
     });
   });
@@ -221,7 +224,7 @@ describe("ResourceV5PasswordStringViewModel", () => {
       expect.assertions(1);
       const originalDto = {
         password: "a password",
-        description: ""
+        description: "",
       };
       const viewModel1 = new ResourceV5PasswordStringViewModel(originalDto);
       expect(viewModel1.areSecretsDifferent(originalDto)).toStrictEqual(true);
@@ -229,15 +232,15 @@ describe("ResourceV5PasswordStringViewModel", () => {
 
     it("should return false if both secret have a similar structure and content", () => {
       expect.assertions(1);
-      const originalDto = {password: "test"};
+      const originalDto = { password: "test" };
       const viewModel1 = new ResourceV5PasswordStringViewModel(originalDto);
       expect(viewModel1.areSecretsDifferent(originalDto)).toStrictEqual(false);
     });
 
     it("should return true if the data structure is the same but the secret is different", () => {
       expect.assertions(1);
-      const originalDto = {password: "test"};
-      const viewModel1 = new ResourceV5PasswordStringViewModel({password: "something else"});
+      const originalDto = { password: "test" };
+      const viewModel1 = new ResourceV5PasswordStringViewModel({ password: "something else" });
       expect(viewModel1.areSecretsDifferent(originalDto)).toStrictEqual(true);
     });
   });

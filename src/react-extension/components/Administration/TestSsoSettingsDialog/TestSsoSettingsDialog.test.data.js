@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {v4 as uuid} from "uuid";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { v4 as uuid } from "uuid";
 import SsoProviders from "../ManageSsoSettings/SsoProviders.data";
 
 /**
@@ -30,7 +30,7 @@ export function defaultProps(props = {}) {
     onClose: jest.fn(),
     dialogContext: {
       open: jest.fn(),
-    }
+    },
   };
   delete props.context; // Treated in the default
   return Object.assign(defaultProps, props);

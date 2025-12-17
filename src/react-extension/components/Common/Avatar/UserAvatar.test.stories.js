@@ -17,38 +17,37 @@
  */
 import React from "react";
 import UserAvatar from "./UserAvatar";
-import {defaultProps} from "./UserAvatar.test.data";
+import { defaultProps } from "./UserAvatar.test.data";
 
 export default {
-  title: 'Components/Common/UserAvatar',
-  component: UserAvatar
+  title: "Components/Common/UserAvatar",
+  component: UserAvatar,
 };
 
-
-
-const Template = args =>
-  <div style={{display: "flex", flexWrap: "wrap"}}>
-    <div style={{width: "50%"}}>
-      <UserAvatar {...args}/>
+const Template = (args) => (
+  <div style={{ display: "flex", flexWrap: "wrap" }}>
+    <div style={{ width: "50%" }}>
+      <UserAvatar {...args} />
     </div>
-    <div style={{width: "50%"}}>
-      <UserAvatar {...args} attentionRequired={true}/>
+    <div style={{ width: "50%" }}>
+      <UserAvatar {...args} attentionRequired={true} />
     </div>
-    <div className="avatar-with-name" style={{width: "50%", marginTop: "2.3rem"}}>
-      <UserAvatar {...args}/>
+    <div className="avatar-with-name" style={{ width: "50%", marginTop: "2.3rem" }}>
+      <UserAvatar {...args} />
       <div className="details center-cell">
         <span className="name">Name</span>
         <span className="email">name@passbolt.com</span>
       </div>
     </div>
-    <div className="avatar-with-name" style={{width: "50%", marginTop: "2.3rem"}}>
-      <UserAvatar {...args} attentionRequired={true}/>
+    <div className="avatar-with-name" style={{ width: "50%", marginTop: "2.3rem" }}>
+      <UserAvatar {...args} attentionRequired={true} />
       <div className="details center-cell">
         <span className="name">Name</span>
         <span className="email">name@passbolt.com</span>
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 export const Initial = Template.bind({});
-Initial.args = defaultProps({baseUrl: process.env.ORIGIN_URL});
+Initial.args = defaultProps({ baseUrl: process.env.ORIGIN_URL });

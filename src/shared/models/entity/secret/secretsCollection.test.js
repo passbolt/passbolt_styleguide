@@ -14,13 +14,10 @@
 
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import SecretsCollection from "./secretsCollection";
-import {minimalDto, readSecret} from "passbolt-styleguide/src/shared/models/entity/secret/secretEntity.test.data";
+import { minimalDto, readSecret } from "passbolt-styleguide/src/shared/models/entity/secret/secretEntity.test.data";
 import SecretEntity from "./secretEntity";
-import {
-  defaultSecretDataV5DefaultDto
-} from "passbolt-styleguide/src/shared/models/entity/secretData/secretDataV5DefaultEntity.test.data";
-import SecretDataV5DefaultEntity
-  from "passbolt-styleguide/src/shared/models/entity/secretData/secretDataV5DefaultEntity";
+import { defaultSecretDataV5DefaultDto } from "passbolt-styleguide/src/shared/models/entity/secretData/secretDataV5DefaultEntity.test.data";
+import SecretDataV5DefaultEntity from "passbolt-styleguide/src/shared/models/entity/secretData/secretDataV5DefaultEntity";
 import expect from "expect";
 
 describe("SecretsCollection", () => {
@@ -71,60 +68,58 @@ describe("SecretsCollection", () => {
 
     it("should throw if the collection schema does not validate", () => {
       expect.assertions(1);
-      expect(() => new SecretsCollection({}))
-        .toThrowEntityValidationError("items");
+      expect(() => new SecretsCollection({})).toThrowEntityValidationError("items");
     });
 
     it("should throw if one of data item does not validate the collection entity schema", () => {
       const dto1 = minimalDto();
-      const dto2 = minimalDto({id: 42});
+      const dto2 = minimalDto({ id: 42 });
 
       expect.assertions(1);
-      expect(() => new SecretsCollection([dto1, dto2]))
-        .toThrowCollectionValidationError("1.id.type");
+      expect(() => new SecretsCollection([dto1, dto2])).toThrowCollectionValidationError("1.id.type");
     });
 
     it("should throw if one of data item does not validate the unique id build rule", () => {
       const dto1 = readSecret();
-      const dto2 = readSecret({id: dto1.id});
+      const dto2 = readSecret({ id: dto1.id });
 
       expect.assertions(1);
-      expect(() => new SecretsCollection([dto1, dto2]))
-        .toThrowCollectionValidationError("1.id.unique");
+      expect(() => new SecretsCollection([dto1, dto2])).toThrowCollectionValidationError("1.id.unique");
     });
 
     it("should throw if one of data item does not validate the unique resource id & user id tuple build rule", () => {
       const dto1 = readSecret();
-      const dto2 = readSecret({resource_id: dto1.resource_id, user_id: dto1.user_id});
+      const dto2 = readSecret({ resource_id: dto1.resource_id, user_id: dto1.user_id });
 
       expect.assertions(1);
-      expect(() => new SecretsCollection([dto1, dto2]))
-        .toThrowCollectionValidationError("1.resource_id:user_id.unique");
+      expect(() => new SecretsCollection([dto1, dto2])).toThrowCollectionValidationError(
+        "1.resource_id:user_id.unique",
+      );
     });
 
     it("should, with enabling the ignore invalid option, ignore items which do not validate their schema", () => {
       const dto1 = readSecret();
-      const dto2 = readSecret({id: 42});
+      const dto2 = readSecret({ id: 42 });
 
       expect.assertions(2);
-      const collection = new SecretsCollection([dto1, dto2], {ignoreInvalidEntity: true});
+      const collection = new SecretsCollection([dto1, dto2], { ignoreInvalidEntity: true });
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0].id).toEqual(dto1.id);
     });
 
     it("should, with enabling the ignore invalid option, ignore items which do not validate the unique id build rule", () => {
       const dto1 = readSecret();
-      const dto2 = readSecret({id: dto1.id});
+      const dto2 = readSecret({ id: dto1.id });
 
       expect.assertions(2);
-      const collection = new SecretsCollection([dto1, dto2], {ignoreInvalidEntity: true});
+      const collection = new SecretsCollection([dto1, dto2], { ignoreInvalidEntity: true });
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0].id).toEqual(dto1.id);
     });
   });
 
   describe(":pushMany", () => {
-    it("[performance] should ensure performance adding large dataset remains effective.", async() => {
+    it("[performance] should ensure performance adding large dataset remains effective.", async () => {
       const count = 10_000;
       const dtos = [];
       for (let i = 0; i < count; i++) {
@@ -214,7 +209,6 @@ describe("SecretsCollection", () => {
       const collection = new SecretsCollection(dtos);
       collection.items[0].data = secretDataDecrypted;
       collection.items[1].data = secretDataDecrypted;
-
 
       collection.filterOutSecretDataEncrypted();
 

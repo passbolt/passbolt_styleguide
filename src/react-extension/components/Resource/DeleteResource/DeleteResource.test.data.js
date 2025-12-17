@@ -1,7 +1,7 @@
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {readPermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { readPermissionDto } from "../../../../shared/models/entity/permission/permissionEntity.test.data";
 
 /**
  * Default props one selected resource owned
@@ -57,15 +57,15 @@ export const resourcesMock = [
     },
     tags: [
       {
-        "id": "1c8afebc-7e23-51bd-a0b6-2e695afeb32f",
-        "slug": "#charlie",
-        "is_shared": true
+        id: "1c8afebc-7e23-51bd-a0b6-2e695afeb32f",
+        slug: "#charlie",
+        is_shared: true,
       },
       {
-        "id": "ecd059e8-4cb3-574b-a063-6083e272ef27",
-        "slug": "#golf",
-        "is_shared": true
-      }
+        id: "ecd059e8-4cb3-574b-a063-6083e272ef27",
+        slug: "#golf",
+        is_shared: true,
+      },
     ],
   }),
   defaultResourceDto({
@@ -77,5 +77,5 @@ export const resourcesMock = [
     },
     permission: readPermissionDto(),
     tags: [],
-  })
+  }),
 ];

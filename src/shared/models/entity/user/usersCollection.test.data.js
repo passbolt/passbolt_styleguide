@@ -12,7 +12,7 @@
  * @since         4.8.0
  */
 
-import {defaultUserDto} from "./userEntity.test.data";
+import { defaultUserDto } from "./userEntity.test.data";
 
 /**
  * Build groups dtos.
@@ -28,7 +28,7 @@ import {defaultUserDto} from "./userEntity.test.data";
 export const defaultUsersDtos = (groupsCount = 10, options = {}) => {
   const dtos = [];
   for (let i = 0; i < groupsCount; i++) {
-    const dto = defaultUserDto({username: `user${i}@domain.test`}, options);
+    const dto = defaultUserDto({ username: `user${i}@domain.test` }, options);
     dtos.push(dto);
   }
   return dtos;

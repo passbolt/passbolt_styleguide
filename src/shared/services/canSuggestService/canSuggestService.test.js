@@ -16,13 +16,25 @@ import CanSuggestService from "./canSuggestService";
 describe("CanSuggestService", () => {
   describe("::canSuggestUris", () => {
     it("should suggest matching domain urls", () => {
-      expect(CanSuggestService.canSuggestUris("https://www.passbolt.com", ["https://www.passbolt.com", "https://email"])).toBe(true);
-      expect(CanSuggestService.canSuggestUris("https://email", ["https://www.passbolt.com", "https://email"])).toBe(true);
+      expect(
+        CanSuggestService.canSuggestUris("https://www.passbolt.com", ["https://www.passbolt.com", "https://email"]),
+      ).toBe(true);
+      expect(CanSuggestService.canSuggestUris("https://email", ["https://www.passbolt.com", "https://email"])).toBe(
+        true,
+      );
     });
 
     it("shouldn't suggest urls not matching the exact domain", () => {
-      expect(CanSuggestService.canSuggestUris("https://www.not-passbolt.com", ["passbolt.com", "http://email", "email"])).toBe(false);
-      expect(CanSuggestService.canSuggestUris("https://www.attacker-passbolt.com", ["passbolt.com", "http://email", "email"])).toBe(false);
+      expect(
+        CanSuggestService.canSuggestUris("https://www.not-passbolt.com", ["passbolt.com", "http://email", "email"]),
+      ).toBe(false);
+      expect(
+        CanSuggestService.canSuggestUris("https://www.attacker-passbolt.com", [
+          "passbolt.com",
+          "http://email",
+          "email",
+        ]),
+      ).toBe(false);
       expect(CanSuggestService.canSuggestUris("https://email", ["passbolt.com", "http://email"])).toBe(false);
       expect(CanSuggestService.canSuggestUris("https://www.not-passbolt.com", null)).toBe(false);
       expect(CanSuggestService.canSuggestUris("https://www.not-passbolt.com", undefined)).toBe(false);
@@ -35,13 +47,19 @@ describe("CanSuggestService", () => {
       expect(CanSuggestService.canSuggestUri("http://www.passbolt.com", "http://www.passbolt.com")).toBe(true);
       expect(CanSuggestService.canSuggestUri("ftp://www.passbolt.com", "ftp://www.passbolt.com")).toBe(true);
       expect(CanSuggestService.canSuggestUri("https://www.passbolt.com", "https://www.passbolt.com")).toBe(true);
-      expect(CanSuggestService.canSuggestUri("https://www.passbolt.com:443", "https://www.passbolt.com:443")).toBe(true);
+      expect(CanSuggestService.canSuggestUri("https://www.passbolt.com:443", "https://www.passbolt.com:443")).toBe(
+        true,
+      );
       expect(CanSuggestService.canSuggestUri("https://email", "https://email")).toBe(true);
     });
 
     it("should suggest matching international domain urls", () => {
-      expect(CanSuggestService.canSuggestUri(new URL("https://àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ.com").origin,
-        "https://àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ.com")).toBe(true);
+      expect(
+        CanSuggestService.canSuggestUri(
+          new URL("https://àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ.com").origin,
+          "https://àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ.com",
+        ),
+      ).toBe(true);
       expect(CanSuggestService.canSuggestUri(new URL("https://الش.com").origin, "https://الش.com")).toBe(true);
       expect(CanSuggestService.canSuggestUri(new URL("https://Ид.com").origin, "https://Ид.com")).toBe(true);
       expect(CanSuggestService.canSuggestUri(new URL("https://完善.com").origin, "https://完善.com")).toBe(true);
@@ -56,7 +74,9 @@ describe("CanSuggestService", () => {
       expect(CanSuggestService.canSuggestUri("ftp://127.0.0.1", "ftp://127.0.0.1")).toBe(true);
       expect(CanSuggestService.canSuggestUri("https://[0:0:0:0:0:0:0:1]", "https://[0:0:0:0:0:0:0:1]")).toBe(true);
       expect(CanSuggestService.canSuggestUri("https://127.0.0.1", "https://127.0.0.1")).toBe(true);
-      expect(CanSuggestService.canSuggestUri("https://[0:0:0:0:0:0:0:1]:443", "https://[0:0:0:0:0:0:0:1]:443")).toBe(true);
+      expect(CanSuggestService.canSuggestUri("https://[0:0:0:0:0:0:0:1]:443", "https://[0:0:0:0:0:0:0:1]:443")).toBe(
+        true,
+      );
       expect(CanSuggestService.canSuggestUri("https://127.0.0.1:443", "https://127.0.0.1:443")).toBe(true);
     });
 
@@ -121,13 +141,17 @@ describe("CanSuggestService", () => {
     it("should not suggest urls to an attacker url containing a parameter looking alike a stored password url", () => {
       expect(CanSuggestService.canSuggestUri("https://attacker.com?passbolt.com", "passbolt.com")).toBe(false);
       expect(CanSuggestService.canSuggestUri("https://attacker.com?passbolt.com", "passbolt.com")).toBe(false);
-      expect(CanSuggestService.canSuggestUri("https://attacker.com?url=https://passbolt.com", "passbolt.com")).toBe(false);
+      expect(CanSuggestService.canSuggestUri("https://attacker.com?url=https://passbolt.com", "passbolt.com")).toBe(
+        false,
+      );
     });
 
     it("should not suggest urls to an attacker url containing a hash looking alike a stored password url", () => {
       expect(CanSuggestService.canSuggestUri("https://attacker.com#passbolt.com", "passbolt.com")).toBe(false);
       expect(CanSuggestService.canSuggestUri("https://attacker.com#passbolt.com", "passbolt.com")).toBe(false);
-      expect(CanSuggestService.canSuggestUri("https://attacker.com#url=https://passbolt.com", "passbolt.com")).toBe(false);
+      expect(CanSuggestService.canSuggestUri("https://attacker.com#url=https://passbolt.com", "passbolt.com")).toBe(
+        false,
+      );
     });
 
     it("shouldn't suggest urls with a port looking alike a stored password url", () => {
@@ -171,10 +195,11 @@ describe("CanSuggestService", () => {
     });
 
     it("shouldn't suggest urls with no hostname to url with no hostname", () => {
-      expect(CanSuggestService.canSuggestUri("https://no%20identified%20domain%20url.com", "no%20identified%20domain%20url")).toBe(false);
+      expect(
+        CanSuggestService.canSuggestUri("https://no%20identified%20domain%20url.com", "no%20identified%20domain%20url"),
+      ).toBe(false);
       expect(CanSuggestService.canSuggestUri("about:addons", "about:addons")).toBe(false);
       expect(CanSuggestService.canSuggestUri("about:addons", "no%20identified%20domain%20url")).toBe(false);
     });
   });
 });
-
