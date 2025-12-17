@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.10.1
  */
-import {v4 as uuidv4} from "uuid";
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
-import {defaultSessionKeysBundleDataDto} from "./sessionKeysBundleDataEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
+import { defaultSessionKeysBundleDataDto } from "./sessionKeysBundleDataEntity.test.data";
 
 /**
  * Returns a minimal DTO object suitable for the SessionKeysBundleEntity
@@ -26,7 +26,7 @@ export const minimalSessionKeysBundleDto = (data = {}, options = {}) => {
   const defaultData = {
     user_id: uuidv4(),
     data: pgpKeys.metadataKey.encryptedSessionKeysDataMessage,
-    ...data
+    ...data,
   };
 
   if (options?.withDecryptedSessionKeysBundle) {
@@ -42,14 +42,17 @@ export const minimalSessionKeysBundleDto = (data = {}, options = {}) => {
  * @param {object} options
  * @returns {object}
  */
-export const defaultSessionKeysBundleDto = (data = {}, options = {}) => minimalSessionKeysBundleDto({
-  id: uuidv4(),
-  modified: "2022-10-11T08:09:00+00:00",
-  created_by: uuidv4(),
-  created: "2022-10-11T08:09:00+00:00",
-  ...data,
-}, options);
-
+export const defaultSessionKeysBundleDto = (data = {}, options = {}) =>
+  minimalSessionKeysBundleDto(
+    {
+      id: uuidv4(),
+      modified: "2022-10-11T08:09:00+00:00",
+      created_by: uuidv4(),
+      created: "2022-10-11T08:09:00+00:00",
+      ...data,
+    },
+    options,
+  );
 
 /**
  * Returns a DTO object suitable for the SessionKeysBundleEntity with decrypted data field
@@ -57,7 +60,11 @@ export const defaultSessionKeysBundleDto = (data = {}, options = {}) => minimalS
  * @param {object} options
  * @returns {object}
  */
-export const decryptedSessionKeysBundleDto = (data = {}, options = {}) => defaultSessionKeysBundleDto({
-  data: defaultSessionKeysBundleDataDto(),
-  ...data,
-}, options);
+export const decryptedSessionKeysBundleDto = (data = {}, options = {}) =>
+  defaultSessionKeysBundleDto(
+    {
+      data: defaultSessionKeysBundleDataDto(),
+      ...data,
+    },
+    options,
+  );

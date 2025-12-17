@@ -16,24 +16,26 @@
  * Unit tests on CreateUser in regard of specifications
  */
 import CreateUserPage from "./CreateUser.test.page";
-import {defaultAppContext, defaultProps} from "./CreateUser.test.data";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import { defaultAppContext, defaultProps } from "./CreateUser.test.data";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
-import {waitFor} from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
 });
-const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
+const truncatedWarningMessage =
+  "Warning: this is the maximum size for this field, make sure your data was not truncated.";
 
 describe("See the Create Dialog User", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (context, implementation) =>
+    jest.spyOn(context.port, "request").mockImplementation(implementation);
 
-  describe('As LU I can start adding a user', () => {
+  describe("As LU I can start adding a user", () => {
     /**
      * I should see the create user dialog
      */
@@ -41,7 +43,7 @@ describe("See the Create Dialog User", () => {
       page = new CreateUserPage(context, props);
     });
 
-    it('As AD I see a success toaster message after adding a user with success', async() => {
+    it("As AD I see a success toaster message after adding a user with success", async () => {
       expect(page.createUser.exists()).toBeTruthy();
       // create user
       const userMeta = {
@@ -63,7 +65,7 @@ describe("See the Create Dialog User", () => {
 
       const requestMockImpl = jest.fn((message, data) => data);
       mockContextRequest(context, requestMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       const userDto = {
         profile: {
@@ -80,7 +82,7 @@ describe("See the Create Dialog User", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As AD I should see a processing feedback while submitting the form', async() => {
+    it("As AD I should see a processing feedback while submitting the form", async () => {
       // Fill the form
       page.createUser.fillInput(page.createUser.firstName, "firstname");
       page.createUser.fillInput(page.createUser.lastName, "lastname");
@@ -88,9 +90,12 @@ describe("See the Create Dialog User", () => {
 
       // Mock the request function to make it the expected result
       let updateResolve;
-      const requestMockImpl = jest.fn(() => new Promise(resolve => {
-        updateResolve = resolve;
-      }));
+      const requestMockImpl = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            updateResolve = resolve;
+          }),
+      );
 
       // Mock the request function to make it the expected result
       mockContextRequest(context, requestMockImpl);
@@ -106,7 +111,7 @@ describe("See the Create Dialog User", () => {
       });
     });
 
-    it('As AD I shouldn’t be able to submit the form if there is an invalid field', async() => {
+    it("As AD I shouldn’t be able to submit the form if there is an invalid field", async () => {
       expect(page.createUser.exists()).toBeTruthy();
       await page.createUser.click(page.createUser.saveButton);
 
@@ -120,32 +125,32 @@ describe("See the Create Dialog User", () => {
       expect(page.createUser.usernameErrorMessage.textContent).toBe("The username should be a valid username address.");
     });
 
-    it('As AD I can stop adding a user by clicking on the cancel button', async() => {
+    it("As AD I can stop adding a user by clicking on the cancel button", async () => {
       expect(page.createUser.exists()).toBeTruthy();
       await page.createUser.click(page.createUser.cancelButton);
       expect(props.onClose).toBeCalled();
     });
 
-    it('As AD I can stop adding a user by closing the dialog', async() => {
+    it("As AD I can stop adding a user by closing the dialog", async () => {
       expect(page.createUser.exists()).toBeTruthy();
       await page.createUser.click(page.createUser.dialogClose);
       expect(props.onClose).toBeCalled();
     });
 
-    it('As AD I can stop adding a user with the keyboard (escape)', async() => {
+    it("As AD I can stop adding a user with the keyboard (escape)", async () => {
       expect(page.createUser.exists()).toBeTruthy();
       await page.createUser.escapeKey(page.createUser.dialogClose);
       expect(props.onClose).toBeCalled();
     });
 
-    it('As AD I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
+    it("As AD I should see an error dialog if the submit operation fails for an unexpected reason", async () => {
       // Fill the form
       page.createUser.fillInput(page.createUser.firstName, "firstname");
       page.createUser.fillInput(page.createUser.lastName, "lastname");
       page.createUser.fillInput(page.createUser.username, "user@passbolt.com");
 
       // Mock the request function to make it return an error.
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(context.port, "request").mockImplementationOnce(() => {
         throw new PassboltApiFetchError("Jest simulate API error.");
       });
 
@@ -156,7 +161,7 @@ describe("See the Create Dialog User", () => {
       expect(page.createUser.errorDialogMessage).not.toBeNull();
     });
 
-    it('As AD I should see an error message if the username already exists', async() => {
+    it("As AD I should see an error message if the username already exists", async () => {
       // Fill the form
       page.createUser.fillInput(page.createUser.firstName, "firstname");
       page.createUser.fillInput(page.createUser.lastName, "lastname");
@@ -165,13 +170,13 @@ describe("See the Create Dialog User", () => {
       const data = {
         body: {
           username: {
-            uniqueUsername: "This username is already in use."
-          }
-        }
+            uniqueUsername: "This username is already in use.",
+          },
+        },
       };
 
       // Mock the request function to make it return an error.
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(context.port, "request").mockImplementationOnce(() => {
         throw new PassboltApiFetchError("Could not validate user data.", data);
       });
 
@@ -181,11 +186,11 @@ describe("See the Create Dialog User", () => {
       expect(page.createUser.usernameErrorMessage.textContent).toBe("This username is already in use.");
     });
 
-    it("As a user I should see a feedback when firstname, username or lastname field content is truncated by a field limit", async() => {
+    it("As a user I should see a feedback when firstname, username or lastname field content is truncated by a field limit", async () => {
       expect.assertions(3);
-      page.createUser.fillInput(page.createUser.firstName, 'a'.repeat(128));
-      page.createUser.fillInput(page.createUser.username, 'a'.repeat(128));
-      page.createUser.fillInput(page.createUser.lastName, 'a'.repeat(128));
+      page.createUser.fillInput(page.createUser.firstName, "a".repeat(128));
+      page.createUser.fillInput(page.createUser.username, "a".repeat(128));
+      page.createUser.fillInput(page.createUser.lastName, "a".repeat(128));
 
       await page.createUser.keyUpInput(page.createUser.firstName);
       await page.createUser.keyUpInput(page.createUser.username);

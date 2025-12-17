@@ -17,7 +17,7 @@ import DisplayEmptyDetailsPage from "./DisplayEmptyDetails.test.page";
  * Unit tests on DisplayEmptyDetails in regard of specifications
  */
 describe("DisplayEmptyDetails", () => {
-  it('As LU I see the empty sidebar with its content', () => {
+  it("As LU I see the empty sidebar with its content", () => {
     expect.assertions(2);
 
     const page = new DisplayEmptyDetailsPage();

@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 import ExternalGpgKeyEntity from "./externalGpgKeyEntity";
-import {ExternalGpgKeyEntityFixtures} from "./externalGpgKeyEntity.test.fixtures";
+import { ExternalGpgKeyEntityFixtures } from "./externalGpgKeyEntity.test.fixtures";
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 
@@ -37,12 +37,12 @@ describe("ExternalGpgKey entity", () => {
 
     it("validates user_ids property", () => {
       const correctUserIds = [
-        {email: "test@test.com", name: "user's name"},
-        {email: "test2@test.com", name: "second user's name"},
+        { email: "test@test.com", name: "user's name" },
+        { email: "test2@test.com", name: "second user's name" },
       ];
       const successScenarios = [
         assertEntityProperty.SCENARIO_ARRAY,
-        {scenario: "with valid user_ids", value: correctUserIds}
+        { scenario: "with valid user_ids", value: correctUserIds },
       ];
 
       const failingScenarios = [
@@ -72,8 +72,8 @@ describe("ExternalGpgKey entity", () => {
     it("validates expires property", () => {
       const successScenarios = [
         ...assertEntityProperty.SUCCESS_DATETIME_SCENARIO,
-        {scenario: "date 'infinity'", value: "Infinity"},
-        {scenario: "date 'Never'", value: "Never"},
+        { scenario: "date 'infinity'", value: "Infinity" },
+        { scenario: "date 'Never'", value: "Never" },
         assertEntityProperty.SCENARIO_NULL,
       ];
 
@@ -84,10 +84,22 @@ describe("ExternalGpgKey entity", () => {
 
     it("validates created property", () => {
       //assertEntityProperty.string: without failing tests as the value is enforced in the constructor
-      assertEntityProperty.assert(ExternalGpgKeyEntity, "created", assertEntityProperty.SUCCESS_STRING_SCENARIOS, [], "type");
+      assertEntityProperty.assert(
+        ExternalGpgKeyEntity,
+        "created",
+        assertEntityProperty.SUCCESS_STRING_SCENARIOS,
+        [],
+        "type",
+      );
 
       //assertEntityProperty.dateTime: without failing tests as the value is enforced in the constructor
-      assertEntityProperty.assert(ExternalGpgKeyEntity, "created", assertEntityProperty.SUCCESS_DATETIME_SCENARIO, [], "format");
+      assertEntityProperty.assert(
+        ExternalGpgKeyEntity,
+        "created",
+        assertEntityProperty.SUCCESS_DATETIME_SCENARIO,
+        [],
+        "format",
+      );
       assertEntityProperty.notRequired(ExternalGpgKeyEntity, "created");
     });
 
@@ -103,10 +115,7 @@ describe("ExternalGpgKey entity", () => {
     });
 
     it("validates curve property", () => {
-      const successScenarios = [
-        ...assertEntityProperty.SUCCESS_STRING_SCENARIOS,
-        assertEntityProperty.SCENARIO_NULL,
-      ];
+      const successScenarios = [...assertEntityProperty.SUCCESS_STRING_SCENARIOS, assertEntityProperty.SCENARIO_NULL];
       const failingScenarios = assertEntityProperty.FAIL_STRING_SCENARIOS;
 
       assertEntityProperty.assert(ExternalGpgKeyEntity, "curve", successScenarios, failingScenarios, "type");
@@ -151,7 +160,7 @@ describe("ExternalGpgKey entity", () => {
       key_id: legacyDto.keyId,
       user_ids: legacyDto.userIds,
       created: "2015-10-26T12:45:08.000Z",
-      expires: "2024-10-26T12:45:08.000Z"
+      expires: "2024-10-26T12:45:08.000Z",
     };
     delete sanitizedDto.key;
     delete sanitizedDto.keyId;
@@ -159,5 +168,7 @@ describe("ExternalGpgKey entity", () => {
     expect(entity.toDto()).toEqual(sanitizedDto);
   });
 
-  it.todo("constructor works if the user id email is not standard and the application settings defined a custom validation.");
+  it.todo(
+    "constructor works if the user id email is not standard and the application settings defined a custom validation.",
+  );
 });

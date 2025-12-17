@@ -12,14 +12,13 @@
  * @since         4.9.4
  */
 
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
-import {Router} from "react-router-dom";
-import MockTranslationProvider
-  from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import { Router } from "react-router-dom";
+import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import ResourceCreatePage from "./ResourceCreatePage";
-import {waitForTrue} from "../../../../test/utils/waitFor";
-import {createMemoryHistory} from "history";
+import { waitForTrue } from "../../../../test/utils/waitFor";
+import { createMemoryHistory } from "history";
 import userEvent from "@testing-library/user-event";
 
 /**
@@ -35,14 +34,14 @@ export default class ResourceCreatePagePage {
       <MockTranslationProvider>
         <Router history={props.history || createMemoryHistory()}>
           {/*<PrepareResourceContextProvider context={context} passwordPoliciesContext={props.passwordPoliciesContext}>*/}
-          <ResourceCreatePage {...props} debug/>
+          <ResourceCreatePage {...props} debug />
           {/*</PrepareResourceContextProvider>*/}
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
-    this.user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
+    this.user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
   }
 
   /**
@@ -106,7 +105,7 @@ export default class ResourceCreatePagePage {
    * @returns {HTLMElement}
    */
   get passwordError() {
-    return this._page.container.querySelector('.resource-create-form .input-password-wrapper .error-message');
+    return this._page.container.querySelector(".resource-create-form .input-password-wrapper .error-message");
   }
 
   /**
@@ -114,7 +113,7 @@ export default class ResourceCreatePagePage {
    * @returns {string}
    */
   get complexityText() {
-    return this._page.container.querySelector('.complexity-text')?.textContent;
+    return this._page.container.querySelector(".complexity-text")?.textContent;
   }
 
   /**
@@ -156,7 +155,7 @@ export default class ResourceCreatePagePage {
   async setFormWith(formData) {
     let key;
     for (key in formData) {
-      fireEvent.input(this[key], {target: {value: formData[key]}});
+      fireEvent.input(this[key], { target: { value: formData[key] } });
       await waitForTrue(() => this[key].value === formData[key].toString());
     }
   }

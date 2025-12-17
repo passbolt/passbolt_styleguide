@@ -1,14 +1,20 @@
 import MockPort from "../../../test/mock/MockPort";
-import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/roleEntity.test.data";
-import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultResourceMetadataDto} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
-import {ownerFolderPermissionDto, ownerPermissionDto, readFolderPermissionDto, readGroupPermissionDto, readPermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
-import {defaultFolderDto} from "../../../../shared/models/entity/folder/folderEntity.test.data";
-import {defaultGroupDto} from "../../../../shared/models/entity/group/groupEntity.test.data";
-import {defaultGroupUser} from "../../../../shared/models/entity/groupUser/groupUserEntity.test.data";
-import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
-import {defaultProfileDto} from "../../../../shared/models/entity/profile/ProfileEntity.test.data";
-import {defaultFullAvatarDto} from "../../../../shared/models/entity/avatar/avatarEntity.test.data";
+import { TEST_ROLE_USER_ID } from "../../../../shared/models/entity/role/roleEntity.test.data";
+import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { defaultResourceMetadataDto } from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import {
+  ownerFolderPermissionDto,
+  ownerPermissionDto,
+  readFolderPermissionDto,
+  readGroupPermissionDto,
+  readPermissionDto,
+} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
+import { defaultFolderDto } from "../../../../shared/models/entity/folder/folderEntity.test.data";
+import { defaultGroupDto } from "../../../../shared/models/entity/group/groupEntity.test.data";
+import { defaultGroupUser } from "../../../../shared/models/entity/groupUser/groupUserEntity.test.data";
+import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
+import { defaultProfileDto } from "../../../../shared/models/entity/profile/ProfileEntity.test.data";
+import { defaultFullAvatarDto } from "../../../../shared/models/entity/avatar/avatarEntity.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -20,7 +26,7 @@ export function defaultAppContext(appContext) {
     port: new MockPort(),
     users: mockUsers,
     groups: mockGroups,
-    setContext: function(newContext) {
+    setContext: function (newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
     },
@@ -28,14 +34,13 @@ export function defaultAppContext(appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 }
 
-
 /**
  * Default props one selected resource owned
  * @returns {{resourceWorkspaceContext}}
  */
 export function defaultProps() {
   return {
-    onClose: jest.fn()
+    onClose: jest.fn(),
   };
 }
 
@@ -56,10 +61,10 @@ export const mockUsers = [
         id: "0f769127-3053-45e4-bd8e-75e766bb4d52",
         user_id: "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
         foreign_key: "48bcd9ac-a520-53e0-b3a4-9da7e57b91aa",
-      })
+      }),
     }),
     __placeholder_last_logged_in__: "",
-    last_logged_in: ""
+    last_logged_in: "",
   }),
   defaultUserDto({
     id: "f848277c-5398-58f8-a82a-72397af2d450",
@@ -69,7 +74,7 @@ export const mockUsers = [
       created: "2012-07-04T13:39:25+00:00",
       description: "Logged in user",
       modified: "2012-07-04T13:39:25+00:00",
-      name: "user"
+      name: "user",
     },
     username: "ada@passbolt.com",
     profile: defaultProfileDto({
@@ -86,14 +91,16 @@ export const mockUsers = [
         hash: "97e36ab6528e26e3b9f988444ef490f125f49a39",
         path: "Avatar\/ef\/71\/ed\/b5e7a332595f4e52959179df27f8a978\/b5e7a332595f4e52959179df27f8a978.png",
         url: {
-          medium: "img\/public\/Avatar\/ef\/71\/ed\/b5e7a332595f4e52959179df27f8a978\/b5e7a332595f4e52959179df27f8a978.a99472d5.png",
-          small: "img\/public\/Avatar\/ef\/71\/ed\/b5e7a332595f4e52959179df27f8a978\/b5e7a332595f4e52959179df27f8a978.65a0ba70.png"
-        }
+          medium:
+            "img\/public\/Avatar\/ef\/71\/ed\/b5e7a332595f4e52959179df27f8a978\/b5e7a332595f4e52959179df27f8a978.a99472d5.png",
+          small:
+            "img\/public\/Avatar\/ef\/71\/ed\/b5e7a332595f4e52959179df27f8a978\/b5e7a332595f4e52959179df27f8a978.65a0ba70.png",
+        },
       }),
     }),
     __placeholder_last_logged_in__: "2020-05-12T15:56:49+00:00",
-    last_logged_in: "2020-08-12T15:56:49+00:00"
-  })
+    last_logged_in: "2020-08-12T15:56:49+00:00",
+  }),
 ];
 
 /**
@@ -123,7 +130,7 @@ export const mockGroups = [
         is_admin: true,
       }),
     ],
-  })
+  }),
 ];
 
 /**
@@ -188,7 +195,7 @@ export const mockFolders = [
         id: "875cb5d4-fa9a-57cb-908d-3721264e98b1",
         aco_foreign_key: "6592f71b-8874-5e91-bf6d-829b8ad188f5",
         aro_foreign_key: "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-      })
+      }),
     ],
   }),
   defaultFolderDto({
@@ -207,7 +214,7 @@ export const mockFolders = [
         aro_foreign_key: "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
       }),
     ],
-  })
+  }),
 ];
 
 /**
@@ -222,7 +229,7 @@ export const mockResources = [
       uris: ["http://www.apache.org/"],
       description: "Apache is the world\u0027s most used web server software.",
     }),
-    "permissions": [
+    permissions: [
       ownerPermissionDto({
         id: "8dfd59a7-852d-5c57-bd45-75c28bbb3f6c",
         aco_foreign_key: "8e3874ae-4b40-590b-968a-418f704b9d9a",
@@ -233,7 +240,7 @@ export const mockResources = [
         aco_foreign_key: "8e3874ae-4b40-590b-968a-418f704b9d9a",
         aro_foreign_key: "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
       }),
-    ]
+    ],
   }),
   defaultResourceDto({
     id: "f9f79749-4bce-4e61-8016-68c942a8f2d9",

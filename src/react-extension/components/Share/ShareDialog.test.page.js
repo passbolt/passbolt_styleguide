@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import ShareDialog from "./ShareDialog";
 import AppContext from "../../../shared/context/AppContext/AppContext";
@@ -32,10 +31,10 @@ export default class ShareDialogPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <ShareDialog {...props} listMinSize={20}/>
+          <ShareDialog {...props} listMinSize={20} />
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -59,34 +58,34 @@ export default class ShareDialogPage {
    * Returns the dialog element
    */
   get form() {
-    return this._page.container.querySelector('.share-form');
+    return this._page.container.querySelector(".share-form");
   }
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
    * Returns the autocomplete share name input element
    */
   get shareNameInput() {
-    return this._page.container.querySelector('#share-name-input');
+    return this._page.container.querySelector("#share-name-input");
   }
 
   /**
    * Returns the warning message element
    */
   get warningMessage() {
-    return this._page.container.querySelector('.message.warning').textContent;
+    return this._page.container.querySelector(".message.warning").textContent;
   }
 
   /**
    * Returns the error message element
    */
   get errorMessage() {
-    return this._page.container.querySelector('.error.message').textContent;
+    return this._page.container.querySelector(".error.message").textContent;
   }
 
   /**
@@ -94,14 +93,16 @@ export default class ShareDialogPage {
    * @returns {Element}
    */
   userOrGroupAutocomplete(index) {
-    return this._page.container.querySelectorAll('.autocomplete-item .row .main-cell-wrapper .main-cell button')[index - 1];
+    return this._page.container.querySelectorAll(".autocomplete-item .row .main-cell-wrapper .main-cell button")[
+      index - 1
+    ];
   }
 
   /**
    * Returns the number of displayed users and groups
    */
   get count() {
-    return this._page.container.querySelectorAll('.permissions .row .aro-name').length;
+    return this._page.container.querySelectorAll(".permissions .row .aro-name").length;
   }
 
   /**
@@ -109,7 +110,8 @@ export default class ShareDialogPage {
    * @param index the display of the user
    */
   aroName(index) {
-    return this._page.container.querySelectorAll('.permissions .row .aro-name')[index - 1].querySelector('.ellipsis').textContent;
+    return this._page.container.querySelectorAll(".permissions .row .aro-name")[index - 1].querySelector(".ellipsis")
+      .textContent;
   }
 
   /**
@@ -117,7 +119,8 @@ export default class ShareDialogPage {
    * @param index the display of the user email
    */
   aroDetails(index) {
-    return this._page.container.querySelectorAll('.permissions .row .aro-details')[index - 1].querySelector('.ellipsis').textContent;
+    return this._page.container.querySelectorAll(".permissions .row .aro-details")[index - 1].querySelector(".ellipsis")
+      .textContent;
   }
 
   /**
@@ -125,7 +128,9 @@ export default class ShareDialogPage {
    * @param index the display of the permission
    */
   selectRights(index) {
-    return this._page.container.querySelectorAll('.permissions .row')[index - 1].querySelector('.select .selected-value');
+    return this._page.container
+      .querySelectorAll(".permissions .row")
+      [index - 1].querySelector(".select .selected-value");
   }
 
   /**
@@ -133,7 +138,7 @@ export default class ShareDialogPage {
    * @param index the display of the permission
    */
   selectFirstItem(index) {
-    return this._page.container.querySelectorAll('.permissions .row')[index - 1].querySelector('.select .option');
+    return this._page.container.querySelectorAll(".permissions .row")[index - 1].querySelector(".select .option");
   }
 
   /**
@@ -141,7 +146,7 @@ export default class ShareDialogPage {
    * @param index the display close button to remove user
    */
   removeAro(index) {
-    return this._page.container.querySelectorAll('.permissions .row')[index - 1].querySelector('.remove-item');
+    return this._page.container.querySelectorAll(".permissions .row")[index - 1].querySelector(".remove-item");
   }
 
   /**
@@ -155,7 +160,7 @@ export default class ShareDialogPage {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
@@ -166,26 +171,26 @@ export default class ShareDialogPage {
   }
 
   /** Click on the element */
-  async click(element)  {
+  async click(element) {
     await this.user.click(element);
   }
 
   /** Click without wait for on the element */
-  escapeKey()  {
+  escapeKey() {
     // Escape key down event
-    const escapeKeyDown = {keyCode: 27};
+    const escapeKeyDown = { keyCode: 27 };
     fireEvent.keyDown(this.form, escapeKeyDown);
   }
 
   /** fill the input element with data */
-  async fillInput(element, data)  {
-    const dataInputEvent = {target: {value: data}};
+  async fillInput(element, data) {
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
     await waitFor(() => {});
   }
 
   /** fill the search autocomplete input element with data */
-  async searchName(data)  {
+  async searchName(data) {
     await this.fillInput(this.shareNameInput, data);
   }
 

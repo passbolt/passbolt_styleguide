@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.1.0
  */
-import {v4 as uuidv4} from "uuid";
-import {TEST_RESOURCE_TYPE_V5_DEFAULT} from "../resourceType/resourceTypeEntity.test.data";
-import {defaultResourceMetadataDto} from "./metadata/resourceMetadataEntity.test.data";
-import {minimalDefaultSecretDataV5DefaultDto} from "../secretData/secretDataV5DefaultEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../resourceType/resourceTypeEntity.test.data";
+import { defaultResourceMetadataDto } from "./metadata/resourceMetadataEntity.test.data";
+import { minimalDefaultSecretDataV5DefaultDto } from "../secretData/secretDataV5DefaultEntity.test.data";
 
 /**
  * Build default resource dto.
@@ -28,10 +28,9 @@ export const defaultResourceFormDto = (data = {}) => {
     resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
     folder_parent_id: null,
     metadata: defaultResourceMetadataDto({
-      resource_type_id: data?.metadata?.resource_type_id
-        || data?.resource_type_id || TEST_RESOURCE_TYPE_V5_DEFAULT
+      resource_type_id: data?.metadata?.resource_type_id || data?.resource_type_id || TEST_RESOURCE_TYPE_V5_DEFAULT,
     }),
     secret: minimalDefaultSecretDataV5DefaultDto(),
-    ...data
+    ...data,
   };
 };

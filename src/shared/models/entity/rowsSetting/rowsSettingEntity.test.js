@@ -39,7 +39,7 @@ describe("RowsSettingEntity", () => {
     it("should return the defined height", () => {
       expect.assertions(1);
 
-      const dto = {height: "comfortable"};
+      const dto = { height: "comfortable" };
 
       const entity = new RowsSettingEntity(dto);
       expect(entity.height).toStrictEqual(dto.height);

@@ -14,12 +14,12 @@
 
 import MockPort from "../../../../react-extension/test/mock/MockPort";
 import MetadataSetupSettingsEntity from "../../../models/entity/metadata/metadataSetupSettingsEntity";
-import {enableMetadataSetupSettingsDto} from "../../../models/entity/metadata/metadataSetupSettingsEntity.test.data";
+import { enableMetadataSetupSettingsDto } from "../../../models/entity/metadata/metadataSetupSettingsEntity.test.data";
 import UserEntity from "../../../models/entity/user/userEntity";
-import {defaultAdminUserDto} from "../../../models/entity/user/userEntity.test.data";
+import { defaultAdminUserDto } from "../../../models/entity/user/userEntity.test.data";
 import SetupServiceWorkerService from "./setupServiceWorkerService";
-import {defaultSecurityTokenDto} from "../../../../react-extension/contexts/Desktop/ImportAccountKitContext.test.data";
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import { defaultSecurityTokenDto } from "../../../../react-extension/contexts/Desktop/ImportAccountKitContext.test.data";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -27,13 +27,13 @@ beforeEach(() => {
 
 describe("SetupServiceWorkerService", () => {
   describe("::findMetadataSetupSettings", () => {
-    it("requests the service worker with the expected event and return the metadata setup settings.", async() => {
+    it("requests the service worker with the expected event and return the metadata setup settings.", async () => {
       expect.assertions(4);
 
       const event = "passbolt.metadata.find-setup-settings";
       const dto = enableMetadataSetupSettingsDto();
       const port = new MockPort();
-      port.addRequestListener(event, async() => dto);
+      port.addRequestListener(event, async () => dto);
       jest.spyOn(port, "request");
 
       const service = new SetupServiceWorkerService(port);
@@ -47,7 +47,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::enableMetadataEncryption", () => {
-    it("requests the service worker with the expected event and return the metadata setup settings.", async() => {
+    it("requests the service worker with the expected event and return the metadata setup settings.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.metadata.enable";
@@ -64,7 +64,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::redirectUserToPostLoginUrl", () => {
-    it("requests the service worker to redirect the user to the post login URL.", async() => {
+    it("requests the service worker to redirect the user to the post login URL.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.auth.post-login-redirect";
@@ -81,7 +81,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::getCurrentLoggedInUser", () => {
-    it("requests the service worker to get information about the currently logged in user.", async() => {
+    it("requests the service worker to get information about the currently logged in user.", async () => {
       expect.assertions(4);
 
       const event = "passbolt.users.find-logged-in-user";
@@ -101,7 +101,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::isFirstInstall", () => {
-    it("requests the service worker to redirect the user to the post login URL.", async() => {
+    it("requests the service worker to redirect the user to the post login URL.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.setup.is-first-install";
@@ -118,7 +118,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::startSetup", () => {
-    it("requests the service worker to redirect the user to the post login URL.", async() => {
+    it("requests the service worker to redirect the user to the post login URL.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.setup.start";
@@ -135,7 +135,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::generateKey", () => {
-    it("requests the service worker to redirect the user to the post login URL.", async() => {
+    it("requests the service worker to redirect the user to the post login URL.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.setup.generate-key";
@@ -145,15 +145,15 @@ describe("SetupServiceWorkerService", () => {
       jest.spyOn(port, "request");
 
       const service = new SetupServiceWorkerService(port);
-      await service.generateKey({passphrase});
+      await service.generateKey({ passphrase });
 
       expect(port.request).toHaveBeenCalledTimes(1);
-      expect(port.request).toHaveBeenCalledWith(event, {passphrase});
+      expect(port.request).toHaveBeenCalledWith(event, { passphrase });
     });
   });
 
   describe("::downloadRecoveryKit", () => {
-    it("requests the service worker to redirect the user to the post login URL.", async() => {
+    it("requests the service worker to redirect the user to the post login URL.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.setup.download-recovery-kit";
@@ -170,7 +170,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::getAccountRecoveryOrganisationPolicy", () => {
-    it("requests the service worker to redirect the user to the post login URL.", async() => {
+    it("requests the service worker to redirect the user to the post login URL.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.setup.get-account-recovery-organization-policy";
@@ -187,7 +187,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::setAccountRecoveryUserSettings", () => {
-    it("requests the service worker to redirect the user to the post login URL.", async() => {
+    it("requests the service worker to redirect the user to the post login URL.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.setup.set-account-recovery-user-setting";
@@ -204,7 +204,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::importKey", () => {
-    it("requests the service worker to redirect the user to the post login URL.", async() => {
+    it("requests the service worker to redirect the user to the post login URL.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.setup.import-key";
@@ -222,7 +222,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::verifyPassphrase", () => {
-    it("requests the service worker to redirect the user to the post login URL.", async() => {
+    it("requests the service worker to redirect the user to the post login URL.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.setup.verify-passphrase";
@@ -240,7 +240,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::setSecurityToken", () => {
-    it("requests the service worker to redirect the user to the post login URL.", async() => {
+    it("requests the service worker to redirect the user to the post login URL.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.setup.set-security-token";
@@ -258,7 +258,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::completeSetup", () => {
-    it("requests the service worker to redirect the user to the post login URL.", async() => {
+    it("requests the service worker to redirect the user to the post login URL.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.setup.complete";
@@ -275,7 +275,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::signIn", () => {
-    it("requests the service worker to redirect the user to the post login URL.", async() => {
+    it("requests the service worker to redirect the user to the post login URL.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.setup.sign-in";
@@ -292,7 +292,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::validatePrivateKey", () => {
-    it("requests the service worker to redirect the user to the post login URL.", async() => {
+    it("requests the service worker to redirect the user to the post login URL.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.auth.post-login-redirect";
@@ -309,7 +309,7 @@ describe("SetupServiceWorkerService", () => {
   });
 
   describe("::getUserPassphrasePolicies", () => {
-    it("requests the service worker to redirect the user to the post login URL.", async() => {
+    it("requests the service worker to redirect the user to the post login URL.", async () => {
       expect.assertions(2);
 
       const event = "passbolt.auth.post-login-redirect";

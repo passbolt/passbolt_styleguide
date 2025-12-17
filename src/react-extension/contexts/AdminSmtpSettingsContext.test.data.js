@@ -27,7 +27,7 @@ export function emptySmtpSettings(data = {}) {
 
   return {
     ...defaultData,
-    ...data
+    ...data,
   };
 }
 
@@ -44,7 +44,7 @@ export function defaultSmtpSettings(data = {}) {
 
   return {
     ...defaultData,
-    ...data
+    ...data,
   };
 }
 
@@ -56,7 +56,7 @@ export function withoutSmtpSettings(data = {}) {
 
   return {
     ...defaultData,
-    ...data
+    ...data,
   };
 }
 
@@ -69,27 +69,26 @@ export function withExistingSmtpSettings(data = {}) {
     username: "test username",
     password: "test password",
     sender_email: "server@passbolt.com",
-    sender_name: "Passbolt"
+    sender_name: "Passbolt",
   };
   return defaultSmtpSettings({
     ...defaultData,
-    ...data
+    ...data,
   });
 }
-
 
 export function withKnownProviderSmtpSettings(data = {}) {
   return withExistingSmtpSettings({
     ...SmtpProviders[0].availableConfigurations[0],
-    ...data
+    ...data,
   });
 }
 
 export function withAwsSesSmtpSettings(data = {}) {
-  const awsSesProvider = SmtpProviders.find(provider => provider.id === "aws-ses");
+  const awsSesProvider = SmtpProviders.find((provider) => provider.id === "aws-ses");
   return withExistingSmtpSettings({
     ...awsSesProvider.availableConfigurations[0],
-    ...data
+    ...data,
   });
 }
 

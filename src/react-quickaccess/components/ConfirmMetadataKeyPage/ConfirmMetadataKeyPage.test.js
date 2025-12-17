@@ -16,15 +16,15 @@
  * Unit tests on ConfirmMetadataKey in regard of specifications
  */
 import ConfirmMetadataKeyPage from "./ConfirmMetadataKeyPage.test.page";
-import {waitFor} from "@testing-library/react";
-import {defaultProps, defaultPropsWithRollback} from "./ConfirmMetadataKeyPage.test.data";
+import { waitFor } from "@testing-library/react";
+import { defaultProps, defaultPropsWithRollback } from "./ConfirmMetadataKeyPage.test.data";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
 describe("ConfirmMetadataKey", () => {
-  it('As a signed in user I can confirm a metadata key more recent', async() => {
+  it("As a signed in user I can confirm a metadata key more recent", async () => {
     expect.assertions(6);
     const props = defaultProps();
     jest.spyOn(props.context.port, "emit");
@@ -38,12 +38,12 @@ describe("ConfirmMetadataKey", () => {
     await page.openMoreInformation();
     await page.submit();
 
-    expect(page.fingerprint.textContent).toStrictEqual(props.metadataKey.fingerprint.replace(/.{4}/g, '$& '));
+    expect(page.fingerprint.textContent).toStrictEqual(props.metadataKey.fingerprint.replace(/.{4}/g, "$& "));
     expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, "SUCCESS", true);
     expect(props.onComplete).toHaveBeenCalled();
   });
 
-  it('As a signed in user I can confirm a metadata key older', async() => {
+  it("As a signed in user I can confirm a metadata key older", async () => {
     expect.assertions(6);
     const props = defaultPropsWithRollback();
     jest.spyOn(props.context.port, "emit");
@@ -57,12 +57,12 @@ describe("ConfirmMetadataKey", () => {
     await page.openMoreInformation();
     await page.submit();
 
-    expect(page.fingerprint.textContent).toStrictEqual(props.metadataKey.fingerprint.replace(/.{4}/g, '$& '));
+    expect(page.fingerprint.textContent).toStrictEqual(props.metadataKey.fingerprint.replace(/.{4}/g, "$& "));
     expect(props.context.port.emit).toHaveBeenCalledWith(props.requestId, "SUCCESS", true);
     expect(props.onComplete).toHaveBeenCalled();
   });
 
-  it('As a signed in user I can close a confirm metadata key', async() => {
+  it("As a signed in user I can close a confirm metadata key", async () => {
     expect.assertions(3);
     const props = defaultProps();
     jest.spyOn(props.context.port, "emit");

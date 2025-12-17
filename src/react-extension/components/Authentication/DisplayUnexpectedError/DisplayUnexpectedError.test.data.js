@@ -22,7 +22,7 @@ import EntityValidationError from "../../../../shared/models/entity/abstract/ent
 export function defaultProps(props = {}) {
   const defaultProps = {
     error: new Error("Mocked unexpected error."),
-    context: {}
+    context: {},
   };
   return Object.assign(defaultProps, props);
 }
@@ -37,9 +37,9 @@ export function passboltApiFetchErrorProps(props = {}) {
     body: {
       message: "The provided Gpg doesn't fit the minimal requirements.",
     },
-    code: 403
+    code: 403,
   });
-  const defaultProps = {error};
+  const defaultProps = { error };
   return Object.assign(defaultProps, props);
 }
 
@@ -51,6 +51,6 @@ export function passboltApiFetchErrorProps(props = {}) {
 export function passboltEntityValidationErrorProps(props = {}) {
   const error = new EntityValidationError("Could not validate Entity");
   error.addError("algorithm", "enum", "The algorithm value is not included in the supported list.");
-  const defaultProps = {error};
+  const defaultProps = { error };
   return Object.assign(defaultProps, props);
 }

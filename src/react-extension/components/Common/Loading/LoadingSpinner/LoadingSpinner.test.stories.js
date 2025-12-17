@@ -13,30 +13,31 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import LoadingSpinner from "./LoadingSpinner";
 
 export default {
-  title: 'Components/Common/LoadingSpinner',
-  component: LoadingSpinner
+  title: "Components/Common/LoadingSpinner",
+  component: LoadingSpinner,
 };
 
-const Template = args =>
+const Template = (args) => (
   <MockTranslationProvider>
     <div id="container" className="container page login">
       <div className="content">
         <div className="login-form">
-          <MemoryRouter initialEntries={['/']}>
-            <Route component={routerProps => <LoadingSpinner {...args} {...routerProps}/>}/>
+          <MemoryRouter initialEntries={["/"]}>
+            <Route component={(routerProps) => <LoadingSpinner {...args} {...routerProps} />} />
           </MemoryRouter>
         </div>
       </div>
     </div>
-  </MockTranslationProvider>;
+  </MockTranslationProvider>
+);
 
 const defaultParameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };
 
 export const PleaseWait = Template.bind({});
@@ -44,6 +45,6 @@ PleaseWait.parameters = defaultParameters;
 
 export const RequestAccountRecovery = Template.bind({});
 RequestAccountRecovery.args = {
-  title: "Requesting administrator approval. Please wait."
+  title: "Requesting administrator approval. Please wait.",
 };
 RequestAccountRecovery.parameters = defaultParameters;

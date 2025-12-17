@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -14,7 +13,7 @@
  */
 
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import ResourceIcon from "./ResourceIcon";
 
 /**
@@ -26,10 +25,7 @@ export default class ResourceIconPage {
    * @param props Props to attach
    */
   constructor(props) {
-    this._page = render(
-      <ResourceIcon {...props} />,
-      {legacyRoot: true}
-    );
+    this._page = render(<ResourceIcon {...props} />, { legacyRoot: true });
   }
 
   /**

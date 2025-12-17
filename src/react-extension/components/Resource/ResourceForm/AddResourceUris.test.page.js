@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.2.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AddResourceUris from "./AddResourceUris";
@@ -27,7 +26,7 @@ export default class AddResourceUrisPage {
       <MockTranslationProvider>
         <AddResourceUris {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -42,14 +41,14 @@ export default class AddResourceUrisPage {
    * Returns the uri input element
    */
   get mainUri() {
-    return this._page.container.querySelector('#resource-main-uri');
+    return this._page.container.querySelector("#resource-main-uri");
   }
 
   /**
    * Returns the add uri button element
    */
   get addUri() {
-    return this._page.container.querySelector('.uri-add button');
+    return this._page.container.querySelector(".uri-add button");
   }
 
   /**
@@ -79,7 +78,7 @@ export default class AddResourceUrisPage {
    * @param {string} data - The data to fill the input element with.
    */
   async fillInput(element, data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
     await waitFor(() => {
       element.value === data;
@@ -91,9 +90,8 @@ export default class AddResourceUrisPage {
    * @param {Element} element
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   }
 }

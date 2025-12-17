@@ -12,14 +12,12 @@
  * @since         5.8.0
  */
 import CreateRole from "./CreateRole";
-import {defaultProps} from "./CreateRole.test.data";
-
+import { defaultProps } from "./CreateRole.test.data";
 
 export default {
-  title: 'Components/Administration/CreateRole',
-  component: CreateRole
+  title: "Components/Administration/CreateRole",
+  component: CreateRole,
 };
-
 
 export const Initial = {
   args: defaultProps(),

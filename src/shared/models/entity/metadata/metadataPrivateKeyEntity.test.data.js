@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.10.0
  */
-import {v4 as uuidv4} from "uuid";
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
+import { v4 as uuidv4 } from "uuid";
+import { pgpKeys } from "../../../../../test/fixture/pgpKeys/keys";
 
 /**
  * Returns a minimal DTO object suitable for the MetadataPrivateKeyEntity
@@ -22,7 +22,7 @@ import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
 export const minimalMetadataPrivateKeyDto = (data = {}) => ({
   user_id: null,
   data: pgpKeys.metadataKey.encryptedMetadataPrivateKeyDataMessage,
-  ...data
+  ...data,
 });
 
 /**
@@ -30,25 +30,26 @@ export const minimalMetadataPrivateKeyDto = (data = {}) => ({
  * @param {object} data
  * @returns {object}
  */
-export const defaultMetadataPrivateKeyDto = (data = {}) => minimalMetadataPrivateKeyDto({
-  id: uuidv4(),
-  user_id: uuidv4(),
-  metadata_key_id: uuidv4(),
-  data_signed_by_current_user: null,
-  modified: "2022-10-11T08:09:00+00:00",
-  created_by: uuidv4(),
-  created: "2022-10-11T08:09:00+00:00",
-  modified_by: uuidv4(),
-  ...data,
-});
-
+export const defaultMetadataPrivateKeyDto = (data = {}) =>
+  minimalMetadataPrivateKeyDto({
+    id: uuidv4(),
+    user_id: uuidv4(),
+    metadata_key_id: uuidv4(),
+    data_signed_by_current_user: null,
+    modified: "2022-10-11T08:09:00+00:00",
+    created_by: uuidv4(),
+    created: "2022-10-11T08:09:00+00:00",
+    modified_by: uuidv4(),
+    ...data,
+  });
 
 /**
  * Returns a DTO object suitable for the MetadataPrivateKeyEntity with decrypted data field
  * @param {object} data
  * @returns {object}
  */
-export const decryptedMetadataPrivateKeyDto = (data = {}) => defaultMetadataPrivateKeyDto({
-  data: JSON.parse(pgpKeys.metadataKey.decryptedMetadataPrivateKeyData),
-  ...data,
-});
+export const decryptedMetadataPrivateKeyDto = (data = {}) =>
+  defaultMetadataPrivateKeyDto({
+    data: JSON.parse(pgpKeys.metadataKey.decryptedMetadataPrivateKeyData),
+    ...data,
+  });

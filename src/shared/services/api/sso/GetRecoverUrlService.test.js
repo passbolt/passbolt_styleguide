@@ -15,11 +15,11 @@
 /**
  * Unit tests on GetRecoverUrlService in regard of specifications
  */
-import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
+import { ApiClientOptions } from "../../../lib/apiClient/apiClientOptions";
 import GetRecoverUrlService from "./GetRecoverUrlService";
-import {v4 as uuid} from 'uuid';
-import {enableFetchMocks} from "jest-fetch-mock";
-import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
+import { v4 as uuid } from "uuid";
+import { enableFetchMocks } from "jest-fetch-mock";
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -27,25 +27,24 @@ beforeEach(() => {
 });
 
 describe("GetRecoverUrlService", () => {
-  describe('GetRecoverUrlService::getRecoverUrl', () => {
-    it('Should run the SSO login process and get back an URL for the user to proceed', () => {
+  describe("GetRecoverUrlService::getRecoverUrl", () => {
+    it("Should run the SSO login process and get back an URL for the user to proceed", () => {
       expect.assertions(2);
       const siteDomain = "https://www.passbolt.test/";
       const expectedUrl = `${siteDomain}/setup/install`;
-      const apiClientOptions = new ApiClientOptions()
-        .setBaseUrl("http://localhost:6006");
+      const apiClientOptions = new ApiClientOptions().setBaseUrl("http://localhost:6006");
 
       const service = new GetRecoverUrlService(new URL(siteDomain), apiClientOptions);
       const token = uuid();
 
       const expectedDto = {
         token: token,
-        case: "default"
+        case: "default",
       };
 
-      const response = {url: expectedUrl};
+      const response = { url: expectedUrl };
 
-      fetch.doMockOnce(async req => {
+      fetch.doMockOnce(async (req) => {
         const dto = JSON.parse(await req.text());
         expect(dto).toStrictEqual(expectedDto);
         return mockApiResponse(response);
@@ -54,18 +53,17 @@ describe("GetRecoverUrlService", () => {
       return expect(service.getRecoverUrl(token)).resolves.toStrictEqual(new URL(expectedUrl));
     });
 
-    it('Should throw an Error if the domain in the response is not the exoected one', () => {
+    it("Should throw an Error if the domain in the response is not the exoected one", () => {
       expect.assertions(1);
       const siteDomain = "https://www.passbolt.test/";
-      const apiClientOptions = new ApiClientOptions()
-        .setBaseUrl("http://localhost:6006");
+      const apiClientOptions = new ApiClientOptions().setBaseUrl("http://localhost:6006");
 
       const service = new GetRecoverUrlService(new URL(siteDomain), apiClientOptions);
 
-      const response = {url: "https://evil.com"};
+      const response = { url: "https://evil.com" };
       fetch.doMockOnce(() => mockApiResponse(response));
 
-      const expectedError = new Error('The url should be from the same origin.');
+      const expectedError = new Error("The url should be from the same origin.");
       return expect(service.getRecoverUrl(uuid())).rejects.toStrictEqual(expectedError);
     });
   });

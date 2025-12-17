@@ -19,7 +19,7 @@ export function defaultAppContext(context) {
   const defaultAppContext = {
     setContext: jest.fn(),
     siteSettings: new SiteSettings(siteSettingsFixture),
-    trustedDomain: "http://127.0.0.1:3001"
+    trustedDomain: "http://127.0.0.1:3001",
   };
   return Object.assign(defaultAppContext, context || {});
 }
@@ -33,7 +33,7 @@ export function defaultProps(props) {
     context: defaultAppContext(),
     apiTriageContext: {
       onTriageRequested: () => {},
-    }
+    },
   };
   return Object.assign(defaultProps, props || {});
 }

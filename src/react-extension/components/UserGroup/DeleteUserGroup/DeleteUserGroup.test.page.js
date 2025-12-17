@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../contexts/DialogContext";
@@ -35,12 +34,12 @@ export default class DeleteUserGroupTestPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <DialogContextProvider>
-            <ManageDialogs/>
-            <DeleteUserGroup {...props}/>
+            <ManageDialogs />
+            <DeleteUserGroup {...props} />
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -76,14 +75,14 @@ class DeleteGroupDialogPageObject {
    * Returns the menu elements
    */
   get dialogTitle() {
-    return this._container.querySelector('.dialog-header h2 span');
+    return this._container.querySelector(".dialog-header h2 span");
   }
 
   /**
    * Returns the close button elements
    */
   get closeButton() {
-    return this._container.querySelector('.dialog-close');
+    return this._container.querySelector(".dialog-close");
   }
 
   /**
@@ -104,7 +103,7 @@ class DeleteGroupDialogPageObject {
    * Returns the cancel button elements
    */
   get cancelButton() {
-    return this._container.querySelector('.submit-wrapper .cancel');
+    return this._container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
@@ -118,28 +117,28 @@ class DeleteGroupDialogPageObject {
    * Returns the error dialog
    */
   get errorDialog() {
-    return this._container.querySelector('.error-dialog');
+    return this._container.querySelector(".error-dialog");
   }
 
   /**
    * Returns the error dialog message
    */
   get errorDialogMessage() {
-    return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content');
+    return this._container.querySelector(".error-dialog .dialog .dialog-content .form-content");
   }
 
   /**
    * Returns the user first name, last name, (username)
    */
   get groupName() {
-    return this._container.querySelector('.form-content p strong');
+    return this._container.querySelector(".form-content p strong");
   }
 
   /**
    * Returns the tag name input element
    */
   get tagName() {
-    return this._container.querySelector('.form-content p strong');
+    return this._container.querySelector(".form-content p strong");
   }
 
   /**
@@ -153,8 +152,8 @@ class DeleteGroupDialogPageObject {
    * Click on the element
    * @param element
    */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -163,8 +162,8 @@ class DeleteGroupDialogPageObject {
    * Click on the element without wait for
    * @param element
    */
-  clickWithoutWaitFor(element)  {
-    const leftClick = {button: 0};
+  clickWithoutWaitFor(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
   }
 }

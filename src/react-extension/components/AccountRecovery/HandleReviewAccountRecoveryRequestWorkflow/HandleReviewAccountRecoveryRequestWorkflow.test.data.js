@@ -12,11 +12,11 @@
  * @since         3.6.0
  */
 
-import {v4 as uuidv4} from "uuid";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-import {defaultAccountRecoveryUserContext} from "../../../contexts/AccountRecoveryUserContext.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultAccountRecoveryUserContext } from "../../../contexts/AccountRecoveryUserContext.test.data";
 
 /**
  * Default props
@@ -29,15 +29,15 @@ export function defaultProps(props = {}) {
     accountRecoveryContext: defaultAccountRecoveryUserContext({
       accountRecoveryOrganizationPolicy: {
         account_recovery_organization_public_key: {
-          id: uuidv4()
-        }
-      }
+          id: uuidv4(),
+        },
+      },
     }),
     actionFeedbackContext: defaultActionFeedbackContext(props?.actionFeedbackContext),
     context: defaultAppContext(props?.context),
     dialogContext: defaultDialogContext(props?.dialogContext),
     onStop: jest.fn(),
-    t: text => text
+    t: (text) => text,
   };
   delete props?.adminAccountRecoveryContext; // Treated in the default
   delete props?.adminAccountRecoveryContext; // Treated in the default
@@ -45,4 +45,3 @@ export function defaultProps(props = {}) {
   delete props?.dialogContext; // Treated in the default
   return Object.assign(_props, props);
 }
-

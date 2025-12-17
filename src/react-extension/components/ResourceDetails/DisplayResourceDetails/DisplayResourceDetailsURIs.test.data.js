@@ -12,14 +12,14 @@
  * @since         5.3.0
  */
 
-import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { TEST_RESOURCE_TYPE_V5_CUSTOM_FIELDS } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {resourceTypesCollectionDto} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
-import {updatePermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultUserRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import { updatePermissionDto } from "../../../../shared/models/entity/permission/permissionEntity.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultUserRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * Default props
@@ -46,8 +46,7 @@ export const resourceWithMultipleUris = defaultResourceDto({
     description: "Apache is the world's most used web server software.",
     uris: ["http://www.apache.org/", "https://www.passbolt.com/", "http://www.mastodon.social/"],
   },
-  permission: updatePermissionDto()
-
+  permission: updatePermissionDto(),
 });
 
 /**
@@ -61,6 +60,5 @@ export const resourceWithOneUris = defaultResourceDto({
     description: "Apache is the world's most used web server software.",
     uris: ["http://www.apache.org/"],
   },
-  permission: updatePermissionDto()
-
+  permission: updatePermissionDto(),
 });

@@ -13,8 +13,8 @@
  */
 
 import React from "react";
-import {render} from '@testing-library/react';
-import DisplayScimSettingsAdministrationHelp from './DisplayScimSettingsAdministrationHelp';
+import { render } from "@testing-library/react";
+import DisplayScimSettingsAdministrationHelp from "./DisplayScimSettingsAdministrationHelp";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -28,9 +28,9 @@ export default class DisplayScimSettingsAdministrationHelpPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayScimSettingsAdministrationHelp {...props}/>
+        <DisplayScimSettingsAdministrationHelp {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -53,7 +53,7 @@ export default class DisplayScimSettingsAdministrationHelpPage {
    * @returns {HTMLElement}
    */
   get warningSection() {
-    return this._page.container.querySelector('.sidebar-help-section.warning.message');
+    return this._page.container.querySelector(".sidebar-help-section.warning.message");
   }
 
   /**
@@ -61,7 +61,7 @@ export default class DisplayScimSettingsAdministrationHelpPage {
    * @returns {HTMLElement}
    */
   get warningBanner() {
-    return this._page.container.querySelector('.sidebar-help-section.warning.message .form-banner');
+    return this._page.container.querySelector(".sidebar-help-section.warning.message .form-banner");
   }
 
   /**
@@ -77,7 +77,7 @@ export default class DisplayScimSettingsAdministrationHelpPage {
    * @returns {HTMLElement}
    */
   get helpBox() {
-    return this._page.container.querySelector('.sidebar-help-section:not(.warning)');
+    return this._page.container.querySelector(".sidebar-help-section:not(.warning)");
   }
 
   /**
@@ -85,7 +85,7 @@ export default class DisplayScimSettingsAdministrationHelpPage {
    * @returns {HTMLElement}
    */
   get helpBoxTitle() {
-    return this._page.container.querySelector('.sidebar-help-section:not(.warning) h3');
+    return this._page.container.querySelector(".sidebar-help-section:not(.warning) h3");
   }
 
   /**
@@ -93,7 +93,7 @@ export default class DisplayScimSettingsAdministrationHelpPage {
    * @returns {NodeList}
    */
   get helpBoxDescription() {
-    return this._page.container.querySelectorAll('.sidebar-help-section:not(.warning) p');
+    return this._page.container.querySelectorAll(".sidebar-help-section:not(.warning) p");
   }
 
   /**
@@ -101,6 +101,6 @@ export default class DisplayScimSettingsAdministrationHelpPage {
    * @returns {HTMLElement}
    */
   get helpBoxButton() {
-    return this._page.container.querySelector('.sidebar-help-section:not(.warning) .button');
+    return this._page.container.querySelector(".sidebar-help-section:not(.warning) .button");
   }
 }

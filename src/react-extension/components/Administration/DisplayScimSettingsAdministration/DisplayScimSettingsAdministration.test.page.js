@@ -13,11 +13,11 @@
  */
 
 import React from "react";
-import {fireEvent, render} from '@testing-library/react';
-import DisplayScimSettingsAdministration from './DisplayScimSettingsAdministration';
+import { fireEvent, render } from "@testing-library/react";
+import DisplayScimSettingsAdministration from "./DisplayScimSettingsAdministration";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {RoleContext} from "../../../contexts/RoleContext";
+import { RoleContext } from "../../../contexts/RoleContext";
 
 export default class DisplayScimSettingsAdministrationPage {
   constructor(props) {
@@ -25,11 +25,11 @@ export default class DisplayScimSettingsAdministrationPage {
       <MockTranslationProvider>
         <AppContext.Provider value={props.context}>
           <RoleContext.Provider value={props.roleContext}>
-            <DisplayScimSettingsAdministration {...props}/>
+            <DisplayScimSettingsAdministration {...props} />
           </RoleContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -172,7 +172,7 @@ export default class DisplayScimSettingsAdministrationPage {
 
   /** Click on the element */
   click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
   }
 
@@ -212,4 +212,3 @@ export default class DisplayScimSettingsAdministrationPage {
     this.click(this.saveButton);
   }
 }
-

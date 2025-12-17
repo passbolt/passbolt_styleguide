@@ -12,7 +12,7 @@
  * @since         4.9.4
  */
 
-import {defaultPermissionTransferDto} from "./permissionTransferEntity.test.data";
+import { defaultPermissionTransferDto } from "./permissionTransferEntity.test.data";
 
 /**
  * Build permission transfers collection dtos.

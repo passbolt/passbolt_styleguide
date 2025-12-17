@@ -25,7 +25,7 @@ import {
   resourceTypeV5DefaultTotpDto,
   resourceTypeV5PasswordStringDto,
   resourceTypeV5TotpDto,
-  resourceTypeWithoutSecretDefinitionDto
+  resourceTypeWithoutSecretDefinitionDto,
 } from "./resourceTypeEntity.test.data";
 import EntityValidationError from "../abstract/entityValidationError";
 
@@ -66,13 +66,8 @@ describe("ResourceTypeEntity", () => {
     });
 
     it("validates description property", () => {
-      const successScenarios = [
-        ...assertEntityProperty.SUCCESS_STRING_SCENARIOS,
-        assertEntityProperty.SCENARIO_NULL,
-      ];
-      const failingScenarios = [
-        ...assertEntityProperty.FAIL_STRING_SCENARIOS,
-      ];
+      const successScenarios = [...assertEntityProperty.SUCCESS_STRING_SCENARIOS, assertEntityProperty.SCENARIO_NULL];
+      const failingScenarios = [...assertEntityProperty.FAIL_STRING_SCENARIOS];
 
       assertEntityProperty.assert(ResourceTypeEntity, "description", successScenarios, failingScenarios, "type");
       assertEntityProperty.notRequired(ResourceTypeEntity, "description");
@@ -123,7 +118,9 @@ describe("ResourceTypeEntity", () => {
       const dto = resourceTypePasswordAndDescriptionDto({
         slug: "wrong-slug",
       });
-      expect(() => new ResourceTypeEntity(dto)).toThrow(new EntityValidationError("Could not validate entity ResourceTypeEntity."));
+      expect(() => new ResourceTypeEntity(dto)).toThrow(
+        new EntityValidationError("Could not validate entity ResourceTypeEntity."),
+      );
     });
 
     it("should throw an error if slug is invalid", () => {
@@ -131,7 +128,9 @@ describe("ResourceTypeEntity", () => {
       const dto = resourceTypePasswordAndDescriptionDto({
         slug: 42,
       });
-      expect(() => new ResourceTypeEntity(dto)).toThrow(new EntityValidationError("Could not validate entity ResourceTypeEntity."));
+      expect(() => new ResourceTypeEntity(dto)).toThrow(
+        new EntityValidationError("Could not validate entity ResourceTypeEntity."),
+      );
     });
   });
 
@@ -139,7 +138,7 @@ describe("ResourceTypeEntity", () => {
     it("should set the right plaintext secret definition for: password-string", () => {
       expect.assertions(2);
 
-      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "password-string"});
+      const dto = resourceTypeWithoutSecretDefinitionDto({ slug: "password-string" });
       const expectedSecretDefinition = resourceTypePasswordStringDto().definition.secret;
 
       const resourceTypeEntity = new ResourceTypeEntity(dto);
@@ -151,7 +150,7 @@ describe("ResourceTypeEntity", () => {
     it("should set the right plaintext secret definition for: password-and-description", () => {
       expect.assertions(2);
 
-      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "password-and-description"});
+      const dto = resourceTypeWithoutSecretDefinitionDto({ slug: "password-and-description" });
       const expectedSecretDefinition = resourceTypePasswordAndDescriptionDto().definition.secret;
 
       const resourceTypeEntity = new ResourceTypeEntity(dto);
@@ -163,7 +162,7 @@ describe("ResourceTypeEntity", () => {
     it("should set the right plaintext secret definition for: password-description-totp", () => {
       expect.assertions(2);
 
-      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "password-description-totp"});
+      const dto = resourceTypeWithoutSecretDefinitionDto({ slug: "password-description-totp" });
       const expectedSecretDefinition = resourceTypePasswordDescriptionTotpDto().definition.secret;
 
       const resourceTypeEntity = new ResourceTypeEntity(dto);
@@ -175,7 +174,7 @@ describe("ResourceTypeEntity", () => {
     it("should set the right plaintext secret definition for: totp", () => {
       expect.assertions(2);
 
-      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "totp"});
+      const dto = resourceTypeWithoutSecretDefinitionDto({ slug: "totp" });
       const expectedSecretDefinition = resourceTypeTotpDto().definition.secret;
 
       const resourceTypeEntity = new ResourceTypeEntity(dto);
@@ -187,7 +186,7 @@ describe("ResourceTypeEntity", () => {
     it("should set the right plaintext secret definition for: v5 default", () => {
       expect.assertions(2);
 
-      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "v5-default"});
+      const dto = resourceTypeWithoutSecretDefinitionDto({ slug: "v5-default" });
       const expectedSecretDefinition = resourceTypeV5DefaultDto().definition.secret;
 
       const resourceTypeEntity = new ResourceTypeEntity(dto);
@@ -199,7 +198,7 @@ describe("ResourceTypeEntity", () => {
     it("should set the right plaintext secret definition for: v5 default totp", () => {
       expect.assertions(2);
 
-      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "v5-default-with-totp"});
+      const dto = resourceTypeWithoutSecretDefinitionDto({ slug: "v5-default-with-totp" });
       const expectedSecretDefinition = resourceTypeV5DefaultTotpDto().definition.secret;
 
       const resourceTypeEntity = new ResourceTypeEntity(dto);
@@ -211,7 +210,7 @@ describe("ResourceTypeEntity", () => {
     it("should set the right plaintext secret definition for: v5 password string", () => {
       expect.assertions(2);
 
-      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "v5-password-string"});
+      const dto = resourceTypeWithoutSecretDefinitionDto({ slug: "v5-password-string" });
       const expectedSecretDefinition = resourceTypeV5PasswordStringDto().definition.secret;
 
       const resourceTypeEntity = new ResourceTypeEntity(dto);
@@ -223,7 +222,7 @@ describe("ResourceTypeEntity", () => {
     it("should set the right plaintext secret definition for: v5 totp", () => {
       expect.assertions(2);
 
-      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "v5-totp-standalone"});
+      const dto = resourceTypeWithoutSecretDefinitionDto({ slug: "v5-totp-standalone" });
       const expectedSecretDefinition = resourceTypeV5TotpDto().definition.secret;
 
       const resourceTypeEntity = new ResourceTypeEntity(dto);
@@ -234,7 +233,7 @@ describe("ResourceTypeEntity", () => {
     it("should set the right secret definition for: v5 custom fields", () => {
       expect.assertions(2);
 
-      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "v5-custom-fields"});
+      const dto = resourceTypeWithoutSecretDefinitionDto({ slug: "v5-custom-fields" });
       const expectedSecretDefinition = resourceTypeV5CustomFieldsDto().definition.secret;
 
       const resourceTypeEntity = new ResourceTypeEntity(dto);
@@ -248,7 +247,7 @@ describe("ResourceTypeEntity", () => {
     it("should provide the right values when everything is set", () => {
       expect.assertions(3);
 
-      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "password-description-totp"});
+      const dto = resourceTypeWithoutSecretDefinitionDto({ slug: "password-description-totp" });
       const entity = new ResourceTypeEntity(dto);
 
       const expectedDefinition = resourceTypePasswordDescriptionTotpDto().definition;

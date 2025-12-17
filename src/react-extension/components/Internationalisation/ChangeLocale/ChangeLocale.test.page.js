@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.2.0
  */
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import ChangeLocale from "./ChangeLocale";
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -29,9 +28,9 @@ export default class ChangeLocalePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ChangeLocale {...props}/>
+        <ChangeLocale {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -39,11 +38,11 @@ export default class ChangeLocalePage {
    * Returns the change locale element
    */
   get changeLocale() {
-    const element = this._page.container.querySelector('.select-wrapper.input');
+    const element = this._page.container.querySelector(".select-wrapper.input");
     return {
       exists() {
         return element !== null;
-      }
+      },
     };
   }
 
@@ -51,28 +50,27 @@ export default class ChangeLocalePage {
    * Returns the locale input element
    */
   get locale() {
-    return this._page.container.querySelector('#user-locale-input');
+    return this._page.container.querySelector("#user-locale-input");
   }
 
   /**
    * Returns the locale selected input element
    */
   get localeSelected() {
-    return this._page.container.querySelector('#user-locale-input .value').textContent;
+    return this._page.container.querySelector("#user-locale-input .value").textContent;
   }
 
   /**
    * Returns the locale input element
    */
   getLocaleList(index) {
-    return this._page.container.querySelectorAll('#user-locale-input .option')[index - 1];
+    return this._page.container.querySelectorAll("#user-locale-input .option")[index - 1];
   }
 
   /** click on the element */
   async click(element) {
     fireEvent.click(element);
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   }
 
   /** select the french language */
@@ -81,8 +79,3 @@ export default class ChangeLocalePage {
     await this.click(this.getLocaleList(3));
   }
 }
-
-
-
-
-

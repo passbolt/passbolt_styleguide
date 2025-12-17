@@ -12,11 +12,11 @@
  * @since         4.5.0
  */
 
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 import PasswordExpiryDialogPage from "./PasswordExpiryDialog.test.page";
-import {defaultProps} from "./PasswordExpiryDialog.test.data";
-import {waitForTrue} from "../../../../../test/utils/waitFor";
-import {PasswordExpiryOptionEnum} from "../../../../shared/models/passwordExpirySettings/PasswordExpiryDialogViewModel";
+import { defaultProps } from "./PasswordExpiryDialog.test.data";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
+import { PasswordExpiryOptionEnum } from "../../../../shared/models/passwordExpirySettings/PasswordExpiryDialogViewModel";
 /**
  * Unit tests on PasswordExpiryDialog in regard of specifications
  */
@@ -27,16 +27,16 @@ beforeEach(() => {
 });
 
 describe("PasswordExpiryDialog", () => {
-  it("As a logged in user in Passbolt EE, I see Password expiry dialog", async() => {
+  it("As a logged in user in Passbolt EE, I see Password expiry dialog", async () => {
     expect.assertions(13);
 
     const props = defaultProps();
-    const expectedUpdatedResources = props.resources.map(resource => ({
+    const expectedUpdatedResources = props.resources.map((resource) => ({
       id: resource.id,
       expired: null,
     }));
 
-    props.context.port.addRequestListener('passbolt.resources.set-expiration-date', resourcesDto => {
+    props.context.port.addRequestListener("passbolt.resources.set-expiration-date", (resourcesDto) => {
       expect(resourcesDto).toStrictEqual(expectedUpdatedResources);
     });
 
@@ -64,69 +64,69 @@ describe("PasswordExpiryDialog", () => {
     await waitForTrue(() => props.actionFeedbackContext.displaySuccess.mock.calls.length > 0);
 
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
-    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The expiry dates of the selected resources have been updated.");
+    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
+      "The expiry dates of the selected resources have been updated.",
+    );
 
     expect(props.onClose).toHaveBeenCalledTimes(3);
   });
 
-  it("As a logged in user in Passbolt EE, I see Password expiry dialog: with duration in days", async() => {
+  it("As a logged in user in Passbolt EE, I see Password expiry dialog: with duration in days", async () => {
     expect.assertions(2);
-    jest
-      .useFakeTimers()
-      .setSystemTime(new Date('2023-01-01'));
+    jest.useFakeTimers().setSystemTime(new Date("2023-01-01"));
 
     const durationInDays = "15";
     const props = defaultProps();
-    const expectedDate = '2023-01-16';
-    const expectedUpdatedResources = props.resources.map(resource => ({
+    const expectedDate = "2023-01-16";
+    const expectedUpdatedResources = props.resources.map((resource) => ({
       id: resource.id,
       expired: expectedDate,
     }));
-    props.context.port.addRequestListener('passbolt.resources.set-expiration-date', resourcesDto => {
+    props.context.port.addRequestListener("passbolt.resources.set-expiration-date", (resourcesDto) => {
       expect(resourcesDto).toStrictEqual(expectedUpdatedResources);
     });
 
     const page = new PasswordExpiryDialogPage(props);
     await page.setFormWith({
-      durationInDayInput: durationInDays
+      durationInDayInput: durationInDays,
     });
     expect(page.selectedOptionRadio.value).toStrictEqual(PasswordExpiryOptionEnum.AUTOMATIC);
 
     await page.clickOn(page.saveButton);
   });
 
-  it("As a logged in user in Passbolt EE, I see Password expiry dialog: with a date picket", async() => {
+  it("As a logged in user in Passbolt EE, I see Password expiry dialog: with a date picket", async () => {
     expect.assertions(2);
 
     const props = defaultProps();
-    const expectedDate = '2023-01-16';
-    const expectedUpdatedResources = props.resources.map(resource => ({
+    const expectedDate = "2023-01-16";
+    const expectedUpdatedResources = props.resources.map((resource) => ({
       id: resource.id,
       expired: expectedDate,
     }));
-    props.context.port.addRequestListener('passbolt.resources.set-expiration-date', resourcesDto => {
+    props.context.port.addRequestListener("passbolt.resources.set-expiration-date", (resourcesDto) => {
       expect(resourcesDto).toStrictEqual(expectedUpdatedResources);
     });
 
     const page = new PasswordExpiryDialogPage(props);
     await page.setFormWith({
-      dateInput: expectedDate
+      dateInput: expectedDate,
     });
     expect(page.selectedOptionRadio.value).toStrictEqual(PasswordExpiryOptionEnum.MANUAL);
 
     await page.clickOn(page.saveButton);
   });
 
-  it("As a logged in user in Passbolt EE, I see Password expiry dialog: set to never", async() => {
+  it("As a logged in user in Passbolt EE, I see Password expiry dialog: set to never", async () => {
     expect.assertions(2);
 
     const props = defaultProps();
     const expectedDate = null;
-    const expectedUpdatedResources = props.resources.map(resource => ({
+    const expectedUpdatedResources = props.resources.map((resource) => ({
       id: resource.id,
       expired: expectedDate,
     }));
-    props.context.port.addRequestListener('passbolt.resources.set-expiration-date', resourcesDto => {
+    props.context.port.addRequestListener("passbolt.resources.set-expiration-date", (resourcesDto) => {
       expect(resourcesDto).toStrictEqual(expectedUpdatedResources);
     });
 
@@ -138,7 +138,7 @@ describe("PasswordExpiryDialog", () => {
     await page.clickOn(page.saveButton);
   });
 
-  it("As a logged in user in Passbolt EE, I can switch expiry option", async() => {
+  it("As a logged in user in Passbolt EE, I can switch expiry option", async () => {
     expect.assertions(3);
 
     const props = defaultProps();
@@ -154,15 +154,15 @@ describe("PasswordExpiryDialog", () => {
     await page.clickOn(page.saveButton);
   });
 
-  it("As a logged in user in Passbolt EE, I can see the error message when the manual date is wrong", async() => {
+  it("As a logged in user in Passbolt EE, I can see the error message when the manual date is wrong", async () => {
     expect.assertions(2);
 
     const props = defaultProps();
-    const wrongDate = '';
+    const wrongDate = "";
 
     const page = new PasswordExpiryDialogPage(props);
     await page.setFormWith({
-      dateInput: wrongDate
+      dateInput: wrongDate,
     });
     expect(page.selectedOptionRadio.value).toStrictEqual(PasswordExpiryOptionEnum.MANUAL);
 
@@ -171,15 +171,15 @@ describe("PasswordExpiryDialog", () => {
     expect(page.dateInputError).toBeTruthy();
   });
 
-  it("As a logged in user in Passbolt EE, I can see the error message when the automatic date is wrong", async() => {
+  it("As a logged in user in Passbolt EE, I can see the error message when the automatic date is wrong", async () => {
     expect.assertions(2);
 
     const props = defaultProps();
-    const wrongDate = '';
+    const wrongDate = "";
 
     const page = new PasswordExpiryDialogPage(props);
     await page.setFormWith({
-      durationInDayInput: wrongDate
+      durationInDayInput: wrongDate,
     });
     expect(page.selectedOptionRadio.value).toStrictEqual(PasswordExpiryOptionEnum.AUTOMATIC);
 

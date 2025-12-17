@@ -18,10 +18,10 @@ beforeEach(() => {
 });
 
 describe("ApiSuccess", () => {
-  it('Should display the given message from the content of the page', async() => {
+  it("Should display the given message from the content of the page", async () => {
     expect.assertions(2);
     const props = {
-      message: "You successfully authenticated."
+      message: "You successfully authenticated.",
     };
     const page = new ApiSuccessPage(props);
 

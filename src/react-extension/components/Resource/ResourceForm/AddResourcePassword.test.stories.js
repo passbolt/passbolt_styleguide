@@ -15,35 +15,33 @@
 import AddResourcePassword from "./AddResourcePassword";
 import React from "react";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {defaultProps} from "./AddResourcePassword.test.data";
+import { defaultProps } from "./AddResourcePassword.test.data";
 
 export default {
-  title: 'Components/Resource/AddResourcePassword',
+  title: "Components/Resource/AddResourcePassword",
   component: AddResourcePassword,
-  decorators: [(Story, {args}) =>
-    <div style={{margin: "-1rem"}}>
-      <DialogWrapper title="Create a resource" className="create-resource">
-        <div className="left-sidebar">
-          <div className="main-action-wrapper">
+  decorators: [
+    (Story, { args }) => (
+      <div style={{ margin: "-1rem" }}>
+        <DialogWrapper title="Create a resource" className="create-resource">
+          <div className="left-sidebar">
+            <div className="main-action-wrapper"></div>
+            <div className="sidebar-content-sections"></div>
           </div>
-          <div className="sidebar-content-sections">
-          </div>
-        </div>
-        <div className="grid-and-footer">
-          <div className="grid">
-            <div className="resource-info">
-              <div className="information">
+          <div className="grid-and-footer">
+            <div className="grid">
+              <div className="resource-info">
+                <div className="information"></div>
+              </div>
+              <div className="create-workspace">
+                <Story {...args} />
               </div>
             </div>
-            <div className="create-workspace">
-              <Story {...args}/>
-            </div>
+            <div className="submit-wrapper"></div>
           </div>
-          <div className="submit-wrapper">
-          </div>
-        </div>
-      </DialogWrapper>
-    </div>
+        </DialogWrapper>
+      </div>
+    ),
   ],
 };
 

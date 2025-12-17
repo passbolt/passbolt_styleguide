@@ -13,52 +13,50 @@
  */
 import React from "react";
 import FormSubmitButton from "../../Inputs/FormSubmitButton/FormSubmitButton";
-import {Trans} from "react-i18next";
+import { Trans } from "react-i18next";
 
-const DialogFooter = args =>
+const DialogFooter = (args) => (
   <div className="dialog-wrapper">
     <div className="dialog">
-      <div className="dialog-content">
-
-      </div>
+      <div className="dialog-content"></div>
       <div className="dialog-footer">
-        <button className="button button-left" disabled={args.disabled} type="button"><Trans>Learn more</Trans></button>
+        <button className="button button-left" disabled={args.disabled} type="button">
+          <Trans>Learn more</Trans>
+        </button>
         <button disabled={args.disabled} className="link cancel">
           <Trans>Cancel</Trans>
         </button>
-        <FormSubmitButton
-          disabled={args.disabled}
-          processing={args.processing}
-          warning={args.warning}/>
+        <FormSubmitButton disabled={args.disabled} processing={args.processing} warning={args.warning} />
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 export default {
-  title: 'Components/Common/DialogFooter',
-  component: DialogFooter
+  title: "Components/Common/DialogFooter",
+  component: DialogFooter,
 };
 
 export const Default = {
   args: {
     disabled: false,
     processing: false,
-    warning: false
-  }
+    warning: false,
+  },
 };
 
 export const Disabled = {
   args: {
     disabled: true,
     processing: true,
-    warning: false
-  }
+    warning: false,
+  },
 };
 
 export const Warning = {
   args: {
     disabled: false,
     processing: false,
-    warning: true
-  }
+    warning: true,
+  },
 };

@@ -12,15 +12,13 @@
  * @since         5.1.0
  */
 
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {v4 as uuidv4} from "uuid";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { v4 as uuidv4 } from "uuid";
 import {
   defaultMetadataKeyDto,
-  metadataKeyWithSignedMetadataPrivateKeyDataDto
+  metadataKeyWithSignedMetadataPrivateKeyDataDto,
 } from "../../../../shared/models/entity/metadata/metadataKeyEntity.test.data";
-import {
-  defaultMetadataTrustedKeyDto
-} from "../../../../shared/models/entity/metadata/metadataTrustedKeyEntity.test.data";
+import { defaultMetadataTrustedKeyDto } from "../../../../shared/models/entity/metadata/metadataTrustedKeyEntity.test.data";
 import MetadataKeyEntity from "../../../../shared/models/entity/metadata/metadataKeyEntity";
 import MetadataTrustedKeyEntity from "../../../../shared/models/entity/metadata/metadataTrustedKeyEntity";
 
@@ -30,15 +28,15 @@ import MetadataTrustedKeyEntity from "../../../../shared/models/entity/metadata/
  * @returns {object}
  */
 export function defaultProps(data = {}) {
-  const metadataKeyDto = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true, withCreator: true});
+  const metadataKeyDto = defaultMetadataKeyDto({}, { withMetadataPrivateKeys: true, withCreator: true });
   delete metadataKeyDto.metadata_private_keys[0].data; // Service worker does not return the data.
   return {
     context: defaultUserAppContext(),
     requestId: uuidv4(),
     metadataTrustedKey: new MetadataTrustedKeyEntity(defaultMetadataTrustedKeyDto()),
-    metadataKey: new MetadataKeyEntity(metadataKeyDto, {validate: false}),
+    metadataKey: new MetadataKeyEntity(metadataKeyDto, { validate: false }),
     onClose: jest.fn(),
-    ...data
+    ...data,
   };
 }
 
@@ -48,14 +46,17 @@ export function defaultProps(data = {}) {
  * @returns {object}
  */
 export function defaultPropsWithRollback(data = {}) {
-  const metadataKeyDto = metadataKeyWithSignedMetadataPrivateKeyDataDto({}, {withMetadataPrivateKeys: true, withCreator: true});
+  const metadataKeyDto = metadataKeyWithSignedMetadataPrivateKeyDataDto(
+    {},
+    { withMetadataPrivateKeys: true, withCreator: true },
+  );
   delete metadataKeyDto.metadata_private_keys[0].data; // Service worker does not return the data.
   return {
     context: defaultUserAppContext(),
     requestId: uuidv4(),
     metadataTrustedKey: new MetadataTrustedKeyEntity(defaultMetadataTrustedKeyDto()),
-    metadataKey: new MetadataKeyEntity(metadataKeyDto, {validate: false}),
+    metadataKey: new MetadataKeyEntity(metadataKeyDto, { validate: false }),
     onClose: jest.fn(),
-    ...data
+    ...data,
   };
 }

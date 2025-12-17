@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import Password from "./Password";
@@ -28,17 +27,17 @@ export default class PasswordPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <Password {...props}/>
+        <Password {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
   rerender(props) {
     this._page.rerender(
       <MockTranslationProvider>
-        <Password {...props}/>
-      </MockTranslationProvider>
+        <Password {...props} />
+      </MockTranslationProvider>,
     );
   }
 
@@ -46,28 +45,28 @@ export default class PasswordPage {
    * Returns the password wrapper element
    */
   get passwordWrapper() {
-    return this._page.container.querySelector('.input.password');
+    return this._page.container.querySelector(".input.password");
   }
 
   /**
    * Returns the password input element
    */
   get passwordInput() {
-    return this._page.container.querySelector('input');
+    return this._page.container.querySelector("input");
   }
 
   /**
    * Returns the eye button
    */
   get eyeButton() {
-    return this._page.container.querySelector('.password-view .svg-icon');
+    return this._page.container.querySelector(".password-view .svg-icon");
   }
 
   /**
    * Returns the security token
    */
   get securityToken() {
-    return this._page.container.querySelector('.security-token');
+    return this._page.container.querySelector(".security-token");
   }
 
   /**
@@ -81,7 +80,7 @@ export default class PasswordPage {
    * Returns true if the component is in an obfuscated mode
    */
   get isObfuscated() {
-    return this.passwordInput.getAttribute('type') === "password";
+    return this.passwordInput.getAttribute("type") === "password";
   }
 
   /**
@@ -92,20 +91,20 @@ export default class PasswordPage {
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
 
   /** fill the input element with data */
-  fillInput(element, data)  {
-    const dataInputEvent = {target: {value: data}};
+  fillInput(element, data) {
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
   }
 
   /** fill the passphrase input element with data */
-  insertPassword(data)  {
+  insertPassword(data) {
     this.fillInput(this.passwordInput, data);
   }
 
@@ -116,8 +115,3 @@ export default class PasswordPage {
     await this.click(this.eyeButton);
   }
 }
-
-
-
-
-

@@ -12,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import CheckMailBox from "./CheckMailBox";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -29,9 +29,9 @@ export default class CheckMailBoxTestPage {
   constructor() {
     this._page = render(
       <MockTranslationProvider>
-        <CheckMailBox/>
+        <CheckMailBox />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -39,14 +39,14 @@ export default class CheckMailBoxTestPage {
    * Returns the title
    */
   get title() {
-    return this._page.container.querySelector('.email-sent-instructions h1').textContent;
+    return this._page.container.querySelector(".email-sent-instructions h1").textContent;
   }
 
   /**
    * Returns the message
    */
   get message() {
-    return this._page.container.querySelector('.email-sent-instructions p').textContent;
+    return this._page.container.querySelector(".email-sent-instructions p").textContent;
   }
 
   /**

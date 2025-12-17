@@ -14,23 +14,23 @@
 import "../../../../shared/components/Icons/ResourceIcon.test.init";
 import React from "react";
 import DisplayResourceDetailsURIs from "./DisplayResourceDetailsURIs";
-import {resourceWithMultipleUris, resourceWithOneUris} from "./DisplayResourceDetailsURIs.test.data";
-import {defaultAppContext} from "../../Share/ShareDialog.test.data";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { resourceWithMultipleUris, resourceWithOneUris } from "./DisplayResourceDetailsURIs.test.data";
+import { defaultAppContext } from "../../Share/ShareDialog.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
 
 /**
  * DisplayResourceDetails stories
  */
 export default {
-  title: 'Components/ResourceDetails/DisplayResourceDetailsURIs',
+  title: "Components/ResourceDetails/DisplayResourceDetailsURIs",
   component: DisplayResourceDetailsURIs,
   decorators: [
-    (Story, {args}) => (
+    (Story, { args }) => (
       <div className="page">
-        <div className="app" style={{margin: "-1rem"}}>
+        <div className="app" style={{ margin: "-1rem" }}>
           <div className="panel main">
             <div className="panel middle">
-              <div className="middle-right" style={{display: "flex", justifyContent: "flex-end"}}>
+              <div className="middle-right" style={{ display: "flex", justifyContent: "flex-end" }}>
                 <div className="panel aside">
                   <div className="sidebar resource">
                     <div className="sidebar-content">
@@ -43,24 +43,24 @@ export default {
           </div>
         </div>
       </div>
-    )
-  ]
+    ),
+  ],
 };
 
 export const Default = {
   args: {
     context: defaultAppContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
-      details: {resource: resourceWithMultipleUris}
+      details: { resource: resourceWithMultipleUris },
     }),
-  }
+  },
 };
 
 export const WithOneUri = {
   args: {
     context: defaultAppContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
-      details: {resource: resourceWithOneUris}
+      details: { resource: resourceWithOneUris },
     }),
-  }
+  },
 };

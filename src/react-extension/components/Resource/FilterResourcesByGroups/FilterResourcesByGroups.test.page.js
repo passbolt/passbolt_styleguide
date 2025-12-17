@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,10 +12,9 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import FilterResourcesByGroups from "./FilterResourcesByGroups";
 
@@ -32,10 +30,10 @@ export default class FilterResourcesByGroupsPage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <FilterResourcesByGroups.WrappedComponent {...props}/>
+          <FilterResourcesByGroups.WrappedComponent {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -84,8 +82,8 @@ class TitleHeaderPageObject {
   }
 
   /** Click on the title */
-  async click()  {
-    const leftClick = {button: 0};
+  async click() {
+    const leftClick = { button: 0 };
     fireEvent.click(this.hyperlink, leftClick);
     await waitFor(() => {});
   }
@@ -104,7 +102,7 @@ class DisplayGroupPageObject {
    * Returns the list elements of activities
    */
   get list() {
-    return this._container.querySelector('.accordion-content');
+    return this._container.querySelector(".accordion-content");
   }
 
   /**
@@ -118,21 +116,21 @@ class DisplayGroupPageObject {
    * Returns the number of displayed groups
    */
   count() {
-    return this.list.querySelectorAll('.group-item').length;
+    return this.list.querySelectorAll(".group-item").length;
   }
 
   /**
    * Returns the group selected
    */
   get groupSelected() {
-    return this.list.querySelector('.group-item .row.selected');
+    return this.list.querySelector(".group-item .row.selected");
   }
 
   /**
    * Returns the group for the 'index' one
    */
   group(index) {
-    return this.list.querySelectorAll('.group-item')[index - 1].querySelector('.main-cell-wrapper');
+    return this.list.querySelectorAll(".group-item")[index - 1].querySelector(".main-cell-wrapper");
   }
 
   /**
@@ -140,12 +138,12 @@ class DisplayGroupPageObject {
    * @param index The display rank of name's group
    */
   name(index) {
-    return this.list.querySelectorAll('.group-item')[index - 1].querySelector('.ellipsis').textContent;
+    return this.list.querySelectorAll(".group-item")[index - 1].querySelector(".ellipsis").textContent;
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

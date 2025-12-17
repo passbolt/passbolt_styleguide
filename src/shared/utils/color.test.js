@@ -12,7 +12,7 @@
  * @since         5.2.0
  */
 
-import {getContrastedColor} from "./color";
+import { getContrastedColor } from "./color";
 
 describe("colors", () => {
   describe("::getContrastedColor", () => {

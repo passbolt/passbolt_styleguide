@@ -14,16 +14,16 @@
 
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {defaultProps, propsWithMfaProviders, propsWithoutMfaProviders} from "./DisplayProviderList.test.data";
-import {MfaContextProvider} from "../../../contexts/MFAContext";
+import { defaultProps, propsWithMfaProviders, propsWithoutMfaProviders } from "./DisplayProviderList.test.data";
+import { MfaContextProvider } from "../../../contexts/MFAContext";
 import DisplayProviderList from "../DisplayProviderList/DisplayProviderList";
 
 export default {
-  title: 'Components/MFA/DisplayProviderList',
-  component: DisplayProviderList
+  title: "Components/MFA/DisplayProviderList",
+  component: DisplayProviderList,
 };
 
-const Template = args =>
+const Template = (args) => (
   <MfaContextProvider {...args}>
     <MockTranslationProvider>
       <div className="panel middle">
@@ -31,8 +31,10 @@ const Template = args =>
           <DisplayProviderList {...args} />
         </div>
       </div>
-    </MockTranslationProvider>;
-  </MfaContextProvider>;
+    </MockTranslationProvider>
+    ;
+  </MfaContextProvider>
+);
 
 export const Default = Template.bind({});
 Default.args = propsWithMfaProviders();

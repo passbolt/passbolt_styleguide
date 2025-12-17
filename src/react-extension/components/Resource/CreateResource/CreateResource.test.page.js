@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -12,21 +11,19 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
+import { ResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext";
 import CreateResource from "./CreateResource";
-import {
-  ResourceTypesLocalStorageContext
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import {ResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import { ResourceTypesLocalStorageContext } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { ResourcePasswordGeneratorContext } from "../../../contexts/ResourcePasswordGeneratorContext";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
-import {MemoryRouter} from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import DialogContextProvider from "../../../contexts/DialogContext";
-import {ManagedClipboardServiceContext} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { ManagedClipboardServiceContext } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 import userEvent from "@testing-library/user-event";
 /**
  * The Create Resource component represented as a page
@@ -39,20 +36,24 @@ export default class CreateResourcePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <MemoryRouter initialEntries={[
-          "/app/folders/view/:filterByFolderId",
-          "/app/passwords/view/:selectedResourceId",
-          "/app/passwords",
-        ]}>
+        <MemoryRouter
+          initialEntries={[
+            "/app/folders/view/:filterByFolderId",
+            "/app/passwords/view/:selectedResourceId",
+            "/app/passwords",
+          ]}
+        >
           <AppContext.Provider value={props.context}>
             <ManagedClipboardServiceContext.Provider value={props.clipboardContext}>
               <DialogContextProvider>
                 <ActionFeedbackContext.Provider value={props.actionFeedbackContext}>
-                  <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
+                  <ResourceTypesLocalStorageContext.Provider
+                    value={{ get: () => props.resourceTypes, resourceTypes: props.resourceTypes }}
+                  >
                     <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
                       <ResourcePasswordGeneratorContext.Provider value={props.resourcePasswordGeneratorContext}>
-                        <ManageDialogs/>
-                        <CreateResource {...props}/>
+                        <ManageDialogs />
+                        <CreateResource {...props} />
                       </ResourcePasswordGeneratorContext.Provider>
                     </ResourceWorkspaceContext.Provider>
                   </ResourceTypesLocalStorageContext.Provider>
@@ -62,7 +63,7 @@ export default class CreateResourcePage {
           </AppContext.Provider>
         </MemoryRouter>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -72,13 +73,13 @@ export default class CreateResourcePage {
    * Returns the dialog element
    */
   get dialog() {
-    return this._page.container.querySelector('.create-resource');
+    return this._page.container.querySelector(".create-resource");
   }
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._page.container.querySelector('.dialog-close');
+    return this._page.container.querySelector(".dialog-close");
   }
 
   /**
@@ -92,147 +93,147 @@ export default class CreateResourcePage {
    * Returns the name input element
    */
   get name() {
-    return this._page.container.querySelector('#resource-name');
+    return this._page.container.querySelector("#resource-name");
   }
 
   /**
    * Returns the name error mesage input element
    */
   get nameErrorMessage() {
-    return this._page.container.querySelector('.name.error-message');
+    return this._page.container.querySelector(".name.error-message");
   }
 
   /**
    * Returns the name warning mesage input element
    */
   get nameWarningMessage() {
-    return this._page.container.querySelector('.name.warning-message');
+    return this._page.container.querySelector(".name.warning-message");
   }
 
   /**
    * Returns the uri input element
    */
   get uri() {
-    return this._page.container.querySelector('#resource-uri');
+    return this._page.container.querySelector("#resource-uri");
   }
 
   /**
    * Returns the uri error message input element
    */
   get uriErrorMessage() {
-    return this._page.container.querySelector('.uri.error-message');
+    return this._page.container.querySelector(".uri.error-message");
   }
 
   /**
    * Returns the uri warning message input element
    */
   get uriWarningMessage() {
-    return this._page.container.querySelector('.uri.warning-message');
+    return this._page.container.querySelector(".uri.warning-message");
   }
 
   /**
    * Returns the username / email input element
    */
   get username() {
-    return this._page.container.querySelector('#resource-username');
+    return this._page.container.querySelector("#resource-username");
   }
 
   /**
    * Returns the username warning mesage input element
    */
   get usernameErrorMessage() {
-    return this._page.container.querySelector('.username.error-message');
+    return this._page.container.querySelector(".username.error-message");
   }
 
   /**
    * Returns the username warning mesage input element
    */
   get usernameWarningMessage() {
-    return this._page.container.querySelector('.username.warning-message');
+    return this._page.container.querySelector(".username.warning-message");
   }
 
   /**
    * Returns the password input element
    */
   get password() {
-    return this._page.container.querySelector('#resource-password');
+    return this._page.container.querySelector("#resource-password");
   }
 
   /**
    * Returns the password error mesage input element
    */
   get passwordErrorMessage() {
-    return this._page.container.querySelector('.password.error-message');
+    return this._page.container.querySelector(".password.error-message");
   }
 
   /**
    * Returns the password warning mesage input element
    */
   get passwordWarningMessage() {
-    return this._page.container.querySelector('.password.warning-message');
+    return this._page.container.querySelector(".password.warning-message");
   }
 
   /**
    * Returns the description input element
    */
   get description() {
-    return this._page.container.querySelector('#resource-description');
+    return this._page.container.querySelector("#resource-description");
   }
 
   /**
    * Returns the description error message input element
    */
   get descriptionErrorMessage() {
-    return this._page.container.querySelector('.description.error-message');
+    return this._page.container.querySelector(".description.error-message");
   }
 
   /**
    * Returns the description warning message input element
    */
   get descriptionWarningMessage() {
-    return this._page.container.querySelector('.description.warning-message');
+    return this._page.container.querySelector(".description.warning-message");
   }
 
   /**
    * Returns the left sidebar description input element
    */
   get menuDescription() {
-    return this._page.container.querySelector('#menu-description');
+    return this._page.container.querySelector("#menu-description");
   }
 
   /**
    * Returns the left sidebar uris input element
    */
   get menuUris() {
-    return this._page.container.querySelector('#menu-uris');
+    return this._page.container.querySelector("#menu-uris");
   }
 
   /**
    * Returns the main uri input element
    */
   get mainUri() {
-    return this._page.container.querySelector('#resource-main-uri');
+    return this._page.container.querySelector("#resource-main-uri");
   }
 
   /**
    * Returns the uri error message input element
    */
   get mainUriErrorMessage() {
-    return this._page.container.querySelector('.main-uri.error-message');
+    return this._page.container.querySelector(".main-uri.error-message");
   }
 
   /**
    * Returns the uri warning message input element
    */
   get mainUriWarningMessage() {
-    return this._page.container.querySelector('.main-uri.warning-message');
+    return this._page.container.querySelector(".main-uri.warning-message");
   }
 
   /**
    * Returns the add uri button element
    */
   get addUri() {
-    return this._page.container.querySelector('.uri-add button');
+    return this._page.container.querySelector(".uri-add button");
   }
 
   /**
@@ -270,70 +271,70 @@ export default class CreateResourcePage {
    * Returns the password input element
    */
   get totp() {
-    return this._page.container.querySelector('#resource-totp');
+    return this._page.container.querySelector("#resource-totp");
   }
 
   /**
    * Returns the password input element
    */
   get note() {
-    return this._page.container.querySelector('#resource-note');
+    return this._page.container.querySelector("#resource-note");
   }
 
   /**
    * Returns the note error message input element
    */
   get noteErrorMessage() {
-    return this._page.container.querySelector('.note.error-message');
+    return this._page.container.querySelector(".note.error-message");
   }
 
   /**
    * Returns the note warning message input element
    */
   get noteWarningMessage() {
-    return this._page.container.querySelector('.note.warning-message');
+    return this._page.container.querySelector(".note.warning-message");
   }
 
   /**
    * Returns the password view button element
    */
   get passwordViewButton() {
-    return this._page.container.querySelector('.password-view .svg-icon');
+    return this._page.container.querySelector(".password-view .svg-icon");
   }
 
   /**
    * Returns the password generate button element
    */
   get passwordGenerateButton() {
-    return this._page.container.querySelector('.password-generate');
+    return this._page.container.querySelector(".password-generate");
   }
 
   /**
    * Returns the resource totp key input element
    */
   get resourceTotpKey() {
-    return this._page.container.querySelector('#resource-totp-key');
+    return this._page.container.querySelector("#resource-totp-key");
   }
 
   /**
    * Returns the resource totp key error message input element
    */
   get resourceTotpKeyErrorMessage() {
-    return this._page.container.querySelector('.totp-key.error-message');
+    return this._page.container.querySelector(".totp-key.error-message");
   }
 
   /**
    * Returns the resource totp period error message input element
    */
   get resourceTotpPeriodErrorMessage() {
-    return this._page.container.querySelector('.period.error-message');
+    return this._page.container.querySelector(".period.error-message");
   }
 
   /**
    * Returns the resource totp digits error message input element
    */
   get resourceTotpDigitsErrorMessage() {
-    return this._page.container.querySelector('.digits.error-message');
+    return this._page.container.querySelector(".digits.error-message");
   }
 
   /**
@@ -341,7 +342,7 @@ export default class CreateResourcePage {
    * @return {Element}
    */
   get advancedSettings() {
-    return this._page.container.querySelector('.additional-information button');
+    return this._page.container.querySelector(".additional-information button");
   }
 
   /**
@@ -349,7 +350,7 @@ export default class CreateResourcePage {
    * @return {Element}
    */
   get period() {
-    return this._page.container.querySelector('#resource-totp-period');
+    return this._page.container.querySelector("#resource-totp-period");
   }
 
   /**
@@ -357,7 +358,7 @@ export default class CreateResourcePage {
    * @return {Element}
    */
   get digits() {
-    return this._page.container.querySelector('#resource-totp-digits');
+    return this._page.container.querySelector("#resource-totp-digits");
   }
 
   /**
@@ -365,7 +366,7 @@ export default class CreateResourcePage {
    * @return {Element}
    */
   get algorithm() {
-    return this._page.container.querySelector('#resource-totp-algorithm .selected-value .value');
+    return this._page.container.querySelector("#resource-totp-algorithm .selected-value .value");
   }
 
   /**
@@ -373,28 +374,28 @@ export default class CreateResourcePage {
    * @return {Element}
    */
   get firstItemOption() {
-    return this._page.container.querySelector('#resource-totp-algorithm .select-items .option');
+    return this._page.container.querySelector("#resource-totp-algorithm .select-items .option");
   }
 
   /**
    * Returns the resource totp code element
    */
   get resourceTotpCode() {
-    return this._page.container.querySelector('.totp-workspace .totp-wrapper .secret-totp button');
+    return this._page.container.querySelector(".totp-workspace .totp-wrapper .secret-totp button");
   }
 
   /**
    * Returns the resource totp code element
    */
   get copyTotpButton() {
-    return this._page.container.querySelector('.totp-workspace #copy-totp');
+    return this._page.container.querySelector(".totp-workspace #copy-totp");
   }
 
   /**
    * Returns the add custom field button element
    */
   get addCustomField() {
-    return this._page.container.querySelector('.custom-field-add button');
+    return this._page.container.querySelector(".custom-field-add button");
   }
 
   /**
@@ -465,7 +466,7 @@ export default class CreateResourcePage {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._page.container.querySelector('.submit-wrapper .cancel');
+    return this._page.container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
@@ -474,9 +475,11 @@ export default class CreateResourcePage {
    * @returns {Element}
    */
   getSectionItem(index) {
-    return this._page.container.querySelector('.left-sidebar .sidebar-content-sections').querySelectorAll('.section-content')[index - 1].querySelector("button.no-border");
+    return this._page.container
+      .querySelector(".left-sidebar .sidebar-content-sections")
+      .querySelectorAll(".section-content")
+      [index - 1].querySelector("button.no-border");
   }
-
 
   /**
    * Returns the add secret
@@ -555,35 +558,35 @@ export default class CreateResourcePage {
    * @returns {Element}
    */
   get sectionItemSelected() {
-    return this._page.container.querySelector('.left-sidebar .sidebar-content-sections .section-content.selected');
+    return this._page.container.querySelector(".left-sidebar .sidebar-content-sections .section-content.selected");
   }
 
   /**
    * Returns the complexity text input element
    */
   get complexityText() {
-    return this._page.container.querySelector('.complexity-text');
+    return this._page.container.querySelector(".complexity-text");
   }
 
   /**
    * Returns the progress bar element
    */
   get progressBar() {
-    return this._page.container.querySelector('.progress-bar');
+    return this._page.container.querySelector(".progress-bar");
   }
 
   /**
    * Returns the convert to description button element
    */
   get convertToDescription() {
-    return this._page.container.querySelector('#convert-to-description');
+    return this._page.container.querySelector("#convert-to-description");
   }
 
   /**
    * Returns the convert to note button element
    */
   get convertToNote() {
-    return this._page.container.querySelector('#convert-to-note');
+    return this._page.container.querySelector("#convert-to-note");
   }
 
   /**
@@ -594,20 +597,20 @@ export default class CreateResourcePage {
   }
 
   /** Click on the element */
-  async click(element)  {
+  async click(element) {
     await this.user.click(element);
   }
 
   /** Click without wait for on the element */
-  escapeKey()  {
+  escapeKey() {
     // Escape key down event
-    const escapeKeyDown = {keyCode: 27};
+    const escapeKeyDown = { keyCode: 27 };
     fireEvent.keyDown(this.dialog, escapeKeyDown);
   }
 
   /** fill the input element with data */
   async fillInput(element, data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
   }
 }

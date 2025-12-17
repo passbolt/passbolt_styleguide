@@ -13,13 +13,13 @@
  */
 
 import ImportResources from "./ImportResources";
-import {defaultProps} from "./ImportResources.test.data";
+import { defaultProps } from "./ImportResources.test.data";
 
 export default {
-  title: 'Components/Resource/ImportResources/ImportResources',
-  component: ImportResources
+  title: "Components/Resource/ImportResources/ImportResources",
+  component: ImportResources,
 };
 
 export const Default = {
-  args: defaultProps()
+  args: defaultProps(),
 };

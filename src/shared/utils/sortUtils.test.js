@@ -12,19 +12,19 @@
  * @since         4.10.0
  */
 
-import {defaultResourceDto} from "../models/entity/resource/resourceEntity.test.data";
-import {sortResourcesAlphabetically} from "./sortUtils";
-import {defaultResourceMetadataDto} from "../models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import { defaultResourceDto } from "../models/entity/resource/resourceEntity.test.data";
+import { sortResourcesAlphabetically } from "./sortUtils";
+import { defaultResourceMetadataDto } from "../models/entity/resource/metadata/resourceMetadataEntity.test.data";
 
 describe("sortUtils", () => {
-  describe('::sortResourceAlphabetically', () => {
+  describe("::sortResourceAlphabetically", () => {
     it("should sort resources based on their name given from metadata and in case insensitve way", () => {
       expect.assertions(4);
 
-      const resource1 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: 'resource1'})});
-      const resource2 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: 'Resource2'})});
-      const resource3 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: 'resource3'})});
-      const resource4 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: 'Resource4'})});
+      const resource1 = defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "resource1" }) });
+      const resource2 = defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "Resource2" }) });
+      const resource3 = defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "resource3" }) });
+      const resource4 = defaultResourceDto({ metadata: defaultResourceMetadataDto({ name: "Resource4" }) });
 
       const resources = [resource2, resource3, resource4, resource1];
 

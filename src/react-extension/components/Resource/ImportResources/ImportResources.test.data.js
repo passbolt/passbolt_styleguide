@@ -11,10 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
  */
-import {defaultAdministratorRbacContext, denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {
+  defaultAdministratorRbacContext,
+  denyRbacContext,
+} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default component props with folder having owner permission
@@ -28,7 +31,7 @@ export function defaultProps(data = {}) {
     dialogContext: defaultDialogContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     onClose: jest.fn(),
-    ...data
+    ...data,
   };
 }
 
@@ -40,7 +43,6 @@ export function defaultProps(data = {}) {
 export function propsWithDenyUiAction(data = {}) {
   return defaultProps({
     rbacContext: denyRbacContext(),
-    ...data
+    ...data,
   });
 }
-

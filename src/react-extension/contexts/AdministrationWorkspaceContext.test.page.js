@@ -11,15 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import AdministrationWorkspaceContextProvider, {
-  AdministrationWorkspaceContext
+  AdministrationWorkspaceContext,
 } from "./AdministrationWorkspaceContext";
 import AppContext from "../../shared/context/AppContext/AppContext";
-import {Router, NavLink, Route, Switch} from "react-router-dom";
-import {createMemoryHistory} from "history";
-
+import { Router, NavLink, Route, Switch } from "react-router-dom";
+import { createMemoryHistory } from "history";
 
 /**
  * The AdministrationWorkspaceContextPage component represented as a page
@@ -35,7 +34,6 @@ export default class AdministrationWorkspaceContextPage {
     this.props = props;
     this.setup(appContext, props);
   }
-
 
   /**
    * Returns the contextual selected administration
@@ -107,7 +105,7 @@ export default class AdministrationWorkspaceContextPage {
    */
   async goToLink(linkCssSelector) {
     const element = this._page.container.querySelector(linkCssSelector);
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -117,7 +115,7 @@ export default class AdministrationWorkspaceContextPage {
    */
   async goToMfa() {
     this.setup(this.context, this.props);
-    await this.goToLink('.mfa');
+    await this.goToLink(".mfa");
   }
 
   /**
@@ -125,7 +123,7 @@ export default class AdministrationWorkspaceContextPage {
    */
   async goToMfaPolicy() {
     this.setup(this.context, this.props);
-    await this.goToLink('.mfa-policy');
+    await this.goToLink(".mfa-policy");
   }
 
   /**
@@ -133,7 +131,7 @@ export default class AdministrationWorkspaceContextPage {
    */
   async goToPasswordPolicySettings() {
     this.setup(this.context, this.props);
-    await this.goToLink('.password-policies');
+    await this.goToLink(".password-policies");
   }
 
   /**
@@ -141,7 +139,7 @@ export default class AdministrationWorkspaceContextPage {
    */
   async goToUserPassphraseSettings() {
     this.setup(this.context, this.props);
-    await this.goToLink('.user-passphrase-policies');
+    await this.goToLink(".user-passphrase-policies");
   }
 
   /**
@@ -149,7 +147,7 @@ export default class AdministrationWorkspaceContextPage {
    */
   async goToAccountRecoverySettings() {
     this.setup(this.context, this.props);
-    await this.goToLink('.account-recovery');
+    await this.goToLink(".account-recovery");
   }
 
   /**
@@ -157,37 +155,36 @@ export default class AdministrationWorkspaceContextPage {
    */
   async goToSsoSettings() {
     this.setup(this.context, this.props);
-    await this.goToLink('.sso');
+    await this.goToLink(".sso");
   }
 
   /**
    * Go to the users directory route
    */
   async goToUsersDirectory() {
-    await this.goToLink('.users-directory');
+    await this.goToLink(".users-directory");
   }
 
   /**
    * Go to the email notifications route
    */
   async goToEmailNotifications() {
-    await this.goToLink('.email-notifications');
+    await this.goToLink(".email-notifications");
   }
 
   /**
    * Go to the subscription route
    */
   async goToSubscription() {
-    await this.goToLink('.subscription');
+    await this.goToLink(".subscription");
   }
 
   /**
    * Go to the healthcheck route
    */
   async goToHealthcheck() {
-    await this.goToLink('.healthcheck');
+    await this.goToLink(".healthcheck");
   }
-
 
   /**
    * on save enabled
@@ -270,69 +267,52 @@ export default class AdministrationWorkspaceContextPage {
   setup(appContext, props) {
     this._page = render(
       <AppContext.Provider value={appContext}>
-
-        <Router history={createMemoryHistory({initialEntries: [
-          "/app/administration",
-        ]})}>
+        <Router history={createMemoryHistory({ initialEntries: ["/app/administration"] })}>
           <Switch>
-            <Route path={[
-              "/app/administration",
-            ]}>
+            <Route path={["/app/administration"]}>
               <AdministrationWorkspaceContextProvider {...props}>
                 <AdministrationWorkspaceContext.Consumer>
-                  {
-                    AdministrationWorkspaceContext => {
-                      this.administrationWorkspaceContext = AdministrationWorkspaceContext;
-                      return (<></>);
-                    }
-                  }
+                  {(AdministrationWorkspaceContext) => {
+                    this.administrationWorkspaceContext = AdministrationWorkspaceContext;
+                    return <></>;
+                  }}
                 </AdministrationWorkspaceContext.Consumer>
               </AdministrationWorkspaceContextProvider>
             </Route>
           </Switch>
-          <NavLink
-            to={{pathname: "/app/administration/mfa"}}>
+          <NavLink to={{ pathname: "/app/administration/mfa" }}>
             <a className="mfa"></a>
           </NavLink>
-          <NavLink
-            to={{pathname: "/app/administration/mfa-policy"}}>
+          <NavLink to={{ pathname: "/app/administration/mfa-policy" }}>
             <a className="mfa-policy"></a>
           </NavLink>
-          <NavLink
-            to={{pathname: "/app/administration/password-policies"}}>
+          <NavLink to={{ pathname: "/app/administration/password-policies" }}>
             <a className="password-policies"></a>
           </NavLink>
-          <NavLink
-            to={{pathname: "/app/administration/user-passphrase-policies"}}>
+          <NavLink to={{ pathname: "/app/administration/user-passphrase-policies" }}>
             <a className="user-passphrase-policies"></a>
           </NavLink>
-          <NavLink
-            to={{pathname: "/app/administration/sso"}}>
+          <NavLink to={{ pathname: "/app/administration/sso" }}>
             <a className="sso"></a>
           </NavLink>
-          <NavLink
-            to={{pathname: "/app/administration/account-recovery"}}>
+          <NavLink to={{ pathname: "/app/administration/account-recovery" }}>
             <a className="account-recovery"></a>
           </NavLink>
-          <NavLink
-            to={{pathname: "/app/administration/users-directory"}}>
+          <NavLink to={{ pathname: "/app/administration/users-directory" }}>
             <a className="users-directory"></a>
           </NavLink>
-          <NavLink
-            to={{pathname: "/app/administration/email-notification"}}>
+          <NavLink to={{ pathname: "/app/administration/email-notification" }}>
             <a className="email-notifications"></a>
           </NavLink>
-          <NavLink
-            to={{pathname: "/app/administration/subscription"}}>
+          <NavLink to={{ pathname: "/app/administration/subscription" }}>
             <a className="subscription"></a>
           </NavLink>
-          <NavLink
-            to={{pathname: "/app/administration/healthcheck"}}>
+          <NavLink to={{ pathname: "/app/administration/healthcheck" }}>
             <a className="healthcheck"></a>
           </NavLink>
         </Router>
       </AppContext.Provider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 }

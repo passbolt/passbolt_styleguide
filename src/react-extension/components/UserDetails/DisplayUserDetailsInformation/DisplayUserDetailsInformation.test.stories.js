@@ -11,25 +11,26 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import React from "react";
 import PropTypes from "prop-types";
 import DisplayUserDetailsInformation from "./DisplayUserDetailsInformation";
-import {defaultProps} from "./DisplayUserDetailsInformation.test.data";
+import { defaultProps } from "./DisplayUserDetailsInformation.test.data";
 
 export default {
-  title: 'Components/UserDetails/DisplayUserDetailsInformation',
-  component: DisplayUserDetailsInformation
+  title: "Components/UserDetails/DisplayUserDetailsInformation",
+  component: DisplayUserDetailsInformation,
 };
 
-const Template = args =>
+const Template = (args) => (
   <div className="panel aside">
     <div className="detailed-information">
-      <MemoryRouter initialEntries={['/']}>
-        <Route component={routerProps => <DisplayUserDetailsInformation {...args} {...routerProps}/>}></Route>
+      <MemoryRouter initialEntries={["/"]}>
+        <Route component={(routerProps) => <DisplayUserDetailsInformation {...args} {...routerProps} />}></Route>
       </MemoryRouter>
     </div>
-  </div>;
+  </div>
+);
 
 Template.propTypes = {
   context: PropTypes.object,

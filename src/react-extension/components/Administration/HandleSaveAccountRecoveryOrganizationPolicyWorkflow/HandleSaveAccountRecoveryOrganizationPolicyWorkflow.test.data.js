@@ -12,8 +12,8 @@
  * @since         3.6.0
  */
 
-import {defaultAdminAccountRecoveryContext} from "../../../contexts/AdminAccountRecoveryContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import { defaultAdminAccountRecoveryContext } from "../../../contexts/AdminAccountRecoveryContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
 
 /**
  * Default props
@@ -39,9 +39,9 @@ export function hasPolicyChangesProps(props = {}) {
   const _props = {
     adminAccountRecoveryContext: {
       policyChanges: {
-        policy: "opt-in"
-      }
-    }
+        policy: "opt-in",
+      },
+    },
   };
   return defaultProps(Object.assign(_props, props));
 }

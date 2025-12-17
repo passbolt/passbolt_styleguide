@@ -15,10 +15,10 @@
 /**
  * Unit tests on ConfirmCreateEdit in regard of specifications
  */
-import {waitFor} from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 import ConfirmCreateEditPage from "./ConfirmCreateEdit.test.page";
-import {defaultProps} from "./ConfirmCreateEdit.test.data";
-import {ConfirmEditCreateOperationVariations, ConfirmEditCreateRuleVariations} from "./ConfirmCreateEdit";
+import { defaultProps } from "./ConfirmCreateEdit.test.data";
+import { ConfirmEditCreateOperationVariations, ConfirmEditCreateRuleVariations } from "./ConfirmCreateEdit";
 
 beforeEach(() => {
   jest.resetModules();
@@ -26,10 +26,13 @@ beforeEach(() => {
 });
 
 describe("ConfirmCreateEdit", () => {
-  describe('As LU I can confirm or cancel a created resource', () => {
-    it('As LU I can confirm a resource', async() => {
+  describe("As LU I can confirm or cancel a created resource", () => {
+    it("As LU I can confirm a resource", async () => {
       expect.assertions(6);
-      const props = defaultProps({operation: ConfirmEditCreateOperationVariations.CREATE, rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY}); // The props to pass
+      const props = defaultProps({
+        operation: ConfirmEditCreateOperationVariations.CREATE,
+        rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+      }); // The props to pass
       const page = new ConfirmCreateEditPage(props);
       await waitFor(() => {});
 
@@ -44,9 +47,12 @@ describe("ConfirmCreateEdit", () => {
       expect(props.onClose).toHaveBeenCalled();
     });
 
-    it('As LU I can cancel a resource', async() => {
+    it("As LU I can cancel a resource", async () => {
       expect.assertions(6);
-      const props = defaultProps({operation: ConfirmEditCreateOperationVariations.CREATE, rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY}); // The props to pass
+      const props = defaultProps({
+        operation: ConfirmEditCreateOperationVariations.CREATE,
+        rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+      }); // The props to pass
       const page = new ConfirmCreateEditPage(props);
       await waitFor(() => {});
 
@@ -61,14 +67,17 @@ describe("ConfirmCreateEdit", () => {
       expect(props.onClose).toHaveBeenCalled();
     });
 
-    it('As LU I should see buttons disabled when the save is not finished', async() => {
+    it("As LU I should see buttons disabled when the save is not finished", async () => {
       expect.assertions(4);
       const props = defaultProps();
       // Mock the request function to make it the expected result
       let updateResolve;
-      const requestMockImpl = jest.fn(() => new Promise(resolve => {
-        updateResolve = resolve;
-      }));
+      const requestMockImpl = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            updateResolve = resolve;
+          }),
+      );
       jest.spyOn(props, "onConfirm").mockImplementation(requestMockImpl);
 
       const page = new ConfirmCreateEditPage(props);
@@ -79,14 +88,14 @@ describe("ConfirmCreateEdit", () => {
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
         expect(page.dialogClose.getAttribute("disabled")).not.toBeNull();
-        expect(page.saveButton.hasAttribute('disabled')).toBeTruthy();
+        expect(page.saveButton.hasAttribute("disabled")).toBeTruthy();
         expect(page.cancelButton.className).toBe("link cancel");
-        expect(page.cancelButton.hasAttribute('disabled')).toBeTruthy();
+        expect(page.cancelButton.hasAttribute("disabled")).toBeTruthy();
         updateResolve();
       });
     });
 
-    it('As LU I can cancel by closing the dialog', async() => {
+    it("As LU I can cancel by closing the dialog", async () => {
       expect.assertions(1);
       const props = defaultProps();
       const page = new ConfirmCreateEditPage(props);
@@ -95,7 +104,7 @@ describe("ConfirmCreateEdit", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I can cancel with the keyboard (escape)', async() => {
+    it("As LU I can cancel with the keyboard (escape)", async () => {
       expect.assertions(1);
       const props = defaultProps();
       const page = new ConfirmCreateEditPage(props);
@@ -105,10 +114,13 @@ describe("ConfirmCreateEdit", () => {
     });
   });
 
-  describe('As LU I can confirm or cancel an edited resource', () => {
-    it('As LU I can confirm a resource', async() => {
+  describe("As LU I can confirm or cancel an edited resource", () => {
+    it("As LU I can confirm a resource", async () => {
       expect.assertions(6);
-      const props = defaultProps({operation: ConfirmEditCreateOperationVariations.EDIT, rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY}); // The props to pass
+      const props = defaultProps({
+        operation: ConfirmEditCreateOperationVariations.EDIT,
+        rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+      }); // The props to pass
       const page = new ConfirmCreateEditPage(props);
       await waitFor(() => {});
 
@@ -123,9 +135,12 @@ describe("ConfirmCreateEdit", () => {
       expect(props.onClose).toHaveBeenCalled();
     });
 
-    it('As LU I can cancel a resource', async() => {
+    it("As LU I can cancel a resource", async () => {
       expect.assertions(6);
-      const props = defaultProps({operation: ConfirmEditCreateOperationVariations.EDIT, rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY}); // The props to pass
+      const props = defaultProps({
+        operation: ConfirmEditCreateOperationVariations.EDIT,
+        rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+      }); // The props to pass
       const page = new ConfirmCreateEditPage(props);
       await waitFor(() => {});
 

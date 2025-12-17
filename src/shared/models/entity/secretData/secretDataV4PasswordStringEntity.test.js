@@ -16,8 +16,6 @@ import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import SecretDataV4PasswordStringEntity from "./secretDataV4PasswordStringEntity";
 
-
-
 describe("secretDataV4PasswordStringEntity", () => {
   describe("::getSchema", () => {
     it("schema must validate", () => {
@@ -34,7 +32,7 @@ describe("secretDataV4PasswordStringEntity", () => {
   describe("::constructor", () => {
     it("constructor works if minimal valid DTO is provided", () => {
       expect.assertions(1);
-      const dto = {password: "password"};
+      const dto = { password: "password" };
       const entity = new SecretDataV4PasswordStringEntity(dto);
 
       expect(entity.password).toStrictEqual("password");
@@ -51,7 +49,7 @@ describe("secretDataV4PasswordStringEntity", () => {
 
     it("create with data provided", () => {
       expect.assertions(1);
-      const dto = {password: "password"};
+      const dto = { password: "password" };
       const entity = SecretDataV4PasswordStringEntity.createFromDefault(dto);
 
       expect(entity.password).toStrictEqual(dto.password);
@@ -77,13 +75,13 @@ describe("secretDataV4PasswordStringEntity", () => {
 
   describe("::areSecretsDifferent", () => {
     it("should return true", () => {
-      const dto = {password: "password"};
+      const dto = { password: "password" };
       const entity = new SecretDataV4PasswordStringEntity(dto);
-      expect(entity.areSecretsDifferent({password: "this-is-a-secret-password"})).toBeTruthy();
+      expect(entity.areSecretsDifferent({ password: "this-is-a-secret-password" })).toBeTruthy();
     });
 
     it("should return false", () => {
-      const dto = {password: "password"};
+      const dto = { password: "password" };
       const entity = new SecretDataV4PasswordStringEntity(dto);
       expect(entity.areSecretsDifferent(dto)).toBeFalsy();
     });

@@ -11,12 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.12.0
  */
-import {ApiClientOptions} from "../../lib/apiClient/apiClientOptions";
+import { ApiClientOptions } from "../../lib/apiClient/apiClientOptions";
 
 export function defaultAppContext(context) {
-  const baseUrl = 'http://localhost:6006';
-  const apiClientOptions = new ApiClientOptions()
-    .setBaseUrl(baseUrl);
+  const baseUrl = "http://localhost:6006";
+  const apiClientOptions = new ApiClientOptions().setBaseUrl(baseUrl);
 
   const defaultAppContext = {
     getApiClientOptions: () => apiClientOptions,

@@ -12,24 +12,20 @@
  * @since         2.11.0
  */
 import DisplayResourcesWorkspaceMainMenu from "./DisplayResourcesWorkspaceMainMenu";
-import {
-  defaultPropsFolderNotOwned,
-  defaultPropsFolderOwned
-} from "./DisplayResourcesWorkspaceMainMenu.test.data";
+import { defaultPropsFolderNotOwned, defaultPropsFolderOwned } from "./DisplayResourcesWorkspaceMainMenu.test.data";
 
 /**
  * DisplayResourcesWorkspaceMainMenu stories
  */
 export default {
-  title: 'Components/Resource/DisplayResourcesWorkspaceMainMenu',
-  component: DisplayResourcesWorkspaceMainMenu
+  title: "Components/Resource/DisplayResourcesWorkspaceMainMenu",
+  component: DisplayResourcesWorkspaceMainMenu,
 };
 
 export const FolderOwned = {
-  args: defaultPropsFolderOwned()
+  args: defaultPropsFolderOwned(),
 };
 
 export const FolderNotOwned = {
-  args: defaultPropsFolderNotOwned()
+  args: defaultPropsFolderNotOwned(),
 };
-

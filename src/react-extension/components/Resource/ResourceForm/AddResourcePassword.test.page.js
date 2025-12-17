@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -12,15 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
-import {
-  ResourceTypesLocalStorageContext
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import {ResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
+import { ResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext";
+import { ResourceTypesLocalStorageContext } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { ResourcePasswordGeneratorContext } from "../../../contexts/ResourcePasswordGeneratorContext";
 import AddResourcePassword from "./AddResourcePassword";
 /**
  * The Add resource password component represented as a page
@@ -34,7 +31,9 @@ export default class AddResourcePasswordPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={props.context}>
-          <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes, resourceTypes: props.resourceTypes}}>
+          <ResourceTypesLocalStorageContext.Provider
+            value={{ get: () => props.resourceTypes, resourceTypes: props.resourceTypes }}
+          >
             <ResourceWorkspaceContext.Provider value={props.resourceWorkspaceContext}>
               <ResourcePasswordGeneratorContext.Provider value={props.resourcePasswordGeneratorContext}>
                 <AddResourcePassword {...props} />
@@ -43,10 +42,9 @@ export default class AddResourcePasswordPage {
           </ResourceTypesLocalStorageContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
-
 
   /**
    * Returns the clickable area of the header
@@ -59,42 +57,42 @@ export default class AddResourcePasswordPage {
    * Returns the uri input element
    */
   get uri() {
-    return this._page.container.querySelector('#resource-uri');
+    return this._page.container.querySelector("#resource-uri");
   }
 
   /**
    * Returns the username / email input element
    */
   get username() {
-    return this._page.container.querySelector('#resource-username');
+    return this._page.container.querySelector("#resource-username");
   }
 
   /**
    * Returns the password input element
    */
   get password() {
-    return this._page.container.querySelector('#resource-password');
+    return this._page.container.querySelector("#resource-password");
   }
 
   /**
    * Returns the complexity text input element
    */
   get complexityText() {
-    return this._page.container.querySelector('.complexity-text');
+    return this._page.container.querySelector(".complexity-text");
   }
 
   /**
    * Returns the password view button element
    */
   get passwordViewButton() {
-    return this._page.container.querySelector('.password-view .svg-icon');
+    return this._page.container.querySelector(".password-view .svg-icon");
   }
 
   /**
    * Returns the password generate button element
    */
   get passwordGenerateButton() {
-    return this._page.container.querySelector('.password-generate');
+    return this._page.container.querySelector(".password-generate");
   }
 
   /**
@@ -106,9 +104,9 @@ export default class AddResourcePasswordPage {
 
   /** Click on the element */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => { });
+    await waitFor(() => {});
   }
 
   /**
@@ -117,8 +115,10 @@ export default class AddResourcePasswordPage {
    * @param {string} data - The data to fill the input element with.
    */
   async fillInput(element, data) {
-    const dataInputEvent = {target: {value: data}};
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
-    await waitFor(() => { element.value === data; });
+    await waitFor(() => {
+      element.value === data;
+    });
   }
 }

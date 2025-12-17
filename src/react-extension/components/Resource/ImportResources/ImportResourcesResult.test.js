@@ -15,9 +15,9 @@
 /**
  * Unit tests on PasswordImportResultDialog in regard of specifications
  */
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultProps, defaultPropsWithNoError} from "./ImportResourcesResult.test.data";
-import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultProps, defaultPropsWithNoError } from "./ImportResourcesResult.test.data";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import ImportResourcesResultPage from "./ImportResourcesResult.test.page";
 
 beforeEach(() => {
@@ -28,11 +28,11 @@ describe("As LU I should see the password import result dialog", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
 
-  describe('As LU I can see the import result', () => {
+  describe("As LU I can see the import result", () => {
     /**
      * I should see the password import result dialog
      */
-    it('As LU I see a success import result dialog with no errors', async() => {
+    it("As LU I see a success import result dialog with no errors", async () => {
       expect.assertions(8);
       const props = defaultPropsWithNoError(); // The props to pass
       page = new ImportResourcesResultPage(context, props);
@@ -49,7 +49,7 @@ describe("As LU I should see the password import result dialog", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I see the import result dialog with warnings and errors', async() => {
+    it("As LU I see the import result dialog with warnings and errors", async () => {
       expect.assertions(8);
       const props = defaultProps();
       page = new ImportResourcesResultPage(context, props);
@@ -66,7 +66,7 @@ describe("As LU I should see the password import result dialog", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I can open and see warnings resources details', async() => {
+    it("As LU I can open and see warnings resources details", async () => {
       expect.assertions(2);
       const props = defaultProps();
       page = new ImportResourcesResultPage(context, props);
@@ -75,13 +75,14 @@ describe("As LU I should see the password import result dialog", () => {
 
       await page.openWarningResourcesDetails();
 
-      const expectedWarningDebug = "----------------------------\nResources warnings\n----------------------------\n" +
-        "[\n    {\n        \"name\": \"resource1\"\n    },\n    {\n        \"name\": \"resource2\"\n    }\n]";
+      const expectedWarningDebug =
+        "----------------------------\nResources warnings\n----------------------------\n" +
+        '[\n    {\n        "name": "resource1"\n    },\n    {\n        "name": "resource2"\n    }\n]';
 
       expect(page.warningResourcesDebug).toBe(expectedWarningDebug);
     });
 
-    it('As LU I can open and see errors resources details', async() => {
+    it("As LU I can open and see errors resources details", async () => {
       expect.assertions(2);
       const props = defaultProps();
       page = new ImportResourcesResultPage(context, props);
@@ -90,13 +91,14 @@ describe("As LU I should see the password import result dialog", () => {
 
       await page.openErrorResourcesDetails();
 
-      const expectedErrorDebug = "----------------------------\nResources errors\n----------------------------\n" +
-        "[\n    {\n        \"name\": \"resource1\"\n    },\n    {\n        \"name\": \"resource2\"\n    }\n]";
+      const expectedErrorDebug =
+        "----------------------------\nResources errors\n----------------------------\n" +
+        '[\n    {\n        "name": "resource1"\n    },\n    {\n        "name": "resource2"\n    }\n]';
 
       expect(page.errorResourcesDebug).toBe(expectedErrorDebug);
     });
 
-    it('As LU I can open and see errors folders details', async() => {
+    it("As LU I can open and see errors folders details", async () => {
       expect.assertions(2);
       const props = defaultProps();
       page = new ImportResourcesResultPage(context, props);
@@ -105,30 +107,33 @@ describe("As LU I should see the password import result dialog", () => {
 
       await page.openErrorFoldersDetails();
 
-      const expectedFolderErrorDebug = "----------------------------\nFolder errors\n----------------------------\n" +
-        "[\n    {\n        \"name\": \"folder1\"\n    }\n]";
+      const expectedFolderErrorDebug =
+        "----------------------------\nFolder errors\n----------------------------\n" +
+        '[\n    {\n        "name": "folder1"\n    }\n]';
 
       expect(page.errorFoldersDebug).toBe(expectedFolderErrorDebug);
     });
 
-    it('As LU I can filter by tag', async() => {
+    it("As LU I can filter by tag", async () => {
       expect.assertions(1);
       const props = defaultPropsWithNoError();
       page = new ImportResourcesResultPage(context, props);
       await page.filterByReference();
-      const filter = {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag: {slug: "tag"}}};
-      expect(props.history.push).toBeCalledWith({pathname: "/app/passwords", state: {filter}});
+      const filter = { type: ResourceWorkspaceFilterTypes.TAG, payload: { tag: { slug: "tag" } } };
+      expect(props.history.push).toBeCalledWith({ pathname: "/app/passwords", state: { filter } });
     });
 
-    it('As LU I can filter by folder', async() => {
+    it("As LU I can filter by folder", async () => {
       expect.assertions(1);
       const props = defaultProps();
       page = new ImportResourcesResultPage(context, props);
       await page.filterByReference();
-      expect(props.history.push).toBeCalledWith(`/app/folders/view/${props.resourceWorkspaceContext.resourceFileImportResult.references.folder.id}`);
+      expect(props.history.push).toBeCalledWith(
+        `/app/folders/view/${props.resourceWorkspaceContext.resourceFileImportResult.references.folder.id}`,
+      );
     });
 
-    it('As LU I can close the dialog', async() => {
+    it("As LU I can close the dialog", async () => {
       expect.assertions(1);
       const props = defaultProps();
       page = new ImportResourcesResultPage(context, props);
@@ -136,7 +141,7 @@ describe("As LU I should see the password import result dialog", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I can stop to see the import result dialog with the keyboard (escape)', async() => {
+    it("As LU I can stop to see the import result dialog with the keyboard (escape)", async () => {
       expect.assertions(1);
       const props = defaultProps();
       page = new ImportResourcesResultPage(context, props);

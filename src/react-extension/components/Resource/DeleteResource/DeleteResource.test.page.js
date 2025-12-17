@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import PropTypes from "prop-types";
@@ -35,12 +34,12 @@ export default class DeleteResourceTestPage {
       <MockTranslationProvider>
         <AppContextProvider context={props.context}>
           <DialogContextProvider>
-            <ManageDialogs/>
-            <DeleteResource {...props}/>
+            <ManageDialogs />
+            <DeleteResource {...props} />
           </DialogContextProvider>
         </AppContextProvider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -76,14 +75,14 @@ class DeleteResourcePageObject {
    * Returns the menu elements of password workspace menu
    */
   get dialogTitle() {
-    return this._container.querySelector('.dialog-header h2 span');
+    return this._container.querySelector(".dialog-header h2 span");
   }
 
   /**
    * Returns the more menu elements of password workspace menu
    */
   get closeButton() {
-    return this._container.querySelector('.dialog-close');
+    return this._container.querySelector(".dialog-close");
   }
 
   /**
@@ -97,28 +96,27 @@ class DeleteResourcePageObject {
    * Returns the delete menu elements of password workspace menu
    */
   get cancelButton() {
-    return this._container.querySelector('.submit-wrapper .cancel');
+    return this._container.querySelector(".submit-wrapper .cancel");
   }
 
   get resourceName() {
-    return this._container.querySelector('.form-content p strong');
+    return this._container.querySelector(".form-content p strong");
   }
 
   get errorDialog() {
-    return this._container.querySelector('.error-dialog');
+    return this._container.querySelector(".error-dialog");
   }
 
   get errorDialogMessage() {
-    return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content');
+    return this._container.querySelector(".error-dialog .dialog .dialog-content .form-content");
   }
 
   /**
    * Returns the tag name input element
    */
   get tagName() {
-    return this._container.querySelector('.form-content p strong');
+    return this._container.querySelector(".form-content p strong");
   }
-
 
   /**
    * Returns true if the page object exists in the container
@@ -131,8 +129,8 @@ class DeleteResourcePageObject {
    * Click on the element
    * @param element
    */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -152,22 +150,18 @@ class AppContextProvider extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({setContext: this.setState.bind(this)});
+    this.setState({ setContext: this.setState.bind(this) });
   }
 
   /**
    * Render the component
    */
   render() {
-    return (
-      <AppContext.Provider value={this.state}>
-        {this.props.children}
-      </AppContext.Provider>
-    );
+    return <AppContext.Provider value={this.state}>{this.props.children}</AppContext.Provider>;
   }
 }
 
 AppContextProvider.propTypes = {
   context: PropTypes.object,
-  children: PropTypes.any
+  children: PropTypes.any,
 };

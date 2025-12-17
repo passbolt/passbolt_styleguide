@@ -16,15 +16,17 @@
  * Unit tests on DisplaySubscriptionKey in regard of specifications
  */
 import {
-  defaultProps, formatDate,
-  mockSubscription, mockSubscriptionExpired,
+  defaultProps,
+  formatDate,
+  mockSubscription,
+  mockSubscriptionExpired,
   mockSubscriptionUsersExceeded,
-  mockUsers
+  mockUsers,
 } from "./DisplaySubscriptionKey.test.data";
 import DisplaySubscriptionKeyPage from "./DisplaySubscriptionKey.test.page";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
-import {waitFor} from "@testing-library/react";
-import {DateTime} from "luxon";
+import { waitFor } from "@testing-library/react";
+import { DateTime } from "luxon";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import PassboltSubscriptionError from "../../../lib/Error/PassboltSubscriptionError";
 
@@ -35,7 +37,7 @@ beforeEach(() => {
 describe("DisplaySubscriptionKeyPage", () => {
   let page; // The page to test against
   const props = defaultProps(); // The props to pass
-  describe(' As AD I can see the subscription', () => {
+  describe(" As AD I can see the subscription", () => {
     /**
      * Given a valid subscription
      * When I go to the subscription
@@ -44,7 +46,7 @@ describe("DisplaySubscriptionKeyPage", () => {
      * And I should be able to identify each active users
      * And I should be able to identify when the subscription expire
      */
-    it('As AD I should see all details about the subscription', async() => {
+    it("As AD I should see all details about the subscription", async () => {
       page = new DisplaySubscriptionKeyPage(props.context, props);
       await waitFor(() => {});
       expect(page.exists()).toBeTruthy();
@@ -57,13 +59,15 @@ describe("DisplaySubscriptionKeyPage", () => {
         expect(page.users).toBe(`${mockSubscription.users} (currently: ${mockUsers.length})`);
       });
       expect(page.created).toBe(`${formatDate(mockSubscription.created)}`);
-      expect(page.expiry).toBe(`${formatDate(mockSubscription.expiry)} (${DateTime.fromISO(mockSubscription.expiry).toRelative()})`);
+      expect(page.expiry).toBe(
+        `${formatDate(mockSubscription.expiry)} (${DateTime.fromISO(mockSubscription.expiry).toRelative()})`,
+      );
       expect(page.help).toBeTruthy();
       expect(page.helpContactSales.getAttribute("href")).toBe("https://www.passbolt.com/contact");
     });
 
-    it('As AD I should be able to identify if the limit of users is exceeded', async() => {
-      jest.spyOn(props.context, 'onGetSubscriptionKeyRequested').mockImplementationOnce(() => {
+    it("As AD I should be able to identify if the limit of users is exceeded", async () => {
+      jest.spyOn(props.context, "onGetSubscriptionKeyRequested").mockImplementationOnce(() => {
         throw new PassboltSubscriptionError("users exceeded", mockSubscriptionUsersExceeded);
       });
       page = new DisplaySubscriptionKeyPage(props.context, props);
@@ -77,14 +81,18 @@ describe("DisplaySubscriptionKeyPage", () => {
         expect(page.users).toBe(`${mockSubscriptionUsersExceeded.users} (currently: ${mockUsers.length})`);
       });
       expect(page.created).toBe(`${formatDate(mockSubscriptionUsersExceeded.created)}`);
-      expect(page.expiry).toBe(`${formatDate(mockSubscriptionUsersExceeded.expiry)} (expired ${DateTime.fromISO(mockSubscriptionUsersExceeded.expiry).toRelative()})`);
+      expect(page.expiry).toBe(
+        `${formatDate(mockSubscriptionUsersExceeded.expiry)} (expired ${DateTime.fromISO(mockSubscriptionUsersExceeded.expiry).toRelative()})`,
+      );
 
       await page.goToRenewKey();
-      expect(props.navigationContext.onGoToNewTab).toHaveBeenCalledWith(`https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${mockSubscriptionUsersExceeded.subscription_id}&customer_id=${mockSubscriptionUsersExceeded.customer_id}`);
+      expect(props.navigationContext.onGoToNewTab).toHaveBeenCalledWith(
+        `https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${mockSubscriptionUsersExceeded.subscription_id}&customer_id=${mockSubscriptionUsersExceeded.customer_id}`,
+      );
     });
 
-    it('As AD I should be able to identify if the key is expired', async() => {
-      jest.spyOn(props.context, 'onGetSubscriptionKeyRequested').mockImplementationOnce(() => {
+    it("As AD I should be able to identify if the key is expired", async () => {
+      jest.spyOn(props.context, "onGetSubscriptionKeyRequested").mockImplementationOnce(() => {
         throw new PassboltSubscriptionError("key expired", mockSubscriptionExpired);
       });
       page = new DisplaySubscriptionKeyPage(props.context, props);
@@ -98,16 +106,19 @@ describe("DisplaySubscriptionKeyPage", () => {
         expect(page.users).toBe(`${mockSubscriptionExpired.users} (currently: ${mockUsers.length})`);
       });
       expect(page.created).toBe(`${formatDate(mockSubscriptionExpired.created)}`);
-      expect(page.expiry).toBe(`${formatDate(mockSubscriptionExpired.expiry)} (expired ${DateTime.fromISO(mockSubscriptionExpired.expiry).toRelative()})`);
+      expect(page.expiry).toBe(
+        `${formatDate(mockSubscriptionExpired.expiry)} (expired ${DateTime.fromISO(mockSubscriptionExpired.expiry).toRelative()})`,
+      );
 
       await page.goToRenewKey();
-      expect(props.navigationContext.onGoToNewTab).toHaveBeenCalledWith(`https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${mockSubscriptionExpired.subscription_id}&customer_id=${mockSubscriptionExpired.customer_id}`);
+      expect(props.navigationContext.onGoToNewTab).toHaveBeenCalledWith(
+        `https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${mockSubscriptionExpired.subscription_id}&customer_id=${mockSubscriptionExpired.customer_id}`,
+      );
     });
 
-
-    it('As AD I should be able to identify if the key is missing', async() => {
+    it("As AD I should be able to identify if the key is missing", async () => {
       expect.assertions(3);
-      jest.spyOn(props.context, 'onGetSubscriptionKeyRequested').mockImplementationOnce(() => {
+      jest.spyOn(props.context, "onGetSubscriptionKeyRequested").mockImplementationOnce(() => {
         throw new PassboltApiFetchError("missing key", {});
       });
       page = new DisplaySubscriptionKeyPage(props.context, props);
@@ -117,42 +128,40 @@ describe("DisplaySubscriptionKeyPage", () => {
 
       await page.updateKey();
       const editSubscriptionKey = {
-        key: null
+        key: null,
       };
       expect(props.dialogContext.open).toHaveBeenCalledWith(EditSubscriptionKey);
-      expect(props.context.setContext).toHaveBeenCalledWith({editSubscriptionKey});
+      expect(props.context.setContext).toHaveBeenCalledWith({ editSubscriptionKey });
     });
 
-
-    it('As AD I should open edit subscription key', async() => {
+    it("As AD I should open edit subscription key", async () => {
       expect.assertions(2);
-      jest.spyOn(props.context, 'onGetSubscriptionKeyRequested').mockImplementationOnce(() => {});
+      jest.spyOn(props.context, "onGetSubscriptionKeyRequested").mockImplementationOnce(() => {});
       page = new DisplaySubscriptionKeyPage(props.context, props);
 
       await waitFor(() => {});
 
       const editSubscriptionKey = {
-        key: null
+        key: null,
       };
 
       await page.updateKey();
 
       expect(props.dialogContext.open).toHaveBeenCalledWith(EditSubscriptionKey);
-      expect(props.context.setContext).toHaveBeenCalledWith({editSubscriptionKey});
+      expect(props.context.setContext).toHaveBeenCalledWith({ editSubscriptionKey });
     });
   });
 
-  describe(' As AD I see an error if no subscription was found', () => {
-  /**
-   * Given no subscription was found
-   * When I go to the subscription
-   * Then I should see an error
-   */
+  describe(" As AD I see an error if no subscription was found", () => {
+    /**
+     * Given no subscription was found
+     * When I go to the subscription
+     * Then I should see an error
+     */
 
-
-    it('As AD I should see an error if no subscription key was found', async() => {
+    it("As AD I should see an error if no subscription key was found", async () => {
       expect.assertions(3);
-      jest.spyOn(props.context, 'onGetSubscriptionKeyRequested').mockImplementationOnce(() => {
+      jest.spyOn(props.context, "onGetSubscriptionKeyRequested").mockImplementationOnce(() => {
         throw new PassboltApiFetchError("no subscription key", "");
       });
 
@@ -160,12 +169,12 @@ describe("DisplaySubscriptionKeyPage", () => {
       await waitFor(() => {});
       expect(page.subscriptionDetailsTitle).toBe("Your subscription key is either missing or not valid.");
 
-      jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(() => {});
+      jest.spyOn(props.dialogContext, "open").mockImplementationOnce(() => {});
       await page.updateKey();
       const editSubscriptionKey = {
-        key: null
+        key: null,
       };
-      expect(props.context.setContext).toHaveBeenCalledWith({editSubscriptionKey});
+      expect(props.context.setContext).toHaveBeenCalledWith({ editSubscriptionKey });
       expect(props.dialogContext.open).toHaveBeenCalledWith(EditSubscriptionKey);
     });
   });

@@ -19,7 +19,7 @@
  */
 export function defaultProps(props = {}) {
   const defaultProps = {
-    onSignInWithPassphraseClick: jest.fn()
+    onSignInWithPassphraseClick: jest.fn(),
   };
   return Object.assign(defaultProps, props);
 }

@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import FilterResourcesByText from "./FilterResourcesByText";
 
@@ -32,11 +32,11 @@ export default class FilterResourcesByTextPage {
       <MockTranslationProvider>
         <Router>
           <AppContext.Provider value={appContext}>
-            <FilterResourcesByText.WrappedComponent {...props}/>
+            <FilterResourcesByText.WrappedComponent {...props} />
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -69,28 +69,28 @@ class DisplaySearchBarPageObject {
    * Returns the resource searchBar
    */
   get searchBar() {
-    return this._container.querySelector('.search');
+    return this._container.querySelector(".search");
   }
 
   /**
    * Returns the label element
    */
   get label() {
-    return this._container.querySelector('label');
+    return this._container.querySelector("label");
   }
 
   /**
    * Returns the input text element
    */
   get inputText() {
-    return this._container.querySelector('input');
+    return this._container.querySelector("input");
   }
 
   /**
    * Returns the button element
    */
   get button() {
-    return this._container.querySelector('button');
+    return this._container.querySelector("button");
   }
 
   /**
@@ -108,8 +108,8 @@ class DisplaySearchBarPageObject {
   }
 
   /** fill the input element with data */
-  fillInput(element, data)  {
-    const dataInputEvent = {target: {value: data}};
+  fillInput(element, data) {
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
   }
 
@@ -118,8 +118,3 @@ class DisplaySearchBarPageObject {
     this.fillInput(this.inputText, text);
   }
 }
-
-
-
-
-

@@ -11,20 +11,20 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.5.0
  */
-import {v4 as uuidv4} from "uuid";
-import {defaultUserDto} from "../user/userEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultUserDto } from "../user/userEntity.test.data";
 
 export const minimumGroupUserDto = (data = {}) => ({
-  user_id:  uuidv4(),
+  user_id: uuidv4(),
   is_admin: false,
-  ...data
+  ...data,
 });
 
 export const createGroupUser = (data = {}) => ({
-  user_id:  uuidv4(),
+  user_id: uuidv4(),
   group_id: uuidv4(),
   is_admin: false,
-  ...data
+  ...data,
 });
 
 export const defaultGroupUser = (data = {}) => ({
@@ -33,16 +33,15 @@ export const defaultGroupUser = (data = {}) => ({
   group_id: uuidv4(),
   is_admin: false,
   created: "2022-01-13T13:19:04.661Z",
-  ...data
+  ...data,
 });
 
 export function groupsWithoutOwnership(data = {}) {
   const groupsUsers = [
     defaultUserDto({
-      is_admin: false
-    })
+      is_admin: false,
+    }),
   ];
 
   return Object.assign(groupsUsers, data);
 }
-

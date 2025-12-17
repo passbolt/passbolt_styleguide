@@ -13,11 +13,11 @@
  */
 
 import "../../../../../test/mocks/mockPortal.js";
-import {waitFor} from '@testing-library/dom';
-import {defaultDisabledProps, defaultProps} from './DisplayAdministrationMetadataGettingStarted.test.data';
-import DisplayAdministrationMetadataGettingStartedPage from './DisplayAdministrationMetadataGettingStarted.test.page';
+import { waitFor } from "@testing-library/dom";
+import { defaultDisabledProps, defaultProps } from "./DisplayAdministrationMetadataGettingStarted.test.data";
+import DisplayAdministrationMetadataGettingStartedPage from "./DisplayAdministrationMetadataGettingStarted.test.page";
 
-describe('DisplayAdministrationMetadataGettingStarted', () => {
+describe("DisplayAdministrationMetadataGettingStarted", () => {
   let page, props;
 
   beforeEach(() => {
@@ -25,13 +25,15 @@ describe('DisplayAdministrationMetadataGettingStarted', () => {
     page = new DisplayAdministrationMetadataGettingStartedPage(props);
   });
 
-  it('should display the title and description', () => {
+  it("should display the title and description", () => {
     expect.assertions(2);
-    expect(page.title).toBe('Getting started');
-    expect(page.description).toBe('Some of the latest features such as the new resource types require the encrypted metadata feature to be enabled.Here you can choose to enable it or do it later when ready. We recommend making a backup before, just in case.');
+    expect(page.title).toBe("Getting started");
+    expect(page.description).toBe(
+      "Some of the latest features such as the new resource types require the encrypted metadata feature to be enabled.Here you can choose to enable it or do it later when ready. We recommend making a backup before, just in case.",
+    );
   });
 
-  it('should allow selecting enable encrypted metadata and save it', async() => {
+  it("should allow selecting enable encrypted metadata and save it", async () => {
     expect.assertions(3);
     jest.spyOn(props.context.port, "request");
 
@@ -42,23 +44,26 @@ describe('DisplayAdministrationMetadataGettingStarted', () => {
 
     await page.clickSaveButton();
 
-    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.metadata.enable-encrypted-metadata-for-existing-instance");
+    expect(props.context.port.request).toHaveBeenCalledWith(
+      "passbolt.metadata.enable-encrypted-metadata-for-existing-instance",
+    );
   });
 
-  it('As a logged in administrator I can see an help box in administration metadata getting started screen ', async() => {
+  it("As a logged in administrator I can see an help box in administration metadata getting started screen ", async () => {
     expect.assertions(6);
 
     expect(page.exists()).toBeTruthy();
     await waitFor(() => {});
     expect(page.helpBox).not.toBeNull();
     expect(page.helpBoxTitle.textContent).toBe("Need help?");
-    expect(page.helpBoxDescription.textContent).toBe("For more information about the content type support and migration, checkout the dedicated page on the official website.");
+    expect(page.helpBoxDescription.textContent).toBe(
+      "For more information about the content type support and migration, checkout the dedicated page on the official website.",
+    );
     expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-    expect(page.helpBoxButton.getAttribute('href')).toEqual('https://www.passbolt.com/docs/admin/metadata-encryption/');
+    expect(page.helpBoxButton.getAttribute("href")).toEqual("https://www.passbolt.com/docs/admin/metadata-encryption/");
   });
 
-
-  it('should allow selecting keep legacy cleartext metadata and save it', async() => {
+  it("should allow selecting keep legacy cleartext metadata and save it", async () => {
     expect.assertions(3);
     jest.spyOn(props.context.port, "request");
 
@@ -69,10 +74,12 @@ describe('DisplayAdministrationMetadataGettingStarted', () => {
 
     page.clickSaveButton();
 
-    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.metadata.keep-cleartext-metadata-for-existing-instance");
+    expect(props.context.port.request).toHaveBeenCalledWith(
+      "passbolt.metadata.keep-cleartext-metadata-for-existing-instance",
+    );
   });
 
-  it('should not be able to save if settings are already saved', async() => {
+  it("should not be able to save if settings are already saved", async () => {
     expect.assertions(3);
 
     props = defaultDisabledProps();

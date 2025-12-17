@@ -13,10 +13,14 @@
  */
 
 import MockPort from "../../../react-extension/test/mock/MockPort";
-import {defaultCommentDto} from "../../../shared/models/entity/comment/commentEntity.test.data";
-import {defaultCommentCollectionDto} from "../../../shared/models/entity/comment/commentEntityCollection.test.data";
-import CommentsServiceWorkerService, {COMMENTS_CREATE, COMMENTS_DELETE, COMMENTS_FIND_ALL_BY_RESOURCE} from "./CommentsServiceWorkerService";
-import {v4 as uuidv4} from "uuid";
+import { defaultCommentDto } from "../../../shared/models/entity/comment/commentEntity.test.data";
+import { defaultCommentCollectionDto } from "../../../shared/models/entity/comment/commentEntityCollection.test.data";
+import CommentsServiceWorkerService, {
+  COMMENTS_CREATE,
+  COMMENTS_DELETE,
+  COMMENTS_FIND_ALL_BY_RESOURCE,
+} from "./CommentsServiceWorkerService";
+import { v4 as uuidv4 } from "uuid";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -31,15 +35,15 @@ describe("CommentsServiceWorkerService", () => {
   });
 
   describe("::create", () => {
-    it("requests the service worker to create a comment", async() => {
+    it("requests the service worker to create a comment", async () => {
       expect.assertions(2);
       const commentDto = defaultCommentDto();
       jest.spyOn(port, "request").mockReturnValue(commentDto);
       const payload = {
         foreign_key: uuidv4(),
-        foreign_model: 'Resource',
+        foreign_model: "Resource",
         content: "first comment",
-        user_id: uuidv4()
+        user_id: uuidv4(),
       };
 
       const resultComment = await service.create(payload);
@@ -50,7 +54,7 @@ describe("CommentsServiceWorkerService", () => {
   });
 
   describe("::delete", () => {
-    it("requests the service worker to delete a comment", async() => {
+    it("requests the service worker to delete a comment", async () => {
       expect.assertions(1);
       jest.spyOn(port, "request").mockReturnValue(() => {});
       const resourceId = uuidv4();
@@ -61,7 +65,7 @@ describe("CommentsServiceWorkerService", () => {
   });
 
   describe("::findAllByResource", () => {
-    it("requests the service worker to list all comments for the resource", async() => {
+    it("requests the service worker to list all comments for the resource", async () => {
       expect.assertions(2);
       const commentsCollection = defaultCommentCollectionDto();
       jest.spyOn(port, "request").mockReturnValue(commentsCollection);

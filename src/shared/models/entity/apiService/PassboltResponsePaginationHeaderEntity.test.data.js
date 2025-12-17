@@ -16,5 +16,5 @@ export const defaultPassboltResponsePaginationHeaderDto = (data = {}) => ({
   count: 1,
   limit: 1,
   page: 1,
-  ...data
+  ...data,
 });

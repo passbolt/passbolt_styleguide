@@ -13,29 +13,36 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
-import ConfirmCreatePage, {ConfirmCreatePageRuleVariations} from "./ConfirmCreatePage";
+import { MemoryRouter, Route } from "react-router-dom";
+import ConfirmCreatePage, { ConfirmCreatePageRuleVariations } from "./ConfirmCreatePage";
 
 export default {
-  title: 'Components/QuickAccess/ConfirmCreatePage',
-  component: ConfirmCreatePage
+  title: "Components/QuickAccess/ConfirmCreatePage",
+  component: ConfirmCreatePage,
 };
 
-const Template = args =>
-  <MemoryRouter initialEntries={[{pathname: '/', state: args.state}]}>
-    <Route component={routerProps => <div className="container quickaccess"><ConfirmCreatePage {...args} {...routerProps}/></div>}/>
-  </MemoryRouter>;
+const Template = (args) => (
+  <MemoryRouter initialEntries={[{ pathname: "/", state: args.state }]}>
+    <Route
+      component={(routerProps) => (
+        <div className="container quickaccess">
+          <ConfirmCreatePage {...args} {...routerProps} />
+        </div>
+      )}
+    />
+  </MemoryRouter>
+);
 
 const parameters = {
-  css: "ext_quickaccess"
+  css: "ext_quickaccess",
 };
 
 export const Initial = Template.bind({});
 Initial.args = {
   state: {
     rule: ConfirmCreatePageRuleVariations.IN_DICTIONARY,
-    resourceName: "Resource Name"
-  }
+    resourceName: "Resource Name",
+  },
 };
 Initial.parameters = parameters;
 
@@ -43,8 +50,7 @@ export const VeryWeakEntropy = Template.bind({});
 VeryWeakEntropy.args = {
   state: {
     rule: ConfirmCreatePageRuleVariations.MINIMUM_ENTROPY,
-    resourceName: "Resource Name"
-  }
+    resourceName: "Resource Name",
+  },
 };
 VeryWeakEntropy.parameters = parameters;
-

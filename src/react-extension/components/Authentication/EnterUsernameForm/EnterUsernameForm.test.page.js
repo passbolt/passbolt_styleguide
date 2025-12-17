@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {render, waitFor} from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import React from "react";
 import EnterUsernameForm from "./EnterUsernameForm";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -30,9 +29,9 @@ export default class EnterUsernameFormPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <EnterUsernameForm {...props}/>
+        <EnterUsernameForm {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -42,42 +41,42 @@ export default class EnterUsernameFormPage {
    * Returns the form element
    */
   get enterUsernameForm() {
-    return this._page.container.querySelector('.enter-username');
+    return this._page.container.querySelector(".enter-username");
   }
 
   /**
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.enter-username h1').textContent;
+    return this._page.container.querySelector(".enter-username h1").textContent;
   }
 
   /**
    * Returns the username / email input element
    */
   get username() {
-    return this._page.container.querySelector('#username-input');
+    return this._page.container.querySelector("#username-input");
   }
 
   /**
    * Returns the email error message input element
    */
   get usernameErrorMessage() {
-    return this._page.container.querySelectorAll('.error-message')[0].textContent;
+    return this._page.container.querySelectorAll(".error-message")[0].textContent;
   }
 
   /**
    * Returns the agreed terms checkbox element
    */
   get isAgreedTerms() {
-    return this._page.container.querySelector('#checkbox-terms');
+    return this._page.container.querySelector("#checkbox-terms");
   }
 
   /**
    * Returns the agreed terms error element
    */
   get agreedTermsError() {
-    return this._page.container.querySelectorAll('.error-message')[1].textContent;
+    return this._page.container.querySelectorAll(".error-message")[1].textContent;
   }
 
   /**
@@ -91,7 +90,7 @@ export default class EnterUsernameFormPage {
    * Returns the secondary action button element
    */
   get secondaryActionButton() {
-    return this._page.container.querySelector('.form-actions button.link');
+    return this._page.container.querySelector(".form-actions button.link");
   }
 
   /**
@@ -102,23 +101,23 @@ export default class EnterUsernameFormPage {
   }
 
   /** Click on the element */
-  async click(element)  {
+  async click(element) {
     await this.user.click(element);
   }
 
   /** Click without wait for on the element */
-  async clickWithoutWaitFor(element)  {
+  async clickWithoutWaitFor(element) {
     await this.user.click(element);
   }
 
   /** fill the input element with data */
-  async fillInput(element, data)  {
+  async fillInput(element, data) {
     await userEvent.clear(element);
     await userEvent.type(element, data);
   }
 
   /** fill the username input element with data */
-  async insertUsername(data)  {
+  async insertUsername(data) {
     await this.fillInput(this.username, data);
   }
 
@@ -145,8 +144,3 @@ export default class EnterUsernameFormPage {
     });
   }
 }
-
-
-
-
-

@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import TotpGetStarted from "./TotpGetStarted";
 
@@ -28,9 +28,9 @@ export default class TotpGetStartedPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <TotpGetStarted {...props}/>
+        <TotpGetStarted {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,106 +38,105 @@ export default class TotpGetStartedPage {
    * Returns the totp get started parent element
    */
   get totpGetStartedList() {
-    return this._page.container.querySelector('.totp-get-started');
+    return this._page.container.querySelector(".totp-get-started");
   }
 
   /**
    * Returns page title
    */
   get title() {
-    return this._page.container.querySelector('h3');
+    return this._page.container.querySelector("h3");
   }
 
   /**
    * Returns the subtitle page
    */
   get subtitle() {
-    return this._page.container.querySelector('h4.no-border');
+    return this._page.container.querySelector("h4.no-border");
   }
 
   /**
    * Returns the totp sign in illustration
    */
   get totpSignInIllustation() {
-    return this._page.container.querySelector('.sign-in-illustration');
+    return this._page.container.querySelector(".sign-in-illustration");
   }
 
   /**
    * Returns the totp sign in illustration description
    */
   get totpSignInIllustationDescription() {
-    return this._page.container.querySelector('.sign-in-illustration p');
+    return this._page.container.querySelector(".sign-in-illustration p");
   }
 
   /**
    * Returns the totp phone illustration
    */
   get totpPhoneIllustation() {
-    return this._page.container.querySelector('.phone-illustration');
+    return this._page.container.querySelector(".phone-illustration");
   }
 
   /**
    * Returns the totp phone illustration description
    */
   get totpPhoneIllustationDescription() {
-    return this._page.container.querySelector('.phone-illustration p');
+    return this._page.container.querySelector(".phone-illustration p");
   }
 
   /**
    * Returns the totp enter code illustration
    */
   get totpEnterCodeIllustation() {
-    return this._page.container.querySelector('.enter-code-illustration');
+    return this._page.container.querySelector(".enter-code-illustration");
   }
 
   /**
    * Returns the totp enter code description
    */
   get totpEnterCodeIllustationDescription() {
-    return this._page.container.querySelector('.enter-code-illustration p');
+    return this._page.container.querySelector(".enter-code-illustration p");
   }
-
 
   /**
    * Returns the cancel button
    */
   get cancelButton() {
-    return this._page.container.querySelector('.button.cancel');
+    return this._page.container.querySelector(".button.cancel");
   }
 
   /**
    * Returns the get started button
    */
   get getStartedButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * Returns the help box
    */
   get helpBox() {
-    return this._page.container.querySelector('.sidebar-help');
+    return this._page.container.querySelector(".sidebar-help");
   }
 
   /**
    * Returns the help box title
    */
   get helpBoxTitle() {
-    return this._page.container.querySelector('.sidebar-help h3');
+    return this._page.container.querySelector(".sidebar-help h3");
   }
 
   /**
    * Returns the help box description
    */
   get helpBoxDescription() {
-    return this._page.container.querySelector('.sidebar-help p');
+    return this._page.container.querySelector(".sidebar-help p");
   }
 
   /**
    * Returns the help box button
    */
   get helpBoxButton() {
-    return this._page.container.querySelector('.sidebar-help .button');
+    return this._page.container.querySelector(".sidebar-help .button");
   }
 
   /**
@@ -166,7 +165,7 @@ export default class TotpGetStartedPage {
    * @param {Element} element
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

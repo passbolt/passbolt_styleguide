@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import DisplayAdministrationWorkspaceBreadcrumb from "./DisplayAdministrationWorkspaceBreadcrumb";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -33,11 +32,11 @@ export default class DisplayAdministrationWorkspaceBreadcrumbPage {
       <MockTranslationProvider>
         <Router>
           <AppContext.Provider value={appContext}>
-            <DisplayAdministrationWorkspaceBreadcrumb {...props}/>
+            <DisplayAdministrationWorkspaceBreadcrumb {...props} />
           </AppContext.Provider>
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -45,21 +44,21 @@ export default class DisplayAdministrationWorkspaceBreadcrumbPage {
    * Returns the resource breadcrumb
    */
   get breadcrumb() {
-    return this._page.container.querySelector('.breadcrumbs');
+    return this._page.container.querySelector(".breadcrumbs");
   }
 
   /**
    * Returns the number of items element
    */
   get count() {
-    return this._page.container.querySelectorAll('li').length;
+    return this._page.container.querySelectorAll("li").length;
   }
 
   /**
    * Returns the item element for the index one
    */
   item(index) {
-    return this._page.container.querySelectorAll('li')[index - 1].textContent;
+    return this._page.container.querySelectorAll("li")[index - 1].textContent;
   }
 
   /**
@@ -69,8 +68,3 @@ export default class DisplayAdministrationWorkspaceBreadcrumbPage {
     return this.breadcrumb !== null;
   }
 }
-
-
-
-
-

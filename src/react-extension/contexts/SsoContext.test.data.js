@@ -12,7 +12,7 @@
  * @since         3.9.0
  */
 
-import {defaultAppContext} from "./ExtAppContext.test.data";
+import { defaultAppContext } from "./ExtAppContext.test.data";
 import MockPort from "../test/mock/MockPort";
 
 function mockedTranslation(string, parameters) {
@@ -32,15 +32,24 @@ function mockedTranslation(string, parameters) {
  */
 export function defaultProps(data = {}, providerId = null) {
   const port = new MockPort();
-  port.addRequestListener("passbolt.sso.get-local-configured-provider", jest.fn(() => Promise.resolve(providerId)));
-  port.addRequestListener('passbolt.sso.sign-in', jest.fn(() => Promise.resolve()));
-  port.addRequestListener("passbolt.auth.post-login-redirect", jest.fn(() => Promise.resolve()));
+  port.addRequestListener(
+    "passbolt.sso.get-local-configured-provider",
+    jest.fn(() => Promise.resolve(providerId)),
+  );
+  port.addRequestListener(
+    "passbolt.sso.sign-in",
+    jest.fn(() => Promise.resolve()),
+  );
+  port.addRequestListener(
+    "passbolt.auth.post-login-redirect",
+    jest.fn(() => Promise.resolve()),
+  );
 
   const defaultAuthenticationLoginAppContext = {
     context: {
       port: port,
     },
-    t: mockedTranslation
+    t: mockedTranslation,
   };
   return Object.assign(defaultAppContext(defaultAuthenticationLoginAppContext), data);
 }

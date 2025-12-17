@@ -29,9 +29,11 @@ describe("CheckAccountRecoveryEmail", () => {
     page = new CheckAccountRecoveryEmailTestPage();
   });
 
-  it('As AN I should be notified that an email will be sent to me when an administrator accept my account recovery request', () => {
+  it("As AN I should be notified that an email will be sent to me when an administrator accept my account recovery request", () => {
     expect(page.exists()).toBeTruthy();
     expect(page.title).toBe("Please wait, while your request is processed.");
-    expect(page.message).toContain("As soon as an administrator validates your request you will receive an email link to complete the process.");
+    expect(page.message).toContain(
+      "As soon as an administrator validates your request you will receive an email link to complete the process.",
+    );
   });
 });

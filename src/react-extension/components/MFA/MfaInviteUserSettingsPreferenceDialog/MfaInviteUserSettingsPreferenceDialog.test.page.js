@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.10.0
  */
-import {render, fireEvent, waitFor} from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import MfaInviteUserSettingsPreferenceDialog from "./MfaInviteUserSettingsPreferenceDialog";
@@ -29,7 +29,7 @@ export default class MfaInviteUserSettingsPreferenceDialogPage {
       <MockTranslationProvider>
         <MfaInviteUserSettingsPreferenceDialog {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -47,7 +47,7 @@ export default class MfaInviteUserSettingsPreferenceDialogPage {
    * @returns {string}
    */
   get message() {
-    return this.selector('.mfa-policy-dialog p').textContent;
+    return this.selector(".mfa-policy-dialog p").textContent;
   }
 
   /**
@@ -55,7 +55,7 @@ export default class MfaInviteUserSettingsPreferenceDialogPage {
    * @returns {HTMLElement}
    */
   get cancelButton() {
-    return this.selector('.mfa-policy-dialog button.cancel');
+    return this.selector(".mfa-policy-dialog button.cancel");
   }
 
   /**
@@ -63,7 +63,7 @@ export default class MfaInviteUserSettingsPreferenceDialogPage {
    * @returns {HTMLElement}
    */
   get cancelCross() {
-    return this.selector('.mfa-policy-dialog .dialog-close');
+    return this.selector(".mfa-policy-dialog .dialog-close");
   }
 
   /**
@@ -79,7 +79,7 @@ export default class MfaInviteUserSettingsPreferenceDialogPage {
    * @returns {Promise<void>}
    */
   async clickOnContinue() {
-    fireEvent.click(this.continueButton, {button: 0});
+    fireEvent.click(this.continueButton, { button: 0 });
     await waitFor(() => {});
   }
 
@@ -88,7 +88,7 @@ export default class MfaInviteUserSettingsPreferenceDialogPage {
    * @returns {Promise<void>}
    */
   async clickOnCancel() {
-    fireEvent.click(this.cancelButton, {button: 0});
+    fireEvent.click(this.cancelButton, { button: 0 });
     await waitFor(() => {});
   }
 
@@ -97,7 +97,7 @@ export default class MfaInviteUserSettingsPreferenceDialogPage {
    * @returns {Promise<void>}
    */
   async clickOnCross() {
-    fireEvent.click(this.cancelCross, {button: 0});
+    fireEvent.click(this.cancelCross, { button: 0 });
     await waitFor(() => {});
   }
 }

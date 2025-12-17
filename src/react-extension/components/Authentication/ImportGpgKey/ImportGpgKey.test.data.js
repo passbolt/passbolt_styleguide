@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 
-import {ImportGpgKeyVariations} from "./ImportGpgKey";
+import { ImportGpgKeyVariations } from "./ImportGpgKey";
 
 /**
  * Default props
@@ -25,11 +25,11 @@ export function defaultProps(props) {
     onSecondaryActionClick: jest.fn(() => Promise.resolve()),
     context: {
       port: {
-        request: jest.fn(async() => ({}))
-      }
+        request: jest.fn(async () => ({})),
+      },
     },
     validatePrivateGpgKey: jest.fn(),
-    shouldShowExpiryDateWarning: jest.fn(() => Promise.resolve(false))
+    shouldShowExpiryDateWarning: jest.fn(() => Promise.resolve(false)),
   };
   return Object.assign(defaultProps, props || {});
 }

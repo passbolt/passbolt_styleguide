@@ -12,16 +12,17 @@
  * @since         3.3.3
  */
 
-import {defaultFolderDto} from "../../../../shared/models/entity/folder/folderEntity.test.data";
-import {ownerFolderPermissionDto, readFolderPermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
-import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
-import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import { defaultFolderDto } from "../../../../shared/models/entity/folder/folderEntity.test.data";
 import {
-  resourceTypesCollectionDto
-} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+  ownerFolderPermissionDto,
+  readFolderPermissionDto,
+} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultDialogContext } from "../../../contexts/DialogContext.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import { resourceTypesCollectionDto } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Default props
@@ -30,13 +31,13 @@ import {
  */
 export function defaultProps(data = {}) {
   return {
-    context: defaultAppContext({folders: foldersMock}),
+    context: defaultAppContext({ folders: foldersMock }),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       filter: {
         type: ResourceWorkspaceFilterTypes.FOLDER,
         payload: {
-          folder: foldersMock[0]
-        }
+          folder: foldersMock[0],
+        },
       },
     }),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
@@ -44,24 +45,24 @@ export function defaultProps(data = {}) {
       dragging: true,
       draggedItems: {
         folders: [foldersMock[3]],
-        resources: []
+        resources: [],
       },
       onDragStart: jest.fn(),
       onDragEnd: jest.fn(),
     },
     history: {
-      push: jest.fn()
+      push: jest.fn(),
     },
     dialogContext: defaultDialogContext(),
     match: {
       params: {
-        filterByFolderId: foldersMock[0].id
-      }
+        filterByFolderId: foldersMock[0].id,
+      },
     },
     contextualMenuContext: {
-      show: jest.fn()
+      show: jest.fn(),
     },
-    ...data
+    ...data,
   };
 }
 

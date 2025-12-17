@@ -13,8 +13,8 @@
  */
 
 import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
-import {BrowserRouter as Router} from "react-router-dom";
+import { fireEvent, render, waitFor } from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import SsoLogin from "./SsoLogin";
 
@@ -30,10 +30,10 @@ export default class LoginPage {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <SsoLogin {...props}/>
+          <SsoLogin {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -41,28 +41,28 @@ export default class LoginPage {
    * Returns the secondary action link element
    */
   get secondaryActionLink() {
-    return this._page.container.querySelector('.form-actions button.link');
+    return this._page.container.querySelector(".form-actions button.link");
   }
 
   /**
    * Returns the Azure SSO login button element
    */
   get azureLoginButton() {
-    return this._page.container.querySelector('.sso-login-form .sso-login-button');
+    return this._page.container.querySelector(".sso-login-form .sso-login-button");
   }
 
   /**
    * Returns true if one is processing
    */
   get isProcessing() {
-    return this.signInButton.getAttribute('class').indexOf('processing') > -1;
+    return this.signInButton.getAttribute("class").indexOf("processing") > -1;
   }
 
   /**
    * Click on the secondary action link.
    */
   async clickSecondaryActionLink(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.secondaryActionLink, leftClick);
     await waitFor(inProgressFn);
   }
@@ -71,7 +71,7 @@ export default class LoginPage {
    * Click on the secondary action link.
    */
   async clickOnSsoLogin(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.azureLoginButton, leftClick);
     await waitFor(inProgressFn);
   }

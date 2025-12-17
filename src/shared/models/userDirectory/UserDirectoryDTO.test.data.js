@@ -50,7 +50,7 @@ export const mockedData = {
       hosts: ["127.0.0.1"],
       username: "username",
       authentication_type: "basic",
-    }
+    },
   },
   fields_mapping: {
     ad: {
@@ -62,15 +62,15 @@ export const mockedData = {
         created: "whenCreated",
         modified: "whenChanged",
         groups: "memberOf",
-        enabled: "userAccountControl"
+        enabled: "userAccountControl",
       },
       group: {
         id: "objectGuid",
         name: "cn",
         created: "whenCreated",
         modified: "whenChanged",
-        users: "member"
-      }
+        users: "member",
+      },
     },
     openldap: {
       user: {
@@ -79,15 +79,15 @@ export const mockedData = {
         lastname: "sn",
         username: "mail",
         created: "createtimestamp",
-        modified: "modifytimestamp"
+        modified: "modifytimestamp",
       },
       group: {
         id: "entryUuid",
         name: "cn",
         created: "createtimestamp",
         modified: "modifytimestamp",
-        users: "member"
-      }
-    }
+        users: "member",
+      },
+    },
   },
 };

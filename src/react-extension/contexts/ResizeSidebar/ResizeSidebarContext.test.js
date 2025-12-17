@@ -12,7 +12,7 @@
  * @since         5.6.0
  */
 
-import {ResizableSidebarContextProvider} from "./ResizeSidebarContext";
+import { ResizableSidebarContextProvider } from "./ResizeSidebarContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -25,18 +25,18 @@ describe("ResizableSidebarContextProvider", () => {
   describe("As a user I should be able to resize sidebars", () => {
     beforeEach(() => {
       sidebarContext = new ResizableSidebarContextProvider();
-      const setStateMock = stateUpdate => {
+      const setStateMock = (stateUpdate) => {
         const prevState = sidebarContext.state;
         const updatedState = typeof stateUpdate === "function" ? stateUpdate(prevState) : stateUpdate;
-        sidebarContext.state =  Object.assign(prevState, updatedState);
+        sidebarContext.state = Object.assign(prevState, updatedState);
       };
       jest.spyOn(sidebarContext, "setState").mockImplementation(setStateMock);
     });
 
     it("should initialize with correct default state", () => {
       expect(sidebarContext.state).toEqual({
-        left: {width: 0},
-        right: {width: 0},
+        left: { width: 0 },
+        right: { width: 0 },
       });
       expect(sidebarContext.containerRef).toBeDefined();
     });

@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {render, fireEvent, waitFor} from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import Select from "./Select";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -30,7 +30,7 @@ export default class SelectPage {
       <MockTranslationProvider>
         <Select {...props}></Select>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -89,12 +89,11 @@ export default class SelectPage {
     return this.find(`#${id}`) === null;
   }
 
-
   /**
    * Click on the component
    */
-  async click(component)  {
-    const leftClick = {button: 0};
+  async click(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }
@@ -102,20 +101,20 @@ export default class SelectPage {
   /**
    * Click on the component with right click
    */
-  async rightClick(component)  {
-    const rightClick = {button: 0};
+  async rightClick(component) {
+    const rightClick = { button: 0 };
     fireEvent.contextMenu(component, rightClick);
     await waitFor(() => {});
   }
 
   /** Drag start on the component */
-  async dragStart(component)  {
+  async dragStart(component) {
     fireEvent.dragStart(component);
     await waitFor(() => {});
   }
 
   /** Scroll event on component */
-  async scroll(component)  {
+  async scroll(component) {
     fireEvent.scroll(component);
     await waitFor(() => {});
   }
@@ -131,7 +130,7 @@ export default class SelectPage {
    * Click on the enter keyboard
    */
   async onEnter(component) {
-    fireEvent.keyDown(component, {keyCode: 13});
+    fireEvent.keyDown(component, { keyCode: 13 });
     await waitFor(() => {});
   }
 
@@ -139,7 +138,7 @@ export default class SelectPage {
    * Click on the arrow down
    */
   async onArrowDown(component) {
-    fireEvent.keyDown(component, {keyCode: 40});
+    fireEvent.keyDown(component, { keyCode: 40 });
     await waitFor(() => {});
   }
 
@@ -147,7 +146,7 @@ export default class SelectPage {
    * Click on the arrow up
    */
   async onArrowUp(component) {
-    fireEvent.keyDown(component, {keyCode: 38});
+    fireEvent.keyDown(component, { keyCode: 38 });
     await waitFor(() => {});
   }
 
@@ -155,7 +154,7 @@ export default class SelectPage {
    * Click on the arrow up
    */
   async onEscape(component) {
-    fireEvent.keyDown(component, {keyCode: 27});
+    fireEvent.keyDown(component, { keyCode: 27 });
     await waitFor(() => {});
   }
 
@@ -163,27 +162,26 @@ export default class SelectPage {
    * Click on the arrow right
    */
   async onArrowright(component) {
-    fireEvent.keyDown(component, {keyCode: 39});
+    fireEvent.keyDown(component, { keyCode: 39 });
     await waitFor(() => {});
   }
 
   /** fill the input element with data */
-  async fillInput(search)  {
-    fireEvent.change(this.searchInput, {target: {value: search}});
+  async fillInput(search) {
+    fireEvent.change(this.searchInput, { target: { value: search } });
     await waitFor(() => {});
   }
 }
-
 
 /**
  * enumeration for html selector to avoid hardcoding
  */
 export const SelectorEnum = {
-  items: '.items',
-  searchInput: '.search-input',
-  container: '.select-container',
-  select: '.select',
-  selectedValue: '.selected-value',
-  option: '.option',
+  items: ".items",
+  searchInput: ".search-input",
+  container: ".select-container",
+  select: ".select",
+  selectedValue: ".selected-value",
+  option: ".option",
   firstItem: '.option[tabindex = "0"]',
 };

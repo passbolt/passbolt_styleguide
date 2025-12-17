@@ -14,19 +14,19 @@
 
 import React from "react";
 import DisplayResourceDetailsNote from "./DisplayResourceDetailsNote";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 export default {
-  title: 'Components/ResourceDetails/DisplayResourceDetailsNote',
+  title: "Components/ResourceDetails/DisplayResourceDetailsNote",
   component: DisplayResourceDetailsNote,
   decorators: [
-    (Story, {args}) => (
+    (Story, { args }) => (
       <div className="page">
-        <div className="app" style={{margin: "-1rem"}}>
+        <div className="app" style={{ margin: "-1rem" }}>
           <div className="panel main">
             <div className="panel middle">
-              <div className="middle-right" style={{display: "flex", justifyContent: "flex-end"}}>
+              <div className="middle-right" style={{ display: "flex", justifyContent: "flex-end" }}>
                 <div className="panel aside">
                   <div className="sidebar resource">
                     <div className="sidebar-content">
@@ -39,51 +39,54 @@ export default {
           </div>
         </div>
       </div>
-    )
-  ]
+    ),
+  ],
 };
 
 export const SecureNote = {
   args: {
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
-      details: {resource: {}}
+      details: { resource: {} },
     }),
     context: defaultAppContext({
       port: {
-        request: () => new Promise(resolve => {
-          setTimeout(() => resolve({description: "A resource description"}), 1000);
-        })
-      }
+        request: () =>
+          new Promise((resolve) => {
+            setTimeout(() => resolve({ description: "A resource description" }), 1000);
+          }),
+      },
     }),
-  }
+  },
 };
 
 export const SecureNoteWithDecryptionError = {
   args: {
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
-      details: {resource: {}}
+      details: { resource: {} },
     }),
     context: defaultAppContext({
       port: {
-        request: () => new Promise((_, reject) => {
-          setTimeout(() => reject("Something went wrong!"), 1000);
-        })
-      }
+        request: () =>
+          new Promise((_, reject) => {
+            setTimeout(() => reject("Something went wrong!"), 1000);
+          }),
+      },
     }),
-  }
+  },
 };
 
 export const EmptySecureNote = {
   args: {
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
-      details: {resource: {}}
+      details: { resource: {} },
     }),
     context: defaultAppContext({
       port: {
-        request: () => new Promise(resolve => {
-          setTimeout(() => resolve({description: ""}), 1000);
-        })
-      }
+        request: () =>
+          new Promise((resolve) => {
+            setTimeout(() => resolve({ description: "" }), 1000);
+          }),
+      },
     }),
-  }
+  },
 };

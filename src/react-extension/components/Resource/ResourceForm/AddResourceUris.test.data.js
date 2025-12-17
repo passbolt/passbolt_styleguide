@@ -12,15 +12,10 @@
  * @since         5.2.0
  */
 
-
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultResourceFormDto} from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
-import {
-  TEST_RESOURCE_TYPE_V5_DEFAULT
-} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
-import {
-  defaultResourceMetadataDto
-} from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultResourceFormDto } from "../../../../shared/models/entity/resource/resourceFormEntity.test.data";
+import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import { defaultResourceMetadataDto } from "../../../../shared/models/entity/resource/metadata/resourceMetadataEntity.test.data";
 
 /**
  * Default props
@@ -33,9 +28,9 @@ export function defaultProps(data = {}) {
     resource: defaultResourceFormDto({
       metadata: defaultResourceMetadataDto({
         resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
-        uris: ["https://www.passbolt.com", "https://www.passbolt.com/docs"]
+        uris: ["https://www.passbolt.com", "https://www.passbolt.com/docs"],
       }),
-    })
+    }),
   };
   return Object.assign(defaultData, data);
 }

@@ -13,9 +13,9 @@
  */
 
 import RequestAccountRecoveryPage from "./RequestAccountRecovery.test.page";
-import {defaultProps} from "./RequestAccountRecovery.test.data";
+import { defaultProps } from "./RequestAccountRecovery.test.data";
 import each from "jest-each";
-import {RequestAccountRecoveryVariations} from "./RequestAccountRecovery";
+import { RequestAccountRecoveryVariations } from "./RequestAccountRecovery";
 
 beforeEach(() => {
   jest.resetModules();
@@ -23,10 +23,10 @@ beforeEach(() => {
 
 describe("RequestAccountRecoveryPage", () => {
   each([
-    {displayAs: RequestAccountRecoveryVariations.SETUP}, // Login
-    {displayAs: RequestAccountRecoveryVariations.RECOVER}, // recover account
-    {displayAs: RequestAccountRecoveryVariations.ACCOUNT_RECOVERY}, // account recovery
-  ]).describe("Common behavior to all context", _props => {
+    { displayAs: RequestAccountRecoveryVariations.SETUP }, // Login
+    { displayAs: RequestAccountRecoveryVariations.RECOVER }, // recover account
+    { displayAs: RequestAccountRecoveryVariations.ACCOUNT_RECOVERY }, // account recovery
+  ]).describe("Common behavior to all context", (_props) => {
     let page, props;
 
     beforeEach(() => {
@@ -34,13 +34,13 @@ describe("RequestAccountRecoveryPage", () => {
       page = new RequestAccountRecoveryPage(props);
     });
 
-    it('As AN I should be able to request an account recovery', async() => {
+    it("As AN I should be able to request an account recovery", async () => {
       expect.assertions(1);
       await page.requestAccountRecovery();
       expect(props.onPrimaryActionClick).toHaveBeenCalled();
     });
 
-    it('As AN I should be able to try again', async() => {
+    it("As AN I should be able to try again", async () => {
       expect.assertions(1);
       await page.clickSecondaryActionLink();
       expect(props.onSecondaryActionClick).toHaveBeenCalled();

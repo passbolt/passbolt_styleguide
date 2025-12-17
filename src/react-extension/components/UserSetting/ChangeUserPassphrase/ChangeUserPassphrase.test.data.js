@@ -6,8 +6,8 @@ export function defaultProps(state) {
   const props = {
     userSettingsContext: {
       state: state,
-      onIntroductionPassphraseRequested: jest.fn()
-    }
+      onIntroductionPassphraseRequested: jest.fn(),
+    },
   };
 
   return props;

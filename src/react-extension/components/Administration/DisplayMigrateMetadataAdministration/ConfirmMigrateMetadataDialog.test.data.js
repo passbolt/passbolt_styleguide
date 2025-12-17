@@ -22,6 +22,6 @@ export function defaultProps(props = {}) {
     confirm: jest.fn(),
     cancel: jest.fn(),
     onClose: jest.fn(),
-    ...props
+    ...props,
   };
 }

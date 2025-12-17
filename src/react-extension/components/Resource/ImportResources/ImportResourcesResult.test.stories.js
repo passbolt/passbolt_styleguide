@@ -13,19 +13,20 @@
  */
 
 import React from "react";
-import {MemoryRouter} from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import ImportResourcesResult from "./ImportResourcesResult";
-import {defaultProps, defaultPropsWithNoError} from "./ImportResourcesResult.test.data";
+import { defaultProps, defaultPropsWithNoError } from "./ImportResourcesResult.test.data";
 
 export default {
-  title: 'Components/Resource/ImportResources/ImportResourcesResult',
+  title: "Components/Resource/ImportResources/ImportResourcesResult",
   component: ImportResourcesResult,
   decorators: [
-    (Story, {args}) =>
-      <MemoryRouter initialEntries={['/']}>
-        <Story {...args}/>
+    (Story, { args }) => (
+      <MemoryRouter initialEntries={["/"]}>
+        <Story {...args} />
       </MemoryRouter>
-  ]
+    ),
+  ],
 };
 
 export const Initial = {

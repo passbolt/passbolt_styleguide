@@ -12,13 +12,13 @@
  * @since         5.4.0
  */
 import ActionAbortedMissingMetadataKeys from "./ActionAbortedMissingMetadataKeys";
-import {defaultProps} from "./ActionAbortedMissingMetadataKeys.test.data";
+import { defaultProps } from "./ActionAbortedMissingMetadataKeys.test.data";
 
 export default {
-  title: 'Components/Metadata/ActionAbortedMissingMetadataKeys',
-  component: ActionAbortedMissingMetadataKeys
+  title: "Components/Metadata/ActionAbortedMissingMetadataKeys",
+  component: ActionAbortedMissingMetadataKeys,
 };
 
 export const Default = {
-  args: defaultProps()
+  args: defaultProps(),
 };

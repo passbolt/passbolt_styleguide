@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         5.0.0
  */
 
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import OrchestrateResourceForm from "./OrchestrateResourceForm";
@@ -29,9 +28,9 @@ export default class OrchestrateResourceFormPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <OrchestrateResourceForm {...props}/>
+        <OrchestrateResourceForm {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -40,7 +39,7 @@ export default class OrchestrateResourceFormPage {
    * @returns {boolean}
    */
   get hasPasswordForm() {
-    return Boolean(this._page.container.querySelector('.password'));
+    return Boolean(this._page.container.querySelector(".password"));
   }
 
   /**
@@ -48,7 +47,7 @@ export default class OrchestrateResourceFormPage {
    * @returns {boolean}
    */
   get hasTotpForm() {
-    return Boolean(this._page.container.querySelector('.totp'));
+    return Boolean(this._page.container.querySelector(".totp"));
   }
 
   /**
@@ -56,7 +55,7 @@ export default class OrchestrateResourceFormPage {
    * @returns {boolean}
    */
   get hasCustomFieldsForm() {
-    return Boolean(this._page.container.querySelector('.custom-fields'));
+    return Boolean(this._page.container.querySelector(".custom-fields"));
   }
 
   /**
@@ -64,7 +63,7 @@ export default class OrchestrateResourceFormPage {
    * @returns {boolean}
    */
   get hasNoteForm() {
-    return Boolean(this._page.container.querySelector('.note'));
+    return Boolean(this._page.container.querySelector(".note"));
   }
 
   /**
@@ -72,7 +71,7 @@ export default class OrchestrateResourceFormPage {
    * @returns {boolean}
    */
   get hasDescriptionForm() {
-    return Boolean(this._page.container.querySelector('.description'));
+    return Boolean(this._page.container.querySelector(".description"));
   }
 
   /**
@@ -80,6 +79,6 @@ export default class OrchestrateResourceFormPage {
    * @returns {boolean}
    */
   get hasAppearanceForm() {
-    return Boolean(this._page.container.querySelector('.appearance-workspace'));
+    return Boolean(this._page.container.querySelector(".appearance-workspace"));
   }
 }

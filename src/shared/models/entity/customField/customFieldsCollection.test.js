@@ -12,11 +12,11 @@
  * @since         5.3.0
  */
 import EntitySchema from "../abstract/entitySchema";
-import {defaultCustomField, emptyCustomFieldDto} from "./customFieldEntity.test.data";
+import { defaultCustomField, emptyCustomFieldDto } from "./customFieldEntity.test.data";
 import CustomFieldEntity from "./customFieldEntity";
 import CustomFieldsCollection from "./customFieldsCollection";
-import {customFieldsCollectionDtos, defaultCustomFieldsCollection} from "./customFieldsCollection.test.data";
-import {v4 as uuidv4} from "uuid";
+import { customFieldsCollectionDtos, defaultCustomFieldsCollection } from "./customFieldsCollection.test.data";
+import { v4 as uuidv4 } from "uuid";
 
 describe("CustomFieldsCollection", () => {
   describe("::getSchema", () => {
@@ -52,8 +52,7 @@ describe("CustomFieldsCollection", () => {
     it("should throw if the collection schema does not validate", () => {
       expect.assertions(1);
 
-      expect(() => new CustomFieldsCollection({}))
-        .toThrowEntityValidationError("items");
+      expect(() => new CustomFieldsCollection({})).toThrowEntityValidationError("items");
     });
 
     it("should, with enabling the ignore invalid option, ignore items which do not validate their schema", () => {
@@ -62,7 +61,7 @@ describe("CustomFieldsCollection", () => {
       const dtos = defaultCustomFieldsCollection();
       delete dtos[0].id;
 
-      const collection = new CustomFieldsCollection(dtos, {ignoreInvalidEntity: true});
+      const collection = new CustomFieldsCollection(dtos, { ignoreInvalidEntity: true });
 
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0]._props.id).toEqual(dtos[1].id);
@@ -74,14 +73,13 @@ describe("CustomFieldsCollection", () => {
       const maxItems = CustomFieldsCollection.getSchema().maxItems;
       const collectionDto = customFieldsCollectionDtos(maxItems + 1);
 
-      expect(() => new CustomFieldsCollection(collectionDto))
-        .toThrowCollectionValidationError("maxItems");
+      expect(() => new CustomFieldsCollection(collectionDto)).toThrowCollectionValidationError("maxItems");
     });
 
     it("should not throw if the content total size reach the exact maximum allowed", () => {
       expect.assertions(1);
 
-      const data = {secret_value: "a".repeat(5_000)};
+      const data = { secret_value: "a".repeat(5_000) };
       const collectionDto = customFieldsCollectionDtos(10, data);
 
       expect(() => new CustomFieldsCollection(collectionDto)).not.toThrowError();
@@ -90,32 +88,34 @@ describe("CustomFieldsCollection", () => {
     it("should throw if the content total size exceed the maximum allowed: with strings", () => {
       expect.assertions(1);
 
-      const data = {secret_value: "a".repeat(5_000)};
+      const data = { secret_value: "a".repeat(5_000) };
       const collectionDto = customFieldsCollectionDtos(11, data);
 
-      expect(() => new CustomFieldsCollection(collectionDto))
-        .toThrowCollectionValidationError("10.items.maxContentSize");
+      expect(() => new CustomFieldsCollection(collectionDto)).toThrowCollectionValidationError(
+        "10.items.maxContentSize",
+      );
     });
 
     it("should throw if the content total size exceed the maximum allowed: with a number", () => {
       expect.assertions(1);
 
-      const data = {secret_value: "a".repeat(5_000)};
+      const data = { secret_value: "a".repeat(5_000) };
       const collectionDto = customFieldsCollectionDtos(10, data);
       const extraCustomField = defaultCustomField({
         type: "number",
-        secret_value: 42
+        secret_value: 42,
       });
       collectionDto.push(extraCustomField);
 
-      expect(() => new CustomFieldsCollection(collectionDto))
-        .toThrowCollectionValidationError("10.items.maxContentSize");
+      expect(() => new CustomFieldsCollection(collectionDto)).toThrowCollectionValidationError(
+        "10.items.maxContentSize",
+      );
     });
 
     it("should throw if the content total size exceed the maximum allowed: with a boolean (true)", () => {
       expect.assertions(1);
 
-      const data = {secret_value: "a".repeat(5_000)};
+      const data = { secret_value: "a".repeat(5_000) };
       const collectionDto = customFieldsCollectionDtos(10, data);
       const extraCustomField = defaultCustomField({
         type: "boolean",
@@ -123,28 +123,30 @@ describe("CustomFieldsCollection", () => {
       });
       collectionDto.push(extraCustomField);
 
-      expect(() => new CustomFieldsCollection(collectionDto))
-        .toThrowCollectionValidationError("10.items.maxContentSize");
+      expect(() => new CustomFieldsCollection(collectionDto)).toThrowCollectionValidationError(
+        "10.items.maxContentSize",
+      );
     });
 
     it("should throw if the content total size exceed the maximum allowed: with a boolean (false)", () => {
       expect.assertions(1);
 
-      const data = {secret_value: "a".repeat(5_000)};
+      const data = { secret_value: "a".repeat(5_000) };
       const collectionDto = customFieldsCollectionDtos(10, data);
       const extraCustomField = defaultCustomField({
         type: "boolean",
-        secret_value: false
+        secret_value: false,
       });
       collectionDto.push(extraCustomField);
 
-      expect(() => new CustomFieldsCollection(collectionDto))
-        .toThrowCollectionValidationError("10.items.maxContentSize");
+      expect(() => new CustomFieldsCollection(collectionDto)).toThrowCollectionValidationError(
+        "10.items.maxContentSize",
+      );
     });
   });
 
   describe("::pushMany", () => {
-    it("[performance] should ensure performance adding large dataset remains effective.", async() => {
+    it("[performance] should ensure performance adding large dataset remains effective.", async () => {
       const count = CustomFieldsCollection.getSchema().maxItems;
       const dtos = customFieldsCollectionDtos(count);
 
@@ -157,17 +159,17 @@ describe("CustomFieldsCollection", () => {
   });
 
   describe("::currentSize", () => {
-    it("should return the size of the collection values", async() => {
+    it("should return the size of the collection values", async () => {
       expect.assertions(1);
 
-      const data = {secret_value: "a".repeat(1_000)};
+      const data = { secret_value: "a".repeat(1_000) };
       const collectionDto = customFieldsCollectionDtos(10, data);
       const customFieldsCollection = new CustomFieldsCollection(collectionDto);
 
       expect(customFieldsCollection.currentSize).toStrictEqual(10_000);
     });
 
-    it("should return 0 if all element in the collection is empty", async() => {
+    it("should return 0 if all element in the collection is empty", async () => {
       expect.assertions(1);
 
       const collection = new CustomFieldsCollection([
@@ -183,7 +185,7 @@ describe("CustomFieldsCollection", () => {
   });
 
   describe("::isEmpty", () => {
-    it("should return true if the collection is empty", async() => {
+    it("should return true if the collection is empty", async () => {
       expect.assertions(1);
 
       const collection = new CustomFieldsCollection([]);
@@ -191,7 +193,7 @@ describe("CustomFieldsCollection", () => {
       expect(collection.isEmpty()).toStrictEqual(true);
     });
 
-    it("should return true if the collection is full of empty key/value", async() => {
+    it("should return true if the collection is full of empty key/value", async () => {
       expect.assertions(1);
 
       const collection = new CustomFieldsCollection([
@@ -206,7 +208,7 @@ describe("CustomFieldsCollection", () => {
       expect(collection.isEmpty()).toStrictEqual(true);
     });
 
-    it("should return false if at least 1 element in the collection is not empty", async() => {
+    it("should return false if at least 1 element in the collection is not empty", async () => {
       expect.assertions(1);
 
       const collection = new CustomFieldsCollection([
@@ -221,19 +223,17 @@ describe("CustomFieldsCollection", () => {
       expect(collection.isEmpty()).toStrictEqual(false);
     });
 
-    it("should return false if all element are not empty", async() => {
+    it("should return false if all element are not empty", async () => {
       expect.assertions(1);
 
-      const collection = new CustomFieldsCollection([
-        defaultCustomField(),
-      ]);
+      const collection = new CustomFieldsCollection([defaultCustomField()]);
 
       expect(collection.isEmpty()).toStrictEqual(false);
     });
   });
 
   describe("::areCollectionsDifferent", () => {
-    it("should throw an error if the parameters are not of the right type.", async() => {
+    it("should throw an error if the parameters are not of the right type.", async () => {
       expect.assertions(2);
 
       const collection = new CustomFieldsCollection(defaultCustomFieldsCollection());
@@ -242,14 +242,14 @@ describe("CustomFieldsCollection", () => {
       expect(() => CustomFieldsCollection.areCollectionsDifferent(collection, null)).toThrowError();
     });
 
-    it("should return false if both collection are identical.", async() => {
+    it("should return false if both collection are identical.", async () => {
       expect.assertions(1);
 
       const collection = new CustomFieldsCollection(defaultCustomFieldsCollection());
       expect(CustomFieldsCollection.areCollectionsDifferent(collection, collection)).toStrictEqual(false);
     });
 
-    it("should return true if collections have different size.", async() => {
+    it("should return true if collections have different size.", async () => {
       expect.assertions(1);
 
       const dtoA = defaultCustomFieldsCollection();
@@ -261,12 +261,12 @@ describe("CustomFieldsCollection", () => {
       expect(CustomFieldsCollection.areCollectionsDifferent(collectionA, collectionB)).toStrictEqual(true);
     });
 
-    it("should return true if collections have different items.", async() => {
+    it("should return true if collections have different items.", async () => {
       expect.assertions(1);
 
       const dtoA = defaultCustomFieldsCollection();
       const dtoB = [...dtoA];
-      dtoB[1] = {...dtoA[1], id: uuidv4()};
+      dtoB[1] = { ...dtoA[1], id: uuidv4() };
 
       const collectionA = new CustomFieldsCollection(dtoA);
       const collectionB = new CustomFieldsCollection(dtoB);
@@ -275,7 +275,7 @@ describe("CustomFieldsCollection", () => {
   });
 
   describe("::mergeCollectionsMetadataAndSecret", () => {
-    it("should throw an error if the parameters are not of the right type.", async() => {
+    it("should throw an error if the parameters are not of the right type.", async () => {
       expect.assertions(2);
 
       const collection = new CustomFieldsCollection(defaultCustomFieldsCollection());
@@ -284,33 +284,35 @@ describe("CustomFieldsCollection", () => {
       expect(() => CustomFieldsCollection.mergeCollectionsMetadataAndSecret(collection, null)).toThrowError();
     });
 
-    it("should return a collection merged between them.", async() => {
+    it("should return a collection merged between them.", async () => {
       expect.assertions(1);
       const mergedCollection = new CustomFieldsCollection(defaultCustomFieldsCollection());
 
       const metadataCustomFieldsDto = [...mergedCollection];
-      metadataCustomFieldsDto.forEach(customField => {
+      metadataCustomFieldsDto.forEach((customField) => {
         delete customField.secret_value;
         delete customField.secret_key;
       });
 
       const secretCustomFieldsDto = [...mergedCollection];
-      secretCustomFieldsDto.forEach(customField => {
+      secretCustomFieldsDto.forEach((customField) => {
         delete customField.metadata_value;
         delete customField.metadata_key;
       });
 
       const metadataCollection = new CustomFieldsCollection(metadataCustomFieldsDto);
       const secretCollection = new CustomFieldsCollection(secretCustomFieldsDto);
-      expect(CustomFieldsCollection.mergeCollectionsMetadataAndSecret(metadataCollection, secretCollection)).toStrictEqual(mergedCollection);
+      expect(
+        CustomFieldsCollection.mergeCollectionsMetadataAndSecret(metadataCollection, secretCollection),
+      ).toStrictEqual(mergedCollection);
     });
 
-    it("should return a merged even if secret collections have different size.", async() => {
+    it("should return a merged even if secret collections have different size.", async () => {
       expect.assertions(1);
       const mergedCollection = new CustomFieldsCollection(defaultCustomFieldsCollection());
 
-      const metadataCustomFieldsDto =  [...mergedCollection];
-      const secretCustomFieldsDto =  [...mergedCollection];
+      const metadataCustomFieldsDto = [...mergedCollection];
+      const secretCustomFieldsDto = [...mergedCollection];
       const customField = defaultCustomField();
       secretCustomFieldsDto.push(customField);
 
@@ -318,27 +320,29 @@ describe("CustomFieldsCollection", () => {
       delete customField.metadata_value;
       mergedCollection.push(customField);
 
-      metadataCustomFieldsDto.forEach(customField => {
+      metadataCustomFieldsDto.forEach((customField) => {
         delete customField.secret_value;
         delete customField.secret_key;
       });
 
-      secretCustomFieldsDto.forEach(customField => {
+      secretCustomFieldsDto.forEach((customField) => {
         delete customField.metadata_value;
         delete customField.metadata_key;
       });
 
       const metadataCollection = new CustomFieldsCollection(metadataCustomFieldsDto);
       const secretCollection = new CustomFieldsCollection(secretCustomFieldsDto);
-      expect(CustomFieldsCollection.mergeCollectionsMetadataAndSecret(metadataCollection, secretCollection)).toStrictEqual(mergedCollection);
+      expect(
+        CustomFieldsCollection.mergeCollectionsMetadataAndSecret(metadataCollection, secretCollection),
+      ).toStrictEqual(mergedCollection);
     });
 
-    it("should return a merged even if metadata collections have different size.", async() => {
+    it("should return a merged even if metadata collections have different size.", async () => {
       expect.assertions(1);
       const mergedCollection = new CustomFieldsCollection(defaultCustomFieldsCollection());
 
-      const metadataCustomFieldsDto =  [...mergedCollection];
-      const secretCustomFieldsDto =  [...mergedCollection];
+      const metadataCustomFieldsDto = [...mergedCollection];
+      const secretCustomFieldsDto = [...mergedCollection];
       const customField = defaultCustomField();
       metadataCustomFieldsDto.push(customField);
 
@@ -346,19 +350,21 @@ describe("CustomFieldsCollection", () => {
       delete customField.secret_value;
       mergedCollection.push(customField);
 
-      metadataCustomFieldsDto.forEach(customField => {
+      metadataCustomFieldsDto.forEach((customField) => {
         delete customField.secret_value;
         delete customField.secret_key;
       });
 
-      secretCustomFieldsDto.forEach(customField => {
+      secretCustomFieldsDto.forEach((customField) => {
         delete customField.metadata_value;
         delete customField.metadata_key;
       });
 
       const collectionA = new CustomFieldsCollection(metadataCustomFieldsDto);
       const collectionB = new CustomFieldsCollection(secretCustomFieldsDto);
-      expect(CustomFieldsCollection.mergeCollectionsMetadataAndSecret(collectionA, collectionB)).toStrictEqual(mergedCollection);
+      expect(CustomFieldsCollection.mergeCollectionsMetadataAndSecret(collectionA, collectionB)).toStrictEqual(
+        mergedCollection,
+      );
     });
   });
 });

@@ -15,23 +15,20 @@
 /**
  * Unit tests on FilterResourcesByFolders in regard of specifications
  */
-import {defaultProps} from "./FilterResourcesByFolders.test.data";
-import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
+import { defaultProps } from "./FilterResourcesByFolders.test.data";
+import { ResourceWorkspaceFilterTypes } from "../../../contexts/ResourceWorkspaceContext";
 import FilterResourcesByRootFolderContextualMenu from "./FilterResourcesByRootFolderContextualMenu";
 import FilterResourcesByFoldersPage from "./FilterResourcesByFolders.test.page";
-import {defaultResourcesDtos} from "../../../../shared/models/entity/resource/resourcesCollection.test.data";
-import {foldersMock} from "./FilterResourcesByFolders.test.data";
+import { defaultResourcesDtos } from "../../../../shared/models/entity/resource/resourcesCollection.test.data";
+import { foldersMock } from "./FilterResourcesByFolders.test.data";
 import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFoldersItemContextualMenu";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {
-  TEST_RESOURCE_TYPE_V5_DEFAULT
-} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
-import ActionAbortedMissingMetadataKeys
-  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
-import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
-import {v4 as uuidv4} from "uuid";
-import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import { TEST_RESOURCE_TYPE_V5_DEFAULT } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
+import { defaultUserDto } from "../../../../shared/models/entity/user/userEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
+import { defaultResourceDto } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -41,10 +38,11 @@ describe("See Folders", () => {
   let page; // The page to test against
   const props = defaultProps(); // The props to pass
   const requestMockImpl = jest.fn((message, data) => data);
-  const mockContextRequest = (context, implementation) => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (context, implementation) =>
+    jest.spyOn(props.context.port, "request").mockImplementation(implementation);
   mockContextRequest(props.context, requestMockImpl);
 
-  describe('As LU I see the folders', () => {
+  describe("As LU I see the folders", () => {
     /**
      * Given an organization with 5 Folders
      * Then I should see the 5 Folders on the left sidebar
@@ -56,7 +54,7 @@ describe("See Folders", () => {
       page = new FilterResourcesByFoldersPage(props);
     });
 
-    it('As LU I should collapse the folder tree area', async() => {
+    it("As LU I should collapse the folder tree area", async () => {
       expect.assertions(5);
       expect(page.filterResourcesByFolders.exists()).toBeTruthy();
       expect(page.filterResourcesByFolders.displayFolderList).toBeTruthy();
@@ -64,10 +62,10 @@ describe("See Folders", () => {
       expect(page.filterResourcesByFolders.displayFolderList).toBeFalsy();
       await page.filterResourcesByFolders.toggleExpanded();
       expect(page.filterResourcesByFolders.displayFolderList).toBeTruthy();
-      expect(page.filterResourcesByFolders.rootFolderName).toBe('My workspace');
+      expect(page.filterResourcesByFolders.rootFolderName).toBe("My workspace");
     });
 
-    it('As LU I should see all folders name', async() => {
+    it("As LU I should see all folders name", async () => {
       expect.assertions(12);
       expect(page.filterResourcesByFolders.exists()).toBeTruthy();
       expect(page.filterResourcesByFoldersItem.exists()).toBeTruthy();
@@ -85,7 +83,7 @@ describe("See Folders", () => {
       expect(page.filterResourcesByFoldersItem.selectedFolderName).toBe("Accounting");
     });
 
-    it('As LU I should be able to close folder to hide the child folders', async() => {
+    it("As LU I should be able to close folder to hide the child folders", async () => {
       expect.assertions(2);
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(6);
@@ -94,32 +92,41 @@ describe("See Folders", () => {
       expect(page.filterResourcesByFoldersItem.count).toBe(5);
     });
 
-    it('As LU I should be able to filter by root folder', async() => {
+    it("As LU I should be able to filter by root folder", async () => {
       expect.assertions(1);
       await page.title.click();
-      expect(props.history.push).toHaveBeenCalledWith(`/app/passwords`, {filter: {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER}});
+      expect(props.history.push).toHaveBeenCalledWith(`/app/passwords`, {
+        filter: { type: ResourceWorkspaceFilterTypes.ROOT_FOLDER },
+      });
     });
 
-    it('As LU I should be able to open a contextual menu for root folder with the more button', async() => {
+    it("As LU I should be able to open a contextual menu for root folder with the more button", async () => {
       expect.assertions(1);
       await page.filterResourcesByFolders.openContextualMenuWithButton;
-      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByRootFolderContextualMenu, {className: "right", left: 0, top: 19, onBeforeHide: expect.any(Function)});
+      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByRootFolderContextualMenu, {
+        className: "right",
+        left: 0,
+        top: 19,
+        onBeforeHide: expect.any(Function),
+      });
     });
 
-    it('As LU I should be able to open a contextual menu for root folder with right click', async() => {
+    it("As LU I should be able to open a contextual menu for root folder with right click", async () => {
       expect.assertions(1);
       await page.filterResourcesByFolders.openContextualMenuWithRightClick;
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByRootFolderContextualMenu, {});
     });
 
-    it('As LU I should be able to open a contextual menu for a folder with right click on a child folder', async() => {
+    it("As LU I should be able to open a contextual menu for a folder with right click on a child folder", async () => {
       expect.assertions(1);
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
       await page.filterResourcesByFoldersItem.openContextualMenuWithRightClick(6);
-      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {folder: foldersMock[2]});
+      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {
+        folder: foldersMock[2],
+      });
     });
 
-    it('As LU I should be able to drag and drop a folder on the root folder', async() => {
+    it("As LU I should be able to drag and drop a folder on the root folder", async () => {
       expect.assertions(3);
       await page.filterResourcesByFoldersItem.dragStartOnFolder(1);
       await page.filterResourcesByFoldersItem.dragEndOnFolder(1);
@@ -128,25 +135,35 @@ describe("See Folders", () => {
       await page.filterResourcesByFolders.onDragOver;
       await page.filterResourcesByFolders.onDrop;
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", null);
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.folders.move-by-id",
+        "3ed65efd-7c41-5906-9c02-71e2d95951db",
+        null,
+      );
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
     });
 
-    it('As LU I should be able to drag and drop a folder on another folder', async() => {
+    it("As LU I should be able to drag and drop a folder on another folder", async () => {
       expect.assertions(2);
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(5);
       await page.filterResourcesByFoldersItem.dragStartOnFolder(5);
       await page.filterResourcesByFoldersItem.dragEndOnFolder(5);
       await page.filterResourcesByFoldersItem.onDropFolder(4);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", foldersMock[0].id);
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.folders.move-by-id",
+        "3ed65efd-7c41-5906-9c02-71e2d95951db",
+        foldersMock[0].id,
+      );
     });
 
-    it('As LU I should throw an error dialog if somethings went wrong when a folder is dropped', async() => {
+    it("As LU I should throw an error dialog if somethings went wrong when a folder is dropped", async () => {
       expect.assertions(2);
 
       const error = new Error("ERROR");
-      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => { throw error; });
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => {
+        throw error;
+      });
 
       const page = new FilterResourcesByFoldersPage(props);
 
@@ -156,11 +173,15 @@ describe("See Folders", () => {
       await page.filterResourcesByFoldersItem.onDropFolder(4);
 
       // Throw dialog general error message
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", foldersMock[0].id);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.folders.move-by-id",
+        "3ed65efd-7c41-5906-9c02-71e2d95951db",
+        foldersMock[0].id,
+      );
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: error });
     });
 
-    it('As LU I should be able to open and close folder to see or not the child folders', async() => {
+    it("As LU I should be able to open and close folder to see or not the child folders", async () => {
       expect.assertions(3);
 
       expect(page.filterResourcesByFoldersItem.count).toBe(5);
@@ -171,8 +192,8 @@ describe("See Folders", () => {
     });
   });
 
-  describe('As LU I should be able to drag and drop resources on folders', () => {
-    it('As LU I should be able to drag and drop resources on the root folder', async() => {
+  describe("As LU I should be able to drag and drop resources on folders", () => {
+    it("As LU I should be able to drag and drop resources on the root folder", async () => {
       expect.assertions(2);
       const resources = defaultResourcesDtos();
       const props = defaultProps({
@@ -180,17 +201,20 @@ describe("See Folders", () => {
           dragging: true,
           draggedItems: {
             folders: [],
-            resources: resources
+            resources: resources,
           },
           onDragStart: jest.fn(),
           onDragEnd: jest.fn(),
-        }
+        },
       });
 
-      props.context.port.addRequestListener("passbolt.resources.move-by-ids", async(resourcesIds, destinationFolder) => {
-        expect(destinationFolder).toBeNull();
-        expect(resourcesIds).toStrictEqual(resources.map(r => r.id));
-      });
+      props.context.port.addRequestListener(
+        "passbolt.resources.move-by-ids",
+        async (resourcesIds, destinationFolder) => {
+          expect(destinationFolder).toBeNull();
+          expect(resourcesIds).toStrictEqual(resources.map((r) => r.id));
+        },
+      );
 
       const page = new FilterResourcesByFoldersPage(props);
 
@@ -200,7 +224,7 @@ describe("See Folders", () => {
       await page.filterResourcesByFolders.onDrop;
     });
 
-    it('As LU I should be able to drag and drop resources on another folder', async() => {
+    it("As LU I should be able to drag and drop resources on another folder", async () => {
       expect.assertions(4);
       const resources = defaultResourcesDtos();
       const props = defaultProps({
@@ -208,17 +232,20 @@ describe("See Folders", () => {
           dragging: true,
           draggedItems: {
             folders: [],
-            resources: resources
+            resources: resources,
           },
           onDragStart: jest.fn(),
           onDragEnd: jest.fn(),
-        }
+        },
       });
 
-      props.context.port.addRequestListener("passbolt.resources.move-by-ids", async(resourcesIds, destinationFolder) => {
-        expect(destinationFolder).toStrictEqual(foldersMock[4].id);
-        expect(resourcesIds).toStrictEqual(resources.map(r => r.id));
-      });
+      props.context.port.addRequestListener(
+        "passbolt.resources.move-by-ids",
+        async (resourcesIds, destinationFolder) => {
+          expect(destinationFolder).toStrictEqual(foldersMock[4].id);
+          expect(resourcesIds).toStrictEqual(resources.map((r) => r.id));
+        },
+      );
 
       const page = new FilterResourcesByFoldersPage(props);
 
@@ -234,21 +261,24 @@ describe("See Folders", () => {
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
     });
 
-    it('As LU I should not be able to drag and drop personal resources v5 on a shared folder if I have missing keys', async() => {
+    it("As LU I should not be able to drag and drop personal resources v5 on a shared folder if I have missing keys", async () => {
       expect.assertions(3);
-      const resources = [defaultResourceDto(), defaultResourceDto({personal: true, resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT})];
+      const resources = [
+        defaultResourceDto(),
+        defaultResourceDto({ personal: true, resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT }),
+      ];
       const props = defaultProps({
         dragContext: {
           dragging: true,
           draggedItems: {
             folders: [],
-            resources: resources
+            resources: resources,
           },
           onDragStart: jest.fn(),
           onDragEnd: jest.fn(),
-        }
+        },
       });
-      props.context.loggedInUser = defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true});
+      props.context.loggedInUser = defaultUserDto({ missing_metadata_key_ids: [uuidv4()] }, { withRole: true });
 
       const page = new FilterResourcesByFoldersPage(props);
 
@@ -265,10 +295,10 @@ describe("See Folders", () => {
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
     });
 
-    it('As LU I should not be able to drag and drop a folder on a shared folder if I have missing keys', async() => {
+    it("As LU I should not be able to drag and drop a folder on a shared folder if I have missing keys", async () => {
       expect.assertions(3);
       const props = defaultProps();
-      props.context.loggedInUser = defaultUserDto({missing_metadata_key_ids: [uuidv4()]}, {withRole: true});
+      props.context.loggedInUser = defaultUserDto({ missing_metadata_key_ids: [uuidv4()] }, { withRole: true });
 
       const page = new FilterResourcesByFoldersPage(props);
 
@@ -285,7 +315,7 @@ describe("See Folders", () => {
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(1, ActionAbortedMissingMetadataKeys);
     });
 
-    it('As LU I should throw an error dialog if somethings went wrong when a resource is dropped', async() => {
+    it("As LU I should throw an error dialog if somethings went wrong when a resource is dropped", async () => {
       expect.assertions(2);
       const resources = defaultResourcesDtos();
       const props = defaultProps({
@@ -293,15 +323,17 @@ describe("See Folders", () => {
           dragging: true,
           draggedItems: {
             folders: [],
-            resources: resources
+            resources: resources,
           },
           onDragStart: jest.fn(),
           onDragEnd: jest.fn(),
-        }
+        },
       });
 
       const error = new Error("ERROR");
-      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => { throw error; });
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => {
+        throw error;
+      });
 
       const page = new FilterResourcesByFoldersPage(props);
 
@@ -315,26 +347,30 @@ describe("See Folders", () => {
       await page.filterResourcesByFoldersItem.onDropFolder(7);
 
       // Throw dialog general error message
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.move-by-ids", resources.map(resource => resource.id), foldersMock[4].id);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.resources.move-by-ids",
+        resources.map((resource) => resource.id),
+        foldersMock[4].id,
+      );
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: error });
     });
   });
 
-  describe('As LU I should see the Folder section open to the selected folder with parent open', () => {
+  describe("As LU I should see the Folder section open to the selected folder with parent open", () => {
     const props = defaultProps({
       resourceWorkspaceContext: defaultResourceWorkspaceContext({
         filter: {
           type: ResourceWorkspaceFilterTypes.FOLDER,
           payload: {
-            folder: foldersMock[5]
-          }
+            folder: foldersMock[5],
+          },
         },
       }),
       match: {
         params: {
-          filterByFolderId: foldersMock[5].id
-        }
-      }
+          filterByFolderId: foldersMock[5].id,
+        },
+      },
     });
     /**
      * Given an organization with 5 Folders with a child folder selected
@@ -345,7 +381,7 @@ describe("See Folders", () => {
       page = new FilterResourcesByFoldersPage(props);
     });
 
-    it('As LU I should see selected folder name with parents open', () => {
+    it("As LU I should see selected folder name with parents open", () => {
       expect.assertions(7);
       expect(page.filterResourcesByFoldersItem.count).toBe(5);
       expect(page.filterResourcesByFoldersItem.name(1)).toBe("1. Test");
@@ -357,7 +393,7 @@ describe("See Folders", () => {
     });
   });
 
-  describe('As LU I should see the Folder section empty', () => {
+  describe("As LU I should see the Folder section empty", () => {
     const props = defaultProps();
     props.context.folders = [];
     /**
@@ -369,12 +405,12 @@ describe("See Folders", () => {
       page = new FilterResourcesByFoldersPage(props);
     });
 
-    it('I should see the Folders section empty', () => {
+    it("I should see the Folders section empty", () => {
       expect(page.filterResourcesByFolders.isEmpty()).toBeTruthy();
     });
   });
 
-  describe('As LU I see a loading feedback in the section when the folders are not yet fetched', () => {
+  describe("As LU I see a loading feedback in the section when the folders are not yet fetched", () => {
     const props = defaultProps();
     props.context.folders = null;
 
@@ -382,7 +418,7 @@ describe("See Folders", () => {
       page = new FilterResourcesByFoldersPage(props);
     });
 
-    it('I should see the loading message “Retrieving folders', async() => {
+    it("I should see the loading message “Retrieving folders", async () => {
       expect(page.filterResourcesByFolders.isLoading()).toBeTruthy();
     });
   });

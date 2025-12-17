@@ -12,36 +12,39 @@
  * @since         3.6.0
  */
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ChooseAccountRecoveryPreference from "./ChooseAccountRecoveryPreference";
 import {
   mandatoryPolicyProps,
-  mandatoryPolicyPropsWithImportedKey, optInPolicyProps,
-  optInPolicyPropsWithImportedKey, optOutPolicyProps, optOutPolicyPropsWithImportedKey
+  mandatoryPolicyPropsWithImportedKey,
+  optInPolicyProps,
+  optInPolicyPropsWithImportedKey,
+  optOutPolicyProps,
+  optOutPolicyPropsWithImportedKey,
 } from "./ChooseAccountRecoveryPreference.test.data";
 
-
 export default {
-  title: 'Components/Authentication/ChooseAccountRecoveryPreference',
-  component: ChooseAccountRecoveryPreference
+  title: "Components/Authentication/ChooseAccountRecoveryPreference",
+  component: ChooseAccountRecoveryPreference,
 };
 
-const Template = args =>
+const Template = (args) => (
   <MockTranslationProvider>
     <div id="container" className="container page login">
       <div className="content">
         <div className="login-form">
-          <MemoryRouter initialEntries={['/']}>
-            <Route component={routerProps => <ChooseAccountRecoveryPreference {...args} {...routerProps}/>}/>
+          <MemoryRouter initialEntries={["/"]}>
+            <Route component={(routerProps) => <ChooseAccountRecoveryPreference {...args} {...routerProps} />} />
           </MemoryRouter>
         </div>
       </div>
     </div>
-  </MockTranslationProvider>;
+  </MockTranslationProvider>
+);
 
 const defaultParameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };
 
 export const MandatoryWithLink = Template.bind({});

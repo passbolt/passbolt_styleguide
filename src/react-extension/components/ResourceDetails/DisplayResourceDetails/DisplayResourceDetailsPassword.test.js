@@ -17,17 +17,16 @@
  */
 
 import "../../../../../test/mocks/mockClipboard";
-import {
-  defaultProps, propsWithDenyUiAction,
-} from "./DisplayResourceDetailsPassword.test.data";
+import { defaultProps, propsWithDenyUiAction } from "./DisplayResourceDetailsPassword.test.data";
 import DisplayResourceDetailsPasswordPage from "./DisplayResourceDetailsPassword.test.page";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import {waitFor} from "@testing-library/dom";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { ActionFeedbackContext } from "../../../contexts/ActionFeedbackContext";
+import { waitFor } from "@testing-library/dom";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 describe("DisplayResourceDetailsPassword", () => {
   let page, props;
-  const mockContextRequest = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (implementation) =>
+    jest.spyOn(props.context.port, "request").mockImplementation(implementation);
   const copyClipboardMockImpl = jest.fn((message, data) => data);
 
   beforeEach(() => {
@@ -43,8 +42,8 @@ describe("DisplayResourceDetailsPassword", () => {
    * And I should be able to identify each Password name
    * And I should be able to see each Password value
    */
-  describe(' As LU I can see Password of a resource', () => {
-    it('I should see the Password of a resource', async() => {
+  describe(" As LU I can see Password of a resource", () => {
+    it("I should see the Password of a resource", async () => {
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
       expect.assertions(2);
@@ -52,7 +51,7 @@ describe("DisplayResourceDetailsPassword", () => {
       expect(page.exists()).toBeTruthy();
     });
 
-    it('I should close the Password of a resource', async() => {
+    it("I should close the Password of a resource", async () => {
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
       await page.click(page.title);
@@ -60,48 +59,57 @@ describe("DisplayResourceDetailsPassword", () => {
       expect(page.exists()).toBeFalsy();
     });
 
-    it('I should be able to identify each Password name', async() => {
+    it("I should be able to identify each Password name", async () => {
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
       expect.assertions(6);
-      expect(page.usernameLabel).toBe('Username');
+      expect(page.usernameLabel).toBe("Username");
       expect(page.username.textContent).toBe(props.resourceWorkspaceContext.details.resource.metadata.username);
-      expect(page.passwordLabel).toBe('Password');
+      expect(page.passwordLabel).toBe("Password");
       expect(page.password.textContent).toBe("Copy to clipboard");
-      expect(page.uriLabel).toBe('URI');
+      expect(page.uriLabel).toBe("URI");
       expect(page.uri.textContent).toBe(props.resourceWorkspaceContext.details.resource.metadata.uris[0]);
     });
   });
 
-  describe(' As LU I can copy username of a resource to clipboard', () => {
-    it('AS LU, I should be able to copy the username of a resource to clipboard', async() => {
+  describe(" As LU I can copy username of a resource to clipboard", () => {
+    it("AS LU, I should be able to copy the username of a resource to clipboard", async () => {
       expect.assertions(1);
       page = new DisplayResourceDetailsPasswordPage(props);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       await page.click(page.username);
 
-      expect(props.clipboardContext.copy).toHaveBeenCalledWith(props.resourceWorkspaceContext.details.resource.metadata.username, "The username has been copied to clipboard.");
+      expect(props.clipboardContext.copy).toHaveBeenCalledWith(
+        props.resourceWorkspaceContext.details.resource.metadata.username,
+        "The username has been copied to clipboard.",
+      );
     });
   });
 
-  describe(' As LU I can copy a secret of a resource to clipboard', () => {
-    it('AS LU, I should be able to copy the secret of a resource to clipboard', async() => {
+  describe(" As LU I can copy a secret of a resource to clipboard", () => {
+    it("AS LU, I should be able to copy the secret of a resource to clipboard", async () => {
       expect.assertions(2);
 
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
       mockContextRequest(copyClipboardMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => ({ password: "secret-copy" }));
 
       await page.click(page.password);
 
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.secret.find-by-resource-id", props.resourceWorkspaceContext.details.resource.id);
-      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith('secret-copy', "The secret has been copied to clipboard.");
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.resourceWorkspaceContext.details.resource.id,
+      );
+      expect(props.clipboardContext.copyTemporarily).toHaveBeenCalledWith(
+        "secret-copy",
+        "The secret has been copied to clipboard.",
+      );
     });
 
-    it('AS LU, I cannot copy secret of resource if denied by RBAC', async() => {
+    it("AS LU, I cannot copy secret of resource if denied by RBAC", async () => {
       const props = propsWithDenyUiAction();
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
@@ -111,30 +119,33 @@ describe("DisplayResourceDetailsPassword", () => {
     });
   });
 
-  describe(' As LU I can preview secret of a resource', () => {
-    it('AS LU, I should be able to preview secret of a resource', async() => {
+  describe(" As LU I can preview secret of a resource", () => {
+    it("AS LU, I should be able to preview secret of a resource", async () => {
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => ({ password: "secret-copy" }));
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementationOnce(() => {});
 
       expect.assertions(4);
       await page.click(page.viewPassword);
-      expect(page.password.textContent).toBe('secret-copy');
+      expect(page.password.textContent).toBe("secret-copy");
       expect(props.resourceWorkspaceContext.onResourcePreviewed).toHaveBeenCalled();
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.details.resource.id);
+      expect(props.context.port.request).toHaveBeenCalledWith(
+        "passbolt.secret.find-by-resource-id",
+        props.resourceWorkspaceContext.details.resource.id,
+      );
       await page.click(page.viewPassword);
-      expect(page.password.textContent).toBe('Copy to clipboard');
+      expect(page.password.textContent).toBe("Copy to clipboard");
     });
 
-    it('AS LU, I cannot preview secret of resource if disabled by API flag', async() => {
+    it("AS LU, I cannot preview secret of resource if disabled by API flag", async () => {
       const context = defaultUserAppContext({
         siteSettings: {
-          getServerTimezone: () => '',
+          getServerTimezone: () => "",
           canIUse: () => false,
-        }
+        },
       });
-      const props = defaultProps({context});
+      const props = defaultProps({ context });
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});
 
@@ -142,7 +153,7 @@ describe("DisplayResourceDetailsPassword", () => {
       expect(page.isViewPasswordExist).toBeFalsy();
     });
 
-    it('AS LU, I cannot preview secret of resource if denied by RBAC', async() => {
+    it("AS LU, I cannot preview secret of resource if denied by RBAC", async () => {
       const props = propsWithDenyUiAction();
       page = new DisplayResourceDetailsPasswordPage(props);
       await waitFor(() => {});

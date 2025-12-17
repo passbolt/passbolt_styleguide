@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import HandleSaveAccountRecovery from "./HandleSaveAccountRecoveryOrganizationPolicyWorkflow";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -28,9 +28,9 @@ export default class HandleSaveAccountRecoveryOrganizationPolicyWorkflowPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <HandleSaveAccountRecovery {...props}/>
+        <HandleSaveAccountRecovery {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 }

@@ -14,7 +14,7 @@
 
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import PassboltResponsePaginationHeaderEntity from "./PassboltResponsePaginationHeaderEntity";
-import {defaultPassboltResponsePaginationHeaderDto} from "./PassboltResponsePaginationHeaderEntity.test.data";
+import { defaultPassboltResponsePaginationHeaderDto } from "./PassboltResponsePaginationHeaderEntity.test.data";
 
 describe("PassboltResponsePaginationHeaderEntity", () => {
   describe("PassboltResponsePaginationHeaderEntity::getSchema", () => {

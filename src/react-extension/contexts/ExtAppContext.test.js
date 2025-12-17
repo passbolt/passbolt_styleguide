@@ -12,7 +12,7 @@
  * @since         3.11.0
  */
 
-import {defaultAppContext} from "./ExtAppContext.test.data";
+import { defaultAppContext } from "./ExtAppContext.test.data";
 import ExtAppContextProvider from "./ExtAppContext";
 
 beforeEach(() => {
@@ -23,20 +23,20 @@ beforeEach(() => {
 describe("ExtApp Context", () => {
   let extAppContext; // The extAppContext to text
 
-  describe('As LU I should complete an authentication setup', () => {
+  describe("As LU I should complete an authentication setup", () => {
     beforeEach(() => {
       extAppContext = new ExtAppContextProvider(defaultAppContext());
-      const setStateMock = state => extAppContext.state = Object.assign(extAppContext.state, state);
-      jest.spyOn(extAppContext, 'setState').mockImplementation(setStateMock);
+      const setStateMock = (state) => (extAppContext.state = Object.assign(extAppContext.state, state));
+      jest.spyOn(extAppContext, "setState").mockImplementation(setStateMock);
     });
 
-    it('As LU I should start with the state isSessionLogoutByUser false', () => {
+    it("As LU I should start with the state isSessionLogoutByUser false", () => {
       expect.assertions(1);
       // expectations
       expect(extAppContext.state.isSessionLogoutByUser).toBeFalsy();
     });
 
-    it('As LU I should listen on expired session', () => {
+    it("As LU I should listen on expired session", () => {
       expect.assertions(3);
       // data mocked
       const callback = () => "Hello";
@@ -47,11 +47,11 @@ describe("ExtApp Context", () => {
       extAppContext.onExpiredSession(callback);
       // expectations
       expect(extAppContext.onExpiredSession).toHaveBeenCalledWith(callback);
-      expect(extAppContext.props.port.on).toHaveBeenCalledWith('passbolt.auth.after-logout', expect.any(Function));
+      expect(extAppContext.props.port.on).toHaveBeenCalledWith("passbolt.auth.after-logout", expect.any(Function));
       expect(extAppContext.state.isSessionLogoutByUser).toBeFalsy();
     });
 
-    it('As LU I should logout with the state isSessionLogoutByUser true', () => {
+    it("As LU I should logout with the state isSessionLogoutByUser true", () => {
       expect.assertions(1);
       // process
       extAppContext.onLogoutRequested();

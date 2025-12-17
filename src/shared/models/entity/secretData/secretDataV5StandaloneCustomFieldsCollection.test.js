@@ -14,34 +14,47 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 import SecretDataV5StandaloneCustomFieldsCollection from "./secretDataV5StandaloneCustomFieldsCollection";
-import {defaultCustomFieldsCollection} from "../customField/customFieldsCollection.test.data";
-import {defaultSecretDataV5StandaloneCustomFieldsCollectionDtos, minimalSecretDataV5StandaloneCustomFieldsCollectionDtos} from "./secretDataV5StandaloneCustomFieldsCollection.test.data";
-import {defaultCustomField} from "../customField/customFieldEntity.test.data";
-import {v4 as uuidv4} from "uuid";
+import { defaultCustomFieldsCollection } from "../customField/customFieldsCollection.test.data";
+import {
+  defaultSecretDataV5StandaloneCustomFieldsCollectionDtos,
+  minimalSecretDataV5StandaloneCustomFieldsCollectionDtos,
+} from "./secretDataV5StandaloneCustomFieldsCollection.test.data";
+import { defaultCustomField } from "../customField/customFieldEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
 import CustomFieldEntity from "../customField/customFieldEntity";
 
 describe("SecretDataV5StandaloneCustomFieldsCollection", () => {
   describe("::getSchema", () => {
     it("schema must validate", () => {
-      EntitySchema.validateSchema(SecretDataV5StandaloneCustomFieldsCollection.name, SecretDataV5StandaloneCustomFieldsCollection.getSchema());
+      EntitySchema.validateSchema(
+        SecretDataV5StandaloneCustomFieldsCollection.name,
+        SecretDataV5StandaloneCustomFieldsCollection.getSchema(),
+      );
     });
 
     it("validates object_type property", () => {
-      assertEntityProperty.enumeration(SecretDataV5StandaloneCustomFieldsCollection, "object_type", [SECRET_DATA_OBJECT_TYPE], ["any other values"]);
+      assertEntityProperty.enumeration(
+        SecretDataV5StandaloneCustomFieldsCollection,
+        "object_type",
+        [SECRET_DATA_OBJECT_TYPE],
+        ["any other values"],
+      );
     });
 
     it("validates custom_fields property", () => {
       const dto = defaultSecretDataV5StandaloneCustomFieldsCollectionDtos();
-      const successScenarios = [
-        {scenario: "valid custom fields", value: defaultCustomFieldsCollection()},
-      ];
-      const failScenarios = [
-        {scenario: "invalid header type: integer", value: 42},
-      ];
+      const successScenarios = [{ scenario: "valid custom fields", value: defaultCustomFieldsCollection() }];
+      const failScenarios = [{ scenario: "invalid header type: integer", value: 42 }];
       assertEntityProperty.required(SecretDataV5StandaloneCustomFieldsCollection, "custom_fields");
-      assertEntityProperty.assertAssociation(SecretDataV5StandaloneCustomFieldsCollection, "custom_fields", dto, successScenarios, failScenarios);
+      assertEntityProperty.assertAssociation(
+        SecretDataV5StandaloneCustomFieldsCollection,
+        "custom_fields",
+        dto,
+        successScenarios,
+        failScenarios,
+      );
     });
   });
 
@@ -151,7 +164,9 @@ describe("SecretDataV5StandaloneCustomFieldsCollection", () => {
     it("should assert its parameters", () => {
       expect.assertions(1);
 
-      const collection = new SecretDataV5StandaloneCustomFieldsCollection(defaultSecretDataV5StandaloneCustomFieldsCollectionDtos());
+      const collection = new SecretDataV5StandaloneCustomFieldsCollection(
+        defaultSecretDataV5StandaloneCustomFieldsCollectionDtos(),
+      );
       expect(() => collection.areSecretsDifferent(null)).toThrowError();
     });
 
@@ -169,9 +184,9 @@ describe("SecretDataV5StandaloneCustomFieldsCollection", () => {
     it("returns true if one item in the collection is different", () => {
       expect.assertions(1);
       const dtoA = defaultSecretDataV5StandaloneCustomFieldsCollectionDtos();
-      const dtoB = {...dtoA};
+      const dtoB = { ...dtoA };
       dtoB.custom_fields = [...dtoA.custom_fields];
-      dtoB.custom_fields[1] = {...dtoB.custom_fields[1], id: uuidv4()};
+      dtoB.custom_fields[1] = { ...dtoB.custom_fields[1], id: uuidv4() };
 
       const collectionA = new SecretDataV5StandaloneCustomFieldsCollection(dtoA);
 

@@ -1,4 +1,4 @@
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { defaultUserAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props
@@ -9,14 +9,14 @@ export function defaultProps() {
     context: defaultUserAppContext(),
     folderParentId: "some folder parent id",
     actionFeedbackContext: {
-      displaySuccess: jest.fn()
+      displaySuccess: jest.fn(),
     },
     dialogContext: {
-      open: jest.fn()
+      open: jest.fn(),
     },
     history: {
-      push: jest.fn()
+      push: jest.fn(),
     },
-    onClose: jest.fn()
+    onClose: jest.fn(),
   };
 }

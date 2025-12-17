@@ -178,8 +178,8 @@ import AnimatedFeedback from "./AnimatedFeedback";
 import QrCodeSVG from "../../../img/svg/qr_code.svg";
 
 export default {
-  title: 'Foundations/Icon',
-  component: "Icon"
+  title: "Foundations/Icon",
+  component: "Icon",
 };
 
 const iconsSVGs = [
@@ -333,7 +333,7 @@ const iconsSVGs = [
   UserXSVG,
   UsersSVG,
   VenetianMaskSVG,
-  WalletSVG
+  WalletSVG,
 ];
 
 const settingIconsSVGs = [
@@ -367,39 +367,42 @@ function getSvgName(SVGIcon) {
 }
 
 export const Icons = {
-  render: () =>
-    <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, 10%)"}}>
-      {iconsSVGs.map((Icon, index) =>
-        <div key={index} style={{marginTop: "1rem"}} title={getSvgName(Icon)}>
-          <Icon className="svg-icon"/>
+  render: () => (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 10%)" }}>
+      {iconsSVGs.map((Icon, index) => (
+        <div key={index} style={{ marginTop: "1rem" }} title={getSvgName(Icon)}>
+          <Icon className="svg-icon" />
         </div>
-      )}
-      <div style={{marginTop: "1rem"}}>
-        <SpinnerSVG/>
+      ))}
+      <div style={{ marginTop: "1rem" }}>
+        <SpinnerSVG />
       </div>
-      <div style={{marginTop: "1rem"}}>
-        <TimerSVG/>
+      <div style={{ marginTop: "1rem" }}>
+        <TimerSVG />
       </div>
     </div>
+  ),
 };
 
 export const SettingsIcons = {
-  render: () =>
-    <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, 10%)"}}>
-      {settingIconsSVGs.map((Icon, index) =>
-        <div key={index} style={{marginTop: "1rem"}} title={getSvgName(Icon)}>
-          <Icon className="svg-icon"/>
+  render: () => (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 10%)" }}>
+      {settingIconsSVGs.map((Icon, index) => (
+        <div key={index} style={{ marginTop: "1rem" }} title={getSvgName(Icon)}>
+          <Icon className="svg-icon" />
         </div>
-      )}
+      ))}
     </div>
+  ),
 };
 
 export const AnimatedFeedbackIcons = {
-  render: () =>
-    <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, 10%)"}}>
-      <AnimatedFeedback name="success"/>
-      <AnimatedFeedback name="warning"/>
-      <AnimatedFeedback name="attention"/>
-      <AnimatedFeedback name="error"/>
+  render: () => (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 10%)" }}>
+      <AnimatedFeedback name="success" />
+      <AnimatedFeedback name="warning" />
+      <AnimatedFeedback name="attention" />
+      <AnimatedFeedback name="error" />
     </div>
+  ),
 };

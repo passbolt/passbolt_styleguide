@@ -14,9 +14,9 @@
 import EntitySchema from "../abstract/entitySchema";
 import RoleEntity from "./roleEntity";
 import RolesCollection from "./rolesCollection";
-import {rolesCollectionDto} from "./rolesCollection.test.data";
-import {adminRoleDto, customRoleDto, guestRoleDto, userRoleDto} from "./roleEntity.test.data";
-import {v4 as uuidv4} from "uuid";
+import { rolesCollectionDto } from "./rolesCollection.test.data";
+import { adminRoleDto, customRoleDto, guestRoleDto, userRoleDto } from "./roleEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
 
 describe("RolesCollections", () => {
   it("schema must validate", () => {
@@ -38,8 +38,8 @@ describe("RolesCollections", () => {
       const collection = new RolesCollection(dtos);
       expect(JSON.stringify(collection)).toEqual(JSON.stringify(dtos));
       expect(collection).toHaveLength(2);
-      expect(collection.items[0].name).toEqual('admin');
-      expect(collection.items[1].name).toEqual('guest');
+      expect(collection.items[0].name).toEqual("admin");
+      expect(collection.items[1].name).toEqual("guest");
     });
 
     it("works if valid complete entities are provided", () => {
@@ -62,30 +62,27 @@ describe("RolesCollections", () => {
       expect.assertions(1);
 
       const dto1 = adminRoleDto();
-      const dto2 = userRoleDto({id: 42});
+      const dto2 = userRoleDto({ id: 42 });
 
-      expect(() => new RolesCollection([dto1, dto2]))
-        .toThrowCollectionValidationError("1.id.type");
+      expect(() => new RolesCollection([dto1, dto2])).toThrowCollectionValidationError("1.id.type");
     });
 
     it("should throw if one of data item does not validate the unique id build rule", () => {
       expect.assertions(1);
 
       const dto1 = adminRoleDto();
-      const dto2 = guestRoleDto({id: dto1.id});
+      const dto2 = guestRoleDto({ id: dto1.id });
 
-      expect(() => new RolesCollection([dto1, dto2]))
-        .toThrowCollectionValidationError("1.id.unique");
+      expect(() => new RolesCollection([dto1, dto2])).toThrowCollectionValidationError("1.id.unique");
     });
 
     it("should throw if one of data item does not validate the unique name build rule", () => {
       expect.assertions(1);
 
       const dto1 = adminRoleDto();
-      const dto2 = guestRoleDto({name: dto1.name});
+      const dto2 = guestRoleDto({ name: dto1.name });
 
-      expect(() => new RolesCollection([dto1, dto2]))
-        .toThrowCollectionValidationError("1.name.unique");
+      expect(() => new RolesCollection([dto1, dto2])).toThrowCollectionValidationError("1.name.unique");
     });
 
     it("should throw if the collection is too large", () => {
@@ -106,10 +103,10 @@ describe("RolesCollections", () => {
       expect.assertions(2);
 
       const dto1 = adminRoleDto();
-      const dto2 = guestRoleDto({id: dto1.id});
-      const dto3 = guestRoleDto({name: dto1.name});
+      const dto2 = guestRoleDto({ id: dto1.id });
+      const dto3 = guestRoleDto({ name: dto1.name });
 
-      const collection = new RolesCollection([dto1, dto2, dto3], {ignoreInvalidEntity: true});
+      const collection = new RolesCollection([dto1, dto2, dto3], { ignoreInvalidEntity: true });
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0].toDto()).toEqual(dto1);
     });
@@ -125,7 +122,9 @@ describe("RolesCollections", () => {
         customRoleDto(),
       ];
 
-      expect(() => new RolesCollection(rolesCollection, {ignoreInvalidEntity: true})).toThrowCollectionValidationError("maxItems");
+      expect(
+        () => new RolesCollection(rolesCollection, { ignoreInvalidEntity: true }),
+      ).toThrowCollectionValidationError("maxItems");
     });
   });
 
@@ -133,7 +132,13 @@ describe("RolesCollections", () => {
     it("should filter the collection by all custom roles", () => {
       expect.assertions(3);
 
-      const collectionDto = [adminRoleDto(), userRoleDto(), guestRoleDto(), customRoleDto(), customRoleDto({name: "other-name"})];
+      const collectionDto = [
+        adminRoleDto(),
+        userRoleDto(),
+        guestRoleDto(),
+        customRoleDto(),
+        customRoleDto({ name: "other-name" }),
+      ];
       const rolesCollection = new RolesCollection(collectionDto);
 
       rolesCollection.filterByCustomRole();
@@ -148,7 +153,13 @@ describe("RolesCollections", () => {
       expect.assertions(3);
 
       const guestRole = guestRoleDto();
-      const collectionDto = [adminRoleDto(), userRoleDto(), guestRole, customRoleDto(), customRoleDto({name: "other-name"})];
+      const collectionDto = [
+        adminRoleDto(),
+        userRoleDto(),
+        guestRole,
+        customRoleDto(),
+        customRoleDto({ name: "other-name" }),
+      ];
       const rolesCollection = new RolesCollection(collectionDto);
       const expectedCollection = new RolesCollection(collectionDto);
       expectedCollection.items.splice(2, 1);
@@ -162,7 +173,7 @@ describe("RolesCollections", () => {
     it("should not modify the collection and not crash if there are no guest role", () => {
       expect.assertions(2);
 
-      const collectionDto = [adminRoleDto(), userRoleDto(), customRoleDto(), customRoleDto({name: "other-name"})];
+      const collectionDto = [adminRoleDto(), userRoleDto(), customRoleDto(), customRoleDto({ name: "other-name" })];
       const rolesCollection = new RolesCollection(collectionDto);
 
       rolesCollection.filterOutGuestRole();
@@ -175,7 +186,13 @@ describe("RolesCollections", () => {
     it("should return the role given its id", () => {
       expect.assertions(1);
 
-      const collectionDto = [adminRoleDto(), userRoleDto(), guestRoleDto(), customRoleDto(), customRoleDto({name: "other-name"})];
+      const collectionDto = [
+        adminRoleDto(),
+        userRoleDto(),
+        guestRoleDto(),
+        customRoleDto(),
+        customRoleDto({ name: "other-name" }),
+      ];
       const rolesCollection = new RolesCollection(collectionDto);
 
       const roleEntity = rolesCollection.getById(collectionDto[3].id);
@@ -185,7 +202,13 @@ describe("RolesCollections", () => {
     it("should return null if the role id is not in the collection", () => {
       expect.assertions(1);
 
-      const collectionDto = [adminRoleDto(), userRoleDto(), guestRoleDto(), customRoleDto(), customRoleDto({name: "other-name"})];
+      const collectionDto = [
+        adminRoleDto(),
+        userRoleDto(),
+        guestRoleDto(),
+        customRoleDto(),
+        customRoleDto({ name: "other-name" }),
+      ];
       const rolesCollection = new RolesCollection(collectionDto);
 
       const roleEntity = rolesCollection.getById(uuidv4());

@@ -12,7 +12,7 @@
  * @since         5.8.0
  */
 
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../contexts/DialogContext";
@@ -34,11 +34,11 @@ export default class AddUserToGroupDialogPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <DialogContextProvider>
-            <ManageDialogs/>
-            <AddUserToGroupDialog {...props}/>
+            <ManageDialogs />
+            <AddUserToGroupDialog {...props} />
           </DialogContextProvider>
         </AppContext.Provider>
-      </MockTranslationProvider>
+      </MockTranslationProvider>,
     );
     this.setupPageObjects();
   }
@@ -74,14 +74,14 @@ class AddUserToGroupDialogPageObject {
    * Returns the menu elements
    */
   get dialogTitle() {
-    return this._container.querySelector('.dialog-header h2 span');
+    return this._container.querySelector(".dialog-header h2 span");
   }
 
   /**
    * Returns the close button elements
    */
   get closeButton() {
-    return this._container.querySelector('.dialog-close');
+    return this._container.querySelector(".dialog-close");
   }
 
   /**
@@ -102,7 +102,7 @@ class AddUserToGroupDialogPageObject {
    * Returns the cancel button elements
    */
   get cancelButton() {
-    return this._container.querySelector('.submit-wrapper .cancel');
+    return this._container.querySelector(".submit-wrapper .cancel");
   }
 
   /**
@@ -116,28 +116,28 @@ class AddUserToGroupDialogPageObject {
    * Returns the error dialog
    */
   get errorDialog() {
-    return this._container.querySelector('.error-dialog');
+    return this._container.querySelector(".error-dialog");
   }
 
   /**
    * Returns the error dialog message
    */
   get errorDialogMessage() {
-    return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content');
+    return this._container.querySelector(".error-dialog .dialog .dialog-content .form-content");
   }
 
   /**
    * Returns the user first name, last name, (username)
    */
   get getUser() {
-    return this._container.querySelectorAll('.form-content p strong')[0];
+    return this._container.querySelectorAll(".form-content p strong")[0];
   }
 
   /**
    * Returns the group name
    */
   get getGroup() {
-    return this._container.querySelectorAll('.form-content p strong')[1];
+    return this._container.querySelectorAll(".form-content p strong")[1];
   }
 
   /**
@@ -151,8 +151,8 @@ class AddUserToGroupDialogPageObject {
    * Click on the element
    * @param element
    */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -161,8 +161,8 @@ class AddUserToGroupDialogPageObject {
    * Click on the element without wait for
    * @param element
    */
-  clickWithoutWaitFor(element)  {
-    const leftClick = {button: 0};
+  clickWithoutWaitFor(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
   }
 }

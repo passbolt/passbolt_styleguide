@@ -19,9 +19,9 @@ import {
   minimalScimSettingsFormDto,
   scimSettingsFormDtoWithNullSecretToken,
   scimSettingsFormDtoWithInvalidSecretToken,
-  scimSettingsFormDtoWithInvalidSecretTokenLength
+  scimSettingsFormDtoWithInvalidSecretTokenLength,
 } from "./scimSettingsFormEntity.test.data";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import EntityValidationError from "../abstract/entityValidationError";
 
 describe("ScimSettingsFormEntity", () => {
@@ -93,7 +93,7 @@ describe("ScimSettingsFormEntity", () => {
       expect.assertions(1);
       const dto = {
         setting_id: uuidv4(),
-        secret_token: "pb_1234567890abcdef1234567890abcdef123456789"
+        secret_token: "pb_1234567890abcdef1234567890abcdef123456789",
       };
       expect(() => new ScimSettingsFormEntity(dto)).toThrow(EntityValidationError);
     });
@@ -102,7 +102,7 @@ describe("ScimSettingsFormEntity", () => {
       expect.assertions(1);
       const dto = {
         scim_user_id: uuidv4(),
-        secret_token: "pb_1234567890abcdef1234567890abcdef123456789"
+        secret_token: "pb_1234567890abcdef1234567890abcdef123456789",
       };
       expect(() => new ScimSettingsFormEntity(dto)).toThrow(EntityValidationError);
     });

@@ -13,7 +13,7 @@
  */
 import EntitySchema from "../abstract/entitySchema";
 import ColumnsSettingCollection from "./columnsSettingCollection";
-import {defaultColumnSettingData} from "./columnSettingEntity.test.data";
+import { defaultColumnSettingData } from "./columnSettingEntity.test.data";
 import EntityCollectionError from "../abstract/entityCollectionError";
 
 describe("ColumnsSetting Collection", () => {
@@ -23,7 +23,7 @@ describe("ColumnsSetting Collection", () => {
 
   it("constructor works with collection DTO", () => {
     expect.assertions(4);
-    const collectionDto = [defaultColumnSettingData(), defaultColumnSettingData({id: "idB"})];
+    const collectionDto = [defaultColumnSettingData(), defaultColumnSettingData({ id: "idB" })];
     const collection = new ColumnsSettingCollection(collectionDto);
     expect(collection.toDto()).toEqual(collectionDto);
     expect(JSON.stringify(collection)).toEqual(JSON.stringify(collectionDto));
@@ -43,14 +43,14 @@ describe("ColumnsSetting Collection", () => {
       new ColumnsSettingCollection(collectionDto);
     } catch (error) {
       expect(error).toBeInstanceOf(EntityCollectionError);
-      expect(error.rule).toEqual('unique_id');
+      expect(error.rule).toEqual("unique_id");
     }
   });
 
   describe("ColumnsSetting:removeById", () => {
     it("should remove a column by its identifier", () => {
       expect.assertions(2);
-      const collectionDto = [defaultColumnSettingData(), defaultColumnSettingData({id: "idB"})];
+      const collectionDto = [defaultColumnSettingData(), defaultColumnSettingData({ id: "idB" })];
       const collection = new ColumnsSettingCollection(collectionDto);
       collection.removeById("id");
       expect(collection.length).toEqual(1);
@@ -61,8 +61,8 @@ describe("ColumnsSetting Collection", () => {
   describe("ColumnsSetting:deepMerge", () => {
     it("should merge and add unique column", () => {
       expect.assertions(2);
-      const collectionDtoDefault = [defaultColumnSettingData(), defaultColumnSettingData({id: "idB"})];
-      const collectionDto = [defaultColumnSettingData({label: "labelD"}), defaultColumnSettingData({id: "idC"})];
+      const collectionDtoDefault = [defaultColumnSettingData(), defaultColumnSettingData({ id: "idB" })];
+      const collectionDto = [defaultColumnSettingData({ label: "labelD" }), defaultColumnSettingData({ id: "idC" })];
       const collection = new ColumnsSettingCollection(collectionDtoDefault);
       const collectionResult = collection.deepMerge(new ColumnsSettingCollection(collectionDto));
       collection.removeById("id");
@@ -72,10 +72,12 @@ describe("ColumnsSetting Collection", () => {
 
     it("should merge and ignore unique column", () => {
       expect.assertions(2);
-      const collectionDtoDefault = [defaultColumnSettingData(), defaultColumnSettingData({id: "idB"})];
-      const collectionDto = [defaultColumnSettingData({label: "labelD"}), defaultColumnSettingData({id: "idC"})];
+      const collectionDtoDefault = [defaultColumnSettingData(), defaultColumnSettingData({ id: "idB" })];
+      const collectionDto = [defaultColumnSettingData({ label: "labelD" }), defaultColumnSettingData({ id: "idC" })];
       const collection = new ColumnsSettingCollection(collectionDtoDefault);
-      const collectionResult = collection.deepMerge(new ColumnsSettingCollection(collectionDto), {keepUnknownValue: false});
+      const collectionResult = collection.deepMerge(new ColumnsSettingCollection(collectionDto), {
+        keepUnknownValue: false,
+      });
       collection.removeById("id");
       expect(collectionResult.length).toEqual(2);
       expect(collectionResult.items[0].label).toEqual("labelD");

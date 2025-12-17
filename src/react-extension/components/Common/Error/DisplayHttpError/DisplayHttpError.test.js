@@ -20,9 +20,17 @@ import each from "jest-each";
 
 describe("Display Http Error", () => {
   each([
-    {errorCode: 403, title: "Whoops... access is denied", description: "Access is restricted to authorized users only."},
-    {errorCode: 404, title: "Whoops... looks like you are lost.", description: "We could not find the page you are looking for."},
-  ]).describe("As LU, I should see a proper HTTP error code page", scenario => {
+    {
+      errorCode: 403,
+      title: "Whoops... access is denied",
+      description: "Access is restricted to authorized users only.",
+    },
+    {
+      errorCode: 404,
+      title: "Whoops... looks like you are lost.",
+      description: "We could not find the page you are looking for.",
+    },
+  ]).describe("As LU, I should see a proper HTTP error code page", (scenario) => {
     it(`with ${scenario.errorCode}`, () => {
       expect.assertions(3);
       const page = new DisplayHttpErrorPage(scenario.errorCode);

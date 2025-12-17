@@ -11,7 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.4.0
  */
-import {defaultCeSiteSettings, defaultProSiteSettings} from "../../../react-extension/test/fixture/Settings/siteSettings.test.data";
+import {
+  defaultCeSiteSettings,
+  defaultProSiteSettings,
+} from "../../../react-extension/test/fixture/Settings/siteSettings.test.data";
 import SiteSettings from "./SiteSettings";
 
 describe("SiteSettings", () => {

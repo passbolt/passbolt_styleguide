@@ -13,12 +13,12 @@
  */
 
 import "../../../../../test/mocks/mockPortal";
-import {defaultAppContext} from '../../../contexts/ApiAppContext.test.data';
-import {defaultProps} from './DisplayPasswordPoliciesAdministration.test.data';
-import DisplayPasswordPoliciesAdministrationPage from './DisplayPasswordPoliciesAdministration.test.page';
-import {waitFor} from '@testing-library/dom';
-import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
-import {screen} from "@testing-library/react";
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
+import { defaultProps } from "./DisplayPasswordPoliciesAdministration.test.data";
+import DisplayPasswordPoliciesAdministrationPage from "./DisplayPasswordPoliciesAdministration.test.page";
+import { waitFor } from "@testing-library/dom";
+import { defaultPasswordPoliciesDto } from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
+import { screen } from "@testing-library/react";
 
 async function waitForTrue(callback) {
   return waitFor(() => {
@@ -46,7 +46,7 @@ describe("DisplayPasswordPoliciesAdministration", () => {
   });
 
   describe("As an administrator I can read password policies settings of my organization", () => {
-    it('As a logged in administrator I can see the "password policy" settings in the administration workspace ', async() => {
+    it('As a logged in administrator I can see the "password policy" settings in the administration workspace ', async () => {
       expect.assertions(4);
 
       expect(page.exists()).toBeTruthy();
@@ -55,43 +55,47 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.passphrasePolicyTitle.textContent).toBe("Password generator default settings");
     });
 
-    it('As a logged in administrator I can see an help box in the password policy administration screen ', async() => {
+    it("As a logged in administrator I can see an help box in the password policy administration screen ", async () => {
       expect.assertions(5);
 
       expect(page.helpBox).not.toBeNull();
       expect(page.helpBoxTitle.textContent).toBe("What is password policy?");
-      expect(page.helpBoxDescription.textContent).toBe("For more information about the password policy settings, checkout the dedicated page on the help website.");
+      expect(page.helpBoxDescription.textContent).toBe(
+        "For more information about the password policy settings, checkout the dedicated page on the help website.",
+      );
       expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://passbolt.com/docs/admin/password-configuration/password-policy/');
+      expect(page.helpBoxButton.getAttribute("href")).toEqual(
+        "https://passbolt.com/docs/admin/password-configuration/password-policy/",
+      );
     });
   });
 
   describe("As an administrator I can update the password policies settings of my organization", () => {
-    it("As a logged in administrator I can see the don't forget to save banner", async() => {
+    it("As a logged in administrator I can see the don't forget to save banner", async () => {
       expect.assertions(2);
 
       expect(page.settingsChangedBanner).toBeNull();
       await page.togglePasswordPanel();
 
       await page.setFormWith({
-        passwordLengthInput: 20
+        passwordLengthInput: 20,
       });
 
       expect(page.settingsChangedBanner).not.toBeNull();
     });
 
-    it("As a logged in administrator I can save the current configuration", async() => {
+    it("As a logged in administrator I can save the current configuration", async () => {
       expect.assertions(5);
 
       const newPasswordLength = "20";
       const newPassphraseWordCount = "20";
 
-      context.port.addRequestListener("passbolt.password-policies.save", passwordSettingsDto => {
+      context.port.addRequestListener("passbolt.password-policies.save", (passwordSettingsDto) => {
         const expectedPasswordGeneratorSettings = Object.assign({}, settingsDto.password_generator_settings, {
           length: newPasswordLength,
         });
         const expectedPassphraseGeneratorSettings = Object.assign({}, settingsDto.passphrase_generator_settings, {
-          words: newPassphraseWordCount
+          words: newPassphraseWordCount,
         });
         const expectedRequest = Object.assign({}, settingsDto, {
           password_generator_settings: expectedPasswordGeneratorSettings,
@@ -110,7 +114,7 @@ describe("DisplayPasswordPoliciesAdministration", () => {
 
       await page.setFormWith({
         passwordLengthInput: newPasswordLength,
-        passphraseWordCountInput: newPassphraseWordCount
+        passphraseWordCountInput: newPassphraseWordCount,
       });
 
       expect(page.settingsChangedBanner).not.toBeNull();
@@ -123,11 +127,13 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.settingsChangedBanner).toBeNull();
     });
 
-    it("As a logged in administrator I should see an error notification if the configuration could not be saved", async() => {
+    it("As a logged in administrator I should see an error notification if the configuration could not be saved", async () => {
       expect.assertions(1);
 
       const expectedErrorMessage = "Something wrong happened";
-      props.context.port.addRequestListener("passbolt.password-policies.save", () => { throw new Error(expectedErrorMessage); });
+      props.context.port.addRequestListener("passbolt.password-policies.save", () => {
+        throw new Error(expectedErrorMessage);
+      });
 
       const spyOnFeddback = jest.spyOn(props.actionFeedbackContext, "displayError");
 
@@ -142,7 +148,7 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(spyOnFeddback).toHaveBeenCalledWith(expectedErrorMessage);
     });
 
-    it("As a logged in administrator I should see the expected entropy of the password configurator change based on the current configuration", async() => {
+    it("As a logged in administrator I should see the expected entropy of the password configurator change based on the current configuration", async () => {
       expect.assertions(2);
 
       const defaultConfigurationEntropy = "116.0 bits";
@@ -153,13 +159,13 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.passwordEntropyValue).toContain(defaultConfigurationEntropy);
 
       await page.setFormWith({
-        passwordLengthInput: "20"
+        passwordLengthInput: "20",
       });
 
       expect(page.passwordEntropyValue).toContain(passwordEntropyWith20Chars);
     });
 
-    it("As a logged in administrator I should see the expected entropy of the passphrase configurator change based on the current configuration", async() => {
+    it("As a logged in administrator I should see the expected entropy of the passphrase configurator change based on the current configuration", async () => {
       expect.assertions(2);
 
       const passphraseEntropyWith9Words = "130.6 bits";
@@ -170,46 +176,46 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.passphraseEntropyValue).toContain(passphraseEntropyWith9Words);
 
       await page.setFormWith({
-        passphraseWordCountInput: "20"
+        passphraseWordCountInput: "20",
       });
 
       expect(page.passphraseEntropyValue).toContain(passphraseEntropyWith20Words);
     });
 
-    it("As a logged in administrator I should see a warning message if the passphrase entropy is not high enough to be considered strong", async() => {
+    it("As a logged in administrator I should see a warning message if the passphrase entropy is not high enough to be considered strong", async () => {
       expect.assertions(1);
 
       await page.togglePasswordPanel();
       await page.togglePassphrasePanel();
       await page.setFormWith({
         passwordLengthInput: "20",
-        passphraseWordCountInput: "4"
+        passphraseWordCountInput: "4",
       });
 
       expect(page.minimalPassphraseEntropyAdvisedWarning).not.toBeNull();
     });
 
-    it("As a logged in administrator I should see a warning message if the password entropy is not high enough to be considered strong", async() => {
+    it("As a logged in administrator I should see a warning message if the password entropy is not high enough to be considered strong", async () => {
       expect.assertions(1);
 
       await page.togglePasswordPanel();
       await page.togglePassphrasePanel();
       await page.setFormWith({
         passwordLengthInput: "8",
-        passphraseWordCountInput: "40"
+        passphraseWordCountInput: "40",
       });
 
       expect(page.minimalPasswordEntropyAdvisedWarning).not.toBeNull();
     });
 
-    it("As a logged in administrator I should see an error message if I try to save passphrase generator settings that leads to have entropies that are under the minimum Passbolt's requirement", async() => {
+    it("As a logged in administrator I should see an error message if I try to save passphrase generator settings that leads to have entropies that are under the minimum Passbolt's requirement", async () => {
       expect.assertions(1);
 
       await page.togglePasswordPanel();
       await page.togglePassphrasePanel();
       await page.setFormWith({
         passwordLengthInput: "20",
-        passphraseWordCountInput: "4"
+        passphraseWordCountInput: "4",
       });
 
       await page.clickOnSave();
@@ -217,14 +223,14 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.minimalPassphraseEntropyError).not.toBeNull();
     });
 
-    it("As a logged in administrator I should see an error message if I try to save password generator settings that leads to have entropies that are under the minimum Passbolt's requirement", async() => {
+    it("As a logged in administrator I should see an error message if I try to save password generator settings that leads to have entropies that are under the minimum Passbolt's requirement", async () => {
       expect.assertions(1);
 
       await page.togglePasswordPanel();
       await page.togglePassphrasePanel();
       await page.setFormWith({
         passwordLengthInput: "8",
-        passphraseWordCountInput: "40"
+        passphraseWordCountInput: "40",
       });
 
       await page.clickOnSave();
@@ -232,12 +238,12 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.minimalPasswordEntropyError).not.toBeNull();
     });
 
-    it("As a logged in administrator I should see an error message if the words separator is too long", async() => {
+    it("As a logged in administrator I should see an error message if the words separator is too long", async () => {
       expect.assertions(1);
 
       await page.togglePassphrasePanel();
       await page.setFormWith({
-        passphraseWordsSeparatorInput: "".padStart(11, ' ')
+        passphraseWordsSeparatorInput: "".padStart(11, " "),
       });
 
       await page.clickOnSave();
@@ -245,7 +251,7 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.wordsSeparatorErrorMessage).not.toBeNull();
     });
 
-    it("As a logged in administrator I can toggle the external dictionary check", async() => {
+    it("As a logged in administrator I can toggle the external dictionary check", async () => {
       expect.assertions(1);
 
       await screen.findByRole("checkbox", {
@@ -259,7 +265,7 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.externalDictionaryCheck.checked).not.toBe(currentToggleState);
     });
 
-    it("As a logged in administrator I can change the password mask to use by default", async() => {
+    it("As a logged in administrator I can change the password mask to use by default", async () => {
       const maskButtonsLength = 10;
       expect.assertions(maskButtonsLength + 1);
 
@@ -268,13 +274,13 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(maskButtons.length).toStrictEqual(maskButtonsLength);
 
       for (let i = 0; i < maskButtonsLength; i++) {
-        const isChecked = maskButtons[i].classList.contains('selected');
+        const isChecked = maskButtons[i].classList.contains("selected");
         await page.clickOnMaskButton(maskButtons[i]);
-        expect(page.getMaskButton(i).classList.contains('selected')).not.toBe(isChecked);
+        expect(page.getMaskButton(i).classList.contains("selected")).not.toBe(isChecked);
       }
     });
 
-    it("As a logged in administrator I should see an error if I unselect all the password mask", async() => {
+    it("As a logged in administrator I should see an error if I unselect all the password mask", async () => {
       expect.assertions(1);
 
       await page.togglePasswordPanel();
@@ -290,7 +296,7 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.maskError).not.toBeNull();
     });
 
-    it("As a logged in administrator I can see the error messages associated to the secret length", async() => {
+    it("As a logged in administrator I can see the error messages associated to the secret length", async () => {
       expect.assertions(2);
 
       await page.togglePasswordPanel();
@@ -307,7 +313,7 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.passphraseLengthError).not.toBeNull();
     });
 
-    it("As a logged in administrator I can choose passphrase as default generator", async() => {
+    it("As a logged in administrator I can choose passphrase as default generator", async () => {
       expect.assertions(1);
 
       await page.choosePassphraseAsDefaultGenerator();
@@ -317,9 +323,9 @@ describe("DisplayPasswordPoliciesAdministration", () => {
   });
 
   describe("As AD I should be warned that the source of the configuration is about to change", () => {
-    it("As a logged in administrator I should be warned if the current configuration source is the environment variable and that I'm about to change that.", async() => {
+    it("As a logged in administrator I should be warned if the current configuration source is the environment variable and that I'm about to change that.", async () => {
       expect.assertions(1);
-      const currentSettings = defaultPasswordPoliciesDto({source: 'env'});
+      const currentSettings = defaultPasswordPoliciesDto({ source: "env" });
 
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.password-policies.get-admin-settings", () => currentSettings);
@@ -330,75 +336,77 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.sourceChangingBanner).not.toBeNull();
     });
 
-    it("As a logged in administrator I should not be warned if the current configuration source the database.", async() => {
+    it("As a logged in administrator I should not be warned if the current configuration source the database.", async () => {
       expect.assertions(1);
-      const currentSettings = defaultPasswordPoliciesDto({source: 'db'});
+      const currentSettings = defaultPasswordPoliciesDto({ source: "db" });
 
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.password-policies.get-admin-settings", () => currentSettings);
       const page = new DisplayPasswordPoliciesAdministrationPage(context, props);
-
 
       expect(page.sourceChangingBanner).toBeNull();
     });
 
-    it("As a logged in administrator I should not be warned if the current configuration source is 'default'.", async() => {
+    it("As a logged in administrator I should not be warned if the current configuration source is 'default'.", async () => {
       expect.assertions(1);
-      const currentSettings = defaultPasswordPoliciesDto({source: 'default'});
+      const currentSettings = defaultPasswordPoliciesDto({ source: "default" });
 
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.password-policies.get-admin-settings", () => currentSettings);
       const page = new DisplayPasswordPoliciesAdministrationPage(context, props);
-
 
       expect(page.sourceChangingBanner).toBeNull();
     });
   });
 
   describe("As AD I should not be able to see the source of the configuration", () => {
-    it("when it's coming from the default configuration", async() => {
+    it("when it's coming from the default configuration", async () => {
       expect.assertions(1);
 
       const context = defaultAppContext();
       const settingsDto = defaultPasswordPoliciesDto({
-        source: null
+        source: null,
       });
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.password-policies.get-admin-settings", () => settingsDto);
       page = new DisplayPasswordPoliciesAdministrationPage(context, props);
       await waitForTrue(() => Boolean(page.settingsSource));
 
-      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: default configuration.');
+      expect(page.settingsSource.textContent).toStrictEqual(
+        "This current configuration source is: default configuration.",
+      );
     });
 
-    it("when it's coming from the database", async() => {
+    it("when it's coming from the database", async () => {
       expect.assertions(1);
 
       const context = defaultAppContext();
       const settingsDto = defaultPasswordPoliciesDto({
-        source: 'db'
+        source: "db",
       });
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.password-policies.get-admin-settings", () => settingsDto);
       page = new DisplayPasswordPoliciesAdministrationPage(context, props);
-      await waitForTrue(() => Boolean(page.settingsSource?.textContent?.includes('database')));
+      await waitForTrue(() => Boolean(page.settingsSource?.textContent?.includes("database")));
 
-      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: database.');
+      expect(page.settingsSource.textContent).toStrictEqual("This current configuration source is: database.");
     });
 
-    it("when it's coming from a environment variables", async() => {
+    it("when it's coming from a environment variables", async () => {
       expect.assertions(1);
 
       const context = defaultAppContext();
       const settingsDto = defaultPasswordPoliciesDto({
-        source: 'env'
+        source: "env",
       });
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.password-policies.get-admin-settings", () => settingsDto);
       page = new DisplayPasswordPoliciesAdministrationPage(context, props);
-      await waitForTrue(() => Boolean(page.settingsSource?.textContent?.includes('environment variables')));
+      await waitForTrue(() => Boolean(page.settingsSource?.textContent?.includes("environment variables")));
 
-      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: environment variables.');
+      expect(page.settingsSource.textContent).toStrictEqual(
+        "This current configuration source is: environment variables.",
+      );
     });
   });
 });

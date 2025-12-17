@@ -12,17 +12,20 @@
  * @since         3.8.3
  */
 
-import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
-import {defaultProps, mockResult} from '../../../components/Administration/DisplaySelfRegistrationAdministration/DisplaySelfRegistrationAdministration.test.data';
-import {enableFetchMocks} from 'jest-fetch-mock';
-import SelfRegistrationDomainsViewModel from '../../../../shared/models/selfRegistration/SelfRegistrationDomainsViewModel';
-import {AdminSelfRegistrationContextProvider} from "../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
-import MapObject from '../../../lib/Map/MapObject';
-import SelfRegistrationDto from '../../../../shared/models/selfRegistration/SelfRegistrationDto';
-import ConfirmSaveSelfRegistrationSettings from '../../../components/Administration/DisplaySelfRegistrationAdministration/ConfirmSaveSelfRegistrationSettings/ConfirmSaveSelfRegistrationSettings';
-import ConfirmDeletionSelfRegistrationSettings from '../../../components/Administration/DisplaySelfRegistrationAdministration/ConfirmDeletionSelfRegistrationSettings/ConfirmDeletionSelfRegistrationSettings';
-import NotifyError from '../../../components/Common/Error/NotifyError/NotifyError';
-import PassboltServiceUnavailableError from '../../../../shared/lib/Error/PassboltServiceUnavailableError';
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import {
+  defaultProps,
+  mockResult,
+} from "../../../components/Administration/DisplaySelfRegistrationAdministration/DisplaySelfRegistrationAdministration.test.data";
+import { enableFetchMocks } from "jest-fetch-mock";
+import SelfRegistrationDomainsViewModel from "../../../../shared/models/selfRegistration/SelfRegistrationDomainsViewModel";
+import { AdminSelfRegistrationContextProvider } from "../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
+import MapObject from "../../../lib/Map/MapObject";
+import SelfRegistrationDto from "../../../../shared/models/selfRegistration/SelfRegistrationDto";
+import ConfirmSaveSelfRegistrationSettings from "../../../components/Administration/DisplaySelfRegistrationAdministration/ConfirmSaveSelfRegistrationSettings/ConfirmSaveSelfRegistrationSettings";
+import ConfirmDeletionSelfRegistrationSettings from "../../../components/Administration/DisplaySelfRegistrationAdministration/ConfirmDeletionSelfRegistrationSettings/ConfirmDeletionSelfRegistrationSettings";
+import NotifyError from "../../../components/Common/Error/NotifyError/NotifyError";
+import PassboltServiceUnavailableError from "../../../../shared/lib/Error/PassboltServiceUnavailableError";
 
 describe("AdministrationSelfRegistrationContext", () => {
   let adminSelfRegistrationContext; // The adminSelfRegistrationContext to test
@@ -33,7 +36,7 @@ describe("AdministrationSelfRegistrationContext", () => {
   };
 
   //Initialize context by default
-  const initContext = async() => {
+  const initContext = async () => {
     mockApiCalls();
     await adminSelfRegistrationContext.findSettings();
   };
@@ -46,7 +49,7 @@ describe("AdministrationSelfRegistrationContext", () => {
   });
 
   describe("AdministrationSelfRegistrationContext::findSettings", () => {
-    it("should get the current settings and store it in its state", async() => {
+    it("should get the current settings and store it in its state", async () => {
       expect.assertions(3);
 
       // Mock the call to API
@@ -58,7 +61,7 @@ describe("AdministrationSelfRegistrationContext", () => {
       expect(adminSelfRegistrationContext.getCurrentSettings()).toEqual(mockResult());
       expect(adminSelfRegistrationContext.isProcessing()).toBeFalsy();
     });
-    it("should set processing to true when loading settings", async() => {
+    it("should set processing to true when loading settings", async () => {
       expect.assertions(1);
 
       adminSelfRegistrationContext.setProcessing(false);
@@ -73,7 +76,7 @@ describe("AdministrationSelfRegistrationContext", () => {
   describe("AdministrationSelfRegistrationContext::hasSettingsChanges", () => {
     let keys = null;
 
-    beforeEach(async() => {
+    beforeEach(async () => {
       await initContext();
       keys = MapObject.iterators(adminSelfRegistrationContext.getAllowedDomains());
     });
@@ -82,7 +85,7 @@ describe("AdministrationSelfRegistrationContext", () => {
 
       const domains = MapObject.clone(adminSelfRegistrationContext.getAllowedDomains());
       domains.set(keys[0], "passbot.com");
-      adminSelfRegistrationContext.setDomains({allowedDomains: domains});
+      adminSelfRegistrationContext.setDomains({ allowedDomains: domains });
 
       expect(adminSelfRegistrationContext.hasSettingsChanges()).toBeTruthy();
     });
@@ -93,22 +96,22 @@ describe("AdministrationSelfRegistrationContext", () => {
 
       const domains = MapObject.clone(adminSelfRegistrationContext.getAllowedDomains());
       domains.set(keys[0], "passbot.com");
-      adminSelfRegistrationContext.setDomains({allowedDomains: domains});
+      adminSelfRegistrationContext.setDomains({ allowedDomains: domains });
       domains.set(keys[0], firstValue);
-      adminSelfRegistrationContext.setDomains({allowedDomains: domains});
+      adminSelfRegistrationContext.setDomains({ allowedDomains: domains });
 
       expect(adminSelfRegistrationContext.hasSettingsChanges()).toBeFalsy();
     });
   });
 
   describe("AdminUserDirectoryContext::clearContext", () => {
-    beforeEach(async() => {
+    beforeEach(async () => {
       await initContext();
     });
     it("should clear the context and set it by default", () => {
       expect.assertions(3);
 
-      adminSelfRegistrationContext.setDomains({allowedDomains: {"test": "value"}});
+      adminSelfRegistrationContext.setDomains({ allowedDomains: { test: "value" } });
       adminSelfRegistrationContext.clearContext();
 
       expect(adminSelfRegistrationContext.isProcessing()).toBeTruthy();
@@ -118,34 +121,40 @@ describe("AdministrationSelfRegistrationContext", () => {
   });
 
   describe("AdminUserDirectoryContext::save", () => {
-    beforeEach(async() => {
+    beforeEach(async () => {
       await initContext();
     });
-    it("should display ConfirmSaveSelfRegistrationSettings if form is valid", async() => {
+    it("should display ConfirmSaveSelfRegistrationSettings if form is valid", async () => {
       await adminSelfRegistrationContext.save();
 
       expect.assertions(2);
 
       expect(adminSelfRegistrationContext.isSubmitted).toBeTruthy();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmSaveSelfRegistrationSettings, expect.objectContaining({"domains": adminSelfRegistrationContext.getAllowedDomains()}));
+      expect(props.dialogContext.open).toHaveBeenCalledWith(
+        ConfirmSaveSelfRegistrationSettings,
+        expect.objectContaining({ domains: adminSelfRegistrationContext.getAllowedDomains() }),
+      );
     });
 
-    it("should display ConfirmDeletionSelfRegistrationSettings if form is valid and domains are empty", async() => {
-      adminSelfRegistrationContext.setDomains({allowedDomains: new Map()});
+    it("should display ConfirmDeletionSelfRegistrationSettings if form is valid and domains are empty", async () => {
+      adminSelfRegistrationContext.setDomains({ allowedDomains: new Map() });
       await adminSelfRegistrationContext.save();
 
       expect.assertions(2);
 
       expect(adminSelfRegistrationContext.isSubmitted).toBeTruthy();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmDeletionSelfRegistrationSettings, expect.objectContaining({onClose: expect.any(Function), onSubmit: expect.any(Function)}));
+      expect(props.dialogContext.open).toHaveBeenCalledWith(
+        ConfirmDeletionSelfRegistrationSettings,
+        expect.objectContaining({ onClose: expect.any(Function), onSubmit: expect.any(Function) }),
+      );
     });
   });
 
   describe("AdminUserDirectoryContext::saveSettings", () => {
-    beforeEach(async() => {
+    beforeEach(async () => {
       await initContext();
     });
-    it("should save settings and display feedback", async() => {
+    it("should save settings and display feedback", async () => {
       fetch.doMockOnceIf(/self-registration\/settings*/, () => mockApiResponse({}));
       jest.spyOn(adminSelfRegistrationContext, "findSettings").mockImplementation();
 
@@ -156,12 +165,21 @@ describe("AdministrationSelfRegistrationContext", () => {
       //Save should set processing to false in any case
       expect(adminSelfRegistrationContext.isProcessing()).toBeFalsy();
       expect(adminSelfRegistrationContext.findSettings).toHaveBeenCalled();
-      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The self registration settings for the organization were updated.");
-      expect(JSON.parse(fetch.mock.calls[1][1].body)).toEqual(expect.objectContaining(new SelfRegistrationDto({allowedDomains: adminSelfRegistrationContext.getAllowedDomains()}, adminSelfRegistrationContext.getCurrentSettings())));
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
+        "The self registration settings for the organization were updated.",
+      );
+      expect(JSON.parse(fetch.mock.calls[1][1].body)).toEqual(
+        expect.objectContaining(
+          new SelfRegistrationDto(
+            { allowedDomains: adminSelfRegistrationContext.getAllowedDomains() },
+            adminSelfRegistrationContext.getCurrentSettings(),
+          ),
+        ),
+      );
     });
 
-    it("should not save settings and display feedback when we have an error", async() => {
-      const error = {message: "Unable to reach the server, an unexpected error occurred"};
+    it("should not save settings and display feedback when we have an error", async () => {
+      const error = { message: "Unable to reach the server, an unexpected error occurred" };
 
       fetch.doMockOnceIf(/self-registration\/settings*/, () => Promise.reject(error));
 
@@ -174,26 +192,35 @@ describe("AdministrationSelfRegistrationContext", () => {
       //Save should set processing to false in any case
       expect(adminSelfRegistrationContext.isProcessing()).toBeFalsy();
       expect(adminSelfRegistrationContext.findSettings).not.toHaveBeenCalled();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {"error": new PassboltServiceUnavailableError(error.message)});
-      expect(JSON.parse(fetch.mock.calls[1][1].body)).toEqual(expect.objectContaining(new SelfRegistrationDto({allowedDomains: adminSelfRegistrationContext.getAllowedDomains()}, adminSelfRegistrationContext.getCurrentSettings())));
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {
+        error: new PassboltServiceUnavailableError(error.message),
+      });
+      expect(JSON.parse(fetch.mock.calls[1][1].body)).toEqual(
+        expect.objectContaining(
+          new SelfRegistrationDto(
+            { allowedDomains: adminSelfRegistrationContext.getAllowedDomains() },
+            adminSelfRegistrationContext.getCurrentSettings(),
+          ),
+        ),
+      );
     });
   });
   describe("AdminMfaContext::errors", () => {
-    it("should update error object with targeted property", async() => {
+    it("should update error object with targeted property", async () => {
       expect.assertions(1);
       await adminSelfRegistrationContext.setError("uuid1", "error");
 
       expect(adminSelfRegistrationContext.getErrors().get("uuid1")).toBe("error");
     });
 
-    it("should init errors with default property", async() => {
+    it("should init errors with default property", async () => {
       expect.assertions(1);
       expect(adminSelfRegistrationContext.getErrors()).toEqual(new Map());
     });
   });
 
   describe("AdminMfaContext::setSubmitted", () => {
-    it("should set submit and focus", async() => {
+    it("should set submit and focus", async () => {
       expect.assertions(2);
       await adminSelfRegistrationContext.setSubmitted(true);
 
@@ -203,11 +230,10 @@ describe("AdministrationSelfRegistrationContext", () => {
   });
 });
 
-
 function mockState(adminSelfRegistrationContext) {
-  const setStateMock = state => {
+  const setStateMock = (state) => {
     let newState;
-    if (typeof state  === 'function') {
+    if (typeof state === "function") {
       newState = state(adminSelfRegistrationContext.state);
     } else {
       newState = state;

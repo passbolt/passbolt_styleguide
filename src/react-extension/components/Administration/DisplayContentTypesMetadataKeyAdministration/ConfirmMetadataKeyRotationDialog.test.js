@@ -15,12 +15,12 @@
 /**
  * Unit tests on ConfirmMetadataKeyRotationDialog in regard of specifications
  */
-import {waitFor} from "@testing-library/react";
-import {defaultProps} from "./ConfirmMetadataKeyRotationDialog.test.data";
+import { waitFor } from "@testing-library/react";
+import { defaultProps } from "./ConfirmMetadataKeyRotationDialog.test.data";
 import ConfirmMetadataKeyRotationDialogPage from "./ConfirmMetadataKeyRotationDialog.test.page";
 
 describe("ConfirmMetadataKeyRotationDialog", () => {
-  it('should display the dialog', async() => {
+  it("should display the dialog", async () => {
     expect.assertions(1);
     const props = defaultProps(); // The props to pass
     const page = new ConfirmMetadataKeyRotationDialogPage(props);
@@ -29,7 +29,7 @@ describe("ConfirmMetadataKeyRotationDialog", () => {
     expect(page.exists()).toBeTruthy();
   });
 
-  it('should confirm the rotation', async() => {
+  it("should confirm the rotation", async () => {
     expect.assertions(2);
     const props = defaultProps(); // The props to pass
     const page = new ConfirmMetadataKeyRotationDialogPage(props);
@@ -41,7 +41,7 @@ describe("ConfirmMetadataKeyRotationDialog", () => {
     expect(props.onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('should cancel the rotation', async() => {
+  it("should cancel the rotation", async () => {
     expect.assertions(1);
     const props = defaultProps(); // The props to pass
     const page = new ConfirmMetadataKeyRotationDialogPage(props);
@@ -52,7 +52,7 @@ describe("ConfirmMetadataKeyRotationDialog", () => {
     expect(props.onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('should close the dialog', async() => {
+  it("should close the dialog", async () => {
     expect.assertions(1);
     const props = defaultProps(); // The props to pass
     const page = new ConfirmMetadataKeyRotationDialogPage(props);

@@ -24,39 +24,43 @@ beforeEach(() => {
 });
 
 describe("UserEventsService", () => {
-  it("As LU I should autofill field with all events", async() => {
+  it("As LU I should autofill field with all events", async () => {
     expect.assertions(6);
     const field = {
       click: jest.fn(),
       value: "",
-      dispatchEvent: jest.fn()
+      dispatchEvent: jest.fn(),
     };
     UserEventsService.autofill(field, "test");
     expect(field.click).toHaveBeenCalledTimes(1);
     expect(field.value).toStrictEqual("test");
-    expect(field.dispatchEvent).toHaveBeenCalledWith(new KeyboardEvent("keydown", {bubbles: true}));
-    expect(field.dispatchEvent).toHaveBeenCalledWith(new InputEvent("input", {inputType: "insertText", data: "test", bubbles: true}));
-    expect(field.dispatchEvent).toHaveBeenCalledWith(new KeyboardEvent("keyup", {bubbles: true}));
-    expect(field.dispatchEvent).toHaveBeenCalledWith(new Event("change", {bubbles: true}));
+    expect(field.dispatchEvent).toHaveBeenCalledWith(new KeyboardEvent("keydown", { bubbles: true }));
+    expect(field.dispatchEvent).toHaveBeenCalledWith(
+      new InputEvent("input", { inputType: "insertText", data: "test", bubbles: true }),
+    );
+    expect(field.dispatchEvent).toHaveBeenCalledWith(new KeyboardEvent("keyup", { bubbles: true }));
+    expect(field.dispatchEvent).toHaveBeenCalledWith(new Event("change", { bubbles: true }));
   });
 
-  it("As LU I should autofill field with null value", async() => {
+  it("As LU I should autofill field with null value", async () => {
     expect.assertions(6);
     const field = {
       click: jest.fn(),
       value: "",
-      dispatchEvent: jest.fn()
+      dispatchEvent: jest.fn(),
     };
     UserEventsService.autofill(field, null);
     expect(field.click).toHaveBeenCalledTimes(1);
     expect(field.value).toStrictEqual(null);
-    expect(field.dispatchEvent).toHaveBeenCalledWith(new KeyboardEvent("keydown", {bubbles: true}));
-    expect(field.dispatchEvent).toHaveBeenCalledWith(new InputEvent("input", {inputType: "insertText", data: null, bubbles: true}));
-    expect(field.dispatchEvent).toHaveBeenCalledWith(new KeyboardEvent("keyup", {bubbles: true}));
-    expect(field.dispatchEvent).toHaveBeenCalledWith(new Event("change", {bubbles: true}));
+    expect(field.dispatchEvent).toHaveBeenCalledWith(new KeyboardEvent("keydown", { bubbles: true }));
+    expect(field.dispatchEvent).toHaveBeenCalledWith(
+      new InputEvent("input", { inputType: "insertText", data: null, bubbles: true }),
+    );
+    expect(field.dispatchEvent).toHaveBeenCalledWith(new KeyboardEvent("keyup", { bubbles: true }));
+    expect(field.dispatchEvent).toHaveBeenCalledWith(new Event("change", { bubbles: true }));
   });
 
-  it("As LU I should not autofill null field", async() => {
+  it("As LU I should not autofill null field", async () => {
     expect.assertions(1);
     const field = null;
     try {
@@ -68,4 +72,3 @@ describe("UserEventsService", () => {
     }
   });
 });
-

@@ -12,7 +12,7 @@
  * @since         5.4.0
  */
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import DisplayAroName from "./DisplayAroName";
 import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -26,7 +26,7 @@ export default class DisplayAroNamePage {
       <MockTranslationProvider>
         <DisplayAroName {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 

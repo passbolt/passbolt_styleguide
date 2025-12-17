@@ -25,7 +25,7 @@ beforeEach(() => {
 describe("As AN I should see an error page", () => {
   let page; // The page to test against
 
-  describe('As AN I should see an error if my registration cannot be performed', () => {
+  describe("As AN I should see an error if my registration cannot be performed", () => {
     /**
      * Given a AN
      * Then I should see an error
@@ -35,14 +35,16 @@ describe("As AN I should see an error page", () => {
       page = new DisplayRequireInvitationErrorPage();
     });
 
-    it('As AN following an invalid registration link I should see a feedback notifying me that the registration link is invalid', () => {
+    it("As AN following an invalid registration link I should see a feedback notifying me that the registration link is invalid", () => {
       expect(page.exists()).toBeTruthy();
       // title
       expect(page.title).toBe("Access to this service requires an invitation.");
       // message
-      expect(page.message).toBe('This email is not associated with any approved users on this domain. Please contact your administrator to request an invitation link.');
+      expect(page.message).toBe(
+        "This email is not associated with any approved users on this domain. Please contact your administrator to request an invitation link.",
+      );
       // download
-      expect(page.linkToRetrySetup).toBe('Try with another email');
+      expect(page.linkToRetrySetup).toBe("Try with another email");
     });
   });
 });

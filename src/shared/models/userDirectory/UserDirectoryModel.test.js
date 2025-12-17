@@ -11,10 +11,10 @@
  * @link          https=//www.passbolt.com Passbolt(tm)
  * @since         3.8.0
  */
-import UserDirectoryModel from './UserDirectoryModel';
-import {mockedDefaultData, mockedData} from './UserDirectoryModel.test.data';
-import {mockResult} from '../../../react-extension/components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data';
-import {v4 as uuid} from 'uuid';
+import UserDirectoryModel from "./UserDirectoryModel";
+import { mockedDefaultData, mockedData } from "./UserDirectoryModel.test.data";
+import { mockResult } from "../../../react-extension/components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
+import { v4 as uuid } from "uuid";
 /**
  * Test model related to the user model
  */
@@ -41,9 +41,9 @@ describe("UserDirectoryModel model", () => {
         fieldsMapping: {
           openldap: {
             group: {
-              users: mockResult.fields_mapping.openldap.group.users
-            }
-          }
+              users: mockResult.fields_mapping.openldap.group.users,
+            },
+          },
         },
         source: model.source,
       });
@@ -64,9 +64,9 @@ describe("UserDirectoryModel model", () => {
         fieldsMapping: {
           openldap: {
             group: {
-              users: mockResult.fields_mapping.openldap.group.users
-            }
-          }
+              users: mockResult.fields_mapping.openldap.group.users,
+            },
+          },
         },
         source: model.source,
       });
@@ -74,6 +74,3 @@ describe("UserDirectoryModel model", () => {
     });
   });
 });
-
-
-

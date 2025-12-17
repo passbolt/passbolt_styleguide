@@ -21,13 +21,13 @@ import {
   defaultProps,
   mockResultsFolders,
   mockResultsResources,
-  mockResultsResourcesAndFolders
+  mockResultsResourcesAndFolders,
 } from "./ShareDialog.test.data";
-import {ActionFeedbackContext} from "../../contexts/ActionFeedbackContext";
+import { ActionFeedbackContext } from "../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../shared/lib/Error/PassboltApiFetchError";
-import {waitFor} from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 import NotifyError from "../Common/Error/NotifyError/NotifyError";
-import {waitForTrue} from "../../../../test/utils/waitFor";
+import { waitForTrue } from "../../../../test/utils/waitFor";
 import UserAbortsOperationError from "../../lib/Error/UserAbortsOperationError";
 
 beforeAll(() => {
@@ -38,42 +38,48 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-
 describe("As Lu I should see the share dialog", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
   let props = null; // The component props
 
-  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = (implementation) => jest.spyOn(context.port, "request").mockImplementation(implementation);
 
-  describe('As LU I can start sharing resources', () => {
+  describe("As LU I can start sharing resources", () => {
     const shareDialogProps = {
-      resourcesIds: ["8e3874ae-4b40-590b-968a-418f704b9d9a", "daaf057e-7fc3-5537-a8a9-e8c151890878", "c8b93000-56b3-5a16-8048-c579d1babbd7"],
+      resourcesIds: [
+        "8e3874ae-4b40-590b-968a-418f704b9d9a",
+        "daaf057e-7fc3-5537-a8a9-e8c151890878",
+        "c8b93000-56b3-5a16-8048-c579d1babbd7",
+      ],
     };
     /**
      * I should see the share dialog
      */
-    beforeEach(async() => {
-      const requestResourcesMockImpl = path => mockResultsResources[path];
+    beforeEach(async () => {
+      const requestResourcesMockImpl = (path) => mockResultsResources[path];
       mockContextRequest(requestResourcesMockImpl);
-      context.setContext({shareDialogProps});
+      context.setContext({ shareDialogProps });
       props = defaultProps();
       page = new ShareDialogPage(context, props);
     });
 
-    it('As LU I see a success toaster message after sharing resources to users and groups with success', async() => {
+    it("As LU I see a success toaster message after sharing resources to users and groups with success", async () => {
       expect.assertions(18);
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.resources.find-all-by-ids-for-display-permissions', shareDialogProps.resourcesIds);
+      expect(context.port.request).toHaveBeenCalledWith(
+        "passbolt.resources.find-all-by-ids-for-display-permissions",
+        shareDialogProps.resourcesIds,
+      );
       expect(page.exists()).toBeTruthy();
-      expect(page.title).toBe('Share 3 resources');
+      expect(page.title).toBe("Share 3 resources");
       expect(page.count).toBe(11);
 
       const requestBextMockImpl = (request, option) => {
         switch (request) {
           case "passbolt.keyring.get-public-key-info-by-user":
-            return {fingerprint: "079D6F4FDA3BFDC2D8E562D8AA44B1DA4BFB36B6"};
+            return { fingerprint: "079D6F4FDA3BFDC2D8E562D8AA44B1DA4BFB36B6" };
           case "passbolt.share.search-aros":
-            return context.users.filter(user => user.username.indexOf(option) !== -1);
+            return context.users.filter((user) => user.username.indexOf(option) !== -1);
         }
       };
 
@@ -82,36 +88,72 @@ describe("As Lu I should see the share dialog", () => {
       await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
       await page.selectUserOrGroup(1);
 
-      expect(page.warningMessage).toBe('Click save to apply your pending changes.');
+      expect(page.warningMessage).toBe("Click save to apply your pending changes.");
 
       expect(page.count).toBe(12);
-      expect(page.aroName(1)).toBe('Ada Lovelace');
-      expect(page.aroDetails(1)).toBe('ada@passbolt.com');
-      expect(page.aroName(2)).toBe('Betty Holberton');
-      expect(page.aroDetails(2)).toBe('betty@passbolt.com');
-      expect(page.aroName(3)).toBe('Board');
-      expect(page.aroDetails(3)).toBe('Group');
-      expect(page.aroName(12)).toBe('Admin User');
-      expect(page.aroDetails(12)).toBe('admin@passbolt.com');
-      expect(page.selectRights(12).textContent).toBe('can read');
+      expect(page.aroName(1)).toBe("Ada Lovelace");
+      expect(page.aroDetails(1)).toBe("ada@passbolt.com");
+      expect(page.aroName(2)).toBe("Betty Holberton");
+      expect(page.aroDetails(2)).toBe("betty@passbolt.com");
+      expect(page.aroName(3)).toBe("Board");
+      expect(page.aroDetails(3)).toBe("Group");
+      expect(page.aroName(12)).toBe("Admin User");
+      expect(page.aroDetails(12)).toBe("admin@passbolt.com");
+      expect(page.selectRights(12).textContent).toBe("can read");
 
       const requestMockImpl = jest.fn();
       mockContextRequest(requestMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       await page.savePermissions();
 
-      const permissionDto = [{"aco": "Resource", "aco_foreign_key": shareDialogProps.resourcesIds[0], "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1},
-        {"aco": "Resource", "aco_foreign_key": shareDialogProps.resourcesIds[1], "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1},
-        {"aco": "Resource", "aco_foreign_key": "690b6e40-f371-579c-b0c6-86e8ef383adc", "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1},
-        {"aco": "Resource", "aco_foreign_key": "ecf0ed85-3bfc-5f45-b11d-74e9a86aa313", "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1}];
+      const permissionDto = [
+        {
+          aco: "Resource",
+          aco_foreign_key: shareDialogProps.resourcesIds[0],
+          aro: "User",
+          aro_foreign_key: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+          is_new: true,
+          type: 1,
+        },
+        {
+          aco: "Resource",
+          aco_foreign_key: shareDialogProps.resourcesIds[1],
+          aro: "User",
+          aro_foreign_key: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+          is_new: true,
+          type: 1,
+        },
+        {
+          aco: "Resource",
+          aco_foreign_key: "690b6e40-f371-579c-b0c6-86e8ef383adc",
+          aro: "User",
+          aro_foreign_key: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+          is_new: true,
+          type: 1,
+        },
+        {
+          aco: "Resource",
+          aco_foreign_key: "ecf0ed85-3bfc-5f45-b11d-74e9a86aa313",
+          aro: "User",
+          aro_foreign_key: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+          is_new: true,
+          type: 1,
+        },
+      ];
 
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.share.resources.save", shareDialogProps.resourcesIds, permissionDto);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith('The permissions have been changed successfully.');
+      expect(context.port.request).toHaveBeenCalledWith(
+        "passbolt.share.resources.save",
+        shareDialogProps.resourcesIds,
+        permissionDto,
+      );
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The permissions have been changed successfully.",
+      );
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I can remove a permission', async() => {
+    it("As LU I can remove a permission", async () => {
       expect.assertions(2);
       await waitForTrue(() => page.count !== 3);
       expect(page.count).toBe(11);
@@ -119,11 +161,11 @@ describe("As Lu I should see the share dialog", () => {
       expect(page.count).toBe(10);
     });
 
-    it('As LU I should see a processing feedback while submitting the form', async() => {
+    it("As LU I should see a processing feedback while submitting the form", async () => {
       const requestBextMockImpl = (request, option) => {
         switch (request) {
           case "passbolt.share.search-aros":
-            return context.users.filter(user => user.username.indexOf(option) !== -1);
+            return context.users.filter((user) => user.username.indexOf(option) !== -1);
         }
       };
       mockContextRequest(requestBextMockImpl);
@@ -133,9 +175,12 @@ describe("As Lu I should see the share dialog", () => {
 
       // Mock the request function to make it the expected result
       let updateResolve;
-      const requestMockImpl = jest.fn(() => new Promise(resolve => {
-        updateResolve = resolve;
-      }));
+      const requestMockImpl = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            updateResolve = resolve;
+          }),
+      );
 
       // Mock the request function to make it the expected result
       mockContextRequest(requestMockImpl);
@@ -144,8 +189,8 @@ describe("As Lu I should see the share dialog", () => {
       await waitFor(() => {
         expect(page.shareNameInput.getAttribute("disabled")).not.toBeNull();
         expect(page.selectRights(1).className).toBe("selected-value disabled");
-        expect(page.removeAro(1).className).toBe('remove-item button inline button-transparent disabled');
-        expect(page.cancelButton.className).toBe('link cancel');
+        expect(page.removeAro(1).className).toBe("remove-item button inline button-transparent disabled");
+        expect(page.cancelButton.className).toBe("link cancel");
         expect(page.cancelButton.hasAttribute("disabled")).toBeTruthy();
         expect(page.saveButton.hasAttribute("disabled")).toBeTruthy();
         expect(page.saveButton.className).toBe("button primary form disabled processing");
@@ -153,38 +198,38 @@ describe("As Lu I should see the share dialog", () => {
       });
     });
 
-    it('As LU I shouldn’t be able to submit the form if there is no owner', async() => {
+    it("As LU I shouldn’t be able to submit the form if there is no owner", async () => {
       expect.assertions(2);
       await page.selectFirstItemRights(1);
-      expect(page.errorMessage).toBe('Please make sure there is at least one owner.');
+      expect(page.errorMessage).toBe("Please make sure there is at least one owner.");
       expect(page.saveButton.getAttribute("disabled")).not.toBeNull();
     });
 
-    it('As LU I can stop sharing resources by clicking on the cancel button', async() => {
+    it("As LU I can stop sharing resources by clicking on the cancel button", async () => {
       expect.assertions(2);
       expect(page.exists()).toBeTruthy();
       await page.click(page.cancelButton);
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I can stop sharing resources by closing the dialog', async() => {
+    it("As LU I can stop sharing resources by closing the dialog", async () => {
       expect.assertions(2);
       expect(page.exists()).toBeTruthy();
       await page.click(page.dialogClose);
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I can stop sharing resources with the keyboard (escape)', async() => {
+    it("As LU I can stop sharing resources with the keyboard (escape)", async () => {
       expect.assertions(2);
       expect(page.exists()).toBeTruthy();
       await page.escapeKey(page.dialogClose);
       expect(props.onClose).toBeCalled();
     });
 
-    it('displays an error dialog if the resource details cannot be loaded due to an unexpected error', async() => {
+    it("displays an error dialog if the resource details cannot be loaded due to an unexpected error", async () => {
       expect.assertions(2);
       const error = new Error("Unexpected error");
-      const requestBextMockImpl = request => {
+      const requestBextMockImpl = (request) => {
         switch (request) {
           case "passbolt.resources.find-all-by-ids-for-display-permissions":
             throw error;
@@ -195,13 +240,13 @@ describe("As Lu I should see the share dialog", () => {
 
       // Throw general error message
       expect(props.onClose).toBeCalled();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: error });
     });
 
-    it('closes the share dialogs if the resource details cannot be loaded due to users not entering their passphrase when requested. This happens when the metadata need to be decrypted.', async() => {
+    it("closes the share dialogs if the resource details cannot be loaded due to users not entering their passphrase when requested. This happens when the metadata need to be decrypted.", async () => {
       expect.assertions(2);
       const error = new UserAbortsOperationError();
-      const requestBextMockImpl = request => {
+      const requestBextMockImpl = (request) => {
         switch (request) {
           case "passbolt.resources.find-all-by-ids-for-display-permissions":
             throw error;
@@ -215,12 +260,12 @@ describe("As Lu I should see the share dialog", () => {
       expect(props.dialogContext.open).not.toHaveBeenCalled();
     });
 
-    it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
+    it("As LU I should see an error dialog if the submit operation fails for an unexpected reason", async () => {
       expect.assertions(1);
       const requestBextMockImpl = (request, option) => {
         switch (request) {
           case "passbolt.share.search-aros":
-            return context.users.filter(user => user.username.indexOf(option) !== -1);
+            return context.users.filter((user) => user.username.indexOf(option) !== -1);
         }
       };
       mockContextRequest(requestBextMockImpl);
@@ -230,43 +275,46 @@ describe("As Lu I should see the share dialog", () => {
 
       // Mock the request function to make it return an error.
       const error = new PassboltApiFetchError("Jest simulate API error.");
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(context.port, "request").mockImplementationOnce(() => {
         throw error;
       });
 
       await page.savePermissions();
 
       // Throw general error message
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, { error: error });
     });
   });
 
-  describe('As LU I can start sharing one resources', () => {
+  describe("As LU I can start sharing one resources", () => {
     const shareDialogProps = {
       resourcesIds: ["8e3874ae-4b40-590b-968a-418f704b9d9a"],
     };
     /**
      * I should see the share dialog
      */
-    beforeEach(async() => {
-      const requestResourcesMockImpl = path => mockResultsResources[path];
+    beforeEach(async () => {
+      const requestResourcesMockImpl = (path) => mockResultsResources[path];
       mockContextRequest(requestResourcesMockImpl);
-      context.setContext({shareDialogProps});
+      context.setContext({ shareDialogProps });
       page = new ShareDialogPage(context, props);
     });
 
-    it('As LU I see a success toaster message after sharing one resource to users and groups with success', async() => {
+    it("As LU I see a success toaster message after sharing one resource to users and groups with success", async () => {
       expect.assertions(12);
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.resources.find-all-by-ids-for-display-permissions', shareDialogProps.resourcesIds);
+      expect(context.port.request).toHaveBeenCalledWith(
+        "passbolt.resources.find-all-by-ids-for-display-permissions",
+        shareDialogProps.resourcesIds,
+      );
       expect(page.exists()).toBeTruthy();
-      expect(page.title).toBe('Share resource');
-      expect(page.subtitle).toBe('apache');
+      expect(page.title).toBe("Share resource");
+      expect(page.subtitle).toBe("apache");
       expect(page.count).toBe(11);
 
       const requestBextMockImpl = (request, option) => {
         switch (request) {
           case "passbolt.share.search-aros":
-            return context.users.filter(user => user.username.indexOf(option) !== -1);
+            return context.users.filter((user) => user.username.indexOf(option) !== -1);
         }
       };
       mockContextRequest(requestBextMockImpl);
@@ -275,60 +323,96 @@ describe("As Lu I should see the share dialog", () => {
       await page.selectUserOrGroup(1);
 
       expect(page.count).toBe(12);
-      expect(page.aroName(12)).toBe('Admin User');
-      expect(page.aroDetails(12)).toBe('admin@passbolt.com');
-      expect(page.selectRights(12).textContent).toBe('can read');
+      expect(page.aroName(12)).toBe("Admin User");
+      expect(page.aroDetails(12)).toBe("admin@passbolt.com");
+      expect(page.selectRights(12).textContent).toBe("can read");
 
       const requestMockImpl = jest.fn();
       mockContextRequest(requestMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       await page.savePermissions();
 
-      const permissionDto = [{"aco": "Resource", "aco_foreign_key": shareDialogProps.resourcesIds[0], "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1},
-        {"aco": "Resource", "aco_foreign_key": "daaf057e-7fc3-5537-a8a9-e8c151890878", "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1},
-        {"aco": "Resource", "aco_foreign_key": "690b6e40-f371-579c-b0c6-86e8ef383adc", "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1},
-        {"aco": "Resource", "aco_foreign_key": "ecf0ed85-3bfc-5f45-b11d-74e9a86aa313", "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1}];
+      const permissionDto = [
+        {
+          aco: "Resource",
+          aco_foreign_key: shareDialogProps.resourcesIds[0],
+          aro: "User",
+          aro_foreign_key: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+          is_new: true,
+          type: 1,
+        },
+        {
+          aco: "Resource",
+          aco_foreign_key: "daaf057e-7fc3-5537-a8a9-e8c151890878",
+          aro: "User",
+          aro_foreign_key: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+          is_new: true,
+          type: 1,
+        },
+        {
+          aco: "Resource",
+          aco_foreign_key: "690b6e40-f371-579c-b0c6-86e8ef383adc",
+          aro: "User",
+          aro_foreign_key: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+          is_new: true,
+          type: 1,
+        },
+        {
+          aco: "Resource",
+          aco_foreign_key: "ecf0ed85-3bfc-5f45-b11d-74e9a86aa313",
+          aro: "User",
+          aro_foreign_key: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+          is_new: true,
+          type: 1,
+        },
+      ];
 
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.share.resources.save", shareDialogProps.resourcesIds, permissionDto);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith('The permissions have been changed successfully.');
+      expect(context.port.request).toHaveBeenCalledWith(
+        "passbolt.share.resources.save",
+        shareDialogProps.resourcesIds,
+        permissionDto,
+      );
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The permissions have been changed successfully.",
+      );
       expect(props.onClose).toBeCalled();
     });
   });
 
-  describe('As LU I can start sharing one folder', () => {
+  describe("As LU I can start sharing one folder", () => {
     const shareDialogProps = {
       foldersIds: ["8e3874ae-4b40-590b-968a-418f704b9d9a"],
     };
     /**
      * I should see the share dialog
      */
-    beforeEach(async() => {
-      const requestResourcesMockImpl = path => mockResultsFolders[path];
+    beforeEach(async () => {
+      const requestResourcesMockImpl = (path) => mockResultsFolders[path];
       mockContextRequest(requestResourcesMockImpl);
-      context.setContext({shareDialogProps});
+      context.setContext({ shareDialogProps });
       page = new ShareDialogPage(context, props);
     });
 
-    it('As LU I see a success toaster message after sharing one folder to users and groups with success', async() => {
+    it("As LU I see a success toaster message after sharing one folder to users and groups with success", async () => {
       expect.assertions(12);
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.share.get-folders', shareDialogProps.foldersIds);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.share.get-folders", shareDialogProps.foldersIds);
       expect(page.exists()).toBeTruthy();
-      expect(page.title).toBe('Share folder');
-      expect(page.subtitle).toBe('apache');
+      expect(page.title).toBe("Share folder");
+      expect(page.subtitle).toBe("apache");
       expect(page.count).toBe(2);
 
       const requestKeyInfoMockImpl = () => ({
-        fingerprint: "079D6F4FDA3BFDC2D8E562D8AA44B1DA4BFB36B6"
+        fingerprint: "079D6F4FDA3BFDC2D8E562D8AA44B1DA4BFB36B6",
       });
       mockContextRequest(requestKeyInfoMockImpl);
 
       const requestBextMockImpl = (request, option) => {
         switch (request) {
           case "passbolt.keyring.get-public-key-info-by-user":
-            return {fingerprint: "079D6F4FDA3BFDC2D8E562D8AA44B1DA4BFB36B6"};
+            return { fingerprint: "079D6F4FDA3BFDC2D8E562D8AA44B1DA4BFB36B6" };
           case "passbolt.share.search-aros":
-            return context.users.filter(user => user.username.indexOf(option) !== -1);
+            return context.users.filter((user) => user.username.indexOf(option) !== -1);
         }
       };
       mockContextRequest(requestBextMockImpl);
@@ -338,26 +422,41 @@ describe("As Lu I should see the share dialog", () => {
       await page.selectUserOrGroup(2);
 
       expect(page.count).toBe(3);
-      expect(page.aroName(3)).toBe('Adele Goldstine');
-      expect(page.aroDetails(3)).toBe('adele@passbolt.com');
-      expect(page.selectRights(3).textContent).toBe('can read');
+      expect(page.aroName(3)).toBe("Adele Goldstine");
+      expect(page.aroDetails(3)).toBe("adele@passbolt.com");
+      expect(page.selectRights(3).textContent).toBe("can read");
 
       const requestMockImpl = jest.fn();
       mockContextRequest(requestMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, "displaySuccess").mockImplementation(() => {});
 
       await page.savePermissions();
 
-      const permissionDto = [{"aco": "Folder", "aco_foreign_key": shareDialogProps.foldersIds[0], "aro": "User", "aro_foreign_key": "af5e1f70-a0ee-5b76-935b-c846f8a6a190", "is_new": true, "type": 1}];
+      const permissionDto = [
+        {
+          aco: "Folder",
+          aco_foreign_key: shareDialogProps.foldersIds[0],
+          aro: "User",
+          aro_foreign_key: "af5e1f70-a0ee-5b76-935b-c846f8a6a190",
+          is_new: true,
+          type: 1,
+        },
+      ];
 
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.share.folders.save", shareDialogProps.foldersIds[0], permissionDto);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith('The permissions have been changed successfully.');
+      expect(context.port.request).toHaveBeenCalledWith(
+        "passbolt.share.folders.save",
+        shareDialogProps.foldersIds[0],
+        permissionDto,
+      );
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith(
+        "The permissions have been changed successfully.",
+      );
       expect(props.onClose).toBeCalled();
     });
   });
 
   //@todo: skipped as not supported for the moment. We can share only 1 folder at a time or multiple resources but not multiple folders or folders and resources at the same time
-  describe.skip('As LU I can\'t start sharing folders and resources at the same time', () => {
+  describe.skip("As LU I can't start sharing folders and resources at the same time", () => {
     const shareDialogProps = {
       resourcesIds: ["8e3874ae-4b40-590b-968a-418f704b9d9a"],
       foldersIds: ["8e3874ae-4b40-590b-968a-418f704b9d9a"],
@@ -365,22 +464,22 @@ describe("As Lu I should see the share dialog", () => {
     /**
      * I should see the share dialog
      */
-    beforeEach(async() => {
-      const requestResourcesMockImpl = path => mockResultsResourcesAndFolders[path];
+    beforeEach(async () => {
+      const requestResourcesMockImpl = (path) => mockResultsResourcesAndFolders[path];
       mockContextRequest(requestResourcesMockImpl);
-      context.setContext({shareDialogProps});
+      context.setContext({ shareDialogProps });
       page = new ShareDialogPage(context, props);
     });
 
-    it('As LU I see a error dialog message after try to sharing folders and resources at the same time', async() => {
+    it("As LU I see a error dialog message after try to sharing folders and resources at the same time", async () => {
       expect.assertions(3);
       expect(page.exists()).toBeTruthy();
-      expect(page.title).toBe('Share 2 items');
+      expect(page.title).toBe("Share 2 items");
 
       const requestBextMockImpl = (request, option) => {
         switch (request) {
           case "passbolt.share.search-aros":
-            return context.users.filter(user => user.username.indexOf(option) !== -1);
+            return context.users.filter((user) => user.username.indexOf(option) !== -1);
         }
       };
       mockContextRequest(requestBextMockImpl);
@@ -390,7 +489,9 @@ describe("As Lu I should see the share dialog", () => {
 
       await page.savePermissions();
       // Throw general error message
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: new Error("Multi resource and folder share is not implemented.")});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {
+        error: new Error("Multi resource and folder share is not implemented."),
+      });
     });
   });
 });

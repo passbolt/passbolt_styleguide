@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import AskForAuthenticationHelpCredentialLost from "./AskForAuthenticationHelpCredentialLost";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -27,9 +27,9 @@ export default class AskForAuthenticationHelpCredentialLostTestPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AskForAuthenticationHelpCredentialLost {...props}/>
+        <AskForAuthenticationHelpCredentialLost {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -37,14 +37,14 @@ export default class AskForAuthenticationHelpCredentialLostTestPage {
    * Returns the request help
    */
   get requestHelpButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * Request help
    */
   async requestHelp() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.requestHelpButton, leftClick);
   }
 
@@ -52,14 +52,14 @@ export default class AskForAuthenticationHelpCredentialLostTestPage {
    * Returns the try again link element
    */
   get tryAgainLink() {
-    return this._page.container.querySelector('.form-actions button.link');
+    return this._page.container.querySelector(".form-actions button.link");
   }
 
   /**
    * Try again
    */
   async tryAgain() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.tryAgainLink, leftClick);
   }
 }

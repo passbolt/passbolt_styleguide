@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
@@ -34,12 +34,12 @@ export default class EditUserPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <DialogContextProvider>
-            <ManageDialogs/>
-            <EditUser {...props}/>
+            <ManageDialogs />
+            <EditUser {...props} />
           </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
     this.setupPageObjects();
   }
@@ -101,56 +101,56 @@ class EditUserPageObject {
    * Returns the dialog element
    */
   get dialog() {
-    return this._container.querySelector('.user-edit-dialog');
+    return this._container.querySelector(".user-edit-dialog");
   }
 
   /**
    * Returns the dialog close element
    */
   get dialogClose() {
-    return this._container.querySelector('.dialog-close');
+    return this._container.querySelector(".dialog-close");
   }
 
   /**
    * Returns the first name input element
    */
   get firstName() {
-    return this._container.querySelector('#user-first-name-input');
+    return this._container.querySelector("#user-first-name-input");
   }
 
   /**
    * Returns the first name error mesage input element
    */
   get firstNameErrorMessage() {
-    return this._container.querySelector('.first_name.error-message');
+    return this._container.querySelector(".first_name.error-message");
   }
 
   /**
    * Returns the last name input element
    */
   get lastName() {
-    return this._container.querySelector('#user-last-name-input');
+    return this._container.querySelector("#user-last-name-input");
   }
 
   /**
    * Returns the last name error mesage input element
    */
   get lastNameErrorMessage() {
-    return this._container.querySelector('.last_name.error-message');
+    return this._container.querySelector(".last_name.error-message");
   }
 
   /**
    * Returns the username / email input element
    */
   get email() {
-    return this._container.querySelector('#user-username-input');
+    return this._container.querySelector("#user-username-input");
   }
 
   /**
    * Returns the select role element
    */
   get selectRole() {
-    return this._container.querySelector('#select_role');
+    return this._container.querySelector("#select_role");
   }
 
   /**
@@ -158,21 +158,21 @@ class EditUserPageObject {
    * @return {string}
    */
   get roleSelected() {
-    return this._container.querySelector('#select_role .value').textContent;
+    return this._container.querySelector("#select_role .value").textContent;
   }
 
   /**
    * Returns the role input element
    */
   getRoleList(index) {
-    return this._container.querySelectorAll('#select_role .option')[index - 1];
+    return this._container.querySelectorAll("#select_role .option")[index - 1];
   }
 
   /**
    * Returns the is suspended checkbox element
    */
   get isSuspended() {
-    return this._container.querySelector('#is_suspended_checkbox');
+    return this._container.querySelector("#is_suspended_checkbox");
   }
 
   /**
@@ -193,36 +193,36 @@ class EditUserPageObject {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._container.querySelector('.submit-wrapper .cancel');
+    return this._container.querySelector(".submit-wrapper .cancel");
   }
 
   get errorDialog() {
-    return this._container.querySelector('.error-dialog');
+    return this._container.querySelector(".error-dialog");
   }
 
   get errorDialogMessage() {
-    return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content');
+    return this._container.querySelector(".error-dialog .dialog .dialog-content .form-content");
   }
 
   /**
    * Returns the username warning mesage input element
    */
   get usernameWarningMessage() {
-    return this._container.querySelector('.username.warning-message');
+    return this._container.querySelector(".username.warning-message");
   }
 
   /**
    * Returns the first name warning mesage input element
    */
   get firstnameWarningMessage() {
-    return this._container.querySelector('.firstname.warning-message');
+    return this._container.querySelector(".firstname.warning-message");
   }
 
   /**
    * Returns the last name warning mesage input element
    */
   get lastnameWarningMessage() {
-    return this._container.querySelector('.lastname.warning-message');
+    return this._container.querySelector(".lastname.warning-message");
   }
 
   /**
@@ -233,25 +233,25 @@ class EditUserPageObject {
   }
 
   /** Click on the element */
-  async click(element)  {
+  async click(element) {
     await this.user.click(element);
   }
 
   /** Click without wait for on the element */
-  escapeKey()  {
+  escapeKey() {
     // Escape key down event
-    const escapeKeyDown = {keyCode: 27};
+    const escapeKeyDown = { keyCode: 27 };
     fireEvent.keyDown(this.dialog, escapeKeyDown);
   }
 
   /** fill the input element with data */
-  fillInput(element, data)  {
-    const dataInputEvent = {target: {value: data}};
+  fillInput(element, data) {
+    const dataInputEvent = { target: { value: data } };
     fireEvent.change(element, dataInputEvent);
   }
 
   /** on keypup element */
-  keyUpInput(component)  {
-    fireEvent.keyUp(component, {keyCode: 38});
+  keyUpInput(component) {
+    fireEvent.keyUp(component, { keyCode: 38 });
   }
 }

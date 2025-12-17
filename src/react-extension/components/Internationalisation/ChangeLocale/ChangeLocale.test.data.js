@@ -10,8 +10,8 @@ export function defaultProps() {
     context: {
       locale: "en-UK",
       siteSettings: new SiteSettings(siteSettingsFixture),
-      onUpdateLocaleRequested: jest.fn()
-    }
+      onUpdateLocaleRequested: jest.fn(),
+    },
   };
 
   return props;

@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,14 +12,13 @@
  * @since         3.10.0
  */
 
-
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayUserBadgeMenu from "./DisplayUserBadgeMenu";
-import {waitForTrue} from "../../../../../test/utils/waitFor";
+import { waitForTrue } from "../../../../../test/utils/waitFor";
 
 /**
  * The DisplayUserBadgeMenuPage component represented as a page
@@ -36,11 +34,11 @@ export default class DisplayUserBadgeMenuPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
-            <DisplayUserBadgeMenu {...props}/>
+            <DisplayUserBadgeMenu {...props} />
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -49,7 +47,7 @@ export default class DisplayUserBadgeMenuPage {
    * @returns {boolean}
    */
   get attentionRequired() {
-    return Boolean(this._page.container.querySelector('.attention-required'));
+    return Boolean(this._page.container.querySelector(".attention-required"));
   }
 
   /**
@@ -57,7 +55,7 @@ export default class DisplayUserBadgeMenuPage {
    * @returns {HTMLElement|null}
    */
   get userBadgeMenu() {
-    return this._page.container.querySelector('.avatar-with-name');
+    return this._page.container.querySelector(".avatar-with-name");
   }
 
   /**
@@ -65,7 +63,7 @@ export default class DisplayUserBadgeMenuPage {
    * @returns {HTMLElement|null}
    */
   get mobileTransferMenuItem() {
-    return this._page.container.querySelector('#user-badge-menu-mobile');
+    return this._page.container.querySelector("#user-badge-menu-mobile");
   }
 
   /**
@@ -73,7 +71,7 @@ export default class DisplayUserBadgeMenuPage {
    * @returns {HTMLElement|null}
    */
   get dropdownMenu() {
-    return this._page.container.querySelector('.dropdown-content');
+    return this._page.container.querySelector(".dropdown-content");
   }
 
   /**
@@ -81,9 +79,8 @@ export default class DisplayUserBadgeMenuPage {
    * @returns {Promise<void>}
    */
   async openMenu() {
-    const leftClick = {button: 1};
+    const leftClick = { button: 1 };
     fireEvent.click(this.userBadgeMenu, leftClick);
     await waitForTrue(() => Boolean(this.dropdownMenu));
   }
 }
-

@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import {ApiClient} from "./apiClient";
-import {ApiClientOptions} from "./apiClientOptions";
-import {enableFetchMocks} from 'jest-fetch-mock';
+import { ApiClient } from "./apiClient";
+import { ApiClientOptions } from "./apiClientOptions";
+import { enableFetchMocks } from "jest-fetch-mock";
 import each from "jest-each";
-import {v4 as uuid} from "uuid";
+import { v4 as uuid } from "uuid";
 import PassboltBadResponseError from "../Error/PassboltBadResponseError";
 import PassboltServiceUnavailableError from "../Error/PassboltServiceUnavailableError";
 import PassboltApiFetchError from "../Error/PassboltApiFetchError";
@@ -26,43 +26,42 @@ beforeEach(() => {
 });
 
 //@todo: put in a mock lib like it is done in passbolt-browser-extension
-const mockApiResponseError = (status, errorMessage, body = {}) => Promise.resolve({
-  status: status,
-  body: JSON.stringify({
-    header: {
-      message: errorMessage,
-      status: status
-    },
-    body: body
-  })
-});
-
-const mockApiResponse = (body = {}, header = {}) => Promise.resolve(JSON.stringify({header: header, body: body}));
-
-describe("Unit testing apiClient with mocked fetch", () => {
-  const responseHtml = '<html><head></head><body></body></html>';
-  const responseJson = JSON.stringify({
-    header: {
-      test: "test"
-    },
-    body: {
-      resource: {}
-    }
+const mockApiResponseError = (status, errorMessage, body = {}) =>
+  Promise.resolve({
+    status: status,
+    body: JSON.stringify({
+      header: {
+        message: errorMessage,
+        status: status,
+      },
+      body: body,
+    }),
   });
 
-  const url = 'https://test.passbolt.com/passbolt-unit-test';
-  const resourceName = 'fake-resource';
-  const options = (new ApiClientOptions())
-    .setBaseUrl(url)
-    .setResourceName(resourceName);
+const mockApiResponse = (body = {}, header = {}) => Promise.resolve(JSON.stringify({ header: header, body: body }));
+
+describe("Unit testing apiClient with mocked fetch", () => {
+  const responseHtml = "<html><head></head><body></body></html>";
+  const responseJson = JSON.stringify({
+    header: {
+      test: "test",
+    },
+    body: {
+      resource: {},
+    },
+  });
+
+  const url = "https://test.passbolt.com/passbolt-unit-test";
+  const resourceName = "fake-resource";
+  const options = new ApiClientOptions().setBaseUrl(url).setResourceName(resourceName);
 
   each([
-    {responseBody: responseHtml, method: "GET"},
-    {responseBody: responseHtml, method: "POST"},
-    {responseBody: responseJson, method: "GET"},
-    {responseBody: responseJson, method: "POST"},
-  ]).describe(`Should call the endpoint and return the response as-is with sendRequest`, scenario => {
-    it(`scenario: ${JSON.stringify(scenario)}`, async() => {
+    { responseBody: responseHtml, method: "GET" },
+    { responseBody: responseHtml, method: "POST" },
+    { responseBody: responseJson, method: "GET" },
+    { responseBody: responseJson, method: "POST" },
+  ]).describe(`Should call the endpoint and return the response as-is with sendRequest`, (scenario) => {
+    it(`scenario: ${JSON.stringify(scenario)}`, async () => {
       expect.assertions(4);
       const testClient = new ApiClient(options);
 
@@ -71,7 +70,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
       const spyOnAssertMethod = jest.spyOn(testClient, "assertMethod");
       const spyOnAssertBody = jest.spyOn(testClient, "assertBody");
 
-      fetch.mockResponseOnce(async() => scenario.responseBody);
+      fetch.mockResponseOnce(async () => scenario.responseBody);
       const result = await testClient.sendRequest(scenario.method, currentUrl);
       expect(result.text()).resolves.toStrictEqual(scenario.responseBody);
       expect(spyOnAssertUrl).toHaveBeenLastCalledWith(currentUrl);
@@ -80,7 +79,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     });
   });
 
-  it("Should call the endpoint with form data body and return the response as-is with sendRequest", async() => {
+  it("Should call the endpoint with form data body and return the response as-is with sendRequest", async () => {
     expect.assertions(4);
     const testClient = new ApiClient(options);
 
@@ -89,9 +88,9 @@ describe("Unit testing apiClient with mocked fetch", () => {
     const spyOnAssertMethod = jest.spyOn(testClient, "assertMethod");
     const spyOnAssertBody = jest.spyOn(testClient, "assertBody");
     const body = new FormData();
-    body.append('data[test]', "test");
+    body.append("data[test]", "test");
 
-    fetch.mockResponseOnce(async() => responseJson);
+    fetch.mockResponseOnce(async () => responseJson);
     const result = await testClient.sendRequest("POST", currentUrl, body);
     expect(result.text()).resolves.toStrictEqual(responseJson);
     expect(spyOnAssertUrl).toHaveBeenLastCalledWith(currentUrl);
@@ -100,10 +99,10 @@ describe("Unit testing apiClient with mocked fetch", () => {
   });
 
   each([
-    {responseBody: responseJson, method: "GET"},
-    {responseBody: responseJson, method: "POST"},
-  ]).describe(`should call the endpoint and parse the response as JSON with fetchAndHandleResponse`, scenario => {
-    it(`scenario: ${JSON.stringify(scenario)}`, async() => {
+    { responseBody: responseJson, method: "GET" },
+    { responseBody: responseJson, method: "POST" },
+  ]).describe(`should call the endpoint and parse the response as JSON with fetchAndHandleResponse`, (scenario) => {
+    it(`scenario: ${JSON.stringify(scenario)}`, async () => {
       expect.assertions(4);
       const testClient = new ApiClient(options);
 
@@ -112,7 +111,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
       const spyOnAssertMethod = jest.spyOn(testClient, "assertMethod");
       const spyOnAssertBody = jest.spyOn(testClient, "assertBody");
 
-      fetch.mockResponseOnce(async() => scenario.responseBody);
+      fetch.mockResponseOnce(async () => scenario.responseBody);
       const result = await testClient.fetchAndHandleResponse(scenario.method, currentUrl);
       expect(result).toStrictEqual(JSON.parse(scenario.responseBody));
       expect(spyOnAssertUrl).toHaveBeenLastCalledWith(currentUrl);
@@ -121,18 +120,20 @@ describe("Unit testing apiClient with mocked fetch", () => {
     });
   });
 
-  it("should throw an exception if server respond with an error", async() => {
+  it("should throw an exception if server respond with an error", async () => {
     expect.assertions(1);
     const testClient = new ApiClient(options);
     const currentUrl = new URL(url);
     const errorMessage = "Something went wrong!";
 
-    fetch.mockResponse(() => { throw new Error(errorMessage); });
+    fetch.mockResponse(() => {
+      throw new Error(errorMessage);
+    });
 
     expect(testClient.fetchAndHandleResponse("POST", currentUrl)).rejects.toThrowError(PassboltServiceUnavailableError);
   });
 
-  it("should throw an exception if server respond with an error", async() => {
+  it("should throw an exception if server respond with an error", async () => {
     expect.assertions(1);
     const testClient = new ApiClient(options);
     const currentUrl = new URL(url);
@@ -140,43 +141,47 @@ describe("Unit testing apiClient with mocked fetch", () => {
 
     fetch.mockResponse(() => mockApiResponseError(500, errorMessage));
 
-    expect(testClient.fetchAndHandleResponse("POST", currentUrl)).rejects.toThrowError(new PassboltApiFetchError(errorMessage));
+    expect(testClient.fetchAndHandleResponse("POST", currentUrl)).rejects.toThrowError(
+      new PassboltApiFetchError(errorMessage),
+    );
   });
 
-  it("should throw an exception if response is not JSON but JSON is expected", async() => {
+  it("should throw an exception if response is not JSON but JSON is expected", async () => {
     expect.assertions(1);
     const testClient = new ApiClient(options);
     const currentUrl = new URL(url);
 
-    fetch.mockResponse(async() => responseHtml);
+    fetch.mockResponse(async () => responseHtml);
 
     expect(testClient.fetchAndHandleResponse("POST", currentUrl)).rejects.toThrowError(PassboltBadResponseError);
   });
 
-  const assertUrlEmptyError = new TypeError('ApliClient.assertUrl error: url is required.');
-  const assertUrlInvalidError = new TypeError('ApliClient.assertUrl error: url should be a valid URL object.');
-  const assertUrlInvalidProtocolError = new TypeError('ApliClient.assertUrl error: url protocol should only be https or http.');
+  const assertUrlEmptyError = new TypeError("ApliClient.assertUrl error: url is required.");
+  const assertUrlInvalidError = new TypeError("ApliClient.assertUrl error: url should be a valid URL object.");
+  const assertUrlInvalidProtocolError = new TypeError(
+    "ApliClient.assertUrl error: url protocol should only be https or http.",
+  );
   each([
-    {url: null, error: assertUrlEmptyError},
-    {url: undefined, error: assertUrlEmptyError},
-    {url: false, error: assertUrlEmptyError},
-    {url: 0, error: assertUrlEmptyError},
+    { url: null, error: assertUrlEmptyError },
+    { url: undefined, error: assertUrlEmptyError },
+    { url: false, error: assertUrlEmptyError },
+    { url: 0, error: assertUrlEmptyError },
 
-    {url: 1, error: assertUrlInvalidError},
-    {url: "test", error: assertUrlInvalidError},
-    {url: "file:///etc/", error: assertUrlInvalidError},
-    {url: 'https://www.passbolt.com', error: assertUrlInvalidError},
+    { url: 1, error: assertUrlInvalidError },
+    { url: "test", error: assertUrlInvalidError },
+    { url: "file:///etc/", error: assertUrlInvalidError },
+    { url: "https://www.passbolt.com", error: assertUrlInvalidError },
 
-    {url: new URL("file:///etc/"), error: assertUrlInvalidProtocolError},
-    {url: new URL('ssh://passbolt.com'), error: assertUrlInvalidProtocolError},
-    {url: new URL('chrome-extension://passbolt.com'), error: assertUrlInvalidProtocolError},
-  ]).describe("should throw an Error if the URL can't be asserted", scenario => {
-    it(`scenario: ${JSON.stringify(scenario)}`, async() => {
+    { url: new URL("file:///etc/"), error: assertUrlInvalidProtocolError },
+    { url: new URL("ssh://passbolt.com"), error: assertUrlInvalidProtocolError },
+    { url: new URL("chrome-extension://passbolt.com"), error: assertUrlInvalidProtocolError },
+  ]).describe("should throw an Error if the URL can't be asserted", (scenario) => {
+    it(`scenario: ${JSON.stringify(scenario)}`, async () => {
       expect.assertions(3);
       const testClient = new ApiClient(options);
       const spy = jest.spyOn(testClient, "assertUrl");
 
-      fetch.mockResponse(async() => responseJson);
+      fetch.mockResponse(async () => responseJson);
       try {
         await testClient.sendRequest("GET", scenario.url);
       } catch (e) {
@@ -193,37 +198,37 @@ describe("Unit testing apiClient with mocked fetch", () => {
   });
 
   each([
-    {url: new URL("https://www.passbolt.com")},
-    {url: new URL("https://www.passbolt.com/sub-folder/")},
-    {url: new URL('https://www.google.com')},
-  ]).describe("should successfully assert the URL if it's correct", scenario => {
+    { url: new URL("https://www.passbolt.com") },
+    { url: new URL("https://www.passbolt.com/sub-folder/") },
+    { url: new URL("https://www.google.com") },
+  ]).describe("should successfully assert the URL if it's correct", (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, () => {
       expect.assertions(3);
       const testClient = new ApiClient(options);
       const spy = jest.spyOn(testClient, "assertUrl");
 
-      fetch.mockResponse(async() => responseJson);
+      fetch.mockResponse(async () => responseJson);
       expect(testClient.sendRequest("GET", scenario.url)).resolves.not.toThrow();
       expect(testClient.fetchAndHandleResponse("GET", scenario.url)).resolves.not.toThrow();
       expect(spy).toHaveBeenCalledTimes(2);
     });
   });
 
-  const assertMethodTypeError = new TypeError('ApiClient.assertValidMethod method should be a string.');
+  const assertMethodTypeError = new TypeError("ApiClient.assertValidMethod method should be a string.");
   each([
-    {method: null, error: assertMethodTypeError},
-    {method: undefined, error: assertMethodTypeError},
-    {method: false, error: assertMethodTypeError},
-    {method: 0, error: assertMethodTypeError},
-    {method: 1, error: assertMethodTypeError},
-  ]).describe("should throw an Error if the method is not a string", scenario => {
-    it(`scenario: ${JSON.stringify(scenario)}`, async() => {
+    { method: null, error: assertMethodTypeError },
+    { method: undefined, error: assertMethodTypeError },
+    { method: false, error: assertMethodTypeError },
+    { method: 0, error: assertMethodTypeError },
+    { method: 1, error: assertMethodTypeError },
+  ]).describe("should throw an Error if the method is not a string", (scenario) => {
+    it(`scenario: ${JSON.stringify(scenario)}`, async () => {
       expect.assertions(3);
       const testClient = new ApiClient(options);
       const spy = jest.spyOn(testClient, "assertMethod");
       const currentUrl = new URL(url);
 
-      fetch.mockResponse(async() => responseJson);
+      fetch.mockResponse(async () => responseJson);
       try {
         await testClient.sendRequest(scenario.method, currentUrl);
       } catch (e) {
@@ -240,69 +245,69 @@ describe("Unit testing apiClient with mocked fetch", () => {
     });
   });
 
+  each([{ method: "HEAD" }, { method: "OPTION" }, { method: "head" }, { method: "option" }]).describe(
+    "should throw an Error if the method is not unsupported",
+    (scenario) => {
+      it(`scenario: ${JSON.stringify(scenario)}`, async () => {
+        expect.assertions(3);
+        const testClient = new ApiClient(options);
+        const spy = jest.spyOn(testClient, "assertMethod");
+        const assertMethodUnsupportedError = new TypeError(
+          `ApiClient.assertValidMethod error: method ${scenario.method} is not supported.`,
+        );
+        const currentUrl = new URL(url);
+
+        fetch.mockResponse(async () => responseJson);
+        try {
+          await testClient.sendRequest(scenario.method, currentUrl);
+        } catch (e) {
+          expect(e).toStrictEqual(assertMethodUnsupportedError);
+        }
+
+        try {
+          await testClient.fetchAndHandleResponse(scenario.method, currentUrl);
+        } catch (e) {
+          expect(e).toStrictEqual(assertMethodUnsupportedError);
+        }
+
+        expect(spy).toHaveBeenCalledTimes(2);
+      });
+    },
+  );
+
   each([
-    {method: "HEAD"},
-    {method: "OPTION"},
-    {method: "head"},
-    {method: "option"},
-  ]).describe("should throw an Error if the method is not unsupported", scenario => {
-    it(`scenario: ${JSON.stringify(scenario)}`, async() => {
-      expect.assertions(3);
-      const testClient = new ApiClient(options);
-      const spy = jest.spyOn(testClient, "assertMethod");
-      const assertMethodUnsupportedError = new TypeError(`ApiClient.assertValidMethod error: method ${scenario.method} is not supported.`);
-      const currentUrl = new URL(url);
-
-      fetch.mockResponse(async() => responseJson);
-      try {
-        await testClient.sendRequest(scenario.method, currentUrl);
-      } catch (e) {
-        expect(e).toStrictEqual(assertMethodUnsupportedError);
-      }
-
-      try {
-        await testClient.fetchAndHandleResponse(scenario.method, currentUrl);
-      } catch (e) {
-        expect(e).toStrictEqual(assertMethodUnsupportedError);
-      }
-
-      expect(spy).toHaveBeenCalledTimes(2);
-    });
-  });
-
-  each([
-    {method: "GET"},
-    {method: "POST"},
-    {method: "PUT"},
-    {method: "DELETE"},
-    {method: "get"},
-    {method: "post"},
-    {method: "put"},
-    {method: "delete"},
-  ]).describe("should successfully assert the method if it's correct", scenario => {
+    { method: "GET" },
+    { method: "POST" },
+    { method: "PUT" },
+    { method: "DELETE" },
+    { method: "get" },
+    { method: "post" },
+    { method: "put" },
+    { method: "delete" },
+  ]).describe("should successfully assert the method if it's correct", (scenario) => {
     it(`scenario: ${JSON.stringify(scenario)}`, () => {
       expect.assertions(3);
       const testClient = new ApiClient(options);
       const spy = jest.spyOn(testClient, "assertMethod");
       const currentUrl = new URL(url);
 
-      fetch.mockResponse(async() => responseJson);
+      fetch.mockResponse(async () => responseJson);
       expect(testClient.sendRequest(scenario.method, currentUrl)).resolves.not.toThrow();
       expect(testClient.fetchAndHandleResponse(scenario.method, currentUrl)).resolves.not.toThrow();
       expect(spy).toHaveBeenCalledTimes(2);
     });
   });
 
-  const assertIdEmptyError = new TypeError('ApiClient.assertValidId error: id cannot be empty');
-  const assertIdTypeError = new TypeError('ApiClient.assertValidId error: id should be a string');
+  const assertIdEmptyError = new TypeError("ApiClient.assertValidId error: id cannot be empty");
+  const assertIdTypeError = new TypeError("ApiClient.assertValidId error: id should be a string");
   each([
-    {id: null, error: assertIdEmptyError},
-    {id: undefined, error: assertIdEmptyError},
-    {id: false, error: assertIdEmptyError},
-    {id: 0, error: assertIdEmptyError},
-    {id: {}, error: assertIdTypeError},
-  ]).describe("should throw an Error if the ID can't be asserted", scenario => {
-    it(`scenario: ${JSON.stringify(scenario)}`, async() => {
+    { id: null, error: assertIdEmptyError },
+    { id: undefined, error: assertIdEmptyError },
+    { id: false, error: assertIdEmptyError },
+    { id: 0, error: assertIdEmptyError },
+    { id: {}, error: assertIdTypeError },
+  ]).describe("should throw an Error if the ID can't be asserted", (scenario) => {
+    it(`scenario: ${JSON.stringify(scenario)}`, async () => {
       expect.assertions(1);
       const testClient = new ApiClient(options);
 
@@ -314,34 +319,32 @@ describe("Unit testing apiClient with mocked fetch", () => {
     });
   });
 
-  each([
-    {id: "https://www.passbolt.com"},
-    {id: uuid()},
-    {id: "me"},
-    {id: "test.json"},
-  ]).describe("should successfully assert the ID if it's correct", scenario => {
-    it(`scenario: ${JSON.stringify(scenario)}`, () => {
-      expect.assertions(1);
-      const testClient = new ApiClient(options);
+  each([{ id: "https://www.passbolt.com" }, { id: uuid() }, { id: "me" }, { id: "test.json" }]).describe(
+    "should successfully assert the ID if it's correct",
+    (scenario) => {
+      it(`scenario: ${JSON.stringify(scenario)}`, () => {
+        expect.assertions(1);
+        const testClient = new ApiClient(options);
 
-      expect(() => testClient.assertValidId(scenario.id)).not.toThrow();
-    });
-  });
+        expect(() => testClient.assertValidId(scenario.id)).not.toThrow();
+      });
+    },
+  );
 
   const assertBodyError = new TypeError(`ApiClient.assertBody error: body should be a string or a FormData.`);
   each([
-    {body: 1, error: assertBodyError},
-    {body: true, error: assertBodyError},
-    {body: [], error: assertBodyError},
-    {body: {}, error: assertBodyError},
-  ]).describe("should throw an Error if the body is not a string", scenario => {
-    it(`scenario: ${JSON.stringify(scenario)}`, async() => {
+    { body: 1, error: assertBodyError },
+    { body: true, error: assertBodyError },
+    { body: [], error: assertBodyError },
+    { body: {}, error: assertBodyError },
+  ]).describe("should throw an Error if the body is not a string", (scenario) => {
+    it(`scenario: ${JSON.stringify(scenario)}`, async () => {
       expect.assertions(3);
       const testClient = new ApiClient(options);
       const spy = jest.spyOn(testClient, "assertBody");
       const currentUrl = new URL(url);
 
-      fetch.mockResponse(async() => responseJson);
+      fetch.mockResponse(async () => responseJson);
       try {
         await testClient.sendRequest("POST", currentUrl, scenario.body);
       } catch (e) {
@@ -358,106 +361,106 @@ describe("Unit testing apiClient with mocked fetch", () => {
     });
   });
 
-  each([
-    {body: null},
-    {body: undefined},
-    {body: 0},
-  ]).describe("should ignore the body if it has a falsy value", scenario => {
-    it(`scenario: ${JSON.stringify(scenario)}`, async() => {
-      expect.assertions(5);
-      const testClient = new ApiClient(options);
-      const spy = jest.spyOn(testClient, "assertBody");
-      const currentUrl = new URL(url);
+  each([{ body: null }, { body: undefined }, { body: 0 }]).describe(
+    "should ignore the body if it has a falsy value",
+    (scenario) => {
+      it(`scenario: ${JSON.stringify(scenario)}`, async () => {
+        expect.assertions(5);
+        const testClient = new ApiClient(options);
+        const spy = jest.spyOn(testClient, "assertBody");
+        const currentUrl = new URL(url);
 
-      fetch.mockResponse(async req => {
-        const body = await req.text();
-        expect(body).toStrictEqual("");
-        return responseJson;
+        fetch.mockResponse(async (req) => {
+          const body = await req.text();
+          expect(body).toStrictEqual("");
+          return responseJson;
+        });
+        expect(testClient.sendRequest("POST", currentUrl, scenario.body)).resolves.not.toThrow();
+        expect(testClient.fetchAndHandleResponse("POST", currentUrl, scenario.body)).resolves.not.toThrow();
+
+        expect(spy).not.toHaveBeenCalled();
       });
-      expect(testClient.sendRequest("POST", currentUrl, scenario.body)).resolves.not.toThrow();
-      expect(testClient.fetchAndHandleResponse("POST", currentUrl, scenario.body)).resolves.not.toThrow();
+    },
+  );
 
-      expect(spy).not.toHaveBeenCalled();
-    });
-  });
+  each([{ body: JSON.stringify({ string: "string", object: {}, array: [] }) }, { body: uuid() }]).describe(
+    "should send the given body if it is a string or a form data",
+    (scenario) => {
+      it(`scenario: ${JSON.stringify(scenario)}`, async () => {
+        expect.assertions(5);
+        const testClient = new ApiClient(options);
+        const spy = jest.spyOn(testClient, "assertBody");
+        const currentUrl = new URL(url);
 
-  each([
-    {body: JSON.stringify({string: 'string', object: {}, array: []})},
-    {body: uuid()},
-  ]).describe("should send the given body if it is a string or a form data", scenario => {
-    it(`scenario: ${JSON.stringify(scenario)}`, async() => {
-      expect.assertions(5);
-      const testClient = new ApiClient(options);
-      const spy = jest.spyOn(testClient, "assertBody");
-      const currentUrl = new URL(url);
+        fetch.mockResponse(async (req) => {
+          const body = await req.text();
+          expect(body).toStrictEqual(scenario.body);
+          return responseJson;
+        });
+        expect(testClient.sendRequest("POST", currentUrl, scenario.body)).resolves.not.toThrow();
+        expect(testClient.fetchAndHandleResponse("POST", currentUrl, scenario.body)).resolves.not.toThrow();
 
-      fetch.mockResponse(async req => {
-        const body = await req.text();
-        expect(body).toStrictEqual(scenario.body);
-        return responseJson;
+        expect(spy).toHaveBeenCalledTimes(2);
       });
-      expect(testClient.sendRequest("POST", currentUrl, scenario.body)).resolves.not.toThrow();
-      expect(testClient.fetchAndHandleResponse("POST", currentUrl, scenario.body)).resolves.not.toThrow();
-
-      expect(spy).toHaveBeenCalledTimes(2);
-    });
-  });
+    },
+  );
 
   const userUuid = uuid();
   each([
     {
-      expectedUrl: 'https://test.passbolt.com/resource.json?api-version=v2',
+      expectedUrl: "https://test.passbolt.com/resource.json?api-version=v2",
       url: "https://test.passbolt.com/resource",
-      options: undefined
+      options: undefined,
     },
     {
       expectedUrl: `https://test.passbolt.com/resource.json?api-version=v2&filter%5Bhas-users%5D=${userUuid}`,
       url: "https://test.passbolt.com/resource",
-      options: {'filter[has-users]': userUuid}
+      options: { "filter[has-users]": userUuid },
     },
     {
       expectedUrl: `https://test.passbolt.com/resource.json?api-version=v2&filter%5Bhas-users%5D=${userUuid}&filter%5Bsearch%5D=something`,
       url: "https://test.passbolt.com/resource",
       options: {
-        'filter[has-users]': userUuid,
-        'filter[search]': "something"
-      }
+        "filter[has-users]": userUuid,
+        "filter[search]": "something",
+      },
     },
     {
-      expectedUrl: 'https://test.passbolt.com/resource.json?api-version=v2&contain%5Bpermissions.user.profile%5D=1',
+      expectedUrl: "https://test.passbolt.com/resource.json?api-version=v2&contain%5Bpermissions.user.profile%5D=1",
       url: "https://test.passbolt.com/resource",
       options: {
-        'contain[permissions.user.profile]': "1"
-      }
+        "contain[permissions.user.profile]": "1",
+      },
     },
     {
-      expectedUrl: 'https://test.passbolt.com/resource.json?api-version=v2&contain%5Bpermissions.user.profile%5D=1&contain%5Bpermissions.group%5D=1',
+      expectedUrl:
+        "https://test.passbolt.com/resource.json?api-version=v2&contain%5Bpermissions.user.profile%5D=1&contain%5Bpermissions.group%5D=1",
       url: "https://test.passbolt.com/resource",
       options: {
-        'contain[permissions.user.profile]': "1",
-        'contain[permissions.group]': "1"
-      }
+        "contain[permissions.user.profile]": "1",
+        "contain[permissions.group]": "1",
+      },
     },
     {
       expectedUrl: `https://test.passbolt.com/resource.json?api-version=v2&filter%5Bhas-users%5D=${userUuid}&contain%5Bpermissions.user.profile%5D=1`,
       url: "https://test.passbolt.com/resource",
       options: {
-        'filter[has-users]': userUuid,
-        'contain[permissions.user.profile]': "1"
-      }
+        "filter[has-users]": userUuid,
+        "contain[permissions.user.profile]": "1",
+      },
     },
     {
       expectedUrl: `https://test.passbolt.com/resource.json?api-version=v2&filter%5Bhas-users%5D=${userUuid}&filter%5Bsearch%5D=something&contain%5Bpermissions.user.profile%5D=1&contain%5Bpermissions.group%5D=1`,
       url: "https://test.passbolt.com/resource",
       options: {
-        'filter[has-users]': userUuid,
-        'filter[search]': "something",
-        'contain[permissions.user.profile]': "1",
-        'contain[permissions.group]': "1"
-      }
+        "filter[has-users]": userUuid,
+        "filter[search]": "something",
+        "contain[permissions.user.profile]": "1",
+        "contain[permissions.group]": "1",
+      },
     },
-  ]).describe("should run the build URL properly", scenario => {
-    it(`scenario: ${JSON.stringify(scenario)}`, async() => {
+  ]).describe("should run the build URL properly", (scenario) => {
+    it(`scenario: ${JSON.stringify(scenario)}`, async () => {
       expect.assertions(1);
       const testClient = new ApiClient(options);
       const url = testClient.buildUrl(scenario.url, scenario.options);
@@ -465,7 +468,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     });
   });
 
-  it("should call GET with an id for a resource", async() => {
+  it("should call GET with an id for a resource", async () => {
     expect.assertions(5);
     const testClient = new ApiClient(options);
     const spyFetch = jest.spyOn(testClient, "fetchAndHandleResponse");
@@ -474,7 +477,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     const resourceId = uuid();
     const responseData = {
       id: resourceId,
-      data: 'fake-data'
+      data: "fake-data",
     };
     const expectedResponse = JSON.parse(await mockApiResponse(responseData));
 
@@ -489,7 +492,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     expect(spyAssertId).toHaveBeenCalledWith(resourceId);
   });
 
-  it("should call DELETE with an id for a resource", async() => {
+  it("should call DELETE with an id for a resource", async () => {
     expect.assertions(5);
     const testClient = new ApiClient(options);
     const spyFetch = jest.spyOn(testClient, "fetchAndHandleResponse");
@@ -498,7 +501,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     const resourceId = uuid();
     const responseData = {
       id: resourceId,
-      data: 'fake-data'
+      data: "fake-data",
     };
     const expectedResponse = JSON.parse(await mockApiResponse(responseData));
 
@@ -508,12 +511,16 @@ describe("Unit testing apiClient with mocked fetch", () => {
 
     expect(result).toStrictEqual(expectedResponse);
     expect(spyFetch).toHaveBeenCalledTimes(1);
-    expect(spyFetch).toHaveBeenCalledWith("DELETE", new URL(`${url}/${resourceName}/${resourceId}.json?api-version=v2`), null);
+    expect(spyFetch).toHaveBeenCalledWith(
+      "DELETE",
+      new URL(`${url}/${resourceName}/${resourceId}.json?api-version=v2`),
+      null,
+    );
     expect(spyAssertId).toHaveBeenCalledTimes(1);
     expect(spyAssertId).toHaveBeenCalledWith(resourceId);
   });
 
-  it("should call DELETE (dry-run) with an id for a resource", async() => {
+  it("should call DELETE (dry-run) with an id for a resource", async () => {
     expect.assertions(5);
     const testClient = new ApiClient(options);
     const spyFetch = jest.spyOn(testClient, "fetchAndHandleResponse");
@@ -522,7 +529,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     const resourceId = uuid();
     const responseData = {
       id: resourceId,
-      data: 'fake-data'
+      data: "fake-data",
     };
     const expectedResponse = JSON.parse(await mockApiResponse(responseData));
 
@@ -532,24 +539,30 @@ describe("Unit testing apiClient with mocked fetch", () => {
 
     expect(result).toStrictEqual(expectedResponse);
     expect(spyFetch).toHaveBeenCalledTimes(1);
-    expect(spyFetch).toHaveBeenCalledWith("DELETE", new URL(`${url}/${resourceName}/${resourceId}/dry-run.json?api-version=v2`), null);
+    expect(spyFetch).toHaveBeenCalledWith(
+      "DELETE",
+      new URL(`${url}/${resourceName}/${resourceId}/dry-run.json?api-version=v2`),
+      null,
+    );
     expect(spyAssertId).toHaveBeenCalledTimes(1);
     expect(spyAssertId).toHaveBeenCalledWith(resourceId);
   });
 
-  it("should call GET (find all) without id", async() => {
+  it("should call GET (find all) without id", async () => {
     expect.assertions(3);
     const testClient = new ApiClient(options);
     const spy = jest.spyOn(testClient, "fetchAndHandleResponse");
 
-    const responseData = [{
-      id: uuid(),
-      data: 'fake-data'
-    },
-    {
-      id: uuid(),
-      data: 'fake-data'
-    }];
+    const responseData = [
+      {
+        id: uuid(),
+        data: "fake-data",
+      },
+      {
+        id: uuid(),
+        data: "fake-data",
+      },
+    ];
     const expectedResponse = JSON.parse(await mockApiResponse(responseData));
 
     fetch.mockResponse(() => mockApiResponse(responseData));
@@ -561,16 +574,16 @@ describe("Unit testing apiClient with mocked fetch", () => {
     expect(spy).toHaveBeenCalledWith("GET", new URL(`${url}/${resourceName}.json?api-version=v2`));
   });
 
-  it("should call POST (create) without id", async() => {
+  it("should call POST (create) without id", async () => {
     expect.assertions(3);
     const testClient = new ApiClient(options);
     const spy = jest.spyOn(testClient, "fetchAndHandleResponse");
 
     const resourceId = uuid();
     const body = {
-      data: 'fake-data'
+      data: "fake-data",
     };
-    const responseData = {id: resourceId, ...body};
+    const responseData = { id: resourceId, ...body };
     const expectedResponse = JSON.parse(await mockApiResponse(responseData));
 
     fetch.mockResponse(() => mockApiResponse(responseData));
@@ -579,10 +592,14 @@ describe("Unit testing apiClient with mocked fetch", () => {
 
     expect(result).toStrictEqual(expectedResponse);
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledWith("POST", new URL(`${url}/${resourceName}.json?api-version=v2`), JSON.stringify(body));
+    expect(spy).toHaveBeenCalledWith(
+      "POST",
+      new URL(`${url}/${resourceName}.json?api-version=v2`),
+      JSON.stringify(body),
+    );
   });
 
-  it("should call PUT (update) with an id for a resource", async() => {
+  it("should call PUT (update) with an id for a resource", async () => {
     expect.assertions(5);
     const testClient = new ApiClient(options);
     const spyFetch = jest.spyOn(testClient, "fetchAndHandleResponse");
@@ -591,9 +608,9 @@ describe("Unit testing apiClient with mocked fetch", () => {
     const resourceId = uuid();
     const body = {
       id: resourceId,
-      data: 'fake-data'
+      data: "fake-data",
     };
-    const responseData = {id: resourceId, ...body};
+    const responseData = { id: resourceId, ...body };
     const expectedResponse = JSON.parse(await mockApiResponse(responseData));
 
     fetch.mockResponse(() => mockApiResponse(responseData));
@@ -602,12 +619,16 @@ describe("Unit testing apiClient with mocked fetch", () => {
 
     expect(result).toStrictEqual(expectedResponse);
     expect(spyFetch).toHaveBeenCalledTimes(1);
-    expect(spyFetch).toHaveBeenCalledWith("PUT", new URL(`${url}/${resourceName}/${resourceId}.json?api-version=v2`), JSON.stringify(body));
+    expect(spyFetch).toHaveBeenCalledWith(
+      "PUT",
+      new URL(`${url}/${resourceName}/${resourceId}.json?api-version=v2`),
+      JSON.stringify(body),
+    );
     expect(spyAssertId).toHaveBeenCalledTimes(1);
     expect(spyAssertId).toHaveBeenCalledWith(resourceId);
   });
 
-  it("should call PUT (update dry-run) with an id for a resource", async() => {
+  it("should call PUT (update dry-run) with an id for a resource", async () => {
     expect.assertions(5);
     const testClient = new ApiClient(options);
     const spyFetch = jest.spyOn(testClient, "fetchAndHandleResponse");
@@ -616,9 +637,9 @@ describe("Unit testing apiClient with mocked fetch", () => {
     const resourceId = uuid();
     const body = {
       id: resourceId,
-      data: 'fake-data'
+      data: "fake-data",
     };
-    const responseData = {id: resourceId, ...body};
+    const responseData = { id: resourceId, ...body };
     const expectedResponse = JSON.parse(await mockApiResponse(responseData));
 
     fetch.mockResponse(() => mockApiResponse(responseData));
@@ -627,57 +648,144 @@ describe("Unit testing apiClient with mocked fetch", () => {
 
     expect(result).toStrictEqual(expectedResponse);
     expect(spyFetch).toHaveBeenCalledTimes(1);
-    expect(spyFetch).toHaveBeenCalledWith("PUT", new URL(`${url}/${resourceName}/${resourceId}/dry-run.json?api-version=v2`), null);
+    expect(spyFetch).toHaveBeenCalledWith(
+      "PUT",
+      new URL(`${url}/${resourceName}/${resourceId}/dry-run.json?api-version=v2`),
+      null,
+    );
     expect(spyAssertId).toHaveBeenCalledTimes(1);
     expect(spyAssertId).toHaveBeenCalledWith(resourceId);
   });
 
   each([
-    {baseUrl: "http://local.passbolt.dev", resourceName: "/resource", expected: "http://local.passbolt.dev/resource"},
-    {baseUrl: "http://local.passbolt.dev/", resourceName: "/resource", expected: "http://local.passbolt.dev/resource"},
-    {baseUrl: "http://local.passbolt.dev", resourceName: "resource", expected: "http://local.passbolt.dev/resource"},
-    {baseUrl: "http://local.passbolt.dev/", resourceName: "resource", expected: "http://local.passbolt.dev/resource"},
-    {baseUrl: "http://local.passbolt.dev", resourceName: "/resource/other", expected: "http://local.passbolt.dev/resource/other"},
-    {baseUrl: "http://local.passbolt.dev/", resourceName: "/resource/other", expected: "http://local.passbolt.dev/resource/other"},
-    {baseUrl: "http://local.passbolt.dev", resourceName: "resource/other", expected: "http://local.passbolt.dev/resource/other"},
-    {baseUrl: "http://local.passbolt.dev/", resourceName: "resource/other", expected: "http://local.passbolt.dev/resource/other"},
-    {baseUrl: "http://local.passbolt.dev", resourceName: "/resource/other/", expected: "http://local.passbolt.dev/resource/other"},
-    {baseUrl: "http://local.passbolt.dev/", resourceName: "/resource/other/", expected: "http://local.passbolt.dev/resource/other"},
-    {baseUrl: "http://local.passbolt.dev", resourceName: "resource/other/", expected: "http://local.passbolt.dev/resource/other"},
-    {baseUrl: "http://local.passbolt.dev/", resourceName: "resource/other/", expected: "http://local.passbolt.dev/resource/other"},
-    {baseUrl: "http://local.passbolt.dev/subfolder", resourceName: "/resource", expected: "http://local.passbolt.dev/subfolder/resource"},
-    {baseUrl: "http://local.passbolt.dev/subfolder/", resourceName: "/resource", expected: "http://local.passbolt.dev/subfolder/resource"},
-    {baseUrl: "http://local.passbolt.dev/subfolder", resourceName: "resource", expected: "http://local.passbolt.dev/subfolder/resource"},
-    {baseUrl: "http://local.passbolt.dev/subfolder/", resourceName: "resource", expected: "http://local.passbolt.dev/subfolder/resource"},
-    {baseUrl: "http://local.passbolt.dev/subfolder", resourceName: "/resource/other", expected: "http://local.passbolt.dev/subfolder/resource/other"},
-    {baseUrl: "http://local.passbolt.dev/subfolder/", resourceName: "/resource/other", expected: "http://local.passbolt.dev/subfolder/resource/other"},
-    {baseUrl: "http://local.passbolt.dev/subfolder", resourceName: "resource/other", expected: "http://local.passbolt.dev/subfolder/resource/other"},
-    {baseUrl: "http://local.passbolt.dev/subfolder/", resourceName: "resource/other", expected: "http://local.passbolt.dev/subfolder/resource/other"},
-    {baseUrl: "http://local.passbolt.dev/subfolder", resourceName: "/resource/other/", expected: "http://local.passbolt.dev/subfolder/resource/other"},
-    {baseUrl: "http://local.passbolt.dev/subfolder/", resourceName: "/resource/other/", expected: "http://local.passbolt.dev/subfolder/resource/other"},
-    {baseUrl: "http://local.passbolt.dev/subfolder", resourceName: "resource/other/", expected: "http://local.passbolt.dev/subfolder/resource/other"},
-    {baseUrl: "http://local.passbolt.dev/subfolder/", resourceName: "resource/other/", expected: "http://local.passbolt.dev/subfolder/resource/other"},
-  ]).describe("Should set a proper baseUrl with ending slashes in baseUrl and starting slash in resource name", scenario => {
-    it(`with the URL: ${scenario.baseUrl}/${scenario.resourceName}`, async() => {
-      expect.assertions(1);
-      const options = (new ApiClientOptions())
-        .setBaseUrl(scenario.baseUrl)
-        .setResourceName(scenario.resourceName);
-      const apiClient = new ApiClient(options);
+    { baseUrl: "http://local.passbolt.dev", resourceName: "/resource", expected: "http://local.passbolt.dev/resource" },
+    {
+      baseUrl: "http://local.passbolt.dev/",
+      resourceName: "/resource",
+      expected: "http://local.passbolt.dev/resource",
+    },
+    { baseUrl: "http://local.passbolt.dev", resourceName: "resource", expected: "http://local.passbolt.dev/resource" },
+    { baseUrl: "http://local.passbolt.dev/", resourceName: "resource", expected: "http://local.passbolt.dev/resource" },
+    {
+      baseUrl: "http://local.passbolt.dev",
+      resourceName: "/resource/other",
+      expected: "http://local.passbolt.dev/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/",
+      resourceName: "/resource/other",
+      expected: "http://local.passbolt.dev/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev",
+      resourceName: "resource/other",
+      expected: "http://local.passbolt.dev/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/",
+      resourceName: "resource/other",
+      expected: "http://local.passbolt.dev/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev",
+      resourceName: "/resource/other/",
+      expected: "http://local.passbolt.dev/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/",
+      resourceName: "/resource/other/",
+      expected: "http://local.passbolt.dev/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev",
+      resourceName: "resource/other/",
+      expected: "http://local.passbolt.dev/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/",
+      resourceName: "resource/other/",
+      expected: "http://local.passbolt.dev/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/subfolder",
+      resourceName: "/resource",
+      expected: "http://local.passbolt.dev/subfolder/resource",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/subfolder/",
+      resourceName: "/resource",
+      expected: "http://local.passbolt.dev/subfolder/resource",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/subfolder",
+      resourceName: "resource",
+      expected: "http://local.passbolt.dev/subfolder/resource",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/subfolder/",
+      resourceName: "resource",
+      expected: "http://local.passbolt.dev/subfolder/resource",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/subfolder",
+      resourceName: "/resource/other",
+      expected: "http://local.passbolt.dev/subfolder/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/subfolder/",
+      resourceName: "/resource/other",
+      expected: "http://local.passbolt.dev/subfolder/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/subfolder",
+      resourceName: "resource/other",
+      expected: "http://local.passbolt.dev/subfolder/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/subfolder/",
+      resourceName: "resource/other",
+      expected: "http://local.passbolt.dev/subfolder/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/subfolder",
+      resourceName: "/resource/other/",
+      expected: "http://local.passbolt.dev/subfolder/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/subfolder/",
+      resourceName: "/resource/other/",
+      expected: "http://local.passbolt.dev/subfolder/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/subfolder",
+      resourceName: "resource/other/",
+      expected: "http://local.passbolt.dev/subfolder/resource/other",
+    },
+    {
+      baseUrl: "http://local.passbolt.dev/subfolder/",
+      resourceName: "resource/other/",
+      expected: "http://local.passbolt.dev/subfolder/resource/other",
+    },
+  ]).describe(
+    "Should set a proper baseUrl with ending slashes in baseUrl and starting slash in resource name",
+    (scenario) => {
+      it(`with the URL: ${scenario.baseUrl}/${scenario.resourceName}`, async () => {
+        expect.assertions(1);
+        const options = new ApiClientOptions().setBaseUrl(scenario.baseUrl).setResourceName(scenario.resourceName);
+        const apiClient = new ApiClient(options);
 
-      expect(apiClient.baseUrl.toString()).toStrictEqual(scenario.expected);
-    });
-  });
+        expect(apiClient.baseUrl.toString()).toStrictEqual(scenario.expected);
+      });
+    },
+  );
 
-  it("should use a custom fetch strategy if provided.", async() => {
+  it("should use a custom fetch strategy if provided.", async () => {
     expect.assertions(2);
 
     global.customApiClientFetch = jest.fn();
-    const url = 'https://test.passbolt.com/passbolt-unit-test';
-    const resourceName = 'fake-resource';
-    const options = (new ApiClientOptions())
-      .setBaseUrl(url)
-      .setResourceName(resourceName);
+    const url = "https://test.passbolt.com/passbolt-unit-test";
+    const resourceName = "fake-resource";
+    const options = new ApiClientOptions().setBaseUrl(url).setResourceName(resourceName);
     const apiClient = new ApiClient(options);
 
     await expect(apiClient.sendRequest("GET", new URL(`${url}/test.json`))).resolves.not.toThrow();

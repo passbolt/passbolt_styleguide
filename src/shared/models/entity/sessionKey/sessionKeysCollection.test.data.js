@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.10.1
  */
-import {defaultSessionKeyDto} from "./sessionKeyEntity.test.data";
-import {metadata} from "../../../../../test/fixture/encryptedMetadata/metadata";
+import { defaultSessionKeyDto } from "./sessionKeyEntity.test.data";
+import { metadata } from "../../../../../test/fixture/encryptedMetadata/metadata";
 
 /**
  * Build session keys dtos used to encrypt shared resources.
@@ -28,7 +28,7 @@ export const sharedResourcesSessionKeys = (data = {}, options = {}) => {
   for (let i = 0; i < count; i++) {
     const defaultData = {
       session_key: metadata.withSharedKey.sessionKeys[i % fixtureCount],
-      ... Array.isArray(data) ? data[i] : data,
+      ...(Array.isArray(data) ? data[i] : data),
     };
     const dto = defaultSessionKeyDto(defaultData);
     dtos.push(dto);

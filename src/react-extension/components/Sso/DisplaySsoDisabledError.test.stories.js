@@ -13,25 +13,24 @@
  */
 import React from "react";
 import DisplaySsoDisabledError from "./DisplaySsoDisabledError";
-import {defaultProps} from "./DisplaySsoDisabledError.test.data";
+import { defaultProps } from "./DisplaySsoDisabledError.test.data";
 
 export default {
-  title: 'Components/Authentication/DisplaySsoDisabledError',
-  component: DisplaySsoDisabledError
+  title: "Components/Authentication/DisplaySsoDisabledError",
+  component: DisplaySsoDisabledError,
 };
 
-const Template = args =>
+const Template = (args) => (
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
-        <DisplaySsoDisabledError {...args}/>
+        <DisplaySsoDisabledError {...args} />
       </div>
     </div>
   </div>
-;
-
+);
 export const Initial = Template.bind({});
 Initial.args = defaultProps();
 Initial.parameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };

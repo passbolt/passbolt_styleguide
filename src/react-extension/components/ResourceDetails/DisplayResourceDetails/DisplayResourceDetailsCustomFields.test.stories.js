@@ -13,23 +13,23 @@
  */
 
 import React from "react";
-import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import { defaultResourceWorkspaceContext } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import DisplayResourceDetailsCustomFields from "./DisplayResourceDetailsCustomFields";
-import {resourceWithCustomFields} from "./DisplayResourceDetailsCustomFields.test.data";
-import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
-import {plaintextSecretCustomFieldsDto} from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import { resourceWithCustomFields } from "./DisplayResourceDetailsCustomFields.test.data";
+import { defaultAdministratorRbacContext } from "../../../../shared/context/Rbac/RbacContext.test.data";
+import { plaintextSecretCustomFieldsDto } from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
 
 export default {
-  title: 'Components/ResourceDetails/DisplayResourceDetailsCustomFields',
+  title: "Components/ResourceDetails/DisplayResourceDetailsCustomFields",
   component: DisplayResourceDetailsCustomFields,
   decorators: [
-    (Story, {args}) => (
+    (Story, { args }) => (
       <div className="page">
-        <div className="app" style={{margin: "-1rem"}}>
+        <div className="app" style={{ margin: "-1rem" }}>
           <div className="panel main">
             <div className="panel middle">
-              <div className="middle-right" style={{display: "flex", justifyContent: "flex-end"}}>
+              <div className="middle-right" style={{ display: "flex", justifyContent: "flex-end" }}>
                 <div className="panel aside">
                   <div className="sidebar resource">
                     <div className="sidebar-content">
@@ -42,8 +42,8 @@ export default {
           </div>
         </div>
       </div>
-    )
-  ]
+    ),
+  ],
 };
 
 const resourceWithCustomFieldsDto = resourceWithCustomFields;
@@ -51,16 +51,15 @@ export const Default = {
   args: {
     context: defaultAppContext({
       port: {
-        request: () => new Promise(resolve => {
-          setTimeout(() => resolve(plaintextSecretCustomFieldsDto(
-            resourceWithCustomFieldsDto.metadata
-          )), 1000);
-        })
-      }
+        request: () =>
+          new Promise((resolve) => {
+            setTimeout(() => resolve(plaintextSecretCustomFieldsDto(resourceWithCustomFieldsDto.metadata)), 1000);
+          }),
+      },
     }),
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
-      details: {resource: resourceWithCustomFieldsDto}
+      details: { resource: resourceWithCustomFieldsDto },
     }),
-  }
+  },
 };

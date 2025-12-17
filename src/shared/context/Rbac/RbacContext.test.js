@@ -12,11 +12,11 @@
  * @since         5.8.0
  */
 
-import {enableFetchMocks} from 'jest-fetch-mock';
-import {defaultProps} from './RbacContext.test.data';
-import {RbacContextProvider} from './RbacContext';
-import {uiActions} from "../../services/rbacs/uiActionEnumeration";
-import {actions} from "../../services/rbacs/actionEnumeration";
+import { enableFetchMocks } from "jest-fetch-mock";
+import { defaultProps } from "./RbacContext.test.data";
+import { RbacContextProvider } from "./RbacContext";
+import { uiActions } from "../../services/rbacs/uiActionEnumeration";
+import { actions } from "../../services/rbacs/actionEnumeration";
 
 describe("RbacContext", () => {
   let rbacContext; // The rbacContextProvider to test
@@ -30,7 +30,7 @@ describe("RbacContext", () => {
   });
 
   describe("RbacContext::canIUseAction", () => {
-    it("should return allow or deny for action or ui action for a signed-in user", async() => {
+    it("should return allow or deny for action or ui action for a signed-in user", async () => {
       expect.assertions(16);
 
       expect(rbacContext.canIUseAction(uiActions.RESOURCES_EXPORT)).toBeTruthy();
@@ -53,11 +53,10 @@ describe("RbacContext", () => {
   });
 });
 
-
 function mockState(contextProvider) {
-  const setStateMock = state => {
+  const setStateMock = (state) => {
     let newState;
-    if (typeof state  === 'function') {
+    if (typeof state === "function") {
       newState = state(contextProvider.state);
     } else {
       newState = state;

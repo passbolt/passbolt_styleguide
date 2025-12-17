@@ -12,18 +12,18 @@
  * @since         4.4.0
  */
 
-import {defaultProps} from "../DisplayProviderList/DisplayProviderList.test.data";
+import { defaultProps } from "../DisplayProviderList/DisplayProviderList.test.data";
 
 export function propsMfaWithProvider(provider) {
-  return  defaultProps({
+  return defaultProps({
     mfaContext: {
       provider,
       goToProviderList: jest.fn(),
-      removeProvider: jest.fn()
-    }
+      removeProvider: jest.fn(),
+    },
   });
 }
 
 export const mockVerifiedDate = {
-  verified: "2023-09-27T13:03:23+00:00"
+  verified: "2023-09-27T13:03:23+00:00",
 };

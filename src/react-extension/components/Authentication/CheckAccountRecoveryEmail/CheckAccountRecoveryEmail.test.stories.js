@@ -13,27 +13,28 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import CheckAccountRecoveryEmail from "./CheckAccountRecoveryEmail";
 
 export default {
-  title: 'Components/Authentication/CheckAccountRecoveryEmail',
-  component: CheckAccountRecoveryEmail
+  title: "Components/Authentication/CheckAccountRecoveryEmail",
+  component: CheckAccountRecoveryEmail,
 };
 
-const Template = args =>
+const Template = (args) => (
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
-        <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <CheckAccountRecoveryEmail {...args} {...routerProps}/>}/>
+        <MemoryRouter initialEntries={["/"]}>
+          <Route component={(routerProps) => <CheckAccountRecoveryEmail {...args} {...routerProps} />} />
         </MemoryRouter>
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 export const Initial = Template.bind({});
 
 Initial.parameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };

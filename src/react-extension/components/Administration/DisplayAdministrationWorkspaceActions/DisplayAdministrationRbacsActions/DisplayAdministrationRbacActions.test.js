@@ -16,10 +16,9 @@
  * Unit tests on DisplayAdministrationRbacActions in regard of specifications
  */
 
-
-import {hasChangesProps} from "./DisplayAdministrationRbacActions.test.data";
+import { hasChangesProps } from "./DisplayAdministrationRbacActions.test.data";
 import DisplayAdministrationRbacActionsPage from "./DisplayAdministrationRbacActions.test.page";
-import {defaultProps} from "../../DisplayRbacAdministration/DisplayRbacAdministration.test.data.js";
+import { defaultProps } from "../../DisplayRbacAdministration/DisplayRbacAdministration.test.data.js";
 
 beforeEach(() => {
   jest.resetModules();
@@ -28,7 +27,7 @@ beforeEach(() => {
 describe("As AD I can see the administration role based access control action", () => {
   let page; // The page to test against
 
-  it('As AD I should see the save enabled for administration role based access control action', async() => {
+  it("As AD I should see the save enabled for administration role based access control action", async () => {
     expect.assertions(2);
 
     const props = defaultProps();
@@ -38,7 +37,7 @@ describe("As AD I can see the administration role based access control action", 
     expect(page.saveButton.hasAttribute("disabled")).toBeFalsy();
   });
 
-  it('As AD I should see the save button enable when changes exist', async() => {
+  it("As AD I should see the save button enable when changes exist", async () => {
     expect.assertions(2);
 
     const props = hasChangesProps();
@@ -48,7 +47,7 @@ describe("As AD I can see the administration role based access control action", 
     expect(page.saveButton.hasAttribute("disabled")).toBeFalsy();
   });
 
-  it('As AD I should see the all buttons enabled and trigger save', async() => {
+  it("As AD I should see the all buttons enabled and trigger save", async () => {
     expect.assertions(3);
 
     const props = hasChangesProps();
@@ -61,7 +60,7 @@ describe("As AD I can see the administration role based access control action", 
     expect(props.adminRbacContext.save).toHaveBeenCalled();
   });
 
-  it('As AD I should see the save button disable when button is processing and they are changes', async() => {
+  it("As AD I should see the save button disable when button is processing and they are changes", async () => {
     expect.assertions(2);
 
     const props = hasChangesProps();
@@ -72,7 +71,7 @@ describe("As AD I can see the administration role based access control action", 
     expect(page.saveButton.hasAttribute("disabled")).toBeTruthy();
   });
 
-  it('As AD I should see be notify if save succeed', async() => {
+  it("As AD I should see be notify if save succeed", async () => {
     expect.assertions(2);
 
     const props = hasChangesProps();
@@ -81,13 +80,15 @@ describe("As AD I can see the administration role based access control action", 
 
     await page.save();
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
-    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The role-based access control settings were updated.");
+    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(
+      "The role-based access control settings were updated.",
+    );
   });
 
-  it('As AD I should see be notify if save failed', async() => {
+  it("As AD I should see be notify if save failed", async () => {
     expect.assertions(2);
 
-    const error = {message: "The service is unavailable"};
+    const error = { message: "The service is unavailable" };
     const props = hasChangesProps();
     props.adminRbacContext.save = () => Promise.reject(error);
     page = new DisplayAdministrationRbacActionsPage(props);

@@ -19,10 +19,12 @@ import {
   resourceTypeTotpDto,
   resourceTypeV5DefaultDto,
   resourceTypeV5PasswordStringDto,
-  resourceTypeV5DefaultTotpDto, resourceTypeV5TotpDto, resourceTypeV5CustomFieldsDto,
-  resourceTypeV5StandaloneNoteDto
+  resourceTypeV5DefaultTotpDto,
+  resourceTypeV5TotpDto,
+  resourceTypeV5CustomFieldsDto,
+  resourceTypeV5StandaloneNoteDto,
 } from "./resourceTypeEntity.test.data";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Resource types collection dto.
@@ -38,7 +40,7 @@ export const resourceTypesCollectionDto = () => [
   resourceTypeV5DefaultTotpDto(),
   resourceTypeV5TotpDto(),
   resourceTypeV5CustomFieldsDto(),
-  resourceTypeV5StandaloneNoteDto()
+  resourceTypeV5StandaloneNoteDto(),
 ];
 
 /**
@@ -65,7 +67,7 @@ export const resourceTypesV4CollectionDto = () => [
   resourceTypePasswordStringDto(),
   resourceTypePasswordAndDescriptionDto(),
   resourceTypePasswordDescriptionTotpDto(),
-  resourceTypeTotpDto()
+  resourceTypeTotpDto(),
 ];
 
 /**
@@ -78,7 +80,7 @@ export const resourceTypesV5CollectionDto = () => [
   resourceTypeV5DefaultTotpDto(),
   resourceTypeV5TotpDto(),
   resourceTypeV5CustomFieldsDto(),
-  resourceTypeV5StandaloneNoteDto()
+  resourceTypeV5StandaloneNoteDto(),
 ];
 
 /**
@@ -90,7 +92,7 @@ export const buildDefineNumberOfResourceTypesDtos = (count = 10) => {
   const resourceTypesDto = resourceTypesCollectionDto();
   const dtos = resourceTypesDto;
   for (let i = 0; i < count; i++) {
-    const dto = {...resourceTypesDto[i % resourceTypesDto.length]};
+    const dto = { ...resourceTypesDto[i % resourceTypesDto.length] };
     dto.id = uuidv4();
     dto.slug = `${dto.slug} ${i + 1}`;
     dtos.push(dto);
@@ -105,7 +107,7 @@ export const buildDefineNumberOfResourceTypesDtos = (count = 10) => {
 export const resourceTypesCollectionWithoutPassword = () => [
   resourceTypeTotpDto(),
   resourceTypeV5TotpDto(),
-  resourceTypeV5StandaloneNoteDto()
+  resourceTypeV5StandaloneNoteDto(),
 ];
 
 /**
@@ -118,5 +120,5 @@ export const resourceTypesCollectionWithoutTOTP = () => [
   resourceTypeV5DefaultDto(),
   resourceTypeV5PasswordStringDto(),
   resourceTypeV5CustomFieldsDto(),
-  resourceTypeV5StandaloneNoteDto()
+  resourceTypeV5StandaloneNoteDto(),
 ];

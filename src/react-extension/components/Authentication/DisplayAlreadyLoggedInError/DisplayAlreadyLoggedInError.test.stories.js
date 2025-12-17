@@ -13,48 +13,51 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
-import DisplayAlreadyLoggedInError, {DisplayAlreadyLoggedInErrorVariations} from "./DisplayAlreadyLoggedInError";
+import { MemoryRouter, Route } from "react-router-dom";
+import DisplayAlreadyLoggedInError, { DisplayAlreadyLoggedInErrorVariations } from "./DisplayAlreadyLoggedInError";
 
 export default {
-  title: 'Components/Authentication/DisplayAlreadyLoggedInError',
-  component: DisplayAlreadyLoggedInError
+  title: "Components/Authentication/DisplayAlreadyLoggedInError",
+  component: DisplayAlreadyLoggedInError,
 };
 
-const Template = args =>
+const Template = (args) => (
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
-        <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <DisplayAlreadyLoggedInError {...args} {...routerProps}/>}/>
+        <MemoryRouter initialEntries={["/"]}>
+          <Route component={(routerProps) => <DisplayAlreadyLoggedInError {...args} {...routerProps} />} />
         </MemoryRouter>
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 const defaultParameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };
 
-const logoutCallback = () => { console.log("Trigger log out"); };
+const logoutCallback = () => {
+  console.log("Trigger log out");
+};
 
 export const Setup = Template.bind({});
 Setup.args = {
   onLogoutButtonClick: logoutCallback,
-  displayAs: DisplayAlreadyLoggedInErrorVariations.SETUP
+  displayAs: DisplayAlreadyLoggedInErrorVariations.SETUP,
 };
 Setup.parameters = defaultParameters;
 
 export const Recover = Template.bind({});
 Recover.args = {
   onLogoutButtonClick: logoutCallback,
-  displayAs: DisplayAlreadyLoggedInErrorVariations.RECOVER
+  displayAs: DisplayAlreadyLoggedInErrorVariations.RECOVER,
 };
 Recover.parameters = defaultParameters;
 
 export const AccountRecovery = Template.bind({});
 AccountRecovery.args = {
   onLogoutButtonClick: logoutCallback,
-  displayAs: DisplayAlreadyLoggedInErrorVariations.ACCOUNT_RECOVERY
+  displayAs: DisplayAlreadyLoggedInErrorVariations.ACCOUNT_RECOVERY,
 };
 AccountRecovery.parameters = defaultParameters;

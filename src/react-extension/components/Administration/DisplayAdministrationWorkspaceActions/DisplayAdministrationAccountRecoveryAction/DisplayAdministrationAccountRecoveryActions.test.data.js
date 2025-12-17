@@ -14,9 +14,9 @@
 
 import {
   defaultAdminAccountRecoveryContext,
-  hasPolicyChangesAdminAccountRecoveryContext
+  hasPolicyChangesAdminAccountRecoveryContext,
 } from "../../../../contexts/AdminAccountRecoveryContext.test.data";
-import {defaultWorkflowContext} from "../../../../contexts/WorkflowContext.test.data";
+import { defaultWorkflowContext } from "../../../../contexts/WorkflowContext.test.data";
 
 /**
  * Default props.
@@ -26,7 +26,7 @@ import {defaultWorkflowContext} from "../../../../contexts/WorkflowContext.test.
 export function defaultProps(props = {}) {
   const _props = {
     adminAccountRecoveryContext: defaultAdminAccountRecoveryContext(props?.adminAccountRecoveryContext),
-    workflowContext: defaultWorkflowContext(props?.workflowContext)
+    workflowContext: defaultWorkflowContext(props?.workflowContext),
   };
   delete props.adminAccountRecoveryContext; // Treated in the default
   delete props.workflowContext; // Treated in the default

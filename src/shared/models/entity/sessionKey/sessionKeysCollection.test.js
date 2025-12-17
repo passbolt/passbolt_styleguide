@@ -13,9 +13,9 @@
  */
 import EntitySchema from "../abstract/entitySchema";
 import SessionKeysCollection from "./sessionKeysCollection";
-import {sharedResourcesSessionKeys} from "./sessionKeysCollection.test.data";
-import {defaultSessionKeyDto} from "./sessionKeyEntity.test.data";
-import {v4 as uuidv4} from "uuid";
+import { sharedResourcesSessionKeys } from "./sessionKeysCollection.test.data";
+import { defaultSessionKeyDto } from "./sessionKeyEntity.test.data";
+import { v4 as uuidv4 } from "uuid";
 
 describe("SessionKeysCollection", () => {
   describe("::getSchema", () => {
@@ -47,8 +47,7 @@ describe("SessionKeysCollection", () => {
     it("should throw if the collection schema does not validate", () => {
       expect.assertions(1);
 
-      expect(() => new SessionKeysCollection({}))
-        .toThrowEntityValidationError("items");
+      expect(() => new SessionKeysCollection({})).toThrowEntityValidationError("items");
     });
 
     it("should throw if one of data item does not validate the unique id build rule", () => {
@@ -57,8 +56,7 @@ describe("SessionKeysCollection", () => {
       const dtos = sharedResourcesSessionKeys();
       dtos[1].foreign_id = dtos[0].foreign_id;
 
-      expect(() => new SessionKeysCollection(dtos))
-        .toThrowCollectionValidationError("1.foreign_id.unique");
+      expect(() => new SessionKeysCollection(dtos)).toThrowCollectionValidationError("1.foreign_id.unique");
     });
 
     it("should, with enabling the ignore invalid option, ignore items which do not validate the unique id build rule", () => {
@@ -67,7 +65,7 @@ describe("SessionKeysCollection", () => {
       const dtos = sharedResourcesSessionKeys();
       dtos[1].foreign_id = dtos[0].foreign_id;
 
-      const collection = new SessionKeysCollection(dtos, {ignoreInvalidEntity: true});
+      const collection = new SessionKeysCollection(dtos, { ignoreInvalidEntity: true });
 
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0]._props.foreign_id).toEqual(dtos[0].foreign_id);
@@ -77,19 +75,22 @@ describe("SessionKeysCollection", () => {
     it.skip("should throw if one of session key does not validate the collection entity schema", () => {
       expect.assertions(1);
 
-      const dtos = sharedResourcesSessionKeys({session_key: "9:901D6ED579AFF935F9F157A5198BCE48B50AD87345DEADBA06F42C5D018C78CC"});
+      const dtos = sharedResourcesSessionKeys({
+        session_key: "9:901D6ED579AFF935F9F157A5198BCE48B50AD87345DEADBA06F42C5D018C78CC",
+      });
 
-      expect(() => new SessionKeysCollection(dtos))
-        .toThrowCollectionValidationError("1.session_key.unique");
+      expect(() => new SessionKeysCollection(dtos)).toThrowCollectionValidationError("1.session_key.unique");
     });
 
     // TODO enable it when session key build rule will be added
     it.skip("should, with enabling the ignore invalid option, ignore items which do not validate session key schema", () => {
       expect.assertions(2);
 
-      const dtos = sharedResourcesSessionKeys({session_key: "9:901D6ED579AFF935F9F157A5198BCE48B50AD87345DEADBA06F42C5D018C78CC"});
+      const dtos = sharedResourcesSessionKeys({
+        session_key: "9:901D6ED579AFF935F9F157A5198BCE48B50AD87345DEADBA06F42C5D018C78CC",
+      });
 
-      const collection = new SessionKeysCollection(dtos, {ignoreInvalidEntity: true});
+      const collection = new SessionKeysCollection(dtos, { ignoreInvalidEntity: true });
 
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0].toDto()).toEqual(dtos[0]);
@@ -97,13 +98,17 @@ describe("SessionKeysCollection", () => {
   });
 
   describe("::filterOutMetadataEncrypted", () => {
-    it("should filter out the resource which have metadata key type different than user_key.", async() => {
+    it("should filter out the resource which have metadata key type different than user_key.", async () => {
       expect.assertions(3);
 
       const foreignId1 = uuidv4();
       const foreignId2 = uuidv4();
       const foreignId3 = uuidv4();
-      const dtos = [defaultSessionKeyDto({foreign_id: foreignId1}), defaultSessionKeyDto({foreign_id: foreignId2}), defaultSessionKeyDto({foreign_id: foreignId3})];
+      const dtos = [
+        defaultSessionKeyDto({ foreign_id: foreignId1 }),
+        defaultSessionKeyDto({ foreign_id: foreignId2 }),
+        defaultSessionKeyDto({ foreign_id: foreignId3 }),
+      ];
       const collection = new SessionKeysCollection(dtos);
 
       collection.filterOutSessionKeysNotMatchingForeignModelAndForeignIds("Resource", [foreignId1, foreignId3]);
@@ -115,9 +120,9 @@ describe("SessionKeysCollection", () => {
   });
 
   describe("::pushMany", () => {
-    it("[performance] should ensure performance adding large dataset remains effective.", async() => {
+    it("[performance] should ensure performance adding large dataset remains effective.", async () => {
       const count = 10_000;
-      const dtos = sharedResourcesSessionKeys({}, {count});
+      const dtos = sharedResourcesSessionKeys({}, { count });
 
       const start = performance.now();
       const collection = new SessionKeysCollection(dtos);
@@ -128,13 +133,17 @@ describe("SessionKeysCollection", () => {
   });
 
   describe("::remove", () => {
-    it("should remove a given sessionKey.", async() => {
+    it("should remove a given sessionKey.", async () => {
       expect.assertions(3);
 
       const foreignId1 = uuidv4();
       const foreignId2 = uuidv4();
       const foreignId3 = uuidv4();
-      const dtos = [defaultSessionKeyDto({foreign_id: foreignId1}), defaultSessionKeyDto({foreign_id: foreignId2}), defaultSessionKeyDto({foreign_id: foreignId3})];
+      const dtos = [
+        defaultSessionKeyDto({ foreign_id: foreignId1 }),
+        defaultSessionKeyDto({ foreign_id: foreignId2 }),
+        defaultSessionKeyDto({ foreign_id: foreignId3 }),
+      ];
       const collection = new SessionKeysCollection(dtos);
 
       collection.remove(collection._items[1]);

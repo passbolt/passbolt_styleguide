@@ -13,29 +13,31 @@
  */
 
 import MockPort from "../../../../react-extension/test/mock/MockPort";
-import SubscriptionKeyServiceWorkerService, {GET_SUBSCRIPTION_KEY, UPDATE_SUBSCRIPTION_KEY} from "./SubscriptionKeyServiceWorkerService";
+import SubscriptionKeyServiceWorkerService, {
+  GET_SUBSCRIPTION_KEY,
+  UPDATE_SUBSCRIPTION_KEY,
+} from "./SubscriptionKeyServiceWorkerService";
 
-describe('SubscriptionKeyServiceWorkerService', () => {
+describe("SubscriptionKeyServiceWorkerService", () => {
   /**
    * @type {MockPort}
    */
   let port,
-
     /**
      * @type {SubscriptionKeyServiceWorkerService}
      */
     service;
 
-  const key = 'a perfectly valid subscription key';
-  const keyDto = {data: key};
+  const key = "a perfectly valid subscription key";
+  const keyDto = { data: key };
 
   beforeEach(() => {
     port = new MockPort();
     service = new SubscriptionKeyServiceWorkerService(port);
   });
 
-  describe('::findOrganizationSubscriptionKey', () => {
-    it('requests the service worker for the organisation subscription key', async() => {
+  describe("::findOrganizationSubscriptionKey", () => {
+    it("requests the service worker for the organisation subscription key", async () => {
       const mockGetSubscriptionKey = jest.fn().mockResolvedValue(keyDto);
       port.addRequestListener(GET_SUBSCRIPTION_KEY, mockGetSubscriptionKey);
 
@@ -45,10 +47,10 @@ describe('SubscriptionKeyServiceWorkerService', () => {
     });
   });
 
-  describe('::updateOrganizationSubscriptionKey', () => {
-    it('requests the service worker to update the organisation subscription key', async() => {
-      const newKey = 'another perfectly valid key';
-      const newKeyDto = {data: newKey};
+  describe("::updateOrganizationSubscriptionKey", () => {
+    it("requests the service worker to update the organisation subscription key", async () => {
+      const newKey = "another perfectly valid key";
+      const newKeyDto = { data: newKey };
 
       const mockUpdateSubscriptionKey = jest.fn().mockResolvedValue(newKeyDto);
       port.addRequestListener(UPDATE_SUBSCRIPTION_KEY, mockUpdateSubscriptionKey);

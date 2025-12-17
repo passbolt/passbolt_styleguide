@@ -12,8 +12,8 @@
  * @since         4.4.0
  */
 
-import {MfaSettingsWorkflowStates} from "../../../../contexts/MFAContext";
-import {defaultProps} from "../ScanTotpCode/ScanTotpCode.test.data";
+import { MfaSettingsWorkflowStates } from "../../../../contexts/MFAContext";
+import { defaultProps } from "../ScanTotpCode/ScanTotpCode.test.data";
 import TotpGetStartedPage from "./TotpGetStarted.test.page";
 
 /**
@@ -22,14 +22,13 @@ import TotpGetStartedPage from "./TotpGetStarted.test.page";
 
 describe("TotpGetStarted", () => {
   describe("As a logged user I should see a get started screen to explain how to setup TOTP", () => {
-    let page,
-      props;
+    let page, props;
 
     beforeEach(() => {
       props = defaultProps();
       page = new TotpGetStartedPage(props);
     });
-    it('I should have access to the scan totp screen', () => {
+    it("I should have access to the scan totp screen", () => {
       expect.assertions(3);
 
       expect(page.exists()).toBeTruthy();
@@ -37,7 +36,7 @@ describe("TotpGetStarted", () => {
       expect(page.subtitle.textContent).toEqual("How does it work?");
     });
 
-    it('I should see some explanation to how the setup will happen', async() => {
+    it("I should see some explanation to how the setup will happen", async () => {
       expect.assertions(1);
 
       await page.clickOnGetStartedButton();
@@ -45,19 +44,23 @@ describe("TotpGetStarted", () => {
       expect(props.mfaContext.navigate).toHaveBeenCalledWith(MfaSettingsWorkflowStates.SCANTOTPCODE);
     });
 
-    it('I should be able to cancel the setup', async() => {
+    it("I should be able to cancel the setup", async () => {
       expect.assertions(6);
 
       await page.clickOnCancelButton();
       expect(page.totpSignInIllustation).not.toBeNull();
-      expect(page.totpSignInIllustationDescription.textContent).toEqual("You sign in to passbolt just like you normally do.");
+      expect(page.totpSignInIllustationDescription.textContent).toEqual(
+        "You sign in to passbolt just like you normally do.",
+      );
       expect(page.totpPhoneIllustation).not.toBeNull();
-      expect(page.totpPhoneIllustationDescription.textContent).toEqual("When using a new browser, you need an additional code from your phone.");
+      expect(page.totpPhoneIllustationDescription.textContent).toEqual(
+        "When using a new browser, you need an additional code from your phone.",
+      );
       expect(page.totpEnterCodeIllustation).not.toBeNull();
       expect(page.totpEnterCodeIllustationDescription.textContent).toEqual("Once you enter this code, you can log in.");
     });
 
-    it('I should be able to start the setup', async() => {
+    it("I should be able to start the setup", async () => {
       expect.assertions(1);
 
       await page.clickOnGetStartedButton();

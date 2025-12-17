@@ -16,15 +16,15 @@
  * Unit tests on ActionAbortedMissingMetadataKeys in regard of specifications
  */
 import ActionAbortedMissingMetadataKeysPage from "./ActionAbortedMissingMetadataKeys.test.page";
-import {waitFor} from "@testing-library/react";
-import {defaultProps} from "./ActionAbortedMissingMetadataKeys.test.data";
+import { waitFor } from "@testing-library/react";
+import { defaultProps } from "./ActionAbortedMissingMetadataKeys.test.data";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
 describe("ActionAbortedMissingMetadataKeys", () => {
-  it("As a signed in user I can close the dialog with the submit button", async() => {
+  it("As a signed in user I can close the dialog with the submit button", async () => {
     expect.assertions(4);
     const props = defaultProps();
     const page = new ActionAbortedMissingMetadataKeysPage(props);
@@ -39,7 +39,7 @@ describe("ActionAbortedMissingMetadataKeys", () => {
     expect(props.onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('As a signed in user I can close an action aborted missing metadata keys', async() => {
+  it("As a signed in user I can close an action aborted missing metadata keys", async () => {
     expect.assertions(2);
     const props = defaultProps();
     const page = new ActionAbortedMissingMetadataKeysPage(props);

@@ -12,16 +12,15 @@
  * @since         5.4.0
  */
 
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 import mockComponentSetState from "../../../test/mock/components/React/mockSetState";
-import {defaultAdministrationEncryptedMetadataGettingStartedContext} from "./AdministrationEncryptedMetadataGettingStartedContext.test.data";
+import { defaultAdministrationEncryptedMetadataGettingStartedContext } from "./AdministrationEncryptedMetadataGettingStartedContext.test.data";
 import AdministrationEncryptedMetadataGettingStartedContextProvider from "./AdministrationEncryptedMetadataGettingStartedContext";
 import {
   defaultMetadataGettingStartedSettingsDto,
-  enableMetadataGettingStartedSettingsDto
+  enableMetadataGettingStartedSettingsDto,
 } from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity.test.data";
-import MetadataGettingStartedSettingsEntity
-  from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity";
+import MetadataGettingStartedSettingsEntity from "../../../../shared/models/entity/metadata/metadataGettingStartedSettingsEntity";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -32,7 +31,9 @@ describe("AdministrationEncryptedMetadataGettingStartedContext", () => {
     it("should initialise the default state and handlers", () => {
       expect.assertions(3);
 
-      const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(defaultAdministrationEncryptedMetadataGettingStartedContext());
+      const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(
+        defaultAdministrationEncryptedMetadataGettingStartedContext(),
+      );
       mockComponentSetState(contextProvider);
 
       expect(contextProvider.runningUpdatePromise).not.toBeUndefined();
@@ -40,7 +41,7 @@ describe("AdministrationEncryptedMetadataGettingStartedContext", () => {
       expect(contextProvider.state).toMatchObject({
         get: expect.any(Function),
         metadataGettingStartedSettings: null,
-        update: expect.any(Function)
+        update: expect.any(Function),
       });
     });
   });
@@ -56,20 +57,26 @@ describe("AdministrationEncryptedMetadataGettingStartedContext", () => {
       const expectedMetadataGettingStartedSettings = enableMetadataGettingStartedSettingsDto();
 
       contextProvider.setState({
-        metadataGettingStartedSettings: new MetadataGettingStartedSettingsEntity(expectedMetadataGettingStartedSettings),
+        metadataGettingStartedSettings: new MetadataGettingStartedSettingsEntity(
+          expectedMetadataGettingStartedSettings,
+        ),
       });
 
       expect(contextProvider.get().toDto()).toStrictEqual(expectedMetadataGettingStartedSettings);
     });
 
-    it("should return null if the state hasn't been initialized yet and set a blocking promise while the init occurs", async() => {
+    it("should return null if the state hasn't been initialized yet and set a blocking promise while the init occurs", async () => {
       expect.assertions(4);
 
       const props = defaultAdministrationEncryptedMetadataGettingStartedContext();
       const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(props);
       mockComponentSetState(contextProvider);
 
-      jest.spyOn(props.service, "findGettingStartedSettings").mockImplementation(() => Promise.resolve(new MetadataGettingStartedSettingsEntity(defaultMetadataGettingStartedSettingsDto())));
+      jest
+        .spyOn(props.service, "findGettingStartedSettings")
+        .mockImplementation(() =>
+          Promise.resolve(new MetadataGettingStartedSettingsEntity(defaultMetadataGettingStartedSettingsDto())),
+        );
 
       expect(contextProvider.runningUpdatePromise).toBeNull();
       expect(contextProvider.get()).toBeNull();
@@ -87,23 +94,31 @@ describe("AdministrationEncryptedMetadataGettingStartedContext", () => {
 
       const metadataGettingStartedSettings = defaultMetadataGettingStartedSettingsDto();
 
-      const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(defaultAdministrationEncryptedMetadataGettingStartedContext());
+      const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(
+        defaultAdministrationEncryptedMetadataGettingStartedContext(),
+      );
       mockComponentSetState(contextProvider);
 
       expect(contextProvider.state.metadataGettingStartedSettings).toBeNull();
       contextProvider.set(new MetadataGettingStartedSettingsEntity(metadataGettingStartedSettings));
 
-      expect(contextProvider.state.metadataGettingStartedSettings.toDto()).toStrictEqual(metadataGettingStartedSettings);
+      expect(contextProvider.state.metadataGettingStartedSettings.toDto()).toStrictEqual(
+        metadataGettingStartedSettings,
+      );
     });
   });
 
   describe("::update", () => {
-    it("should call the service with the right method to trigger the event or the API call.", async() => {
+    it("should call the service with the right method to trigger the event or the API call.", async () => {
       expect.assertions(1);
 
       const props = defaultAdministrationEncryptedMetadataGettingStartedContext();
       const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(props);
-      const spyOnRequest = jest.spyOn(props.service, "findGettingStartedSettings").mockImplementation(() => Promise.resolve(new MetadataGettingStartedSettingsEntity(defaultMetadataGettingStartedSettingsDto())));
+      const spyOnRequest = jest
+        .spyOn(props.service, "findGettingStartedSettings")
+        .mockImplementation(() =>
+          Promise.resolve(new MetadataGettingStartedSettingsEntity(defaultMetadataGettingStartedSettingsDto())),
+        );
 
       mockComponentSetState(contextProvider);
 
@@ -112,14 +127,21 @@ describe("AdministrationEncryptedMetadataGettingStartedContext", () => {
       expect(spyOnRequest).toHaveBeenCalledTimes(1);
     });
 
-    it("should not call the service twice if a pending promise is running.", async() => {
+    it("should not call the service twice if a pending promise is running.", async () => {
       expect.assertions(3);
 
       const props = defaultAdministrationEncryptedMetadataGettingStartedContext();
       let resolveUpdateLocalStoragePromise;
-      const spyOnRequest = jest.spyOn(props.service, "findGettingStartedSettings").mockImplementation(
-        () => new Promise(resolve => resolveUpdateLocalStoragePromise = () => resolve(new MetadataGettingStartedSettingsEntity(enableMetadataGettingStartedSettingsDto())))
-      );
+      const spyOnRequest = jest
+        .spyOn(props.service, "findGettingStartedSettings")
+        .mockImplementation(
+          () =>
+            new Promise(
+              (resolve) =>
+                (resolveUpdateLocalStoragePromise = () =>
+                  resolve(new MetadataGettingStartedSettingsEntity(enableMetadataGettingStartedSettingsDto()))),
+            ),
+        );
 
       const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(props);
       mockComponentSetState(contextProvider);
@@ -141,12 +163,14 @@ describe("AdministrationEncryptedMetadataGettingStartedContext", () => {
       await resolveUpdateLocalStoragePromise();
     });
 
-    it("should call the service again if the promise has been resolved.", async() => {
+    it("should call the service again if the promise has been resolved.", async () => {
       expect.assertions(5);
 
       const props = defaultAdministrationEncryptedMetadataGettingStartedContext();
 
-      const spyOnRequest = jest.spyOn(props.service, "findGettingStartedSettings").mockImplementation(() => new MetadataGettingStartedSettingsEntity(defaultMetadataGettingStartedSettingsDto()));
+      const spyOnRequest = jest
+        .spyOn(props.service, "findGettingStartedSettings")
+        .mockImplementation(() => new MetadataGettingStartedSettingsEntity(defaultMetadataGettingStartedSettingsDto()));
       const contextProvider = new AdministrationEncryptedMetadataGettingStartedContextProvider(props);
       mockComponentSetState(contextProvider);
 

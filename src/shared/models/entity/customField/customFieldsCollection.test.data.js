@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.3.0
  */
-import {defaultCustomField} from "./customFieldEntity.test.data";
+import { defaultCustomField } from "./customFieldEntity.test.data";
 
 export const defaultCustomFieldsCollection = () => [
   defaultCustomField({

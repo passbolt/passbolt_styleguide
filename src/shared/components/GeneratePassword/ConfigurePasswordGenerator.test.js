@@ -16,7 +16,7 @@
  * Unit tests on ConfigurePasswordGenerator in regard of specifications
  */
 import ConfigurePasswordGeneratorPage from "./ConfigurePasswordGenerator.test.page";
-import {defaultProps} from "./ConfigurePasswordGenerator.test.data";
+import { defaultProps } from "./ConfigurePasswordGenerator.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -31,8 +31,8 @@ describe("Configure Password Generator", () => {
     page = new ConfigurePasswordGeneratorPage(props);
   });
 
-  describe('As LU I should update the password configuration', () => {
-    it('As LU I should change the range of word count', async() => {
+  describe("As LU I should update the password configuration", () => {
+    it("As LU I should change the range of word count", async () => {
       expect.assertions(5);
       expect(page.rangeLength.value).toBe("18");
       expect(page.length.value).toBe("18");
@@ -43,7 +43,7 @@ describe("Configure Password Generator", () => {
       expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
 
-    it('As LU I should change the number of word count', async() => {
+    it("As LU I should change the number of word count", async () => {
       expect.assertions(5);
       expect(page.rangeLength.value).toBe("18");
       expect(page.length.value).toBe("18");
@@ -54,7 +54,7 @@ describe("Configure Password Generator", () => {
       expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
 
-    it('As LU I should change the masks', async() => {
+    it("As LU I should change the masks", async () => {
       expect.assertions(3);
       expect(page.numberOfActiveMask).toBe(9);
       await page.selectMask(1);
@@ -63,7 +63,7 @@ describe("Configure Password Generator", () => {
       expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
 
-    it('As LU I should change the look alike', async() => {
+    it("As LU I should change the look alike", async () => {
       expect.assertions(3);
       expect(page.isCheckedLookAlike).toBeTruthy();
       await page.changeLookAlike();

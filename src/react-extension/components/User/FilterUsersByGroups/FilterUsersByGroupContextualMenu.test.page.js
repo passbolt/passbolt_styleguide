@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,8 +12,7 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, waitFor} from "@testing-library/react";
+import { fireEvent, waitFor } from "@testing-library/react";
 
 /**
  * The FilterUsersByGroupContextualMenu component represented as a page
@@ -32,26 +30,26 @@ export default class FilterUsersByGroupContextualMenuPageObject {
    * Returns the all group menu
    */
   get allGroupMenu() {
-    return this._container.querySelector('#all-groups');
+    return this._container.querySelector("#all-groups");
   }
 
   /**
    * Returns the group manage
    */
   get groupManageMenu() {
-    return this._container.querySelector('#groups-manage');
+    return this._container.querySelector("#groups-manage");
   }
 
   /**
    * Returns the group manage
    */
   get groupMemberMenu() {
-    return this._container.querySelector('#groups-member');
+    return this._container.querySelector("#groups-member");
   }
 
   /** Click on the component */
-  async click(component)  {
-    const leftClick = {button: 0};
+  async click(component) {
+    const leftClick = { button: 0 };
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }

@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,12 +12,11 @@
  * @since         2.11.0
  */
 
-
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
-import {BrowserRouter as Router} from "react-router-dom";
-import {UserWorkspaceContext} from "../../../contexts/UserWorkspaceContext";
+import { BrowserRouter as Router } from "react-router-dom";
+import { UserWorkspaceContext } from "../../../contexts/UserWorkspaceContext";
 import DisplayUserGroupDetailsMembers from "./DisplayUserGroupDetailsMembers";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -37,29 +35,27 @@ export default class DisplayUserGroupDetailsMembersPage {
         <AppContext.Provider value={appContext}>
           <Router>
             <UserWorkspaceContext.Provider value={props.userWorkspaceContext}>
-              <DisplayUserGroupDetailsMembers {...props}/>
+              <DisplayUserGroupDetailsMembers {...props} />
             </UserWorkspaceContext.Provider>
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
-
-
 
   /**
    * Returns true if the component is in a collapsed mode
    */
   get isCollapsed() {
-    return Boolean(this._page.container.querySelector('.closed'));
+    return Boolean(this._page.container.querySelector(".closed"));
   }
 
   /**
    * Returns the members count of the group
    */
   get membersCount() {
-    return this._page.container.querySelectorAll('.permission.usercard-col-2').length;
+    return this._page.container.querySelectorAll(".permission.usercard-col-2").length;
   }
 
   /**
@@ -67,22 +63,22 @@ export default class DisplayUserGroupDetailsMembersPage {
    * @param index
    */
   member(index) {
-    const element = this._page.container.querySelectorAll('.permission.usercard-col-2')[index - 1];
+    const element = this._page.container.querySelectorAll(".permission.usercard-col-2")[index - 1];
     return {
       get name() {
         return element.querySelector(".name").textContent;
       },
       get role() {
-        return element.querySelector('.subinfo').textContent;
-      }
+        return element.querySelector(".subinfo").textContent;
+      },
     };
   }
   /**
    * Toggle the collapse / expand component hbehavior
    */
   async toggleCollapse() {
-    const element = this._page.container.querySelector('button');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector("button");
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -91,8 +87,8 @@ export default class DisplayUserGroupDetailsMembersPage {
    * Call-to-action to the edit of the group
    */
   async editGroup() {
-    const element = this._page.container.querySelector('.section-action');
-    const leftClick = {button: 0};
+    const element = this._page.container.querySelector(".section-action");
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }

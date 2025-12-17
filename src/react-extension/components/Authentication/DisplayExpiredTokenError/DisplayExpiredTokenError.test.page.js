@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayExpiredTokenError from "./DisplayExpiredTokenError";
@@ -27,9 +27,9 @@ export default class DisplayExpiredTokenErrorTestPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayExpiredTokenError {...props}/>
+        <DisplayExpiredTokenError {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -37,14 +37,14 @@ export default class DisplayExpiredTokenErrorTestPage {
    * Returns the request new invitation element
    */
   get requestNewInvitationButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector(".button.primary");
   }
 
   /**
    * Request new account
    */
   async requestNewInvitation() {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(this.requestNewInvitationButton, leftClick);
   }
 }

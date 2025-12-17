@@ -1,4 +1,4 @@
-import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import { defaultAppContext } from "../../../contexts/ApiAppContext.test.data";
 
 /**
  * Default props.

@@ -19,7 +19,7 @@
 export function defaultProps(props) {
   const defaultProps = {
     onAccept: jest.fn(() => Promise.resolve()),
-    serverKey: {"fingerprint": "0c1d1761110d1e33c9006d1a5b1b332ed06426d3"},
+    serverKey: { fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3" },
   };
   return Object.assign(defaultProps, props || {});
 }

@@ -11,10 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.3.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
-import MockTranslationProvider
-  from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import Totp from "./Totp";
 
 export default class TotpTestPage {
@@ -25,9 +24,9 @@ export default class TotpTestPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <Totp {...props}/>
+        <Totp {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -36,7 +35,7 @@ export default class TotpTestPage {
    * @return {HTMLElement}
    */
   get button() {
-    return this._page.container.querySelector('button');
+    return this._page.container.querySelector("button");
   }
 
   /**
@@ -44,7 +43,7 @@ export default class TotpTestPage {
    * @return {HTMLElement}
    */
   get codeElement() {
-    return this._page.container.querySelector('.totp-code');
+    return this._page.container.querySelector(".totp-code");
   }
 
   /**
@@ -52,18 +51,13 @@ export default class TotpTestPage {
    * @retutn {string}
    */
   get code() {
-    return this.codeElement.textContent.match(/\d/g).join('');
+    return this.codeElement.textContent.match(/\d/g).join("");
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
 }
-
-
-
-
-

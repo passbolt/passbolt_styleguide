@@ -17,7 +17,7 @@
  */
 
 import AskInFormMenuDisplayTestPage from "./AskInFormMenuDisplay.test.page";
-import {contextWithAuthenticatedUser, contextWithUnauthenticatedUser} from "./AskInFormMenuDisplay.test.data";
+import { contextWithAuthenticatedUser, contextWithUnauthenticatedUser } from "./AskInFormMenuDisplay.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -26,22 +26,22 @@ beforeEach(() => {
 describe("See the Create Resource", () => {
   let page; // The page to test against
 
-  describe('As a logged out user on a webpage with a form', () => {
+  describe("As a logged out user on a webpage with a form", () => {
     beforeEach(() => {
       page = new AskInFormMenuDisplayTestPage(contextWithUnauthenticatedUser);
     });
 
-    it('I should see a grey Passbolt icon when I mouseover or focus on a username or password fields', async() => {
+    it("I should see a grey Passbolt icon when I mouseover or focus on a username or password fields", async () => {
       expect(page.isActive).toBeFalsy();
     });
   });
 
-  describe('As a logged in user on a webpage with a form', () => {
+  describe("As a logged in user on a webpage with a form", () => {
     beforeEach(() => {
       page = new AskInFormMenuDisplayTestPage(contextWithAuthenticatedUser);
     });
 
-    it('I should see a grey Passbolt icon when I mouseover or focus on a username or password fields', async() => {
+    it("I should see a grey Passbolt icon when I mouseover or focus on a username or password fields", async () => {
       expect(page.isActive).toBeTruthy();
     });
   });

@@ -11,16 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.8.0
  */
-import {defaultProps} from "./DeleteRole.test.data";
+import { defaultProps } from "./DeleteRole.test.data";
 import DeleteRole from "./DeleteRole";
 
-
 export default {
-  title: 'Components/Administration/DeleteRole',
-  component: DeleteRole
+  title: "Components/Administration/DeleteRole",
+  component: DeleteRole,
 };
 
-
 export const Initial = {
-  args: defaultProps()
+  args: defaultProps(),
 };

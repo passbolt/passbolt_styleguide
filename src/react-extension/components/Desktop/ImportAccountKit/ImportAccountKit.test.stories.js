@@ -15,26 +15,23 @@
 import React from "react";
 import ImportAccountKit from "./ImportAccountKit";
 
-
 export default {
-  title: 'Components/Desktop/ImportAccountKit',
-  component: ImportAccountKit
+  title: "Components/Desktop/ImportAccountKit",
+  component: ImportAccountKit,
 };
 
-const Template = () =>
+const Template = () => (
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
         <ImportAccountKit />
       </div>
     </div>
-  </div>;
+  </div>
+);
 
 const defaultParameters = {
-  css: "ext_authentication"
+  css: "ext_authentication",
 };
 export const Default = Template.bind({});
 Default.parameters = defaultParameters;
-
-
-

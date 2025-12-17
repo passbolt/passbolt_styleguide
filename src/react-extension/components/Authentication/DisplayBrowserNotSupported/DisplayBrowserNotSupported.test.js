@@ -18,11 +18,10 @@
 
 import DisplayBrowserNotSupportedPage from "./DisplayBrowserNotSupported.test.page";
 
-
 beforeAll(() => {
-  Object.defineProperty(window, 'matchMedia', {
+  Object.defineProperty(window, "matchMedia", {
     writable: true,
-    value: jest.fn().mockImplementation(query => ({
+    value: jest.fn().mockImplementation((query) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -44,27 +43,27 @@ describe("As AN I should see not supported browser page", () => {
   const browserInfo = [
     {
       name: "Mozilla Firefox",
-      url: "https://www.mozilla.org/"
+      url: "https://www.mozilla.org/",
     },
     {
       name: "Google Chrome",
-      url: "https://www.google.com/chrome/"
+      url: "https://www.google.com/chrome/",
     },
     {
       name: "Microsoft Edge",
-      url: "https://www.microsoft.com/edge"
+      url: "https://www.microsoft.com/edge",
     },
     {
       name: "Brave",
-      url: "https://www.brave.com/"
+      url: "https://www.brave.com/",
     },
     {
       name: "Vivaldi",
-      url: "https://www.vivaldi.com/"
+      url: "https://www.vivaldi.com/",
     },
   ];
 
-  describe('As AN I should be able to be requested to download a compatible browser during the setup of my account', () => {
+  describe("As AN I should be able to be requested to download a compatible browser during the setup of my account", () => {
     /**
      * Given a AN
      * Then I should see that my browser is not supported
@@ -74,14 +73,14 @@ describe("As AN I should see not supported browser page", () => {
       page = new DisplayBrowserNotSupportedPage();
     });
 
-    it('As AN I should see that my browser is not supported', async() => {
+    it("As AN I should see that my browser is not supported", async () => {
       expect.assertions(3 + browserInfo.length * 2);
 
       expect(page.exists()).toBeTruthy();
       // title
       expect(page.title).toBe("Sorry, your browser is not supported.");
       // message
-      expect(page.message).toBe('Please download one of these browsers to get started with passbolt:');
+      expect(page.message).toBe("Please download one of these browsers to get started with passbolt:");
       for (let i = 0; i < browserInfo.length; i++) {
         await page.clickOnBrowserButton(i);
         // download

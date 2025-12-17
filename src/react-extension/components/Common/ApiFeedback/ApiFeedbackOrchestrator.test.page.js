@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.10.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ApiFeedbackOrchestrator from "./ApiFeedbackOrchestrator";
@@ -24,24 +24,16 @@ export default class ApiErrorPage {
    * Default constructor
    * @param props Props to attach
    */
-  constructor({errorMessage, successMessage, ...props}) {
+  constructor({ errorMessage, successMessage, ...props }) {
     this._page = render(
       <MockTranslationProvider>
         <>
-          <ApiFeedbackOrchestrator {...props}/>
-          {errorMessage &&
-            <div id="api-error-details">
-              {errorMessage}
-            </div>
-          }
-          {successMessage &&
-            <div id="api-success">
-              {successMessage}
-            </div>
-          }
+          <ApiFeedbackOrchestrator {...props} />
+          {errorMessage && <div id="api-error-details">{errorMessage}</div>}
+          {successMessage && <div id="api-success">{successMessage}</div>}
         </>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -71,7 +63,7 @@ export default class ApiErrorPage {
    * @returns {Promise<void>}
    */
   async clickOn(element, callback) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {
       if (!callback()) {
@@ -85,7 +77,7 @@ export default class ApiErrorPage {
    * @return {HTMLElement}
    */
   get panel() {
-    return this.select('.api-feedback-card');
+    return this.select(".api-feedback-card");
   }
 
   /**
@@ -93,7 +85,7 @@ export default class ApiErrorPage {
    * @return {HTMLElement}
    */
   get logToggle() {
-    return this.select('.api-feedback-card .accordion-header button');
+    return this.select(".api-feedback-card .accordion-header button");
   }
 
   /**
@@ -101,7 +93,7 @@ export default class ApiErrorPage {
    * @return {HTMLElement}
    */
   get logDetails() {
-    return this.select('.api-feedback-card .accordion-content textarea');
+    return this.select(".api-feedback-card .accordion-content textarea");
   }
 
   /**
@@ -109,7 +101,7 @@ export default class ApiErrorPage {
    * @return {HTMLElement}
    */
   get successMessage() {
-    return this.select('.api-feedback-card p');
+    return this.select(".api-feedback-card p");
   }
 
   /**

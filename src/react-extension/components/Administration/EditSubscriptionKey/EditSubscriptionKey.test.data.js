@@ -19,12 +19,12 @@ export function defaultProps() {
     context: {
       port: new MockPort(),
       editSubscriptionKey: {
-        key: "data"
+        key: "data",
       },
       setContext: jest.fn(),
     },
     dialogContext: {
-      open: jest.fn()
-    }
+      open: jest.fn(),
+    },
   };
 }

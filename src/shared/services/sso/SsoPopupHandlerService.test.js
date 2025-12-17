@@ -15,9 +15,9 @@
 /**
  * Unit tests on IdentifyWithSsoService in regard of specifications
  */
-import SsoPopupHandlerService, {AUTHENTICATION_SUCCESS_CASES} from "./SsoPopupHandlerService";
-import {v4 as uuid} from 'uuid';
-import each from 'jest-each';
+import SsoPopupHandlerService, { AUTHENTICATION_SUCCESS_CASES } from "./SsoPopupHandlerService";
+import { v4 as uuid } from "uuid";
+import each from "jest-each";
 
 const mockWindowOpen = () => {
   window.originalOpen = window.open;
@@ -27,11 +27,11 @@ const mockWindowOpen = () => {
     opener: "non null opener",
     closed: false,
     location: {
-      href: url
+      href: url,
     },
     target: target,
     param: param,
-    close: jest.fn()
+    close: jest.fn(),
   });
 };
 
@@ -54,14 +54,11 @@ afterAll(() => {
   unmockWindowOpen();
 });
 
-const scenarios = [
-  {providerId: 'azure'},
-  {providerId: 'google'}
-];
+const scenarios = [{ providerId: "azure" }, { providerId: "google" }];
 
-each(scenarios).describe("SsoPopupHandlerService", scenario => {
+each(scenarios).describe("SsoPopupHandlerService", (scenario) => {
   describe(`SsoPopupHandlerService::exec (with provider '${scenario.providerId}')`, () => {
-    it('Should create a popup window', () => {
+    it("Should create a popup window", () => {
       expect.assertions(4);
       const expectedPopupUrl = "http://passbolt.test";
       const siteDomain = "http://localhost:6006";
@@ -77,7 +74,7 @@ each(scenarios).describe("SsoPopupHandlerService", scenario => {
       expect(popup.closed).toBeFalsy();
     });
 
-    it('Should return the token when the popup is on the expected url', async() => {
+    it("Should return the token when the popup is on the expected url", async () => {
       expect.assertions(4);
       const expectedPopupUrl = "http://passbolt.test";
       const siteDomain = "http://localhost:6006";
@@ -100,14 +97,14 @@ each(scenarios).describe("SsoPopupHandlerService", scenario => {
       const returnedToken = await promise;
       expect(returnedToken).toStrictEqual({
         case: AUTHENTICATION_SUCCESS_CASES.DEFAULT,
-        token: expectedToken
+        token: expectedToken,
       });
       expect(popup.close).toHaveBeenCalledTimes(1);
       expect(service.popup).toBeNull();
       expect(closeSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('Should return the user email if its available for self_registration when the popup is on the erroneous url with an email', async() => {
+    it("Should return the user email if its available for self_registration when the popup is on the erroneous url with an email", async () => {
       expect.assertions(4);
       const expectedPopupUrl = "http://passbolt.test";
       const siteDomain = "http://localhost:6006";
@@ -130,14 +127,14 @@ each(scenarios).describe("SsoPopupHandlerService", scenario => {
       const returnedEmail = await promise;
       expect(returnedEmail).toStrictEqual({
         case: AUTHENTICATION_SUCCESS_CASES.REGISTRATION_REQUIRED,
-        email: expectedEmail
+        email: expectedEmail,
       });
       expect(popup.close).toHaveBeenCalledTimes(1);
       expect(service.popup).toBeNull();
       expect(closeSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('Should not return when the popup is on the erroneous url without an email', async() => {
+    it("Should not return when the popup is on the erroneous url without an email", async () => {
       expect.assertions(4);
       const expectedPopupUrl = "http://passbolt.test";
       const siteDomain = "http://localhost:6006";
@@ -158,7 +155,7 @@ each(scenarios).describe("SsoPopupHandlerService", scenario => {
       expect(checkUrlSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('Should stop the process if the popup is closed', async() => {
+    it("Should stop the process if the popup is closed", async () => {
       expect.assertions(2);
       const expectedPopupUrl = "http://passbolt.test";
       const siteDomain = "http://localhost:6006/";

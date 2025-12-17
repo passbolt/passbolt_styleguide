@@ -12,20 +12,20 @@
  * @since         4.3.0
  */
 
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import MockPort from "../../test/mock/MockPort";
 
 export const defaultAccountKit = (data = {}) => {
   const defaultData = {
-    "domain": "https://passbolt.local",
-    "user_id": uuidv4(),
-    "username": "ada@passbolt.dev",
-    "first_name": "Ada",
-    "last_name": "Lovelace",
-    "user_public_armored_key": "",
-    "user_private_armored_key": "",
-    "server_public_armored_key": "",
-    "security_token": defaultSecurityTokenDto(data?.security_token)
+    domain: "https://passbolt.local",
+    user_id: uuidv4(),
+    username: "ada@passbolt.dev",
+    first_name: "Ada",
+    last_name: "Lovelace",
+    user_public_armored_key: "",
+    user_private_armored_key: "",
+    server_public_armored_key: "",
+    security_token: defaultSecurityTokenDto(data?.security_token),
   };
 
   delete data?.securityToken;
@@ -35,9 +35,9 @@ export const defaultAccountKit = (data = {}) => {
 
 export const defaultSecurityTokenDto = (data = {}) => {
   const defaultData = {
-    "code": "HGA",
-    "color": "#8bc34a",
-    "textcolor": "#000000",
+    code: "HGA",
+    color: "#8bc34a",
+    textcolor: "#000000",
   };
 
   return Object.assign(defaultData, data);
@@ -73,6 +73,6 @@ export function defaultImportAccountKitContext(context = {}) {
     verifyAccountKit: jest.fn(),
     verifyPassphrase: jest.fn(),
     flushAccountKit: jest.fn(),
-    ...context
+    ...context,
   };
 }

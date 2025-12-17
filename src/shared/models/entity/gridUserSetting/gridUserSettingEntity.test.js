@@ -14,7 +14,7 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import GridUserSettingEntity from "./gridUserSettingEntity";
-import {defaultGridUserSettingData} from "./gridUserSettingEntity.test.data";
+import { defaultGridUserSettingData } from "./gridUserSettingEntity.test.data";
 import each from "jest-each";
 import EntityValidationError from "../abstract/entityValidationError";
 
@@ -35,36 +35,34 @@ describe("GridUserSettingEntity", () => {
     });
 
     each([
-      {scenario: 'required', rule: 'type'},
-      {scenario: 'not null', rule: 'type', value: null},
-    ]).describe("Should validate the columns_setting", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+      { scenario: "required", rule: "type" },
+      { scenario: "not null", rule: "type", value: null },
+    ]).describe("Should validate the columns_setting", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultGridUserSettingData({
-          columns_setting: test.value
+          columns_setting: test.value,
         });
         try {
           new GridUserSettingEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('columns_setting', test.rule)).toBeTruthy();
+          expect(error.hasError("columns_setting", test.rule)).toBeTruthy();
         }
       });
     });
 
-    each([
-      {scenario: 'required', rule: 'type'},
-    ]).describe("Should validate the sorter", test => {
-      it(`Should not accept: ${test.scenario}`, async() => {
+    each([{ scenario: "required", rule: "type" }]).describe("Should validate the sorter", (test) => {
+      it(`Should not accept: ${test.scenario}`, async () => {
         expect.assertions(2);
         const dto = defaultGridUserSettingData({
-          sorter: test.value
+          sorter: test.value,
         });
         try {
           new GridUserSettingEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('sorter', test.rule)).toBeTruthy();
+          expect(error.hasError("sorter", test.rule)).toBeTruthy();
         }
       });
     });
@@ -73,10 +71,7 @@ describe("GridUserSettingEntity", () => {
   describe("GridUserSettingEntity:toDto", () => {
     it("should return the expected properties.", () => {
       expect.assertions(2);
-      const expectedKeys = [
-        'columns_setting',
-        'sorter'
-      ];
+      const expectedKeys = ["columns_setting", "sorter"];
 
       const dto = defaultGridUserSettingData();
       const entity = new GridUserSettingEntity(dto);

@@ -30,4 +30,5 @@ export const defaultPasswordGeneratorSettingsDto = (data = {}) => ({
   mask_char5: true,
   mask_emoji: false,
   exclude_look_alike_chars: true,
-  ...data});
+  ...data,
+});

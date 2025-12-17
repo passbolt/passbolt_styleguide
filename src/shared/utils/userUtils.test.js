@@ -12,8 +12,15 @@
  * @since         4.6.0
  */
 
-import {defaultUserDto} from "../models/entity/user/userEntity.test.data";
-import {USER_STATUS, getUserFormattedName, getUserStatus, isUserSuspended, isAccountRecoveryRequested, isMissingMetadataKey} from "./userUtils";
+import { defaultUserDto } from "../models/entity/user/userEntity.test.data";
+import {
+  USER_STATUS,
+  getUserFormattedName,
+  getUserStatus,
+  isUserSuspended,
+  isAccountRecoveryRequested,
+  isMissingMetadataKey,
+} from "./userUtils";
 
 describe("userUtils", () => {
   beforeEach(() => {
@@ -35,23 +42,22 @@ describe("userUtils", () => {
 
     it("should return false if the user a `disabled` property but falsy", () => {
       expect.assertions(1);
-      const user = {disabled: false};
+      const user = { disabled: false };
       expect(isUserSuspended(user)).toStrictEqual(false);
     });
 
     it("should return false if the user a `disabled` property but later than now", () => {
       expect.assertions(1);
-      const user = {disabled: new Date("3023-11-11T08:09:00")};
+      const user = { disabled: new Date("3023-11-11T08:09:00") };
       expect(isUserSuspended(user)).toStrictEqual(false);
     });
 
     it("should return true if the user a `disabled` set before now", () => {
       expect.assertions(1);
-      const user = {disabled: new Date("2022-11-11T08:09:00")};
+      const user = { disabled: new Date("2022-11-11T08:09:00") };
       expect(isUserSuspended(user)).toStrictEqual(true);
     });
   });
-
 
   describe("::getUserStatus", () => {
     it("should return DELETED if the user has a `deleted` date set", () => {
@@ -70,7 +76,6 @@ describe("userUtils", () => {
       };
       expect(getUserStatus(user)).toStrictEqual(USER_STATUS.DELETED);
     });
-
 
     it("should return SUSPENDED if the user has a `disabled` date in the past", () => {
       expect.assertions(1);
@@ -105,7 +110,7 @@ describe("userUtils", () => {
       jest.clearAllMocks();
     });
 
-    const mockTranslation = jest.fn().mockImplementation(s => s);
+    const mockTranslation = jest.fn().mockImplementation((s) => s);
 
     it("should return the user name when defined and without username", () => {
       expect.assertions(2);
@@ -119,13 +124,13 @@ describe("userUtils", () => {
       expect.assertions(2);
       const user = defaultUserDto();
       const expectedResult = `${user.profile.first_name} ${user.profile.last_name} (${user.username})`;
-      expect(getUserFormattedName(user, mockTranslation, {withUsername: true})).toStrictEqual(expectedResult);
+      expect(getUserFormattedName(user, mockTranslation, { withUsername: true })).toStrictEqual(expectedResult);
       expect(mockTranslation).not.toHaveBeenCalled();
     });
 
     it("should return 'Unknown user' if no name is defined", () => {
       expect.assertions(3);
-      const user = {profile: {}};
+      const user = { profile: {} };
       expect(getUserFormattedName(user, mockTranslation)).toStrictEqual("Unknown user");
       expect(mockTranslation).toHaveBeenCalledTimes(1);
       expect(mockTranslation).toHaveBeenCalledWith("Unknown user");
@@ -159,7 +164,7 @@ describe("userUtils", () => {
       expect.assertions(1);
       const user = {
         id: "54c6278e-f824-5fda-91ff-3e946b18d994",
-        pending_account_recovery_request: {"status": "pending"}
+        pending_account_recovery_request: { status: "pending" },
       };
       expect(isAccountRecoveryRequested(user)).toStrictEqual(true);
     });
@@ -185,9 +190,7 @@ describe("userUtils", () => {
       expect.assertions(1);
       const user = {
         id: "54c6278e-f824-5fda-91ff-3e946b18d994",
-        missing_metadata_key_ids: [
-          '1234',
-        ]
+        missing_metadata_key_ids: ["1234"],
       };
       expect(isMissingMetadataKey(user)).toStrictEqual(true);
     });

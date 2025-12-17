@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.2.0
  */
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
-import {AdminInternationalizationContextProvider} from "../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
+import { AdminInternationalizationContextProvider } from "../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayAdministrationInternationalisationActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationInternationalisationActions/DisplayAdministrationInternationalisationActions";
@@ -32,14 +32,14 @@ export default class DisplayInternationalizationAdministrationPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={{appContext: props.context}}>
-          <AdminInternationalizationContextProvider  {...props}>
-            <DisplayAdministrationInternationalisationActions/>
-            <DisplayInternationalizationAdministration {...props}/>
+        <AppContext.Provider value={{ appContext: props.context }}>
+          <AdminInternationalizationContextProvider {...props}>
+            <DisplayAdministrationInternationalisationActions />
+            <DisplayInternationalizationAdministration {...props} />
           </AdminInternationalizationContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -48,21 +48,21 @@ export default class DisplayInternationalizationAdministrationPage {
    * Returns the totp input element
    */
   get internationalisationSettings() {
-    return this._page.container.querySelector('.internationalisation-settings');
+    return this._page.container.querySelector(".internationalisation-settings");
   }
 
   /**
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.internationalisation-settings h3').textContent;
+    return this._page.container.querySelector(".internationalisation-settings h3").textContent;
   }
 
   /**
    * Returns the language input element
    */
   get locale() {
-    return this._page.container.querySelector('#locale-input');
+    return this._page.container.querySelector("#locale-input");
   }
 
   /**
@@ -70,14 +70,14 @@ export default class DisplayInternationalizationAdministrationPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSaveButton() {
-    return this._page.container.querySelector('#save-settings');
+    return this._page.container.querySelector("#save-settings");
   }
 
   /**
    * Returns the locale selected input element
    */
   get localeSelected() {
-    return this._page.container.querySelector('#locale-input .value').textContent;
+    return this._page.container.querySelector("#locale-input .value").textContent;
   }
 
   /**
@@ -91,7 +91,7 @@ export default class DisplayInternationalizationAdministrationPage {
    * Returns the locale input element
    */
   getLocaleList(index) {
-    return this._page.container.querySelectorAll('#locale-input .option')[index - 1];
+    return this._page.container.querySelectorAll("#locale-input .option")[index - 1];
   }
 
   /**
@@ -106,28 +106,28 @@ export default class DisplayInternationalizationAdministrationPage {
    * Returns the help box
    */
   get helpBox() {
-    return this._page.container.querySelectorAll('.sidebar-help-section')[0];
+    return this._page.container.querySelectorAll(".sidebar-help-section")[0];
   }
 
   /**
    * Returns the help box title
    */
   get helpBoxTitle() {
-    return this.helpBox.querySelector('h3');
+    return this.helpBox.querySelector("h3");
   }
 
   /**
    * Returns the help box description
    */
   get helpBoxDescription() {
-    return this.helpBox.querySelector('p');
+    return this.helpBox.querySelector("p");
   }
 
   /**
    * Returns the help box button
    */
   get helpBoxButton() {
-    return this.helpBox.querySelector('a');
+    return this.helpBox.querySelector("a");
   }
 
   /** click on the element */
@@ -155,7 +155,6 @@ export default class DisplayInternationalizationAdministrationPage {
     await this.click(this.locale);
     await this.click(this.getLocaleList(2));
   }
-
 
   /** select the spain language */
   async selectLanguageEs() {

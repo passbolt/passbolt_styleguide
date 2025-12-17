@@ -12,11 +12,11 @@
  * @since        3.6.0
  */
 import React from "react";
-import {render} from "@testing-library/react";
-import {Router} from 'react-router-dom';
+import { render } from "@testing-library/react";
+import { Router } from "react-router-dom";
 import HandleAccountRecoveryUserSettingsRoute from "./HandleAccountRecoveryUserSettingsRoute";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {createMemoryHistory} from "history";
+import { createMemoryHistory } from "history";
 
 export default class HandleAccountRecoveryUserSettingsRoutePage {
   /**
@@ -29,10 +29,10 @@ export default class HandleAccountRecoveryUserSettingsRoutePage {
     this._page = render(
       <MockTranslationProvider>
         <Router history={history}>
-          <HandleAccountRecoveryUserSettingsRoute {...props}/>
+          <HandleAccountRecoveryUserSettingsRoute {...props} />
         </Router>
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 }

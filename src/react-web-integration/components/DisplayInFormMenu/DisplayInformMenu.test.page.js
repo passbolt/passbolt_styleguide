@@ -12,12 +12,11 @@
  * @since         4.10.0
  */
 
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 import DisplayInFormMenu from "./DisplayInFormMenu";
-import MockTranslationProvider
-  from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The DisplayInFormMenuTestPage component represented as a page
@@ -31,10 +30,10 @@ export default class DisplayInFormMenuTestPage {
     this._page = render(
       <AppContext.Provider value={props.context}>
         <MockTranslationProvider>
-          <DisplayInFormMenu {...props}/>
+          <DisplayInFormMenu {...props} />
         </MockTranslationProvider>
       </AppContext.Provider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -42,6 +41,6 @@ export default class DisplayInFormMenuTestPage {
    * Returns inform menu items component
    */
   get informMenuItems() {
-    return this._page.container.querySelectorAll('.in-form-menu a');
+    return this._page.container.querySelectorAll(".in-form-menu a");
   }
 }

@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -13,11 +12,11 @@
  * @since         5.7.0
  */
 
-import {fireEvent, render} from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayCreatorSecretHistory from "./DisplayCreatorSecretRevision";
-import {waitFor} from "@testing-library/dom";
+import { waitFor } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 
 /**
@@ -31,9 +30,9 @@ export default class SelectSecretHistoryPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayCreatorSecretHistory {...props}/>
+        <DisplayCreatorSecretHistory {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
 
     this.user = userEvent.setup();
@@ -44,9 +43,8 @@ export default class SelectSecretHistoryPage {
    * @returns {Element}
    */
   get creatorSecretHistory() {
-    return this._page.container.querySelector('button.no-border');
+    return this._page.container.querySelector("button.no-border");
   }
-
 
   /**
    * Returns the add secret custom fields
@@ -112,7 +110,7 @@ export default class SelectSecretHistoryPage {
   }
 
   /** Mouse over on the fingerprint element */
-  async mouseOverOnFingerprint()  {
+  async mouseOverOnFingerprint() {
     fireEvent.mouseOver(this.fingerprint);
     await waitFor(() => {});
   }

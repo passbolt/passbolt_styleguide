@@ -12,21 +12,24 @@
  * @since         3.8.0
  */
 
-import {defaultProps} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
-import {AdminMfaContextProvider} from "./AdministrationMfaContext";
-import {enableFetchMocks} from 'jest-fetch-mock';
-import {mockMfaSettings, mockDuoError} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
-import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
-import MfaModel from '../../../../shared/models/Mfa/MfaModel';
-import {mockDefaultMfaModel} from '../../../components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data';
-import MfaDTO from '../../../../shared/models/Mfa/MfaDTO';
+import { defaultProps } from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
+import { AdminMfaContextProvider } from "./AdministrationMfaContext";
+import { enableFetchMocks } from "jest-fetch-mock";
+import {
+  mockMfaSettings,
+  mockDuoError,
+} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
+import { mockApiResponse } from "../../../../../test/mocks/mockApiResponse";
+import MfaModel from "../../../../shared/models/Mfa/MfaModel";
+import { mockDefaultMfaModel } from "../../../components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
+import MfaDTO from "../../../../shared/models/Mfa/MfaDTO";
 
 describe("AdminMfaContext", () => {
   let adminMfaContext; // The adminMfaContext to test
   const props = defaultProps(); // The props to pass
 
   //Initialize context by default
-  const initContext = async() => {
+  const initContext = async () => {
     fetch.doMock(() => mockApiResponse(mockMfaSettings));
     await adminMfaContext.findMfaSettings();
   };
@@ -34,12 +37,12 @@ describe("AdminMfaContext", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     adminMfaContext = new AdminMfaContextProvider(props);
-    const setStateMock = state => adminMfaContext.state = Object.assign(adminMfaContext.state, state);
+    const setStateMock = (state) => (adminMfaContext.state = Object.assign(adminMfaContext.state, state));
     jest.spyOn(adminMfaContext, "setState").mockImplementation(setStateMock);
     enableFetchMocks();
   });
   describe("AdminMfaContext::findMfaSettings", () => {
-    it("should get the current settings and store it in its state", async() => {
+    it("should get the current settings and store it in its state", async () => {
       // Mock the call to API
       const mockApiSettingsFetch = fetch.doMockOnceIf(/mfa\/settings.json/, () => mockApiResponse(mockMfaSettings));
       const expectedResult = new MfaModel(mockMfaSettings);
@@ -53,7 +56,7 @@ describe("AdminMfaContext", () => {
       expect(adminMfaContext.isProcessing()).toBeFalsy();
     });
 
-    it("should initialize with default value if object is empty", async() => {
+    it("should initialize with default value if object is empty", async () => {
       // Mock the call to API
       const mockApiSettingsFetch = fetch.doMockOnceIf(/mfa\/settings.json/, () => mockApiResponse({}));
       await adminMfaContext.findMfaSettings();
@@ -66,7 +69,7 @@ describe("AdminMfaContext", () => {
       expect(adminMfaContext.isProcessing()).toBeFalsy();
     });
 
-    it("should set processing to true when loading settings", async() => {
+    it("should set processing to true when loading settings", async () => {
       adminMfaContext.setProcessing(false);
       try {
         await adminMfaContext.findMfaSettings();
@@ -78,7 +81,7 @@ describe("AdminMfaContext", () => {
   });
 
   describe("AdminMfaContext::hasSettingsChanges", () => {
-    beforeEach(async() => {
+    beforeEach(async () => {
       await initContext();
     });
     it("should return true if settings is different then current setting", () => {
@@ -100,7 +103,7 @@ describe("AdminMfaContext", () => {
   });
 
   describe("AdminMfaContext::clearContext", () => {
-    beforeEach(async() => {
+    beforeEach(async () => {
       await initContext();
     });
     it("should clear the context and set it by default", () => {
@@ -120,7 +123,7 @@ describe("AdminMfaContext", () => {
   });
 
   describe("AdminMfaContext::save", () => {
-    it("should save settings and call findMfaSettings", async() => {
+    it("should save settings and call findMfaSettings", async () => {
       fetch.doMockOnceIf(/mfa\/settings.json/, () => mockApiResponse({}));
       const findSettings = jest.spyOn(adminMfaContext, "findMfaSettings").mockImplementation();
 
@@ -135,7 +138,7 @@ describe("AdminMfaContext", () => {
   });
 
   describe("AdminMfaContext::setSettings", () => {
-    it("should update settings object and not the current object", async() => {
+    it("should update settings object and not the current object", async () => {
       await initContext();
       adminMfaContext.setSettings("duoToggle", false);
 
@@ -147,7 +150,7 @@ describe("AdminMfaContext", () => {
   });
 
   describe("AdminMfaContext::errors", () => {
-    it("should update error object with targeted property", async() => {
+    it("should update error object with targeted property", async () => {
       await initContext();
       adminMfaContext.setError("duoSaltError", "error");
 
@@ -156,12 +159,12 @@ describe("AdminMfaContext", () => {
       expect(adminMfaContext.getErrors().duoSaltError).toBe("error");
     });
 
-    it("should init errors with default property", async() => {
+    it("should init errors with default property", async () => {
       expect.assertions(1);
       expect(adminMfaContext.getErrors()).toEqual(adminMfaContext.initErrors());
     });
 
-    it("should update error object with all properties ", async() => {
+    it("should update error object with all properties ", async () => {
       const mockError = mockDuoError();
       adminMfaContext.setErrors(mockError);
 
@@ -174,5 +177,3 @@ describe("AdminMfaContext", () => {
     });
   });
 });
-
-

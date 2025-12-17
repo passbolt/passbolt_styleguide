@@ -15,17 +15,18 @@
 import MetadataTypesSettingsFormEntity from "./metadataTypesSettingsFormEntity";
 import {
   defaultMetadataTypesSettingsV4Dto,
-  defaultMetadataTypesSettingsV50FreshDto, defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto
+  defaultMetadataTypesSettingsV50FreshDto,
+  defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto,
 } from "./metadataTypesSettingsEntity.test.data";
 import ResourceTypesCollection from "../resourceType/resourceTypesCollection";
 import EntityValidationError from "../abstract/entityValidationError";
 import {
   resourceTypesCollectionDto,
   resourceTypesV4CollectionDto,
-  resourceTypesV5CollectionDto
+  resourceTypesV5CollectionDto,
 } from "../resourceType/resourceTypesCollection.test.data";
 import MetadataKeysCollection from "./metadataKeysCollection";
-import {defaultMetadataKeysDtos} from "./metadataKeysCollection.test.data";
+import { defaultMetadataKeysDtos } from "./metadataKeysCollection.test.data";
 
 describe("MetadataTypesSettingsFormEntity", () => {
   describe("::toFormDto", () => {
@@ -48,11 +49,14 @@ describe("MetadataTypesSettingsFormEntity", () => {
     it("exports even if invalid", () => {
       expect.assertions(1);
 
-      const settings = new MetadataTypesSettingsFormEntity({
-        default_resource_types: "v4",
-        allow_creation_of_v5_resources: false,
-        allow_creation_of_v4_resources: false,
-      }, {validate: false});
+      const settings = new MetadataTypesSettingsFormEntity(
+        {
+          default_resource_types: "v4",
+          allow_creation_of_v5_resources: false,
+          allow_creation_of_v4_resources: false,
+        },
+        { validate: false },
+      );
 
       const expectedDto = {
         default_resource_types: "v4",
@@ -128,7 +132,7 @@ describe("MetadataTypesSettingsFormEntity", () => {
         expect.assertions(3);
 
         const metadataKeys = new MetadataKeysCollection(defaultMetadataKeysDtos());
-        const dto = defaultMetadataTypesSettingsV50FreshDto({allow_creation_of_v4_resources: true});
+        const dto = defaultMetadataTypesSettingsV50FreshDto({ allow_creation_of_v4_resources: true });
         const settings = new MetadataTypesSettingsFormEntity(dto);
         const resourceTypes = new ResourceTypesCollection(resourceTypesV5CollectionDto());
         const issues = settings.verifyHealth(resourceTypes, metadataKeys);
@@ -141,7 +145,7 @@ describe("MetadataTypesSettingsFormEntity", () => {
         expect.assertions(3);
 
         const metadataKeys = new MetadataKeysCollection(defaultMetadataKeysDtos());
-        const dto = defaultMetadataTypesSettingsV4Dto({allow_creation_of_v5_resources: true});
+        const dto = defaultMetadataTypesSettingsV4Dto({ allow_creation_of_v5_resources: true });
         const settings = new MetadataTypesSettingsFormEntity(dto);
         const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
         const issues = settings.verifyHealth(resourceTypes, metadataKeys);
@@ -154,7 +158,7 @@ describe("MetadataTypesSettingsFormEntity", () => {
         expect.assertions(3);
 
         const metadataKeys = new MetadataKeysCollection([]);
-        const dto = defaultMetadataTypesSettingsV4Dto({allow_creation_of_v5_resources: true});
+        const dto = defaultMetadataTypesSettingsV4Dto({ allow_creation_of_v5_resources: true });
         const settings = new MetadataTypesSettingsFormEntity(dto);
         const resourceTypes = new ResourceTypesCollection(resourceTypesV4CollectionDto());
         const issues = settings.verifyHealth(resourceTypes, metadataKeys);

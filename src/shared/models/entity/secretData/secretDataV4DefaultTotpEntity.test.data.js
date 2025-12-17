@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import {defaultTotpDto} from "../totp/totpDto.test.data";
+import { defaultTotpDto } from "../totp/totpDto.test.data";
 
 /**
  * The minimal default secret v4 default totp entity

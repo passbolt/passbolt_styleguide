@@ -12,9 +12,9 @@
  * @since         3.6.0
  */
 
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
-export const createRejectedAccountRecoveryUserSettingDto = data => {
+export const createRejectedAccountRecoveryUserSettingDto = (data) => {
   const defaultData = {
     user_id: uuidv4(),
     status: "rejected",
@@ -23,19 +23,19 @@ export const createRejectedAccountRecoveryUserSettingDto = data => {
   return Object.assign(defaultData, data || {});
 };
 
-export const rejectedAccountRecoveryUserSettingDto = data => {
+export const rejectedAccountRecoveryUserSettingDto = (data) => {
   const defaultData = createRejectedAccountRecoveryUserSettingDto({
     id: uuidv4(),
     created_by: uuidv4(),
     modified_by: uuidv4(),
     created: "2022-01-13T13:19:04.661Z",
-    modified: "2022-01-13T13:19:04.661Z"
+    modified: "2022-01-13T13:19:04.661Z",
   });
 
   return Object.assign(defaultData, data || {});
 };
 
-export const createAcceptedAccountRecoveryUserSettingDto = data => {
+export const createAcceptedAccountRecoveryUserSettingDto = (data) => {
   const defaultData = {
     user_id: uuidv4(),
     status: "approved",

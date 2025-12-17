@@ -31,10 +31,10 @@ function defaultProps() {
   return {
     context: {
       port: new MockPort(),
-      setContext: () => { }
+      setContext: () => {},
     },
     dialogContext: {
-      open: jest.fn()
+      open: jest.fn(),
     },
     onClose: jest.fn(),
   };
@@ -43,7 +43,7 @@ function defaultProps() {
 describe("See the Confirm Save Account Recovery Settings", () => {
   let page; // The page to test agains
 
-  describe('As AD I can import an ORK', () => {
+  describe("As AD I can import an ORK", () => {
     /**
      * Given  that I am a logged in administrator in the administration workspace
      * And    I am on the Account recovery settings page
@@ -60,7 +60,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
      * And    I see a “Cancel” button to go back to the Account recovery settings page
      * And    I see an “Apply” button
      */
-    it('As a logged in administrator on the account recovery settings in the administration workspace, I can open a dialog to import an Organization Recovery Key', async() => {
+    it("As a logged in administrator on the account recovery settings in the administration workspace, I can open a dialog to import an Organization Recovery Key", async () => {
       expect.assertions(11);
       page = new SelectAccountRecoveryOrganizationKeyPage();
 
@@ -74,7 +74,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       // Tabs exists
       const tabs = page.tabs;
       const tabsContent = [];
-      tabs.forEach(t => tabsContent.push(t.textContent));
+      tabs.forEach((t) => tabsContent.push(t.textContent));
       expect(tabsContent.sort()).toEqual(["Import", "Generate"].sort());
 
       // Default selected tab is Import tab
@@ -102,10 +102,9 @@ describe("See the Confirm Save Account Recovery Settings", () => {
      * When   I paste a OpenPGP Public key in the “Import an OpenPGP Public key” field
      * Then   I see the OpenPGP key in the textarea
      */
-    it('As a logged in administrator on the account recovery settings in the administration workspace, I can copy/paste an OpenPGP Public key in the Organization Recovery Key dialog', async() => {
+    it("As a logged in administrator on the account recovery settings in the administration workspace, I can copy/paste an OpenPGP Public key in the Organization Recovery Key dialog", async () => {
       expect.assertions(1);
       page = new SelectAccountRecoveryOrganizationKeyPage();
-
 
       //pick a text doesn't have to be a real key
       const expectedText = "a fake pasted key";
@@ -125,11 +124,10 @@ describe("See the Confirm Save Account Recovery Settings", () => {
      * Then   the modal is closed
      * And    I see the OpenPGP key in the field
      */
-    it('As a logged in administrator in the administration workspace, I can import an OpenPGP Public key in the Organization Recovery Key dialog', async() => {
+    it("As a logged in administrator in the administration workspace, I can import an OpenPGP Public key in the Organization Recovery Key dialog", async () => {
       page = new SelectAccountRecoveryOrganizationKeyPage();
 
-
-      const fileContent = '(⌐□_□)';
+      const fileContent = "(⌐□_□)";
       const waitForFileReadCallback = () => expect(page.importKeyTextArea.value).toBe(fileContent);
 
       await page.userHasSelectedAFile(fileContent, waitForFileReadCallback);
@@ -155,16 +153,17 @@ describe("See the Confirm Save Account Recovery Settings", () => {
      * And    I the message tells me the key is already in use
      * And    I see the “Import an OpenPGP Public key” label in @red
      */
-    it('As a logged in administrator in the administration workspace, I cannot import an invalid OpenPGP Public key in the Organization Recovery Key settings', async() => {
+    it("As a logged in administrator in the administration workspace, I cannot import an invalid OpenPGP Public key in the Organization Recovery Key settings", async () => {
       const props = defaultProps();
       page = new SelectAccountRecoveryOrganizationKeyPage(props);
 
       const errorMessage = "The key is already used.";
-      const mockValidateKey = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
+      const mockValidateKey = (implementation) =>
+        jest.spyOn(props.context.port, "request").mockImplementation(implementation);
       mockValidateKey(jest.fn(() => Promise.reject(new Error(errorMessage))));
 
       const waitForFileReadCallback = () => expect(page.importKeyTextArea.value).not.toBe("");
-      await page.userHasSelectedAFile('Key already used!', waitForFileReadCallback);
+      await page.userHasSelectedAFile("Key already used!", waitForFileReadCallback);
 
       const waitForErrorMessageCallback = () => expect(page.importErrorMessage).not.toBeNull();
       await page.applyChanges(waitForErrorMessageCallback);

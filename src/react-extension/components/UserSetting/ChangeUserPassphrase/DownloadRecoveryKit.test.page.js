@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.1.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DownloadRecoveryKit from "./DownloadRecoveryKit";
@@ -28,9 +27,9 @@ export default class DownloadRecoveryKitPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DownloadRecoveryKit {...props}/>
+        <DownloadRecoveryKit {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,21 +37,21 @@ export default class DownloadRecoveryKitPage {
    * Returns the user confirm passphrase element
    */
   get downloadRecoveryKit() {
-    return this._page.container.querySelector('.recovery-kit');
+    return this._page.container.querySelector(".recovery-kit");
   }
 
   /**
    * Returns the title element
    */
   get title() {
-    return this._page.container.querySelector('.recovery-kit h3').textContent;
+    return this._page.container.querySelector(".recovery-kit h3").textContent;
   }
 
   /**
    * Returns the download backup button element
    */
   get downloadBackupButton() {
-    return this._page.container.querySelector('.actions-wrapper button.button');
+    return this._page.container.querySelector(".actions-wrapper button.button");
   }
 
   /**
@@ -63,8 +62,8 @@ export default class DownloadRecoveryKitPage {
   }
 
   /** Click on the element */
-  async click(element)  {
-    const leftClick = {button: 0};
+  async click(element) {
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
@@ -74,8 +73,3 @@ export default class DownloadRecoveryKitPage {
     await this.click(this.downloadBackupButton);
   }
 }
-
-
-
-
-

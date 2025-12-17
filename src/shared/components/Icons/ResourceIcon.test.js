@@ -16,8 +16,13 @@
  * Unit tests on ResourceIcon in regard of specifications
  */
 
-import {defaultProps, resourceWithAppearance, resourceWithClearAppearance, resourceWithTransparentColor} from './ResourceIcon.test.data';
-import ResourceIconPage from './ResourceIcon.test.page';
+import {
+  defaultProps,
+  resourceWithAppearance,
+  resourceWithClearAppearance,
+  resourceWithTransparentColor,
+} from "./ResourceIcon.test.data";
+import ResourceIconPage from "./ResourceIcon.test.page";
 
 /**
  * Tests Resource Icon in regards of specification
@@ -25,7 +30,7 @@ import ResourceIconPage from './ResourceIcon.test.page';
  * These lacks of true checks due to the fact the svg is not really rendered.
  */
 describe("ResourceIcon", () => {
-  it('Should render the Icon with the default resource type icon if no appearance is define on the resource', () => {
+  it("Should render the Icon with the default resource type icon if no appearance is define on the resource", () => {
     expect.assertions(1);
 
     const props = defaultProps();
@@ -34,7 +39,7 @@ describe("ResourceIcon", () => {
     expect(page.exists()).toBeTruthy();
   });
 
-  it('Should render the selected Icon if an appearance is define on the resource', () => {
+  it("Should render the selected Icon if an appearance is define on the resource", () => {
     expect.assertions(1);
 
     const props = resourceWithAppearance();
@@ -43,7 +48,7 @@ describe("ResourceIcon", () => {
     expect(page.exists()).toBeTruthy();
   });
 
-  it('Should render the selected Icon with a color if an appearance is define on the resource', () => {
+  it("Should render the selected Icon with a color if an appearance is define on the resource", () => {
     expect.assertions(1);
 
     const props = resourceWithClearAppearance();
@@ -52,7 +57,7 @@ describe("ResourceIcon", () => {
     expect(page.exists()).toBeTruthy();
   });
 
-  it('Should render the selected Icon with specific stroke color if the selected color is transparent', () => {
+  it("Should render the selected Icon with specific stroke color if the selected color is transparent", () => {
     expect.assertions(1);
 
     const props = resourceWithTransparentColor();

@@ -11,20 +11,18 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.8.0
  */
-import {defaultProps} from "./DeleteRoleNotAllowed.test.data";
+import { defaultProps } from "./DeleteRoleNotAllowed.test.data";
 import DeleteRoleNotAllowed from "./DeleteRoleNotAllowed";
 
-
 export default {
-  title: 'Components/Administration/DeleteRoleNotAllowed',
-  component: DeleteRoleNotAllowed
+  title: "Components/Administration/DeleteRoleNotAllowed",
+  component: DeleteRoleNotAllowed,
 };
 
-
 export const Initial = {
-  args: defaultProps()
+  args: defaultProps(),
 };
 
 export const OneUser = {
-  args: defaultProps({usersCount: 1})
+  args: defaultProps({ usersCount: 1 }),
 };

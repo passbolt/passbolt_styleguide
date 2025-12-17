@@ -12,11 +12,11 @@
  * @since         3.10.0
  */
 
-import {enableFetchMocks} from 'jest-fetch-mock';
-import {defaultAppContext} from '../../../contexts/ExtAppContext.test.data';
-import {defaultProps} from './DisplayUserBadgeMenu.test.data';
-import DisplayUserBadgeMenuPage from './DisplayUserBadgeMenu.test.page';
-import {waitFor} from '@testing-library/react';
+import { enableFetchMocks } from "jest-fetch-mock";
+import { defaultAppContext } from "../../../contexts/ExtAppContext.test.data";
+import { defaultProps } from "./DisplayUserBadgeMenu.test.data";
+import DisplayUserBadgeMenuPage from "./DisplayUserBadgeMenu.test.page";
+import { waitFor } from "@testing-library/react";
 
 describe("DisplayUserBadgeMenu", () => {
   let page; // The page to test against
@@ -27,7 +27,7 @@ describe("DisplayUserBadgeMenu", () => {
     enableFetchMocks();
     jest.resetModules();
   });
-  it("As a signed-in user I should see a badge on my avatar to display that I have a missing MFA settings", async() => {
+  it("As a signed-in user I should see a badge on my avatar to display that I have a missing MFA settings", async () => {
     expect.assertions(1);
 
     jest.spyOn(props.mfaContext, "isMfaChoiceRequired").mockImplementation(() => true);
@@ -37,7 +37,7 @@ describe("DisplayUserBadgeMenu", () => {
     expect(page.attentionRequired).toBeTruthy();
   });
 
-  it("As a signed-in user I should see a badge on my avatar to display that I have a missing Account recovery settings", async() => {
+  it("As a signed-in user I should see a badge on my avatar to display that I have a missing Account recovery settings", async () => {
     expect.assertions(1);
 
     jest.spyOn(props.mfaContext, "isMfaChoiceRequired").mockImplementation(() => false);
@@ -47,7 +47,7 @@ describe("DisplayUserBadgeMenu", () => {
     expect(page.attentionRequired).toBeTruthy();
   });
 
-  it("As a signed-in user I should see a badge on my avatar to display that I have a missing settings", async() => {
+  it("As a signed-in user I should see a badge on my avatar to display that I have a missing settings", async () => {
     expect.assertions(1);
 
     jest.spyOn(props.mfaContext, "isMfaChoiceRequired").mockImplementation(() => true);
@@ -57,11 +57,15 @@ describe("DisplayUserBadgeMenu", () => {
     expect(page.attentionRequired).toBeTruthy();
   });
 
-  it("As a signin user I should not have a 404 error with the flag mfa policy disable", async() => {
+  it("As a signin user I should not have a 404 error with the flag mfa policy disable", async () => {
     expect.assertions(1);
-    const propsWithoutPolicy = defaultProps({context: {siteSettings: {
-      canIUse: () => false
-    }}});
+    const propsWithoutPolicy = defaultProps({
+      context: {
+        siteSettings: {
+          canIUse: () => false,
+        },
+      },
+    });
     page = new DisplayUserBadgeMenuPage(defaultAppContext, propsWithoutPolicy);
 
     jest.spyOn(props.mfaContext, "isMfaChoiceRequired").mockImplementation(() => true);

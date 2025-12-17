@@ -16,10 +16,10 @@
  * Unit tests on EnterNewPassphrase in regard of specifications
  */
 import DisplayAccountRecoveryUserSettingsPage from "./DisplayAccountRecoveryUserSettings.test.page";
-import {defaultProps, defaultAccountRecoveryPolicyDto} from "./DisplayAccountRecoveryUserSettings.test.data";
-import {waitFor} from "@testing-library/react";
+import { defaultProps, defaultAccountRecoveryPolicyDto } from "./DisplayAccountRecoveryUserSettings.test.data";
+import { waitFor } from "@testing-library/react";
 import ManageAccountRecoveryUserSettings from "../../AccountRecovery/ManageAccountRecoveryUserSettings/ManageAccountRecoveryUserSettings";
-import {formatDateTimeAgo} from "../../../../../test/utils/dateUtils";
+import { formatDateTimeAgo } from "../../../../../test/utils/dateUtils";
 
 beforeEach(() => {
   jest.resetModules();
@@ -32,7 +32,7 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    * When	I navigate to the user account recovery settings in the user settings workspace
    * Then	I see my current account recovery settings
    */
-  it('As a logged in user I can see my account recovery settings', async() => {
+  it("As a logged in user I can see my account recovery settings", async () => {
     const accountRecoveryPolicyDto = defaultAccountRecoveryPolicyDto();
     const props = defaultProps();
     const page = new DisplayAccountRecoveryUserSettingsPage(props);
@@ -41,7 +41,9 @@ describe("DisplayAccountRecoveryUserSettings", () => {
     expect(page.exists()).toBeTruthy();
     expect(page.status.textContent).toBe("pending");
     expect(page.requestorName.textContent).toBe("Ada Lovelace (ada@passbolt.com)");
-    expect(page.requestDate.textContent).toBe(formatDateTimeAgo(accountRecoveryPolicyDto.modified, props.context.locale));
+    expect(page.requestDate.textContent).toBe(
+      formatDateTimeAgo(accountRecoveryPolicyDto.modified, props.context.locale),
+    );
   });
 
   /**
@@ -50,20 +52,22 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    * When I navigate to the user settings workspace
    * Then I can’t see the account recovery section on the left sidebar
    */
-  it('As a logged in user I cannot see my account recovery settings if the account recovery organization policy is disabled', async() => {
+  it("As a logged in user I cannot see my account recovery settings if the account recovery organization policy is disabled", async () => {
     const props = defaultProps({
       accountRecoveryContext: {
         status: "disabled",
         policy: {
-          policy: "disabled"
-        }
-      }
+          policy: "disabled",
+        },
+      },
     });
     const page = new DisplayAccountRecoveryUserSettingsPage(props);
     await waitFor(() => {});
 
     expect(page.exists()).toBeTruthy();
-    expect(page.description.textContent).toBe("Please contact your administrator to enable the account recovery feature.");
+    expect(page.description.textContent).toBe(
+      "Please contact your administrator to enable the account recovery feature.",
+    );
   });
 
   /**
@@ -75,11 +79,11 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    * When	I click on the “Review” button
    * Then	I see the account recovery dialog prompt
    */
-  it('As a logged in user who has rejected the account recovery program, I can change my choice from my settings workspace', async() => {
+  it("As a logged in user who has rejected the account recovery program, I can change my choice from my settings workspace", async () => {
     const props = defaultProps({
       accountRecoveryContext: {
         status: "disabled",
-      }
+      },
     });
     const page = new DisplayAccountRecoveryUserSettingsPage(props);
     await waitFor(() => {});
@@ -100,12 +104,12 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    * When	 I click on the “Review” button
    * Then	 I see the “Recovery (Optional)” or “Recovery (Mandatory)” dialog
    */
-  it('As a logged in user I can update my account recovery choice when my review is pending for the Opt-in, Mandatory and Opt-out policies', async() => {
+  it("As a logged in user I can update my account recovery choice when my review is pending for the Opt-in, Mandatory and Opt-out policies", async () => {
     const accountRecoveryPoliciesDto = defaultAccountRecoveryPolicyDto();
     const props = defaultProps({
       accountRecoveryContext: {
         status: "disabled",
-      }
+      },
     });
     const page = new DisplayAccountRecoveryUserSettingsPage(props);
     await waitFor(() => {});
@@ -114,7 +118,7 @@ describe("DisplayAccountRecoveryUserSettings", () => {
     await page.clickOnReview();
 
     expect(props.dialogContext.open).toHaveBeenCalledWith(ManageAccountRecoveryUserSettings, {
-      organizationPolicy: accountRecoveryPoliciesDto.policy
+      organizationPolicy: accountRecoveryPoliciesDto.policy,
     });
   });
 });

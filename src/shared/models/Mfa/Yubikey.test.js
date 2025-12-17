@@ -19,7 +19,7 @@ describe("YubiKey model", () => {
   const randomClient = "random-client";
 
   describe("YubiKey::constructor", () => {
-    it("should init with clientId and secretKey", async() => {
+    it("should init with clientId and secretKey", async () => {
       const yubikeyParam = {
         clientId: randomClient,
         secretKey: randomKey,
@@ -31,7 +31,7 @@ describe("YubiKey model", () => {
       expect(yubikey.clientId).toEqual(yubikeyParam.clientId);
       expect(yubikey.secretKey).toEqual(yubikeyParam.secretKey);
     });
-    it("should init with yubikeyClientIdentifier and yubikeySecretKey", async() => {
+    it("should init with yubikeyClientIdentifier and yubikeySecretKey", async () => {
       const yubikeyParam = {
         yubikeyClientIdentifier: randomClient,
         yubikeySecretKey: randomKey,

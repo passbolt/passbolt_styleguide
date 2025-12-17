@@ -12,7 +12,7 @@
  * @since         5.0.0
  */
 
-import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 
 /**
  * Returns a minimum DTO object suitable for the SecretDataV5PasswordStringEntity
@@ -32,5 +32,5 @@ export const minimalDefaultSecretDataV5PasswordStringDto = (data = {}) => ({
  */
 export const defaultSecretDataV5PasswordStringDto = (data = {}) => ({
   ...minimalDefaultSecretDataV5PasswordStringDto(data),
-  password: "this-is-a-secret-password"
+  password: "this-is-a-secret-password",
 });

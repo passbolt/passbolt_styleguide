@@ -14,12 +14,16 @@
 import MetadataPrivateKeyEntity from "./metadataPrivateKeyEntity";
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {decryptedMetadataPrivateKeyDto, defaultMetadataPrivateKeyDto, minimalMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
+import {
+  decryptedMetadataPrivateKeyDto,
+  defaultMetadataPrivateKeyDto,
+  minimalMetadataPrivateKeyDto,
+} from "./metadataPrivateKeyEntity.test.data";
 import EntityValidationError from "../abstract/entityValidationError";
-import {defaultPgpMessage} from "../../../../../test/assert/assertEntityProperty.test.data";
-import {defaultMetadataPrivateKeyDataDto} from "./metadataPrivateKeyDataEntity.test.data";
+import { defaultPgpMessage } from "../../../../../test/assert/assertEntityProperty.test.data";
+import { defaultMetadataPrivateKeyDataDto } from "./metadataPrivateKeyDataEntity.test.data";
 import MetadataPrivateKeyDataEntity from "./metadataPrivateKeyDataEntity";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 describe("MetadataPrivateKeyEntity", () => {
   describe("::getSchema", () => {
@@ -59,49 +63,68 @@ describe("MetadataPrivateKeyEntity", () => {
       assertEntityProperty.required(MetadataPrivateKeyEntity, "data");
 
       const dataStringSuccessScenarios = [
-        {scenario: "PGP Message with comments in the header", value: defaultPgpMessage({withCrc: true, withComments: true})},
-        {scenario: "PGP Message without comments in the header", value: defaultPgpMessage({withCrc: true, withComments: false})},
+        {
+          scenario: "PGP Message with comments in the header",
+          value: defaultPgpMessage({ withCrc: true, withComments: true }),
+        },
+        {
+          scenario: "PGP Message without comments in the header",
+          value: defaultPgpMessage({ withCrc: true, withComments: false }),
+        },
       ];
       for (let i = 0; i < dataStringSuccessScenarios.length; i++) {
         const scenario = dataStringSuccessScenarios[i];
-        const dto = defaultMetadataPrivateKeyDto({data: scenario.value});
+        const dto = defaultMetadataPrivateKeyDto({ data: scenario.value });
 
         expect(() => new MetadataPrivateKeyEntity(dto)).not.toThrow();
       }
 
       const dataStringFailScenarios = [
-        {scenario: "PGP Message without CRC", value: defaultPgpMessage({withCrc: false})},
-        {scenario: "PGP Message without CRC and multiple blocks", value: defaultPgpMessage({withCrc: false, withDuplicates: true})},
-        {scenario: "PGP Message with wrong extra characters", value: defaultPgpMessage({withCrc: true, withWrongExtraCharacters: true})},
-        {scenario: "PGP Message with wrong extra characters and multiple blocks", value: defaultPgpMessage({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})},
-        {scenario: "PGP Message with comments in the header and multiple blocks", value: defaultPgpMessage({withCrc: true, withComments: true, withDuplicates: true})},
-        {scenario: "PGP Message without comments in the header and multiple blocks", value: defaultPgpMessage({withCrc: true, withComments: false, withDuplicates: true})},
+        { scenario: "PGP Message without CRC", value: defaultPgpMessage({ withCrc: false }) },
+        {
+          scenario: "PGP Message without CRC and multiple blocks",
+          value: defaultPgpMessage({ withCrc: false, withDuplicates: true }),
+        },
+        {
+          scenario: "PGP Message with wrong extra characters",
+          value: defaultPgpMessage({ withCrc: true, withWrongExtraCharacters: true }),
+        },
+        {
+          scenario: "PGP Message with wrong extra characters and multiple blocks",
+          value: defaultPgpMessage({ withCrc: true, withWrongExtraCharacters: true, withDuplicates: true }),
+        },
+        {
+          scenario: "PGP Message with comments in the header and multiple blocks",
+          value: defaultPgpMessage({ withCrc: true, withComments: true, withDuplicates: true }),
+        },
+        {
+          scenario: "PGP Message without comments in the header and multiple blocks",
+          value: defaultPgpMessage({ withCrc: true, withComments: false, withDuplicates: true }),
+        },
       ];
       for (let i = 0; i < dataStringFailScenarios.length; i++) {
         const scenario = dataStringFailScenarios[i];
-        const dto = defaultMetadataPrivateKeyDto({data: scenario.value});
+        const dto = defaultMetadataPrivateKeyDto({ data: scenario.value });
 
         expect(() => new MetadataPrivateKeyEntity(dto)).toThrow(EntityValidationError);
       }
 
-      const dataObjectSuccessScenarios = [
-        {scenario: "valid entity dto", value: defaultMetadataPrivateKeyDataDto()},
-      ];
+      const dataObjectSuccessScenarios = [{ scenario: "valid entity dto", value: defaultMetadataPrivateKeyDataDto() }];
       for (let i = 0; i < dataObjectSuccessScenarios.length; i++) {
         const scenario = dataObjectSuccessScenarios[i];
-        const dto = defaultMetadataPrivateKeyDto({data: scenario.value});
+        const dto = defaultMetadataPrivateKeyDto({ data: scenario.value });
 
         expect(() => new MetadataPrivateKeyEntity(dto)).not.toThrow();
       }
 
       const dataObjectFailScenarios = [
-        {scenario: "invalid entity object", value: {}},
-        {scenario: "integer", value: 42},
-        {scenario: "boolean", value: false},
+        { scenario: "invalid entity object", value: {} },
+        { scenario: "integer", value: 42 },
+        { scenario: "boolean", value: false },
       ];
       for (let i = 0; i < dataObjectFailScenarios.length; i++) {
         const scenario = dataObjectFailScenarios[i];
-        const dto = defaultMetadataPrivateKeyDto({data: scenario.value});
+        const dto = defaultMetadataPrivateKeyDto({ data: scenario.value });
 
         expect(() => new MetadataPrivateKeyEntity(dto)).toThrow(EntityValidationError);
       }
@@ -205,7 +228,7 @@ describe("MetadataPrivateKeyEntity", () => {
     it("`id` should return the right value", () => {
       expect.assertions(2);
       const dto1 = minimalMetadataPrivateKeyDto({
-        id: null
+        id: null,
       });
       const entity1 = new MetadataPrivateKeyEntity(dto1);
 
@@ -227,7 +250,7 @@ describe("MetadataPrivateKeyEntity", () => {
     it("`data` should return the right value: with a MetadataPrivateKeyDataEntity", () => {
       expect.assertions(2);
       const dto = defaultMetadataPrivateKeyDto({
-        data: defaultMetadataPrivateKeyDataDto()
+        data: defaultMetadataPrivateKeyDataDto(),
       });
       const entity = new MetadataPrivateKeyEntity(dto);
 
@@ -290,7 +313,9 @@ describe("MetadataPrivateKeyEntity", () => {
         expect.assertions(1);
         const entity = new MetadataPrivateKeyEntity(defaultMetadataPrivateKeyDto());
 
-        expect(() => { entity.dataSignedByCurrentUser = "test"; }).toThrow(EntityValidationError);
+        expect(() => {
+          entity.dataSignedByCurrentUser = "test";
+        }).toThrow(EntityValidationError);
       });
 
       it("`data_signed_by_current_user` could be set with a date", () => {
@@ -315,7 +340,9 @@ describe("MetadataPrivateKeyEntity", () => {
         expect.assertions(1);
         const entity = new MetadataPrivateKeyEntity(defaultMetadataPrivateKeyDto());
 
-        expect(() => { entity.dataSignedByCurrentUser = "test"; }).toThrow(EntityValidationError);
+        expect(() => {
+          entity.dataSignedByCurrentUser = "test";
+        }).toThrow(EntityValidationError);
       });
     });
   });
@@ -389,7 +416,7 @@ describe("MetadataPrivateKeyEntity", () => {
       const dto = defaultMetadataPrivateKeyDto();
       const entity = new MetadataPrivateKeyEntity(dto);
 
-      expect(entity.toDataDto()).toStrictEqual({data: dto.data});
+      expect(entity.toDataDto()).toStrictEqual({ data: dto.data });
     });
   });
 
@@ -429,7 +456,7 @@ describe("MetadataPrivateKeyEntity", () => {
       expect(clonedEntityForSharing.toDto()).toStrictEqual({
         user_id: userId,
         metadata_key_id: dto.metadata_key_id,
-        data: dto.data
+        data: dto.data,
       });
     });
   });

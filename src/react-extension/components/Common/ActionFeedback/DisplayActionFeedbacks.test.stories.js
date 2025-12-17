@@ -11,23 +11,26 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {propsWithOneErrorMessage, propsWithOneSuccessMessage, propsWithOneWarningMessage} from "./DisplayActionFeedbacks.test.data";
+import {
+  propsWithOneErrorMessage,
+  propsWithOneSuccessMessage,
+  propsWithOneWarningMessage,
+} from "./DisplayActionFeedbacks.test.data";
 import DisplayActionFeedbacks from "./DisplayActionFeedbacks";
 
 export default {
-  title: 'Components/Common/ActionFeedback',
-  component: DisplayActionFeedbacks
+  title: "Components/Common/ActionFeedback",
+  component: DisplayActionFeedbacks,
 };
 
-
 export const Success = {
-  args: propsWithOneSuccessMessage
+  args: propsWithOneSuccessMessage,
 };
 
 export const Error = {
-  args: propsWithOneErrorMessage
+  args: propsWithOneErrorMessage,
 };
 
 export const Warning = {
-  args: propsWithOneWarningMessage
+  args: propsWithOneWarningMessage,
 };

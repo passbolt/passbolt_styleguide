@@ -16,8 +16,8 @@
  * Unit tests on EnterUsernameForm in regard of specifications
  */
 import EnterUsernameFormPage from "./EnterUsernameForm.test.page";
-import {defaultProps} from "./EnterUsernameForm.test.data";
-import {waitFor} from "@testing-library/react";
+import { defaultProps } from "./EnterUsernameForm.test.data";
+import { waitFor } from "@testing-library/react";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 
@@ -28,14 +28,14 @@ beforeEach(() => {
 describe("As AN I should see the Enter Username Form Page", () => {
   let page; // The page to test against
 
-  describe('As AN I can start adding a username', () => {
-    it('As AN I should be able to submit a valid username', async() => {
+  describe("As AN I can start adding a username", () => {
+    it("As AN I should be able to submit a valid username", async () => {
       const props = defaultProps();
-      jest.spyOn(props.apiTriageContext, 'onTriageRequested').mockImplementation(() => {});
+      jest.spyOn(props.apiTriageContext, "onTriageRequested").mockImplementation(() => {});
       page = new EnterUsernameFormPage(props);
 
       expect(page.exists()).toBeTruthy();
-      expect(page.title).toBe('Please enter your email to continue.');
+      expect(page.title).toBe("Please enter your email to continue.");
 
       // Fill the form
       await page.insertUsername("admin@passbolt.com");
@@ -44,16 +44,16 @@ describe("As AN I should see the Enter Username Form Page", () => {
       expect(props.apiTriageContext.onTriageRequested).toHaveBeenCalledWith("admin@passbolt.com");
     });
 
-    it('As AN I should be able to submit a username with success with no terms or privacy policy required by the API', async() => {
+    it("As AN I should be able to submit a username with success with no terms or privacy policy required by the API", async () => {
       const siteSettingsFixtureClone = JSON.parse(JSON.stringify(siteSettingsFixture));
       siteSettingsFixtureClone.passbolt.legal = {};
       const siteSettings = new SiteSettings(siteSettingsFixtureClone);
-      const props = defaultProps({context: {siteSettings}});
-      jest.spyOn(props.apiTriageContext, 'onTriageRequested').mockImplementation(() => {});
+      const props = defaultProps({ context: { siteSettings } });
+      jest.spyOn(props.apiTriageContext, "onTriageRequested").mockImplementation(() => {});
       page = new EnterUsernameFormPage(props);
 
       expect(page.exists()).toBeTruthy();
-      expect(page.title).toBe('Please enter your email to continue.');
+      expect(page.title).toBe("Please enter your email to continue.");
       await page.isReady();
 
       // Fill the form
@@ -62,7 +62,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
       expect(props.apiTriageContext.onTriageRequested).toHaveBeenCalledWith("admin@passbolt.com");
     });
 
-    it('As AN I should see a processing feedback while submitting the form', async() => {
+    it("As AN I should see a processing feedback while submitting the form", async () => {
       const props = defaultProps();
       page = new EnterUsernameFormPage(props);
 
@@ -75,11 +75,11 @@ describe("As AN I should see the Enter Username Form Page", () => {
       await waitFor(() => {
         expect(page.username.getAttribute("disabled")).not.toBeNull();
         expect(page.nextButton.getAttribute("disabled")).not.toBeNull();
-        expect(page.nextButton.className).toBe('button primary form disabled processing big full-width');
+        expect(page.nextButton.className).toBe("button primary form disabled processing big full-width");
       });
     });
 
-    it('As AN I shouldn’t be able to submit the form if there is an invalid field', async() => {
+    it("As AN I shouldn’t be able to submit the form if there is an invalid field", async () => {
       const props = defaultProps();
       page = new EnterUsernameFormPage(props);
 
@@ -97,11 +97,11 @@ describe("As AN I should see the Enter Username Form Page", () => {
   });
 
   describe("As AN I can switch to identify myself with SSO if the organisation allows it", () => {
-    it("As AN I should see a secondary action to switch to SSO login", async() => {
+    it("As AN I should see a secondary action to switch to SSO login", async () => {
       expect.assertions(2);
       const props = defaultProps({
         isSsoRecoverEnabled: true,
-        onSecondaryActionClick: jest.fn()
+        onSecondaryActionClick: jest.fn(),
       });
 
       page = new EnterUsernameFormPage(props);

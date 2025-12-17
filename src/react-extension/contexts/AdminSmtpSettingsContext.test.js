@@ -11,26 +11,27 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.8.0
  */
-import {defaultAppContext} from "./ApiAppContext.test.data";
-import {defaultSmtpSettings} from "./AdminSmtpSettingsContext.test.data";
-import {AdminSmtpSettingsContextProvider} from "./AdminSmtpSettingsContext";
-import {v4 as uuid} from "uuid";
-import {mockApiResponse} from "../../../test/mocks/mockApiResponse";
-import {enableFetchMocks} from "jest-fetch-mock";
+import { defaultAppContext } from "./ApiAppContext.test.data";
+import { defaultSmtpSettings } from "./AdminSmtpSettingsContext.test.data";
+import { AdminSmtpSettingsContextProvider } from "./AdminSmtpSettingsContext";
+import { v4 as uuid } from "uuid";
+import { mockApiResponse } from "../../../test/mocks/mockApiResponse";
+import { enableFetchMocks } from "jest-fetch-mock";
 import SmtpProviders from "../components/Administration/ManageSmtpAdministrationSettings/SmtpProviders.data";
 
 describe("AdminSmtpSettingsContext", () => {
   let adminSmtpContext; // The AdminSmtpSettingsContext to test
-  const props = { // The props to pass
+  const props = {
+    // The props to pass
     context: defaultAppContext(),
     adminSmtpSettingsContext: defaultSmtpSettings(),
     actionFeedbackContext: {
-      displaySuccess: jest.fn()
+      displaySuccess: jest.fn(),
     },
     dialogContext: {
-      open: jest.fn()
+      open: jest.fn(),
     },
-    t: s => s
+    t: (s) => s,
   };
 
   beforeEach(() => {
@@ -47,7 +48,7 @@ describe("AdminSmtpSettingsContext", () => {
   });
 
   describe("AdminSmtpSettingsContextProvider::findSmtpSettings", () => {
-    it("should get the current SMTP settings and store them in its state with the corresponding provider", async() => {
+    it("should get the current SMTP settings and store them in its state with the corresponding provider", async () => {
       const currentSmtpSettings = {
         id: uuid(),
         source: "db",
@@ -65,9 +66,11 @@ describe("AdminSmtpSettingsContext", () => {
         modified: "2022-10-11T08:09:00+00:00",
       };
 
-      const mockApiSmtpSettingsFetch = fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(currentSmtpSettings));
-      const otherProvider = SmtpProviders.find(provider => provider.id === "other");
-      const expectedSettings = {...currentSmtpSettings, provider: otherProvider};
+      const mockApiSmtpSettingsFetch = fetch.doMockOnceIf(/smtp\/settings.json/, () =>
+        mockApiResponse(currentSmtpSettings),
+      );
+      const otherProvider = SmtpProviders.find((provider) => provider.id === "other");
+      const expectedSettings = { ...currentSmtpSettings, provider: otherProvider };
 
       await adminSmtpContext.findSmtpSettings();
 
@@ -78,7 +81,7 @@ describe("AdminSmtpSettingsContext", () => {
   });
 
   describe("AdminSmtpSettingsContextProvider::saveSettings()", () => {
-    it("should get the current SMTP settings and store them in its state with the corresponding provider", async() => {
+    it("should get the current SMTP settings and store them in its state with the corresponding provider", async () => {
       expect.assertions(3);
 
       const currentSmtpSettings = {
@@ -109,14 +112,16 @@ describe("AdminSmtpSettingsContext", () => {
         sender_name: "other Passbolt test",
       };
 
-      const smtpSettingsCallMock = fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(currentSmtpSettings));
+      const smtpSettingsCallMock = fetch.doMockOnceIf(/smtp\/settings.json/, () =>
+        mockApiResponse(currentSmtpSettings),
+      );
 
-      fetch.doMockOnceIf(/smtp\/settings.json/, req => {
+      fetch.doMockOnceIf(/smtp\/settings.json/, (req) => {
         const requestData = JSON.parse(req.body);
         const expectedData = {
           ...currentSmtpSettings,
           ...newFormData,
-          tls: false
+          tls: false,
         };
         expect(requestData).toStrictEqual(expectedData);
         return mockApiResponse(expectedData);
@@ -124,7 +129,7 @@ describe("AdminSmtpSettingsContext", () => {
 
       await adminSmtpContext.findSmtpSettings();
       for (const key in newFormData) {
-        adminSmtpContext.setData({[key]: newFormData[key]});
+        adminSmtpContext.setData({ [key]: newFormData[key] });
       }
 
       await adminSmtpContext.saveSmtpSettings();

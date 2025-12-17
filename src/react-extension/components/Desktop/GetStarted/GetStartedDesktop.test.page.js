@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {render, fireEvent, waitFor} from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import GetStartedDesktop from "./GetStartedDesktop";
 
@@ -30,7 +30,7 @@ export default class GetStartedDesktopPage {
       <MockTranslationProvider>
         <GetStartedDesktop {...props} />
       </MockTranslationProvider>,
-      {legacyRoot: true}
+      { legacyRoot: true },
     );
   }
 
@@ -38,28 +38,28 @@ export default class GetStartedDesktopPage {
    * Returns the get started parent class
    */
   get getStarted() {
-    return this._page.container.querySelector('.get-started-desktop');
+    return this._page.container.querySelector(".get-started-desktop");
   }
 
   /**
    * return the title
    */
   get title() {
-    return this._page.container.querySelector('.get-started-desktop h1').textContent;
+    return this._page.container.querySelector(".get-started-desktop h1").textContent;
   }
 
   /**
    * return the description
    */
   get description() {
-    return this._page.container.querySelector('.get-started-description').textContent;
+    return this._page.container.querySelector(".get-started-description").textContent;
   }
 
   /**
    * return the start button
    */
   get startButton() {
-    return this._page.container.querySelector('.get-started-desktop .button.primary');
+    return this._page.container.querySelector(".get-started-desktop .button.primary");
   }
 
   /**
@@ -83,8 +83,8 @@ export default class GetStartedDesktopPage {
    *
    */
   async click(element) {
-    const leftClick = {button: 0};
+    const leftClick = { button: 0 };
     fireEvent.click(element, leftClick);
-    await waitFor(() => { });
+    await waitFor(() => {});
   }
 }
