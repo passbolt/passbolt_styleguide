@@ -17,7 +17,7 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 
-const CHROME_STORE_BROWSER_EXTENSION_URL = "https://chrome.google.com/webstore/detail/passbolt-extension/didegimhafipceonhjepacocaffmoppf";
+export const CHROME_STORE_BROWSER_EXTENSION_URL = "https://download.passbolt.com/extension/chrome";
 const FIREFOX_STORE_BROWSER_EXTENSION_URL = "https://addons.mozilla.org/firefox/addon/passbolt";
 const EDGE_STORE_BROWSER_EXTENSION_URL = "https://microsoftedge.microsoft.com/addons/detail/passbolt-extension/ljeppgjhohmhpbdhjjjbiflabdgfkhpo";
 
