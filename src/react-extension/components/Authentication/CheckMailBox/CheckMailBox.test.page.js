@@ -31,7 +31,6 @@ export default class CheckMailBoxTestPage {
       <MockTranslationProvider>
         <CheckMailBox />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 
