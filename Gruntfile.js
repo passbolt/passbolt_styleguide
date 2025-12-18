@@ -13,15 +13,6 @@ module.exports = function(grunt) {
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		clean: {
-			all: [
-				'build/css/*',
-				'src/css/**',
-			],
-      css: [
-        'src/css/**'
-      ]
-		},
 		less: {
       options: {
         javascriptEnabled: true
@@ -71,6 +62,16 @@ module.exports = function(grunt) {
       'build-apps': {
         command: [
           'npm run build'
+        ].join(' && ')
+      },
+      'clean-css': {
+        command: [
+          'npm run build:clean:css'
+        ].join(' && ')
+      },
+      'clean-all': {
+        command: [
+          'npm run build:clean:all'
         ].join(' && ')
       },
       'externalize': {
@@ -182,7 +183,6 @@ module.exports = function(grunt) {
 	// Initialise
 
   grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-symlink');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -196,8 +196,8 @@ module.exports = function(grunt) {
 
 	// 'grunt' will check code quality, and if no errors,
 	// compile LESS to CSS, and minify and concatonate all JS and CSS
-  grunt.registerTask('default', ['clean:all', 'less', 'cssmin', 'header', 'shell:build-apps', 'externalize-locale-string', 'symlink']);
-  grunt.registerTask('css', [ 'clean:css', 'less', 'cssmin']);
+  grunt.registerTask('default', ['shell:clean-all', 'less', 'cssmin', 'header', 'shell:build-apps', 'externalize-locale-string', 'symlink']);
+  grunt.registerTask('css', ['shell:clean-css', 'less', 'cssmin']);
   grunt.registerTask('externalize-locale-string', ['shell:externalize']);
 
   // Tasks to add the custom theme in the less and watch config
