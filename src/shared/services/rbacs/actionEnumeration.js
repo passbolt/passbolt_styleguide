@@ -15,6 +15,7 @@
 export const actions = {
   GROUPS_ADD: "GroupsAdd.addPost",
   ACCOUNT_RECOVERY_REQUEST_VIEW: "AccountRecoveryRequestsView.view",
+  ACCOUNT_RECOVERY_REQUEST_INDEX: "AccountRecoveryRequestsIndex.index",
   ACCOUNT_RECOVERY_RESPONSE_CREATE: "AccountRecoveryResponsesCreate.post"
 };
 

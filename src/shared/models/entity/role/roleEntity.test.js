@@ -191,4 +191,30 @@ describe("Role entity", () => {
       expect(role6.isAReservedRole()).toStrictEqual(false);
     });
   });
+
+  describe("::toUpdateDto", () => {
+    it("should return only name property", () => {
+      expect.assertions(2);
+      const dto = adminRoleDto({
+        description: "Admin role description",
+        created: "2020-04-25 12:52:00",
+        modified: "2020-04-25 12:52:01",
+      });
+      const entity = new RoleEntity(dto);
+      const updateDto = entity.toUpdateDto();
+
+      expect(updateDto.name).toStrictEqual(dto.name);
+      expect(Object.keys(updateDto)).toEqual(["name"]);
+    });
+
+    it("should not include id in the DTO", () => {
+      expect.assertions(2);
+      const dto = adminRoleDto();
+      const entity = new RoleEntity(dto);
+      const updateDto = entity.toUpdateDto();
+
+      expect(updateDto.id).toBeUndefined();
+      expect(Object.keys(updateDto)).toEqual(["name"]);
+    });
+  });
 });

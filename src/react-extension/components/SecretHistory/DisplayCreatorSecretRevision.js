@@ -61,6 +61,14 @@ class DisplayCreatorSecretRevision extends Component {
   }
 
   /**
+   * Is resource secret revision selected
+   * @return {boolean}
+   */
+  get isResourceSecretRevisionSelected() {
+    return this.props.secretRevisionSelectedId === this.props.secretRevision.id;
+  }
+
+  /**
    * Handle whenever the user passes its mouse hover the tooltip.
    * @returns {Promise<JSX>}
    */
@@ -113,7 +121,7 @@ class DisplayCreatorSecretRevision extends Component {
    */
   render() {
     return (
-      <button type="button" className="no-border" disabled={this.props.disabled}
+      <button type="button" className={`no-border ${this.isResourceSecretRevisionSelected ? "selected" : ""}`} disabled={this.props.disabled}
         onClick={this.handleSelectSecretRevision}>
         <div className="creator">
           <UserAvatar user={this.creator.toDto(UserEntity.ALL_CONTAIN_OPTIONS)} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
@@ -160,6 +168,7 @@ DisplayCreatorSecretRevision.defaultProps = {
 DisplayCreatorSecretRevision.propTypes = {
   secretRevision: PropTypes.instanceOf(SecretRevisionEntity).isRequired, // The secret revision entity
   disabled: PropTypes.bool, // The disabled property
+  secretRevisionSelectedId: PropTypes.string, // The secret revision selected id
   onSelectSecretRevision: PropTypes.func, // The on select secret revision callback
   context: PropTypes.object, // The app context
   t: PropTypes.func, // The translation function

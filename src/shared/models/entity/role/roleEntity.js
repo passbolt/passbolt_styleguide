@@ -205,4 +205,20 @@ export default class RoleEntity extends EntityV2 {
   static get ROLE_NAME_MAX_LENGTH() {
     return ROLE_NAME_MAX_LENGTH;
   }
+  /*
+   * ==================================================
+   * Serialization
+   * ==================================================
+   */
+
+  /**
+   * Return an update DTO ready to send to the API.
+   *
+   * @returns {object}
+   */
+  toUpdateDto() {
+    return {
+      name: this.name
+    };
+  }
 }

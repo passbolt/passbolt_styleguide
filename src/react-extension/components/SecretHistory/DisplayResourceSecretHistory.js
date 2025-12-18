@@ -126,15 +126,6 @@ class DisplaySecretResourceHistory extends Component {
   }
 
   /**
-   * Is resource secret revision selected
-   * @param id
-   * @return {boolean}
-   */
-  isResourceSecretRevisionSelected(id) {
-    return this.state.resourceSecretHistorySelectedId === id;
-  }
-
-  /**
    * Has no resource secret revision access
    * @param secrets
    * @return {boolean}
@@ -163,14 +154,14 @@ class DisplaySecretResourceHistory extends Component {
         <div className="left-sidebar">
           <div className="sidebar-content-sections">
             {this.resourceSecretRevisionsCollection?.items.map(resourceSecretRevision => (
-              <div className={`section-content ${this.isResourceSecretRevisionSelected(resourceSecretRevision.id) ? "selected" : ""} ${this.hasNoRevisionsAccess(resourceSecretRevision.secrets) ? "disabled" : ""}`} key={resourceSecretRevision.id}>
+              <div className="section-content" key={resourceSecretRevision.id}>
                 {this.hasNoRevisionsAccess(resourceSecretRevision.secrets) &&
                   <TooltipPortal message={<Trans>You cannot access revisions created before the resource was shared with you.</Trans>}>
                     <DisplayCreatorSecretRevision disabled={true} secretRevision={resourceSecretRevision}/>
                   </TooltipPortal>
                 }
                 {!this.hasNoRevisionsAccess(resourceSecretRevision.secrets) &&
-                  <DisplayCreatorSecretRevision disabled={this.state.isProcessing} secretRevision={resourceSecretRevision} onSelectSecretRevision={this.onSelectSecretRevision}/>
+                  <DisplayCreatorSecretRevision disabled={this.state.isProcessing} secretRevision={resourceSecretRevision} secretRevisionSelectedId={this.state.resourceSecretHistorySelectedId} onSelectSecretRevision={this.onSelectSecretRevision}/>
                 }
               </div>
             ))}
