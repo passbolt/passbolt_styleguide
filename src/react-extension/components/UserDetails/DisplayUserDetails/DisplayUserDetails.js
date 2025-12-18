@@ -102,7 +102,7 @@ class DisplayUserDetails extends React.Component {
    * @return {boolean}
    */
   canSeeAccountRecoveryDetails() {
-    return this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_VIEW)
+    return this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_INDEX)
       && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE);
   }
 

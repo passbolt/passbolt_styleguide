@@ -39,6 +39,7 @@ export const defaultSettingsRbacsCollectionData = [
   defaultRbacWithUiActionData({ ui_action: defaultUiActionData({ name: uiActions.SHARE_FOLDER }) }),
   defaultRbacWithActionData({ action: defaultActionData({ name: actions.GROUPS_ADD }) }),
   defaultRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_REQUEST_VIEW }) }),
+  defaultRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_REQUEST_INDEX }) }),
   defaultRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_RESPONSE_CREATE }) }),
 ];
 
@@ -61,6 +62,7 @@ export const settingsRbacsCollectionData = () => [
   defaultRbacWithUiActionData({ ui_action: defaultUiActionData({ name: uiActions.SHARE_FOLDER }) }),
   denyRbacWithActionData({ action: defaultActionData({ name: actions.GROUPS_ADD }) }),
   denyRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_REQUEST_VIEW }) }),
+  denyRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_REQUEST_INDEX }) }),
   denyRbacWithActionData({ action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_RESPONSE_CREATE }) }),
 ];
 
@@ -122,6 +124,10 @@ export const settingsRbacsCollectionFromRoleCollectionData = (rolesCollectionDto
       denyRbacWithActionData({
         role_id: roleId,
         action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_REQUEST_VIEW }),
+      }),
+      denyRbacWithActionData({
+        role_id: roleId,
+        action: defaultActionData({ name: actions.ACCOUNT_RECOVERY_REQUEST_INDEX }),
       }),
       denyRbacWithActionData({
         role_id: roleId,

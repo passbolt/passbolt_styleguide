@@ -15,15 +15,18 @@
 import SecretRevisionEntity from "../../../shared/models/entity/secretRevision/secretRevisionEntity";
 import { defaultSecretRevisionDto } from "../../../shared/models/entity/secretRevision/secretRevisionEntity.test.data";
 import { defaultAppContext } from "../../contexts/ExtAppContext.test.data";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Default props
  * @returns {*}
  */
 export function defaultProps(data = {}) {
+  const id = uuidv4();
   const defaultData = {
     context: defaultAppContext(),
-    secretRevision: new SecretRevisionEntity(defaultSecretRevisionDto({}, { withCreator: true })),
+    secretRevision: new SecretRevisionEntity(defaultSecretRevisionDto({ id }, { withCreator: true })),
+    secretHistorySelectedId: id,
     disabled: false,
     onSelectSecretRevision: jest.fn(),
   };

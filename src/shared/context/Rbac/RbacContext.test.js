@@ -31,7 +31,7 @@ describe("RbacContext", () => {
 
   describe("RbacContext::canIUseAction", () => {
     it("should return allow or deny for action or ui action for a signed-in user", async () => {
-      expect.assertions(16);
+      expect.assertions(17);
 
       expect(rbacContext.canIUseAction(uiActions.RESOURCES_EXPORT)).toBeTruthy();
       expect(rbacContext.canIUseAction(uiActions.RESOURCES_IMPORT)).toBeFalsy();
@@ -48,6 +48,7 @@ describe("RbacContext", () => {
       expect(rbacContext.canIUseAction(uiActions.SHARE_FOLDER)).toBeTruthy();
       expect(rbacContext.canIUseAction(actions.GROUPS_ADD)).toBeFalsy();
       expect(rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_VIEW)).toBeFalsy();
+      expect(rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_INDEX)).toBeFalsy();
       expect(rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE)).toBeFalsy();
     });
   });

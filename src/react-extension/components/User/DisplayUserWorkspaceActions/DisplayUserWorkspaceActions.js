@@ -308,6 +308,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   get canIReviewAccountRecoveryRequest() {
     return this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE)
+      && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_INDEX)
       && this.hasOneUserSelected()
       && this.props.context.siteSettings.canIUse("accountRecovery")
       && Boolean(this.selectedUser.pending_account_recovery_request);

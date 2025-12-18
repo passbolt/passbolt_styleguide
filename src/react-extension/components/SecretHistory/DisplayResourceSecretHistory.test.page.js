@@ -117,7 +117,7 @@ export default class DisplayResourceSecretHistoryPage {
    */
   get secretRevisionCreatorItemSelected() {
     const element = this._page.container.querySelector(
-      ".left-sidebar .sidebar-content-sections .section-content.selected",
+      ".left-sidebar .sidebar-content-sections .section-content .selected",
     );
 
     return {
