@@ -314,6 +314,24 @@ class DisplayInFormMenu extends React.Component {
    */
   async handleDisplayConfigurationReceivedEvent() {
     const configuration = await this.props.context.port.request('passbolt.in-form-menu.init');
+
+    // Sort suggested resources: favorites first, then alphabetically
+    if (configuration?.suggestedResources?.length > 0) {
+      configuration.suggestedResources.sort((a, b) => {
+        // Priority 1: Favorites first
+        const aIsFavorite = a.favorite !== null;
+        const bIsFavorite = b.favorite !== null;
+        if (aIsFavorite !== bIsFavorite) {
+          return aIsFavorite ? -1 : 1;
+        }
+
+        // Priority 2: Sort alphabetically by name
+        const aName = a.metadata.name.toUpperCase();
+        const bName = b.metadata.name.toUpperCase();
+        return aName.localeCompare(bName);
+      });
+    }
+
     this.setState({configuration});
     if (!this.isPasswordFilled) {
       // Pre-generate the password
