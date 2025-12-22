@@ -30,7 +30,6 @@ export default class ChangeLocalePage {
       <MockTranslationProvider>
         <ChangeLocale {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 
