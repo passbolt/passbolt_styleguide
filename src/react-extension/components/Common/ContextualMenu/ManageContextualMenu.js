@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
+import { withContextualMenu } from "../../../contexts/ContextualMenuContext";
 
 /**
  * This component acts as an anchor for the different project contextual menus.
@@ -59,21 +59,20 @@ class ManageContextualMenu extends React.Component {
   render() {
     return (
       <div ref={this.elementRef}>
-        {
-          this.props.contextualMenuContext.contextualMenus.map((contextualMenu, index) =>
-            <contextualMenu.ContextualMenuComponent
-              key={index}
-              hide={() => this.handleHide(index)}
-              {...contextualMenu.componentProps} />
-          )
-        }
+        {this.props.contextualMenuContext.contextualMenus.map((contextualMenu, index) => (
+          <contextualMenu.ContextualMenuComponent
+            key={index}
+            hide={() => this.handleHide(index)}
+            {...contextualMenu.componentProps}
+          />
+        ))}
       </div>
     );
   }
 }
 
 ManageContextualMenu.propTypes = {
-  contextualMenuContext: PropTypes.any // The contextual menu context
+  contextualMenuContext: PropTypes.any, // The contextual menu context
 };
 
 export default withContextualMenu(ManageContextualMenu);

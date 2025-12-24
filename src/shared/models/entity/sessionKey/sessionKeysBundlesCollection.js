@@ -32,8 +32,8 @@ class SessionKeysBundlesCollection extends EntityV2Collection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": SessionKeysBundleEntity.getSchema(),
+      type: "array",
+      items: SessionKeysBundleEntity.getSchema(),
     };
   }
 
@@ -44,7 +44,7 @@ class SessionKeysBundlesCollection extends EntityV2Collection {
    * @throws {EntityValidationError} If a session key already exists with the same foreign_id.
    */
   validateBuildRules(item, options = {}) {
-    this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
+    this.assertNotExist("id", item._props.id, { haystackSet: options?.uniqueIdsSetCache });
     this.assertSameUserId(item);
   }
 
@@ -77,7 +77,7 @@ class SessionKeysBundlesCollection extends EntityV2Collection {
    * @returns {array}
    */
   toDto(contains = {}) {
-    return this._items.map(entity => entity.toDto(contains));
+    return this._items.map((entity) => entity.toDto(contains));
   }
 
   /**
@@ -86,14 +86,14 @@ class SessionKeysBundlesCollection extends EntityV2Collection {
   pushMany(data, entityOptions = {}, options = {}) {
     const uniqueIdsSetCache = new Set(this.extract("id"));
 
-    const onItemPushed = item => {
+    const onItemPushed = (item) => {
       uniqueIdsSetCache.add(item._props.id);
     };
 
     options = {
       onItemPushed: onItemPushed,
-      validateBuildRules: {...options?.validateBuildRules, uniqueIdsSetCache},
-      ...options
+      validateBuildRules: { ...options?.validateBuildRules, uniqueIdsSetCache },
+      ...options,
     };
 
     super.pushMany(data, entityOptions, options);
@@ -104,7 +104,7 @@ class SessionKeysBundlesCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasSomeDecryptedSessionKeysBundles() {
-    return this.items.some(sessionKeysBundleEntity => sessionKeysBundleEntity.isDecrypted);
+    return this.items.some((sessionKeysBundleEntity) => sessionKeysBundleEntity.isDecrypted);
   }
 
   /**
@@ -112,7 +112,7 @@ class SessionKeysBundlesCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasSomeEncryptedSessionKeysBundles() {
-    return this.items.some(sessionKeysBundleEntity => !sessionKeysBundleEntity.isDecrypted);
+    return this.items.some((sessionKeysBundleEntity) => !sessionKeysBundleEntity.isDecrypted);
   }
 
   /**
@@ -142,7 +142,7 @@ class SessionKeysBundlesCollection extends EntityV2Collection {
     if (!this.length) {
       return;
     }
-    return this.items.reduce((result, currentItem) => currentItem.modified > result.modified ? currentItem : result);
+    return this.items.reduce((result, currentItem) => (currentItem.modified > result.modified ? currentItem : result));
   }
 }
 

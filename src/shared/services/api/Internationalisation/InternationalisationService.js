@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,7 @@
  * @since         3.8.0
  */
 
-import {ApiClient} from "../../../lib/apiClient/apiClient";
+import { ApiClient } from "../../../lib/apiClient/apiClient";
 
 const INTERNATIONALISATION_RESOURCE_NAME = "locale/settings";
 
@@ -43,4 +42,3 @@ class InternationalisationService {
 }
 
 export default InternationalisationService;
-

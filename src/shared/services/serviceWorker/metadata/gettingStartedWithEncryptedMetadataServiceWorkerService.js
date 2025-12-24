@@ -13,8 +13,10 @@
  */
 import MetadataGettingStartedSettingsEntity from "../../../models/entity/metadata/metadataGettingStartedSettingsEntity";
 
-const METADATA_ENABLE_ENCRYPTED_METADATA_FOR_EXISTING_INSTANCE = "passbolt.metadata.enable-encrypted-metadata-for-existing-instance";
-const METADATA_KEEP_LEGACY_CLEARTEXT_METADATA_FOR_EXISTING_INSTANCE = "passbolt.metadata.keep-cleartext-metadata-for-existing-instance";
+const METADATA_ENABLE_ENCRYPTED_METADATA_FOR_EXISTING_INSTANCE =
+  "passbolt.metadata.enable-encrypted-metadata-for-existing-instance";
+const METADATA_KEEP_LEGACY_CLEARTEXT_METADATA_FOR_EXISTING_INSTANCE =
+  "passbolt.metadata.keep-cleartext-metadata-for-existing-instance";
 const METADATA_FIND_GETTING_STARTED_SETTINGS = "passbolt.metadata.find-getting-started-settings";
 
 export default class GettingStartedWithEncryptedMetadataServiceWorkerService {

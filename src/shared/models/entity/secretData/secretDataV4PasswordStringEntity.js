@@ -22,16 +22,14 @@ class secretDataV4PasswordStringEntity extends SecretDataEntity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "password",
-      ],
-      "properties": {
-        "password": {
-          "type": "string",
-          "maxLength": 4096,
+      type: "object",
+      required: ["password"],
+      properties: {
+        password: {
+          type: "string",
+          maxLength: 4096,
         },
-      }
+      },
     };
   }
 
@@ -46,7 +44,7 @@ class secretDataV4PasswordStringEntity extends SecretDataEntity {
       password: "",
     };
 
-    return new secretDataV4PasswordStringEntity({...defaultData, ...data}, options);
+    return new secretDataV4PasswordStringEntity({ ...defaultData, ...data }, options);
   }
 
   /**

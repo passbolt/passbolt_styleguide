@@ -14,8 +14,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import InternationalisationService from '../../../../shared/services/api/Internationalisation/InternationalisationService';
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import InternationalisationService from "../../../../shared/services/api/Internationalisation/InternationalisationService";
 
 /**
  * The Administration Internationalization Context
@@ -59,7 +59,7 @@ export class AdminInternationalizationContextProvider extends React.Component {
       processing: true, // Context is processing data
       getCurrentLocale: this.getCurrentLocale.bind(this), // Returns locale saved
       getLocale: this.getLocale.bind(this), // Returns locale for UI changes
-      setLocale: this.setLocale.bind(this),  // Set the locale with changes
+      setLocale: this.setLocale.bind(this), // Set the locale with changes
       findLocale: this.findLocale.bind(this), // Find the current settings and store it in the state
       hasLocaleChanges: this.hasLocaleChanges.bind(this), // Check if locale has changes
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
@@ -106,7 +106,7 @@ export class AdminInternationalizationContextProvider extends React.Component {
    * @returns {void}
    */
   async setLocale(locale) {
-    await this.setState({locale});
+    await this.setState({ locale });
   }
 
   /**
@@ -124,7 +124,7 @@ export class AdminInternationalizationContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({processing});
+    this.setState({ processing });
   }
 
   /**
@@ -139,9 +139,11 @@ export class AdminInternationalizationContextProvider extends React.Component {
    * Puts the state to its default in order to avoid keeping the data users didn't want to save.
    */
   clearContext() {
-    const {currentLocale, locale, processing} = this.defaultState;
+    const { currentLocale, locale, processing } = this.defaultState;
     this.setState({
-      currentLocale, locale, processing
+      currentLocale,
+      locale,
+      processing,
     });
   }
 
@@ -150,7 +152,7 @@ export class AdminInternationalizationContextProvider extends React.Component {
    */
   async save() {
     this.setProcessing(true);
-    await this.internalisationService.save({value: this.state.locale});
+    await this.internalisationService.save({ value: this.state.locale });
     this.props.context.onRefreshLocaleRequested(this.state.locale);
     this.findLocale();
   }
@@ -184,9 +186,9 @@ export function withAdminInternationalization(WrappedComponent) {
     render() {
       return (
         <AdminInternationalizationContext.Consumer>
-          {
-            adminInternationalizationContext => <WrappedComponent adminInternationalizationContext={adminInternationalizationContext} {...this.props} />
-          }
+          {(adminInternationalizationContext) => (
+            <WrappedComponent adminInternationalizationContext={adminInternationalizationContext} {...this.props} />
+          )}
         </AdminInternationalizationContext.Consumer>
       );
     }

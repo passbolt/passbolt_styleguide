@@ -17,9 +17,7 @@ import EntitySchema from "../abstract/entitySchema";
 const ENTITY_NAME = "GoogleSsoSettings";
 const GOOGLE = "google";
 
-const SUPPORTED_URLS = [
-  'https://accounts.google.com'
-];
+const SUPPORTED_URLS = ["https://accounts.google.com"];
 
 /**
  * Entity related to the SSO settings
@@ -29,11 +27,14 @@ class GoogleSsoSettingsEntity extends Entity {
    * @inheritDoc
    */
   constructor(googleSsoSettingsDto, options = {}) {
-    super(EntitySchema.validate(
-      GoogleSsoSettingsEntity.ENTITY_NAME,
-      googleSsoSettingsDto,
-      GoogleSsoSettingsEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(
+        GoogleSsoSettingsEntity.ENTITY_NAME,
+        googleSsoSettingsDto,
+        GoogleSsoSettingsEntity.getSchema(),
+      ),
+      options,
+    );
   }
 
   /**
@@ -42,21 +43,18 @@ class GoogleSsoSettingsEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "client_id",
-        "client_secret",
-      ],
-      "properties": {
-        "client_id": {
-          "type": "string",
-          "minLength": 1,
+      type: "object",
+      required: ["client_id", "client_secret"],
+      properties: {
+        client_id: {
+          type: "string",
+          minLength: 1,
         },
-        "client_secret": {
-          "type": "string",
-          "minLength": 1,
+        client_secret: {
+          type: "string",
+          minLength: 1,
         },
-      }
+      },
     };
   }
 

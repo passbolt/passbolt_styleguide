@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 class Tooltip extends Component {
@@ -23,23 +23,20 @@ class Tooltip extends Component {
     return (
       <div className="tooltip" tabIndex="0">
         {this.props.children}
-        <span className={`tooltip-text ${this.props.direction}`}>
-          {this.props.message}
-        </span>
+        <span className={`tooltip-text ${this.props.direction}`}>{this.props.message}</span>
       </div>
     );
   }
 }
 
-
 Tooltip.defaultProps = {
-  direction: 'right'
+  direction: "right",
 };
 
 Tooltip.propTypes = {
   children: PropTypes.any,
   message: PropTypes.any.isRequired,
-  direction: PropTypes.string
+  direction: PropTypes.string,
 };
 
 export default Tooltip;

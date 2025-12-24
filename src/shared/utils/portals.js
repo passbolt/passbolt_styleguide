@@ -12,7 +12,7 @@
  * @since         5.0.0
  */
 import React from "react";
-import {createPortal} from "react-dom";
+import { createPortal } from "react-dom";
 
 /**
  * Create a portal in a "safe" mode.
@@ -24,7 +24,5 @@ import {createPortal} from "react-dom";
  * @returns {JSX}
  */
 export function createSafePortal(children, domNode, key) {
-  return (<>
-    {domNode && createPortal(children, domNode, key)}
-  </>);
+  return <>{domNode && createPortal(children, domNode, key)}</>;
 }

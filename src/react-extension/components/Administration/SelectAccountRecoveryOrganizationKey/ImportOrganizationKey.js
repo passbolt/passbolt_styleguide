@@ -13,11 +13,11 @@
  */
 
 import React from "react";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import InfoSVG from "../../../../img/svg/info.svg";
 
 /**
@@ -74,7 +74,7 @@ class ImportOrganizationKey extends React.Component {
   async handleSelectOrganizationKeyFile(event) {
     const [organizationFile] = event.target.files;
     const organizationKey = await this.readOrganizationKeyFile(organizationFile);
-    this.setState({key: organizationKey, selectedFile: organizationFile});
+    this.setState({ key: organizationKey, selectedFile: organizationFile });
   }
 
   /**
@@ -105,7 +105,7 @@ class ImportOrganizationKey extends React.Component {
     if (key === "") {
       return Promise.reject(new Error(this.translate("The key can't be empty.")));
     }
-    return await this.props.context.port.request('passbolt.account-recovery.validate-organization-key', key);
+    return await this.props.context.port.request("passbolt.account-recovery.validate-organization-key", key);
   }
 
   /**
@@ -120,8 +120,8 @@ class ImportOrganizationKey extends React.Component {
 
     return await this.validateKeyInput()
       .then(() => true)
-      .catch(error => {
-        this.setState({keyError: error.message});
+      .catch((error) => {
+        this.setState({ keyError: error.message });
         return false;
       });
   }
@@ -133,7 +133,7 @@ class ImportOrganizationKey extends React.Component {
   handleInputChange(event) {
     const target = event.target;
     this.setState({
-      [target.name]: target.value
+      [target.name]: target.value,
     });
   }
 
@@ -161,10 +161,10 @@ class ImportOrganizationKey extends React.Component {
    * Save the changes.
    */
   async save() {
-    await this.setState({hasAlreadyBeenValidated: true});
+    await this.setState({ hasAlreadyBeenValidated: true });
     await this.toggleProcessing();
 
-    if (!await this.validate()) {
+    if (!(await this.validate())) {
       this.handleValidateError();
       await this.toggleProcessing();
       return;
@@ -193,7 +193,7 @@ class ImportOrganizationKey extends React.Component {
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({processing: !this.state.processing});
+    await this.setState({ processing: !this.state.processing });
   }
 
   /**
@@ -228,11 +228,23 @@ class ImportOrganizationKey extends React.Component {
       <form onSubmit={this.handleFormSubmit} noValidate>
         <div className="form-content import-organization-key">
           <div className={`input textarea required ${this.state.keyError ? "error" : ""}`}>
-            <label htmlFor="organization-recover-form-key"><Trans>Import an OpenPGP Public key</Trans></label>
-            <textarea id="organization-recover-form-key" name="key" value={this.state.key}
-              onKeyUp={this.handleKeyInputKeyUp} onChange={this.handleInputChange}
-              disabled={this.hasAllInputDisabled()} ref={this.keyInputRef} className="required"
-              placeholder={this.translate('Add Open PGP Public key')} required="required" autoComplete="off" autoFocus={true} />
+            <label htmlFor="organization-recover-form-key">
+              <Trans>Import an OpenPGP Public key</Trans>
+            </label>
+            <textarea
+              id="organization-recover-form-key"
+              name="key"
+              value={this.state.key}
+              onKeyUp={this.handleKeyInputKeyUp}
+              onChange={this.handleInputChange}
+              disabled={this.hasAllInputDisabled()}
+              ref={this.keyInputRef}
+              className="required"
+              placeholder={this.translate("Add Open PGP Public key")}
+              required="required"
+              autoComplete="off"
+              autoFocus={true}
+            />
           </div>
           <div className="input file">
             <input
@@ -240,7 +252,8 @@ class ImportOrganizationKey extends React.Component {
               id="dialog-import-private-key"
               ref={this.fileUploaderRef}
               disabled={this.hasAllInputDisabled()}
-              onChange={this.handleSelectOrganizationKeyFile} />
+              onChange={this.handleSelectOrganizationKeyFile}
+            />
             <label htmlFor="dialog-import-private-key">
               <Trans>Select a file to import</Trans>
             </label>
@@ -249,29 +262,47 @@ class ImportOrganizationKey extends React.Component {
                 type="text"
                 disabled={true}
                 placeholder={this.translate("No file selected")}
-                defaultValue={this.selectedFilename} />
+                defaultValue={this.selectedFilename}
+              />
               <button
                 className="button primary"
-                type='button'
+                type="button"
                 disabled={this.hasAllInputDisabled()}
-                onClick={this.handleSelectFile}>
-                <span><Trans>Choose a file</Trans></span>
+                onClick={this.handleSelectFile}
+              >
+                <span>
+                  <Trans>Choose a file</Trans>
+                </span>
               </button>
             </div>
-            {this.state.keyError &&
-              <div className="key error-message">{this.state.keyError}</div>
-            }
+            {this.state.keyError && <div className="key error-message">{this.state.keyError}</div>}
           </div>
-          {!this.state.hasAlreadyBeenValidated &&
+          {!this.state.hasAlreadyBeenValidated && (
             <div className="message notice no-margin">
-              <InfoSVG className="svg-icon info baseline"/>
-              <strong><Trans>Pro tip</Trans>:</strong> <Trans>Learn how to <a href="https://help.passbolt.com/configure/account-recovery" target="_blank" rel="noopener noreferrer">generate a key separately.</a></Trans>
+              <InfoSVG className="svg-icon info baseline" />
+              <strong>
+                <Trans>Pro tip</Trans>:
+              </strong>{" "}
+              <Trans>
+                Learn how to{" "}
+                <a
+                  href="https://help.passbolt.com/configure/account-recovery"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  generate a key separately.
+                </a>
+              </Trans>
             </div>
-          }
+          )}
         </div>
         <div className="submit-wrapper clearfix">
           <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.props.onClose} />
-          <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Apply")} />
+          <FormSubmitButton
+            disabled={this.hasAllInputDisabled()}
+            processing={this.state.processing}
+            value={this.translate("Apply")}
+          />
         </div>
       </form>
     );
@@ -285,4 +316,4 @@ ImportOrganizationKey.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(ImportOrganizationKey));
+export default withAppContext(withTranslation("common")(ImportOrganizationKey));

@@ -14,8 +14,8 @@
 
 import EntityValidationError from "../entity/abstract/entityValidationError";
 import EntitySchema from "../entity/abstract/entitySchema";
-import {DateTime} from "luxon";
-import {formatDateForApi} from "../../utils/dateUtils";
+import { DateTime } from "luxon";
+import { formatDateForApi } from "../../utils/dateUtils";
 
 const DEFAULT_EXPIRY_PERIOD = 90;
 const INPUT_DATE_FORMAT = "yyyy-MM-dd";
@@ -45,18 +45,14 @@ class PasswordExpiryDialogViewModel {
    * @returns {Object} schema
    */
   static getSchema() {
-    const schema =  {
+    const schema = {
       type: "object",
-      required: [
-        "passwordExpiryDurationInDay",
-        "passwordExpiryDate",
-        "passwordExpiryOption",
-      ],
+      required: ["passwordExpiryDurationInDay", "passwordExpiryDate", "passwordExpiryOption"],
       properties: {
         passwordExpiryDurationInDay: {
           type: "integer",
           maximum: 999,
-          minimum: -99
+          minimum: -99,
         },
         passwordExpiryDate: {
           type: "string",
@@ -79,9 +75,7 @@ class PasswordExpiryDialogViewModel {
    */
   static fromEntityDto(entityDto) {
     const passwordExpiryDurationInDay = entityDto?.default_expiry_period || DEFAULT_EXPIRY_PERIOD;
-    const passwordExpiryDate =  DateTime.utc()
-      .plus({days: passwordExpiryDurationInDay})
-      .toFormat(INPUT_DATE_FORMAT);
+    const passwordExpiryDate = DateTime.utc().plus({ days: passwordExpiryDurationInDay }).toFormat(INPUT_DATE_FORMAT);
 
     const data = {
       passwordExpiryDurationInDay: passwordExpiryDurationInDay,
@@ -113,11 +107,11 @@ class PasswordExpiryDialogViewModel {
     let date;
     switch (this.passwordExpiryOption) {
       case PasswordExpiryOptionEnum.AUTOMATIC: {
-        date = DateTime.utc().plus({days: this.passwordExpiryDurationInDay});
+        date = DateTime.utc().plus({ days: this.passwordExpiryDurationInDay });
         break;
       }
       case PasswordExpiryOptionEnum.MANUAL: {
-        date = DateTime.fromFormat(this.passwordExpiryDate, INPUT_DATE_FORMAT, {zone: "UTC"});
+        date = DateTime.fromFormat(this.passwordExpiryDate, INPUT_DATE_FORMAT, { zone: "UTC" });
         break;
       }
       case PasswordExpiryOptionEnum.NEVER: {
@@ -137,7 +131,7 @@ class PasswordExpiryDialogViewModel {
    */
   mapResourcesToPasswordExpiryDto(resourceList) {
     const expiryDate = this.getExpiryDateToApply();
-    return resourceList.map(resource => ({
+    return resourceList.map((resource) => ({
       id: resource.id,
       expired: expiryDate,
     }));
@@ -168,7 +162,11 @@ class PasswordExpiryDialogViewModel {
   validatePasswordExpiryDurationInDay() {
     const schema = PasswordExpiryDialogViewModel.getSchema();
     try {
-      EntitySchema.validateProp("passwordExpiryDurationInDay", this.passwordExpiryDurationInDay, schema.properties.passwordExpiryDurationInDay);
+      EntitySchema.validateProp(
+        "passwordExpiryDurationInDay",
+        this.passwordExpiryDurationInDay,
+        schema.properties.passwordExpiryDurationInDay,
+      );
     } catch (e) {
       if (!(e instanceof EntityValidationError)) {
         throw e;

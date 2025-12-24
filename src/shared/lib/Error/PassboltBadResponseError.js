@@ -7,7 +7,7 @@
 class PassboltBadResponseError extends Error {
   constructor() {
     super("An internal error occurred. The server response could not be parsed. Please contact your administrator.");
-    this.name = 'PassboltBadResponseError';
+    this.name = "PassboltBadResponseError";
   }
 }
 

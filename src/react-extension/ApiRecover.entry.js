@@ -26,8 +26,4 @@ document.body.appendChild(appDomElement);
  * const root = ReactDOM.createRoot(appDomElement);
  */
 /* eslint-disable react/no-deprecated */
-ReactDOM.render(
-  <ApiRecover/>,
-  appDomElement
-);
-
+ReactDOM.render(<ApiRecover />, appDomElement);

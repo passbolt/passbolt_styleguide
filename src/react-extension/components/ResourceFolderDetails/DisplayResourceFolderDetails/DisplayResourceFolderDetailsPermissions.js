@@ -16,11 +16,11 @@ import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import DisplayAroName from "../../../../shared/components/Aro/DisplayAroName";
@@ -79,9 +79,13 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
    * Get the folder permissions.
    */
   async fetch() {
-    this.setState({loading: true});
-    const permissions = await this.props.context.port.request('passbolt.permissions.find-aco-permissions-for-display', this.folder.id, "Folder");
-    this.setState({permissions, loading: false});
+    this.setState({ loading: true });
+    const permissions = await this.props.context.port.request(
+      "passbolt.permissions.find-aco-permissions-for-display",
+      this.folder.id,
+      "Folder",
+    );
+    this.setState({ permissions, loading: false });
   }
 
   /**
@@ -93,7 +97,7 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
     if (open) {
       this.fetch();
     }
-    this.setState({open});
+    this.setState({ open });
   }
 
   /**
@@ -101,7 +105,7 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
    */
   handlePermissionsEditClickEvent() {
     const foldersIds = [this.folder.id];
-    this.props.context.setContext({shareDialogProps: {foldersIds}});
+    this.props.context.setContext({ shareDialogProps: { foldersIds } });
     this.props.dialogContext.open(ShareDialog);
   }
 
@@ -156,43 +160,50 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
               <span className="accordion-title">
                 <Trans>Shared with</Trans>
               </span>
-              {this.state.open
-                ? <CaretDownSVG />
-                : <CaretRightSVG />
-              }
+              {this.state.open ? <CaretDownSVG /> : <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open &&
+        {this.state.open && (
           <div className="accordion-content">
             <div>
               <ul className="shared-with ready">
-                {this.isLoading() &&
-                <div className="processing-wrapper">
-                  <SpinnerSVG/>
-                  <span className="processing-text"><Trans>Retrieving permissions</Trans></span>
-                </div>
-                }
-                {this.state.permissions && this.state.permissions.map(permission => (
-                  <li key={permission.id} className="usercard-col-2">
-                    {permission.aro === "User" &&
-                    <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
-                    }
-                    {permission.aro === "Group" &&
-                    <GroupAvatar group={permission.group}/>
-                    }
-                    <div className="content-wrapper">
-                      <div className="content">
-                        <div className="name"><DisplayAroName displayAs={permission.aro} user={permission.user} group={permission.group}/></div>
-                        <div className="subinfo">{this.getPermissionLabel(permission)}</div>
+                {this.isLoading() && (
+                  <div className="processing-wrapper">
+                    <SpinnerSVG />
+                    <span className="processing-text">
+                      <Trans>Retrieving permissions</Trans>
+                    </span>
+                  </div>
+                )}
+                {this.state.permissions &&
+                  this.state.permissions.map((permission) => (
+                    <li key={permission.id} className="usercard-col-2">
+                      {permission.aro === "User" && (
+                        <UserAvatar
+                          user={permission.user}
+                          baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                        />
+                      )}
+                      {permission.aro === "Group" && <GroupAvatar group={permission.group} />}
+                      <div className="content-wrapper">
+                        <div className="content">
+                          <div className="name">
+                            <DisplayAroName
+                              displayAs={permission.aro}
+                              user={permission.user}
+                              group={permission.group}
+                            />
+                          </div>
+                          <div className="subinfo">{this.getPermissionLabel(permission)}</div>
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                ))}
+                    </li>
+                  ))}
               </ul>
             </div>
           </div>
-        }
+        )}
       </div>
     );
   }
@@ -205,4 +216,6 @@ DisplayResourceFolderDetailsPermissions.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withResourceWorkspace(withTranslation('common')(DisplayResourceFolderDetailsPermissions))));
+export default withAppContext(
+  withDialog(withResourceWorkspace(withTranslation("common")(DisplayResourceFolderDetailsPermissions))),
+);

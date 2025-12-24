@@ -13,27 +13,25 @@
  */
 
 import React from "react";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
 import EditResource from "../EditResource/EditResource";
 import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
-import {Trans, withTranslation} from "react-i18next";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import {withProgress} from "../../../contexts/ProgressContext";
-import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import { Trans, withTranslation } from "react-i18next";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withProgress } from "../../../contexts/ProgressContext";
+import { TotpCodeGeneratorService } from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
-import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
-import {formatDateForApi} from "../../../../shared/utils/dateUtils";
-import {DateTime} from "luxon";
-import {
-  withResourceTypesLocalStorage
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
+import { formatDateForApi } from "../../../../shared/utils/dateUtils";
+import { DateTime } from "luxon";
+import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
@@ -55,19 +53,13 @@ import EditSVG from "../../../../img/svg/edit.svg";
 import ShareSVG from "../../../../img/svg/share.svg";
 import CloseSVG from "../../../../img/svg/close.svg";
 import SecretHistorySVG from "../../../../img/svg/history.svg";
-import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
-import {
-  withMetadataKeysSettingsLocalStorage
-} from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { withMetadataKeysSettingsLocalStorage } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import ActionAbortedMissingMetadataKeys
-  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
+import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 import Logger from "../../../../shared/utils/logger";
-import {
-  withSecretRevisionsSettings
-} from "../../../../shared/context/SecretRevisionSettingsContext/SecretRevisionsSettingsContext";
-import SecretRevisionsSettingsEntity
-  from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
+import { withSecretRevisionsSettings } from "../../../../shared/context/SecretRevisionSettingsContext/SecretRevisionsSettingsContext";
+import SecretRevisionsSettingsEntity from "../../../../shared/models/entity/secretRevision/secretRevisionsSettingsEntity";
 import DisplayResourceSecretHistory from "../../SecretHistory/DisplayResourceSecretHistory";
 
 /**
@@ -106,7 +98,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * handle delete one or more resources
    */
   handleDeleteClickEvent() {
-    this.props.dialogContext.open(DeleteResource, {resources: this.selectedResources});
+    this.props.dialogContext.open(DeleteResource, { resources: this.selectedResources });
   }
 
   /**
@@ -114,13 +106,20 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @returns {Promise<void>}
    */
   async handleMarkAsExpiredClick() {
-    const resourcesExpiryDateToUpdate = this.selectedResources.map(resource => ({id: resource.id, expired: formatDateForApi(DateTime.utc())}));
+    const resourcesExpiryDateToUpdate = this.selectedResources.map((resource) => ({
+      id: resource.id,
+      expired: formatDateForApi(DateTime.utc()),
+    }));
     try {
       await this.props.context.port.request("passbolt.resources.set-expiration-date", resourcesExpiryDateToUpdate);
-      await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been marked as expired.", {count: resourcesExpiryDateToUpdate.length}));
+      await this.props.actionFeedbackContext.displaySuccess(
+        this.translate("The resource has been marked as expired.", { count: resourcesExpiryDateToUpdate.length }),
+      );
     } catch (error) {
       Logger.error(error);
-      await this.props.actionFeedbackContext.displayError(this.translate("Unable to mark the resource as expired.", {count: resourcesExpiryDateToUpdate.length}));
+      await this.props.actionFeedbackContext.displayError(
+        this.translate("Unable to mark the resource as expired.", { count: resourcesExpiryDateToUpdate.length }),
+      );
     }
   }
 
@@ -128,7 +127,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * Handle secret history click
    */
   handleSecretHistoryClick() {
-    this.props.dialogContext.open(DisplayResourceSecretHistory, {resource: this.selectedResources[0]});
+    this.props.dialogContext.open(DisplayResourceSecretHistory, { resource: this.selectedResources[0] });
   }
 
   /**
@@ -137,7 +136,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   handleEditClickEvent() {
     const canEditResource = this.canEditResource();
     if (canEditResource) {
-      this.props.dialogContext.open(EditResource, {resource: this.selectedResources[0]});
+      this.props.dialogContext.open(EditResource, { resource: this.selectedResources[0] });
     } else {
       this.displayActionAborted();
     }
@@ -171,8 +170,8 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   async handleShareClickEvent() {
     const canShareResource = this.canShareResource();
     if (canShareResource) {
-      const resourcesIds = this.selectedResources.map(resource => resource.id);
-      await this.props.context.setContext({shareDialogProps: {resourcesIds}});
+      const resourcesIds = this.selectedResources.map((resource) => resource.id);
+      await this.props.context.setContext({ shareDialogProps: { resourcesIds } });
       this.props.dialogContext.open(ShareDialog);
     } else {
       this.displayActionAborted();
@@ -207,14 +206,20 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * handle copy username of one resource
    */
   async handleCopyUsernameClickEvent() {
-    await this.props.clipboardContext.copy(this.selectedResources[0].metadata.username, this.translate("The username has been copied to clipboard."));
+    await this.props.clipboardContext.copy(
+      this.selectedResources[0].metadata.username,
+      this.translate("The username has been copied to clipboard."),
+    );
   }
 
   /**
    * handle copy uri of one resource
    */
   async handleCopyUriClickEvent() {
-    await this.props.clipboardContext.copy(this.selectedResources[0].metadata.uris[0], this.translate("The uri has been copied to clipboard."));
+    await this.props.clipboardContext.copy(
+      this.selectedResources[0].metadata.uris[0],
+      this.translate("The uri has been copied to clipboard."),
+    );
   }
 
   /**
@@ -246,7 +251,10 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     if (!password) {
       throw new TypeError(this.translate("The password is empty."));
     }
-    await this.props.clipboardContext.copyTemporarily(password, this.translate("The secret has been copied to clipboard."));
+    await this.props.clipboardContext.copyTemporarily(
+      password,
+      this.translate("The secret has been copied to clipboard."),
+    );
   }
 
   /**
@@ -255,7 +263,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   async handleCopySecretClickEvent() {
     let plaintextSecretDto;
 
-    this.props.progressContext.open(this.props.t('Decrypting secret'));
+    this.props.progressContext.open(this.props.t("Decrypting secret"));
     try {
       plaintextSecretDto = await this.decryptResourceSecret();
     } catch (error) {
@@ -266,7 +274,9 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     this.props.progressContext.close();
 
     if (!plaintextSecretDto?.password?.length) {
-      await this.props.actionFeedbackContext.displayWarning(this.translate("The password is empty and cannot be copied to clipboard."));
+      await this.props.actionFeedbackContext.displayWarning(
+        this.translate("The password is empty and cannot be copied to clipboard."),
+      );
       return;
     }
 
@@ -280,7 +290,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   async handleCopyTotpClickEvent() {
     let plaintextSecretDto, code;
 
-    this.props.progressContext.open(this.props.t('Decrypting secret'));
+    this.props.progressContext.open(this.props.t("Decrypting secret"));
     try {
       plaintextSecretDto = await this.decryptResourceSecret();
     } catch (error) {
@@ -295,7 +305,9 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     }
 
     if (!plaintextSecretDto.totp) {
-      await this.props.actionFeedbackContext.displayError(this.translate("The TOTP is empty and cannot be copied to clipboard."));
+      await this.props.actionFeedbackContext.displayError(
+        this.translate("The TOTP is empty and cannot be copied to clipboard."),
+      );
       return;
     }
 
@@ -316,7 +328,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   handleSetExpiryDateClickEvent() {
     this.props.dialogContext.open(PasswordExpiryDialog, {
-      resources: this.selectedResources
+      resources: this.selectedResources,
     });
   }
 
@@ -355,7 +367,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   canUpdate() {
-    return this.selectedResources.every(resource => resource.permission.type >= 7);
+    return this.selectedResources.every((resource) => resource.permission.type >= 7);
   }
 
   /**
@@ -363,7 +375,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   canShare() {
-    return this.selectedResources.every(resource => resource.permission.type === 15);
+    return this.selectedResources.every((resource) => resource.permission.type === 15);
   }
 
   /**
@@ -371,8 +383,10 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   canExport() {
-    return this.props.context.siteSettings.canIUse("export")
-      && this.props.rbacContext.canIUseAction(uiActions.RESOURCES_EXPORT);
+    return (
+      this.props.context.siteSettings.canIUse("export") &&
+      this.props.rbacContext.canIUseAction(uiActions.RESOURCES_EXPORT)
+    );
   }
 
   /**
@@ -404,7 +418,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   get canDisplaySecretHistory() {
-    const isFeatureEnabled = this.props.context.siteSettings.canIUse('secretRevisions');
+    const isFeatureEnabled = this.props.context.siteSettings.canIUse("secretRevisions");
     return isFeatureEnabled && this.props.secretRevisionsSettings?.isFeatureEnabled;
   }
 
@@ -452,8 +466,8 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * Exports the selected resources
    */
   async export() {
-    const resourcesIds = this.selectedResources.map(resource => resource.id);
-    await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds});
+    const resourcesIds = this.selectedResources.map((resource) => resource.id);
+    await this.props.resourceWorkspaceContext.onResourcesToExport({ resourcesIds });
     await this.props.dialogContext.open(ExportResources);
   }
 
@@ -462,7 +476,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {*}
    */
   get canUseTotp() {
-    return this.props.context.siteSettings.canIUse('totpResourceTypes');
+    return this.props.context.siteSettings.canIUse("totpResourceTypes");
   }
 
   /**
@@ -505,137 +519,206 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
       <div className="actions" ref={this.props.actionsButtonRef}>
         <div className="actions-wrapper">
           <ul>
-            {canViewShare &&
+            {canViewShare && (
               <li id="share_action">
                 <button type="button" className="button-action-contextual" onClick={this.handleShareClickEvent}>
-                  <ShareSVG/>
-                  <span><Trans>Share</Trans></span>
+                  <ShareSVG />
+                  <span>
+                    <Trans>Share</Trans>
+                  </span>
                 </button>
               </li>
-            }
-            {canViewCopy &&
+            )}
+            {canViewCopy && (
               <li id="copy_action">
                 <Dropdown>
                   <DropdownButton className="button-action-contextual">
-                    <CopySVG/>
-                    <span><Trans>Copy</Trans></span>
-                    <CaretDownSVG/>
+                    <CopySVG />
+                    <span>
+                      <Trans>Copy</Trans>
+                    </span>
+                    <CaretDownSVG />
                   </DropdownButton>
                   <DropdownMenu className="menu-action-contextual">
-                    {this.hasResourceUsername &&
+                    {this.hasResourceUsername && (
                       <DropdownMenuItem>
-                        <button id="username_action" type="button" className="no-border"
+                        <button
+                          id="username_action"
+                          type="button"
+                          className="no-border"
                           disabled={!this.canCopyUsername()}
-                          onClick={this.handleCopyUsernameClickEvent}>
-                          <OwnedByMeSVG/>
-                          <span><Trans>Copy username</Trans></span>
+                          onClick={this.handleCopyUsernameClickEvent}
+                        >
+                          <OwnedByMeSVG />
+                          <span>
+                            <Trans>Copy username</Trans>
+                          </span>
                         </button>
                       </DropdownMenuItem>
-                    }
-                    {canCopySecret && this.canCopyPassword() &&
+                    )}
+                    {canCopySecret && this.canCopyPassword() && (
                       <DropdownMenuItem>
-                        <button id="secret_action" type="button" className="no-border"
-                          onClick={this.handleCopySecretClickEvent}>
-                          <KeySVG/>
-                          <span><Trans>Copy password</Trans></span>
+                        <button
+                          id="secret_action"
+                          type="button"
+                          className="no-border"
+                          onClick={this.handleCopySecretClickEvent}
+                        >
+                          <KeySVG />
+                          <span>
+                            <Trans>Copy password</Trans>
+                          </span>
                         </button>
                       </DropdownMenuItem>
-                    }
-                    {this.canUseTotp && this.canCopyTotp() &&
+                    )}
+                    {this.canUseTotp && this.canCopyTotp() && (
                       <DropdownMenuItem>
-                        <button id="totp_action" type="button" className="no-border"
-                          onClick={this.handleCopyTotpClickEvent}>
-                          <TotpSVG/>
-                          <span><Trans>Copy TOTP</Trans></span>
+                        <button
+                          id="totp_action"
+                          type="button"
+                          className="no-border"
+                          onClick={this.handleCopyTotpClickEvent}
+                        >
+                          <TotpSVG />
+                          <span>
+                            <Trans>Copy TOTP</Trans>
+                          </span>
                         </button>
                       </DropdownMenuItem>
-                    }
+                    )}
                     <DropdownMenuItem>
-                      <button id="uri_action" type="button" className="no-border" disabled={!this.canCopyUri()}
-                        onClick={this.handleCopyUriClickEvent}>
-                        <GlobeSVG/>
-                        <span><Trans>Copy URI</Trans></span>
+                      <button
+                        id="uri_action"
+                        type="button"
+                        className="no-border"
+                        disabled={!this.canCopyUri()}
+                        onClick={this.handleCopyUriClickEvent}
+                      >
+                        <GlobeSVG />
+                        <span>
+                          <Trans>Copy URI</Trans>
+                        </span>
                       </button>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <button id="permalink_action" type="button" className="no-border"
-                        onClick={this.handleCopyPermalinkClickEvent}>
-                        <LinkSVG/>
-                        <span><Trans>Copy permalink</Trans></span>
+                      <button
+                        id="permalink_action"
+                        type="button"
+                        className="no-border"
+                        onClick={this.handleCopyPermalinkClickEvent}
+                      >
+                        <LinkSVG />
+                        <span>
+                          <Trans>Copy permalink</Trans>
+                        </span>
                       </button>
                     </DropdownMenuItem>
                   </DropdownMenu>
                 </Dropdown>
               </li>
-            }
-            {canViewEdit &&
+            )}
+            {canViewEdit && (
               <li id="edit_action">
                 <button type="button" className="button-action-contextual" onClick={this.handleEditClickEvent}>
-                  <EditSVG/>
-                  <span><Trans>Edit</Trans></span>
+                  <EditSVG />
+                  <span>
+                    <Trans>Edit</Trans>
+                  </span>
                 </button>
               </li>
-            }
-            {canViewDelete &&
+            )}
+            {canViewDelete && (
               <li id="delete_action">
                 <button type="button" className="button-action-contextual" onClick={this.handleDeleteClickEvent}>
-                  <DeleteSVG/>
-                  <span><Trans>Delete</Trans></span>
+                  <DeleteSVG />
+                  <span>
+                    <Trans>Delete</Trans>
+                  </span>
                 </button>
               </li>
-            }
-            {this.hasMoreActionAllowed() &&
+            )}
+            {this.hasMoreActionAllowed() && (
               <li>
                 <Dropdown>
                   <DropdownButton className="more button-action-contextual button-action-icon">
-                    <MoreHorizontalSVG/>
+                    <MoreHorizontalSVG />
                   </DropdownButton>
                   <DropdownMenu className="menu-action-contextual">
-                    {this.canExport() &&
-                      <DropdownMenuItem separator={!(this.canOverridePasswordExpiry && canUpdate) && canViewSecretHistory}>
-                        <button id="export_action" type="button" className="no-border"
-                          onClick={this.handleExportClickEvent}>
-                          <DownloadFileSVG/>
-                          <span><Trans>Export</Trans></span>
+                    {this.canExport() && (
+                      <DropdownMenuItem
+                        separator={!(this.canOverridePasswordExpiry && canUpdate) && canViewSecretHistory}
+                      >
+                        <button
+                          id="export_action"
+                          type="button"
+                          className="no-border"
+                          onClick={this.handleExportClickEvent}
+                        >
+                          <DownloadFileSVG />
+                          <span>
+                            <Trans>Export</Trans>
+                          </span>
                         </button>
                       </DropdownMenuItem>
-                    }
-                    {this.canOverridePasswordExpiry && canUpdate &&
+                    )}
+                    {this.canOverridePasswordExpiry && canUpdate && (
                       <>
                         <DropdownMenuItem>
-                          <button id="set_expiry_date_action" type="button" className="no-border"
-                            onClick={this.handleSetExpiryDateClickEvent}>
-                            <CalendarCogSVG/>
-                            <span><Trans>Set expiry date</Trans></span>
+                          <button
+                            id="set_expiry_date_action"
+                            type="button"
+                            className="no-border"
+                            onClick={this.handleSetExpiryDateClickEvent}
+                          >
+                            <CalendarCogSVG />
+                            <span>
+                              <Trans>Set expiry date</Trans>
+                            </span>
                           </button>
                         </DropdownMenuItem>
                         <DropdownMenuItem separator={canViewSecretHistory}>
-                          <button id="mark_as_expired_action" type="button" className="no-border"
-                            onClick={this.handleMarkAsExpiredClick}>
-                            <AlarmClockSVG/>
-                            <span><Trans>Mark as expired</Trans></span>
+                          <button
+                            id="mark_as_expired_action"
+                            type="button"
+                            className="no-border"
+                            onClick={this.handleMarkAsExpiredClick}
+                          >
+                            <AlarmClockSVG />
+                            <span>
+                              <Trans>Mark as expired</Trans>
+                            </span>
                           </button>
                         </DropdownMenuItem>
                       </>
-                    }
-                    {canViewSecretHistory &&
+                    )}
+                    {canViewSecretHistory && (
                       <DropdownMenuItem>
-                        <button id="secret_history_action" type="button" className="no-border"
-                          onClick={this.handleSecretHistoryClick}>
-                          <SecretHistorySVG/>
-                          <span><Trans>Secret history</Trans></span>
+                        <button
+                          id="secret_history_action"
+                          type="button"
+                          className="no-border"
+                          onClick={this.handleSecretHistoryClick}
+                        >
+                          <SecretHistorySVG />
+                          <span>
+                            <Trans>Secret history</Trans>
+                          </span>
                         </button>
                       </DropdownMenuItem>
-                    }
+                    )}
                   </DropdownMenu>
                 </Dropdown>
               </li>
-            }
+            )}
           </ul>
-          <span className="counter"><Trans count={count}>{{count}} selected</Trans></span>
+          <span className="counter">
+            <Trans count={count}>{{ count }} selected</Trans>
+          </span>
           <button type="button" className="button-transparent inline" onClick={this.handleClearSelectionClick}>
-            <CloseSVG/>
-            <span className="visuallyhidden"><Trans>Clear selection</Trans></span>
+            <CloseSVG />
+            <span className="visuallyhidden">
+              <Trans>Clear selection</Trans>
+            </span>
           </button>
         </div>
       </div>
@@ -659,4 +742,24 @@ DisplayResourcesWorkspaceMenu.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withMetadataKeysSettingsLocalStorage(withClipboard(withRbac(withDialog(withProgress(withPasswordExpiry(withSecretRevisionsSettings(withResourceWorkspace(withResourceTypesLocalStorage(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu))))))))))));
+export default withAppContext(
+  withMetadataKeysSettingsLocalStorage(
+    withClipboard(
+      withRbac(
+        withDialog(
+          withProgress(
+            withPasswordExpiry(
+              withSecretRevisionsSettings(
+                withResourceWorkspace(
+                  withResourceTypesLocalStorage(
+                    withActionFeedback(withTranslation("common")(DisplayResourcesWorkspaceMenu)),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  ),
+);

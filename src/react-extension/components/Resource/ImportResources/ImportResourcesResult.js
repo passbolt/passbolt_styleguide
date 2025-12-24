@@ -12,15 +12,15 @@
  * @since         2.14.0
  */
 
-import React, {Component} from "react";
-import {withRouter} from "react-router-dom";
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import HealthcheckSuccessSVG from "../../../../img/svg/healthcheck_success.svg";
@@ -48,7 +48,7 @@ class ImportResourcesResult extends Component {
     return {
       showWarningResourcesDetails: false, // Display flag of the warning resources details area
       showErrorResourcesDetails: false, // Display flag of the error resources details area
-      showErrorFoldersDetails: false // Display flag of the error folders details area
+      showErrorFoldersDetails: false, // Display flag of the error folders details area
     };
   }
 
@@ -116,8 +116,8 @@ class ImportResourcesResult extends Component {
    */
   handleReferenceTagClick() {
     const tag = this.resultReferenceTag;
-    const filter = {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag}};
-    this.props.history.push({pathname: "/app/passwords", state: {filter}});
+    const filter = { type: ResourceWorkspaceFilterTypes.TAG, payload: { tag } };
+    this.props.history.push({ pathname: "/app/passwords", state: { filter } });
     this.close();
   }
 
@@ -132,21 +132,21 @@ class ImportResourcesResult extends Component {
    * Toggle the display of the warning resources details
    */
   toggleWarningResourcesDetails() {
-    this.setState({showWarningResourcesDetails: !this.state.showWarningResourcesDetails});
+    this.setState({ showWarningResourcesDetails: !this.state.showWarningResourcesDetails });
   }
 
   /**
    * Toggle the display of the error resources details
    */
   toggleErrorResourcesDetails() {
-    this.setState({showErrorResourcesDetails: !this.state.showErrorResourcesDetails});
+    this.setState({ showErrorResourcesDetails: !this.state.showErrorResourcesDetails });
   }
 
   /**
    * Toggle the display of the error folders details
    */
   toggleErrorFoldersDetails() {
-    this.setState({showErrorFoldersDetails: !this.state.showErrorFoldersDetails});
+    this.setState({ showErrorFoldersDetails: !this.state.showErrorFoldersDetails });
   }
 
   /*
@@ -326,185 +326,177 @@ class ImportResourcesResult extends Component {
       <DialogWrapper
         className="import-resources-result"
         title={this.props.t("Import summary")}
-        onClose={this.handleClose}>
+        onClose={this.handleClose}
+      >
         <form onSubmit={this.handleSubmit}>
           <div className="form-content import-dialog-summary">
             <h2>Resources</h2>
 
             <div className="resources-section">
-              {
-                this.resultCreatedResourcesCount > 0 &&
-              <div className="summary-section">
-                <div className="summary-header">
-                  <div className="state-icon success-state">
-                    <HealthcheckSuccessSVG /></div>
-                  <span>
-                    <Trans
-                      count={this.resultCreatedResourcesCount}
-                    >
-                      <strong>{{count: this.resultCreatedResourcesCount}}</strong> resource was imported successfully.
-                    </Trans>
-                  </span>
-                </div>
-              </div>
-              }
-              {
-                this.hasWarningsResources &&
-              <div className="summary-section accordion accordion-section">
-                <div className="summary-header accordion-header" onClick={this.handleWarningResourcesDetailsToggle}>
-                  <div className="state-icon warning-state">
-                    <HealthcheckWarningSVG />
-                  </div>
-                  <button type="button" className="summary-content link no-border">
-                    <span>
-                      <Trans
-                        count={this.resultWarningsResources.length}
-                      >
-                        <strong>{{count: this.resultWarningsResources.length}}</strong> resource was partially imported.
-                      </Trans>
-                    </span>
-                    {this.state.showWarningResourcesDetails
-                      ? <CaretDownSVG className="baseline svg-icon" />
-                      : <CaretRightSVG className="baseline svg-icon" />
-                    }
-                  </button>
-                </div>
-
-                {this.state.showWarningResourcesDetails &&
-                  <div className="accordion-content">
-                    <div className="input text">
-                      <label
-                        htmlFor="js_field_debug"
-                        className="visuallyhidden">
-                        <Trans>Error details</Trans>
-                      </label>
-                      <textarea
-                        id="js_field_debug"
-                        defaultValue={`${this.stackTraceResourceWarnings}`}
-                        readOnly />
-                    </div>
-                  </div>
-                }
-              </div>
-              }
-              {
-                this.hasErrorsResources &&
-              <div className="summary-section accordion accordion-section">
-                <div className="summary-header accordion-header" onClick={this.handleErrorResourcesDetailsToggle}>
-                  <div className="state-icon fail-state">
-                    <HealthcheckErrorSVG />
-                  </div>
-                  <button type="button" className="summary-content link no-border">
-                    <span>
-                      <Trans
-                        count={this.resultErrorsResources.length}
-                      >
-                        <strong>{{count: this.resultErrorsResources.length}}</strong> resource was not imported.
-                      </Trans>
-                    </span>
-                    {this.state.showErrorResourcesDetails
-                      ? <CaretDownSVG className="baseline svg-icon" />
-                      : <CaretRightSVG className="baseline svg-icon" />
-                    }
-                  </button>
-                </div>
-
-                {this.state.showErrorResourcesDetails &&
-                  <div className="accordion-content">
-                    <div className="input text">
-                      <label
-                        htmlFor="js_field_debug"
-                        className="visuallyhidden">
-                        <Trans>Error details</Trans>
-                      </label>
-                      <textarea
-                        id="js_field_debug"
-                        defaultValue={`${this.stackTraceResourceErrors}`}
-                        readOnly />
-                    </div>
-                  </div>
-                }
-              </div>
-              }
-            </div>
-            {this.canIUseFolders && this.resultCreatedFoldersCount > 0 && <>
-              <h2>Folders</h2>
-              <div className="folder-section">
+              {this.resultCreatedResourcesCount > 0 && (
                 <div className="summary-section">
                   <div className="summary-header">
                     <div className="state-icon success-state">
-                      <HealthcheckSuccessSVG /></div>
+                      <HealthcheckSuccessSVG />
+                    </div>
                     <span>
-                      <Trans
-                        count={this.resultCreatedFoldersCount}
-                      >
-                        <strong>{{count: this.resultCreatedFoldersCount}}</strong> folder was fully imported.
+                      <Trans count={this.resultCreatedResourcesCount}>
+                        <strong>{{ count: this.resultCreatedResourcesCount }}</strong> resource was imported
+                        successfully.
                       </Trans>
                     </span>
                   </div>
                 </div>
-                {this.resultHasErrorsFolders &&
-                  <div className="summary-section accordion accordion-section">
-                    <div className="summary-header accordion-header" onClick={this.handleErrorFoldersDetailsToggle}>
-                      <div className="state-icon fail-state">
-                        <HealthcheckErrorSVG />
-                      </div>
-                      <button type="button" className="summary-content link no-border">
-                        <span>
-                          <Trans
-                            count={this.resultErrorsFolders.length}
-                          >
-                            <strong>{{count: this.resultErrorsFolders.length}}</strong> folder was not imported.
-                          </Trans>
-                        </span>
-                        {this.state.showErrorFoldersDetails
-                          ? <CaretDownSVG className="baseline svg-icon" />
-                          : <CaretRightSVG className="baseline svg-icon" />
-                        }
-                      </button>
+              )}
+              {this.hasWarningsResources && (
+                <div className="summary-section accordion accordion-section">
+                  <div className="summary-header accordion-header" onClick={this.handleWarningResourcesDetailsToggle}>
+                    <div className="state-icon warning-state">
+                      <HealthcheckWarningSVG />
                     </div>
-                    {this.state.showErrorFoldersDetails &&
-                      <div className="accordion-content">
-                        <div className="input text">
-                          <label
-                            htmlFor="js_field_folders_debug"
-                            className="visuallyhidden">
-                            <Trans>Error details</Trans>
-                          </label>
-                          <textarea
-                            id="js_field_folders_debug"
-                            defaultValue={`${this.stackTraceFoldersErrors}`}
-                            readOnly />
-                        </div>
-                      </div>
-                    }
+                    <button type="button" className="summary-content link no-border">
+                      <span>
+                        <Trans count={this.resultWarningsResources.length}>
+                          <strong>{{ count: this.resultWarningsResources.length }}</strong> resource was partially
+                          imported.
+                        </Trans>
+                      </span>
+                      {this.state.showWarningResourcesDetails ? (
+                        <CaretDownSVG className="baseline svg-icon" />
+                      ) : (
+                        <CaretRightSVG className="baseline svg-icon" />
+                      )}
+                    </button>
                   </div>
-                }
-              </div>
-            </>
-            }
-            {(this.resultReferenceFolder || this.resultReferenceTag) &&
+
+                  {this.state.showWarningResourcesDetails && (
+                    <div className="accordion-content">
+                      <div className="input text">
+                        <label htmlFor="js_field_debug" className="visuallyhidden">
+                          <Trans>Error details</Trans>
+                        </label>
+                        <textarea id="js_field_debug" defaultValue={`${this.stackTraceResourceWarnings}`} readOnly />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+              {this.hasErrorsResources && (
+                <div className="summary-section accordion accordion-section">
+                  <div className="summary-header accordion-header" onClick={this.handleErrorResourcesDetailsToggle}>
+                    <div className="state-icon fail-state">
+                      <HealthcheckErrorSVG />
+                    </div>
+                    <button type="button" className="summary-content link no-border">
+                      <span>
+                        <Trans count={this.resultErrorsResources.length}>
+                          <strong>{{ count: this.resultErrorsResources.length }}</strong> resource was not imported.
+                        </Trans>
+                      </span>
+                      {this.state.showErrorResourcesDetails ? (
+                        <CaretDownSVG className="baseline svg-icon" />
+                      ) : (
+                        <CaretRightSVG className="baseline svg-icon" />
+                      )}
+                    </button>
+                  </div>
+
+                  {this.state.showErrorResourcesDetails && (
+                    <div className="accordion-content">
+                      <div className="input text">
+                        <label htmlFor="js_field_debug" className="visuallyhidden">
+                          <Trans>Error details</Trans>
+                        </label>
+                        <textarea id="js_field_debug" defaultValue={`${this.stackTraceResourceErrors}`} readOnly />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+            {this.canIUseFolders && this.resultCreatedFoldersCount > 0 && (
+              <>
+                <h2>Folders</h2>
+                <div className="folder-section">
+                  <div className="summary-section">
+                    <div className="summary-header">
+                      <div className="state-icon success-state">
+                        <HealthcheckSuccessSVG />
+                      </div>
+                      <span>
+                        <Trans count={this.resultCreatedFoldersCount}>
+                          <strong>{{ count: this.resultCreatedFoldersCount }}</strong> folder was fully imported.
+                        </Trans>
+                      </span>
+                    </div>
+                  </div>
+                  {this.resultHasErrorsFolders && (
+                    <div className="summary-section accordion accordion-section">
+                      <div className="summary-header accordion-header" onClick={this.handleErrorFoldersDetailsToggle}>
+                        <div className="state-icon fail-state">
+                          <HealthcheckErrorSVG />
+                        </div>
+                        <button type="button" className="summary-content link no-border">
+                          <span>
+                            <Trans count={this.resultErrorsFolders.length}>
+                              <strong>{{ count: this.resultErrorsFolders.length }}</strong> folder was not imported.
+                            </Trans>
+                          </span>
+                          {this.state.showErrorFoldersDetails ? (
+                            <CaretDownSVG className="baseline svg-icon" />
+                          ) : (
+                            <CaretRightSVG className="baseline svg-icon" />
+                          )}
+                        </button>
+                      </div>
+                      {this.state.showErrorFoldersDetails && (
+                        <div className="accordion-content">
+                          <div className="input text">
+                            <label htmlFor="js_field_folders_debug" className="visuallyhidden">
+                              <Trans>Error details</Trans>
+                            </label>
+                            <textarea
+                              id="js_field_folders_debug"
+                              defaultValue={`${this.stackTraceFoldersErrors}`}
+                              readOnly
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+            {(this.resultReferenceFolder || this.resultReferenceTag) && (
               <div className="notice message">
-                {this.canIUseFolders && this.resultReferenceFolder &&
+                {this.canIUseFolders && this.resultReferenceFolder && (
                   <p>
                     <Trans>
-                      You can find these newly imported passwords in the folder <button type="button" className="link inline no-border" onClick={this.handleReferenceFolderClick}>{{folderName: this.resultReferenceFolder.name}}</button>.
+                      You can find these newly imported passwords in the folder{" "}
+                      <button type="button" className="link inline no-border" onClick={this.handleReferenceFolderClick}>
+                        {{ folderName: this.resultReferenceFolder.name }}
+                      </button>
+                      .
                     </Trans>
                   </p>
-                }
-                {this.canIUseTags && !this.resultReferenceFolder && this.resultReferenceTag &&
+                )}
+                {this.canIUseTags && !this.resultReferenceFolder && this.resultReferenceTag && (
                   <p>
                     <Trans>
-                      You can find these newly imported passwords under the tag <button type="button" className="link inline no-border" onClick={this.handleReferenceTagClick}>{{tagName: this.resultReferenceTag.slug}}</button>.
+                      You can find these newly imported passwords under the tag{" "}
+                      <button type="button" className="link inline no-border" onClick={this.handleReferenceTagClick}>
+                        {{ tagName: this.resultReferenceTag.slug }}
+                      </button>
+                      .
                     </Trans>
                   </p>
-                }
+                )}
               </div>
-            }
+            )}
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton
-              value={this.props.t("Ok")} />
+            <FormSubmitButton value={this.props.t("Ok")} />
           </div>
         </form>
       </DialogWrapper>
@@ -521,4 +513,6 @@ ImportResourcesResult.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withAppContext(withResourceWorkspace(withActionFeedback(withTranslation('common')(ImportResourcesResult)))));
+export default withRouter(
+  withAppContext(withResourceWorkspace(withActionFeedback(withTranslation("common")(ImportResourcesResult)))),
+);

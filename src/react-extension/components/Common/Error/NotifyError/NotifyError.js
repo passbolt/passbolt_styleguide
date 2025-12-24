@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withTranslation, Trans} from "react-i18next";
+import { withTranslation, Trans } from "react-i18next";
 import DialogWrapper from "../../Dialog/DialogWrapper/DialogWrapper";
 import CaretDownSVG from "../../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../../img/svg/caret_right.svg";
@@ -31,7 +31,7 @@ class NotifyError extends Component {
 
   get defaultState() {
     return {
-      showErrorDetails: false
+      showErrorDetails: false,
     };
   }
 
@@ -50,7 +50,7 @@ class NotifyError extends Component {
    * @return {void}
    */
   componentDidMount() {
-    document.addEventListener("keydown", this.handleKeyDown, {capture: true});
+    document.addEventListener("keydown", this.handleKeyDown, { capture: true });
   }
 
   /**
@@ -59,7 +59,7 @@ class NotifyError extends Component {
    * @return {void}
    */
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeyDown, {capture: true});
+    document.removeEventListener("keydown", this.handleKeyDown, { capture: true });
   }
 
   /**
@@ -67,9 +67,7 @@ class NotifyError extends Component {
    * @returns {String|string} return default if string is empty
    */
   getTitle() {
-    return this.props.title
-      ? this.props.title
-      : this.props.t("There was an unexpected error...");
+    return this.props.title ? this.props.title : this.props.t("There was an unexpected error...");
   }
 
   /**
@@ -98,7 +96,7 @@ class NotifyError extends Component {
    */
   handleErrorDetailsToggle() {
     this.setState({
-      showErrorDetails: !this.state.showErrorDetails
+      showErrorDetails: !this.state.showErrorDetails,
     });
   }
 
@@ -125,42 +123,40 @@ class NotifyError extends Component {
    */
   render() {
     return (
-      <DialogWrapper
-        className="dialog-wrapper error-dialog"
-        onClose={this.props.onClose}
-        title={this.getTitle()}>
+      <DialogWrapper className="dialog-wrapper error-dialog" onClose={this.props.onClose} title={this.getTitle()}>
         <div className="form-content">
           <p>{this.getMessage()}</p>
-          {this.hasErrorDetails &&
-                <div className="accordion error-details">
-                  <div className="accordion-header">
-                    <button type="button" className="link no-border" onClick={this.handleErrorDetailsToggle}>
-                      <span><Trans>Error details</Trans></span>
-                      {this.state.showErrorDetails
-                        ? <CaretDownSVG className="baseline svg-icon"/>
-                        : <CaretRightSVG className="baseline svg-icon"/>
-                      }
-                    </button>
+          {this.hasErrorDetails && (
+            <div className="accordion error-details">
+              <div className="accordion-header">
+                <button type="button" className="link no-border" onClick={this.handleErrorDetailsToggle}>
+                  <span>
+                    <Trans>Error details</Trans>
+                  </span>
+                  {this.state.showErrorDetails ? (
+                    <CaretDownSVG className="baseline svg-icon" />
+                  ) : (
+                    <CaretRightSVG className="baseline svg-icon" />
+                  )}
+                </button>
+              </div>
+              {this.state.showErrorDetails && (
+                <div className="accordion-content">
+                  <div className="input text">
+                    <label htmlFor="js_field_debug" className="visuallyhidden">
+                      <Trans>Error details</Trans>
+                    </label>
+                    <textarea id="js_field_debug" defaultValue={this.formatErrors()} readOnly />
                   </div>
-                  {this.state.showErrorDetails &&
-                    <div className="accordion-content">
-                      <div className="input text">
-                        <label
-                          htmlFor="js_field_debug"
-                          className="visuallyhidden">
-                          <Trans>Error details</Trans>
-                        </label>
-                        <textarea
-                          id="js_field_debug"
-                          defaultValue={this.formatErrors()}
-                          readOnly />
-                      </div>
-                    </div>
-                  }
                 </div>
-          }</div>
+              )}
+            </div>
+          )}
+        </div>
         <div className="submit-wrapper clearfix">
-          <button type="button" className="button primary warning" onClick={this.props.onClose}>Ok</button>
+          <button type="button" className="button primary warning" onClick={this.props.onClose}>
+            Ok
+          </button>
         </div>
       </DialogWrapper>
     );
@@ -171,7 +167,7 @@ NotifyError.propTypes = {
   title: PropTypes.string, // The title to display in the header
   error: PropTypes.object.isRequired, // The error object to handle in the dialog
   onClose: PropTypes.func, // The close callback
-  t: PropTypes.func // the translation function
+  t: PropTypes.func, // the translation function
 };
 
 export default withTranslation("common")(NotifyError);

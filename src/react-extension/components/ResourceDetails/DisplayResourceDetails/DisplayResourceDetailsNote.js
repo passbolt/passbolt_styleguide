@@ -15,13 +15,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import RevertSVG from "../../../../img/svg/revert.svg";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {
-  withResourceTypesLocalStorage
-} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
@@ -66,9 +64,11 @@ class DisplayResourceDetailsNote extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.resource?.id !== prevProps.resourceWorkspaceContext.details.resource?.id
-      || this.resource?.modified !== prevProps.resourceWorkspaceContext.details.resource?.modified) {
-      this.setState({note: null, isSecretDecrypted: false});
+    if (
+      this.resource?.id !== prevProps.resourceWorkspaceContext.details.resource?.id ||
+      this.resource?.modified !== prevProps.resourceWorkspaceContext.details.resource?.modified
+    ) {
+      this.setState({ note: null, isSecretDecrypted: false });
     }
   }
 
@@ -77,15 +77,18 @@ class DisplayResourceDetailsNote extends React.Component {
    * @return {Promise<void>}
    */
   async decryptAndLoadEncryptedNote() {
-    this.setState({isSecretDecrypting: true});
+    this.setState({ isSecretDecrypting: true });
 
     try {
-      const plaintextSecretDto = await this.props.context.port.request("passbolt.secret.find-by-resource-id", this.resource.id);
+      const plaintextSecretDto = await this.props.context.port.request(
+        "passbolt.secret.find-by-resource-id",
+        this.resource.id,
+      );
       this.setState({
         note: plaintextSecretDto.description,
         isSecretDecrypting: false,
         isSecretDecrypted: true,
-        error: false
+        error: false,
       });
       this.props.resourceWorkspaceContext.onResourceDescriptionDecrypted();
     } catch (error) {
@@ -122,7 +125,7 @@ class DisplayResourceDetailsNote extends React.Component {
    * Handle when the user selects the folder parent.
    */
   handleTitleClickEvent() {
-    this.setState({open: !this.state.open, note: null, isSecretDecrypted: false});
+    this.setState({ open: !this.state.open, note: null, isSecretDecrypted: false });
   }
 
   /**
@@ -153,9 +156,7 @@ class DisplayResourceDetailsNote extends React.Component {
    * @returns {boolean}
    */
   hasNoNote() {
-    return typeof(this.state.note) === "undefined"
-      || this.state.note === null
-      || this.state.note?.length === 0;
+    return typeof this.state.note === "undefined" || this.state.note === null || this.state.note?.length === 0;
   }
 
   /**
@@ -179,7 +180,6 @@ class DisplayResourceDetailsNote extends React.Component {
     return !this.state.isSecretDecrypted && !this.state.error;
   }
 
-
   /**
    * Render the component
    * @returns {JSX}
@@ -193,52 +193,65 @@ class DisplayResourceDetailsNote extends React.Component {
               <span className="accordion-title">
                 <Trans>Note</Trans>
               </span>
-              {this.state.open
-                ? <CaretDownSVG/>
-                : <CaretRightSVG/>
-              }
+              {this.state.open ? <CaretDownSVG /> : <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open &&
+        {this.state.open && (
           <div className={`accordion-content ${this.state.error ? "error-message" : ""}`}>
-            {this.state.error &&
+            {this.state.error && (
               <>
                 <p className="description-content">
-                  <Trans><strong>Error: </strong>Decryption failed</Trans>
+                  <Trans>
+                    <strong>Error: </strong>Decryption failed
+                  </Trans>
                 </p>
-                <button type="button" disabled={this.state.isSecretDecrypting} onClick={this.handleRetryDecryptClickEvent}>
-                  {this.state.isSecretDecrypting ? <SpinnerSVG/> : <RevertSVG/>}<Trans>Retry</Trans>
+                <button
+                  type="button"
+                  disabled={this.state.isSecretDecrypting}
+                  onClick={this.handleRetryDecryptClickEvent}
+                >
+                  {this.state.isSecretDecrypting ? <SpinnerSVG /> : <RevertSVG />}
+                  <Trans>Retry</Trans>
                 </button>
               </>
-            }
-            {this.mustShowEmptyNote() &&
+            )}
+            {this.mustShowEmptyNote() && (
               <p className="description-content">
-                <span className="empty-content"><Trans>There is no note.</Trans></span>
+                <span className="empty-content">
+                  <Trans>There is no note.</Trans>
+                </span>
               </p>
-            }
-            {this.mustShowNote() &&
+            )}
+            {this.mustShowNote() && (
               <>
-                <p className="description-content">
-                  {this.state.note}
-                </p>
+                <p className="description-content">{this.state.note}</p>
                 <button type="button" onClick={this.handleHideNoteClickEvent}>
-                  <EyeCloseSVG/><Trans>Hide</Trans>
+                  <EyeCloseSVG />
+                  <Trans>Hide</Trans>
                 </button>
               </>
-            }
-            {this.mustShowEncryptedNote() &&
+            )}
+            {this.mustShowEncryptedNote() && (
               <>
                 <p className="encrypted-description">
-                  Never gonna give you up. Never gonna let you down. Never gonna run around and desert you. Never gonna make you cry. Never gonna say goodbye. Never gonna tell a lie and hurt you.
+                  Never gonna give you up. Never gonna let you down. Never gonna run around and desert you. Never gonna
+                  make you cry. Never gonna say goodbye. Never gonna tell a lie and hurt you.
                 </p>
-                <button type="button" className={`button ${this.state.isSecretDecrypting ? "processing" : ""}`} disabled={this.state.isSecretDecrypting} onClick={this.handleRetryDecryptClickEvent}>
-                  <EyeOpenSVG/><Trans>Show</Trans>{this.state.isSecretDecrypting && <SpinnerSVG/>}
+                <button
+                  type="button"
+                  className={`button ${this.state.isSecretDecrypting ? "processing" : ""}`}
+                  disabled={this.state.isSecretDecrypting}
+                  onClick={this.handleRetryDecryptClickEvent}
+                >
+                  <EyeOpenSVG />
+                  <Trans>Show</Trans>
+                  {this.state.isSecretDecrypting && <SpinnerSVG />}
                 </button>
               </>
-            }
+            )}
           </div>
-        }
+        )}
       </div>
     );
   }
@@ -252,4 +265,8 @@ DisplayResourceDetailsNote.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withResourceTypesLocalStorage(withActionFeedback(withTranslation('common')(DisplayResourceDetailsNote)))));
+export default withAppContext(
+  withResourceWorkspace(
+    withResourceTypesLocalStorage(withActionFeedback(withTranslation("common")(DisplayResourceDetailsNote))),
+  ),
+);

@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -13,8 +12,8 @@
  * @since         5.0.0
  */
 
-import React from 'react';
-import {Trans, withTranslation} from "react-i18next";
+import React from "react";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * This component displays the user confirm passphrase information help
@@ -23,14 +22,28 @@ class ConfirmPassphraseHelp extends React.Component {
   render() {
     return (
       <div className="sidebar-help-section">
-        <h3><Trans>What if I forgot my passphrase?</Trans></h3>
-        <p><Trans>Unfortunately you need your passphrase in order to continue. If you forgot it, please contact your administrator.</Trans></p>
-        <a className="button" href="https://www.passbolt.com/docs/user/settings/browser/account-recovery-setup/" target="_blank" rel="noopener noreferrer">
-          <span><Trans>Learn more</Trans></span>
+        <h3>
+          <Trans>What if I forgot my passphrase?</Trans>
+        </h3>
+        <p>
+          <Trans>
+            Unfortunately you need your passphrase in order to continue. If you forgot it, please contact your
+            administrator.
+          </Trans>
+        </p>
+        <a
+          className="button"
+          href="https://www.passbolt.com/docs/user/settings/browser/account-recovery-setup/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>
+            <Trans>Learn more</Trans>
+          </span>
         </a>
       </div>
     );
   }
 }
 
-export default withTranslation('common')(ConfirmPassphraseHelp);
+export default withTranslation("common")(ConfirmPassphraseHelp);

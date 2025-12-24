@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import CellHeaderWrapper from "./CellHeaderWrapper";
-import {withTable} from "./Context/TableContext";
+import { withTable } from "./Context/TableContext";
 
 /**
  * This component represents a table row header
@@ -39,19 +39,16 @@ class RowHeader extends Component {
   render() {
     return (
       <tr className={`${this.isDragging ? "dragging" : ""}`}>
-        {this.columns.map((column, index) =>
-          <CellHeaderWrapper
-            key={column.id}
-            column={column}
-            index={index}/>
-        )}
+        {this.columns.map((column, index) => (
+          <CellHeaderWrapper key={column.id} column={column} index={index} />
+        ))}
       </tr>
     );
   }
 }
 
 RowHeader.propTypes = {
-  tableContext: PropTypes.any // The table context
+  tableContext: PropTypes.any, // The table context
 };
 
 export default withTable(RowHeader);

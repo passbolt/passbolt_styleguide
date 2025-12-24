@@ -11,19 +11,19 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.12.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {Trans, withTranslation} from "react-i18next";
-import {maxSizeValidation} from '../../../lib/Error/InputValidator';
-import {RESOURCE_FOLDER_NAME_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
+import { withDialog } from "../../../contexts/DialogContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { Trans, withTranslation } from "react-i18next";
+import { maxSizeValidation } from "../../../lib/Error/InputValidator";
+import { RESOURCE_FOLDER_NAME_MAX_LENGTH } from "../../../../shared/constants/inputs.const";
 import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class RenameResourceFolder extends Component {
@@ -34,7 +34,7 @@ class RenameResourceFolder extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.getStateBasedOnContext(props,  this.getDefaultState());
+    this.state = this.getStateBasedOnContext(props, this.getDefaultState());
     this.createInputRefs();
     this.bindEventHandlers();
   }
@@ -45,7 +45,7 @@ class RenameResourceFolder extends Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.setState({loading: false}, () => {
+    this.setState({ loading: false }, () => {
       this.nameRef.current.focus();
     });
   }
@@ -80,13 +80,13 @@ class RenameResourceFolder extends Component {
   getStateBasedOnContext(props, defaultState) {
     const folders = props.context.folders;
     const error = {
-      message: this.translate("The folder could not be found. Maybe it was deleted or you lost access.")
+      message: this.translate("The folder could not be found. Maybe it was deleted or you lost access."),
     };
     if (!folders) {
       console.error(`No folders context defined.`);
       this.handleError(error);
     }
-    const folder = props.context.folders.find(item => item.id === props.context.folder.id) || false;
+    const folder = props.context.folders.find((item) => item.id === props.context.folder.id) || false;
     if (!folder) {
       console.error(`Folder ${props.context.folder.id} not found in context.`);
       this.handleError(error);
@@ -132,13 +132,16 @@ class RenameResourceFolder extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    this.setState({
-      [name]: value
-    }, () => {
-      if (this.state.inlineValidation) {
-        this.validate();
-      }
-    });
+    this.setState(
+      {
+        [name]: value,
+      },
+      () => {
+        if (this.state.inlineValidation) {
+          this.validate();
+        }
+      },
+    );
   }
 
   /**
@@ -156,7 +159,7 @@ class RenameResourceFolder extends Component {
 
     // After first submit, inline validation is on
     this.setState({
-      inlineValidation: this.state.inlineValidation || true
+      inlineValidation: this.state.inlineValidation || true,
     });
 
     await this.toggleProcessing();
@@ -191,12 +194,12 @@ class RenameResourceFolder extends Component {
   handleSaveError(error) {
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
+      this.setState({ processing: false });
     } else {
       // Unexpected error occurred.
       console.error(error);
       this.handleError(error);
-      this.setState({processing: false});
+      this.setState({ processing: false });
     }
   }
 
@@ -206,7 +209,7 @@ class RenameResourceFolder extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -217,8 +220,8 @@ class RenameResourceFolder extends Component {
    */
   async toggleProcessing() {
     const prev = this.state.processing;
-    return new Promise(resolve => {
-      this.setState({processing: !prev}, resolve());
+    return new Promise((resolve) => {
+      this.setState({ processing: !prev }, resolve());
     });
   }
 
@@ -237,7 +240,7 @@ class RenameResourceFolder extends Component {
   async updateFolder() {
     const folderDto = {
       id: this.props.context.folder.id,
-      name: this.state.name
+      name: this.state.name,
     };
     return await this.props.context.port.request("passbolt.folders.update", folderDto);
   }
@@ -266,8 +269,8 @@ class RenameResourceFolder extends Component {
    * @returns {Promise<void>}
    */
   async resetValidation() {
-    return new Promise(resolve => {
-      this.setState({nameError: false}, resolve());
+    return new Promise((resolve) => {
+      this.setState({ nameError: false }, resolve());
     });
   }
 
@@ -284,8 +287,8 @@ class RenameResourceFolder extends Component {
     if (name.length > 256) {
       nameError = this.translate("A name can not be more than 256 char in length.");
     }
-    return new Promise(resolve => {
-      this.setState({nameError: nameError}, resolve);
+    return new Promise((resolve) => {
+      this.setState({ nameError: nameError }, resolve);
     });
   }
 
@@ -294,7 +297,7 @@ class RenameResourceFolder extends Component {
    */
   handleNameInputKeyUp() {
     const nameWarning = maxSizeValidation(this.state.name, RESOURCE_FOLDER_NAME_MAX_LENGTH, this.translate);
-    this.setState({nameWarning});
+    this.setState({ nameWarning });
   }
 
   /**
@@ -302,7 +305,7 @@ class RenameResourceFolder extends Component {
    * @returns {boolean}
    */
   hasValidationError() {
-    return (this.state.nameError !== false);
+    return this.state.nameError !== false;
   }
 
   /**
@@ -327,36 +330,54 @@ class RenameResourceFolder extends Component {
    */
   render() {
     return (
-      <DialogWrapper className='rename-folder-dialog' title={this.translate("Rename a folder")}
-        onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+      <DialogWrapper
+        className="rename-folder-dialog"
+        title={this.translate("Rename a folder")}
+        onClose={this.handleClose}
+        disabled={this.hasAllInputDisabled()}
+      >
         <form className="folder-rename-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="folder-name-input"><Trans>Folder name</Trans>{this.state.nameWarning &&
-                <AttentionSVG className="attention-required"/>
-              }</label>
-              <input id="folder-name-input" name="name"
+            <div
+              className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+            >
+              <label htmlFor="folder-name-input">
+                <Trans>Folder name</Trans>
+                {this.state.nameWarning && <AttentionSVG className="attention-required" />}
+              </label>
+              <input
+                id="folder-name-input"
+                name="name"
                 ref={this.nameRef}
-                type="text" value={this.state.name} placeholder={this.translate("Untitled folder")}
-                maxLength="256" required="required"
+                type="text"
+                value={this.state.name}
+                placeholder={this.translate("Untitled folder")}
+                maxLength="256"
+                required="required"
                 onChange={this.handleInputChange}
                 onKeyUp={this.handleNameInputKeyUp}
                 disabled={this.hasAllInputDisabled()}
-                autoComplete="off" autoFocus={true}
+                autoComplete="off"
+                autoFocus={true}
               />
-              {this.state.nameError &&
-                <div className="name error-message">{this.state.nameError}</div>
-              }
+              {this.state.nameError && <div className="name error-message">{this.state.nameError}</div>}
               {this.state.nameWarning && (
                 <div className="name warning-message">
-                  <strong><Trans>Warning:</Trans></strong> {this.state.nameWarning}
+                  <strong>
+                    <Trans>Warning:</Trans>
+                  </strong>{" "}
+                  {this.state.nameWarning}
                 </div>
               )}
             </div>
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Rename")}/>
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Rename")}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -372,4 +393,4 @@ RenameResourceFolder.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withActionFeedback(withTranslation('common')(RenameResourceFolder))));
+export default withAppContext(withDialog(withActionFeedback(withTranslation("common")(RenameResourceFolder))));

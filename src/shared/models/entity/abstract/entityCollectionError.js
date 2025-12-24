@@ -25,16 +25,16 @@ class EntityCollectionError extends Error {
    * @param {string} [message] optional
    */
   constructor(position, rule, message) {
-    message = message || 'Entity collection error.';
+    message = message || "Entity collection error.";
     super(message);
-    if (typeof position !== 'number') {
-      throw new TypeError('EntityCollectionError requires a valid position');
+    if (typeof position !== "number") {
+      throw new TypeError("EntityCollectionError requires a valid position");
     }
-    if (!rule || typeof rule !== 'string') {
-      throw new TypeError('EntityCollectionError requires a valid rule');
+    if (!rule || typeof rule !== "string") {
+      throw new TypeError("EntityCollectionError requires a valid rule");
     }
-    if (!message || typeof message !== 'string') {
-      throw new TypeError('EntityCollectionError requires a valid message');
+    if (!message || typeof message !== "string") {
+      throw new TypeError("EntityCollectionError requires a valid message");
     }
     this.position = position;
     this.rule = rule;

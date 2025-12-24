@@ -21,7 +21,7 @@ import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
 import AccountEntity from "../../shared/models/entity/account/accountEntity";
 import RoleServiceWorkerService from "../../shared/services/serviceWorker/role/roleServiceWorkerService";
 import RbacServiceWorkerService from "../../shared/services/serviceWorker/rbac/rbacServiceWorkerService";
-import SubscriptionKeyServiceWorkerService from '../../shared/services/api/subscriptionKey/SubscriptionKeyServiceWorkerService';
+import SubscriptionKeyServiceWorkerService from "../../shared/services/api/subscriptionKey/SubscriptionKeyServiceWorkerService";
 
 /**
  * The ExtApp context provider
@@ -90,12 +90,12 @@ class ExtAppContextProvider extends React.Component {
       locale: null, // The locale
       isSessionLogoutByUser: false, // Is the session logout by the user
 
-      setContext: context => {
+      setContext: (context) => {
         this.setState(context);
       },
 
       // passphrase dialog
-      passphraseRequestId: '',
+      passphraseRequestId: "",
 
       // folder dialogs
       folder: {},
@@ -103,7 +103,7 @@ class ExtAppContextProvider extends React.Component {
         requestId: null,
         folderId: null,
         foldersIds: [],
-        resourcesIds: []
+        resourcesIds: [],
       },
 
       // share dialog
@@ -114,11 +114,11 @@ class ExtAppContextProvider extends React.Component {
 
       // user dialog
       editUserDialogProps: {
-        id: null // The id of the current user to edit
+        id: null, // The id of the current user to edit
       },
 
       deleteUserDialogProps: {
-        user: null
+        user: null,
       },
 
       deleteUserWithConflictsDialogProps: {
@@ -133,7 +133,7 @@ class ExtAppContextProvider extends React.Component {
       // group dialog
       deleteGroupDialogProps: {
         group: null, // the group to delete
-        numberResourcesOwned: null
+        numberResourcesOwned: null,
       },
 
       deleteGroupWithConflictsDialogProps: {
@@ -158,7 +158,7 @@ class ExtAppContextProvider extends React.Component {
       onUpdateLocaleRequested: this.onUpdateLocaleRequested.bind(this),
 
       // Get folder hierarchy
-      getHierarchyFolderCache: this.getHierarchyFolderCache.bind(this)
+      getHierarchyFolderCache: this.getHierarchyFolderCache.bind(this),
     };
   }
 
@@ -175,11 +175,13 @@ class ExtAppContextProvider extends React.Component {
    * @returns {boolean}
    */
   isReady() {
-    return this.state.loggedInUser !== null
-      && this.state.rbacs !== null
-      && this.state.userSettings !== null
-      && this.state.siteSettings !== null
-      && this.state.locale !== null;
+    return (
+      this.state.loggedInUser !== null &&
+      this.state.rbacs !== null &&
+      this.state.userSettings !== null &&
+      this.state.siteSettings !== null &&
+      this.state.locale !== null
+    );
   }
 
   /*
@@ -191,11 +193,11 @@ class ExtAppContextProvider extends React.Component {
    * Get the current user info from background page and set it in the state
    */
   async getLoggedInUser() {
-    const canIUseRbac = this.state.siteSettings.canIUse('rbacs');
+    const canIUseRbac = this.state.siteSettings.canIUse("rbacs");
     const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
     const rbacsDto = canIUseRbac ? await this.rbacServiceWorkerService.findMe() : [];
     const rbacs = new RbacsCollection(rbacsDto);
-    this.setState({loggedInUser, rbacs});
+    this.setState({ loggedInUser, rbacs });
   }
 
   /**
@@ -205,7 +207,7 @@ class ExtAppContextProvider extends React.Component {
   async getSiteSettings() {
     const settings = await this.props.port.request("passbolt.organization-settings.get");
     const siteSettings = new SiteSettings(settings);
-    this.setState({siteSettings});
+    this.setState({ siteSettings });
   }
 
   /**
@@ -213,7 +215,7 @@ class ExtAppContextProvider extends React.Component {
    */
   async getExtensionVersion() {
     const extensionVersion = await this.props.port.request("passbolt.addon.get-version");
-    this.setState({extensionVersion});
+    this.setState({ extensionVersion });
   }
 
   /**
@@ -223,7 +225,7 @@ class ExtAppContextProvider extends React.Component {
     const storageData = await this.props.storage.local.get(["resources"]);
     if (storageData.resources) {
       const resources = storageData.resources;
-      this.setState({resources: resources});
+      this.setState({ resources: resources });
     }
   }
 
@@ -239,7 +241,7 @@ class ExtAppContextProvider extends React.Component {
         return result;
       }, {});
       this.hierarchyFolderCache = {};
-      this.setState({folders, foldersMapById});
+      this.setState({ folders, foldersMapById });
     }
   }
 
@@ -251,7 +253,7 @@ class ExtAppContextProvider extends React.Component {
     const storageData = await this.props.storage.local.get(storageKey);
     if (storageData[storageKey]) {
       const groups = storageData[storageKey];
-      this.setState({groups: groups});
+      this.setState({ groups: groups });
     }
   }
 
@@ -262,7 +264,7 @@ class ExtAppContextProvider extends React.Component {
     const storageData = await this.props.storage.local.get(["users"]);
     if (storageData.users && storageData.users.length) {
       const users = storageData.users;
-      this.setState({users: users});
+      this.setState({ users: users });
     }
   }
 
@@ -273,15 +275,15 @@ class ExtAppContextProvider extends React.Component {
   async getUserSettings() {
     const storageData = await this.props.storage.local.get(["_passbolt_data"]);
     const userSettings = new UserSettings(storageData._passbolt_data.config);
-    this.setState({userSettings});
+    this.setState({ userSettings });
   }
 
   /**
    * Init the locale
    */
   async initLocale() {
-    const {locale} = await this.props.port.request("passbolt.locale.get");
-    this.setState({locale});
+    const { locale } = await this.props.port.request("passbolt.locale.get");
+    this.setState({ locale });
   }
 
   /**
@@ -291,7 +293,7 @@ class ExtAppContextProvider extends React.Component {
   async getAccount() {
     const accountDto = await this.props.port.request("passbolt.account.get");
     const account = new AccountEntity(accountDto);
-    this.setState({account});
+    this.setState({ account });
   }
 
   /**
@@ -343,12 +345,12 @@ class ExtAppContextProvider extends React.Component {
   handleStorageChange(changes) {
     if (changes.resources && changes.resources.newValue) {
       const resources = changes.resources.newValue;
-      this.setState({resources});
+      this.setState({ resources });
     }
     if (changes._passbolt_data && changes._passbolt_data.newValue) {
       const userData = changes._passbolt_data.newValue;
       const userSettings = new UserSettings(userData.config);
-      this.setState({userSettings});
+      this.setState({ userSettings });
     }
     if (changes.folders && changes.folders.newValue) {
       const folders = changes.folders.newValue;
@@ -357,16 +359,16 @@ class ExtAppContextProvider extends React.Component {
         return result;
       }, {});
       this.hierarchyFolderCache = {};
-      this.setState({folders, foldersMapById});
+      this.setState({ folders, foldersMapById });
     }
     if (changes.users && changes.users.newValue) {
       const users = changes.users.newValue;
-      this.setState({users});
+      this.setState({ users });
     }
     const storageKey = `groups-${this.state.account.id}`;
     if (changes[storageKey] && changes[storageKey].newValue) {
       const groups = changes[storageKey].newValue;
-      this.setState({groups});
+      this.setState({ groups });
     }
   }
 
@@ -374,9 +376,9 @@ class ExtAppContextProvider extends React.Component {
    * Listen when the user wants to logout.
    */
   onLogoutRequested() {
-    const requestLogout = () => this.props.port.request('passbolt.auth.logout', true);
+    const requestLogout = () => this.props.port.request("passbolt.auth.logout", true);
     // Indicate that the session is logout by the user before requesting a logout
-    this.setState({isSessionLogoutByUser: true}, requestLogout);
+    this.setState({ isSessionLogoutByUser: true }, requestLogout);
   }
 
   /**
@@ -388,10 +390,10 @@ class ExtAppContextProvider extends React.Component {
       if (!this.state.isSessionLogoutByUser) {
         callback();
         // Flush resources to not leave sensitive data
-        this.setState({resources: []});
+        this.setState({ resources: [] });
       }
     };
-    this.props.port.on('passbolt.auth.after-logout', displayExpiredSession);
+    this.props.port.on("passbolt.auth.after-logout", displayExpiredSession);
   }
 
   /**
@@ -405,8 +407,8 @@ class ExtAppContextProvider extends React.Component {
    * Whenever the update of the locale is requested
    */
   async onUpdateLocaleRequested() {
-    const {locale} = await this.props.port.request("passbolt.locale.get");
-    this.setState({locale});
+    const { locale } = await this.props.port.request("passbolt.locale.get");
+    this.setState({ locale });
   }
 
   /**
@@ -414,18 +416,14 @@ class ExtAppContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <AppContext.Provider value={this.state}>
-        {this.isReady() && this.props.children}
-      </AppContext.Provider>
-    );
+    return <AppContext.Provider value={this.state}>{this.isReady() && this.props.children}</AppContext.Provider>;
   }
 }
 
 ExtAppContextProvider.propTypes = {
   port: PropTypes.object,
   storage: PropTypes.object,
-  children: PropTypes.any // The children components
+  children: PropTypes.any, // The children components
 };
 
 export default ExtAppContextProvider;

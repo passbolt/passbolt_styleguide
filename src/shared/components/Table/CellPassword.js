@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import HiddenPassword from "../Password/HiddenPassword";
 import EyeOpenSVG from "../../../img/svg/eye_open.svg";
@@ -68,26 +68,33 @@ class CellPassword extends Component {
    */
   render() {
     const previewedPassword = this.props.getPreviewPassword(this.value);
-    const showPassword = typeof(previewedPassword) === "string";
+    const showPassword = typeof previewedPassword === "string";
     const hasPassword = this.props.hasPassword(this.value);
     return (
       <>
-        {hasPassword &&
-         <>
-           <div className={`secret secret-password ${showPassword ? "" : "secret-copy"}`}
-             title={previewedPassword || this.props.title}>
-             <HiddenPassword
-               canClick={this.props.canCopy}
-               preview={previewedPassword}
-               onClick={this.handlePasswordClick} />
-           </div>
-           {this.props.canPreview &&
-             <button type="button" onClick={this.handlePreviewPasswordButtonClick} className="password-view inline button-transparent">
-               {previewedPassword ? <EyeCloseSVG/> : <EyeOpenSVG/>}
-             </button>
-           }
-         </>
-        }
+        {hasPassword && (
+          <>
+            <div
+              className={`secret secret-password ${showPassword ? "" : "secret-copy"}`}
+              title={previewedPassword || this.props.title}
+            >
+              <HiddenPassword
+                canClick={this.props.canCopy}
+                preview={previewedPassword}
+                onClick={this.handlePasswordClick}
+              />
+            </div>
+            {this.props.canPreview && (
+              <button
+                type="button"
+                onClick={this.handlePreviewPasswordButtonClick}
+                className="password-view inline button-transparent"
+              >
+                {previewedPassword ? <EyeCloseSVG /> : <EyeOpenSVG />}
+              </button>
+            )}
+          </>
+        )}
       </>
     );
   }
@@ -95,7 +102,7 @@ class CellPassword extends Component {
 
 CellPassword.defaultProps = {
   canPreviewSecret: false,
-  canCopySecret: false
+  canCopySecret: false,
 };
 
 CellPassword.propTypes = {

@@ -13,14 +13,14 @@
  */
 
 import React from "react";
-import {withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import {withAdminAccountRecovery} from "../../../contexts/AdminAccountRecoveryContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAdminAccountRecovery } from "../../../contexts/AdminAccountRecoveryContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import ProvideAccountRecoveryOrganizationKey from "../ProvideAccountRecoveryOrganizationKey/ProvideAccountRecoveryOrganizationKey";
 import ConfirmSaveAccountRecoverySettings from "../ConfirmSaveAccountRecoverySettings/ConfirmSaveAccountRecoverySettings";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 /**
@@ -63,7 +63,7 @@ class HandleSaveAccountRecoveryOrganizationPolicyWorkflow extends React.Componen
       policy: this.props.adminAccountRecoveryContext.policyChanges?.policy,
       keyInfo: await this.getNewOrganizationKeyInfo(),
       onClose: this.handleCloseDialog,
-      onSubmit: this.handleConfirmSave
+      onSubmit: this.handleConfirmSave,
     });
   }
 
@@ -102,7 +102,9 @@ class HandleSaveAccountRecoveryOrganizationPolicyWorkflow extends React.Componen
    * @return {Promise<void>}
    */
   async handleConfirmSave() {
-    const hasKey = Boolean(this.props.adminAccountRecoveryContext.currentPolicy?.account_recovery_organization_public_key);
+    const hasKey = Boolean(
+      this.props.adminAccountRecoveryContext.currentPolicy?.account_recovery_organization_public_key,
+    );
     if (hasKey) {
       this.displayProvideAccountRecoveryOrganizationKeyDialog();
     } else {
@@ -117,7 +119,9 @@ class HandleSaveAccountRecoveryOrganizationPolicyWorkflow extends React.Componen
   async handleSave(privateGpgKeyDto = null) {
     try {
       await this.props.adminAccountRecoveryContext.save(privateGpgKeyDto);
-      await this.props.actionFeedbackContext.displaySuccess(this.translate("The organization recovery policy has been updated successfully"));
+      await this.props.actionFeedbackContext.displaySuccess(
+        this.translate("The organization recovery policy has been updated successfully"),
+      );
       this.props.onStop();
     } catch (error) {
       this.handleError(error);
@@ -134,18 +138,26 @@ class HandleSaveAccountRecoveryOrganizationPolicyWorkflow extends React.Componen
       "WrongOrganizationRecoveryKeyError",
       "InvalidMasterPasswordError",
       "BadSignatureMessageGpgKeyError",
-      "GpgKeyError"
+      "GpgKeyError",
     ];
     // If the error is controlled by the dialogs, throw it to let the dialogs handle it.
     if (dialogControlledErrors.includes(error.name)) {
       throw error;
     }
 
-    if (error.name === "PassboltApiFetchError" && error?.data?.body?.account_recovery_organization_public_key?.fingerprint?.isNotAccountRecoveryOrganizationPublicKeyFingerprintRule) {
-      this.props.dialogContext.open(NotifyError, {error: new Error(this.translate("The new organization recovery key should not be a formerly used organization recovery key."))});
+    if (
+      error.name === "PassboltApiFetchError" &&
+      error?.data?.body?.account_recovery_organization_public_key?.fingerprint
+        ?.isNotAccountRecoveryOrganizationPublicKeyFingerprintRule
+    ) {
+      this.props.dialogContext.open(NotifyError, {
+        error: new Error(
+          this.translate("The new organization recovery key should not be a formerly used organization recovery key."),
+        ),
+      });
     } else {
       // Handle unexpected error.
-      this.props.dialogContext.open(NotifyError, {error});
+      this.props.dialogContext.open(NotifyError, { error });
     }
 
     this.props.onStop();
@@ -174,7 +186,13 @@ HandleSaveAccountRecoveryOrganizationPolicyWorkflow.propTypes = {
   actionFeedbackContext: PropTypes.object, // the admin action feedback context
   context: PropTypes.object, // the app context,
   onStop: PropTypes.func.isRequired, // The callback to stop the workflow
-  t: PropTypes.func // the translation function
+  t: PropTypes.func, // the translation function
 };
 
-export default withAppContext(withDialog(withActionFeedback(withAdminAccountRecovery(withTranslation("common")(HandleSaveAccountRecoveryOrganizationPolicyWorkflow)))));
+export default withAppContext(
+  withDialog(
+    withActionFeedback(
+      withAdminAccountRecovery(withTranslation("common")(HandleSaveAccountRecoveryOrganizationPolicyWorkflow)),
+    ),
+  ),
+);

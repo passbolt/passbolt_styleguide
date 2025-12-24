@@ -12,7 +12,7 @@
  * @since         4.5.0
  */
 
-import {ApiClient} from "../../../lib/apiClient/apiClient";
+import { ApiClient } from "../../../lib/apiClient/apiClient";
 
 const HEALTHCHECK_RESOURCE_NAME = "healthcheck";
 
@@ -37,8 +37,6 @@ class HealthcheckService {
     const result = await this.apiClient.findAll();
     return result?.body;
   }
-
-
 
   /**
    * Initializes the API client with the specified resource name.

@@ -11,15 +11,15 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import React, {Component, Fragment} from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {DateTime} from "luxon";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { DateTime } from "luxon";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
 
 class ConfirmSaveAccountRecoverySettings extends Component {
   /**
@@ -37,7 +37,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    */
   getDefaultState() {
     return {
-      processing: false
+      processing: false,
     };
   }
 
@@ -60,7 +60,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({processing: !this.state.processing});
+    await this.setState({ processing: !this.state.processing });
   }
 
   /**
@@ -86,7 +86,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
         // It can happen when the user has closed the passphrase entry dialog by instance. Do nothing.
       } else {
         // The component passing the onSubmit prop should take care of any unexpected errors, this code should not run.
-        console.error('Uncaught uncontrolled error');
+        console.error("Uncaught uncontrolled error");
         throw error;
       }
     }
@@ -99,8 +99,14 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    */
   formatFingerprint(fingerprint) {
     fingerprint = fingerprint || "";
-    const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
-    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
+    const result = fingerprint.toUpperCase().replace(/.{4}/g, "$& ");
+    return (
+      <>
+        {result.substr(0, 24)}
+        <br />
+        {result.substr(25)}
+      </>
+    );
   }
 
   /**
@@ -110,7 +116,12 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    */
   formatUserIds(user_ids) {
     user_ids = user_ids || [];
-    return user_ids.map((user, id) => <Fragment key={id}>{user.name}&lt;{user.email}&gt;<br/></Fragment>);
+    return user_ids.map((user, id) => (
+      <Fragment key={id}>
+        {user.name}&lt;{user.email}&gt;
+        <br />
+      </Fragment>
+    ));
   }
 
   /**
@@ -119,7 +130,9 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    * @return {string}
    */
   formatDate(date) {
-    return DateTime.fromJSDate(new Date(date)).setLocale(this.props.context.locale).toLocaleString(DateTime.DATETIME_FULL);
+    return DateTime.fromJSDate(new Date(date))
+      .setLocale(this.props.context.locale)
+      .toLocaleString(DateTime.DATETIME_FULL);
   }
 
   /**
@@ -140,86 +153,139 @@ class ConfirmSaveAccountRecoverySettings extends Component {
         title={this.translate("Save Settings Summary")}
         onClose={this.handleClose}
         disabled={this.state.processing}
-        className="save-recovery-account-settings-dialog">
+        className="save-recovery-account-settings-dialog"
+      >
         <form onSubmit={this.handleSubmit}>
           <div className="form-content">
-            {this.props.policy &&
+            {this.props.policy && (
               <>
-                <label><Trans>New Account Recovery Policy</Trans></label>
+                <label>
+                  <Trans>New Account Recovery Policy</Trans>
+                </label>
                 <div className="account-recovery-setting-save">
                   <p className="name">
-                    {{
-                      mandatory: <Trans>Prompt</Trans>,
-                      'opt-out': <Trans>Optional, Opt-out</Trans>,
-                      'opt-in': <Trans>Optional, Opt-in</Trans>,
-                      disabled: <Trans>Disable</Trans>
-                    }[this.props.policy]}
+                    {
+                      {
+                        mandatory: <Trans>Prompt</Trans>,
+                        "opt-out": <Trans>Optional, Opt-out</Trans>,
+                        "opt-in": <Trans>Optional, Opt-in</Trans>,
+                        disabled: <Trans>Disable</Trans>,
+                      }[this.props.policy]
+                    }
                   </p>
                   <p className="info">
-                    {{
-                      mandatory: <><Trans>Every user is required to provide a copy of their private key and passphrase during setup.</Trans><br/><Trans>Warning: You should inform your users not to store personal passwords.</Trans></>,
-                      'opt-out': <Trans>Every user will be prompted to provide a copy of their private key and passphrase by default during the setup, but they can opt out.</Trans>,
-                      'opt-in': <Trans>Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.</Trans>,
-                      disabled: <><Trans>Backup of the private key and passphrase will not be stored. This is the safest option.</Trans><br/><Trans>Warning: If users lose their private key and passphrase they will not be able to recover their account.</Trans></>
-                    }[this.props.policy]}
+                    {
+                      {
+                        mandatory: (
+                          <>
+                            <Trans>
+                              Every user is required to provide a copy of their private key and passphrase during setup.
+                            </Trans>
+                            <br />
+                            <Trans>Warning: You should inform your users not to store personal passwords.</Trans>
+                          </>
+                        ),
+                        "opt-out": (
+                          <Trans>
+                            Every user will be prompted to provide a copy of their private key and passphrase by default
+                            during the setup, but they can opt out.
+                          </Trans>
+                        ),
+                        "opt-in": (
+                          <Trans>
+                            Every user can decide to provide a copy of their private key and passphrase by default
+                            during the setup, but they can opt in.
+                          </Trans>
+                        ),
+                        disabled: (
+                          <>
+                            <Trans>
+                              Backup of the private key and passphrase will not be stored. This is the safest option.
+                            </Trans>
+                            <br />
+                            <Trans>
+                              Warning: If users lose their private key and passphrase they will not be able to recover
+                              their account.
+                            </Trans>
+                          </>
+                        ),
+                      }[this.props.policy]
+                    }
                   </p>
                 </div>
               </>
-            }
-            {this.props.keyInfo &&
+            )}
+            {this.props.keyInfo && (
               <>
-                <label><Trans>New Organization Recovery Key</Trans></label>
+                <label>
+                  <Trans>New Organization Recovery Key</Trans>
+                </label>
                 <div className="recovery-key-details">
                   <table className="table-info recovery-key">
                     <tbody>
                       <tr className="user-ids">
-                        <td className="label"><Trans>Uid</Trans></td>
+                        <td className="label">
+                          <Trans>Uid</Trans>
+                        </td>
                         <td className="value">{this.formatUserIds(this.props.keyInfo.user_ids)}</td>
                       </tr>
                       <tr className="fingerprint">
-                        <td className="label"><Trans>Fingerprint</Trans></td>
+                        <td className="label">
+                          <Trans>Fingerprint</Trans>
+                        </td>
                         <td className="value">{this.formatFingerprint(this.props.keyInfo.fingerprint)}</td>
                       </tr>
                       <tr className="algorithm">
-                        <td className="label"><Trans>Algorithm</Trans></td>
+                        <td className="label">
+                          <Trans>Algorithm</Trans>
+                        </td>
                         <td className="value">{this.props.keyInfo.algorithm}</td>
                       </tr>
                       <tr className="key-length">
-                        <td className="label"><Trans>Key length</Trans></td>
+                        <td className="label">
+                          <Trans>Key length</Trans>
+                        </td>
                         <td className="value">{this.props.keyInfo.length}</td>
                       </tr>
                       <tr className="created">
-                        <td className="label"><Trans>Created</Trans></td>
+                        <td className="label">
+                          <Trans>Created</Trans>
+                        </td>
                         <td className="value">{this.formatDate(this.props.keyInfo.created)}</td>
                       </tr>
                       <tr className="expires">
-                        <td className="label"><Trans>Expires</Trans></td>
-                        <td className="value" title={this.props.keyInfo.expires}>{formatDateTimeAgo(this.props.keyInfo.expires, this.props.t, this.props.context.locale)}</td>
+                        <td className="label">
+                          <Trans>Expires</Trans>
+                        </td>
+                        <td className="value" title={this.props.keyInfo.expires}>
+                          {formatDateTimeAgo(this.props.keyInfo.expires, this.props.t, this.props.context.locale)}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
               </>
-            }
+            )}
             <div className="warning message no-margin">
               <Trans>Please review carefully this configuration as it will not be trivial to change this later.</Trans>
             </div>
           </div>
           <div className="submit-wrapper clearfix">
             <a
-              target="_blank" rel="noopener noreferrer"
+              target="_blank"
+              rel="noopener noreferrer"
               href="https://www.passbolt.com/docs/admin/authentication/account-recovery/"
-              className={`button button-left ${this.isProcessing ? "disabled" : ''}`}>
+              className={`button button-left ${this.isProcessing ? "disabled" : ""}`}
+            >
               <Trans>Learn more</Trans>
             </a>
-            <FormCancelButton
-              onClick={this.handleClose}
-              disabled={this.isProcessing}/>
+            <FormCancelButton onClick={this.handleClose} disabled={this.isProcessing} />
             <FormSubmitButton
               value={this.translate("Save")}
               disabled={this.isProcessing}
               processing={this.isProcessing}
-              warning={true}/>
+              warning={true}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -235,4 +301,4 @@ ConfirmSaveAccountRecoverySettings.propTypes = {
   keyInfo: PropTypes.object, // The account recovery public key details if any change of key
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withTranslation('common')(ConfirmSaveAccountRecoverySettings));
+export default withAppContext(withTranslation("common")(ConfirmSaveAccountRecoverySettings));

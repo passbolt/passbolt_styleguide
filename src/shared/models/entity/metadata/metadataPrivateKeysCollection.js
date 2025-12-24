@@ -46,8 +46,8 @@ class MetadataPrivateKeysCollection extends EntityV2Collection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": MetadataPrivateKeyEntity.getSchema(),
+      type: "array",
+      items: MetadataPrivateKeyEntity.getSchema(),
     };
   }
 
@@ -58,8 +58,8 @@ class MetadataPrivateKeysCollection extends EntityV2Collection {
    * @throws {EntityValidationError} If a permission already exists with the same id.
    */
   validateBuildRules(item, options = {}) {
-    this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
-    this.assertNotExist("user_id", item._props.user_id, {haystackSet: options?.uniqueUserIdsSetCache});
+    this.assertNotExist("id", item._props.id, { haystackSet: options?.uniqueIdsSetCache });
+    this.assertNotExist("user_id", item._props.user_id, { haystackSet: options?.uniqueUserIdsSetCache });
     this.assertSameMetadataKeyId(item);
   }
 
@@ -74,7 +74,7 @@ class MetadataPrivateKeysCollection extends EntityV2Collection {
       return;
     }
 
-    const collectionMetadataKeyId = this._items.find(item => Boolean(item.metadataKeyId))?.metadataKeyId;
+    const collectionMetadataKeyId = this._items.find((item) => Boolean(item.metadataKeyId))?.metadataKeyId;
     if (!collectionMetadataKeyId) {
       return;
     }
@@ -84,7 +84,11 @@ class MetadataPrivateKeysCollection extends EntityV2Collection {
     }
 
     const error = new EntityValidationError();
-    error.addError("metadata_key_id", "same_metadata_key", "The collection should not contain different metadata key ID.");
+    error.addError(
+      "metadata_key_id",
+      "same_metadata_key",
+      "The collection should not contain different metadata key ID.",
+    );
     throw error;
   }
 
@@ -93,7 +97,7 @@ class MetadataPrivateKeysCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasDecryptedPrivateKeys() {
-    return this._items.some(item => item.isDecrypted);
+    return this._items.some((item) => item.isDecrypted);
   }
 
   /**
@@ -101,7 +105,7 @@ class MetadataPrivateKeysCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasEncryptedPrivateKeys() {
-    return this._items.some(item => !item.isDecrypted);
+    return this._items.some((item) => !item.isDecrypted);
   }
 
   /*
@@ -116,15 +120,15 @@ class MetadataPrivateKeysCollection extends EntityV2Collection {
   pushMany(data, entityOptions = {}, options = {}) {
     const uniqueIdsSetCache = new Set(this.extract("id"));
     const uniqueUserIdsSetCache = new Set(this.extract("user_id"));
-    const onItemPushed = item => {
+    const onItemPushed = (item) => {
       uniqueIdsSetCache.add(item._props.id);
       uniqueUserIdsSetCache.add(item._props.user_id);
     };
 
     options = {
       onItemPushed: onItemPushed,
-      validateBuildRules: {...options?.validateBuildRules, uniqueIdsSetCache, uniqueUserIdsSetCache},
-      ...options
+      validateBuildRules: { ...options?.validateBuildRules, uniqueIdsSetCache, uniqueUserIdsSetCache },
+      ...options,
     };
 
     super.pushMany(data, entityOptions, options);

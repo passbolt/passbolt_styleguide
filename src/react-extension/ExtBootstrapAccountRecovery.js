@@ -12,10 +12,9 @@
  * @since         3.6.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import InsertAccountRecoveryIframe
-  from "./components/AuthenticationAccountRecovery/OrchestrateAccountRecovery/InsertAccountRecoveryIframe";
+import InsertAccountRecoveryIframe from "./components/AuthenticationAccountRecovery/OrchestrateAccountRecovery/InsertAccountRecoveryIframe";
 import InsertFileIframe from "./components/InsertFileIframe";
 
 /**
@@ -40,8 +39,7 @@ class ExtBootstrapAccountRecovery extends Component {
     const rootNode = document.getRootNode();
     const htmlTag = rootNode.lastChild;
 
-    return htmlTag?.tagName === "HTML"
-      && htmlTag.classList.contains('passbolt');
+    return htmlTag?.tagName === "HTML" && htmlTag.classList.contains("passbolt");
   }
 
   /**
@@ -58,7 +56,10 @@ class ExtBootstrapAccountRecovery extends Component {
    * Whenever the background page request the recover iframe to be removed.
    */
   handleRemoveIframeRequested() {
-    this.props.port.on("passbolt.account-recovery-bootstrap.remove-iframe", this.removeAccountRecoveryIframe.bind(this));
+    this.props.port.on(
+      "passbolt.account-recovery-bootstrap.remove-iframe",
+      this.removeAccountRecoveryIframe.bind(this),
+    );
   }
 
   /**
@@ -78,8 +79,8 @@ class ExtBootstrapAccountRecovery extends Component {
 
     return (
       <>
-        <InsertAccountRecoveryIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
-        <InsertFileIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
+        <InsertAccountRecoveryIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl} />
+        <InsertFileIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl} />
       </>
     );
   }

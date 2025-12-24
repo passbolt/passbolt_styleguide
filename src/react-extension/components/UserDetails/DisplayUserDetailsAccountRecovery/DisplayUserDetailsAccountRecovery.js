@@ -15,13 +15,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import HandleReviewAccountRecoveryRequestWorkflow
-  from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
-import {withWorkflow} from "../../../contexts/WorkflowContext";
-import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
+import HandleReviewAccountRecoveryRequestWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
+import { withWorkflow } from "../../../contexts/WorkflowContext";
+import { formatDateTimeAgo } from "../../../../shared/utils/dateUtils";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import TriangleAlertSVG from "../../../../img/svg/triangle_alert.svg";
@@ -48,7 +47,7 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
     return {
       loading: true, // loading
       open: false, // Flag for the expand / collapse mode
-      userRequests: [] // The user requests
+      userRequests: [], // The user requests
     };
   }
 
@@ -67,11 +66,11 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
    */
   async handleUserChange(previousUser) {
     const hasUserChanged = this.selectedUser.id !== previousUser.id;
-    if ((hasUserChanged) && this.state.open) {
-      const state = Object.assign({}, this.defaultState, {open: true});
+    if (hasUserChanged && this.state.open) {
+      const state = Object.assign({}, this.defaultState, { open: true });
       await this.setState(state);
       await this.findUserRequests();
-      this.setState({loading: false});
+      this.setState({ loading: false });
     }
   }
 
@@ -84,10 +83,13 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
     if (!this.state.open) {
       return;
     }
-    if (user?.pending_account_recovery_request?.status !== this.props.userWorkspaceContext.details.user?.pending_account_recovery_request?.status) {
-      await this.setState({loading: true});
+    if (
+      user?.pending_account_recovery_request?.status !==
+      this.props.userWorkspaceContext.details.user?.pending_account_recovery_request?.status
+    ) {
+      await this.setState({ loading: true });
       await this.findUserRequests();
-      await this.setState({loading: false});
+      await this.setState({ loading: false });
     }
   }
 
@@ -108,9 +110,9 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
       const defaultState = this.defaultState;
       this.setState(defaultState);
     } else {
-      await this.setState({loading: true, open: true});
+      await this.setState({ loading: true, open: true });
       await this.findUserRequests();
-      this.setState({loading: false});
+      this.setState({ loading: false });
     }
   }
 
@@ -119,7 +121,7 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
    */
   handleReviewClicked() {
     const accountRecoveryRequestId = this.selectedUser.pending_account_recovery_request.id;
-    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {accountRecoveryRequestId});
+    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, { accountRecoveryRequestId });
   }
 
   /**
@@ -127,9 +129,12 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
    * @returns {Promise<void>}
    */
   async findUserRequests() {
-    const unsortedUserRequests = await this.props.context.port.request('passbolt.account-recovery.get-user-requests', this.selectedUser.id);
+    const unsortedUserRequests = await this.props.context.port.request(
+      "passbolt.account-recovery.get-user-requests",
+      this.selectedUser.id,
+    );
     const userRequests = unsortedUserRequests.sort((a, b) => new Date(b.created) - new Date(a.created));
-    this.setState({userRequests});
+    this.setState({ userRequests });
   }
 
   /**
@@ -188,48 +193,68 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
             <button className="link no-border" type="button" onClick={this.handleTitleClicked}>
               <span className="accordion-title">
                 <Trans>Account recovery</Trans>
-                {this.isAccountRecoveryPending &&
-                  <AttentionSVG className="attention-required"/>
-                }
+                {this.isAccountRecoveryPending && <AttentionSVG className="attention-required" />}
               </span>
-              {this.state.open && <CaretDownSVG/>}
-              {!this.state.open && <CaretRightSVG/>}
+              {this.state.open && <CaretDownSVG />}
+              {!this.state.open && <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open &&
-        <div className="accordion-content">
-          {this.state.loading &&
-          <div className="processing-wrapper">
-            <SpinnerSVG/>
-            <span className="processing-text"><Trans>Retrieving account recovery</Trans></span>
+        {this.state.open && (
+          <div className="accordion-content">
+            {this.state.loading && (
+              <div className="processing-wrapper">
+                <SpinnerSVG />
+                <span className="processing-text">
+                  <Trans>Retrieving account recovery</Trans>
+                </span>
+              </div>
+            )}
+            {!this.state.loading && (
+              <>
+                <div className="account-recovery-details">
+                  <div className="information-label">
+                    {this.isAccountRecoveryPending && (
+                      <span className="pending-request-status label">
+                        <Trans>Current status</Trans>
+                      </span>
+                    )}
+                    <span className="previous-request label">
+                      <Trans>Previous recovery</Trans>
+                    </span>
+                    <span className="requests-count label">
+                      <Trans>Number of recovery</Trans>
+                    </span>
+                  </div>
+                  <div className="information-value">
+                    {this.isAccountRecoveryPending && (
+                      <span className="pending-request-status value">
+                        <Trans>To review</Trans>
+                      </span>
+                    )}
+                    <span
+                      className="previous-request value"
+                      title={
+                        this.previousAccountRecoveryRequest ? this.previousAccountRecoveryRequest.created : "Never"
+                      }
+                    >
+                      {this.previousAccountRecoveryRequest
+                        ? `${this.capitalizeFirstLetter(this.previousAccountRecoveryRequest.status)} ${formatDateTimeAgo(this.previousAccountRecoveryRequest.created, this.props.t, this.props.context.locale)}`
+                        : "Never"}
+                    </span>
+                    <span className="requests-count value">{this.state.userRequests.length}</span>
+                  </div>
+                </div>
+                {this.isAccountRecoveryPending && (
+                  <button className="review-request" type="button" onClick={this.handleReviewClicked}>
+                    <TriangleAlertSVG />
+                    <Trans>Review</Trans>
+                  </button>
+                )}
+              </>
+            )}
           </div>
-          }
-          {!this.state.loading &&
-          <>
-            <div className="account-recovery-details">
-              <div className="information-label">
-                {this.isAccountRecoveryPending &&
-                <span className="pending-request-status label"><Trans>Current status</Trans></span>
-                }
-                <span className="previous-request label"><Trans>Previous recovery</Trans></span>
-                <span className="requests-count label"><Trans>Number of recovery</Trans></span>
-              </div>
-              <div className="information-value">
-                {this.isAccountRecoveryPending &&
-              <span className="pending-request-status value"><Trans>To review</Trans></span>
-                }
-                <span className="previous-request value" title={this.previousAccountRecoveryRequest ? this.previousAccountRecoveryRequest.created : "Never"}>{this.previousAccountRecoveryRequest ? `${this.capitalizeFirstLetter(this.previousAccountRecoveryRequest.status)} ${formatDateTimeAgo(this.previousAccountRecoveryRequest.created, this.props.t, this.props.context.locale)}` : "Never"}</span>
-                <span className="requests-count value">{this.state.userRequests.length}</span>
-              </div>
-            </div>
-            {this.isAccountRecoveryPending &&
-              <button className="review-request" type="button" onClick={this.handleReviewClicked}><TriangleAlertSVG/><Trans>Review</Trans></button>
-            }
-          </>
-          }
-        </div>
-        }
+        )}
       </div>
     );
   }
@@ -242,4 +267,6 @@ DisplayUserDetailsAccountRecovery.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withWorkflow(withUserWorkspace(withTranslation('common')(DisplayUserDetailsAccountRecovery))));
+export default withAppContext(
+  withWorkflow(withUserWorkspace(withTranslation("common")(DisplayUserDetailsAccountRecovery))),
+);

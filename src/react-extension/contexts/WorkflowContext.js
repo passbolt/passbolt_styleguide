@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * The workflow context
@@ -22,7 +22,7 @@ import {v4 as uuidv4} from "uuid";
 export const WorkflowContext = React.createContext({
   workflows: [], // The current of displayed workflows
   start: () => {}, // Start a workflow
-  stop: () => {} // Stop a workflow
+  stop: () => {}, // Stop a workflow
 });
 
 /**
@@ -46,11 +46,12 @@ export default class WorkflowContextProvider extends React.Component {
       workflows: [],
       start: (Workflow, workflowProps) => {
         const workflowKey = uuidv4();
-        this.setState({workflows: [...this.state.workflows, {key: workflowKey, Workflow, workflowProps}]});
+        this.setState({ workflows: [...this.state.workflows, { key: workflowKey, Workflow, workflowProps }] });
 
         return workflowKey;
       },
-      stop: async workflowKey => await this.setState({workflows: this.state.workflows.filter(workflow => workflowKey !== workflow.key)})
+      stop: async (workflowKey) =>
+        await this.setState({ workflows: this.state.workflows.filter((workflow) => workflowKey !== workflow.key) }),
     };
   }
 
@@ -59,16 +60,12 @@ export default class WorkflowContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <WorkflowContext.Provider value={this.state}>
-        {this.props.children}
-      </WorkflowContext.Provider>
-    );
+    return <WorkflowContext.Provider value={this.state}>{this.props.children}</WorkflowContext.Provider>;
   }
 }
-WorkflowContextProvider.displayName = 'WorkflowContextProvider';
+WorkflowContextProvider.displayName = "WorkflowContextProvider";
 WorkflowContextProvider.propTypes = {
-  children: PropTypes.any
+  children: PropTypes.any,
 };
 
 /**
@@ -80,9 +77,7 @@ export function withWorkflow(WrappedComponent) {
     render() {
       return (
         <WorkflowContext.Consumer>
-          {
-            workflowContext => <WrappedComponent workflowContext={workflowContext} {...this.props} />
-          }
+          {(workflowContext) => <WrappedComponent workflowContext={workflowContext} {...this.props} />}
         </WorkflowContext.Consumer>
       );
     }

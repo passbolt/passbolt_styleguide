@@ -11,25 +11,25 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../contexts/DialogContext";
-import {Trans, withTranslation} from "react-i18next";
-import {maxSizeValidation} from '../../../lib/Error/InputValidator';
-import {USER_INPUT_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import { Trans, withTranslation } from "react-i18next";
+import { maxSizeValidation } from "../../../lib/Error/InputValidator";
+import { USER_INPUT_MAX_LENGTH } from "../../../../shared/constants/inputs.const";
 import Tooltip from "../../Common/Tooltip/Tooltip";
-import {DateTime} from "luxon";
+import { DateTime } from "luxon";
 import AttentionSVG from "../../../../img/svg/attention.svg";
 import InfoSVG from "../../../../img/svg/info.svg";
 import Select from "../../Common/Select/Select";
-import {capitalizeFirstLetter} from "../../../../shared/utils/stringUtils";
-import {withRoles} from "../../../contexts/RoleContext";
+import { capitalizeFirstLetter } from "../../../../shared/utils/stringUtils";
+import { withRoles } from "../../../contexts/RoleContext";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 
 class EditUser extends Component {
@@ -49,7 +49,7 @@ class EditUser extends Component {
    * @returns {*}
    */
   get defaultState() {
-    const user = this.props.context.users.find(user => user.id === this.props.context.editUserDialogProps.id);
+    const user = this.props.context.users.find((user) => user.id === this.props.context.editUserDialogProps.id);
     const disabled = user.disabled ? new Date(user.disabled) : null;
     return {
       // Dialog states
@@ -66,7 +66,7 @@ class EditUser extends Component {
       username: user.username,
       disabled: disabled,
       role_id: user.role_id,
-      hasAlreadyBeenValidated: false // True if the form has already been submitted once
+      hasAlreadyBeenValidated: false, // True if the form has already been submitted once
     };
   }
 
@@ -77,7 +77,7 @@ class EditUser extends Component {
    */
   componentDidMount() {
     this.props.roleContext.refreshRoles();
-    this.setState({loading: false}, () => {
+    this.setState({ loading: false }, () => {
       this.firstNameRef.current.focus();
     });
   }
@@ -86,9 +86,11 @@ class EditUser extends Component {
    * Returns true if the editing user is actually the logged in user
    */
   get isLoggedInUserAsEditing() {
-    return this.props.context.editUserDialogProps &&
+    return (
+      this.props.context.editUserDialogProps &&
       this.props.context.loggedInUser &&
-      this.props.context.editUserDialogProps.id === this.props.context.loggedInUser.id;
+      this.props.context.editUserDialogProps.id === this.props.context.loggedInUser.id
+    );
   }
 
   /**
@@ -119,7 +121,7 @@ class EditUser extends Component {
    * @returns {void}
    */
   handleClose() {
-    this.props.context.setContext({editUserDialogProps: null});
+    this.props.context.setContext({ editUserDialogProps: null });
     this.props.onClose();
   }
 
@@ -132,7 +134,7 @@ class EditUser extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    this.setState({[name]: value});
+    this.setState({ [name]: value });
   }
 
   /**
@@ -144,7 +146,7 @@ class EditUser extends Component {
     const target = event.target;
     const checked = target.checked;
     const name = target.name;
-    this.setState({[name]: checked});
+    this.setState({ [name]: checked });
   }
 
   /**
@@ -154,11 +156,9 @@ class EditUser extends Component {
    */
   handleIsSuspendedCheckboxClick(event) {
     const checked = event.target.checked;
-    const disabled = checked
-      ? new Date()
-      : null;
+    const disabled = checked ? new Date() : null;
 
-    this.setState({disabled});
+    this.setState({ disabled });
   }
 
   /**
@@ -170,7 +170,7 @@ class EditUser extends Component {
       this.setState(state);
     } else {
       const first_nameWarning = maxSizeValidation(this.state.first_name, USER_INPUT_MAX_LENGTH, this.translate);
-      this.setState({first_nameWarning});
+      this.setState({ first_nameWarning });
     }
   }
 
@@ -183,7 +183,7 @@ class EditUser extends Component {
       this.setState(state);
     } else {
       const last_nameWarning = maxSizeValidation(this.state.last_name, USER_INPUT_MAX_LENGTH, this.translate);
-      this.setState({last_nameWarning});
+      this.setState({ last_nameWarning });
     }
   }
 
@@ -196,7 +196,7 @@ class EditUser extends Component {
     // Avoid the form to be submitted.
     event.preventDefault();
 
-    this.setState({hasAlreadyBeenValidated: true});
+    this.setState({ hasAlreadyBeenValidated: true });
 
     // Do not re-submit an already processing form
     if (!this.state.processing) {
@@ -233,12 +233,12 @@ class EditUser extends Component {
   handleSaveError(error) {
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
+      this.setState({ processing: false });
     } else {
       // Unexpected error occurred.
       console.error(error);
       this.handleError(error);
-      this.setState({processing: false});
+      this.setState({ processing: false });
     }
   }
 
@@ -248,7 +248,7 @@ class EditUser extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -258,7 +258,7 @@ class EditUser extends Component {
    */
   toggleProcessing() {
     const prev = this.state.processing;
-    this.setState({processing: !prev});
+    this.setState({ processing: !prev });
   }
 
   /**
@@ -283,7 +283,7 @@ class EditUser extends Component {
       username: this.state.username,
       profile: {
         first_name: this.state.first_name,
-        last_name: this.state.last_name
+        last_name: this.state.last_name,
       },
       role_id: this.state.role_id,
     };
@@ -297,10 +297,10 @@ class EditUser extends Component {
    * Update the logged in user if he actually edited himself
    */
   async updateLoggedInUserIfNeeded() {
-    const newContext = {editUserDialogProps: null};
+    const newContext = { editUserDialogProps: null };
     if (this.isLoggedInUserAsEditing) {
       const loggedInUser = await this.props.context.port.request("passbolt.users.find-logged-in-user", true);
-      this.props.context.setContext({loggedInUser});
+      this.props.context.setContext({ loggedInUser });
     }
     await this.props.context.setContext(newContext);
   }
@@ -311,10 +311,7 @@ class EditUser extends Component {
    */
   async validate() {
     // Validate the form inputs.
-    await Promise.all([
-      this.validateFirstNameInput(),
-      this.validateLastNameInput()
-    ]);
+    await Promise.all([this.validateFirstNameInput(), this.validateLastNameInput()]);
     return this.hasValidationError();
   }
 
@@ -328,7 +325,7 @@ class EditUser extends Component {
     if (!first_name.length) {
       first_nameError = this.translate("A first name is required.");
     }
-    return this.setState({first_nameError});
+    return this.setState({ first_nameError });
   }
 
   /**
@@ -341,7 +338,7 @@ class EditUser extends Component {
     if (!last_name.length) {
       last_nameError = this.translate("A last name is required.");
     }
-    return this.setState({last_nameError});
+    return this.setState({ last_nameError });
   }
 
   /**
@@ -374,8 +371,7 @@ class EditUser extends Component {
       return null;
     }
 
-    return DateTime
-      .fromJSDate(new Date(this.state.disabled))
+    return DateTime.fromJSDate(new Date(this.state.disabled))
       .setLocale(this.props.context.locale)
       .toLocaleString(DateTime.DATETIME_FULL);
   }
@@ -393,7 +389,7 @@ class EditUser extends Component {
    * @returns {boolean}
    */
   isSuspendedUserFeatureEnabled() {
-    return this.props.context.siteSettings.canIUse('disableUser');
+    return this.props.context.siteSettings.canIUse("disableUser");
   }
 
   /**
@@ -406,7 +402,7 @@ class EditUser extends Component {
       return null;
     }
 
-    const formatNumber = num => num.toString().padStart(2, '0');
+    const formatNumber = (num) => num.toString().padStart(2, "0");
     const Y = date.getFullYear();
     const M = formatNumber(date.getUTCMonth() + 1);
     const D = formatNumber(date.getUTCDate());
@@ -423,9 +419,11 @@ class EditUser extends Component {
    */
   get rolesList() {
     if (this.props.roles) {
-      return this.props.roles.items.map(role => role.isAReservedRole()
-        ? ({value: role.id, label: capitalizeFirstLetter(this.translate(role.name))})
-        : ({value: role.id, label: role.name}));
+      return this.props.roles.items.map((role) =>
+        role.isAReservedRole()
+          ? { value: role.id, label: capitalizeFirstLetter(this.translate(role.name)) }
+          : { value: role.id, label: role.name },
+      );
     }
     return [];
   }
@@ -446,63 +444,110 @@ class EditUser extends Component {
     const isUserSuspended = this.isUserSuspended();
     const suspendedDate = this.suspendedDate;
     return (
-      <DialogWrapper className='user-edit-dialog' title={this.translate('Edit User')}
-        onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+      <DialogWrapper
+        className="user-edit-dialog"
+        title={this.translate("Edit User")}
+        onClose={this.handleClose}
+        disabled={this.hasAllInputDisabled()}
+      >
         <form className="user-edit-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.first_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="user-first-name-input"><Trans>First name</Trans>{this.state.first_nameWarning &&
-                <AttentionSVG className="attention-required"/>
-              }</label>
-              <input id="user-first-name-input" name="first_name"
-                ref={this.firstNameRef} type="text" value={this.state.first_name} placeholder={this.translate("First name")}
-                required="required" disabled={this.hasAllInputDisabled()}
-                onKeyUp={this.handleFirstNameInputOnKeyUp} onChange={this.handleInputChange}
-                autoComplete='off' autoFocus={true}
+            <div
+              className={`input text required ${this.state.first_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+            >
+              <label htmlFor="user-first-name-input">
+                <Trans>First name</Trans>
+                {this.state.first_nameWarning && <AttentionSVG className="attention-required" />}
+              </label>
+              <input
+                id="user-first-name-input"
+                name="first_name"
+                ref={this.firstNameRef}
+                type="text"
+                value={this.state.first_name}
+                placeholder={this.translate("First name")}
+                required="required"
+                disabled={this.hasAllInputDisabled()}
+                onKeyUp={this.handleFirstNameInputOnKeyUp}
+                onChange={this.handleInputChange}
+                autoComplete="off"
+                autoFocus={true}
               />
-              {this.state.first_nameError &&
-              <div className="first_name error-message">{this.state.first_nameError}</div>
-              }
+              {this.state.first_nameError && (
+                <div className="first_name error-message">{this.state.first_nameError}</div>
+              )}
               {this.state.first_nameWarning && (
                 <div className="firstname warning-message">
-                  <strong><Trans>Warning:</Trans></strong> {this.state.first_nameWarning}
+                  <strong>
+                    <Trans>Warning:</Trans>
+                  </strong>{" "}
+                  {this.state.first_nameWarning}
                 </div>
               )}
             </div>
-            <div className={`input text required ${this.state.last_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="user-last-name-input"><Trans>Last name</Trans></label>
-              <input id="user-last-name-input" name="last_name"
+            <div
+              className={`input text required ${this.state.last_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+            >
+              <label htmlFor="user-last-name-input">
+                <Trans>Last name</Trans>
+              </label>
+              <input
+                id="user-last-name-input"
+                name="last_name"
                 maxLength="128"
-                ref={this.lastNameRef} type="text" value={this.state.last_name} placeholder={this.translate("Last name")}
-                required="required" disabled={this.hasAllInputDisabled()}
-                onKeyUp={this.handleLastNameInputOnKeyUp} onChange={this.handleInputChange}
-                autoComplete='off' autoFocus={true}
+                ref={this.lastNameRef}
+                type="text"
+                value={this.state.last_name}
+                placeholder={this.translate("Last name")}
+                required="required"
+                disabled={this.hasAllInputDisabled()}
+                onKeyUp={this.handleLastNameInputOnKeyUp}
+                onChange={this.handleInputChange}
+                autoComplete="off"
+                autoFocus={true}
               />
-              {this.state.last_nameError &&
-              <div className="last_name error-message">{this.state.last_nameError}</div>
-              }
+              {this.state.last_nameError && <div className="last_name error-message">{this.state.last_nameError}</div>}
               {this.state.last_nameWarning && (
                 <div className="lastname warning-message">
-                  <strong><Trans>Warning:</Trans></strong> {this.state.last_nameWarning}
+                  <strong>
+                    <Trans>Warning:</Trans>
+                  </strong>{" "}
+                  {this.state.last_nameWarning}
                 </div>
               )}
             </div>
             <div className="input text required disabled">
-              <label htmlFor="user-username-input"><Trans>Username / Email</Trans>{this.state.last_nameWarning &&
-                <AttentionSVG className="attention-required"/>
-              }</label>
-              <input id="user-username-input" name="username"
+              <label htmlFor="user-username-input">
+                <Trans>Username / Email</Trans>
+                {this.state.last_nameWarning && <AttentionSVG className="attention-required" />}
+              </label>
+              <input
+                id="user-username-input"
+                name="username"
                 maxLength="128"
-                type="text" value={this.state.username} placeholder={this.translate("Username")}
-                required="required" disabled={true}
-                autoComplete='off' autoFocus={true}
+                type="text"
+                value={this.state.username}
+                placeholder={this.translate("Username")}
+                required="required"
+                disabled={true}
+                autoComplete="off"
+                autoFocus={true}
               />
             </div>
-            <div className={`input select-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="select_role"><Trans>Role</Trans></label>
-              <Select id="select_role" disabled={this.isLoggedInUserAsEditing || this.hasAllInputDisabled()} name="role_id" items={this.rolesList} value={this.state.role_id} onChange={this.handleInputChange}/>
+            <div className={`input select-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+              <label htmlFor="select_role">
+                <Trans>Role</Trans>
+              </label>
+              <Select
+                id="select_role"
+                disabled={this.isLoggedInUserAsEditing || this.hasAllInputDisabled()}
+                name="role_id"
+                items={this.rolesList}
+                value={this.state.role_id}
+                onChange={this.handleInputChange}
+              />
             </div>
-            {this.isSuspendedUserFeatureEnabled() &&
+            {this.isSuspendedUserFeatureEnabled() && (
               <div className="input toggle-switch form-element ready">
                 <input
                   id="is_suspended_checkbox"
@@ -513,21 +558,34 @@ class EditUser extends Component {
                   type="checkbox"
                   className="toggle-switch-checkbox checkbox"
                 />
-                <label htmlFor="is_suspended_checkbox"> <Trans>Suspend this user</Trans></label>
-                <Tooltip message={this.translate("This user will not be able to sign in to passbolt and receive email notifications. Other users can share resource with it and add this user to a group.")}>
-                  <InfoSVG/>
+                <label htmlFor="is_suspended_checkbox">
+                  {" "}
+                  <Trans>Suspend this user</Trans>
+                </label>
+                <Tooltip
+                  message={this.translate(
+                    "This user will not be able to sign in to passbolt and receive email notifications. Other users can share resource with it and add this user to a group.",
+                  )}
+                >
+                  <InfoSVG />
                 </Tooltip>
               </div>
-            }
-            {!isUserSuspended && this.state.disabled &&
+            )}
+            {!isUserSuspended && this.state.disabled && (
               <div className="message warning no-margin">
-                <Trans><b>Warning:</b> Suspension is scheduled for the {{suspendedDate}}</Trans>
+                <Trans>
+                  <b>Warning:</b> Suspension is scheduled for the {{ suspendedDate }}
+                </Trans>
               </div>
-            }
+            )}
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Save")}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -545,4 +603,4 @@ EditUser.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withRoles(withDialog(withTranslation('common')(EditUser)))));
+export default withAppContext(withActionFeedback(withRoles(withDialog(withTranslation("common")(EditUser)))));

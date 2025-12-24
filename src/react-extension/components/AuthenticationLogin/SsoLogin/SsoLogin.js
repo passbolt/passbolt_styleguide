@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.10.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 
 /**
  * This component allows the user to log in with his account
@@ -37,7 +37,7 @@ class SsoLogin extends Component {
   get defaultState() {
     return {
       actions: {
-        processing: false // True if one's processing passphrase
+        processing: false, // True if one's processing passphrase
       },
     };
   }
@@ -62,8 +62,7 @@ class SsoLogin extends Component {
    * Returns the user full name
    */
   get fullname() {
-    return this.props.userSettings?.fullName
-      || `${this.props.account?.first_name} ${this.props.account?.last_name}`;
+    return this.props.userSettings?.fullName || `${this.props.account?.first_name} ${this.props.account?.last_name}`;
   }
 
   /**
@@ -77,8 +76,7 @@ class SsoLogin extends Component {
    * Returns the trusted domain
    */
   get trustedDomain() {
-    return this.props.userSettings?.getTrustedDomain()
-      || this.props.account?.domain;
+    return this.props.userSettings?.getTrustedDomain() || this.props.account?.domain;
   }
 
   /**
@@ -93,7 +91,7 @@ class SsoLogin extends Component {
    * Toggle the processing mode
    */
   toggleProcessing() {
-    this.setState({actions: {processing: !this.state.actions.processing}});
+    this.setState({ actions: { processing: !this.state.actions.processing } });
   }
 
   /**
@@ -114,16 +112,16 @@ class SsoLogin extends Component {
     event.preventDefault();
     this.setState({
       actions: {
-        processing: true
-      }
+        processing: true,
+      },
     });
 
     await this.props.onSsoSignIn();
 
     this.setState({
       actions: {
-        processing: false
-      }
+        processing: false,
+      },
     });
   }
 
@@ -143,16 +141,19 @@ class SsoLogin extends Component {
     return (
       <div className="login">
         <div className="login-user">
-          <UserAvatar user={this.props.account?.user} baseUrl={this.trustedDomain} className="big avatar user-avatar"/>
+          <UserAvatar user={this.props.account?.user} baseUrl={this.trustedDomain} className="big avatar user-avatar" />
           <p className="login-user-name">{this.fullname}</p>
           <p className="login-user-email">{this.username}</p>
         </div>
         <div className="form-actions sso-login-form">
-          <button type="button" className={`sso-login-button ${this.isProcessing ? "disabled" : ""} ${ssoProviderData.id}`} onClick={this.handleSignInWithSso} disabled={this.isProcessing} >
-            <span className="provider-logo">
-              {ssoProviderData.icon}
-            </span>
-            {this.props.t(`Sign in with {{providerName}}`, {providerName: ssoProviderData.name})}
+          <button
+            type="button"
+            className={`sso-login-button ${this.isProcessing ? "disabled" : ""} ${ssoProviderData.id}`}
+            onClick={this.handleSignInWithSso}
+            disabled={this.isProcessing}
+          >
+            <span className="provider-logo">{ssoProviderData.icon}</span>
+            {this.props.t(`Sign in with {{providerName}}`, { providerName: ssoProviderData.name })}
           </button>
           <button className="link" type="button" onClick={this.handleSwitchToPassphrase}>
             <Trans>Sign in with my passphrase.</Trans>
@@ -171,4 +172,4 @@ SsoLogin.propTypes = {
   ssoProvider: PropTypes.object, // The SSO provider if any
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withTranslation('common')(SsoLogin));
+export default withAppContext(withTranslation("common")(SsoLogin));

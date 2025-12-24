@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 class InsertFileIframe extends Component {
@@ -42,9 +42,7 @@ class InsertFileIframe extends Component {
    * @return {JSX}
    */
   render() {
-    return (
-      <iframe id="passbolt-iframe-file" ref={this.iframeRef} className="cachette"/>
-    );
+    return <iframe id="passbolt-iframe-file" ref={this.iframeRef} className="cachette" />;
   }
 }
 

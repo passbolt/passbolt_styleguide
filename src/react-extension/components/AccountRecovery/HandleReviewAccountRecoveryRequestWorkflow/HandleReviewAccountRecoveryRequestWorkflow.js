@@ -12,12 +12,12 @@
  * @since         3.6.0
  */
 import React from "react";
-import {withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withAccountRecovery } from "../../../contexts/AccountRecoveryUserContext";
 import ProvideAccountRecoveryOrganizationKey from "../../Administration/ProvideAccountRecoveryOrganizationKey/ProvideAccountRecoveryOrganizationKey";
 import ReviewAccountRecoveryRequest from "../ReviewAccountRecoveryRequest/ReviewAccountRecoveryRequest";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -63,9 +63,12 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
   async getAccountRecoveryRequest() {
     let accountRecoveryRequest = this.props.accountRecoveryRequest;
     if (!accountRecoveryRequest) {
-      accountRecoveryRequest = await this.props.context.port.request("passbolt.account-recovery.get-request", this.props.accountRecoveryRequestId);
+      accountRecoveryRequest = await this.props.context.port.request(
+        "passbolt.account-recovery.get-request",
+        this.props.accountRecoveryRequestId,
+      );
     }
-    this.setState({accountRecoveryRequest});
+    this.setState({ accountRecoveryRequest });
   }
 
   /**
@@ -89,7 +92,7 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
       onSubmit: this.reviewAccountRecoveryRequest,
     });
     this.setState({
-      currentOpenedDialog: dialogId
+      currentOpenedDialog: dialogId,
     });
   }
 
@@ -102,7 +105,7 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
       onSubmit: this.handleSave,
     });
     this.setState({
-      currentOpenedDialog: dialogId
+      currentOpenedDialog: dialogId,
     });
   }
 
@@ -119,8 +122,8 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    * @param {string} responseStatus The response status. Any of "approved" or "rejected".
    */
   reviewAccountRecoveryRequest(responseStatus) {
-    this.setState({responseStatus});
-    if (responseStatus !== 'approved') {
+    this.setState({ responseStatus });
+    if (responseStatus !== "approved") {
       this.handleSave();
     } else {
       this.displayProvideAccountRecoveryOrganizationKeyDialog();
@@ -133,8 +136,15 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    */
   async handleSave(privateGpgKeyDto) {
     try {
-      await this.props.context.port.request('passbolt.account-recovery.review-request', this.state.accountRecoveryRequest.id, this.state.responseStatus, privateGpgKeyDto);
-      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The account recovery review has been saved successfully"));
+      await this.props.context.port.request(
+        "passbolt.account-recovery.review-request",
+        this.state.accountRecoveryRequest.id,
+        this.state.responseStatus,
+        privateGpgKeyDto,
+      );
+      await this.props.actionFeedbackContext.displaySuccess(
+        this.props.t("The account recovery review has been saved successfully"),
+      );
       this.props.onStop();
     } catch (e) {
       if (e.name === "UserAbortsOperationError") {
@@ -152,7 +162,7 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    */
   async handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
     this.props.onStop();
@@ -177,21 +187,29 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
  */
 const requiredAccountRecoveryProp = (props, propName, componentName) => {
   if (!props.accountRecoveryRequestId && !props.accountRecoveryRequest) {
-    return new Error(`One of 'accountRecoveryRequestId' or 'accountRecoveryRequest' is required by '${componentName}' component.`);
+    return new Error(
+      `One of 'accountRecoveryRequestId' or 'accountRecoveryRequest' is required by '${componentName}' component.`,
+    );
   }
   if (props.accountRecoveryRequestId) {
-    PropTypes.checkPropTypes({
-      accountRecoveryRequestId: PropTypes.string,
-    }, props,
-    propName,
-    componentName);
+    PropTypes.checkPropTypes(
+      {
+        accountRecoveryRequestId: PropTypes.string,
+      },
+      props,
+      propName,
+      componentName,
+    );
   }
   if (props.accountRecoveryRequest) {
-    PropTypes.checkPropTypes({
-      accountRecoveryRequestId: PropTypes.object,
-    }, props,
-    propName,
-    componentName);
+    PropTypes.checkPropTypes(
+      {
+        accountRecoveryRequestId: PropTypes.object,
+      },
+      props,
+      propName,
+      componentName,
+    );
   }
 };
 
@@ -203,7 +221,11 @@ HandleReviewAccountRecoveryRequestWorkflow.propTypes = {
   context: PropTypes.object, // the app context
   accountRecoveryRequestId: requiredAccountRecoveryProp, // The account recovery request id
   accountRecoveryRequest: requiredAccountRecoveryProp, // The account recovery request
-  t: PropTypes.func // the translation function
+  t: PropTypes.func, // the translation function
 };
 
-export default withAppContext(withAccountRecovery(withDialog(withActionFeedback(withTranslation("common")(HandleReviewAccountRecoveryRequestWorkflow)))));
+export default withAppContext(
+  withAccountRecovery(
+    withDialog(withActionFeedback(withTranslation("common")(HandleReviewAccountRecoveryRequestWorkflow))),
+  ),
+);

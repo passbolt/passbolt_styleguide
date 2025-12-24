@@ -14,20 +14,20 @@
 import React from "react";
 import LinkSVG from "../../../../img/svg/link.svg";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
+import { withAccountRecovery } from "../../../contexts/AccountRecoveryUserContext";
 import DisplayUserDetailsInformation from "../DisplayUserDetailsInformation/DisplayUserDetailsInformation";
 import DisplayUserDetailsGroups from "../DisplayUserDetailsGroups/DisplayUserDetailsGroups";
 import DisplayUserDetailsPublicKey from "../DisplayUserDetailsPublicKey/DisplayUserDetailsPublicKey";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {withTranslation, Trans} from "react-i18next";
+import { withTranslation, Trans } from "react-i18next";
 import DisplayUserDetailsAccountRecovery from "../DisplayUserDetailsAccountRecovery/DisplayUserDetailsAccountRecovery";
-import {isUserSuspended} from "../../../../shared/utils/userUtils";
-import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
-import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import { isUserSuspended } from "../../../../shared/utils/userUtils";
+import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
 
 class DisplayUserDetails extends React.Component {
   /**
@@ -94,7 +94,7 @@ class DisplayUserDetails extends React.Component {
    * @returns {boolean}
    */
   isLoggedInUserAdmin() {
-    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === "admin";
   }
 
   /**
@@ -102,8 +102,10 @@ class DisplayUserDetails extends React.Component {
    * @return {boolean}
    */
   canSeeAccountRecoveryDetails() {
-    return this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_INDEX)
-      && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE);
+    return (
+      this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_INDEX) &&
+      this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE)
+    );
   }
 
   /**
@@ -118,7 +120,7 @@ class DisplayUserDetails extends React.Component {
    * @returns {boolean}
    */
   hasUserIsMissingKeys() {
-    if (this.isLoggedInUserAdmin() && Boolean(this.props.context.siteSettings?.canIUse('metadata'))) {
+    if (this.isLoggedInUserAdmin() && Boolean(this.props.context.siteSettings?.canIUse("metadata"))) {
       return this.user.missing_metadata_key_ids?.length > 0;
     }
     return false;
@@ -129,7 +131,10 @@ class DisplayUserDetails extends React.Component {
    * @returns {boolean}
    */
   get hasAttentionRequired() {
-    return (this.isAccountRecoveryEnabled() && Boolean(this.user.pending_account_recovery_request)) || this.hasUserIsMissingKeys();
+    return (
+      (this.isAccountRecoveryEnabled() && Boolean(this.user.pending_account_recovery_request)) ||
+      this.hasUserIsMissingKeys()
+    );
   }
 
   /**
@@ -137,7 +142,7 @@ class DisplayUserDetails extends React.Component {
    * @returns {boolean}
    */
   get isUserSuspended() {
-    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(this.user);
+    return this.props.context.siteSettings.canIUse("disableUser") && isUserSuspended(this.user);
   }
 
   /**
@@ -155,12 +160,11 @@ class DisplayUserDetails extends React.Component {
   render() {
     return (
       <div className="sidebar user">
-        <div className={`sidebar-header ${this.isUserInactive ? "inactive" : ""} ${this.isUserSuspended ? "suspended" : ""}`}>
+        <div
+          className={`sidebar-header ${this.isUserInactive ? "inactive" : ""} ${this.isUserSuspended ? "suspended" : ""}`}
+        >
           <div className="teaser-image">
-            <UserAvatar
-              user={this.user}
-              baseUrl={this.baseUrl}
-              attentionRequired={this.hasAttentionRequired}/>
+            <UserAvatar user={this.user} baseUrl={this.baseUrl} attentionRequired={this.hasAttentionRequired} />
           </div>
           <div className="title-area">
             <h3>
@@ -169,17 +173,26 @@ class DisplayUserDetails extends React.Component {
               </div>
               <span className="subtitle">{this.user.username}</span>
             </h3>
-            <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this user")} onClick={this.handlePermalinkClick}>
-              <LinkSVG/>
-              <span className="visuallyhidden"><Trans>Copy the link to this user</Trans></span>
+            <button
+              type="button"
+              className="title-link link no-border"
+              title={this.translate("Copy the link to this user")}
+              onClick={this.handlePermalinkClick}
+            >
+              <LinkSVG />
+              <span className="visuallyhidden">
+                <Trans>Copy the link to this user</Trans>
+              </span>
             </button>
           </div>
         </div>
         <div className="sidebar-content">
-          <DisplayUserDetailsInformation/>
-          {this.user.active && <DisplayUserDetailsGroups/>}
-          {this.user.active && <DisplayUserDetailsPublicKey/>}
-          {this.isAccountRecoveryEnabled() && this.user.active && this.canSeeAccountRecoveryDetails() && <DisplayUserDetailsAccountRecovery/>}
+          <DisplayUserDetailsInformation />
+          {this.user.active && <DisplayUserDetailsGroups />}
+          {this.user.active && <DisplayUserDetailsPublicKey />}
+          {this.isAccountRecoveryEnabled() && this.user.active && this.canSeeAccountRecoveryDetails() && (
+            <DisplayUserDetailsAccountRecovery />
+          )}
         </div>
       </div>
     );
@@ -196,4 +209,8 @@ DisplayUserDetails.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withAccountRecovery(withRbac(withUserWorkspace(withActionFeedback(withClipboard(withTranslation('common')(DisplayUserDetails)))))));
+export default withAppContext(
+  withAccountRecovery(
+    withRbac(withUserWorkspace(withActionFeedback(withClipboard(withTranslation("common")(DisplayUserDetails))))),
+  ),
+);

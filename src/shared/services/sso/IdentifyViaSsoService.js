@@ -14,7 +14,7 @@
 
 import GetRecoverUrlService from "../api/sso/GetRecoverUrlService";
 import GetUrlForSsoIdentificationService from "../api/sso/GetUrlForSsoIdentificationService";
-import SsoPopupHandlerService, {AUTHENTICATION_SUCCESS_CASES} from "./SsoPopupHandlerService";
+import SsoPopupHandlerService, { AUTHENTICATION_SUCCESS_CASES } from "./SsoPopupHandlerService";
 
 /**
  * Handles the SSO login for the recover process.
@@ -31,7 +31,7 @@ class IdentifyViaSsoService {
     this.providerId = providerId;
     this.apiClientOptions = context.getApiClientOptions();
 
-    const siteDomain = context.trustedDomain.replace(/\/$/, '');
+    const siteDomain = context.trustedDomain.replace(/\/$/, "");
     this.getUrlForSsoIdentificationService = new GetUrlForSsoIdentificationService(context.getApiClientOptions());
     this.getRecoverUrlService = new GetRecoverUrlService(siteDomain, context.getApiClientOptions());
     this.ssoPopupHandler = new SsoPopupHandlerService(siteDomain, providerId);
@@ -65,4 +65,3 @@ class IdentifyViaSsoService {
 }
 
 export default IdentifyViaSsoService;
-

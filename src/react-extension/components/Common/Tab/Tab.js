@@ -45,7 +45,7 @@ class Tab extends React.Component {
 
   render() {
     return (
-      <li className={`tab ${this.props.isActive ? 'active' : ''}`}>
+      <li className={`tab ${this.props.isActive ? "active" : ""}`}>
         <button type="button" className="tab-link" onClick={this.handleClick}>
           {this.props.name}
         </button>
@@ -59,7 +59,7 @@ Tab.propTypes = {
   type: PropTypes.string.isRequired, // The tab type
   isActive: PropTypes.bool, // The current tab is active
   onClick: PropTypes.func, // The click event callback
-  children: PropTypes.any // The childrent content of the tab
+  children: PropTypes.any, // The childrent content of the tab
 };
 
 export default Tab;

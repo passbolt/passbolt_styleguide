@@ -13,16 +13,16 @@
  */
 import React from "react";
 import FilterResourcesByFoldersItem from "./FilterResourcesByFoldersItem";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withRouter} from "react-router-dom";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withRouter } from "react-router-dom";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import FilterResourcesByRootFolderContextualMenu from "./FilterResourcesByRootFolderContextualMenu";
-import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
+import { withContextualMenu } from "../../../contexts/ContextualMenuContext";
 import PropTypes from "prop-types";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import ReactList from "react-list";
-import {Trans, withTranslation} from "react-i18next";
-import {withDrag} from "../../../contexts/DragContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withDrag } from "../../../contexts/DragContext";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
@@ -55,7 +55,7 @@ class FilterResourcesByFolders extends React.Component {
       draggingOverTitleSince: null,
       open: true,
       moreMenuOpen: false,
-      folderIdsOpened: []
+      folderIdsOpened: [],
     };
   }
 
@@ -111,9 +111,9 @@ class FilterResourcesByFolders extends React.Component {
    */
   handleFolderScroll(folders) {
     const folderToScroll = this.props.resourceWorkspaceContext.scrollTo.folder;
-    const hasNotEmptyRange = this.folderTreeRef.current?.getVisibleRange().some(value => value);
+    const hasNotEmptyRange = this.folderTreeRef.current?.getVisibleRange().some((value) => value);
     if (folderToScroll && hasNotEmptyRange) {
-      this.scrollTo(folders,  this.props.match.params.filterByFolderId);
+      this.scrollTo(folders, this.props.match.params.filterByFolderId);
       this.props.resourceWorkspaceContext.onFolderScrolled();
     }
   }
@@ -124,7 +124,7 @@ class FilterResourcesByFolders extends React.Component {
    * @param {string} folderId
    */
   scrollTo(folders, folderId) {
-    const folderIndex = folders.findIndex(folder => folder.id === folderId);
+    const folderIndex = folders.findIndex((folder) => folder.id === folderId);
     const [visibleStartIndex, visibleEndIndex] = this.folderTreeRef.current.getVisibleRange();
     const isInvisible = folderIndex < visibleStartIndex || folderIndex > visibleEndIndex;
     if (isInvisible) {
@@ -163,16 +163,18 @@ class FilterResourcesByFolders extends React.Component {
     // Store each array of folders by depth rang into an object with parent id as a key and an array of folders as value (example: root folder 0, subfolder 1, ...)
     const foldersByParentIdOrderedByDepth = [{}];
     // Loop through each folder form the context and set the foldersByParentIdOrderedByDepth
-    folders?.forEach(folder => {
+    folders?.forEach((folder) => {
       if (folder.folder_parent_id === ROOT) {
         // Initialize or get the depth 0 of root folders to display
-        (foldersByParentIdOrderedByDepth[0][folder.folder_parent_id] = foldersByParentIdOrderedByDepth[0][folder.folder_parent_id] || []).push(folder);
+        (foldersByParentIdOrderedByDepth[0][folder.folder_parent_id] =
+          foldersByParentIdOrderedByDepth[0][folder.folder_parent_id] || []).push(folder);
       } else if (folderIdsOpened.includes(folder.folder_parent_id)) {
         const depth = this.props.context.getHierarchyFolderCache(folder.id).length;
         // Initialize or get the depth of folders to display
         foldersByParentIdOrderedByDepth[depth] = foldersByParentIdOrderedByDepth[depth] || {};
         // Initialize or get the subfolders of a parent to display and add the folder
-        (foldersByParentIdOrderedByDepth[depth][folder.folder_parent_id] = foldersByParentIdOrderedByDepth[depth][folder.folder_parent_id] || []).push(folder);
+        (foldersByParentIdOrderedByDepth[depth][folder.folder_parent_id] =
+          foldersByParentIdOrderedByDepth[depth][folder.folder_parent_id] || []).push(folder);
       }
     });
     return foldersByParentIdOrderedByDepth;
@@ -187,11 +189,11 @@ class FilterResourcesByFolders extends React.Component {
     // The folders array to display
     const foldersToDisplay = [];
     // Loop through each depth corresponding of the order of the array
-    foldersByParentIdOrderedByDepth?.forEach(foldersByParent => {
+    foldersByParentIdOrderedByDepth?.forEach((foldersByParent) => {
       // Get the key (folder parent id) and the value (array of folders)
       for (const [key, value] of Object.entries(foldersByParent)) {
         // Get the index of the folder parent id
-        const folderParentIndex = foldersToDisplay.findIndex(folder => folder.id === key);
+        const folderParentIndex = foldersToDisplay.findIndex((folder) => folder.id === key);
         // Sort folders alphabetically
         this.sortFoldersAlphabetically(value);
         // Insert folders into the right position
@@ -207,33 +209,33 @@ class FilterResourcesByFolders extends React.Component {
    */
   addParentFolderIdsToBeOpen(folderId) {
     const folderIdsOpened = [...this.state.folderIdsOpened];
-    const selectedFolder = this.props.context.folders?.find(folder => folder.id === folderId);
+    const selectedFolder = this.props.context.folders?.find((folder) => folder.id === folderId);
     // If the selected folder has a parent. Open it if not yet open.
     let folderParentId = selectedFolder?.folder_parent_id;
     // loop until folder parent id is null
     while (folderParentId) {
-      const parentFolder = this.props.context.folders.find(folder => folder.id === folderParentId);
+      const parentFolder = this.props.context.folders.find((folder) => folder.id === folderParentId);
       if (!folderIdsOpened.includes(parentFolder.id)) {
         folderIdsOpened.push(parentFolder.id);
       }
       folderParentId = parentFolder.folder_parent_id;
     }
-    this.setState({folderIdsOpened});
+    this.setState({ folderIdsOpened });
   }
 
   /**
    * Close the create menu
    */
   handleCloseMoreMenu() {
-    this.setState({moreMenuOpen: false});
+    this.setState({ moreMenuOpen: false });
   }
 
   /**
    * Handle when the user clicks on the section title.
    */
   handleClickOnTitle() {
-    const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
-    this.props.history.push(`/app/passwords`, {filter});
+    const filter = { type: ResourceWorkspaceFilterTypes.ROOT_FOLDER };
+    this.props.history.push(`/app/passwords`, { filter });
   }
 
   /**
@@ -253,7 +255,7 @@ class FilterResourcesByFolders extends React.Component {
 
     const top = event.pageY;
     const left = event.pageX;
-    const contextualMenuProps = {left, top};
+    const contextualMenuProps = { left, top };
     this.props.contextualMenuContext.show(FilterResourcesByRootFolderContextualMenu, contextualMenuProps);
   }
 
@@ -263,11 +265,11 @@ class FilterResourcesByFolders extends React.Component {
    */
   handleTitleMoreClickEvent(event) {
     const moreMenuOpen = !this.state.moreMenuOpen;
-    this.setState({moreMenuOpen});
+    this.setState({ moreMenuOpen });
     if (moreMenuOpen) {
-      const {left, top} = event.currentTarget.getBoundingClientRect();
+      const { left, top } = event.currentTarget.getBoundingClientRect();
       const onBeforeHide = this.handleCloseMoreMenu;
-      const contextualMenuProps = {left, top: top + 19, className: "right", onBeforeHide};
+      const contextualMenuProps = { left, top: top + 19, className: "right", onBeforeHide };
       this.props.contextualMenuContext.show(FilterResourcesByRootFolderContextualMenu, contextualMenuProps);
     }
   }
@@ -280,7 +282,7 @@ class FilterResourcesByFolders extends React.Component {
   handleToggleOpenFolder(folderId) {
     if (!this.state.folderIdsOpened.includes(folderId)) {
       const folderIdsOpened = [...this.state.folderIdsOpened, folderId];
-      this.setState({folderIdsOpened});
+      this.setState({ folderIdsOpened });
     }
   }
 
@@ -291,13 +293,13 @@ class FilterResourcesByFolders extends React.Component {
    */
   handleToggleCloseFolder(folderId) {
     const foldersToClose = [folderId];
-    this.props.context.folders.forEach(folder => {
+    this.props.context.folders.forEach((folder) => {
       if (foldersToClose.includes(folder.folder_parent_id)) {
         foldersToClose.push(folder.id);
       }
     });
-    const folderIdsOpened = this.state.folderIdsOpened.filter(folderId => !foldersToClose.includes(folderId));
-    this.setState({folderIdsOpened});
+    const folderIdsOpened = this.state.folderIdsOpened.filter((folderId) => !foldersToClose.includes(folderId));
+    this.setState({ folderIdsOpened });
   }
 
   /**
@@ -308,7 +310,7 @@ class FilterResourcesByFolders extends React.Component {
     // Stop propagation to not continue the event and select the root folder
     event?.stopPropagation();
     const open = !this.state.open;
-    this.setState({open});
+    this.setState({ open });
   }
 
   /**
@@ -317,7 +319,7 @@ class FilterResourcesByFolders extends React.Component {
   handleDragLeaveTitle() {
     const draggingOverTitle = false;
     const draggingOverTitleSince = null;
-    this.setState({draggingOverTitle, draggingOverTitleSince});
+    this.setState({ draggingOverTitle, draggingOverTitleSince });
   }
 
   /**
@@ -337,7 +339,7 @@ class FilterResourcesByFolders extends React.Component {
     }
     const draggingOverTitle = true;
     const draggingOverTitleSince = Date.now();
-    this.setState({draggingOverTitle, draggingOverTitleSince});
+    this.setState({ draggingOverTitle, draggingOverTitleSince });
   }
 
   /**
@@ -360,8 +362,8 @@ class FilterResourcesByFolders extends React.Component {
    * Handle when the user is dropping the content on the title.
    */
   handleDropTitle() {
-    const folders = this.props.dragContext.draggedItems.folders.map(folder => folder.id);
-    const resources = this.props.dragContext.draggedItems.resources.map(resource => resource.id);
+    const folders = this.props.dragContext.draggedItems.folders.map((folder) => folder.id);
+    const resources = this.props.dragContext.draggedItems.resources.map((resource) => resource.id);
     if (folders?.length > 0) {
       this.props.context.port.request("passbolt.folders.move-by-id", folders[0], null);
     } else if (resources?.length > 0) {
@@ -370,7 +372,7 @@ class FilterResourcesByFolders extends React.Component {
 
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
     const draggingOverTitle = false;
-    this.setState({draggingOverTitle});
+    this.setState({ draggingOverTitle });
   }
 
   /**
@@ -383,7 +385,7 @@ class FilterResourcesByFolders extends React.Component {
       return true;
     }
 
-    const folderParent = this.props.context.folders.find(folder => folder.id === item.folder_parent_id);
+    const folderParent = this.props.context.folders.find((folder) => folder.id === item.folder_parent_id);
 
     // The user can always drag content from a personal folder.
     if (folderParent.personal) {
@@ -413,7 +415,8 @@ class FilterResourcesByFolders extends React.Component {
     let canDragItems = draggedFolders.reduce((accumulator, folder) => accumulator && this.canDragItem(folder), true);
 
     const draggedResources = draggedItems.resources;
-    canDragItems = canDragItems && draggedResources.reduce((accumulator, folder) => accumulator && this.canDragItem(folder), true);
+    canDragItems =
+      canDragItems && draggedResources.reduce((accumulator, folder) => accumulator && this.canDragItem(folder), true);
 
     return canDragItems;
   }
@@ -431,10 +434,12 @@ class FilterResourcesByFolders extends React.Component {
    * @param {array} folders The list of folders to sort
    */
   sortFoldersAlphabetically(folders) {
-    folders.sort((folderA, folderB) => folderA.name.localeCompare(folderB.name, this.props.context.locale, {
-      numeric: true, // Sort numeric values
-      caseFirst: "upper"  // Uppercase letters sort before lowercase
-    }));
+    folders.sort((folderA, folderB) =>
+      folderA.name.localeCompare(folderB.name, this.props.context.locale, {
+        numeric: true, // Sort numeric values
+        caseFirst: "upper", // Uppercase letters sort before lowercase
+      }),
+    );
   }
 
   /**
@@ -460,7 +465,11 @@ class FilterResourcesByFolders extends React.Component {
    * @return {JSX.Element}
    */
   renderFolderTree(items, ref) {
-    return <ul ref={ref} className="folders-tree">{items}</ul>;
+    return (
+      <ul ref={ref} className="folders-tree">
+        {items}
+      </ul>
+    );
   }
 
   /**
@@ -474,13 +483,15 @@ class FilterResourcesByFolders extends React.Component {
     const item = folders[index];
     const isOpen = this.state.folderIdsOpened.includes(item.id);
 
-    return <FilterResourcesByFoldersItem
-      key={item.id}
-      folder={item}
-      isOpen={isOpen}
-      toggleOpenFolder={this.handleToggleOpenFolder}
-      toggleCloseFolder={this.handleToggleCloseFolder}
-    />;
+    return (
+      <FilterResourcesByFoldersItem
+        key={item.id}
+        folder={item}
+        isOpen={isOpen}
+        toggleOpenFolder={this.handleToggleOpenFolder}
+        toggleCloseFolder={this.handleToggleCloseFolder}
+      />
+    );
   }
 
   /**
@@ -514,22 +525,27 @@ class FilterResourcesByFolders extends React.Component {
       <div className="navigation-secondary-tree navigation-secondary navigation-folders accordion">
         <div className="accordion-header">
           <div className={`${isOpen ? "open" : "close"} node root`}>
-            <div className={`row title ${this.isSelected ? "selected" : ""} ${showDropFocus ? "drop-focus" : ""} ${disabled ? "disabled" : ""} ${this.state.moreMenuOpen ? "highlight" : ""}`}>
+            <div
+              className={`row title ${this.isSelected ? "selected" : ""} ${showDropFocus ? "drop-focus" : ""} ${disabled ? "disabled" : ""} ${this.state.moreMenuOpen ? "highlight" : ""}`}
+            >
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <h3>
                     <span className="folders-label">
-                      <button type="button" className="link no-border"
+                      <button
+                        type="button"
+                        className="link no-border"
                         onDragOver={this.handleDragOverTitle}
                         onDragLeave={this.handleDragLeaveTitle}
                         onDrop={this.handleDropTitle}
                         onClick={this.handleClickOnTitle}
-                        onContextMenu={this.handleTitleContextualMenuEvent}>
-                        <div className="toggle-folder" onClick={event => this.handleSectionTitleClickCaretEvent(event)}>
-                          {isOpen
-                            ? <CaretDownSVG />
-                            : <CaretRightSVG />
-                          }
+                        onContextMenu={this.handleTitleContextualMenuEvent}
+                      >
+                        <div
+                          className="toggle-folder"
+                          onClick={(event) => this.handleSectionTitleClickCaretEvent(event)}
+                        >
+                          {isOpen ? <CaretDownSVG /> : <CaretRightSVG />}
                         </div>
                         <CabinetSVG />
                         <Trans>My workspace</Trans>
@@ -539,7 +555,11 @@ class FilterResourcesByFolders extends React.Component {
                 </div>
               </div>
               <div className="dropdown right-cell more-ctrl">
-                <button type="button" className={`button-transparent inline-menu-horizontal ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}>
+                <button
+                  type="button"
+                  className={`button-transparent inline-menu-horizontal ${this.state.moreMenuOpen ? "open" : ""}`}
+                  onClick={this.handleTitleMoreClickEvent}
+                >
                   <MoreHorizontalSVG />
                 </button>
               </div>
@@ -547,16 +567,20 @@ class FilterResourcesByFolders extends React.Component {
           </div>
         </div>
         <div className="accordion-content">
-          {isLoading &&
+          {isLoading && (
             <div className="processing-wrapper">
-              <SpinnerSVG/>
-              <span className="processing-text"><Trans>Retrieving folders</Trans></span>
+              <SpinnerSVG />
+              <span className="processing-text">
+                <Trans>Retrieving folders</Trans>
+              </span>
             </div>
-          }
-          {!isLoading && isOpen && folders.length === 0 &&
-            <em className="empty-content"><Trans>empty</Trans></em>
-          }
-          {!isLoading && isOpen && folders.length > 0 &&
+          )}
+          {!isLoading && isOpen && folders.length === 0 && (
+            <em className="empty-content">
+              <Trans>empty</Trans>
+            </em>
+          )}
+          {!isLoading && isOpen && folders.length > 0 && (
             <ReactList
               itemRenderer={(index, key) => this.renderItem(index, key, folders)}
               itemsRenderer={(items, ref) => this.renderFolderTree(items, ref)}
@@ -565,9 +589,9 @@ class FilterResourcesByFolders extends React.Component {
               minSize={30}
               type="uniform"
               usePosition={true}
-              ref={this.folderTreeRef}>
-            </ReactList>
-          }
+              ref={this.folderTreeRef}
+            ></ReactList>
+          )}
         </div>
       </div>
     );
@@ -584,4 +608,10 @@ FilterResourcesByFolders.propTypes = {
   dragContext: PropTypes.any,
 };
 
-export default withRouter(withDialog(withContextualMenu(withResourceWorkspace(withAppContext(withDrag(withTranslation("common")(FilterResourcesByFolders)))))));
+export default withRouter(
+  withDialog(
+    withContextualMenu(
+      withResourceWorkspace(withAppContext(withDrag(withTranslation("common")(FilterResourcesByFolders)))),
+    ),
+  ),
+);

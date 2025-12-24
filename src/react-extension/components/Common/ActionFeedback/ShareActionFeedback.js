@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * Child component that displays a single action feedback
@@ -44,7 +44,7 @@ class ShareActionFeedback extends React.Component {
     return {
       shouldRender: true, // Flag telling whether the component must be rendered
       isPersisted: false, // Flag telling whether the feedback must be continually displayed ( except manual close )
-      timeoutId: null // The identifier of timeout use for the fading animation
+      timeoutId: null, // The identifier of timeout use for the fading animation
     };
   }
 
@@ -61,9 +61,10 @@ class ShareActionFeedback extends React.Component {
    */
   componentDidUpdate(previousProps) {
     const hasFeedbackChanged = previousProps && previousProps.feedback.id !== this.props.feedback.id;
-    const hasDisplayTimeChanged = previousProps && this.props.displayTimeInMs && previousProps.displayTimeInMs !== this.props.displayTimeInMs;
+    const hasDisplayTimeChanged =
+      previousProps && this.props.displayTimeInMs && previousProps.displayTimeInMs !== this.props.displayTimeInMs;
     if (hasFeedbackChanged) {
-      this.setState({shouldRender: true});
+      this.setState({ shouldRender: true });
       this.displayWithTimer(this.props.displayTimeInMs);
     } else if (hasDisplayTimeChanged) {
       this.updateTimer(this.props.displayTimeInMs);
@@ -98,7 +99,7 @@ class ShareActionFeedback extends React.Component {
     }
     const timeoutId = setTimeout(this.close, displayTimeInMs);
     const time = Date.now();
-    this.setState({timeoutId, time});
+    this.setState({ timeoutId, time });
   }
 
   /**
@@ -122,7 +123,7 @@ class ShareActionFeedback extends React.Component {
     const hasNotPersistedYet = this.state.timeoutId && !this.state.isPersisted;
     if (hasNotPersistedYet) {
       clearTimeout(this.state.timeoutId);
-      this.setState({isPersisted: true});
+      this.setState({ isPersisted: true });
     }
   }
 
@@ -130,7 +131,7 @@ class ShareActionFeedback extends React.Component {
    * Close the feedback
    */
   close() {
-    this.setState({shouldRender: false});
+    this.setState({ shouldRender: false });
     // To keep the hide animation
     setTimeout(this.props.onClose, ShareActionFeedback.DEFAULT_WAIT_TO_CLOSE_TIME_IN_MS);
   }
@@ -145,13 +146,28 @@ class ShareActionFeedback extends React.Component {
         className="notification"
         onMouseOver={this.persist}
         onMouseLeave={this.displayWithTimer}
-        onClick={this.close}>
-        <div className={`message animated ${this.state.shouldRender ? 'fadeInUp' : 'fadeOutUp'} ${this.props.feedback.type}`}>
+        onClick={this.close}
+      >
+        <div
+          className={`message animated ${this.state.shouldRender ? "fadeInUp" : "fadeOutUp"} ${this.props.feedback.type}`}
+        >
           <span className="content">
             <strong>
-              {this.props.feedback.type === "success" && <><Trans>Success</Trans>: </>}
-              {this.props.feedback.type === "error" && <><Trans>Error</Trans>: </>}
-              {this.props.feedback.type === "warning" && <><Trans>Warning</Trans>: </>}
+              {this.props.feedback.type === "success" && (
+                <>
+                  <Trans>Success</Trans>:{" "}
+                </>
+              )}
+              {this.props.feedback.type === "error" && (
+                <>
+                  <Trans>Error</Trans>:{" "}
+                </>
+              )}
+              {this.props.feedback.type === "warning" && (
+                <>
+                  <Trans>Warning</Trans>:{" "}
+                </>
+              )}
             </strong>
             {this.props.feedback.message}
           </span>

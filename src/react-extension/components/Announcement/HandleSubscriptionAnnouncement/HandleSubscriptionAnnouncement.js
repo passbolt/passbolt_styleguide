@@ -13,9 +13,9 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withAnnouncement} from "../../../contexts/AnnouncementContext";
-import {DateTime} from "luxon";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withAnnouncement } from "../../../contexts/AnnouncementContext";
+import { DateTime } from "luxon";
 import DisplayGoingToExpireSubscriptionAnnouncement from "./DisplayGoingToExpireSubscriptionAnnouncement";
 import DisplayExpiredSubscriptionAnnouncement from "./DisplayExpiredSubscriptionAnnouncement";
 import DisplayInvalidSubscriptionAnnouncement from "./DisplayInvalidSubscriptionAnnouncement";
@@ -59,10 +59,11 @@ class HandleSubscriptionAnnouncement extends React.Component {
    * @returns {Promise<void>}
    */
   async handleRefreshSubscriptionAnnouncement(previousRefreshSubscriptionAnnouncement) {
-    const refreshSubscriptionAnnouncementHasChanged = this.props.context.refreshSubscriptionAnnouncement !== previousRefreshSubscriptionAnnouncement;
+    const refreshSubscriptionAnnouncementHasChanged =
+      this.props.context.refreshSubscriptionAnnouncement !== previousRefreshSubscriptionAnnouncement;
     if (refreshSubscriptionAnnouncementHasChanged && this.props.context.refreshSubscriptionAnnouncement) {
       await this.handleAnnouncementSubscriptionEvent();
-      this.props.context.setContext({refreshSubscriptionAnnouncement: null});
+      this.props.context.setContext({ refreshSubscriptionAnnouncement: null });
     }
   }
 
@@ -74,7 +75,9 @@ class HandleSubscriptionAnnouncement extends React.Component {
     try {
       const subscription = await this.props.context.onGetSubscriptionKeyRequested();
       if (this.isSubscriptionGoingToExpire(subscription.expiry)) {
-        this.props.announcementContext.show(DisplayGoingToExpireSubscriptionAnnouncement, {expiry: subscription.expiry});
+        this.props.announcementContext.show(DisplayGoingToExpireSubscriptionAnnouncement, {
+          expiry: subscription.expiry,
+        });
       }
     } catch (error) {
       if (error.name === "PassboltSubscriptionError") {
@@ -92,10 +95,14 @@ class HandleSubscriptionAnnouncement extends React.Component {
     const subscriptionAnnouncements = [
       DisplayGoingToExpireSubscriptionAnnouncement,
       DisplayExpiredSubscriptionAnnouncement,
-      DisplayInvalidSubscriptionAnnouncement
+      DisplayInvalidSubscriptionAnnouncement,
     ];
-    this.props.announcementContext.announcements.forEach(annoucement => {
-      if (subscriptionAnnouncements.some(subscriptionAnnoucement => subscriptionAnnoucement === annoucement.Announcement)) {
+    this.props.announcementContext.announcements.forEach((annoucement) => {
+      if (
+        subscriptionAnnouncements.some(
+          (subscriptionAnnoucement) => subscriptionAnnoucement === annoucement.Announcement,
+        )
+      ) {
         this.props.announcementContext.close(annoucement.key);
       }
     });
@@ -107,7 +114,7 @@ class HandleSubscriptionAnnouncement extends React.Component {
    * @returns {boolean}
    */
   isSubscriptionGoingToExpire(expiryDate) {
-    return DateTime.fromISO(expiryDate) < DateTime.now().plus({days: 30});
+    return DateTime.fromISO(expiryDate) < DateTime.now().plus({ days: 30 });
   }
 
   /**

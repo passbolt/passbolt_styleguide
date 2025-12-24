@@ -12,7 +12,7 @@
  * @since         4.2.0
  */
 
-import ColumnModel, {ColumnFields, ColumnModelTypes} from "./ColumnModel";
+import ColumnModel, { ColumnFields, ColumnModelTypes } from "./ColumnModel";
 
 /**
  * Model related to the column modified use only with the UI
@@ -35,4 +35,3 @@ class ColumnModifiedModel extends ColumnModel {
 }
 
 export default ColumnModifiedModel;
-

@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.2.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import ChangeLocale from "./ChangeLocale";
-import {ApiRecoverContextState, withApiRecoverContext} from "../../../contexts/ApiRecoverContext";
+import { ApiRecoverContextState, withApiRecoverContext } from "../../../contexts/ApiRecoverContext";
 
 /**
  * This component allows the user to change the locale for the authentication workflows.
@@ -25,9 +25,7 @@ class ChangeApiRecoverLocale extends Component {
    * @returns {array}
    */
   get statesToHideLocaleSwitch() {
-    return [
-      ApiRecoverContextState.INITIAL_STATE,
-    ];
+    return [ApiRecoverContextState.INITIAL_STATE];
   }
 
   /**
@@ -42,11 +40,7 @@ class ChangeApiRecoverLocale extends Component {
    * Render the component
    */
   render() {
-    return (
-      <>
-        {this.mustDisplayLocaleSwitch && <ChangeLocale/>}
-      </>
-    );
+    return <>{this.mustDisplayLocaleSwitch && <ChangeLocale />}</>;
   }
 }
 

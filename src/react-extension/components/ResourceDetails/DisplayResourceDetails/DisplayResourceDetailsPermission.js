@@ -15,19 +15,19 @@ import React from "react";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
-import {isUserSuspended} from "../../../../shared/utils/userUtils";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
+import { isUserSuspended } from "../../../../shared/utils/userUtils";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import DisplayAroName from "../../../../shared/components/Aro/DisplayAroName";
 
 const PERMISSIONS_LABEL = {
-  1: 'can read',
-  7: 'can update',
-  15: 'is owner'
+  1: "can read",
+  7: "can update",
+  15: "is owner",
 };
 
 /**
@@ -106,9 +106,13 @@ class DisplayResourceDetailsPermission extends React.Component {
    * Get the folder permissions.
    */
   async fetch() {
-    this.setState({loading: true});
-    const permissions = await this.props.context.port.request('passbolt.permissions.find-aco-permissions-for-display', this.resource.id, "Resource");
-    this.setState({permissions, loading: false});
+    this.setState({ loading: true });
+    const permissions = await this.props.context.port.request(
+      "passbolt.permissions.find-aco-permissions-for-display",
+      this.resource.id,
+      "Resource",
+    );
+    this.setState({ permissions, loading: false });
   }
 
   /**
@@ -119,7 +123,7 @@ class DisplayResourceDetailsPermission extends React.Component {
     if (open) {
       this.fetch();
     }
-    this.setState({open});
+    this.setState({ open });
   }
 
   /**
@@ -136,7 +140,7 @@ class DisplayResourceDetailsPermission extends React.Component {
    * @returns {boolean}
    */
   isUserSuspended(user) {
-    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(user);
+    return this.props.context.siteSettings.canIUse("disableUser") && isUserSuspended(user);
   }
 
   /**
@@ -152,48 +156,61 @@ class DisplayResourceDetailsPermission extends React.Component {
               <span className="accordion-title">
                 <Trans>Shared with</Trans>
               </span>
-              {this.state.open &&
-                <CaretDownSVG/>
-              }
-              {!this.state.open &&
-                <CaretRightSVG/>
-              }
+              {this.state.open && <CaretDownSVG />}
+              {!this.state.open && <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open &&
+        {this.state.open && (
           <div className="accordion-content">
-            {this.isLoading() &&
+            {this.isLoading() && (
               <div className="processing-wrapper">
-                <SpinnerSVG/>
-                <span className="processing-text"><Trans>Retrieving permissions</Trans></span>
+                <SpinnerSVG />
+                <span className="processing-text">
+                  <Trans>Retrieving permissions</Trans>
+                </span>
               </div>
-            }
-            {!this.isLoading() &&
+            )}
+            {!this.isLoading() && (
               <>
-                {this.state.permissions && this.state.permissions.map(permission =>
-                  <div key={permission.id}
-                    className={`usercard-col-2 ${this.isUserSuspended(permission.user) ? "suspended" : ""}`}>
-                    {(permission.user || permission.aro === "User") &&
-                      <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
-                    }
-                    {(permission.group || permission.aro === "Group") &&
-                      <GroupAvatar group={permission.group}/>
-                    }
-                    <div className="content-wrapper">
-                      <div className="content">
-                        <div className="name">
-                          <DisplayAroName displayAs={permission.aro} group={permission.group} user={permission.user} withUsername={true}/>{this.isUserSuspended(permission.user) &&
-                          <span className="suspended"> <Trans>(suspended)</Trans></span>}</div>
-                        <div className="subinfo">{this.props.t(PERMISSIONS_LABEL[permission.type])}</div>
+                {this.state.permissions &&
+                  this.state.permissions.map((permission) => (
+                    <div
+                      key={permission.id}
+                      className={`usercard-col-2 ${this.isUserSuspended(permission.user) ? "suspended" : ""}`}
+                    >
+                      {(permission.user || permission.aro === "User") && (
+                        <UserAvatar
+                          user={permission.user}
+                          baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                        />
+                      )}
+                      {(permission.group || permission.aro === "Group") && <GroupAvatar group={permission.group} />}
+                      <div className="content-wrapper">
+                        <div className="content">
+                          <div className="name">
+                            <DisplayAroName
+                              displayAs={permission.aro}
+                              group={permission.group}
+                              user={permission.user}
+                              withUsername={true}
+                            />
+                            {this.isUserSuspended(permission.user) && (
+                              <span className="suspended">
+                                {" "}
+                                <Trans>(suspended)</Trans>
+                              </span>
+                            )}
+                          </div>
+                          <div className="subinfo">{this.props.t(PERMISSIONS_LABEL[permission.type])}</div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  ))}
               </>
-            }
+            )}
           </div>
-        }
+        )}
       </div>
     );
   }
@@ -205,4 +222,4 @@ DisplayResourceDetailsPermission.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsPermission)));
+export default withAppContext(withResourceWorkspace(withTranslation("common")(DisplayResourceDetailsPermission)));

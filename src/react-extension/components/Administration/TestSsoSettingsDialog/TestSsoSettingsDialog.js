@@ -13,17 +13,17 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {withAdminSso} from "../../../contexts/AdminSsoContext";
+import { withAdminSso } from "../../../contexts/AdminSsoContext";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 
 const uiStateEnum = {
   FORM: "form",
-  SUCCESS: "success"
+  SUCCESS: "success",
 };
 
 class TestSsoSettingsDialog extends React.Component {
@@ -67,12 +67,12 @@ class TestSsoSettingsDialog extends React.Component {
   async handleSignInTestClick(event) {
     event.preventDefault();
     try {
-      this.setState({processing: true});
-      const ssoToken = await this.props.context.port.request('passbolt.sso.dry-run', this.props.configurationId);
+      this.setState({ processing: true });
+      const ssoToken = await this.props.context.port.request("passbolt.sso.dry-run", this.props.configurationId);
       this.setState({
         uiState: uiStateEnum.SUCCESS,
         hasSuccessfullySignedInWithSso: true,
-        ssoToken: ssoToken
+        ssoToken: ssoToken,
       });
     } catch (e) {
       // The user might manually close the popup but other errors than this one are unexpected
@@ -80,7 +80,7 @@ class TestSsoSettingsDialog extends React.Component {
         this.props.adminSsoContext.handleError(e);
       }
     }
-    this.setState({processing: false});
+    this.setState({ processing: false });
   }
 
   /**
@@ -91,15 +91,21 @@ class TestSsoSettingsDialog extends React.Component {
   async handleActivateSsoSettings(event) {
     event.preventDefault();
     try {
-      this.setState({processing: true});
-      await this.props.context.port.request("passbolt.sso.activate-settings", this.props.configurationId, this.state.ssoToken);
+      this.setState({ processing: true });
+      await this.props.context.port.request(
+        "passbolt.sso.activate-settings",
+        this.props.configurationId,
+        this.state.ssoToken,
+      );
       await this.props.context.port.request("passbolt.sso.generate-sso-kit", this.props.provider.id);
       this.props.onSuccessfulSettingsActivation();
-      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The SSO settings have been saved successfully"));
+      await this.props.actionFeedbackContext.displaySuccess(
+        this.props.t("The SSO settings have been saved successfully"),
+      );
     } catch (e) {
       this.props.adminSsoContext.handleError(e);
     }
-    this.setState({processing: false});
+    this.setState({ processing: false });
     this.handleCloseDialog();
   }
 
@@ -153,28 +159,46 @@ class TestSsoSettingsDialog extends React.Component {
    */
   render() {
     return (
-      <DialogWrapper className='test-sso-settings-dialog sso-login-form' title={this.title}
-        onClose={this.handleCloseDialog} disabled={this.hasAllInputDisabled()}>
+      <DialogWrapper
+        className="test-sso-settings-dialog sso-login-form"
+        title={this.title}
+        onClose={this.handleCloseDialog}
+        disabled={this.hasAllInputDisabled()}
+      >
         <form onSubmit={this.handleActivateSsoSettings}>
           <div className="form-content">
-            {this.state.uiState === uiStateEnum.FORM &&
+            {this.state.uiState === uiStateEnum.FORM && (
               <>
-                <p><Trans>Before saving the settings, we need to test if the configuration is working.</Trans></p>
-                <button type="button" className={`sso-login-button ${this.props.provider.id}`} onClick={this.handleSignInTestClick} disabled={this.hasAllInputDisabled()} >
-                  <span className="provider-logo">
-                    {this.props.provider.icon}
-                  </span>
-                  {this.translate(`Sign in with {{providerName}}`, {providerName: this.props.provider.name})}
+                <p>
+                  <Trans>Before saving the settings, we need to test if the configuration is working.</Trans>
+                </p>
+                <button
+                  type="button"
+                  className={`sso-login-button ${this.props.provider.id}`}
+                  onClick={this.handleSignInTestClick}
+                  disabled={this.hasAllInputDisabled()}
+                >
+                  <span className="provider-logo">{this.props.provider.icon}</span>
+                  {this.translate(`Sign in with {{providerName}}`, { providerName: this.props.provider.name })}
                 </button>
               </>
-            }
-            {this.state.uiState === uiStateEnum.SUCCESS &&
-              <p>{this.translate(`You susccessfully signed in with your {{providerName}} account. You can safely save your configuration.`, {providerName: this.props.provider.name})}</p>
-            }
+            )}
+            {this.state.uiState === uiStateEnum.SUCCESS && (
+              <p>
+                {this.translate(
+                  `You susccessfully signed in with your {{providerName}} account. You can safely save your configuration.`,
+                  { providerName: this.props.provider.name },
+                )}
+              </p>
+            )}
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseDialog}/>
-            <FormSubmitButton disabled={!this.canSaveSettings()} processing={this.state.processing} value={this.translate("Save settings")}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseDialog} />
+            <FormSubmitButton
+              disabled={!this.canSaveSettings()}
+              processing={this.state.processing}
+              value={this.translate("Save settings")}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -194,4 +218,4 @@ TestSsoSettingsDialog.propTypes = {
   onSuccessfulSettingsActivation: PropTypes.func, // callback to notify when the settings hasve been activated successsfully
 };
 
-export default withAppContext(withAdminSso(withActionFeedback(withTranslation('common')(TestSsoSettingsDialog))));
+export default withAppContext(withAdminSso(withActionFeedback(withTranslation("common")(TestSsoSettingsDialog))));

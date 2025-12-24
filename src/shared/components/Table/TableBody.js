@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withTable} from "./Context/TableContext";
+import { withTable } from "./Context/TableContext";
 
 /**
  * This component represents a table body
@@ -28,7 +28,7 @@ class TableBody extends Component {
       MozUserSelect: "none",
       WebkitUserSelect: "none",
       msUserSelect: "none",
-      width: `${this.props.tableContext.tableWidth}px`
+      width: `${this.props.tableContext.tableWidth}px`,
     };
   }
 
@@ -39,9 +39,7 @@ class TableBody extends Component {
   render() {
     return (
       <table style={this.tableBodyStyle}>
-        <tbody ref={this.props.tableBodyRef}>
-          {this.props.items}
-        </tbody>
+        <tbody ref={this.props.tableBodyRef}>{this.props.items}</tbody>
       </table>
     );
   }
@@ -50,7 +48,7 @@ class TableBody extends Component {
 TableBody.propTypes = {
   tableContext: PropTypes.any, // The table context
   items: PropTypes.array.isRequired, // The items to display
-  tableBodyRef: PropTypes.any
+  tableBodyRef: PropTypes.any,
 };
 
 export default withTable(TableBody);

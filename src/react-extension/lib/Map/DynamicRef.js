@@ -25,7 +25,9 @@ const map = new Map();
  * set a new ref to map
  */
 function setRef(key) {
-  if (typeof key !== "string") { return console.warn(`useDynamicRefs: Cannot set ref without key`); }
+  if (typeof key !== "string") {
+    return console.warn(`useDynamicRefs: Cannot set ref without key`);
+  }
   const ref = React.createRef();
   map.set(key, ref);
   return ref;
@@ -35,7 +37,9 @@ function setRef(key) {
  * get input ref
  */
 function getRef(key) {
-  if (!key) { return console.warn(`useDynamicRefs: Cannot get ref without key`); }
+  if (!key) {
+    return console.warn(`useDynamicRefs: Cannot get ref without key`);
+  }
   return map.get(key);
 }
 
@@ -43,7 +47,7 @@ function getRef(key) {
  * return the dynamic object
  */
 function useDynamicRefs() {
-  return {getRef, setRef};
+  return { getRef, setRef };
 }
 
 export default useDynamicRefs;

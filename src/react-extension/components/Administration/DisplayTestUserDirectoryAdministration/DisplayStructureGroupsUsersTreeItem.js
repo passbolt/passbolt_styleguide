@@ -42,38 +42,36 @@ class DisplayStructureGroupsUsersTreeItem extends React.Component {
   render() {
     return (
       <ul key={this.node.id}>
-        {this.node.type === 'group' &&
-        <li className="group">
-          {this.node.group.name}
-          <ul>
-            {Object.values(this.node.group.users).map(node =>
-              <li className="user" key={node.id}>
-                {node.errors &&
-                <span className="error">{node.directory_name}</span>
-                }
-                {!node.errors &&
-                <span>{this.displayUserName(node.user)} <em>({node.user.username})</em></span>
-                }
-              </li>
-            )
-            }
-            {Object.values(this.node.group.groups).map(node => <DisplayStructureGroupsUsersTreeItem
-              key={`tree-${node.id}`}
-              node={node}
-            />)}
-          </ul>
-        </li>
-        }
-        {this.node.type === 'user' &&
-        <li className="user">
-          {this.node.errors &&
-          <span className="error">{this.node.directory_name}</span>
-          }
-          {!this.node.errors &&
-          <span>{this.displayUserName(this.node.user)} <em>({this.node.user.username})</em></span>
-          }
-        </li>
-        }
+        {this.node.type === "group" && (
+          <li className="group">
+            {this.node.group.name}
+            <ul>
+              {Object.values(this.node.group.users).map((node) => (
+                <li className="user" key={node.id}>
+                  {node.errors && <span className="error">{node.directory_name}</span>}
+                  {!node.errors && (
+                    <span>
+                      {this.displayUserName(node.user)} <em>({node.user.username})</em>
+                    </span>
+                  )}
+                </li>
+              ))}
+              {Object.values(this.node.group.groups).map((node) => (
+                <DisplayStructureGroupsUsersTreeItem key={`tree-${node.id}`} node={node} />
+              ))}
+            </ul>
+          </li>
+        )}
+        {this.node.type === "user" && (
+          <li className="user">
+            {this.node.errors && <span className="error">{this.node.directory_name}</span>}
+            {!this.node.errors && (
+              <span>
+                {this.displayUserName(this.node.user)} <em>({this.node.user.username})</em>
+              </span>
+            )}
+          </li>
+        )}
       </ul>
     );
   }

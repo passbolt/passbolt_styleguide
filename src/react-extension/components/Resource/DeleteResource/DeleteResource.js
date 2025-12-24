@@ -11,17 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * This component allows user to delete a tag of the resources
@@ -76,7 +76,9 @@ class DeleteResource extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been deleted successfully.", {count: this.resources.length}));
+    await this.props.actionFeedbackContext.displaySuccess(
+      this.translate("The resource has been deleted successfully.", { count: this.resources.length }),
+    );
     this.props.onClose();
   }
 
@@ -87,12 +89,12 @@ class DeleteResource extends Component {
   handleSaveError(error) {
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
+      this.setState({ processing: false });
     } else {
       // Unexpected error occurred.
       console.error(error);
       this.handleError(error);
-      this.setState({processing: false});
+      this.setState({ processing: false });
     }
   }
 
@@ -100,9 +102,9 @@ class DeleteResource extends Component {
    * Save the changes.
    */
   async delete() {
-    this.setState({processing: true});
+    this.setState({ processing: true });
     try {
-      const resourcesIds = this.resources.map(resource => resource.id);
+      const resourcesIds = this.resources.map((resource) => resource.id);
       await this.props.context.port.request("passbolt.resources.delete-all", resourcesIds);
       await this.handleSaveSuccess();
     } catch (error) {
@@ -116,7 +118,7 @@ class DeleteResource extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -148,31 +150,45 @@ class DeleteResource extends Component {
   render() {
     return (
       <DialogWrapper
-        title={this.translate("Delete resource?", {count: this.resources.length})}
+        title={this.translate("Delete resource?", { count: this.resources.length })}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
-        className="delete-password-dialog">
+        className="delete-password-dialog"
+      >
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            {!this.hasMultipleResources() &&
-            <>
+            {!this.hasMultipleResources() && (
+              <>
+                <p>
+                  <Trans>
+                    Are you sure you want to delete the resource{" "}
+                    <strong className="dialog-variable">{{ resourceName: this.resources[0].metadata.name }}</strong>?
+                  </Trans>
+                </p>
+                <p>
+                  <Trans>
+                    Once the resource is deleted, it will be removed permanently and will not be recoverable.
+                  </Trans>
+                </p>
+              </>
+            )}
+            {this.hasMultipleResources() && (
               <p>
                 <Trans>
-                  Are you sure you want to delete the resource <strong className="dialog-variable">{{resourceName: this.resources[0].metadata.name}}</strong>?
+                  Please confirm you really want to delete the resources. After clicking ok, the resources will be
+                  deleted permanently.
                 </Trans>
               </p>
-              <p><Trans>Once the resource is deleted, it will be removed permanently and will not be recoverable.</Trans></p>
-            </>
-            }
-            {this.hasMultipleResources() &&
-            <p>
-              <Trans>Please confirm you really want to delete the resources. After clicking ok, the resources will be deleted permanently.</Trans>
-            </p>
-            }
+            )}
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Delete")}
+              warning={true}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -190,4 +206,6 @@ DeleteResource.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(DeleteResource)))));
+export default withAppContext(
+  withResourceWorkspace(withActionFeedback(withDialog(withTranslation("common")(DeleteResource)))),
+);

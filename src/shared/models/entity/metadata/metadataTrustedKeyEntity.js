@@ -24,23 +24,20 @@ class MetadataTrustedKeyEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "fingerprint",
-        "signed"
-      ],
-      "properties": {
-        "fingerprint": {
-          "type": "string",
-          "pattern": /^[a-f0-9]{40}$/im,
-          "minLength": FINGERPRINT_MIN_LENGTH,
-          "maxLength": FINGERPRINT_MAX_LENGTH
+      type: "object",
+      required: ["fingerprint", "signed"],
+      properties: {
+        fingerprint: {
+          type: "string",
+          pattern: /^[a-f0-9]{40}$/im,
+          minLength: FINGERPRINT_MIN_LENGTH,
+          maxLength: FINGERPRINT_MAX_LENGTH,
         },
-        "signed": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
+        signed: {
+          type: "string",
+          format: "date-time",
+        },
+      },
     };
   }
 

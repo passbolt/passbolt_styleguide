@@ -14,10 +14,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import NotifyError from "../components/Common/Error/NotifyError/NotifyError";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
-import {withDialog} from "./DialogContext";
-import {withTranslation} from "react-i18next";
-import {withActionFeedback} from "./ActionFeedbackContext";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
+import { withDialog } from "./DialogContext";
+import { withTranslation } from "react-i18next";
+import { withActionFeedback } from "./ActionFeedbackContext";
 import SsoProviders from "../components/Administration/ManageSsoSettings/SsoProviders.data";
 import TestSsoSettingsDialog from "../components/Administration/TestSsoSettingsDialog/TestSsoSettingsDialog";
 import ConfirmDeleteSsoSettingsDialog from "../components/Administration/ConfirmDeleteSsoSettingsDialog/ConfirmDeleteSsoSettingsDialog";
@@ -118,7 +118,7 @@ export class AdminSsoContextProvider extends React.Component {
     try {
       ssoConfig = await this.props.context.port.request("passbolt.sso.get-current");
     } catch (error) {
-      this.props.dialogContext.open(NotifyError, {error});
+      this.props.dialogContext.open(NotifyError, { error });
       return;
     }
 
@@ -144,16 +144,16 @@ export class AdminSsoContextProvider extends React.Component {
     }
 
     switch (settings.provider) {
-      case (AzureSsoSettingsEntity.PROVIDER_ID): {
+      case AzureSsoSettingsEntity.PROVIDER_ID: {
         return AzureSsoSettingsViewModel.fromEntityDto(settings);
       }
-      case (GoogleSsoSettingsEntity.PROVIDER_ID): {
+      case GoogleSsoSettingsEntity.PROVIDER_ID: {
         return GoogleSsoSettingsViewModel.fromEntityDto(settings);
       }
-      case (OAuth2SsoSettingsEntity.PROVIDER_ID): {
+      case OAuth2SsoSettingsEntity.PROVIDER_ID: {
         return OAuth2SsoSettingsViewModel.fromEntityDto(settings);
       }
-      case (AdfsSsoSettingsEntity.PROVIDER_ID): {
+      case AdfsSsoSettingsEntity.PROVIDER_ID: {
         return AdfsSsoSettingsViewModel.fromEntityDto(settings);
       }
     }
@@ -199,9 +199,11 @@ export class AdminSsoContextProvider extends React.Component {
    * @returns {boolean}
    */
   hasFormChanged() {
-    return (this.state.originalConfig !== null && this.state.ssoConfig === null)
-      || (this.state.originalConfig === null && this.state.ssoConfig !== null)
-      || this.state.originalConfig?.isDataDifferent(this.state.ssoConfig);
+    return (
+      (this.state.originalConfig !== null && this.state.ssoConfig === null) ||
+      (this.state.originalConfig === null && this.state.ssoConfig !== null) ||
+      this.state.originalConfig?.isDataDifferent(this.state.ssoConfig)
+    );
   }
 
   /**
@@ -212,7 +214,7 @@ export class AdminSsoContextProvider extends React.Component {
   setValue(key, value) {
     const ssoConfig = this.state.ssoConfig.cloneWithMutation(key, value);
 
-    this.setState({ssoConfig}, () => {
+    this.setState({ ssoConfig }, () => {
       if (this.state.hasBeenValidated) {
         this.validateData();
       }
@@ -226,7 +228,7 @@ export class AdminSsoContextProvider extends React.Component {
     const cachedSsoConfig = this.state.cachedSsoConfig;
     cachedSsoConfig[this.state.ssoConfig.provider] = this.state.ssoConfig;
     const ssoConfig = null;
-    this.setState({ssoConfig, cachedSsoConfig});
+    this.setState({ ssoConfig, cachedSsoConfig });
   }
 
   /**
@@ -259,14 +261,17 @@ export class AdminSsoContextProvider extends React.Component {
       cachedSsoConfig[currentProviderConfig] = this.state.ssoConfig;
     }
 
-    this.setState({
-      ssoConfig: this.getCachedSsoConfigOrDefault(provider.id),
-      cachedSsoConfig,
-    }, () => {
-      if (this.state.hasBeenValidated) {
-        this.validateData();
-      }
-    });
+    this.setState(
+      {
+        ssoConfig: this.getCachedSsoConfigOrDefault(provider.id),
+        cachedSsoConfig,
+      },
+      () => {
+        if (this.state.hasBeenValidated) {
+          this.validateData();
+        }
+      },
+    );
   }
 
   /**
@@ -279,7 +284,7 @@ export class AdminSsoContextProvider extends React.Component {
       return this.state.cachedSsoConfig[providerId];
     }
 
-    const defaultProviderConfiguration = SsoProviders.find(provider => provider.id === providerId);
+    const defaultProviderConfiguration = SsoProviders.find((provider) => provider.id === providerId);
     const entityDto = {
       id: this.state.ssoConfig?.id,
       provider: providerId,
@@ -297,7 +302,7 @@ export class AdminSsoContextProvider extends React.Component {
     const validattionError = this.state.ssoConfig.validate();
     const hasErrors = validattionError.hasErrors();
     const errors = hasErrors ? validattionError : null;
-    this.setState({errors, hasBeenValidated: true});
+    this.setState({ errors, hasBeenValidated: true });
     this.shouldFocusOnError = applyFieldFocusOnError && hasErrors;
     return !hasErrors;
   }
@@ -324,7 +329,7 @@ export class AdminSsoContextProvider extends React.Component {
    * Saves the current settings as a new draft and run the test dialog
    */
   async saveAndTestConfiguration() {
-    this.setState({processing: true});
+    this.setState({ processing: true });
     const ssoSettings = this.getSsoConfigurationDto();
 
     let draftConfiguration;
@@ -332,13 +337,13 @@ export class AdminSsoContextProvider extends React.Component {
       draftConfiguration = await this.props.context.port.request("passbolt.sso.save-draft", ssoSettings);
     } catch (e) {
       this.handleError(e);
-      this.setState({processing: false});
+      this.setState({ processing: false });
       return;
     }
 
     await this.runTestConfig(draftConfiguration);
     const ssoConfig = this.getSsoProviderViewModel(draftConfiguration);
-    this.setState({ssoConfig});
+    this.setState({ ssoConfig });
   }
 
   /**
@@ -361,7 +366,7 @@ export class AdminSsoContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async deleteSettings() {
-    this.setState({processing: true});
+    this.setState({ processing: true });
     try {
       const ssoSettingsId = this.state.originalConfig.id;
       await this.props.context.port.request("passbolt.sso.delete-settings", ssoSettingsId);
@@ -374,7 +379,7 @@ export class AdminSsoContextProvider extends React.Component {
       });
     } catch (e) {
       this.handleError(e);
-      this.setState({processing: false});
+      this.setState({ processing: false });
     }
   }
 
@@ -384,7 +389,7 @@ export class AdminSsoContextProvider extends React.Component {
    * @param {SsoConfigurationDto} draftConfiguration
    */
   async runTestConfig(draftConfiguration) {
-    const selectedProvider = SsoProviders.find(provider => provider.id === draftConfiguration.provider);
+    const selectedProvider = SsoProviders.find((provider) => provider.id === draftConfiguration.provider);
     this.props.dialogContext.open(TestSsoSettingsDialog, {
       provider: selectedProvider,
       configurationId: draftConfiguration.id,
@@ -397,7 +402,7 @@ export class AdminSsoContextProvider extends React.Component {
    * Handles the closing of the SSO test configuration dialog
    */
   handleTestConfigCloseDialog() {
-    this.setState({processing: false});
+    this.setState({ processing: false });
   }
 
   /**
@@ -405,7 +410,7 @@ export class AdminSsoContextProvider extends React.Component {
    */
   handleSettingsActivation() {
     this.isSsoConfigExisting = true;
-    this.setState({originalConfig: this.state.ssoConfig});
+    this.setState({ originalConfig: this.state.ssoConfig });
   }
 
   /**
@@ -414,7 +419,7 @@ export class AdminSsoContextProvider extends React.Component {
    */
   handleError(error) {
     console.error(error);
-    this.props.dialogContext.open(NotifyError, {error});
+    this.props.dialogContext.open(NotifyError, { error });
   }
 
   /**
@@ -422,11 +427,7 @@ export class AdminSsoContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <AdminSsoContext.Provider value={this.state}>
-        {this.props.children}
-      </AdminSsoContext.Provider>
-    );
+    return <AdminSsoContext.Provider value={this.state}>{this.props.children}</AdminSsoContext.Provider>;
   }
 }
 
@@ -438,7 +439,7 @@ AdminSsoContextProvider.propTypes = {
   actionFeedbackContext: PropTypes.object, // The action feedback context
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(AdminSsoContextProvider))));
+export default withAppContext(withActionFeedback(withDialog(withTranslation("common")(AdminSsoContextProvider))));
 
 /**
  * Resource Workspace Context Consumer HOC
@@ -449,9 +450,7 @@ export function withAdminSso(WrappedComponent) {
     render() {
       return (
         <AdminSsoContext.Consumer>
-          {
-            adminSsoContext => <WrappedComponent adminSsoContext={adminSsoContext} {...this.props} />
-          }
+          {(adminSsoContext) => <WrappedComponent adminSsoContext={adminSsoContext} {...this.props} />}
         </AdminSsoContext.Consumer>
       );
     }

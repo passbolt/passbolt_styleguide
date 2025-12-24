@@ -14,7 +14,7 @@
 import Validator from "validator";
 import EntityV2 from "../abstract/entityV2";
 
-const ENTITY_NAME = 'GroupUser';
+const ENTITY_NAME = "GroupUser";
 
 class GroupUserEntity extends EntityV2 {
   /**
@@ -23,37 +23,34 @@ class GroupUserEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "user_id",
-        "is_admin",
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["user_id", "is_admin"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "user_id": {
-          "type": "string",
-          "format": "uuid"
+        user_id: {
+          type: "string",
+          format: "uuid",
         },
-        "group_id": {
-          "type": "string",
-          "format": "uuid"
+        group_id: {
+          type: "string",
+          format: "uuid",
         },
-        "is_admin": {
-          "type": "boolean"
+        is_admin: {
+          type: "boolean",
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
-        }
+        created: {
+          type: "string",
+          format: "date-time",
+        },
         /*
          * NO ASSOCIATIONS
          * users or groups are omitted
          * to avoid circular dependencies
          */
-      }
+      },
     };
   }
 
@@ -124,7 +121,7 @@ class GroupUserEntity extends EntityV2 {
    */
   set id(id) {
     if (!Validator.isUUID(id)) {
-      throw new TypeError('The group user id should be a valid UUID.');
+      throw new TypeError("The group user id should be a valid UUID.");
     }
     this._props.id = id;
   }

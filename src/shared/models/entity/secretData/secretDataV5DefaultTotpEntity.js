@@ -14,7 +14,7 @@
 
 import TotpEntity from "../totp/totpEntity";
 import SecretDataV5DefaultEntity from "./secretDataV5DefaultEntity";
-import {SECRET_DATA_OBJECT_TYPE} from "./secretDataEntity";
+import { SECRET_DATA_OBJECT_TYPE } from "./secretDataEntity";
 import assertString from "validator/es/lib/util/assertString";
 import CustomFieldsCollection from "../customField/customFieldsCollection";
 import CustomFieldEntity from "../customField/customFieldEntity";
@@ -26,17 +26,13 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "object_type",
-        "password",
-        "totp"
-      ],
-      "properties": {
+      type: "object",
+      required: ["object_type", "password", "totp"],
+      properties: {
         ...SecretDataV5DefaultEntity.getSchema().properties,
-        "totp": TotpEntity.getSchema(),
-        "custom_fields": CustomFieldsCollection.getSchema(),
-      }
+        totp: TotpEntity.getSchema(),
+        custom_fields: CustomFieldsCollection.getSchema(),
+      },
     };
   }
 
@@ -70,10 +66,10 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
     const defaultData = {
       object_type: SECRET_DATA_OBJECT_TYPE,
       password: "",
-      totp: TotpEntity.createFromDefault({}, {validate: false}).toDto(),
+      totp: TotpEntity.createFromDefault({}, { validate: false }).toDto(),
     };
 
-    return new SecretDataV5DefaultTotpEntity({...defaultData, ...data}, options);
+    return new SecretDataV5DefaultTotpEntity({ ...defaultData, ...data }, options);
   }
 
   /**
@@ -89,7 +85,7 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
       case "description":
         return "";
       case "totp":
-        return TotpEntity.createFromDefault({}, {validate: false}).toDto();
+        return TotpEntity.createFromDefault({}, { validate: false }).toDto();
       case "custom_fields":
         return new CustomFieldsCollection([CustomFieldEntity.createFromDefault()]).toDto();
       default:
@@ -112,20 +108,24 @@ class SecretDataV5DefaultTotpEntity extends SecretDataV5DefaultEntity {
     }
 
     const totp = this.totp.toDto();
-    const isTotpDifferent = Object.keys(totp).some(key => totp[key] !== secretDto.totp?.[key]);
+    const isTotpDifferent = Object.keys(totp).some((key) => totp[key] !== secretDto.totp?.[key]);
     if (isTotpDifferent) {
       return true;
     }
 
-    const isCustomFieldDefined = typeof(this.customFields) !== "undefined" && this.customFields !== null;
-    const isOtherCustomFieldDefined = typeof(secretDto.custom_fields) !== "undefined" && secretDto.custom_fields !== null;
+    const isCustomFieldDefined = typeof this.customFields !== "undefined" && this.customFields !== null;
+    const isOtherCustomFieldDefined =
+      typeof secretDto.custom_fields !== "undefined" && secretDto.custom_fields !== null;
     if (!isCustomFieldDefined && !isOtherCustomFieldDefined) {
       return false;
-    } else if (!isCustomFieldDefined && isOtherCustomFieldDefined || isCustomFieldDefined && !isOtherCustomFieldDefined) {
+    } else if (
+      (!isCustomFieldDefined && isOtherCustomFieldDefined) ||
+      (isCustomFieldDefined && !isOtherCustomFieldDefined)
+    ) {
       return true;
     }
 
-    const otherCollection = new CustomFieldsCollection(secretDto.custom_fields, {validate: false});
+    const otherCollection = new CustomFieldsCollection(secretDto.custom_fields, { validate: false });
     return CustomFieldsCollection.areCollectionsDifferent(this.customFields, otherCollection);
   }
 

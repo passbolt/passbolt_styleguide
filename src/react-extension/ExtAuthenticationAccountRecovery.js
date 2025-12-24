@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import AppContext from "../shared/context/AppContext/AppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
@@ -20,8 +20,7 @@ import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import Footer from "./components/Common/Footer/Footer";
 import ChangeLocale from "./components/Internationalisation/ChangeLocale/ChangeLocale";
 import AuthenticationAccountRecoveryContextProvider from "./contexts/Authentication/AuthenticationAccountRecoveryContext";
-import OrchestrateAccountRecovery
-  from "./components/AuthenticationAccountRecovery/OrchestrateAccountRecovery/OrchestrateAccountRecovery";
+import OrchestrateAccountRecovery from "./components/AuthenticationAccountRecovery/OrchestrateAccountRecovery/OrchestrateAccountRecovery";
 import LogoSVG from "../img/svg/logo.svg";
 
 /**
@@ -101,23 +100,23 @@ class ExtAuthenticationAccountRecovery extends Component {
     const settings = await this.props.port.request("passbolt.organization-settings.get");
     const siteSettings = new SiteSettings(settings);
     const trustedDomain = siteSettings.url;
-    this.setState({siteSettings, trustedDomain});
+    this.setState({ siteSettings, trustedDomain });
   }
 
   /**
    * Get extension version
    */
   async getExtensionVersion() {
-    const extensionVersion = await this.props.port.request('passbolt.addon.get-version');
-    this.setState({extensionVersion});
+    const extensionVersion = await this.props.port.request("passbolt.addon.get-version");
+    this.setState({ extensionVersion });
   }
 
   /**
    * Init the locale
    */
   async initLocale() {
-    const {locale} = await this.props.port.request("passbolt.locale.get");
-    this.setState({locale});
+    const { locale } = await this.props.port.request("passbolt.locale.get");
+    this.setState({ locale });
   }
 
   /**
@@ -125,7 +124,7 @@ class ExtAuthenticationAccountRecovery extends Component {
    * @param {string} locale The locale identifier
    */
   async onUpdateLocaleRequested(locale) {
-    const localeDto = {locale};
+    const localeDto = { locale };
     await this.props.port.request("passbolt.locale.update-user-locale", localeDto);
     this.onRefreshLocaleRequested(locale);
   }
@@ -134,8 +133,8 @@ class ExtAuthenticationAccountRecovery extends Component {
    * Whenever the refresh of the locale is requested
    */
   async onRefreshLocaleRequested() {
-    const {locale} = await this.props.port.request("passbolt.locale.get");
-    this.setState({locale});
+    const { locale } = await this.props.port.request("passbolt.locale.get");
+    this.setState({ locale });
   }
 
   /**
@@ -144,26 +143,26 @@ class ExtAuthenticationAccountRecovery extends Component {
   render() {
     return (
       <AppContext.Provider value={this.state}>
-        {this.isReady() &&
-        <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
-          <AuthenticationAccountRecoveryContextProvider>
-            <div id="container" className="container page login">
-              <div className="content">
-                <div className="header">
-                  <div className="logo-svg">
-                    <LogoSVG role="img" width="20rem" height="3.5rem"/>
+        {this.isReady() && (
+          <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
+            <AuthenticationAccountRecoveryContextProvider>
+              <div id="container" className="container page login">
+                <div className="content">
+                  <div className="header">
+                    <div className="logo-svg">
+                      <LogoSVG role="img" width="20rem" height="3.5rem" />
+                    </div>
                   </div>
+                  <div className="login-form">
+                    <OrchestrateAccountRecovery />
+                  </div>
+                  <ChangeLocale />
                 </div>
-                <div className="login-form">
-                  <OrchestrateAccountRecovery/>
-                </div>
-                <ChangeLocale/>
+                <Footer />
               </div>
-              <Footer/>
-            </div>
-          </AuthenticationAccountRecoveryContextProvider>
-        </TranslationProvider>
-        }
+            </AuthenticationAccountRecoveryContextProvider>
+          </TranslationProvider>
+        )}
       </AppContext.Provider>
     );
   }

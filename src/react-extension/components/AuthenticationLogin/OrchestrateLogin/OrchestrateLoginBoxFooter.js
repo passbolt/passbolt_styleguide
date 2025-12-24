@@ -11,13 +11,13 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import {
   AuthenticationLoginWorkflowStates,
-  withAuthenticationLoginContext
+  withAuthenticationLoginContext,
 } from "../../../contexts/Authentication/AuthenticationLoginContext";
 
 /**
@@ -31,11 +31,13 @@ class OrchestrateLoginBoxFooter extends Component {
     switch (this.props.authenticationLoginContext.state) {
       case AuthenticationLoginWorkflowStates.SIGN_IN:
       case AuthenticationLoginWorkflowStates.SIGN_IN_SSO:
-        return <div className="login-box-footer-actions">
-          <button type="button" className="link" onClick={this.props.authenticationLoginContext.handleSwitchAccount}>
-            <Trans>Or switch to another account.</Trans>
-          </button>
-        </div>;
+        return (
+          <div className="login-box-footer-actions">
+            <button type="button" className="link" onClick={this.props.authenticationLoginContext.handleSwitchAccount}>
+              <Trans>Or switch to another account.</Trans>
+            </button>
+          </div>
+        );
       default:
         return <></>;
     }

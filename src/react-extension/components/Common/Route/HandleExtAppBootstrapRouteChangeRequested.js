@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 /**
  * This component tracks any navigation changes and handle it
@@ -30,7 +30,7 @@ class HandleExtAppBootstrapRouteChangeRequested extends Component {
    * Whenever the route change is requested
    */
   handleRouteChangeRequested() {
-    this.props.port.on('passbolt.app-bootstrap.change-route', pathname => {
+    this.props.port.on("passbolt.app-bootstrap.change-route", (pathname) => {
       if (/^\/[A-Za-z0-9\-\/]*$/.test(pathname)) {
         this.props.history.replace(pathname);
       }
@@ -42,15 +42,12 @@ class HandleExtAppBootstrapRouteChangeRequested extends Component {
    * @return {JSX}
    */
   render() {
-    return (
-      <></>
-    );
+    return <></>;
   }
 }
 
 HandleExtAppBootstrapRouteChangeRequested.propTypes = {
   history: PropTypes.object,
-  port: PropTypes.any
+  port: PropTypes.any,
 };
 export default withRouter(HandleExtAppBootstrapRouteChangeRequested);
-

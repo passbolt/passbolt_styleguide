@@ -24,8 +24,7 @@ export default class AppEmailValidatorService {
    * @returns {boolean|boolean}
    */
   static validate(value, appSettings) {
-    return AppEmailValidatorService.getValidator(appSettings)
-      .validate(value);
+    return AppEmailValidatorService.getValidator(appSettings).validate(value);
   }
 
   /**
@@ -38,9 +37,7 @@ export default class AppEmailValidatorService {
    * @returns {IsRegexValidator|IsEmailValidator}
    */
   static getValidator(appSettings) {
-    if (appSettings
-      && appSettings instanceof SiteSettings
-      && appSettings.emailValidateRegex) {
+    if (appSettings && appSettings instanceof SiteSettings && appSettings.emailValidateRegex) {
       return new IsRegexValidator(appSettings.emailValidateRegex);
     }
 

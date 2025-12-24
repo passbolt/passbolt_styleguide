@@ -14,12 +14,12 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import Password from "../../../../shared/components/Password/Password";
 import AttentionSVG from "../../../../img/svg/attention.svg";
@@ -55,7 +55,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
       passwordError: "",
       passwordWarning: "",
       hasAlreadyBeenValidated: false, // True if the form has already been submitted onc
-      selectedFile: null
+      selectedFile: null,
     };
   }
 
@@ -99,7 +99,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
     const [organizationFile] = event.target.files;
     const organizationKey = await this.readOrganizationKeyFile(organizationFile);
     await this.fillOrganizationKey(organizationKey);
-    this.setState({selectedFile: organizationFile});
+    this.setState({ selectedFile: organizationFile });
     if (this.state.hasAlreadyBeenValidated) {
       await this.validate();
     }
@@ -128,7 +128,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
    * @param organizationKey A subscription key
    */
   async fillOrganizationKey(organizationKey) {
-    await this.setState({key: organizationKey});
+    await this.setState({ key: organizationKey });
   }
 
   /**
@@ -142,8 +142,8 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
       keyError = this.translate("An organization key is required.");
     }
 
-    return new Promise(resolve => {
-      this.setState({keyError}, resolve);
+    return new Promise((resolve) => {
+      this.setState({ keyError }, resolve);
     });
   }
 
@@ -163,12 +163,14 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
    */
   handlePasswordInputKeyUp() {
     if (this.state.hasAlreadyBeenValidated) {
-      this.setState({passwordError: ""});
+      this.setState({ passwordError: "" });
     } else {
       const hasResourcePasswordMaxLength = this.state.password.length >= RESOURCE_PASSWORD_MAX_LENGTH;
-      const warningMessage = this.translate("this is the maximum size for this field, make sure your data was not truncated");
-      const passwordWarning = hasResourcePasswordMaxLength ? warningMessage : '';
-      this.setState({passwordWarning});
+      const warningMessage = this.translate(
+        "this is the maximum size for this field, make sure your data was not truncated",
+      );
+      const passwordWarning = hasResourcePasswordMaxLength ? warningMessage : "";
+      this.setState({ passwordWarning });
     }
   }
 
@@ -181,7 +183,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
     const value = target.value;
     const name = target.name;
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -209,10 +211,10 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
    * Save the changes.
    */
   async save() {
-    this.setState({hasAlreadyBeenValidated: true});
+    this.setState({ hasAlreadyBeenValidated: true });
     await this.toggleProcessing();
 
-    if (!await this.validate()) {
+    if (!(await this.validate())) {
       this.handleValidateError();
       await this.toggleProcessing();
       return;
@@ -220,10 +222,13 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
 
     const privateGpgKeyDto = {
       armored_key: this.state.key,
-      passphrase: this.state.password
+      passphrase: this.state.password,
     };
     try {
-      await this.props.context.port.request('passbolt.account-recovery.validate-organization-private-key', privateGpgKeyDto);
+      await this.props.context.port.request(
+        "passbolt.account-recovery.validate-organization-private-key",
+        privateGpgKeyDto,
+      );
       await this.props.onSubmit(privateGpgKeyDto);
       await this.toggleProcessing();
       this.props.onClose();
@@ -242,15 +247,15 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
       // It can happen when the user has closed the passphrase entry dialog by instance.
       return;
     } else if (error.name === "WrongOrganizationRecoveryKeyError") {
-      this.setState({expectedFingerprintError: error.expectedFingerprint});
+      this.setState({ expectedFingerprintError: error.expectedFingerprint });
     } else if (error.name === "InvalidMasterPasswordError") {
-      this.setState({passwordError: this.translate("This is not a valid passphrase.")});
+      this.setState({ passwordError: this.translate("This is not a valid passphrase.") });
     } else if (error.name === "BadSignatureMessageGpgKeyError") {
-      this.setState({keyError: error.message});
+      this.setState({ keyError: error.message });
     } else if (error.name === "GpgKeyError") {
-      this.setState({keyError: error.message});
+      this.setState({ keyError: error.message });
     } else {
-      console.error('Uncaught uncontrolled error');
+      console.error("Uncaught uncontrolled error");
       //@todo unify unexpected error management: the error should be handle by the workflow proposing the callback prop
       this.onUnexpectedError(error);
     }
@@ -263,7 +268,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
    */
   onUnexpectedError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -284,7 +289,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
     this.setState({
       keyError: "",
       passwordError: "",
-      expectedFingerprintError: ""
+      expectedFingerprintError: "",
     });
 
     await this.validateKeyInput();
@@ -296,7 +301,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({processing: !this.state.processing});
+    await this.setState({ processing: !this.state.processing });
   }
 
   /**
@@ -323,8 +328,14 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
     if (!fingerprint) {
       return <></>;
     }
-    const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
-    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
+    const result = fingerprint.toUpperCase().replace(/.{4}/g, "$& ");
+    return (
+      <>
+        {result.substr(0, 24)}
+        <br />
+        {result.substr(25)}
+      </>
+    );
   }
 
   /**
@@ -352,15 +363,30 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
         title={this.translate("Organization Recovery Key")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
-        className="provide-organization-recover-key-dialog">
+        className="provide-organization-recover-key-dialog"
+      >
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content provide-organization-key">
-            <div className={`input textarea required ${this.state.keyError || this.state.expectedFingerprintError ? "error" : ""}`}>
-              <label htmlFor="organization-recover-form-key"><Trans>Enter the private key used by your organization for account recovery</Trans></label>
-              <textarea id="organization-recover-form-key" name="key" value={this.state.key}
-                onKeyUp={this.handleKeyInputKeyUp} onChange={this.handleInputChange}
-                disabled={this.hasAllInputDisabled()} ref={this.keyInputRef} className="required"
-                placeholder={this.translate('Paste the OpenPGP Private key here')} required="required" autoComplete="off" autoFocus={true}/>
+            <div
+              className={`input textarea required ${this.state.keyError || this.state.expectedFingerprintError ? "error" : ""}`}
+            >
+              <label htmlFor="organization-recover-form-key">
+                <Trans>Enter the private key used by your organization for account recovery</Trans>
+              </label>
+              <textarea
+                id="organization-recover-form-key"
+                name="key"
+                value={this.state.key}
+                onKeyUp={this.handleKeyInputKeyUp}
+                onChange={this.handleInputChange}
+                disabled={this.hasAllInputDisabled()}
+                ref={this.keyInputRef}
+                className="required"
+                placeholder={this.translate("Paste the OpenPGP Private key here")}
+                required="required"
+                autoComplete="off"
+                autoFocus={true}
+              />
             </div>
             <div className="input file">
               <input
@@ -368,7 +394,8 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
                 id="dialog-import-private-key"
                 ref={this.fileUploaderRef}
                 disabled={this.hasAllInputDisabled()}
-                onChange={this.handleSelectOrganizationKeyFile} />
+                onChange={this.handleSelectOrganizationKeyFile}
+              />
               <label htmlFor="dialog-import-private-key">
                 <Trans>Select a file to import</Trans>
               </label>
@@ -377,37 +404,38 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
                   type="text"
                   disabled={true}
                   placeholder={this.translate("No file selected")}
-                  defaultValue={this.selectedFilename} />
+                  defaultValue={this.selectedFilename}
+                />
                 <button
                   className="button primary"
-                  type='button'
+                  type="button"
                   disabled={this.hasAllInputDisabled()}
-                  onClick={this.handleSelectFile}>
-                  <span><Trans>Choose a file</Trans></span>
+                  onClick={this.handleSelectFile}
+                >
+                  <span>
+                    <Trans>Choose a file</Trans>
+                  </span>
                 </button>
               </div>
-              {this.state.keyError &&
-                <div className="key error-message">{this.state.keyError}</div>
-              }
-              {this.state.expectedFingerprintError &&
+              {this.state.keyError && <div className="key error-message">{this.state.keyError}</div>}
+              {this.state.expectedFingerprintError && (
                 <div className="key error-message">
-                  <Trans>Error, this is not the current organization recovery key.</Trans><br/>
-                  <Trans>Expected fingerprint:</Trans><br/>
-                  <br/>
-                  <span className="fingerprint">
-                    {this.formatFingerprint(this.state.expectedFingerprintError)}
-                  </span>
+                  <Trans>Error, this is not the current organization recovery key.</Trans>
+                  <br />
+                  <Trans>Expected fingerprint:</Trans>
+                  <br />
+                  <br />
+                  <span className="fingerprint">{this.formatFingerprint(this.state.expectedFingerprintError)}</span>
                 </div>
-              }
+              )}
             </div>
             <div className={`input-password-wrapper input ${this.state.passwordError ? "error" : ""}`}>
               <label htmlFor="generate-organization-key-form-password">
                 <Trans>Organization key passphrase</Trans>
-                {this.state.passwordWarning &&
-                  <AttentionSVG />
-                }
+                {this.state.passwordWarning && <AttentionSVG />}
               </label>
-              <Password id="generate-organization-key-form-password"
+              <Password
+                id="generate-organization-key-form-password"
                 name="password"
                 placeholder={this.translate("Passphrase")}
                 autoComplete="new-password"
@@ -417,18 +445,26 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
                 preview={true}
                 onChange={this.handleInputChange}
                 disabled={this.hasAllInputDisabled()}
-                inputRef={this.passwordInputRef}/>
-              {this.state.passwordError &&
-                <div className="password error-message">{this.state.passwordError}</div>
-              }
-              {this.state.passwordWarning &&
-                <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.passwordWarning}</div>
-              }
+                inputRef={this.passwordInputRef}
+              />
+              {this.state.passwordError && <div className="password error-message">{this.state.passwordError}</div>}
+              {this.state.passwordWarning && (
+                <div className="password warning-message">
+                  <strong>
+                    <Trans>Warning:</Trans>
+                  </strong>{" "}
+                  {this.state.passwordWarning}
+                </div>
+              )}
             </div>
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Submit")}/>
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Submit")}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -445,4 +481,4 @@ ProvideAccountRecoveryOrganizationKey.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withTranslation('common')(ProvideAccountRecoveryOrganizationKey)));
+export default withAppContext(withDialog(withTranslation("common")(ProvideAccountRecoveryOrganizationKey)));

@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 class DisplaySsoDisabledError extends Component {
   /**
@@ -34,8 +34,8 @@ class DisplaySsoDisabledError extends Component {
       hasAccepted: false, //  True if the user did explicitly accept the new SSO provider
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
-        hasNotAccepted: false // True if the user did not explicitly accept the new SSO provider
-      }
+        hasNotAccepted: false, // True if the user did not explicitly accept the new SSO provider
+      },
     };
   }
 
@@ -43,7 +43,7 @@ class DisplaySsoDisabledError extends Component {
    * Returns true if the passphrase is valid
    */
   get isValid() {
-    return Object.values(this.state.errors).every(value => !value);
+    return Object.values(this.state.errors).every((value) => !value);
   }
 
   /**
@@ -77,7 +77,7 @@ class DisplaySsoDisabledError extends Component {
    */
   handleAcceptChange() {
     const hasAccepted = !this.state.hasAccepted;
-    this.setState({hasAccepted});
+    this.setState({ hasAccepted });
     if (this.state.hasBeenValidated) {
       this.validate(hasAccepted);
     }
@@ -99,8 +99,8 @@ class DisplaySsoDisabledError extends Component {
     this.setState({
       hasBeenValidated: true,
       errors: {
-        hasNotAccepted: !isValid
-      }
+        hasNotAccepted: !isValid,
+      },
     });
 
     return isValid;
@@ -111,21 +111,28 @@ class DisplaySsoDisabledError extends Component {
    * @returns {JSX}
    */
   render() {
-    const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
+    const disabledClassName = this.mustBeDisabled ? "disabled" : "";
     return (
       <div className="sso-disabled-error">
-        <h1><Trans>SSO feature has been disabled</Trans></h1>
-        <p><Trans>For security reasons please check with your administrator that this is a change that they initiated.</Trans></p>
-        <form
-          acceptCharset="utf-8"
-          onSubmit={this.handleSubmit}>
-          <div className={`input checkbox ${this.state.hasBeenValidated && this.state.errors.hasNotAccepted ? "error" : ""}`}>
+        <h1>
+          <Trans>SSO feature has been disabled</Trans>
+        </h1>
+        <p>
+          <Trans>
+            For security reasons please check with your administrator that this is a change that they initiated.
+          </Trans>
+        </p>
+        <form acceptCharset="utf-8" onSubmit={this.handleSubmit}>
+          <div
+            className={`input checkbox ${this.state.hasBeenValidated && this.state.errors.hasNotAccepted ? "error" : ""}`}
+          >
             <input
               id="confirm-sso-disabled"
               type="checkbox"
               name="confirm-sso-disabled"
               value={this.state.hasAccepted}
-              onChange={this.handleAcceptChange}/>
+              onChange={this.handleAcceptChange}
+            />
             <label htmlFor="confirm-sso-disabled">
               <Trans>Yes I checked and it is all fine.</Trans>
             </label>
@@ -135,7 +142,8 @@ class DisplaySsoDisabledError extends Component {
               type="submit"
               className={`button primary big full-width ${disabledClassName}`}
               role="button"
-              disabled={this.mustBeDisabled}>
+              disabled={this.mustBeDisabled}
+            >
               <Trans>Sign in with my passphrase</Trans>
             </button>
           </div>

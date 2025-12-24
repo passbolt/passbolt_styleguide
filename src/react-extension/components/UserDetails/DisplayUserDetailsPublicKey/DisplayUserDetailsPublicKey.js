@@ -15,11 +15,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {DateTime} from "luxon";
-import {Trans, withTranslation} from "react-i18next";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { DateTime } from "luxon";
+import { Trans, withTranslation } from "react-i18next";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
@@ -39,7 +39,7 @@ export const GPG_KEY_TYPES = {
   // Reserved for AEDH
   aedh: "AEDH",
   // Reserved for AEDSA
-  aedsa: "AEDSA"
+  aedsa: "AEDSA",
 };
 
 /**
@@ -63,7 +63,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
     return {
       open: false, // Flag for the expand / collapse mode
       gpgkeyInfo: {}, // The gpg key info
-      loading: false // Is the component loading
+      loading: false, // Is the component loading
     };
   }
 
@@ -105,7 +105,10 @@ class DisplayUserDetailsPublicKey extends React.Component {
    * @returns {Promise<void>}
    */
   async fetchGpgkeyInfo() {
-    const gpgkeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
+    const gpgkeyInfo = await this.props.context.port.request(
+      "passbolt.keyring.get-public-key-info-by-user",
+      this.user.id,
+    );
     // format the gpgkey info.
     const fingerprint = gpgkeyInfo.fingerprint;
     const type = GPG_KEY_TYPES[gpgkeyInfo.algorithm];
@@ -122,8 +125,8 @@ class DisplayUserDetailsPublicKey extends React.Component {
     const curve = gpgkeyInfo.curve;
     const length = gpgkeyInfo.length;
 
-    const formatedGpgkeyInfo = {fingerprint, type, created, expires, curve, length};
-    this.setState({gpgkeyInfo: formatedGpgkeyInfo});
+    const formatedGpgkeyInfo = { fingerprint, type, created, expires, curve, length };
+    this.setState({ gpgkeyInfo: formatedGpgkeyInfo });
   }
 
   /**
@@ -133,7 +136,9 @@ class DisplayUserDetailsPublicKey extends React.Component {
    */
   formatDate(data) {
     try {
-      return DateTime.fromJSDate(new Date(data)).setLocale(this.props.context.locale).toLocaleString(DateTime.DATETIME_FULL);
+      return DateTime.fromJSDate(new Date(data))
+        .setLocale(this.props.context.locale)
+        .toLocaleString(DateTime.DATETIME_FULL);
     } catch (error) {
       console.error(`Failed to format date "${data}":`, error);
       return "";
@@ -154,8 +159,14 @@ class DisplayUserDetailsPublicKey extends React.Component {
    */
   formatFingerprint(fingerprint) {
     fingerprint = fingerprint || "";
-    const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
-    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
+    const result = fingerprint.toUpperCase().replace(/.{4}/g, "$& ");
+    return (
+      <>
+        {result.substr(0, 24)}
+        <br />
+        {result.substr(25)}
+      </>
+    );
   }
 
   /**
@@ -163,11 +174,11 @@ class DisplayUserDetailsPublicKey extends React.Component {
    */
   async handleTitleClicked() {
     if (this.state.open) {
-      await this.setState({gpgkeyInfo: {}, open: false});
+      await this.setState({ gpgkeyInfo: {}, open: false });
     } else {
-      await this.setState({open: true, loading: true});
+      await this.setState({ open: true, loading: true });
       await this.fetchGpgkeyInfo();
-      await this.setState({loading: false});
+      await this.setState({ loading: false });
     }
   }
 
@@ -185,7 +196,6 @@ class DisplayUserDetailsPublicKey extends React.Component {
   render() {
     const isLoading = this.state.loading;
 
-
     return (
       <div className={`key-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
@@ -194,47 +204,59 @@ class DisplayUserDetailsPublicKey extends React.Component {
               <span className="accordion-title">
                 <Trans>Public key</Trans>
               </span>
-              {this.state.open && <CaretDownSVG/>}
-              {!this.state.open && <CaretRightSVG/>}
+              {this.state.open && <CaretDownSVG />}
+              {!this.state.open && <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open &&
-        <div className="accordion-content">
-          {isLoading &&
-          <ul>
-            <li className="processing-wrapper">
-              <SpinnerSVG/>
-              <span className="processing-text"><Trans>Retrieving public key</Trans></span>
-            </li>
-          </ul>
-          }
-          {!isLoading &&
-                    <>
-                      <div className="information-label">
-                        <span className="fingerprint label"><Trans>Fingerprint</Trans></span>
-                        <span className="type label"><Trans>Type</Trans></span>
-                        {this.state.gpgkeyInfo.curve &&
-                          <span className="curve label"><Trans>Curve</Trans></span>
-                        }
-                        <span className="length label"><Trans>Length</Trans></span>
-                        <span className="created label"><Trans>Created</Trans></span>
-                        <span className="expires label"><Trans>Expires</Trans></span>
-                      </div>
-                      <div className="information-value">
-                        <span className="fingerprint value">{this.formatFingerprint(this.state.gpgkeyInfo.fingerprint)}</span>
-                        <span className="type value">{this.state.gpgkeyInfo.type}</span>
-                        {this.state.gpgkeyInfo.curve &&
-                          <span className="curve value">{this.state.gpgkeyInfo.curve}</span>
-                        }
-                        <span className="length value">{this.state.gpgkeyInfo.length}</span>
-                        <span className="created value">{this.state.gpgkeyInfo.created}</span>
-                        <span className="expires value">{this.state.gpgkeyInfo.expires}</span>
-                      </div>
-                    </>
-          }
-        </div>
-        }
+        {this.state.open && (
+          <div className="accordion-content">
+            {isLoading && (
+              <ul>
+                <li className="processing-wrapper">
+                  <SpinnerSVG />
+                  <span className="processing-text">
+                    <Trans>Retrieving public key</Trans>
+                  </span>
+                </li>
+              </ul>
+            )}
+            {!isLoading && (
+              <>
+                <div className="information-label">
+                  <span className="fingerprint label">
+                    <Trans>Fingerprint</Trans>
+                  </span>
+                  <span className="type label">
+                    <Trans>Type</Trans>
+                  </span>
+                  {this.state.gpgkeyInfo.curve && (
+                    <span className="curve label">
+                      <Trans>Curve</Trans>
+                    </span>
+                  )}
+                  <span className="length label">
+                    <Trans>Length</Trans>
+                  </span>
+                  <span className="created label">
+                    <Trans>Created</Trans>
+                  </span>
+                  <span className="expires label">
+                    <Trans>Expires</Trans>
+                  </span>
+                </div>
+                <div className="information-value">
+                  <span className="fingerprint value">{this.formatFingerprint(this.state.gpgkeyInfo.fingerprint)}</span>
+                  <span className="type value">{this.state.gpgkeyInfo.type}</span>
+                  {this.state.gpgkeyInfo.curve && <span className="curve value">{this.state.gpgkeyInfo.curve}</span>}
+                  <span className="length value">{this.state.gpgkeyInfo.length}</span>
+                  <span className="created value">{this.state.gpgkeyInfo.created}</span>
+                  <span className="expires value">{this.state.gpgkeyInfo.expires}</span>
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </div>
     );
   }
@@ -245,7 +267,9 @@ DisplayUserDetailsPublicKey.propTypes = {
   userWorkspaceContext: PropTypes.object, // The user workspace context
   actionFeedbackContext: PropTypes.object, // The action feedback context
   t: PropTypes.func, // The translation function
-  i18n: PropTypes.any // The i18n context translation
+  i18n: PropTypes.any, // The i18n context translation
 };
 
-export default withAppContext(withActionFeedback(withUserWorkspace(withTranslation('common')(DisplayUserDetailsPublicKey))));
+export default withAppContext(
+  withActionFeedback(withUserWorkspace(withTranslation("common")(DisplayUserDetailsPublicKey))),
+);

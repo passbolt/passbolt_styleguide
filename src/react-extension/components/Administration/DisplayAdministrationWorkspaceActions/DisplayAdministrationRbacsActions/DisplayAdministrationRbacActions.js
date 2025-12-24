@@ -14,9 +14,9 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withActionFeedback} from "../../../../contexts/ActionFeedbackContext";
-import {withAdminRbac} from "../../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withActionFeedback } from "../../../../contexts/ActionFeedbackContext";
+import { withAdminRbac } from "../../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
 
 class DisplayAdministrationRbacActions extends React.Component {
   /**
@@ -59,7 +59,9 @@ class DisplayAdministrationRbacActions extends React.Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role-based access control settings were updated."));
+    await this.props.actionFeedbackContext.displaySuccess(
+      this.props.t("The role-based access control settings were updated."),
+    );
   }
 
   /**
@@ -78,8 +80,15 @@ class DisplayAdministrationRbacActions extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button className="button primary form" type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
-          <span><Trans>Save</Trans></span>
+        <button
+          className="button primary form"
+          type="button"
+          disabled={!this.isSaveEnabled()}
+          onClick={this.handleSaveClick}
+        >
+          <span>
+            <Trans>Save</Trans>
+          </span>
         </button>
       </div>
     );

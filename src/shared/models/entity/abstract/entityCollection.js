@@ -90,11 +90,11 @@ class EntityCollection {
     return {
       next: () => {
         if (i < this._items.length) {
-          return {value: this._items[i++], done: false};
+          return { value: this._items[i++], done: false };
         } else {
-          return {done: true};
+          return { done: true };
         }
-      }
+      },
     };
   }
 
@@ -107,12 +107,14 @@ class EntityCollection {
    * @returns {array} all the items matching search
    */
   getAll(propName, search) {
-    if (typeof propName !== 'string') {
-      throw new TypeError('EntityCollection excludeAll expects propName to be string.');
-    } else if (typeof search !== 'string') {
-      throw new TypeError('EntityCollection excludeAll expects search to be string.');
+    if (typeof propName !== "string") {
+      throw new TypeError("EntityCollection excludeAll expects propName to be string.");
+    } else if (typeof search !== "string") {
+      throw new TypeError("EntityCollection excludeAll expects search to be string.");
     }
-    return this._items.filter(item => (Object.prototype.hasOwnProperty.call(item._props, propName) && item._props[propName] === search));
+    return this._items.filter(
+      (item) => Object.prototype.hasOwnProperty.call(item._props, propName) && item._props[propName] === search,
+    );
   }
 
   /**
@@ -123,8 +125,8 @@ class EntityCollection {
    * @returns {Entity} first item matching search
    */
   getFirst(propName, search) {
-    if (typeof propName !== 'string' || typeof search !== 'string') {
-      throw new TypeError('EntityCollection getFirst by expect propName and search to be strings');
+    if (typeof propName !== "string" || typeof search !== "string") {
+      throw new TypeError("EntityCollection getFirst by expect propName and search to be strings");
     }
     const found = this.getAll(propName, search);
     if (!found || !found.length) {
@@ -140,8 +142,8 @@ class EntityCollection {
    * @throws TypeError if parameters are invalid
    */
   extract(propName) {
-    if (typeof propName !== 'string') {
-      throw new TypeError('EntityCollection extract expects propName to be a string.');
+    if (typeof propName !== "string") {
+      throw new TypeError("EntityCollection extract expects propName to be a string.");
     }
 
     return this._items.reduce((accumulator, item) => {
@@ -194,17 +196,19 @@ class EntityCollection {
    * @throws TypeError if parameters are invalid
    */
   filterByPropertyValueIn(propName, needles, excludeUndefined = true) {
-    if (typeof propName !== 'string') {
-      throw new TypeError('EntityCollection filterByPropertyValueIn expects propName to be a string.');
+    if (typeof propName !== "string") {
+      throw new TypeError("EntityCollection filterByPropertyValueIn expects propName to be a string.");
     }
     if (!Array.isArray(needles)) {
-      throw new TypeError('EntityCollection filterByPropertyValueIn expects needles to be an array.');
+      throw new TypeError("EntityCollection filterByPropertyValueIn expects needles to be an array.");
     }
 
-    this.filterByCallback(item => {
+    this.filterByCallback((item) => {
       const isPropertyDefined = Object.prototype.hasOwnProperty.call(item._props, propName);
-      return !((excludeUndefined && !isPropertyDefined) // exclude undefined property.
-        || (isPropertyDefined && !needles.includes(item._props[propName]))); // or exclude defined property not matching the search.
+      return !(
+        (excludeUndefined && !isPropertyDefined) || // exclude undefined property.
+        (isPropertyDefined && !needles.includes(item._props[propName]))
+      ); // or exclude defined property not matching the search.
     });
   }
 
@@ -217,7 +221,7 @@ class EntityCollection {
    */
   filterByCallback(callback) {
     if (typeof callback !== "function") {
-      throw new TypeError('EntityCollection filterByCallback expects callback to be a function.');
+      throw new TypeError("EntityCollection filterByCallback expects callback to be a function.");
     }
 
     for (let currentIndex = this._items.length - 1; currentIndex >= 0; currentIndex--) {
@@ -279,9 +283,10 @@ class EntityCollection {
 
     if (haystackSet.has(propValue)) {
       const error = new EntityValidationError();
-      const message = options?.message
-        || `The collection already includes an element that has a property (${propName}) with an identical value.`;
-      error.addError(propName, 'unique', message);
+      const message =
+        options?.message ||
+        `The collection already includes an element that has a property (${propName}) with an identical value.`;
+      error.addError(propName, "unique", message);
       throw error;
     }
   }

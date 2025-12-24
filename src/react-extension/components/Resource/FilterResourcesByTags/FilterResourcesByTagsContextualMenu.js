@@ -14,8 +14,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
-import {filterByTagsOptions} from "./FilterResourcesByTagsList";
-import {Trans, withTranslation} from "react-i18next";
+import { filterByTagsOptions } from "./FilterResourcesByTagsList";
+import { Trans, withTranslation } from "react-i18next";
 import VenetianMaskSVG from "../../../../img/svg/venetian_mask.svg";
 import ShareSVG from "../../../../img/svg/share.svg";
 import TagV2SVG from "../../../../img/svg/tag_v2.svg";
@@ -51,7 +51,7 @@ class FilterResourcesByTagsContextualMenu extends React.Component {
    * Handle hide contextual menu
    */
   handleHide() {
-    if (typeof this.props.onBeforeHide === 'function') {
+    if (typeof this.props.onBeforeHide === "function") {
       this.props.onBeforeHide();
     }
     this.props.hide();
@@ -67,14 +67,22 @@ class FilterResourcesByTagsContextualMenu extends React.Component {
         hide={this.handleHide}
         left={this.props.left}
         top={this.props.top}
-        className={this.props.className}>
+        className={this.props.className}
+      >
         <li key="option-filter-all-tag" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button" className="link no-border" id="all-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.all)}>
+                <button
+                  type="button"
+                  className="link no-border"
+                  id="all-tag"
+                  onClick={() => this.handleFilterClickEvent(filterByTagsOptions.all)}
+                >
                   <TagV2SVG />
-                  <span><Trans>All tags</Trans></span>
+                  <span>
+                    <Trans>All tags</Trans>
+                  </span>
                 </button>
               </div>
             </div>
@@ -84,9 +92,16 @@ class FilterResourcesByTagsContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button" className="link no-border" id="personal-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.personal)}>
+                <button
+                  type="button"
+                  className="link no-border"
+                  id="personal-tag"
+                  onClick={() => this.handleFilterClickEvent(filterByTagsOptions.personal)}
+                >
                   <VenetianMaskSVG />
-                  <span><Trans>My tags</Trans></span>
+                  <span>
+                    <Trans>My tags</Trans>
+                  </span>
                 </button>
               </div>
             </div>
@@ -96,9 +111,16 @@ class FilterResourcesByTagsContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button" className="link no-border" id="shared-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.shared)}>
+                <button
+                  type="button"
+                  className="link no-border"
+                  id="shared-tag"
+                  onClick={() => this.handleFilterClickEvent(filterByTagsOptions.shared)}
+                >
                   <ShareSVG />
-                  <span><Trans>Shared tags</Trans></span>
+                  <span>
+                    <Trans>Shared tags</Trans>
+                  </span>
                 </button>
               </div>
             </div>

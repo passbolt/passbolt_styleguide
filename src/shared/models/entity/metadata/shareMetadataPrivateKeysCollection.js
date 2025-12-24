@@ -46,8 +46,8 @@ class ShareMetadataPrivateKeysCollection extends EntityV2Collection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": MetadataPrivateKeyEntity.getSchema(),
+      type: "array",
+      items: MetadataPrivateKeyEntity.getSchema(),
     };
   }
 
@@ -59,7 +59,7 @@ class ShareMetadataPrivateKeysCollection extends EntityV2Collection {
    * @throws {EntityValidationError} if a secret already exists with the same metadata key id and user id.
    */
   validateBuildRules(item, options) {
-    this.assertUniqueMetadataKeyIdUserId(item, {haystackSet: options?.uniqueMetadataKeyIdUserIdSetCache});
+    this.assertUniqueMetadataKeyIdUserId(item, { haystackSet: options?.uniqueMetadataKeyIdUserIdSetCache });
   }
 
   /**
@@ -79,7 +79,7 @@ class ShareMetadataPrivateKeysCollection extends EntityV2Collection {
 
     // If not given initialize the haystack set with the values of the items properties.
     if (!haystackSet) {
-      haystackSet = new Set(this.items.map(item => `${item.metadataKeyId}:${item.userId}`));
+      haystackSet = new Set(this.items.map((item) => `${item.metadataKeyId}:${item.userId}`));
     }
 
     const metadataKeyIdUserIdKey = `${item.metadataKeyId}:${item.userId}`;
@@ -87,7 +87,7 @@ class ShareMetadataPrivateKeysCollection extends EntityV2Collection {
     if (haystackSet.has(metadataKeyIdUserIdKey)) {
       const error = new EntityValidationError();
       const message = `The collection already includes an element that has a couple metadata_key_id:user_id (${metadataKeyIdUserIdKey}) with an identical value.`;
-      error.addError("metadata_key_id:user_id", 'unique', message);
+      error.addError("metadata_key_id:user_id", "unique", message);
       throw error;
     }
   }
@@ -102,15 +102,15 @@ class ShareMetadataPrivateKeysCollection extends EntityV2Collection {
    * This method creates a cache of unique metadata_key_id and users id tuple to improve the build rules performance.
    */
   pushMany(data, entityOptions = {}, options = {}) {
-    const uniqueMetadataKeyIdUserIdSetCache = new Set(this.items.map(item => `${item.metadataKeyId}:${item.userId}`));
-    const onItemPushed = item => {
+    const uniqueMetadataKeyIdUserIdSetCache = new Set(this.items.map((item) => `${item.metadataKeyId}:${item.userId}`));
+    const onItemPushed = (item) => {
       uniqueMetadataKeyIdUserIdSetCache.add(`${item.metadataKeyId}:${item.userId}`);
     };
 
     options = {
       onItemPushed: onItemPushed,
-      validateBuildRules: {...options?.validateBuildRules, uniqueMetadataKeyIdUserIdSetCache},
-      ...options
+      validateBuildRules: { ...options?.validateBuildRules, uniqueMetadataKeyIdUserIdSetCache },
+      ...options,
     };
 
     super.pushMany(data, entityOptions, options);
@@ -121,7 +121,7 @@ class ShareMetadataPrivateKeysCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasDecryptedPrivateKeys() {
-    return this._items.some(item => item.isDecrypted);
+    return this._items.some((item) => item.isDecrypted);
   }
 
   /**
@@ -129,7 +129,7 @@ class ShareMetadataPrivateKeysCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasEncryptedPrivateKeys() {
-    return this._items.some(item => !item.isDecrypted);
+    return this._items.some((item) => !item.isDecrypted);
   }
 }
 

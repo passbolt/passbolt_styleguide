@@ -11,20 +11,20 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withNavigationContext } from "../../../contexts/NavigationContext";
+import { withAccountRecovery } from "../../../contexts/AccountRecoveryUserContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {Trans, withTranslation} from "react-i18next";
-import {withMfa} from "../../../contexts/MFAContext";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withMfa } from "../../../contexts/MFAContext";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
 import ProfileIcon from "../../../../img/svg/profile.svg";
 import LogoutIcon from "../../../../img/svg/logout.svg";
 import CloseSVG from "../../../../img/svg/close.svg";
 import AttentionSVG from "../../../../img/svg/attention.svg";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 class DisplayUserBadgeMenu extends Component {
@@ -63,18 +63,18 @@ class DisplayUserBadgeMenu extends Component {
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
-    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
-    if (this.props.context.siteSettings.canIUse('mfaPolicies')) {
+    document.addEventListener("click", this.handleDocumentClickEvent, { capture: true });
+    document.addEventListener("contextmenu", this.handleDocumentContextualMenuEvent, { capture: true });
+    document.addEventListener("dragstart", this.handleDocumentDragStartEvent, { capture: true });
+    if (this.props.context.siteSettings.canIUse("mfaPolicies")) {
       this.props.mfaContext.checkMfaChoiceRequired();
     }
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent, {capture: true});
-    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
+    document.removeEventListener("click", this.handleDocumentClickEvent, { capture: true });
+    document.removeEventListener("contextmenu", this.handleDocumentContextualMenuEvent, { capture: true });
+    document.removeEventListener("dragstart", this.handleDocumentDragStartEvent, { capture: true });
   }
 
   /**
@@ -119,7 +119,7 @@ class DisplayUserBadgeMenu extends Component {
    * Close the user badge menu
    */
   closeUserBadgeMenu() {
-    this.setState({open: false});
+    this.setState({ open: false });
   }
 
   /**
@@ -128,7 +128,7 @@ class DisplayUserBadgeMenu extends Component {
    */
   getUserFullName() {
     if (!this.props.user || !this.props.user.profile) {
-      return '...';
+      return "...";
     }
     return `${this.props.user.profile.first_name} ${this.props.user.profile.last_name}`;
   }
@@ -139,7 +139,7 @@ class DisplayUserBadgeMenu extends Component {
    */
   getUserUsername() {
     if (!this.props.user || !this.props.user.username) {
-      return '...';
+      return "...";
     }
     return `${this.props.user.username}`;
   }
@@ -152,7 +152,7 @@ class DisplayUserBadgeMenu extends Component {
   handleToggleMenuClick(e) {
     e.preventDefault();
     const open = !this.state.open;
-    this.setState({open});
+    this.setState({ open });
   }
 
   /**
@@ -171,7 +171,7 @@ class DisplayUserBadgeMenu extends Component {
     try {
       await this.props.context.onLogoutRequested();
     } catch (error) {
-      this.props.dialogContext.open(NotifyError, {error});
+      this.props.dialogContext.open(NotifyError, { error });
     } finally {
       this.closeUserBadgeMenu();
     }
@@ -182,9 +182,9 @@ class DisplayUserBadgeMenu extends Component {
    * @return {boolean}
    */
   get attentionRequired() {
-    return this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()
-      || this.props.mfaContext.isMfaChoiceRequired()
-    ;
+    return (
+      this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired() || this.props.mfaContext.isMfaChoiceRequired()
+    );
   }
 
   /**
@@ -195,12 +195,24 @@ class DisplayUserBadgeMenu extends Component {
     return (
       <div className="profile-wrapper">
         <div className="user profile dropdown" ref={this.userBadgeMenuRef}>
-          <button type="button" className={`avatar-with-name button avatar-button ${this.state.open ? "open" : ""}`} onClick={this.handleToggleMenuClick}>
-            <UserAvatar user={this.props.user} baseUrl={this.props.baseUrl} attentionRequired={this.attentionRequired} />
+          <button
+            type="button"
+            className={`avatar-with-name button avatar-button ${this.state.open ? "open" : ""}`}
+            onClick={this.handleToggleMenuClick}
+          >
+            <UserAvatar
+              user={this.props.user}
+              baseUrl={this.props.baseUrl}
+              attentionRequired={this.attentionRequired}
+            />
           </button>
-          {this.state.open &&
+          {this.state.open && (
             <div className="dropdown-content left visible">
-              <button className="button button-transparent user-profile-close" role="button" onClick={this.handleToggleMenuClick}>
+              <button
+                className="button button-transparent user-profile-close"
+                role="button"
+                onClick={this.handleToggleMenuClick}
+              >
                 <CloseSVG className="svg-icon close" />
                 <span className="visually-hidden">Close</span>
               </button>
@@ -212,19 +224,15 @@ class DisplayUserBadgeMenu extends Component {
               <div className="manage-account">
                 <button className="button primary" onClick={this.handleProfileClick}>
                   <ProfileIcon /> <Trans>Manage account</Trans>
-                  {this.attentionRequired &&
-                    <AttentionSVG className="attention-required"/>
-                  }
+                  {this.attentionRequired && <AttentionSVG className="attention-required" />}
                 </button>
               </div>
               <button type="button" className="no-border sign-out" onClick={this.handleSignOutClick}>
-                <LogoutIcon/>
-                <Trans>
-                  Sign out
-                </Trans>
+                <LogoutIcon />
+                <Trans>Sign out</Trans>
               </button>
             </div>
-          }
+          )}
         </div>
       </div>
     );
@@ -242,4 +250,8 @@ DisplayUserBadgeMenu.propTypes = {
   dialogContext: PropTypes.object, // the dialog context prop
 };
 
-export default withAppContext(withRbac(withNavigationContext(withDialog(withAccountRecovery(withMfa(withTranslation("common")(DisplayUserBadgeMenu)))))));
+export default withAppContext(
+  withRbac(
+    withNavigationContext(withDialog(withAccountRecovery(withMfa(withTranslation("common")(DisplayUserBadgeMenu))))),
+  ),
+);

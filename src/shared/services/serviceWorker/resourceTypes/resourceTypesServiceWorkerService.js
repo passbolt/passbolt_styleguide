@@ -13,7 +13,8 @@
  */
 import ResourceTypesCollection from "../../../models/entity/resourceType/resourceTypesCollection";
 
-export const RESOURCE_TYPE_FIND_DELETED_AND_NON_DELETED_EVENT = "passbolt.resource-type.find-all-by-deleted-and-non-deleted";
+export const RESOURCE_TYPE_FIND_DELETED_AND_NON_DELETED_EVENT =
+  "passbolt.resource-type.find-all-by-deleted-and-non-deleted";
 export const RESOURCE_TYPE_UPDATE_ALL_DELETED_STATUS_EVENT = "passbolt.resource-types.update-all-deleted-status";
 
 class ResourceTypesServiceWorkerService {

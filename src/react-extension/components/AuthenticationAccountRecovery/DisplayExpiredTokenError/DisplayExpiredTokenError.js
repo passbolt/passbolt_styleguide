@@ -12,10 +12,10 @@
  * @since         3.6.0
  */
 
-import React, {Component} from "react";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import React, { Component } from "react";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 class DisplayExpiredTokenError extends Component {
   /**
@@ -25,13 +25,19 @@ class DisplayExpiredTokenError extends Component {
   render() {
     return (
       <div className="setup-error">
-        <h1><Trans>The request is expired.</Trans></h1>
-        <p><Trans>If you still need to recover your account, you will need to start the process from scratch.</Trans></p>
+        <h1>
+          <Trans>The request is expired.</Trans>
+        </h1>
+        <p>
+          <Trans>If you still need to recover your account, you will need to start the process from scratch.</Trans>
+        </p>
         <div className="form-actions">
-          <a href={`${this.props.context.trustedDomain}`}
+          <a
+            href={`${this.props.context.trustedDomain}`}
             className="button primary big full-width"
             role="button"
-            rel="noopener noreferrer">
+            rel="noopener noreferrer"
+          >
             <Trans>Continue</Trans>
           </a>
         </div>

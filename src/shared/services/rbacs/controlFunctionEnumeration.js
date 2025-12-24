@@ -15,17 +15,17 @@
 import AllowControlFunction from "./controlFunctions/allowControlFunction";
 import AllowIfGroupManagerInOneGroupFunction from "./controlFunctions/allowIfGroupManagerInOneGroupFunction";
 import DenyControlFunction from "./controlFunctions/denyControlFunction";
-import {uiActions} from "./uiActionEnumeration";
-import {actions} from "./actionEnumeration";
+import { uiActions } from "./uiActionEnumeration";
+import { actions } from "./actionEnumeration";
 
 /**
  * The supported control functions labels.
  * @type {object}
  */
 export const controlFunctions = {
-  ALLOW: 'Allow',
-  DENY: 'Deny',
-  ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP: 'AllowIfGroupManagerInOneGroup'
+  ALLOW: "Allow",
+  DENY: "Deny",
+  ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP: "AllowIfGroupManagerInOneGroup",
 };
 
 /**
@@ -35,7 +35,7 @@ export const controlFunctions = {
 export const controlFunctionResolutions = {
   [controlFunctions.ALLOW]: AllowControlFunction,
   [controlFunctions.DENY]: DenyControlFunction,
-  [controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP]: AllowIfGroupManagerInOneGroupFunction
+  [controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP]: AllowIfGroupManagerInOneGroupFunction,
 };
 
 /**
@@ -44,7 +44,7 @@ export const controlFunctionResolutions = {
  * @type {object}
  */
 export const defaultAdminActionControlResolution = {
-  [uiActions.FOLDERS_USE]: controlFunctionResolutions[controlFunctions.ALLOW] // Default example, to be removed when the placeholder won't be necessary anymore to explain the dat structure
+  [uiActions.FOLDERS_USE]: controlFunctionResolutions[controlFunctions.ALLOW], // Default example, to be removed when the placeholder won't be necessary anymore to explain the dat structure
 };
 
 /**

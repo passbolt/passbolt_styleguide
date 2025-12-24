@@ -11,24 +11,25 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.7.0
  */
-import React, {Component} from "react";
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import DialogWrapper from "../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import TooltipPortal from "../Common/Tooltip/TooltipPortal";
-import SecretRevisionsResourceServiceWorkerService
-  from "../../../shared/services/serviceWorker/secretRevision/secretRevisionsResourceServiceWorkerService";
-import {formatDateTimeAgo} from "../../../shared/utils/dateUtils";
+import SecretRevisionsResourceServiceWorkerService from "../../../shared/services/serviceWorker/secretRevision/secretRevisionsResourceServiceWorkerService";
+import { formatDateTimeAgo } from "../../../shared/utils/dateUtils";
 import DisplayCreatorSecretRevision from "./DisplayCreatorSecretRevision";
-import {withDialog} from "../../contexts/DialogContext";
+import { withDialog } from "../../contexts/DialogContext";
 import NotifyError from "../Common/Error/NotifyError/NotifyError";
 
 class DisplaySecretResourceHistory extends Component {
   constructor(props) {
     super(props);
-    this.secretRevisionsResourceServiceWorkerService = new SecretRevisionsResourceServiceWorkerService(props.context.port);
+    this.secretRevisionsResourceServiceWorkerService = new SecretRevisionsResourceServiceWorkerService(
+      props.context.port,
+    );
     this.state = this.defaultState;
     this.bindCallbacks();
   }
@@ -61,7 +62,8 @@ class DisplaySecretResourceHistory extends Component {
    */
   async componentDidMount() {
     try {
-      this.resourceSecretRevisionsCollection = await this.secretRevisionsResourceServiceWorkerService.findAllByResourceIdForDisplay(this.props.resource.id);
+      this.resourceSecretRevisionsCollection =
+        await this.secretRevisionsResourceServiceWorkerService.findAllByResourceIdForDisplay(this.props.resource.id);
     } catch (error) {
       // It can happen when the user has closed the passphrase entry dialog by instance.
       if (error?.name === "UserAbortsOperationError") {
@@ -69,7 +71,7 @@ class DisplaySecretResourceHistory extends Component {
         this.handleClose();
         return;
       }
-      this.props.dialogContext.open(NotifyError, {error});
+      this.props.dialogContext.open(NotifyError, { error });
       this.handleClose();
       return;
     }
@@ -77,7 +79,7 @@ class DisplaySecretResourceHistory extends Component {
 
     this.setState({
       resourceSecretHistorySelectedId: this.resourceSecretRevisionsCollection?.items[0]?.id,
-      isProcessing: false
+      isProcessing: false,
     });
   }
 
@@ -93,7 +95,7 @@ class DisplaySecretResourceHistory extends Component {
    * @param {string} secretRevisionId The secret revision id
    */
   onSelectSecretRevision(secretRevisionId) {
-    this.setState({resourceSecretHistorySelectedId: secretRevisionId});
+    this.setState({ resourceSecretHistorySelectedId: secretRevisionId });
   }
 
   /**
@@ -111,8 +113,8 @@ class DisplaySecretResourceHistory extends Component {
    */
   get secretHistoryAsJson() {
     const object = this.resourceSecretRevisionSelected?.secrets?.items[0]?.data;
-    return JSON.stringify(object,  null, 2);
-  };
+    return JSON.stringify(object, null, 2);
+  }
 
   /**
    * Get the resource secret revision selected
@@ -149,20 +151,34 @@ class DisplaySecretResourceHistory extends Component {
    */
   render() {
     return (
-      <DialogWrapper title={this.translate("Secret history")} subtitle={this.props.resource.metadata.name} className="resource-secret-history"
-        disabled={this.state.isProcessing} onClose={this.handleClose}>
+      <DialogWrapper
+        title={this.translate("Secret history")}
+        subtitle={this.props.resource.metadata.name}
+        className="resource-secret-history"
+        disabled={this.state.isProcessing}
+        onClose={this.handleClose}
+      >
         <div className="left-sidebar">
           <div className="sidebar-content-sections">
-            {this.resourceSecretRevisionsCollection?.items.map(resourceSecretRevision => (
+            {this.resourceSecretRevisionsCollection?.items.map((resourceSecretRevision) => (
               <div className="section-content" key={resourceSecretRevision.id}>
-                {this.hasNoRevisionsAccess(resourceSecretRevision.secrets) &&
-                  <TooltipPortal message={<Trans>You cannot access revisions created before the resource was shared with you.</Trans>}>
-                    <DisplayCreatorSecretRevision disabled={true} secretRevision={resourceSecretRevision}/>
+                {this.hasNoRevisionsAccess(resourceSecretRevision.secrets) && (
+                  <TooltipPortal
+                    message={
+                      <Trans>You cannot access revisions created before the resource was shared with you.</Trans>
+                    }
+                  >
+                    <DisplayCreatorSecretRevision disabled={true} secretRevision={resourceSecretRevision} />
                   </TooltipPortal>
-                }
-                {!this.hasNoRevisionsAccess(resourceSecretRevision.secrets) &&
-                  <DisplayCreatorSecretRevision disabled={this.state.isProcessing} secretRevision={resourceSecretRevision} secretRevisionSelectedId={this.state.resourceSecretHistorySelectedId} onSelectSecretRevision={this.onSelectSecretRevision}/>
-                }
+                )}
+                {!this.hasNoRevisionsAccess(resourceSecretRevision.secrets) && (
+                  <DisplayCreatorSecretRevision
+                    disabled={this.state.isProcessing}
+                    secretRevision={resourceSecretRevision}
+                    secretRevisionSelectedId={this.state.resourceSecretHistorySelectedId}
+                    onSelectSecretRevision={this.onSelectSecretRevision}
+                  />
+                )}
               </div>
             ))}
           </div>
@@ -173,29 +189,37 @@ class DisplaySecretResourceHistory extends Component {
               <div className="title">
                 <h2>
                   <Trans>Secret revision</Trans>
-                  <span className="subtitle">{formatDateTimeAgo(this.resourceSecretRevisionSelected?.modified, this.props.t, this.props.context.locale)}</span>
+                  <span className="subtitle">
+                    {formatDateTimeAgo(
+                      this.resourceSecretRevisionSelected?.modified,
+                      this.props.t,
+                      this.props.context.locale,
+                    )}
+                  </span>
                 </h2>
               </div>
               <div className="content">
                 <div className="secret-history-fields">
-                  {this.resourceSecretRevisionsCollection?.length > 0 &&
+                  {this.resourceSecretRevisionsCollection?.length > 0 && (
                     <pre>
-                      <code className="json-object">
-                        {this.secretHistoryAsJson}
-                      </code>
+                      <code className="json-object">{this.secretHistoryAsJson}</code>
                     </pre>
-                  }
-                  {this.resourceSecretRevisionsCollection?.length === 0 &&
+                  )}
+                  {this.resourceSecretRevisionsCollection?.length === 0 && (
                     <p className="empty-content">
                       <Trans>There is no revision</Trans>
                     </p>
-                  }
+                  )}
                 </div>
               </div>
             </div>
           </div>
           <div className="submit-wrapper">
-            <FormSubmitButton value={this.translate("Close")} disabled={this.state.isProcessing} processing={this.state.isProcessing}/>
+            <FormSubmitButton
+              value={this.translate("Close")}
+              disabled={this.state.isProcessing}
+              processing={this.state.isProcessing}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -211,5 +235,4 @@ DisplaySecretResourceHistory.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default  withAppContext(withDialog(withTranslation('common')(DisplaySecretResourceHistory)));
-
+export default withAppContext(withDialog(withTranslation("common")(DisplaySecretResourceHistory)));

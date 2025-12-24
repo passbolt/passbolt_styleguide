@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.3.0
  */
-import {PasswordGenerator} from "./PasswordGenerator";
-import {PassphraseGenerator} from "./PassphraseGenerator";
-import {SecretGeneratorComplexity} from "./SecretGeneratorComplexity";
+import { PasswordGenerator } from "./PasswordGenerator";
+import { PassphraseGenerator } from "./PassphraseGenerator";
+import { SecretGeneratorComplexity } from "./SecretGeneratorComplexity";
 
 export const SecretGenerator = {
   /**
@@ -21,11 +21,11 @@ export const SecretGenerator = {
    * @param {PasswordPoliciesDto} configuration A generator configuration
    * @return {string} A generated secret
    */
-  generate: configuration => {
+  generate: (configuration) => {
     const type = configuration.default_generator;
-    if (type === 'password') {
+    if (type === "password") {
       return PasswordGenerator.generate(configuration.password_generator_settings);
-    } else if (type === 'passphrase') {
+    } else if (type === "passphrase") {
       return PassphraseGenerator.generate(configuration.passphrase_generator_settings);
     }
   },
@@ -34,12 +34,12 @@ export const SecretGenerator = {
    * @param {string} secret A secret
    * @return {Number} The secret entropy
    */
-  entropy: secret => {
-    const {numberWords, separator, isPassphrase} = PassphraseGenerator.detectPassphrase(secret);
+  entropy: (secret) => {
+    const { numberWords, separator, isPassphrase } = PassphraseGenerator.detectPassphrase(secret);
     if (isPassphrase) {
       return SecretGeneratorComplexity.entropyPassphrase(numberWords, separator);
     } else {
       return SecretGeneratorComplexity.entropyPassword(secret);
     }
-  }
+  },
 };

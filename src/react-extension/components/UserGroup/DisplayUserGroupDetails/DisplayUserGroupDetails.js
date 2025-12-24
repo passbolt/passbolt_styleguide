@@ -13,16 +13,15 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import DisplayUserGroupDetailsInformation
-  from "../DisplayUserGroupDetailsInformation/DisplayUserGroupDetailsInformation";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
+import DisplayUserGroupDetailsInformation from "../DisplayUserGroupDetailsInformation/DisplayUserGroupDetailsInformation";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import DisplayUserGroupDetailsMembers from "../DisplayUserGroupDetailsMembers/DisplayUserGroupDetailsMembers";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { Trans, withTranslation } from "react-i18next";
 import LinkSVG from "../../../../img/svg/link.svg";
-import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 /**
  * This component displays the details of a users group
@@ -68,7 +67,6 @@ class DisplayUserGroupDetails extends React.Component {
     await this.props.clipboardContext.copy(permalink, this.translate("The permalink has been copied to clipboard."));
   }
 
-
   /**
    * Handle close sidebar click
    */
@@ -93,24 +91,33 @@ class DisplayUserGroupDetails extends React.Component {
       <div className="sidebar group">
         <div className="sidebar-header">
           <div className="teaser-image">
-            <GroupAvatar group={this.group}/>
+            <GroupAvatar group={this.group} />
           </div>
           <div className="title-area">
             <h3>
               <div className="title-wrapper">
                 <span className="name sidebar-header-title">{this.group.name}</span>
               </div>
-              <span className="subtitle"><Trans>Group</Trans></span>
+              <span className="subtitle">
+                <Trans>Group</Trans>
+              </span>
             </h3>
-            <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this group")} onClick={this.handlePermalinkClick}>
-              <LinkSVG/>
-              <span className="visuallyhidden"><Trans>Copy the link to this group</Trans></span>
+            <button
+              type="button"
+              className="title-link link no-border"
+              title={this.translate("Copy the link to this group")}
+              onClick={this.handlePermalinkClick}
+            >
+              <LinkSVG />
+              <span className="visuallyhidden">
+                <Trans>Copy the link to this group</Trans>
+              </span>
             </button>
           </div>
         </div>
         <div className="sidebar-content">
-          <DisplayUserGroupDetailsInformation/>
-          <DisplayUserGroupDetailsMembers/>
+          <DisplayUserGroupDetailsInformation />
+          <DisplayUserGroupDetailsMembers />
         </div>
       </div>
     );
@@ -125,4 +132,6 @@ DisplayUserGroupDetails.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withUserWorkspace(withClipboard(withTranslation('common')(DisplayUserGroupDetails)))));
+export default withAppContext(
+  withActionFeedback(withUserWorkspace(withClipboard(withTranslation("common")(DisplayUserGroupDetails)))),
+);

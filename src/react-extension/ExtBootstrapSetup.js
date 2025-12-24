@@ -10,7 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import InsertSetupAuthenticationIframe from "./components/AuthenticationSetup/SetupAuthentication/InsertSetupAuthenticationIframe";
 import InsertFileIframe from "./components/InsertFileIframe";
@@ -37,8 +37,7 @@ class ExtBootstrapSetup extends Component {
     const rootNode = document.getRootNode();
     const htmlTag = rootNode.lastChild;
 
-    return htmlTag?.tagName === "HTML"
-      && htmlTag.classList.contains('passbolt');
+    return htmlTag?.tagName === "HTML" && htmlTag.classList.contains("passbolt");
   }
 
   /**
@@ -75,8 +74,8 @@ class ExtBootstrapSetup extends Component {
 
     return (
       <>
-        <InsertSetupAuthenticationIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
-        <InsertFileIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
+        <InsertSetupAuthenticationIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl} />
+        <InsertFileIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl} />
       </>
     );
   }

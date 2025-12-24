@@ -13,8 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 
@@ -72,7 +72,7 @@ class DisplayResourceDetailsDescription extends React.Component {
    */
   handleTitleClickEvent() {
     const open = !this.state.open;
-    this.setState({open});
+    this.setState({ open });
   }
 
   /*
@@ -84,8 +84,7 @@ class DisplayResourceDetailsDescription extends React.Component {
    * @returns {boolean}
    */
   hasNoDescription() {
-    return !this.resource.metadata.description
-      || this.resource.metadata.description?.length === 0;
+    return !this.resource.metadata.description || this.resource.metadata.description?.length === 0;
   }
 
   /**
@@ -101,30 +100,23 @@ class DisplayResourceDetailsDescription extends React.Component {
               <span className="accordion-title">
                 <Trans>Description</Trans>
               </span>
-              {this.state.open &&
-                <CaretDownSVG/>
-              }
-              {!this.state.open &&
-                <CaretRightSVG/>
-              }
+              {this.state.open && <CaretDownSVG />}
+              {!this.state.open && <CaretRightSVG />}
             </button>
           </h4>
         </div>
-        {this.state.open &&
+        {this.state.open && (
           <div className="accordion-content">
-            {this.hasNoDescription() &&
+            {this.hasNoDescription() && (
               <p className="description-content">
-                <span className="empty-content"><Trans>There is no description.</Trans></span>
+                <span className="empty-content">
+                  <Trans>There is no description.</Trans>
+                </span>
               </p>
-            }
-            {!this.hasNoDescription() &&
-              <p className="description-content">
-                {this.resource.metadata.description}
-              </p>
-            }
+            )}
+            {!this.hasNoDescription() && <p className="description-content">{this.resource.metadata.description}</p>}
           </div>
-        }
-
+        )}
       </div>
     );
   }
@@ -135,4 +127,4 @@ DisplayResourceDetailsDescription.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsDescription));
+export default withResourceWorkspace(withTranslation("common")(DisplayResourceDetailsDescription));

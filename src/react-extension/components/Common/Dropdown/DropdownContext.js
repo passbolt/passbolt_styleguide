@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 export const DropdownContext = React.createContext({
@@ -43,7 +43,7 @@ export default class DropdownContextProvider extends Component {
     return {
       dropdownOpen: false, // dropdown open or not
       onClose: this.handleCloseDropdown.bind(this),
-      onOpen: this.handleOpenDropdown.bind(this)
+      onOpen: this.handleOpenDropdown.bind(this),
     };
   }
 
@@ -65,15 +65,15 @@ export default class DropdownContextProvider extends Component {
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
-    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
+    document.addEventListener("click", this.handleDocumentClickEvent, { capture: true });
+    document.addEventListener("contextmenu", this.handleDocumentContextualMenuEvent, { capture: true });
+    document.addEventListener("dragstart", this.handleDocumentDragStartEvent, { capture: true });
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent, {capture: true});
-    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
+    document.removeEventListener("click", this.handleDocumentClickEvent, { capture: true });
+    document.removeEventListener("contextmenu", this.handleDocumentContextualMenuEvent, { capture: true });
+    document.removeEventListener("dragstart", this.handleDocumentDragStartEvent, { capture: true });
   }
 
   /**
@@ -111,7 +111,7 @@ export default class DropdownContextProvider extends Component {
    * Removes dropdown items
    */
   handleCloseDropdown() {
-    this.setState({dropdownOpen: false});
+    this.setState({ dropdownOpen: false });
   }
 
   /**
@@ -119,7 +119,7 @@ export default class DropdownContextProvider extends Component {
    */
   handleOpenDropdown() {
     const dropdownOpen = !this.state.dropdownOpen;
-    this.setState({dropdownOpen});
+    this.setState({ dropdownOpen });
   }
 
   /**
@@ -138,7 +138,7 @@ export default class DropdownContextProvider extends Component {
 }
 
 DropdownContextProvider.propTypes = {
-  children: PropTypes.any // The children
+  children: PropTypes.any, // The children
 };
 
 /**
@@ -150,9 +150,7 @@ export function withDropdown(WrappedComponent) {
     render() {
       return (
         <DropdownContext.Consumer>
-          {
-            dropdownContext => <WrappedComponent dropdownContext={dropdownContext} {...this.props} />
-          }
+          {(dropdownContext) => <WrappedComponent dropdownContext={dropdownContext} {...this.props} />}
         </DropdownContext.Consumer>
       );
     }

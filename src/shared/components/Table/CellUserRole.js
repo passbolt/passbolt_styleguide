@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 /**
@@ -25,9 +25,7 @@ class CellUserRole extends Component {
   render() {
     return (
       <div title={this.props.value}>
-        <span>
-          {this.props.value}
-        </span>
+        <span>{this.props.value}</span>
       </div>
     );
   }

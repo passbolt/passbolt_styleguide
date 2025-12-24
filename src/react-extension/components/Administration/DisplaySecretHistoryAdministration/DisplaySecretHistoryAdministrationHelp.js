@@ -13,8 +13,8 @@
  */
 
 import PropTypes from "prop-types";
-import React, {Component} from 'react';
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
 import InfoSVG from "../../../../img/svg/info.svg";
 
 class DisplaySecretHistoryAdministrationHelp extends Component {
@@ -25,11 +25,24 @@ class DisplaySecretHistoryAdministrationHelp extends Component {
   render() {
     return (
       <div className="sidebar-help-section">
-        <h3><Trans>Need help?</Trans></h3>
-        <p><Trans>For more information about the secret history settings, checkout the dedicated page on the official website.</Trans></p>
-        <a className="button" target="_blank" rel="noopener noreferrer" href="https://passbolt.com/docs/admin/secret-history" >
-          <InfoSVG/>
-          <span><Trans>Read the documentation</Trans></span>
+        <h3>
+          <Trans>Need help?</Trans>
+        </h3>
+        <p>
+          <Trans>
+            For more information about the secret history settings, checkout the dedicated page on the official website.
+          </Trans>
+        </p>
+        <a
+          className="button"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://passbolt.com/docs/admin/secret-history"
+        >
+          <InfoSVG />
+          <span>
+            <Trans>Read the documentation</Trans>
+          </span>
         </a>
       </div>
     );
@@ -40,4 +53,4 @@ DisplaySecretHistoryAdministrationHelp.propTypes = {
   t: PropTypes.func, // translation function
 };
 
-export default withTranslation('common')(DisplaySecretHistoryAdministrationHelp);
+export default withTranslation("common")(DisplaySecretHistoryAdministrationHelp);

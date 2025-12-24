@@ -17,11 +17,11 @@
  * @param {string} color
  * @returns {string}
  */
-export const getContrastedColor = color => {
+export const getContrastedColor = (color) => {
   const c = color.substring(1).match(/(\S{2})/g);
   const r = parseInt(c[0], 16);
   const g = parseInt(c[1], 16);
   const b = parseInt(c[2], 16);
-  const l = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-  return l > 125 ? '#000000' : '#ffffff';
+  const l = (r * 299 + g * 587 + b * 114) / 1000;
+  return l > 125 ? "#000000" : "#ffffff";
 };

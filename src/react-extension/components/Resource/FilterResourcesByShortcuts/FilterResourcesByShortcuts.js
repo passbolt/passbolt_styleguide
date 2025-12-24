@@ -14,10 +14,10 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withRouter } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import HomeSVG from "../../../../img/svg/home.svg";
 
 /**
@@ -44,30 +44,34 @@ class FilterResourcesByShortcuts extends React.Component {
    * Returns true if the Home shortcut is currently selected
    */
   get isHomeItemSelected() {
-    return this.props.resourceWorkspaceContext.filter.type !== ResourceWorkspaceFilterTypes.FOLDER
-      && this.props.resourceWorkspaceContext.filter.type !== ResourceWorkspaceFilterTypes.ROOT_FOLDER
-      && this.props.resourceWorkspaceContext.filter.type !== ResourceWorkspaceFilterTypes.GROUP
-      && this.props.resourceWorkspaceContext.filter.type !== ResourceWorkspaceFilterTypes.TAG;
+    return (
+      this.props.resourceWorkspaceContext.filter.type !== ResourceWorkspaceFilterTypes.FOLDER &&
+      this.props.resourceWorkspaceContext.filter.type !== ResourceWorkspaceFilterTypes.ROOT_FOLDER &&
+      this.props.resourceWorkspaceContext.filter.type !== ResourceWorkspaceFilterTypes.GROUP &&
+      this.props.resourceWorkspaceContext.filter.type !== ResourceWorkspaceFilterTypes.TAG
+    );
   }
   /**
    * Whenever the shortcut "Home" has been selected
    */
   handleAllItemsClick() {
-    const filter = {type: ResourceWorkspaceFilterTypes.ALL};
-    this.props.history.push({pathname: '/app/passwords', state: {filter}});
+    const filter = { type: ResourceWorkspaceFilterTypes.ALL };
+    this.props.history.push({ pathname: "/app/passwords", state: { filter } });
   }
 
   render() {
     return (
       <div className="navigation-secondary navigation-shortcuts">
-        <ul >
+        <ul>
           <li>
             <div className={`row ${this.isHomeItemSelected ? "selected" : ""}`} onClick={this.handleAllItemsClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button type="button" className="link no-border">
                     <HomeSVG />
-                    <span><Trans>Home</Trans></span>
+                    <span>
+                      <Trans>Home</Trans>
+                    </span>
                   </button>
                 </div>
               </div>

@@ -13,10 +13,10 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext, {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import AppContext, { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {getUserFormattedName} from "../../../../shared/utils/userUtils";
+import { getUserFormattedName } from "../../../../shared/utils/userUtils";
 
 class DisplayDragUser extends React.Component {
   /**
@@ -48,7 +48,7 @@ class DisplayDragUser extends React.Component {
    * @returns {string}
    */
   get numberOfUsers() {
-    return this.selectedUsers.length > 99 ? '99+' : this.props.userWorkspaceContext.selectedUsers.length.toString();
+    return this.selectedUsers.length > 99 ? "99+" : this.props.userWorkspaceContext.selectedUsers.length.toString();
   }
 
   /**
@@ -69,14 +69,16 @@ class DisplayDragUser extends React.Component {
     const username = this.selectedUsers[0]?.username;
 
     return (
-      <div className={`drag-and-drop ${this.hasMoreThanThreeUsersSelected() ? "item-n" : `item-${this.numberOfUsers}`}`}>
-        <UserAvatar className="drag-image" user={this.selectedUsers[0]} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+      <div
+        className={`drag-and-drop ${this.hasMoreThanThreeUsersSelected() ? "item-n" : `item-${this.numberOfUsers}`}`}
+      >
+        <UserAvatar
+          className="drag-image"
+          user={this.selectedUsers[0]}
+          baseUrl={this.props.context.userSettings.getTrustedDomain()}
+        />
         <span className="message">{fullName || username}</span>
-        {this.isMultipleSelected() &&
-          <span className="count">
-            {this.numberOfUsers}
-          </span>
-        }
+        {this.isMultipleSelected() && <span className="count">{this.numberOfUsers}</span>}
       </div>
     );
   }
@@ -86,7 +88,7 @@ DisplayDragUser.contextType = AppContext;
 
 DisplayDragUser.propTypes = {
   context: PropTypes.any, // The application context
-  userWorkspaceContext: PropTypes.any
+  userWorkspaceContext: PropTypes.any,
 };
 
 export default withAppContext(withUserWorkspace(DisplayDragUser));

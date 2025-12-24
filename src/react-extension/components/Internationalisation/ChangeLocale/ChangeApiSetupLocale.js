@@ -11,10 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.2.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import ChangeLocale from "./ChangeLocale";
-import {ApiSetupContextState, withApiSetupContext} from "../../../contexts/ApiSetupContext";
+import { ApiSetupContextState, withApiSetupContext } from "../../../contexts/ApiSetupContext";
 
 /**
  * This component allows the user to change the locale for the authentication workflows.
@@ -25,9 +25,7 @@ class ChangeApiSetupLocale extends Component {
    * @returns {array}
    */
   get statesToHideLocaleSwitch() {
-    return [
-      ApiSetupContextState.INITIAL_STATE,
-    ];
+    return [ApiSetupContextState.INITIAL_STATE];
   }
 
   /**
@@ -42,11 +40,7 @@ class ChangeApiSetupLocale extends Component {
    * Render the component
    */
   render() {
-    return (
-      <>
-        {this.mustDisplayLocaleSwitch && <ChangeLocale/>}
-      </>
-    );
+    return <>{this.mustDisplayLocaleSwitch && <ChangeLocale />}</>;
   }
 }
 

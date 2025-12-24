@@ -12,9 +12,9 @@
  * @since         3.6.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 class ChooseAccountRecoveryPreference extends Component {
   /**
@@ -50,7 +50,7 @@ class ChooseAccountRecoveryPreference extends Component {
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({processing: !this.state.processing});
+    await this.setState({ processing: !this.state.processing });
   }
 
   /**
@@ -89,7 +89,7 @@ class ChooseAccountRecoveryPreference extends Component {
     const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -108,44 +108,61 @@ class ChooseAccountRecoveryPreference extends Component {
   render() {
     return (
       <div className="recovery-account-setup-extension">
-        <h1><Trans>Account recovery</Trans> ({{
-          ["opt-in"]: <Trans>Optional</Trans>,
-          ["opt-out"]: <Trans>Recommended</Trans>,
-          ["mandatory"]: <Trans>Mandatory</Trans>
-        }[this.props.policy]})</h1>
+        <h1>
+          <Trans>Account recovery</Trans> (
+          {
+            {
+              ["opt-in"]: <Trans>Optional</Trans>,
+              ["opt-out"]: <Trans>Recommended</Trans>,
+              ["mandatory"]: <Trans>Mandatory</Trans>,
+            }[this.props.policy]
+          }
+          )
+        </h1>
         <form onSubmit={this.handleSubmit}>
           <p>
-            <Trans>It is possible and recommended to share securely your recovery kit with your organization recovery
-              contacts.</Trans> <Trans>They will be able to help you in case you lose it.</Trans>
+            <Trans>
+              It is possible and recommended to share securely your recovery kit with your organization recovery
+              contacts.
+            </Trans>{" "}
+            <Trans>They will be able to help you in case you lose it.</Trans>
           </p>
           <div className="radiolist-alt">
-            {this.canReject() &&
-            <div className={`input radio ${this.state.status === "rejected" ? "checked" : ""}`}>
-              <input type="radio"
-                value="rejected"
-                onChange={this.handleInputChange}
-                name="status"
-                checked={this.state.status === "rejected"}
-                id="statusRecoverAccountReject"
-                disabled={this.isProcessing}/>
-              <label htmlFor="statusRecoverAccountReject">
-                <span className="name"><Trans>Reject</Trans></span>
-                <span className="info">
-                  <Trans>I do not agree to share this info with my organization recovery contacts</Trans>
-                </span>
-              </label>
-            </div>
-            }
+            {this.canReject() && (
+              <div className={`input radio ${this.state.status === "rejected" ? "checked" : ""}`}>
+                <input
+                  type="radio"
+                  value="rejected"
+                  onChange={this.handleInputChange}
+                  name="status"
+                  checked={this.state.status === "rejected"}
+                  id="statusRecoverAccountReject"
+                  disabled={this.isProcessing}
+                />
+                <label htmlFor="statusRecoverAccountReject">
+                  <span className="name">
+                    <Trans>Reject</Trans>
+                  </span>
+                  <span className="info">
+                    <Trans>I do not agree to share this info with my organization recovery contacts</Trans>
+                  </span>
+                </label>
+              </div>
+            )}
             <div className={`input radio ${this.state.status === "approved" ? "checked" : ""}`}>
-              <input type="radio"
+              <input
+                type="radio"
                 value="approved"
                 onChange={this.handleInputChange}
                 name="status"
                 checked={this.state.status === "approved"}
                 id="statusRecoverAccountAccept"
-                disabled={this.isProcessing}/>
+                disabled={this.isProcessing}
+              />
               <label htmlFor="statusRecoverAccountAccept">
-                <span className="name"><Trans>Accept</Trans></span>
+                <span className="name">
+                  <Trans>Accept</Trans>
+                </span>
                 <span className="info">
                   <Trans>I agree to share this info with my organization recovery contacts</Trans>
                 </span>
@@ -157,16 +174,20 @@ class ChooseAccountRecoveryPreference extends Component {
               type="submit"
               className={`button primary big full-width ${this.isProcessing ? "processing" : ""}`}
               role="button"
-              disabled={this.isProcessing}>
+              disabled={this.isProcessing}
+            >
               <Trans>Next</Trans>
             </button>
-            {this.props.canGenerateNewKeyInstead &&
-            <button type="button" className="generate-new-key link"
-              onClick={this.props.onGenerateNewKeyInstead}
-              disabled={this.isProcessing}>
-              <Trans>Generate new key instead</Trans>
-            </button>
-            }
+            {this.props.canGenerateNewKeyInstead && (
+              <button
+                type="button"
+                className="generate-new-key link"
+                onClick={this.props.onGenerateNewKeyInstead}
+                disabled={this.isProcessing}
+              >
+                <Trans>Generate new key instead</Trans>
+              </button>
+            )}
           </div>
         </form>
       </div>
@@ -179,11 +200,7 @@ ChooseAccountRecoveryPreference.defaultProps = {
 };
 
 ChooseAccountRecoveryPreference.propTypes = {
-  policy: PropTypes.oneOf([
-    "opt-in",
-    "opt-out",
-    "mandatory"
-  ]).isRequired, // The account recovery organization policy.
+  policy: PropTypes.oneOf(["opt-in", "opt-out", "mandatory"]).isRequired, // The account recovery organization policy.
   onComplete: PropTypes.func.isRequired, // Callback to trigger when the user chose its preference.
   canGenerateNewKeyInstead: PropTypes.bool, // Can generate new key
   onGenerateNewKeyInstead: PropTypes.func, // Callback to trigger when the user wants to generate a new key instead.

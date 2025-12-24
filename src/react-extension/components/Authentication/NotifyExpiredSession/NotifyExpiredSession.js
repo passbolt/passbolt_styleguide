@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
  */
-import React, {Component} from "react";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import React, { Component } from "react";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
+import { withRouter } from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 
 /**
@@ -68,17 +68,24 @@ class NotifyExpiredSession extends Component {
       <DialogWrapper
         title={this.props.t("Session Expired")}
         onClose={this.handleCloseClick}
-        className="session-expired-dialog">
+        className="session-expired-dialog"
+      >
         <div className="form-content">
-          <p><Trans>Your session has expired, you need to sign in.</Trans></p>
+          <p>
+            <Trans>Your session has expired, you need to sign in.</Trans>
+          </p>
         </div>
         <div className="submit-wrapper clearfix">
-          <a ref={this.loginLinkRef}
+          <a
+            ref={this.loginLinkRef}
             href={this.loginUrl}
             className="primary button form"
             target="_parent"
             role="button"
-            rel="noopener noreferrer"><Trans>Sign in</Trans></a>
+            rel="noopener noreferrer"
+          >
+            <Trans>Sign in</Trans>
+          </a>
         </div>
       </DialogWrapper>
     );
@@ -90,4 +97,4 @@ NotifyExpiredSession.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withTranslation('common')(NotifyExpiredSession)));
+export default withAppContext(withRouter(withTranslation("common")(NotifyExpiredSession)));

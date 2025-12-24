@@ -23,14 +23,14 @@ class UserModel {
     this.id = userDto.id;
     this.active = userDto.active;
     this.deleted = userDto.deleted;
-    this.gpgkey  = userDto.gpgkey;
+    this.gpgkey = userDto.gpgkey;
     this.groupsUsers = userDto.groups_users;
-    this.isMfaEnabled  = userDto.is_mfa_enabled;
-    this.lastLoggedIn  = userDto.last_logged_in;
-    this.profile   = userDto.profile;
-    this.role  = userDto.role;
-    this.roleId  = userDto.role_id;
-    this.username  = userDto.username;
+    this.isMfaEnabled = userDto.is_mfa_enabled;
+    this.lastLoggedIn = userDto.last_logged_in;
+    this.profile = userDto.profile;
+    this.role = userDto.role;
+    this.roleId = userDto.role_id;
+    this.username = userDto.username;
   }
 }
 

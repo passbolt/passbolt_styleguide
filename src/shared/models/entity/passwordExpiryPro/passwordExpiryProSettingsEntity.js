@@ -14,20 +14,23 @@
 
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
-import {DateTime} from "luxon";
+import { DateTime } from "luxon";
 
-const ENTITY_NAME = 'passwordExpiryProSettingsEntity';
+const ENTITY_NAME = "passwordExpiryProSettingsEntity";
 
 class PasswordExpiryProSettingsEntity extends Entity {
   /**
    * @inheritDoc
    */
   constructor(PasswordExpirySettingsDto, options = {}) {
-    super(EntitySchema.validate(
-      PasswordExpiryProSettingsEntity.ENTITY_NAME,
-      PasswordExpirySettingsDto,
-      PasswordExpiryProSettingsEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(
+        PasswordExpiryProSettingsEntity.ENTITY_NAME,
+        PasswordExpirySettingsDto,
+        PasswordExpiryProSettingsEntity.getSchema(),
+      ),
+      options,
+    );
   }
 
   /**
@@ -36,49 +39,45 @@ class PasswordExpiryProSettingsEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "automatic_expiry",
-        "automatic_update",
-        "policy_override",
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid",
+      type: "object",
+      required: ["automatic_expiry", "automatic_update", "policy_override"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "default_expiry_period": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 999,
-          "nullable": true,
+        default_expiry_period: {
+          type: "integer",
+          minimum: 1,
+          maximum: 999,
+          nullable: true,
         },
-        "policy_override": {
-          "type": "boolean",
+        policy_override: {
+          type: "boolean",
         },
-        "automatic_expiry": {
-          "type": "boolean",
+        automatic_expiry: {
+          type: "boolean",
         },
-        "automatic_update": {
-          "type": "boolean",
+        automatic_update: {
+          type: "boolean",
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "created_by": {
-          "type": "string",
-          "format": "uuid"
+        created_by: {
+          type: "string",
+          format: "uuid",
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-        "modified_by": {
-          "type": "string",
-          "format": "uuid"
+        modified_by: {
+          type: "string",
+          format: "uuid",
         },
-      }
+      },
     };
   }
 
@@ -91,7 +90,7 @@ class PasswordExpiryProSettingsEntity extends Entity {
       return null;
     }
 
-    return DateTime.utc().plus({days: this._props.default_expiry_period}).toISO();
+    return DateTime.utc().plus({ days: this._props.default_expiry_period }).toISO();
   }
 
   /*
@@ -130,7 +129,7 @@ class PasswordExpiryProSettingsEntity extends Entity {
       automatic_update: true,
     };
 
-    const dto = {...defaultData, ...data};
+    const dto = { ...defaultData, ...data };
     return new PasswordExpiryProSettingsEntity(dto);
   }
 }

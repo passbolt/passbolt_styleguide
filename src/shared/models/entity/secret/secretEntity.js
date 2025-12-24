@@ -31,50 +31,48 @@ class SecretEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "data"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["data"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "user_id": {
-          "type": "string",
-          "format": "uuid"
+        user_id: {
+          type: "string",
+          format: "uuid",
         },
-        "resource_id": {
-          "type": "string",
-          "format": "uuid"
+        resource_id: {
+          type: "string",
+          format: "uuid",
         },
-        "secret_revision_id": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true,
+        secret_revision_id: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
-        "data": {
-          "type": "string",
+        data: {
+          type: "string",
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "created_by": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true,
+        created_by: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-        "modified_by": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true,
-        }
-      }
+        modified_by: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
+        },
+      },
     };
   }
 
@@ -104,9 +102,7 @@ class SecretEntity extends EntityV2 {
    * @returns {string|SecretDataEntity} an armored pgp message or a secret data entity
    */
   get data() {
-    return this.isDataDecrypted
-      ? this._data
-      : this._props.data;
+    return this.isDataDecrypted ? this._data : this._props.data;
   }
 
   /**
@@ -163,7 +159,7 @@ class SecretEntity extends EntityV2 {
       if (!(data instanceof SecretDataEntity)) {
         throw new TypeError("The given data is not of type SecretDataEntity");
       }
-      this._data = new data.constructor(data.toDto(), {clone: true, validate: false});
+      this._data = new data.constructor(data.toDto(), { clone: true, validate: false });
       delete this._props.data;
     }
   }
@@ -176,17 +172,17 @@ class SecretEntity extends EntityV2 {
    * TODO this format validation should be part of the json schema.
    */
   static assertValidMessage(message) {
-    const error = new EntityValidationError('This is not a valid OpenPGP armored message');
-    if (!message || (typeof message !== 'string') || message === '') {
-      error.addError('data', 'empty', 'The OpenPGP armored message should not be empty.');
+    const error = new EntityValidationError("This is not a valid OpenPGP armored message");
+    if (!message || typeof message !== "string" || message === "") {
+      error.addError("data", "empty", "The OpenPGP armored message should not be empty.");
       throw error;
     }
     if (!message.match(/-----BEGIN PGP MESSAGE-----/)) {
-      error.addError('data', 'begin', 'The OpenPGP armored message should contain a start delimiter.');
+      error.addError("data", "begin", "The OpenPGP armored message should contain a start delimiter.");
       throw error;
     }
     if (!message.match(/-----END PGP MESSAGE-----/)) {
-      error.addError('data', 'end', 'The OpenPGP armored message should contain an end delimiter.');
+      error.addError("data", "end", "The OpenPGP armored message should contain an end delimiter.");
       throw error;
     }
   }
@@ -219,7 +215,7 @@ class SecretEntity extends EntityV2 {
    * @returns {object} all contain options that can be used in toDto()
    */
   static get ALL_CONTAIN_OPTIONS() {
-    return {data: true};
+    return { data: true };
   }
 }
 

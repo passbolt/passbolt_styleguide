@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import React, {Component, memo} from "react";
+import React, { Component, memo } from "react";
 import PropTypes from "prop-types";
 import AttentionSVG from "../../../img/svg/attention.svg";
 
@@ -24,7 +24,10 @@ class CellUserProfile extends Component {
    * @returns {boolean}
    */
   get isAttentionRequired() {
-    return (Boolean(this.props.value.pending_account_recovery_request)) || this.props.value.missing_metadata_key_ids?.length > 0;
+    return (
+      Boolean(this.props.value.pending_account_recovery_request) ||
+      this.props.value.missing_metadata_key_ids?.length > 0
+    );
   }
 
   /**
@@ -43,12 +46,8 @@ class CellUserProfile extends Component {
     const hasAttentionRequired = this.props.hasAttentionRequiredFeature && this.isAttentionRequired;
     return (
       <div title={this.name}>
-        <span>
-          {this.name}
-        </span>
-        {hasAttentionRequired &&
-          <AttentionSVG className="attention-required"/>
-        }
+        <span>{this.name}</span>
+        {hasAttentionRequired && <AttentionSVG className="attention-required" />}
       </div>
     );
   }
@@ -56,7 +55,7 @@ class CellUserProfile extends Component {
 
 CellUserProfile.propTypes = {
   value: PropTypes.object.isRequired, // The value to display
-  hasAttentionRequiredFeature: PropTypes.bool.isRequired // Attention require feature is enabled
+  hasAttentionRequiredFeature: PropTypes.bool.isRequired, // Attention require feature is enabled
 };
 
 export default memo(CellUserProfile);

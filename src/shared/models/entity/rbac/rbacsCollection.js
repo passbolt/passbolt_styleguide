@@ -39,8 +39,8 @@ class RbacsCollection extends EntityV2Collection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": RbacEntity.getSchema(),
+      type: "array",
+      items: RbacEntity.getSchema(),
     };
   }
 
@@ -50,7 +50,7 @@ class RbacsCollection extends EntityV2Collection {
    * @throws {EntityValidationError} If a metadata key already exists with the same id.
    */
   validateBuildRules(item, options = {}) {
-    this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
+    this.assertNotExist("id", item._props.id, { haystackSet: options?.uniqueIdsSetCache });
   }
 
   /*
@@ -65,7 +65,7 @@ class RbacsCollection extends EntityV2Collection {
    * @returns {array}
    */
   toBulkUpdateDto() {
-    return this.items.map(rbac => rbac.toUpdateDto());
+    return this.items.map((rbac) => rbac.toUpdateDto());
   }
 
   /*
@@ -80,11 +80,11 @@ class RbacsCollection extends EntityV2Collection {
    * @throws {Error} If the name parameter is not a string
    */
   findRbacByUiActionName(name) {
-    if (typeof name !== 'string' && !(name instanceof String)) {
-      throw new Error('The name parameter should be a valid string.');
+    if (typeof name !== "string" && !(name instanceof String)) {
+      throw new Error("The name parameter should be a valid string.");
     }
 
-    return this.items.find(rbac => rbac.uiAction?.name === name);
+    return this.items.find((rbac) => rbac.uiAction?.name === name);
   }
 
   /**
@@ -97,13 +97,15 @@ class RbacsCollection extends EntityV2Collection {
    */
   findRbacByRoleAndActionName(role, name) {
     if (!(role instanceof RoleEntity)) {
-      throw new Error('The role parameter should be a role entity.');
+      throw new Error("The role parameter should be a role entity.");
     }
-    if (typeof name !== 'string' && !(name instanceof String)) {
-      throw new Error('The name parameter should be a valid string.');
+    if (typeof name !== "string" && !(name instanceof String)) {
+      throw new Error("The name parameter should be a valid string.");
     }
 
-    return this.items.find(rbac => rbac.roleId === role.id && (rbac.uiAction?.name === name || rbac.action?.name === name));
+    return this.items.find(
+      (rbac) => rbac.roleId === role.id && (rbac.uiAction?.name === name || rbac.action?.name === name),
+    );
   }
 
   /**
@@ -113,11 +115,11 @@ class RbacsCollection extends EntityV2Collection {
    * @throws {Error} If the name parameter is not a string
    */
   findRbacByActionName(name) {
-    if (typeof name !== 'string' && !(name instanceof String)) {
-      throw new Error('The name parameter should be a valid string.');
+    if (typeof name !== "string" && !(name instanceof String)) {
+      throw new Error("The name parameter should be a valid string.");
     }
 
-    return this.items.find(rbac => rbac.action?.name === name);
+    return this.items.find((rbac) => rbac.action?.name === name);
   }
 
   /*
@@ -130,14 +132,14 @@ class RbacsCollection extends EntityV2Collection {
    */
   pushMany(data, entityOptions = {}, options = {}) {
     const uniqueIdsSetCache = new Set(this.extract("id"));
-    const onItemPushed = item => {
+    const onItemPushed = (item) => {
       uniqueIdsSetCache.add(item._props.id);
     };
 
     options = {
       onItemPushed: onItemPushed,
-      validateBuildRules: {...options?.validateBuildRules, uniqueIdsSetCache},
-      ...options
+      validateBuildRules: { ...options?.validateBuildRules, uniqueIdsSetCache },
+      ...options,
     };
 
     super.pushMany(data, entityOptions, options);

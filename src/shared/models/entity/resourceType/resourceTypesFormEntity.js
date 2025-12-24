@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.12.0
  */
-import {DateTime} from "luxon";
+import { DateTime } from "luxon";
 import EntityV2 from "../abstract/entityV2";
 import EntityValidationError from "../abstract/entityValidationError";
 import MetadataKeysCollection from "../metadata/metadataKeysCollection";
@@ -26,31 +26,17 @@ import {
   RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
   RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
-  RESOURCE_TYPE_V5_TOTP_SLUG
+  RESOURCE_TYPE_V5_TOTP_SLUG,
 } from "../resourceType/resourceTypeSchemasDefinition";
 import ResourceTypesCollection from "../resourceType/resourceTypesCollection";
 
 const partialCheckboxesMapping = {
-  passwordV4: [
-    RESOURCE_TYPE_PASSWORD_STRING_SLUG,
-    RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  ],
-  totpV4: [
-    RESOURCE_TYPE_TOTP_SLUG,
-  ],
-  passwordV5: [
-    RESOURCE_TYPE_V5_DEFAULT_SLUG,
-    RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
-  ],
-  totpV5: [
-    RESOURCE_TYPE_V5_TOTP_SLUG,
-  ],
-  customFieldsV5: [
-    RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
-  ],
-  noteV5: [
-    RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
-  ],
+  passwordV4: [RESOURCE_TYPE_PASSWORD_STRING_SLUG, RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG],
+  totpV4: [RESOURCE_TYPE_TOTP_SLUG],
+  passwordV5: [RESOURCE_TYPE_V5_DEFAULT_SLUG, RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG],
+  totpV5: [RESOURCE_TYPE_V5_TOTP_SLUG],
+  customFieldsV5: [RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG],
+  noteV5: [RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG],
 };
 
 const fullResourceTypesMapping = {
@@ -59,25 +45,15 @@ const fullResourceTypesMapping = {
     RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
     RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
   ],
-  totpV4: [
-    RESOURCE_TYPE_TOTP_SLUG,
-    RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
-  ],
+  totpV4: [RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG],
   passwordV5: [
     RESOURCE_TYPE_V5_DEFAULT_SLUG,
     RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG,
     RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
   ],
-  totpV5: [
-    RESOURCE_TYPE_V5_TOTP_SLUG,
-    RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
-  ],
-  customFieldsV5: [
-    RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
-  ],
-  noteV5: [
-    RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG
-  ],
+  totpV5: [RESOURCE_TYPE_V5_TOTP_SLUG, RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG],
+  customFieldsV5: [RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG],
+  noteV5: [RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG],
 };
 
 class ResourceTypesFormEntity extends EntityV2 {
@@ -99,8 +75,8 @@ class ResourceTypesFormEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
+      type: "object",
+      required: [
         "password_v4",
         "password_v5",
         "totp_v4",
@@ -117,51 +93,51 @@ class ResourceTypesFormEntity extends EntityV2 {
         "has_v4_resource_types",
         "has_v5_resource_types",
       ],
-      "properties": {
-        "password_v4": {
-          "type": "boolean",
+      properties: {
+        password_v4: {
+          type: "boolean",
         },
-        "password_v5": {
-          "type": "boolean",
+        password_v5: {
+          type: "boolean",
         },
-        "totp_v4": {
-          "type": "boolean",
+        totp_v4: {
+          type: "boolean",
         },
-        "totp_v5": {
-          "type": "boolean",
+        totp_v5: {
+          type: "boolean",
         },
-        "custom_fields_v5": {
-          "type": "boolean",
+        custom_fields_v5: {
+          type: "boolean",
         },
-        "note_v5": {
-          "type": "boolean",
+        note_v5: {
+          type: "boolean",
         },
-        "password_v4_count": {
-          "type": "integer",
+        password_v4_count: {
+          type: "integer",
         },
-        "password_v5_count": {
-          "type": "integer",
+        password_v5_count: {
+          type: "integer",
         },
-        "totp_v4_count": {
-          "type": "integer",
+        totp_v4_count: {
+          type: "integer",
         },
-        "totp_v5_count": {
-          "type": "integer",
+        totp_v5_count: {
+          type: "integer",
         },
-        "custom_fields_v5_count": {
-          "type": "integer",
+        custom_fields_v5_count: {
+          type: "integer",
         },
-        "note_v5_count": {
-          "type": "integer",
+        note_v5_count: {
+          type: "integer",
         },
-        "has_v4_resource_types": {
-          "type": "boolean",
+        has_v4_resource_types: {
+          type: "boolean",
         },
-        "has_v5_resource_types": {
-          "type": "boolean",
+        has_v5_resource_types: {
+          type: "boolean",
         },
-        "resource_types": ResourceTypesCollection.getSchema(), // all resource types collection (available and deleted)
-      }
+        resource_types: ResourceTypesCollection.getSchema(), // all resource types collection (available and deleted)
+      },
     };
   }
 
@@ -175,21 +151,33 @@ class ResourceTypesFormEntity extends EntityV2 {
       throw new TypeError("The parameter 'resource_types' is not a valid 'ResourceTypesCollection' type.");
     }
 
-    const availableResourceTypesDto = resource_types.items.filter(rt => !rt.isDeleted());
+    const availableResourceTypesDto = resource_types.items.filter((rt) => !rt.isDeleted());
     const availableResourceTypes = new ResourceTypesCollection(availableResourceTypesDto);
 
     const password_v4 = this._areAllResourceTypesAvailable(partialCheckboxesMapping.passwordV4, availableResourceTypes);
     const password_v5 = this._areAllResourceTypesAvailable(partialCheckboxesMapping.passwordV5, availableResourceTypes);
     const totp_v4 = this._areAllResourceTypesAvailable(partialCheckboxesMapping.totpV4, availableResourceTypes);
     const totp_v5 = this._areAllResourceTypesAvailable(partialCheckboxesMapping.totpV5, availableResourceTypes);
-    const custom_fields_v5 = this._areAllResourceTypesAvailable(partialCheckboxesMapping.customFieldsV5, availableResourceTypes);
+    const custom_fields_v5 = this._areAllResourceTypesAvailable(
+      partialCheckboxesMapping.customFieldsV5,
+      availableResourceTypes,
+    );
     const note_v5 = this._areAllResourceTypesAvailable(partialCheckboxesMapping.noteV5, availableResourceTypes);
 
-    const password_v4_count = this._getResourcesCountForResourceTypeFamily(fullResourceTypesMapping.passwordV4, resource_types);
-    const password_v5_count = this._getResourcesCountForResourceTypeFamily(fullResourceTypesMapping.passwordV5, resource_types);
+    const password_v4_count = this._getResourcesCountForResourceTypeFamily(
+      fullResourceTypesMapping.passwordV4,
+      resource_types,
+    );
+    const password_v5_count = this._getResourcesCountForResourceTypeFamily(
+      fullResourceTypesMapping.passwordV5,
+      resource_types,
+    );
     const totp_v4_count = this._getResourcesCountForResourceTypeFamily(fullResourceTypesMapping.totpV4, resource_types);
     const totp_v5_count = this._getResourcesCountForResourceTypeFamily(fullResourceTypesMapping.totpV5, resource_types);
-    const custom_fields_v5_count = this._getResourcesCountForResourceTypeFamily(fullResourceTypesMapping.customFieldsV5, availableResourceTypes);
+    const custom_fields_v5_count = this._getResourcesCountForResourceTypeFamily(
+      fullResourceTypesMapping.customFieldsV5,
+      availableResourceTypes,
+    );
     const note_v5_count = this._getResourcesCountForResourceTypeFamily(fullResourceTypesMapping.noteV5, resource_types);
 
     const has_v4_resource_types = resource_types.hasSomeOfVersion("v4");
@@ -210,7 +198,7 @@ class ResourceTypesFormEntity extends EntityV2 {
       custom_fields_v5_count,
       has_v4_resource_types,
       has_v5_resource_types,
-      resource_types
+      resource_types,
     });
   }
 
@@ -237,7 +225,7 @@ class ResourceTypesFormEntity extends EntityV2 {
    * @private
    */
   static _areAllResourceTypesAvailable(requiredResourceTypes, availableResourceTypesCollection) {
-    return requiredResourceTypes.every(slug => availableResourceTypesCollection.hasOneWithSlug(slug));
+    return requiredResourceTypes.every((slug) => availableResourceTypesCollection.hasOneWithSlug(slug));
   }
 
   /**
@@ -249,29 +237,55 @@ class ResourceTypesFormEntity extends EntityV2 {
     let error = null;
     if (!this._props.password_v4 && this._props.password_v4_count > 0) {
       error = error || new EntityValidationError();
-      error.addError("password_v4", "has_content", "One (or more) resource type v4 having a password is deleted but its resources_count is not 0.");
+      error.addError(
+        "password_v4",
+        "has_content",
+        "One (or more) resource type v4 having a password is deleted but its resources_count is not 0.",
+      );
     }
     if (!this._props.totp_v4 && this._props.totp_v4_count > 0) {
       error = error || new EntityValidationError();
-      error.addError("totp_v4", "has_content", "One (or more) resource type v4 having a totp is deleted but its resources_count is not 0.");
+      error.addError(
+        "totp_v4",
+        "has_content",
+        "One (or more) resource type v4 having a totp is deleted but its resources_count is not 0.",
+      );
     }
     if (!this._props.password_v5 && this._props.password_v5_count > 0) {
       error = error || new EntityValidationError();
-      error.addError("password_v5", "has_content", "One (or more) resource type v5 having a password is deleted but its resources_count is not 0.");
+      error.addError(
+        "password_v5",
+        "has_content",
+        "One (or more) resource type v5 having a password is deleted but its resources_count is not 0.",
+      );
     }
     if (!this._props.totp_v5 && this._props.totp_v5_count > 0) {
       error = error || new EntityValidationError();
-      error.addError("totp_v5", "has_content", "One (or more) resource type v5 having a totp is deleted but its resources_count is not 0.");
+      error.addError(
+        "totp_v5",
+        "has_content",
+        "One (or more) resource type v5 having a totp is deleted but its resources_count is not 0.",
+      );
     }
     if (!this._props.custom_fields_v5 && this._props.custom_fields_v5_count > 0) {
       error = error || new EntityValidationError();
-      error.addError("custom_fields_v5", "has_content", "Custom fields resource type is deleted but there is existing custom fields resources.");
+      error.addError(
+        "custom_fields_v5",
+        "has_content",
+        "Custom fields resource type is deleted but there is existing custom fields resources.",
+      );
     }
     if (!this._props.note_v5 && this._props.note_v5_count > 0) {
       error = error || new EntityValidationError();
       error.addError("note_v5", "has_content", "Note resource type is deleted but there is existing note resources.");
     }
-    if (!this._props.password_v4 && !this._props.totp_v4 && !this._props.password_v5 && !this._props.totp_v5 && !this._props.note_v5) {
+    if (
+      !this._props.password_v4 &&
+      !this._props.totp_v4 &&
+      !this._props.password_v5 &&
+      !this._props.totp_v5 &&
+      !this._props.note_v5
+    ) {
       const message = "At least one content type should be allowed";
       const rule = "minimum_requirement";
 
@@ -313,8 +327,16 @@ class ResourceTypesFormEntity extends EntityV2 {
     let result = null;
     if (metadataTypesSettings.allowCreationOfV4Resources && !this._props.password_v4 && !this._props.totp_v4) {
       result = new EntityValidationError();
-      result.addError("password_v4", "is_creation_alowed", "Creation of resource type v4 is allowed but all resource types having passwords are deleted.");
-      result.addError("totp_v4", "is_creation_alowed", "Creation of resource type v4 is allowed but all resource types having totps are deleted.");
+      result.addError(
+        "password_v4",
+        "is_creation_alowed",
+        "Creation of resource type v4 is allowed but all resource types having passwords are deleted.",
+      );
+      result.addError(
+        "totp_v4",
+        "is_creation_alowed",
+        "Creation of resource type v4 is allowed but all resource types having totps are deleted.",
+      );
     }
 
     if (!metadataTypesSettings.allowCreationOfV4Resources && this._props.password_v4) {
@@ -327,12 +349,34 @@ class ResourceTypesFormEntity extends EntityV2 {
       result.addError("totp_v4", "is_creation_not_alowed", "Creation of resource type v4 is not allowed.");
     }
 
-    if (metadataTypesSettings.allowCreationOfV5Resources && !this._props.password_v5 && !this._props.totp_v5 && !this._props.custom_fields_v5 && !this._props.note_v5) {
+    if (
+      metadataTypesSettings.allowCreationOfV5Resources &&
+      !this._props.password_v5 &&
+      !this._props.totp_v5 &&
+      !this._props.custom_fields_v5 &&
+      !this._props.note_v5
+    ) {
       result = result || new EntityValidationError();
-      result.addError("password_v5", "is_creation_alowed", "Creation of resource type v5 is allowed but all resource types having passwords are deleted.");
-      result.addError("totp_v5", "is_creation_alowed", "Creation of resource type v5 is allowed but all resource types having totps are deleted.");
-      result.addError("custom_fields_v5", "is_creation_alowed", "Creation of resource type v5 is allowed but all resource types having custom fields are deleted.");
-      result.addError("note_v5", "is_creation_alowed", "Creation of resource type v5 is allowed but all resource types having notes are deleted.");
+      result.addError(
+        "password_v5",
+        "is_creation_alowed",
+        "Creation of resource type v5 is allowed but all resource types having passwords are deleted.",
+      );
+      result.addError(
+        "totp_v5",
+        "is_creation_alowed",
+        "Creation of resource type v5 is allowed but all resource types having totps are deleted.",
+      );
+      result.addError(
+        "custom_fields_v5",
+        "is_creation_alowed",
+        "Creation of resource type v5 is allowed but all resource types having custom fields are deleted.",
+      );
+      result.addError(
+        "note_v5",
+        "is_creation_alowed",
+        "Creation of resource type v5 is allowed but all resource types having notes are deleted.",
+      );
     }
 
     if (!metadataTypesSettings.allowCreationOfV5Resources && this._props.password_v5) {
@@ -355,8 +399,7 @@ class ResourceTypesFormEntity extends EntityV2 {
       result.addError("custom_fields_v5", "is_creation_not_alowed", "Creation of resource type v5 is not allowed.");
     }
 
-
-    const activeMetadataKeysCollection = metadataKeysCollection.items.filter(metadataKey => !metadataKey.expired);
+    const activeMetadataKeysCollection = metadataKeysCollection.items.filter((metadataKey) => !metadataKey.expired);
     if (activeMetadataKeysCollection.length === 0 && this._props.password_v5) {
       result = result || new EntityValidationError();
       result.addError("password_v5", "active_metadata_key", "No active metadata key defined.");
@@ -410,21 +453,24 @@ class ResourceTypesFormEntity extends EntityV2 {
    */
   toResourceTypesCollection() {
     //computes the new resource types collection state based on the form
-    const availableResourceTypes = this._resource_types.items.filter(rt =>
-      (this._props.password_v4 && rt.isV4() && rt.hasPassword() && !rt.hasTotp()) // password v4 only resource types
-      || (this._props.totp_v4 && rt.isV4() && !rt.hasPassword() && rt.hasTotp()) // standalone totp v4 resource types
-      || (this._props.totp_v4 && this._props.password_v4 && rt.isV4() && rt.hasPassword() && rt.hasTotp())  // password + totp v4 resource types
-      || (this._props.password_v5 && rt.isV5() && rt.hasPassword() && !rt.hasTotp())  // password v5 only resource types
-      || (this._props.totp_v5 && rt.isV5() && !rt.hasPassword() && rt.hasTotp())  // standalone v5 only resource types
-      || (this._props.totp_v5 && this._props.password_v5 && rt.isV5() && rt.hasPassword() && rt.hasTotp())  // password + totp v5 resource types
-      || (this._props.custom_fields_v5 && rt.slug === RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG)  // note v5 only resource types
-      || (this._props.note_v5 && rt.slug === RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG)  // note v5 only resource types
+    const availableResourceTypes = this._resource_types.items.filter(
+      (rt) =>
+        (this._props.password_v4 && rt.isV4() && rt.hasPassword() && !rt.hasTotp()) || // password v4 only resource types
+        (this._props.totp_v4 && rt.isV4() && !rt.hasPassword() && rt.hasTotp()) || // standalone totp v4 resource types
+        (this._props.totp_v4 && this._props.password_v4 && rt.isV4() && rt.hasPassword() && rt.hasTotp()) || // password + totp v4 resource types
+        (this._props.password_v5 && rt.isV5() && rt.hasPassword() && !rt.hasTotp()) || // password v5 only resource types
+        (this._props.totp_v5 && rt.isV5() && !rt.hasPassword() && rt.hasTotp()) || // standalone v5 only resource types
+        (this._props.totp_v5 && this._props.password_v5 && rt.isV5() && rt.hasPassword() && rt.hasTotp()) || // password + totp v5 resource types
+        (this._props.custom_fields_v5 && rt.slug === RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG) || // note v5 only resource types
+        (this._props.note_v5 && rt.slug === RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG), // note v5 only resource types
     );
-    const deletedResourceTypes = this._resource_types.items.filter(rt => !availableResourceTypes.some(art => rt.id === art.id));
+    const deletedResourceTypes = this._resource_types.items.filter(
+      (rt) => !availableResourceTypes.some((art) => rt.id === art.id),
+    );
 
     //keep only the diff changes
-    const resourceTypesToEnable = availableResourceTypes.filter(art => art.isDeleted());
-    const resourceTypesToDelete = deletedResourceTypes.filter(drt => !drt.isDeleted());
+    const resourceTypesToEnable = availableResourceTypes.filter((art) => art.isDeleted());
+    const resourceTypesToDelete = deletedResourceTypes.filter((drt) => !drt.isDeleted());
 
     //mark resource types as deleted
     const now = DateTime.now().toISO();
@@ -437,10 +483,7 @@ class ResourceTypesFormEntity extends EntityV2 {
       resourceTypesToEnable[i].deleted = null;
     }
 
-    return new ResourceTypesCollection([
-      ...resourceTypesToEnable,
-      ...resourceTypesToDelete
-    ]);
+    return new ResourceTypesCollection([...resourceTypesToEnable, ...resourceTypesToDelete]);
   }
 }
 

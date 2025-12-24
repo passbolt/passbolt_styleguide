@@ -11,18 +11,18 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.2.0
  */
-import i18n from 'i18next';
-import {initReactI18next} from 'react-i18next';
-import HttpApi from 'i18next-http-backend';
-import React, {Component} from "react";
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import HttpApi from "i18next-http-backend";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 
 /**
  * The locales default path.
  * @type {string}
  */
-const defaultLocalesPath = '/locales/{{lng}}/{{ns}}.json';
+const defaultLocalesPath = "/locales/{{lng}}/{{ns}}.json";
 
 /**
  * This component set up the translation process
@@ -38,7 +38,7 @@ class TranslationProvider extends Component {
    */
   get defaultState() {
     return {
-      ready: false // if i18n ready
+      ready: false, // if i18n ready
     };
   }
 
@@ -50,7 +50,7 @@ class TranslationProvider extends Component {
       // init i18next, for all options read: https://www.i18next.com/overview/configuration-options
       .init({
         lng: this.locale,
-        load: 'currentOnly',
+        load: "currentOnly",
         interpolation: {
           escapeValue: false, // not needed since react already escape - https://github.com/i18next/react-i18next/issues/277
         },
@@ -66,17 +66,17 @@ class TranslationProvider extends Component {
            */
         },
         backend: {
-          loadPath: (lngs, namespaces) => this.getTranslationPath(lngs, namespaces)
+          loadPath: (lngs, namespaces) => this.getTranslationPath(lngs, namespaces),
         },
         supportedLngs: this.supportedLocales,
         fallbackLng: false,
-        ns: ['common'],
-        defaultNS: 'common',
+        ns: ["common"],
+        defaultNS: "common",
         keySeparator: false, // don't use the dot for separator of nested json object
         nsSeparator: false, // allowed ':' in key to avoid namespace separator
         debug: false,
       });
-    this.setState({ready: true});
+    this.setState({ ready: true });
   }
 
   /**
@@ -96,11 +96,9 @@ class TranslationProvider extends Component {
     const lng = lngs[0];
     const ns = namespaces[0];
     // i18next is doing a fallback on en-GB we are redirecting to our en-UK folder
-    const actualLng = lng === 'en-GB' ? 'en-UK' : lng;
+    const actualLng = lng === "en-GB" ? "en-UK" : lng;
     const basePath = this.props.loadingPath || defaultLocalesPath;
-    return basePath
-      .replace('{{lng}}', actualLng)
-      .replace('{{ns}}', ns);
+    return basePath.replace("{{lng}}", actualLng).replace("{{ns}}", ns);
   }
 
   /**
@@ -111,14 +109,12 @@ class TranslationProvider extends Component {
     let locales = [];
     if (!this.props.context.siteSettings?.supportedLocales) {
       locales.push(this.locale);
-    }  else {
-      locales = this.props.context.siteSettings?.supportedLocales.map(
-        supportedLocale => supportedLocale.locale
-      );
+    } else {
+      locales = this.props.context.siteSettings?.supportedLocales.map((supportedLocale) => supportedLocale.locale);
     }
 
-    if (locales.includes('en-UK')) {
-      locales.push('en-GB'); //Need to add the locale to support i18next fallback as en-UK is not supported
+    if (locales.includes("en-UK")) {
+      locales.push("en-GB"); //Need to add the locale to support i18next fallback as en-UK is not supported
     }
     return locales;
   }
@@ -163,13 +159,7 @@ class TranslationProvider extends Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <>
-        {this.isReady &&
-        this.props.children
-        }
-      </>
-    );
+    return <>{this.isReady && this.props.children}</>;
   }
 }
 

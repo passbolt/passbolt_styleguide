@@ -14,7 +14,7 @@
 import EntityV2Collection from "../abstract/entityV2Collection";
 import GroupUserEntity from "../groupUser/groupUserEntity";
 
-const ENTITY_NAME = 'GroupsUsers';
+const ENTITY_NAME = "GroupsUsers";
 
 class GroupsUsersCollection extends EntityV2Collection {
   /**
@@ -31,8 +31,8 @@ class GroupsUsersCollection extends EntityV2Collection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": GroupUserEntity.getSchema(),
+      type: "array",
+      items: GroupUserEntity.getSchema(),
     };
   }
 
@@ -70,7 +70,7 @@ class GroupsUsersCollection extends EntityV2Collection {
    * @return {object}
    */
   getGroupUserByUserId(userId) {
-    return this.groupsUsers.find(groupUser => groupUser.userId === userId);
+    return this.groupsUsers.find((groupUser) => groupUser.userId === userId);
   }
 
   /**
@@ -79,7 +79,7 @@ class GroupsUsersCollection extends EntityV2Collection {
    * @return {object}
    */
   getById(id) {
-    return this.items.find(groupUser => groupUser.id === id);
+    return this.items.find((groupUser) => groupUser.id === id);
   }
 }
 

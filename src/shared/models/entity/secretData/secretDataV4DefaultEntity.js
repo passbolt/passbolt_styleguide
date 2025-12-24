@@ -28,22 +28,19 @@ class SecretDataV4DefaultEntity extends secretDataEntity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "password",
-      ],
-      "properties": {
-        "password": {
-          "type": "string",
-          "maxLength": 4096,
+      type: "object",
+      required: ["password"],
+      properties: {
+        password: {
+          type: "string",
+          maxLength: 4096,
         },
-        "description": {
-          "type": "string",
-          "maxLength": 10000,
-          "nullable": true,
+        description: {
+          type: "string",
+          maxLength: 10000,
+          nullable: true,
         },
-
-      }
+      },
     };
   }
 
@@ -56,10 +53,10 @@ class SecretDataV4DefaultEntity extends secretDataEntity {
   static createFromDefault(data = {}, options) {
     const defaultData = {
       password: "",
-      description: ""
+      description: "",
     };
 
-    return new SecretDataV4DefaultEntity({...defaultData, ...data}, options);
+    return new SecretDataV4DefaultEntity({ ...defaultData, ...data }, options);
   }
 
   /**

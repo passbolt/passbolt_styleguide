@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 
 // The import account kit workflow states.
 export const ImportAccountKitWorkflowStates = {
@@ -23,7 +23,7 @@ export const ImportAccountKitWorkflowStates = {
   VERIFY_PASSPHRASE: "Verify user passphrase",
   IMPORTING_ACCOUNT: "Importing account",
   SIGNING_IN: "Sign in",
-  UNEXPECTED_ERROR_STATE: "Unexpected error state"
+  UNEXPECTED_ERROR_STATE: "Unexpected error state",
 };
 
 /**
@@ -35,12 +35,12 @@ export const ImportAccountKitContext = React.createContext({
   accountKit: null, // The account kit validated by the Background webview
   state: null, // orchestration state
   unexpectedError: null, // The unexpected error obejct if any
-  navigate: () => { }, // Change state for orchestration
-  isProcessing: () => { }, // returns true if a process is running and the UI must be disabled
-  setProcessing: () => { }, //Update processing object
-  verifyAccountKit: () => { }, // verify the account kit with the Background webview
-  importAccountAndConnect: () => { }, // import the account kit and connect the user with the Background webview
-  flushAccountKit: () => { }, // Flush the account kit
+  navigate: () => {}, // Change state for orchestration
+  isProcessing: () => {}, // returns true if a process is running and the UI must be disabled
+  setProcessing: () => {}, //Update processing object
+  verifyAccountKit: () => {}, // verify the account kit with the Background webview
+  importAccountAndConnect: () => {}, // import the account kit and connect the user with the Background webview
+  flushAccountKit: () => {}, // Flush the account kit
 });
 
 /**
@@ -90,7 +90,7 @@ export class ImportAccountKitContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({processing});
+    this.setState({ processing });
   }
 
   /**
@@ -98,7 +98,7 @@ export class ImportAccountKitContextProvider extends React.Component {
    * @returns {void}
    */
   flushAccountKit() {
-    this.setState({accountKit: null});
+    this.setState({ accountKit: null });
   }
 
   /**
@@ -107,7 +107,7 @@ export class ImportAccountKitContextProvider extends React.Component {
    * @returns {void}
    */
   navigate(state) {
-    this.setState({state});
+    this.setState({ state });
   }
 
   /**
@@ -118,11 +118,17 @@ export class ImportAccountKitContextProvider extends React.Component {
   async verifyAccountKit(accountKit) {
     try {
       this.setProcessing(true);
-      const accountKitValidated = await this.props.context.port.request("passbolt.background.verify-account-kit", accountKit);
-      return this.setState({state: ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE, accountKit: accountKitValidated});
+      const accountKitValidated = await this.props.context.port.request(
+        "passbolt.background.verify-account-kit",
+        accountKit,
+      );
+      return this.setState({
+        state: ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE,
+        accountKit: accountKitValidated,
+      });
     } catch (error) {
       console.error(error);
-      return this.setState({unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE});
+      return this.setState({ unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE });
     } finally {
       this.setProcessing(false);
     }
@@ -159,7 +165,7 @@ export class ImportAccountKitContextProvider extends React.Component {
       await this.props.context.port.request("passbolt.auth.login", passphrase);
     } catch (error) {
       console.error(error);
-      return this.setState({unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE});
+      return this.setState({ unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE });
     }
   }
 
@@ -169,9 +175,7 @@ export class ImportAccountKitContextProvider extends React.Component {
    */
   render() {
     return (
-      <ImportAccountKitContext.Provider value={this.state}>
-        {this.props.children}
-      </ImportAccountKitContext.Provider>
+      <ImportAccountKitContext.Provider value={this.state}>{this.props.children}</ImportAccountKitContext.Provider>
     );
   }
 }
@@ -192,9 +196,9 @@ export function withImportAccountKitContext(WrappedComponent) {
     render() {
       return (
         <ImportAccountKitContext.Consumer>
-          {
-            importAccountKitContext => <WrappedComponent importAccountKitContext={importAccountKitContext} {...this.props} />
-          }
+          {(importAccountKitContext) => (
+            <WrappedComponent importAccountKitContext={importAccountKitContext} {...this.props} />
+          )}
         </ImportAccountKitContext.Consumer>
       );
     }

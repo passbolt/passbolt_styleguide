@@ -15,7 +15,7 @@
 import PassboltResponseEntity from "../../../models/entity/apiService/PassboltResponseEntity";
 import AbstractService from "../abstract/abstractService";
 
-const RBAC_SERVICE_RESOURCE_NAME = '/rbacs';
+const RBAC_SERVICE_RESOURCE_NAME = "/rbacs";
 
 export default class RbacApiService extends AbstractService {
   /**

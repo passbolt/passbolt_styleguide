@@ -15,18 +15,21 @@
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 
-const ENTITY_NAME = 'UserPassphrasePolicies';
+const ENTITY_NAME = "UserPassphrasePolicies";
 
 class UserPassphrasePoliciesEntity extends Entity {
   /**
    * @inheritDoc
    */
   constructor(userPassphrasePoliciesDto, options = {}) {
-    super(EntitySchema.validate(
-      UserPassphrasePoliciesEntity.ENTITY_NAME,
-      userPassphrasePoliciesDto,
-      UserPassphrasePoliciesEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(
+        UserPassphrasePoliciesEntity.ENTITY_NAME,
+        userPassphrasePoliciesDto,
+        UserPassphrasePoliciesEntity.getSchema(),
+      ),
+      options,
+    );
   }
 
   /**
@@ -35,41 +38,38 @@ class UserPassphrasePoliciesEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "entropy_minimum",
-        "external_dictionary_check",
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid",
+      type: "object",
+      required: ["entropy_minimum", "external_dictionary_check"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "entropy_minimum": {
-          "type": "integer",
-          "minimum": 50,
-          "maximum": 224,
+        entropy_minimum: {
+          type: "integer",
+          minimum: 50,
+          maximum: 224,
         },
-        "external_dictionary_check": {
-          "type": "boolean"
+        external_dictionary_check: {
+          type: "boolean",
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "created_by": {
-          "type": "string",
-          "format": "uuid"
+        created_by: {
+          type: "string",
+          format: "uuid",
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-        "modified_by": {
-          "type": "string",
-          "format": "uuid"
+        modified_by: {
+          type: "string",
+          format: "uuid",
         },
-      }
+      },
     };
   }
 

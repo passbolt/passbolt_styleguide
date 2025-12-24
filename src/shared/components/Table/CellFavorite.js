@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component, memo} from "react";
+import React, { Component, memo } from "react";
 import PropTypes from "prop-types";
 import FavoriteSVG from "../../../img/svg/favorite.svg";
 
@@ -60,7 +60,7 @@ class CellFavorite extends Component {
     const isFavorite = this.value.favorite !== null && this.value.favorite !== undefined;
     return (
       <button type="button" className={`no-border no-text ${isFavorite ? "fav" : "unfav"}`} onClick={this.handleClick}>
-        <FavoriteSVG/>
+        <FavoriteSVG />
       </button>
     );
   }

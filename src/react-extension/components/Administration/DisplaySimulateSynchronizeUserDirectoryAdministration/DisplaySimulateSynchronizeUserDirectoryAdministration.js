@@ -11,14 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import DisplayLoadingDialog from "../DisplayLoadingDialog/DisplayLoadingDialog";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withAdminUserDirectory} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAdminUserDirectory } from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import download from "downloadjs";
@@ -44,7 +44,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
       loading: true,
 
       openFullReport: false,
-      userDirectorySimulateSynchronizeResult: null
+      userDirectorySimulateSynchronizeResult: null,
     };
   }
 
@@ -67,7 +67,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
   async componentDidMount() {
     try {
       const result = await this.props.adminUserDirectoryContext.simulateUsers();
-      this.setState({loading: false, userDirectorySimulateSynchronizeResult: result});
+      this.setState({ loading: false, userDirectorySimulateSynchronizeResult: result });
     } catch (error) {
       await this.handleError(error);
     }
@@ -88,7 +88,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * Handle the click on the errors
    */
   handleFullReportClicked() {
-    this.setState({openFullReport: !this.state.openFullReport});
+    this.setState({ openFullReport: !this.state.openFullReport });
   }
 
   /**
@@ -136,7 +136,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get usersSuccess() {
-    const successStatus = user => user.status === "success";
+    const successStatus = (user) => user.status === "success";
     return this.users.filter(successStatus);
   }
 
@@ -145,7 +145,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get groupsSuccess() {
-    const successStatus = group => group.status === "success";
+    const successStatus = (group) => group.status === "success";
     return this.groups.filter(successStatus);
   }
 
@@ -154,7 +154,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get usersWarning() {
-    const warningStatus = user => user.status === "warning";
+    const warningStatus = (user) => user.status === "warning";
     return this.users.filter(warningStatus);
   }
 
@@ -163,17 +163,16 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get groupsWarning() {
-    const warningStatus = group => group.status === "warning";
+    const warningStatus = (group) => group.status === "warning";
     return this.groups.filter(warningStatus);
   }
-
 
   /**
    * Get users error
    * @returns {*}
    */
   get usersError() {
-    const successStatus = user => user.status === "error";
+    const successStatus = (user) => user.status === "error";
     return this.users.filter(successStatus);
   }
 
@@ -182,7 +181,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get groupsError() {
-    const successStatus = group => group.status === "error";
+    const successStatus = (group) => group.status === "error";
     return this.groups.filter(successStatus);
   }
 
@@ -191,7 +190,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get usersIgnored() {
-    const successStatus = user => user.status === "ignore";
+    const successStatus = (user) => user.status === "ignore";
     return this.users.filter(successStatus);
   }
 
@@ -200,7 +199,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get groupsIgnored() {
-    const successStatus = group => group.status === "ignore";
+    const successStatus = (group) => group.status === "ignore";
     return this.groups.filter(successStatus);
   }
 
@@ -233,12 +232,14 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {boolean}
    */
   hasErrorOrIgnoreResource() {
-    return this.usersError.length > 0
-      || this.groupsError.length > 0
-      || this.usersWarning.length > 0
-      || this.groupsWarning.length > 0
-      || this.usersIgnored.length > 0
-      || this.groupsIgnored.length > 0;
+    return (
+      this.usersError.length > 0 ||
+      this.groupsError.length > 0 ||
+      this.usersWarning.length > 0 ||
+      this.groupsWarning.length > 0 ||
+      this.usersIgnored.length > 0 ||
+      this.groupsIgnored.length > 0
+    );
   }
 
   /**
@@ -246,7 +247,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {string}
    */
   getFullReport() {
-    let fullReport = '';
+    let fullReport = "";
     fullReport = fullReport.concat(this.getUsersFullReport());
     fullReport = fullReport.concat(this.getGroupsFullReport());
     return fullReport;
@@ -267,7 +268,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
      *
      */
 
-    const now = new Date().toISOString().slice(0, 19).replace('T', '_').replace(/:/g, '-');
+    const now = new Date().toISOString().slice(0, 19).replace("T", "_").replace(/:/g, "-");
     const filename = `passbolt-user-directory-simulate-synchronization-report-${now}.txt`;
 
     download(fullReport, filename, "text/plain");
@@ -278,19 +279,20 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {string}
    */
   getUsersFullReport() {
-    const hasReport = this.usersSuccess.length > 0
-      || this.usersWarning.length > 0
-      || this.usersError.length > 0
-      || this.usersIgnored.length > 0;
+    const hasReport =
+      this.usersSuccess.length > 0 ||
+      this.usersWarning.length > 0 ||
+      this.usersError.length > 0 ||
+      this.usersIgnored.length > 0;
 
     if (!hasReport) {
-      return '';
+      return "";
     }
 
-    let userFullReport = '';
+    let userFullReport = "";
     const usersHeader = `-----------------------------------------------\n${this.props.t("Users")}\n-----------------------------------------------\n`;
     userFullReport = userFullReport.concat(usersHeader);
-    const addMessage = user => userFullReport = userFullReport.concat(`- ${user.message}\n`);
+    const addMessage = (user) => (userFullReport = userFullReport.concat(`- ${user.message}\n`));
     if (this.usersSuccess.length > 0) {
       userFullReport = userFullReport.concat(`\n${this.props.t("Success:")}\n`);
       this.usersSuccess.map(addMessage);
@@ -307,7 +309,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
       userFullReport = userFullReport.concat(`\n${this.props.t("Ignored:")}\n`);
       this.usersIgnored.map(addMessage);
     }
-    return userFullReport.concat('\n');
+    return userFullReport.concat("\n");
   }
 
   /**
@@ -315,19 +317,20 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {string}
    */
   getGroupsFullReport() {
-    const hasReport = this.groupsSuccess.length > 0
-      || this.groupsWarning.length > 0
-      || this.groupsError.length > 0
-      || this.groupsIgnored.length > 0;
+    const hasReport =
+      this.groupsSuccess.length > 0 ||
+      this.groupsWarning.length > 0 ||
+      this.groupsError.length > 0 ||
+      this.groupsIgnored.length > 0;
 
     if (!hasReport) {
-      return '';
+      return "";
     }
 
-    let groupFullReport = '';
+    let groupFullReport = "";
     const groupsHeader = `-----------------------------------------------\n${this.props.t("Groups")}\n-----------------------------------------------\n`;
     groupFullReport = groupFullReport.concat(groupsHeader);
-    const addMessage = group => groupFullReport = groupFullReport.concat(`- ${group.message}\n`);
+    const addMessage = (group) => (groupFullReport = groupFullReport.concat(`- ${group.message}\n`));
     if (this.groupsSuccess.length > 0) {
       groupFullReport = groupFullReport.concat(`\n${this.props.t("Success:")}\n`);
       this.groupsSuccess.map(addMessage);
@@ -360,82 +363,133 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {JSX}
    */
   render() {
-    const fullReportText = this.users ? String(this.getFullReport()) : '';
+    const fullReportText = this.users ? String(this.getFullReport()) : "";
 
     return (
       <div>
-        {this.isLoading() &&
-        <DisplayLoadingDialog onClose={this.handleClose} title={this.props.t("Synchronize simulation")}></DisplayLoadingDialog>
-        }
-        {!this.isLoading() &&
-        <DialogWrapper className='ldap-simulate-synchronize-dialog' title={this.props.t("Synchronize simulation report")}
-          onClose={this.handleClose} disabled={this.isLoading()}>
-          <div className="form-content" onSubmit={this.handleFormSubmit}>
-            <p>
-              <strong><Trans>The operation was successful.</Trans></strong>
-            </p>
-            {fullReportText &&
-            <>
-              {this.hasSuccessResource() &&
-              <p id="resources-synchronize">
-                {this.hasSuccessUserResource() &&
-                  <>{this.props.t("{{count}} user will be synchronized.", {count: this.usersSuccess.length})}</>
-                }
-                {this.hasSuccessUserResource() && this.hasSuccessGroupResource() && <br/>}
-                {this.hasSuccessGroupResource() &&
-                  <>{this.props.t("{{count}} group will be synchronized.", {count: this.groupsSuccess.length})}</>
-                }
+        {this.isLoading() && (
+          <DisplayLoadingDialog
+            onClose={this.handleClose}
+            title={this.props.t("Synchronize simulation")}
+          ></DisplayLoadingDialog>
+        )}
+        {!this.isLoading() && (
+          <DialogWrapper
+            className="ldap-simulate-synchronize-dialog"
+            title={this.props.t("Synchronize simulation report")}
+            onClose={this.handleClose}
+            disabled={this.isLoading()}
+          >
+            <div className="form-content" onSubmit={this.handleFormSubmit}>
+              <p>
+                <strong>
+                  <Trans>The operation was successful.</Trans>
+                </strong>
               </p>
-              }
-              {!this.hasSuccessResource() &&
-            <p id="no-resources"> <Trans>No resources will be synchronized.</Trans> </p>
-              }
-              <div className={`accordion operation-details ${this.state.openFullReport ? "" : "closed"}`}>
-                <div className="accordion-header" onClick={this.handleFullReportClicked}>
-                  <button type="button" className="link no-border">
-                    <span><Trans>Full report</Trans></span>
-                    {this.state.openFullReport
-                      ? <CaretDownSVG className="baseline svg-icon"/>
-                      : <CaretRightSVG className="baseline svg-icon"/>
-                    }
-                  </button>
-                </div>
-                <div className="accordion-content">
-                  <div className="input text">
-                    <textarea className="full_report" readOnly={true} value={fullReportText}/>
+              {fullReportText && (
+                <>
+                  {this.hasSuccessResource() && (
+                    <p id="resources-synchronize">
+                      {this.hasSuccessUserResource() && (
+                        <>{this.props.t("{{count}} user will be synchronized.", { count: this.usersSuccess.length })}</>
+                      )}
+                      {this.hasSuccessUserResource() && this.hasSuccessGroupResource() && <br />}
+                      {this.hasSuccessGroupResource() && (
+                        <>
+                          {this.props.t("{{count}} group will be synchronized.", { count: this.groupsSuccess.length })}
+                        </>
+                      )}
+                    </p>
+                  )}
+                  {!this.hasSuccessResource() && (
+                    <p id="no-resources">
+                      {" "}
+                      <Trans>No resources will be synchronized.</Trans>{" "}
+                    </p>
+                  )}
+                  <div className={`accordion operation-details ${this.state.openFullReport ? "" : "closed"}`}>
+                    <div className="accordion-header" onClick={this.handleFullReportClicked}>
+                      <button type="button" className="link no-border">
+                        <span>
+                          <Trans>Full report</Trans>
+                        </span>
+                        {this.state.openFullReport ? (
+                          <CaretDownSVG className="baseline svg-icon" />
+                        ) : (
+                          <CaretRightSVG className="baseline svg-icon" />
+                        )}
+                      </button>
+                    </div>
+                    <div className="accordion-content">
+                      <div className="input text">
+                        <textarea className="full_report" readOnly={true} value={fullReportText} />
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className="link download-full-report"
+                      onClick={(event) => this.handleDownloadFullReport(event, fullReportText)}
+                    >
+                      <Trans>Download the Full Report</Trans>
+                    </button>
                   </div>
-                </div>
-                <button type="button" className="link download-full-report" onClick={event => this.handleDownloadFullReport(event, fullReportText)}>
-                  <Trans>Download the Full Report</Trans>
-                </button>
-              </div>
-            </>
-            }
-            {
-              !fullReportText && <p id="no-report-message"><span><Trans>There is nothing to synchronize</Trans></span></p>
-            }
-            {this.hasErrorOrIgnoreResource() &&
-              <div className="warning message no-margin">
-                <p>
-                  <Trans>Some resources will not be synchronized and will require your attention, see the full report.</Trans>
+                </>
+              )}
+              {!fullReportText && (
+                <p id="no-report-message">
+                  <span>
+                    <Trans>There is nothing to synchronize</Trans>
+                  </span>
                 </p>
-              </div>
-            }
-          </div>
-          <div className="submit-wrapper clearfix">
-            <a className="button" target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/docs/admin/user-provisioning/users-directory/advanced-directory-options/" > <span><Trans>Read the documentation</Trans></span></a>
-            { fullReportText &&
-              <>
-                <FormCancelButton disabled={this.isLoading()} onClick={this.handleClose}/>
-                <button type="submit" disabled={this.isLoading()} className="primary button form" onClick={this.handleSynchronize}><Trans>Synchronize</Trans></button>
-              </>
-            }
-            { !fullReportText &&
-              <button disabled={this.isLoading()} className="primary button form" type="button" onClick={this.handleClose}><Trans>Ok</Trans></button>
-            }
-          </div>
-        </DialogWrapper>
-        }
+              )}
+              {this.hasErrorOrIgnoreResource() && (
+                <div className="warning message no-margin">
+                  <p>
+                    <Trans>
+                      Some resources will not be synchronized and will require your attention, see the full report.
+                    </Trans>
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="submit-wrapper clearfix">
+              <a
+                className="button"
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://www.passbolt.com/docs/admin/user-provisioning/users-directory/advanced-directory-options/"
+              >
+                {" "}
+                <span>
+                  <Trans>Read the documentation</Trans>
+                </span>
+              </a>
+              {fullReportText && (
+                <>
+                  <FormCancelButton disabled={this.isLoading()} onClick={this.handleClose} />
+                  <button
+                    type="submit"
+                    disabled={this.isLoading()}
+                    className="primary button form"
+                    onClick={this.handleSynchronize}
+                  >
+                    <Trans>Synchronize</Trans>
+                  </button>
+                </>
+              )}
+              {!fullReportText && (
+                <button
+                  disabled={this.isLoading()}
+                  className="primary button form"
+                  type="button"
+                  onClick={this.handleClose}
+                >
+                  <Trans>Ok</Trans>
+                </button>
+              )}
+            </div>
+          </DialogWrapper>
+        )}
       </div>
     );
   }
@@ -449,4 +503,6 @@ DisplaySimulateSynchronizeUserDirectoryAdministration.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withAdminUserDirectory(withTranslation('common')(DisplaySimulateSynchronizeUserDirectoryAdministration)));
+export default withActionFeedback(
+  withAdminUserDirectory(withTranslation("common")(DisplaySimulateSynchronizeUserDirectoryAdministration)),
+);

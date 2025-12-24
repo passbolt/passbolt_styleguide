@@ -17,11 +17,11 @@ import {
   RESOURCE_NAME_MAX_LENGTH,
   RESOURCE_PASSWORD_MAX_LENGTH,
   RESOURCE_URI_MAX_LENGTH,
-  RESOURCE_USERNAME_MAX_LENGTH
+  RESOURCE_USERNAME_MAX_LENGTH,
 } from "../../constants/inputs.const";
 import ResourceViewModel from "./ResourceViewModel";
-import {RESOURCE_TYPE_V5_DEFAULT_SLUG} from "../entity/resourceType/resourceTypeSchemasDefinition";
-import {SECRET_DATA_OBJECT_TYPE} from "../entity/secretData/secretDataEntity";
+import { RESOURCE_TYPE_V5_DEFAULT_SLUG } from "../entity/resourceType/resourceTypeSchemasDefinition";
+import { SECRET_DATA_OBJECT_TYPE } from "../entity/secretData/secretDataEntity";
 
 /**
  * ResourceV5Default ViewModel
@@ -38,7 +38,7 @@ class ResourceV5DefaultViewModel extends ResourceViewModel {
     this.folder_parent_id = resourceViewModel.folder_parent_id || null;
     this.resource_type_id = resourceViewModel.resource_type_id;
 
-    if (typeof(resourceViewModel.id) !== "undefined") {
+    if (typeof resourceViewModel.id !== "undefined") {
       this.id = resourceViewModel.id;
     }
     if (resourceViewModel.name) {
@@ -47,7 +47,7 @@ class ResourceV5DefaultViewModel extends ResourceViewModel {
     if (resourceViewModel.password) {
       this.password = resourceViewModel.password;
     }
-    if (typeof(resourceViewModel.expired) !== "undefined") {
+    if (typeof resourceViewModel.expired !== "undefined") {
       this.expired = resourceViewModel.expired;
     }
   }
@@ -64,7 +64,7 @@ class ResourceV5DefaultViewModel extends ResourceViewModel {
       description: resourceDto.metadata.description,
       folder_parent_id: resourceDto.folder_parent_id,
       resource_type_id: resourceDto.resource_type_id,
-      expired: resourceDto.expired
+      expired: resourceDto.expired,
     };
 
     return new ResourceV5DefaultViewModel(resourceViewModelDto);
@@ -74,11 +74,7 @@ class ResourceV5DefaultViewModel extends ResourceViewModel {
    * @inheritdoc
    */
   static getSchema(mode) {
-    const required = [
-      "name",
-      "password",
-      "resource_type_id",
-    ];
+    const required = ["name", "password", "resource_type_id"];
 
     if (mode === ResourceViewModel.EDIT_MODE) {
       required.push("id");
@@ -129,7 +125,7 @@ class ResourceV5DefaultViewModel extends ResourceViewModel {
           type: "string",
           format: "uuid",
         },
-      }
+      },
     };
   }
 
@@ -179,11 +175,11 @@ class ResourceV5DefaultViewModel extends ResourceViewModel {
       },
     };
 
-    if (typeof(this.expired) !== "undefined") {
+    if (typeof this.expired !== "undefined") {
       dto.expired = this.expired;
     }
 
-    if (typeof(this.id) !== "undefined") {
+    if (typeof this.id !== "undefined") {
       dto.id = this.id;
     }
 
@@ -208,13 +204,16 @@ class ResourceV5DefaultViewModel extends ResourceViewModel {
   areSecretsDifferent(originalSecretDto) {
     const secretBKeys = Object.keys(originalSecretDto);
 
-    const hasSameSecretStructure = secretBKeys.length === 2
-      && Object.hasOwn(originalSecretDto, "password")
-      && Object.hasOwn(originalSecretDto, "description");
+    const hasSameSecretStructure =
+      secretBKeys.length === 2 &&
+      Object.hasOwn(originalSecretDto, "password") &&
+      Object.hasOwn(originalSecretDto, "description");
 
-    return !hasSameSecretStructure
-      || this.password !== originalSecretDto.password
-      || this.description !== originalSecretDto.description;
+    return (
+      !hasSameSecretStructure ||
+      this.password !== originalSecretDto.password ||
+      this.description !== originalSecretDto.description
+    );
   }
 }
 

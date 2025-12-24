@@ -11,12 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.8.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 
 /**
@@ -49,7 +49,7 @@ class DeleteRoleNotAllowed extends Component {
     event.preventDefault();
 
     if (!this.state.processing) {
-      this.setState({processing: true});
+      this.setState({ processing: true });
       this.handleClose();
     }
   }
@@ -83,19 +83,33 @@ class DeleteRoleNotAllowed extends Component {
         title={this.translate("Delete role")}
         onClose={this.handleClose}
         disabled={this.state.processing}
-        className="delete-role-not-allowed-dialog">
+        className="delete-role-not-allowed-dialog"
+      >
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <p>
               <Trans>
-                The role <strong className="dialog-variable">{{roleName: this.props.role.name}}</strong> can’t be deleted yet.
+                The role <strong className="dialog-variable">{{ roleName: this.props.role.name }}</strong> can’t be
+                deleted yet.
               </Trans>
             </p>
-            <p><Trans count={this.props.usersCount}>{{count: this.props.usersCount}} user is still assigned to this role.</Trans> <Trans count={this.props.usersCount}>Assign him a different role, then try deleting <strong className="dialog-variable">{{roleName: this.props.role.name}}</strong> again.</Trans></p>
+            <p>
+              <Trans count={this.props.usersCount}>
+                {{ count: this.props.usersCount }} user is still assigned to this role.
+              </Trans>{" "}
+              <Trans count={this.props.usersCount}>
+                Assign him a different role, then try deleting{" "}
+                <strong className="dialog-variable">{{ roleName: this.props.role.name }}</strong> again.
+              </Trans>
+            </p>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Ok")}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Ok")}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -110,4 +124,4 @@ DeleteRoleNotAllowed.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(DeleteRoleNotAllowed);
+export default withTranslation("common")(DeleteRoleNotAllowed);

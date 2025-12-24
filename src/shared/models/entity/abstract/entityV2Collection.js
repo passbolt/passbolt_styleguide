@@ -54,7 +54,7 @@ class EntityV2Collection extends EntityCollection {
     if (validate) {
       this.validateSchema();
     }
-    this.pushMany(this._props, {...options, clone: false});
+    this.pushMany(this._props, { ...options, clone: false });
     this._props = null;
   }
 
@@ -64,11 +64,7 @@ class EntityV2Collection extends EntityCollection {
    * @private
    */
   validateSchema() {
-    this._props = EntitySchema.validate(
-      this.constructor.name,
-      this._props,
-      this.cachedSchema
-    );
+    this._props = EntitySchema.validate(this.constructor.name, this._props, this.cachedSchema);
   }
 
   /**
@@ -104,7 +100,7 @@ class EntityV2Collection extends EntityCollection {
    * @returns {this.entityClass}
    */
   buildOrCloneEntity(data, entityOptions = {}) {
-    if (!data || typeof data !== 'object') {
+    if (!data || typeof data !== "object") {
       throw new TypeError(`${this.entityClass.name}::buildOrCloneEntity expects "data" to be an object.`);
     }
 
@@ -165,12 +161,12 @@ class EntityV2Collection extends EntityCollection {
     }
 
     const collectionValidationError = new CollectionValidationError();
-    this.items.forEach(((entity, index) => {
+    this.items.forEach((entity, index) => {
       const errors = entity.validate(options);
       if (errors) {
         collectionValidationError.addItemValidationError(index, errors);
       }
-    }));
+    });
 
     // Throw error if some issues were gathered
     if (collectionValidationError.hasErrors()) {
@@ -215,7 +211,7 @@ class EntityV2Collection extends EntityCollection {
    */
   pushOrReplace(data, entityOptions = {}, options = {}) {
     const replacePropertyName = options?.replacePropertyName || "id";
-    const foundIndex = this.items.findIndex(entity => entity[replacePropertyName] === data[replacePropertyName]);
+    const foundIndex = this.items.findIndex((entity) => entity[replacePropertyName] === data[replacePropertyName]);
 
     if (foundIndex !== -1) {
       this.items.splice(foundIndex, 1);
@@ -263,7 +259,11 @@ class EntityV2Collection extends EntityCollection {
    * @protected
    */
   handlePushItemError(index, error, entityOptions) {
-    if (error instanceof EntityValidationError || error instanceof CollectionValidationError || error instanceof EntityCollectionError) {
+    if (
+      error instanceof EntityValidationError ||
+      error instanceof CollectionValidationError ||
+      error instanceof EntityCollectionError
+    ) {
       if (!entityOptions?.ignoreInvalidEntity) {
         /*
          * The validation process for checking entity associations in the collection is functional. However, the error
@@ -275,7 +275,7 @@ class EntityV2Collection extends EntityCollection {
         throw collectionValidationError;
       } else {
         const errorMessage = `${this.entityClass.name}::pushMany ignored item (${index}) due to validation error.`;
-        Logger.error(new Error(errorMessage, {cause: error}));
+        Logger.error(new Error(errorMessage, { cause: error }));
       }
     } else {
       throw error;

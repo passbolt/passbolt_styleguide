@@ -8,11 +8,7 @@ class SslEntity extends Entity {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(EntitySchema.validate(
-      SslEntity.ENTITY_NAME,
-      dto,
-      SslEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(SslEntity.ENTITY_NAME, dto, SslEntity.getSchema()), options);
   }
 
   /**
@@ -21,22 +17,22 @@ class SslEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": ["peerValid", "hostValid", "notSelfSigned"],
-      "properties": {
-        "peerValid": {
-          "type": "boolean"
+      type: "object",
+      required: ["peerValid", "hostValid", "notSelfSigned"],
+      properties: {
+        peerValid: {
+          type: "boolean",
         },
-        "hostValid": {
-          "type": "boolean"
+        hostValid: {
+          type: "boolean",
         },
-        "notSelfSigned": {
-          "type": "boolean"
+        notSelfSigned: {
+          type: "boolean",
         },
-        "info": {
-          "type": "string"
-        }
-      }
+        info: {
+          type: "string",
+        },
+      },
     };
   }
 

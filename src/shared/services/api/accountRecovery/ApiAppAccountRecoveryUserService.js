@@ -12,8 +12,8 @@
  * @since         3.6.0
  */
 
-import {ApiClient} from "../../../lib/apiClient/apiClient";
-import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
+import { ApiClient } from "../../../lib/apiClient/apiClient";
+import { ApiClientOptions } from "../../../lib/apiClient/apiClientOptions";
 
 export default class ApiAppAccountRecoveryUserService {
   constructor() {
@@ -32,9 +32,9 @@ export default class ApiAppAccountRecoveryUserService {
    * @return {string}
    */
   getBaseUrl() {
-    const baseElement = document.getElementsByTagName('base') && document.getElementsByTagName('base')[0];
+    const baseElement = document.getElementsByTagName("base") && document.getElementsByTagName("base")[0];
     if (baseElement) {
-      return baseElement.attributes.href.value.replace(/\/*$/g, '');
+      return baseElement.attributes.href.value.replace(/\/*$/g, "");
     }
     console.error("Unable to retrieve the page base tag");
     return "";
@@ -45,8 +45,7 @@ export default class ApiAppAccountRecoveryUserService {
    * @returns {ApiClientOptions}
    */
   getApiClientOptions() {
-    return new ApiClientOptions()
-      .setBaseUrl(this.baseUrl);
+    return new ApiClientOptions().setBaseUrl(this.baseUrl);
   }
 
   /**
@@ -58,15 +57,15 @@ export default class ApiAppAccountRecoveryUserService {
     if (!cookieString) {
       return undefined;
     }
-    const cookieArray = cookieString.split('; ');
+    const cookieArray = cookieString.split("; ");
     if (!cookieArray) {
       return undefined;
     }
-    const csrfCookie = cookieArray.find(row => row.startsWith('csrfToken'));
+    const csrfCookie = cookieArray.find((row) => row.startsWith("csrfToken"));
     if (!csrfCookie) {
       return undefined;
     }
-    const csrfToken = csrfCookie.split('=');
+    const csrfToken = csrfCookie.split("=");
     if (csrfToken && csrfToken.length === 2) {
       return csrfToken[1];
     }

@@ -15,7 +15,7 @@
 import {
   controlFunctionResolutions,
   defaultAdminActionControlResolution,
-  defaultUserActionControlResolution
+  defaultUserActionControlResolution,
 } from "./controlFunctionEnumeration";
 import DenyControlFunction from "./controlFunctions/denyControlFunction";
 import AllowControlFunction from "./controlFunctions/allowControlFunction";

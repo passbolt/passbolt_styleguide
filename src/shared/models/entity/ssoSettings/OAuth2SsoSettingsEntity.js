@@ -27,11 +27,14 @@ class OAuth2SsoSettingsEntity extends Entity {
    * @inheritDoc
    */
   constructor(oAuth2SsoSettingsDto, options = {}) {
-    super(EntitySchema.validate(
-      OAuth2SsoSettingsEntity.ENTITY_NAME,
-      oAuth2SsoSettingsDto,
-      OAuth2SsoSettingsEntity.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(
+        OAuth2SsoSettingsEntity.ENTITY_NAME,
+        oAuth2SsoSettingsDto,
+        OAuth2SsoSettingsEntity.getSchema(),
+      ),
+      options,
+    );
   }
 
   /**
@@ -40,36 +43,30 @@ class OAuth2SsoSettingsEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "url",
-        "openid_configuration_path",
-        "scope",
-        "client_id",
-        "client_secret",
-      ],
-      "properties": {
-        "url": {
-          "type": "string",
-          "pattern": OAUTH2_SUPPORTED_URLS
+      type: "object",
+      required: ["url", "openid_configuration_path", "scope", "client_id", "client_secret"],
+      properties: {
+        url: {
+          type: "string",
+          pattern: OAUTH2_SUPPORTED_URLS,
         },
-        "openid_configuration_path": {
-          "type": "string",
-          "minLength": 1,
+        openid_configuration_path: {
+          type: "string",
+          minLength: 1,
         },
-        "scope": {
-          "type": "string",
-          "minLength": 1,
+        scope: {
+          type: "string",
+          minLength: 1,
         },
-        "client_id": {
-          "type": "string",
-          "minLength": 1,
+        client_id: {
+          type: "string",
+          minLength: 1,
         },
-        "client_secret": {
-          "type": "string",
-          "minLength": 1,
+        client_secret: {
+          type: "string",
+          minLength: 1,
         },
-      }
+      },
     };
   }
 

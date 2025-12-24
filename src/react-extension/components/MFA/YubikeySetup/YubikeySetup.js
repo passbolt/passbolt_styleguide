@@ -12,12 +12,12 @@
  * @since         4.4.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
-import {Trans} from 'react-i18next';
-import {MfaSettingsWorkflowStates, withMfa} from "../../../contexts/MFAContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
+import { MfaSettingsWorkflowStates, withMfa } from "../../../contexts/MFAContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 
 /**
  * This component will display the yubikey setup
@@ -43,8 +43,8 @@ class YubikeySetup extends Component {
       isSubmitted: false,
       error: {
         isRequired: false,
-        invalidCode: false
-      }
+        invalidCode: false,
+      },
     };
   }
 
@@ -84,8 +84,8 @@ class YubikeySetup extends Component {
    * set an error to object
    */
   setError(key, value) {
-    const error = Object.assign({}, this.state.error, {[key]: value});
-    this.setState({error});
+    const error = Object.assign({}, this.state.error, { [key]: value });
+    this.setState({ error });
   }
 
   /**
@@ -98,7 +98,7 @@ class YubikeySetup extends Component {
     if (this.state.yubikeyCode !== "") {
       this.setError("isRequired", false);
     }
-    this.setState({yubikeyCode});
+    this.setState({ yubikeyCode });
   }
 
   /**
@@ -108,7 +108,7 @@ class YubikeySetup extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     try {
-      this.setState({isSubmitted: true});
+      this.setState({ isSubmitted: true });
       if (this.state.yubikeyCode === "") {
         this.setError("isRequired", true);
       } else {
@@ -155,34 +155,43 @@ class YubikeySetup extends Component {
                   autoComplete="off"
                   onChange={this.handleInputChange}
                   disabled={this.hasAllInputDisabled()}
-                  ref={this.otpInputRef}/>
-                {(this.state.error.isRequired && this.state.isSubmitted) &&
-                <div className="code-required error-message"><Trans>A OTP code is required.</Trans></div>
-                }
-                {(this.state.error.invalidCode && this.state.isSubmitted) &&
-                <div className="invalid-code error-message"><Trans>This OTP is not valid.</Trans></div>
-                }
+                  ref={this.otpInputRef}
+                />
+                {this.state.error.isRequired && this.state.isSubmitted && (
+                  <div className="code-required error-message">
+                    <Trans>A OTP code is required.</Trans>
+                  </div>
+                )}
+                {this.state.error.invalidCode && this.state.isSubmitted && (
+                  <div className="invalid-code error-message">
+                    <Trans>This OTP is not valid.</Trans>
+                  </div>
+                )}
               </div>
-              <div className="helptext">
-                    Plug in the yubikey and put your finger on it.
-              </div>
+              <div className="helptext">Plug in the yubikey and put your finger on it.</div>
             </form>
           </div>
         </div>
         <div className="actions-wrapper">
           <button
             className="button cancel secondary"
-            type='button'
+            type="button"
             disabled={this.hasAllInputDisabled()}
-            onClick={this.handleCancelClick}>
-            <span><Trans>Cancel</Trans></span>
+            onClick={this.handleCancelClick}
+          >
+            <span>
+              <Trans>Cancel</Trans>
+            </span>
           </button>
           <button
             className="button primary form"
-            type='button'
+            type="button"
             disabled={this.hasAllInputDisabled()}
-            onClick={this.handleSubmit}>
-            <span><Trans>Validate</Trans></span>
+            onClick={this.handleSubmit}
+          >
+            <span>
+              <Trans>Validate</Trans>
+            </span>
           </button>
         </div>
       </>

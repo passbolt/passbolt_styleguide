@@ -13,8 +13,7 @@
  */
 import EntityV2 from "../abstract/entityV2";
 
-
-const ENTITY_NAME = 'gpgkey';
+const ENTITY_NAME = "gpgkey";
 
 const FINGERPRINT_MIN_LENGTH = 40;
 const FINGERPRINT_MAX_LENGTH = 40;
@@ -33,66 +32,63 @@ class GpgkeyEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "user_id",
-        "armored_key"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["user_id", "armored_key"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "user_id": {
-          "type": "string",
-          "format": "uuid"
+        user_id: {
+          type: "string",
+          format: "uuid",
         },
         //@todo: enforce fingerprint checks with regexp like the other fingerprint schema
-        "fingerprint": {
-          "type": "string",
-          "minLength": FINGERPRINT_MIN_LENGTH,
-          "maxLength": FINGERPRINT_MAX_LENGTH
+        fingerprint: {
+          type: "string",
+          minLength: FINGERPRINT_MIN_LENGTH,
+          maxLength: FINGERPRINT_MAX_LENGTH,
         },
-        "armored_key": {
-          "type": "string"
+        armored_key: {
+          type: "string",
         },
-        "deleted": {
-          "type": "boolean"
+        deleted: {
+          type: "boolean",
         },
-        "type": {
-          "type": "string",
-          "nullable": true,
+        type: {
+          type: "string",
+          nullable: true,
         },
-        "uid": {
-          "type": "string"
+        uid: {
+          type: "string",
         },
-        "bits": {
-          "type": "integer",
-          "nullable": true,
+        bits: {
+          type: "integer",
+          nullable: true,
         },
-        "key_id": {
-          "type": "string",
-          "minLength": KEY_ID_MIN_LENGTH,
-          "maxLength": KEY_ID_MAX_LENGTH
+        key_id: {
+          type: "string",
+          minLength: KEY_ID_MIN_LENGTH,
+          maxLength: KEY_ID_MAX_LENGTH,
         },
-        "key_created": {
-          "type": "string",
-          "format": "date-time"
+        key_created: {
+          type: "string",
+          format: "date-time",
         },
-        "expires": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true,
+        expires: {
+          type: "string",
+          format: "date-time",
+          nullable: true,
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
+        modified: {
+          type: "string",
+          format: "date-time",
+        },
+      },
     };
   }
 
@@ -154,7 +150,7 @@ class GpgkeyEntity extends EntityV2 {
    * @returns {{boolean|null}} true if deleted
    */
   get isDeleted() {
-    if (typeof this._props.deleted === 'undefined') {
+    if (typeof this._props.deleted === "undefined") {
       return null;
     }
     return this._props.deleted;

@@ -15,11 +15,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import FilterResourcesByTagsContextualMenu from "./FilterResourcesByTagsContextualMenu";
 import FilterResourcesByTagsList from "./FilterResourcesByTagsList";
-import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withRouter} from "react-router-dom";
-import {withTranslation} from "react-i18next";
+import { withContextualMenu } from "../../../contexts/ContextualMenuContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withRouter } from "react-router-dom";
+import { withTranslation } from "react-i18next";
 import CarretDownSVG from "../../../../img/svg/caret_down.svg";
 import CarretRightSVG from "../../../../img/svg/caret_right.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
@@ -48,7 +48,7 @@ class FilterResourcesByTags extends React.Component {
       open: true,
       title: this.translate("Tags"),
       filterType: null, // type of the filter selected
-      moreMenuOpen: false // more menu open
+      moreMenuOpen: false, // more menu open
     };
   }
 
@@ -68,7 +68,7 @@ class FilterResourcesByTags extends React.Component {
    */
   handleTitleClickEvent() {
     const open = !this.state.open;
-    this.setState({open});
+    this.setState({ open });
   }
 
   /**
@@ -85,7 +85,7 @@ class FilterResourcesByTags extends React.Component {
    * Close the more menu
    */
   handleCloseMoreMenu() {
-    this.setState({moreMenuOpen: false});
+    this.setState({ moreMenuOpen: false });
   }
 
   /**
@@ -94,9 +94,9 @@ class FilterResourcesByTags extends React.Component {
    */
   handleTitleMoreClickEvent(event) {
     const moreMenuOpen = !this.state.moreMenuOpen;
-    this.setState({moreMenuOpen});
+    this.setState({ moreMenuOpen });
     if (moreMenuOpen) {
-      const {left, top} = event.currentTarget.getBoundingClientRect();
+      const { left, top } = event.currentTarget.getBoundingClientRect();
       this.showContextualMenu(top + 18, left, "right");
     }
   }
@@ -110,7 +110,7 @@ class FilterResourcesByTags extends React.Component {
   showContextualMenu(top, left, className = "") {
     const onFilterSelected = this.handleFilterTagsType;
     const onBeforeHide = this.handleCloseMoreMenu;
-    const contextualMenuProps = {left, onFilterSelected, onBeforeHide, top, className};
+    const contextualMenuProps = { left, onFilterSelected, onBeforeHide, top, className };
     this.props.contextualMenuContext.show(FilterResourcesByTagsContextualMenu, contextualMenuProps);
   }
 
@@ -121,10 +121,10 @@ class FilterResourcesByTags extends React.Component {
   handleFilterTagsType(filterType) {
     if (this.isAllFilterRequire(filterType)) {
       // apply all filter
-      const filter = {type: ResourceWorkspaceFilterTypes.ALL};
-      this.props.history.push({pathname: '/app/passwords', state: {filter}});
+      const filter = { type: ResourceWorkspaceFilterTypes.ALL };
+      this.props.history.push({ pathname: "/app/passwords", state: { filter } });
     }
-    this.setState({filterType}, () => {
+    this.setState({ filterType }, () => {
       this.updateTitle();
     });
   }
@@ -137,7 +137,7 @@ class FilterResourcesByTags extends React.Component {
   isAllFilterRequire(filterType) {
     const filter = this.props.resourceWorkspaceContext.filter;
     const isSharedTag = filter.type === ResourceWorkspaceFilterTypes.TAG && filter.payload.tag.is_shared;
-    return !isSharedTag && filterType === 'shared' || isSharedTag && filterType === 'personal';
+    return (!isSharedTag && filterType === "shared") || (isSharedTag && filterType === "personal");
   }
 
   // Zero conditional statements
@@ -149,7 +149,7 @@ class FilterResourcesByTags extends React.Component {
     return {
       personal: this.translate("My tags"),
       shared: this.translate("Shared tags"),
-      default: this.translate("Tags")
+      default: this.translate("Tags"),
     };
   }
 
@@ -158,7 +158,7 @@ class FilterResourcesByTags extends React.Component {
    */
   updateTitle() {
     const title = this.titles[this.state.filterType] || this.titles.default;
-    this.setState({title});
+    this.setState({ title });
   }
 
   /**
@@ -168,12 +168,15 @@ class FilterResourcesByTags extends React.Component {
   getTagsFromResources() {
     if (this.props.context.resources) {
       // get all tags, flat in array and reduce to have unique tag)
-      const tags =  this.props.context.resources.map(resource => resource.tags).flat().reduce((accumulator, resourceTags) => {
-        if (resourceTags) {
-          !accumulator.find(tag => tag.id === resourceTags.id) && accumulator.push(resourceTags);
-        }
-        return accumulator;
-      }, []);
+      const tags = this.props.context.resources
+        .map((resource) => resource.tags)
+        .flat()
+        .reduce((accumulator, resourceTags) => {
+          if (resourceTags) {
+            !accumulator.find((tag) => tag.id === resourceTags.id) && accumulator.push(resourceTags);
+          }
+          return accumulator;
+        }, []);
       // sort array alphabetically
       return tags.sort((tagA, tagB) => tagA.slug.localeCompare(tagB.slug));
     }
@@ -201,14 +204,13 @@ class FilterResourcesByTags extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <h3 className="section-title">
-                    <span className="folders-label" onClick={this.handleTitleClickEvent} onContextMenu={this.handleTitleContextualMenuEvent}>
+                    <span
+                      className="folders-label"
+                      onClick={this.handleTitleClickEvent}
+                      onContextMenu={this.handleTitleContextualMenuEvent}
+                    >
                       <button type="button" className="link no-border">
-                        <div className="toggle-folder">
-                          {this.state.open
-                            ? <CarretDownSVG />
-                            : <CarretRightSVG />
-                          }
-                        </div>
+                        <div className="toggle-folder">{this.state.open ? <CarretDownSVG /> : <CarretRightSVG />}</div>
                         <TagV2SVG />
                         <span>{this.state.title}</span>
                       </button>
@@ -217,19 +219,20 @@ class FilterResourcesByTags extends React.Component {
                 </div>
               </div>
               <div className="dropdown right-cell more-ctrl">
-                <button type="button" className={`button-transparent inline-menu-horizontal ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}>
+                <button
+                  type="button"
+                  className={`button-transparent inline-menu-horizontal ${this.state.moreMenuOpen ? "open" : ""}`}
+                  onClick={this.handleTitleMoreClickEvent}
+                >
                   <MoreHorizontalSVG />
                 </button>
               </div>
             </div>
           </li>
         </ul>
-        {this.state.open &&
-        <FilterResourcesByTagsList
-          tags={this.getTagsFromResources()}
-          filterType={this.state.filterType}
-        />
-        }
+        {this.state.open && (
+          <FilterResourcesByTagsList tags={this.getTagsFromResources()} filterType={this.state.filterType} />
+        )}
       </div>
     );
   }
@@ -243,4 +246,6 @@ FilterResourcesByTags.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withAppContext(withResourceWorkspace(withContextualMenu(withTranslation('common')(FilterResourcesByTags)))));
+export default withRouter(
+  withAppContext(withResourceWorkspace(withContextualMenu(withTranslation("common")(FilterResourcesByTags)))),
+);

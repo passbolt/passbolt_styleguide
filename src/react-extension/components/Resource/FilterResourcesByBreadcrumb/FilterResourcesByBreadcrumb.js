@@ -11,15 +11,15 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
-import {withRouter} from "react-router-dom";
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
 import Breadcrumb from "../../Common/Navigation/Breadcrumbs/Breadcrumb";
-import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withNavigationContext } from "../../../contexts/NavigationContext";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * The component displays a navigation breadcrumb given the applied resources filter
@@ -65,7 +65,7 @@ class FilterResourcesByBreadcrumb extends Component {
         const currentFolderName = (folder && folder.name) || this.translate("N/A");
         const currentBreadcrumbItem = this.getBreadcrumb(`${currentFolderName}`, `/app/folders/view/${folder.id}`);
 
-        const subFolders = this.foldersHierarchy.map(folder => {
+        const subFolders = this.foldersHierarchy.map((folder) => {
           const currentFolderName = (folder && folder.name) || this.translate("N/A");
           return this.getBreadcrumb(`${currentFolderName}`, `/app/folders/view/${folder.id}`);
         });
@@ -86,7 +86,7 @@ class FilterResourcesByBreadcrumb extends Component {
    * @return {JSX.Element}
    */
   get allItemsBreadcrumb() {
-    return <Breadcrumb name={this.translate("Home")} onClick={this.props.navigationContext.onGoToPasswordsRequested}/>;
+    return <Breadcrumb name={this.translate("Home")} onClick={this.props.navigationContext.onGoToPasswordsRequested} />;
   }
 
   /**
@@ -94,15 +94,15 @@ class FilterResourcesByBreadcrumb extends Component {
    * @return {JSX.Element}
    */
   get myWorkspaceBreadcrumb() {
-    return <Breadcrumb name={this.translate("My workspace")} onClick={this.handleClickOnMyWorkspace.bind(this)}/>;
+    return <Breadcrumb name={this.translate("My workspace")} onClick={this.handleClickOnMyWorkspace.bind(this)} />;
   }
 
   /**
    * Handle when the user clicks on the my workspace breadcrumb.
    */
   handleClickOnMyWorkspace() {
-    const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
-    this.props.history.push(`/app/passwords`, {filter});
+    const filter = { type: ResourceWorkspaceFilterTypes.ROOT_FOLDER };
+    this.props.history.push(`/app/passwords`, { filter });
   }
 
   /**
@@ -112,7 +112,7 @@ class FilterResourcesByBreadcrumb extends Component {
    * @return {JSX.Element}
    */
   getBreadcrumb(name, pathname) {
-    return <Breadcrumb name={name} onClick={this.onBreadcrumbClick.bind(this, pathname)}/>;
+    return <Breadcrumb name={name} onClick={this.onBreadcrumbClick.bind(this, pathname)} />;
   }
 
   /**
@@ -121,7 +121,7 @@ class FilterResourcesByBreadcrumb extends Component {
    * @returns {Promise<void>}
    */
   async onBreadcrumbClick(pathname = this.props.location.pathname) {
-    this.props.history.push({pathname});
+    this.props.history.push({ pathname });
   }
 
   /**
@@ -148,9 +148,11 @@ class FilterResourcesByBreadcrumb extends Component {
     const count = this.props.resourceWorkspaceContext.filteredResources?.length;
     return (
       <Breadcrumbs items={this.items}>
-        {this.isResourceNotNull &&
-          <span className="counter"><Trans count={count}>{{count}} items</Trans></span>
-        }
+        {this.isResourceNotNull && (
+          <span className="counter">
+            <Trans count={count}>{{ count }} items</Trans>
+          </span>
+        )}
       </Breadcrumbs>
     );
   }
@@ -165,4 +167,6 @@ FilterResourcesByBreadcrumb.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withAppContext(withNavigationContext(withResourceWorkspace(withTranslation('common')(FilterResourcesByBreadcrumb)))));
+export default withRouter(
+  withAppContext(withNavigationContext(withResourceWorkspace(withTranslation("common")(FilterResourcesByBreadcrumb)))),
+);

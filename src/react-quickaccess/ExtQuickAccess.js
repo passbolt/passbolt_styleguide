@@ -3,10 +3,8 @@ import React from "react";
 import FilterResourcesByFavoritePage from "./components/FilterResourcesByFavoritePage/FilterResourcesByFavoritePage";
 import FilterResourcesByItemsIOwnPage from "./components/FilterResourcesByItemsIOwnPage/FilterResourcesByItemsIOwnPage";
 import FilterResourcesByGroupPage from "./components/FilterResourcesByGroupPage/FilterResourcesByGroupPage";
-import FilterResourcesByRecentlyModifiedPage
-  from "./components/FilterResourcesByRecentlyModifiedPage/FilterResourcesByRecentlyModifiedPage";
-import FilterResourcesBySharedWithMePage
-  from "./components/FilterResourcesBySharedWithMePage/FilterResourcesBySharedWithMePage";
+import FilterResourcesByRecentlyModifiedPage from "./components/FilterResourcesByRecentlyModifiedPage/FilterResourcesByRecentlyModifiedPage";
+import FilterResourcesBySharedWithMePage from "./components/FilterResourcesBySharedWithMePage/FilterResourcesBySharedWithMePage";
 import FilterResourcesByTagPage from "./components/FilterResourcesByTagPage/FilterResourcesByTagPage";
 import Header from "./components/Header/Header";
 import HomePage from "./components/HomePage/HomePage";
@@ -15,7 +13,7 @@ import MoreFiltersPage from "./components/MoreFiltersPage/MoreFiltersPage";
 import ResourceCreatePage from "./components/ResourceCreatePage/ResourceCreatePage";
 import ResourceViewPage from "./components/ResourceViewPage/ResourceViewPage";
 import Search from "./components/Search/Search";
-import {BrowserRouter as Router, Redirect, Route, Switch} from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import AnimatedSwitch from "./components/AnimatedSwitch/AnimatedSwitch";
 import PassphraseDialog from "./components/PassphraseDialog/PassphraseDialog";
 import PropTypes from "prop-types";
@@ -43,29 +41,28 @@ import ConfirmMetadataKeyDialog from "./components/ConfirmMetadataKeyPage/Confir
 import MetadataKeyEntity from "../shared/models/entity/metadata/metadataKeyEntity";
 import MetadataTrustedKeyEntity from "../shared/models/entity/metadata/metadataTrustedKeyEntity";
 import MetadataKeysSettingsLocalStorageContextProvider from "../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
-import ActionAbortedMissingMetadataKeysPage
-  from "./components/ActionAbortedMissingMetadataKeysPage/ActionAbortedMissingMetadataKeysPage";
+import ActionAbortedMissingMetadataKeysPage from "./components/ActionAbortedMissingMetadataKeysPage/ActionAbortedMissingMetadataKeysPage";
 import RbacServiceWorkerService from "../shared/services/serviceWorker/rbac/rbacServiceWorkerService";
 
 const SEARCH_VISIBLE_ROUTES = [
-  '/webAccessibleResources/quickaccess/home',
-  '/webAccessibleResources/quickaccess/resources/favorite',
-  '/webAccessibleResources/quickaccess/resources/group',
-  '/webAccessibleResources/quickaccess/resources/owned-by-me',
-  '/webAccessibleResources/quickaccess/resources/recently-modified',
-  '/webAccessibleResources/quickaccess/resources/shared-with-me',
-  '/webAccessibleResources/quickaccess/resources/tag'
+  "/webAccessibleResources/quickaccess/home",
+  "/webAccessibleResources/quickaccess/resources/favorite",
+  "/webAccessibleResources/quickaccess/resources/group",
+  "/webAccessibleResources/quickaccess/resources/owned-by-me",
+  "/webAccessibleResources/quickaccess/resources/recently-modified",
+  "/webAccessibleResources/quickaccess/resources/shared-with-me",
+  "/webAccessibleResources/quickaccess/resources/tag",
 ];
 
 const PASSBOLT_GETTING_STARTED_URL = "https://www.passbolt.com/start";
 
 // Supported bootstrap features.
 export const BOOTSTRAP_FEATURE = {
-  LOGIN: 'login',
-  CREATE_NEW_CREDENTIALS: 'create-new-credentials',
-  SAVE_CREDENTIALS: 'save-credentials',
-  AUTOSAVE_CREDENTIALS: 'autosave-credentials',
-  REQUEST_PASSPHRASE: 'request-passphrase',
+  LOGIN: "login",
+  CREATE_NEW_CREDENTIALS: "create-new-credentials",
+  SAVE_CREDENTIALS: "save-credentials",
+  AUTOSAVE_CREDENTIALS: "autosave-credentials",
+  REQUEST_PASSPHRASE: "request-passphrase",
 };
 
 class ExtQuickAccess extends React.Component {
@@ -122,8 +119,8 @@ class ExtQuickAccess extends React.Component {
    */
   async componentDidMount() {
     try {
-      this.state.port.on('passbolt.passphrase.request', this.handleBackgroundPageRequiresPassphraseEvent);
-      this.state.port.on('passbolt.metadata-key.trust-confirm', this.handleBackgroundPageConfirmMetadataKeyEvent);
+      this.state.port.on("passbolt.passphrase.request", this.handleBackgroundPageRequiresPassphraseEvent);
+      this.state.port.on("passbolt.metadata-key.trust-confirm", this.handleBackgroundPageConfirmMetadataKeyEvent);
       this.handlePassphraseRequest();
       await this.checkPluginIsConfigured();
       await this.getUser();
@@ -136,7 +133,7 @@ class ExtQuickAccess extends React.Component {
     } catch (e) {
       this.setState({
         hasError: true,
-        errorMessage: e.message
+        errorMessage: e.message,
       });
     }
   }
@@ -166,7 +163,7 @@ class ExtQuickAccess extends React.Component {
       focusSearch: this.focusSearch,
       // Passphrase
       passphraseRequired: false,
-      passphraseRequestId: '',
+      passphraseRequestId: "",
       // Manage popup blur
       shouldCloseAtWindowBlur: true, // when true the quickaccess in detached mode should close when losing focus
       setWindowBlurBehaviour: this.setWindowBlurBehaviour, // set the detached mode blur behaviour
@@ -178,7 +175,7 @@ class ExtQuickAccess extends React.Component {
       confirmMetadataKeyRequired: false,
       confirmMetadataKeyRequestId: null,
       confirmMetadataKeyMetadataKey: null,
-      confirmMetadataKeyMetadataTrustedKey: null
+      confirmMetadataKeyMetadataTrustedKey: null,
     };
   }
 
@@ -207,7 +204,7 @@ class ExtQuickAccess extends React.Component {
   }
 
   updateSearch(search) {
-    this.setState({search});
+    this.setState({ search });
   }
 
   focusSearch() {
@@ -221,13 +218,13 @@ class ExtQuickAccess extends React.Component {
    * @param {boolean} shouldCloseAtWindowBlur
    */
   setWindowBlurBehaviour(shouldCloseAtWindowBlur) {
-    this.setState({shouldCloseAtWindowBlur});
+    this.setState({ shouldCloseAtWindowBlur });
   }
 
   async checkPluginIsConfigured() {
-    const isConfigured = await this.state.port.request('passbolt.addon.is-configured');
+    const isConfigured = await this.state.port.request("passbolt.addon.is-configured");
     if (!isConfigured) {
-      browser.tabs.create({url: PASSBOLT_GETTING_STARTED_URL});
+      browser.tabs.create({ url: PASSBOLT_GETTING_STARTED_URL });
       window.close();
     }
   }
@@ -235,29 +232,29 @@ class ExtQuickAccess extends React.Component {
   async getUser() {
     const storageData = await this.props.storage.local.get(["_passbolt_data"]);
     const userSettings = new UserSettings(storageData._passbolt_data.config);
-    this.setState({userSettings});
+    this.setState({ userSettings });
   }
 
   async getSiteSettings() {
-    const siteSettingsDto = await this.state.port.request('passbolt.organization-settings.get');
+    const siteSettingsDto = await this.state.port.request("passbolt.organization-settings.get");
     const siteSettings = new SiteSettings(siteSettingsDto);
-    this.setState({siteSettings});
+    this.setState({ siteSettings });
   }
 
   /**
    * Get the current user info from background page and set it in the state
    */
   async getLoggedInUser() {
-    const canIUseRbac = this.state.siteSettings.canIUse('rbacs');
+    const canIUseRbac = this.state.siteSettings.canIUse("rbacs");
     const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
     const rbacsDto = canIUseRbac ? await this.rbacServiceWorkerService.findMe() : [];
     const rbacs = new RbacsCollection(rbacsDto);
-    this.setState({loggedInUser, rbacs});
+    this.setState({ loggedInUser, rbacs });
   }
 
   async getLocale() {
-    const {locale} = await this.state.port.request("passbolt.locale.get");
-    this.setState({locale});
+    const { locale } = await this.state.port.request("passbolt.locale.get");
+    this.setState({ locale });
   }
 
   /**
@@ -267,7 +264,7 @@ class ExtQuickAccess extends React.Component {
   async getAccount() {
     const accountDto = await this.state.port.request("passbolt.account.get");
     const account = new AccountEntity(accountDto);
-    this.setState({account});
+    this.setState({ account });
   }
 
   /**
@@ -280,19 +277,19 @@ class ExtQuickAccess extends React.Component {
    * @returns {Promise<void>}
    */
   async checkAuthStatus() {
-    const {isAuthenticated, isMfaRequired} = await this.state.port.request("passbolt.auth.check-status");
+    const { isAuthenticated, isMfaRequired } = await this.state.port.request("passbolt.auth.check-status");
     if (isMfaRequired) {
       this.redirectToMfaAuthentication();
       return;
     }
-    this.setState({isAuthenticated});
+    this.setState({ isAuthenticated });
   }
 
   /**
    * Redirect to MFA authentication.
    */
   redirectToMfaAuthentication() {
-    browser.tabs.create({url: this.state.userSettings.getTrustedDomain()});
+    browser.tabs.create({ url: this.state.userSettings.getTrustedDomain() });
     window.close();
   }
 
@@ -303,16 +300,16 @@ class ExtQuickAccess extends React.Component {
     }
 
     await this.getSiteSettings();
-    this.setState({isAuthenticated: true});
+    this.setState({ isAuthenticated: true });
     await this.getLoggedInUser();
   }
 
   logoutSuccessCallback() {
-    this.setState({isAuthenticated: false});
+    this.setState({ isAuthenticated: false });
   }
 
   mfaRequiredCallback(url) {
-    browser.tabs.create({url});
+    browser.tabs.create({ url });
     window.close();
   }
 
@@ -324,7 +321,7 @@ class ExtQuickAccess extends React.Component {
   }
 
   handleBackgroundPageRequiresPassphraseEvent(requestId) {
-    this.setState({passphraseRequired: true, passphraseRequestId: requestId});
+    this.setState({ passphraseRequired: true, passphraseRequestId: requestId });
   }
 
   /**
@@ -335,19 +332,19 @@ class ExtQuickAccess extends React.Component {
   handleBackgroundPageConfirmMetadataKeyEvent(requestId, data) {
     try {
       // Set validation to false as data is required for the entity used by the service worker but should not be sent to the content code.
-      const metadataKey = new MetadataKeyEntity(data.metadata_key, {validate: false});
+      const metadataKey = new MetadataKeyEntity(data.metadata_key, { validate: false });
       const metadataTrustedKey = new MetadataTrustedKeyEntity(data.metadata_trusted_key);
       this.setState({
         confirmMetadataKeyRequired: true,
         confirmMetadataKeyRequestId: requestId,
         confirmMetadataKeyMetadataKey: metadataKey,
-        confirmMetadataKeyMetadataTrustedKey: metadataTrustedKey
+        confirmMetadataKeyMetadataTrustedKey: metadataTrustedKey,
       });
     } catch (error) {
       console.log(error);
       this.setState({
         hasError: true,
-        errorMessage: error.message
+        errorMessage: error.message,
       });
     }
   }
@@ -356,7 +353,7 @@ class ExtQuickAccess extends React.Component {
     if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.REQUEST_PASSPHRASE) {
       window.close();
     } else {
-      this.setState({passphraseRequired: false, passphraseRequestId: null});
+      this.setState({ passphraseRequired: false, passphraseRequestId: null });
     }
   }
 
@@ -374,15 +371,17 @@ class ExtQuickAccess extends React.Component {
       confirmMetadataKeyRequired: false,
       confirmMetadataKeyRequestId: null,
       confirmMetadataKeyMetadataKey: null,
-      confirmMetadataKeyMetadataTrustedKey: null
+      confirmMetadataKeyMetadataTrustedKey: null,
     });
   }
 
   isReady() {
-    return this.state.isAuthenticated !== null
-      && this.state.userSettings !== null
-      && this.state.siteSettings != null
-      && this.state.locale !== null;
+    return (
+      this.state.isAuthenticated !== null &&
+      this.state.userSettings !== null &&
+      this.state.siteSettings != null &&
+      this.state.locale !== null
+    );
   }
 
   /**
@@ -414,91 +413,172 @@ class ExtQuickAccess extends React.Component {
 
     return (
       <AppContext.Provider value={this.state}>
-        <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json" locale={this.state?.locale}>
+        <TranslationProvider
+          loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json"
+          locale={this.state?.locale}
+        >
           <Router>
             <div className="container quickaccess" onKeyDown={this.handleKeyDown}>
-              <Header logoutSuccessCallback={this.logoutSuccessCallback}/>
-              {!isReady && !this.state.hasError &&
-              <div className="processing-wrapper">
-                <SpinnerSVG/>
-                <p className="processing-text">Connecting your account</p>
-              </div>
-              }
-              {this.state.hasError &&
-              <div className="processing-wrapper">
-                <p className="processing-text">{this.state.errorMessage}</p>
-              </div>
-              }
-              {isReady &&
-              <>
-                <ManageQuickAccessMode/>
-                <Switch>
-                  {/* The initial route the quickaccess panel is loaded on is a triage url. */}
-                  <Route exact path={"/webAccessibleResources/quickaccess.html"} render={() => (
-                    <Redirect to={this.getBootstrapRoute()}/>
-                  )}/>
-                  {/* The route when the user is not authenticated */}
-                  <Route exact path="/webAccessibleResources/quickaccess/login" render={() => (
-                    <SsoContextProvider>
-                      <LoginPage
-                        loginSuccessCallback={this.loginSuccessCallback}
-                        mfaRequiredCallback={this.mfaRequiredCallback}
-                        canRememberMe={this.canRememberMe}/>
-                    </SsoContextProvider>
-                  )}/>
-                  {/* Any other authenticated routes. */}
-                  <Route path="/">
-                    {this.state.passphraseRequired &&
-                      <PassphraseDialog requestId={this.state.passphraseRequestId} onComplete={this.handlePassphraseDialogCompleted} canRememberMe={this.canRememberMe}/>
-                    }
-                    {this.state.confirmMetadataKeyRequired &&
-                      <ConfirmMetadataKeyDialog requestId={this.state.confirmMetadataKeyRequestId}
-                        metadataKey={this.state.confirmMetadataKeyMetadataKey}
-                        metadataTrustedKey={this.state.confirmMetadataKeyMetadataTrustedKey}
-                        onComplete={this.handleConfirmMetadataKeyDialogCompleted}/>
-                    }
-                    <div className={`${this.state.passphraseRequired || this.state.confirmMetadataKeyRequired ? "visually-hidden" : ""}`}>
-                      <Route path={SEARCH_VISIBLE_ROUTES} render={() => (
-                        <Search ref={el => this.searchRef = el}/>
-                      )}/>
-                      <ResourceTypesLocalStorageContextProvider>
-                        <ResourceLocalStorageProvider>
-                          <MetadataTypesSettingsLocalStorageContextProvider>
-                            <MetadataKeysSettingsLocalStorageContextProvider>
-                              <PasswordPoliciesContext>
-                                <PrepareResourceContextProvider>
-                                  <PasswordExpirySettingsContextProvider>
-                                    <AnimatedSwitch>
-                                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/group" component={FilterResourcesByGroupPage}/>
-                                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/group/:id" component={FilterResourcesByGroupPage}/>
-                                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/tag" component={FilterResourcesByTagPage}/>
-                                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/tag/:id" component={FilterResourcesByTagPage}/>
-                                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/favorite" component={FilterResourcesByFavoritePage}/>
-                                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/owned-by-me" component={FilterResourcesByItemsIOwnPage}/>
-                                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/recently-modified" component={FilterResourcesByRecentlyModifiedPage}/>
-                                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/shared-with-me" component={FilterResourcesBySharedWithMePage}/>
-                                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/create" component={ResourceCreatePage}/>
-                                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/confirm-create" component={ConfirmCreatePage}/>
-                                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/autosave" component={SaveResource}/>
-                                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/view/:id" component={ResourceViewPage}/>
-                                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/more-filters" component={MoreFiltersPage}/>
-                                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/setup-extension-in-progress" component={SetupExtensionInProgress}/>
-                                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/generate-password" component={GeneratePasswordPage}/>
-                                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/action-aborted-missing-metadata-keys" component={ActionAbortedMissingMetadataKeysPage}/>
-                                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/home" component={HomePage}/>
-                                    </AnimatedSwitch>
-                                  </PasswordExpirySettingsContextProvider>
-                                </PrepareResourceContextProvider>
-                              </PasswordPoliciesContext>
-                            </MetadataKeysSettingsLocalStorageContextProvider>
-                          </MetadataTypesSettingsLocalStorageContextProvider>
-                        </ResourceLocalStorageProvider>
-                      </ResourceTypesLocalStorageContextProvider>
-                    </div>
-                  </Route>
-                </Switch>
-              </>
-              }
+              <Header logoutSuccessCallback={this.logoutSuccessCallback} />
+              {!isReady && !this.state.hasError && (
+                <div className="processing-wrapper">
+                  <SpinnerSVG />
+                  <p className="processing-text">Connecting your account</p>
+                </div>
+              )}
+              {this.state.hasError && (
+                <div className="processing-wrapper">
+                  <p className="processing-text">{this.state.errorMessage}</p>
+                </div>
+              )}
+              {isReady && (
+                <>
+                  <ManageQuickAccessMode />
+                  <Switch>
+                    {/* The initial route the quickaccess panel is loaded on is a triage url. */}
+                    <Route
+                      exact
+                      path={"/webAccessibleResources/quickaccess.html"}
+                      render={() => <Redirect to={this.getBootstrapRoute()} />}
+                    />
+                    {/* The route when the user is not authenticated */}
+                    <Route
+                      exact
+                      path="/webAccessibleResources/quickaccess/login"
+                      render={() => (
+                        <SsoContextProvider>
+                          <LoginPage
+                            loginSuccessCallback={this.loginSuccessCallback}
+                            mfaRequiredCallback={this.mfaRequiredCallback}
+                            canRememberMe={this.canRememberMe}
+                          />
+                        </SsoContextProvider>
+                      )}
+                    />
+                    {/* Any other authenticated routes. */}
+                    <Route path="/">
+                      {this.state.passphraseRequired && (
+                        <PassphraseDialog
+                          requestId={this.state.passphraseRequestId}
+                          onComplete={this.handlePassphraseDialogCompleted}
+                          canRememberMe={this.canRememberMe}
+                        />
+                      )}
+                      {this.state.confirmMetadataKeyRequired && (
+                        <ConfirmMetadataKeyDialog
+                          requestId={this.state.confirmMetadataKeyRequestId}
+                          metadataKey={this.state.confirmMetadataKeyMetadataKey}
+                          metadataTrustedKey={this.state.confirmMetadataKeyMetadataTrustedKey}
+                          onComplete={this.handleConfirmMetadataKeyDialogCompleted}
+                        />
+                      )}
+                      <div
+                        className={`${this.state.passphraseRequired || this.state.confirmMetadataKeyRequired ? "visually-hidden" : ""}`}
+                      >
+                        <Route
+                          path={SEARCH_VISIBLE_ROUTES}
+                          render={() => <Search ref={(el) => (this.searchRef = el)} />}
+                        />
+                        <ResourceTypesLocalStorageContextProvider>
+                          <ResourceLocalStorageProvider>
+                            <MetadataTypesSettingsLocalStorageContextProvider>
+                              <MetadataKeysSettingsLocalStorageContextProvider>
+                                <PasswordPoliciesContext>
+                                  <PrepareResourceContextProvider>
+                                    <PasswordExpirySettingsContextProvider>
+                                      <AnimatedSwitch>
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/group"
+                                          component={FilterResourcesByGroupPage}
+                                        />
+                                        <PrivateRoute
+                                          path="/webAccessibleResources/quickaccess/resources/group/:id"
+                                          component={FilterResourcesByGroupPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/tag"
+                                          component={FilterResourcesByTagPage}
+                                        />
+                                        <PrivateRoute
+                                          path="/webAccessibleResources/quickaccess/resources/tag/:id"
+                                          component={FilterResourcesByTagPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/favorite"
+                                          component={FilterResourcesByFavoritePage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/owned-by-me"
+                                          component={FilterResourcesByItemsIOwnPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/recently-modified"
+                                          component={FilterResourcesByRecentlyModifiedPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/shared-with-me"
+                                          component={FilterResourcesBySharedWithMePage}
+                                        />
+                                        <PrivateRoute
+                                          path="/webAccessibleResources/quickaccess/resources/create"
+                                          component={ResourceCreatePage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/confirm-create"
+                                          component={ConfirmCreatePage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/resources/autosave"
+                                          component={SaveResource}
+                                        />
+                                        <PrivateRoute
+                                          path="/webAccessibleResources/quickaccess/resources/view/:id"
+                                          component={ResourceViewPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/more-filters"
+                                          component={MoreFiltersPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/setup-extension-in-progress"
+                                          component={SetupExtensionInProgress}
+                                        />
+                                        <PrivateRoute
+                                          path="/webAccessibleResources/quickaccess/resources/generate-password"
+                                          component={GeneratePasswordPage}
+                                        />
+                                        <PrivateRoute
+                                          path="/webAccessibleResources/quickaccess/resources/action-aborted-missing-metadata-keys"
+                                          component={ActionAbortedMissingMetadataKeysPage}
+                                        />
+                                        <PrivateRoute
+                                          exact
+                                          path="/webAccessibleResources/quickaccess/home"
+                                          component={HomePage}
+                                        />
+                                      </AnimatedSwitch>
+                                    </PasswordExpirySettingsContextProvider>
+                                  </PrepareResourceContextProvider>
+                                </PasswordPoliciesContext>
+                              </MetadataKeysSettingsLocalStorageContextProvider>
+                            </MetadataTypesSettingsLocalStorageContextProvider>
+                          </ResourceLocalStorageProvider>
+                        </ResourceTypesLocalStorageContextProvider>
+                      </div>
+                    </Route>
+                  </Switch>
+                </>
+              )}
             </div>
           </Router>
         </TranslationProvider>
@@ -513,7 +593,7 @@ ExtQuickAccess.propTypes = {
   bootstrapFeature: PropTypes.string,
   bootstrapRequestId: PropTypes.string,
   openerTabId: PropTypes.string,
-  detached: PropTypes.bool
+  detached: PropTypes.bool,
 };
 
 export default ExtQuickAccess;

@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.7.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import { Trans } from "react-i18next";
 import InfoSVG from "../../../../img/svg/info.svg";
 
 /**
@@ -27,18 +27,38 @@ class DisplayScimSettingsAdministrationHelp extends Component {
   render() {
     return (
       <>
-        {this.props.shouldDisplayWarning && <div className="sidebar-help-section warning message">
-          <div className="form-banner">
-            <p><b><Trans>Warning:</Trans></b> <Trans>if you think the secret has been compromised please regenerate and update it in your provider settings.</Trans></p>
+        {this.props.shouldDisplayWarning && (
+          <div className="sidebar-help-section warning message">
+            <div className="form-banner">
+              <p>
+                <b>
+                  <Trans>Warning:</Trans>
+                </b>{" "}
+                <Trans>
+                  if you think the secret has been compromised please regenerate and update it in your provider
+                  settings.
+                </Trans>
+              </p>
+            </div>
           </div>
-        </div>
-        }
+        )}
         <div className="sidebar-help-section">
-          <h3><Trans>Need help?</Trans></h3>
-          <p><Trans>For more information about SCIM, checkout the dedicated page on the official website.</Trans></p>
-          <a className="button" target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/docs/admin/user-provisioning/scim" >
-            <InfoSVG/>
-            <span><Trans>Read the documentation</Trans></span>
+          <h3>
+            <Trans>Need help?</Trans>
+          </h3>
+          <p>
+            <Trans>For more information about SCIM, checkout the dedicated page on the official website.</Trans>
+          </p>
+          <a
+            className="button"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://www.passbolt.com/docs/admin/user-provisioning/scim"
+          >
+            <InfoSVG />
+            <span>
+              <Trans>Read the documentation</Trans>
+            </span>
           </a>
         </div>
       </>
