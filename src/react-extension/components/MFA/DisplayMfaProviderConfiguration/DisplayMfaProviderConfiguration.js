@@ -12,13 +12,13 @@
  * @since         4.4.0
  */
 
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withMfa} from "../../../contexts/MFAContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withMfa } from "../../../contexts/MFAContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import MfaProviders from "../DisplayProviderList/MfaProviders.data";
-import {DateTime} from "luxon";
+import { DateTime } from "luxon";
 import AnimatedFeedbackSuccessSVG from "../../../../img/svg/success.svg";
 
 /**
@@ -41,16 +41,20 @@ class DisplayMfaProviderConfiguration extends Component {
    * @return {string}
    */
   formatDate(date) {
-    return DateTime.fromJSDate(new Date(date)).setLocale(this.props.context.locale).toLocaleString(DateTime.DATETIME_FULL);
+    return DateTime.fromJSDate(new Date(date))
+      .setLocale(this.props.context.locale)
+      .toLocaleString(DateTime.DATETIME_FULL);
   }
 
   /**
    * Whenever the component is mounted
    */
   async componentDidMount() {
-    const verification = await this.props.context.port.request("passbolt.mfa-setup.verify-provider", {provider: this.props.mfaContext.provider});
+    const verification = await this.props.context.port.request("passbolt.mfa-setup.verify-provider", {
+      provider: this.props.mfaContext.provider,
+    });
     const formatedDate = this.formatDate(verification?.verified);
-    this.setState({verifiedDate: formatedDate});
+    this.setState({ verifiedDate: formatedDate });
   }
 
   /**
@@ -74,7 +78,7 @@ class DisplayMfaProviderConfiguration extends Component {
    * Return the provider
    */
   getProvider() {
-    return MfaProviders.find(mfaProvider => mfaProvider.id === this.props.mfaContext.provider);
+    return MfaProviders.find((mfaProvider) => mfaProvider.id === this.props.mfaContext.provider);
   }
 
   /**
@@ -126,29 +130,32 @@ class DisplayMfaProviderConfiguration extends Component {
             <div className="feedback-card">
               <div className="illustration icon-feedback">
                 <div className="success">
-                  <AnimatedFeedbackSuccessSVG/>
+                  <AnimatedFeedbackSuccessSVG />
                 </div>
-
               </div>
               <div className="additional-information">
-                <p>
-                  {this.description}
-                </p>
-                {this.state.verifiedDate && <p className="created date">
-                  {this.state.verifiedDate}
-                </p>}
+                <p>{this.description}</p>
+                {this.state.verifiedDate && <p className="created date">{this.state.verifiedDate}</p>}
               </div>
             </div>
           </div>
         </div>
         <div className="actions-wrapper">
-          <button className="button cancel secondary" onClick={this.handleCancelClick} disabled={this.isProcessing}><Trans>Manage providers</Trans></button>
-          <button className="button primary warning form" type="button" onClick={this.handleDeleteClick} disabled={this.isProcessing}>
-            <span><Trans>Turn off</Trans></span>
+          <button className="button cancel secondary" onClick={this.handleCancelClick} disabled={this.isProcessing}>
+            <Trans>Manage providers</Trans>
+          </button>
+          <button
+            className="button primary warning form"
+            type="button"
+            onClick={this.handleDeleteClick}
+            disabled={this.isProcessing}
+          >
+            <span>
+              <Trans>Turn off</Trans>
+            </span>
           </button>
         </div>
       </>
-
     );
   }
 }

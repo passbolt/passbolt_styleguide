@@ -29,9 +29,7 @@ export default class Logger {
     try {
       // If the provided value is an Error, output additional properties not shown by the console API.
       if (error instanceof Error && typeof error.toJSON === "function") {
-        console.log(
-          `Error: ${error.message}\nError structure: ${JSON.stringify(Logger.serializeError(error))}`
-        );
+        console.log(`Error: ${error.message}\nError structure: ${JSON.stringify(Logger.serializeError(error))}`);
       }
     } catch (error) {
       console.error("The logger was unable to extract additional error information", error);
@@ -46,14 +44,14 @@ export default class Logger {
   static serializeError(error) {
     // Exclude the stack since it is already pretty-printed by the default console API.
     // eslint-disable-next-line no-unused-vars
-    const {stack, cause, ...errorProperties} = error.toJSON();
+    const { stack, cause, ...errorProperties } = error.toJSON();
     // Serialize the error cause as well.
     if (error.cause && error.cause instanceof Error) {
       errorProperties.cause = Logger.serializeError(error.cause);
     }
     // Serialize passbolt collection validation errors.
     if (error instanceof CollectionValidationError && Array.isArray(error.errors)) {
-      errorProperties.errors = error.errors.map(collectionError => Logger.serializeError(collectionError));
+      errorProperties.errors = error.errors.map((collectionError) => Logger.serializeError(collectionError));
     }
     return errorProperties;
   }

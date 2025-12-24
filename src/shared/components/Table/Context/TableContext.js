@@ -11,10 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {ROW_SETTING_HEIGHT_COMPACT} from "../../../models/entity/rowsSetting/rowsSettingEntity";
-
+import { ROW_SETTING_HEIGHT_COMPACT } from "../../../models/entity/rowsSetting/rowsSettingEntity";
 
 const PADDING_SIZE = 8;
 const PADDING_FIRST_COLUMN_ADDED = 20;
@@ -70,7 +69,7 @@ export default class TableContextProvider extends Component {
       onReorderColumns: this.handleReorderColumns.bind(this), // Whenever the column is reordered
       onStartDraggingColumn: this.handleStartDraggingColumns.bind(this), // Whenever a column start to be dragged
       onEndDraggingColumn: this.handleEndDraggingColumns.bind(this), // Whenever a column end to be dragged
-      onChangeColumns: this.handleChangeColumns.bind(this) // Whenever columns change
+      onChangeColumns: this.handleChangeColumns.bind(this), // Whenever columns change
     };
   }
 
@@ -96,7 +95,7 @@ export default class TableContextProvider extends Component {
    * @returns {boolean}
    */
   isNotDefaultColumn(columns) {
-    const isNotDefaultWidth = column => column.width !== column.defaultWidth;
+    const isNotDefaultWidth = (column) => column.width !== column.defaultWidth;
     return columns.some(isNotDefaultWidth);
   }
 
@@ -107,10 +106,10 @@ export default class TableContextProvider extends Component {
    */
   get sanitizeColumnsFromProps() {
     const columns = [...this.props.columns];
-    const isNegativeWidth = column => column.width < 0;
+    const isNegativeWidth = (column) => column.width < 0;
     if (columns.some(isNegativeWidth)) {
       // Set default widths for all columns
-      columns.forEach(column => column.width = column.defaultWidth);
+      columns.forEach((column) => (column.width = column.defaultWidth));
     }
     return columns;
   }
@@ -122,7 +121,7 @@ export default class TableContextProvider extends Component {
     const tableWidth = this.getTableWidth(this.state.columns);
     if (this.isNotDefaultColumn(this.state.columns)) {
       const tableviewWidth = this.tableviewRef.current.clientWidth;
-      this.setState({tableWidth, tableviewWidth});
+      this.setState({ tableWidth, tableviewWidth });
     } else {
       // Set the column
       this.setColumnsWidthFromActualWidth(this.state.columns);
@@ -141,7 +140,7 @@ export default class TableContextProvider extends Component {
       this.setColumnsWidthFromActualWidth(this.state.columns);
     } else if (prevProps.columns !== this.props.columns) {
       const columns = this.props.columns;
-      this.setState({columns}, () => this.recomputeTableWidth(columns));
+      this.setState({ columns }, () => this.recomputeTableWidth(columns));
     }
   }
 
@@ -149,9 +148,9 @@ export default class TableContextProvider extends Component {
    * Remove a column
    */
   removeColumn() {
-    const filterByIdPresent = column => this.props.columns.some(defaultColumn => defaultColumn.id === column.id);
+    const filterByIdPresent = (column) => this.props.columns.some((defaultColumn) => defaultColumn.id === column.id);
     const columns = this.state.columns.filter(filterByIdPresent);
-    this.setState({columns}, () => this.recomputeTableWidth(columns));
+    this.setState({ columns }, () => this.recomputeTableWidth(columns));
   }
 
   /**
@@ -161,7 +160,7 @@ export default class TableContextProvider extends Component {
   recomputeTableWidth(columns) {
     this.setState({
       tableviewWidth: this.tableviewRef.current.clientWidth,
-      tableWidth: this.getTableWidth(columns)
+      tableWidth: this.getTableWidth(columns),
     });
   }
 
@@ -172,17 +171,17 @@ export default class TableContextProvider extends Component {
     const columns = [...this.state.columns];
     const columnIndexToAdd = [];
     this.props.columns.forEach((column, index) => {
-      const isColumnNonExisting = this.state.columns.every(item => column.id !== item.id);
+      const isColumnNonExisting = this.state.columns.every((item) => column.id !== item.id);
       if (isColumnNonExisting) {
         columnIndexToAdd.push(index);
       }
     });
 
-    columnIndexToAdd.forEach(index => {
+    columnIndexToAdd.forEach((index) => {
       columns.splice(index, 0, this.props.columns[index]);
     });
     // Add the column to its default position and width
-    this.setState({columns}, () => this.recomputeTableWidth(columns));
+    this.setState({ columns }, () => this.recomputeTableWidth(columns));
   }
 
   /**
@@ -202,7 +201,7 @@ export default class TableContextProvider extends Component {
     const columns = [...this.state.columns];
     const column = columns.splice(fromIndex, 1)[0];
     columns.splice(toIndex, 0, column);
-    this.setState({columns});
+    this.setState({ columns });
   }
 
   /**
@@ -217,7 +216,7 @@ export default class TableContextProvider extends Component {
     columns[index].width = width;
     // Get table width
     const tableWidth = this.getTableWidth(columns);
-    this.setState({columns, tableWidth});
+    this.setState({ columns, tableWidth });
   }
 
   /**
@@ -225,7 +224,12 @@ export default class TableContextProvider extends Component {
    */
   handleChangeColumns() {
     // Get the columns settings properties
-    const columns = this.state.columns.map((column, index) => ({id: column.id, label: column.label, width: column.width, position: index}));
+    const columns = this.state.columns.map((column, index) => ({
+      id: column.id,
+      label: column.label,
+      width: column.width,
+      position: index,
+    }));
     this.props.onChange(columns);
   }
 
@@ -236,7 +240,10 @@ export default class TableContextProvider extends Component {
    */
   getTableWidth(columns) {
     // Starting from 20 to have checkbox column width and add padding for each column displayed
-    return columns.filter(c => !c.excludeFromWidthComputation).reduce((sum, col) => sum + col.width, 0) + this.getColumnsPaddingWidth(columns);
+    return (
+      columns.filter((c) => !c.excludeFromWidthComputation).reduce((sum, col) => sum + col.width, 0) +
+      this.getColumnsPaddingWidth(columns)
+    );
   }
 
   /**
@@ -245,7 +252,9 @@ export default class TableContextProvider extends Component {
    * @return {number}
    */
   getColumnWidthNoResizable(columns) {
-    return columns.filter(c => !c.excludeFromWidthComputation && !c.resizable).reduce((sum, col) => sum + parseFloat(col.width), 0);
+    return columns
+      .filter((c) => !c.excludeFromWidthComputation && !c.resizable)
+      .reduce((sum, col) => sum + parseFloat(col.width), 0);
   }
 
   /**
@@ -255,7 +264,7 @@ export default class TableContextProvider extends Component {
    */
   getColumnsPaddingWidth(columns) {
     // Get the columns padding widths from the displayed columns
-    return PADDING_SIZE * columns.filter(c => !c.excludeFromWidthComputation).length + PADDING_FIRST_COLUMN_ADDED;
+    return PADDING_SIZE * columns.filter((c) => !c.excludeFromWidthComputation).length + PADDING_FIRST_COLUMN_ADDED;
   }
 
   /**
@@ -274,7 +283,7 @@ export default class TableContextProvider extends Component {
       // Calculate the ratio between two widths
       const ratio = (tableviewWidth - fixedWidth) / columnsResizableWidth;
       // Scale the widths with the ratio
-      columns.forEach(column => {
+      columns.forEach((column) => {
         if (column.resizable) {
           // rounding down avoids a slight shift on the left of the grid that happens sometimes and a scrolling
           column.width = Math.floor(column.width * ratio);
@@ -282,7 +291,7 @@ export default class TableContextProvider extends Component {
       });
       // Get the table width from all columns
       const tableWidth = this.getTableWidth(columns);
-      this.setState({columns, tableWidth, tableviewWidth});
+      this.setState({ columns, tableWidth, tableviewWidth });
     }
   }
 
@@ -291,7 +300,7 @@ export default class TableContextProvider extends Component {
    * @param rowId A row id
    */
   isRowSelected(rowId) {
-    return this.props.selectedRowsIds?.some(selectedRow => rowId === selectedRow);
+    return this.props.selectedRowsIds?.some((selectedRow) => rowId === selectedRow);
   }
 
   /**
@@ -324,8 +333,8 @@ export default class TableContextProvider extends Component {
    * @return {boolean}
    */
   canMoveColumn(columnIndex, moveX) {
-    const columnMovable = column => column.draggable;
-    const findLastIndex = (lastColumnIndex, column, index) => columnMovable(column) ? index : lastColumnIndex;
+    const columnMovable = (column) => column.draggable;
+    const findLastIndex = (lastColumnIndex, column, index) => (columnMovable(column) ? index : lastColumnIndex);
     const canBeMovedBefore = columnIndex > this.state.columns.findIndex(columnMovable) && moveX < 0;
     const canBeMovedAfter = columnIndex < this.state.columns.reduce(findLastIndex, -1) && moveX > 0;
     return canBeMovedBefore || canBeMovedAfter;
@@ -335,14 +344,14 @@ export default class TableContextProvider extends Component {
    * On start dragging column
    */
   handleStartDraggingColumns() {
-    this.setState({isDraggingColumn: true});
+    this.setState({ isDraggingColumn: true });
   }
 
   /**
    * On end dragging column
    */
   handleEndDraggingColumns() {
-    this.setState({isDraggingColumn: false});
+    this.setState({ isDraggingColumn: false });
   }
 
   /**
@@ -352,7 +361,10 @@ export default class TableContextProvider extends Component {
   render() {
     return (
       <TableContext.Provider value={this.state}>
-        <div ref={this.tableviewRef} className={`tableview ${this.props.rowsSetting?.height ? this.props.rowsSetting.height : ROW_SETTING_HEIGHT_COMPACT}`}>
+        <div
+          ref={this.tableviewRef}
+          className={`tableview ${this.props.rowsSetting?.height ? this.props.rowsSetting.height : ROW_SETTING_HEIGHT_COMPACT}`}
+        >
           {this.props.children}
         </div>
       </TableContext.Provider>
@@ -368,7 +380,7 @@ TableContextProvider.propTypes = {
   selectedRowsIds: PropTypes.array, // The selected row ids
   onSortChange: PropTypes.func, // The on sort property
   onChange: PropTypes.func, // The on change property
-  children: PropTypes.any // The children
+  children: PropTypes.any, // The children
 };
 
 /**
@@ -380,9 +392,7 @@ export function withTable(WrappedComponent) {
     render() {
       return (
         <TableContext.Consumer>
-          {
-            tableContext => <WrappedComponent tableContext={tableContext} {...this.props} />
-          }
+          {(tableContext) => <WrappedComponent tableContext={tableContext} {...this.props} />}
         </TableContext.Consumer>
       );
     }

@@ -12,7 +12,7 @@
  * @since         5.0.0
  */
 import React from "react";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import SelectResourceSVG from "../../../../img/svg/select_resource.svg";
 
 class DisplayEmptyDetails extends React.Component {
@@ -24,10 +24,12 @@ class DisplayEmptyDetails extends React.Component {
     return (
       <div className="sidebar empty">
         <SelectResourceSVG />
-        <p><Trans>Select a resource or a folder to see the details.</Trans></p>
+        <p>
+          <Trans>Select a resource or a folder to see the details.</Trans>
+        </p>
       </div>
     );
   }
 }
 
-export default withTranslation('common')(DisplayEmptyDetails);
+export default withTranslation("common")(DisplayEmptyDetails);

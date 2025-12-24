@@ -13,5 +13,5 @@
  */
 
 export const SelfRegistrationProviderTypes = {
-  EMAILDOMAINS: 'email_domains', // Default value for provider
+  EMAILDOMAINS: "email_domains", // Default value for provider
 };

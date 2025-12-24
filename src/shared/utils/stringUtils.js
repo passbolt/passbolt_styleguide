@@ -17,14 +17,14 @@
  * @param {string} text
  * @return {string}
  */
-export const snakeCaseToCamelCase = text => text?.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
+export const snakeCaseToCamelCase = (text) => text?.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
 
 /**
  * Uppercase the first letter of a string
  * @param text
  * @return {string|null}
  */
-export const capitalizeFirstLetter = text => {
+export const capitalizeFirstLetter = (text) => {
   // Handle empty string
   if (!text) {
     return text;

@@ -29,13 +29,13 @@ class PassboltResponseHeaderEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [],
-      "properties": {
-        "pagination": {
-          "type": "object",
+      type: "object",
+      required: [],
+      properties: {
+        pagination: {
+          type: "object",
         },
-      }
+      },
     };
   }
 

@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 import UserAvatarSVG from "../../../../img/avatar/user_default.svg";
 import AttentionSVG from "../../../../img/svg/attention.svg";
 
@@ -72,8 +72,7 @@ class UserAvatar extends Component {
    * @returns {boolean}
    */
   propsUrlHasProtocol() {
-    return this.avatarUrl.startsWith('https://')
-      || this.avatarUrl.startsWith('http://');
+    return this.avatarUrl.startsWith("https://") || this.avatarUrl.startsWith("http://");
   }
 
   /**
@@ -102,9 +101,7 @@ class UserAvatar extends Component {
       return null;
     }
 
-    return this.propsUrlHasProtocol()
-      ? this.avatarUrl
-      : this.formatUrl(this.avatarUrl);
+    return this.propsUrlHasProtocol() ? this.avatarUrl : this.formatUrl(this.avatarUrl);
   }
 
   /**
@@ -114,7 +111,7 @@ class UserAvatar extends Component {
    */
   handleError() {
     console.error(`Could not load avatar image url: ${this.getAvatarSrc()}`);
-    this.setState({error: true});
+    this.setState({ error: true });
   }
 
   /**
@@ -122,7 +119,7 @@ class UserAvatar extends Component {
    * @return {void}
    */
   handleLoaded() {
-    this.setState({isLoading: false});
+    this.setState({ isLoading: false });
   }
 
   /**
@@ -132,9 +129,12 @@ class UserAvatar extends Component {
   getAltText() {
     const user = this.props?.user;
     if (!user?.first_name || !user?.last_name) {
-      return '...';
+      return "...";
     }
-    return this.props.t('Avatar of user {{first_name}} {{last_name}}.', {firstname: user.first_name, lastname: user.last_name});
+    return this.props.t("Avatar of user {{first_name}} {{last_name}}.", {
+      firstname: user.first_name,
+      lastname: user.last_name,
+    });
   }
 
   /**
@@ -143,24 +143,31 @@ class UserAvatar extends Component {
    */
   render() {
     const srcAvatar = this.getAvatarSrc();
-    const shouldDisplayDefaultAvatar = this.state.error || !this.props.user || this.isDefaultAvatarUrlFromApi() || !srcAvatar;
+    const shouldDisplayDefaultAvatar =
+      this.state.error || !this.props.user || this.isDefaultAvatarUrlFromApi() || !srcAvatar;
 
     return (
       <div className={`${this.props.className}`}>
         <div className="default-avatar">
-          {(shouldDisplayDefaultAvatar || this.state.isLoading) && <UserAvatarSVG/>}
-          {!shouldDisplayDefaultAvatar && <img src={srcAvatar} className={this.state.isLoading ? "is-loading" : ""} onError={this.handleError} onLoad={this.handleLoaded} alt={this.getAltText()} />}
+          {(shouldDisplayDefaultAvatar || this.state.isLoading) && <UserAvatarSVG />}
+          {!shouldDisplayDefaultAvatar && (
+            <img
+              src={srcAvatar}
+              className={this.state.isLoading ? "is-loading" : ""}
+              onError={this.handleError}
+              onLoad={this.handleLoaded}
+              alt={this.getAltText()}
+            />
+          )}
         </div>
-        {this.props.attentionRequired &&
-          <AttentionSVG className="attention-required"/>
-        }
+        {this.props.attentionRequired && <AttentionSVG className="attention-required" />}
       </div>
     );
   }
 }
 
 UserAvatar.defaultProps = {
-  className: "avatar user-avatar"
+  className: "avatar user-avatar",
 };
 
 UserAvatar.propTypes = {
@@ -171,4 +178,4 @@ UserAvatar.propTypes = {
   t: PropTypes.func,
 };
 
-export default withTranslation('common')(UserAvatar);
+export default withTranslation("common")(UserAvatar);

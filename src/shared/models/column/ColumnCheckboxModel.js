@@ -12,7 +12,7 @@
  * @since         4.2.0
  */
 
-import ColumnModel, {ColumnFields, ColumnModelTypes} from "./ColumnModel";
+import ColumnModel, { ColumnFields, ColumnModelTypes } from "./ColumnModel";
 
 /**
  * Model related to the column checkbox use only with the UI
@@ -30,10 +30,9 @@ class ColumnCheckboxModel extends ColumnModel {
     columnDto.resizable = false;
     columnDto.draggable = false;
     columnDto.sortable = false;
-    columnDto.getValue = value => value;
+    columnDto.getValue = (value) => value;
     super(columnDto);
   }
 }
 
 export default ColumnCheckboxModel;
-

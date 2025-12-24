@@ -23,15 +23,12 @@ class SecretDataV4DefaultTotpEntity extends SecretDataV4DefaultEntity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "password",
-        "totp"
-      ],
-      "properties": {
+      type: "object",
+      required: ["password", "totp"],
+      properties: {
         ...SecretDataV4DefaultEntity.getSchema().properties,
-        "totp": TotpEntity.getSchema(),
-      }
+        totp: TotpEntity.getSchema(),
+      },
     };
   }
 
@@ -40,7 +37,7 @@ class SecretDataV4DefaultTotpEntity extends SecretDataV4DefaultEntity {
    */
   static get associations() {
     return {
-      totp: TotpEntity
+      totp: TotpEntity,
     };
   }
 
@@ -53,10 +50,10 @@ class SecretDataV4DefaultTotpEntity extends SecretDataV4DefaultEntity {
   static createFromDefault(data = {}, options) {
     const defaultData = {
       password: "",
-      totp: TotpEntity.createFromDefault({}, {validate: false}).toDto()
+      totp: TotpEntity.createFromDefault({}, { validate: false }).toDto(),
     };
 
-    return new SecretDataV4DefaultTotpEntity({...defaultData, ...data}, options);
+    return new SecretDataV4DefaultTotpEntity({ ...defaultData, ...data }, options);
   }
 
   /**
@@ -72,7 +69,7 @@ class SecretDataV4DefaultTotpEntity extends SecretDataV4DefaultEntity {
       case "description":
         return "";
       case "totp":
-        return TotpEntity.createFromDefault({}, {validate: false}).toDto();
+        return TotpEntity.createFromDefault({}, { validate: false }).toDto();
       default:
         return;
     }
@@ -85,7 +82,7 @@ class SecretDataV4DefaultTotpEntity extends SecretDataV4DefaultEntity {
    */
   areSecretsDifferent(secretDto) {
     const totp = this.totp.toDto();
-    const isTotpDifferent = Object.keys(totp).some(key => totp[key] !== secretDto.totp?.[key]);
+    const isTotpDifferent = Object.keys(totp).some((key) => totp[key] !== secretDto.totp?.[key]);
     return this.password !== secretDto.password || isTotpDifferent || this.description !== secretDto.description;
   }
 

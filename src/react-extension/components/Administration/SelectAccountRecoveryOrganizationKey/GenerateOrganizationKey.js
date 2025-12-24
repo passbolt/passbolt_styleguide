@@ -14,19 +14,19 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import Tooltip from "../../Common/Tooltip/Tooltip";
-import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { SecretGenerator } from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import Password from "../../../../shared/components/Password/Password";
 import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
 import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
-import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import { withPasswordPolicies } from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import PasswordComplexityWithGoal from "../../../../shared/components/PasswordComplexityWithGoal/PasswordComplexityWithGoal";
 import InfoSVG from "../../../../img/svg/info.svg";
 import AttentionSVG from "../../../../img/svg/attention.svg";
@@ -110,7 +110,7 @@ class GenerateOrganizationKey extends React.Component {
       this.pownedService = new PownedService(this.props.context.port);
     }
 
-    this.setState({isPwnedServiceAvailable});
+    this.setState({ isPwnedServiceAvailable });
   }
 
   /**
@@ -132,7 +132,7 @@ class GenerateOrganizationKey extends React.Component {
     if (!name.length) {
       nameError = this.translate("A name is required.");
     }
-    this.setState({nameError});
+    this.setState({ nameError });
     return nameError === null;
   }
 
@@ -157,7 +157,7 @@ class GenerateOrganizationKey extends React.Component {
     } else if (!AppEmailValidatorService.validate(email, this.props.context.siteSettings)) {
       emailError = this.translate("Please enter a valid email address.");
     }
-    this.setState({email, emailError});
+    this.setState({ email, emailError });
     return emailError === null;
   }
 
@@ -167,7 +167,7 @@ class GenerateOrganizationKey extends React.Component {
    */
   async handlePassphraseChange(event) {
     const passphrase = event.target.value;
-    this.setState({passphrase}, () => this.checkPassphraseValidity());
+    this.setState({ passphrase }, () => this.checkPassphraseValidity());
   }
 
   /**
@@ -192,11 +192,13 @@ class GenerateOrganizationKey extends React.Component {
       this.validatePassphraseInput();
     } else {
       const hasResourcePassphraseMaxLength = this.state.passphrase.length >= RESOURCE_PASSWORD_MAX_LENGTH;
-      const warningMessage = this.translate("this is the maximum size for this field, make sure your data was not truncated");
-      const passphraseWarning = hasResourcePassphraseMaxLength ? warningMessage : '';
-      this.setState({passphraseWarning});
+      const warningMessage = this.translate(
+        "this is the maximum size for this field, make sure your data was not truncated",
+      );
+      const passphraseWarning = hasResourcePassphraseMaxLength ? warningMessage : "";
+      this.setState({ passphraseWarning });
     }
-    this.setState({passphraseEntropy});
+    this.setState({ passphraseEntropy });
   }
 
   /**
@@ -270,9 +272,12 @@ class GenerateOrganizationKey extends React.Component {
     let passphraseInDictionnary = false;
 
     try {
-      const result =  await this.pownedService.evaluateSecret(passphrase);
+      const result = await this.pownedService.evaluateSecret(passphrase);
       //we ensure after the resolution of the deobunced promise that the passphrase is not empty and the minimum entropy is still reached so we do not display the 'in dictionary' warning message when not relevant
-      passphraseInDictionnary = this.state.passphrase && result.inDictionary && this.isMinimumRequiredEntropyReached(this.state.passphraseEntropy);
+      passphraseInDictionnary =
+        this.state.passphrase &&
+        result.inDictionary &&
+        this.isMinimumRequiredEntropyReached(this.state.passphraseEntropy);
       isPwnedServiceAvailable = result.isPwnedServiceAvailable;
     } catch (error) {
       // If the service is unavailable don't block the user journey.
@@ -299,7 +304,7 @@ class GenerateOrganizationKey extends React.Component {
   handleInputChange(event) {
     const target = event.target;
     this.setState({
-      [target.name]: target.value
+      [target.name]: target.value,
     });
   }
 
@@ -335,7 +340,7 @@ class GenerateOrganizationKey extends React.Component {
     if (this.state.processing) {
       return;
     }
-    this.setState({hasAlreadyBeenValidated: true});
+    this.setState({ hasAlreadyBeenValidated: true });
 
     await this.save();
   }
@@ -345,10 +350,7 @@ class GenerateOrganizationKey extends React.Component {
    * @return {Boolean}
    */
   hasAnyErrors() {
-    const validations = [
-      this.isEmptyPassword(),
-      this.state.passphraseInDictionnary,
-    ];
+    const validations = [this.isEmptyPassword(), this.state.passphraseInDictionnary];
     validations.push(this.hasWeakPassword());
     validations.push(!this.pownedService && this.state.passphrase.length < 8);
     return validations.includes(true);
@@ -360,7 +362,7 @@ class GenerateOrganizationKey extends React.Component {
   async save() {
     this.toggleProcessing();
 
-    if (!await this.validate()) {
+    if (!(await this.validate())) {
       this.handleValidateError();
       this.toggleProcessing();
       return;
@@ -404,14 +406,17 @@ class GenerateOrganizationKey extends React.Component {
       passphrase: this.state.passphrase,
     };
 
-    return await this.props.context.port.request("passbolt.account-recovery.generate-organization-key", generateGpgKeyDto);
+    return await this.props.context.port.request(
+      "passbolt.account-recovery.generate-organization-key",
+      generateGpgKeyDto,
+    );
   }
 
   /**
    * Toggle the processing mode
    */
   toggleProcessing() {
-    this.setState({processing: !this.state.processing});
+    this.setState({ processing: !this.state.processing });
   }
 
   /**
@@ -444,8 +449,11 @@ class GenerateOrganizationKey extends React.Component {
    * @returns {function(...[*]=)}
    */
   get isPassphraseWarning() {
-    return this.state.passphrase?.length > 0 && !this.state.hasAlreadyBeenValidated &&
-    (!this.state.isPwnedServiceAvailable || this.state.passphraseInDictionnary);
+    return (
+      this.state.passphrase?.length > 0 &&
+      !this.state.hasAlreadyBeenValidated &&
+      (!this.state.isPwnedServiceAvailable || this.state.passphraseInDictionnary)
+    );
   }
 
   /**
@@ -453,111 +461,186 @@ class GenerateOrganizationKey extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const passphraseEntropy = this.state.passphraseInDictionnary  ? 0 : this.state.passphraseEntropy;
+    const passphraseEntropy = this.state.passphraseInDictionnary ? 0 : this.state.passphraseEntropy;
 
     return (
       <form onSubmit={this.handleFormSubmit} noValidate>
         <div className="form-content generate-organization-key">
           <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-            <label htmlFor="generate-organization-key-form-name"><Trans>Name</Trans></label>
-            <input id="generate-organization-key-form-name" name="name" type="text" value={this.state.name}
-              onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
-              disabled={this.hasAllInputDisabled()} ref={this.nameInputRef} className="required fluid" maxLength="64"
-              required="required" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")} />
-            {this.state.nameError &&
-              <div className="name error-message">{this.state.nameError}</div>
-            }
+            <label htmlFor="generate-organization-key-form-name">
+              <Trans>Name</Trans>
+            </label>
+            <input
+              id="generate-organization-key-form-name"
+              name="name"
+              type="text"
+              value={this.state.name}
+              onKeyUp={this.handleNameInputKeyUp}
+              onChange={this.handleInputChange}
+              disabled={this.hasAllInputDisabled()}
+              ref={this.nameInputRef}
+              className="required fluid"
+              maxLength="64"
+              required="required"
+              autoComplete="off"
+              autoFocus={true}
+              placeholder={this.translate("Name")}
+            />
+            {this.state.nameError && <div className="name error-message">{this.state.nameError}</div>}
           </div>
           <div className={`input text required ${this.state.emailError ? "error" : ""}`}>
-            <label htmlFor="generate-organization-key-form-email"><Trans>Email</Trans></label>
-            <input id="generate-organization-key-form-email" name="email" ref={this.emailInputRef} className="required fluid" maxLength="64" type="email"
-              autoComplete="off" value={this.state.email} onChange={this.handleInputChange} placeholder={this.translate("Email Address")}
-              onKeyUp={this.handleEmailInputKeyUp} disabled={this.hasAllInputDisabled()} required="required"/>
-            {this.state.emailError &&
-              <div className="email error-message">{this.state.emailError}</div>
-            }
+            <label htmlFor="generate-organization-key-form-email">
+              <Trans>Email</Trans>
+            </label>
+            <input
+              id="generate-organization-key-form-email"
+              name="email"
+              ref={this.emailInputRef}
+              className="required fluid"
+              maxLength="64"
+              type="email"
+              autoComplete="off"
+              value={this.state.email}
+              onChange={this.handleInputChange}
+              placeholder={this.translate("Email Address")}
+              onKeyUp={this.handleEmailInputKeyUp}
+              disabled={this.hasAllInputDisabled()}
+              required="required"
+            />
+            {this.state.emailError && <div className="email error-message">{this.state.emailError}</div>}
           </div>
           <div className="input select-wrapper">
             <label htmlFor="generate-organization-key-form-algorithm">
               <Trans>Algorithm</Trans>
-              <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}>
-                <InfoSVG/>
+              <Tooltip
+                message={this.translate(
+                  "Algorithm and key size cannot be changed at the moment. These are secure default",
+                )}
+              >
+                <InfoSVG />
               </Tooltip>
             </label>
-            <input id="generate-organization-key-form-algorithm" name="algorithm" value={this.state.algorithm}
-              className="fluid" type="text"
-              autoComplete="off" disabled={true} />
+            <input
+              id="generate-organization-key-form-algorithm"
+              name="algorithm"
+              value={this.state.algorithm}
+              className="fluid"
+              type="text"
+              autoComplete="off"
+              disabled={true}
+            />
           </div>
           <div className="input select-wrapper">
             <label htmlFor="generate-organization-key-form-keySize">
               <Trans>Key Size</Trans>
-              <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}>
-                <InfoSVG/>
+              <Tooltip
+                message={this.translate(
+                  "Algorithm and key size cannot be changed at the moment. These are secure default",
+                )}
+              >
+                <InfoSVG />
               </Tooltip>
             </label>
-            <input id="generate-organization-key-form-key-size" name="keySize" value={this.state.keySize}
-              className="fluid" type="text"
-              autoComplete="off" disabled={true} />
+            <input
+              id="generate-organization-key-form-key-size"
+              name="keySize"
+              value={this.state.keySize}
+              className="fluid"
+              type="text"
+              autoComplete="off"
+              disabled={true}
+            />
           </div>
-          <div className={`input-password-wrapper input required ${this.hasAnyErrors() && this.state.hasAlreadyBeenValidated ? "error" : ""}`}>
+          <div
+            className={`input-password-wrapper input required ${this.hasAnyErrors() && this.state.hasAlreadyBeenValidated ? "error" : ""}`}
+          >
             <label htmlFor="generate-organization-key-form-password">
               <Trans>Organization key passphrase</Trans>
-              {this.isPassphraseWarning &&
-                <AttentionSVG className="attention-required"/>
-              }
+              {this.isPassphraseWarning && <AttentionSVG className="attention-required" />}
             </label>
-            <Password id="generate-organization-key-form-password" name="password"
-              placeholder={this.translate("Passphrase")} autoComplete="new-password" preview={true}
+            <Password
+              id="generate-organization-key-form-password"
+              name="password"
+              placeholder={this.translate("Passphrase")}
+              autoComplete="new-password"
+              preview={true}
               securityToken={this.props.context.userSettings.getSecurityToken()}
               value={this.state.passphrase}
-              onChange={this.handlePassphraseChange} disabled={this.hasAllInputDisabled()}
-              inputRef={this.passphraseInputRef}/>
-            <PasswordComplexityWithGoal entropy={passphraseEntropy} targetEntropy={FAIR_STRENGTH_ENTROPY}/>
-            {this.state.hasAlreadyBeenValidated &&
+              onChange={this.handlePassphraseChange}
+              disabled={this.hasAllInputDisabled()}
+              inputRef={this.passphraseInputRef}
+            />
+            <PasswordComplexityWithGoal entropy={passphraseEntropy} targetEntropy={FAIR_STRENGTH_ENTROPY} />
+            {this.state.hasAlreadyBeenValidated && (
               <div className="password error-message">
-                {this.isEmptyPassword() &&
-                  <div className="empty-passphrase error-message"><Trans>A passphrase is required.</Trans></div>
-                }
-                {this.hasWeakPassword() && passphraseEntropy > 0 &&
-                  <div className="invalid-passphrase error-message"><Trans>A strong passphrase is required. The minimum complexity must be &#39;fair&#39;.</Trans></div>
-                }
-                {this.state.passphraseInDictionnary && passphraseEntropy === 0 && !this.isEmptyPassword() &&
-                  <div className="invalid-passphrase error-message"><Trans>The passphrase should not be part of an exposed data breach.</Trans></div>
-                }
+                {this.isEmptyPassword() && (
+                  <div className="empty-passphrase error-message">
+                    <Trans>A passphrase is required.</Trans>
+                  </div>
+                )}
+                {this.hasWeakPassword() && passphraseEntropy > 0 && (
+                  <div className="invalid-passphrase error-message">
+                    <Trans>A strong passphrase is required. The minimum complexity must be &#39;fair&#39;.</Trans>
+                  </div>
+                )}
+                {this.state.passphraseInDictionnary && passphraseEntropy === 0 && !this.isEmptyPassword() && (
+                  <div className="invalid-passphrase error-message">
+                    <Trans>The passphrase should not be part of an exposed data breach.</Trans>
+                  </div>
+                )}
               </div>
-            }
+            )}
           </div>
 
-          <div className={`input-password-wrapper input required ${this.state.hasAlreadyBeenValidated && !this.validatePassphraseConfirmationInput() ? "error" : ""}`}>
+          <div
+            className={`input-password-wrapper input required ${this.state.hasAlreadyBeenValidated && !this.validatePassphraseConfirmationInput() ? "error" : ""}`}
+          >
             <label htmlFor="generate-organization-key-form-password">
               <Trans>Organization key passphrase confirmation</Trans>
             </label>
-            <Password id="generate-organization-key-form-password-confirmation" name="passphraseConfirmation"
-              placeholder={this.translate("Passphrase confirmation")} autoComplete="new-password" preview={true}
+            <Password
+              id="generate-organization-key-form-password-confirmation"
+              name="passphraseConfirmation"
+              placeholder={this.translate("Passphrase confirmation")}
+              autoComplete="new-password"
+              preview={true}
               securityToken={this.props.context.userSettings.getSecurityToken()}
               value={this.state.passphraseConfirmation}
-              onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}
-              inputRef={this.passphraseConfirmationInputRef}/>
-            {this.state.hasAlreadyBeenValidated &&
-                <div className="password-confirmation error-message">
-                  {this.isEmptyPasswordConfirmation() &&
-                    <div className="empty-passphrase-confirmation error-message"><Trans>The passphrase confirmation is required.</Trans></div>
-                  }
-                  {this.isPassphraseAndConfirmationDifferent() &&
-                    <div className="invalid-passphrase-confirmation error-message"><Trans>The passphrase confirmation should match the passphrase</Trans></div>
-                  }
-                </div>
-            }
+              onChange={this.handleInputChange}
+              disabled={this.hasAllInputDisabled()}
+              inputRef={this.passphraseConfirmationInputRef}
+            />
+            {this.state.hasAlreadyBeenValidated && (
+              <div className="password-confirmation error-message">
+                {this.isEmptyPasswordConfirmation() && (
+                  <div className="empty-passphrase-confirmation error-message">
+                    <Trans>The passphrase confirmation is required.</Trans>
+                  </div>
+                )}
+                {this.isPassphraseAndConfirmationDifferent() && (
+                  <div className="invalid-passphrase-confirmation error-message">
+                    <Trans>The passphrase confirmation should match the passphrase</Trans>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           <div className="warning message no-margin" id="generate-organization-key-setting-overridden-banner">
             <p>
-              <Trans>Warning, we encourage you to generate your OpenPGP Organization Recovery Key separately. Make sure you keep a backup in a safe place.</Trans>
+              <Trans>
+                Warning, we encourage you to generate your OpenPGP Organization Recovery Key separately. Make sure you
+                keep a backup in a safe place.
+              </Trans>
             </p>
           </div>
         </div>
         <div className="submit-wrapper clearfix">
           <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.props.onClose} />
-          <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Generate & Apply")} />
+          <FormSubmitButton
+            disabled={this.hasAllInputDisabled()}
+            processing={this.state.processing}
+            value={this.translate("Generate & Apply")}
+          />
         </div>
       </form>
     );
@@ -572,4 +655,4 @@ GenerateOrganizationKey.propTypes = {
   passwordPoliciesContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withDialog(withPasswordPolicies(withTranslation('common')(GenerateOrganizationKey))));
+export default withAppContext(withDialog(withPasswordPolicies(withTranslation("common")(GenerateOrganizationKey))));

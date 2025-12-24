@@ -14,16 +14,16 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withAdministrationWorkspace } from "../../../contexts/AdministrationWorkspaceContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import SmtpProviders from "./SmtpProviders.data";
 import Password from "../../../../shared/components/Password/Password";
 import Select from "../../Common/Select/Select";
-import {withAdminSmtpSettings} from "../../../contexts/AdminSmtpSettingsContext";
+import { withAdminSmtpSettings } from "../../../contexts/AdminSmtpSettingsContext";
 import DisplayAdministrationSmtpSettingsActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSmtpSettingsActions/DisplayAdministrationSmtpSettingsActions";
-import {createSafePortal} from "../../../../shared/utils/portals";
+import { createSafePortal } from "../../../../shared/utils/portals";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 import EmailSVG from "../../../../img/svg/email.svg";
@@ -104,12 +104,14 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationSmtpSettingsActions);
+    this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(
+      DisplayAdministrationSmtpSettingsActions,
+    );
     await this.props.adminSmtpSettingsContext.findSmtpSettings();
 
     const settings = this.props.adminSmtpSettingsContext.getCurrentSmtpSettings();
 
-    this.setState({showAdvancedSettings: settings.provider?.id === "other"});
+    this.setState({ showAdvancedSettings: settings.provider?.id === "other" });
   }
 
   /**
@@ -134,7 +136,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
     }
 
     if (smtpContext.hasProviderChanged()) {
-      this.setState({showAdvancedSettings: smtpContext.getCurrentSmtpSettings().provider?.id === "other"});
+      this.setState({ showAdvancedSettings: smtpContext.getCurrentSmtpSettings().provider?.id === "other" });
     }
   }
 
@@ -154,7 +156,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    */
   handleProviderChange(event) {
     const providerId = event.target.value;
-    const provider = SmtpProviders.find(item => item.id === providerId);
+    const provider = SmtpProviders.find((item) => item.id === providerId);
     this.props.adminSmtpSettingsContext.changeProvider(provider);
   }
 
@@ -173,7 +175,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
       password = "";
     }
 
-    this.props.adminSmtpSettingsContext.setData({username, password});
+    this.props.adminSmtpSettingsContext.setData({ username, password });
   }
 
   /**
@@ -183,14 +185,14 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    */
   handleInputChange(event) {
     const target = event.target;
-    this.props.adminSmtpSettingsContext.setData({[target.name]: target.value});
+    this.props.adminSmtpSettingsContext.setData({ [target.name]: target.value });
   }
 
   /**
    * Handles the click on the advanced settings toggle.
    */
   handleAdvancedSettingsToggle() {
-    this.setState({showAdvancedSettings: !this.state.showAdvancedSettings});
+    this.setState({ showAdvancedSettings: !this.state.showAdvancedSettings });
   }
 
   /**
@@ -206,9 +208,9 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    * @returns {Array<object>}
    */
   get providerList() {
-    return SmtpProviders.map(item => ({
+    return SmtpProviders.map((item) => ({
       value: item.id,
-      label: item.name
+      label: item.name,
     }));
   }
 
@@ -218,9 +220,9 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    */
   get authenticationMethodList() {
     return [
-      {value: AUTHENTICATION_METHOD_NONE, label: this.translate('None')},
-      {value: AUTHENTICATION_METHOD_USERNAME, label: this.translate('Username only')},
-      {value: AUTHENTICATION_METHOD_USERNAME_PASSWORD, label: this.translate('Username & password')},
+      { value: AUTHENTICATION_METHOD_NONE, label: this.translate("None") },
+      { value: AUTHENTICATION_METHOD_USERNAME, label: this.translate("Username only") },
+      { value: AUTHENTICATION_METHOD_USERNAME_PASSWORD, label: this.translate("Username & password") },
     ];
   }
 
@@ -237,7 +239,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
       {
         value: false,
         label: this.translate("No"),
-      }
+      },
     ];
   }
 
@@ -263,8 +265,10 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    * @return {boolean}
    */
   shouldDisplayUsername() {
-    return this.authenticationMethod === AUTHENTICATION_METHOD_USERNAME
-      || this.authenticationMethod === AUTHENTICATION_METHOD_USERNAME_PASSWORD;
+    return (
+      this.authenticationMethod === AUTHENTICATION_METHOD_USERNAME ||
+      this.authenticationMethod === AUTHENTICATION_METHOD_USERNAME_PASSWORD
+    );
   }
 
   /**
@@ -306,11 +310,13 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    * @returns {string}
    */
   get configurationSource() {
-    return {
-      'env': this.props.t('environment variables'),
-      'file': this.props.t('file'),
-      'db': this.props.t('database'),
-    }[this.settingsSource] || this.props.t('unknown');
+    return (
+      {
+        env: this.props.t("environment variables"),
+        file: this.props.t("file"),
+        db: this.props.t("database"),
+      }[this.settingsSource] || this.props.t("unknown")
+    );
   }
 
   /**
@@ -336,191 +342,359 @@ export class ManageSmtpAdministrationSettings extends React.Component {
         <>
           <div className="third-party-provider-settings smtp-settings main-column">
             <div className="main-content">
-              <h3 className="title"><Trans>Email server</Trans></h3>
-              {this.isReady() && !settings?.provider &&
-              <>
-
-                <h4 className="no-border"><Trans>Select a provider</Trans></h4>
-                <div className="provider-list">
-                  {SmtpProviders.map(provider =>
-                    <div key={provider.id} className="provider button" id={provider.id} onClick={() => this.props.adminSmtpSettingsContext.changeProvider(provider)}>
-                      <div className="provider-logo">
-                        {provider.id === "other" &&
-                          <EmailSVG/>
-                        }
-                        {provider.id !== "other" &&
-                          <img src={`${this.props.context.trustedDomain}/img/third_party/${provider.icon}`}/>
-                        }
+              <h3 className="title">
+                <Trans>Email server</Trans>
+              </h3>
+              {this.isReady() && !settings?.provider && (
+                <>
+                  <h4 className="no-border">
+                    <Trans>Select a provider</Trans>
+                  </h4>
+                  <div className="provider-list">
+                    {SmtpProviders.map((provider) => (
+                      <div
+                        key={provider.id}
+                        className="provider button"
+                        id={provider.id}
+                        onClick={() => this.props.adminSmtpSettingsContext.changeProvider(provider)}
+                      >
+                        <div className="provider-logo">
+                          {provider.id === "other" && <EmailSVG />}
+                          {provider.id !== "other" && (
+                            <img src={`${this.props.context.trustedDomain}/img/third_party/${provider.icon}`} />
+                          )}
+                        </div>
+                        <p className="provider-name">{provider.name}</p>
                       </div>
-                      <p className="provider-name">{provider.name}</p>
-                    </div>
-                  )}
-                </div>
-              </>
-              }
-              {this.isReady() && settings?.provider &&
-              <>
-                <form className="form">
-                  <h4 className="no-border"><Trans>SMTP server configuration</Trans></h4>
-                  <div className={`select-wrapper input required ${this.isProcessing() ? 'disabled' : ''}`}>
-                    <label htmlFor="smtp-settings-form-provider"><Trans>Email provider</Trans></label>
-                    <Select id="smtp-settings-form-provider" name="provider" items={this.providerList} value={settings.provider.id} onChange={this.handleProviderChange} disabled={this.isProcessing()}/>
+                    ))}
                   </div>
-                  <div className={`select-wrapper input required ${this.isProcessing() ? 'disabled' : ''}`}>
-                    <label htmlFor="smtp-settings-form-authentication-method"><Trans>Authentication method</Trans></label>
-                    <Select id="smtp-settings-form-authentication-method" name="authentication-method" items={this.authenticationMethodList} value={this.authenticationMethod} onChange={this.handleAuthenticationMethodChange} disabled={this.isProcessing()}/>
-                  </div>
-                  {this.shouldDisplayUsername() &&
-                    <div className={`input text ${errors.username ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
-                      <label htmlFor="smtp-settings-form-username"><Trans>Username</Trans></label>
-                      <input id="smtp-settings-form-username" ref={this.usernameFieldRef} name="username" className="fluid" maxLength="256" type="text"
-                        autoComplete="off" value={settings.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
-                        disabled={this.isProcessing()}/>
-                      {errors.username &&
-                        <div className="error-message">{errors.username}</div>
-                      }
-                    </div>
-                  }
-                  {this.shouldDisplayPassword() &&
-                    <div className={`input-password-wrapper input ${errors.password ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
-                      <label htmlFor="smtp-settings-form-password"><Trans>Password</Trans></label>
-                      <Password id="smtp-settings-form-password"
-                        name="password"
-                        autoComplete="new-password"
-                        placeholder={this.translate("Password")}
-                        preview={true}
-                        value={settings.password}
-                        onChange={this.handleInputChange}
+                </>
+              )}
+              {this.isReady() && settings?.provider && (
+                <>
+                  <form className="form">
+                    <h4 className="no-border">
+                      <Trans>SMTP server configuration</Trans>
+                    </h4>
+                    <div className={`select-wrapper input required ${this.isProcessing() ? "disabled" : ""}`}>
+                      <label htmlFor="smtp-settings-form-provider">
+                        <Trans>Email provider</Trans>
+                      </label>
+                      <Select
+                        id="smtp-settings-form-provider"
+                        name="provider"
+                        items={this.providerList}
+                        value={settings.provider.id}
+                        onChange={this.handleProviderChange}
                         disabled={this.isProcessing()}
-                        inputRef={this.passwordFieldRef}/>
-                      {errors.password &&
-                        <div className="password error-message">{errors.password}</div>
-                      }
+                      />
                     </div>
-                  }
-                  <div className="accordion-header">
-                    <button type="button" className="link no-border" onClick={this.handleAdvancedSettingsToggle}>
-                      {this.state.showAdvancedSettings ? <CaretDownSVG/> : <CaretRightSVG/>}<Trans>Advanced settings</Trans>
-                    </button>
-                  </div>
-                  {this.state.showAdvancedSettings &&
-                    <div className="advanced-settings">
-                      <div className={`input text required ${errors.host ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
-                        <label htmlFor="smtp-settings-form-host"><Trans>SMTP host</Trans></label>
-                        <input id="smtp-settings-form-host" ref={this.hostFieldRef} name="host" aria-required={true} className="fluid" maxLength="256" type="text"
-                          autoComplete="off" value={settings.host} onChange={this.handleInputChange} placeholder={this.translate("SMTP server address")}
-                          disabled={this.isProcessing()}/>
-                        {errors.host &&
-                        <div className="error-message">{errors.host}</div>
-                        }
-                      </div>
-                      <div className={`input text required ${errors.tls ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
-                        <label htmlFor="smtp-settings-form-tls"><Trans>Use TLS</Trans></label>
-                        <Select id="smtp-settings-form-tls" name="tls" items={this.tlsSelectList} value={settings.tls} onChange={this.handleInputChange} disabled={this.isProcessing()}/>
-                      </div>
-                      <div className={`input text required ${errors.port ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
-                        <label htmlFor="smtp-settings-form-port"><Trans>Port</Trans></label>
-                        <input id="smtp-settings-form-port" aria-required={true} ref={this.portFieldRef} name="port" className="fluid" maxLength="256" type="text"
-                          autoComplete="off" value={settings.port} onChange={this.handleInputChange} placeholder={this.translate("Port number")}
-                          disabled={this.isProcessing()}/>
-                        {errors.port &&
-                        <div className="error-message">{errors.port}</div>
-                        }
-                      </div>
-                      <div className={`input text ${errors.client ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
-                        <label htmlFor="smtp-settings-form-client"><Trans>SMTP client</Trans></label>
-                        <input id="smtp-settings-form-client" ref={this.clientFieldRef} name="client" maxLength="2048" type="text"
-                          autoComplete="off" value={settings.client} onChange={this.handleInputChange} placeholder={this.translate("SMTP client address")}
-                          disabled={this.isProcessing()}/>
-                        {errors.client &&
-                          <div className="error-message">{errors.client}</div>
-                        }
-                      </div>
+                    <div className={`select-wrapper input required ${this.isProcessing() ? "disabled" : ""}`}>
+                      <label htmlFor="smtp-settings-form-authentication-method">
+                        <Trans>Authentication method</Trans>
+                      </label>
+                      <Select
+                        id="smtp-settings-form-authentication-method"
+                        name="authentication-method"
+                        items={this.authenticationMethodList}
+                        value={this.authenticationMethod}
+                        onChange={this.handleAuthenticationMethodChange}
+                        disabled={this.isProcessing()}
+                      />
                     </div>
-                  }
-                  <h4><Trans>Sender configuration</Trans></h4>
-                  <div className={`input text required ${errors.sender_name ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
-                    <label htmlFor="smtp-settings-form-sender-name"><Trans>Sender name</Trans></label>
-                    <input id="smtp-settings-form-sender-name" ref={this.senderNameFieldRef} name="sender_name" aria-required={true} className="fluid" maxLength="256" type="text"
-                      autoComplete="off" value={settings.sender_name} onChange={this.handleInputChange} placeholder={this.translate("Sender name")}
-                      disabled={this.isProcessing()}/>
-                    {errors.sender_name &&
-                    <div className="error-message">{errors.sender_name}</div>
-                    }
-                    <p>
-                      <Trans>This is the name users will see in their mailbox when passbolt sends a notification.</Trans>
-                    </p>
-                  </div>
-                  <div className={`input text required ${errors.sender_email ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
-                    <label htmlFor="smtp-settings-form-sender-name"><Trans>Sender email</Trans></label>
-                    <input id="smtp-settings-form-sender-email" ref={this.senderEmailFieldRef} name="sender_email" aria-required={true} className="fluid" maxLength="256" type="text"
-                      autoComplete="off" value={settings.sender_email} onChange={this.handleInputChange} placeholder={this.translate("Sender email")}
-                      disabled={this.isProcessing()}/>
-                    {errors.sender_email &&
-                    <div className="error-message">{errors.sender_email}</div>
-                    }
-                    <p>
-                      <Trans>This is the email address users will see in their mail box when passbolt sends a notification.<br/>It&apos;s a good practice to provide a working email address that users can reply to.</Trans>
-                    </p>
-                  </div>
-                </form>
-              </>
-              }
+                    {this.shouldDisplayUsername() && (
+                      <div
+                        className={`input text ${errors.username ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                      >
+                        <label htmlFor="smtp-settings-form-username">
+                          <Trans>Username</Trans>
+                        </label>
+                        <input
+                          id="smtp-settings-form-username"
+                          ref={this.usernameFieldRef}
+                          name="username"
+                          className="fluid"
+                          maxLength="256"
+                          type="text"
+                          autoComplete="off"
+                          value={settings.username}
+                          onChange={this.handleInputChange}
+                          placeholder={this.translate("Username")}
+                          disabled={this.isProcessing()}
+                        />
+                        {errors.username && <div className="error-message">{errors.username}</div>}
+                      </div>
+                    )}
+                    {this.shouldDisplayPassword() && (
+                      <div
+                        className={`input-password-wrapper input ${errors.password ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                      >
+                        <label htmlFor="smtp-settings-form-password">
+                          <Trans>Password</Trans>
+                        </label>
+                        <Password
+                          id="smtp-settings-form-password"
+                          name="password"
+                          autoComplete="new-password"
+                          placeholder={this.translate("Password")}
+                          preview={true}
+                          value={settings.password}
+                          onChange={this.handleInputChange}
+                          disabled={this.isProcessing()}
+                          inputRef={this.passwordFieldRef}
+                        />
+                        {errors.password && <div className="password error-message">{errors.password}</div>}
+                      </div>
+                    )}
+                    <div className="accordion-header">
+                      <button type="button" className="link no-border" onClick={this.handleAdvancedSettingsToggle}>
+                        {this.state.showAdvancedSettings ? <CaretDownSVG /> : <CaretRightSVG />}
+                        <Trans>Advanced settings</Trans>
+                      </button>
+                    </div>
+                    {this.state.showAdvancedSettings && (
+                      <div className="advanced-settings">
+                        <div
+                          className={`input text required ${errors.host ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                        >
+                          <label htmlFor="smtp-settings-form-host">
+                            <Trans>SMTP host</Trans>
+                          </label>
+                          <input
+                            id="smtp-settings-form-host"
+                            ref={this.hostFieldRef}
+                            name="host"
+                            aria-required={true}
+                            className="fluid"
+                            maxLength="256"
+                            type="text"
+                            autoComplete="off"
+                            value={settings.host}
+                            onChange={this.handleInputChange}
+                            placeholder={this.translate("SMTP server address")}
+                            disabled={this.isProcessing()}
+                          />
+                          {errors.host && <div className="error-message">{errors.host}</div>}
+                        </div>
+                        <div
+                          className={`input text required ${errors.tls ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                        >
+                          <label htmlFor="smtp-settings-form-tls">
+                            <Trans>Use TLS</Trans>
+                          </label>
+                          <Select
+                            id="smtp-settings-form-tls"
+                            name="tls"
+                            items={this.tlsSelectList}
+                            value={settings.tls}
+                            onChange={this.handleInputChange}
+                            disabled={this.isProcessing()}
+                          />
+                        </div>
+                        <div
+                          className={`input text required ${errors.port ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                        >
+                          <label htmlFor="smtp-settings-form-port">
+                            <Trans>Port</Trans>
+                          </label>
+                          <input
+                            id="smtp-settings-form-port"
+                            aria-required={true}
+                            ref={this.portFieldRef}
+                            name="port"
+                            className="fluid"
+                            maxLength="256"
+                            type="text"
+                            autoComplete="off"
+                            value={settings.port}
+                            onChange={this.handleInputChange}
+                            placeholder={this.translate("Port number")}
+                            disabled={this.isProcessing()}
+                          />
+                          {errors.port && <div className="error-message">{errors.port}</div>}
+                        </div>
+                        <div
+                          className={`input text ${errors.client ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                        >
+                          <label htmlFor="smtp-settings-form-client">
+                            <Trans>SMTP client</Trans>
+                          </label>
+                          <input
+                            id="smtp-settings-form-client"
+                            ref={this.clientFieldRef}
+                            name="client"
+                            maxLength="2048"
+                            type="text"
+                            autoComplete="off"
+                            value={settings.client}
+                            onChange={this.handleInputChange}
+                            placeholder={this.translate("SMTP client address")}
+                            disabled={this.isProcessing()}
+                          />
+                          {errors.client && <div className="error-message">{errors.client}</div>}
+                        </div>
+                      </div>
+                    )}
+                    <h4>
+                      <Trans>Sender configuration</Trans>
+                    </h4>
+                    <div
+                      className={`input text required ${errors.sender_name ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                    >
+                      <label htmlFor="smtp-settings-form-sender-name">
+                        <Trans>Sender name</Trans>
+                      </label>
+                      <input
+                        id="smtp-settings-form-sender-name"
+                        ref={this.senderNameFieldRef}
+                        name="sender_name"
+                        aria-required={true}
+                        className="fluid"
+                        maxLength="256"
+                        type="text"
+                        autoComplete="off"
+                        value={settings.sender_name}
+                        onChange={this.handleInputChange}
+                        placeholder={this.translate("Sender name")}
+                        disabled={this.isProcessing()}
+                      />
+                      {errors.sender_name && <div className="error-message">{errors.sender_name}</div>}
+                      <p>
+                        <Trans>
+                          This is the name users will see in their mailbox when passbolt sends a notification.
+                        </Trans>
+                      </p>
+                    </div>
+                    <div
+                      className={`input text required ${errors.sender_email ? "error" : ""} ${this.isProcessing() ? "disabled" : ""}`}
+                    >
+                      <label htmlFor="smtp-settings-form-sender-name">
+                        <Trans>Sender email</Trans>
+                      </label>
+                      <input
+                        id="smtp-settings-form-sender-email"
+                        ref={this.senderEmailFieldRef}
+                        name="sender_email"
+                        aria-required={true}
+                        className="fluid"
+                        maxLength="256"
+                        type="text"
+                        autoComplete="off"
+                        value={settings.sender_email}
+                        onChange={this.handleInputChange}
+                        placeholder={this.translate("Sender email")}
+                        disabled={this.isProcessing()}
+                      />
+                      {errors.sender_email && <div className="error-message">{errors.sender_email}</div>}
+                      <p>
+                        <Trans>
+                          This is the email address users will see in their mail box when passbolt sends a notification.
+                          <br />
+                          It&apos;s a good practice to provide a working email address that users can reply to.
+                        </Trans>
+                      </p>
+                    </div>
+                  </form>
+                </>
+              )}
             </div>
-            {hasWarnings &&
+            {hasWarnings && (
               <div className="warning message">
-                {this.shouldShowSourceWarningMessage() &&
+                {this.shouldShowSourceWarningMessage() && (
                   <div id="smtp-settings-source-warning">
-                    <Trans>These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.</Trans>
+                    <Trans>
+                      These are the settings provided by a configuration file. If you save it, will ignore the settings
+                      on file and use the ones from the database.
+                    </Trans>
                   </div>
-                }
-                {hasChanges &&
+                )}
+                {hasChanges && (
                   <div>
                     <p>
                       <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
                     </p>
                   </div>
-                }
+                )}
               </div>
-            }
+            )}
           </div>
-          <DisplayAdministrationSmtpSettingsActions/>
+          <DisplayAdministrationSmtpSettingsActions />
         </>
         {createSafePortal(
           <>
             <div className="sidebar-help-section" id="smtp-settings-source">
-              <h3><Trans>Configuration source</Trans></h3>
-              <p><Trans>This current configuration source is: </Trans>{this.configurationSource}.</p>
+              <h3>
+                <Trans>Configuration source</Trans>
+              </h3>
+              <p>
+                <Trans>This current configuration source is: </Trans>
+                {this.configurationSource}.
+              </p>
             </div>
             <div className="sidebar-help-section">
-              <h3><Trans>Why do I need an SMTP server?</Trans></h3>
-              <p><Trans>Passbolt needs an smtp server in order to send invitation emails after an account creation and to send email notifications.</Trans></p>
-              <a className="button" href="https://passbolt.com/docs/admin/emails/email-server/" target="_blank" rel="noopener noreferrer">
+              <h3>
+                <Trans>Why do I need an SMTP server?</Trans>
+              </h3>
+              <p>
+                <Trans>
+                  Passbolt needs an smtp server in order to send invitation emails after an account creation and to send
+                  email notifications.
+                </Trans>
+              </p>
+              <a
+                className="button"
+                href="https://passbolt.com/docs/admin/emails/email-server/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <FileTextSVG />
-                <span><Trans>Read the documentation</Trans></span>
+                <span>
+                  <Trans>Read the documentation</Trans>
+                </span>
               </a>
             </div>
-            {settings?.provider && settings?.provider.id !== "other" &&
-            <div className="sidebar-help-section">
-              <h3><Trans>How do I configure a {{smtpProviderName}} SMTP server?</Trans></h3>
-              <a className="button" href={settings.provider.help_page} target="_blank" rel="noopener noreferrer">
-                <LinkSVG/>
-                <span><Trans>See the {{smtpProviderName}} documentation</Trans></span>
-              </a>
-            </div>
-            }
-            {settings?.provider && (settings.provider.id === "google-mail" || settings.provider.id === "google-workspace") &&
-            <div className="sidebar-help-section">
-              <h3><Trans>Why shouldn&apos;t I use my login password ?</Trans></h3>
-              <p><Trans>In order to use the &quot;Username & Password&quot; authentication method with Google, you will need to enable MFA on your Google Account. The password should not be your login password, you have to create an &quot;App Password&quot; generated by Google.. However, the email remain the same.</Trans></p>
-              <a className="button" href="https://support.google.com/mail/answer/185833" target="_blank" rel="noopener noreferrer">
-                <FileTextSVG />
-                <span><Trans>More informations</Trans></span>
-              </a>
-            </div>
-            }
+            {settings?.provider && settings?.provider.id !== "other" && (
+              <div className="sidebar-help-section">
+                <h3>
+                  <Trans>How do I configure a {{ smtpProviderName }} SMTP server?</Trans>
+                </h3>
+                <a className="button" href={settings.provider.help_page} target="_blank" rel="noopener noreferrer">
+                  <LinkSVG />
+                  <span>
+                    <Trans>See the {{ smtpProviderName }} documentation</Trans>
+                  </span>
+                </a>
+              </div>
+            )}
+            {settings?.provider &&
+              (settings.provider.id === "google-mail" || settings.provider.id === "google-workspace") && (
+                <div className="sidebar-help-section">
+                  <h3>
+                    <Trans>Why shouldn&apos;t I use my login password ?</Trans>
+                  </h3>
+                  <p>
+                    <Trans>
+                      In order to use the &quot;Username & Password&quot; authentication method with Google, you will
+                      need to enable MFA on your Google Account. The password should not be your login password, you
+                      have to create an &quot;App Password&quot; generated by Google.. However, the email remain the
+                      same.
+                    </Trans>
+                  </p>
+                  <a
+                    className="button"
+                    href="https://support.google.com/mail/answer/185833"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FileTextSVG />
+                    <span>
+                      <Trans>More informations</Trans>
+                    </span>
+                  </a>
+                </div>
+              )}
           </>,
-          document.getElementById("administration-help-panel")
+          document.getElementById("administration-help-panel"),
         )}
       </div>
     );
@@ -535,4 +709,8 @@ ManageSmtpAdministrationSettings.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withAdminSmtpSettings(withDialog(withAdministrationWorkspace(withTranslation('common')(ManageSmtpAdministrationSettings)))));
+export default withAppContext(
+  withAdminSmtpSettings(
+    withDialog(withAdministrationWorkspace(withTranslation("common")(ManageSmtpAdministrationSettings))),
+  ),
+);

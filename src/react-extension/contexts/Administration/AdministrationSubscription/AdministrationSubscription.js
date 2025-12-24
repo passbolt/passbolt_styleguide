@@ -14,8 +14,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import SubscriptionModel from '../../../../shared/models/subscription/SubscriptionModel';
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import SubscriptionModel from "../../../../shared/models/subscription/SubscriptionModel";
 
 /**
  * The Administration Subscription Context
@@ -75,7 +75,7 @@ export class AdminSubscriptionContextProvider extends React.Component {
       }
     } finally {
       //Init subscription which will interact with UI
-      this.setState({subscription});
+      this.setState({ subscription });
       this.setProcessing(false);
     }
   }
@@ -87,7 +87,7 @@ export class AdminSubscriptionContextProvider extends React.Component {
    */
   async getActiveUsers() {
     const users = await this.props.context.port.request("passbolt.users.get-all");
-    const filterActiveUsers = user => user.active;
+    const filterActiveUsers = (user) => user.active;
     return users.filter(filterActiveUsers).length;
   }
 
@@ -114,16 +114,17 @@ export class AdminSubscriptionContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({processing});
+    this.setState({ processing });
   }
 
   /**
    * Puts the state to its default in order to avoid keeping the data users didn't want to save.
    */
   clearContext() {
-    const {subscription, processing} = this.defaultState;
+    const { subscription, processing } = this.defaultState;
     this.setState({
-      subscription, processing
+      subscription,
+      processing,
     });
   }
 
@@ -133,9 +134,7 @@ export class AdminSubscriptionContextProvider extends React.Component {
    */
   render() {
     return (
-      <AdminSubscriptionContext.Provider value={this.state}>
-        {this.props.children}
-      </AdminSubscriptionContext.Provider>
+      <AdminSubscriptionContext.Provider value={this.state}>{this.props.children}</AdminSubscriptionContext.Provider>
     );
   }
 }
@@ -147,7 +146,6 @@ AdminSubscriptionContextProvider.propTypes = {
 
 export default withAppContext(AdminSubscriptionContextProvider);
 
-
 /**
  * Resource Workspace Context Consumer HOC
  * @param WrappedComponent
@@ -157,12 +155,11 @@ export function withAdminSubscription(WrappedComponent) {
     render() {
       return (
         <AdminSubscriptionContext.Consumer>
-          {
-            adminSubscriptionContext => <WrappedComponent adminSubscriptionContext={adminSubscriptionContext} {...this.props} />
-          }
+          {(adminSubscriptionContext) => (
+            <WrappedComponent adminSubscriptionContext={adminSubscriptionContext} {...this.props} />
+          )}
         </AdminSubscriptionContext.Consumer>
       );
     }
   };
 }
-

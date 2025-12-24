@@ -14,8 +14,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
-import {ApiClient} from "../../shared/lib/apiClient/apiClient";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
+import { ApiClient } from "../../shared/lib/apiClient/apiClient";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
 import PassboltServiceUnavailableError from "../../shared/lib/Error/PassboltServiceUnavailableError";
 import AuthLogoutService from "../../shared/services/api/auth/AuthLogoutService";
@@ -30,11 +30,9 @@ export const ApiAccountRecoveryContext = React.createContext({
   state: null, // The current account recovery workflow state
   unexpectedError: null, // The unexpected error obejct if any
   // Whenever the initialization of the account recovery is requested.,
-  onInitializeAccountRecoveryRequested: () => {
-  },
+  onInitializeAccountRecoveryRequested: () => {},
   // Callback to be used when a user is unexpectedly logged in.
-  logoutUserAndRefresh: () => {
-  },
+  logoutUserAndRefresh: () => {},
 });
 
 /**
@@ -71,12 +69,12 @@ export class ApiAccountRecoveryContextProvider extends React.Component {
    */
   async onInitializeAccountRecoveryRequested() {
     if (!this.state.userId || !this.state.authenticationToken) {
-      return this.setState({state: ApiAccountRecoveryContextState.REQUEST_INVITATION_ERROR});
+      return this.setState({ state: ApiAccountRecoveryContextState.REQUEST_INVITATION_ERROR });
     }
 
     try {
       await this.verifyCanContinueAccountRecovery();
-      this.setState({state: ApiAccountRecoveryContextState.RESTART_FROM_SCRATCH});
+      this.setState({ state: ApiAccountRecoveryContextState.RESTART_FROM_SCRATCH });
     } catch (error) {
       await this.handleVerifyCanContinueAccountRecoveryError(error);
     }
@@ -101,16 +99,16 @@ export class ApiAccountRecoveryContextProvider extends React.Component {
     if (error instanceof PassboltApiFetchError) {
       const isUserLoggedIn = error.data.code === 403;
       if (isUserLoggedIn) {
-        return this.setState({state: ApiAccountRecoveryContextState.ERROR_ALREADY_SIGNED_IN_STATE});
+        return this.setState({ state: ApiAccountRecoveryContextState.ERROR_ALREADY_SIGNED_IN_STATE });
       }
 
       const isTokenExpired = Boolean(error?.data?.body?.token?.expired);
       const isNotActive = Boolean(error?.data?.body?.token?.isActive);
       if (isTokenExpired || isNotActive) {
-        return this.setState({state: ApiAccountRecoveryContextState.TOKEN_EXPIRED_STATE});
+        return this.setState({ state: ApiAccountRecoveryContextState.TOKEN_EXPIRED_STATE });
       }
     }
-    this.setState({state: ApiAccountRecoveryContextState.UNEXPECTED_ERROR_STATE, unexpectedError: error});
+    this.setState({ state: ApiAccountRecoveryContextState.UNEXPECTED_ERROR_STATE, unexpectedError: error });
   }
 
   /**
@@ -122,7 +120,7 @@ export class ApiAccountRecoveryContextProvider extends React.Component {
       await this.authLogoutService.logout();
     } catch (e) {
       const error = new PassboltServiceUnavailableError(e.message);
-      return this.setState({unexpectedError: error, state: ApiAccountRecoveryContextState.UNEXPECTED_ERROR_STATE});
+      return this.setState({ unexpectedError: error, state: ApiAccountRecoveryContextState.UNEXPECTED_ERROR_STATE });
     }
 
     window.location.reload();
@@ -134,9 +132,7 @@ export class ApiAccountRecoveryContextProvider extends React.Component {
    */
   render() {
     return (
-      <ApiAccountRecoveryContext.Provider value={this.state}>
-        {this.props.children}
-      </ApiAccountRecoveryContext.Provider>
+      <ApiAccountRecoveryContext.Provider value={this.state}>{this.props.children}</ApiAccountRecoveryContext.Provider>
     );
   }
 }
@@ -144,7 +140,7 @@ export class ApiAccountRecoveryContextProvider extends React.Component {
 ApiAccountRecoveryContextProvider.propTypes = {
   context: PropTypes.any, // The application context
   value: PropTypes.any, // The initial value of the context
-  children: PropTypes.any // The children components
+  children: PropTypes.any, // The children components
 };
 export default withAppContext(ApiAccountRecoveryContextProvider);
 
@@ -157,9 +153,7 @@ export function withApiAccountRecoveryContext(WrappedComponent) {
     render() {
       return (
         <ApiAccountRecoveryContext.Consumer>
-          {
-            context => <WrappedComponent apiAccountRecoveryContext={context} {...this.props} />
-          }
+          {(context) => <WrappedComponent apiAccountRecoveryContext={context} {...this.props} />}
         </ApiAccountRecoveryContext.Consumer>
       );
     }
@@ -170,10 +164,10 @@ export function withApiAccountRecoveryContext(WrappedComponent) {
  * The account recovery types of state
  */
 export const ApiAccountRecoveryContextState = {
-  INITIAL_STATE: 'Initial state',
-  RESTART_FROM_SCRATCH: 'Restart from scratch state',
-  TOKEN_EXPIRED_STATE: 'Token expired state',
-  ERROR_ALREADY_SIGNED_IN_STATE: 'Error, already signed in state',
-  REQUEST_INVITATION_ERROR: 'Request inviration error state',
-  UNEXPECTED_ERROR_STATE: 'Unexpected error state',
+  INITIAL_STATE: "Initial state",
+  RESTART_FROM_SCRATCH: "Restart from scratch state",
+  TOKEN_EXPIRED_STATE: "Token expired state",
+  ERROR_ALREADY_SIGNED_IN_STATE: "Error, already signed in state",
+  REQUEST_INVITATION_ERROR: "Request inviration error state",
+  UNEXPECTED_ERROR_STATE: "Unexpected error state",
 };

@@ -18,7 +18,4 @@
  * @param {function} [t] a translation function. Not necessary if called in a context where it is sure the group.name is defined
  * @returns {string}
  */
-export const getGroupFormattedName = (group, t = null) => group?.name
-  ? group.name
-  : t("Unknown group");
-
+export const getGroupFormattedName = (group, t = null) => (group?.name ? group.name : t("Unknown group"));

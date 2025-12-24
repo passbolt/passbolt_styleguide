@@ -15,7 +15,7 @@
 class PassboltApiFetchError extends Error {
   constructor(message, data) {
     super(message);
-    this.name = 'PassboltApiFetchError';
+    this.name = "PassboltApiFetchError";
     this.data = data || {};
   }
 }

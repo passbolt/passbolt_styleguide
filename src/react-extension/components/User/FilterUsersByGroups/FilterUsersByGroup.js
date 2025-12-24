@@ -13,21 +13,21 @@
  */
 import React from "react";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
-import {withRouter} from "react-router-dom";
-import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
+import { withRouter } from "react-router-dom";
+import { UserWorkspaceFilterTypes, withUserWorkspace } from "../../../contexts/UserWorkspaceContext";
+import { withContextualMenu } from "../../../contexts/ContextualMenuContext";
 import FilterUsersByGroupContextualMenu from "./FilterUsersByGroupContextualMenu";
 import DisplayGroupContextualMenu from "./DisplayGroupContextualMenu";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import CarretDownSVG from "../../../../img/svg/caret_down.svg";
 import CarretRightSVG from "../../../../img/svg/caret_right.svg";
 import UsersSVG from "../../../../img/svg/users.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
-import {withDrag} from "../../../contexts/DragContext";
+import { withDrag } from "../../../contexts/DragContext";
 import AddUserToGroup from "../../UserGroup/AddUserToGroupDialog/AddUserToGroupDialog";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 
 /**
  * This component display groups to filter the users
@@ -54,7 +54,7 @@ class FilterUsersByGroup extends React.Component {
       filterType: null, // type of the filter selected
       moreTitleMenuOpen: false, // more title menu open
       moreMenuOpenGroupId: null, // more menu open for a group with the id
-      dragOverGroupId: null // ID of the group currently being dragged over
+      dragOverGroupId: null, // ID of the group currently being dragged over
     };
   }
 
@@ -83,7 +83,7 @@ class FilterUsersByGroup extends React.Component {
    */
   handleTitleClickEvent() {
     const open = !this.state.open;
-    this.setState({open});
+    this.setState({ open });
   }
 
   /**
@@ -102,9 +102,9 @@ class FilterUsersByGroup extends React.Component {
    */
   handleTitleMoreClickEvent(event) {
     const moreTitleMenuOpen = !this.state.moreTitleMenuOpen;
-    this.setState({moreTitleMenuOpen});
+    this.setState({ moreTitleMenuOpen });
     if (moreTitleMenuOpen) {
-      const {left, top} = event.currentTarget.getBoundingClientRect();
+      const { left, top } = event.currentTarget.getBoundingClientRect();
       this.showContextualMenu(top + 18, left, "right");
     }
   }
@@ -113,7 +113,7 @@ class FilterUsersByGroup extends React.Component {
    * Close the title more menu
    */
   handleCloseTitleMoreMenu() {
-    this.setState({moreTitleMenuOpen: false});
+    this.setState({ moreTitleMenuOpen: false });
   }
 
   /**
@@ -129,7 +129,7 @@ class FilterUsersByGroup extends React.Component {
     if (this.isCurrentUserAdmin || isGroupManager) {
       const top = event.pageY;
       const left = event.pageX;
-      const contextualMenuProps = {group, left, top};
+      const contextualMenuProps = { group, left, top };
       this.props.contextualMenuContext.show(DisplayGroupContextualMenu, contextualMenuProps);
     }
   }
@@ -143,17 +143,16 @@ class FilterUsersByGroup extends React.Component {
    * @param group The selected group
    */
   handleGroupSelected(event, group) {
-    const {id} = group;
+    const { id } = group;
     this.props.history.push(`/app/groups/view/${id}`);
   }
-
 
   /**
    * Handle when the user wants to filter tags
    * @param {string} filterType
    */
   handleFilterGroupType(filterType) {
-    this.setState({filterType}, () => {
+    this.setState({ filterType }, () => {
       this.updateTitle();
     });
   }
@@ -165,11 +164,11 @@ class FilterUsersByGroup extends React.Component {
    */
   handleMoreClickEvent(event, group) {
     const moreMenuOpenGroupId = this.state.moreMenuOpenGroupId === group.id ? null : group.id;
-    this.setState({moreMenuOpenGroupId});
+    this.setState({ moreMenuOpenGroupId });
     if (moreMenuOpenGroupId) {
-      const {left, top} = event.currentTarget.getBoundingClientRect();
+      const { left, top } = event.currentTarget.getBoundingClientRect();
       const onBeforeHide = this.handleCloseMoreMenu;
-      const contextualMenuProps = {group, left, top: top + 18, className: "right", onBeforeHide};
+      const contextualMenuProps = { group, left, top: top + 18, className: "right", onBeforeHide };
       this.props.contextualMenuContext.show(DisplayGroupContextualMenu, contextualMenuProps);
     }
   }
@@ -180,7 +179,7 @@ class FilterUsersByGroup extends React.Component {
    */
   handleCloseMoreMenu(id) {
     if (this.state.moreMenuOpenGroupId === id) {
-      this.setState({moreMenuOpenGroupId: null});
+      this.setState({ moreMenuOpenGroupId: null });
     }
   }
 
@@ -190,9 +189,9 @@ class FilterUsersByGroup extends React.Component {
    * @param {Object} group The group
    */
   handleDragLeaveTitle(event, group) {
-  // Clear the drag over state for this group
+    // Clear the drag over state for this group
     if (this.state.dragOverGroupId === group.id) {
-      this.setState({dragOverGroupId: null});
+      this.setState({ dragOverGroupId: null });
     }
   }
 
@@ -202,7 +201,7 @@ class FilterUsersByGroup extends React.Component {
    * @param {Object} group The group being dragged over
    */
   handleDragOverTitle(event, group) {
-  // Prevent drop on disabled groups
+    // Prevent drop on disabled groups
     if (this.isGroupDisabled(group)) {
       return;
     }
@@ -215,7 +214,7 @@ class FilterUsersByGroup extends React.Component {
 
     // Set the drag over state for this group
     if (this.state.dragOverGroupId !== group.id) {
-      this.setState({dragOverGroupId: group.id});
+      this.setState({ dragOverGroupId: group.id });
     }
   }
 
@@ -225,20 +224,20 @@ class FilterUsersByGroup extends React.Component {
    * @param group An user group
    */
   async handleDropTitle(event, group) {
-  // Prevent drop on disabled groups
+    // Prevent drop on disabled groups
     if (this.isGroupDisabled(group)) {
       return;
     }
 
     // Clear the drag over state
-    this.setState({dragOverGroupId: null});
+    this.setState({ dragOverGroupId: null });
     const users = this.props.dragContext.draggedItems.users;
 
     const addUserToGroupDialogProps = {
       user: users[0],
-      group: group
+      group: group,
     };
-    this.props.context.setContext({addUserToGroupDialogProps});
+    this.props.context.setContext({ addUserToGroupDialogProps });
     this.props.dialogContext.open(AddUserToGroup);
   }
 
@@ -251,7 +250,7 @@ class FilterUsersByGroup extends React.Component {
     return {
       [filterByGroupsOptions.manage]: this.translate("Groups I manage"),
       [filterByGroupsOptions.member]: this.translate("Groups I am member of"),
-      default: this.translate("All groups")
+      default: this.translate("All groups"),
     };
   }
 
@@ -261,9 +260,9 @@ class FilterUsersByGroup extends React.Component {
    */
   get filters() {
     return {
-      [filterByGroupsOptions.manage]: group => group.my_group_user && group.my_group_user.is_admin,
-      [filterByGroupsOptions.member]: group => group.my_group_user && !group.my_group_user.is_admin,
-      [filterByGroupsOptions.all]: group => group
+      [filterByGroupsOptions.manage]: (group) => group.my_group_user && group.my_group_user.is_admin,
+      [filterByGroupsOptions.member]: (group) => group.my_group_user && !group.my_group_user.is_admin,
+      [filterByGroupsOptions.all]: (group) => group,
     };
   }
 
@@ -281,7 +280,7 @@ class FilterUsersByGroup extends React.Component {
    * Returns true if the current user is admin
    */
   get isCurrentUserAdmin() {
-    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === "admin";
   }
 
   /**
@@ -309,7 +308,7 @@ class FilterUsersByGroup extends React.Component {
   showContextualMenu(top, left, className = "") {
     const onFilterSelected = this.handleFilterGroupType;
     const onBeforeHide = this.handleCloseTitleMoreMenu;
-    const contextualMenuProps = {left, onFilterSelected, onBeforeHide, top, className};
+    const contextualMenuProps = { left, onFilterSelected, onBeforeHide, top, className };
     this.props.contextualMenuContext.show(FilterUsersByGroupContextualMenu, contextualMenuProps);
   }
 
@@ -318,7 +317,7 @@ class FilterUsersByGroup extends React.Component {
    */
   updateTitle() {
     const title = this.titles[this.state.filterType] || this.titles.default;
-    this.setState({title});
+    this.setState({ title });
   }
 
   /**
@@ -343,7 +342,7 @@ class FilterUsersByGroup extends React.Component {
    */
   isSelected(group) {
     const isGroupFilter = this.props.userWorkspaceContext.filter.type === UserWorkspaceFilterTypes.GROUP;
-    const filterPayload =  this.props.userWorkspaceContext.filter.payload;
+    const filterPayload = this.props.userWorkspaceContext.filter.payload;
     const groupPayload = filterPayload && filterPayload.group;
     const isGroupSelected = () => groupPayload.id === group.id;
     return isGroupFilter && isGroupSelected();
@@ -364,7 +363,7 @@ class FilterUsersByGroup extends React.Component {
    * @returns {boolean} True if the group should be disabled
    */
   isGroupDisabled(group) {
-    const {dragging, draggedItems} = this.props.dragContext;
+    const { dragging, draggedItems } = this.props.dragContext;
     const disabledGroupIds = draggedItems?.disabledGroupIds;
     return dragging && disabledGroupIds && disabledGroupIds.includes(group.id);
   }
@@ -401,12 +400,7 @@ class FilterUsersByGroup extends React.Component {
                   <h3 className="section-title">
                     <span className="folders-label" onClick={this.handleTitleClickEvent}>
                       <button type="button" className="link no-border">
-                        <div className="toggle-folder">
-                          {this.state.open
-                            ? <CarretDownSVG />
-                            : <CarretRightSVG />
-                          }
-                        </div>
+                        <div className="toggle-folder">{this.state.open ? <CarretDownSVG /> : <CarretRightSVG />}</div>
                         <UsersSVG />
                         <span>{this.state.title}</span>
                       </button>
@@ -415,65 +409,71 @@ class FilterUsersByGroup extends React.Component {
                 </div>
               </div>
               <div className="dropdown right-cell more-ctrl">
-                <button type="button" className={`button-transparent inline-menu-horizontal ${this.state.moreTitleMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}>
+                <button
+                  type="button"
+                  className={`button-transparent inline-menu-horizontal ${this.state.moreTitleMenuOpen ? "open" : ""}`}
+                  onClick={this.handleTitleMoreClickEvent}
+                >
                   <MoreHorizontalSVG />
                 </button>
               </div>
             </div>
           </li>
         </ul>
-        {this.state.open &&
-        <div className="accordion-content">
-          {this.isLoading() &&
-          <div className="processing-wrapper">
-            <SpinnerSVG/>
-            <span className="processing-text"><Trans>Retrieving groups</Trans></span>
+        {this.state.open && (
+          <div className="accordion-content">
+            {this.isLoading() && (
+              <div className="processing-wrapper">
+                <SpinnerSVG />
+                <span className="processing-text">
+                  <Trans>Retrieving groups</Trans>
+                </span>
+              </div>
+            )}
+            {!this.isLoading() && !this.hasGroup() && (
+              <em className="empty-content">
+                <Trans>empty</Trans>
+              </em>
+            )}
+            {!this.isLoading() && this.hasGroup() && (
+              <ul className="navigation-secondary-tree ready">
+                {this.filteredGroups.map((group) => (
+                  <li className="open node root group-item" key={group.id}>
+                    <div
+                      className={`row ${this.isSelected(group) ? "selected" : ""} ${this.isGroupDisabled(group) ? "disabled" : ""} ${this.isGroupDraggedOver(group) ? "drop-focus" : ""}`}
+                    >
+                      <div
+                        className="main-cell-wrapper"
+                        onClick={(event) => this.handleGroupSelected(event, group)}
+                        onContextMenu={(event) => this.handleContextualMenuEvent(event, group)}
+                        onDragOver={(event) => this.handleDragOverTitle(event, group)}
+                        onDragLeave={(event) => this.handleDragLeaveTitle(event, group)}
+                        onDrop={(event) => this.handleDropTitle(event, group)}
+                      >
+                        <div className="main-cell">
+                          <button type="button" className="link no-border" title={group.name}>
+                            <span className="ellipsis group-name">{group.name}</span>
+                          </button>
+                        </div>
+                      </div>
+                      {this.canShowMore(group) && (
+                        <div className="dropdown right-cell more-ctrl">
+                          <button
+                            type="button"
+                            onClick={(event) => this.handleMoreClickEvent(event, group)}
+                            className={`button-transparent inline-menu-horizontal ${this.state.moreMenuOpenGroupId === group.id ? "open" : ""}`}
+                          >
+                            <MoreHorizontalSVG />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-          }
-          {!this.isLoading() && !this.hasGroup() &&
-          <em className="empty-content"><Trans>empty</Trans></em>
-          }
-          {!this.isLoading() && this.hasGroup() &&
-          <ul className="navigation-secondary-tree ready">
-            {this.filteredGroups.map(group =>
-              <li className="open node root group-item" key={group.id}>
-                <div
-                  className={`row ${this.isSelected(group) ? "selected" : ""} ${this.isGroupDisabled(group) ? "disabled" : ""} ${this.isGroupDraggedOver(group) ? "drop-focus" : ""}`}
-                >
-                  <div className="main-cell-wrapper"
-                    onClick={event => this.handleGroupSelected(event, group)}
-                    onContextMenu={event => this.handleContextualMenuEvent(event, group)}
-                    onDragOver={event => this.handleDragOverTitle(event, group)}
-                    onDragLeave={event => this.handleDragLeaveTitle(event, group)}
-                    onDrop={event => this.handleDropTitle(event, group)}
-                  >
-                    <div className="main-cell">
-                      <button
-                        type="button"
-                        className="link no-border"
-                        title={group.name}>
-                        <span className="ellipsis group-name">{group.name}</span>
-                      </button>
-                    </div>
-                  </div>
-                  {this.canShowMore(group) &&
-                    <div className="dropdown right-cell more-ctrl">
-                      <button
-                        type="button"
-                        onClick={event => this.handleMoreClickEvent(event, group)}
-                        className={`button-transparent inline-menu-horizontal ${this.state.moreMenuOpenGroupId === group.id ? "open" : ""}`}>
-                        <MoreHorizontalSVG/>
-                      </button>
-                    </div>
-                  }
-                </div>
-              </li>
-            )
-            }
-          </ul>
-          }
-        </div>
-        }
+        )}
       </div>
     );
   }
@@ -489,10 +489,14 @@ FilterUsersByGroup.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withUserWorkspace(withContextualMenu(withDrag(withDialog(withTranslation('common')(FilterUsersByGroup)))))));
+export default withAppContext(
+  withRouter(
+    withUserWorkspace(withContextualMenu(withDrag(withDialog(withTranslation("common")(FilterUsersByGroup))))),
+  ),
+);
 
 export const filterByGroupsOptions = {
   all: "all",
   manage: "manage",
-  member: "member"
+  member: "member",
 };

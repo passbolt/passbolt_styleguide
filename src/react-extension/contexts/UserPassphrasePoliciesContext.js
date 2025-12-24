@@ -14,8 +14,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
-import {withTranslation} from "react-i18next";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
+import { withTranslation } from "react-i18next";
 
 /**
  * The User Passphrase Policies Context
@@ -56,7 +56,7 @@ export class UserPassphrasePoliciesContextProvider extends React.Component {
    */
   async findSettings() {
     const settings = await this.props.context.port.request("passbolt.user-passphrase-policies.find");
-    this.setState({settings});
+    this.setState({ settings });
   }
 
   /**
@@ -86,7 +86,7 @@ UserPassphrasePoliciesContextProvider.propTypes = {
   t: PropTypes.any, // The translate context
 };
 
-export default withAppContext(withTranslation('common')(UserPassphrasePoliciesContextProvider));
+export default withAppContext(withTranslation("common")(UserPassphrasePoliciesContextProvider));
 
 /**
  * Administration User Passphrase Policies Context Consumer HOC
@@ -97,11 +97,8 @@ export function withUserPassphrasePolicies(WrappedComponent) {
     render() {
       return (
         <UserPassphrasePoliciesContext.Consumer>
-          {userPassphrasePoliciesContext => (
-            <WrappedComponent
-              userPassphrasePoliciesContext={userPassphrasePoliciesContext}
-              {...this.props}
-            />
+          {(userPassphrasePoliciesContext) => (
+            <WrappedComponent userPassphrasePoliciesContext={userPassphrasePoliciesContext} {...this.props} />
           )}
         </UserPassphrasePoliciesContext.Consumer>
       );

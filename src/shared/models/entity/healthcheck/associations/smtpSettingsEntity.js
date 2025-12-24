@@ -21,28 +21,29 @@ class SmtpSettingsEntity extends Entity {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(EntitySchema.validate(
-      SmtpSettingsEntity.ENTITY_NAME,
-      dto,
-      SmtpSettingsEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(SmtpSettingsEntity.ENTITY_NAME, dto, SmtpSettingsEntity.getSchema()), options);
   }
 
   static getSchema() {
     return {
-      "type": "object",
-      "required": ["isEnabled", "areEndpointsDisabled", "errorMessage", "source", "isInDb"],
-      "properties": {
-        "isEnabled": {"type": "boolean"},
-        "areEndpointsDisabled": {"type": "boolean"},
-        "errorMessage": {"anyOf": [{
-          "type": "boolean",
-        }, {
-          "type": "string"
-        }]},
-        "source": {"type": "string"},
-        "isInDb": {"type": "boolean"}
-      }
+      type: "object",
+      required: ["isEnabled", "areEndpointsDisabled", "errorMessage", "source", "isInDb"],
+      properties: {
+        isEnabled: { type: "boolean" },
+        areEndpointsDisabled: { type: "boolean" },
+        errorMessage: {
+          anyOf: [
+            {
+              type: "boolean",
+            },
+            {
+              type: "string",
+            },
+          ],
+        },
+        source: { type: "string" },
+        isInDb: { type: "boolean" },
+      },
     };
   }
 

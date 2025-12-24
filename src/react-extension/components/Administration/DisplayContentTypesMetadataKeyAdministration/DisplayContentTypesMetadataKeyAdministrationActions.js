@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import SpinnerSVG from "../../../../img/svg/spinner.svg";
 
 class DisplayContentTypesMetadataKeyAdministrationActions extends React.Component {
@@ -25,11 +25,16 @@ class DisplayContentTypesMetadataKeyAdministrationActions extends React.Componen
   render() {
     return (
       <div className="actions-wrapper">
-        <button type="button" className={`button primary form ${this.props.isProcessing ? "processing" : ""}`} disabled={this.props.isDisabled} onClick={this.props.onSaveRequested}>
-          <span><Trans>Save</Trans></span>
-          {this.props.isProcessing &&
-            <SpinnerSVG/>
-          }
+        <button
+          type="button"
+          className={`button primary form ${this.props.isProcessing ? "processing" : ""}`}
+          disabled={this.props.isDisabled}
+          onClick={this.props.onSaveRequested}
+        >
+          <span>
+            <Trans>Save</Trans>
+          </span>
+          {this.props.isProcessing && <SpinnerSVG />}
         </button>
       </div>
     );

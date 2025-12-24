@@ -14,10 +14,10 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {withAdminSmtpSettings} from "../../../contexts/AdminSmtpSettingsContext";
+import { withAdminSmtpSettings } from "../../../contexts/AdminSmtpSettingsContext";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
@@ -27,7 +27,7 @@ import CaretRightSVG from "../../../../img/svg/caret_right.svg";
 const uiStateEnum = {
   FORM: "form",
   ERROR: "error",
-  SUCCESS: "success"
+  SUCCESS: "success",
 };
 
 class SendTestMailDialog extends React.Component {
@@ -78,7 +78,7 @@ class SendTestMailDialog extends React.Component {
     }
 
     try {
-      this.setState({processing: true});
+      this.setState({ processing: true });
       const details = await this.props.adminSmtpSettingsContext.sendTestMailTo(this.state.recipient);
       this.setState({
         uiState: uiStateEnum.SUCCESS,
@@ -88,7 +88,7 @@ class SendTestMailDialog extends React.Component {
     } catch (e) {
       this.handleError(e);
     }
-    this.setState({processing: false});
+    this.setState({ processing: false });
   }
 
   /**
@@ -97,7 +97,7 @@ class SendTestMailDialog extends React.Component {
    * @returns {Promise<void>}
    */
   async handleInputChange(event) {
-    this.setState({recipient: event.target.value});
+    this.setState({ recipient: event.target.value });
   }
 
   /**
@@ -107,7 +107,7 @@ class SendTestMailDialog extends React.Component {
   validateForm() {
     const isValid = AppEmailValidatorService.validate(this.state.recipient, this.props.context.siteSettings);
     this.setState({
-      recipientError: isValid ? "" : this.translate("Recipient must be a valid email")
+      recipientError: isValid ? "" : this.translate("Recipient must be a valid email"),
     });
     return isValid;
   }
@@ -128,9 +128,7 @@ class SendTestMailDialog extends React.Component {
   handleError(error) {
     //If an SMTP timeout errors happens, no debug is available but we have a clear error message in the header.
     const debugInfo = error.data?.body?.debug;
-    const errorMessage = debugInfo?.length > 0
-      ? debugInfo
-      : error?.message;
+    const errorMessage = debugInfo?.length > 0 ? debugInfo : error?.message;
 
     this.setState({
       uiState: uiStateEnum.ERROR,
@@ -143,14 +141,14 @@ class SendTestMailDialog extends React.Component {
    * Handle the click on "Logs" button by toggling the log details display state.
    */
   handleDisplayLogsClick() {
-    this.setState({displayLogs: !this.state.displayLogs});
+    this.setState({ displayLogs: !this.state.displayLogs });
   }
 
   /**
    * Handle the click on "Retry" button by setting the UI to FORM state.
    */
   handleRetryClick() {
-    this.setState({uiState: uiStateEnum.FORM});
+    this.setState({ uiState: uiStateEnum.FORM });
   }
 
   /**
@@ -170,7 +168,7 @@ class SendTestMailDialog extends React.Component {
     const stateTitles = {
       form: this.translate("Send test email"),
       error: this.translate("Something went wrong!"),
-      success: this.translate("Email sent")
+      success: this.translate("Email sent"),
     };
 
     return stateTitles[this.state.uiState] || "";
@@ -190,96 +188,163 @@ class SendTestMailDialog extends React.Component {
    */
   render() {
     return (
-      <DialogWrapper className='send-test-email-dialog' title={this.title}
-        onClose={this.props.handleClose} disabled={this.hasAllInputDisabled()}>
-        {this.state.uiState === uiStateEnum.FORM &&
+      <DialogWrapper
+        className="send-test-email-dialog"
+        title={this.title}
+        onClose={this.props.handleClose}
+        disabled={this.hasAllInputDisabled()}
+      >
+        {this.state.uiState === uiStateEnum.FORM && (
           <form onSubmit={this.handleFormSubmit} noValidate>
             <div className="form-content">
-              <div className={`input text required ${this.state.recipientError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                <label><Trans>Recipient</Trans></label>
-                <input id="recipient" type="text" name="recipient" required="required" className="required fluid form-element ready" placeholder="name@email.com"
-                  onChange={this.handleInputChange} value={this.state.recipient} disabled={this.hasAllInputDisabled()}/>
-                {this.state.recipientError &&
-                <div className="recipient error-message">{this.state.recipientError}</div>
-                }
+              <div
+                className={`input text required ${this.state.recipientError ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+              >
+                <label>
+                  <Trans>Recipient</Trans>
+                </label>
+                <input
+                  id="recipient"
+                  type="text"
+                  name="recipient"
+                  required="required"
+                  className="required fluid form-element ready"
+                  placeholder="name@email.com"
+                  onChange={this.handleInputChange}
+                  value={this.state.recipient}
+                  disabled={this.hasAllInputDisabled()}
+                />
+                {this.state.recipientError && (
+                  <div className="recipient error-message">{this.state.recipientError}</div>
+                )}
               </div>
               <div className="message notice no-margin">
-                <strong><Trans>Pro tip</Trans>:</strong> <Trans>after clicking on send, a test email will be sent to the recipient email in order to check that your configuration is correct.</Trans>
+                <strong>
+                  <Trans>Pro tip</Trans>:
+                </strong>{" "}
+                <Trans>
+                  after clicking on send, a test email will be sent to the recipient email in order to check that your
+                  configuration is correct.
+                </Trans>
               </div>
             </div>
             <div className="submit-wrapper clearfix">
               <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.props.handleClose} />
-              <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Send")}/>
+              <FormSubmitButton
+                disabled={this.hasAllInputDisabled()}
+                processing={this.state.processing}
+                value={this.translate("Send")}
+              />
             </div>
           </form>
-        }
-        {this.state.uiState === uiStateEnum.ERROR &&
+        )}
+        {this.state.uiState === uiStateEnum.ERROR && (
           <>
             <div className="dialog-body">
-              <p><Trans>The test email could not be sent. Kindly check the logs below for more information.</Trans><br/>
-                <a className="faq-link" href="https://help.passbolt.com/faq/hosting/why-email-not-sent" rel="noopener noreferrer" target="_blank"><Trans>FAQ: Why are my emails not sent?</Trans></a>
+              <p>
+                <Trans>The test email could not be sent. Kindly check the logs below for more information.</Trans>
+                <br />
+                <a
+                  className="faq-link"
+                  href="https://help.passbolt.com/faq/hosting/why-email-not-sent"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <Trans>FAQ: Why are my emails not sent?</Trans>
+                </a>
               </p>
               <div className="accordion-header">
                 <button type="button" className="link no-border" onClick={this.handleDisplayLogsClick}>
-                  <span><Trans>Logs</Trans></span>
-                  {this.state.displayLogs
-                    ? <CaretDownSVG className="baseline svg-icon"/>
-                    : <CaretRightSVG className="baseline svg-icon"/>
-                  }
+                  <span>
+                    <Trans>Logs</Trans>
+                  </span>
+                  {this.state.displayLogs ? (
+                    <CaretDownSVG className="baseline svg-icon" />
+                  ) : (
+                    <CaretRightSVG className="baseline svg-icon" />
+                  )}
                 </button>
               </div>
-              {this.state.displayLogs &&
+              {this.state.displayLogs && (
                 <div className="accordion-content">
-                  <textarea className="full_report" readOnly={true} value={this.state.debugDetails}/>
+                  <textarea className="full_report" readOnly={true} value={this.state.debugDetails} />
                 </div>
-              }
+              )}
             </div>
             <div className="dialog-footer clearfix">
-              <button type="button" className="cancel" disabled={this.hasAllInputDisabled()} onClick={this.handleRetryClick}><Trans>Retry</Trans></button>
+              <button
+                type="button"
+                className="cancel"
+                disabled={this.hasAllInputDisabled()}
+                onClick={this.handleRetryClick}
+              >
+                <Trans>Retry</Trans>
+              </button>
               <button
                 className="button primary"
-                type='button'
+                type="button"
                 onClick={this.props.handleClose}
-                disabled={this.isProcessing}>
-                <span><Trans>Close</Trans></span>
+                disabled={this.isProcessing}
+              >
+                <span>
+                  <Trans>Close</Trans>
+                </span>
               </button>
             </div>
           </>
-        }
-        {this.state.uiState === uiStateEnum.SUCCESS &&
+        )}
+        {this.state.uiState === uiStateEnum.SUCCESS && (
           <>
             <div className="dialog-body">
-              <p><Trans>The test email has been sent. Check your email box, you should receive it in a minute.</Trans></p>
+              <p>
+                <Trans>The test email has been sent. Check your email box, you should receive it in a minute.</Trans>
+              </p>
               <div className="accordion-header">
                 <button type="button" className="link no-border" onClick={this.handleDisplayLogsClick}>
-                  <span><Trans>Logs</Trans></span>
-                  {this.state.displayLogs
-                    ? <CaretDownSVG className="baseline svg-icon"/>
-                    : <CaretRightSVG className="baseline svg-icon"/>
-                  }
+                  <span>
+                    <Trans>Logs</Trans>
+                  </span>
+                  {this.state.displayLogs ? (
+                    <CaretDownSVG className="baseline svg-icon" />
+                  ) : (
+                    <CaretRightSVG className="baseline svg-icon" />
+                  )}
                 </button>
               </div>
-              {this.state.displayLogs &&
+              {this.state.displayLogs && (
                 <div className="accordion-content">
-                  <textarea className="full_report" readOnly={true} value={this.state.debugDetails}/>
+                  <textarea className="full_report" readOnly={true} value={this.state.debugDetails} />
                 </div>
-              }
+              )}
               <div className="message notice no-margin">
-                <strong><Trans>Pro tip</Trans>:</strong> <Trans>Check your spam folder if you do not hear from us after a while.</Trans>
+                <strong>
+                  <Trans>Pro tip</Trans>:
+                </strong>{" "}
+                <Trans>Check your spam folder if you do not hear from us after a while.</Trans>
               </div>
             </div>
             <div className="dialog-footer clearfix">
-              <button type="button" className="cancel" disabled={this.hasAllInputDisabled()} onClick={this.handleRetryClick}><Trans>Retry</Trans></button>
+              <button
+                type="button"
+                className="cancel"
+                disabled={this.hasAllInputDisabled()}
+                onClick={this.handleRetryClick}
+              >
+                <Trans>Retry</Trans>
+              </button>
               <button
                 className="button primary"
-                type='button'
+                type="button"
                 onClick={this.props.handleClose}
-                disabled={this.isProcessing}>
-                <span><Trans>Close</Trans></span>
+                disabled={this.isProcessing}
+              >
+                <span>
+                  <Trans>Close</Trans>
+                </span>
               </button>
             </div>
           </>
-        }
+        )}
       </DialogWrapper>
     );
   }
@@ -292,4 +357,4 @@ SendTestMailDialog.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withAdminSmtpSettings(withTranslation('common')(SendTestMailDialog)));
+export default withAppContext(withAdminSmtpSettings(withTranslation("common")(SendTestMailDialog)));

@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.12.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import Password from "../../../../shared/components/Password/Password";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import Select from "../../Common/Select/Select";
@@ -56,10 +56,12 @@ class InputPassphrase extends Component {
    * @returns {Promise<void>}
    */
   async initDefaultRememberMeChoice() {
-    const defaultRememberMeChoice = await this.props.context.port.request('passbolt.remember-me.get-user-latest-choice');
+    const defaultRememberMeChoice = await this.props.context.port.request(
+      "passbolt.remember-me.get-user-latest-choice",
+    );
     this.setState({
       rememberMe: defaultRememberMeChoice,
-      rememberMeDuration: this.getUntilILogOutDurationOrDefault(defaultRememberMeChoice)
+      rememberMeDuration: this.getUntilILogOutDurationOrDefault(defaultRememberMeChoice),
     });
   }
 
@@ -83,7 +85,7 @@ class InputPassphrase extends Component {
   close() {
     const error = new UserAbortsOperationError("The dialog has been closed.");
     this.props.context.port.emit(this.props.context.passphraseRequestId, "ERROR", error);
-    this.props.context.setContext({passphraseRequestId: null});
+    this.props.context.setContext({ passphraseRequestId: null });
     this.props.onClose();
   }
 
@@ -102,7 +104,7 @@ class InputPassphrase extends Component {
   async handleFormSubmit(event) {
     event.preventDefault();
 
-    this.setState({processing: true});
+    this.setState({ processing: true });
     if (await this.isValidPassphrase()) {
       this.handleValidPassphrase();
     } else {
@@ -144,9 +146,9 @@ class InputPassphrase extends Component {
 
     this.props.context.port.emit(this.props.context.passphraseRequestId, "SUCCESS", {
       passphrase: this.state.passphrase,
-      rememberMe: rememberMe
+      rememberMe: rememberMe,
     });
-    this.props.context.setContext({passphraseRequestId: null});
+    this.props.context.setContext({ passphraseRequestId: null });
     this.props.onClose();
   }
 
@@ -167,7 +169,7 @@ class InputPassphrase extends Component {
     this.setState({
       processing: false,
       attempt: attempt,
-      passphraseError: passphraseError
+      passphraseError: passphraseError,
     });
     if (attempt < 3) {
       // Force the passphrase input focus. The autoFocus attribute only works during the first rendering.
@@ -184,7 +186,7 @@ class InputPassphrase extends Component {
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -195,10 +197,9 @@ class InputPassphrase extends Component {
   handleRememberMeDurationSelectChange(event) {
     this.setState({
       rememberMe: true,
-      rememberMeDuration: event.target.value
+      rememberMeDuration: event.target.value,
     });
   }
-
 
   /**
    * Render the remember me options
@@ -209,7 +210,7 @@ class InputPassphrase extends Component {
     const rememberMeOptions = this.props.context.siteSettings.getRememberMeOptions();
 
     for (const time in rememberMeOptions) {
-      selectOptions.push({value: parseInt(time), label: rememberMeOptions[time]});
+      selectOptions.push({ value: parseInt(time), label: rememberMeOptions[time] });
     }
 
     return selectOptions;
@@ -223,13 +224,13 @@ class InputPassphrase extends Component {
    */
   getUntilILogOutDurationOrDefault(rememberMe) {
     const allOptions = this.props.context.siteSettings.getRememberMeOptions();
-    const limitedTimeOptions = Object.keys(allOptions).filter(option => parseInt(option, 10) !== -1);
+    const limitedTimeOptions = Object.keys(allOptions).filter((option) => parseInt(option, 10) !== -1);
     const firstOption = parseInt(limitedTimeOptions.at(0), 10);
 
     if (!rememberMe) {
       return firstOption;
     }
-    const untilILogoutOrFirstOption = -1 in allOptions ? -1 : firstOption;
+    const untilILogoutOrFirstOption = (-1) in allOptions ? -1 : firstOption;
     return untilILogoutOrFirstOption;
   }
 
@@ -253,8 +254,12 @@ class InputPassphrase extends Component {
     const hasRememberMeOptions = this.hasRememberMeOptions();
 
     return (
-      <DialogWrapper className="passphrase-entry"  title={this.translate("Please enter your passphrase.")} onClose={this.handleCloseClick}>
-        {this.state.attempt < 3 &&
+      <DialogWrapper
+        className="passphrase-entry"
+        title={this.translate("Please enter your passphrase.")}
+        onClose={this.handleCloseClick}
+      >
+        {this.state.attempt < 3 && (
           <form onSubmit={this.handleFormSubmit}>
             <div className="form-content">
               <div className={`input-password-wrapper input required ${this.state.passphraseError ? "error" : ""}`}>
@@ -271,38 +276,56 @@ class InputPassphrase extends Component {
                   preview={true}
                   securityToken={this.props.context.userSettings.getSecurityToken()}
                 />
-                {this.state.passphraseError &&
-                  <div className="error-message">{this.state.passphraseError}</div>
-                }
+                {this.state.passphraseError && <div className="error-message">{this.state.passphraseError}</div>}
               </div>
-              {hasRememberMeOptions &&
+              {hasRememberMeOptions && (
                 <div className="remember-me">
                   <div className="input checkbox">
-                    <input id="passphrase-entry-form-remember-me" type="checkbox" name="rememberMe"
-                      checked={this.state.rememberMe} onChange={this.handleInputChange}/>
-                    <label htmlFor="passphrase-entry-form-remember-me"><Trans>Remember it for</Trans> </label>
+                    <input
+                      id="passphrase-entry-form-remember-me"
+                      type="checkbox"
+                      name="rememberMe"
+                      checked={this.state.rememberMe}
+                      onChange={this.handleInputChange}
+                    />
+                    <label htmlFor="passphrase-entry-form-remember-me">
+                      <Trans>Remember it for</Trans>{" "}
+                    </label>
                   </div>
-                  <Select className="inline" name="rememberMeDuration" items={this.renderRememberMeOptions()} value={this.state.rememberMeDuration}
-                    onChange={this.handleRememberMeDurationSelectChange}/>
+                  <Select
+                    className="inline"
+                    name="rememberMeDuration"
+                    items={this.renderRememberMeOptions()}
+                    value={this.state.rememberMeDuration}
+                    onChange={this.handleRememberMeDurationSelectChange}
+                  />
                 </div>
-              }
+              )}
             </div>
             <div className="submit-wrapper clearfix">
-              <button type="button" className="cancel link" onClick={this.handleCloseClick}><Trans>Cancel</Trans></button>
-              <button type="submit" className="button primary form" role="button"><Trans>Ok</Trans></button>
+              <button type="button" className="cancel link" onClick={this.handleCloseClick}>
+                <Trans>Cancel</Trans>
+              </button>
+              <button type="submit" className="button primary form" role="button">
+                <Trans>Ok</Trans>
+              </button>
             </div>
           </form>
-        }
-        {this.state.attempt === 3 &&
+        )}
+        {this.state.attempt === 3 && (
           <>
             <div className="form-content">
-              <p><Trans>Your passphrase is wrong! The operation has been aborted.</Trans></p>
+              <p>
+                <Trans>Your passphrase is wrong! The operation has been aborted.</Trans>
+              </p>
             </div>
             <div className="submit-wrapper clearfix">
-              <button type="button" className="primary" onClick={this.handleCloseClick}><Trans>Close</Trans></button>
+              <button type="button" className="primary" onClick={this.handleCloseClick}>
+                <Trans>Close</Trans>
+              </button>
             </div>
           </>
-        }
+        )}
       </DialogWrapper>
     );
   }
@@ -314,4 +337,4 @@ InputPassphrase.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(InputPassphrase));
+export default withAppContext(withTranslation("common")(InputPassphrase));

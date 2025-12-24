@@ -22,20 +22,17 @@ class MetadataKeysSettingsEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "allow_usage_of_personal_keys",
-        "zero_knowledge_key_share",
-      ],
-      "properties": {
-        "allow_usage_of_personal_keys": {
-          "type": "boolean",
+      type: "object",
+      required: ["allow_usage_of_personal_keys", "zero_knowledge_key_share"],
+      properties: {
+        allow_usage_of_personal_keys: {
+          type: "boolean",
         },
-        "zero_knowledge_key_share": {
-          "type": "boolean",
+        zero_knowledge_key_share: {
+          type: "boolean",
         },
-        "metadata_private_keys": ShareMetadataPrivateKeysCollection.getSchema(),
-      }
+        metadata_private_keys: ShareMetadataPrivateKeysCollection.getSchema(),
+      },
     };
   }
 
@@ -69,10 +66,10 @@ class MetadataKeysSettingsEntity extends EntityV2 {
   static createFromDefault(data = {}) {
     const defaultData = {
       allow_usage_of_personal_keys: true,
-      zero_knowledge_key_share: false
+      zero_knowledge_key_share: false,
     };
 
-    return new MetadataKeysSettingsEntity({...defaultData, ...data});
+    return new MetadataKeysSettingsEntity({ ...defaultData, ...data });
   }
 
   /*
@@ -140,7 +137,7 @@ class MetadataKeysSettingsEntity extends EntityV2 {
    * @returns {object} all contain options that can be used in toDto()
    */
   static get ALL_CONTAIN_OPTIONS() {
-    return {metadata_private_keys: true};
+    return { metadata_private_keys: true };
   }
 }
 

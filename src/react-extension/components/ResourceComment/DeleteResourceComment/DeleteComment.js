@@ -13,10 +13,10 @@
  */
 
 import React from "react";
-import {withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import ConfirmResourceCommentDeletion from "../ConfirmResourceCommentDeletion/ConfirmResourceCommentDeletion";
 import DeleteSVG from "../../../../img/svg/delete.svg";
 
@@ -44,14 +44,14 @@ class DeleteComment extends React.Component {
    * Call to delete the comment
    */
   delete() {
-    this.props.context.setContext({resourceCommentId: this.props.commentId});
+    this.props.context.setContext({ resourceCommentId: this.props.commentId });
     this.props.dialogContext.open(ConfirmResourceCommentDeletion);
   }
 
   render() {
     return (
       <button type="button" className="delete-comment button-transparent inline" onClick={this.delete}>
-        <DeleteSVG name="trash"/>
+        <DeleteSVG name="trash" />
       </button>
     );
   }
@@ -60,7 +60,7 @@ class DeleteComment extends React.Component {
 DeleteComment.propTypes = {
   context: PropTypes.any, // The application context
   commentId: PropTypes.string, // The resource comment id
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
 };
 
 export default withAppContext(withDialog(withTranslation("common")(DeleteComment)));

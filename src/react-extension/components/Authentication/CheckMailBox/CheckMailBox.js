@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
 
 class CheckMailBox extends Component {
   /**
@@ -22,17 +22,20 @@ class CheckMailBox extends Component {
   render() {
     return (
       <div className="email-sent-instructions">
-        <div className="email-sent-bg">
-        </div>
-        <h1><Trans>Check your mailbox!</Trans></h1>
-        <p><Trans>We sent you a link to verify your email.</Trans><br/>
-          <Trans>Check your spam folder if you do not hear from us after a while.</Trans></p>
+        <div className="email-sent-bg"></div>
+        <h1>
+          <Trans>Check your mailbox!</Trans>
+        </h1>
+        <p>
+          <Trans>We sent you a link to verify your email.</Trans>
+          <br />
+          <Trans>Check your spam folder if you do not hear from us after a while.</Trans>
+        </p>
       </div>
     );
   }
 }
 
-CheckMailBox.propTypes = {
-};
+CheckMailBox.propTypes = {};
 
 export default withTranslation("common")(CheckMailBox);

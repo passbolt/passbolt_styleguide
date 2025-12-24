@@ -12,7 +12,7 @@
  * @since         4.3.0
  */
 
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import { defaultActionFeedbackContext } from "../../../contexts/ActionFeedbackContext.test.data";
 
 /**
  * Default props
@@ -25,4 +25,3 @@ export function defaultProps(data = {}) {
 
   return props;
 }
-

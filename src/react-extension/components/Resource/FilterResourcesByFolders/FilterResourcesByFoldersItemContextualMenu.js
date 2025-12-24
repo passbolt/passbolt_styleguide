@@ -13,25 +13,24 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import RenameResourceFolder from "../../ResourceFolder/RenameResourceFolder/RenameResourceFolder";
 import DeleteResourceFolder from "../../ResourceFolder/DeleteResourceFolder/DeleteResourceFolder";
 import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import FolderPlusSVG from "../../../../img/svg/folder_plus.svg";
 import DownloadFileSVG from "../../../../img/svg/download_file.svg";
 import DeleteSVG from "../../../../img/svg/delete.svg";
 import ShareSVG from "../../../../img/svg/share.svg";
 import RenameSVG from "../../../../img/svg/rename.svg";
-import ActionAbortedMissingMetadataKeys
-  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
+import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 class FilterResourcesByFoldersItemContextualMenu extends React.Component {
   /**
@@ -59,7 +58,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    * Handle hide contextual menu
    */
   handleHide() {
-    if (typeof this.props.onBeforeHide === 'function') {
+    if (typeof this.props.onBeforeHide === "function") {
       this.props.onBeforeHide();
     }
     this.props.hide();
@@ -70,7 +69,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   handleCreateFolderItemClickEvent() {
     if (this.canUpdate()) {
-      this.props.dialogContext.open(CreateResourceFolder, {folderParentId: this.props.folder.id});
+      this.props.dialogContext.open(CreateResourceFolder, { folderParentId: this.props.folder.id });
       this.handleHide();
     }
   }
@@ -80,7 +79,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   handleRenameFolderItemClickEvent() {
     if (this.canUpdate()) {
-      this.props.context.setContext({folder: this.props.folder});
+      this.props.context.setContext({ folder: this.props.folder });
       this.props.dialogContext.open(RenameResourceFolder);
       this.handleHide();
     }
@@ -94,7 +93,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
       const userHasMissingKeys = this.props.context.loggedInUser.missing_metadata_key_ids?.length > 0;
       if (!userHasMissingKeys) {
         const foldersIds = [this.props.folder.id];
-        this.props.context.setContext({shareDialogProps: {foldersIds}});
+        this.props.context.setContext({ shareDialogProps: { foldersIds } });
         this.props.dialogContext.open(ShareDialog);
       } else {
         this.props.dialogContext.open(ActionAbortedMissingMetadataKeys);
@@ -118,7 +117,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   handleDeleteFolderItemClickEvent() {
     if (this.canUpdate()) {
-      this.props.context.setContext({folder: this.props.folder});
+      this.props.context.setContext({ folder: this.props.folder });
       this.props.dialogContext.open(DeleteResourceFolder);
       this.handleHide();
     }
@@ -145,8 +144,10 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    * @returns {boolean}
    */
   canExport() {
-    return this.props.context.siteSettings.canIUse("export")
-      && this.props.rbacContext.canIUseAction(uiActions.RESOURCES_EXPORT);
+    return (
+      this.props.context.siteSettings.canIUse("export") &&
+      this.props.rbacContext.canIUseAction(uiActions.RESOURCES_EXPORT)
+    );
   }
 
   /**
@@ -154,7 +155,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   async export() {
     const foldersIds = [this.props.folder.id];
-    await this.props.resourceWorkspaceContext.onResourcesToExport({foldersIds});
+    await this.props.resourceWorkspaceContext.onResourcesToExport({ foldersIds });
     await this.props.dialogContext.open(ExportResources);
   }
 
@@ -173,7 +174,8 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
         hide={this.handleHide}
         left={this.props.left}
         top={this.props.top}
-        className={this.props.className}>
+        className={this.props.className}
+      >
         <li key="option-create-folder" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
@@ -182,9 +184,12 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
                   type="button"
                   onClick={this.handleCreateFolderItemClickEvent}
                   disabled={!canUpdate}
-                  className="create link no-border">
+                  className="create link no-border"
+                >
                   <FolderPlusSVG />
-                  <span><Trans>Create folder</Trans></span>
+                  <span>
+                    <Trans>Create folder</Trans>
+                  </span>
                 </button>
               </div>
             </div>
@@ -198,32 +203,39 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
                   type="button"
                   onClick={this.handleRenameFolderItemClickEvent}
                   disabled={!canUpdate}
-                  className="rename link no-border">
+                  className="rename link no-border"
+                >
                   <RenameSVG />
-                  <span><Trans>Rename</Trans></span>
+                  <span>
+                    <Trans>Rename</Trans>
+                  </span>
                 </button>
               </div>
             </div>
           </div>
         </li>
-        {canViewShare && <li key="option-share-folder" className="ready closed">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <button
-                  type="button"
-                  onClick={this.handleShareFolderItemClickEvent}
-                  disabled={!canShare}
-                  className="share link no-border">
-                  <ShareSVG />
-                  <span><Trans>Share</Trans></span>
-                </button>
+        {canViewShare && (
+          <li key="option-share-folder" className="ready closed">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button
+                    type="button"
+                    onClick={this.handleShareFolderItemClickEvent}
+                    disabled={!canShare}
+                    className="share link no-border"
+                  >
+                    <ShareSVG />
+                    <span>
+                      <Trans>Share</Trans>
+                    </span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
-        }
-        {canExport &&
+          </li>
+        )}
+        {canExport && (
           <li key="option-export-folder" className="ready closed">
             <div className="row">
               <div className="main-cell-wrapper">
@@ -231,15 +243,18 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
                   <button
                     type="button"
                     className="export link no-border"
-                    onClick={this.handleExportFolderItemClickEvent}>
+                    onClick={this.handleExportFolderItemClickEvent}
+                  >
                     <DownloadFileSVG />
-                    <span><Trans>Export</Trans></span>
+                    <span>
+                      <Trans>Export</Trans>
+                    </span>
                   </button>
                 </div>
               </div>
             </div>
           </li>
-        }
+        )}
         <li key="option-delete-folder" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
@@ -248,9 +263,12 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
                   type="button"
                   onClick={this.handleDeleteFolderItemClickEvent}
                   disabled={!canUpdate}
-                  className="delete link no-border">
+                  className="delete link no-border"
+                >
                   <DeleteSVG />
-                  <span><Trans>Delete</Trans></span>
+                  <span>
+                    <Trans>Delete</Trans>
+                  </span>
                 </button>
               </div>
             </div>
@@ -274,4 +292,6 @@ FilterResourcesByFoldersItemContextualMenu.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // Resource workspace context
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withDialog(withTranslation("common")(FilterResourcesByFoldersItemContextualMenu)))));
+export default withAppContext(
+  withRbac(withResourceWorkspace(withDialog(withTranslation("common")(FilterResourcesByFoldersItemContextualMenu)))),
+);

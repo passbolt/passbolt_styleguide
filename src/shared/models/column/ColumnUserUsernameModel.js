@@ -12,7 +12,7 @@
  * @since         5.0.0
  */
 
-import ColumnModel, {ColumnFields, ColumnModelTypes} from "./ColumnModel";
+import ColumnModel, { ColumnFields, ColumnModelTypes } from "./ColumnModel";
 
 /**
  * Model related to the column user username use only with the UI
@@ -35,4 +35,3 @@ class ColumnUserUsernameModel extends ColumnModel {
 }
 
 export default ColumnUserUsernameModel;
-

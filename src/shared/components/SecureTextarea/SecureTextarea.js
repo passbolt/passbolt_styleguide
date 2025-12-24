@@ -11,11 +11,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.3.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import EyeOpenSVG from "../../../img/svg/eye_open.svg";
 import EyeCloseSVG from "../../../img/svg/eye_close.svg";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * This component represent a secure textarea field with some additional properties
@@ -62,9 +62,8 @@ class SecureTextarea extends Component {
     if (this.props.disabled) {
       return;
     }
-    this.setState({viewTextarea: !this.state.viewTextarea});
+    this.setState({ viewTextarea: !this.state.viewTextarea });
   }
-
 
   /**
    * Render the component
@@ -73,24 +72,29 @@ class SecureTextarea extends Component {
   render() {
     return (
       <div className={`textarea-wrapper ${this.props.disabled ? "disabled" : ""}`}>
-        <textarea id={this.props.id} name={this.props.name}
+        <textarea
+          id={this.props.id}
+          name={this.props.name}
           placeholder={this.props.placeholder}
           className={`${!this.state.viewTextarea ? "secure" : ""}`}
           value={this.props.value}
-          onChange={this.handleInputChange} disabled={this.props.disabled}
-          readOnly={this.props.readOnly} autoComplete={this.props.autoComplete}
-          maxLength={this.props.maxLength}>
-        </textarea>
+          onChange={this.handleInputChange}
+          disabled={this.props.disabled}
+          readOnly={this.props.readOnly}
+          autoComplete={this.props.autoComplete}
+          maxLength={this.props.maxLength}
+        ></textarea>
         <div className="textarea-view-wrapper">
-          <button type="button" onClick={this.handleViewTextareaButtonClick}
-            className={`textarea-view infield button-transparent ${this.props.disabled ? "disabled" : ""}`}>
-            {!this.state.viewTextarea &&
-              <EyeOpenSVG className='svg-icon eye-open'/>
-            }
-            {this.state.viewTextarea &&
-              <EyeCloseSVG className='svg-icon eye-close'/>
-            }
-            <span className="visually-hidden"><Trans>View</Trans></span>
+          <button
+            type="button"
+            onClick={this.handleViewTextareaButtonClick}
+            className={`textarea-view infield button-transparent ${this.props.disabled ? "disabled" : ""}`}
+          >
+            {!this.state.viewTextarea && <EyeOpenSVG className="svg-icon eye-open" />}
+            {this.state.viewTextarea && <EyeCloseSVG className="svg-icon eye-close" />}
+            <span className="visually-hidden">
+              <Trans>View</Trans>
+            </span>
           </button>
         </div>
       </div>
@@ -113,7 +117,7 @@ SecureTextarea.propTypes = {
   disabled: PropTypes.bool, // Disabled textarea
   readOnly: PropTypes.bool, // Read only textarea
   maxLength: PropTypes.number, // Max length textarea
-  onChange: PropTypes.func // Function onChange of the textarea
+  onChange: PropTypes.func, // Function onChange of the textarea
 };
 
 export default withTranslation("common")(SecureTextarea);

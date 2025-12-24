@@ -12,8 +12,8 @@
  * @since         v4.3.0
  */
 
-import React from 'react';
-import {Trans, withTranslation} from 'react-i18next';
+import React from "react";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 
 /**
@@ -65,7 +65,7 @@ class Range extends React.PureComponent {
   getComputedStyleForEntropyStep(index, valueCount) {
     const percentValue = index * (100 / (valueCount - 1));
     return {
-      left: `${percentValue}%`
+      left: `${percentValue}%`,
     };
   }
 
@@ -75,7 +75,7 @@ class Range extends React.PureComponent {
    * @returns {number}
    */
   getValueIndex(value) {
-    return this.values.findIndex(v => v.value === value);
+    return this.values.findIndex((v) => v.value === value);
   }
 
   /**
@@ -84,21 +84,21 @@ class Range extends React.PureComponent {
    */
   get values() {
     return [
-      {label: "50 bits", value: 50},
-      {label: "64 bits", value: 64},
-      {label: "80 bits", value: 80},
-      {label: "96 bits", value: 96},
-      {label: "128 bits", value: 128},
-      {label: "160 bits", value: 160},
-      {label: "192 bits", value: 192},
-      {label: "224 bits", value: 224},
+      { label: "50 bits", value: 50 },
+      { label: "64 bits", value: 64 },
+      { label: "80 bits", value: 80 },
+      { label: "96 bits", value: 96 },
+      { label: "128 bits", value: 128 },
+      { label: "160 bits", value: 160 },
+      { label: "192 bits", value: 192 },
+      { label: "224 bits", value: 224 },
     ];
   }
 
   render() {
     const values = this.values;
     const valueCount = values.length;
-    const {id, value} = this.props;
+    const { id, value } = this.props;
 
     return (
       <div className="range-wrapper">
@@ -130,9 +130,11 @@ class Range extends React.PureComponent {
                 key={`li-${index}`}
                 onClick={() => this.handleRangeOptionClick(v.value)}
                 style={this.getComputedStyleForEntropyStep(index, valueCount)}
-                className={`range-option ${value === (v.value) ? 'range-option--active' : ''}`}
+                className={`range-option ${value === v.value ? "range-option--active" : ""}`}
                 disabled={this.props.disabled}
-              >{v.label}</li>
+              >
+                {v.label}
+              </li>
             ))}
           </ul>
         </div>

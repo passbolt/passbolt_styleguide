@@ -26,13 +26,16 @@ class MetadataKeyEntity extends EntityV2 {
     super(dto, options);
     // Associations
     if (this._props.metadata_private_keys) {
-      this._metadata_private_keys = new MetadataPrivateKeysCollection(this._props.metadata_private_keys, {...options, clone: false});
+      this._metadata_private_keys = new MetadataPrivateKeysCollection(this._props.metadata_private_keys, {
+        ...options,
+        clone: false,
+      });
       delete this._props.metadata_private_keys;
       this.assertSameMetadataKeyId();
     }
 
     if (this._props.creator) {
-      this._creator = new UserEntity(this._props.creator, {...options, clone: false});
+      this._creator = new UserEntity(this._props.creator, { ...options, clone: false });
       delete this._props.creator;
     }
   }
@@ -43,59 +46,57 @@ class MetadataKeyEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "fingerprint",
-        "armored_key",
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true,
+      type: "object",
+      required: ["fingerprint", "armored_key"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
-        "fingerprint": {
-          "type": "string",
-          "pattern": /^[a-f0-9]{40}$/im
+        fingerprint: {
+          type: "string",
+          pattern: /^[a-f0-9]{40}$/im,
         },
-        "armored_key": {
-          "type": "string",
-          "maxLength": PGP_STRING_MAX_LENGTH,
-          "pattern": /^-----BEGIN PGP PUBLIC KEY BLOCK-----\r?\n((?:[!-9;-~]+:\s?.*\r?\n)*\r?\n)((?:[A-Za-z0-9+/]{1,76}\r?\n)*)([A-Za-z0-9+/]{1,76}={0,2}\r?\n)(=[A-Za-z0-9+/]{4}\r?\n)-----END PGP PUBLIC KEY BLOCK-----\s*$/,
+        armored_key: {
+          type: "string",
+          maxLength: PGP_STRING_MAX_LENGTH,
+          pattern:
+            /^-----BEGIN PGP PUBLIC KEY BLOCK-----\r?\n((?:[!-9;-~]+:\s?.*\r?\n)*\r?\n)((?:[A-Za-z0-9+/]{1,76}\r?\n)*)([A-Za-z0-9+/]{1,76}={0,2}\r?\n)(=[A-Za-z0-9+/]{4}\r?\n)-----END PGP PUBLIC KEY BLOCK-----\s*$/,
         },
-        "created": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+        created: {
+          type: "string",
+          format: "date-time",
+          nullable: true,
         },
-        "created_by": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true
+        created_by: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true
+        modified: {
+          type: "string",
+          format: "date-time",
+          nullable: true,
         },
-        "modified_by": {
-          "type": "string",
-          "format": "uuid",
-          "nullable": true
+        modified_by: {
+          type: "string",
+          format: "uuid",
+          nullable: true,
         },
-        "deleted": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true,
+        deleted: {
+          type: "string",
+          format: "date-time",
+          nullable: true,
         },
-        "expired": {
-          "type": "string",
-          "format": "date-time",
-          "nullable": true,
+        expired: {
+          type: "string",
+          format: "date-time",
+          nullable: true,
         },
-        "metadata_private_keys": MetadataPrivateKeysCollection.getSchema(),
-        "creator": UserEntity.getSchema(),
-      }
+        metadata_private_keys: MetadataPrivateKeysCollection.getSchema(),
+        creator: UserEntity.getSchema(),
+      },
     };
   }
 
@@ -125,7 +126,11 @@ class MetadataKeyEntity extends EntityV2 {
 
     if (keyId !== privateKeyId) {
       const error = new EntityValidationError();
-      error.addError("id:metadata_private_keys", 'same_id', '`id` and the `metadata_private_keys.id` should be the same');
+      error.addError(
+        "id:metadata_private_keys",
+        "same_id",
+        "`id` and the `metadata_private_keys.id` should be the same",
+      );
       throw error;
     }
   }
@@ -148,7 +153,11 @@ class MetadataKeyEntity extends EntityV2 {
       }
       if (metadataPrivateKey.data.fingerprint !== this.fingerprint) {
         const error = new EntityValidationError();
-        error.addError(`metadata_private_keys.${index}.fingerprint`, 'fingerprint_match', 'The fingerprint of the metadata private key does not match the fingerprint of the metadata public key');
+        error.addError(
+          `metadata_private_keys.${index}.fingerprint`,
+          "fingerprint_match",
+          "The fingerprint of the metadata private key does not match the fingerprint of the metadata public key",
+        );
         throw error;
       }
     });
@@ -187,7 +196,9 @@ class MetadataKeyEntity extends EntityV2 {
   toContentCodeConfirmTrustRequestDto() {
     const result = this.toDto();
     if (this._metadata_private_keys) {
-      result.metadata_private_keys = this._metadata_private_keys.items.map(privateKey => privateKey.toContentCodeConfirmTrustRequestDto());
+      result.metadata_private_keys = this._metadata_private_keys.items.map((privateKey) =>
+        privateKey.toContentCodeConfirmTrustRequestDto(),
+      );
     }
     if (this._creator) {
       result.creator = this._creator.toDto(UserEntity.ALL_CONTAIN_OPTIONS);
@@ -267,7 +278,7 @@ class MetadataKeyEntity extends EntityV2 {
    * @returns {object} all contain options that can be used in toDto()
    */
   static get ALL_CONTAIN_OPTIONS() {
-    return {metadata_private_keys: true};
+    return { metadata_private_keys: true };
   }
 }
 

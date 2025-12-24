@@ -14,7 +14,7 @@
 class UserAbortsOperationError extends Error {
   constructor(message) {
     super(message);
-    this.name = 'UserAbortsOperationError';
+    this.name = "UserAbortsOperationError";
   }
 }
 

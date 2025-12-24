@@ -24,37 +24,32 @@ class MetadataPrivateKeyDataEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "object_type",
-        "domain",
-        "fingerprint",
-        "armored_key",
-        "passphrase",
-      ],
-      "properties": {
-        "object_type": {
-          "type": "string",
-          "enum": ["PASSBOLT_METADATA_PRIVATE_KEY"]
+      type: "object",
+      required: ["object_type", "domain", "fingerprint", "armored_key", "passphrase"],
+      properties: {
+        object_type: {
+          type: "string",
+          enum: ["PASSBOLT_METADATA_PRIVATE_KEY"],
         },
-        "domain": {
-          "type": "string",
-          "maxLength": DOMAIN_MAX_LENGTH
+        domain: {
+          type: "string",
+          maxLength: DOMAIN_MAX_LENGTH,
         },
-        "fingerprint": {
-          "type": "string",
-          "pattern": /^[a-f0-9]{40}$/im
+        fingerprint: {
+          type: "string",
+          pattern: /^[a-f0-9]{40}$/im,
         },
-        "armored_key": {
-          "type": "string",
-          "maxLength": PGP_STRING_MAX_LENGTH,
-          "pattern": /^-----BEGIN PGP PRIVATE KEY BLOCK-----\r?\n((?:[!-9;-~]+:\s?.*\r?\n)*\r?\n)((?:[A-Za-z0-9+/]{1,76}\r?\n)*)([A-Za-z0-9+/]{1,76}={0,2}\r?\n)(=[A-Za-z0-9+/]{4}\r?\n)-----END PGP PRIVATE KEY BLOCK-----\s*$/,
+        armored_key: {
+          type: "string",
+          maxLength: PGP_STRING_MAX_LENGTH,
+          pattern:
+            /^-----BEGIN PGP PRIVATE KEY BLOCK-----\r?\n((?:[!-9;-~]+:\s?.*\r?\n)*\r?\n)((?:[A-Za-z0-9+/]{1,76}\r?\n)*)([A-Za-z0-9+/]{1,76}={0,2}\r?\n)(=[A-Za-z0-9+/]{4}\r?\n)-----END PGP PRIVATE KEY BLOCK-----\s*$/,
         },
-        "passphrase": {
-          "type": "string",
-          "maxLength": PASSPHRASE_MAX_LENGTH,
+        passphrase: {
+          type: "string",
+          maxLength: PASSPHRASE_MAX_LENGTH,
         },
-      }
+      },
     };
   }
 

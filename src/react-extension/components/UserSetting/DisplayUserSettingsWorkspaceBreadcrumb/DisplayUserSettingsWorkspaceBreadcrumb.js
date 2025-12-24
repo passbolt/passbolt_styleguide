@@ -10,14 +10,14 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-import React, {Component} from "react";
-import {withRouter} from "react-router-dom";
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import Breadcrumb from "../../Common/Navigation/Breadcrumbs/Breadcrumb";
-import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {withTranslation} from "react-i18next";
+import { withNavigationContext } from "../../../contexts/NavigationContext";
+import { withTranslation } from "react-i18next";
 
 /**
  * The component displays a navigation breadcrumb given the applied users filter
@@ -29,9 +29,21 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
    */
   get items() {
     return [
-      <Breadcrumb key="bread-1" name={this.translate("All users")} onClick={this.props.navigationContext.onGoToUsersRequested}/>,
-      <Breadcrumb key="bread-2" name={this.loggedInUserName} onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}/>,
-      <Breadcrumb key="bread-3" name={this.getLastBreadcrumbItemName} onClick={this.onLastBreadcrumbClick.bind(this)}/>
+      <Breadcrumb
+        key="bread-1"
+        name={this.translate("All users")}
+        onClick={this.props.navigationContext.onGoToUsersRequested}
+      />,
+      <Breadcrumb
+        key="bread-2"
+        name={this.loggedInUserName}
+        onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}
+      />,
+      <Breadcrumb
+        key="bread-3"
+        name={this.getLastBreadcrumbItemName}
+        onClick={this.onLastBreadcrumbClick.bind(this)}
+      />,
     ];
   }
 
@@ -44,23 +56,22 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
     return user ? `${user.profile.first_name} ${user.profile.last_name}` : "";
   }
 
-
   /**
    * Returns the current item name given the current location
    */
   get getLastBreadcrumbItemName() {
-    const matchPathSuffix = pathSuffix => this.props.location.pathname.endsWith(pathSuffix);
+    const matchPathSuffix = (pathSuffix) => this.props.location.pathname.endsWith(pathSuffix);
     const names = {
       profile: this.translate("Profile"),
       passphrase: this.translate("Passphrase"),
-      'security-token': this.translate("Security token"),
+      "security-token": this.translate("Security token"),
       theme: this.translate("Theme"),
       mfa: this.translate("Multi Factor Authentication"),
       duo: this.translate("Multi Factor Authentication"),
       keys: this.translate("Keys inspector"),
       mobile: this.translate("Mobile transfer"),
-      'account-recovery': this.translate("Account Recovery"),
-      'smtp-settings': this.translate("Email server"),
+      "account-recovery": this.translate("Account Recovery"),
+      "smtp-settings": this.translate("Email server"),
       desktop: this.translate("Desktop app setup"),
     };
     const matchedKey = Object.keys(names).find(matchPathSuffix);
@@ -73,7 +84,7 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
    */
   async onLastBreadcrumbClick() {
     const pathname = this.props.location.pathname;
-    this.props.history.push({pathname});
+    this.props.history.push({ pathname });
   }
 
   /**
@@ -89,9 +100,7 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <Breadcrumbs items={this.items}/>
-    );
+    return <Breadcrumbs items={this.items} />;
   }
 }
 
@@ -103,4 +112,6 @@ DisplayUserSettingsWorkspaceBreadcrumb.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withNavigationContext(withTranslation('common')(DisplayUserSettingsWorkspaceBreadcrumb))));
+export default withAppContext(
+  withRouter(withNavigationContext(withTranslation("common")(DisplayUserSettingsWorkspaceBreadcrumb))),
+);

@@ -11,21 +11,19 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
-import DialogWrapper from '../../Common/Dialog/DialogWrapper/DialogWrapper';
+import { withTranslation } from "react-i18next";
+import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {Trans} from 'react-i18next';
-
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withNavigationContext } from "../../../contexts/NavigationContext";
+import { Trans } from "react-i18next";
 
 /**
  * The component display variations.
  * @type {Object}
  */
-
 
 class MfaInviteUserSettingsPreferenceDialog extends Component {
   constructor(props) {
@@ -55,7 +53,7 @@ class MfaInviteUserSettingsPreferenceDialog extends Component {
    * Handle click on cancel buttons
    */
   async handleCancel() {
-    await this.props.context.port.request('passbolt.mfa-policy.postpone-user-setting-invitation');
+    await this.props.context.port.request("passbolt.mfa-policy.postpone-user-setting-invitation");
     this.props.onClose();
   }
 
@@ -76,17 +74,17 @@ class MfaInviteUserSettingsPreferenceDialog extends Component {
       <DialogWrapper
         title={`${this.translate("Enable Multi Factor Authentication")}`}
         onClose={this.handleCancel}
-        className="mfa-policy-dialog" >
+        className="mfa-policy-dialog"
+      >
         <form onSubmit={this.handleSubmit}>
           <div className="form-content">
-            <p>
-              Your administrator requires you to configure a Multi Factor Authentication method for your account.
-            </p>
+            <p>Your administrator requires you to configure a Multi Factor Authentication method for your account.</p>
           </div>
           <div className="submit-wrapper clearfix">
-            <button type="button" className="cancel link" onClick={this.handleCancel}><Trans>Later</Trans></button>
-            <FormSubmitButton
-              value={this.translate("Go to MFA settings")}/>
+            <button type="button" className="cancel link" onClick={this.handleCancel}>
+              <Trans>Later</Trans>
+            </button>
+            <FormSubmitButton value={this.translate("Go to MFA settings")} />
           </div>
         </form>
       </DialogWrapper>

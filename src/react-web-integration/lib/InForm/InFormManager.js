@@ -53,7 +53,7 @@ class InFormManager {
    * Create the shadow host and shadow root and insert in the body
    */
   createAndInsertShadowRootWithHost() {
-    this.host = document.createElement('div');
+    this.host = document.createElement("div");
     /*
      * Remove all style the component could have inherited from its environment.
      * Enforce the following style:
@@ -61,23 +61,30 @@ class InFormManager {
      * - display block to ensure the component is always displayed
      * - z-index fixed to the maximum allowed value to ensure the component is always displayed above all the page's components.
      */
-    this.host.setAttribute('style', 'all: initial; position: fixed !important; display: block !important; z-index: 2147483647 !important');
+    this.host.setAttribute(
+      "style",
+      "all: initial; position: fixed !important; display: block !important; z-index: 2147483647 !important",
+    );
     // Block any setter and getter property style, however it can be bypassed with setAttribute.
-    Object.defineProperty(this.host, 'style', {
+    Object.defineProperty(this.host, "style", {
       set: () => {},
       get: () => null,
     });
     // Attach shadow in closed mode to not have access except with the reference
-    this.shadowRoot = this.host.attachShadow({mode: 'closed'});
+    this.shadowRoot = this.host.attachShadow({ mode: "closed" });
     /*
      * Block any click event that is not ins the shadow root
      * This prevents an attacker to add element in the host and try to add event listener
      */
-    this.host.addEventListener('click', event => {
-      if (!this.shadowRoot.contains(event.target)) {
-        event.stopImmediatePropagation(); // Block any external event
-      }
-    }, true); // Capture phase
+    this.host.addEventListener(
+      "click",
+      (event) => {
+        if (!this.shadowRoot.contains(event.target)) {
+          event.stopImmediatePropagation(); // Block any external event
+        }
+      },
+      true,
+    ); // Capture phase
     // Insert the host in the body
     document.body.appendChild(this.host);
   }
@@ -138,9 +145,9 @@ class InFormManager {
     this.htmlMutationObserver = new MutationObserver(() => this.destroyIfElementNotVisible(document.documentElement));
     this.bodyMutationObserver = new MutationObserver(() => this.destroyIfElementNotVisible(document.body));
 
-    this.hostMutationObserver.observe(this.host, {attributes: true});
-    this.htmlMutationObserver.observe(document.documentElement, {attributes: true});
-    this.bodyMutationObserver.observe(document.body, {attributes: true});
+    this.hostMutationObserver.observe(this.host, { attributes: true });
+    this.htmlMutationObserver.observe(document.documentElement, { attributes: true });
+    this.bodyMutationObserver.observe(document.body, { attributes: true });
   }
 
   /**
@@ -160,7 +167,7 @@ class InFormManager {
    */
   isElementNotVisible(element) {
     const visibilityOptions = {
-      visibilityProperty: true
+      visibilityProperty: true,
     };
     return getComputedStyle(element).opacity < 0.4 || !element.checkVisibility(visibilityOptions);
   }
@@ -173,9 +180,12 @@ class InFormManager {
   async waitingAnimations(element) {
     const animations = element.getAnimations();
     await Promise.all(
-      animations.map(animation => new Promise(resolve => {
-        animation.addEventListener("finish", resolve, {once: true});
-      }))
+      animations.map(
+        (animation) =>
+          new Promise((resolve) => {
+            animation.addEventListener("finish", resolve, { once: true });
+          }),
+      ),
     );
   }
 
@@ -209,10 +219,10 @@ class InFormManager {
     const newFields = newUsernameFields.concat(newPasswordFields);
     if (newFields.length > 0) {
       this.removeCallToActionFieldsNotMatches(newFields);
-      this.callToActionFields = newFields.map(newField => {
-        const matchField = fieldToMatch => callToActionField => callToActionField.field === fieldToMatch;
+      this.callToActionFields = newFields.map((newField) => {
+        const matchField = (fieldToMatch) => (callToActionField) => callToActionField.field === fieldToMatch;
         const existingField = this.callToActionFields.find(matchField(newField));
-        const fieldType = newField.matches(InFormFieldSelector.USERNAME_FIELD_SELECTOR) ? 'username' : 'password';
+        const fieldType = newField.matches(InFormFieldSelector.USERNAME_FIELD_SELECTOR) ? "username" : "password";
         return existingField || new InFormCallToActionField(newField, fieldType, this.shadowRoot);
       });
     } else {
@@ -226,9 +236,9 @@ class InFormManager {
    * @param newFields The new fields
    */
   removeCallToActionFieldsNotMatches(newFields) {
-    const matchField = callToActionField => fieldToMatch => callToActionField.field === fieldToMatch;
-    const callToActionFieldsToRemove = this.callToActionFields.filter(field => !newFields.some(matchField(field)));
-    callToActionFieldsToRemove.forEach(field => field.removeCallToActionIframe());
+    const matchField = (callToActionField) => (fieldToMatch) => callToActionField.field === fieldToMatch;
+    const callToActionFieldsToRemove = this.callToActionFields.filter((field) => !newFields.some(matchField(field)));
+    callToActionFieldsToRemove.forEach((field) => field.removeCallToActionIframe());
   }
 
   /**
@@ -241,11 +251,17 @@ class InFormManager {
      */
     const newCredentialsFormFields = InFormCredentialsFormField.findAll();
     if (newCredentialsFormFields.length > 0) {
-      this.credentialsFormFields = newCredentialsFormFields.map(newField => {
-        const matchField = fieldToMatch => credentialsFormField => credentialsFormField.field === fieldToMatch;
+      this.credentialsFormFields = newCredentialsFormFields.map((newField) => {
+        const matchField = (fieldToMatch) => (credentialsFormField) => credentialsFormField.field === fieldToMatch;
         const existingField = this.credentialsFormFields.find(matchField(newField));
-        const usernameField = this.callToActionFields.find(callToActionField => callToActionField.fieldType === 'username' && newField.contains(callToActionField.field));
-        const passwordField = this.callToActionFields.find(callToActionField => callToActionField.fieldType === 'password' && newField.contains(callToActionField.field));
+        const usernameField = this.callToActionFields.find(
+          (callToActionField) =>
+            callToActionField.fieldType === "username" && newField.contains(callToActionField.field),
+        );
+        const passwordField = this.callToActionFields.find(
+          (callToActionField) =>
+            callToActionField.fieldType === "password" && newField.contains(callToActionField.field),
+        );
         return existingField || new InFormCredentialsFormField(newField, usernameField?.field, passwordField?.field);
       });
     } else {
@@ -257,7 +273,7 @@ class InFormManager {
    * Clean the DOM of in-form entities
    */
   clean() {
-    this.callToActionFields.forEach(field => field.removeCallToActionIframe());
+    this.callToActionFields.forEach((field) => field.removeCallToActionIframe());
     this.menuField?.removeMenuIframe();
   }
 
@@ -265,18 +281,18 @@ class InFormManager {
    * Whenever the DOM changes
    */
   handleDomChange() {
-    const updateAuthenticationFields = mutationsList => {
+    const updateAuthenticationFields = (mutationsList) => {
       /*
        * The only way to prevent an attacker trying to move the host into another parent element and add opacity
        * If the host is not in the body anymore destroy
        */
       if (this.host.parentNode !== document.body) {
-        console.debug('Someone has moved the host of the shadow root');
+        console.debug("Someone has moved the host of the shadow root");
         this.destroy();
         return;
       }
       // Check if the mutation is an iframe added or removed by us
-      const isMutationInformIframe = mutation => this.isInformIframe(mutation);
+      const isMutationInformIframe = (mutation) => this.isInformIframe(mutation);
       // Check if our iframe is in the mutation list
       const hasNotMutationFromInformIframe = !mutationsList.some(isMutationInformIframe);
       if (hasNotMutationFromInformIframe) {
@@ -287,11 +303,11 @@ class InFormManager {
     // Debounce the mutation observer to avoid too many requests
     const updateAuthenticationFieldsDebounce = debounce(updateAuthenticationFields, 1000, {
       leading: true,
-      accumulate: false
+      accumulate: false,
     });
     // Search again for authentication callToActionFields to attach when the DOM changes
     this.mutationObserver = new MutationObserver(updateAuthenticationFieldsDebounce);
-    this.mutationObserver.observe(document.body, {subtree: true, childList: true});
+    this.mutationObserver.observe(document.body, { subtree: true, childList: true });
   }
 
   /**
@@ -305,11 +321,11 @@ class InFormManager {
     // The list add only 1 iframe at a time don't need to check when several nodes are added
     if (nodeList.length === 1) {
       if (this.callToActionFields.length > 0) {
-        const isIdPresent = iframe => Array.prototype.some.call(nodeList, node => iframe.iframeId === node.id);
+        const isIdPresent = (iframe) => Array.prototype.some.call(nodeList, (node) => iframe.iframeId === node.id);
         isInformIframe = this.callToActionFields.some(isIdPresent);
       }
       if (!isInformIframe && this.menuField) {
-        isInformIframe = Array.prototype.some.call(nodeList, node => this.menuField.iframeId === node.id);
+        isInformIframe = Array.prototype.some.call(nodeList, (node) => this.menuField.iframeId === node.id);
       }
     }
     return isInformIframe;
@@ -319,14 +335,14 @@ class InFormManager {
    * Whenever the username / password callToActionFields change its position, reposition the call-to-action
    */
   handleInformCallToActionRepositionEvent() {
-    window.addEventListener('resize', this.clean);
+    window.addEventListener("resize", this.clean);
   }
 
   /**
    * Whenever the user clicks on the in-form call-to-action, it inserts the in-form menu iframe
    */
   handleInFormMenuInsertionEvent() {
-    port.on('passbolt.in-form-menu.open', () => {
+    port.on("passbolt.in-form-menu.open", () => {
       this.menuField = new InFormMenuField(this.lastCallToActionFieldClicked.field, this.shadowRoot);
     });
   }
@@ -335,7 +351,7 @@ class InFormManager {
    * Whenever the user clicks on the in-form menu, it removes the in-form menu iframe
    */
   handleInFormMenuRemoveEvent() {
-    port.on('passbolt.in-form-menu.close', () => {
+    port.on("passbolt.in-form-menu.close", () => {
       this.menuField.removeMenuIframe();
     });
   }
@@ -344,39 +360,40 @@ class InFormManager {
    * Handle the click on the in-form call-to-action (iframe)
    */
   handleInformCallToActionClickEvent() {
-    const setLastCallToActionFieldClicked = callToActionField => callToActionField.onClick(() => {
-      this.lastCallToActionFieldClicked = callToActionField;
-    });
+    const setLastCallToActionFieldClicked = (callToActionField) =>
+      callToActionField.onClick(() => {
+        this.lastCallToActionFieldClicked = callToActionField;
+      });
     this.callToActionFields.forEach(setLastCallToActionFieldClicked);
   }
 
   /** Whenever one requires to get the type and value of the input attached to the last call-to-action performed */
   handleGetLastCallToActionClickedInput() {
-    port.on('passbolt.web-integration.last-performed-call-to-action-input', requestId => {
-      port.emit(requestId, 'SUCCESS', {
+    port.on("passbolt.web-integration.last-performed-call-to-action-input", (requestId) => {
+      port.emit(requestId, "SUCCESS", {
         type: this.lastCallToActionFieldClicked.fieldType,
-        value: this.lastCallToActionFieldClicked.field.value
+        value: this.lastCallToActionFieldClicked.field.value,
       });
     });
   }
 
   /** Whenever one requires to get the current credentials */
   handleGetCurrentCredentials() {
-    port.on('passbolt.web-integration.get-credentials', requestId => {
+    port.on("passbolt.web-integration.get-credentials", (requestId) => {
       const currentFieldType = this.lastCallToActionFieldClicked?.fieldType;
-      const isUsernameType = currentFieldType === 'username';
-      const isPasswordType = currentFieldType === 'password';
+      const isUsernameType = currentFieldType === "username";
+      const isPasswordType = currentFieldType === "password";
       let username = null;
       let password = null;
       if (!isUsernameType) {
-        username = this.callToActionFields.find(field => field.fieldType === 'username')?.field.value || "";
+        username = this.callToActionFields.find((field) => field.fieldType === "username")?.field.value || "";
         password = this.lastCallToActionFieldClicked?.field.value;
       }
       if (!isPasswordType) {
         username = this.lastCallToActionFieldClicked?.field.value;
-        password = this.callToActionFields.find(field => field.fieldType === 'password')?.field.value || "";
+        password = this.callToActionFields.find((field) => field.fieldType === "password")?.field.value || "";
       }
-      port.emit(requestId, 'SUCCESS', {username, password});
+      port.emit(requestId, "SUCCESS", { username, password });
     });
   }
 
@@ -384,17 +401,21 @@ class InFormManager {
    * Whenever one requests to fill the current page form with given credentials
    */
   handleFillCredentials() {
-    port.on('passbolt.web-integration.fill-credentials', ({username, password}) => {
+    port.on("passbolt.web-integration.fill-credentials", ({ username, password }) => {
       const currentFieldType = this.lastCallToActionFieldClicked?.fieldType;
-      const isUsernameType = currentFieldType === 'username';
-      const isPasswordType = currentFieldType === 'password';
+      const isUsernameType = currentFieldType === "username";
+      const isPasswordType = currentFieldType === "password";
       if (!isUsernameType) {
         // Simulate a user to autofill the password field
         UserEventsService.autofill(this.lastCallToActionFieldClicked.field, password);
         // Get username fields and find the one with the lowest common ancestor
-        const usernameFields = this.callToActionFields
-          .filter(callToActionField => callToActionField.fieldType === 'username');
-        const usernameField = DomUtils.getFieldWithLowestCommonAncestor(this.lastCallToActionFieldClicked.field, usernameFields);
+        const usernameFields = this.callToActionFields.filter(
+          (callToActionField) => callToActionField.fieldType === "username",
+        );
+        const usernameField = DomUtils.getFieldWithLowestCommonAncestor(
+          this.lastCallToActionFieldClicked.field,
+          usernameFields,
+        );
         if (usernameField) {
           // Simulate a user to autofill the username field
           UserEventsService.autofill(usernameField.field, username);
@@ -403,9 +424,13 @@ class InFormManager {
         // Simulate a user to autofill the username field
         UserEventsService.autofill(this.lastCallToActionFieldClicked.field, username);
         // Get password fields and find the one with the lowest common ancestor
-        const passwordFields = this.callToActionFields
-          .filter(callToActionField => callToActionField.fieldType === 'password');
-        const passwordField = DomUtils.getFieldWithLowestCommonAncestor(this.lastCallToActionFieldClicked.field, passwordFields);
+        const passwordFields = this.callToActionFields.filter(
+          (callToActionField) => callToActionField.fieldType === "password",
+        );
+        const passwordField = DomUtils.getFieldWithLowestCommonAncestor(
+          this.lastCallToActionFieldClicked.field,
+          passwordFields,
+        );
         if (passwordField) {
           // Simulate a user to autofill the password field
           UserEventsService.autofill(passwordField.field, password);
@@ -418,14 +443,20 @@ class InFormManager {
    * Whenever one requests to fill the current page form with a password
    */
   handleFillPassword() {
-    port.on('passbolt.web-integration.fill-password', password => {
-      const passwordFields = this.callToActionFields
-        .filter(callToActionField => callToActionField.fieldType === 'password');
+    port.on("passbolt.web-integration.fill-password", (password) => {
+      const passwordFields = this.callToActionFields.filter(
+        (callToActionField) => callToActionField.fieldType === "password",
+      );
       // Autofill only empty passwords field
-      passwordFields.forEach(callToActionField => !callToActionField.field.value && UserEventsService.autofill(callToActionField.field, password));
+      passwordFields.forEach(
+        (callToActionField) =>
+          !callToActionField.field.value && UserEventsService.autofill(callToActionField.field, password),
+      );
       this.menuField.removeMenuIframe();
       // Listen the auto-save on the appropriate form field
-      const formField = this.credentialsFormFields.find(formField => formField.field.contains(this.lastCallToActionFieldClicked.field));
+      const formField = this.credentialsFormFields.find((formField) =>
+        formField.field.contains(this.lastCallToActionFieldClicked.field),
+      );
       formField?.handleAutoSaveEvent();
     });
   }
@@ -453,10 +484,10 @@ class InFormManager {
     this.hostMutationObserver.disconnect();
     this.htmlMutationObserver.disconnect();
     this.bodyMutationObserver.disconnect();
-    this.callToActionFields.forEach(field => field.destroy());
+    this.callToActionFields.forEach((field) => field.destroy());
     this.menuField?.destroy();
-    this.credentialsFormFields.forEach(field => field.destroy());
-    window.removeEventListener('resize', this.clean);
+    this.credentialsFormFields.forEach((field) => field.destroy());
+    window.removeEventListener("resize", this.clean);
     document.removeEventListener("cut", this.handleClipboardChange);
     document.removeEventListener("copy", this.handleClipboardChange);
     this.host.remove();
@@ -470,7 +501,7 @@ class InFormManager {
      * This is extremely important, when an extension is available
      * so the port receive the message 'passbolt.port.destroy' to clean all data and listeners
      */
-    port.on('passbolt.content-script.destroy', this.destroy);
+    port.on("passbolt.content-script.destroy", this.destroy);
     /*
      * If the port has not been destroyed correctly,
      * The port cannot reconnect due to an invalid context in case of a manual update of the extension,
@@ -481,4 +512,3 @@ class InFormManager {
 }
 
 export default new InFormManager();
-

@@ -14,9 +14,9 @@
 import EntityV2 from "../abstract/entityV2";
 import AvatarUrlEntity from "../avatar/avatarUrlEntity";
 
-const ENTITY_NAME = 'Avatar';
-const AVATAR_URL_SIZE_SMALL = 'small';
-const AVATAR_URL_SIZE_MEDIUM = 'medium';
+const ENTITY_NAME = "Avatar";
+const AVATAR_URL_SIZE_SMALL = "small";
+const AVATAR_URL_SIZE_MEDIUM = "medium";
 
 class AvatarEntity extends EntityV2 {
   /**
@@ -27,7 +27,7 @@ class AvatarEntity extends EntityV2 {
 
     // Associations
     if (this._props.url) {
-      this._url = new AvatarUrlEntity(this._props.url, {...options, clone: false});
+      this._url = new AvatarUrlEntity(this._props.url, { ...options, clone: false });
       delete this._props.url;
     }
   }
@@ -38,25 +38,23 @@ class AvatarEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "url"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
+      type: "object",
+      required: ["url"],
+      properties: {
+        id: {
+          type: "string",
+          format: "uuid",
         },
-        "created": {
-          "type": "string",
-          "format": "date-time"
+        created: {
+          type: "string",
+          format: "date-time",
         },
-        "modified": {
-          "type": "string",
-          "format": "date-time"
+        modified: {
+          type: "string",
+          format: "date-time",
         },
-        "url": AvatarUrlEntity.getSchema(),
-      }
+        url: AvatarUrlEntity.getSchema(),
+      },
     };
   }
 

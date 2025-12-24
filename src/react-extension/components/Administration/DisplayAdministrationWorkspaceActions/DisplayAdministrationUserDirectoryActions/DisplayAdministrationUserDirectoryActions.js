@@ -14,15 +14,15 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import DisplaySimulateSynchronizeUserDirectoryAdministration from "../../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministration";
 import DisplaySynchronizeUserDirectoryAdministration from "../../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration";
-import UserDirectoryFormService from '../../../../../shared/services/forms/userDirectory/UserDirectoryFormService';
-import {withAdminUserDirectory} from "../../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
-import {withActionFeedback} from "../../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../../contexts/DialogContext";
+import UserDirectoryFormService from "../../../../../shared/services/forms/userDirectory/UserDirectoryFormService";
+import { withAdminUserDirectory } from "../../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
+import { withActionFeedback } from "../../../../contexts/ActionFeedbackContext";
+import { withDialog } from "../../../../contexts/DialogContext";
 import DisplayTestUserDirectoryAdministration from "../../DisplayTestUserDirectoryAdministration/DisplayTestUserDirectoryAdministration";
-import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../../shared/context/AppContext/AppContext";
 import TestSVG from "../../../../../img/svg/test.svg";
 import SimulateSyncSVG from "../../../../../img/svg/simulate-sync.svg";
 import RevertSVG from "../../../../../img/svg/revert.svg";
@@ -40,7 +40,10 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
     super(props);
     this.bindCallbacks();
     this.state = this.defaultState;
-    this.userDirectoryFormService = UserDirectoryFormService.getInstance(this.props.adminUserDirectoryContext, this.props.t);
+    this.userDirectoryFormService = UserDirectoryFormService.getInstance(
+      this.props.adminUserDirectoryContext,
+      this.props.t,
+    );
   }
 
   /**
@@ -67,16 +70,15 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
     this.handleSaveSuccess();
   }
 
-
   async handleFormSubmit(action) {
     try {
       const isValid = this.userDirectoryFormService.validate();
       if (isValid) {
         switch (action) {
-          case 'save':
+          case "save":
             await this.handleSaveClick();
             break;
-          case 'test':
+          case "test":
             await this.handleTestClick();
             break;
         }
@@ -95,9 +97,9 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
   async handleTestClick() {
     const result = await this.props.adminUserDirectoryContext.test();
     const displayTestUserDirectoryDialogProps = {
-      userDirectoryTestResult: result.body
+      userDirectoryTestResult: result.body,
     };
-    this.props.context.setContext({displayTestUserDirectoryDialogProps});
+    this.props.context.setContext({ displayTestUserDirectoryDialogProps });
     this.props.dialogContext.open(DisplayTestUserDirectoryAdministration);
   }
 
@@ -106,7 +108,9 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
    * @returns {boolean}
    */
   isSaveEnabled() {
-    return !this.props.adminUserDirectoryContext.isProcessing() && this.props.adminUserDirectoryContext.hasSettingsChanges();
+    return (
+      !this.props.adminUserDirectoryContext.isProcessing() && this.props.adminUserDirectoryContext.hasSettingsChanges()
+    );
   }
 
   /**
@@ -114,16 +118,22 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
    * @returns {boolean}
    */
   isTestEnabled() {
-    return !this.props.adminUserDirectoryContext.isProcessing() && this.props.adminUserDirectoryContext.getSettings().userDirectoryToggle;
+    return (
+      !this.props.adminUserDirectoryContext.isProcessing() &&
+      this.props.adminUserDirectoryContext.getSettings().userDirectoryToggle
+    );
   }
-
 
   /**
    * Is Synchronize button is enable
    * @returns {boolean}
    */
   isSynchronizeEnabled() {
-    return !this.props.adminUserDirectoryContext.isProcessing() && this.props.adminUserDirectoryContext.getSettings().userDirectoryToggle && this.props.adminUserDirectoryContext.getCurrentSettings().userDirectoryToggle;
+    return (
+      !this.props.adminUserDirectoryContext.isProcessing() &&
+      this.props.adminUserDirectoryContext.getSettings().userDirectoryToggle &&
+      this.props.adminUserDirectoryContext.getCurrentSettings().userDirectoryToggle
+    );
   }
 
   /**
@@ -154,7 +164,9 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The user directory settings for the organization were updated."));
+    await this.props.actionFeedbackContext.displaySuccess(
+      this.props.t("The user directory settings for the organization were updated."),
+    );
   }
 
   /**
@@ -186,21 +198,49 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
     return (
       <div className="actions-wrapper">
         <div className="left-actions-wrapper">
-          <button type="button" className="button secondary" disabled={!this.isTestEnabled()} onClick={() => this.handleFormSubmit('test')}>
+          <button
+            type="button"
+            className="button secondary"
+            disabled={!this.isTestEnabled()}
+            onClick={() => this.handleFormSubmit("test")}
+          >
             <TestSVG />
-            <span><Trans>Test settings</Trans></span>
+            <span>
+              <Trans>Test settings</Trans>
+            </span>
           </button>
-          <button type="button" className="button secondary " disabled={!this.isSynchronizeEnabled()} onClick={this.handleSimulateSynchronizeClick}>
+          <button
+            type="button"
+            className="button secondary "
+            disabled={!this.isSynchronizeEnabled()}
+            onClick={this.handleSimulateSynchronizeClick}
+          >
             <SimulateSyncSVG />
-            <span><Trans>Simulate synchronize</Trans></span>
+            <span>
+              <Trans>Simulate synchronize</Trans>
+            </span>
           </button>
-          <button type="button" className="button secondary" disabled={!this.isSynchronizeEnabled()} onClick={this.handleSynchronizeClick}>
+          <button
+            type="button"
+            className="button secondary"
+            disabled={!this.isSynchronizeEnabled()}
+            onClick={this.handleSynchronizeClick}
+          >
             <RevertSVG />
-            <span><Trans>Synchronize</Trans></span>
+            <span>
+              <Trans>Synchronize</Trans>
+            </span>
           </button>
         </div>
-        <button type="button" className="button primary form" disabled={!this.isSaveEnabled()} onClick={() => this.handleFormSubmit('save')}>
-          <span><Trans>Save</Trans></span>
+        <button
+          type="button"
+          className="button primary form"
+          disabled={!this.isSaveEnabled()}
+          onClick={() => this.handleFormSubmit("save")}
+        >
+          <span>
+            <Trans>Save</Trans>
+          </span>
         </button>
       </div>
     );
@@ -215,4 +255,8 @@ DisplayAdministrationUserDirectoryActions.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withDialog(withAdminUserDirectory(withTranslation("common")(DisplayAdministrationUserDirectoryActions)))));
+export default withAppContext(
+  withActionFeedback(
+    withDialog(withAdminUserDirectory(withTranslation("common")(DisplayAdministrationUserDirectoryActions))),
+  ),
+);

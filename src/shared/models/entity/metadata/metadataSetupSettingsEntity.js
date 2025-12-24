@@ -20,15 +20,13 @@ export default class MetadataSetupSettingsEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "enable_encrypted_metadata_on_install",
-      ],
-      "properties": {
-        "enable_encrypted_metadata_on_install": {
-          "type": "boolean",
+      type: "object",
+      required: ["enable_encrypted_metadata_on_install"],
+      properties: {
+        enable_encrypted_metadata_on_install: {
+          type: "boolean",
         },
-      }
+      },
     };
   }
 

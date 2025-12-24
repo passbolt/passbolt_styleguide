@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.0.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import { withTranslation } from "react-i18next";
 
 /**
  * This component represents a table cell user MFA
@@ -45,4 +45,4 @@ CellUserMfa.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(CellUserMfa);
+export default withTranslation("common")(CellUserMfa);

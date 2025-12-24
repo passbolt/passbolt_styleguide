@@ -11,15 +11,15 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import DialogWrapper from "../../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormCancelButton from "../../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import FormSubmitButton from "../../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
-import {withAdminSelfRegistration} from "../../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
-import MapObject from '../../../../lib/Map/MapObject';
+import { withAppContext } from "../../../../../shared/context/AppContext/AppContext";
+import { withAdminSelfRegistration } from "../../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
+import MapObject from "../../../../lib/Map/MapObject";
 
 class ConfirmSaveSelfRegistrationSettings extends Component {
   /**
@@ -74,20 +74,20 @@ class ConfirmSaveSelfRegistrationSettings extends Component {
         title={this.props.t("Save self registration settings")}
         onClose={this.handleClose}
         disabled={isProcessing}
-        className="save-self-registration-settings-dialog">
+        className="save-self-registration-settings-dialog"
+      >
         <form onSubmit={this.handleSubmit}>
           <div className="form-content">
-            <label><Trans>Allowed domains</Trans></label>
+            <label>
+              <Trans>Allowed domains</Trans>
+            </label>
             <div className="radiolist-alt">
               <div className="input radio">
                 <ul id="domains-list">
                   {this.allowedDomains &&
-                    MapObject.iterators(this.allowedDomains).map(key => (
-                      <li key={key}>
-                        {this.allowedDomains.get(key)}
-                      </li>
-                    ))
-                  }
+                    MapObject.iterators(this.allowedDomains).map((key) => (
+                      <li key={key}>{this.allowedDomains.get(key)}</li>
+                    ))}
                 </ul>
               </div>
             </div>
@@ -96,14 +96,13 @@ class ConfirmSaveSelfRegistrationSettings extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton
-              onClick={this.handleClose}
-              disabled={isProcessing}/>
+            <FormCancelButton onClick={this.handleClose} disabled={isProcessing} />
             <FormSubmitButton
               value={this.props.t("Save")}
               disabled={isProcessing}
               processing={isProcessing}
-              warning={true}/>
+              warning={true}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -118,5 +117,6 @@ ConfirmSaveSelfRegistrationSettings.propTypes = {
   onClose: PropTypes.func, // Callback when the dialog must be closed
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withAdminSelfRegistration(withTranslation('common')(ConfirmSaveSelfRegistrationSettings)));
-
+export default withAppContext(
+  withAdminSelfRegistration(withTranslation("common")(ConfirmSaveSelfRegistrationSettings)),
+);

@@ -18,5 +18,5 @@
 
 export const DirectoryType = {
   openldap: "openldap",
-  ad: "ad"
+  ad: "ad",
 };

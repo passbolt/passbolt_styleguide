@@ -13,10 +13,10 @@
  */
 import PassboltResponseEntity from "../../../models/entity/apiService/PassboltResponseEntity";
 import AbstractService from "../abstract/abstractService";
-import {isValidUuid} from "../../../utils/assertions";
+import { isValidUuid } from "../../../utils/assertions";
 import assertString from "validator/es/lib/util/assertString";
 
-const ROLES_API_SERVICE_RESOURCE_NAME = 'roles';
+const ROLES_API_SERVICE_RESOURCE_NAME = "roles";
 
 export default class RoleApiService extends AbstractService {
   /**
@@ -48,11 +48,9 @@ export default class RoleApiService extends AbstractService {
    */
   async findAll() {
     const response = await this.apiClient.findAll();
-    const body = response.body && response.body.length
-      ? response.body
-      : [];
+    const body = response.body && response.body.length ? response.body : [];
 
-    return new PassboltResponseEntity({header: response.header, body: body});
+    return new PassboltResponseEntity({ header: response.header, body: body });
   }
 
   /**

@@ -13,10 +13,10 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import CloseSVG from "../../../img/svg/close.svg";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 class ActionAbortedMissingMetadataKeysPage extends React.Component {
   constructor(props) {
@@ -84,25 +84,35 @@ class ActionAbortedMissingMetadataKeysPage extends React.Component {
       <div className="action-aborted-missing-metadata-keys" onKeyDown={this.handleKeyDown}>
         <div className="back-link">
           <a className="primary-action">
-            <span className="primary-action-title"><Trans>Action aborted</Trans></span>
+            <span className="primary-action-title">
+              <Trans>Action aborted</Trans>
+            </span>
           </a>
-          <a onClick={this.handleCloseClick} className="secondary-action button-transparent button" title={this.translate("Cancel the operation")}>
-            <CloseSVG className="close"/>
-            <span className="visually-hidden"><Trans>Cancel</Trans></span>
+          <a
+            onClick={this.handleCloseClick}
+            className="secondary-action button-transparent button"
+            title={this.translate("Cancel the operation")}
+          >
+            <CloseSVG className="close" />
+            <span className="visually-hidden">
+              <Trans>Cancel</Trans>
+            </span>
           </a>
         </div>
         <form onSubmit={this.handleFormSubmit}>
           <div className="form-container">
             <p>
               <Trans>You cannot perform this action because you lack access to the shared metadata key.</Trans>
-              <br/>
-              <br/>
+              <br />
+              <br />
               <Trans>Please ask your administrator to share it with you.</Trans>
             </p>
           </div>
           <div className="submit-wrapper">
             <button type="submit" className="button primary full-width">
-              <span><Trans>Ok</Trans></span>
+              <span>
+                <Trans>Ok</Trans>
+              </span>
             </button>
           </div>
         </form>
@@ -119,4 +129,4 @@ ActionAbortedMissingMetadataKeysPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withTranslation('common')(ActionAbortedMissingMetadataKeysPage)));
+export default withAppContext(withRouter(withTranslation("common")(ActionAbortedMissingMetadataKeysPage)));

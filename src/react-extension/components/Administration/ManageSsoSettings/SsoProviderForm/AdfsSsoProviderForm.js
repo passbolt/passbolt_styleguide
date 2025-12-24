@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -13,14 +12,14 @@
  * @since         4.6.0
  */
 import React from "react";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import {withActionFeedback} from "../../../../contexts/ActionFeedbackContext";
-import {withAdminSso} from "../../../../contexts/AdminSsoContext";
-import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
+import { withActionFeedback } from "../../../../contexts/ActionFeedbackContext";
+import { withAdminSso } from "../../../../contexts/AdminSsoContext";
+import { withAppContext } from "../../../../../shared/context/AppContext/AppContext";
 import Password from "../../../../../shared/components/Password/Password";
 import CopySVG from "../../../../../img/svg/copy.svg";
-import {withClipboard} from "../../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { withClipboard } from "../../../../contexts/Clipboard/ManagedClipboardServiceProvider";
 
 /**
  * This component displays the Adfs SSO settings form
@@ -64,7 +63,13 @@ class AdfsSsoProviderForm extends React.Component {
     }
 
     const errors = this.props.adminSsoContext.getErrors();
-    const fieldToFocus = this.getFirstFieldInError(errors, ["url", "openid_configuration_path", "scope", "client_id", "client_secret"]);
+    const fieldToFocus = this.getFirstFieldInError(errors, [
+      "url",
+      "openid_configuration_path",
+      "scope",
+      "client_id",
+      "client_secret",
+    ]);
 
     switch (fieldToFocus) {
       case "url":
@@ -107,7 +112,7 @@ class AdfsSsoProviderForm extends React.Component {
    * @returns {void}
    */
   handleInputChange(event) {
-    const {value, name} = event.target;
+    const { value, name } = event.target;
     this.props.adminSsoContext.setValue(name, value);
   }
 
@@ -115,7 +120,10 @@ class AdfsSsoProviderForm extends React.Component {
    * Handle the copy to clipboard button
    */
   async handleCopyRedirectUrl() {
-    await this.props.clipboardContext.copy(this.fullRedirectUrl, this.translate("The redirection URL has been copied to the clipboard."));
+    await this.props.clipboardContext.copy(
+      this.fullRedirectUrl,
+      this.translate("The redirection URL has been copied to the clipboard."),
+    );
   }
 
   /**
@@ -161,69 +169,119 @@ class AdfsSsoProviderForm extends React.Component {
     const errors = ssoContext.getErrors();
     return (
       <>
-        <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-          <label><Trans>Login URL</Trans></label>
-          <input id="sso-adfs-url-input" type="text" className="fluid form-element" name="url" ref={this.urlInputRef}
-            value={ssoConfig.url} onChange={this.handleInputChange} placeholder={this.translate("Login URL")}
-            disabled={this.hasAllInputDisabled()}/>
-          {errors?.hasError('url') &&
-            <div className="error-message">{this.displayErrors(errors.getError('url'))}</div>
-          }
+        <div className={`input text required ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+          <label>
+            <Trans>Login URL</Trans>
+          </label>
+          <input
+            id="sso-adfs-url-input"
+            type="text"
+            className="fluid form-element"
+            name="url"
+            ref={this.urlInputRef}
+            value={ssoConfig.url}
+            onChange={this.handleInputChange}
+            placeholder={this.translate("Login URL")}
+            disabled={this.hasAllInputDisabled()}
+          />
+          {errors?.hasError("url") && <div className="error-message">{this.displayErrors(errors.getError("url"))}</div>}
           <p>
             <Trans>The AD FS authentication endpoint.</Trans>
           </p>
         </div>
-        <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-          <label><Trans>Redirect URL</Trans></label>
+        <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+          <label>
+            <Trans>Redirect URL</Trans>
+          </label>
           <div className="button-inline">
-            <input id="sso-redirect-url-input" type="text" className="fluid form-element disabled" name="redirect_url"
-              value={this.fullRedirectUrl} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
+            <input
+              id="sso-redirect-url-input"
+              type="text"
+              className="fluid form-element disabled"
+              name="redirect_url"
+              value={this.fullRedirectUrl}
+              placeholder={this.translate("Redirect URL")}
+              readOnly
+              disabled={true}
+            />
             <button type="button" onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button button-icon">
-              <CopySVG/>
+              <CopySVG />
             </button>
           </div>
           <p>
             <Trans>The URL to provide to the AD FS platform when registering the application.</Trans>
           </p>
         </div>
-        <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-          <label><Trans>OpenId Configuration Path</Trans></label>
-          <input id="sso-adfs-openid-configuration-path-input" type="text" className="fluid form-element" name="openid_configuration_path" ref={this.openIdConfigurationPathInputRef}
-            value={ssoConfig.openid_configuration_path} onChange={this.handleInputChange} placeholder={this.translate("OpenId Configuration Path")}
-            disabled={this.hasAllInputDisabled()}/>
-          {errors?.hasError('openid_configuration_path') &&
-            <div className="error-message">{this.displayErrors(errors.getError('openid_configuration_path'))}</div>
-          }
+        <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+          <label>
+            <Trans>OpenId Configuration Path</Trans>
+          </label>
+          <input
+            id="sso-adfs-openid-configuration-path-input"
+            type="text"
+            className="fluid form-element"
+            name="openid_configuration_path"
+            ref={this.openIdConfigurationPathInputRef}
+            value={ssoConfig.openid_configuration_path}
+            onChange={this.handleInputChange}
+            placeholder={this.translate("OpenId Configuration Path")}
+            disabled={this.hasAllInputDisabled()}
+          />
+          {errors?.hasError("openid_configuration_path") && (
+            <div className="error-message">{this.displayErrors(errors.getError("openid_configuration_path"))}</div>
+          )}
           <p>
             <Trans>The AD FS configuration relative path from the given login url.</Trans>
           </p>
         </div>
-        <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-          <label><Trans>Scope</Trans></label>
-          <input id="sso-adfs-scope-input" type="text" className="fluid form-element" name="scope" ref={this.scopeInputRef}
-            value={ssoConfig.scope} onChange={this.handleInputChange} placeholder={this.translate("Scope")}
-            disabled={this.hasAllInputDisabled()}/>
-          {errors?.hasError('scope') &&
-            <div className="error-message">{this.displayErrors(errors.getError('scope'))}</div>
-          }
+        <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+          <label>
+            <Trans>Scope</Trans>
+          </label>
+          <input
+            id="sso-adfs-scope-input"
+            type="text"
+            className="fluid form-element"
+            name="scope"
+            ref={this.scopeInputRef}
+            value={ssoConfig.scope}
+            onChange={this.handleInputChange}
+            placeholder={this.translate("Scope")}
+            disabled={this.hasAllInputDisabled()}
+          />
+          {errors?.hasError("scope") && (
+            <div className="error-message">{this.displayErrors(errors.getError("scope"))}</div>
+          )}
           <p>
             <Trans>The AD FS scope.</Trans>
           </p>
         </div>
-        <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-          <label><Trans>Application (client) ID</Trans></label>
-          <input id="sso-adfs-client-id-input" type="text" className="fluid form-element" name="client_id" ref={this.clientIdInputRef}
-            value={ssoConfig.client_id} onChange={this.handleInputChange} placeholder={this.translate("Application (client) ID")}
-            disabled={this.hasAllInputDisabled()}/>
-          {errors?.hasError('client_id') &&
-            <div className="error-message">{this.displayErrors(errors.getError('client_id'))}</div>
-          }
+        <div className={`input text required ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+          <label>
+            <Trans>Application (client) ID</Trans>
+          </label>
+          <input
+            id="sso-adfs-client-id-input"
+            type="text"
+            className="fluid form-element"
+            name="client_id"
+            ref={this.clientIdInputRef}
+            value={ssoConfig.client_id}
+            onChange={this.handleInputChange}
+            placeholder={this.translate("Application (client) ID")}
+            disabled={this.hasAllInputDisabled()}
+          />
+          {errors?.hasError("client_id") && (
+            <div className="error-message">{this.displayErrors(errors.getError("client_id"))}</div>
+          )}
           <p>
             <Trans>The public identifier for the AD FS app.</Trans>
           </p>
         </div>
-        <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-          <label><Trans>Secret</Trans></label>
+        <div className={`input text required ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+          <label>
+            <Trans>Secret</Trans>
+          </label>
           <Password
             id="sso-adfs-secret-input"
             className="fluid form-element"
@@ -234,10 +292,11 @@ class AdfsSsoProviderForm extends React.Component {
             disabled={this.hasAllInputDisabled()}
             value={ssoConfig.client_secret}
             preview={true}
-            inputRef={this.clientSecretInputRef}/>
-          {errors?.hasError('client_secret') &&
-            <div className="error-message">{this.displayErrors(errors.getError('client_secret'))}</div>
-          }
+            inputRef={this.clientSecretInputRef}
+          />
+          {errors?.hasError("client_secret") && (
+            <div className="error-message">{this.displayErrors(errors.getError("client_secret"))}</div>
+          )}
           <p>
             <Trans>Allows your AD FS provider and Passbolt API to securely share information.</Trans>
           </p>
@@ -255,4 +314,6 @@ AdfsSsoProviderForm.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withAdminSso(withClipboard(withTranslation('common')(AdfsSsoProviderForm)))));
+export default withAppContext(
+  withActionFeedback(withAdminSso(withClipboard(withTranslation("common")(AdfsSsoProviderForm)))),
+);

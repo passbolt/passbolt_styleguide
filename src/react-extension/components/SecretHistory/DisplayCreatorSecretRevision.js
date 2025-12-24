@@ -11,17 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         5.7.0
  */
-import React, {Component} from "react";
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import UserAvatar from "../Common/Avatar/UserAvatar";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import TooltipPortal from "../Common/Tooltip/TooltipPortal";
 import TooltipMessageFingerprintLoading from "../Common/Tooltip/TooltipMessageFingerprintLoading";
 import FingerprintSVG from "../../../img/svg/fingerprint.svg";
 import Fingerprint from "../Common/Fingerprint/Fingerprint";
-import {formatDateTimeAgo} from "../../../shared/utils/dateUtils";
-import UserEntity, {USER_STATUS} from "../../../shared/models/entity/user/userEntity";
+import { formatDateTimeAgo } from "../../../shared/utils/dateUtils";
+import UserEntity, { USER_STATUS } from "../../../shared/models/entity/user/userEntity";
 import SecretRevisionEntity from "../../../shared/models/entity/secretRevision/secretRevisionEntity";
 
 class DisplayCreatorSecretRevision extends Component {
@@ -47,7 +47,6 @@ class DisplayCreatorSecretRevision extends Component {
   bindCallbacks() {
     this.handleSelectSecretRevision = this.handleSelectSecretRevision.bind(this);
   }
-
 
   /**
    * Handle the select secret revision
@@ -78,13 +77,13 @@ class DisplayCreatorSecretRevision extends Component {
     }
     let tooltipFingerprintMessage;
     try {
-      const gpgkey = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', userId);
-      tooltipFingerprintMessage = <Fingerprint fingerprint={gpgkey.fingerprint}/>;
+      const gpgkey = await this.props.context.port.request("passbolt.keyring.get-public-key-info-by-user", userId);
+      tooltipFingerprintMessage = <Fingerprint fingerprint={gpgkey.fingerprint} />;
     } catch (error) {
       console.error(error);
       tooltipFingerprintMessage = <p>{error.message}</p>;
     }
-    this.setState({tooltipFingerprintMessage});
+    this.setState({ tooltipFingerprintMessage });
   }
 
   /**
@@ -98,9 +97,9 @@ class DisplayCreatorSecretRevision extends Component {
         username: "Unknown user",
         profile: {
           first_name: "Unknown",
-          last_name: "user"
+          last_name: "user",
         },
-        status: USER_STATUS.DELETED
+        status: USER_STATUS.DELETED,
       });
     }
     return this.props.secretRevision.creator;
@@ -121,39 +120,46 @@ class DisplayCreatorSecretRevision extends Component {
    */
   render() {
     return (
-      <button type="button" className={`no-border ${this.isResourceSecretRevisionSelected ? "selected" : ""}`} disabled={this.props.disabled}
-        onClick={this.handleSelectSecretRevision}>
+      <button
+        type="button"
+        className={`no-border ${this.isResourceSecretRevisionSelected ? "selected" : ""}`}
+        disabled={this.props.disabled}
+        onClick={this.handleSelectSecretRevision}
+      >
         <div className="creator">
-          <UserAvatar user={this.creator.toDto(UserEntity.ALL_CONTAIN_OPTIONS)} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+          <UserAvatar
+            user={this.creator.toDto(UserEntity.ALL_CONTAIN_OPTIONS)}
+            baseUrl={this.props.context.userSettings.getTrustedDomain()}
+          />
           <div className="profile">
             <div className="name">
               <span className="ellipsis">{this.creator.getUserFormattedName(this.translate)}</span>
-              {
-                this.creator?.id && <TooltipPortal
+              {this.creator?.id && (
+                <TooltipPortal
                   message={this.state.tooltipFingerprintMessage || <TooltipMessageFingerprintLoading />}
-                  onMouseHover={() => this.onTooltipFingerprintMouseHover(this.creator?.id)}>
-                  <FingerprintSVG/>
+                  onMouseHover={() => this.onTooltipFingerprintMouseHover(this.creator?.id)}
+                >
+                  <FingerprintSVG />
                 </TooltipPortal>
-              }
+              )}
             </div>
-            <div className="username ellipsis">
-              {this.creator.username}
-            </div>
+            <div className="username ellipsis">{this.creator.username}</div>
           </div>
         </div>
         <div className="additional-information">
-          {this.creator.status === USER_STATUS.SUSPENDED &&
+          {this.creator.status === USER_STATUS.SUSPENDED && (
             <div className="status suspended ellipsis">
               <Trans>Suspended</Trans>
             </div>
-          }
-          {this.creator.status === USER_STATUS.DELETED &&
+          )}
+          {this.creator.status === USER_STATUS.DELETED && (
             <div className="status deleted ellipsis">
               <Trans>Deleted</Trans>
             </div>
-          }
+          )}
           <div className="updated-date ellipsis">
-            <span>Edited:</span> {formatDateTimeAgo(this.props.secretRevision.modified, this.translate, this.props.context.locale)}
+            <span>Edited:</span>{" "}
+            {formatDateTimeAgo(this.props.secretRevision.modified, this.translate, this.props.context.locale)}
           </div>
         </div>
       </button>
@@ -162,7 +168,7 @@ class DisplayCreatorSecretRevision extends Component {
 }
 
 DisplayCreatorSecretRevision.defaultProps = {
-  disabled: true
+  disabled: true,
 };
 
 DisplayCreatorSecretRevision.propTypes = {
@@ -174,5 +180,4 @@ DisplayCreatorSecretRevision.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(DisplayCreatorSecretRevision));
-
+export default withAppContext(withTranslation("common")(DisplayCreatorSecretRevision));

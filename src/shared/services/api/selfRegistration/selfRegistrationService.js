@@ -12,7 +12,7 @@
  * @since         3.8.3
  */
 
-import {ApiClient} from "../../../lib/apiClient/apiClient";
+import { ApiClient } from "../../../lib/apiClient/apiClient";
 
 const SELF_REGISTRATION_SETTINGS_RESOURCE_NAME = "self-registration";
 
@@ -83,4 +83,3 @@ class SelfRegistrationService {
 }
 
 export default SelfRegistrationService;
-

@@ -32,8 +32,8 @@ class ActivitiesServiceWorkerService {
    * @param {number} options.limit The limit of activities per page
    * @returns {object} The activities
    */
-  async findAllFromResourceId(resourceId, {page, limit = LIMIT_ACTIVITIES_PER_PAGE}) {
-    return await this.port.request(RESOURCE_ACTIVITIES_FIND_ALL_EVENT, "Resource", resourceId, {limit, page});
+  async findAllFromResourceId(resourceId, { page, limit = LIMIT_ACTIVITIES_PER_PAGE }) {
+    return await this.port.request(RESOURCE_ACTIVITIES_FIND_ALL_EVENT, "Resource", resourceId, { limit, page });
   }
 }
 

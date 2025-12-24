@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import EmailNotificationService from "../../../../shared/services/api/emailNotification/EmailNotificationService";
 import EmailNotificationModel from "../../../../shared/models/emailNotification/EmailNotificationModel";
 import EmailNotificationDTO from "../../../../shared/models/emailNotification/EmailNotificationDTO";
@@ -60,7 +60,7 @@ export class AdminEmailNotificationContextProvider extends React.Component {
       processing: true, // Context is processing data
       getCurrentSettings: this.getCurrentSettings.bind(this), // Returns settings saved
       getSettings: this.getSettings.bind(this), // Returns settings for UI changes
-      setSettings: this.setSettings.bind(this),  // Set the settings object with changes
+      setSettings: this.setSettings.bind(this), // Set the settings object with changes
       findEmailNotificationSettings: this.findEmailNotificationSettings.bind(this), // Find the current settings and store it in the state
       hasSettingsChanges: this.hasSettingsChanges.bind(this), // Check if setting has changes
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
@@ -76,12 +76,12 @@ export class AdminEmailNotificationContextProvider extends React.Component {
    */
   async findEmailNotificationSettings() {
     this.setProcessing(true);
-    const result = (await this.emailNotificationService.find());
+    const result = await this.emailNotificationService.find();
     const currentSettings = new EmailNotificationModel(result);
     //Init saved setting
-    this.setState({currentSettings});
+    this.setState({ currentSettings });
     //Init setting which will interact with UI
-    this.setState({settings: Object.assign({}, currentSettings)});
+    this.setState({ settings: Object.assign({}, currentSettings) });
 
     this.setProcessing(false);
   }
@@ -108,8 +108,8 @@ export class AdminEmailNotificationContextProvider extends React.Component {
    * @returns {void}
    */
   setSettings(key, value) {
-    const newSettings = Object.assign({}, this.state.settings, {[key]: value});
-    this.setState({settings: newSettings});
+    const newSettings = Object.assign({}, this.state.settings, { [key]: value });
+    this.setState({ settings: newSettings });
   }
 
   /**
@@ -127,7 +127,7 @@ export class AdminEmailNotificationContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({processing});
+    this.setState({ processing });
   }
 
   /**
@@ -135,15 +135,19 @@ export class AdminEmailNotificationContextProvider extends React.Component {
    * @returns {Boolean}
    */
   hasSettingsChanges() {
-    return this.state.currentSettings && JSON.stringify(this.state.currentSettings) !== JSON.stringify(this.state.settings);
+    return (
+      this.state.currentSettings && JSON.stringify(this.state.currentSettings) !== JSON.stringify(this.state.settings)
+    );
   }
   /**
    * Puts the state to its default in order to avoid keeping the data users didn't want to save.
    */
   clearContext() {
-    const {currentSettings, settings, processing} = this.defaultState;
+    const { currentSettings, settings, processing } = this.defaultState;
     this.setState({
-      currentSettings, settings, processing
+      currentSettings,
+      settings,
+      processing,
     });
   }
 
@@ -177,7 +181,6 @@ AdminEmailNotificationContextProvider.propTypes = {
 
 export default withAppContext(AdminEmailNotificationContextProvider);
 
-
 /**
  * Resource Workspace Context Consumer HOC
  * @param WrappedComponent
@@ -187,13 +190,11 @@ export function withAdminEmailNotification(WrappedComponent) {
     render() {
       return (
         <AdminEmailNotificationContext.Consumer>
-          {
-            adminEmailNotificationContext => <WrappedComponent adminEmailNotificationContext={adminEmailNotificationContext} {...this.props} />
-          }
+          {(adminEmailNotificationContext) => (
+            <WrappedComponent adminEmailNotificationContext={adminEmailNotificationContext} {...this.props} />
+          )}
         </AdminEmailNotificationContext.Consumer>
       );
     }
   };
 }
-
-

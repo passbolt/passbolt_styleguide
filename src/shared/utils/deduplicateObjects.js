@@ -22,18 +22,18 @@
  * @returns {array<array>}
  */
 const deduplicateObjects = (arr, key) => {
-  if (!(Array.isArray(arr))) {
-    throw new TypeError('deduplicateObjects first parameter should be an array.');
+  if (!Array.isArray(arr)) {
+    throw new TypeError("deduplicateObjects first parameter should be an array.");
   }
-  if (typeof key !== 'string') {
-    throw new TypeError('deduplicateObjects second parameter should be a string.');
+  if (typeof key !== "string") {
+    throw new TypeError("deduplicateObjects second parameter should be a string.");
   }
 
   // Extract the values to deduplicate in an hashtable.
   const valuesHash = arr
-  // Do not add to the hash the object which doesn't have the property.
-    .filter(row => Object.prototype.hasOwnProperty.call(row, key))
-    .map(row => row[key]);
+    // Do not add to the hash the object which doesn't have the property.
+    .filter((row) => Object.prototype.hasOwnProperty.call(row, key))
+    .map((row) => row[key]);
 
   /**
    * Deduplicate the values by flipping the hash table.

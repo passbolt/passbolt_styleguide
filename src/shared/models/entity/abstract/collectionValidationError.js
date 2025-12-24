@@ -19,9 +19,9 @@ class CollectionValidationError extends Error {
    *
    * @param {string} message
    */
-  constructor(message = 'Collection validation error.') {
+  constructor(message = "Collection validation error.") {
     super(message);
-    this.name = 'CollectionValidationError';
+    this.name = "CollectionValidationError";
     this.errors = [];
   }
 
@@ -39,8 +39,13 @@ class CollectionValidationError extends Error {
     if (!Number.isInteger(position)) {
       throw new TypeError('CollectionValidationError::addEntityValidationError expects "position" to be an integer.');
     }
-    if (!(validationError instanceof EntityValidationError) && !(validationError instanceof CollectionValidationError)) {
-      throw new TypeError('CollectionValidationError::addEntityValidationError expects "entityValidationError" to be an instance of EntityValidationError or CollectionValidationError.');
+    if (
+      !(validationError instanceof EntityValidationError) &&
+      !(validationError instanceof CollectionValidationError)
+    ) {
+      throw new TypeError(
+        'CollectionValidationError::addEntityValidationError expects "entityValidationError" to be an instance of EntityValidationError or CollectionValidationError.',
+      );
     }
     this.errors[position] = validationError;
   }
@@ -69,7 +74,7 @@ class CollectionValidationError extends Error {
    * @returns {boolean}
    */
   hasErrors() {
-    return this.errors.some(error => Object.keys(error.details).length > 0);
+    return this.errors.some((error) => Object.keys(error.details).length > 0);
   }
 
   /**

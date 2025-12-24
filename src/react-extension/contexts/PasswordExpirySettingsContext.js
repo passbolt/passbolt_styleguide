@@ -14,10 +14,10 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
-import {withTranslation} from "react-i18next";
-import {formatDateForApi} from "../../shared/utils/dateUtils";
-import {DateTime} from "luxon";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
+import { withTranslation } from "react-i18next";
+import { formatDateForApi } from "../../shared/utils/dateUtils";
+import { DateTime } from "luxon";
 
 /**
  * The User Passphrase Policies Context
@@ -61,11 +61,11 @@ export class PasswordExpirySettingsContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async findSettings() {
-    if (!this.props.context.siteSettings.canIUse('passwordExpiry') || this.getSettings() !== null) {
+    if (!this.props.context.siteSettings.canIUse("passwordExpiry") || this.getSettings() !== null) {
       return;
     }
     const settings = await this.props.context.port.request("passbolt.password-expiry.get-or-find");
-    this.setState({settings});
+    this.setState({ settings });
   }
 
   /**
@@ -81,7 +81,7 @@ export class PasswordExpirySettingsContextProvider extends React.Component {
    * @returns {string|null}
    */
   getDefaultExpirationDate() {
-    if (!this.props.context.siteSettings.canIUse('passwordExpiryPolicies')) {
+    if (!this.props.context.siteSettings.canIUse("passwordExpiryPolicies")) {
       return null;
     }
 
@@ -91,7 +91,7 @@ export class PasswordExpirySettingsContextProvider extends React.Component {
     }
 
     const durationInDays = settings.default_expiry_period;
-    const expirationDate = DateTime.utc().plus({days: durationInDays});
+    const expirationDate = DateTime.utc().plus({ days: durationInDays });
     return formatDateForApi(expirationDate);
   }
 
@@ -101,7 +101,7 @@ export class PasswordExpirySettingsContextProvider extends React.Component {
    */
   isFeatureEnabled() {
     const settings = this.getSettings();
-    if (!this.props.context.siteSettings.canIUse('passwordExpiry') || !settings) {
+    if (!this.props.context.siteSettings.canIUse("passwordExpiry") || !settings) {
       return false;
     }
 
@@ -128,7 +128,7 @@ PasswordExpirySettingsContextProvider.propTypes = {
   t: PropTypes.any, // The translate context
 };
 
-export default withAppContext(withTranslation('common')(PasswordExpirySettingsContextProvider));
+export default withAppContext(withTranslation("common")(PasswordExpirySettingsContextProvider));
 
 /**
  * Password expiry Context Consumer HOC
@@ -139,11 +139,8 @@ export function withPasswordExpiry(WrappedComponent) {
     render() {
       return (
         <PasswordExpirySettingsContext.Consumer>
-          {passwordExpiryContext => (
-            <WrappedComponent
-              passwordExpiryContext={passwordExpiryContext}
-              {...this.props}
-            />
+          {(passwordExpiryContext) => (
+            <WrappedComponent passwordExpiryContext={passwordExpiryContext} {...this.props} />
           )}
         </PasswordExpirySettingsContext.Consumer>
       );

@@ -15,8 +15,8 @@ import React from "react";
 import AppContext from "../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import SiteSettings from "../../shared/lib/Settings/SiteSettings";
-import {ApiClientOptions} from "../../shared/lib/apiClient/apiClientOptions";
-import {ApiClient} from "../../shared/lib/apiClient/apiClient";
+import { ApiClientOptions } from "../../shared/lib/apiClient/apiClientOptions";
+import { ApiClient } from "../../shared/lib/apiClient/apiClient";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
 import PassboltSubscriptionError from "../lib/Error/PassboltSubscriptionError";
 import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
@@ -70,7 +70,7 @@ class ApiAppContextProvider extends React.Component {
       rbacs: null, // The logged in user
       siteSettings: null, // The site settings
       trustedDomain: this.baseUrl, // The site domain (use trusted domain for compatibility with browser extension applications)
-      basename: (new URL(this.baseUrl)).pathname, // Base path to be used for routing if needed ex. /workspace
+      basename: new URL(this.baseUrl).pathname, // Base path to be used for routing if needed ex. /workspace
       getApiClientOptions: this.getApiClientOptions.bind(this), // Get the api client options
       locale: null, // The locale
 
@@ -79,7 +79,7 @@ class ApiAppContextProvider extends React.Component {
       },
 
       // @todo check if still necessary
-      setContext: context => {
+      setContext: (context) => {
         this.setState(context);
       },
 
@@ -94,7 +94,7 @@ class ApiAppContextProvider extends React.Component {
       onGetSubscriptionKeyRequested: () => this.onGetSubscriptionKeyRequested(),
 
       // Locale
-      onRefreshLocaleRequested: this.onRefreshLocaleRequested.bind(this)
+      onRefreshLocaleRequested: this.onRefreshLocaleRequested.bind(this),
     };
   }
 
@@ -102,10 +102,12 @@ class ApiAppContextProvider extends React.Component {
    * Returns true when the component can be rendered
    */
   get isReady() {
-    return this.state.loggedInUser !== null
-      && this.state.rbacs !== null
-      && this.state.siteSettings !== null
-      && this.state.locale !== null;
+    return (
+      this.state.loggedInUser !== null &&
+      this.state.rbacs !== null &&
+      this.state.siteSettings !== null &&
+      this.state.locale !== null
+    );
   }
 
   /**
@@ -113,9 +115,9 @@ class ApiAppContextProvider extends React.Component {
    * @return {string}
    */
   get baseUrl() {
-    const baseElement = document.getElementsByTagName('base') && document.getElementsByTagName('base')[0];
+    const baseElement = document.getElementsByTagName("base") && document.getElementsByTagName("base")[0];
     if (baseElement) {
-      return baseElement.attributes.href.value.replace(/\/*$/g, '');
+      return baseElement.attributes.href.value.replace(/\/*$/g, "");
     }
     console.error("Unable to retrieve the page base tag");
     return "";
@@ -126,8 +128,7 @@ class ApiAppContextProvider extends React.Component {
    * @returns {ApiClientOptions}
    */
   getApiClientOptions() {
-    return new ApiClientOptions()
-      .setBaseUrl(this.state.trustedDomain);
+    return new ApiClientOptions().setBaseUrl(this.state.trustedDomain);
   }
 
   /**
@@ -139,7 +140,7 @@ class ApiAppContextProvider extends React.Component {
     const apiClient = new ApiClient(apiClientOptions);
     const result = await apiClient.get("me");
     const loggedInUser = result.body;
-    this.setState({loggedInUser});
+    this.setState({ loggedInUser });
   }
 
   /**
@@ -147,18 +148,18 @@ class ApiAppContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async getRbacs() {
-    const canIUseRbac = this.state.siteSettings.canIUse('rbacs');
+    const canIUseRbac = this.state.siteSettings.canIUse("rbacs");
     if (!canIUseRbac) {
-      this.setState({rbacs: new RbacsCollection()});
+      this.setState({ rbacs: new RbacsCollection() });
       return;
     }
 
     const apiClientOptions = this.getApiClientOptions();
     const rbacApiService = new RbacApiService(apiClientOptions);
-    const apiResponse = await rbacApiService.findMe({ui_action: true, action: true});
+    const apiResponse = await rbacApiService.findMe({ ui_action: true, action: true });
     const rbacsDto = apiResponse.body;
     const rbacs = new RbacsCollection(rbacsDto, true);
-    this.setState({rbacs});
+    this.setState({ rbacs });
   }
 
   /**
@@ -168,7 +169,7 @@ class ApiAppContextProvider extends React.Component {
     const apiClientOptions = this.getApiClientOptions().setResourceName("settings");
     const apiClient = new ApiClient(apiClientOptions);
     const siteSettings = await apiClient.findAll();
-    await this.setState({siteSettings: new SiteSettings(siteSettings.body)});
+    await this.setState({ siteSettings: new SiteSettings(siteSettings.body) });
   }
 
   /**
@@ -180,11 +181,11 @@ class ApiAppContextProvider extends React.Component {
   async initLocale() {
     const userLocale = await this.getUserLocale();
     if (userLocale) {
-      return this.setState({locale: userLocale.locale});
+      return this.setState({ locale: userLocale.locale });
     }
 
     const organizationLocale = this.state.siteSettings.locale;
-    return this.setState({locale: organizationLocale});
+    return this.setState({ locale: organizationLocale });
   }
 
   /**
@@ -193,9 +194,11 @@ class ApiAppContextProvider extends React.Component {
    */
   async getUserLocale() {
     const userSettings = await this.getUserSettings();
-    const userLocaleSettings = userSettings.find(userSetting => userSetting.property === "locale");
+    const userLocaleSettings = userSettings.find((userSetting) => userSetting.property === "locale");
     if (userLocaleSettings) {
-      return this.state.siteSettings.supportedLocales.find(supportedLocale => supportedLocale.locale === userLocaleSettings.value);
+      return this.state.siteSettings.supportedLocales.find(
+        (supportedLocale) => supportedLocale.locale === userLocaleSettings.value,
+      );
     }
   }
 
@@ -234,7 +237,7 @@ class ApiAppContextProvider extends React.Component {
     try {
       const apiClientOptions = this.getApiClientOptions().setResourceName("auth");
       const apiClient = new ApiClient(apiClientOptions);
-      await apiClient.get('is-authenticated');
+      await apiClient.get("is-authenticated");
       return true;
     } catch (error) {
       if (error instanceof PassboltApiFetchError) {
@@ -251,7 +254,7 @@ class ApiAppContextProvider extends React.Component {
    * @param {function} callback The callback to execute
    */
   onExpiredSession(callback) {
-    this.scheduledCheckIsAuthenticatedTimeout = setTimeout(async() => {
+    this.scheduledCheckIsAuthenticatedTimeout = setTimeout(async () => {
       const isAuthenticated = await this.onCheckIsAuthenticatedRequested();
       if (!isAuthenticated) {
         callback();
@@ -270,7 +273,7 @@ class ApiAppContextProvider extends React.Component {
     try {
       const apiClientOptions = this.getApiClientOptions().setResourceName("ee/subscription");
       const apiClient = new ApiClient(apiClientOptions);
-      const subscription = await apiClient.get('key');
+      const subscription = await apiClient.get("key");
       return subscription.body;
     } catch (error) {
       if (error instanceof PassboltApiFetchError) {
@@ -298,16 +301,12 @@ class ApiAppContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <AppContext.Provider value={this.state}>
-        {this.isReady && this.props.children}
-      </AppContext.Provider>
-    );
+    return <AppContext.Provider value={this.state}>{this.isReady && this.props.children}</AppContext.Provider>;
   }
 }
 
 ApiAppContextProvider.propTypes = {
-  children: PropTypes.any // The children components
+  children: PropTypes.any, // The children components
 };
 
 export default ApiAppContextProvider;

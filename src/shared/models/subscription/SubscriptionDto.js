@@ -24,11 +24,10 @@ class SubscriptionDto {
     this.subscription_id = subscriptionModel.subscriptionId;
     this.users = subscriptionModel.users;
     this.email = subscriptionModel.email;
-    this.expiry  = subscriptionModel.expiry;
-    this.created  = subscriptionModel.created;
-    this.data  = subscriptionModel.data;
+    this.expiry = subscriptionModel.expiry;
+    this.created = subscriptionModel.created;
+    this.data = subscriptionModel.data;
   }
 }
 
 export default SubscriptionDto;
-

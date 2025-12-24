@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import ReactList from "react-list";
 import Row from "./Row";
@@ -34,14 +34,17 @@ class GridTable extends Component {
     // Apply the function if is row inactive is defined in props
     const isRowInactive = this.props.isRowInactive?.(item);
 
-    return <Row
-      key={key}
-      item={item}
-      className={isRowInactive ? "inactive" : ""}
-      onClick={this.props.onRowClick}
-      onContextMenu={this.props.onRowContextMenu}
-      onDragStart={this.props.onRowDragStart}
-      onDragEnd={this.props.onRowDragEnd}/>;
+    return (
+      <Row
+        key={key}
+        item={item}
+        className={isRowInactive ? "inactive" : ""}
+        onClick={this.props.onRowClick}
+        onContextMenu={this.props.onRowContextMenu}
+        onDragStart={this.props.onRowDragStart}
+        onDragEnd={this.props.onRowDragEnd}
+      />
+    );
   }
 
   /**
@@ -51,7 +54,7 @@ class GridTable extends Component {
    * @return {JSX.Element}
    */
   renderTable(items, ref) {
-    return <TableBody items={items} tableBodyRef={ref}/>;
+    return <TableBody items={items} tableBodyRef={ref} />;
   }
 
   /**
@@ -68,9 +71,10 @@ class GridTable extends Component {
         selectedRowsIds={this.props.selectedRowsIds}
         sorter={this.props.sorter}
         onSortChange={this.props.onSortChange}
-        onChange={this.props.onChange}>
-        <TableHead/>
-        {hasRows &&
+        onChange={this.props.onChange}
+      >
+        <TableHead />
+        {hasRows && (
           <div className="tableview-content">
             <ReactList
               itemRenderer={(index, key) => this.renderItem(index, key)}
@@ -79,10 +83,10 @@ class GridTable extends Component {
               pageSize={20}
               minSize={20}
               type="uniform"
-              ref={this.props.rowsRef}>
-            </ReactList>
+              ref={this.props.rowsRef}
+            ></ReactList>
           </div>
-        }
+        )}
       </TableContextProvider>
     );
   }
@@ -101,7 +105,7 @@ GridTable.propTypes = {
   onRowDragStart: PropTypes.func, // The onRowDragStart property
   onRowDragEnd: PropTypes.func, // The onRowDragEnd property
   onChange: PropTypes.func, // The onChange property
-  rowsRef: PropTypes.any // The ref of the rows
+  rowsRef: PropTypes.any, // The ref of the rows
 };
 
 export default GridTable;

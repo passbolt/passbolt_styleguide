@@ -16,7 +16,7 @@ import IconEntity from "./IconEntity";
 import CustomFieldsCollection from "../../customField/customFieldsCollection";
 import assertString from "validator/es/lib/util/assertString";
 
-const ENTITY_NAME = 'ResourceMetadataEntity';
+const ENTITY_NAME = "ResourceMetadataEntity";
 const RESOURCE_NAME_MAX_LENGTH = 255;
 const RESOURCE_USERNAME_MAX_LENGTH = 255;
 const RESOURCE_URI_MAX_LENGTH = 1024;
@@ -31,44 +31,41 @@ class ResourceMetadataEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
-        "name",
-        "resource_type_id"
-      ],
-      "properties": {
-        "object_type": {
-          "type": "string",
-          "enum": [METADATA_OBJECT_TYPE]
+      type: "object",
+      required: ["name", "resource_type_id"],
+      properties: {
+        object_type: {
+          type: "string",
+          enum: [METADATA_OBJECT_TYPE],
         },
-        "resource_type_id": {
-          "type": "string",
-          "format": "uuid"
+        resource_type_id: {
+          type: "string",
+          format: "uuid",
         },
-        "name": {
-          "type": "string",
-          "maxLength": RESOURCE_NAME_MAX_LENGTH
+        name: {
+          type: "string",
+          maxLength: RESOURCE_NAME_MAX_LENGTH,
         },
-        "username": {
-          "type": "string",
-          "maxLength": RESOURCE_USERNAME_MAX_LENGTH,
-          "nullable": true,
+        username: {
+          type: "string",
+          maxLength: RESOURCE_USERNAME_MAX_LENGTH,
+          nullable: true,
         },
-        "uris": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "maxLength": RESOURCE_URI_MAX_LENGTH
+        uris: {
+          type: "array",
+          items: {
+            type: "string",
+            maxLength: RESOURCE_URI_MAX_LENGTH,
           },
-          "maxItems": RESOURCE_URIS_MAX_ITEMS
+          maxItems: RESOURCE_URIS_MAX_ITEMS,
         },
-        "description": {
-          "type": "string",
-          "maxLength": RESOURCE_DESCRIPTION_MAX_LENGTH,
-          "nullable": true,
+        description: {
+          type: "string",
+          maxLength: RESOURCE_DESCRIPTION_MAX_LENGTH,
+          nullable: true,
         },
-        "icon": IconEntity.getSchema(),
-        "custom_fields": CustomFieldsCollection.getSchema(),
+        icon: IconEntity.getSchema(),
+        custom_fields: CustomFieldsCollection.getSchema(),
       },
     };
   }

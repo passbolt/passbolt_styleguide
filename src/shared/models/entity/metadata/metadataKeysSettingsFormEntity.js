@@ -23,7 +23,10 @@ class MetadataKeysSettingsFormEntity extends MetadataKeysSettingsEntity {
 
     // Associations
     if (this._props.generated_metadata_key) {
-      this._generated_metadata_key = new ExternalGpgKeyPairEntity(this._props.generated_metadata_key, {...options, clone: false});
+      this._generated_metadata_key = new ExternalGpgKeyPairEntity(this._props.generated_metadata_key, {
+        ...options,
+        clone: false,
+      });
       delete this._props.generated_metadata_key;
     }
   }
@@ -35,14 +38,11 @@ class MetadataKeysSettingsFormEntity extends MetadataKeysSettingsEntity {
   static getSchema() {
     return {
       type: "object",
-      required: [
-        "allow_usage_of_personal_keys",
-        "zero_knowledge_key_share",
-      ],
+      required: ["allow_usage_of_personal_keys", "zero_knowledge_key_share"],
       properties: {
         ...MetadataKeysSettingsEntity.getSchema().properties,
         generated_metadata_key: ExternalGpgKeyPairEntity.getSchema(),
-      }
+      },
     };
   }
 
@@ -53,7 +53,7 @@ class MetadataKeysSettingsFormEntity extends MetadataKeysSettingsEntity {
   toDto() {
     return {
       ...this._props,
-      generated_metadata_key: this.generatedMetadataKey?.toDto({public_key: true, private_key: true}) || null,
+      generated_metadata_key: this.generatedMetadataKey?.toDto({ public_key: true, private_key: true }) || null,
     };
   }
 

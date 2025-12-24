@@ -12,11 +12,11 @@
  * @since         5.0.0
  */
 
-import React, {Component} from "react";
-import {withResourceTypesLocalStorage} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import {withMetadataTypesSettingsLocalStorage} from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
-import {withDialog} from "../../../contexts/DialogContext";
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withMetadataTypesSettingsLocalStorage } from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import Tab from "../../Common/Tab/Tab";
@@ -25,24 +25,25 @@ import KeySVG from "../../../../img/svg/key.svg";
 import TotpSVG from "../../../../img/svg/totp.svg";
 import NotesSVG from "../../../../img/svg/notes.svg";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import MetadataTypesSettingsEntity, {RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import MetadataTypesSettingsEntity, {
+  RESOURCE_TYPE_VERSION_4,
+  RESOURCE_TYPE_VERSION_5,
+} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  RESOURCE_TYPE_TOTP_SLUG, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
+  RESOURCE_TYPE_TOTP_SLUG,
+  RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG,
   RESOURCE_TYPE_V5_DEFAULT_SLUG,
   RESOURCE_TYPE_V5_TOTP_SLUG,
-  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG
+  RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG,
 } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import { ResourceWorkspaceFilterTypes, withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import CreateResource from "./CreateResource";
 import TablePropertiesSVG from "../../../../img/svg/table_properties.svg";
-import {
-  withMetadataKeysSettingsLocalStorage
-} from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import { withMetadataKeysSettingsLocalStorage } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import ActionAbortedMissingMetadataKeys
-  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 class DisplayResourceCreationMenu extends Component {
   constructor(props) {
@@ -95,7 +96,7 @@ class DisplayResourceCreationMenu extends Component {
 
     const folderParentId = this.folderSelected?.id || null;
 
-    this.props.dialogContext.open(CreateResource, {resourceType, folderParentId});
+    this.props.dialogContext.open(CreateResource, { resourceType, folderParentId });
   }
 
   /**
@@ -144,8 +145,10 @@ class DisplayResourceCreationMenu extends Component {
    * @returns {boolean}
    */
   get areLegacyCleartextMetadataContentTypesAvailable() {
-    return this.props.metadataTypeSettings.allowCreationOfV4Resources
-      && this.props.resourceTypes?.hasSomeOfVersion(RESOURCE_TYPE_VERSION_4);
+    return (
+      this.props.metadataTypeSettings.allowCreationOfV4Resources &&
+      this.props.resourceTypes?.hasSomeOfVersion(RESOURCE_TYPE_VERSION_4)
+    );
   }
 
   /**
@@ -153,8 +156,10 @@ class DisplayResourceCreationMenu extends Component {
    * @returns {boolean}
    */
   get areEncryptedMetadataContentTypesAvailable() {
-    return this.props.metadataTypeSettings.allowCreationOfV5Resources
-      && this.props.resourceTypes?.hasSomeOfVersion(RESOURCE_TYPE_VERSION_5);
+    return (
+      this.props.metadataTypeSettings.allowCreationOfV5Resources &&
+      this.props.resourceTypes?.hasSomeOfVersion(RESOURCE_TYPE_VERSION_5)
+    );
   }
 
   /**
@@ -162,8 +167,7 @@ class DisplayResourceCreationMenu extends Component {
    * @returns {boolean}
    */
   get shouldDisplayTabs() {
-    return this.areEncryptedMetadataContentTypesAvailable
-      && this.areLegacyCleartextMetadataContentTypesAvailable;
+    return this.areEncryptedMetadataContentTypesAvailable && this.areLegacyCleartextMetadataContentTypesAvailable;
   }
 
   /**
@@ -229,38 +233,66 @@ class DisplayResourceCreationMenu extends Component {
   get encryptedMetadataContentTypes() {
     return (
       <div className="grid">
-        {this.hasPasswordV5 &&
-          <button id="password_action" type="button" className="button-transparent card" onClick={e => this.handleContentTypeClick(e, RESOURCE_TYPE_V5_DEFAULT_SLUG)}>
-            <KeySVG/>
+        {this.hasPasswordV5 && (
+          <button
+            id="password_action"
+            type="button"
+            className="button-transparent card"
+            onClick={(e) => this.handleContentTypeClick(e, RESOURCE_TYPE_V5_DEFAULT_SLUG)}
+          >
+            <KeySVG />
             <div className="card-information">
-              <span className="title"><Trans>Password</Trans></span>
+              <span className="title">
+                <Trans>Password</Trans>
+              </span>
             </div>
           </button>
-        }
-        {this.hasTotpV5 &&
-          <button id="totp_action" type="button" className="button-transparent card" onClick={e => this.handleContentTypeClick(e, RESOURCE_TYPE_V5_TOTP_SLUG)}>
-            <TotpSVG/>
+        )}
+        {this.hasTotpV5 && (
+          <button
+            id="totp_action"
+            type="button"
+            className="button-transparent card"
+            onClick={(e) => this.handleContentTypeClick(e, RESOURCE_TYPE_V5_TOTP_SLUG)}
+          >
+            <TotpSVG />
             <div className="card-information">
-              <span className="title"><Trans>TOTP</Trans></span>
+              <span className="title">
+                <Trans>TOTP</Trans>
+              </span>
             </div>
           </button>
-        }
-        {this.hasStandaloneNoteV5 &&
-          <button id="standalone_note_action" type="button" className="button-transparent card" onClick={e => this.handleContentTypeClick(e, RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG)}>
-            <NotesSVG/>
+        )}
+        {this.hasStandaloneNoteV5 && (
+          <button
+            id="standalone_note_action"
+            type="button"
+            className="button-transparent card"
+            onClick={(e) => this.handleContentTypeClick(e, RESOURCE_TYPE_V5_STANDALONE_NOTE_SLUG)}
+          >
+            <NotesSVG />
             <div className="card-information">
-              <span className="title"><Trans>Note</Trans></span>
+              <span className="title">
+                <Trans>Note</Trans>
+              </span>
             </div>
           </button>
-        }
-        {this.hasCustomFieldsV5 &&
-          <button id="custom_fields_action" type="button" className="button-transparent card" onClick={e => this.handleContentTypeClick(e, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG)}>
-            <TablePropertiesSVG/>
+        )}
+        {this.hasCustomFieldsV5 && (
+          <button
+            id="custom_fields_action"
+            type="button"
+            className="button-transparent card"
+            onClick={(e) => this.handleContentTypeClick(e, RESOURCE_TYPE_V5_CUSTOM_FIELDS_SLUG)}
+          >
+            <TablePropertiesSVG />
             <div className="card-information">
-              <span className="title"><Trans>Custom fields</Trans></span>
+              <span className="title">
+                <Trans>Custom fields</Trans>
+              </span>
             </div>
           </button>
-        }
+        )}
       </div>
     );
   }
@@ -272,24 +304,42 @@ class DisplayResourceCreationMenu extends Component {
   get legacyCleartextMetadataContentTypes() {
     return (
       <div className="grid">
-        {this.hasPasswordV4 &&
-          <button id="password_action" type="button" className="button-transparent card" onClick={e => this.handleContentTypeClick(e, RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG)}>
-            <KeySVG/>
+        {this.hasPasswordV4 && (
+          <button
+            id="password_action"
+            type="button"
+            className="button-transparent card"
+            onClick={(e) => this.handleContentTypeClick(e, RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG)}
+          >
+            <KeySVG />
             <div className="card-information">
-              <span className="title"><Trans>Password (legacy)</Trans></span>
-              <span className="info"><Trans>with cleartext metadata</Trans></span>
+              <span className="title">
+                <Trans>Password (legacy)</Trans>
+              </span>
+              <span className="info">
+                <Trans>with cleartext metadata</Trans>
+              </span>
             </div>
           </button>
-        }
-        {this.hasTotpV4 &&
-          <button id="totp_action" type="button" className="button-transparent card" onClick={e => this.handleContentTypeClick(e, RESOURCE_TYPE_TOTP_SLUG)}>
-            <TotpSVG/>
+        )}
+        {this.hasTotpV4 && (
+          <button
+            id="totp_action"
+            type="button"
+            className="button-transparent card"
+            onClick={(e) => this.handleContentTypeClick(e, RESOURCE_TYPE_TOTP_SLUG)}
+          >
+            <TotpSVG />
             <div className="card-information">
-              <span className="title"><Trans>TOTP (legacy)</Trans></span>
-              <span className="info"><Trans>with cleartext metadata</Trans></span>
+              <span className="title">
+                <Trans>TOTP (legacy)</Trans>
+              </span>
+              <span className="info">
+                <Trans>with cleartext metadata</Trans>
+              </span>
             </div>
           </button>
-        }
+        )}
       </div>
     );
   }
@@ -302,21 +352,27 @@ class DisplayResourceCreationMenu extends Component {
   render() {
     const shouldShowTabs = this.shouldDisplayTabs;
     return (
-      <DialogWrapper title={this.translate("Create a resource")} className="create-resource-menu"
-        disabled={this.state.processing} onClose={this.handleClose}>
+      <DialogWrapper
+        title={this.translate("Create a resource")}
+        className="create-resource-menu"
+        disabled={this.state.processing}
+        onClose={this.handleClose}
+      >
         <div className="dialog-body">
-          {shouldShowTabs &&
+          {shouldShowTabs && (
             <Tabs activeTabName={this.defaultDisplayedTab}>
-              <Tab key='resourceV5' name={this.props.t('Resources with encrypted metadata')} type='resourceV5'>
+              <Tab key="resourceV5" name={this.props.t("Resources with encrypted metadata")} type="resourceV5">
                 {this.encryptedMetadataContentTypes}
               </Tab>
-              <Tab key='resourceV4' name={this.props.t('Legacy resources')} type='resourceV4'>
+              <Tab key="resourceV4" name={this.props.t("Legacy resources")} type="resourceV4">
                 {this.legacyCleartextMetadataContentTypes}
               </Tab>
             </Tabs>
-          }
+          )}
           {!shouldShowTabs && this.areEncryptedMetadataContentTypesAvailable && this.encryptedMetadataContentTypes}
-          {!shouldShowTabs && this.areLegacyCleartextMetadataContentTypesAvailable && this.legacyCleartextMetadataContentTypes}
+          {!shouldShowTabs &&
+            this.areLegacyCleartextMetadataContentTypesAvailable &&
+            this.legacyCleartextMetadataContentTypes}
         </div>
       </DialogWrapper>
     );
@@ -335,5 +391,12 @@ DisplayResourceCreationMenu.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default  withAppContext(withResourceWorkspace(withMetadataTypesSettingsLocalStorage(withMetadataKeysSettingsLocalStorage(withResourceTypesLocalStorage(withDialog(withTranslation('common')(DisplayResourceCreationMenu)))))));
-
+export default withAppContext(
+  withResourceWorkspace(
+    withMetadataTypesSettingsLocalStorage(
+      withMetadataKeysSettingsLocalStorage(
+        withResourceTypesLocalStorage(withDialog(withTranslation("common")(DisplayResourceCreationMenu))),
+      ),
+    ),
+  ),
+);

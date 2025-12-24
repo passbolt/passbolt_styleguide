@@ -13,8 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {SecretGeneratorComplexity} from "../../lib/SecretGenerator/SecretGeneratorComplexity";
+import { Trans, withTranslation } from "react-i18next";
+import { SecretGeneratorComplexity } from "../../lib/SecretGenerator/SecretGeneratorComplexity";
 import Tooltip from "../../../react-extension/components/Common/Tooltip/Tooltip";
 import InfoSVG from "../../../img/svg/info.svg";
 
@@ -29,7 +29,7 @@ class PasswordComplexityWithGoal extends React.PureComponent {
    */
   static getRelativeEntropyPosition(entropyValue) {
     // Power curve with an asymptote at 100%. It will never reach 100% but will get infinitely closer.
-    return 100 - (99 / (1 + Math.pow(entropyValue / 90, 3)));
+    return 100 - 99 / (1 + Math.pow(entropyValue / 90, 3));
   }
 
   /**
@@ -57,7 +57,7 @@ class PasswordComplexityWithGoal extends React.PureComponent {
   get targetEntropyPositionStyle() {
     const leftPosition = this.relativeTargetEntropyRatio;
     const halfArrowCssSize = "0.6rem";
-    return {left: `calc(${leftPosition}% - ${halfArrowCssSize})`};
+    return { left: `calc(${leftPosition}% - ${halfArrowCssSize})` };
   }
 
   /**
@@ -74,9 +74,7 @@ class PasswordComplexityWithGoal extends React.PureComponent {
       return "reached";
     }
 
-    return this.props.isMinimumEntropyRequired
-      ? "required"
-      : "recommended";
+    return this.props.isMinimumEntropyRequired ? "required" : "recommended";
   }
 
   /**
@@ -96,7 +94,11 @@ class PasswordComplexityWithGoal extends React.PureComponent {
   get currentEntropyTooltipMessage() {
     const currentEntropy = this.formatEntropy(this.props.entropy);
     const targettedEntropy = this.formatEntropy(this.props.targetEntropy);
-    return <Trans>Entropy: {{currentEntropy}} / {{targettedEntropy}} bits</Trans>;
+    return (
+      <Trans>
+        Entropy: {{ currentEntropy }} / {{ targettedEntropy }} bits
+      </Trans>
+    );
   }
 
   /**
@@ -106,7 +108,7 @@ class PasswordComplexityWithGoal extends React.PureComponent {
   get passwordStrengthLabel() {
     const shouldDisplayEntropyLabel = this.hasEntropy() || this.hasError();
     if (!shouldDisplayEntropyLabel) {
-      return (<Trans>Quality</Trans>);
+      return <Trans>Quality</Trans>;
     }
 
     /*
@@ -120,7 +122,7 @@ class PasswordComplexityWithGoal extends React.PureComponent {
      * this.translate("Very strong")
      */
     const strength = SecretGeneratorComplexity.strength(this.props.entropy);
-    return (<>{strength.label}</>);
+    return <>{strength.label}</>;
   }
 
   /**
@@ -130,7 +132,7 @@ class PasswordComplexityWithGoal extends React.PureComponent {
    */
   getProgresseBarStyle(entropy) {
     const relativePositionForEntropy = PasswordComplexityWithGoal.getRelativeEntropyPosition(entropy);
-    return  {width: `${relativePositionForEntropy}%`};
+    return { width: `${relativePositionForEntropy}%` };
   }
 
   /**
@@ -158,15 +160,23 @@ class PasswordComplexityWithGoal extends React.PureComponent {
       <div className="password-complexity with-goal">
         <span className="complexity-text">
           <Tooltip message={this.currentEntropyTooltipMessage}>
-            {this.passwordStrengthLabel} <InfoSVG/>
+            {this.passwordStrengthLabel} <InfoSVG />
           </Tooltip>
         </span>
         <span className="progress">
-          <span className="progress-bar background"/>
-          <span className={`progress-bar target ${this.colorClassName}`} style={this.hasEntropy() ? this.getProgresseBarStyle(this.props.targetEntropy) : null}/>
-          <span className={`progress-bar foreground ${this.colorClassName}`} style={this.hasEntropy() ? this.getProgresseBarStyle(this.props.entropy) : null}/>
+          <span className="progress-bar background" />
+          <span
+            className={`progress-bar target ${this.colorClassName}`}
+            style={this.hasEntropy() ? this.getProgresseBarStyle(this.props.targetEntropy) : null}
+          />
+          <span
+            className={`progress-bar foreground ${this.colorClassName}`}
+            style={this.hasEntropy() ? this.getProgresseBarStyle(this.props.entropy) : null}
+          />
           <span className={`target-entropy ${this.colorClassName}`} style={this.targetEntropyPositionStyle}>
-            <Tooltip message={this.targetTooltipMessage}><span className="tooltip-anchor"></span></Tooltip>
+            <Tooltip message={this.targetTooltipMessage}>
+              <span className="tooltip-anchor"></span>
+            </Tooltip>
           </span>
         </span>
       </div>
@@ -175,7 +185,7 @@ class PasswordComplexityWithGoal extends React.PureComponent {
 }
 
 PasswordComplexityWithGoal.defaultProps = {
-  isMinimumEntropyRequired: true
+  isMinimumEntropyRequired: true,
 };
 
 PasswordComplexityWithGoal.propTypes = {

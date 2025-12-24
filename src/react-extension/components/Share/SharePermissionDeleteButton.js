@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
-import {Trans, withTranslation} from "react-i18next";
+import React, { Component } from "react";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import CloseSVG from "../../../img/svg/close.svg";
 
@@ -22,9 +22,9 @@ class SharePermissionDeleteButton extends Component {
   }
 
   getClassName() {
-    let className = 'remove-item button inline button-transparent';
+    let className = "remove-item button inline button-transparent";
     if (this.props.disabled) {
-      className += ' disabled';
+      className += " disabled";
     }
     return className;
   }
@@ -32,15 +32,17 @@ class SharePermissionDeleteButton extends Component {
   render() {
     return (
       <button type="button" className={this.getClassName()} onClick={this.handleCloseClick.bind(this)}>
-        <CloseSVG/>
-        <span className="visually-hidden"><Trans>Remove</Trans></span>
+        <CloseSVG />
+        <span className="visually-hidden">
+          <Trans>Remove</Trans>
+        </span>
       </button>
     );
   }
 }
 SharePermissionDeleteButton.propTypes = {
   onClose: PropTypes.func,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
 };
 
 export default withTranslation("common")(SharePermissionDeleteButton);

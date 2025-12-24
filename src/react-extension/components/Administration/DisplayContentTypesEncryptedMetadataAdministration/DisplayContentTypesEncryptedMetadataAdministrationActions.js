@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 class DisplayContentTypesEncryptedMetadataAdministrationActions extends React.Component {
   /**
@@ -24,8 +24,15 @@ class DisplayContentTypesEncryptedMetadataAdministrationActions extends React.Co
   render() {
     return (
       <div className="actions-wrapper">
-        <button type="button" className="button primary form" disabled={this.props.isProcessing} onClick={this.props.onSaveRequested}>
-          <span><Trans>Save</Trans></span>
+        <button
+          type="button"
+          className="button primary form"
+          disabled={this.props.isProcessing}
+          onClick={this.props.onSaveRequested}
+        >
+          <span>
+            <Trans>Save</Trans>
+          </span>
         </button>
       </div>
     );

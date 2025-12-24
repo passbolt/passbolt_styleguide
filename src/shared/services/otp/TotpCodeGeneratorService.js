@@ -25,10 +25,10 @@ export class TotpCodeGeneratorService {
       digits: totpDto.digits,
       period: totpDto.period,
       // Remove all special characters and whitespace from secret_key (including spaces, tabs and newline characters)
-      secret: totpDto.secret_key.replace(/(\W|_|\s)/g, ''),
+      secret: totpDto.secret_key.replace(/(\W|_|\s)/g, ""),
       issuer: totpDto.issuer,
       label: totpDto.label,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
 

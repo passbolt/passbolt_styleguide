@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import ReactList from "react-list";
 import PropTypes from "prop-types";
 
@@ -20,13 +20,13 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import Autocomplete from "../../Common/Inputs/Autocomplete/Autocomplete";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { Trans, withTranslation } from "react-i18next";
 import EditUserGroupItem from "../EditUserGroup/EditUserGroupItem";
-import {maxSizeValidation} from '../../../lib/Error/InputValidator';
-import {RESOURCE_GROUP_NAME_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
+import { maxSizeValidation } from "../../../lib/Error/InputValidator";
+import { RESOURCE_GROUP_NAME_MAX_LENGTH } from "../../../../shared/constants/inputs.const";
 import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class CreateUserGroup extends Component {
@@ -52,7 +52,7 @@ class CreateUserGroup extends Component {
       processing: false,
 
       // Input fields
-      name: '',
+      name: "",
       nameError: "",
       nameWarning: "",
 
@@ -99,7 +99,7 @@ class CreateUserGroup extends Component {
    */
   async componentDidMount() {
     await this.addCurrentUser();
-    this.setState({loading: false}, () => {
+    this.setState({ loading: false }, () => {
       this.nameInputRef.current.focus();
     });
   }
@@ -117,7 +117,7 @@ class CreateUserGroup extends Component {
    * @return {void}
    */
   handleAutocompleteOpen() {
-    this.setState({autocompleteOpen: true});
+    this.setState({ autocompleteOpen: true });
   }
 
   /**
@@ -125,7 +125,7 @@ class CreateUserGroup extends Component {
    * @return {void}
    */
   handleAutocompleteClose() {
-    this.setState({autocompleteOpen: false});
+    this.setState({ autocompleteOpen: false });
   }
 
   /**
@@ -137,7 +137,7 @@ class CreateUserGroup extends Component {
     const value = target.value;
     const name = target.name;
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -148,7 +148,7 @@ class CreateUserGroup extends Component {
     const state = this.validateNameInput();
     this.setState(state);
     const nameWarning = maxSizeValidation(this.state.name, RESOURCE_GROUP_NAME_MAX_LENGTH, this.translate);
-    this.setState({nameWarning});
+    this.setState({ nameWarning });
   }
 
   /**
@@ -160,9 +160,9 @@ class CreateUserGroup extends Component {
     const target = event.target;
     const is_admin = target.value === true;
     const groups_users = Object.assign(this.state.groups_users);
-    const index = groups_users.findIndex(groups_user => groups_user.user.id === userId);
-    groups_users[index] = Object.assign(groups_users[index], {is_admin});
-    this.setState({groups_users});
+    const index = groups_users.findIndex((groups_user) => groups_user.user.id === userId);
+    groups_users[index] = Object.assign(groups_users[index], { is_admin });
+    this.setState({ groups_users });
   }
 
   /**
@@ -172,9 +172,9 @@ class CreateUserGroup extends Component {
    */
   handleDeleteClickEvent(event, userId) {
     const groups_users = Object.assign(this.state.groups_users);
-    const index = groups_users.findIndex(groups_user => groups_user.user.id === userId);
+    const index = groups_users.findIndex((groups_user) => groups_user.user.id === userId);
     groups_users.splice(index, 1);
-    this.setState({groups_users});
+    this.setState({ groups_users });
   }
 
   /**
@@ -185,7 +185,7 @@ class CreateUserGroup extends Component {
   async handleFormSubmit(event) {
     event.preventDefault();
 
-    if (!await this.validate()) {
+    if (!(await this.validate())) {
       this.handleValidateError();
       return;
     }
@@ -206,7 +206,7 @@ class CreateUserGroup extends Component {
    * Handle validation error.
    */
   handleValidateError() {
-    this.setState({processing: false});
+    this.setState({ processing: false });
     this.focusFieldError();
   }
 
@@ -225,14 +225,14 @@ class CreateUserGroup extends Component {
   handleSaveError(error) {
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
+      this.setState({ processing: false });
     } else if (this.hasGroupNameAlreadyExists(error.data)) {
-      this.setState({processing: false, nameError: error.data.body.name.group_unique});
+      this.setState({ processing: false, nameError: error.data.body.name.group_unique });
     } else {
       // Unexpected error occurred.
       console.error(error);
       this.handleError(error);
-      this.setState({processing: false});
+      this.setState({ processing: false });
     }
   }
 
@@ -251,7 +251,7 @@ class CreateUserGroup extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -261,7 +261,7 @@ class CreateUserGroup extends Component {
    */
   async addCurrentUser() {
     const [user] = await this.decorateUsersWithGpgKey([this.props.context.loggedInUser]);
-    this.state.groups_users.push({user, is_admin: true});
+    this.state.groups_users.push({ user, is_admin: true });
   }
 
   /**
@@ -270,7 +270,7 @@ class CreateUserGroup extends Component {
    */
   async toggleProcessing() {
     const prev = this.state.processing;
-    return this.setState({processing: !prev});
+    return this.setState({ processing: !prev });
   }
 
   /**
@@ -293,8 +293,8 @@ class CreateUserGroup extends Component {
       nameError = this.translate("A name is required.");
     }
 
-    return new Promise(resolve => {
-      this.setState({nameError: nameError}, resolve);
+    return new Promise((resolve) => {
+      this.setState({ nameError: nameError }, resolve);
     });
   }
 
@@ -324,8 +324,8 @@ class CreateUserGroup extends Component {
   handleAutocompleteSelect(aro) {
     const groups_users = this.state.groups_users;
     const is_admin = this.state.groups_users.length === 0;
-    groups_users.push({user: aro, is_admin});
-    this.setState({groups_users}, () => {
+    groups_users.push({ user: aro, is_admin });
+    this.setState({ groups_users }, () => {
       // scroll at the bottom of the group users list
       this.groupUsersListRef.current.scrollTo(groups_users.length - 1);
     });
@@ -336,11 +336,11 @@ class CreateUserGroup extends Component {
    * @returns {Promise<void>}
    */
   async createGroup() {
-    const groups_users = this.state.groups_users.map(groups_user => ({
+    const groups_users = this.state.groups_users.map((groups_user) => ({
       user_id: groups_user.user.id,
-      is_admin: groups_user.is_admin
+      is_admin: groups_user.is_admin,
     }));
-    const groupDto = {name: this.state.name, groups_users};
+    const groupDto = { name: this.state.name, groups_users };
     return await this.props.context.port.request("passbolt.groups.create", groupDto);
   }
 
@@ -351,25 +351,24 @@ class CreateUserGroup extends Component {
    */
   async fetchAutocompleteItems(keyword) {
     keyword = keyword.toLowerCase();
-    const words = (keyword && keyword.split(/\s+/)) || [''];
-    const userAlreadyAdded = user => this.state.groups_users.some(groups_user => groups_user.user.id === user.id);
+    const words = (keyword && keyword.split(/\s+/)) || [""];
+    const userAlreadyAdded = (user) => this.state.groups_users.some((groups_user) => groups_user.user.id === user.id);
 
     // Test match of some escaped test words against the name / username
-    const escapeWord = word =>  word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const wordToRegex = word =>  new RegExp(escapeWord(word), 'i');
+    const escapeWord = (word) => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const wordToRegex = (word) => new RegExp(escapeWord(word), "i");
     const matchWord = (word, value) => wordToRegex(word).test(value);
 
     const matchUsernameProperty = (word, user) => matchWord(word, user.username);
-    const matchNameProperty = (word, user) =>  matchWord(word, user.profile.first_name) || matchWord(word, user.profile.last_name);
+    const matchNameProperty = (word, user) =>
+      matchWord(word, user.profile.first_name) || matchWord(word, user.profile.last_name);
     const matchUser = (word, user) => matchUsernameProperty(word, user) || matchNameProperty(word, user);
-    const matchText = user => words.every(word => matchUser(word, user));
+    const matchText = (user) => words.every((word) => matchUser(word, user));
 
     let currentCount = 0;
-    const firstUsersMatched = this.props.context.users.filter(user => {
-      const isUserMatching = currentCount < Autocomplete.DISPLAY_LIMIT
-        && user.active === true
-        && !userAlreadyAdded(user)
-        && matchText(user);
+    const firstUsersMatched = this.props.context.users.filter((user) => {
+      const isUserMatching =
+        currentCount < Autocomplete.DISPLAY_LIMIT && user.active === true && !userAlreadyAdded(user) && matchText(user);
 
       if (isUserMatching) {
         currentCount++;
@@ -386,7 +385,10 @@ class CreateUserGroup extends Component {
    * @returns {Promise<array}
    */
   async decorateUsersWithGpgKey(users) {
-    const decorateGroupsUsersWithGpgKey = async user => Object.assign(user, {gpgkey: await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', user.id)});
+    const decorateGroupsUsersWithGpgKey = async (user) =>
+      Object.assign(user, {
+        gpgkey: await this.props.context.port.request("passbolt.keyring.get-public-key-info-by-user", user.id),
+      });
     const usersWithGPGKey = await Promise.all(users.map(decorateGroupsUsersWithGpgKey));
     return usersWithGPGKey;
   }
@@ -404,7 +406,7 @@ class CreateUserGroup extends Component {
    * @returns {boolean}
    */
   hasManager() {
-    return this.hasMembers() && this.state.groups_users.some(groups_user => groups_user.is_admin === true);
+    return this.hasMembers() && this.state.groups_users.some((groups_user) => groups_user.is_admin === true);
   }
 
   /**
@@ -430,8 +432,14 @@ class CreateUserGroup extends Component {
    * @returns {JSX.Element}
    */
   formatFingerprint(fingerprint) {
-    const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
-    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
+    const result = fingerprint.toUpperCase().replace(/.{4}/g, "$& ");
+    return (
+      <>
+        {result.substr(0, 24)}
+        <br />
+        {result.substr(25)}
+      </>
+    );
   }
 
   /**
@@ -440,8 +448,8 @@ class CreateUserGroup extends Component {
    */
   get permissions() {
     return [
-      {value: false, label: this.translate("Member")},
-      {value: true, label: this.translate("Group manager")}
+      { value: false, label: this.translate("Member") },
+      { value: true, label: this.translate("Group manager") },
     ];
   }
 
@@ -458,8 +466,8 @@ class CreateUserGroup extends Component {
         key={createUserGroupItemKey}
         itemKey={createUserGroupItemKey}
         groupUser={groupUser}
-        onMemberRoleChange={event => this.handleSelectUpdate(event, groupUser.user.id)}
-        onMemberRemoved={event => this.handleDeleteClickEvent(event, groupUser.user.id)}
+        onMemberRoleChange={(event) => this.handleSelectUpdate(event, groupUser.user.id)}
+        onMemberRemoved={(event) => this.handleDeleteClickEvent(event, groupUser.user.id)}
         isMemberChanged={true}
         isMemberAdded={true}
         areActionsAllowed={!this.hasAllInputDisabled()}
@@ -487,7 +495,7 @@ class CreateUserGroup extends Component {
    * @returns {boolean}
    */
   get isSuspendedUserFeatureEnabled() {
-    return this.props.context.siteSettings.canIUse('disableUser');
+    return this.props.context.siteSettings.canIUse("disableUser");
   }
 
   /**
@@ -508,33 +516,50 @@ class CreateUserGroup extends Component {
         title={this.translate("Create group")}
         className="edit-group-dialog"
         onClose={this.handleClose}
-        disabled={this.hasAllInputDisabled()}>
+        disabled={this.hasAllInputDisabled()}
+      >
         <form className="group-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="group_name"><Trans>Group name</Trans>{this.state.nameWarning &&
-                <AttentionSVG className="attention-required"/>
-              }</label>
-              <input id="group-name-input" name="name" aria-required={true} className="required" maxLength="50" type="text" placeholder={this.translate("group name")}
-                onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
-                disabled={this.hasAllInputDisabled()} ref={this.nameInputRef}/>
-              {this.state.nameError &&
-              <div className="name error-message">{this.state.nameError}</div>
-              }
-              {this.state.nameWarning &&
-                (<div className="name warning-message">
-                  <strong><Trans>Warning:</Trans></strong> {this.state.nameWarning}
-                </div>)
-              }
+            <div
+              className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+            >
+              <label htmlFor="group_name">
+                <Trans>Group name</Trans>
+                {this.state.nameWarning && <AttentionSVG className="attention-required" />}
+              </label>
+              <input
+                id="group-name-input"
+                name="name"
+                aria-required={true}
+                className="required"
+                maxLength="50"
+                type="text"
+                placeholder={this.translate("group name")}
+                onKeyUp={this.handleNameInputKeyUp}
+                onChange={this.handleInputChange}
+                disabled={this.hasAllInputDisabled()}
+                ref={this.nameInputRef}
+              />
+              {this.state.nameError && <div className="name error-message">{this.state.nameError}</div>}
+              {this.state.nameWarning && (
+                <div className="name warning-message">
+                  <strong>
+                    <Trans>Warning:</Trans>
+                  </strong>{" "}
+                  {this.state.nameWarning}
+                </div>
+              )}
             </div>
 
             <div className="input required">
-              <label htmlFor="group_permission"><Trans>Group members</Trans></label>
+              <label htmlFor="group_permission">
+                <Trans>Group members</Trans>
+              </label>
             </div>
 
             <div className="group_members">
               <div className="scroll permission-edit">
-                {this.hasMembers() &&
+                {this.hasMembers() && (
                   <ReactList
                     ref={this.groupUsersListRef}
                     itemRenderer={this.renderItem}
@@ -543,9 +568,9 @@ class CreateUserGroup extends Component {
                     minSize={4}
                     type={this.state.groups_users.length < 4 ? "simple" : "uniform"}
                     usePosition={true}
-                    threshold={30}>
-                  </ReactList>
-                }
+                    threshold={30}
+                  ></ReactList>
+                )}
               </div>
               <div className="permission-add">
                 <Autocomplete
@@ -562,31 +587,44 @@ class CreateUserGroup extends Component {
                   canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
                 />
               </div>
-              {!this.hasMembers() &&
+              {!this.hasMembers() && (
                 <div className="message warning">
-                  <span><Trans>The group is empty, please add a group manager.</Trans></span>
+                  <span>
+                    <Trans>The group is empty, please add a group manager.</Trans>
+                  </span>
                 </div>
-              }
-              {this.hasMembers() && !this.hasManager() &&
+              )}
+              {this.hasMembers() && !this.hasManager() && (
                 <div className="message error">
-                  <span><Trans>Please make sure there is at least one group manager.</Trans></span>
+                  <span>
+                    <Trans>Please make sure there is at least one group manager.</Trans>
+                  </span>
                 </div>
-              }
-              {this.hasManager() &&
+              )}
+              {this.hasManager() && (
                 <div className="message warning">
-                  <span><Trans>You need to click save for the changes to take place.</Trans></span>
+                  <span>
+                    <Trans>You need to click save for the changes to take place.</Trans>
+                  </span>
                 </div>
-              }
+              )}
               {this.state.nameWarning && (
                 <div className="message warning">
-                  <strong><Trans>Warning:</Trans></strong> {this.state.nameWarning}
+                  <strong>
+                    <Trans>Warning:</Trans>
+                  </strong>{" "}
+                  {this.state.nameWarning}
                 </div>
               )}
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
-            <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
+            <FormSubmitButton
+              disabled={this.hasSubmitDisabled()}
+              processing={this.state.processing}
+              value={this.translate("Save")}
+            />
           </div>
         </form>
       </DialogWrapper>
@@ -602,4 +640,4 @@ CreateUserGroup.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(CreateUserGroup))));
+export default withAppContext(withActionFeedback(withDialog(withTranslation("common")(CreateUserGroup))));

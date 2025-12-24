@@ -13,16 +13,14 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../AppContext/AppContext";
+import { withAppContext } from "../AppContext/AppContext";
 import SecretRevisionsSettingsEntity from "../../models/entity/secretRevision/secretRevisionsSettingsEntity";
-import SecretRevisionsSettingsServiceWorkerService
-  from "../../services/serviceWorker/secretRevision/secretRevisionsSettingsServiceWorkerService";
+import SecretRevisionsSettingsServiceWorkerService from "../../services/serviceWorker/secretRevision/secretRevisionsSettingsServiceWorkerService";
 
 export const SecretRevisionsSettingsContext = React.createContext({
   get: () => {}, // Get the secret revisions settings from the api
   secretRevisionsSettings: null, // the current secret revisions settings loaded from the api
 });
-
 
 /**
  * The secret revisions settings local storage context provider
@@ -35,7 +33,9 @@ export class SecretRevisionsSettingsContextProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.secretRevisionsSettingsServiceWorkerService = new SecretRevisionsSettingsServiceWorkerService(props.context.port);
+    this.secretRevisionsSettingsServiceWorkerService = new SecretRevisionsSettingsServiceWorkerService(
+      props.context.port,
+    );
     this.runningUpdatePromise = null;
   }
 
@@ -60,7 +60,7 @@ export class SecretRevisionsSettingsContextProvider extends React.Component {
     if (!(secretRevisionsSettings instanceof SecretRevisionsSettingsEntity)) {
       throw new TypeError("The given data is not of type SecretRevisionsSettingsEntity");
     }
-    this.setState({secretRevisionsSettings: secretRevisionsSettings});
+    this.setState({ secretRevisionsSettings: secretRevisionsSettings });
   }
 
   /**
@@ -121,16 +121,15 @@ export function withSecretRevisionsSettings(WrappedComponent) {
     render() {
       return (
         <SecretRevisionsSettingsContext.Consumer>
-          {
-            secretRevisionsSettingsContext => <WrappedComponent
+          {(secretRevisionsSettingsContext) => (
+            <WrappedComponent
               secretRevisionsSettingsContext={secretRevisionsSettingsContext}
               secretRevisionsSettings={secretRevisionsSettingsContext.get()}
               {...this.props}
             />
-          }
+          )}
         </SecretRevisionsSettingsContext.Consumer>
       );
     }
   };
 }
-

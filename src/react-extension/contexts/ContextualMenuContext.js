@@ -21,7 +21,7 @@ import PropTypes from "prop-types";
 export const ContextualMenuContext = React.createContext({
   ContextualMenu: null, // The current displayed contextual menu
   show: () => {}, // Show a contextual menu
-  hide: () => {} // Hide the contextual menu
+  hide: () => {}, // Hide the contextual menu
 });
 
 /**
@@ -43,8 +43,14 @@ export default class ContextualMenuContextProvider extends React.Component {
   get defaultState() {
     return {
       contextualMenus: [],
-      show: (ContextualMenuComponent, componentProps) => this.setState({contextualMenus: [...this.state.contextualMenus, {ContextualMenuComponent, componentProps}]}),
-      hide: index => this.setState({contextualMenus: this.state.contextualMenus.filter((_, contextualMenuIndex) => contextualMenuIndex !== index)})
+      show: (ContextualMenuComponent, componentProps) =>
+        this.setState({
+          contextualMenus: [...this.state.contextualMenus, { ContextualMenuComponent, componentProps }],
+        }),
+      hide: (index) =>
+        this.setState({
+          contextualMenus: this.state.contextualMenus.filter((_, contextualMenuIndex) => contextualMenuIndex !== index),
+        }),
     };
   }
 
@@ -53,16 +59,12 @@ export default class ContextualMenuContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <ContextualMenuContext.Provider value={this.state}>
-        {this.props.children}
-      </ContextualMenuContext.Provider>
-    );
+    return <ContextualMenuContext.Provider value={this.state}>{this.props.children}</ContextualMenuContext.Provider>;
   }
 }
-ContextualMenuContextProvider.displayName = 'ContextualMenuContextProvider';
+ContextualMenuContextProvider.displayName = "ContextualMenuContextProvider";
 ContextualMenuContextProvider.propTypes = {
-  children: PropTypes.any
+  children: PropTypes.any,
 };
 
 /**
@@ -74,9 +76,9 @@ export function withContextualMenu(WrappedComponent) {
     render() {
       return (
         <ContextualMenuContext.Consumer>
-          {
-            contextualMenuContext => <WrappedComponent contextualMenuContext={contextualMenuContext} {...this.props} />
-          }
+          {(contextualMenuContext) => (
+            <WrappedComponent contextualMenuContext={contextualMenuContext} {...this.props} />
+          )}
         </ContextualMenuContext.Consumer>
       );
     }

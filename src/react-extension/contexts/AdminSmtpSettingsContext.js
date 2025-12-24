@@ -14,14 +14,14 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
 import SmtpSettingsModel from "../../shared/models/smtpSettings/SmtpSettingsModel";
 import SmtpTestSettingsModel from "../../shared/models/smtpSettings/SmtpTestSettingsModel";
 import SmtpProviders from "../components/Administration/ManageSmtpAdministrationSettings/SmtpProviders.data";
-import {withDialog} from "./DialogContext";
+import { withDialog } from "./DialogContext";
 import NotifyError from "../components/Common/Error/NotifyError/NotifyError";
-import {withActionFeedback} from "./ActionFeedbackContext";
-import {withTranslation} from "react-i18next";
+import { withActionFeedback } from "./ActionFeedbackContext";
+import { withTranslation } from "react-i18next";
 import DomainUtil from "../lib/Domain/DomainUtil";
 import AppEmailValidatorService from "../../shared/services/validator/AppEmailValidatorService";
 
@@ -67,7 +67,8 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
   get defaultState() {
     return {
       settingsModified: false,
-      currentSmtpSettings: { // The current SMTP settings
+      currentSmtpSettings: {
+        // The current SMTP settings
         provider: null,
         username: "",
         password: "",
@@ -104,7 +105,7 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async findSmtpSettings() {
-    if (!this.props.context.siteSettings.canIUse('smtpSettings')) {
+    if (!this.props.context.siteSettings.canIUse("smtpSettings")) {
       return;
     }
 
@@ -112,7 +113,7 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
 
     try {
       currentSmtpSettings = await this.smtpSettingsModel.findSmtpSettings();
-      this.setState({currentSmtpSettings, isLoaded: true});
+      this.setState({ currentSmtpSettings, isLoaded: true });
     } catch (e) {
       // In case of error, the user should still be able to update the settings.
       this.handleError(e);
@@ -125,16 +126,21 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
       currentSmtpSettings.provider = this.detectProvider(currentSmtpSettings);
     }
 
-    this.setState({currentSmtpSettings, isLoaded: true});
+    this.setState({ currentSmtpSettings, isLoaded: true });
   }
 
   /**
    * Puts the state to its default in order to avoid keeping the data users didn't want to save.
    */
   clearContext() {
-    const {settingsModified, currentSmtpSettings, errors, isLoaded, processing, hasSumittedForm} = this.defaultState;
+    const { settingsModified, currentSmtpSettings, errors, isLoaded, processing, hasSumittedForm } = this.defaultState;
     this.setState({
-      settingsModified, currentSmtpSettings, errors, isLoaded, processing, hasSumittedForm
+      settingsModified,
+      currentSmtpSettings,
+      errors,
+      isLoaded,
+      processing,
+      hasSumittedForm,
     });
   }
 
@@ -143,15 +149,15 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async saveSmtpSettings() {
-    this._doProcess(async() => {
+    this._doProcess(async () => {
       try {
-        const dto = {...this.state.currentSmtpSettings};
+        const dto = { ...this.state.currentSmtpSettings };
         delete dto.provider;
         dto.client = dto.client || null;
         await this.smtpSettingsModel.saveSmtpSettings(dto);
         this.props.actionFeedbackContext.displaySuccess(this.props.t("The SMTP settings have been saved successfully"));
-        const newSettings = Object.assign({}, this.state.currentSmtpSettings, {"source": "db"});
-        this.setState({currentSmtpSettings: newSettings});
+        const newSettings = Object.assign({}, this.state.currentSmtpSettings, { source: "db" });
+        this.setState({ currentSmtpSettings: newSettings });
       } catch (e) {
         this.handleError(e);
       }
@@ -171,9 +177,9 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   _doProcess(callback) {
-    this.setState({processing: true}, async() => {
+    this.setState({ processing: true }, async () => {
       await callback();
-      this.setState({processing: false});
+      this.setState({ processing: false });
     });
   }
 
@@ -199,8 +205,8 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
         currentSmtpSettings: {
           ...this.state.currentSmtpSettings,
           ...provider.defaultConfiguration,
-          provider: provider
-        }
+          provider: provider,
+        },
       });
     }
   }
@@ -214,9 +220,9 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
     const newState = {
       currentSmtpSettings: {
         ...newSettings,
-        provider: this.detectProvider(newSettings)
+        provider: this.detectProvider(newSettings),
       },
-      settingsModified: true
+      settingsModified: true,
     };
 
     this.setState(newState);
@@ -233,17 +239,16 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
   detectProvider(settings) {
     for (let i = 0; i < SmtpProviders.length; i++) {
       const provider = SmtpProviders[i];
-      const foundConfiguration = provider.availableConfigurations.find(config =>
-        config.host === settings.host
-        && config.port === parseInt(settings.port, 10)
-        && config.tls === settings.tls
+      const foundConfiguration = provider.availableConfigurations.find(
+        (config) =>
+          config.host === settings.host && config.port === parseInt(settings.port, 10) && config.tls === settings.tls,
       );
 
       if (foundConfiguration) {
         return provider;
       }
     }
-    return SmtpProviders.find(provider => provider.id === "other");
+    return SmtpProviders.find((provider) => provider.id === "other");
   }
 
   /**
@@ -298,10 +303,19 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
     isFormValid = this.validate_client(settings.client, errors) && isFormValid;
 
     if (!isFormValid) {
-      this.fieldToFocus = this.getFirstFieldInError(errors, ["username", "password", "host", "tls", "port", "client", "sender_name", "sender_email"]);
+      this.fieldToFocus = this.getFirstFieldInError(errors, [
+        "username",
+        "password",
+        "host",
+        "tls",
+        "port",
+        "client",
+        "sender_name",
+        "sender_email",
+      ]);
     }
 
-    this.setState({errors, hasSumittedForm: true});
+    this.setState({ errors, hasSumittedForm: true });
 
     return isFormValid;
   }
@@ -465,7 +479,7 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
   getFirstFieldInError(errors, fieldPriority) {
     for (let i = 0; i < fieldPriority.length; i++) {
       const fieldName = fieldPriority[i];
-      if (typeof(errors[fieldName]) !== "undefined") {
+      if (typeof errors[fieldName] !== "undefined") {
         return fieldName;
       }
     }
@@ -496,7 +510,7 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
    */
   handleError(error) {
     console.error(error);
-    this.props.dialogContext.open(NotifyError, {error});
+    this.props.dialogContext.open(NotifyError, { error });
   }
 
   /**
@@ -505,9 +519,7 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
    */
   render() {
     return (
-      <AdminSmtpSettingsContext.Provider value={this.state}>
-        {this.props.children}
-      </AdminSmtpSettingsContext.Provider>
+      <AdminSmtpSettingsContext.Provider value={this.state}>{this.props.children}</AdminSmtpSettingsContext.Provider>
     );
   }
 }
@@ -519,7 +531,9 @@ AdminSmtpSettingsContextProvider.propTypes = {
   children: PropTypes.any, // The children components
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withDialog(withActionFeedback(withTranslation("common")(AdminSmtpSettingsContextProvider))));
+export default withAppContext(
+  withDialog(withActionFeedback(withTranslation("common")(AdminSmtpSettingsContextProvider))),
+);
 
 /**
  * Resource Workspace Context Consumer HOC
@@ -530,9 +544,9 @@ export function withAdminSmtpSettings(WrappedComponent) {
     render() {
       return (
         <AdminSmtpSettingsContext.Consumer>
-          {
-            adminSmtpSettingsContext => <WrappedComponent adminSmtpSettingsContext={adminSmtpSettingsContext} {...this.props} />
-          }
+          {(adminSmtpSettingsContext) => (
+            <WrappedComponent adminSmtpSettingsContext={adminSmtpSettingsContext} {...this.props} />
+          )}
         </AdminSmtpSettingsContext.Consumer>
       );
     }

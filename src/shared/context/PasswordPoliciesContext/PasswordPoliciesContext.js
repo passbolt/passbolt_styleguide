@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../AppContext/AppContext";
+import { withAppContext } from "../AppContext/AppContext";
 
 /**
  * The Password settings Context
@@ -61,7 +61,7 @@ export class PasswordPoliciesContextProvider extends React.Component {
       return;
     }
     const policies = await this.props.context.port.request("passbolt.password-policies.get");
-    this.setState({policies});
+    this.setState({ policies });
   }
 
   /**
@@ -86,9 +86,7 @@ export class PasswordPoliciesContextProvider extends React.Component {
    */
   render() {
     return (
-      <PasswordPoliciesContext.Provider value={this.state}>
-        {this.props.children}
-      </PasswordPoliciesContext.Provider>
+      <PasswordPoliciesContext.Provider value={this.state}>{this.props.children}</PasswordPoliciesContext.Provider>
     );
   }
 }
@@ -109,11 +107,8 @@ export function withPasswordPolicies(WrappedComponent) {
     render() {
       return (
         <PasswordPoliciesContext.Consumer>
-          {passwordPoliciesContext => (
-            <WrappedComponent
-              passwordPoliciesContext={passwordPoliciesContext}
-              {...this.props}
-            />
+          {(passwordPoliciesContext) => (
+            <WrappedComponent passwordPoliciesContext={passwordPoliciesContext} {...this.props} />
           )}
         </PasswordPoliciesContext.Consumer>
       );

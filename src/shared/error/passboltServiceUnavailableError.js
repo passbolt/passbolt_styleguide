@@ -16,9 +16,9 @@
 class PassboltServiceUnavailableError extends Error {
   constructor(message) {
     // message = message || i18n.t('The service is unavailable');
-    message = message || 'The service is unavailable';
+    message = message || "The service is unavailable";
     super(message);
-    this.name = 'PassboltServiceUnavailableError';
+    this.name = "PassboltServiceUnavailableError";
   }
 }
 

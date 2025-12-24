@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.9.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 class Fingerprint extends Component {
@@ -22,8 +22,8 @@ class Fingerprint extends Component {
   render() {
     return (
       <div className="fingerprint">
-        <div className="fingerprint-line">{this.props.fingerprint?.substring(0, 20)?.replace(/.{4}/g, '$& ')}</div>
-        <div className="fingerprint-line">{this.props.fingerprint?.substring(20)?.replace(/.{4}/g, '$& ')}</div>
+        <div className="fingerprint-line">{this.props.fingerprint?.substring(0, 20)?.replace(/.{4}/g, "$& ")}</div>
+        <div className="fingerprint-line">{this.props.fingerprint?.substring(20)?.replace(/.{4}/g, "$& ")}</div>
       </div>
     );
   }

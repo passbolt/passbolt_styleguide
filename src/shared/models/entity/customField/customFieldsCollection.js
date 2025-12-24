@@ -47,9 +47,9 @@ export default class CustomFieldsCollection extends EntityV2Collection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": CustomFieldEntity.getSchema(),
-      "maxItems": 128,
+      type: "array",
+      items: CustomFieldEntity.getSchema(),
+      maxItems: 128,
     };
   }
 
@@ -60,7 +60,7 @@ export default class CustomFieldsCollection extends EntityV2Collection {
    * @throws {EntityValidationError} If a permission already exists with the same id.
    */
   validateBuildRules(item, options = {}) {
-    this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
+    this.assertNotExist("id", item._props.id, { haystackSet: options?.uniqueIdsSetCache });
     this.assertContentDoNotExceedMaxSize(item, options);
   }
 
@@ -81,7 +81,11 @@ export default class CustomFieldsCollection extends EntityV2Collection {
     }
 
     const error = new EntityValidationError();
-    error.addError("items", "maxContentSize", `The collection items should not cumulate more than ${CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE} characters in total.`);
+    error.addError(
+      "items",
+      "maxContentSize",
+      `The collection items should not cumulate more than ${CUSTOM_FIELD_COLLECTION_MAX_CONTENT_SIZE} characters in total.`,
+    );
     throw error;
   }
 
@@ -91,16 +95,16 @@ export default class CustomFieldsCollection extends EntityV2Collection {
   pushMany(data, entityOptions = {}, options = {}) {
     const uniqueIdsSetCache = new Set(this.extract("id"));
 
-    const contentInformation = {currentSize: 0};
-    const onItemPushed = item => {
+    const contentInformation = { currentSize: 0 };
+    const onItemPushed = (item) => {
       uniqueIdsSetCache.add(item._props.id);
       contentInformation.currentSize += item.value?.toString().length || 0;
     };
 
     options = {
       onItemPushed: onItemPushed,
-      validateBuildRules: {...options?.validateBuildRules, uniqueIdsSetCache, contentInformation},
-      ...options
+      validateBuildRules: { ...options?.validateBuildRules, uniqueIdsSetCache, contentInformation },
+      ...options,
     };
 
     super.pushMany(data, entityOptions, options);
@@ -119,8 +123,7 @@ export default class CustomFieldsCollection extends EntityV2Collection {
    * Even if an element is present in the collection, as long as this element is considered empty, the collection will be.
    */
   isEmpty() {
-    return this.length === 0
-      || !(this.items.find(i => !i.isEmpty()));
+    return this.length === 0 || !this.items.find((i) => !i.isEmpty());
   }
 
   /**
@@ -129,7 +132,7 @@ export default class CustomFieldsCollection extends EntityV2Collection {
    * @return {*[]}
    */
   toMetadataDto() {
-    return this.items.map(customField => customField.toMetadataDto());
+    return this.items.map((customField) => customField.toMetadataDto());
   }
 
   /**
@@ -138,7 +141,7 @@ export default class CustomFieldsCollection extends EntityV2Collection {
    * @return {*[]}
    */
   toSecretDto() {
-    return this.items.map(customField => customField.toSecretDto());
+    return this.items.map((customField) => customField.toSecretDto());
   }
 
   /**
@@ -177,7 +180,10 @@ export default class CustomFieldsCollection extends EntityV2Collection {
    * @return {CustomFieldsCollection}
    */
   static mergeCollectionsMetadataAndSecret(collectionMetadata, collectionSecret) {
-    if (!(collectionMetadata instanceof CustomFieldsCollection) || !(collectionSecret instanceof CustomFieldsCollection)) {
+    if (
+      !(collectionMetadata instanceof CustomFieldsCollection) ||
+      !(collectionSecret instanceof CustomFieldsCollection)
+    ) {
       throw new TypeError("Both parameters must be of type CustomFieldsCollection");
     }
 
@@ -189,7 +195,7 @@ export default class CustomFieldsCollection extends EntityV2Collection {
     const collectionToMerge = collectionMetadata.toDto();
     // Deep merge keeping the order from the source and add at the end the new entry
     const collectionMergedDto = collectionToMerge.reduce((columnsMerged, columnToMerge) => {
-      const index = columnsMerged.findIndex(column => column.id === columnToMerge.id); // Look for the columnsMerged has the same id while iterating
+      const index = columnsMerged.findIndex((column) => column.id === columnToMerge.id); // Look for the columnsMerged has the same id while iterating
       // If column found need to merge with value of columnsToMerge
       if (index > -1) {
         columnsMerged[index] = Object.assign(columnsMerged[index], columnToMerge);

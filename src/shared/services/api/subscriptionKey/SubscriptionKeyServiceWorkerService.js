@@ -12,10 +12,10 @@
  * @since         5.9.0
  */
 
-import assertString from 'validator/es/lib/util/assertString';
+import assertString from "validator/es/lib/util/assertString";
 
-export const GET_SUBSCRIPTION_KEY = 'passbolt.subscription.get';
-export const UPDATE_SUBSCRIPTION_KEY = 'passbolt.subscription.update';
+export const GET_SUBSCRIPTION_KEY = "passbolt.subscription.get";
+export const UPDATE_SUBSCRIPTION_KEY = "passbolt.subscription.update";
 
 class SubscriptionKeyServiceWorkerService {
   /**
@@ -43,7 +43,7 @@ class SubscriptionKeyServiceWorkerService {
     assertString(subscriptionKey);
 
     return this.port.request(UPDATE_SUBSCRIPTION_KEY, {
-      data: subscriptionKey
+      data: subscriptionKey,
     });
   }
 }

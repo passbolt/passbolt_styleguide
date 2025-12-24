@@ -14,37 +14,36 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import DisplayAdministrationRbacActions
-  from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationRbacsActions/DisplayAdministrationRbacActions";
-import {withAdminRbac} from "../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
+import { withAdministrationWorkspace } from "../../../contexts/AdministrationWorkspaceContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import DisplayAdministrationRbacActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationRbacsActions/DisplayAdministrationRbacActions";
+import { withAdminRbac } from "../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
 import DisplayRbacSection from "./DisplayRbacSection";
 import DisplayRbacItem from "./DisplayRbacItem";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 import RoleApiService from "../../../../shared/services/api/role/roleApiService";
 import RbacApiService from "../../../../shared/services/api/rbac/rbacApiService";
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
 import RbacEntity from "../../../../shared/models/entity/rbac/rbacEntity";
 import FileTextSVG from "../../../../img/svg/file_text.svg";
-import {createSafePortal} from "../../../../shared/utils/portals";
+import { createSafePortal } from "../../../../shared/utils/portals";
 import UserAddSVG from "../../../../img/svg/user_add.svg";
 import MoreVerticalSVG from "../../../../img/svg/more_vertical.svg";
 import DeleteSVG from "../../../../img/svg/delete.svg";
 import EditSVG from "../../../../img/svg/edit.svg";
 import CreateRole from "../CreateRole/CreateRole";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {capitalizeFirstLetter} from "../../../../shared/utils/stringUtils";
+import { withDialog } from "../../../contexts/DialogContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { capitalizeFirstLetter } from "../../../../shared/utils/stringUtils";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
 import DeleteRole from "../DeleteRole/DeleteRole";
 import EditRole from "../EditRole/EditRole";
-import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
+import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
 import UserService from "../../../../shared/services/api/user/userService";
 import DeleteRoleNotAllowed from "../DeleteRole/DeleteRoleNotAllowed";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -123,7 +122,7 @@ class DisplayRbacAdministration extends React.Component {
     const rolesDto = apiResponse.body;
     const roles = new RolesCollection(rolesDto);
     roles.filterOutGuestRole();
-    this.setState({roles});
+    this.setState({ roles });
   }
 
   /**
@@ -131,7 +130,7 @@ class DisplayRbacAdministration extends React.Component {
    * @returns {Promise<void>}
    */
   async findAndLoadRbacSettings() {
-    const apiResponse = await this.rbacApiService.findAll({ui_action: true, action: true});
+    const apiResponse = await this.rbacApiService.findAll({ ui_action: true, action: true });
     const rbacsDto = apiResponse.body;
     const rbacs = new RbacsCollection(rbacsDto, true);
     this.props.adminRbacContext.setRbacs(rbacs);
@@ -151,7 +150,7 @@ class DisplayRbacAdministration extends React.Component {
       rbacsUpdated.remove(rbac);
     } else {
       // If the control function is not the rbac to the list of changes.
-      const clonedRbac = new RbacEntity(rbac.toDto({ui_action: true, action: true}));
+      const clonedRbac = new RbacEntity(rbac.toDto({ ui_action: true, action: true }));
       clonedRbac.controlFunction = controlFunction;
       rbacsUpdated.pushOrReplace(clonedRbac);
     }
@@ -165,7 +164,7 @@ class DisplayRbacAdministration extends React.Component {
    */
   handleAddRoleClick(event) {
     event.preventDefault();
-    this.props.dialogContext.open(CreateRole, {onSubmit: this.createNewRole});
+    this.props.dialogContext.open(CreateRole, { onSubmit: this.createNewRole });
   }
 
   /**
@@ -178,7 +177,7 @@ class DisplayRbacAdministration extends React.Component {
       this.findAndLoadData();
       await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been created successfully."));
     } catch (error) {
-      this.props.dialogContext.open(NotifyError, {error});
+      this.props.dialogContext.open(NotifyError, { error });
     }
   }
 
@@ -191,11 +190,11 @@ class DisplayRbacAdministration extends React.Component {
     event.preventDefault();
     // TODO: use findByRoleId when it's implemented on the API
     const apiResponse = await this.userApiService.findAll();
-    const usersDto = apiResponse.body.filter(user => user.role_id === role.id);
+    const usersDto = apiResponse.body.filter((user) => user.role_id === role.id);
     if (usersDto.length > 0) {
-      this.props.dialogContext.open(DeleteRoleNotAllowed, {role: role, usersCount: usersDto.length});
+      this.props.dialogContext.open(DeleteRoleNotAllowed, { role: role, usersCount: usersDto.length });
     } else {
-      this.props.dialogContext.open(DeleteRole, {role: role, onSubmit: this.deleteRole});
+      this.props.dialogContext.open(DeleteRole, { role: role, onSubmit: this.deleteRole });
     }
   }
 
@@ -209,7 +208,7 @@ class DisplayRbacAdministration extends React.Component {
       this.findAndLoadData();
       await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been deleted successfully."));
     } catch (error) {
-      this.props.dialogContext.open(NotifyError, {error});
+      this.props.dialogContext.open(NotifyError, { error });
     }
   }
 
@@ -220,7 +219,7 @@ class DisplayRbacAdministration extends React.Component {
    */
   async handleRenameRoleClick(event, role) {
     event.preventDefault();
-    this.props.dialogContext.open(EditRole, {role: role, onSubmit: this.renameRole});
+    this.props.dialogContext.open(EditRole, { role: role, onSubmit: this.renameRole });
   }
 
   /**
@@ -233,7 +232,7 @@ class DisplayRbacAdministration extends React.Component {
       this.findAndLoadData();
       await this.props.actionFeedbackContext.displaySuccess(this.props.t("The role has been updated successfully."));
     } catch (error) {
-      this.props.dialogContext.open(NotifyError, {error});
+      this.props.dialogContext.open(NotifyError, { error });
     }
   }
 
@@ -339,11 +338,11 @@ class DisplayRbacAdministration extends React.Component {
   get customizableRoles() {
     const roles = [];
     if (this.state.roles !== null) {
-      const userRoles = this.state.roles.items.find(role => role.isUser());
-      const customRoles = this.state.roles.items.filter(role => !role.isAdmin() && !role.isUser());
+      const userRoles = this.state.roles.items.find((role) => role.isUser());
+      const customRoles = this.state.roles.items.filter((role) => !role.isAdmin() && !role.isUser());
       roles.push(userRoles, ...customRoles);
     }
-    return new RolesCollection(roles, {validate: false});
+    return new RolesCollection(roles, { validate: false });
   }
 
   /**
@@ -356,7 +355,7 @@ class DisplayRbacAdministration extends React.Component {
       rows.push(
         <div className="flex-item" key={index}>
           &nbsp;
-        </div>
+        </div>,
       );
     });
     return <>{rows}</>;
@@ -375,214 +374,300 @@ class DisplayRbacAdministration extends React.Component {
       <div className="row">
         <div className="rbac-settings main-column">
           <div className="main-content">
-            <h3 className="title"><Trans>Role-Based Access Control</Trans></h3>
+            <h3 className="title">
+              <Trans>Role-Based Access Control</Trans>
+            </h3>
             <div className="section-header">
-              <p><Trans>In this section you can define access controls for each user role.</Trans></p>
-              <button type="button" className="button" onClick={this.handleAddRoleClick} disabled={!this.canAddNewRole} title={!this.canAddNewRole ? this.props.t("Maximum number of roles reached") : ""}><UserAddSVG /> <Trans>Add role</Trans></button>
+              <p>
+                <Trans>In this section you can define access controls for each user role.</Trans>
+              </p>
+              <button
+                type="button"
+                className="button"
+                onClick={this.handleAddRoleClick}
+                disabled={!this.canAddNewRole}
+                title={!this.canAddNewRole ? this.props.t("Maximum number of roles reached") : ""}
+              >
+                <UserAddSVG /> <Trans>Add role</Trans>
+              </button>
             </div>
             <form className="form">
               <div className="flex-container outer">
                 <div className="flex-container inner header-flex">
-                  <div className="flex-item first">
-                    &nbsp;
-                  </div>
+                  <div className="flex-item first">&nbsp;</div>
                   <div className="flex-item centered">
-                    <span className="ellipsis" title={this.props.t("Admin")}><Trans>Admin</Trans></span>
+                    <span className="ellipsis" title={this.props.t("Admin")}>
+                      <Trans>Admin</Trans>
+                    </span>
                   </div>
-                  {customizableRoles.items.map(role => (
+                  {customizableRoles.items.map((role) => (
                     <div className="flex-item centered" key={role.id}>
-                      <span className="ellipsis" title={capitalizeFirstLetter(this.getTranslatedRoleName(role))}>{capitalizeFirstLetter(this.getTranslatedRoleName(role))}</span>
-                      {!role.isAReservedRole() &&
-                      <Dropdown>
-                        <DropdownButton className="more button-action-icon link no-border">
-                          <MoreVerticalSVG/>
-                        </DropdownButton>
-                        <DropdownMenu className="menu-action-contextual" direction="left">
-                          <DropdownMenuItem>
-                            <button id="rename_role_action" type="button" className="no-border" onClick={event => this.handleRenameRoleClick(event, role)}>
-                              <EditSVG/>
-                              <span><Trans>Rename</Trans></span>
-                            </button>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <button id="delete_role_action" type="button" className="no-border" onClick={event => this.handleDeleteRoleClick(event, role)}>
-                              <DeleteSVG/>
-                              <span><Trans>Delete</Trans></span>
-                            </button>
-                          </DropdownMenuItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                      }
+                      <span className="ellipsis" title={capitalizeFirstLetter(this.getTranslatedRoleName(role))}>
+                        {capitalizeFirstLetter(this.getTranslatedRoleName(role))}
+                      </span>
+                      {!role.isAReservedRole() && (
+                        <Dropdown>
+                          <DropdownButton className="more button-action-icon link no-border">
+                            <MoreVerticalSVG />
+                          </DropdownButton>
+                          <DropdownMenu className="menu-action-contextual" direction="left">
+                            <DropdownMenuItem>
+                              <button
+                                id="rename_role_action"
+                                type="button"
+                                className="no-border"
+                                onClick={(event) => this.handleRenameRoleClick(event, role)}
+                              >
+                                <EditSVG />
+                                <span>
+                                  <Trans>Rename</Trans>
+                                </span>
+                              </button>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <button
+                                id="delete_role_action"
+                                type="button"
+                                className="no-border"
+                                onClick={(event) => this.handleDeleteRoleClick(event, role)}
+                              >
+                                <DeleteSVG />
+                                <span>
+                                  <Trans>Delete</Trans>
+                                </span>
+                              </button>
+                            </DropdownMenuItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                      )}
                     </div>
                   ))}
                 </div>
-                {this.isReady &&
+                {this.isReady && (
                   <>
                     <div className="flex-container inner header-flex">
                       <div className="flex-item first">
-                        <label><Trans>API Permissions</Trans></label>
+                        <label>
+                          <Trans>API Permissions</Trans>
+                        </label>
                       </div>
                       {this.blankColumnSectionForRoles()}
                     </div>
-                    <DisplayRbacSection label={this.props.t('Group management')} level={1} rolesCount={rolesCount}>
-                      <DisplayRbacItem label={this.props.t('Create a group')}
-                        actionName={actions.GROUPS_ADD} level={2}
+                    <DisplayRbacSection label={this.props.t("Group management")} level={1} rolesCount={rolesCount}>
+                      <DisplayRbacItem
+                        label={this.props.t("Create a group")}
+                        actionName={actions.GROUPS_ADD}
+                        level={2}
                         rbacs={this.props.adminRbacContext.rbacs}
                         rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                         roles={customizableRoles}
-                        onChange={this.updateRbacControlFunction}/>
+                        onChange={this.updateRbacControlFunction}
+                      />
                     </DisplayRbacSection>
-                    {this.canIUseAccountRecovery &&
+                    {this.canIUseAccountRecovery && (
                       <>
-                        <DisplayRbacSection label={this.props.t('Account recovery request')} level={1} rolesCount={rolesCount}>
-                          <DisplayRbacItem label={this.props.t('Account recovery request view')}
-                            actionName={actions.ACCOUNT_RECOVERY_REQUEST_VIEW} level={2}
+                        <DisplayRbacSection
+                          label={this.props.t("Account recovery request")}
+                          level={1}
+                          rolesCount={rolesCount}
+                        >
+                          <DisplayRbacItem
+                            label={this.props.t("Account recovery request view")}
+                            actionName={actions.ACCOUNT_RECOVERY_REQUEST_VIEW}
+                            level={2}
                             rbacs={this.props.adminRbacContext.rbacs}
                             rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                             roles={customizableRoles}
-                            onChange={this.updateRbacControlFunction}/>
-                          <DisplayRbacItem label={this.props.t('Account recovery request index')}
-                            actionName={actions.ACCOUNT_RECOVERY_REQUEST_INDEX} level={2}
+                            onChange={this.updateRbacControlFunction}
+                          />
+                          <DisplayRbacItem
+                            label={this.props.t("Account recovery request index")}
+                            actionName={actions.ACCOUNT_RECOVERY_REQUEST_INDEX}
+                            level={2}
                             rbacs={this.props.adminRbacContext.rbacs}
                             rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                             roles={customizableRoles}
-                            onChange={this.updateRbacControlFunction}/>
-                          <DisplayRbacItem label={this.props.t('Account recovery request review')}
-                            actionName={actions.ACCOUNT_RECOVERY_RESPONSE_CREATE} level={2}
+                            onChange={this.updateRbacControlFunction}
+                          />
+                          <DisplayRbacItem
+                            label={this.props.t("Account recovery request review")}
+                            actionName={actions.ACCOUNT_RECOVERY_RESPONSE_CREATE}
+                            level={2}
                             rbacs={this.props.adminRbacContext.rbacs}
                             rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                             roles={customizableRoles}
-                            onChange={this.updateRbacControlFunction}/>
+                            onChange={this.updateRbacControlFunction}
+                          />
                         </DisplayRbacSection>
                       </>
-                    }
+                    )}
                     <div className="flex-container inner header-flex">
                       <div className="flex-item first">
-                        <label><Trans>UI Permissions</Trans></label>
+                        <label>
+                          <Trans>UI Permissions</Trans>
+                        </label>
                       </div>
                       {this.blankColumnSectionForRoles()}
                     </div>
-                    <DisplayRbacSection label={this.props.t('Resources')} level={1} rolesCount={rolesCount}>
-                      {(this.canIUseImport || this.canIUseExport) &&
-                        <DisplayRbacSection label={this.props.t('Import/Export')} level={2} rolesCount={rolesCount}>
-                          {this.canIUseImport &&
-                            <DisplayRbacItem label={this.props.t('Can import')}
-                              actionName={uiActions.RESOURCES_IMPORT} level={3}
-                              rbacs={this.props.adminRbacContext.rbacs}
-                              rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                              roles={customizableRoles} onChange={this.updateRbacControlFunction}/>
-                          }
-                          {this.canIUseExport &&
-                            <DisplayRbacItem label={this.props.t('Can export')}
-                              actionName={uiActions.RESOURCES_EXPORT} level={3}
+                    <DisplayRbacSection label={this.props.t("Resources")} level={1} rolesCount={rolesCount}>
+                      {(this.canIUseImport || this.canIUseExport) && (
+                        <DisplayRbacSection label={this.props.t("Import/Export")} level={2} rolesCount={rolesCount}>
+                          {this.canIUseImport && (
+                            <DisplayRbacItem
+                              label={this.props.t("Can import")}
+                              actionName={uiActions.RESOURCES_IMPORT}
+                              level={3}
                               rbacs={this.props.adminRbacContext.rbacs}
                               rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                               roles={customizableRoles}
-                              onChange={this.updateRbacControlFunction}/>
-                          }
+                              onChange={this.updateRbacControlFunction}
+                            />
+                          )}
+                          {this.canIUseExport && (
+                            <DisplayRbacItem
+                              label={this.props.t("Can export")}
+                              actionName={uiActions.RESOURCES_EXPORT}
+                              level={3}
+                              rbacs={this.props.adminRbacContext.rbacs}
+                              rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                              roles={customizableRoles}
+                              onChange={this.updateRbacControlFunction}
+                            />
+                          )}
                         </DisplayRbacSection>
-                      }
-                      <DisplayRbacSection label={this.props.t('Password')} level={2} rolesCount={rolesCount}>
-                        {this.canIUsePreviewPassword &&
-                          <DisplayRbacItem label={this.props.t('Can preview')}
-                            actionName={uiActions.SECRETS_PREVIEW} level={3}
+                      )}
+                      <DisplayRbacSection label={this.props.t("Password")} level={2} rolesCount={rolesCount}>
+                        {this.canIUsePreviewPassword && (
+                          <DisplayRbacItem
+                            label={this.props.t("Can preview")}
+                            actionName={uiActions.SECRETS_PREVIEW}
+                            level={3}
                             rbacs={this.props.adminRbacContext.rbacs}
                             rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                             roles={customizableRoles}
-                            onChange={this.updateRbacControlFunction}/>
-                        }
-                        <DisplayRbacItem label={this.props.t('Can copy')}
-                          actionName={uiActions.SECRETS_COPY} level={3}
+                            onChange={this.updateRbacControlFunction}
+                          />
+                        )}
+                        <DisplayRbacItem
+                          label={this.props.t("Can copy")}
+                          actionName={uiActions.SECRETS_COPY}
+                          level={3}
                           rbacs={this.props.adminRbacContext.rbacs}
                           rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                           roles={customizableRoles}
-                          onChange={this.updateRbacControlFunction}/>
+                          onChange={this.updateRbacControlFunction}
+                        />
                       </DisplayRbacSection>
-                      <DisplayRbacSection label={this.props.t('Metadata')} level={2} rolesCount={rolesCount}>
-                        <DisplayRbacItem label={this.props.t('Can see password activities')}
-                          actionName={uiActions.RESOURCES_SEE_ACTIVITIES} level={3}
+                      <DisplayRbacSection label={this.props.t("Metadata")} level={2} rolesCount={rolesCount}>
+                        <DisplayRbacItem
+                          label={this.props.t("Can see password activities")}
+                          actionName={uiActions.RESOURCES_SEE_ACTIVITIES}
+                          level={3}
                           rbacs={this.props.adminRbacContext.rbacs}
                           rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                           roles={customizableRoles}
-                          onChange={this.updateRbacControlFunction}/>
-                        <DisplayRbacItem label={this.props.t('Can see password comments')}
-                          actionName={uiActions.RESOURCES_SEE_COMMENTS} level={3}
+                          onChange={this.updateRbacControlFunction}
+                        />
+                        <DisplayRbacItem
+                          label={this.props.t("Can see password comments")}
+                          actionName={uiActions.RESOURCES_SEE_COMMENTS}
+                          level={3}
                           rbacs={this.props.adminRbacContext.rbacs}
                           rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                           roles={customizableRoles}
-                          onChange={this.updateRbacControlFunction}/>
+                          onChange={this.updateRbacControlFunction}
+                        />
                       </DisplayRbacSection>
-                      {(this.canIUseFolders || this.canIUseTags) &&
-                        <DisplayRbacSection label={this.props.t('Organization')} level={2} rolesCount={rolesCount}>
-                          {this.canIUseFolders &&
-                            <DisplayRbacItem label={this.props.t('Can use folders')}
-                              actionName={uiActions.FOLDERS_USE} level={3}
+                      {(this.canIUseFolders || this.canIUseTags) && (
+                        <DisplayRbacSection label={this.props.t("Organization")} level={2} rolesCount={rolesCount}>
+                          {this.canIUseFolders && (
+                            <DisplayRbacItem
+                              label={this.props.t("Can use folders")}
+                              actionName={uiActions.FOLDERS_USE}
+                              level={3}
                               rbacs={this.props.adminRbacContext.rbacs}
                               rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                               roles={customizableRoles}
-                              onChange={this.updateRbacControlFunction}/>
-                          }
-                          {this.canIUseTags &&
-                            <DisplayRbacItem label={this.props.t('Can use tags')}
-                              actionName={uiActions.TAGS_USE} level={3}
+                              onChange={this.updateRbacControlFunction}
+                            />
+                          )}
+                          {this.canIUseTags && (
+                            <DisplayRbacItem
+                              label={this.props.t("Can use tags")}
+                              actionName={uiActions.TAGS_USE}
+                              level={3}
                               rbacs={this.props.adminRbacContext.rbacs}
                               rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                               roles={customizableRoles}
-                              onChange={this.updateRbacControlFunction}/>
-                          }
+                              onChange={this.updateRbacControlFunction}
+                            />
+                          )}
                         </DisplayRbacSection>
-                      }
-                      <DisplayRbacSection label={this.props.t('Sharing')} level={2} rolesCount={rolesCount}>
-                        <DisplayRbacItem label={this.props.t('Can see with whom passwords are shared with')}
-                          actionName={uiActions.SHARE_VIEW_LIST} level={3}
+                      )}
+                      <DisplayRbacSection label={this.props.t("Sharing")} level={2} rolesCount={rolesCount}>
+                        <DisplayRbacItem
+                          label={this.props.t("Can see with whom passwords are shared with")}
+                          actionName={uiActions.SHARE_VIEW_LIST}
+                          level={3}
                           rbacs={this.props.adminRbacContext.rbacs}
                           rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                           roles={customizableRoles}
-                          onChange={this.updateRbacControlFunction}/>
-                        <DisplayRbacItem label={this.props.t('Can share folders')}
-                          actionName={uiActions.SHARE_FOLDER} level={3}
+                          onChange={this.updateRbacControlFunction}
+                        />
+                        <DisplayRbacItem
+                          label={this.props.t("Can share folders")}
+                          actionName={uiActions.SHARE_FOLDER}
+                          level={3}
                           rbacs={this.props.adminRbacContext.rbacs}
                           rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                           roles={customizableRoles}
-                          onChange={this.updateRbacControlFunction}/>
+                          onChange={this.updateRbacControlFunction}
+                        />
                       </DisplayRbacSection>
                     </DisplayRbacSection>
-                    <DisplayRbacSection label={this.props.t('Users')} level={1} rolesCount={rolesCount}>
-                      <DisplayRbacItem label={this.props.t('Can see users workspace')}
-                        actionName={uiActions.USERS_VIEW_WORKSPACE} level={2}
+                    <DisplayRbacSection label={this.props.t("Users")} level={1} rolesCount={rolesCount}>
+                      <DisplayRbacItem
+                        label={this.props.t("Can see users workspace")}
+                        actionName={uiActions.USERS_VIEW_WORKSPACE}
+                        level={2}
                         rbacs={this.props.adminRbacContext.rbacs}
                         rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                         roles={customizableRoles}
-                        onChange={this.updateRbacControlFunction}/>
+                        onChange={this.updateRbacControlFunction}
+                      />
                     </DisplayRbacSection>
-                    {
-                      (this.canIUseMobile || this.canIUseDesktop) &&
-                      <DisplayRbacSection label={this.props.t('User settings')} level={1} rolesCount={rolesCount}>
-                        {
-                          this.canIUseMobile && <DisplayRbacItem label={this.props.t('Can see mobile setup')}
-                            actionName={uiActions.MOBILE_TRANSFER} level={2}
+                    {(this.canIUseMobile || this.canIUseDesktop) && (
+                      <DisplayRbacSection label={this.props.t("User settings")} level={1} rolesCount={rolesCount}>
+                        {this.canIUseMobile && (
+                          <DisplayRbacItem
+                            label={this.props.t("Can see mobile setup")}
+                            actionName={uiActions.MOBILE_TRANSFER}
+                            level={2}
                             rbacs={this.props.adminRbacContext.rbacs}
                             rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                             roles={customizableRoles}
-                            onChange={this.updateRbacControlFunction}/>
-                        }
-                        {
-                          this.canIUseDesktop &&
-                          <DisplayRbacItem label={this.props.t('Can see desktop application setup')}
-                            actionName={uiActions.DESKTOP_TRANSFER} level={2}
+                            onChange={this.updateRbacControlFunction}
+                          />
+                        )}
+                        {this.canIUseDesktop && (
+                          <DisplayRbacItem
+                            label={this.props.t("Can see desktop application setup")}
+                            actionName={uiActions.DESKTOP_TRANSFER}
+                            level={2}
                             rbacs={this.props.adminRbacContext.rbacs}
                             rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                             roles={customizableRoles}
-                            onChange={this.updateRbacControlFunction}/>
-                        }
+                            onChange={this.updateRbacControlFunction}
+                          />
+                        )}
                       </DisplayRbacSection>
-                    }
+                    )}
                   </>
-                }
+                )}
               </div>
             </form>
           </div>
-          {hasSaveWarning &&
+          {hasSaveWarning && (
             <div className="warning message">
               <div>
                 <p>
@@ -590,20 +675,30 @@ class DisplayRbacAdministration extends React.Component {
                 </p>
               </div>
             </div>
-          }
+          )}
         </div>
-        <DisplayAdministrationRbacActions/>
+        <DisplayAdministrationRbacActions />
         {createSafePortal(
           <div className="sidebar-help-section">
-            <h3><Trans>Need help?</Trans></h3>
-            <p><Trans>Check out the Role Based Access Control documentation.</Trans></p>
-            <a className="button" href="https://passbolt.com/docs/admin/role-based-access-control/" target="_blank"
-              rel="noopener noreferrer">
-              <FileTextSVG/>
-              <span><Trans>Read RBAC doc</Trans></span>
+            <h3>
+              <Trans>Need help?</Trans>
+            </h3>
+            <p>
+              <Trans>Check out the Role Based Access Control documentation.</Trans>
+            </p>
+            <a
+              className="button"
+              href="https://passbolt.com/docs/admin/role-based-access-control/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FileTextSVG />
+              <span>
+                <Trans>Read RBAC doc</Trans>
+              </span>
             </a>
           </div>,
-          document.getElementById("administration-help-panel")
+          document.getElementById("administration-help-panel"),
         )}
       </div>
     );
@@ -613,7 +708,7 @@ class DisplayRbacAdministration extends React.Component {
 DisplayRbacAdministration.defaultProps = {
   RoleApiService: RoleApiService,
   RbacApiService: RbacApiService,
-  UserApiService: UserService
+  UserApiService: UserService,
 };
 
 DisplayRbacAdministration.propTypes = {
@@ -627,4 +722,8 @@ DisplayRbacAdministration.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withAdminRbac(withAdministrationWorkspace(withDialog(withActionFeedback(withTranslation('common')(DisplayRbacAdministration))))));
+export default withAppContext(
+  withAdminRbac(
+    withAdministrationWorkspace(withDialog(withActionFeedback(withTranslation("common")(DisplayRbacAdministration)))),
+  ),
+);

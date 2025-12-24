@@ -14,8 +14,8 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withAdminSelfRegistration} from "../../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withAdminSelfRegistration } from "../../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -77,8 +77,16 @@ class DisplayAdministrationSelfRegistrationActions extends React.Component {
   render() {
     return (
       <div className="actions-wrapper">
-        <button className="button primary form"  type="button" disabled={!this.isSaveEnabled()} id="save-settings" onClick={this.handleSave}>
-          <span><Trans>Save</Trans></span>
+        <button
+          className="button primary form"
+          type="button"
+          disabled={!this.isSaveEnabled()}
+          id="save-settings"
+          onClick={this.handleSave}
+        >
+          <span>
+            <Trans>Save</Trans>
+          </span>
         </button>
       </div>
     );
@@ -91,5 +99,3 @@ DisplayAdministrationSelfRegistrationActions.propTypes = {
 };
 
 export default withTranslation("common")(withAdminSelfRegistration(DisplayAdministrationSelfRegistrationActions));
-
-

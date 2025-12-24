@@ -12,17 +12,17 @@
  * @since         3.10.0
  */
 
-import React from 'react';
-import {withRouter} from 'react-router-dom';
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../contexts/DialogContext";
-import {withAccountRecovery} from "../../contexts/AccountRecoveryUserContext";
+import React from "react";
+import { withRouter } from "react-router-dom";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../contexts/DialogContext";
+import { withAccountRecovery } from "../../contexts/AccountRecoveryUserContext";
 import PropTypes from "prop-types";
-import {AccountRecoveryUserContextProvider} from "../../contexts/AccountRecoveryUserContext";
-import AccountRecoveryInviteUserSettingPreferenceDialog from '../AccountRecovery/AccountRecoveryInviteUserSettingPreferenceDialog/AccountRecoveryInviteUserSettingPreferenceDialog';
-import {MfaPolicyEnumerationTypes} from '../../../shared/models/mfaPolicy/MfaPolicyEnumeration';
-import {withMfa} from '../../contexts/MFAContext';
-import MfaInviteUserSettingsPreferenceDialog from '../MFA/MfaInviteUserSettingsPreferenceDialog/MfaInviteUserSettingsPreferenceDialog';
+import { AccountRecoveryUserContextProvider } from "../../contexts/AccountRecoveryUserContext";
+import AccountRecoveryInviteUserSettingPreferenceDialog from "../AccountRecovery/AccountRecoveryInviteUserSettingPreferenceDialog/AccountRecoveryInviteUserSettingPreferenceDialog";
+import { MfaPolicyEnumerationTypes } from "../../../shared/models/mfaPolicy/MfaPolicyEnumeration";
+import { withMfa } from "../../contexts/MFAContext";
+import MfaInviteUserSettingsPreferenceDialog from "../MFA/MfaInviteUserSettingsPreferenceDialog/MfaInviteUserSettingsPreferenceDialog";
 
 /**
  * This component listens any event related to passphrase entry dialog actions to perform
@@ -74,15 +74,15 @@ class HandleStatusCheck extends React.Component {
     }
 
     let isDialogDisplayHandled = false;
-    if (!isDialogDisplayHandled && this.props.context.siteSettings.canIUse('accountRecovery')) {
+    if (!isDialogDisplayHandled && this.props.context.siteSettings.canIUse("accountRecovery")) {
       const shouldDisplayAccountRecovery = await this.checkAccountRecovery();
-      this.setState({shouldDisplayAccountRecovery});
+      this.setState({ shouldDisplayAccountRecovery });
       isDialogDisplayHandled = shouldDisplayAccountRecovery;
     }
 
-    if (!isDialogDisplayHandled && this.props.context.siteSettings.canIUse('mfaPolicies')) {
+    if (!isDialogDisplayHandled && this.props.context.siteSettings.canIUse("mfaPolicies")) {
       const shouldDisplayMFA = await this.checkMfaPolicy();
-      this.setState({shouldDisplayMFA});
+      this.setState({ shouldDisplayMFA });
       isDialogDisplayHandled = shouldDisplayMFA;
     }
   }
@@ -93,8 +93,7 @@ class HandleStatusCheck extends React.Component {
    */
   isCurrentUrlDisallowsUsersDialog() {
     const pathname = this.props.location.pathname;
-    return pathname.startsWith("/app/settings/mfa")
-      || pathname.startsWith("/app/settings/account-recovery");
+    return pathname.startsWith("/app/settings/mfa") || pathname.startsWith("/app/settings/account-recovery");
   }
 
   /**
@@ -103,8 +102,10 @@ class HandleStatusCheck extends React.Component {
    */
   isOrganizationPolicyRequiresAUserChoiceForAccountRecovery() {
     const policy = this.props.accountRecoveryContext.getPolicy();
-    return policy === AccountRecoveryUserContextProvider.POLICY_MANDATORY
-      || policy === AccountRecoveryUserContextProvider.POLICY_OPT_OUT;
+    return (
+      policy === AccountRecoveryUserContextProvider.POLICY_MANDATORY ||
+      policy === AccountRecoveryUserContextProvider.POLICY_OPT_OUT
+    );
   }
 
   /**
@@ -121,7 +122,9 @@ class HandleStatusCheck extends React.Component {
    * @returns {Promise<boolean>}
    */
   async checkAccountRecovery() {
-    const isResponsePostpone = await this.props.context.port.request("passbolt.account-recovery.has-user-postponed-user-setting-invitation");
+    const isResponsePostpone = await this.props.context.port.request(
+      "passbolt.account-recovery.has-user-postponed-user-setting-invitation",
+    );
     if (isResponsePostpone) {
       return false;
     }
@@ -131,7 +134,9 @@ class HandleStatusCheck extends React.Component {
       return false;
     }
 
-    const isUserAccountRecoverySubscriptionStatusPending = this.props.accountRecoveryContext.getUserAccountRecoverySubscriptionStatus() === AccountRecoveryUserContextProvider.STATUS_PENDING;
+    const isUserAccountRecoverySubscriptionStatusPending =
+      this.props.accountRecoveryContext.getUserAccountRecoverySubscriptionStatus() ===
+      AccountRecoveryUserContextProvider.STATUS_PENDING;
     return isUserAccountRecoverySubscriptionStatusPending;
   }
 
@@ -140,7 +145,9 @@ class HandleStatusCheck extends React.Component {
    * @returns {Promise<boolean>}
    */
   async checkMfaPolicy() {
-    const isResponsePostpone = await this.props.context.port.request("passbolt.mfa-policy.has-user-postponed-user-setting-invitation");
+    const isResponsePostpone = await this.props.context.port.request(
+      "passbolt.mfa-policy.has-user-postponed-user-setting-invitation",
+    );
     if (isResponsePostpone) {
       return false;
     }
@@ -165,11 +172,11 @@ class HandleStatusCheck extends React.Component {
 
     if (!this.state.shouldDisplayAccountRecovery && this.state.shouldDisplayMFA) {
       this.props.dialogContext.open(MfaInviteUserSettingsPreferenceDialog);
-      this.setState({shouldDisplayMFA: false});
+      this.setState({ shouldDisplayMFA: false });
     } else if (this.state.shouldDisplayAccountRecovery) {
       const policy = this.props.accountRecoveryContext.getPolicy();
-      this.props.dialogContext.open(AccountRecoveryInviteUserSettingPreferenceDialog, {policy});
-      this.setState({shouldDisplayAccountRecovery: false});
+      this.props.dialogContext.open(AccountRecoveryInviteUserSettingPreferenceDialog, { policy });
+      this.setState({ shouldDisplayAccountRecovery: false });
     }
   }
 

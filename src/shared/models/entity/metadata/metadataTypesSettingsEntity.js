@@ -24,8 +24,8 @@ class MetadataTypesSettingsEntity extends EntityV2 {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": [
+      type: "object",
+      required: [
         "default_resource_types",
         "default_folder_type",
         "default_tag_type",
@@ -41,66 +41,54 @@ class MetadataTypesSettingsEntity extends EntityV2 {
         "allow_v4_v5_upgrade",
         "allow_v5_v4_downgrade",
       ],
-      "properties": {
-        "default_resource_types": {
-          "type": "string",
-          "enum": [
-            RESOURCE_TYPE_VERSION_4,
-            RESOURCE_TYPE_VERSION_5,
-          ]
+      properties: {
+        default_resource_types: {
+          type: "string",
+          enum: [RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5],
         },
-        "default_folder_type": {
-          "type": "string",
-          "enum": [
-            RESOURCE_TYPE_VERSION_4,
-            RESOURCE_TYPE_VERSION_5,
-          ]
+        default_folder_type: {
+          type: "string",
+          enum: [RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5],
         },
-        "default_tag_type": {
-          "type": "string",
-          "enum": [
-            RESOURCE_TYPE_VERSION_4,
-            RESOURCE_TYPE_VERSION_5,
-          ]
+        default_tag_type: {
+          type: "string",
+          enum: [RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5],
         },
-        "default_comment_type": {
-          "type": "string",
-          "enum": [
-            RESOURCE_TYPE_VERSION_4,
-            RESOURCE_TYPE_VERSION_5,
-          ]
+        default_comment_type: {
+          type: "string",
+          enum: [RESOURCE_TYPE_VERSION_4, RESOURCE_TYPE_VERSION_5],
         },
-        "allow_creation_of_v5_resources": {
-          "type": "boolean"
+        allow_creation_of_v5_resources: {
+          type: "boolean",
         },
-        "allow_creation_of_v5_folders": {
-          "type": "boolean"
+        allow_creation_of_v5_folders: {
+          type: "boolean",
         },
-        "allow_creation_of_v5_tags": {
-          "type": "boolean"
+        allow_creation_of_v5_tags: {
+          type: "boolean",
         },
-        "allow_creation_of_v5_comments": {
-          "type": "boolean"
+        allow_creation_of_v5_comments: {
+          type: "boolean",
         },
-        "allow_creation_of_v4_resources": {
-          "type": "boolean"
+        allow_creation_of_v4_resources: {
+          type: "boolean",
         },
-        "allow_creation_of_v4_folders": {
-          "type": "boolean"
+        allow_creation_of_v4_folders: {
+          type: "boolean",
         },
-        "allow_creation_of_v4_tags": {
-          "type": "boolean"
+        allow_creation_of_v4_tags: {
+          type: "boolean",
         },
-        "allow_creation_of_v4_comments": {
-          "type": "boolean"
+        allow_creation_of_v4_comments: {
+          type: "boolean",
         },
-        "allow_v4_v5_upgrade": {
-          "type": "boolean"
+        allow_v4_v5_upgrade: {
+          type: "boolean",
         },
-        "allow_v5_v4_downgrade": {
-          "type": "boolean"
+        allow_v5_v4_downgrade: {
+          type: "boolean",
         },
-      }
+      },
     };
   }
 
@@ -153,7 +141,7 @@ class MetadataTypesSettingsEntity extends EntityV2 {
       allow_v5_v4_downgrade: false,
     };
 
-    return new MetadataTypesSettingsEntity({...defaultData, ...data});
+    return new MetadataTypesSettingsEntity({ ...defaultData, ...data });
   }
 
   /**
@@ -180,7 +168,7 @@ class MetadataTypesSettingsEntity extends EntityV2 {
       allow_v5_v4_downgrade: false,
     };
 
-    return new MetadataTypesSettingsEntity({...defaultData, ...data});
+    return new MetadataTypesSettingsEntity({ ...defaultData, ...data });
   }
 
   /**
@@ -284,7 +272,6 @@ class MetadataTypesSettingsEntity extends EntityV2 {
   get allowCreationOfV4Comments() {
     return this._props.allow_creation_of_v4_comments;
   }
-
 
   /**
    * Is default resource types version 5

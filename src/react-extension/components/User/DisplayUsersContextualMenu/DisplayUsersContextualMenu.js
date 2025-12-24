@@ -13,31 +13,31 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
 import EditUser from "../EditUser/EditUser";
 import ConfirmDisableUserMFA from "../ConfirmDisableUserMFA/ConfirmDisableUserMFA";
 import DeleteUserWithConflicts from "../DeleteUser/DeleteUserWithConflicts";
 import DeleteUser from "../DeleteUser/DeleteUser";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {Trans, withTranslation} from "react-i18next";
-import {withWorkflow} from "../../../contexts/WorkflowContext";
+import { Trans, withTranslation } from "react-i18next";
+import { withWorkflow } from "../../../contexts/WorkflowContext";
 import HandleReviewAccountRecoveryRequestWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
-import LinkSVG from '../../../../img/svg/link.svg';
-import EmailSVG from '../../../../img/svg/email.svg';
-import KeySVG from '../../../../img/svg/key.svg';
-import EditSVG from '../../../../img/svg/edit.svg';
-import SendSVG from '../../../../img/svg/send.svg';
-import FingerprintDisabledSVG from '../../../../img/svg/fingerprint_disabled.svg';
-import DeleteSVG from '../../../../img/svg/delete.svg';
-import BuoySVG from '../../../../img/svg/buoy.svg';
+import LinkSVG from "../../../../img/svg/link.svg";
+import EmailSVG from "../../../../img/svg/email.svg";
+import KeySVG from "../../../../img/svg/key.svg";
+import EditSVG from "../../../../img/svg/edit.svg";
+import SendSVG from "../../../../img/svg/send.svg";
+import FingerprintDisabledSVG from "../../../../img/svg/fingerprint_disabled.svg";
+import DeleteSVG from "../../../../img/svg/delete.svg";
+import BuoySVG from "../../../../img/svg/buoy.svg";
 import MetadataKeySVG from "../../../../img/svg/metadata_key.svg";
 import ConfirmShareMissingMetadataKeys from "../ConfirmShareMissingMetadataKeys/ConfirmShareMissingMetadataKeys";
-import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
-import {actions} from "../../../../shared/services/rbacs/actionEnumeration";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { actions } from "../../../../shared/services/rbacs/actionEnumeration";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
 
 class DisplayUsersContextualMenu extends React.Component {
   /**
@@ -122,8 +122,14 @@ class DisplayUsersContextualMenu extends React.Component {
    * Handle the copy of public key
    */
   async handlePublicKeyCopy() {
-    const gpgkeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
-    await this.props.clipboardContext.copy(gpgkeyInfo.armored_key, this.translate("The public key has been copied to clipboard."));
+    const gpgkeyInfo = await this.props.context.port.request(
+      "passbolt.keyring.get-public-key-info-by-user",
+      this.user.id,
+    );
+    await this.props.clipboardContext.copy(
+      gpgkeyInfo.armored_key,
+      this.translate("The public key has been copied to clipboard."),
+    );
     this.props.hide();
   }
 
@@ -132,9 +138,9 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   handleEditClickEvent() {
     const editUserDialogProps = {
-      id: this.user.id
+      id: this.user.id,
     };
-    this.props.context.setContext({editUserDialogProps});
+    this.props.context.setContext({ editUserDialogProps });
     this.props.dialogContext.open(EditUser);
     this.props.hide();
   }
@@ -175,9 +181,9 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   displayDeleteUserDialog() {
     const deleteUserDialogProps = {
-      user: this.user
+      user: this.user,
     };
-    this.props.context.setContext({deleteUserDialogProps});
+    this.props.context.setContext({ deleteUserDialogProps });
     this.props.dialogContext.open(DeleteUser);
   }
 
@@ -187,9 +193,9 @@ class DisplayUsersContextualMenu extends React.Component {
   displayDeleteUserWithConflictsDialog(errors) {
     const deleteUserWithConflictsDialogProps = {
       user: this.user,
-      errors: errors
+      errors: errors,
     };
-    this.props.context.setContext({deleteUserWithConflictsDialogProps});
+    this.props.context.setContext({ deleteUserWithConflictsDialogProps });
     this.props.dialogContext.open(DeleteUserWithConflicts);
   }
 
@@ -198,7 +204,7 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   handleReviewRecoveryRequestClickEvent() {
     const accountRecoveryRequestId = this.user.pending_account_recovery_request.id;
-    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {accountRecoveryRequestId});
+    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, { accountRecoveryRequestId });
     this.props.hide();
   }
 
@@ -220,7 +226,7 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -245,16 +251,22 @@ class DisplayUsersContextualMenu extends React.Component {
    * Check if the user can use the review recovery request capability.
    */
   canIReviewAccountRecoveryRequest() {
-    return this.props.context.siteSettings.canIUse("accountRecovery")
-      && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE)
-      && this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_INDEX);
+    return (
+      this.props.context.siteSettings.canIUse("accountRecovery") &&
+      this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_RESPONSE_CREATE) &&
+      this.props.rbacContext.canIUseAction(actions.ACCOUNT_RECOVERY_REQUEST_INDEX)
+    );
   }
 
   /**
    * Check if the user can use the share missing data key capability.
    */
   get canIShareMissingMetadataKeys() {
-    return this.props.context.siteSettings.canIUse("metadata") && this.isLoggedInUserAdmin() && this.props.context.loggedInUser.id !== this.user.id;
+    return (
+      this.props.context.siteSettings.canIUse("metadata") &&
+      this.isLoggedInUserAdmin() &&
+      this.props.context.loggedInUser.id !== this.user.id
+    );
   }
 
   /**
@@ -295,7 +307,7 @@ class DisplayUsersContextualMenu extends React.Component {
    * @returns {boolean}
    */
   isLoggedInUserAdmin() {
-    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === "admin";
   }
 
   /**
@@ -310,7 +322,8 @@ class DisplayUsersContextualMenu extends React.Component {
    * Resend an invite to the given user
    */
   resendInvite() {
-    this.props.context.port.request("passbolt.users.resend-invite", this.user.username)
+    this.props.context.port
+      .request("passbolt.users.resend-invite", this.user.username)
       .then(this.onResendInviteSuccess.bind(this))
       .catch(this.onResendInviteFailure.bind(this));
   }
@@ -329,7 +342,7 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   onResendInviteFailure(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.hide();
     this.props.dialogContext.open(NotifyError, errorDialogProps);
@@ -349,139 +362,180 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   render() {
     return (
-      <ContextualMenuWrapper
-        hide={this.props.hide}
-        left={this.props.left}
-        top={this.props.top}
-        className="floating">
-        <li
-          key="copy-user-permalink"
-          className="opened">
+      <ContextualMenuWrapper hide={this.props.hide} left={this.props.left} top={this.props.top} className="floating">
+        <li key="copy-user-permalink" className="opened">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <button className="link no-border" type="button" onClick={this.handlePermalinkCopy}>
-                  <LinkSVG /><span><Trans>Copy permalink</Trans></span>
+                  <LinkSVG />
+                  <span>
+                    <Trans>Copy permalink</Trans>
+                  </span>
                 </button>
               </div>
             </div>
           </div>
         </li>
-        <li
-          key="copy-public-key"
-          className="opened">
+        <li key="copy-public-key" className="opened">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button"
+                <button
+                  type="button"
                   onClick={this.handlePublicKeyCopy}
                   disabled={!this.canCopyPublicKey()}
-                  className="link no-border">
-                  <KeySVG /><span><Trans>Copy public key</Trans></span>
+                  className="link no-border"
+                >
+                  <KeySVG />
+                  <span>
+                    <Trans>Copy public key</Trans>
+                  </span>
                 </button>
               </div>
             </div>
           </div>
         </li>
-        <li
-          key="copy-username"
-          className="separator-after opened">
+        <li key="copy-username" className="separator-after opened">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <button className="link no-border" type="button" onClick={this.handleUsernameCopy}>
-                  <EmailSVG /><span><Trans>Copy email address</Trans></span>
+                  <EmailSVG />
+                  <span>
+                    <Trans>Copy email address</Trans>
+                  </span>
                 </button>
               </div>
             </div>
           </div>
         </li>
-        {this.canIUseEdit() &&
+        {this.canIUseEdit() && (
           <li key="edit-user" className="ready">
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button className="link no-border" type="button" id="edit" onClick={this.handleEditClickEvent}>
-                    <EditSVG /><span><Trans>Edit</Trans></span>
+                    <EditSVG />
+                    <span>
+                      <Trans>Edit</Trans>
+                    </span>
                   </button>
                 </div>
               </div>
             </div>
           </li>
-        }
-        {this.canIUseResend &&
+        )}
+        {this.canIUseResend && (
           <li key="resend-invite-user" className="ready">
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <button type="button" id="resend"
+                  <button
+                    type="button"
+                    id="resend"
                     onClick={this.handleResendInviteClickEvent}
                     disabled={!this.canResendInviteToUser}
-                    className="link no-border">
-                    <SendSVG /><span><Trans>Resend invite</Trans></span>
+                    className="link no-border"
+                  >
+                    <SendSVG />
+                    <span>
+                      <Trans>Resend invite</Trans>
+                    </span>
                   </button>
                 </div>
               </div>
             </div>
           </li>
-        }
-        {this.canIUseMfa &&
+        )}
+        {this.canIUseMfa && (
           <li key="disable-user-mfa" className="ready">
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <button type="button"
+                  <button
+                    type="button"
                     id="disable-mfa"
                     onClick={this.handleDisableMfaEvent}
                     disabled={!this.canDisableMfaForUser}
-                    className="link no-border">
-                    <FingerprintDisabledSVG /><span><Trans>Disable MFA</Trans></span>
+                    className="link no-border"
+                  >
+                    <FingerprintDisabledSVG />
+                    <span>
+                      <Trans>Disable MFA</Trans>
+                    </span>
                   </button>
                 </div>
               </div>
             </div>
           </li>
-        }
-        {this.canIUseDelete() &&
+        )}
+        {this.canIUseDelete() && (
           <li key="delete-user" className="ready">
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <button type="button" id="delete" onClick={this.handleDeleteClickEvent} disabled={!this.canDeleteUser()} className="link no-border">
-                    <DeleteSVG /><span><Trans>Delete</Trans></span>
+                  <button
+                    type="button"
+                    id="delete"
+                    onClick={this.handleDeleteClickEvent}
+                    disabled={!this.canDeleteUser()}
+                    className="link no-border"
+                  >
+                    <DeleteSVG />
+                    <span>
+                      <Trans>Delete</Trans>
+                    </span>
                   </button>
                 </div>
               </div>
             </div>
           </li>
-        }
-        {this.canIReviewAccountRecoveryRequest() &&
+        )}
+        {this.canIReviewAccountRecoveryRequest() && (
           <li key="review-recovery-user" className="ready">
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <button type="button" id="review-recovery" onClick={this.handleReviewRecoveryRequestClickEvent} disabled={!this.hasPendingAccountRecoveryRequest()} className="link no-border">
-                    <BuoySVG /><span><Trans>Review recovery request</Trans></span>
+                  <button
+                    type="button"
+                    id="review-recovery"
+                    onClick={this.handleReviewRecoveryRequestClickEvent}
+                    disabled={!this.hasPendingAccountRecoveryRequest()}
+                    className="link no-border"
+                  >
+                    <BuoySVG />
+                    <span>
+                      <Trans>Review recovery request</Trans>
+                    </span>
                   </button>
                 </div>
               </div>
             </div>
           </li>
-        }
-        {this.canIShareMissingMetadataKeys &&
+        )}
+        {this.canIShareMissingMetadataKeys && (
           <li key="missing-metadata-keys" className="ready">
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <button id="share-metadata-keys" type="button" onClick={this.handleShareMissingMetadataKeysEvent} disabled={!this.hasMissingMetadataKeysRequest()} className="link no-border">
+                  <button
+                    id="share-metadata-keys"
+                    type="button"
+                    onClick={this.handleShareMissingMetadataKeysEvent}
+                    disabled={!this.hasMissingMetadataKeysRequest()}
+                    className="link no-border"
+                  >
                     <MetadataKeySVG />
-                    <span><Trans>Share metadata keys</Trans></span>
+                    <span>
+                      <Trans>Share metadata keys</Trans>
+                    </span>
                   </button>
                 </div>
               </div>
             </div>
           </li>
-        }
+        )}
       </ContextualMenuWrapper>
     );
   }
@@ -501,5 +555,8 @@ DisplayUsersContextualMenu.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withWorkflow(withRbac(withDialog(withClipboard(withActionFeedback(withTranslation('common')(DisplayUsersContextualMenu)))))));
-
+export default withAppContext(
+  withWorkflow(
+    withRbac(withDialog(withClipboard(withActionFeedback(withTranslation("common")(DisplayUsersContextualMenu))))),
+  ),
+);

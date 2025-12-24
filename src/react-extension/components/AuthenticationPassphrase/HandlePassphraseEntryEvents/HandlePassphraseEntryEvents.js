@@ -12,10 +12,10 @@
  * @since         2.12.0
  */
 
-import React from 'react';
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import React from "react";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import InputPassphrase from "../InputPassphrase/InputPassphrase";
-import {withDialog} from "../../../contexts/DialogContext";
+import { withDialog } from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
 
 /**
@@ -56,7 +56,7 @@ class HandlePassphraseEntryEvents extends React.Component {
    * @param requestId
    */
   async handlePassphraseEntryRequestEvent(requestId) {
-    await this.props.context.setContext({passphraseRequestId: requestId});
+    await this.props.context.setContext({ passphraseRequestId: requestId });
     this.props.dialogContext.open(InputPassphrase);
   }
 

@@ -14,10 +14,10 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import HealthcheckService from "../../../../shared/services/api/healthcheck/HealthcheckService";
 import HealthcheckEntity from "../../../../shared/models/entity/healthcheck/healthcheckEntity";
-import {withActionFeedback} from "../../ActionFeedbackContext";
+import { withActionFeedback } from "../../ActionFeedbackContext";
 
 /**
  * The administration healthcheck context
@@ -86,13 +86,13 @@ export class AdministrationHealthcheckContextProvider extends React.Component {
       const result = await this.healthcheckService.fetchHealthcheck();
       if (result) {
         const healthData = new HealthcheckEntity(result);
-        this.setState({healthcheckData: healthData});
+        this.setState({ healthcheckData: healthData });
       } else {
-        this.props.actionFeedbackContext.displayError('No data received from the server');
+        this.props.actionFeedbackContext.displayError("No data received from the server");
       }
     } catch (error) {
       console.error(error);
-      this.setState({endpointEnabled: false});
+      this.setState({ endpointEnabled: false });
       this.props.actionFeedbackContext.displayError(error.message);
     } finally {
       this.setProcessing(false);
@@ -123,7 +123,7 @@ export class AdministrationHealthcheckContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({processing});
+    this.setState({ processing });
   }
 
   /**
@@ -156,11 +156,8 @@ export function withAdministrationHealthcheck(WrappedComponent) {
     render() {
       return (
         <AdministrationHealthcheckContext.Consumer>
-          {adminHealthcheckContext => (
-            <WrappedComponent
-              adminHealthcheckContext={adminHealthcheckContext}
-              {...this.props}
-            />
+          {(adminHealthcheckContext) => (
+            <WrappedComponent adminHealthcheckContext={adminHealthcheckContext} {...this.props} />
           )}
         </AdministrationHealthcheckContext.Consumer>
       );

@@ -22,11 +22,7 @@ class MetadataEntity extends Entity {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(EntitySchema.validate(
-      MetadataEntity.ENTITY_NAME,
-      dto,
-      MetadataEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(MetadataEntity.ENTITY_NAME, dto, MetadataEntity.getSchema()), options);
   }
 
   /**
@@ -35,15 +31,15 @@ class MetadataEntity extends Entity {
    */
   static getSchema() {
     return {
-      "type": "object",
-      "required": ["canDecryptMetadataPrivateKey"],
-      "properties": {
-        "canDecryptMetadataPrivateKey": {"type": "boolean"},
-        "canValidatePrivateMetadataKey": {"type": "boolean"},
-        "isServerHasAccessToMetadataKey": {"type": "boolean"},
-        "isServerMetadataKeyAccessInZeroKnowledgeMode": {"type": "boolean"},
-        "noActiveMetadataKey": {"type": "boolean"},
-      }
+      type: "object",
+      required: ["canDecryptMetadataPrivateKey"],
+      properties: {
+        canDecryptMetadataPrivateKey: { type: "boolean" },
+        canValidatePrivateMetadataKey: { type: "boolean" },
+        isServerHasAccessToMetadataKey: { type: "boolean" },
+        isServerMetadataKeyAccessInZeroKnowledgeMode: { type: "boolean" },
+        noActiveMetadataKey: { type: "boolean" },
+      },
     };
   }
 

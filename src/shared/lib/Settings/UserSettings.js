@@ -57,7 +57,7 @@ export default class UserSettings {
     return {
       code: this.settings["user.settings.securityToken.code"],
       backgroundColor: this.settings["user.settings.securityToken.color"],
-      textColor: this.settings["user.settings.securityToken.textColor"]
+      textColor: this.settings["user.settings.securityToken.textColor"],
     };
   }
 

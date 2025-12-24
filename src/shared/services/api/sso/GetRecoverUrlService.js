@@ -12,10 +12,10 @@
  * @since         3.11.0
  */
 
-import {ApiClient} from "../../../lib/apiClient/apiClient";
+import { ApiClient } from "../../../lib/apiClient/apiClient";
 
 const SSO_RECOVER_START_CASES = {
-  DEFAULT: "default"
+  DEFAULT: "default",
 };
 
 /**
@@ -41,13 +41,13 @@ class GetRecoverUrlService {
   async getRecoverUrl(ssoToken) {
     const dto = {
       token: ssoToken,
-      case: SSO_RECOVER_START_CASES.DEFAULT
+      case: SSO_RECOVER_START_CASES.DEFAULT,
     };
     const response = await this.apiClient.create(dto);
     const url = new URL(response.body.url);
 
     if (url.origin !== this.expectedUrl.origin) {
-      throw new Error('The url should be from the same origin.');
+      throw new Error("The url should be from the same origin.");
     }
 
     return url;
@@ -55,4 +55,3 @@ class GetRecoverUrlService {
 }
 
 export default GetRecoverUrlService;
-

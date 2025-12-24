@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 class AutocompleteItem extends Component {
@@ -30,9 +30,9 @@ class AutocompleteItem extends Component {
 
   getClassName() {
     if (this.props.selected) {
-      return 'row selected';
+      return "row selected";
     }
-    return 'row';
+    return "row";
   }
 
   onClick(event) {
@@ -45,7 +45,7 @@ class AutocompleteItem extends Component {
         <div className={`autocomplete-suggestion ${this.getClassName()} `}>
           <div className="main-cell-wrapper">
             <div className="main-cell ">
-              <button type="button" className="link no-border" onClick={event => this.onClick(event)}>
+              <button type="button" className="link no-border" onClick={(event) => this.onClick(event)}>
                 <div className="item">
                   <span className="name ellipsis">{this.props.slug}</span>
                 </div>
@@ -62,7 +62,7 @@ AutocompleteItem.propTypes = {
   id: PropTypes.number,
   slug: PropTypes.string,
   selected: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 
 export default AutocompleteItem;

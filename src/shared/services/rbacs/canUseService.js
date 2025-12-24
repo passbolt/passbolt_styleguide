@@ -30,7 +30,7 @@ export default class CanUse {
       return this.getByRbacOrDefault(rbac, actionName, user);
     }
 
-    const role =  new RoleEntity(user.role);
+    const role = new RoleEntity(user.role);
     // Administrator action are not controlled by rbac.
     if (role.isAdmin()) {
       const adminControlFunction = GetControlFunctionService.getDefaultForAdminAndAction(actionName);

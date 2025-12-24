@@ -13,39 +13,32 @@
  */
 
 import React from "react";
-import {Link, withRouter} from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
-import {withRbac} from "../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
-import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
+import { withRbac } from "../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../shared/services/rbacs/uiActionEnumeration";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
+import { filterResourcesBySearch } from "../../../shared/utils/filterUtils";
+import { withResourcesLocalStorage } from "../../contexts/ResourceLocalStorageContext";
 import memoize from "memoize-one";
-import {
-  withResourceTypesLocalStorage
-} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withResourceTypesLocalStorage } from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {
-  withMetadataTypesSettingsLocalStorage
-} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import { withMetadataTypesSettingsLocalStorage } from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
-  RESOURCE_TYPE_V5_DEFAULT_SLUG
+  RESOURCE_TYPE_V5_DEFAULT_SLUG,
 } from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
-import DisplayResourceUrisBadge
-  from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
+import DisplayResourceUrisBadge from "../../../react-extension/components/Resource/DisplayResourceUrisBadge/DisplayResourceUrisBadge";
 import CanSuggestService from "../../../shared/services/canSuggestService/canSuggestService";
 import CaretRightSVG from "../../../img/svg/caret_right.svg";
 import FilterSVG from "../../../img/svg/filter.svg";
 import UsersSVG from "../../../img/svg/users.svg";
 import TagV2SVG from "../../../img/svg/tag_v2.svg";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {
-  withMetadataKeysSettingsLocalStorage
-} from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import { withMetadataKeysSettingsLocalStorage } from "../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
@@ -75,7 +68,7 @@ class HomePage extends React.Component {
   get defaultState() {
     return {
       activeTabUrl: null,
-      usingOnThisTab: false
+      usingOnThisTab: false,
     };
   }
 
@@ -115,8 +108,11 @@ class HomePage extends React.Component {
    */
   async loadActiveTabUrl() {
     try {
-      const activeTabUrl = await this.props.context.port.request("passbolt.active-tab.get-url", this.props.context.getOpenerTabId());
-      this.setState({activeTabUrl});
+      const activeTabUrl = await this.props.context.port.request(
+        "passbolt.active-tab.get-url",
+        this.props.context.getOpenerTabId(),
+      );
+      this.setState({ activeTabUrl });
     } catch (error) {
       console.error(error);
     }
@@ -128,7 +124,7 @@ class HomePage extends React.Component {
    * @param {string} activeTabUrl the active tab url
    * @return {Array<Object>} The list of filtered resources.
    */
-  filterSuggestedResources =  memoize((resources, activeTabUrl) => {
+  filterSuggestedResources = memoize((resources, activeTabUrl) => {
     if (!activeTabUrl) {
       return [];
     }
@@ -137,7 +133,10 @@ class HomePage extends React.Component {
 
     for (const i in resources) {
       const resource = resources[i];
-      if (this.isPasswordResource(resource.resource_type_id) && CanSuggestService.canSuggestUris(activeTabUrl, resource.metadata.uris)) {
+      if (
+        this.isPasswordResource(resource.resource_type_id) &&
+        CanSuggestService.canSuggestUris(activeTabUrl, resource.metadata.uris)
+      ) {
         suggestedResources.push(resource);
         if (suggestedResources.length === SUGGESTED_RESOURCES_LIMIT) {
           break;
@@ -159,7 +158,7 @@ class HomePage extends React.Component {
    * @param {string} search the current search to apply
    * @returns {Array<Object>} The list of resources.
    */
-  filterSearchedResources =  memoize((resources, search) => {
+  filterSearchedResources = memoize((resources, search) => {
     if (search && resources) {
       return filterResourcesBySearch(resources, search, BROWSED_RESOURCES_LIMIT);
     }
@@ -171,18 +170,24 @@ class HomePage extends React.Component {
    * @returns {Promise<void>}
    */
   async handleUseOnThisTabClick(resource) {
-    this.setState({usingOnThisTab: true});
+    this.setState({ usingOnThisTab: true });
     try {
-      await this.props.context.port.request('passbolt.quickaccess.use-resource-on-current-tab', resource.id, this.props.context.getOpenerTabId());
+      await this.props.context.port.request(
+        "passbolt.quickaccess.use-resource-on-current-tab",
+        resource.id,
+        this.props.context.getOpenerTabId(),
+      );
       window.close();
     } catch (error) {
       if (error && error.name === "UserAbortsOperationError") {
-        this.setState({usingOnThisTab: false});
+        this.setState({ usingOnThisTab: false });
       } else {
-        console.error('An error occured', error);
+        console.error("An error occured", error);
         this.setState({
           usingOnThisTab: false,
-          useOnThisTabError: this.props.t("Unable to use the password on this page. Copy and paste the information instead.")
+          useOnThisTabError: this.props.t(
+            "Unable to use the password on this page. Copy and paste the information instead.",
+          ),
         });
       }
     }
@@ -231,7 +236,11 @@ class HomePage extends React.Component {
    * @return {boolean}
    */
   get shouldDisplayActionAbortedMissingMetadataKeys() {
-    return this.props.metadataTypeSettings.isDefaultResourceTypeV5 && this.userHasMissingKeys && !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys;
+    return (
+      this.props.metadataTypeSettings.isDefaultResourceTypeV5 &&
+      this.userHasMissingKeys &&
+      !this.props.metadataKeysSettings?.allowUsageOfPersonalKeys
+    );
   }
 
   /**
@@ -244,7 +253,8 @@ class HomePage extends React.Component {
     const showSuggestedSection = !hasSearch;
     const showBrowsedResourcesSection = hasSearch;
     const showFiltersSection = !hasSearch;
-    const canUseTag = this.props.context.siteSettings.canIUse('tags') && this.props.rbacContext.canIUseAction(uiActions.TAGS_USE);
+    const canUseTag =
+      this.props.context.siteSettings.canIUse("tags") && this.props.rbacContext.canIUseAction(uiActions.TAGS_USE);
     let browsedResources, suggestedResources;
 
     if (isReady) {
@@ -255,131 +265,169 @@ class HomePage extends React.Component {
     return (
       <div className="index-list">
         <div className="list-container">
-          {showSuggestedSection &&
+          {showSuggestedSection && (
             <div className={`list-section`}>
               <div className="list-title">
-                <h2><Trans>Suggested</Trans></h2>
+                <h2>
+                  <Trans>Suggested</Trans>
+                </h2>
               </div>
               <ul className="list-items">
-                {!isReady &&
+                {!isReady && (
                   <li className="empty-entry">
-                    <SpinnerSVG/>
-                    <p className="processing-text"><Trans>Retrieving your passwords</Trans></p>
+                    <SpinnerSVG />
+                    <p className="processing-text">
+                      <Trans>Retrieving your passwords</Trans>
+                    </p>
                   </li>
-                }
-                {(isReady && suggestedResources.length === 0) &&
+                )}
+                {isReady && suggestedResources.length === 0 && (
                   <li className="empty-entry">
-                    <p><Trans>No passwords found for the current page. You can use the search.</Trans></p>
+                    <p>
+                      <Trans>No passwords found for the current page. You can use the search.</Trans>
+                    </p>
                   </li>
-                }
-                {(isReady && suggestedResources.length > 0) &&
-                  suggestedResources.map(resource => (
+                )}
+                {isReady &&
+                  suggestedResources.length > 0 &&
+                  suggestedResources.map((resource) => (
                     <li className="suggested-resource-entry" key={resource.id}>
-                      <button type="button" className="resource-details link" onClick={() => this.handleUseOnThisTabClick(resource)}>
+                      <button
+                        type="button"
+                        className="resource-details link"
+                        onClick={() => this.handleUseOnThisTabClick(resource)}
+                      >
                         <div className="inline-resource-name">
                           <span className="title">{resource.metadata.name}</span>
-                          <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
+                          <span className="username">
+                            {" "}
+                            {resource.metadata.username ? `(${resource.metadata.username})` : ""}
+                          </span>
                         </div>
                         <div className="uris">
                           <span className="url">{resource.metadata.uris?.[0]}</span>
-                          {resource.metadata.uris?.length > 1 &&
-                            <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)}/>
-                          }
+                          {resource.metadata.uris?.length > 1 && (
+                            <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)} />
+                          )}
                         </div>
                       </button>
-                      <Link className="chevron-right-wrapper" to={`/webAccessibleResources/quickaccess/resources/view/${resource.id}`}>
-                        <CaretRightSVG/>
+                      <Link
+                        className="chevron-right-wrapper"
+                        to={`/webAccessibleResources/quickaccess/resources/view/${resource.id}`}
+                      >
+                        <CaretRightSVG />
                       </Link>
                     </li>
                   ))}
               </ul>
             </div>
-          }
-          {showBrowsedResourcesSection &&
+          )}
+          {showBrowsedResourcesSection && (
             <div className="list-section">
               <div className="list-title">
-                <h2><Trans>Browse</Trans></h2>
+                <h2>
+                  <Trans>Browse</Trans>
+                </h2>
               </div>
               <ul className="list-items">
                 <React.Fragment>
-                  {!isReady &&
+                  {!isReady && (
                     <li className="empty-entry">
-                      <SpinnerSVG/>
-                      <p className="processing-text"><Trans>Retrieving your passwords</Trans></p>
+                      <SpinnerSVG />
+                      <p className="processing-text">
+                        <Trans>Retrieving your passwords</Trans>
+                      </p>
                     </li>
-                  }
-                  {(isReady && browsedResources.length === 0) &&
+                  )}
+                  {isReady && browsedResources.length === 0 && (
                     <li className="empty-entry">
-                      <p><Trans>No result match your search. Try with another search term.</Trans></p>
+                      <p>
+                        <Trans>No result match your search. Try with another search term.</Trans>
+                      </p>
                     </li>
-                  }
-                  {(isReady && browsedResources.length > 0) &&
-                    browsedResources.map(resource => (
+                  )}
+                  {isReady &&
+                    browsedResources.length > 0 &&
+                    browsedResources.map((resource) => (
                       <li className="browse-resource-entry" key={resource.id}>
                         <Link to={`/webAccessibleResources/quickaccess/resources/view/${resource.id}`}>
                           <div className="inline-resource-entry">
-                            <div className='inline-resource-name'>
+                            <div className="inline-resource-name">
                               <span className="title">{resource.metadata.name}</span>
-                              <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
+                              <span className="username">
+                                {" "}
+                                {resource.metadata.username ? `(${resource.metadata.username})` : ""}
+                              </span>
                             </div>
                             <div className="uris">
                               <span className="url">{resource.metadata.uris?.[0]}</span>
-                              {resource.metadata.uris?.length > 1 &&
-                                <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)}/>
-                              }
+                              {resource.metadata.uris?.length > 1 && (
+                                <DisplayResourceUrisBadge additionalUris={resource.metadata.uris?.slice(1)} />
+                              )}
                             </div>
                           </div>
-                          <CaretRightSVG/>
+                          <CaretRightSVG />
                         </Link>
                       </li>
                     ))}
                 </React.Fragment>
               </ul>
             </div>
-          }
-          {showFiltersSection &&
+          )}
+          {showFiltersSection && (
             <div className="list-section">
               <div className="list-title">
-                <h2><Trans>Browse</Trans></h2>
+                <h2>
+                  <Trans>Browse</Trans>
+                </h2>
               </div>
               <ul className="list-items">
                 <li className="filter-entry">
                   <Link to={"/webAccessibleResources/quickaccess/more-filters"}>
-                    <FilterSVG/>
-                    <span className="filter-title"><Trans>Filters</Trans></span>
-                    <CaretRightSVG/>
+                    <FilterSVG />
+                    <span className="filter-title">
+                      <Trans>Filters</Trans>
+                    </span>
+                    <CaretRightSVG />
                   </Link>
                 </li>
                 <li className="filter-entry">
                   <Link to={"/webAccessibleResources/quickaccess/resources/group"}>
-                    <UsersSVG/>
-                    <span className="filter-title"><Trans>Groups</Trans></span>
-                    <CaretRightSVG/>
+                    <UsersSVG />
+                    <span className="filter-title">
+                      <Trans>Groups</Trans>
+                    </span>
+                    <CaretRightSVG />
                   </Link>
                 </li>
-                {canUseTag &&
+                {canUseTag && (
                   <li className="filter-entry">
                     <Link to={"/webAccessibleResources/quickaccess/resources/tag"}>
                       <TagV2SVG />
-                      <span className="filter-title"><Trans>Tags</Trans></span>
-                      <CaretRightSVG/>
+                      <span className="filter-title">
+                        <Trans>Tags</Trans>
+                      </span>
+                      <CaretRightSVG />
                     </Link>
                   </li>
-                }
+                )}
               </ul>
             </div>
-          }
+          )}
         </div>
-        {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
-        <div className="submit-wrapper button-after-list input">
-          <Link to={`/webAccessibleResources/quickaccess/resources/${this.shouldDisplayActionAbortedMissingMetadataKeys ? "action-aborted-missing-metadata-keys" : "create"}`} id="popupAction" className="button primary big full-width" role="button">
-            <Trans>Create new</Trans>
-          </Link>
-          {this.state.useOnThisTabError &&
-          <div className="error-message">{this.state.useOnThisTabError}</div>
-          }
-        </div>
-        }
+        {this.hasMetadataTypesSettings() && this.canCreatePassword() && (
+          <div className="submit-wrapper button-after-list input">
+            <Link
+              to={`/webAccessibleResources/quickaccess/resources/${this.shouldDisplayActionAbortedMissingMetadataKeys ? "action-aborted-missing-metadata-keys" : "create"}`}
+              id="popupAction"
+              className="button primary big full-width"
+              role="button"
+            >
+              <Trans>Create new</Trans>
+            </Link>
+            {this.state.useOnThisTabError && <div className="error-message">{this.state.useOnThisTabError}</div>}
+          </div>
+        )}
       </div>
     );
   }
@@ -396,4 +444,16 @@ HomePage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withResourceTypesLocalStorage(withResourcesLocalStorage(withMetadataTypesSettingsLocalStorage(withMetadataKeysSettingsLocalStorage(withTranslation('common')(HomePage))))))));
+export default withAppContext(
+  withRbac(
+    withRouter(
+      withResourceTypesLocalStorage(
+        withResourcesLocalStorage(
+          withMetadataTypesSettingsLocalStorage(
+            withMetadataKeysSettingsLocalStorage(withTranslation("common")(HomePage)),
+          ),
+        ),
+      ),
+    ),
+  ),
+);

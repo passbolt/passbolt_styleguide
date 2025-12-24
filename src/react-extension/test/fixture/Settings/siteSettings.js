@@ -4,234 +4,247 @@
  * @returns {{app: {image_storage: {public_path: string}, debug: number, server_timezone: string, locale: string, version: {number: string, name: string}, url: string, session_timeout: number}, passbolt: {plugins: {resourceTypes: {version: string}, reports: {version: string}, folders: {version: string, enabled: boolean}, import: {version: string, config: {format: string[]}}, log: {version: string}, accountRecovery: {version: string, enabled: boolean}, locale: {options: [{label: string, locale: string},{label: string, locale: string},{label: string, locale: string},{label: string, locale: string},{label: string, locale: string},null,null,null,null,null,null,null,null]}, previewPassword: {version: string}, smtpSettings: {version: string, enabled: boolean}, export: {version: string}, multiFactorAuthentication: {version: string, enabled: boolean}, ee: {version: string, enabled: boolean}, directorySync: {version: string, enabled: boolean}, emailNotificationSettings: {version: string}, audit_log: {version: string, enabled: boolean}, mobile: {version: string}, emailDigest: {version: string}, accountRecoveryRequestHelp: {version: string, enabled: boolean}, passbolt_test_data: {version: string}, tags: {version: string, enabled: boolean}, license: {version: string}, passwordGenerator: {version: string}, rememberMe: {options: {"1800": string, "300": string, "3600": string, "-1": string, "900": string}, version: string}, accountSettings: {themes: {css: string}, version: string}, selenium_api: {version: string}}, legal: {terms: {url: string}, privacy_policy: {url: string}}, edition: (string)}}}
  */
 const siteSettings = (isProEdition = true) => ({
-  "app": {
-    "version": {
-      "number": "3.5.0",
-      "name": "Wide Open"
+  app: {
+    version: {
+      number: "3.5.0",
+      name: "Wide Open",
     },
-    "locale": "en-UK",
-    "url": "http://127.0.0.1:3001",
-    "debug": 1,
-    "server_timezone": "UTC",
-    "session_timeout": 24,
-    "image_storage": {
-      "public_path": "img/public/"
-    }
+    locale: "en-UK",
+    url: "http://127.0.0.1:3001",
+    debug: 1,
+    server_timezone: "UTC",
+    session_timeout: 24,
+    image_storage: {
+      public_path: "img/public/",
+    },
   },
-  "passbolt": {
-    "legal": {
-      "privacy_policy": {
-        "url": "https://passbolt.com/privacy"
+  passbolt: {
+    legal: {
+      privacy_policy: {
+        url: "https://passbolt.com/privacy",
       },
-      "terms": {
-        "url": "https://passbolt.com/terms"
-      }
+      terms: {
+        url: "https://passbolt.com/terms",
+      },
     },
-    "edition": isProEdition ? "pro" : "ce",
-    "plugins": {
-      "accountRecovery": {
-        "version": "1.0.0",
-        "enabled": isProEdition,
+    edition: isProEdition ? "pro" : "ce",
+    plugins: {
+      accountRecovery: {
+        version: "1.0.0",
+        enabled: isProEdition,
       },
-      "rbacs": {
-        "version": "1.0.0",
-        "enabled": isProEdition,
+      rbacs: {
+        version: "1.0.0",
+        enabled: isProEdition,
       },
-      "import": {
-        "version": "2.0.1",
-        "config": {
-          "format": [
-            "kdbx",
-            "csv"
-          ]
-        }
+      import: {
+        version: "2.0.1",
+        config: {
+          format: ["kdbx", "csv"],
+        },
       },
-      "export": {
-        "version": "2.0.0"
+      export: {
+        version: "2.0.0",
       },
-      "selenium_api": {
-        "version": "2.2.0"
+      selenium_api: {
+        version: "2.2.0",
       },
-      "passbolt_test_data": {
-        "version": "2.0"
+      passbolt_test_data: {
+        version: "2.0",
       },
-      "license": {
-        "version": "2.0.0"
+      license: {
+        version: "2.0.0",
       },
-      "ee": {
-        "version": "3.0.0",
-        "enabled": isProEdition
+      ee: {
+        version: "3.0.0",
+        enabled: isProEdition,
       },
-      "accountSettings": {
-        "version": "1.0.0",
-        "themes": {
-          "css": "api_main.min.css"
-        }
+      accountSettings: {
+        version: "1.0.0",
+        themes: {
+          css: "api_main.min.css",
+        },
       },
-      "rememberMe": {
-        "version": "2.0.0",
-        "options": {
-          "300": "5 minutes",
-          "900": "15 minutes",
-          "1800": "30 minutes",
-          "3600": "1 hour",
-          "-1": "until I log out"
-        }
+      rememberMe: {
+        version: "2.0.0",
+        options: {
+          300: "5 minutes",
+          900: "15 minutes",
+          1800: "30 minutes",
+          3600: "1 hour",
+          "-1": "until I log out",
+        },
       },
-      "emailNotificationSettings": {
-        "version": "1.1.0"
+      emailNotificationSettings: {
+        version: "1.1.0",
       },
-      "emailDigest": {
-        "version": "1.0.0"
+      emailDigest: {
+        version: "1.0.0",
       },
-      "resourceTypes": {
-        "version": "1.0.0"
+      resourceTypes: {
+        version: "1.0.0",
       },
-      "reports": {
-        "version": "1.0.0"
+      reports: {
+        version: "1.0.0",
       },
-      "multiFactorAuthentication": {
-        "version": "1.1.0",
-        "enabled": isProEdition
+      multiFactorAuthentication: {
+        version: "1.1.0",
+        enabled: isProEdition,
       },
-      "directorySync": {
-        "version": "1.0.0",
-        "enabled": isProEdition
+      directorySync: {
+        version: "1.0.0",
+        enabled: isProEdition,
       },
-      "tags": {
-        "version": "1.0.1",
-        "enabled": isProEdition
+      tags: {
+        version: "1.0.1",
+        enabled: isProEdition,
       },
-      "log": {
-        "version": "1.0.0"
+      log: {
+        version: "1.0.0",
       },
-      "audit_log": {
-        "version": "1.0.0",
-        "enabled": isProEdition
+      audit_log: {
+        version: "1.0.0",
+        enabled: isProEdition,
       },
-      "folders": {
-        "version": "2.0.0",
-        "enabled": true
+      folders: {
+        version: "2.0.0",
+        enabled: true,
       },
-      "previewPassword": {
-        "version": "3.0.0"
+      previewPassword: {
+        version: "3.0.0",
       },
-      "passwordGenerator": {
-        "version": "3.3.0"
+      passwordGenerator: {
+        version: "3.3.0",
       },
-      "locale": {
-        "options": [
+      locale: {
+        options: [
           {
             locale: "de-DE",
-            label: "Deutsch"
-          }, {
+            label: "Deutsch",
+          },
+          {
             locale: "en-UK",
-            label: "English"
-          }, {
+            label: "English",
+          },
+          {
             locale: "es-ES",
-            label: "Español"
-          }, {
+            label: "Español",
+          },
+          {
             locale: "fr-FR",
-            label: "Français"
-          }, {
+            label: "Français",
+          },
+          {
             locale: "it-IT",
-            label: "Italiano (Beta)"
-          }, {
+            label: "Italiano (Beta)",
+          },
+          {
             locale: "ja-JP",
-            label: "日本語"
-          }, {
+            label: "日本語",
+          },
+          {
             locale: "ko-KR",
-            label: "日本語"
-          }, {
+            label: "日本語",
+          },
+          {
             locale: "lt-LT",
-            label: "Lietuvių"
-          }, {
+            label: "Lietuvių",
+          },
+          {
             locale: "nl-NL",
-            label: "Nederlands"
-          }, {
+            label: "Nederlands",
+          },
+          {
             locale: "pl-PL",
-            label: "Polski"
-          }, {
+            label: "Polski",
+          },
+          {
             locale: "pt-BR",
-            label: "Português Brasil (beta)"
-          }, {
+            label: "Português Brasil (beta)",
+          },
+          {
             locale: "ro-RO",
-            label: "Română (beta)"
-          }, {
+            label: "Română (beta)",
+          },
+          {
             locale: "ru-RU",
-            label: "Pусский (beta)"
-          }, {
+            label: "Pусский (beta)",
+          },
+          {
             locale: "sl-SI",
-            label: "Slovenščina (beta)"
-          }, {
+            label: "Slovenščina (beta)",
+          },
+          {
             locale: "sv-SE",
-            label: "Svenska"
-          }, {
+            label: "Svenska",
+          },
+          {
             locale: "uk-UA",
-            label: "Українська (beta)"
-          }, {
+            label: "Українська (beta)",
+          },
+          {
             locale: "cs-CZ",
-            label: "Čeština (beta)"
-          }
-        ]
+            label: "Čeština (beta)",
+          },
+        ],
       },
-      "mobile": {
-        "version": "1.0.0"
+      mobile: {
+        version: "1.0.0",
       },
-      "accountRecoveryRequestHelp": {
-        "version": "1.0.0",
-        "enabled": isProEdition
+      accountRecoveryRequestHelp: {
+        version: "1.0.0",
+        enabled: isProEdition,
       },
-      "smtpSettings": {
-        "version": "1.0.0",
-        "enabled": true,
+      smtpSettings: {
+        version: "1.0.0",
+        enabled: true,
       },
-      "totpResourceTypes": {
-        "version": "1.0.0",
-        "enabled": true,
+      totpResourceTypes: {
+        version: "1.0.0",
+        enabled: true,
       },
-      "disableUser": {
-        "enabled": true,
+      disableUser: {
+        enabled: true,
       },
-      "passwordExpiry": {
-        "enabled": true,
+      passwordExpiry: {
+        enabled: true,
       },
-      "desktop": {
-        "enabled": true,
+      desktop: {
+        enabled: true,
       },
-      "passwordExpiryPolicies": {
-        "enabled": isProEdition,
+      passwordExpiryPolicies: {
+        enabled: isProEdition,
       },
-      "healthcheckUi": {
-        "enabled": true,
+      healthcheckUi: {
+        enabled: true,
       },
-      "sso": {
-        "enabled": isProEdition,
+      sso: {
+        enabled: isProEdition,
       },
-      "mfaPolicies": {
-        "enabled": isProEdition,
+      mfaPolicies: {
+        enabled: isProEdition,
       },
-      "passwordPoliciesUpdate": {
-        "enabled": isProEdition,
+      passwordPoliciesUpdate: {
+        enabled: isProEdition,
       },
-      "userPassphrasePolicies": {
-        "enabled": isProEdition,
+      userPassphrasePolicies: {
+        enabled: isProEdition,
       },
-      "metadata": {
-        "enabled": true,
+      metadata: {
+        enabled: true,
       },
-      "selfRegistration": {
-        "enabled": true,
+      selfRegistration: {
+        enabled: true,
       },
-      "scim": {
-        "enabled": true,
+      scim: {
+        enabled: true,
       },
-      "secretRevisions": {
-        "enabled": true,
-        "maxRevisionsLimit": 11
+      secretRevisions: {
+        enabled: true,
+        maxRevisionsLimit: 11,
       },
-    }
-  }
+    },
+  },
 });
 
 const siteSettingsPro = siteSettings(true);

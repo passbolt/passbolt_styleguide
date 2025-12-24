@@ -13,16 +13,18 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {Trans, withTranslation} from "react-i18next";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { Trans, withTranslation } from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import { withPasswordExpiry } from "../../../contexts/PasswordExpirySettingsContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import PasswordExpiryDialogViewModel, {PasswordExpiryOptionEnum} from "../../../../shared/models/passwordExpirySettings/PasswordExpiryDialogViewModel";
+import { withDialog } from "../../../contexts/DialogContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import PasswordExpiryDialogViewModel, {
+  PasswordExpiryOptionEnum,
+} from "../../../../shared/models/passwordExpirySettings/PasswordExpiryDialogViewModel";
 import CalendarSVG from "../../../../img/svg/calendar.svg";
 
 class PasswordExpiryDialog extends React.Component {
@@ -74,7 +76,7 @@ class PasswordExpiryDialog extends React.Component {
     }
 
     const newExpiryDurationInDay = {
-      passwordExpiryDurationInDay: parseInt(event.target.value, 10)
+      passwordExpiryDurationInDay: parseInt(event.target.value, 10),
     };
     this.selectExpiryOption(PasswordExpiryOptionEnum.AUTOMATIC, newExpiryDurationInDay);
   }
@@ -85,7 +87,7 @@ class PasswordExpiryDialog extends React.Component {
    */
   handleDateChange(event) {
     const newPasswordExpiryDate = {
-      passwordExpiryDate: event.target.value
+      passwordExpiryDate: event.target.value,
     };
     this.selectExpiryOption(PasswordExpiryOptionEnum.MANUAL, newPasswordExpiryDate);
   }
@@ -96,7 +98,9 @@ class PasswordExpiryDialog extends React.Component {
    * @param {object} [newInputFieldDate]
    */
   selectExpiryOption(passwordExpiryOption, newInputFieldDate = {}) {
-    const data = Object.assign({}, this.state.passwordExpiryDialogViewModel.toDto(), newInputFieldDate, {passwordExpiryOption});
+    const data = Object.assign({}, this.state.passwordExpiryDialogViewModel.toDto(), newInputFieldDate, {
+      passwordExpiryOption,
+    });
     const newState = {
       passwordExpiryDialogViewModel: new PasswordExpiryDialogViewModel(data),
     };
@@ -123,7 +127,7 @@ class PasswordExpiryDialog extends React.Component {
    * @param {Error} error
    */
   handleError(error) {
-    this.props.dialogContext.open(NotifyError, {error});
+    this.props.dialogContext.open(NotifyError, { error });
   }
 
   /**
@@ -133,8 +137,11 @@ class PasswordExpiryDialog extends React.Component {
   displayErrors(errors) {
     return (
       <span className="error-message">
-        {Object.keys(errors).map(errorKey => <>{errors[errorKey]}</>)}
-      </span>);
+        {Object.keys(errors).map((errorKey) => (
+          <>{errors[errorKey]}</>
+        ))}
+      </span>
+    );
   }
 
   /**
@@ -163,20 +170,25 @@ class PasswordExpiryDialog extends React.Component {
       return;
     }
 
-    this.setState({processing: true});
+    this.setState({ processing: true });
 
-    const resourceExpirationDto = this.state.passwordExpiryDialogViewModel.mapResourcesToPasswordExpiryDto(this.props.resources);
+    const resourceExpirationDto = this.state.passwordExpiryDialogViewModel.mapResourcesToPasswordExpiryDto(
+      this.props.resources,
+    );
     try {
-      await this.props.context.port.request('passbolt.resources.set-expiration-date', resourceExpirationDto);
-      this.props.actionFeedbackContext.displaySuccess(this.props.t("The expiry date of the selected resource has been updated.", {count: this.props.resources.length}));
-      this.setState({processing: false});
+      await this.props.context.port.request("passbolt.resources.set-expiration-date", resourceExpirationDto);
+      this.props.actionFeedbackContext.displaySuccess(
+        this.props.t("The expiry date of the selected resource has been updated.", {
+          count: this.props.resources.length,
+        }),
+      );
+      this.setState({ processing: false });
       this.props.onClose();
     } catch (e) {
       this.handleError(e);
-      this.setState({processing: false});
+      this.setState({ processing: false });
     }
   }
-
 
   /**
    * Render the component.
@@ -187,20 +199,31 @@ class PasswordExpiryDialog extends React.Component {
     const isDisabled = this.hasAllInputDisabled();
     const errors = this.state.errors;
     return (
-      <DialogWrapper className='password-expiry-dialog' title={this.props.t("Set an expiry date", {count: this.resourceCount})} onClose={this.props.onClose} disabled={isDisabled}>
+      <DialogWrapper
+        className="password-expiry-dialog"
+        title={this.props.t("Set an expiry date", { count: this.resourceCount })}
+        onClose={this.props.onClose}
+        disabled={isDisabled}
+      >
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className="radiolist-alt">
-              <div className={`input radio ${viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.AUTOMATIC ? "checked" : ""}`}>
-                <input type="radio"
+              <div
+                className={`input radio ${viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.AUTOMATIC ? "checked" : ""}`}
+              >
+                <input
+                  type="radio"
                   value={PasswordExpiryOptionEnum.AUTOMATIC}
                   onChange={() => this.selectExpiryOption(PasswordExpiryOptionEnum.AUTOMATIC)}
                   name="passwordExpiryOption"
                   checked={viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.AUTOMATIC}
                   id="passwordExpiryOptionAutomatic"
-                  disabled={this.hasAllInputDisabled()}/>
+                  disabled={this.hasAllInputDisabled()}
+                />
                 <label htmlFor="passwordExpiryOptionAutomatic">
-                  <span className="name"><Trans>Set the date automatically:</Trans></span>
+                  <span className="name">
+                    <Trans>Set the date automatically:</Trans>
+                  </span>
                   <span className="info">
                     <input
                       type="number"
@@ -210,22 +233,30 @@ class PasswordExpiryDialog extends React.Component {
                       onChange={this.handleDurationInDayChange}
                       disabled={this.hasAllInputDisabled()}
                       min="1"
-                      max="365"/>
+                      max="365"
+                    />
                     <Trans>days from now.</Trans>
                   </span>
-                  {errors?.hasError("passwordExpiryDurationInDay") && this.displayErrors(errors.getError("passwordExpiryDurationInDay"))}
+                  {errors?.hasError("passwordExpiryDurationInDay") &&
+                    this.displayErrors(errors.getError("passwordExpiryDurationInDay"))}
                 </label>
               </div>
-              <div className={`input radio ${viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.MANUAL ? "checked" : ""}`}>
-                <input type="radio"
+              <div
+                className={`input radio ${viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.MANUAL ? "checked" : ""}`}
+              >
+                <input
+                  type="radio"
                   value={PasswordExpiryOptionEnum.MANUAL}
                   onChange={() => this.selectExpiryOption(PasswordExpiryOptionEnum.MANUAL)}
                   name="passwordExpiryOption"
                   checked={viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.MANUAL}
                   id="passwordExpiryOptionManual"
-                  disabled={this.hasAllInputDisabled()}/>
+                  disabled={this.hasAllInputDisabled()}
+                />
                 <label htmlFor="passwordExpiryOptionManual">
-                  <span className="name"><Trans>Set the date manually:</Trans></span>
+                  <span className="name">
+                    <Trans>Set the date manually:</Trans>
+                  </span>
                   <span className="info date-wrapper">
                     <div className="button-inline">
                       <input
@@ -237,22 +268,28 @@ class PasswordExpiryDialog extends React.Component {
                         onChange={this.handleDateChange}
                         disabled={this.hasAllInputDisabled()}
                       />
-                      <CalendarSVG/>
+                      <CalendarSVG />
                     </div>
                   </span>
                   {errors?.hasError("passwordExpiryDate") && this.displayErrors(errors.getError("passwordExpiryDate"))}
                 </label>
               </div>
-              <div className={`input radio ${viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.NEVER ? "checked" : ""}`}>
-                <input type="radio"
+              <div
+                className={`input radio ${viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.NEVER ? "checked" : ""}`}
+              >
+                <input
+                  type="radio"
                   value={PasswordExpiryOptionEnum.NEVER}
                   onChange={() => this.selectExpiryOption(PasswordExpiryOptionEnum.NEVER)}
                   name="passwordExpiryOption"
                   checked={viewModel.passwordExpiryOption === PasswordExpiryOptionEnum.NEVER}
                   id="passwordExpiryOptionNever"
-                  disabled={this.hasAllInputDisabled()}/>
+                  disabled={this.hasAllInputDisabled()}
+                />
                 <label htmlFor="passwordExpiryOptionNever">
-                  <span className="name"><Trans>Not set</Trans></span>
+                  <span className="name">
+                    <Trans>Not set</Trans>
+                  </span>
                   <span className="info">
                     <Trans count={this.resourceCount}>This resource does not need an expiry date.</Trans>
                   </span>
@@ -261,8 +298,8 @@ class PasswordExpiryDialog extends React.Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton disabled={isDisabled} onClick={this.props.onClose}/>
-            <FormSubmitButton disabled={isDisabled} processing={this.state.processing} value={this.props.t("Save")}/>
+            <FormCancelButton disabled={isDisabled} onClick={this.props.onClose} />
+            <FormSubmitButton disabled={isDisabled} processing={this.state.processing} value={this.props.t("Save")} />
           </div>
         </form>
       </DialogWrapper>
@@ -280,4 +317,6 @@ PasswordExpiryDialog.propTypes = {
   resources: PropTypes.arrayOf(Object), // the resource to modify
 };
 
-export default withAppContext(withDialog(withPasswordExpiry(withActionFeedback(withTranslation('common')(PasswordExpiryDialog)))));
+export default withAppContext(
+  withDialog(withPasswordExpiry(withActionFeedback(withTranslation("common")(PasswordExpiryDialog)))),
+);

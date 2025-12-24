@@ -17,15 +17,15 @@ import DisplayResourceDetailsInformation from "./DisplayResourceDetailsInformati
 import DisplayResourceDetailsTag from "./DisplayResourceDetailsTag";
 import DisplayResourceDetailsComment from "./DisplayResourceDetailsComment";
 import DisplayResourceDetailsDescription from "./DisplayResourceDetailsDescription";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import { withResourceWorkspace } from "../../../contexts/ResourceWorkspaceContext";
 import DisplayResourceDetailsPermission from "./DisplayResourceDetailsPermission";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
 import DisplayResourceDetailsActivity from "./DisplayResourceDetailsActivity";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {Trans, withTranslation} from "react-i18next";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {withResourceTypesLocalStorage} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { withActionFeedback } from "../../../contexts/ActionFeedbackContext";
+import { Trans, withTranslation } from "react-i18next";
+import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
+import { withRbac } from "../../../../shared/context/Rbac/RbacContext";
+import { withResourceTypesLocalStorage } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import DisplayResourceDetailsPassword from "./DisplayResourceDetailsPassword";
 import DisplayResourceDetailsTotp from "./DisplayResourceDetailsTotp";
@@ -37,18 +37,17 @@ import ResourceIcon from "../../../../shared/components/Icons/ResourceIcon";
 import ArrowBigUpDashSVG from "../../../../img/svg/arrow_big_up_dash.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../../img/svg/caret_right.svg";
-import {V4_TO_V5_RESOURCE_TYPE_MAPPING} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
-import {withMetadataTypesSettingsLocalStorage} from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import { V4_TO_V5_RESOURCE_TYPE_MAPPING } from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import { withMetadataTypesSettingsLocalStorage } from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import ResourceFormEntity from "../../../../shared/models/entity/resource/resourceFormEntity";
 import DisplayResourceDetailsCustomFields from "./DisplayResourceDetailsCustomFields";
 import DisplayResourceDetailsURIs from "./DisplayResourceDetailsURIs";
-import {withClipboard} from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
-import {withMetadataKeysSettingsLocalStorage} from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
+import { withClipboard } from "../../../contexts/Clipboard/ManagedClipboardServiceProvider";
+import { withMetadataKeysSettingsLocalStorage } from "../../../../shared/context/MetadataKeysSettingsLocalStorageContext/MetadataKeysSettingsLocalStorageContext";
 import MetadataKeysSettingsEntity from "../../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
-import {withDialog} from "../../../contexts/DialogContext";
-import ActionAbortedMissingMetadataKeys
-  from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
+import { withDialog } from "../../../contexts/DialogContext";
+import ActionAbortedMissingMetadataKeys from "../../Metadata/ActionAbortedMissingMetadataKeys/ActionAbortedMissingMetadataKeys";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -137,7 +136,7 @@ class DisplayResourceDetails extends React.Component {
    * Handles the click on the display upgrade button.
    */
   handleDisplayUpgradeClick() {
-    this.setState({displayUpgrade: !this.state.displayUpgrade});
+    this.setState({ displayUpgrade: !this.state.displayUpgrade });
   }
 
   /**
@@ -181,7 +180,7 @@ class DisplayResourceDetails extends React.Component {
    * Upgrade the resource
    */
   async upgradeResource() {
-    this.setState({processing: true});
+    this.setState({ processing: true });
     try {
       const resourceFormEntity = await this.createResourceFormEntity();
       resourceFormEntity.upgradeToV5();
@@ -189,7 +188,7 @@ class DisplayResourceDetails extends React.Component {
     } catch (error) {
       await this.handleSaveError(error);
     } finally {
-      this.setState({processing: false});
+      this.setState({ processing: false });
     }
   }
 
@@ -198,9 +197,9 @@ class DisplayResourceDetails extends React.Component {
    * @returns {Promise<ResourceFormEntity>}
    */
   async createResourceFormEntity() {
-    const resourceDto = {...this.resource};
+    const resourceDto = { ...this.resource };
     resourceDto.secret = await this.getDecryptedSecret();
-    return new ResourceFormEntity(resourceDto, {resourceTypes: this.props.resourceTypes});
+    return new ResourceFormEntity(resourceDto, { resourceTypes: this.props.resourceTypes });
   }
 
   /**
@@ -301,13 +300,15 @@ class DisplayResourceDetails extends React.Component {
     return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasSecretDescription();
   }
 
-
   /*
    * Is resource has custom fields
    * @return {boolean}
    */
   get hasCustomFields() {
-    return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasCustomFields() && this.resource.metadata.custom_fields?.length > 0;
+    return (
+      this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasCustomFields() &&
+      this.resource.metadata.custom_fields?.length > 0
+    );
   }
 
   /**
@@ -325,7 +326,12 @@ class DisplayResourceDetails extends React.Component {
   get shouldDisplayUpgradeResource() {
     const resourceType = this.props.resourceTypes?.getFirstById(this.resource.resource_type_id);
     const v5ResourceTypeSlug = V4_TO_V5_RESOURCE_TYPE_MAPPING[resourceType?.slug];
-    return this.canUpdate && this.props.metadataTypeSettings?.allowV4V5Upgrade && resourceType?.isV4() && this.props.resourceTypes.hasOneWithSlug(v5ResourceTypeSlug);
+    return (
+      this.canUpdate &&
+      this.props.metadataTypeSettings?.allowV4V5Upgrade &&
+      resourceType?.isV4() &&
+      this.props.resourceTypes.hasOneWithSlug(v5ResourceTypeSlug)
+    );
   }
 
   /**
@@ -348,41 +354,23 @@ class DisplayResourceDetails extends React.Component {
    * @returns {JSX}
    */
   renderResourceDetail() {
-    const canUseTags = this.props.context.siteSettings.canIUse("tags")
-      && this.props.rbacContext.canIUseAction(uiActions.TAGS_USE);
+    const canUseTags =
+      this.props.context.siteSettings.canIUse("tags") && this.props.rbacContext.canIUseAction(uiActions.TAGS_USE);
     const canViewShare = this.props.rbacContext.canIUseAction(uiActions.SHARE_VIEW_LIST);
     const canSeeComments = this.props.rbacContext.canIUseAction(uiActions.RESOURCES_SEE_COMMENTS);
 
     return (
       <>
-        {this.isPasswordResources &&
-          <DisplayResourceDetailsPassword/>
-        }
-        {this.isTotpResources &&
-          <DisplayResourceDetailsTotp isStandaloneTotp={this.isStandaloneTotpResource}/>
-        }
-        {this.hasCustomFields &&
-          <DisplayResourceDetailsCustomFields />
-        }
-        {this.hasSecureNote &&
-          <DisplayResourceDetailsNote />
-        }
-        {this.hasMultipleUris &&
-          <DisplayResourceDetailsURIs />
-        }
-        {canViewShare &&
-          <DisplayResourceDetailsPermission />
-        }
+        {this.isPasswordResources && <DisplayResourceDetailsPassword />}
+        {this.isTotpResources && <DisplayResourceDetailsTotp isStandaloneTotp={this.isStandaloneTotpResource} />}
+        {this.hasCustomFields && <DisplayResourceDetailsCustomFields />}
+        {this.hasSecureNote && <DisplayResourceDetailsNote />}
+        {this.hasMultipleUris && <DisplayResourceDetailsURIs />}
+        {canViewShare && <DisplayResourceDetailsPermission />}
         <DisplayResourceDetailsInformation />
-        {this.hasDescription &&
-          <DisplayResourceDetailsDescription />
-        }
-        {canUseTags &&
-        <DisplayResourceDetailsTag />
-        }
-        {canSeeComments &&
-          <DisplayResourceDetailsComment />
-        }
+        {this.hasDescription && <DisplayResourceDetailsDescription />}
+        {canUseTags && <DisplayResourceDetailsTag />}
+        {canSeeComments && <DisplayResourceDetailsComment />}
       </>
     );
   }
@@ -392,14 +380,14 @@ class DisplayResourceDetails extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canUseAuditLog = (this.props.context.siteSettings.canIUse("auditLog")
-      || this.props.context.siteSettings.canIUse("audit_log")) // @deprecated remove with v4
-      && this.props.rbacContext.canIUseAction(uiActions.RESOURCES_SEE_ACTIVITIES);
+    const canUseAuditLog =
+      (this.props.context.siteSettings.canIUse("auditLog") || this.props.context.siteSettings.canIUse("audit_log")) && // @deprecated remove with v4
+      this.props.rbacContext.canIUseAction(uiActions.RESOURCES_SEE_ACTIVITIES);
 
     return (
       <div className="sidebar resource">
         <div className={`sidebar-header ${canUseAuditLog ? "" : "with-separator"}`}>
-          <ResourceIcon resource={this.resource}/>
+          <ResourceIcon resource={this.resource} />
           <div className="title-area">
             <h3>
               <div className="title-wrapper">
@@ -407,51 +395,73 @@ class DisplayResourceDetails extends React.Component {
               </div>
               <span className="subtitle">{this.subtitle}</span>
             </h3>
-            <button type="button" className="title-link button-transparent inline" title={this.translate("Copy the link to this password")} onClick={this.handlePermalinkClick}>
-              <LinkSVG/>
-              <span className="visuallyhidden"><Trans>Copy the link to this password</Trans></span>
+            <button
+              type="button"
+              className="title-link button-transparent inline"
+              title={this.translate("Copy the link to this password")}
+              onClick={this.handlePermalinkClick}
+            >
+              <LinkSVG />
+              <span className="visuallyhidden">
+                <Trans>Copy the link to this password</Trans>
+              </span>
             </button>
           </div>
         </div>
-        {this.shouldDisplayUpgradeResource &&
+        {this.shouldDisplayUpgradeResource && (
           <div className="section-card">
             <div className="card">
               <button type="button" className="title no-border" onClick={this.handleDisplayUpgradeClick}>
-                <ArrowBigUpDashSVG/>
-                <span className="text ellipsis"><Trans>Resource upgrade available</Trans></span>
-                {this.state.displayUpgrade
-                  ? <CaretDownSVG className="caret-down"/>
-                  : <CaretRightSVG className="caret-right"/>
-                }
+                <ArrowBigUpDashSVG />
+                <span className="text ellipsis">
+                  <Trans>Resource upgrade available</Trans>
+                </span>
+                {this.state.displayUpgrade ? (
+                  <CaretDownSVG className="caret-down" />
+                ) : (
+                  <CaretRightSVG className="caret-right" />
+                )}
               </button>
-              {this.state.displayUpgrade &&
+              {this.state.displayUpgrade && (
                 <div className="content">
-                  <p><Trans>Upgrade for security improvements and new features.</Trans></p>
+                  <p>
+                    <Trans>Upgrade for security improvements and new features.</Trans>
+                  </p>
                   <div className="actions-wrapper">
-                    <a className="link" href="https://www.passbolt.com/blog/the-road-to-passbolt-v5-encrypted-metadata-and-other-core-security-changes-2" target="_blank" rel="noopener noreferrer">
-                      <span className="ellipsis"><Trans>Learn more</Trans></span>
+                    <a
+                      className="link"
+                      href="https://www.passbolt.com/blog/the-road-to-passbolt-v5-encrypted-metadata-and-other-core-security-changes-2"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span className="ellipsis">
+                        <Trans>Learn more</Trans>
+                      </span>
                     </a>
                     <button disabled={this.state.processing} type="button" onClick={this.handleUpgradeClick}>
-                      <span className="ellipsis"><Trans>Upgrade</Trans></span>
+                      <span className="ellipsis">
+                        <Trans>Upgrade</Trans>
+                      </span>
                     </button>
                   </div>
                 </div>
-              }
+              )}
             </div>
           </div>
-        }
+        )}
         <div className="sidebar-content">
-          {!canUseAuditLog
-            ? this.renderResourceDetail()
-            : <Tabs activeTabName='Details'>
-              <Tab key='Details' name={this.props.t('Details')} type='Details'>
+          {!canUseAuditLog ? (
+            this.renderResourceDetail()
+          ) : (
+            <Tabs activeTabName="Details">
+              <Tab key="Details" name={this.props.t("Details")} type="Details">
                 {this.renderResourceDetail()}
               </Tab>
-              <Tab key='Activity' name={this.props.t('Activity')} type='Activity'>
+              <Tab key="Activity" name={this.props.t("Activity")} type="Activity">
                 <DisplayResourceDetailsActivity />
               </Tab>
             </Tabs>
-          }
+          )}
         </div>
       </div>
     );
@@ -471,4 +481,16 @@ DisplayResourceDetails.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withRbac(withMetadataTypesSettingsLocalStorage(withMetadataKeysSettingsLocalStorage(withResourceTypesLocalStorage(withActionFeedback(withClipboard(withResourceWorkspace(withTranslation('common')(DisplayResourceDetails))))))))));
+export default withAppContext(
+  withDialog(
+    withRbac(
+      withMetadataTypesSettingsLocalStorage(
+        withMetadataKeysSettingsLocalStorage(
+          withResourceTypesLocalStorage(
+            withActionFeedback(withClipboard(withResourceWorkspace(withTranslation("common")(DisplayResourceDetails)))),
+          ),
+        ),
+      ),
+    ),
+  ),
+);

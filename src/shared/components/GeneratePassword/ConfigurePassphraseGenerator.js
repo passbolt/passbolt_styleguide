@@ -11,9 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.3.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import Select from "../../../react-extension/components/Common/Select/Select";
 
 class ConfigurePassphraseGenerator extends Component {
@@ -35,7 +35,7 @@ class ConfigurePassphraseGenerator extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    const configuration = {...this.props.configuration};
+    const configuration = { ...this.props.configuration };
     configuration[name] = value;
 
     this.props.onConfigurationChanged(configuration);
@@ -48,7 +48,7 @@ class ConfigurePassphraseGenerator extends Component {
   handleWordCountChange(event) {
     const configuration = {
       ...this.props.configuration,
-      words: event.target.value
+      words: event.target.value,
     };
 
     this.props.onConfigurationChanged(configuration);
@@ -89,9 +89,9 @@ class ConfigurePassphraseGenerator extends Component {
    */
   get wordCaseList() {
     return [
-      {value: "lowercase", label: this.translate("Lower case")},
-      {value: "uppercase", label: this.translate("Upper case")},
-      {value: "camelcase", label: this.translate("Camel case")}
+      { value: "lowercase", label: this.translate("Lower case") },
+      { value: "uppercase", label: this.translate("Upper case") },
+      { value: "camelcase", label: this.translate("Camel case") },
     ];
   }
 
@@ -110,8 +110,10 @@ class ConfigurePassphraseGenerator extends Component {
   render() {
     return (
       <>
-        <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
-          <label htmlFor="configure-passphrase-generator-form-word-count"><Trans>Number of words</Trans></label>
+        <div className={`input text ${this.props.disabled ? "disabled" : ""}`}>
+          <label htmlFor="configure-passphrase-generator-form-word-count">
+            <Trans>Number of words</Trans>
+          </label>
           <div className="slider">
             <input
               name="words"
@@ -126,20 +128,40 @@ class ConfigurePassphraseGenerator extends Component {
               type="number"
               id="configure-passphrase-generator-form-word-count"
               name="words"
-              min={this.numberOfWords.min} max={this.numberOfWords.max}
+              min={this.numberOfWords.min}
+              max={this.numberOfWords.max}
               value={this.numberOfWords.default}
               onChange={this.handleWordCountChange}
-              disabled={this.props.disabled}/>
+              disabled={this.props.disabled}
+            />
           </div>
         </div>
-        <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
-          <label htmlFor="configure-passphrase-generator-form-words-separator"><Trans>Words separator</Trans></label>
-          <input type="text" id="configure-passphrase-generator-form-words-separator" name="word_separator" value={this.separator} onChange={this.handleInputChange}
-            placeholder={this.translate("Type one or more characters")} disabled={this.props.disabled}/>
+        <div className={`input text ${this.props.disabled ? "disabled" : ""}`}>
+          <label htmlFor="configure-passphrase-generator-form-words-separator">
+            <Trans>Words separator</Trans>
+          </label>
+          <input
+            type="text"
+            id="configure-passphrase-generator-form-words-separator"
+            name="word_separator"
+            value={this.separator}
+            onChange={this.handleInputChange}
+            placeholder={this.translate("Type one or more characters")}
+            disabled={this.props.disabled}
+          />
         </div>
-        <div className={`select-wrapper input ${this.props.disabled ? 'disabled' : ''}`}>
-          <label htmlFor="configure-passphrase-generator-form-words-case"><Trans>Words case</Trans></label>
-          <Select id="configure-passphrase-generator-form-words-case" name="word_case" items={this.wordCaseList} value={this.wordCase} onChange={this.handleInputChange} disabled={this.props.disabled}/>
+        <div className={`select-wrapper input ${this.props.disabled ? "disabled" : ""}`}>
+          <label htmlFor="configure-passphrase-generator-form-words-case">
+            <Trans>Words case</Trans>
+          </label>
+          <Select
+            id="configure-passphrase-generator-form-words-case"
+            name="word_case"
+            items={this.wordCaseList}
+            value={this.wordCase}
+            onChange={this.handleInputChange}
+            disabled={this.props.disabled}
+          />
         </div>
       </>
     );
@@ -153,4 +175,4 @@ ConfigurePassphraseGenerator.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(ConfigurePassphraseGenerator);
+export default withTranslation("common")(ConfigurePassphraseGenerator);

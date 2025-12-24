@@ -14,8 +14,8 @@
 
 import * as React from "react";
 import PropTypes from "prop-types";
-import {withPasswordPolicies} from "../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
+import { withPasswordPolicies } from "../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import { withAppContext } from "../../shared/context/AppContext/AppContext";
 
 /**
  * Context related to prepare a resource ( name, url, username, password.)
@@ -77,7 +77,7 @@ class PrepareResourceContextProvider extends React.Component {
   async resetSecretGeneratorSettings() {
     await this.props.passwordPoliciesContext.findPolicies();
     const passwordPolicies = this.props.passwordPoliciesContext.getPolicies();
-    this.setState({settings: passwordPolicies});
+    this.setState({ settings: passwordPolicies });
   }
 
   /**
@@ -87,7 +87,7 @@ class PrepareResourceContextProvider extends React.Component {
   onPasswordGenerated(newPassword, newGeneratorSettings) {
     this.setState({
       lastGeneratedPassword: newPassword,
-      settings: newGeneratorSettings
+      settings: newGeneratorSettings,
     });
   }
 
@@ -96,7 +96,7 @@ class PrepareResourceContextProvider extends React.Component {
    * @param resource The prepared resource
    */
   onPrepareResource(resource) {
-    this.setState({resourcePrepared: resource});
+    this.setState({ resourcePrepared: resource });
   }
 
   /**
@@ -112,8 +112,8 @@ class PrepareResourceContextProvider extends React.Component {
    * @returns {string|null}
    */
   consumeLastGeneratedPassword() {
-    const lastGeneratedPassword =  this.state.lastGeneratedPassword;
-    this.setState({lastGeneratedPassword: null});
+    const lastGeneratedPassword = this.state.lastGeneratedPassword;
+    this.setState({ lastGeneratedPassword: null });
     return lastGeneratedPassword;
   }
 
@@ -123,7 +123,7 @@ class PrepareResourceContextProvider extends React.Component {
    */
   consumePreparedResource() {
     const resourcePrepared = this.state.resourcePrepared;
-    this.setState({resourcePrepared: null});
+    this.setState({ resourcePrepared: null });
     return resourcePrepared;
   }
 
@@ -132,21 +132,16 @@ class PrepareResourceContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    return (
-      <PrepareResourceContext.Provider value={this.state}>
-        {this.props.children}
-      </PrepareResourceContext.Provider>
-    );
+    return <PrepareResourceContext.Provider value={this.state}>{this.props.children}</PrepareResourceContext.Provider>;
   }
 }
 
-PrepareResourceContextProvider.displayName = 'PrepareResourceContextProvider';
+PrepareResourceContextProvider.displayName = "PrepareResourceContextProvider";
 PrepareResourceContextProvider.propTypes = {
   context: PropTypes.object,
   passwordPoliciesContext: PropTypes.object, // The password settings context
   children: PropTypes.any,
 };
-
 
 export default withAppContext(withPasswordPolicies(PrepareResourceContextProvider));
 
@@ -159,9 +154,9 @@ export function withPrepareResourceContext(WrappedComponent) {
     render() {
       return (
         <PrepareResourceContext.Consumer>
-          {
-            PrepareResourceContext => <WrappedComponent prepareResourceContext={PrepareResourceContext} {...this.props} />
-          }
+          {(PrepareResourceContext) => (
+            <WrappedComponent prepareResourceContext={PrepareResourceContext} {...this.props} />
+          )}
         </PrepareResourceContext.Consumer>
       );
     }

@@ -11,18 +11,18 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * The component display variations.
  * @type {Object}
  */
 export const DisplayAlreadyLoggedInErrorVariations = {
-  SETUP: 'setup',
-  RECOVER: 'recover',
-  ACCOUNT_RECOVERY: 'account-recovery',
+  SETUP: "setup",
+  RECOVER: "recover",
+  ACCOUNT_RECOVERY: "account-recovery",
 };
 
 class DisplayAlreadyLoggedInError extends Component {
@@ -33,16 +33,41 @@ class DisplayAlreadyLoggedInError extends Component {
   render() {
     return (
       <div className="setup-error">
-        <h1><Trans>Cannot perform the action while being logged in</Trans></h1>
+        <h1>
+          <Trans>Cannot perform the action while being logged in</Trans>
+        </h1>
         <p>
-          {{
-            [DisplayAlreadyLoggedInErrorVariations.SETUP]: <Trans>It is not possible to perform a setup of a new account as you are still logged in. You need to log out first before continuing.</Trans>,
-            [DisplayAlreadyLoggedInErrorVariations.RECOVER]: <Trans>It is not possible to perform the recovery of your account as you are still logged in. You need to log out first before continuing.</Trans>,
-            [DisplayAlreadyLoggedInErrorVariations.ACCOUNT_RECOVERY]: <Trans>It is not possible to recover your private key of your account as you are still logged in. You need to log out first before continuing.</Trans>,
-          }[this.props.displayAs]}
+          {
+            {
+              [DisplayAlreadyLoggedInErrorVariations.SETUP]: (
+                <Trans>
+                  It is not possible to perform a setup of a new account as you are still logged in. You need to log out
+                  first before continuing.
+                </Trans>
+              ),
+              [DisplayAlreadyLoggedInErrorVariations.RECOVER]: (
+                <Trans>
+                  It is not possible to perform the recovery of your account as you are still logged in. You need to log
+                  out first before continuing.
+                </Trans>
+              ),
+              [DisplayAlreadyLoggedInErrorVariations.ACCOUNT_RECOVERY]: (
+                <Trans>
+                  It is not possible to recover your private key of your account as you are still logged in. You need to
+                  log out first before continuing.
+                </Trans>
+              ),
+            }[this.props.displayAs]
+          }
         </p>
         <div className="form-actions">
-          <button onClick={this.props.onLogoutButtonClick.bind(this)} className="button primary big full-width" role="button"><Trans>Sign out</Trans></button>
+          <button
+            onClick={this.props.onLogoutButtonClick.bind(this)}
+            className="button primary big full-width"
+            role="button"
+          >
+            <Trans>Sign out</Trans>
+          </button>
         </div>
       </div>
     );

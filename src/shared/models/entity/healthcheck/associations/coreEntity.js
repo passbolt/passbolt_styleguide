@@ -21,32 +21,28 @@ class CoreEntity extends Entity {
    * @inheritDoc
    */
   constructor(dto, options = {}) {
-    super(EntitySchema.validate(
-      CoreEntity.ENTITY_NAME,
-      dto,
-      CoreEntity.getSchema()
-    ), options);
+    super(EntitySchema.validate(CoreEntity.ENTITY_NAME, dto, CoreEntity.getSchema()), options);
   }
 
   static getSchema() {
     return {
-      "type": "object",
-      "required": ["cache", "debugDisabled", "salt", "fullBaseUrl", "validFullBaseUrl", "info", "fullBaseUrlReachable"],
-      "properties": {
-        "cache": {"type": "boolean"},
-        "debugDisabled": {"type": "boolean"},
-        "salt": {"type": "boolean"},
-        "fullBaseUrl": {"type": "boolean"},
-        "validFullBaseUrl": {"type": "boolean"},
-        "info": {
-          "type": "object",
-          "required": ["fullBaseUrl"],
-          "properties": {
-            "fullBaseUrl": {"type": "string", "format": "uri"}
-          }
+      type: "object",
+      required: ["cache", "debugDisabled", "salt", "fullBaseUrl", "validFullBaseUrl", "info", "fullBaseUrlReachable"],
+      properties: {
+        cache: { type: "boolean" },
+        debugDisabled: { type: "boolean" },
+        salt: { type: "boolean" },
+        fullBaseUrl: { type: "boolean" },
+        validFullBaseUrl: { type: "boolean" },
+        info: {
+          type: "object",
+          required: ["fullBaseUrl"],
+          properties: {
+            fullBaseUrl: { type: "string", format: "uri" },
+          },
         },
-        "fullBaseUrlReachable": {"type": "boolean"}
-      }
+        fullBaseUrlReachable: { type: "boolean" },
+      },
     };
   }
 

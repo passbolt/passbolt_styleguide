@@ -14,9 +14,9 @@
 
 class InvalidMasterPasswordError extends Error {
   constructor(message) {
-    message = message || 'This is not a valid passphrase';
+    message = message || "This is not a valid passphrase";
     super(message);
-    this.name = 'InvalidMasterPasswordError';
+    this.name = "InvalidMasterPasswordError";
   }
 }
 

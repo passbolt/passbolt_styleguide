@@ -12,7 +12,7 @@
  * @since         3.8.3
  */
 
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 /**
  * Model related to the self registration domaisn view models for UI
@@ -31,9 +31,7 @@ class SelfRegistrationDomainsViewModel {
    * @param {*} rows
    */
   mapAllowedDomains(domains) {
-    return new Map(
-      domains.map(domain => [uuidv4(), domain]),
-    );
+    return new Map(domains.map((domain) => [uuidv4(), domain]));
   }
 
   /**
@@ -52,4 +50,3 @@ class SelfRegistrationDomainsViewModel {
 }
 
 export default SelfRegistrationDomainsViewModel;
-

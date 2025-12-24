@@ -11,18 +11,18 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 
 /**
  * The component display variations.
  * @type {Object}
  */
 export const RequestAccountRecoveryVariations = {
-  SIGN_IN: 'Sign-in',
-  RECOVER: 'Recover',
-  ACCOUNT_RECOVERY: 'Account recovery'
+  SIGN_IN: "Sign-in",
+  RECOVER: "Recover",
+  ACCOUNT_RECOVERY: "Account recovery",
 };
 
 class RequestAccountRecovery extends Component {
@@ -33,20 +33,43 @@ class RequestAccountRecovery extends Component {
   render() {
     return (
       <div className="initiate-recover-account">
-        <h1><Trans>Request account recovery</Trans></h1>
+        <h1>
+          <Trans>Request account recovery</Trans>
+        </h1>
         <p>
-          {{
-            [RequestAccountRecoveryVariations.SIGN_IN]: <><Trans>Your passphrase is required to sign-in.</Trans> <Trans>If you do not have access, you can request an account recovery to an administrator.</Trans></>,
-            [RequestAccountRecoveryVariations.RECOVER]: <><Trans>Both the private key and passphrase are required to recover your account.</Trans> <Trans>If you do not have access, you can request an account recovery to an administrator.</Trans></>,
-            [RequestAccountRecoveryVariations.ACCOUNT_RECOVERY]: <><Trans>The passphrase you defined when initiating the account recovery is required to complete the operation.</Trans> <Trans>If you do not have access, you can request a new account recovery to an administrator.</Trans></>,
-          }[this.props.displayAs]}
+          {
+            {
+              [RequestAccountRecoveryVariations.SIGN_IN]: (
+                <>
+                  <Trans>Your passphrase is required to sign-in.</Trans>{" "}
+                  <Trans>If you do not have access, you can request an account recovery to an administrator.</Trans>
+                </>
+              ),
+              [RequestAccountRecoveryVariations.RECOVER]: (
+                <>
+                  <Trans>Both the private key and passphrase are required to recover your account.</Trans>{" "}
+                  <Trans>If you do not have access, you can request an account recovery to an administrator.</Trans>
+                </>
+              ),
+              [RequestAccountRecoveryVariations.ACCOUNT_RECOVERY]: (
+                <>
+                  <Trans>
+                    The passphrase you defined when initiating the account recovery is required to complete the
+                    operation.
+                  </Trans>{" "}
+                  <Trans>If you do not have access, you can request a new account recovery to an administrator.</Trans>
+                </>
+              ),
+            }[this.props.displayAs]
+          }
         </p>
         <div className="form-actions">
           <button
             type="button"
             className={`button primary big full-width ${this.isProcessing ? "processing" : ""}`}
             disabled={this.isProcessing}
-            onClick={this.props.onPrimaryActionClick}>
+            onClick={this.props.onPrimaryActionClick}
+          >
             <Trans>Request account recovery</Trans>
           </button>
           <button type="button" className="link" onClick={this.props.onSecondaryActionClick}>

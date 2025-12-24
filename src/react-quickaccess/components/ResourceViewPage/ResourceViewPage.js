@@ -12,22 +12,20 @@
  * @since         3.2.0
  */
 import React from "react";
-import Transition from 'react-transition-group/Transition';
+import Transition from "react-transition-group/Transition";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import {withRouter} from "react-router-dom";
+import { Trans, withTranslation } from "react-i18next";
+import { withRouter } from "react-router-dom";
 import SpinnerSVG from "../../../img/svg/spinner.svg";
-import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
-import {withRbac} from "../../../shared/context/Rbac/RbacContext";
+import { uiActions } from "../../../shared/services/rbacs/uiActionEnumeration";
+import { withRbac } from "../../../shared/context/Rbac/RbacContext";
 import HiddenPassword from "../../../shared/components/Password/HiddenPassword";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 import Totp from "../../../shared/components/Totp/Totp";
-import {TotpCodeGeneratorService} from "../../../shared/services/otp/TotpCodeGeneratorService";
-import sanitizeUrl, {urlProtocols} from "../../../react-extension/lib/Sanitize/sanitizeUrl";
-import {resourceLinkAuthorizedProtocols} from "../../../react-extension/contexts/ResourceWorkspaceContext";
-import {
-  withResourceTypesLocalStorage
-} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import { TotpCodeGeneratorService } from "../../../shared/services/otp/TotpCodeGeneratorService";
+import sanitizeUrl, { urlProtocols } from "../../../react-extension/lib/Sanitize/sanitizeUrl";
+import { resourceLinkAuthorizedProtocols } from "../../../react-extension/contexts/ResourceWorkspaceContext";
+import { withResourceTypesLocalStorage } from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import CaretDownSVG from "../../../img/svg/caret_down.svg";
 import CaretRightSVG from "../../../img/svg/caret_right.svg";
@@ -123,12 +121,12 @@ class ResourceViewPage extends React.Component {
 
   async loadResource() {
     const storageData = await this.props.context.storage.local.get(["resources"]);
-    const resource = storageData.resources.find(item => item.id === this.props.match.params.id);
-    this.setState({resource});
+    const resource = storageData.resources.find((item) => item.id === this.props.match.params.id);
+    this.setState({ resource });
   }
 
   resetError() {
-    this.setState({error: ""});
+    this.setState({ error: "" });
   }
 
   async handleCopyLoginClick(event) {
@@ -142,9 +140,9 @@ class ResourceViewPage extends React.Component {
     try {
       this.setState({
         copiedProperty: "username",
-        copyLoginState: 'processing',
+        copyLoginState: "processing",
         copyPasswordState: "default",
-        copyTotpState: "default"
+        copyTotpState: "default",
       });
 
       if (this.currentTimeout) {
@@ -152,13 +150,13 @@ class ResourceViewPage extends React.Component {
       }
 
       await this.clipboardServiceWorkerService.copy(this.state.resource.metadata?.username);
-      this.setState({copyLoginState: 'done'});
+      this.setState({ copyLoginState: "done" });
 
       this.currentTimeout = setTimeout(() => {
-        this.setState({copyLoginState: 'default'});
+        this.setState({ copyLoginState: "default" });
       }, 15000);
     } catch (error) {
-      console.error('An unexpected error occured', error);
+      console.error("An unexpected error occured", error);
     }
   }
 
@@ -185,7 +183,7 @@ class ResourceViewPage extends React.Component {
     let plaintextSecretDto;
 
     this.resetError();
-    this.setState({copyPasswordState: 'processing'});
+    this.setState({ copyPasswordState: "processing" });
 
     if (isPasswordPreviewed) {
       plaintextSecretDto = this.state.plaintextSecretDto;
@@ -197,32 +195,32 @@ class ResourceViewPage extends React.Component {
           return;
         }
       } finally {
-        this.setState({copyPasswordState: 'default'});
+        this.setState({ copyPasswordState: "default" });
       }
     }
 
     if (!plaintextSecretDto) {
-      this.setState({copyPasswordState: 'default'});
+      this.setState({ copyPasswordState: "default" });
       return;
     }
 
     if (!plaintextSecretDto.password?.length) {
       this.displayTemporarilyError(this.translate("The password is empty and cannot be copied to clipboard."));
-      this.setState({copyPasswordState: 'default'});
+      this.setState({ copyPasswordState: "default" });
       return;
     }
 
     await this.clipboardServiceWorkerService.copyTemporarily(plaintextSecretDto.password);
 
     const newState = {
-      copyLoginState: 'default',
-      copyPasswordState: 'done',
+      copyLoginState: "default",
+      copyPasswordState: "done",
       copyTotpState: "default",
-      copiedProperty: null
+      copiedProperty: null,
     };
     this.setState(newState, () => {
       //ensure it refreshes the animation after another click on the same property
-      this.setState({copiedProperty: "password"});
+      this.setState({ copiedProperty: "password" });
     });
 
     if (this.currentTimeout) {
@@ -230,7 +228,7 @@ class ResourceViewPage extends React.Component {
     }
 
     this.currentTimeout = setTimeout(() => {
-      this.setState({copyPasswordState: 'default', copiedProperty: null});
+      this.setState({ copyPasswordState: "default", copiedProperty: null });
     }, CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND * 1000);
   }
 
@@ -250,7 +248,7 @@ class ResourceViewPage extends React.Component {
    * Hide the previewed resource secret.
    */
   hidePreviewedSecret() {
-    this.setState({plaintextSecretDto: null, previewedSecret: null});
+    this.setState({ plaintextSecretDto: null, previewedSecret: null });
   }
 
   /**
@@ -260,7 +258,7 @@ class ResourceViewPage extends React.Component {
   async previewPassword() {
     const previewedSecret = "password";
     let plaintextSecretDto;
-    await this.setState({error: "", isPasswordDecrypting: true});
+    await this.setState({ error: "", isPasswordDecrypting: true });
 
     try {
       plaintextSecretDto = await this.decryptResourceSecret(this.state.resource.id);
@@ -269,7 +267,7 @@ class ResourceViewPage extends React.Component {
         return;
       }
     } finally {
-      this.setState({isPasswordDecrypting: false});
+      this.setState({ isPasswordDecrypting: false });
     }
 
     if (!plaintextSecretDto) {
@@ -281,7 +279,7 @@ class ResourceViewPage extends React.Component {
       return;
     }
 
-    await this.setState({plaintextSecretDto, previewedSecret});
+    await this.setState({ plaintextSecretDto, previewedSecret });
   }
 
   /**
@@ -291,8 +289,8 @@ class ResourceViewPage extends React.Component {
    */
   displayTemporarilyError(error, time = DEFAULT_ERROR_DISPLAY_TIME_IN_MS) {
     clearTimeout(this.state.errorTimeout);
-    const errorTimeout = setTimeout(() => this.setState({error: ""}), time);
-    this.setState({errorTimeout, error});
+    const errorTimeout = setTimeout(() => this.setState({ error: "" }), time);
+    this.setState({ errorTimeout, error });
   }
 
   /**
@@ -314,7 +312,7 @@ class ResourceViewPage extends React.Component {
     const isTotpPreviewed = this.isTotpPreviewed();
 
     this.resetError();
-    this.setState({copyTotpState: 'processing'});
+    this.setState({ copyTotpState: "processing" });
 
     if (isTotpPreviewed) {
       plaintextSecretDto = this.state.plaintextSecretDto;
@@ -326,18 +324,18 @@ class ResourceViewPage extends React.Component {
           return;
         }
       } finally {
-        this.setState({copyTotpState: 'default'});
+        this.setState({ copyTotpState: "default" });
       }
     }
 
     if (!plaintextSecretDto) {
-      this.setState({copyTotpState: 'default'});
+      this.setState({ copyTotpState: "default" });
       return;
     }
 
     if (!plaintextSecretDto.totp) {
       this.displayTemporarilyError(this.translate("The TOTP is empty and cannot be copied to clipboard."));
-      this.setState({copyTotpState: 'default'});
+      this.setState({ copyTotpState: "default" });
       return;
     }
 
@@ -345,14 +343,14 @@ class ResourceViewPage extends React.Component {
     await this.clipboardServiceWorkerService.copyTemporarily(code);
 
     const newState = {
-      copyLoginState: 'default',
-      copyTotpState: 'done',
+      copyLoginState: "default",
+      copyTotpState: "done",
       copyPasswordState: "default",
-      copiedProperty: null
+      copiedProperty: null,
     };
     this.setState(newState, () => {
       //ensure it refreshes the animation after another click on the same property
-      this.setState({copiedProperty: "totp"});
+      this.setState({ copiedProperty: "totp" });
     });
 
     if (this.currentTimeout) {
@@ -360,7 +358,7 @@ class ResourceViewPage extends React.Component {
     }
 
     this.currentTimeout = setTimeout(() => {
-      this.setState({copyTotpState: 'default', copiedProperty: null});
+      this.setState({ copyTotpState: "default", copiedProperty: null });
     }, CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND * 1000);
   }
 
@@ -383,7 +381,7 @@ class ResourceViewPage extends React.Component {
     const previewedSecret = "totp";
     let plaintextSecretDto;
 
-    await this.setState({error: "", isTotpDecrypting: true});
+    await this.setState({ error: "", isTotpDecrypting: true });
 
     try {
       plaintextSecretDto = await this.decryptResourceSecret(this.state.resource.id);
@@ -392,7 +390,7 @@ class ResourceViewPage extends React.Component {
         return;
       }
     } finally {
-      this.setState({isTotpDecrypting: false});
+      this.setState({ isTotpDecrypting: false });
     }
 
     if (!plaintextSecretDto) {
@@ -404,7 +402,7 @@ class ResourceViewPage extends React.Component {
       return;
     }
 
-    this.setState({plaintextSecretDto, previewedSecret});
+    this.setState({ plaintextSecretDto, previewedSecret });
   }
 
   handleGoToUrlClick(event) {
@@ -418,18 +416,22 @@ class ResourceViewPage extends React.Component {
 
   async handleUseOnThisTabClick(event) {
     event.preventDefault();
-    this.setState({usingOnThisTab: true});
+    this.setState({ usingOnThisTab: true });
     try {
-      await this.props.context.port.request('passbolt.quickaccess.use-resource-on-current-tab', this.state.resource.id, this.props.context.getOpenerTabId());
+      await this.props.context.port.request(
+        "passbolt.quickaccess.use-resource-on-current-tab",
+        this.state.resource.id,
+        this.props.context.getOpenerTabId(),
+      );
       window.close();
     } catch (error) {
       if (error && error.name === "UserAbortsOperationError") {
-        this.setState({usingOnThisTab: false});
+        this.setState({ usingOnThisTab: false });
       } else {
-        console.error('An error occured', error);
+        console.error("An error occured", error);
         this.setState({
           usingOnThisTab: false,
-          error: this.props.t("Unable to use the password on this page. Copy and paste the information instead.")
+          error: this.props.t("Unable to use the password on this page. Copy and paste the information instead."),
         });
       }
     }
@@ -439,7 +441,7 @@ class ResourceViewPage extends React.Component {
    * Handle click on additional uris
    */
   handleClickAdditionalUrisSection() {
-    this.setState({isOpenAdditionalUris: !this.state.isOpenAdditionalUris});
+    this.setState({ isOpenAdditionalUris: !this.state.isOpenAdditionalUris });
   }
 
   /**
@@ -450,7 +452,7 @@ class ResourceViewPage extends React.Component {
   sanitizeResourceUrl(url) {
     return sanitizeUrl(url, {
       whiteListedProtocols: resourceLinkAuthorizedProtocols,
-      defaultProtocol: urlProtocols.HTTPS
+      defaultProtocol: urlProtocols.HTTPS,
     });
   }
 
@@ -459,7 +461,7 @@ class ResourceViewPage extends React.Component {
    * @returns {boolean}
    */
   isPasswordPreviewed() {
-    return this.state.previewedSecret === 'password';
+    return this.state.previewedSecret === "password";
   }
 
   /**
@@ -467,7 +469,7 @@ class ResourceViewPage extends React.Component {
    * @returns {boolean}
    */
   isTotpPreviewed() {
-    return this.state.previewedSecret === 'totp';
+    return this.state.previewedSecret === "totp";
   }
 
   /**
@@ -475,7 +477,10 @@ class ResourceViewPage extends React.Component {
    * @returns {boolean}
    */
   get canPreviewSecret() {
-    return this.props.context.siteSettings.canIUse('previewPassword') && this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW);
+    return (
+      this.props.context.siteSettings.canIUse("previewPassword") &&
+      this.props.rbacContext.canIUseAction(uiActions.SECRETS_PREVIEW)
+    );
   }
 
   /**
@@ -483,7 +488,10 @@ class ResourceViewPage extends React.Component {
    * @return {boolean}
    */
   get isTotpResources() {
-    return Boolean(this.state.resource.resource_type_id) && this.props.resourceTypes?.getFirstById(this.state.resource.resource_type_id)?.hasTotp();
+    return (
+      Boolean(this.state.resource.resource_type_id) &&
+      this.props.resourceTypes?.getFirstById(this.state.resource.resource_type_id)?.hasTotp()
+    );
   }
 
   /**
@@ -491,7 +499,10 @@ class ResourceViewPage extends React.Component {
    * @return {boolean}
    */
   get isStandaloneTotpResource() {
-    return Boolean(this.state.resource.resource_type_id) && this.props.resourceTypes?.getFirstById(this.state.resource.resource_type_id)?.isStandaloneTotp();
+    return (
+      Boolean(this.state.resource.resource_type_id) &&
+      this.props.resourceTypes?.getFirstById(this.state.resource.resource_type_id)?.isStandaloneTotp()
+    );
   }
 
   render() {
@@ -505,270 +516,387 @@ class ResourceViewPage extends React.Component {
       <div className="resource item-browse">
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick}>
-            <CaretLeftSVG/>
+            <CaretLeftSVG />
             <span className="primary-action-title">{this.state.resource.metadata?.name}</span>
           </a>
-          <a href={`${this.props.context.userSettings.getTrustedDomain()}/app/passwords/view/${this.props.match.params.id}`} className="secondary-action button-transparent button" target="_blank" rel="noopener noreferrer" title={this.translate("View it in passbolt")}>
-            <GoSVG/>
-            <span className="visually-hidden"><Trans>Edit in passbolt</Trans></span>
+          <a
+            href={`${this.props.context.userSettings.getTrustedDomain()}/app/passwords/view/${this.props.match.params.id}`}
+            className="secondary-action button-transparent button"
+            target="_blank"
+            rel="noopener noreferrer"
+            title={this.translate("View it in passbolt")}
+          >
+            <GoSVG />
+            <span className="visually-hidden">
+              <Trans>Edit in passbolt</Trans>
+            </span>
           </a>
         </div>
         <ul className="properties">
-          {!this.isStandaloneTotpResource &&
+          {!this.isStandaloneTotpResource && (
             <>
               <li className="property">
                 <div className="information">
-                  <span className="property-name"><Trans>Username</Trans></span>
-                  {this.state.resource.metadata?.username &&
+                  <span className="property-name">
+                    <Trans>Username</Trans>
+                  </span>
+                  {this.state.resource.metadata?.username && (
                     <a href="#" role="button" className="property-value" onClick={this.handleCopyLoginClick}>
                       {this.state.resource.metadata?.username}
                     </a>
-                  }
-                  {!this.state.resource.metadata?.username &&
+                  )}
+                  {!this.state.resource.metadata?.username && (
                     <span className="property-value empty">
                       <Trans>no username provided</Trans>
                     </span>
-                  }
+                  )}
                 </div>
-                <a role="button" className={`button button-transparent property-action ${!this.state.resource.metadata?.username ? "disabled" : ""}`} onClick={this.handleCopyLoginClick} title={this.translate("Copy to clipboard")}>
+                <a
+                  role="button"
+                  className={`button button-transparent property-action ${!this.state.resource.metadata?.username ? "disabled" : ""}`}
+                  onClick={this.handleCopyLoginClick}
+                  title={this.translate("Copy to clipboard")}
+                >
                   <Transition in={this.state.copyLoginState === "default"} appear={false} timeout={500}>
-                    {status => (
-                      <span className={`transition fade-${status} ${this.state.copyLoginState !== "default" ? "visually-hidden" : ""}`}>
-                        <CopySVG/>
+                    {(status) => (
+                      <span
+                        className={`transition fade-${status} ${this.state.copyLoginState !== "default" ? "visually-hidden" : ""}`}
+                      >
+                        <CopySVG />
                       </span>
                     )}
                   </Transition>
                   <Transition in={this.state.copyLoginState === "processing"} appear={true} timeout={500}>
-                    {status => (
-                      <span className={`transition fade-${status} ${this.state.copyLoginState !== "processing" ? "visually-hidden" : ""}`}>
-                        <SpinnerSVG/>
+                    {(status) => (
+                      <span
+                        className={`transition fade-${status} ${this.state.copyLoginState !== "processing" ? "visually-hidden" : ""}`}
+                      >
+                        <SpinnerSVG />
                       </span>
                     )}
                   </Transition>
                   <Transition in={this.state.copyLoginState === "done"} appear={true} timeout={500}>
-                    {status => (
-                      <span className={`transition fade-${status} ${this.state.copyLoginState !== "done" ? "visually-hidden" : ""}`}>
-                        <HealthCheckSuccessSvg/>
+                    {(status) => (
+                      <span
+                        className={`transition fade-${status} ${this.state.copyLoginState !== "done" ? "visually-hidden" : ""}`}
+                      >
+                        <HealthCheckSuccessSvg />
                       </span>
                     )}
                   </Transition>
-                  <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
+                  <span className="visually-hidden">
+                    <Trans>Copy to clipboard</Trans>
+                  </span>
                 </a>
               </li>
               <li className="property">
                 <div className="information">
-                  <span className="property-name"><Trans>Password</Trans></span>
+                  <span className="property-name">
+                    <Trans>Password</Trans>
+                  </span>
                   <div className="password-wrapper">
-                    <div className={`property-value secret secret-password ${isPasswordPreviewed ? "" : "secret-copy"}`}
-                      title={isPasswordPreviewed ? this.state.plaintextSecretDto?.password : this.translate("Click to copy")}>
+                    <div
+                      className={`property-value secret secret-password ${isPasswordPreviewed ? "" : "secret-copy"}`}
+                      title={
+                        isPasswordPreviewed ? this.state.plaintextSecretDto?.password : this.translate("Click to copy")
+                      }
+                    >
                       <HiddenPassword
                         canClick={canCopySecret}
                         preview={this.state.plaintextSecretDto?.password}
-                        onClick={this.handleCopyPasswordClick} />
+                        onClick={this.handleCopyPasswordClick}
+                      />
                     </div>
-                    {this.canPreviewSecret &&
-                      <button onClick={this.handleViewPasswordButtonClick}
-                        className="password-view inline button-transparent" disabled={this.state.isPasswordDecrypting}>
+                    {this.canPreviewSecret && (
+                      <button
+                        onClick={this.handleViewPasswordButtonClick}
+                        className="password-view inline button-transparent"
+                        disabled={this.state.isPasswordDecrypting}
+                      >
                         <Transition in={!this.state.isPasswordDecrypting} appear={false} timeout={500}>
-                          {status => (
-                            <span className={`transition fade-${status} ${this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}>
-                              {isPasswordPreviewed ? <EyeCloseSVG/> : <EyeOpenSVG/>}
+                          {(status) => (
+                            <span
+                              className={`transition fade-${status} ${this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}
+                            >
+                              {isPasswordPreviewed ? <EyeCloseSVG /> : <EyeOpenSVG />}
                             </span>
                           )}
                         </Transition>
                         <Transition in={this.state.isPasswordDecrypting} appear={true} timeout={500}>
-                          {status => (
-                            <span className={`transition fade-${status} ${!this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}>
-                              <SpinnerSVG/>
+                          {(status) => (
+                            <span
+                              className={`transition fade-${status} ${!this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}
+                            >
+                              <SpinnerSVG />
                             </span>
                           )}
                         </Transition>
-                        <span className="visually-hidden"><Trans>View</Trans></span>
+                        <span className="visually-hidden">
+                          <Trans>View</Trans>
+                        </span>
                       </button>
-                    }
+                    )}
                   </div>
                 </div>
-                {canCopySecret &&
+                {canCopySecret && (
                   <>
-                    <a role="button" className="button button-transparent property-action copy-password" onClick={this.handleCopyPasswordClick} title={this.translate("Copy to clipboard")}>
+                    <a
+                      role="button"
+                      className="button button-transparent property-action copy-password"
+                      onClick={this.handleCopyPasswordClick}
+                      title={this.translate("Copy to clipboard")}
+                    >
                       <Transition in={this.state.copyPasswordState === "default"} appear={false} timeout={500}>
-                        {status => (
-                          <span className={`transition fade-${status} ${this.state.copyPasswordState !== "default" ? "visually-hidden" : ""}`}>
-                            <CopySVG/>
+                        {(status) => (
+                          <span
+                            className={`transition fade-${status} ${this.state.copyPasswordState !== "default" ? "visually-hidden" : ""}`}
+                          >
+                            <CopySVG />
                           </span>
                         )}
                       </Transition>
                       <Transition in={this.state.copyPasswordState === "processing"} appear={true} timeout={500}>
-                        {status => (
-                          <span className={`transition fade-${status} ${this.state.copyPasswordState !== "processing" ? "visually-hidden" : ""}`}>
-                            <SpinnerSVG/>
+                        {(status) => (
+                          <span
+                            className={`transition fade-${status} ${this.state.copyPasswordState !== "processing" ? "visually-hidden" : ""}`}
+                          >
+                            <SpinnerSVG />
                           </span>
                         )}
                       </Transition>
                       <Transition in={this.state.copyPasswordState === "done"} appear={true} timeout={500}>
-                        {status => (
-                          <span className={`transition fade-${status} ${this.state.copyPasswordState !== "done" ? "visually-hidden" : ""}`}>
-                            <HealthCheckSuccessSvg/>
+                        {(status) => (
+                          <span
+                            className={`transition fade-${status} ${this.state.copyPasswordState !== "done" ? "visually-hidden" : ""}`}
+                          >
+                            <HealthCheckSuccessSvg />
                           </span>
                         )}
                       </Transition>
-                      <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
+                      <span className="visually-hidden">
+                        <Trans>Copy to clipboard</Trans>
+                      </span>
                     </a>
-                    {this.state.copiedProperty === "password" &&
-                      <TimerSVG style={{
-                        "--timer-duration": `${CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND}s`,
-                      }}/>
-                    }
+                    {this.state.copiedProperty === "password" && (
+                      <TimerSVG
+                        style={{
+                          "--timer-duration": `${CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND}s`,
+                        }}
+                      />
+                    )}
                   </>
-                }
+                )}
               </li>
             </>
-          }
-          {this.isTotpResources &&
+          )}
+          {this.isTotpResources && (
             <li className="property">
               <div className="information">
-                <span className="property-name"><Trans>TOTP</Trans></span>
+                <span className="property-name">
+                  <Trans>TOTP</Trans>
+                </span>
                 <div className="totp-wrapper">
-                  <div className={`property-value secret secret-totp ${isTotpPreviewed ? "" : "secret-copy"}`}
-                    title={isTotpPreviewed ? this.state.plaintextSecretDto?.totp : this.translate("Click to copy")}>
-                    {isTotpPreviewed &&
+                  <div
+                    className={`property-value secret secret-totp ${isTotpPreviewed ? "" : "secret-copy"}`}
+                    title={isTotpPreviewed ? this.state.plaintextSecretDto?.totp : this.translate("Click to copy")}
+                  >
+                    {isTotpPreviewed && (
                       <Totp
                         totp={this.state.plaintextSecretDto?.totp}
                         canClick={canCopySecret}
-                        onClick={this.handleCopyTotpClick}/>
-                    }
-                    {!isTotpPreviewed &&
-                      <button type="button" className="no-border" onClick={this.handleCopyTotpClick} disabled={!canCopySecret}>
+                        onClick={this.handleCopyTotpClick}
+                      />
+                    )}
+                    {!isTotpPreviewed && (
+                      <button
+                        type="button"
+                        className="no-border"
+                        onClick={this.handleCopyTotpClick}
+                        disabled={!canCopySecret}
+                      >
                         <span>Copy TOTP to clipboard</span>
                       </button>
-                    }
+                    )}
                   </div>
-                  {this.canPreviewSecret &&
-                    <button onClick={this.handlePreviewTotpButtonClick}
-                      className="totp-view inline button-transparent" disabled={this.state.isTotpDecrypting}>
+                  {this.canPreviewSecret && (
+                    <button
+                      onClick={this.handlePreviewTotpButtonClick}
+                      className="totp-view inline button-transparent"
+                      disabled={this.state.isTotpDecrypting}
+                    >
                       <Transition in={!this.state.isTotpDecrypting} appear={false} timeout={500}>
-                        {status => (
-                          <span className={`transition fade-${status} ${this.state.isTotpDecrypting ? "visually-hidden" : ""}`}>
-                            {isTotpPreviewed ? <EyeCloseSVG/> : <EyeOpenSVG/>}
+                        {(status) => (
+                          <span
+                            className={`transition fade-${status} ${this.state.isTotpDecrypting ? "visually-hidden" : ""}`}
+                          >
+                            {isTotpPreviewed ? <EyeCloseSVG /> : <EyeOpenSVG />}
                           </span>
                         )}
                       </Transition>
                       <Transition in={this.state.isTotpDecrypting} appear={true} timeout={500}>
-                        {status => (
-                          <span className={`transition fade-${status} ${!this.state.isTotpDecrypting ? "visually-hidden" : ""}`}>
-                            <SpinnerSVG/>
+                        {(status) => (
+                          <span
+                            className={`transition fade-${status} ${!this.state.isTotpDecrypting ? "visually-hidden" : ""}`}
+                          >
+                            <SpinnerSVG />
                           </span>
                         )}
                       </Transition>
-                      <span className="visually-hidden"><Trans>View</Trans></span>
+                      <span className="visually-hidden">
+                        <Trans>View</Trans>
+                      </span>
                     </button>
-                  }
+                  )}
                 </div>
               </div>
-              {canCopySecret &&
+              {canCopySecret && (
                 <>
-                  <a role="button" className="button button-transparent property-action copy-totp" onClick={this.handleCopyTotpClick} title={this.translate("Copy to clipboard")}>
+                  <a
+                    role="button"
+                    className="button button-transparent property-action copy-totp"
+                    onClick={this.handleCopyTotpClick}
+                    title={this.translate("Copy to clipboard")}
+                  >
                     <Transition in={this.state.copyTotpState === "default"} appear={false} timeout={500}>
-                      {status => (
-                        <span className={`transition fade-${status} ${this.state.copyTotpState !== "default" ? "visually-hidden" : ""}`}>
-                          <CopySVG/>
+                      {(status) => (
+                        <span
+                          className={`transition fade-${status} ${this.state.copyTotpState !== "default" ? "visually-hidden" : ""}`}
+                        >
+                          <CopySVG />
                         </span>
                       )}
                     </Transition>
                     <Transition in={this.state.copyTotpState === "processing"} appear={true} timeout={500}>
-                      {status => (
-                        <span className={`transition fade-${status} ${this.state.copyTotpState !== "processing" ? "visually-hidden" : ""}`}>
-                          <SpinnerSVG/>
+                      {(status) => (
+                        <span
+                          className={`transition fade-${status} ${this.state.copyTotpState !== "processing" ? "visually-hidden" : ""}`}
+                        >
+                          <SpinnerSVG />
                         </span>
                       )}
                     </Transition>
                     <Transition in={this.state.copyTotpState === "done"} appear={true} timeout={500}>
-                      {status => (
-                        <span className={`transition fade-${status} ${this.state.copyTotpState !== "done" ? "visually-hidden" : ""}`}>
-                          <HealthCheckSuccessSvg/>
+                      {(status) => (
+                        <span
+                          className={`transition fade-${status} ${this.state.copyTotpState !== "done" ? "visually-hidden" : ""}`}
+                        >
+                          <HealthCheckSuccessSvg />
                         </span>
                       )}
                     </Transition>
-                    <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
+                    <span className="visually-hidden">
+                      <Trans>Copy to clipboard</Trans>
+                    </span>
                   </a>
-                  {this.state.copiedProperty === "totp" &&
-                    <TimerSVG style={{
-                      "--timer-duration": `${CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND}s`,
-                    }}/>
-                  }
+                  {this.state.copiedProperty === "totp" && (
+                    <TimerSVG
+                      style={{
+                        "--timer-duration": `${CLIPBOARD_TEMPORARY_CONTENT_FLUSH_DELAY_IN_SECOND}s`,
+                      }}
+                    />
+                  )}
                 </>
-              }
+              )}
             </li>
-          }
+          )}
           <li className="property">
             <div className="information">
               <span className="property-name">URI</span>
-              {primaryUri && this.sanitizeResourceUrl(primaryUri) &&
-                <a href={this.sanitizeResourceUrl(primaryUri)} role="button" className="property-value" target="_blank" rel="noopener noreferrer">
+              {primaryUri && this.sanitizeResourceUrl(primaryUri) && (
+                <a
+                  href={this.sanitizeResourceUrl(primaryUri)}
+                  role="button"
+                  className="property-value"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {primaryUri}
                 </a>
-              }
-              {primaryUri && !this.sanitizeResourceUrl(primaryUri) &&
-                <span className="property-value">
-                  {primaryUri}
-                </span>
-              }
-              {!primaryUri &&
+              )}
+              {primaryUri && !this.sanitizeResourceUrl(primaryUri) && (
+                <span className="property-value">{primaryUri}</span>
+              )}
+              {!primaryUri && (
                 <span className="property-value empty">
                   <Trans>no url provided</Trans>
                 </span>
-              }
+              )}
             </div>
-            <a href={`${this.sanitizeResourceUrl(primaryUri) ? this.sanitizeResourceUrl(primaryUri) : "#"}`} role="button" className={`button button-transparent property-action ${!this.sanitizeResourceUrl(primaryUri) ? "disabled" : ""}`}
-              onClick={this.handleGoToUrlClick} target="_blank" rel="noopener noreferrer" title={this.translate("open in a new tab")}>
-              <GoSVG/>
-              <span className="visually-hidden"><Trans>Open in new window</Trans></span>
+            <a
+              href={`${this.sanitizeResourceUrl(primaryUri) ? this.sanitizeResourceUrl(primaryUri) : "#"}`}
+              role="button"
+              className={`button button-transparent property-action ${!this.sanitizeResourceUrl(primaryUri) ? "disabled" : ""}`}
+              onClick={this.handleGoToUrlClick}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={this.translate("open in a new tab")}
+            >
+              <GoSVG />
+              <span className="visually-hidden">
+                <Trans>Open in new window</Trans>
+              </span>
             </a>
           </li>
-          {additionalUris?.length > 0 &&
+          {additionalUris?.length > 0 && (
             <li className="property">
               <div className="information">
                 <div className="accordion">
                   <div className="accordion-header additional-uris" onClick={this.handleClickAdditionalUrisSection}>
                     <button type="button" className="link no-border property-name">
-                      {this.state.isOpenAdditionalUris
-                        ? <CaretDownSVG className="caret-down"/>
-                        : <CaretRightSVG className="caret-right"/>
-                      }
-                      <span><Trans>Additional URIs</Trans></span>
+                      {this.state.isOpenAdditionalUris ? (
+                        <CaretDownSVG className="caret-down" />
+                      ) : (
+                        <CaretRightSVG className="caret-right" />
+                      )}
+                      <span>
+                        <Trans>Additional URIs</Trans>
+                      </span>
                     </button>
                   </div>
-                  {this.state.isOpenAdditionalUris &&
+                  {this.state.isOpenAdditionalUris && (
                     <div className="accordion-content">
                       <div className="list-uris">
                         {additionalUris.map((uri, index) => {
                           const safeUri = this.sanitizeResourceUrl(uri);
                           if (safeUri) {
-                            return <a href={safeUri} className="property-value" key={index} target="_blank" rel="noopener noreferrer"><span className="ellipsis">{uri}</span></a>;
+                            return (
+                              <a
+                                href={safeUri}
+                                className="property-value"
+                                key={index}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <span className="ellipsis">{uri}</span>
+                              </a>
+                            );
                           }
-                          return <span className="property-value" key={index}>{uri}</span>;
-                        })
-                        }
+                          return (
+                            <span className="property-value" key={index}>
+                              {uri}
+                            </span>
+                          );
+                        })}
                       </div>
                     </div>
-                  }
+                  )}
                 </div>
               </div>
             </li>
-          }
+          )}
         </ul>
         <div className="submit-wrapper input">
-          <a href="#" id="popupAction" className={`button primary big full-width ${this.state.usingOnThisTab ? "disabled" : ""}`} role="button" onClick={this.handleUseOnThisTabClick}>
-            {this.state.usingOnThisTab &&
-              <SpinnerSVG/>
-            }
-            {!this.state.usingOnThisTab &&
-              <Trans>Use on this page</Trans>
-            }
+          <a
+            href="#"
+            id="popupAction"
+            className={`button primary big full-width ${this.state.usingOnThisTab ? "disabled" : ""}`}
+            role="button"
+            onClick={this.handleUseOnThisTabClick}
+          >
+            {this.state.usingOnThisTab && <SpinnerSVG />}
+            {!this.state.usingOnThisTab && <Trans>Use on this page</Trans>}
           </a>
-          {this.state.error &&
-            <div className="error-message">{this.state.error}</div>
-          }
+          {this.state.error && <div className="error-message">{this.state.error}</div>}
         </div>
       </div>
     );
@@ -786,4 +914,6 @@ ResourceViewPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withResourceTypesLocalStorage(withTranslation('common')(ResourceViewPage)))));
+export default withAppContext(
+  withRbac(withRouter(withResourceTypesLocalStorage(withTranslation("common")(ResourceViewPage)))),
+);

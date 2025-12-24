@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Component} from "react";
+import React, { Component } from "react";
 
 class SharePermissionItemSkeleton extends Component {
   render() {
@@ -30,7 +30,6 @@ class SharePermissionItemSkeleton extends Component {
   }
 }
 
-SharePermissionItemSkeleton.propTypes = {
-};
+SharePermissionItemSkeleton.propTypes = {};
 
 export default SharePermissionItemSkeleton;

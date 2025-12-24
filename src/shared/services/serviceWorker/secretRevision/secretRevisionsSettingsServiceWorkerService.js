@@ -43,7 +43,9 @@ export default class SecretRevisionsSettingsServiceWorkerService {
    */
   async saveSettings(secretRevisionSettingsEntity) {
     if (!(secretRevisionSettingsEntity instanceof SecretRevisionsSettingsEntity)) {
-      throw new TypeError("The parameter `secretRevisionSettingsEntity` should be of type SecretRevisionsSettingsEntity.");
+      throw new TypeError(
+        "The parameter `secretRevisionSettingsEntity` should be of type SecretRevisionsSettingsEntity.",
+      );
     }
     const settings = await this.port.request(SECRET_REVISIONS_SAVE_SETTINGS, secretRevisionSettingsEntity);
     return new SecretRevisionsSettingsEntity(settings);

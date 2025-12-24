@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.3.0
  */
-import {default as PassphraseGeneratorWords} from "./PassphraseGeneratorWords";
+import { default as PassphraseGeneratorWords } from "./PassphraseGeneratorWords";
 
 /**
  * Returns a number between the given min and max
@@ -34,7 +34,7 @@ function randomNumberRange(min, max) {
  */
 function extractWordWithCase(words, wordCase) {
   const extractWord = () => words[randomNumberRange(0, words.length - 1)];
-  const toCamelCase = word => word.charAt(0).toUpperCase() + word.slice(1);
+  const toCamelCase = (word) => word.charAt(0).toUpperCase() + word.slice(1);
   switch (wordCase) {
     case "lowercase":
       return extractWord().toLowerCase();
@@ -55,7 +55,7 @@ function extractWordWithCase(words, wordCase) {
  */
 function detectPassphrase(secret) {
   const passwordDetected = {
-    isPassphrase: false
+    isPassphrase: false,
   };
 
   if (!secret) {
@@ -63,14 +63,17 @@ function detectPassphrase(secret) {
   }
 
   // Remove all the words from the dictionary present in the secret and keep the count.
-  const separatorsSecret = PassphraseGeneratorWords['en-UK'].reduce((result, word) => {
-    const remainingSecret = result.remainingSecret.replace(new RegExp(word, 'g'), '');
-    const newNumberReplacement = (result.remainingSecret.length - remainingSecret.length) / word.length;
-    return {
-      numberReplacement: result.numberReplacement + newNumberReplacement,
-      remainingSecret: remainingSecret
-    };
-  }, {numberReplacement: 0, remainingSecret: secret.toLowerCase()});
+  const separatorsSecret = PassphraseGeneratorWords["en-UK"].reduce(
+    (result, word) => {
+      const remainingSecret = result.remainingSecret.replace(new RegExp(word, "g"), "");
+      const newNumberReplacement = (result.remainingSecret.length - remainingSecret.length) / word.length;
+      return {
+        numberReplacement: result.numberReplacement + newNumberReplacement,
+        remainingSecret: remainingSecret,
+      };
+    },
+    { numberReplacement: 0, remainingSecret: secret.toLowerCase() },
+  );
 
   const remainingSecret = separatorsSecret.remainingSecret;
 
@@ -84,9 +87,8 @@ function detectPassphrase(secret) {
   const numberSeparators = separatorsSecret.numberReplacement - 1;
   if (numberSeparators === 1) {
     // the resulting string might not be present at all due to the way we remove the words previously
-    const isPassword = secret.indexOf(remainingSecret) === -1
-      || secret.startsWith(remainingSecret)
-      || secret.endsWith(remainingSecret);
+    const isPassword =
+      secret.indexOf(remainingSecret) === -1 || secret.startsWith(remainingSecret) || secret.endsWith(remainingSecret);
 
     if (isPassword) {
       return passwordDetected;
@@ -95,7 +97,7 @@ function detectPassphrase(secret) {
     return {
       numberWords: 2,
       separator: remainingSecret,
-      isPassphrase: true
+      isPassphrase: true,
     };
   }
 
@@ -103,8 +105,8 @@ function detectPassphrase(secret) {
   if (hasEmptySeparator) {
     return {
       numberWords: separatorsSecret.numberReplacement,
-      separator: '',
-      isPassphrase: true
+      separator: "",
+      isPassphrase: true,
     };
   }
 
@@ -116,12 +118,12 @@ function detectPassphrase(secret) {
 
   const lengthSeparators = remainingSecret.length / numberSeparators;
   const firstSeparator = remainingSecret.substring(0, lengthSeparators);
-  const firstSeparatorRegexEscaped = String(firstSeparator).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1');
-  const isPassphrase = remainingSecret.replace(new RegExp(firstSeparatorRegexEscaped, 'g'), '').length === 0;
+  const firstSeparatorRegexEscaped = String(firstSeparator).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, "\\$1");
+  const isPassphrase = remainingSecret.replace(new RegExp(firstSeparatorRegexEscaped, "g"), "").length === 0;
   return {
     numberWords: separatorsSecret.numberReplacement,
     separator: firstSeparator,
-    isPassphrase: isPassphrase && !secret.startsWith(firstSeparator) && !secret.endsWith(firstSeparator)
+    isPassphrase: isPassphrase && !secret.startsWith(firstSeparator) && !secret.endsWith(firstSeparator),
   };
 }
 
@@ -134,17 +136,17 @@ export const PassphraseGenerator = {
    * @param {PassphraseGeneratorSettingsDto} configuration
    * @returns {string}
    */
-  generate: configuration => {
+  generate: (configuration) => {
     const wordCount = configuration.words;
     const canGenerate = wordCount >= configuration.min_words && wordCount <= configuration.max_words;
     if (!canGenerate) {
-      return '';
+      return "";
     }
     const wordCase = configuration.word_case;
-    const words = PassphraseGeneratorWords['en-UK'];
+    const words = PassphraseGeneratorWords["en-UK"];
     const extractWordMapper = () => extractWordWithCase(words, wordCase);
-    const wordsGenerated = Array.from({length: wordCount}, extractWordMapper);
+    const wordsGenerated = Array.from({ length: wordCount }, extractWordMapper);
     return wordsGenerated.join(configuration.word_separator);
   },
-  detectPassphrase
+  detectPassphrase,
 };

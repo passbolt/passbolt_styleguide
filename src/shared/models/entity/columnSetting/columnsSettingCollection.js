@@ -16,9 +16,8 @@ import EntityCollection from "../abstract/entityCollection";
 import EntitySchema from "../abstract/entitySchema";
 import EntityCollectionError from "../abstract/entityCollectionError";
 
-
-const ENTITY_NAME = 'ColumnsSetting';
-const RULE_UNIQUE_ID = 'unique_id';
+const ENTITY_NAME = "ColumnsSetting";
+const RULE_UNIQUE_ID = "unique_id";
 
 class ColumnsSettingCollection extends EntityCollection {
   /**
@@ -26,14 +25,17 @@ class ColumnsSettingCollection extends EntityCollection {
    * @throws {EntityCollectionError} Build Rule: Ensure all items in the collection are unique by ID.
    */
   constructor(columnsSettingCollectionDto, options = {}) {
-    super(EntitySchema.validate(
-      ColumnsSettingCollection.ENTITY_NAME,
-      columnsSettingCollectionDto,
-      ColumnsSettingCollection.getSchema()
-    ), options);
+    super(
+      EntitySchema.validate(
+        ColumnsSettingCollection.ENTITY_NAME,
+        columnsSettingCollectionDto,
+        ColumnsSettingCollection.getSchema(),
+      ),
+      options,
+    );
 
     // Directly push into the private property _items[]
-    this._props.forEach(columnSetting => {
+    this._props.forEach((columnSetting) => {
       this.push(columnSetting);
     });
 
@@ -48,8 +50,8 @@ class ColumnsSettingCollection extends EntityCollection {
    */
   static getSchema() {
     return {
-      "type": "array",
-      "items": ColumnSettingEntity.getSchema(),
+      type: "array",
+      items: ColumnSettingEntity.getSchema(),
     };
   }
 
@@ -63,7 +65,7 @@ class ColumnsSettingCollection extends EntityCollection {
    * @param {object} columnSetting DTO or ColumnSettingEntity
    */
   push(columnSetting) {
-    if (!columnSetting || typeof columnSetting !== 'object') {
+    if (!columnSetting || typeof columnSetting !== "object") {
       throw new TypeError(`ColumnsSettingCollection push parameter should be an object.`);
     }
     if (columnSetting instanceof ColumnSettingEntity) {
@@ -81,7 +83,7 @@ class ColumnsSettingCollection extends EntityCollection {
    * @param {string} columnId The column id
    */
   removeById(columnId) {
-    this._items = this.items.filter(columnSetting => columnSetting.id !== columnId);
+    this._items = this.items.filter((columnSetting) => columnSetting.id !== columnId);
   }
 
   /**
@@ -104,11 +106,11 @@ class ColumnsSettingCollection extends EntityCollection {
    *
    * @return {ColumnsSettingCollection} The new columns setting collection
    */
-  deepMerge(columnsSettingCollection, options = {keepUnknownValue: true}) {
+  deepMerge(columnsSettingCollection, options = { keepUnknownValue: true }) {
     const columnsToMerge = columnsSettingCollection.toDto();
     // Deep merge keeping the order from the source and add at the end the new entry
     const columnSettingCollectionDto = columnsToMerge.reduce((columnsMerged, columnToMerge) => {
-      const index = columnsMerged.findIndex(column => column.id === columnToMerge.id); // Look for the columnsMerged has the same id while iterating
+      const index = columnsMerged.findIndex((column) => column.id === columnToMerge.id); // Look for the columnsMerged has the same id while iterating
       // If column found need to merge with value of columnsToMerge
       if (index > -1) {
         columnsMerged[index] = Object.assign(columnsMerged[index], columnToMerge);
@@ -133,7 +135,7 @@ class ColumnsSettingCollection extends EntityCollection {
    *
    */
   updateColumnShowValueFromDefault(id, show) {
-    const hasSameId = column => column.id === id;
+    const hasSameId = (column) => column.id === id;
     const columnSettingDto = this.constructor.DEFAULT.items.find(hasSameId).toDto();
     // Update the show value
     columnSettingDto.show = show;
@@ -168,7 +170,11 @@ class ColumnsSettingCollection extends EntityCollection {
   assertUniqueId(columnSetting) {
     this.items.forEach((existingColumnSetting, index) => {
       if (existingColumnSetting.id && existingColumnSetting.id === columnSetting.id) {
-        throw new EntityCollectionError(index, ColumnsSettingCollection.RULE_UNIQUE_ID, `ColumnSetting id ${columnSetting.id} already exists.`);
+        throw new EntityCollectionError(
+          index,
+          ColumnsSettingCollection.RULE_UNIQUE_ID,
+          `ColumnSetting id ${columnSetting.id} already exists.`,
+        );
       }
     });
   }
@@ -210,7 +216,7 @@ class ColumnsSettingCollection extends EntityCollection {
    * @param {{keepUnknownValue: boolean}} [options] optional options The columns setting merge options
    * @return {ColumnsSettingCollection} The new columns setting collection
    */
-  static createFromDefault(columnsSettingCollection = null, options = {keepUnknownValue: true}) {
+  static createFromDefault(columnsSettingCollection = null, options = { keepUnknownValue: true }) {
     if (columnsSettingCollection !== null) {
       return this.DEFAULT.deepMerge(columnsSettingCollection, options);
     }
