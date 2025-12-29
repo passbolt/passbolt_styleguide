@@ -15,6 +15,7 @@ import { fireEvent, render, waitFor } from "@testing-library/react";
 import React from "react";
 import ImportGpgKey from "./ImportGpgKey";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import userEvent from "@testing-library/user-event";
 
 /**
  * The CreateGpgKeyPage component represented as a page
@@ -29,8 +30,9 @@ export default class ImportGpgKeyPage {
       <MockTranslationProvider>
         <ImportGpgKey {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
+
+    this.user = userEvent.setup();
   }
 
   /**
@@ -121,8 +123,7 @@ export default class ImportGpgKeyPage {
    * @param inProgressFn Function called while the generation
    */
   async verifyKey(inProgressFn = () => {}) {
-    const leftClick = { button: 0 };
-    fireEvent.click(this.verifyButton, leftClick);
+    await this.user.click(this.verifyButton);
     await waitFor(inProgressFn);
   }
 

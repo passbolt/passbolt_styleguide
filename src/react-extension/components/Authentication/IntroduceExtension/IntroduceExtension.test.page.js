@@ -30,7 +30,6 @@ export default class IntroduceExtensionTestPage {
       <MockTranslationProvider>
         <IntroduceExtension {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

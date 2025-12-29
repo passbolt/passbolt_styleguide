@@ -29,7 +29,6 @@ export default class ChooseAccountRecoveryPreferencePage {
       <MockTranslationProvider>
         <ChooseAccountRecoveryPreference {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 
