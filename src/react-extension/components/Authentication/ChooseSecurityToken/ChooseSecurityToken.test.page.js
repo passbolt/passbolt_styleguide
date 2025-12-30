@@ -30,7 +30,6 @@ export default class ChooseSecurityTokenPage {
       <MockTranslationProvider>
         <ChooseSecurityToken {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

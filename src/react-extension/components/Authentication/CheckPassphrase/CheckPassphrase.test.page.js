@@ -30,7 +30,6 @@ export default class CheckPassphrasePage {
       <MockTranslationProvider>
         <CheckPassphrase {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 
