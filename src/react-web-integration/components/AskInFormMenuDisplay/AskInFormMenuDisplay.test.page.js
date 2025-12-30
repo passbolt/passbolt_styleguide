@@ -30,7 +30,6 @@ export default class AskInFormMenuDisplayTestPage {
       <AppContext.Provider value={appContext}>
         <AskInFormMenuDisplay />
       </AppContext.Provider>,
-      { legacyRoot: true },
     );
   }
 

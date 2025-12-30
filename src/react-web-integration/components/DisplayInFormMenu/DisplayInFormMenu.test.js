@@ -20,7 +20,6 @@ import DisplayInFormMenuTestPage from "./DisplayInformMenu.test.page";
 import { defaultProps, defaultPropsWithMissingMetadataKey } from "./DisplayInformMenu.test.data";
 import { defaultResourceDto } from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import { defaultPasswordPoliciesDto } from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
-import { waitFor } from "@testing-library/dom";
 import expect from "expect";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 import { defaultMetadataTypesSettingsV6Dto } from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
@@ -31,6 +30,7 @@ import {
 } from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataKeysSettingsEntity from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity";
 import { defaultMetadataKeysSettingsDto } from "../../../shared/models/entity/metadata/metadataKeysSettingsEntity.test.data";
+import { act } from "react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -38,6 +38,7 @@ beforeEach(() => {
 });
 
 describe("See the Inform Menu", () => {
+  let page;
   describe("As a signed-in user I should see menu items", () => {
     it("I should see all menu items for username with not value in input", async () => {
       expect.assertions(1);
@@ -47,8 +48,7 @@ describe("See the Inform Menu", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(4);
     });
@@ -61,8 +61,7 @@ describe("See the Inform Menu", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(4);
     });
@@ -75,8 +74,7 @@ describe("See the Inform Menu", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(5);
     });
@@ -89,8 +87,7 @@ describe("See the Inform Menu", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(4);
     });
@@ -105,8 +102,7 @@ describe("See the Inform Menu", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(4);
     });
@@ -119,8 +115,7 @@ describe("See the Inform Menu", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(3);
     });
@@ -133,8 +128,7 @@ describe("See the Inform Menu", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(3);
     });
@@ -149,8 +143,7 @@ describe("See the Inform Menu", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(3);
     });
@@ -164,8 +157,7 @@ describe("See the Inform Menu", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(3);
     });
@@ -178,8 +170,7 @@ describe("See the Inform Menu", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(3);
     });
@@ -192,8 +183,7 @@ describe("See the Inform Menu", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => configuration);
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => defaultPasswordPoliciesDto());
 
-      const page = new DisplayInFormMenuTestPage(props);
-      await waitFor(() => {});
+      await act(async () => (page = new DisplayInFormMenuTestPage(props)));
 
       expect(page.informMenuItems.length).toBe(3);
     });
