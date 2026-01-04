@@ -29,7 +29,6 @@ export default class DisplayBrowserNotSupportedPage {
       <MockTranslationProvider>
         <DisplayBrowserNotSupported />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

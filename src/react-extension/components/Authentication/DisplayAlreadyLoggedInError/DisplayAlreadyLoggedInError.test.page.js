@@ -30,7 +30,6 @@ export default class DisplayAlreadyLoggedInErrorPage {
       <MockTranslationProvider>
         <DisplayAlreadyLoggedInError {...props} />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 

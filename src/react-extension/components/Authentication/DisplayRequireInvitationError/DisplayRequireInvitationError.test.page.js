@@ -29,7 +29,6 @@ export default class DisplayRequireInvitationErrorPage {
       <MockTranslationProvider>
         <DisplayError />
       </MockTranslationProvider>,
-      { legacyRoot: true },
     );
   }
 
