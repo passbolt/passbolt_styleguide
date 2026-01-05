@@ -125,7 +125,6 @@ export default [
       "n/no-missing-require": "off", // Handled by import plugin
 
       // Muted during migration
-      "import/no-named-as-default-member": "off",
       "import/no-duplicates": "off",
       "import/named": "off",
       "import/no-named-as-default": "off",
