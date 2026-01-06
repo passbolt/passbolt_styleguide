@@ -167,7 +167,6 @@ export default [
         },
       ],
       "prefer-regex-literals": "off",
-      "regexp/prefer-d": "off",
       "regexp/prefer-character-class": "off",
       "regexp/prefer-w": "off",
       "regexp/no-obscure-range": "off",
