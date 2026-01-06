@@ -172,7 +172,6 @@ export default [
         },
       ],
       "prefer-regex-literals": "off",
-      "regexp/negation": "off",
       "regexp/no-useless-flag": "off",
       "promise/param-names": "off",
       "promise/catch-or-return": "off",
