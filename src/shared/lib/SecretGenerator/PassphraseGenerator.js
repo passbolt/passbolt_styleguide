@@ -118,7 +118,7 @@ function detectPassphrase(secret) {
 
   const lengthSeparators = remainingSecret.length / numberSeparators;
   const firstSeparator = remainingSecret.substring(0, lengthSeparators);
-  const firstSeparatorRegexEscaped = String(firstSeparator).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, "\\$1");
+  const firstSeparatorRegexEscaped = String(firstSeparator).replace(/([-()[\]{}+?*.$^|,:#<!\\])/g, "\\$1");
   const isPassphrase = remainingSecret.replace(new RegExp(firstSeparatorRegexEscaped, "g"), "").length === 0;
   return {
     numberWords: separatorsSecret.numberReplacement,
