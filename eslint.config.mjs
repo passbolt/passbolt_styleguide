@@ -66,6 +66,11 @@ export default [
       react: {
         version: "detect",
       },
+      regexp: {
+        // Allow PGP armor header character ranges (RFC 4880)
+        // !-9 and ;-~ match all printable ASCII except colon
+        allowedCharacterRanges: ["alphanumeric", "!-9", ";-~"],
+      },
       "import/resolver": {
         node: {
           paths: [__dirname], // Add project root to resolution paths
@@ -167,7 +172,6 @@ export default [
         },
       ],
       "prefer-regex-literals": "off",
-      "regexp/no-obscure-range": "off",
       "regexp/prefer-range": "off",
       "regexp/no-dupe-disjunctions": "off",
       "regexp/no-useless-assertions": "off",
