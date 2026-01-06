@@ -129,7 +129,7 @@ class CanSuggestService {
      * the port information that can be altered by the parsing. By instance, when the https is enforced to the uri
      * www.passbolt.com:443, then the port information is deleted after the parsing.
      */
-    if (!/^[a-zA-Z\-]*:\/\//.test(suggestedUri)) {
+    if (!/^[a-z\-]*:\/\//i.test(suggestedUri)) {
       enforceProtocol = true;
       suggestedUri = `fake://${suggestedUri}`;
     }
