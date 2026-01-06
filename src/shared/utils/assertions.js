@@ -4,7 +4,7 @@ const EMAIL_HOSTNAME_REGEXP =
   "(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[a-z]{2,})";
 const EMAIL_REGEXP = `^[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+(?:\\.[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+)*@${EMAIL_HOSTNAME_REGEXP}$`;
 const UUID_REGEXP = /^[a-f0-9]{8}-[a-f0-9]{4}-[0-5][a-f0-9]{3}-[089ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
-const SECURITY_TOKEN__REGEXP = /^[\w-]{3}$/i;
+const SECURITY_TOKEN__REGEXP = /^[\w-]{3}$/;
 
 /**
  * Returns true if the data is a valid email.
