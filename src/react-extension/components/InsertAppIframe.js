@@ -67,7 +67,7 @@ class InsertAppIframe extends Component {
    * @returns {boolean}
    */
   validatePagePathname() {
-    return /^[A-Z0-9\-/]*$/i.test(this.props.location.pathname);
+    return /^[A-Z/-9\-]*$/i.test(this.props.location.pathname);
   }
 
   /**
