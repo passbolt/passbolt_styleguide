@@ -172,7 +172,6 @@ export default [
         },
       ],
       "prefer-regex-literals": "off",
-      "regexp/no-useless-assertions": "off",
       "regexp/optimal-quantifier-concatenation": "off",
       "regexp/no-unused-capturing-group": "off",
       "regexp/sort-flags": "off",
