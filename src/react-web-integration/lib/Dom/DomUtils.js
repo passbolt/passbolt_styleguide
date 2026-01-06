@@ -127,6 +127,34 @@ class DomUtils {
       return field;
     }
   }
+
+  /**
+   * Generates x and y coordinates in the element
+   * @param {HTMLElement} element
+   * @return {{x: number, y: number}[]} return an array of x and y coordinates in the element
+   */
+  static generateUniquePointsInElement(element) {
+    const { top, left, width, height } = element.getBoundingClientRect();
+    const totalFramePoints = width * height;
+    // Cover 10% for tiny frame and cover 2% of bigger frame
+    const pointCount = totalFramePoints < 2500 ? totalFramePoints / 10 : totalFramePoints / 50;
+    const usedPoints = new Set();
+    const points = [];
+
+    for (let i = 0; i < pointCount; i++) {
+      let x, y, point;
+      do {
+        x = Math.floor(Math.random() * width) + left;
+        y = Math.floor(Math.random() * height) + top;
+        point = `${x},${y}`;
+      } while (usedPoints.has(point));
+
+      usedPoints.add(point);
+      points.push({ x, y });
+    }
+
+    return points;
+  }
 }
 
 export default DomUtils;
