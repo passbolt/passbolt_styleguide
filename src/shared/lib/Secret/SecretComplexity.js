@@ -61,7 +61,7 @@ const MASKS = {
   digit: {
     size: 10,
     data: "0123456789",
-    pattern: /[0-9]/,
+    pattern: /\d/,
   },
   special: {
     size: 32,

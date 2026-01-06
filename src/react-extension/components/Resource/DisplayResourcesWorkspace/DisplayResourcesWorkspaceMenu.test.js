@@ -285,7 +285,7 @@ describe("See Workspace Menu", () => {
         propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id,
       );
       expect(propsOneResourceOwned.clipboardContext.copyTemporarily).toHaveBeenCalledWith(
-        expect.stringMatching(/^[0-9]{6}/),
+        expect.stringMatching(/^\d{6}/),
         "The TOTP has been copied to clipboard.",
       );
     });
