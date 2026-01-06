@@ -167,7 +167,6 @@ export default [
         },
       ],
       "prefer-regex-literals": "off",
-      "regexp/no-useless-escape": "off",
       "regexp/no-dupe-characters-character-class": "off",
       "regexp/use-ignore-case": "off",
       "regexp/prefer-d": "off",

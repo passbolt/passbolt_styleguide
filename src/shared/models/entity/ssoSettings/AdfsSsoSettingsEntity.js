@@ -17,7 +17,7 @@ import EntitySchema from "../abstract/entitySchema";
 const ENTITY_NAME = "ADFSSsoSettings";
 const ADFS = "adfs";
 
-const ADFS_SUPPORTED_URLS = /^https:\/\/.+[^\/]$/;
+const ADFS_SUPPORTED_URLS = /^https:\/\/.+[^/]$/;
 
 /**
  * Entity related to the SSO settings
