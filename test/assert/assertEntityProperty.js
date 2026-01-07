@@ -231,6 +231,9 @@ export const FAIL_EMAIL_SCENARIO = [
 export const email = (EntityClass, propertyName) => {
   assert(EntityClass, propertyName, SUCCESS_EMAIL_SCENARIO, FAIL_EMAIL_SCENARIO, "custom");
 };
+export const emailFormat = (EntityClass, propertyName) => {
+  assert(EntityClass, propertyName, SUCCESS_EMAIL_SCENARIO, FAIL_EMAIL_SCENARIO, "format");
+};
 
 export const SUCCESS_LOCALE_SCENARIO = [
   {scenario: "en-UK", value: "en-UK"},
